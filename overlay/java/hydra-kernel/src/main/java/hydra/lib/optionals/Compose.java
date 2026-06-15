@@ -14,7 +14,6 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -24,7 +23,7 @@ import hydra.util.Either;
  */
 public class Compose extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.optionals.compose");
+        return hydra.lib.Optionals.compose().name;
     }
 
     @Override
@@ -36,8 +35,8 @@ public class Compose extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> {
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> {
             Function<Term, Either<Error_, Optional<Term>>> nativeF = val ->
                 hydra.lib.eithers.Bind.apply(
                     hydra.Reduction.reduceTerm(hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(0), val)),

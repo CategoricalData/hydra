@@ -10,8 +10,26 @@
 ;; Helpers
 ;; ============================================================================
 
-(defun qname (ns_ local)
-  (concatenate 'string ns_ "." local))
+;; #473: primitive names are derived from the generated hydra.lib.* PrimitiveDefinition def-modules
+;; (the single source of truth). Those def-modules are rewriting-style generated code, so they must be
+;; loaded via hydra-load-file (not plain cl:load), and they depend on the kernel (hydra.packaging /
+;; hydra.typing) which is already loaded by the time this registry loads. We load them here, before the
+;; register-* functions below reference their def vars. (find-package guards against a double-load.)
+;; Always load (don't guard on find-package): consumer modules' (:use :hydra.lib.<sub>) clauses
+;; auto-vivify an EMPTY :hydra.lib.<sub> package during gen-main load, so a find-package guard would
+;; skip the real def-module and leave the def vars unbound. hydra-load-file populating an existing
+;; (empty) package is fine.
+(dolist (sub '("chars" "eithers" "equality" "lists" "literals" "logic" "maps"
+               "math" "optionals" "pairs" "regex" "sets" "strings"))
+  (hydra-load-file (merge-pathnames (concatenate 'string "lib/" sub ".lisp")
+                                    *hydra-gen-main-dir*)))
+
+(defun prim-name (def)
+  "Derive a primitive's canonical name from its generated hydra.lib.* PrimitiveDefinition (#473).
+   The def var is loaded into :cl-user by the dolist above (hydra-load-file flattens generated
+   modules into :cl-user; defpackage/in-package forms are skipped by the loader), so callers pass the
+   bare def var, e.g. (prim-name hydra_lib_chars_is_alpha_num)."
+  (hydra_packaging_primitive_definition-name def))
 
 (defun fun (dom cod)
   "A TermCoder for function types using beta reduction to bridge
@@ -26,185 +44,185 @@
 ;; ============================================================================
 
 (defun register-chars ()
-  (let ((ns_ "hydra.lib.chars"))
+  (let ()
     (list
-      (cons (qname ns_ "isAlphaNum") (prim1 (qname ns_ "isAlphaNum") hydra_lib_chars_is_alpha_num nil (tc-int32) (tc-boolean)))
-      (cons (qname ns_ "isLower")    (prim1 (qname ns_ "isLower")    hydra_lib_chars_is_lower    nil (tc-int32) (tc-boolean)))
-      (cons (qname ns_ "isSpace")    (prim1 (qname ns_ "isSpace")    hydra_lib_chars_is_space    nil (tc-int32) (tc-boolean)))
-      (cons (qname ns_ "isUpper")    (prim1 (qname ns_ "isUpper")    hydra_lib_chars_is_upper    nil (tc-int32) (tc-boolean)))
-      (cons (qname ns_ "toLower")    (prim1 (qname ns_ "toLower")    hydra_lib_chars_to_lower    nil (tc-int32) (tc-int32)))
-      (cons (qname ns_ "toUpper")    (prim1 (qname ns_ "toUpper")    hydra_lib_chars_to_upper    nil (tc-int32) (tc-int32))))))
+      (cons (prim-name hydra_lib_chars_is_alpha_num) (prim1 (prim-name hydra_lib_chars_is_alpha_num) hydra_lisp_lib_chars_is_alpha_num nil (tc-int32) (tc-boolean)))
+      (cons (prim-name hydra_lib_chars_is_lower)    (prim1 (prim-name hydra_lib_chars_is_lower)    hydra_lisp_lib_chars_is_lower    nil (tc-int32) (tc-boolean)))
+      (cons (prim-name hydra_lib_chars_is_space)    (prim1 (prim-name hydra_lib_chars_is_space)    hydra_lisp_lib_chars_is_space    nil (tc-int32) (tc-boolean)))
+      (cons (prim-name hydra_lib_chars_is_upper)    (prim1 (prim-name hydra_lib_chars_is_upper)    hydra_lisp_lib_chars_is_upper    nil (tc-int32) (tc-boolean)))
+      (cons (prim-name hydra_lib_chars_to_lower)    (prim1 (prim-name hydra_lib_chars_to_lower)    hydra_lisp_lib_chars_to_lower    nil (tc-int32) (tc-int32)))
+      (cons (prim-name hydra_lib_chars_to_upper)    (prim1 (prim-name hydra_lib_chars_to_upper)    hydra_lisp_lib_chars_to_upper    nil (tc-int32) (tc-int32))))))
 
 ;; ============================================================================
 ;; Eithers
 ;; ============================================================================
 
 (defun register-eithers ()
-  (let ((ns_ "hydra.lib.eithers")
+  (let (
         (x (tc-variable "x"))
         (y (tc-variable "y"))
         (z (tc-variable "z"))
         (w (tc-variable "w")))
     (list
-      (cons (qname ns_ "bind")    (prim2 (qname ns_ "bind")
-                                          hydra_lib_eithers_bind
+      (cons (prim-name hydra_lib_eithers_bind)    (prim2 (prim-name hydra_lib_eithers_bind)
+                                          hydra_lisp_lib_eithers_bind
                                           nil (tc-either x y) (fun y (tc-either x z)) (tc-either x z)))
-      (cons (qname ns_ "bimap")   (prim3 (qname ns_ "bimap")
-                                          hydra_lib_eithers_bimap
+      (cons (prim-name hydra_lib_eithers_bimap)   (prim3 (prim-name hydra_lib_eithers_bimap)
+                                          hydra_lisp_lib_eithers_bimap
                                           nil (fun x z) (fun y w) (tc-either x y) (tc-either z w)))
-      (cons (qname ns_ "either")  (prim3 (qname ns_ "either")
-                                          hydra_lib_eithers_either
+      (cons (prim-name hydra_lib_eithers_either)  (prim3 (prim-name hydra_lib_eithers_either)
+                                          hydra_lisp_lib_eithers_either
                                           nil (fun x z) (fun y z) (tc-either x y) z))
-      (cons (qname ns_ "foldl")   (prim3 (qname ns_ "foldl")
-                                          hydra_lib_eithers_foldl
+      (cons (prim-name hydra_lib_eithers_foldl)   (prim3 (prim-name hydra_lib_eithers_foldl)
+                                          hydra_lisp_lib_eithers_foldl
                                           nil (fun x (fun y (tc-either z x))) x (tc-list y) (tc-either z x)))
-      (cons (qname ns_ "fromLeft")  (prim2 (qname ns_ "fromLeft")
-                                            hydra_lib_eithers_from_left
-                                            nil x (tc-either x y) x))
-      (cons (qname ns_ "fromRight") (prim2 (qname ns_ "fromRight")
-                                            hydra_lib_eithers_from_right
-                                            nil y (tc-either x y) y))
-      (cons (qname ns_ "isLeft")  (prim1 (qname ns_ "isLeft")  hydra_lib_eithers_is_left  nil (tc-either x y) (tc-boolean)))
-      (cons (qname ns_ "isRight") (prim1 (qname ns_ "isRight") hydra_lib_eithers_is_right nil (tc-either x y) (tc-boolean)))
-      (cons (qname ns_ "lefts")   (prim1 (qname ns_ "lefts")   hydra_lib_eithers_lefts   nil (tc-list (tc-either x y)) (tc-list x)))
-      (cons (qname ns_ "map")     (prim2 (qname ns_ "map")
-                                          hydra_lib_eithers_map
+      (cons (prim-name hydra_lib_eithers_from_left)  (lazy-args '(0) (prim2 (prim-name hydra_lib_eithers_from_left)
+                                            hydra_lisp_lib_eithers_from_left
+                                            nil x (tc-either x y) x)))
+      (cons (prim-name hydra_lib_eithers_from_right) (lazy-args '(0) (prim2 (prim-name hydra_lib_eithers_from_right)
+                                            hydra_lisp_lib_eithers_from_right
+                                            nil y (tc-either x y) y)))
+      (cons (prim-name hydra_lib_eithers_is_left)  (prim1 (prim-name hydra_lib_eithers_is_left)  hydra_lisp_lib_eithers_is_left  nil (tc-either x y) (tc-boolean)))
+      (cons (prim-name hydra_lib_eithers_is_right) (prim1 (prim-name hydra_lib_eithers_is_right) hydra_lisp_lib_eithers_is_right nil (tc-either x y) (tc-boolean)))
+      (cons (prim-name hydra_lib_eithers_lefts)   (prim1 (prim-name hydra_lib_eithers_lefts)   hydra_lisp_lib_eithers_lefts   nil (tc-list (tc-either x y)) (tc-list x)))
+      (cons (prim-name hydra_lib_eithers_map)     (prim2 (prim-name hydra_lib_eithers_map)
+                                          hydra_lisp_lib_eithers_map
                                           nil (fun x y) (tc-either z x) (tc-either z y)))
-      (cons (qname ns_ "mapList") (prim2 (qname ns_ "mapList")
-                                          hydra_lib_eithers_map_list
+      (cons (prim-name hydra_lib_eithers_map_list) (prim2 (prim-name hydra_lib_eithers_map_list)
+                                          hydra_lisp_lib_eithers_map_list
                                           nil (fun x (tc-either z y)) (tc-list x) (tc-either z (tc-list y))))
-      (cons (qname ns_ "mapOptional") (prim2 (qname ns_ "mapOptional")
-                                           hydra_lib_eithers_map_optional
+      (cons (prim-name hydra_lib_eithers_map_optional) (prim2 (prim-name hydra_lib_eithers_map_optional)
+                                           hydra_lisp_lib_eithers_map_optional
                                            nil (fun x (tc-either z y)) (tc-optional x) (tc-either z (tc-optional y))))
-      (cons (qname ns_ "mapSet")  (prim2 (qname ns_ "mapSet")
-                                          hydra_lib_eithers_map_set
+      (cons (prim-name hydra_lib_eithers_map_set)  (prim2 (prim-name hydra_lib_eithers_map_set)
+                                          hydra_lisp_lib_eithers_map_set
                                           nil (fun x (tc-either z y)) (tc-set x) (tc-either z (tc-set y))))
-      (cons (qname ns_ "partitionEithers") (prim1 (qname ns_ "partitionEithers")
-                                                   hydra_lib_eithers_partition_eithers
+      (cons (prim-name hydra_lib_eithers_partition_eithers) (prim1 (prim-name hydra_lib_eithers_partition_eithers)
+                                                   hydra_lisp_lib_eithers_partition_eithers
                                                    nil (tc-list (tc-either x y)) (tc-pair (tc-list x) (tc-list y))))
-      (cons (qname ns_ "rights")  (prim1 (qname ns_ "rights")  hydra_lib_eithers_rights  nil (tc-list (tc-either x y)) (tc-list y))))))
+      (cons (prim-name hydra_lib_eithers_rights)  (prim1 (prim-name hydra_lib_eithers_rights)  hydra_lisp_lib_eithers_rights  nil (tc-list (tc-either x y)) (tc-list y))))))
 
 ;; ============================================================================
 ;; Equality
 ;; ============================================================================
 
 (defun register-equality ()
-  (let ((ns_ "hydra.lib.equality")
+  (let (
         (x (tc-variable "x"))
         (ord-x '(("x" . ("ordering"))))
         (eq-x '(("x" . ("equality")))))
     (list
-      (cons (qname ns_ "compare")  (prim2 (qname ns_ "compare")  hydra_lib_equality_compare  nil x x (tc-comparison) ord-x))
-      (cons (qname ns_ "equal")    (prim2 (qname ns_ "equal")    hydra_lib_equality_equal    nil x x (tc-boolean) eq-x))
-      (cons (qname ns_ "gt")       (prim2 (qname ns_ "gt")       hydra_lib_equality_gt       nil x x (tc-boolean) ord-x))
-      (cons (qname ns_ "gte")      (prim2 (qname ns_ "gte")      hydra_lib_equality_gte      nil x x (tc-boolean) ord-x))
-      (cons (qname ns_ "identity") (prim1 (qname ns_ "identity") #'identity                 nil x x))
-      (cons (qname ns_ "lt")       (prim2 (qname ns_ "lt")       hydra_lib_equality_lt       nil x x (tc-boolean) ord-x))
-      (cons (qname ns_ "lte")      (prim2 (qname ns_ "lte")      hydra_lib_equality_lte      nil x x (tc-boolean) ord-x))
-      (cons (qname ns_ "max")      (prim2 (qname ns_ "max")      hydra_lib_equality_max      nil x x x ord-x))
-      (cons (qname ns_ "min")      (prim2 (qname ns_ "min")      hydra_lib_equality_min      nil x x x ord-x)))))
+      (cons (prim-name hydra_lib_equality_compare)  (prim2 (prim-name hydra_lib_equality_compare)  hydra_lisp_lib_equality_compare  nil x x (tc-comparison) ord-x))
+      (cons (prim-name hydra_lib_equality_equal)    (prim2 (prim-name hydra_lib_equality_equal)    hydra_lisp_lib_equality_equal    nil x x (tc-boolean) eq-x))
+      (cons (prim-name hydra_lib_equality_gt)       (prim2 (prim-name hydra_lib_equality_gt)       hydra_lisp_lib_equality_gt       nil x x (tc-boolean) ord-x))
+      (cons (prim-name hydra_lib_equality_gte)      (prim2 (prim-name hydra_lib_equality_gte)      hydra_lisp_lib_equality_gte      nil x x (tc-boolean) ord-x))
+      (cons (prim-name hydra_lib_equality_identity) (prim1 (prim-name hydra_lib_equality_identity) #'identity                 nil x x))
+      (cons (prim-name hydra_lib_equality_lt)       (prim2 (prim-name hydra_lib_equality_lt)       hydra_lisp_lib_equality_lt       nil x x (tc-boolean) ord-x))
+      (cons (prim-name hydra_lib_equality_lte)      (prim2 (prim-name hydra_lib_equality_lte)      hydra_lisp_lib_equality_lte      nil x x (tc-boolean) ord-x))
+      (cons (prim-name hydra_lib_equality_max)      (prim2 (prim-name hydra_lib_equality_max)      hydra_lisp_lib_equality_max      nil x x x ord-x))
+      (cons (prim-name hydra_lib_equality_min)      (prim2 (prim-name hydra_lib_equality_min)      hydra_lisp_lib_equality_min      nil x x x ord-x)))))
 
 ;; ============================================================================
 ;; Lists
 ;; ============================================================================
 
 (defun register-lists ()
-  (let ((ns_ "hydra.lib.lists")
+  (let (
         (a (tc-variable "a"))
         (b (tc-variable "b"))
         (c (tc-variable "c")))
     (list
-      (cons (qname ns_ "apply")      (prim2 (qname ns_ "apply")
-                                              hydra_lib_lists_apply
+      (cons (prim-name hydra_lib_lists_apply)      (prim2 (prim-name hydra_lib_lists_apply)
+                                              hydra_lisp_lib_lists_apply
                                               nil (tc-list (fun a b)) (tc-list a) (tc-list b)))
-      (cons (qname ns_ "bind")       (prim2 (qname ns_ "bind")
-                                              hydra_lib_lists_bind
+      (cons (prim-name hydra_lib_lists_bind)       (prim2 (prim-name hydra_lib_lists_bind)
+                                              hydra_lisp_lib_lists_bind
                                               nil (tc-list a) (fun a (tc-list b)) (tc-list b)))
-      (cons (qname ns_ "concat")     (prim1 (qname ns_ "concat")     hydra_lib_lists_concat     nil (tc-list (tc-list a)) (tc-list a)))
-      (cons (qname ns_ "concat2")    (prim2 (qname ns_ "concat2")
-                                              hydra_lib_lists_concat2
+      (cons (prim-name hydra_lib_lists_concat)     (prim1 (prim-name hydra_lib_lists_concat)     hydra_lisp_lib_lists_concat     nil (tc-list (tc-list a)) (tc-list a)))
+      (cons (prim-name hydra_lib_lists_concat2)    (prim2 (prim-name hydra_lib_lists_concat2)
+                                              hydra_lisp_lib_lists_concat2
                                               nil (tc-list a) (tc-list a) (tc-list a)))
-      (cons (qname ns_ "cons")       (prim2 (qname ns_ "cons")
-                                              hydra_lib_lists_cons
+      (cons (prim-name hydra_lib_lists_cons)       (prim2 (prim-name hydra_lib_lists_cons)
+                                              hydra_lisp_lib_lists_cons
                                               nil a (tc-list a) (tc-list a)))
-      (cons (qname ns_ "drop")       (prim2 (qname ns_ "drop")
-                                              hydra_lib_lists_drop
+      (cons (prim-name hydra_lib_lists_drop)       (prim2 (prim-name hydra_lib_lists_drop)
+                                              hydra_lisp_lib_lists_drop
                                               nil (tc-int32) (tc-list a) (tc-list a)))
-      (cons (qname ns_ "dropWhile")  (prim2 (qname ns_ "dropWhile")
-                                              hydra_lib_lists_drop_while
+      (cons (prim-name hydra_lib_lists_drop_while)  (prim2 (prim-name hydra_lib_lists_drop_while)
+                                              hydra_lisp_lib_lists_drop_while
                                               nil (fun a (tc-boolean)) (tc-list a) (tc-list a)))
-      (cons (qname ns_ "elem")       (prim2 (qname ns_ "elem")
-                                              hydra_lib_lists_elem
+      (cons (prim-name hydra_lib_lists_elem)       (prim2 (prim-name hydra_lib_lists_elem)
+                                              hydra_lisp_lib_lists_elem
                                               nil a (tc-list a) (tc-boolean) '(("a" . ("equality")))))
-      (cons (qname ns_ "filter")     (prim2 (qname ns_ "filter")
-                                              hydra_lib_lists_filter
+      (cons (prim-name hydra_lib_lists_filter)     (prim2 (prim-name hydra_lib_lists_filter)
+                                              hydra_lisp_lib_lists_filter
                                               nil (fun a (tc-boolean)) (tc-list a) (tc-list a)))
-      (cons (qname ns_ "find")       (prim2 (qname ns_ "find")
-                                              hydra_lib_lists_find
+      (cons (prim-name hydra_lib_lists_find)       (prim2 (prim-name hydra_lib_lists_find)
+                                              hydra_lisp_lib_lists_find
                                               nil (fun a (tc-boolean)) (tc-list a) (tc-optional a)))
-      (cons (qname ns_ "foldl")      (prim3 (qname ns_ "foldl")
+      (cons (prim-name hydra_lib_lists_foldl)      (prim3 (prim-name hydra_lib_lists_foldl)
                                               (lambda (f)
                                                 (lambda (init)
                                                   (lambda (xs)
-                                                    (funcall (funcall (funcall hydra_lib_lists_foldl
+                                                    (funcall (funcall (funcall hydra_lisp_lib_lists_foldl
                                                                                (lambda (acc) (lambda (el) (funcall (funcall f acc) el))))
                                                                       init) xs))))
                                               nil (fun b (fun a b)) b (tc-list a) b))
-      (cons (qname ns_ "foldr")      (prim3 (qname ns_ "foldr")
+      (cons (prim-name hydra_lib_lists_foldr)      (prim3 (prim-name hydra_lib_lists_foldr)
                                               (lambda (f)
                                                 (lambda (init)
                                                   (lambda (xs)
-                                                    (funcall (funcall (funcall hydra_lib_lists_foldr
+                                                    (funcall (funcall (funcall hydra_lisp_lib_lists_foldr
                                                                                (lambda (el) (lambda (acc) (funcall (funcall f el) acc))))
                                                                       init) xs))))
                                               nil (fun a (fun b b)) b (tc-list a) b))
-      (cons (qname ns_ "group")      (prim1 (qname ns_ "group")      hydra_lib_lists_group      nil (tc-list a) (tc-list (tc-list a)) '(("a" . ("equality")))))
-      (cons (qname ns_ "intercalate") (prim2 (qname ns_ "intercalate")
-                                               hydra_lib_lists_intercalate
+      (cons (prim-name hydra_lib_lists_group)      (prim1 (prim-name hydra_lib_lists_group)      hydra_lisp_lib_lists_group      nil (tc-list a) (tc-list (tc-list a)) '(("a" . ("equality")))))
+      (cons (prim-name hydra_lib_lists_intercalate) (prim2 (prim-name hydra_lib_lists_intercalate)
+                                               hydra_lisp_lib_lists_intercalate
                                                nil (tc-list a) (tc-list (tc-list a)) (tc-list a)))
-      (cons (qname ns_ "intersperse") (prim2 (qname ns_ "intersperse")
-                                               hydra_lib_lists_intersperse
+      (cons (prim-name hydra_lib_lists_intersperse) (prim2 (prim-name hydra_lib_lists_intersperse)
+                                               hydra_lisp_lib_lists_intersperse
                                                nil a (tc-list a) (tc-list a)))
-      (cons (qname ns_ "length")     (prim1 (qname ns_ "length")     hydra_lib_lists_length     nil (tc-list a) (tc-int32)))
-      (cons (qname ns_ "map")        (prim2 (qname ns_ "map")
-                                              hydra_lib_lists_map
+      (cons (prim-name hydra_lib_lists_length)     (prim1 (prim-name hydra_lib_lists_length)     hydra_lisp_lib_lists_length     nil (tc-list a) (tc-int32)))
+      (cons (prim-name hydra_lib_lists_map)        (prim2 (prim-name hydra_lib_lists_map)
+                                              hydra_lisp_lib_lists_map
                                               nil (fun a b) (tc-list a) (tc-list b)))
-      (cons (qname ns_ "maybeAt")    (prim2 (qname ns_ "maybeAt")    hydra_lib_lists_maybe_at   nil (tc-int32) (tc-list a) (tc-optional a)))
-      (cons (qname ns_ "maybeHead")  (prim1 (qname ns_ "maybeHead")  hydra_lib_lists_maybe_head nil (tc-list a) (tc-optional a)))
-      (cons (qname ns_ "maybeInit")  (prim1 (qname ns_ "maybeInit")  hydra_lib_lists_maybe_init nil (tc-list a) (tc-optional (tc-list a))))
-      (cons (qname ns_ "maybeLast")  (prim1 (qname ns_ "maybeLast")  hydra_lib_lists_maybe_last nil (tc-list a) (tc-optional a)))
-      (cons (qname ns_ "maybeTail")  (prim1 (qname ns_ "maybeTail")  hydra_lib_lists_maybe_tail nil (tc-list a) (tc-optional (tc-list a))))
-      (cons (qname ns_ "nub")        (prim1 (qname ns_ "nub")        hydra_lib_lists_nub        nil (tc-list a) (tc-list a) '(("a" . ("equality")))))
-      (cons (qname ns_ "null")       (prim1 (qname ns_ "null")       hydra_lib_lists_null       nil (tc-list a) (tc-boolean)))
-      (cons (qname ns_ "partition")   (prim2 (qname ns_ "partition")
-                                               hydra_lib_lists_partition
+      (cons (prim-name hydra_lib_lists_maybe_at)    (prim2 (prim-name hydra_lib_lists_maybe_at)    hydra_lisp_lib_lists_maybe_at   nil (tc-int32) (tc-list a) (tc-optional a)))
+      (cons (prim-name hydra_lib_lists_maybe_head)  (prim1 (prim-name hydra_lib_lists_maybe_head)  hydra_lisp_lib_lists_maybe_head nil (tc-list a) (tc-optional a)))
+      (cons (prim-name hydra_lib_lists_maybe_init)  (prim1 (prim-name hydra_lib_lists_maybe_init)  hydra_lisp_lib_lists_maybe_init nil (tc-list a) (tc-optional (tc-list a))))
+      (cons (prim-name hydra_lib_lists_maybe_last)  (prim1 (prim-name hydra_lib_lists_maybe_last)  hydra_lisp_lib_lists_maybe_last nil (tc-list a) (tc-optional a)))
+      (cons (prim-name hydra_lib_lists_maybe_tail)  (prim1 (prim-name hydra_lib_lists_maybe_tail)  hydra_lisp_lib_lists_maybe_tail nil (tc-list a) (tc-optional (tc-list a))))
+      (cons (prim-name hydra_lib_lists_nub)        (prim1 (prim-name hydra_lib_lists_nub)        hydra_lisp_lib_lists_nub        nil (tc-list a) (tc-list a) '(("a" . ("equality")))))
+      (cons (prim-name hydra_lib_lists_null)       (prim1 (prim-name hydra_lib_lists_null)       hydra_lisp_lib_lists_null       nil (tc-list a) (tc-boolean)))
+      (cons (prim-name hydra_lib_lists_partition)   (prim2 (prim-name hydra_lib_lists_partition)
+                                               hydra_lisp_lib_lists_partition
                                                nil (fun a (tc-boolean)) (tc-list a) (tc-pair (tc-list a) (tc-list a))))
-      (cons (qname ns_ "pure")       (prim1 (qname ns_ "pure")       hydra_lib_lists_pure       nil a (tc-list a)))
-      (cons (qname ns_ "replicate")  (prim2 (qname ns_ "replicate")
-                                              hydra_lib_lists_replicate
+      (cons (prim-name hydra_lib_lists_pure)       (prim1 (prim-name hydra_lib_lists_pure)       hydra_lisp_lib_lists_pure       nil a (tc-list a)))
+      (cons (prim-name hydra_lib_lists_replicate)  (prim2 (prim-name hydra_lib_lists_replicate)
+                                              hydra_lisp_lib_lists_replicate
                                               nil (tc-int32) a (tc-list a)))
-      (cons (qname ns_ "reverse")    (prim1 (qname ns_ "reverse")    hydra_lib_lists_reverse    nil (tc-list a) (tc-list a)))
-      (cons (qname ns_ "singleton")  (prim1 (qname ns_ "singleton")  hydra_lib_lists_singleton  nil a (tc-list a)))
-      (cons (qname ns_ "sort")       (prim1 (qname ns_ "sort")       hydra_lib_lists_sort       nil (tc-list a) (tc-list a) '(("a" . ("ordering")))))
-      (cons (qname ns_ "sortOn")     (prim2 (qname ns_ "sortOn")
-                                              hydra_lib_lists_sort_on
+      (cons (prim-name hydra_lib_lists_reverse)    (prim1 (prim-name hydra_lib_lists_reverse)    hydra_lisp_lib_lists_reverse    nil (tc-list a) (tc-list a)))
+      (cons (prim-name hydra_lib_lists_singleton)  (prim1 (prim-name hydra_lib_lists_singleton)  hydra_lisp_lib_lists_singleton  nil a (tc-list a)))
+      (cons (prim-name hydra_lib_lists_sort)       (prim1 (prim-name hydra_lib_lists_sort)       hydra_lisp_lib_lists_sort       nil (tc-list a) (tc-list a) '(("a" . ("ordering")))))
+      (cons (prim-name hydra_lib_lists_sort_on)     (prim2 (prim-name hydra_lib_lists_sort_on)
+                                              hydra_lisp_lib_lists_sort_on
                                               nil (fun a b) (tc-list a) (tc-list a)))
-      (cons (qname ns_ "span")       (prim2 (qname ns_ "span")
-                                              hydra_lib_lists_span
+      (cons (prim-name hydra_lib_lists_span)       (prim2 (prim-name hydra_lib_lists_span)
+                                              hydra_lisp_lib_lists_span
                                               nil (fun a (tc-boolean)) (tc-list a) (tc-pair (tc-list a) (tc-list a))))
-      (cons (qname ns_ "take")       (prim2 (qname ns_ "take")
-                                              hydra_lib_lists_take
+      (cons (prim-name hydra_lib_lists_take)       (prim2 (prim-name hydra_lib_lists_take)
+                                              hydra_lisp_lib_lists_take
                                               nil (tc-int32) (tc-list a) (tc-list a)))
-      (cons (qname ns_ "transpose")  (prim1 (qname ns_ "transpose")  hydra_lib_lists_transpose  nil (tc-list (tc-list a)) (tc-list (tc-list a))))
-      (cons (qname ns_ "uncons")     (prim1 (qname ns_ "uncons")     hydra_lib_lists_uncons     nil (tc-list a) (tc-optional (tc-pair a (tc-list a)))))
-      (cons (qname ns_ "zip")        (prim2 (qname ns_ "zip")
-                                              hydra_lib_lists_zip
+      (cons (prim-name hydra_lib_lists_transpose)  (prim1 (prim-name hydra_lib_lists_transpose)  hydra_lisp_lib_lists_transpose  nil (tc-list (tc-list a)) (tc-list (tc-list a))))
+      (cons (prim-name hydra_lib_lists_uncons)     (prim1 (prim-name hydra_lib_lists_uncons)     hydra_lisp_lib_lists_uncons     nil (tc-list a) (tc-optional (tc-pair a (tc-list a)))))
+      (cons (prim-name hydra_lib_lists_zip)        (prim2 (prim-name hydra_lib_lists_zip)
+                                              hydra_lisp_lib_lists_zip
                                               nil (tc-list a) (tc-list b) (tc-list (tc-pair a b))))
-      (cons (qname ns_ "zipWith")    (prim3 (qname ns_ "zipWith")
+      (cons (prim-name hydra_lib_lists_zip_with)    (prim3 (prim-name hydra_lib_lists_zip_with)
                                               (lambda (f)
                                                 (lambda (xs)
                                                   (lambda (ys)
-                                                    (funcall (funcall (funcall hydra_lib_lists_zip_with
+                                                    (funcall (funcall (funcall hydra_lisp_lib_lists_zip_with
                                                                                (lambda (a) (lambda (b) (funcall (funcall f a) b))))
                                                                       xs) ys))))
                                               nil (fun a (fun b c)) (tc-list a) (tc-list b) (tc-list c))))))
@@ -214,18 +232,18 @@
 ;; ============================================================================
 
 (defun register-logic ()
-  (let ((ns_ "hydra.lib.logic")
+  (let (
         (a (tc-variable "a")))
     (list
-      (cons (qname ns_ "and")    (prim2 (qname ns_ "and")
-                                         hydra_lib_logic_and
+      (cons (prim-name hydra_lib_logic_and)    (prim2 (prim-name hydra_lib_logic_and)
+                                         hydra_lisp_lib_logic_and
                                          nil (tc-boolean) (tc-boolean) (tc-boolean)))
-      (cons (qname ns_ "ifElse") (prim3 (qname ns_ "ifElse")
-                                         hydra_lib_logic_if_else
-                                         nil (tc-boolean) a a a))
-      (cons (qname ns_ "not")    (prim1 (qname ns_ "not")    hydra_lib_logic_not nil (tc-boolean) (tc-boolean)))
-      (cons (qname ns_ "or")     (prim2 (qname ns_ "or")
-                                         hydra_lib_logic_or
+      (cons (prim-name hydra_lib_logic_if_else) (lazy-args '(1 2) (prim3 (prim-name hydra_lib_logic_if_else)
+                                         hydra_lisp_lib_logic_if_else
+                                         nil (tc-boolean) a a a)))
+      (cons (prim-name hydra_lib_logic_not)    (prim1 (prim-name hydra_lib_logic_not)    hydra_lisp_lib_logic_not nil (tc-boolean) (tc-boolean)))
+      (cons (prim-name hydra_lib_logic_or)     (prim2 (prim-name hydra_lib_logic_or)
+                                         hydra_lisp_lib_logic_or
                                          nil (tc-boolean) (tc-boolean) (tc-boolean))))))
 
 ;; ============================================================================
@@ -233,7 +251,7 @@
 ;; ============================================================================
 
 (defun register-maps ()
-  (let ((ns_ "hydra.lib.maps")
+  (let (
         (k  (tc-variable "k"))
         (k1 (tc-variable "k1"))
         (k2 (tc-variable "k2"))
@@ -244,51 +262,51 @@
         (ord-k1k2 '(("k1" . ("ordering")) ("k2" . ("ordering")))))
     (let ((map-kv (tc-map k v)))
       (list
-        (cons (qname ns_ "alter")          (prim3 (qname ns_ "alter")
-                                                   hydra_lib_maps_alter
+        (cons (prim-name hydra_lib_maps_alter)          (prim3 (prim-name hydra_lib_maps_alter)
+                                                   hydra_lisp_lib_maps_alter
                                                    nil (fun (tc-optional v) (tc-optional v)) k map-kv map-kv ord-k))
-        (cons (qname ns_ "bimap")          (prim3 (qname ns_ "bimap")
-                                                   hydra_lib_maps_bimap
+        (cons (prim-name hydra_lib_maps_bimap)          (prim3 (prim-name hydra_lib_maps_bimap)
+                                                   hydra_lisp_lib_maps_bimap
                                                    nil (fun k1 k2) (fun v1 v2) (tc-map k1 v1) (tc-map k2 v2) ord-k1k2))
-        (cons (qname ns_ "delete")         (prim2 (qname ns_ "delete")
-                                                   hydra_lib_maps_delete
+        (cons (prim-name hydra_lib_maps_delete)         (prim2 (prim-name hydra_lib_maps_delete)
+                                                   hydra_lisp_lib_maps_delete
                                                    nil k map-kv map-kv ord-k))
-        (cons (qname ns_ "elems")          (prim1 (qname ns_ "elems")  hydra_lib_maps_elems  nil map-kv (tc-list v) ord-k))
-        (cons (qname ns_ "empty")          (prim0 (qname ns_ "empty")  (lambda () hydra_lib_maps_empty)  nil map-kv ord-k))
-        (cons (qname ns_ "filter")         (prim2 (qname ns_ "filter")
-                                                   hydra_lib_maps_filter
+        (cons (prim-name hydra_lib_maps_elems)          (prim1 (prim-name hydra_lib_maps_elems)  hydra_lisp_lib_maps_elems  nil map-kv (tc-list v) ord-k))
+        (cons (prim-name hydra_lib_maps_empty)          (prim0 (prim-name hydra_lib_maps_empty)  (lambda () hydra_lisp_lib_maps_empty)  nil map-kv ord-k))
+        (cons (prim-name hydra_lib_maps_filter)         (prim2 (prim-name hydra_lib_maps_filter)
+                                                   hydra_lisp_lib_maps_filter
                                                    nil (fun v (tc-boolean)) map-kv map-kv ord-k))
-        (cons (qname ns_ "filterWithKey")  (prim2 (qname ns_ "filterWithKey")
-                                                   hydra_lib_maps_filter_with_key
+        (cons (prim-name hydra_lib_maps_filter_with_key)  (prim2 (prim-name hydra_lib_maps_filter_with_key)
+                                                   hydra_lisp_lib_maps_filter_with_key
                                                    nil (fun k (fun v (tc-boolean))) map-kv map-kv ord-k))
-        (cons (qname ns_ "findWithDefault") (prim3 (qname ns_ "findWithDefault")
-                                                    hydra_lib_maps_find_with_default
-                                                    nil v k map-kv v ord-k))
-        (cons (qname ns_ "fromList")       (prim1 (qname ns_ "fromList") hydra_lib_maps_from_list nil (tc-list (tc-pair k v)) map-kv ord-k))
-        (cons (qname ns_ "insert")         (prim3 (qname ns_ "insert")
-                                                   hydra_lib_maps_insert
+        (cons (prim-name hydra_lib_maps_find_with_default) (lazy-args '(0) (prim3 (prim-name hydra_lib_maps_find_with_default)
+                                                    hydra_lisp_lib_maps_find_with_default
+                                                    nil v k map-kv v ord-k)))
+        (cons (prim-name hydra_lib_maps_from_list)       (prim1 (prim-name hydra_lib_maps_from_list) hydra_lisp_lib_maps_from_list nil (tc-list (tc-pair k v)) map-kv ord-k))
+        (cons (prim-name hydra_lib_maps_insert)         (prim3 (prim-name hydra_lib_maps_insert)
+                                                   hydra_lisp_lib_maps_insert
                                                    nil k v map-kv map-kv ord-k))
-        (cons (qname ns_ "keys")           (prim1 (qname ns_ "keys")   hydra_lib_maps_keys   nil map-kv (tc-list k) ord-k))
-        (cons (qname ns_ "lookup")         (prim2 (qname ns_ "lookup")
-                                                   hydra_lib_maps_lookup
+        (cons (prim-name hydra_lib_maps_keys)           (prim1 (prim-name hydra_lib_maps_keys)   hydra_lisp_lib_maps_keys   nil map-kv (tc-list k) ord-k))
+        (cons (prim-name hydra_lib_maps_lookup)         (prim2 (prim-name hydra_lib_maps_lookup)
+                                                   hydra_lisp_lib_maps_lookup
                                                    nil k map-kv (tc-optional v) ord-k))
-        (cons (qname ns_ "map")            (prim2 (qname ns_ "map")
-                                                   hydra_lib_maps_map
+        (cons (prim-name hydra_lib_maps_map)            (prim2 (prim-name hydra_lib_maps_map)
+                                                   hydra_lisp_lib_maps_map
                                                    nil (fun v1 v2) (tc-map k v1) (tc-map k v2) ord-k))
-        (cons (qname ns_ "mapKeys")        (prim2 (qname ns_ "mapKeys")
-                                                   hydra_lib_maps_map_keys
+        (cons (prim-name hydra_lib_maps_map_keys)        (prim2 (prim-name hydra_lib_maps_map_keys)
+                                                   hydra_lisp_lib_maps_map_keys
                                                    nil (fun k1 k2) (tc-map k1 v) (tc-map k2 v) ord-k1k2))
-        (cons (qname ns_ "member")         (prim2 (qname ns_ "member")
-                                                   hydra_lib_maps_member
+        (cons (prim-name hydra_lib_maps_member)         (prim2 (prim-name hydra_lib_maps_member)
+                                                   hydra_lisp_lib_maps_member
                                                    nil k map-kv (tc-boolean) ord-k))
-        (cons (qname ns_ "null")           (prim1 (qname ns_ "null")   hydra_lib_maps_null   nil map-kv (tc-boolean) ord-k))
-        (cons (qname ns_ "singleton")      (prim2 (qname ns_ "singleton")
-                                                   hydra_lib_maps_singleton
+        (cons (prim-name hydra_lib_maps_null)           (prim1 (prim-name hydra_lib_maps_null)   hydra_lisp_lib_maps_null   nil map-kv (tc-boolean) ord-k))
+        (cons (prim-name hydra_lib_maps_singleton)      (prim2 (prim-name hydra_lib_maps_singleton)
+                                                   hydra_lisp_lib_maps_singleton
                                                    nil k v map-kv ord-k))
-        (cons (qname ns_ "size")           (prim1 (qname ns_ "size")   hydra_lib_maps_size   nil map-kv (tc-int32) ord-k))
-        (cons (qname ns_ "toList")         (prim1 (qname ns_ "toList") hydra_lib_maps_to_list nil map-kv (tc-list (tc-pair k v)) ord-k))
-        (cons (qname ns_ "union")          (prim2 (qname ns_ "union")
-                                                   hydra_lib_maps_union
+        (cons (prim-name hydra_lib_maps_size)           (prim1 (prim-name hydra_lib_maps_size)   hydra_lisp_lib_maps_size   nil map-kv (tc-int32) ord-k))
+        (cons (prim-name hydra_lib_maps_to_list)         (prim1 (prim-name hydra_lib_maps_to_list) hydra_lisp_lib_maps_to_list nil map-kv (tc-list (tc-pair k v)) ord-k))
+        (cons (prim-name hydra_lib_maps_union)          (prim2 (prim-name hydra_lib_maps_union)
+                                                   hydra_lisp_lib_maps_union
                                                    nil map-kv map-kv map-kv ord-k))))))
 
 ;; ============================================================================
@@ -296,7 +314,7 @@
 ;; ============================================================================
 
 (defun register-math ()
-  (let ((ns_ "hydra.lib.math")
+  (let (
         (i32 (tc-int32))
         (f32 (tc-float32))
         (f64 (tc-float64))
@@ -305,185 +323,185 @@
     (append
       ;; Int32 primitives
       (list
-        (cons (qname ns_ "abs")    (prim1 (qname ns_ "abs")    hydra_lib_math_abs    nil i32 i32))
-        (cons (qname ns_ "add")    (prim2 (qname ns_ "add")    hydra_lib_math_add    nil i32 i32 i32))
-        (cons (qname ns_ "even")   (prim1 (qname ns_ "even")   hydra_lib_math_even   nil i32 b))
-        (cons (qname ns_ "mul")    (prim2 (qname ns_ "mul")    hydra_lib_math_mul    nil i32 i32 i32))
-        (cons (qname ns_ "negate") (prim1 (qname ns_ "negate") hydra_lib_math_negate nil i32 i32))
-        (cons (qname ns_ "odd")    (prim1 (qname ns_ "odd")    hydra_lib_math_odd    nil i32 b))
-        (cons (qname ns_ "range")  (prim2 (qname ns_ "range")  hydra_lib_math_range  nil i32 i32 (tc-list i32)))
-        (cons (qname ns_ "signum") (prim1 (qname ns_ "signum") hydra_lib_math_signum nil i32 i32))
-        (cons (qname ns_ "sub")    (prim2 (qname ns_ "sub")    hydra_lib_math_sub    nil i32 i32 i32))
-        (cons (qname ns_ "max")    (prim2 (qname ns_ "max")    hydra_lib_math_max    nil i32 i32 i32))
-        (cons (qname ns_ "maybeDiv")  (prim2 (qname ns_ "maybeDiv")  hydra_lib_math_maybe_div  nil i32 i32 (tc-optional i32)))
-        (cons (qname ns_ "maybeMod")  (prim2 (qname ns_ "maybeMod")  hydra_lib_math_maybe_mod  nil i32 i32 (tc-optional i32)))
-        (cons (qname ns_ "maybePred") (prim1 (qname ns_ "maybePred") hydra_lib_math_maybe_pred nil i32 (tc-optional i32)))
-        (cons (qname ns_ "maybeRem")  (prim2 (qname ns_ "maybeRem")  hydra_lib_math_maybe_rem  nil i32 i32 (tc-optional i32)))
-        (cons (qname ns_ "maybeSucc") (prim1 (qname ns_ "maybeSucc") hydra_lib_math_maybe_succ nil i32 (tc-optional i32)))
-        (cons (qname ns_ "min")    (prim2 (qname ns_ "min")    hydra_lib_math_min    nil i32 i32 i32)))
+        (cons (prim-name hydra_lib_math_abs)    (prim1 (prim-name hydra_lib_math_abs)    hydra_lisp_lib_math_abs    nil i32 i32))
+        (cons (prim-name hydra_lib_math_add)    (prim2 (prim-name hydra_lib_math_add)    hydra_lisp_lib_math_add    nil i32 i32 i32))
+        (cons (prim-name hydra_lib_math_even)   (prim1 (prim-name hydra_lib_math_even)   hydra_lisp_lib_math_even   nil i32 b))
+        (cons (prim-name hydra_lib_math_mul)    (prim2 (prim-name hydra_lib_math_mul)    hydra_lisp_lib_math_mul    nil i32 i32 i32))
+        (cons (prim-name hydra_lib_math_negate) (prim1 (prim-name hydra_lib_math_negate) hydra_lisp_lib_math_negate nil i32 i32))
+        (cons (prim-name hydra_lib_math_odd)    (prim1 (prim-name hydra_lib_math_odd)    hydra_lisp_lib_math_odd    nil i32 b))
+        (cons (prim-name hydra_lib_math_range)  (prim2 (prim-name hydra_lib_math_range)  hydra_lisp_lib_math_range  nil i32 i32 (tc-list i32)))
+        (cons (prim-name hydra_lib_math_signum) (prim1 (prim-name hydra_lib_math_signum) hydra_lisp_lib_math_signum nil i32 i32))
+        (cons (prim-name hydra_lib_math_sub)    (prim2 (prim-name hydra_lib_math_sub)    hydra_lisp_lib_math_sub    nil i32 i32 i32))
+        (cons (prim-name hydra_lib_math_max)    (prim2 (prim-name hydra_lib_math_max)    hydra_lisp_lib_math_max    nil i32 i32 i32))
+        (cons (prim-name hydra_lib_math_maybe_div)  (prim2 (prim-name hydra_lib_math_maybe_div)  hydra_lisp_lib_math_maybe_div  nil i32 i32 (tc-optional i32)))
+        (cons (prim-name hydra_lib_math_maybe_mod)  (prim2 (prim-name hydra_lib_math_maybe_mod)  hydra_lisp_lib_math_maybe_mod  nil i32 i32 (tc-optional i32)))
+        (cons (prim-name hydra_lib_math_maybe_pred) (prim1 (prim-name hydra_lib_math_maybe_pred) hydra_lisp_lib_math_maybe_pred nil i32 (tc-optional i32)))
+        (cons (prim-name hydra_lib_math_maybe_rem)  (prim2 (prim-name hydra_lib_math_maybe_rem)  hydra_lisp_lib_math_maybe_rem  nil i32 i32 (tc-optional i32)))
+        (cons (prim-name hydra_lib_math_maybe_succ) (prim1 (prim-name hydra_lib_math_maybe_succ) hydra_lisp_lib_math_maybe_succ nil i32 (tc-optional i32)))
+        (cons (prim-name hydra_lib_math_min)    (prim2 (prim-name hydra_lib_math_min)    hydra_lisp_lib_math_min    nil i32 i32 i32)))
       ;; Float64 primitives
       (list
-        (cons (qname ns_ "acos")     (prim1 (qname ns_ "acos")     hydra_lib_math_acos     nil f64 f64))
-        (cons (qname ns_ "acosh")    (prim1 (qname ns_ "acosh")    hydra_lib_math_acosh    nil f64 f64))
-        (cons (qname ns_ "addFloat64") (prim2 (qname ns_ "addFloat64") hydra_lib_math_add_float64 nil f64 f64 f64))
-        (cons (qname ns_ "asin")     (prim1 (qname ns_ "asin")     hydra_lib_math_asin     nil f64 f64))
-        (cons (qname ns_ "asinh")    (prim1 (qname ns_ "asinh")    hydra_lib_math_asinh    nil f64 f64))
-        (cons (qname ns_ "atan")     (prim1 (qname ns_ "atan")     hydra_lib_math_atan     nil f64 f64))
-        (cons (qname ns_ "atan2")    (prim2 (qname ns_ "atan2")    hydra_lib_math_atan2    nil f64 f64 f64))
-        (cons (qname ns_ "atanh")    (prim1 (qname ns_ "atanh")    hydra_lib_math_atanh    nil f64 f64))
-        (cons (qname ns_ "ceiling")  (prim1 (qname ns_ "ceiling")  hydra_lib_math_ceiling  nil f64 f64))
-        (cons (qname ns_ "cos")      (prim1 (qname ns_ "cos")      hydra_lib_math_cos      nil f64 f64))
-        (cons (qname ns_ "cosh")     (prim1 (qname ns_ "cosh")     hydra_lib_math_cosh     nil f64 f64))
-        (cons (qname ns_ "e")        (prim0 (qname ns_ "e")        (lambda () hydra_lib_math_e)        nil f64))
-        (cons (qname ns_ "exp")      (prim1 (qname ns_ "exp")      hydra_lib_math_exp      nil f64 f64))
-        (cons (qname ns_ "floor")    (prim1 (qname ns_ "floor")    hydra_lib_math_floor    nil f64 f64))
-        (cons (qname ns_ "log")      (prim1 (qname ns_ "log")      hydra_lib_math_log      nil f64 f64))
-        (cons (qname ns_ "logBase")  (prim2 (qname ns_ "logBase")  hydra_lib_math_log_base nil f64 f64 f64))
-        (cons (qname ns_ "mulFloat64") (prim2 (qname ns_ "mulFloat64") hydra_lib_math_mul_float64 nil f64 f64 f64))
-        (cons (qname ns_ "negateFloat64") (prim1 (qname ns_ "negateFloat64") hydra_lib_math_negate_float64 nil f64 f64))
-        (cons (qname ns_ "pi")       (prim0 (qname ns_ "pi")       (lambda () hydra_lib_math_pi)       nil f64))
-        (cons (qname ns_ "pow")      (prim2 (qname ns_ "pow")      hydra_lib_math_pow      nil f64 f64 f64))
-        (cons (qname ns_ "round")    (prim1 (qname ns_ "round")    hydra_lib_math_round    nil f64 f64))
-        (cons (qname ns_ "roundFloat32")  (prim2 (qname ns_ "roundFloat32")  hydra_lib_math_round_float32  nil i32 f32 f32))
-        (cons (qname ns_ "roundFloat64")  (prim2 (qname ns_ "roundFloat64")  hydra_lib_math_round_float64  nil i32 f64 f64))
-        (cons (qname ns_ "sin")      (prim1 (qname ns_ "sin")      hydra_lib_math_sin      nil f64 f64))
-        (cons (qname ns_ "sinh")     (prim1 (qname ns_ "sinh")     hydra_lib_math_sinh     nil f64 f64))
-        (cons (qname ns_ "sqrt")     (prim1 (qname ns_ "sqrt")     hydra_lib_math_sqrt     nil f64 f64))
-        (cons (qname ns_ "subFloat64") (prim2 (qname ns_ "subFloat64") hydra_lib_math_sub_float64 nil f64 f64 f64))
-        (cons (qname ns_ "tan")      (prim1 (qname ns_ "tan")      hydra_lib_math_tan      nil f64 f64))
-        (cons (qname ns_ "tanh")     (prim1 (qname ns_ "tanh")     hydra_lib_math_tanh     nil f64 f64))
-        (cons (qname ns_ "truncate") (prim1 (qname ns_ "truncate") hydra_lib_math_truncate nil f64 f64))))))
+        (cons (prim-name hydra_lib_math_acos)     (prim1 (prim-name hydra_lib_math_acos)     hydra_lisp_lib_math_acos     nil f64 f64))
+        (cons (prim-name hydra_lib_math_acosh)    (prim1 (prim-name hydra_lib_math_acosh)    hydra_lisp_lib_math_acosh    nil f64 f64))
+        (cons (prim-name hydra_lib_math_add_float64) (prim2 (prim-name hydra_lib_math_add_float64) hydra_lisp_lib_math_add_float64 nil f64 f64 f64))
+        (cons (prim-name hydra_lib_math_asin)     (prim1 (prim-name hydra_lib_math_asin)     hydra_lisp_lib_math_asin     nil f64 f64))
+        (cons (prim-name hydra_lib_math_asinh)    (prim1 (prim-name hydra_lib_math_asinh)    hydra_lisp_lib_math_asinh    nil f64 f64))
+        (cons (prim-name hydra_lib_math_atan)     (prim1 (prim-name hydra_lib_math_atan)     hydra_lisp_lib_math_atan     nil f64 f64))
+        (cons (prim-name hydra_lib_math_atan2)    (prim2 (prim-name hydra_lib_math_atan2)    hydra_lisp_lib_math_atan2    nil f64 f64 f64))
+        (cons (prim-name hydra_lib_math_atanh)    (prim1 (prim-name hydra_lib_math_atanh)    hydra_lisp_lib_math_atanh    nil f64 f64))
+        (cons (prim-name hydra_lib_math_ceiling)  (prim1 (prim-name hydra_lib_math_ceiling)  hydra_lisp_lib_math_ceiling  nil f64 f64))
+        (cons (prim-name hydra_lib_math_cos)      (prim1 (prim-name hydra_lib_math_cos)      hydra_lisp_lib_math_cos      nil f64 f64))
+        (cons (prim-name hydra_lib_math_cosh)     (prim1 (prim-name hydra_lib_math_cosh)     hydra_lisp_lib_math_cosh     nil f64 f64))
+        (cons (prim-name hydra_lib_math_e)        (prim0 (prim-name hydra_lib_math_e)        (lambda () hydra_lisp_lib_math_e)        nil f64))
+        (cons (prim-name hydra_lib_math_exp)      (prim1 (prim-name hydra_lib_math_exp)      hydra_lisp_lib_math_exp      nil f64 f64))
+        (cons (prim-name hydra_lib_math_floor)    (prim1 (prim-name hydra_lib_math_floor)    hydra_lisp_lib_math_floor    nil f64 f64))
+        (cons (prim-name hydra_lib_math_log)      (prim1 (prim-name hydra_lib_math_log)      hydra_lisp_lib_math_log      nil f64 f64))
+        (cons (prim-name hydra_lib_math_log_base)  (prim2 (prim-name hydra_lib_math_log_base)  hydra_lisp_lib_math_log_base nil f64 f64 f64))
+        (cons (prim-name hydra_lib_math_mul_float64) (prim2 (prim-name hydra_lib_math_mul_float64) hydra_lisp_lib_math_mul_float64 nil f64 f64 f64))
+        (cons (prim-name hydra_lib_math_negate_float64) (prim1 (prim-name hydra_lib_math_negate_float64) hydra_lisp_lib_math_negate_float64 nil f64 f64))
+        (cons (prim-name hydra_lib_math_pi)       (prim0 (prim-name hydra_lib_math_pi)       (lambda () hydra_lisp_lib_math_pi)       nil f64))
+        (cons (prim-name hydra_lib_math_pow)      (prim2 (prim-name hydra_lib_math_pow)      hydra_lisp_lib_math_pow      nil f64 f64 f64))
+        (cons (prim-name hydra_lib_math_round)    (prim1 (prim-name hydra_lib_math_round)    hydra_lisp_lib_math_round    nil f64 f64))
+        (cons (prim-name hydra_lib_math_round_float32)  (prim2 (prim-name hydra_lib_math_round_float32)  hydra_lisp_lib_math_round_float32  nil i32 f32 f32))
+        (cons (prim-name hydra_lib_math_round_float64)  (prim2 (prim-name hydra_lib_math_round_float64)  hydra_lisp_lib_math_round_float64  nil i32 f64 f64))
+        (cons (prim-name hydra_lib_math_sin)      (prim1 (prim-name hydra_lib_math_sin)      hydra_lisp_lib_math_sin      nil f64 f64))
+        (cons (prim-name hydra_lib_math_sinh)     (prim1 (prim-name hydra_lib_math_sinh)     hydra_lisp_lib_math_sinh     nil f64 f64))
+        (cons (prim-name hydra_lib_math_sqrt)     (prim1 (prim-name hydra_lib_math_sqrt)     hydra_lisp_lib_math_sqrt     nil f64 f64))
+        (cons (prim-name hydra_lib_math_sub_float64) (prim2 (prim-name hydra_lib_math_sub_float64) hydra_lisp_lib_math_sub_float64 nil f64 f64 f64))
+        (cons (prim-name hydra_lib_math_tan)      (prim1 (prim-name hydra_lib_math_tan)      hydra_lisp_lib_math_tan      nil f64 f64))
+        (cons (prim-name hydra_lib_math_tanh)     (prim1 (prim-name hydra_lib_math_tanh)     hydra_lisp_lib_math_tanh     nil f64 f64))
+        (cons (prim-name hydra_lib_math_truncate) (prim1 (prim-name hydra_lib_math_truncate) hydra_lisp_lib_math_truncate nil f64 f64))))))
 
 ;; ============================================================================
 ;; Maybes
 ;; ============================================================================
 
 (defun register-optionals ()
-  (let ((ns_ "hydra.lib.optionals")
+  (let (
         (a (tc-variable "a"))
         (b (tc-variable "b"))
         (c (tc-variable "c")))
     (list
-      (cons (qname ns_ "apply")    (prim2 (qname ns_ "apply")
-                                           hydra_lib_optionals_apply
+      (cons (prim-name hydra_lib_optionals_apply)    (prim2 (prim-name hydra_lib_optionals_apply)
+                                           hydra_lisp_lib_optionals_apply
                                            nil (tc-optional (fun a b)) (tc-optional a) (tc-optional b)))
-      (cons (qname ns_ "bind")     (prim2 (qname ns_ "bind")
-                                           hydra_lib_optionals_bind
+      (cons (prim-name hydra_lib_optionals_bind)     (prim2 (prim-name hydra_lib_optionals_bind)
+                                           hydra_lisp_lib_optionals_bind
                                            nil (tc-optional a) (fun a (tc-optional b)) (tc-optional b)))
-      (cons (qname ns_ "cases")    (prim3 (qname ns_ "cases")
-                                           hydra_lib_optionals_cases
-                                           nil (tc-optional a) b (fun a b) b))
-      (cons (qname ns_ "cat")      (prim1 (qname ns_ "cat")      hydra_lib_optionals_cat      nil (tc-list (tc-optional a)) (tc-list a)))
-      (cons (qname ns_ "compose")  (prim3 (qname ns_ "compose")
-                                           hydra_lib_optionals_compose
+      (cons (prim-name hydra_lib_optionals_cases)    (lazy-args '(1) (prim3 (prim-name hydra_lib_optionals_cases)
+                                           hydra_lisp_lib_optionals_cases
+                                           nil (tc-optional a) b (fun a b) b)))
+      (cons (prim-name hydra_lib_optionals_cat)      (prim1 (prim-name hydra_lib_optionals_cat)      hydra_lisp_lib_optionals_cat      nil (tc-list (tc-optional a)) (tc-list a)))
+      (cons (prim-name hydra_lib_optionals_compose)  (prim3 (prim-name hydra_lib_optionals_compose)
+                                           hydra_lisp_lib_optionals_compose
                                            nil (fun a (tc-optional b)) (fun b (tc-optional c)) a (tc-optional c)))
-      (cons (qname ns_ "fromOptional") (prim2 (qname ns_ "fromOptional")
-                                            hydra_lib_optionals_from_optional
-                                            nil a (tc-optional a) a))
-      (cons (qname ns_ "isGiven")    (prim1 (qname ns_ "isGiven")    hydra_lib_optionals_is_given    nil (tc-optional a) (tc-boolean)))
-      (cons (qname ns_ "isNone") (prim1 (qname ns_ "isNone") hydra_lib_optionals_is_none nil (tc-optional a) (tc-boolean)))
-      (cons (qname ns_ "map")       (prim2 (qname ns_ "map")
-                                            hydra_lib_optionals_map
+      (cons (prim-name hydra_lib_optionals_from_optional) (lazy-args '(0) (prim2 (prim-name hydra_lib_optionals_from_optional)
+                                            hydra_lisp_lib_optionals_from_optional
+                                            nil a (tc-optional a) a)))
+      (cons (prim-name hydra_lib_optionals_is_given)    (prim1 (prim-name hydra_lib_optionals_is_given)    hydra_lisp_lib_optionals_is_given    nil (tc-optional a) (tc-boolean)))
+      (cons (prim-name hydra_lib_optionals_is_none) (prim1 (prim-name hydra_lib_optionals_is_none) hydra_lisp_lib_optionals_is_none nil (tc-optional a) (tc-boolean)))
+      (cons (prim-name hydra_lib_optionals_map)       (prim2 (prim-name hydra_lib_optionals_map)
+                                            hydra_lisp_lib_optionals_map
                                             nil (fun a b) (tc-optional a) (tc-optional b)))
-      (cons (qname ns_ "mapOptional")  (prim2 (qname ns_ "mapOptional")
-                                            hydra_lib_optionals_map_optional
+      (cons (prim-name hydra_lib_optionals_map_optional)  (prim2 (prim-name hydra_lib_optionals_map_optional)
+                                            hydra_lisp_lib_optionals_map_optional
                                             nil (fun a (tc-optional b)) (tc-list a) (tc-list b)))
-      (cons (qname ns_ "pure")      (prim1 (qname ns_ "pure")      hydra_lib_optionals_pure      nil a (tc-optional a)))
-      (cons (qname ns_ "toList")    (prim1 (qname ns_ "toList")    hydra_lib_optionals_to_list   nil (tc-optional a) (tc-list a))))))
+      (cons (prim-name hydra_lib_optionals_pure)      (prim1 (prim-name hydra_lib_optionals_pure)      hydra_lisp_lib_optionals_pure      nil a (tc-optional a)))
+      (cons (prim-name hydra_lib_optionals_to_list)    (prim1 (prim-name hydra_lib_optionals_to_list)    hydra_lisp_lib_optionals_to_list   nil (tc-optional a) (tc-list a))))))
 
 ;; ============================================================================
 ;; Pairs
 ;; ============================================================================
 
 (defun register-pairs ()
-  (let ((ns_ "hydra.lib.pairs")
+  (let (
         (a (tc-variable "a"))
         (b (tc-variable "b"))
         (c (tc-variable "c"))
         (d (tc-variable "d")))
     (list
-      (cons (qname ns_ "bimap")  (prim3 (qname ns_ "bimap")
-                                         hydra_lib_pairs_bimap
+      (cons (prim-name hydra_lib_pairs_bimap)  (prim3 (prim-name hydra_lib_pairs_bimap)
+                                         hydra_lisp_lib_pairs_bimap
                                          nil (fun a c) (fun b d) (tc-pair a b) (tc-pair c d)))
-      (cons (qname ns_ "first")  (prim1 (qname ns_ "first")  hydra_lib_pairs_first  nil (tc-pair a b) a))
-      (cons (qname ns_ "second") (prim1 (qname ns_ "second") hydra_lib_pairs_second nil (tc-pair a b) b)))))
+      (cons (prim-name hydra_lib_pairs_first)  (prim1 (prim-name hydra_lib_pairs_first)  hydra_lisp_lib_pairs_first  nil (tc-pair a b) a))
+      (cons (prim-name hydra_lib_pairs_second) (prim1 (prim-name hydra_lib_pairs_second) hydra_lisp_lib_pairs_second nil (tc-pair a b) b)))))
 
 ;; ============================================================================
 ;; Sets
 ;; ============================================================================
 
 (defun register-sets ()
-  (let ((ns_ "hydra.lib.sets")
+  (let (
         (a (tc-variable "a"))
         (b (tc-variable "b"))
         (ord-a '(("a" . ("ordering"))))
         (ord-ab '(("a" . ("ordering")) ("b" . ("ordering")))))
     (list
-      (cons (qname ns_ "delete")       (prim2 (qname ns_ "delete")
-                                               hydra_lib_sets_delete
+      (cons (prim-name hydra_lib_sets_delete)       (prim2 (prim-name hydra_lib_sets_delete)
+                                               hydra_lisp_lib_sets_delete
                                                nil a (tc-set a) (tc-set a) ord-a))
-      (cons (qname ns_ "difference")   (prim2 (qname ns_ "difference")
-                                               hydra_lib_sets_difference
+      (cons (prim-name hydra_lib_sets_difference)   (prim2 (prim-name hydra_lib_sets_difference)
+                                               hydra_lisp_lib_sets_difference
                                                nil (tc-set a) (tc-set a) (tc-set a) ord-a))
-      (cons (qname ns_ "empty")        (prim0 (qname ns_ "empty")   (lambda () hydra_lib_sets_empty)   nil (tc-set a) ord-a))
-      (cons (qname ns_ "fromList")     (prim1 (qname ns_ "fromList") hydra_lib_sets_from_list nil (tc-list a) (tc-set a) ord-a))
-      (cons (qname ns_ "insert")       (prim2 (qname ns_ "insert")
-                                               hydra_lib_sets_insert
+      (cons (prim-name hydra_lib_sets_empty)        (prim0 (prim-name hydra_lib_sets_empty)   (lambda () hydra_lisp_lib_sets_empty)   nil (tc-set a) ord-a))
+      (cons (prim-name hydra_lib_sets_from_list)     (prim1 (prim-name hydra_lib_sets_from_list) hydra_lisp_lib_sets_from_list nil (tc-list a) (tc-set a) ord-a))
+      (cons (prim-name hydra_lib_sets_insert)       (prim2 (prim-name hydra_lib_sets_insert)
+                                               hydra_lisp_lib_sets_insert
                                                nil a (tc-set a) (tc-set a) ord-a))
-      (cons (qname ns_ "intersection") (prim2 (qname ns_ "intersection")
-                                               hydra_lib_sets_intersection
+      (cons (prim-name hydra_lib_sets_intersection) (prim2 (prim-name hydra_lib_sets_intersection)
+                                               hydra_lisp_lib_sets_intersection
                                                nil (tc-set a) (tc-set a) (tc-set a) ord-a))
-      (cons (qname ns_ "map")          (prim2 (qname ns_ "map")
-                                               hydra_lib_sets_map
+      (cons (prim-name hydra_lib_sets_map)          (prim2 (prim-name hydra_lib_sets_map)
+                                               hydra_lisp_lib_sets_map
                                                nil (fun a b) (tc-set a) (tc-set b) ord-ab))
-      (cons (qname ns_ "member")       (prim2 (qname ns_ "member")
-                                               hydra_lib_sets_member
+      (cons (prim-name hydra_lib_sets_member)       (prim2 (prim-name hydra_lib_sets_member)
+                                               hydra_lisp_lib_sets_member
                                                nil a (tc-set a) (tc-boolean) ord-a))
-      (cons (qname ns_ "null")         (prim1 (qname ns_ "null")     hydra_lib_sets_null     nil (tc-set a) (tc-boolean) ord-a))
-      (cons (qname ns_ "singleton")    (prim1 (qname ns_ "singleton") hydra_lib_sets_singleton nil a (tc-set a) ord-a))
-      (cons (qname ns_ "size")         (prim1 (qname ns_ "size")     hydra_lib_sets_size     nil (tc-set a) (tc-int32) ord-a))
-      (cons (qname ns_ "toList")       (prim1 (qname ns_ "toList")   hydra_lib_sets_to_list  nil (tc-set a) (tc-list a) ord-a))
-      (cons (qname ns_ "union")        (prim2 (qname ns_ "union")
-                                               hydra_lib_sets_union
+      (cons (prim-name hydra_lib_sets_null)         (prim1 (prim-name hydra_lib_sets_null)     hydra_lisp_lib_sets_null     nil (tc-set a) (tc-boolean) ord-a))
+      (cons (prim-name hydra_lib_sets_singleton)    (prim1 (prim-name hydra_lib_sets_singleton) hydra_lisp_lib_sets_singleton nil a (tc-set a) ord-a))
+      (cons (prim-name hydra_lib_sets_size)         (prim1 (prim-name hydra_lib_sets_size)     hydra_lisp_lib_sets_size     nil (tc-set a) (tc-int32) ord-a))
+      (cons (prim-name hydra_lib_sets_to_list)       (prim1 (prim-name hydra_lib_sets_to_list)   hydra_lisp_lib_sets_to_list  nil (tc-set a) (tc-list a) ord-a))
+      (cons (prim-name hydra_lib_sets_union)        (prim2 (prim-name hydra_lib_sets_union)
+                                               hydra_lisp_lib_sets_union
                                                nil (tc-set a) (tc-set a) (tc-set a) ord-a))
-      (cons (qname ns_ "unions")       (prim1 (qname ns_ "unions")   hydra_lib_sets_unions   nil (tc-list (tc-set a)) (tc-set a) ord-a)))))
+      (cons (prim-name hydra_lib_sets_unions)       (prim1 (prim-name hydra_lib_sets_unions)   hydra_lisp_lib_sets_unions   nil (tc-list (tc-set a)) (tc-set a) ord-a)))))
 
 ;; ============================================================================
 ;; Strings
 ;; ============================================================================
 
 (defun register-strings ()
-  (let ((ns_ "hydra.lib.strings")
+  (let (
         (s (tc-string))
         (i (tc-int32))
         (b (tc-boolean)))
     (list
-      (cons (qname ns_ "cat")         (prim1 (qname ns_ "cat")         hydra_lib_strings_cat         nil (tc-list s) s))
-      (cons (qname ns_ "cat2")        (prim2 (qname ns_ "cat2")
-                                               hydra_lib_strings_cat2
+      (cons (prim-name hydra_lib_strings_cat)         (prim1 (prim-name hydra_lib_strings_cat)         hydra_lisp_lib_strings_cat         nil (tc-list s) s))
+      (cons (prim-name hydra_lib_strings_cat2)        (prim2 (prim-name hydra_lib_strings_cat2)
+                                               hydra_lisp_lib_strings_cat2
                                                nil s s s))
-      (cons (qname ns_ "fromList")    (prim1 (qname ns_ "fromList")    hydra_lib_strings_from_list    nil (tc-list i) s))
-      (cons (qname ns_ "intercalate") (prim2 (qname ns_ "intercalate")
-                                               hydra_lib_strings_intercalate
+      (cons (prim-name hydra_lib_strings_from_list)    (prim1 (prim-name hydra_lib_strings_from_list)    hydra_lisp_lib_strings_from_list    nil (tc-list i) s))
+      (cons (prim-name hydra_lib_strings_intercalate) (prim2 (prim-name hydra_lib_strings_intercalate)
+                                               hydra_lisp_lib_strings_intercalate
                                                nil s (tc-list s) s))
-      (cons (qname ns_ "length")      (prim1 (qname ns_ "length")      hydra_lib_strings_length      nil s i))
-      (cons (qname ns_ "lines")       (prim1 (qname ns_ "lines")       hydra_lib_strings_lines       nil s (tc-list s)))
-      (cons (qname ns_ "maybeCharAt") (prim2 (qname ns_ "maybeCharAt") hydra_lib_strings_maybe_char_at nil i s (tc-optional i)))
-      (cons (qname ns_ "null")        (prim1 (qname ns_ "null")        hydra_lib_strings_null        nil s b))
-      (cons (qname ns_ "splitOn")     (prim2 (qname ns_ "splitOn")
-                                               hydra_lib_strings_split_on
+      (cons (prim-name hydra_lib_strings_length)      (prim1 (prim-name hydra_lib_strings_length)      hydra_lisp_lib_strings_length      nil s i))
+      (cons (prim-name hydra_lib_strings_lines)       (prim1 (prim-name hydra_lib_strings_lines)       hydra_lisp_lib_strings_lines       nil s (tc-list s)))
+      (cons (prim-name hydra_lib_strings_maybe_char_at) (prim2 (prim-name hydra_lib_strings_maybe_char_at) hydra_lisp_lib_strings_maybe_char_at nil i s (tc-optional i)))
+      (cons (prim-name hydra_lib_strings_null)        (prim1 (prim-name hydra_lib_strings_null)        hydra_lisp_lib_strings_null        nil s b))
+      (cons (prim-name hydra_lib_strings_split_on)     (prim2 (prim-name hydra_lib_strings_split_on)
+                                               hydra_lisp_lib_strings_split_on
                                                nil s s (tc-list s)))
-      (cons (qname ns_ "toList")      (prim1 (qname ns_ "toList")      hydra_lib_strings_to_list     nil s (tc-list i)))
-      (cons (qname ns_ "toLower")     (prim1 (qname ns_ "toLower")     hydra_lib_strings_to_lower    nil s s))
-      (cons (qname ns_ "toUpper")     (prim1 (qname ns_ "toUpper")     hydra_lib_strings_to_upper    nil s s))
-      (cons (qname ns_ "unlines")     (prim1 (qname ns_ "unlines")     hydra_lib_strings_unlines     nil (tc-list s) s)))))
+      (cons (prim-name hydra_lib_strings_to_list)      (prim1 (prim-name hydra_lib_strings_to_list)      hydra_lisp_lib_strings_to_list     nil s (tc-list i)))
+      (cons (prim-name hydra_lib_strings_to_lower)     (prim1 (prim-name hydra_lib_strings_to_lower)     hydra_lisp_lib_strings_to_lower    nil s s))
+      (cons (prim-name hydra_lib_strings_to_upper)     (prim1 (prim-name hydra_lib_strings_to_upper)     hydra_lisp_lib_strings_to_upper    nil s s))
+      (cons (prim-name hydra_lib_strings_unlines)     (prim1 (prim-name hydra_lib_strings_unlines)     hydra_lisp_lib_strings_unlines     nil (tc-list s) s)))))
 
 ;; ============================================================================
 ;; Literals
 ;; ============================================================================
 
 (defun register-literals ()
-  (let ((ns_ "hydra.lib.literals")
+  (let (
         (bi  (tc-bigint))
         (dec (tc-decimal))
         (f32 (tc-float32))
@@ -502,65 +520,65 @@
     (append
       ;; Conversions
       (list
-        (cons (qname ns_ "bigintToDecimal")    (prim1 (qname ns_ "bigintToDecimal")    hydra_lib_literals_bigint_to_decimal    nil bi dec))
-        (cons (qname ns_ "bigintToInt8")       (prim1 (qname ns_ "bigintToInt8")       hydra_lib_literals_bigint_to_int8       nil bi i8))
-        (cons (qname ns_ "bigintToInt16")      (prim1 (qname ns_ "bigintToInt16")      hydra_lib_literals_bigint_to_int16      nil bi i16))
-        (cons (qname ns_ "bigintToInt32")      (prim1 (qname ns_ "bigintToInt32")      hydra_lib_literals_bigint_to_int32      nil bi i32))
-        (cons (qname ns_ "bigintToInt64")      (prim1 (qname ns_ "bigintToInt64")      hydra_lib_literals_bigint_to_int64      nil bi i64))
-        (cons (qname ns_ "bigintToUint8")      (prim1 (qname ns_ "bigintToUint8")      hydra_lib_literals_bigint_to_uint8      nil bi u8))
-        (cons (qname ns_ "bigintToUint16")     (prim1 (qname ns_ "bigintToUint16")     hydra_lib_literals_bigint_to_uint16     nil bi u16))
-        (cons (qname ns_ "bigintToUint32")     (prim1 (qname ns_ "bigintToUint32")     hydra_lib_literals_bigint_to_uint32     nil bi u32))
-        (cons (qname ns_ "bigintToUint64")     (prim1 (qname ns_ "bigintToUint64")     hydra_lib_literals_bigint_to_uint64     nil bi u64))
-        (cons (qname ns_ "binaryToBytes")      (prim1 (qname ns_ "binaryToBytes")      hydra_lib_literals_binary_to_bytes      nil bin (tc-list i32)))
-        (cons (qname ns_ "binaryToString")     (prim1 (qname ns_ "binaryToString")     hydra_lib_literals_binary_to_string     nil bin s))
-        (cons (qname ns_ "decimalToBigint")    (prim1 (qname ns_ "decimalToBigint")    hydra_lib_literals_decimal_to_bigint    nil dec bi))
-        (cons (qname ns_ "decimalToFloat32")   (prim1 (qname ns_ "decimalToFloat32")   hydra_lib_literals_decimal_to_float32   nil dec f32))
-        (cons (qname ns_ "decimalToFloat64")   (prim1 (qname ns_ "decimalToFloat64")   hydra_lib_literals_decimal_to_float64   nil dec f64))
-        (cons (qname ns_ "float32ToDecimal")   (prim1 (qname ns_ "float32ToDecimal")   hydra_lib_literals_float32_to_decimal   nil f32 dec))
-        (cons (qname ns_ "float32ToFloat64")   (prim1 (qname ns_ "float32ToFloat64")   hydra_lib_literals_float32_to_float64   nil f32 f64))
-        (cons (qname ns_ "float64ToDecimal")   (prim1 (qname ns_ "float64ToDecimal")   hydra_lib_literals_float64_to_decimal   nil f64 dec))
-        (cons (qname ns_ "float64ToFloat32")   (prim1 (qname ns_ "float64ToFloat32")   hydra_lib_literals_float64_to_float32   nil f64 f32))
-        (cons (qname ns_ "int8ToBigint")       (prim1 (qname ns_ "int8ToBigint")       hydra_lib_literals_int8_to_bigint       nil i8 bi))
-        (cons (qname ns_ "int16ToBigint")      (prim1 (qname ns_ "int16ToBigint")      hydra_lib_literals_int16_to_bigint      nil i16 bi))
-        (cons (qname ns_ "int32ToBigint")      (prim1 (qname ns_ "int32ToBigint")      hydra_lib_literals_int32_to_bigint      nil i32 bi))
-        (cons (qname ns_ "int64ToBigint")      (prim1 (qname ns_ "int64ToBigint")      hydra_lib_literals_int64_to_bigint      nil i64 bi))
-        (cons (qname ns_ "uint8ToBigint")      (prim1 (qname ns_ "uint8ToBigint")      hydra_lib_literals_uint8_to_bigint      nil u8 bi))
-        (cons (qname ns_ "uint16ToBigint")     (prim1 (qname ns_ "uint16ToBigint")     hydra_lib_literals_uint16_to_bigint     nil u16 bi))
-        (cons (qname ns_ "uint32ToBigint")     (prim1 (qname ns_ "uint32ToBigint")     hydra_lib_literals_uint32_to_bigint     nil u32 bi))
-        (cons (qname ns_ "uint64ToBigint")     (prim1 (qname ns_ "uint64ToBigint")     hydra_lib_literals_uint64_to_bigint     nil u64 bi))
-        (cons (qname ns_ "stringToBinary")     (prim1 (qname ns_ "stringToBinary")     hydra_lib_literals_string_to_binary     nil s bin)))
+        (cons (prim-name hydra_lib_literals_bigint_to_decimal)    (prim1 (prim-name hydra_lib_literals_bigint_to_decimal)    hydra_lisp_lib_literals_bigint_to_decimal    nil bi dec))
+        (cons (prim-name hydra_lib_literals_bigint_to_int8)       (prim1 (prim-name hydra_lib_literals_bigint_to_int8)       hydra_lisp_lib_literals_bigint_to_int8       nil bi i8))
+        (cons (prim-name hydra_lib_literals_bigint_to_int16)      (prim1 (prim-name hydra_lib_literals_bigint_to_int16)      hydra_lisp_lib_literals_bigint_to_int16      nil bi i16))
+        (cons (prim-name hydra_lib_literals_bigint_to_int32)      (prim1 (prim-name hydra_lib_literals_bigint_to_int32)      hydra_lisp_lib_literals_bigint_to_int32      nil bi i32))
+        (cons (prim-name hydra_lib_literals_bigint_to_int64)      (prim1 (prim-name hydra_lib_literals_bigint_to_int64)      hydra_lisp_lib_literals_bigint_to_int64      nil bi i64))
+        (cons (prim-name hydra_lib_literals_bigint_to_uint8)      (prim1 (prim-name hydra_lib_literals_bigint_to_uint8)      hydra_lisp_lib_literals_bigint_to_uint8      nil bi u8))
+        (cons (prim-name hydra_lib_literals_bigint_to_uint16)     (prim1 (prim-name hydra_lib_literals_bigint_to_uint16)     hydra_lisp_lib_literals_bigint_to_uint16     nil bi u16))
+        (cons (prim-name hydra_lib_literals_bigint_to_uint32)     (prim1 (prim-name hydra_lib_literals_bigint_to_uint32)     hydra_lisp_lib_literals_bigint_to_uint32     nil bi u32))
+        (cons (prim-name hydra_lib_literals_bigint_to_uint64)     (prim1 (prim-name hydra_lib_literals_bigint_to_uint64)     hydra_lisp_lib_literals_bigint_to_uint64     nil bi u64))
+        (cons (prim-name hydra_lib_literals_binary_to_bytes)      (prim1 (prim-name hydra_lib_literals_binary_to_bytes)      hydra_lisp_lib_literals_binary_to_bytes      nil bin (tc-list i32)))
+        (cons (prim-name hydra_lib_literals_binary_to_string)     (prim1 (prim-name hydra_lib_literals_binary_to_string)     hydra_lisp_lib_literals_binary_to_string     nil bin s))
+        (cons (prim-name hydra_lib_literals_decimal_to_bigint)    (prim1 (prim-name hydra_lib_literals_decimal_to_bigint)    hydra_lisp_lib_literals_decimal_to_bigint    nil dec bi))
+        (cons (prim-name hydra_lib_literals_decimal_to_float32)   (prim1 (prim-name hydra_lib_literals_decimal_to_float32)   hydra_lisp_lib_literals_decimal_to_float32   nil dec f32))
+        (cons (prim-name hydra_lib_literals_decimal_to_float64)   (prim1 (prim-name hydra_lib_literals_decimal_to_float64)   hydra_lisp_lib_literals_decimal_to_float64   nil dec f64))
+        (cons (prim-name hydra_lib_literals_float32_to_decimal)   (prim1 (prim-name hydra_lib_literals_float32_to_decimal)   hydra_lisp_lib_literals_float32_to_decimal   nil f32 dec))
+        (cons (prim-name hydra_lib_literals_float32_to_float64)   (prim1 (prim-name hydra_lib_literals_float32_to_float64)   hydra_lisp_lib_literals_float32_to_float64   nil f32 f64))
+        (cons (prim-name hydra_lib_literals_float64_to_decimal)   (prim1 (prim-name hydra_lib_literals_float64_to_decimal)   hydra_lisp_lib_literals_float64_to_decimal   nil f64 dec))
+        (cons (prim-name hydra_lib_literals_float64_to_float32)   (prim1 (prim-name hydra_lib_literals_float64_to_float32)   hydra_lisp_lib_literals_float64_to_float32   nil f64 f32))
+        (cons (prim-name hydra_lib_literals_int8_to_bigint)       (prim1 (prim-name hydra_lib_literals_int8_to_bigint)       hydra_lisp_lib_literals_int8_to_bigint       nil i8 bi))
+        (cons (prim-name hydra_lib_literals_int16_to_bigint)      (prim1 (prim-name hydra_lib_literals_int16_to_bigint)      hydra_lisp_lib_literals_int16_to_bigint      nil i16 bi))
+        (cons (prim-name hydra_lib_literals_int32_to_bigint)      (prim1 (prim-name hydra_lib_literals_int32_to_bigint)      hydra_lisp_lib_literals_int32_to_bigint      nil i32 bi))
+        (cons (prim-name hydra_lib_literals_int64_to_bigint)      (prim1 (prim-name hydra_lib_literals_int64_to_bigint)      hydra_lisp_lib_literals_int64_to_bigint      nil i64 bi))
+        (cons (prim-name hydra_lib_literals_uint8_to_bigint)      (prim1 (prim-name hydra_lib_literals_uint8_to_bigint)      hydra_lisp_lib_literals_uint8_to_bigint      nil u8 bi))
+        (cons (prim-name hydra_lib_literals_uint16_to_bigint)     (prim1 (prim-name hydra_lib_literals_uint16_to_bigint)     hydra_lisp_lib_literals_uint16_to_bigint     nil u16 bi))
+        (cons (prim-name hydra_lib_literals_uint32_to_bigint)     (prim1 (prim-name hydra_lib_literals_uint32_to_bigint)     hydra_lisp_lib_literals_uint32_to_bigint     nil u32 bi))
+        (cons (prim-name hydra_lib_literals_uint64_to_bigint)     (prim1 (prim-name hydra_lib_literals_uint64_to_bigint)     hydra_lisp_lib_literals_uint64_to_bigint     nil u64 bi))
+        (cons (prim-name hydra_lib_literals_string_to_binary)     (prim1 (prim-name hydra_lib_literals_string_to_binary)     hydra_lisp_lib_literals_string_to_binary     nil s bin)))
       ;; Read primitives
       (list
-        (cons (qname ns_ "readBigint")   (prim1 (qname ns_ "readBigint")   hydra_lib_literals_read_bigint   nil s (tc-optional bi)))
-        (cons (qname ns_ "readBoolean")  (prim1 (qname ns_ "readBoolean")  hydra_lib_literals_read_boolean  nil s (tc-optional b)))
-        (cons (qname ns_ "readDecimal")  (prim1 (qname ns_ "readDecimal")  hydra_lib_literals_read_decimal  nil s (tc-optional dec)))
-        (cons (qname ns_ "readFloat32")  (prim1 (qname ns_ "readFloat32")  hydra_lib_literals_read_float32  nil s (tc-optional f32)))
-        (cons (qname ns_ "readFloat64")  (prim1 (qname ns_ "readFloat64")  hydra_lib_literals_read_float64  nil s (tc-optional f64)))
-        (cons (qname ns_ "readInt8")     (prim1 (qname ns_ "readInt8")     hydra_lib_literals_read_int8     nil s (tc-optional i8)))
-        (cons (qname ns_ "readInt16")    (prim1 (qname ns_ "readInt16")    hydra_lib_literals_read_int16    nil s (tc-optional i16)))
-        (cons (qname ns_ "readInt32")    (prim1 (qname ns_ "readInt32")    hydra_lib_literals_read_int32    nil s (tc-optional i32)))
-        (cons (qname ns_ "readInt64")    (prim1 (qname ns_ "readInt64")    hydra_lib_literals_read_int64    nil s (tc-optional i64)))
-        (cons (qname ns_ "readString")   (prim1 (qname ns_ "readString")   hydra_lib_literals_read_string   nil s (tc-optional s)))
-        (cons (qname ns_ "readUint8")    (prim1 (qname ns_ "readUint8")    hydra_lib_literals_read_uint8    nil s (tc-optional u8)))
-        (cons (qname ns_ "readUint16")   (prim1 (qname ns_ "readUint16")   hydra_lib_literals_read_uint16   nil s (tc-optional u16)))
-        (cons (qname ns_ "readUint32")   (prim1 (qname ns_ "readUint32")   hydra_lib_literals_read_uint32   nil s (tc-optional u32)))
-        (cons (qname ns_ "readUint64")   (prim1 (qname ns_ "readUint64")   hydra_lib_literals_read_uint64   nil s (tc-optional u64))))
+        (cons (prim-name hydra_lib_literals_read_bigint)   (prim1 (prim-name hydra_lib_literals_read_bigint)   hydra_lisp_lib_literals_read_bigint   nil s (tc-optional bi)))
+        (cons (prim-name hydra_lib_literals_read_boolean)  (prim1 (prim-name hydra_lib_literals_read_boolean)  hydra_lisp_lib_literals_read_boolean  nil s (tc-optional b)))
+        (cons (prim-name hydra_lib_literals_read_decimal)  (prim1 (prim-name hydra_lib_literals_read_decimal)  hydra_lisp_lib_literals_read_decimal  nil s (tc-optional dec)))
+        (cons (prim-name hydra_lib_literals_read_float32)  (prim1 (prim-name hydra_lib_literals_read_float32)  hydra_lisp_lib_literals_read_float32  nil s (tc-optional f32)))
+        (cons (prim-name hydra_lib_literals_read_float64)  (prim1 (prim-name hydra_lib_literals_read_float64)  hydra_lisp_lib_literals_read_float64  nil s (tc-optional f64)))
+        (cons (prim-name hydra_lib_literals_read_int8)     (prim1 (prim-name hydra_lib_literals_read_int8)     hydra_lisp_lib_literals_read_int8     nil s (tc-optional i8)))
+        (cons (prim-name hydra_lib_literals_read_int16)    (prim1 (prim-name hydra_lib_literals_read_int16)    hydra_lisp_lib_literals_read_int16    nil s (tc-optional i16)))
+        (cons (prim-name hydra_lib_literals_read_int32)    (prim1 (prim-name hydra_lib_literals_read_int32)    hydra_lisp_lib_literals_read_int32    nil s (tc-optional i32)))
+        (cons (prim-name hydra_lib_literals_read_int64)    (prim1 (prim-name hydra_lib_literals_read_int64)    hydra_lisp_lib_literals_read_int64    nil s (tc-optional i64)))
+        (cons (prim-name hydra_lib_literals_read_string)   (prim1 (prim-name hydra_lib_literals_read_string)   hydra_lisp_lib_literals_read_string   nil s (tc-optional s)))
+        (cons (prim-name hydra_lib_literals_read_uint8)    (prim1 (prim-name hydra_lib_literals_read_uint8)    hydra_lisp_lib_literals_read_uint8    nil s (tc-optional u8)))
+        (cons (prim-name hydra_lib_literals_read_uint16)   (prim1 (prim-name hydra_lib_literals_read_uint16)   hydra_lisp_lib_literals_read_uint16   nil s (tc-optional u16)))
+        (cons (prim-name hydra_lib_literals_read_uint32)   (prim1 (prim-name hydra_lib_literals_read_uint32)   hydra_lisp_lib_literals_read_uint32   nil s (tc-optional u32)))
+        (cons (prim-name hydra_lib_literals_read_uint64)   (prim1 (prim-name hydra_lib_literals_read_uint64)   hydra_lisp_lib_literals_read_uint64   nil s (tc-optional u64))))
       ;; Show primitives
       (list
-        (cons (qname ns_ "showBigint")   (prim1 (qname ns_ "showBigint")   hydra_lib_literals_show_bigint   nil bi s))
-        (cons (qname ns_ "showBoolean")  (prim1 (qname ns_ "showBoolean")  hydra_lib_literals_show_boolean  nil b s))
-        (cons (qname ns_ "showDecimal")  (prim1 (qname ns_ "showDecimal")  hydra_lib_literals_show_decimal  nil dec s))
-        (cons (qname ns_ "showFloat32")  (prim1 (qname ns_ "showFloat32")  hydra_lib_literals_show_float32  nil f32 s))
-        (cons (qname ns_ "showFloat64")  (prim1 (qname ns_ "showFloat64")  hydra_lib_literals_show_float64  nil f64 s))
-        (cons (qname ns_ "showInt8")     (prim1 (qname ns_ "showInt8")     hydra_lib_literals_show_int8     nil i8 s))
-        (cons (qname ns_ "showInt16")    (prim1 (qname ns_ "showInt16")    hydra_lib_literals_show_int16    nil i16 s))
-        (cons (qname ns_ "showInt32")    (prim1 (qname ns_ "showInt32")    hydra_lib_literals_show_int32    nil i32 s))
-        (cons (qname ns_ "showInt64")    (prim1 (qname ns_ "showInt64")    hydra_lib_literals_show_int64    nil i64 s))
-        (cons (qname ns_ "showUint8")    (prim1 (qname ns_ "showUint8")    hydra_lib_literals_show_uint8    nil u8 s))
-        (cons (qname ns_ "showUint16")   (prim1 (qname ns_ "showUint16")   hydra_lib_literals_show_uint16   nil u16 s))
-        (cons (qname ns_ "showUint32")   (prim1 (qname ns_ "showUint32")   hydra_lib_literals_show_uint32   nil u32 s))
-        (cons (qname ns_ "showUint64")   (prim1 (qname ns_ "showUint64")   hydra_lib_literals_show_uint64   nil u64 s))
-        (cons (qname ns_ "showString")   (prim1 (qname ns_ "showString")   hydra_lib_literals_show_string   nil s s))))))
+        (cons (prim-name hydra_lib_literals_show_bigint)   (prim1 (prim-name hydra_lib_literals_show_bigint)   hydra_lisp_lib_literals_show_bigint   nil bi s))
+        (cons (prim-name hydra_lib_literals_show_boolean)  (prim1 (prim-name hydra_lib_literals_show_boolean)  hydra_lisp_lib_literals_show_boolean  nil b s))
+        (cons (prim-name hydra_lib_literals_show_decimal)  (prim1 (prim-name hydra_lib_literals_show_decimal)  hydra_lisp_lib_literals_show_decimal  nil dec s))
+        (cons (prim-name hydra_lib_literals_show_float32)  (prim1 (prim-name hydra_lib_literals_show_float32)  hydra_lisp_lib_literals_show_float32  nil f32 s))
+        (cons (prim-name hydra_lib_literals_show_float64)  (prim1 (prim-name hydra_lib_literals_show_float64)  hydra_lisp_lib_literals_show_float64  nil f64 s))
+        (cons (prim-name hydra_lib_literals_show_int8)     (prim1 (prim-name hydra_lib_literals_show_int8)     hydra_lisp_lib_literals_show_int8     nil i8 s))
+        (cons (prim-name hydra_lib_literals_show_int16)    (prim1 (prim-name hydra_lib_literals_show_int16)    hydra_lisp_lib_literals_show_int16    nil i16 s))
+        (cons (prim-name hydra_lib_literals_show_int32)    (prim1 (prim-name hydra_lib_literals_show_int32)    hydra_lisp_lib_literals_show_int32    nil i32 s))
+        (cons (prim-name hydra_lib_literals_show_int64)    (prim1 (prim-name hydra_lib_literals_show_int64)    hydra_lisp_lib_literals_show_int64    nil i64 s))
+        (cons (prim-name hydra_lib_literals_show_uint8)    (prim1 (prim-name hydra_lib_literals_show_uint8)    hydra_lisp_lib_literals_show_uint8    nil u8 s))
+        (cons (prim-name hydra_lib_literals_show_uint16)   (prim1 (prim-name hydra_lib_literals_show_uint16)   hydra_lisp_lib_literals_show_uint16   nil u16 s))
+        (cons (prim-name hydra_lib_literals_show_uint32)   (prim1 (prim-name hydra_lib_literals_show_uint32)   hydra_lisp_lib_literals_show_uint32   nil u32 s))
+        (cons (prim-name hydra_lib_literals_show_uint64)   (prim1 (prim-name hydra_lib_literals_show_uint64)   hydra_lisp_lib_literals_show_uint64   nil u64 s))
+        (cons (prim-name hydra_lib_literals_show_string)   (prim1 (prim-name hydra_lib_literals_show_string)   hydra_lisp_lib_literals_show_string   nil s s))))))
 
 ;; ============================================================================
 ;; Annotations (term-level functions registered as primitives)
@@ -652,27 +670,27 @@
 ;; ============================================================================
 
 (defun register-regex ()
-  (let ((ns_ "hydra.lib.regex")
+  (let (
         (s (tc-string))
         (b (tc-boolean)))
     (list
-      (cons (qname ns_ "find")       (prim2 (qname ns_ "find")
-                                              hydra_lib_regex_find
+      (cons (prim-name hydra_lib_regex_find)       (prim2 (prim-name hydra_lib_regex_find)
+                                              hydra_lisp_lib_regex_find
                                               nil s s (tc-optional s)))
-      (cons (qname ns_ "findAll")    (prim2 (qname ns_ "findAll")
-                                              hydra_lib_regex_find_all
+      (cons (prim-name hydra_lib_regex_find_all)    (prim2 (prim-name hydra_lib_regex_find_all)
+                                              hydra_lisp_lib_regex_find_all
                                               nil s s (tc-list s)))
-      (cons (qname ns_ "matches")    (prim2 (qname ns_ "matches")
-                                              hydra_lib_regex_matches
+      (cons (prim-name hydra_lib_regex_matches)    (prim2 (prim-name hydra_lib_regex_matches)
+                                              hydra_lisp_lib_regex_matches
                                               nil s s b))
-      (cons (qname ns_ "replace")    (prim3 (qname ns_ "replace")
-                                              hydra_lib_regex_replace
+      (cons (prim-name hydra_lib_regex_replace)    (prim3 (prim-name hydra_lib_regex_replace)
+                                              hydra_lisp_lib_regex_replace
                                               nil s s s s))
-      (cons (qname ns_ "replaceAll") (prim3 (qname ns_ "replaceAll")
-                                              hydra_lib_regex_replace_all
+      (cons (prim-name hydra_lib_regex_replace_all) (prim3 (prim-name hydra_lib_regex_replace_all)
+                                              hydra_lisp_lib_regex_replace_all
                                               nil s s s s))
-      (cons (qname ns_ "split")      (prim2 (qname ns_ "split")
-                                              hydra_lib_regex_split
+      (cons (prim-name hydra_lib_regex_split)      (prim2 (prim-name hydra_lib_regex_split)
+                                              hydra_lisp_lib_regex_split
                                               nil s s (tc-list s))))))
 
 ;; ============================================================================

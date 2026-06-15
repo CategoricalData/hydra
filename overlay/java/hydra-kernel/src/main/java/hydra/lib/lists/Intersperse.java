@@ -14,7 +14,6 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.ConsList;
 import hydra.util.Either;
@@ -24,7 +23,7 @@ import hydra.util.Either;
  */
 public class Intersperse extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.lists.intersperse");
+        return hydra.lib.Lists.intersperse().name;
     }
 
     @Override
@@ -33,8 +32,8 @@ public class Intersperse extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<List<Term>, Term>) list -> Terms.list(Intersperse.apply(args.get(0), list)), hydra.extract.Core.list(graph, args.get(1)));
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Map.apply((Function<List<Term>, Term>) list -> Terms.list(Intersperse.apply(args.get(0), list)), hydra.extract.Core.list(graph, args.get(1)));
     }
 
     /**

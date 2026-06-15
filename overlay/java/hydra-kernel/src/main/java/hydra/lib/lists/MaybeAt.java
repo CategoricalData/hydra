@@ -16,7 +16,6 @@ import static hydra.dsl.Types.int32;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -26,7 +25,7 @@ import hydra.util.Either;
  */
 public class MaybeAt extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.lists.maybeAt");
+        return hydra.lib.Lists.maybeAt().name;
     }
 
     @Override
@@ -35,8 +34,8 @@ public class MaybeAt extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.int32(graph, args.get(0)), i -> hydra.lib.eithers.Map.apply((Function<List<Term>, Term>) l -> Terms.optional(MaybeAt.apply(i, l)), hydra.extract.Core.list(graph, args.get(1))));
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.int32(graph, args.get(0)), i -> hydra.lib.eithers.Map.apply((Function<List<Term>, Term>) l -> Terms.optional(MaybeAt.apply(i, l)), hydra.extract.Core.list(graph, args.get(1))));
     }
 
     /**

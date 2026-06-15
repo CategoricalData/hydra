@@ -11,7 +11,6 @@ import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -20,7 +19,7 @@ import hydra.util.Either;
  */
 public class Identity extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.equality.identity");
+        return hydra.lib.Equality.identity().name;
     }
 
     @Override
@@ -29,8 +28,8 @@ public class Identity extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> Either.right(args.get(0));
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> Either.right(args.get(0));
     }
 
     /**

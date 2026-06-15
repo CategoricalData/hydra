@@ -9,6 +9,10 @@ so that compatibility of different Hydra artifacts can be understood
 on the basis of their version numbers alone, regardless of the implementation language.
 However, this makes it very important to maintain a unified and consistent release process.
 
+For how this process measures up against Apache Software Foundation source-release expectations
+(signing, checksums, `NOTICE`, dependency-license attestation) and the gaps that remain, see
+[release-audit.md](release-audit.md).
+
 As of May 2026, eight complete Hydra hosts pass the common test suite: Hydra-Haskell, Hydra-Java,
 Hydra-Python, Hydra-Scala, Hydra-Clojure, Hydra-Common Lisp, Hydra-Scheme, and Hydra-Emacs Lisp.
 The four Lisp dialects share a single coder and serializer. Hydra-TypeScript graduated to a full
@@ -85,7 +89,7 @@ The canonical version lives in `hydra.json` at the repository root as the
   (the Merkle basis for the per-target generator cache; see
   [build-system.md](build-system.md)). Bumped separately by
   `bin/bump-host-version.sh`. Per-host exceptions live in the
-  `hostVersionOverrides` map and are hand-edited. This field is independent of the
+  `hostOverrides` map and are hand-edited. This field is independent of the
   release flow and is normally left alone during a release.
 
 ### Bumping the version
@@ -199,13 +203,48 @@ and produces the upload-ready artifacts in `release-artifacts/`:
    with many transitive deps, so we pre-build locally and upload via
    `cabal upload --documentation --publish` after release
    (see "Haskell releases" below).
+11. **Canonical source archive + checksum + signature** —
+   a single `git archive` tarball of the tracked source at `HEAD`
+   (`hydra-<version>-src.tar.gz`), plus a SHA-512 checksum and a detached GPG
+   signature. This is the **release of record**: the per-registry artifacts
+   (Hackage sdists, Maven jars, PyPI wheels) are convenience binaries downstream
+   of it. The step asserts `LICENSE` and `NOTICE` are present and tracked (so the
+   archive contains both, as a source release must). Signing uses the key named by
+   `HYDRA_RELEASE_SIGNING_KEY` (else gpg's default); a missing key degrades to a
+   warning so the script stays runnable outside a real release, but a real release
+   must be signed. See "Verifying a release" below.
 
 On success the script writes, for each of `hydra-kernel`, `hydra-haskell`, `hydra`:
 
 - `release-artifacts/<pkg>-<version>.tar.gz`      — the Hackage sdist
 - `release-artifacts/<pkg>-<version>-docs.tar.gz` — the Haddock-for-Hackage docs
 
+and the canonical source release:
+
+- `release-artifacts/hydra-<version>-src.tar.gz`        — the source archive (release of record)
+- `release-artifacts/hydra-<version>-src.tar.gz.sha512` — its SHA-512 checksum
+- `release-artifacts/hydra-<version>-src.tar.gz.asc`    — its detached GPG signature (if signed)
+
 Per-step logs land in `verify-logs/`. All checks must pass before proceeding with the release.
+
+## Verifying a release
+
+The canonical source archive is signed and checksummed so that anyone can confirm a
+download is authentic and untampered. The public signing keys live in the repo-root
+[`KEYS`](https://github.com/CategoricalData/hydra/blob/main/KEYS) file.
+
+```bash
+# Import the project signing keys (once)
+gpg --import KEYS
+
+# Verify the detached signature and the checksum
+gpg --verify hydra-<version>-src.tar.gz.asc hydra-<version>-src.tar.gz
+shasum -a 512 -c hydra-<version>-src.tar.gz.sha512   # or sha512sum -c on Linux
+```
+
+A good signature from a key listed in `KEYS`, plus a matching checksum, confirms the
+release. Release managers register their signing key by appending it to `KEYS` (never
+replacing existing keys) — see the procedure inside that file.
 
 ## Updating the changelog
 
@@ -277,6 +316,14 @@ For each release, add or update:
 Use version-specific package links when the registry supports them, especially for Maven Central artifacts.
 Do not emphasize temporary namespaces such as `net.fortytwo.hydra` in link text; use artifact names like
 `hydra-kernel`, `hydra-java`, `hydra-pg`, and `hydra-rdf`.
+
+## Publishing to registries
+
+The per-registry artifacts below — Hackage sdists, Maven Central jars, PyPI wheels, conda packages —
+are **convenience binaries**: downstream of, and secondary to, the canonical signed source archive
+(see [Release preparation](#release-preparation) Step 11 and [Verifying a release](#verifying-a-release)).
+The source archive is the release of record; the registry artifacts are how consumers obtain usable
+packages without running the codegen toolchain themselves.
 
 ## Haskell releases
 
@@ -575,6 +622,23 @@ The following are Python-specific release steps:
     projects. See Access prerequisites. twine stops at the first failure, so check what (if
     anything) landed before retrying. Order does not matter for upload; PyPI accepts each
     independently.
+  * **Packaging-boundary smoke gate (`smoke-test-wheels.sh`).** After building each wheel set,
+    `publish-pypi.sh` invokes `heads/python/bin/smoke-test-wheels.sh` as a hard gate before any
+    upload. The gate installs the just-built wheels into a fresh, isolated venv with
+    `--no-index --find-links <wheels>` and imports the top-level kernel modules
+    (`hydra.codegen`, `hydra.rewriting`, `hydra.encoding`, `hydra.arity`, `hydra.analysis`,
+    `hydra.query`, `hydra.predicates`, `hydra.validate.core`, `hydra.validate.packaging`,
+    `hydra.python.util`) from a neutral cwd, so the worktree's own `heads/python/` cannot leak
+    onto `sys.path` and mask a missing-from-wheel package. A failure aborts the publish.
+    This gate exists because 0.16.0 shipped a `hydra-kernel` wheel whose generated modules imported
+    `hydra.python.util` from a runtime package that lived only in `heads/python/` and was therefore
+    not packaged into the wheel — every local test passed, but `pip install hydra-kernel==0.16.0`
+    in a clean venv failed with `ModuleNotFoundError`. The fix landed in #461 (the runtime moved to
+    `overlay/python/hydra-kernel/`, which is copied into `dist/python/hydra-kernel/` and packaged);
+    the gate is the standing assurance against the same class of break. See
+    [#472](https://github.com/CategoricalData/hydra/issues/472). If you add a new top-level kernel
+    module that imports a fresh runtime package, add it to `KERNEL_IMPORTS` in the script so the
+    gate covers it.
 * Publish to conda-forge:
 
   conda-forge is maintained for Hydra by [@phreed](https://github.com/phreed) (with
@@ -660,7 +724,8 @@ all scripts and Stack executables (including internal ones called by the sync sc
 | `assemble-haskell-distribution.sh` | `heads/haskell/bin/` | Layer 2 per-package Haskell assembler (Haskell analog of `assemble-distribution.sh`). Takes `<pkg>` (`hydra-kernel`/`hydra-haskell`/`hydra`) and tarballs the already-complete `dist/haskell/<pkg>/` tree (made complete by `sync-haskell.sh`, which overlays the hand-written runtime from `overlay/haskell/`): generates `package.yaml` + `stack.yaml` and runs `stack sdist`. A uniform `dist/` consumer — no per-package special-casing. Replaces the 0.15 monolithic `assemble-hackage-sdist.sh`. |
 | `publish-hackage.sh` | `heads/haskell/bin/` | Assembles (and optionally uploads, `--upload`/`--publish`) the per-package Hackage distributions in leaves-first order. Asserts the publish set is dependency-closed before assembling. |
 | `publish-maven.sh` | `heads/java/bin/` | Builds (and optionally uploads, `--upload`) the per-package Maven Central distributions leaves-first. Guards JDK 17+ and credentials; refreshes `~/.m2` with freshly-built siblings to avoid the stale-same-version trap. `--allow-javadoc-errors` applies a transient init script for #449. |
-| `publish-pypi.sh` | `heads/python/bin/` | Builds (and optionally uploads, `--upload`) the per-package PyPI wheels + sdists. Prefers `uv build`, falls back to `python -m build`. Asserts dependency closure. |
+| `publish-pypi.sh` | `heads/python/bin/` | Builds (and optionally uploads, `--upload`) the per-package PyPI wheels + sdists. Prefers `uv build`, falls back to `python -m build`. Asserts dependency closure. Invokes `smoke-test-wheels.sh` as a hard gate before any upload. |
+| `smoke-test-wheels.sh` | `heads/python/bin/` | Packaging-boundary gate: installs the just-built wheels into an isolated venv with `--no-index` and imports the top-level kernel modules from a neutral cwd, so a worktree-local `hydra.*` cannot mask a wheel that is missing a package it imports. Catches the 0.16.0-class self-broken-wheel bug (#472) before upload. |
 | `verify-haskell-distribution.sh` | `heads/haskell/bin/` | Stages all per-package distributions into one multi-package stack project and `stack build`s them, proving the trio compiles as published (the dependents' `== <version>` pins resolve against the local staged siblings). |
 | `generate-haskell-package-build.py` | `bin/lib/` | Emits a standalone `dist/haskell/<pkg>/package.yaml` (+ `stack.yaml`) from `packages/<pkg>/package.json` (or a built-in spec for the `hydra` umbrella) and `VERSION`. Inter-Hydra deps emit as exact pins `<dep> == <version>`. |
 | `generate-java-package-build.py` | `bin/lib/` | Emits a standalone `dist/java/<pkg>/build.gradle` + `settings.gradle` from `packages/<pkg>/package.json` and `VERSION`. Inter-Hydra deps emit as `api 'net.fortytwo.hydra:<dep>:<version>'`. |

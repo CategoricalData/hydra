@@ -158,8 +158,9 @@ import qualified Data.Set   as S
 
 **Centrally important (unqualified)**:
 - `Hydra.Kernel`
-- `Hydra.Sources.Libraries` — exports the `_strings_toUpper`, `_lists_length`, ...
-  primitive name constants used pervasively in term bodies
+- `Hydra.Dsl.Prims as Prims` and the generated `Hydra.Lib.*` def-modules — a primitive's name is
+  obtained from its `PrimitiveDefinition` via `Prims.primName DefLists.length` (the old
+  `Hydra.Sources.Libraries` `_strings_toUpper`/`_lists_length` name constants were removed in #473)
 - `Hydra.Dsl.Meta.Phantoms as Phantoms` — the term-construction DSL (`var`, `lambda`,
   `lambdas`, `record`, `match`, `cases`, polymorphic `(@@)`). Aliased so files may use
   `Phantoms.x` for disambiguation when needed.
@@ -347,7 +348,7 @@ When a test file references kernel-term primitives directly, add the relevant
 
 **Definition shape**: same as category 6, but test cases construct **Hydra-runtime
 term applications** (encoded `Term` values containing lambda applications, primitive
-applications, etc.) — e.g. `lambda "x" body @@ arg`, `primitive _strings_toUpper @@ string "hello"`.
+applications, etc.) — e.g. `lambda "x" body @@ arg`, `primitive (Prims.primName DefStrings.toUpper) @@ string "hello"`.
 
 **Distinguishing feature**: bare `(@@)` is *term application* (Terms.@@), the
 monomorphic `TypedTerm Term -> TypedTerm Term -> TypedTerm Term`. The polymorphic Phantoms.@@

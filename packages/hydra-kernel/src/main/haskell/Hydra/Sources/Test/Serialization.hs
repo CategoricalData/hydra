@@ -20,7 +20,6 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 import Hydra.Testing
-import Hydra.Sources.Libraries
 import Hydra.Dsl.AsTerm
 import qualified Hydra.Dsl.Ast as Ast
 import qualified Hydra.Dsl.Meta.Lib.Math as Math

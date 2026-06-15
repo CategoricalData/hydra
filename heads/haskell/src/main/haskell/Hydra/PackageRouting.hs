@@ -1,47 +1,64 @@
 -- | Module-to-package routing for the Hydra packaging split.
 --
--- A single source of truth for "which package owns which namespace" and
+-- A single source of truth for "which package owns which module" and
 -- "which directory under dist/json/ does that package write to". Used by
 -- both the JSON writers (update-json-*) and the JSON reader
 -- (bootstrap-from-json), so the two sides can never disagree about where
 -- a module's JSON file should live.
 --
--- Today the mapping is a hardcoded prefix table. Eventually it should be
--- derived from each package's package.json (or Manifest.hs); see
--- feature_290_packaging-plan.md for the longer arc.
+-- The mapping is DERIVED, not hardcoded (#474). A 'RoutingMap' is built once
+-- per executable from each package's declared modules (its manifest's
+-- @mainModules@ + @testModules@ + @derivedMainModules@, or the equivalent
+-- compiled per-package lists in "Hydra.Sources.Ext"). For each declared
+-- module M of package P we record M -> P; and for each @derivedMainModules@
+-- entry we additionally record its derived names
+-- (@hydra.dsl.<x>@, @hydra.encode.<x>@, @hydra.decode.<x>@, and the
+-- @hydra.sources.{encode,decode}.<x>@ source wrappers) -> P, reusing the
+-- shipped-kernel derived-name functions so the naming rule lives in exactly
+-- one place. This is what lets a long-tail type module's derived encoder /
+-- decoder / DSL wrapper route back to its OWNING package instead of falling
+-- through to "hydra-kernel" (the bug the old hand-curated allowlists papered
+-- over).
 --
 -- Routing contract:
 --
---   namespaceToPackage :: ModuleName -> String
+--   namespaceToPackageIn :: RoutingMap -> ModuleName -> String
 --
 --     Returns the package name (e.g. "hydra-kernel", "hydra-ext") that owns
---     a given Hydra namespace. Falls back to "hydra-kernel" for any
---     namespace that does not match an explicit prefix.
+--     a given module name. Falls back to "hydra-kernel" for any module not
+--     present in the map.
 --
---   namespaceToPackageJsonDir :: FilePath -> ModuleName -> FilePath
+--   namespaceToPackageJsonDirIn :: RoutingMap -> FilePath -> ModuleName -> FilePath
 --
---     Given the dist-json root (e.g. "../../dist/json") and a namespace,
---     returns the absolute directory under which that module's JSON file
---     should be written: "<root>/<package>/src/main/json".
+--     Given the dist-json root (e.g. "../../dist/json") and a module name,
+--     returns the directory under which that module's JSON file should be
+--     written: "<root>/<package>/src/main/json".
 --
---   groupByPackage :: [Module] -> [(String, [Module])]
+--   groupByPackageIn :: RoutingMap -> [Module] -> [(String, [Module])]
 --
 --     Partitions a list of modules by owning package, sorted by package
 --     name for deterministic output ordering.
 
 module Hydra.PackageRouting (
-  namespaceToPackage,
-  namespaceToPackageJsonDir,
-  namespaceToPackageTestJsonDir,
-  groupByPackage,
-  packagePrefixes,
+  RoutingMap,
+  buildRoutingMap,
+  routingFallback,
+  namespaceToPackageIn,
+  namespaceToPackageJsonDirIn,
+  namespaceToPackageTestJsonDirIn,
+  groupByPackageIn,
   defaultDistJsonRoot,
 ) where
 
 import Hydra.Kernel
+import qualified Hydra.Dsls as Dsls
+import qualified Hydra.Encoding as Encoding
+import qualified Hydra.Decoding as Decoding
 
 import Data.Function (on)
-import Data.List (groupBy, isPrefixOf, sortOn)
+import Data.List (groupBy, sortOn)
+import qualified Data.List as L
+import qualified Data.Map as M
 import qualified System.FilePath as FP
 
 
@@ -51,166 +68,85 @@ import qualified System.FilePath as FP
 defaultDistJsonRoot :: FilePath
 defaultDistJsonRoot = "../../dist/json"
 
--- | Map a module namespace to the package that owns it.
+-- | A resolved module-to-package routing table. Total via 'routingFallback'.
+newtype RoutingMap = RoutingMap (M.Map ModuleName String)
+
+-- | Package returned for any module not present in the 'RoutingMap'. Matches
+-- the historical fallback of the old prefix table.
+routingFallback :: String
+routingFallback = "hydra-kernel"
+
+-- | Build a 'RoutingMap' from each package's declared modules.
 --
--- The ordering of 'packagePrefixes' matters: more specific prefixes must
--- come before less specific ones. The fallback "hydra-kernel" covers all
--- namespaces that don't match any explicit prefix.
-namespaceToPackage :: ModuleName -> String
-namespaceToPackage (ModuleName ns) = go packagePrefixes
+-- Input: one @(package, declaredModuleNames)@ pair per package, where the
+-- declared set is @mainModules ++ testModules ++ derivedMainModules@.
+--
+-- For a complete table the caller should pass the @derivedMainModules@ names
+-- THEMSELVES in the declared list (so the source module routes correctly) and
+-- this function expands each declared module's derived names. Since we cannot
+-- tell from a bare name whether it is a @derivedMainModules@ source, we expand
+-- the derived names for EVERY declared module; the derived name of a non-type
+-- module simply never gets generated, so the extra map entries are harmless.
+--
+-- Declared (direct) entries take precedence over derived entries on collision,
+-- so a hand-written @hydra.dsl.X@ that is itself a declared module routes to
+-- its declared owner rather than to whatever package happens to derive that
+-- name.
+buildRoutingMap :: [(String, [ModuleName])] -> RoutingMap
+buildRoutingMap pkgs = RoutingMap (M.union declaredMap derivedMap)
   where
-    go []                    = "hydra-kernel"
-    go ((prefix, pkg) : rest)
-      | prefix `isPrefixOf` ns = pkg
-      | otherwise              = go rest
+    declaredMap = M.fromList [ (m, p) | (p, ms) <- pkgs, m <- ms ]
+    derivedMap  = M.fromList
+      [ (d, p)
+      | (p, ms) <- pkgs, m <- ms, d <- derivedNames m ]
 
--- | Given a dist-json root and a namespace, compute the directory under
+-- | The derived module names produced from a source module name, using the
+-- shipped-kernel derived-name functions as the single source of truth.
+derivedNames :: ModuleName -> [ModuleName]
+derivedNames m =
+  [ Dsls.dslModuleName m
+  , Encoding.encodeModuleName m
+  , Decoding.decodeModuleName m
+  , sourceWrapperName (Encoding.encodeModuleName m)
+  , sourceWrapperName (Decoding.decodeModuleName m) ]
+
+-- | The @hydra.sources.<...>@ wrapper name for an already-derived encode/decode
+-- module name, mirroring 'Hydra.Codegen.moduleToSourceModule': drop the first
+-- dotted segment and prepend @hydra.sources.@.
+sourceWrapperName :: ModuleName -> ModuleName
+sourceWrapperName (ModuleName s) =
+  ModuleName ("hydra.sources." ++ L.intercalate "." (drop 1 (splitOnDot s)))
+  where
+    splitOnDot = foldr step [""]
+      where
+        step '.' acc = "" : acc
+        step c (cur : rest) = (c : cur) : rest
+        step c []           = [[c]]
+
+-- | Map a module name to the package that owns it, via a 'RoutingMap'.
+namespaceToPackageIn :: RoutingMap -> ModuleName -> String
+namespaceToPackageIn (RoutingMap m) ns = M.findWithDefault routingFallback ns m
+
+-- | Given a dist-json root and a module name, compute the directory under
 -- which that module's JSON file should be written.
-namespaceToPackageJsonDir :: FilePath -> ModuleName -> FilePath
-namespaceToPackageJsonDir root ns =
-  root FP.</> namespaceToPackage ns FP.</> "src" FP.</> "main" FP.</> "json"
+namespaceToPackageJsonDirIn :: RoutingMap -> FilePath -> ModuleName -> FilePath
+namespaceToPackageJsonDirIn rm root ns =
+  root FP.</> namespaceToPackageIn rm ns FP.</> "src" FP.</> "main" FP.</> "json"
 
--- | Like 'namespaceToPackageJsonDir' but for test JSON output.
-namespaceToPackageTestJsonDir :: FilePath -> ModuleName -> FilePath
-namespaceToPackageTestJsonDir root ns =
-  root FP.</> namespaceToPackage ns FP.</> "src" FP.</> "test" FP.</> "json"
+-- | Like 'namespaceToPackageJsonDirIn' but for test JSON output.
+namespaceToPackageTestJsonDirIn :: RoutingMap -> FilePath -> ModuleName -> FilePath
+namespaceToPackageTestJsonDirIn rm root ns =
+  root FP.</> namespaceToPackageIn rm ns FP.</> "src" FP.</> "test" FP.</> "json"
 
 -- | Partition a list of modules by owning package, returning a list of
 --   (packageName, modules) groups. The groups are sorted by package name
 --   for deterministic output ordering.
-groupByPackage :: [Module] -> [(String, [Module])]
-groupByPackage mods =
+groupByPackageIn :: RoutingMap -> [Module] -> [(String, [Module])]
+groupByPackageIn rm mods =
     fmap collapse
       $ groupBy ((==) `on` fst)
       $ sortOn fst
-      $ fmap (\m -> (namespaceToPackage (moduleName m), m)) mods
+      $ fmap (\m -> (namespaceToPackageIn rm (moduleName m), m)) mods
   where
     collapse [] = ("", [])  -- unreachable; groupBy never returns empty inner lists
     collapse grp@((pkg, _) : _) = (pkg, fmap snd grp)
-
--- | Prefix-to-package table. Order matters: more-specific prefixes first.
--- Any namespace not matching any prefix falls through to "hydra-kernel".
-packagePrefixes :: [(String, String)]
-packagePrefixes =
-  [ -- Coder packages (main runtime modules)
-    ("hydra.haskell.",              "hydra-haskell")
-  , ("hydra.java.",                 "hydra-java")
-  , ("hydra.python.",               "hydra-python")
-  , ("hydra.scala.",                "hydra-scala")
-  , ("hydra.lisp.",                 "hydra-lisp")
-  , ("hydra.coq.",                  "hydra-coq")
-  , ("hydra.typeScript.",           "hydra-typescript")
-  , ("hydra.go.",                   "hydra-go")
-    -- DSL wrapper modules for coder packages
-  , ("hydra.dsl.haskell.",          "hydra-haskell")
-  , ("hydra.dsl.java.",             "hydra-java")
-  , ("hydra.dsl.python.",           "hydra-python")
-  , ("hydra.dsl.scala.",            "hydra-scala")
-  , ("hydra.dsl.lisp.",             "hydra-lisp")
-  , ("hydra.dsl.coq.",              "hydra-coq")
-  , ("hydra.dsl.typeScript.",       "hydra-typescript")
-  , ("hydra.dsl.go.",               "hydra-go")
-    -- Synthesized decoder source modules for coder packages
-  , ("hydra.sources.decode.haskell.",    "hydra-haskell")
-  , ("hydra.sources.decode.java.",       "hydra-java")
-  , ("hydra.sources.decode.python.",     "hydra-python")
-  , ("hydra.sources.decode.scala.",      "hydra-scala")
-  , ("hydra.sources.decode.lisp.",       "hydra-lisp")
-  , ("hydra.sources.decode.coq.",        "hydra-coq")
-  , ("hydra.sources.decode.typeScript.", "hydra-typescript")
-    -- Synthesized encoder source modules for coder packages
-  , ("hydra.sources.encode.haskell.",    "hydra-haskell")
-  , ("hydra.sources.encode.java.",       "hydra-java")
-  , ("hydra.sources.encode.python.",     "hydra-python")
-  , ("hydra.sources.encode.scala.",      "hydra-scala")
-  , ("hydra.sources.encode.lisp.",       "hydra-lisp")
-  , ("hydra.sources.encode.coq.",        "hydra-coq")
-  , ("hydra.sources.encode.typeScript.", "hydra-typescript")
-    -- Property graph package
-  , ("hydra.pg.",                   "hydra-pg")
-  , ("hydra.cypher.",               "hydra-pg")
-  , ("hydra.graphviz.",             "hydra-pg")
-  , ("hydra.tinkerpop.",            "hydra-pg")
-  , ("hydra.error.pg",              "hydra-pg")
-  , ("hydra.show.error.pg",         "hydra-pg")
-  , ("hydra.validate.pg",           "hydra-pg")
-  , ("hydra.decode.pg.",            "hydra-pg")
-  , ("hydra.encode.pg.",            "hydra-pg")
-  , ("hydra.sources.decode.pg.",    "hydra-pg")
-  , ("hydra.sources.encode.pg.",    "hydra-pg")
-  , ("hydra.demos.genpg.",          "hydra-pg")
-  , ("openGql.grammar",             "hydra-pg")
-  , ("com.gdblab.pathAlgebra.",     "hydra-pg")
-  , ("hydra.dsl.pg.",               "hydra-pg")
-  , ("hydra.dsl.cypher.",           "hydra-pg")
-  , ("hydra.dsl.graphviz.",         "hydra-pg")
-  , ("hydra.dsl.tinkerpop.",        "hydra-pg")
-  , ("hydra.dsl.error.pg",          "hydra-pg")
-  , ("hydra.dsl.openGql.",          "hydra-pg")
-  , ("hydra.dsl.com.gdblab.pathAlgebra.", "hydra-pg")
-    -- RDF / OWL / SHACL / ShEx / XML schema package
-  , ("hydra.rdf.",                  "hydra-rdf")
-  , ("hydra.owl.",                  "hydra-rdf")
-  , ("hydra.shacl.",                "hydra-rdf")
-  , ("hydra.shex.",                 "hydra-rdf")
-  , ("hydra.xml.schema",            "hydra-rdf")
-  , ("hydra.dsl.rdf.",              "hydra-rdf")
-  , ("hydra.dsl.owl.",              "hydra-rdf")
-  , ("hydra.dsl.shacl.",            "hydra-rdf")
-  , ("hydra.dsl.shex.",             "hydra-rdf")
-  , ("hydra.dsl.xml.schema",        "hydra-rdf")
-    -- WebAssembly package
-  , ("hydra.wasm.",                 "hydra-wasm")
-  , ("hydra.dsl.wasm.",             "hydra-wasm")
-    -- Benchmark package (synthetic inference workloads; opt-in via sync-bench.sh)
-  , ("hydra.bench.",                "hydra-bench")
-    -- Extension package (truly-ext coders: Avro, Protobuf, GraphQL, etc.)
-  , ("hydra.atlas",                 "hydra-ext")
-  , ("hydra.avro.",                 "hydra-ext")
-  , ("hydra.azure.",                "hydra-ext")
-  , ("hydra.cpp.",                  "hydra-ext")
-  , ("hydra.csharp.",               "hydra-ext")
-  , ("hydra.datalog.",              "hydra-ext")
-  , ("hydra.delta.",                "hydra-ext")
-  , ("hydra.geojson.",              "hydra-ext")
-  , ("hydra.graphql.",              "hydra-ext")
-  , ("hydra.iana.",                 "hydra-ext")
-  , ("hydra.json.schema",           "hydra-ext")
-  , ("hydra.kusto.",                "hydra-ext")
-  , ("hydra.osv.",                  "hydra-ext")
-  , ("hydra.parquet.",              "hydra-ext")
-  , ("hydra.pegasus.",              "hydra-ext")
-  , ("hydra.protobuf.",             "hydra-ext")
-  , ("hydra.rust.",                 "hydra-ext")
-  , ("hydra.sql.",                  "hydra-ext")
-  , ("hydra.stac.",                 "hydra-ext")
-  , ("hydra.typeScript.",           "hydra-ext")
-  , ("hydra.workflow",              "hydra-ext")
-  , ("hydra.dsl.atlas",             "hydra-ext")
-  , ("hydra.dsl.avro.",             "hydra-ext")
-  , ("hydra.dsl.azure.",            "hydra-ext")
-  , ("hydra.dsl.cpp.",              "hydra-ext")
-  , ("hydra.dsl.csharp.",           "hydra-ext")
-  , ("hydra.dsl.datalog.",          "hydra-ext")
-  , ("hydra.dsl.delta.",            "hydra-ext")
-  , ("hydra.dsl.geojson.",          "hydra-ext")
-  , ("hydra.dsl.graphql.",          "hydra-ext")
-  , ("hydra.dsl.iana.",             "hydra-ext")
-  , ("hydra.dsl.json.schema",       "hydra-ext")
-  , ("hydra.dsl.kusto.",            "hydra-ext")
-  , ("hydra.dsl.osv.",              "hydra-ext")
-  , ("hydra.dsl.parquet.",          "hydra-ext")
-  , ("hydra.dsl.pegasus.",          "hydra-ext")
-  , ("hydra.dsl.protobuf.",         "hydra-ext")
-  , ("hydra.dsl.rust.",             "hydra-ext")
-  , ("hydra.dsl.sql.",              "hydra-ext")
-  , ("hydra.dsl.stac.",             "hydra-ext")
-  , ("hydra.dsl.typeScript.",       "hydra-ext")
-  , ("hydra.dsl.workflow",          "hydra-ext")
-    -- hydra.yaml.model lives in hydra-kernel, so we route the hydra-ext yaml
-    -- modules (coder, language, serde) explicitly rather than with a blanket
-    -- hydra.yaml. prefix.
-  , ("hydra.yaml.coder",            "hydra-ext")
-  , ("hydra.yaml.language",         "hydra-ext")
-  , ("hydra.yaml.serde",            "hydra-ext")
-  ]

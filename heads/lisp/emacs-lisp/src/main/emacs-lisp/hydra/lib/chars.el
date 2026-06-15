@@ -6,7 +6,7 @@
 ;; These primitives convert to/from Emacs characters internally.
 
 ;; is_alpha_num :: Int32 -> Bool
-(defvar hydra_lib_chars_is_alpha_num
+(defvar hydra_lisp_lib_chars_is_alpha_num
   (lambda (c)
     "Check whether a character is alphanumeric."
     (let ((ch c))
@@ -16,13 +16,13 @@
            t))))
 
 ;; is_lower :: Int32 -> Bool
-(defvar hydra_lib_chars_is_lower
+(defvar hydra_lisp_lib_chars_is_lower
   (lambda (c)
     "Check whether a character is lowercase."
     (and (>= c ?a) (<= c ?z))))
 
 ;; is_space :: Int32 -> Bool
-(defvar hydra_lib_chars_is_space
+(defvar hydra_lisp_lib_chars_is_space
   (lambda (c)
     "Check whether a character is a whitespace character."
     (and (or (= c ?\s)
@@ -33,19 +33,19 @@
          t)))
 
 ;; is_upper :: Int32 -> Bool
-(defvar hydra_lib_chars_is_upper
+(defvar hydra_lisp_lib_chars_is_upper
   (lambda (c)
     "Check whether a character is uppercase."
     (and (>= c ?A) (<= c ?Z))))
 
 ;; to_lower :: Int32 -> Int32
-(defvar hydra_lib_chars_to_lower
+(defvar hydra_lisp_lib_chars_to_lower
   (lambda (c)
     "Convert a character to lowercase."
     (downcase c)))
 
 ;; to_upper :: Int32 -> Int32
-(defvar hydra_lib_chars_to_upper
+(defvar hydra_lisp_lib_chars_to_upper
   (lambda (c)
     "Convert a character to uppercase."
     (upcase c)))

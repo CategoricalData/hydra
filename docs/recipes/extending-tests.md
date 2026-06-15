@@ -97,7 +97,7 @@ inferWithType "test name" []
 
 **Library function tests** (`Lib/*.hs`) - Use `primCase` to test primitive evaluation:
 ```haskell
-primCase "test name" _lists_reverse  -- primitive name
+primCase "test name" (Prims.primName DefLists.reverse)  -- primitive name from its PrimitiveDefinition
   [intList [1, 2, 3]]                -- input arguments
   (intList [3, 2, 1])                -- expected result
 ```

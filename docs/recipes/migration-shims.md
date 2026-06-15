@@ -29,18 +29,19 @@ published versions all fail identically, you are in Mode B.
 ## Mode A: pin to an earlier good release
 
 The published-host version each host depends on is resolved from `hydra.json`:
-`hostVersionOverrides[<pkg>]` if present, else the global `hostVersion`
-(`bin/lib/hydra-packages.py host-version <pkg>`).
+`hostOverrides[<host>]` if present (keyed by the host's language name — `java`,
+`python`, `haskell`, …), else the global `hostVersion`
+(`bin/lib/hydra-packages.py host-version <pkg>` bridges package → host internally).
 
-To pin a single host back without affecting the others, add a `hostVersionOverrides` entry by hand:
+To pin a single host back without affecting the others, add a `hostOverrides` entry by hand:
 
 ```jsonc
 // hydra.json
 {
   "currentVersion": "0.16.1",
   "hostVersion": "0.16.0",
-  "hostVersionOverrides": {
-    "hydra-java": "0.15.0"   // hydra-java 0.16.0 is buggy; use the last good one
+  "hostOverrides": {
+    "java": "0.15.0"   // the Java host's 0.16.0 is buggy; use the last good one
   },
   ...
 }
@@ -83,7 +84,7 @@ Under a breaking change you therefore:
 1. Rebuild the Haskell host from source: `heads/haskell/bin/sync-haskell.sh --local-host`. This compiles
    the kernel locally (instead of the published Hackage dependency) and regenerates the kernel JSON +
    `dist/{java,python}` against the new data model. (For a single edited Haskell coder rather than the
-   whole host, set `hostVersionOverrides["hydra-<lang>"] = "local"` in `hydra.json` and keep the rest
+   whole host, set `hostOverrides["<lang>"] = "local"` in `hydra.json` and keep the rest
    from Hackage.)
 2. Run the Java / Python DSL→JSON step in **local-host** mode, which builds the coder from that
    freshly-generated local `dist/` instead of the published artifact.
@@ -125,7 +126,7 @@ for a backward-incompatible kernel change the published kernel can't express, or
 release. The Hackage-consumable set is *derived by probing* whether `hydra-<pkg>-<hostVersion>` actually
 exists on Hackage — so a coder published in a future cycle is consumed automatically with no config
 change. To force just one package local while consuming the rest, set
-`hostVersionOverrides["hydra-<pkg>"] = "local"` in `hydra.json` (no flag needed); a local coder still
+`hostOverrides["<host>"] = "local"` in `hydra.json` (no flag needed); a local coder still
 compiles against the published kernel, valid under the forward-compatibility contract.
 
 ### Publish the interim host, then pin to it
@@ -157,11 +158,11 @@ Then bump the pin so the default consume path picks up the interim version:
 
 ```bash
 bin/bump-host-version.sh 0.16.1          # global, if the whole release moves
-# or hand-edit hydra.json:hostVersionOverrides for a single host
+# or hand-edit hydra.json:hostOverrides for a single host
 ```
 
 Once the real fixed version is published to Maven Central / PyPI, bump `hostVersion` to it and remove
-any `hostVersionOverrides` / local interim artifacts.
+any `hostOverrides` / local interim artifacts.
 
 ## The bootstrap (cold-`dist/json`) edge
 

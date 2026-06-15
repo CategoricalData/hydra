@@ -342,7 +342,7 @@ though their behavior must be the same across implementations.
 
 **Haskell**:
 - Metadata:
-  [Hydra/Sources/Libraries.hs](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs) (DSL)
+  [Hydra/Sources/Libraries.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs) (DSL)
 - Implementations:
   [Hydra/Haskell/Lib](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib) (native Haskell)
 
@@ -375,7 +375,7 @@ At a bare minimum, all of the primitives which are referenced in the Hydra kerne
 each primitive must also be *registered* in a central registry (e.g.
 `Libraries.java` in Java) so it can be looked up by name at runtime.
 Periodically compare your registry against the authoritative list in
-[Hydra/Sources/Libraries.hs](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs) to catch any missing registrations.
+[Hydra/Sources/Libraries.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs) to catch any missing registrations.
 
 ### Lazy evaluation and thunking
 
@@ -685,7 +685,9 @@ Add a job to `.github/workflows/ci.yml` so the test suite runs on every push and
 Mirror the structure of an existing job (`common-lisp` and `scheme` are good minimal references):
 check out the repo, install the toolchain via `apt-get`, then invoke the implementation's test
 runner script. The job should fail loudly on any test failure or load error, matching the
-project-wide rule against silently swallowing errors.
+project-wide rule against silently swallowing errors — a corollary of Hydra's
+[formal rigor as a north star](https://github.com/CategoricalData/hydra/wiki/Concepts#key-design-principles)
+design principle.
 
 Without these four pieces — self-hosting I/O, sync integration, a passing bootstrap matrix, and
 CI — regressions in your implementation will only surface during local development and may go

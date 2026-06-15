@@ -15,7 +15,6 @@ import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.schemeEq;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -25,7 +24,7 @@ import hydra.util.Either;
  */
 public class Equal extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.equality.equal");
+        return hydra.lib.Equality.equal().name;
     }
 
     @Override
@@ -34,9 +33,9 @@ public class Equal extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         // Term equality is sufficient here, as we assume that type inference has already succeeded.
-        return args -> cx -> graph -> Either.right(Terms.boolean_(args.get(0).equals(args.get(1))));
+        return args -> graph -> Either.right(Terms.boolean_(args.get(0).equals(args.get(1))));
     }
 
     /**

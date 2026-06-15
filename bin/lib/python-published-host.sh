@@ -8,7 +8,7 @@
 #
 # The published hydra-python wheel Requires-Dist hydra-kernel==<same>, so a single
 # install brings the whole runtime classpath. The version is resolved from
-# hydra.json (hostVersionOverrides["hydra-python"] -> hostVersion) via
+# hydra.json (hostOverrides["python"] -> hostVersion) via
 # bin/lib/hydra-packages.py, the single source of truth shared with the Java path.
 #
 # Usage:

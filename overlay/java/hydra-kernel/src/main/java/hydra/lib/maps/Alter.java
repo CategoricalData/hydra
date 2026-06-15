@@ -17,7 +17,6 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.map;
 import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 import hydra.util.PersistentMap;
@@ -32,7 +31,7 @@ public class Alter extends PrimitiveFunction {
      * @return the name
      */
     public Name name() {
-        return new Name("hydra.lib.maps.alter");
+        return hydra.lib.Maps.alter().name;
     }
 
     /**
@@ -50,8 +49,8 @@ public class Alter extends PrimitiveFunction {
      * @return the implementation function
      */
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(2)), (Map<Term, Term> mp) -> {
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(2)), (Map<Term, Term> mp) -> {
                 Term f = args.get(0);
                 Term key = args.get(1);
                 Optional<Term> currentValue = Lookup.apply(key, mp);

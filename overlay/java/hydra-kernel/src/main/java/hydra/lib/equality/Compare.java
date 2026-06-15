@@ -15,7 +15,6 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.schemeOrd;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -25,7 +24,7 @@ import hydra.util.Either;
  */
 public class Compare extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.equality.compare");
+        return hydra.lib.Equality.compare().name;
     }
 
     @Override
@@ -34,8 +33,8 @@ public class Compare extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> {
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> {
             // For Term comparison, we use a simple comparison based on the term structure
             // This is a simplified implementation; a full implementation would need proper Ord instance
             int cmp = compareTerms(args.get(0), args.get(1));

@@ -19,7 +19,6 @@ import qualified Data.Map                     as M
 
 -- Additional imports specific to this file
 import Hydra.Testing
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Math as Math
 import qualified Hydra.Dsl.Meta.Lib.Pairs as Pairs

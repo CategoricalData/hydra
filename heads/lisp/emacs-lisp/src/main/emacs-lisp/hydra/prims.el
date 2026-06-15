@@ -5,6 +5,20 @@
 (require 'cl-lib)
 
 ;; ============================================================================
+;; Empty InferenceContext placeholder
+;; ============================================================================
+
+;; After #446 the primitive implementation carrier no longer receives an
+;; InferenceContext, but the coder encode/decode functions still take cx. The
+;; prim bodies use this empty-InferenceContext placeholder, mirroring the
+;; Haskell host's `primCx = emptyInferenceContext`, Python's
+;; `PRIM_CX = InferenceContext(fresh_type_variable_count=0, trace=())`, and the
+;; Scheme/Clojure hosts' `(make-hydra_typing_inference_context 0 '())`.
+;; InferenceContext has two fields: freshTypeVariableCount (int32) and trace (a list).
+(defconst hydra-prim-cx (make-hydra_typing_inference_context 0 nil)
+  "Empty InferenceContext used by primitive coders after #446 dropped cx from the carrier.")
+
+;; ============================================================================
 ;; Type scheme helpers
 ;; ============================================================================
 
@@ -75,7 +89,7 @@
          ;; After #156, TypeVariableConstraints.classes is Seq[TypeClassConstraint].
          (constraint-map
           (when constraints
-            (funcall hydra_lib_maps_from_list
+            (funcall hydra_lisp_lib_maps_from_list
                      (mapcar (lambda (entry)
                                (list (car entry)
                                      (make-hydra_core_type_variable_constraints
@@ -206,11 +220,11 @@
     (lambda (cx) (lambda (s)
       (let ((result nil))
         (catch 'fail
-          (dolist (item (funcall hydra_lib_sets_to_list s))
+          (dolist (item (funcall hydra_lisp_lib_sets_to_list s))
             (let ((r (funcall (funcall (hydra_graph_term_coder-decode el-coder) cx) item)))
               (if (eq (car r) :left) (throw 'fail r)
                 (push (cadr r) result))))
-          (list :right (list :set (funcall hydra_lib_sets_from_list (nreverse result))))))))))
+          (list :right (list :set (funcall hydra_lisp_lib_sets_from_list (nreverse result))))))))))
 
 (defun tc-map (key-coder val-coder)
   (make-hydra_graph_term_coder (list :map (make-hydra_core_map_type (hydra_graph_term_coder-type key-coder) (hydra_graph_term_coder-type val-coder)))
@@ -222,13 +236,13 @@
     (lambda (cx) (lambda (m)
       (let ((result nil))
         (catch 'fail
-          (dolist (pair (funcall hydra_lib_maps_to_list m))
-            (let ((kr (funcall (funcall (hydra_graph_term_coder-decode key-coder) cx) (funcall hydra_lib_pairs_first pair))))
+          (dolist (pair (funcall hydra_lisp_lib_maps_to_list m))
+            (let ((kr (funcall (funcall (hydra_graph_term_coder-decode key-coder) cx) (funcall hydra_lisp_lib_pairs_first pair))))
               (if (eq (car kr) :left) (throw 'fail kr)
-                (let ((vr (funcall (funcall (hydra_graph_term_coder-decode val-coder) cx) (funcall hydra_lib_pairs_second pair))))
+                (let ((vr (funcall (funcall (hydra_graph_term_coder-decode val-coder) cx) (funcall hydra_lisp_lib_pairs_second pair))))
                   (if (eq (car vr) :left) (throw 'fail vr)
                     (push (list (cadr kr) (cadr vr)) result))))))
-          (list :right (list :map (funcall hydra_lib_maps_from_list (nreverse result))))))))))
+          (list :right (list :map (funcall hydra_lisp_lib_maps_from_list (nreverse result))))))))))
 
 (defun tc-optional (el-coder)
   (make-hydra_graph_term_coder (list :optional (hydra_graph_term_coder-type el-coder))
@@ -268,9 +282,9 @@
                                  (lambda (term) (funcall (funcall (funcall (hydra_graph_term_coder-encode second-coder) cx) g) term)))
                         g) t_))))
     (lambda (cx) (lambda (p)
-      (let ((fr (funcall (funcall (hydra_graph_term_coder-decode first-coder) cx) (funcall hydra_lib_pairs_first p))))
+      (let ((fr (funcall (funcall (hydra_graph_term_coder-decode first-coder) cx) (funcall hydra_lisp_lib_pairs_first p))))
         (if (eq (car fr) :left) fr
-          (let ((sr (funcall (funcall (hydra_graph_term_coder-decode second-coder) cx) (funcall hydra_lib_pairs_second p))))
+          (let ((sr (funcall (funcall (hydra_graph_term_coder-decode second-coder) cx) (funcall hydra_lisp_lib_pairs_second p))))
             (if (eq (car sr) :left) sr
               (list :right (list :pair (list (cadr fr) (cadr sr))))))))))))
 
@@ -346,46 +360,46 @@
 
 (defun prim0 (pname value-fn variables output &optional constraints)
   (make-hydra_graph_primitive (build-prim-def pname variables nil output constraints)
-    (lambda (cx) (lambda (_g) (lambda (_args)
-      (let ((result (funcall (funcall (hydra_graph_term_coder-decode output) cx) (funcall value-fn))))
-        (wrap-other-error cx result)))))))
+    (lambda (_g) (lambda (_args)
+      (let ((result (funcall (funcall (hydra_graph_term_coder-decode output) hydra-prim-cx) (funcall value-fn))))
+        (wrap-other-error hydra-prim-cx result))))))
 
 (defun prim1 (pname compute variables input1 output &optional constraints)
   (make-hydra_graph_primitive (build-prim-def pname variables (list input1) output constraints)
-    (lambda (cx) (lambda (g) (lambda (args)
+    (lambda (g) (lambda (args)
       (let ((check (funcall (funcall (funcall hydra_extract_core_n_args pname) 1) args)))
         (if (eq (car check) :left) check
-          (let ((r1 (funcall (funcall (funcall (hydra_graph_term_coder-encode input1) cx) g) (car args))))
-            (if (eq (car r1) :left) (wrap-other-error cx r1)
-              (let ((result (funcall (funcall (hydra_graph_term_coder-decode output) cx) (funcall compute (cadr r1)))))
-                (wrap-other-error cx result)))))))))))
+          (let ((r1 (funcall (funcall (funcall (hydra_graph_term_coder-encode input1) hydra-prim-cx) g) (car args))))
+            (if (eq (car r1) :left) (wrap-other-error hydra-prim-cx r1)
+              (let ((result (funcall (funcall (hydra_graph_term_coder-decode output) hydra-prim-cx) (funcall compute (cadr r1)))))
+                (wrap-other-error hydra-prim-cx result))))))))))
 
 (defun prim2 (pname compute variables input1 input2 output &optional constraints)
   (make-hydra_graph_primitive (build-prim-def pname variables (list input1 input2) output constraints)
-    (lambda (cx) (lambda (g) (lambda (args)
+    (lambda (g) (lambda (args)
       (let ((check (funcall (funcall (funcall hydra_extract_core_n_args pname) 2) args)))
         (if (eq (car check) :left) check
-          (let ((r1 (funcall (funcall (funcall (hydra_graph_term_coder-encode input1) cx) g) (car args))))
-            (if (eq (car r1) :left) (wrap-other-error cx r1)
-              (let ((r2 (funcall (funcall (funcall (hydra_graph_term_coder-encode input2) cx) g) (cadr args))))
-                (if (eq (car r2) :left) (wrap-other-error cx r2)
-                  (let ((result (funcall (funcall (hydra_graph_term_coder-decode output) cx)
+          (let ((r1 (funcall (funcall (funcall (hydra_graph_term_coder-encode input1) hydra-prim-cx) g) (car args))))
+            (if (eq (car r1) :left) (wrap-other-error hydra-prim-cx r1)
+              (let ((r2 (funcall (funcall (funcall (hydra_graph_term_coder-encode input2) hydra-prim-cx) g) (cadr args))))
+                (if (eq (car r2) :left) (wrap-other-error hydra-prim-cx r2)
+                  (let ((result (funcall (funcall (hydra_graph_term_coder-decode output) hydra-prim-cx)
                                          (funcall (funcall compute (cadr r1)) (cadr r2)))))
-                    (wrap-other-error cx result)))))))))))))
+                    (wrap-other-error hydra-prim-cx result))))))))))))
 
 (defun prim3 (pname compute variables input1 input2 input3 output &optional constraints)
   (make-hydra_graph_primitive (build-prim-def pname variables (list input1 input2 input3) output constraints)
-    (lambda (cx) (lambda (g) (lambda (args)
+    (lambda (g) (lambda (args)
       (let ((check (funcall (funcall (funcall hydra_extract_core_n_args pname) 3) args)))
         (if (eq (car check) :left) check
-          (let ((r1 (funcall (funcall (funcall (hydra_graph_term_coder-encode input1) cx) g) (car args))))
-            (if (eq (car r1) :left) (wrap-other-error cx r1)
-              (let ((r2 (funcall (funcall (funcall (hydra_graph_term_coder-encode input2) cx) g) (cadr args))))
-                (if (eq (car r2) :left) (wrap-other-error cx r2)
-                  (let ((r3 (funcall (funcall (funcall (hydra_graph_term_coder-encode input3) cx) g) (nth 2 args))))
-                    (if (eq (car r3) :left) (wrap-other-error cx r3)
-                      (let ((result (funcall (funcall (hydra_graph_term_coder-decode output) cx)
+          (let ((r1 (funcall (funcall (funcall (hydra_graph_term_coder-encode input1) hydra-prim-cx) g) (car args))))
+            (if (eq (car r1) :left) (wrap-other-error hydra-prim-cx r1)
+              (let ((r2 (funcall (funcall (funcall (hydra_graph_term_coder-encode input2) hydra-prim-cx) g) (cadr args))))
+                (if (eq (car r2) :left) (wrap-other-error hydra-prim-cx r2)
+                  (let ((r3 (funcall (funcall (funcall (hydra_graph_term_coder-encode input3) hydra-prim-cx) g) (nth 2 args))))
+                    (if (eq (car r3) :left) (wrap-other-error hydra-prim-cx r3)
+                      (let ((result (funcall (funcall (hydra_graph_term_coder-decode output) hydra-prim-cx)
                                              (funcall (funcall (funcall compute (cadr r1)) (cadr r2)) (cadr r3)))))
-                        (wrap-other-error cx result)))))))))))))))
+                        (wrap-other-error hydra-prim-cx result))))))))))))))
 
 (provide 'hydra-prims)

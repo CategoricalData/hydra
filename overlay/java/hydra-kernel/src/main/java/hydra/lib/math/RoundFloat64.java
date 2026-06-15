@@ -14,7 +14,6 @@ import static hydra.dsl.Types.float64;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.int32;
 import static hydra.dsl.Types.scheme;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -24,7 +23,7 @@ import hydra.util.Either;
  */
 public class RoundFloat64 extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.math.roundFloat64");
+        return hydra.lib.Math_.roundFloat64().name;
     }
 
     @Override
@@ -33,8 +32,8 @@ public class RoundFloat64 extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.int32(graph, args.get(0)), arg0 -> hydra.lib.eithers.Map.apply(arg1 -> Terms.float64(apply(arg0, arg1)), hydra.extract.Core.float64(graph, args.get(1))));
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.int32(graph, args.get(0)), arg0 -> hydra.lib.eithers.Map.apply(arg1 -> Terms.float64(apply(arg0, arg1)), hydra.extract.Core.float64(graph, args.get(1))));
     }
 
     public static Function<Double, Double> apply(int n) {

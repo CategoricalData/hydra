@@ -13,7 +13,6 @@ import java.util.function.Function;
 import static hydra.dsl.Types.float64;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -26,7 +25,7 @@ import hydra.util.Either;
  */
 public class Truncate extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.math.truncate");
+        return hydra.lib.Math_.truncate().name;
     }
 
     @Override
@@ -35,8 +34,8 @@ public class Truncate extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((arg0) -> Terms.float64(apply(arg0)), hydra.extract.Core.float64(graph, args.get(0)));
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Map.apply((arg0) -> Terms.float64(apply(arg0)), hydra.extract.Core.float64(graph, args.get(0)));
     }
 
     /**

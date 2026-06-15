@@ -15,7 +15,6 @@ import static hydra.dsl.Types.int32;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.ConsList;
 import hydra.util.Either;
@@ -29,7 +28,7 @@ public class ToList extends PrimitiveFunction {
      * @return the name "hydra.lib.strings.toList"
      */
     public Name name() {
-        return new Name("hydra.lib.strings.toList");
+        return hydra.lib.Strings.toList().name;
     }
 
     /**
@@ -46,8 +45,8 @@ public class ToList extends PrimitiveFunction {
      * @return a function that transforms terms to a flow of graph and term
      */
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<String, Term>) s -> {
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Map.apply((Function<String, Term>) s -> {
             ConsList<Term> reversed = ConsList.empty();
             for (Integer i : apply(s)) {
                 reversed = ConsList.cons(Terms.int32(i), reversed);

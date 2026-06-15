@@ -125,7 +125,7 @@
           "lib/pairs.lisp" "lib/regex.lisp" "lib/sets.lisp"
           "lib/strings.lisp")))
 
-;; Set function bindings for native library defvars (e.g. hydra_lib_maps_singleton)
+;; Set function bindings for native library defvars (e.g. hydra_lisp_lib_maps_singleton)
 ;; so they can be called in function position in generated code.
 (hydra-set-function-bindings)
 

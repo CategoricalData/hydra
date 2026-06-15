@@ -14,7 +14,6 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.int64;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -28,7 +27,7 @@ public class ShowInt64 extends PrimitiveFunction {
      * @return the function name "hydra.lib.literals.showInt64"
      */
     public Name name() {
-        return new Name("hydra.lib.literals.showInt64");
+        return hydra.lib.Literals.showInt64().name;
     }
 
     /**
@@ -45,8 +44,8 @@ public class ShowInt64 extends PrimitiveFunction {
      * @return a function that converts int64 terms to string terms
      */
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<Long, Term>) l -> Terms.string(apply(l)), hydra.extract.Core.int64(graph, args.get(0)));
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Map.apply((Function<Long, Term>) l -> Terms.string(apply(l)), hydra.extract.Core.int64(graph, args.get(0)));
     }
 
     /**

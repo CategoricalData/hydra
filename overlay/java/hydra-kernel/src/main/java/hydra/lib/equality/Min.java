@@ -13,7 +13,6 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.schemeOrd;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -23,7 +22,7 @@ import hydra.util.Either;
  */
 public class Min extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.equality.min");
+        return hydra.lib.Equality.min().name;
     }
 
     @Override
@@ -32,8 +31,8 @@ public class Min extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> {
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> {
             // Simple comparison based on term structure
             int cmp = args.get(0).toString().compareTo(args.get(1).toString());
             return Either.right(cmp <= 0 ? args.get(0) : args.get(1));

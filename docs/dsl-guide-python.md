@@ -772,6 +772,50 @@ TERM__VARIABLE__NAME = Name("variable")
 # ...
 ```
 
+### Constructing record values: builders and copy-update
+
+Every generated record dataclass carries two Python-native affordances for construction, so
+applications do not have to call the all-args constructor directly or re-implement builder boilerplate.
+Both mirror the Java counterparts (`#465`) while reading natively in Python.
+
+**Copy-update methods.**
+Each record has one `with_<field>(...)` method per field, returning a new instance with that one field
+replaced and all others copied. Since every generated record is a `@dataclass(frozen=True)`, these wrap
+`dataclasses.replace`:
+
+```python
+from hydra.core import Binding, Name
+
+b2 = b.with_name(Name("y"))   # same term + type_scheme, new name
+```
+
+Field names are snake-cased, so `typeScheme` becomes `with_type_scheme`.
+
+**Fluent builder.**
+Each record also exposes a static `builder()` factory and a nested `Builder` class with one setter per
+field (named after the field) and a `build()` that returns the immutable record:
+
+```python
+from hydra.core import Lambda, Name
+
+lam = (Lambda.builder()
+       .parameter(Name("x"))
+       .body(my_term)
+       .build())          # domain omitted -> None
+```
+
+The `Builder` is itself a frozen dataclass, so each setter returns a new builder (the chain is
+immutable and reusable). Generic records reuse the record's `Generic[...]` parameters on the builder.
+
+Notes:
+- `with_*` methods and the builder are emitted for **every** generated record (no opt-in flag).
+- The builder stores in-progress state in underscore-prefixed fields (`_parameter`, `_body`, …) so the
+  storage does not collide with the same-named setter methods; these are internal, not user-facing.
+- Builder fields default to `None`, so a partially-populated builder is allowed; `build()` does no
+  null-check (Hydra-generated code never passes nulls, and the keyword constructor remains available).
+- A field literally named `build` or `builder` would collide with the generated methods and is escaped
+  to `build_` / `builder_` (matching the Java convention).
+
 ## Error handling
 
 Hydra computations use `Either[Error, A]` for error handling (the former Flow monad

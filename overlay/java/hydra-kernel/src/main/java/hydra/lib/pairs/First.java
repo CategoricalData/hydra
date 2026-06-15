@@ -14,7 +14,6 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.pair;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.variable;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -28,7 +27,7 @@ public class First extends PrimitiveFunction {
      * @return the name
      */
     public Name name() {
-        return new Name("hydra.lib.pairs.first");
+        return hydra.lib.Pairs.first().name;
     }
 
     /**
@@ -45,8 +44,8 @@ public class First extends PrimitiveFunction {
      * @return the implementation function
      */
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<Pair<Term, Term>, Term>) pair -> apply(pair), hydra.extract.Core.pair(t -> Either.right(t), t -> Either.right(t), graph, args.get(0)));
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Map.apply((Function<Pair<Term, Term>, Term>) pair -> apply(pair), hydra.extract.Core.pair(t -> Either.right(t), t -> Either.right(t), graph, args.get(0)));
     }
 
     /**

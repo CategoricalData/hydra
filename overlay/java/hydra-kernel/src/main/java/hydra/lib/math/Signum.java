@@ -13,7 +13,6 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.int32;
 import static hydra.dsl.Types.scheme;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -27,7 +26,7 @@ public class Signum extends PrimitiveFunction {
      * @return the function name
      */
     public Name name() {
-        return new Name("hydra.lib.math.signum");
+        return hydra.lib.Math_.signum().name;
     }
 
     /**
@@ -44,8 +43,8 @@ public class Signum extends PrimitiveFunction {
      * @return a function that maps terms to a flow of terms
      */
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((arg0) -> Terms.int32(apply(arg0)), hydra.extract.Core.int32(graph, args.get(0)));
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Map.apply((arg0) -> Terms.int32(apply(arg0)), hydra.extract.Core.int32(graph, args.get(0)));
     }
 
     /**

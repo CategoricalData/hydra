@@ -16,7 +16,6 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -30,7 +29,7 @@ public class Cat extends PrimitiveFunction {
      * @return the name "hydra.lib.optionals.cat"
      */
     public Name name() {
-        return new Name("hydra.lib.optionals.cat");
+        return hydra.lib.Optionals.cat().name;
     }
 
     /**
@@ -47,8 +46,8 @@ public class Cat extends PrimitiveFunction {
      * @return a function that filters and extracts Just values from a list
      */
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<java.util.List<Optional<Term>>, Term>) optionals -> Terms.list(apply(optionals)), hydra.extract.Core.listOf(x -> hydra.extract.Core.optionalTerm(t -> Either.right(t), graph, x), graph, args.get(0)));
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Map.apply((Function<java.util.List<Optional<Term>>, Term>) optionals -> Terms.list(apply(optionals)), hydra.extract.Core.listOf(x -> hydra.extract.Core.optionalTerm(t -> Either.right(t), graph, x), graph, args.get(0)));
     }
 
     /**

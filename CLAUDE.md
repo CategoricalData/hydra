@@ -37,7 +37,7 @@ The **Haskell host** now likewise consumes published artifacts: `heads/haskell` 
 not-yet-published coders — not the kernel. `dist/haskell/hydra-kernel` is still *generated* as a target
 but is no longer a host prerequisite (the host-vs-target split). `sync-haskell.sh` / `bin/sync.sh`
 default to `--published-host`; `--local-host` builds the whole host from source, and
-`hostVersionOverrides[pkg]="local"` forces one package local while the rest come from the registry. See
+`hostOverrides[pkg]="local"` forces one package local while the rest come from the registry. See
 [build-system.md § Consuming published hosts](docs/build-system.md#consuming-published-hosts) for the
 full model (probe gate, the per-host mechanics).
 
@@ -151,6 +151,11 @@ At the beginning of every new session, follow these steps **before doing any oth
     consolidated via the squash workflow, it represents shippable history.
     The absence of `WIP:` is what tells a reader the work is finalized.
     See [.claude/commands/squash.md](.claude/commands/squash.md).
+  - **`WIP:` must never reach `origin/main`.** It leaks two ways: dragged in by a
+    merge from integration/a feature branch, and self-authored fix commits pushed
+    without finalizing. The staging loop gates both — a post-pull check and a
+    pre-push scan of `origin/main..staging`. See
+    [Handling pulled WIP commits](claude/branch-flow.md#handling-pulled-wip-commits).
   - **All commit messages are short (≤120 chars), single-line, no body.**
     No `Co-Authored-By` line. End with `For #<issue>` (or `Resolves #<issue>`
     if this branch closes it). Example:
@@ -274,7 +279,7 @@ Primary entry point — the doc most likely to answer the question by task:
 | Use Hydra as a library (library user, not contributor) | [docs/getting-started.md](docs/getting-started.md) — dependency coordinates and minimal-program walk-throughs per host |
 | Understand the kernel API | [docs/hydra-lexicon.txt](docs/hydra-lexicon.txt) — **most important LLM reference**, all kernel types + ~180 primitive signatures |
 | Understand the build/sync/cache system | [docs/build-system.md](docs/build-system.md) — pipeline phases, cache layers, what invalidates what, and the published-host consume model (#370) for all three hosts |
-| Build when a published host can't (pin / local-host shim) | [docs/recipes/migration-shims.md](docs/recipes/migration-shims.md) — `hostVersionOverrides` pinning vs `--local-host`; the per-host shims |
+| Build when a published host can't (pin / local-host shim) | [docs/recipes/migration-shims.md](docs/recipes/migration-shims.md) — `hostOverrides` pinning vs `--local-host`; the per-host shims |
 | Understand the JSON wire format | [docs/json-format.md](docs/json-format.md) — tagged-union duality, optional-field rules, IEEE sentinels, integer threshold |
 | Understand architecture | [docs/implementation.md](docs/implementation.md) |
 | Understand design rationale (the "why" for each major choice) | [Design wiki](https://github.com/CategoricalData/hydra/wiki/Design) |

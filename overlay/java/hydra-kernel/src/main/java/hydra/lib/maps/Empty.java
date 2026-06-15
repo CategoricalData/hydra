@@ -14,7 +14,6 @@ import java.util.function.Function;
 
 import static hydra.dsl.Types.map;
 import static hydra.dsl.Types.scheme;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 import hydra.util.PersistentMap;
@@ -28,7 +27,7 @@ public class Empty extends PrimitiveFunction {
      * @return the name
      */
     public Name name() {
-        return new Name("hydra.lib.maps.empty");
+        return hydra.lib.Maps.empty().name;
     }
 
     /**
@@ -45,8 +44,8 @@ public class Empty extends PrimitiveFunction {
      * @return the implementation function
      */
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return ignored -> cx -> graph -> Either.right(Terms.map(apply()));
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return ignored -> graph -> Either.right(Terms.map(apply()));
     }
 
     /**

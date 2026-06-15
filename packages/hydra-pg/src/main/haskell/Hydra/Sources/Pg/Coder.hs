@@ -10,7 +10,6 @@ import Hydra.Kernel hiding (
   findPropertySpecs, findSingleFieldWithAnnotationKey, hasVertexAdapters,
   projectionAdapter, propertyAdapter, propertyTypes, selectEdgeId,
   selectVertexId, traverseToSingleTerm, vertexCoder, vertexIdAdapter)
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations

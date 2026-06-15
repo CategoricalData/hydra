@@ -83,8 +83,9 @@ if [ "$MODE" = "published-host" ]; then
 else
     # Bootstrap shim: ensure the local dist trees (dist/json/hydra-kernel,
     # dist/python/hydra-kernel, dist/python/hydra-python) are present + current.
-    # sync-python.sh covers all three. HYDRA_IN_SYNC=1 means sync.sh is already
-    # calling us (Phase 5); don't recurse.
+    # sync-python.sh covers all three but is a full recursive `sync.sh --hosts
+    # python --targets python`, so HYDRA_IN_SYNC=1 (sync.sh is already calling us)
+    # must NOT trigger it — that would recurse.
     if [ "${HYDRA_IN_SYNC:-0}" != "1" ]; then
         if [ "$FORCE_REBUILD" = "1" ]; then
             echo "=== Forcing Python host rebuild via bin/sync-python.sh ==="
@@ -92,6 +93,21 @@ else
             echo "=== Running bin/sync-python.sh to ensure dist trees are current ==="
         fi
         "$HYDRA_ROOT/bin/sync-python.sh"
+    else
+        # Under HYDRA_IN_SYNC (Phase 1.5 in bin/sync.sh): the local-host runtime
+        # we are about to put on PYTHONPATH must match the current kernel layout
+        # before update-python-json.py imports hydra.codegen. We can't recurse
+        # via sync-python.sh, but the per-package assembler is non-recursive,
+        # reads dist/json/hydra-kernel (already produced by Phase 1), and has
+        # its own digest-based freshness gate — calling it warm is a fast no-op.
+        # Calling it unconditionally fixes #480: presence-only checks let a stale
+        # dist/python/hydra-kernel/ (from an older kernel layout) silently sit on
+        # PYTHONPATH and break update-python-json.py with an ImportError before
+        # any later phase could regenerate it. (#446/#472 hostOverrides interim
+        # — see staging-plan.md.)
+        echo "=== Ensuring dist/python runtime matches current kernel layout (assembling hydra-kernel + hydra-python; #480) ==="
+        "$HYDRA_ROOT/heads/python/bin/assemble-distribution.sh" hydra-kernel
+        "$HYDRA_ROOT/heads/python/bin/assemble-distribution.sh" hydra-python
     fi
     PP="$PP:$HYDRA_ROOT/dist/python/hydra-kernel/src/main/python"
     PP="$PP:$HYDRA_ROOT/dist/python/hydra-python/src/main/python"
@@ -162,4 +178,22 @@ if [ "$DO_COMPARE" = "1" ]; then
     if [ -n "$COMPARE_CLEANUP" ]; then
         rm -rf "$COMPARE_CLEANUP"
     fi
+fi
+
+# #469: Refresh dist/json/hydra-python/build/main/digest.json so the
+# JSON we just wrote is reflected in the Phase-2 freshness gate. Without
+# this, the next 'assemble-distribution.sh hydra-python' compares the
+# stale input digest (referencing pre-write JSON content) against the
+# output digest's recorded inputs (also stale), reports a cache hit, and
+# skips the JSON->Haskell render — which is exactly the recurrence
+# pattern #469 closes. Skip when we wrote to a tmp dir (compare-only
+# mode without --out-root); in that case the canonical dist/json is
+# untouched.
+if [ "$ACTUAL_OUT_ROOT" = "$HYDRA_ROOT/dist/json" ]; then
+    echo ""
+    echo "=== Refreshing per-package input digest for hydra-python (#469) ==="
+    (cd "$HYDRA_ROOT/heads/haskell" && \
+     stack exec digest-check -- refresh-input \
+       --package hydra-python \
+       --dist-json-root "$HYDRA_ROOT/dist/json")
 fi

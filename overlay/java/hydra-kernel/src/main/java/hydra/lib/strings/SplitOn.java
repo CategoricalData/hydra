@@ -14,7 +14,6 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.ConsList;
 import hydra.util.Either;
@@ -28,7 +27,7 @@ public class SplitOn extends PrimitiveFunction {
      * @return the name "hydra.lib.strings.splitOn"
      */
     public Name name() {
-        return new Name("hydra.lib.strings.splitOn");
+        return hydra.lib.Strings.splitOn().name;
     }
 
     /**
@@ -45,8 +44,8 @@ public class SplitOn extends PrimitiveFunction {
      * @return a function that transforms terms to a flow of graph and term
      */
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.string(graph, args.get(0)), s -> hydra.lib.eithers.Map.apply(s2 -> Terms.listOfStrings(apply(s, s2)), hydra.extract.Core.string(graph, args.get(1))));
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.string(graph, args.get(0)), s -> hydra.lib.eithers.Map.apply(s2 -> Terms.listOfStrings(apply(s, s2)), hydra.extract.Core.string(graph, args.get(1))));
     }
 
     /**

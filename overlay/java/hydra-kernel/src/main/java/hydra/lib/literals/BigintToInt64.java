@@ -14,7 +14,6 @@ import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -28,7 +27,7 @@ public class BigintToInt64 extends PrimitiveFunction {
      * @return the function name "hydra.lib.literals.bigintToInt64"
      */
     public Name name() {
-        return new Name("hydra.lib.literals.bigintToInt64");
+        return hydra.lib.Literals.bigintToInt64().name;
     }
 
     /**
@@ -45,8 +44,8 @@ public class BigintToInt64 extends PrimitiveFunction {
      * @return a function that converts bigint terms to int64 terms
      */
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(s -> Terms.int64(apply(s)), hydra.extract.Core.bigint(graph, args.get(0)));
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Map.apply(s -> Terms.int64(apply(s)), hydra.extract.Core.bigint(graph, args.get(0)));
     }
 
     /**

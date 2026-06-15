@@ -260,7 +260,7 @@ and the legacy Haskell sources still agree.
 > `dist/json/hydra-{java,python}/` via the native drivers in Phase 5 (and heals them
 > in Phase 1.5 when the kernel changed) — automatically, no explicit run needed.
 > The drivers default to the **published host**; pass `--local-host` (or set
-> `hostVersionOverrides["hydra-<pkg>"]="local"` in `hydra.json`) to build the coder
+> `hostOverrides["<host>"]="local"` in `hydra.json`) to build the coder
 > from local `dist/` for a backward-incompatible kernel change. The
 > `generate-hydra-{java,python}-from-{java,python}.sh` scripts run the same path
 > standalone.
@@ -318,6 +318,43 @@ its source-DSL modules can resolve fully-qualified DSL accessors):
    and `dist/json/build/digest.json` before the next sync, since these
    exec edits don't otherwise invalidate Phase 1 (see "Phase 1 cache
    doesn't hash `src/exec`" below).
+
+### Derived modules carry their types — never re-infer them
+
+A *derived* module is one the synthesizer produces from a source type module, rather than one a
+human authors. There are three current categories, all generated per package from the same type
+inputs and best thought of as a set:
+
+- `hydra.dsl.*` — DSL wrapper builders/accessors (e.g. `atomTrue`, `bindingName`)
+- `hydra.encode.*` — term encoders
+- `hydra.decode.*` — term decoders
+
+Unlike hand-authored kernel modules — which start *untyped* and have their types *added* by
+inference — derived modules are constructed with their final types built in. The invariant:
+**inference must never run on a derived module, of any category.** The synthesizer already knows
+each binding's type and emits it directly; re-inference can only lose that information, never
+recover it.
+
+The clearest failure is a DSL wrapper. Each builder is constructed with its phantom type attached
+(e.g. `atomTrue : TypedTerm Atom`), and inference cannot reconstruct that phantom: a nullary
+builder like `atomTrue` (body `inject Atom.true ()`) has nothing constraining its result to
+`Atom`, so re-inference generalizes it to `∀t. TypedTerm t`. That polymorphic wrapper renders as a
+thunked/`typeLambda` nullary, which the target coders mishandle (the Python coder emits an
+`@lru_cache` thunk that downstream value-consumers can't call). This was the root cause of
+[#466](https://github.com/CategoricalData/hydra/issues/466). Encoders and decoders are the same in
+principle — the synthesizer emits their specialized types (e.g. a decoder for `type Vertex = int32`
+yields `int32`, not raw `Literal`), so they too are written as-is rather than re-inferred (see
+[#475](https://github.com/CategoricalData/hydra/issues/475)).
+
+`writeDerivedJsonPackageSplit` (`Hydra.Generation`) writes all three categories without inference.
+Relatedly, the per-package main write pass (`inferAndWriteByPackage`) **skips the native-owned
+packages** `hydra-java`/`hydra-python` entirely (`inferTargets = []`): their already-derived
+`hydra.dsl.{java,python}.*` wrappers must not be re-inferred (it recorrupts them, as in #466), and
+inferring their whole native universe fails on by-name kernel refs; their schemes are harvested
+from the JSON signatures for free.
+
+If you see `typeLambda`/`forall t0` in a generated derived module whose source type is monomorphic,
+a derived module is being inferred when it shouldn't be.
 
 ### Coq
 

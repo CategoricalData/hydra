@@ -9,14 +9,14 @@
     (apply (symbol-function (intern fn-name pkg)) args)))
 
 ;; matches :: String -> String -> Bool
-(defvar hydra_lib_regex_matches
+(defvar hydra_lisp_lib_regex_matches
   (lambda (pattern)
     (lambda (input)
       (let ((scanner (hydra--ppcre-call "CREATE-SCANNER" (concatenate 'string "^(?:" pattern ")$"))))
         (if (hydra--ppcre-call "SCAN" scanner input) t nil)))))
 
 ;; find :: String -> String -> Maybe String
-(defvar hydra_lib_regex_find
+(defvar hydra_lisp_lib_regex_find
   (lambda (pattern)
     (lambda (input)
       (multiple-value-bind (start end)
@@ -24,27 +24,27 @@
         (if start (subseq input start end) nil)))))
 
 ;; find_all :: String -> String -> [String]
-(defvar hydra_lib_regex_find_all
+(defvar hydra_lisp_lib_regex_find_all
   (lambda (pattern)
     (lambda (input)
       (hydra--ppcre-call "ALL-MATCHES-AS-STRINGS" pattern input))))
 
 ;; replace :: String -> String -> String -> String
-(defvar hydra_lib_regex_replace
+(defvar hydra_lisp_lib_regex_replace
   (lambda (pattern)
     (lambda (replacement)
       (lambda (input)
         (hydra--ppcre-call "REGEX-REPLACE" pattern input replacement)))))
 
 ;; replace_all :: String -> String -> String -> String
-(defvar hydra_lib_regex_replace_all
+(defvar hydra_lisp_lib_regex_replace_all
   (lambda (pattern)
     (lambda (replacement)
       (lambda (input)
         (hydra--ppcre-call "REGEX-REPLACE-ALL" pattern input replacement)))))
 
 ;; split :: String -> String -> [String]
-(defvar hydra_lib_regex_split
+(defvar hydra_lisp_lib_regex_split
   (lambda (pattern)
     (lambda (input)
       (let ((parts nil)

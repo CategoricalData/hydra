@@ -15,7 +15,6 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.set;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 import hydra.util.PersistentSet;
@@ -30,7 +29,7 @@ public class Map extends PrimitiveFunction {
      * @return the name "hydra.lib.sets.map"
      */
     public Name name() {
-        return new Name("hydra.lib.sets.map");
+        return hydra.lib.Sets.map().name;
     }
 
     /**
@@ -48,8 +47,8 @@ public class Map extends PrimitiveFunction {
      * @return a function that transforms terms to a flow of graph and term
      */
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> {
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> {
             Term mapping = args.get(0);
             return hydra.lib.eithers.Map.apply(arg -> {
                 PersistentSet<Term> result = PersistentSet.<Term>empty();

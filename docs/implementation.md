@@ -388,7 +388,7 @@ Write programs that build programs (meta-programming):
 buildAddFunction :: TypedTerm (Int -> Int -> Int)
 buildAddFunction =
   lambda "x" $ lambda "y" $
-    primitive _math_add @@ var "x" @@ var "y"
+    primitive (Prims.primName DefMath.add) @@ var "x" @@ var "y"
 
 -- Can inspect and transform this representation
 ```
@@ -609,20 +609,47 @@ def "Primitive" $
     "definition">: doc "Host-independent metadata (name, signature, purity, totality)" $
       packaging "PrimitiveDefinition",
     "implementation">: doc "Concrete, host-specific implementation" $
-      list (core "Term") ~> Types.either_ (errors "Error") (core "Term")
+      graph ~> list (core "Term") ~> Types.either_ (errors "Error") (core "Term")
   ]
 ```
 
-The implementation is a mapping from already-reduced argument terms to a result term, or an error.
-The interpreter strips annotations and reduces each argument before invoking the primitive,
-so the implementation can pattern-match the argument terms directly;
-a higher-order primitive can return an unreduced applicative term and let the outer reducer fold it.
-This shape mirrors `PrimitiveDefinition.defaultImplementation`,
-allowing a host to derive its primitive shell from the same Hydra term that serves as the canonical reference implementation.
+The implementation maps the (already-reduced, annotation-stripped) argument terms to a result term,
+or an error, given the current graph. The interpreter strips annotations and reduces each argument
+before invoking the primitive, so the implementation can pattern-match the argument terms directly.
+
+The two faces have deliberately different shapes:
+
+- `PrimitiveDefinition.defaultImplementation` is an optional **pure** Hydra term whose type is
+  exactly the primitive's public signature (`int32 -> int32 -> int32` for `math.add`,
+  `(a -> Bool) -> [a] -> [a]` for `lists.filter`). It never mentions a graph. It is the portable
+  *reference* implementation — *what* the primitive computes — and is used for type-checking and
+  cross-host documentation, not as a runtime substitute (interpreting it would be far slower than a
+  native impl).
+- `Primitive.implementation` is the host-native runtime carrier, `Graph -> [Term] -> Either Error Term`.
+  It is *how* a host evaluates the primitive, natively and quickly.
+
+So the graph appears in the runtime carrier but **never** in a primitive's signature or in its
+`defaultImplementation`. The graph is a property of the implementation's *calling convention*, not
+of the primitive's *type*.
+
+Why does the carrier carry a graph at all? Most primitives ignore it — `math.add` just adds its two
+arguments. The graph matters only for *higher-order* primitives that must evaluate a function
+argument mid-computation. Take `lists.filter` applied to the predicate `\x -> equality.gt x 2`: the
+native impl is `(Term -> Bool) -> [Term] -> [Term]`, so it must turn that predicate *term* into a
+native `Term -> Bool`, which means reducing `gt x 2` per element. But `gt` arrives as an unresolved
+name (`hydra.lib.equality.gt`) — it sits under a lambda binder and cannot be evaluated until `filter`
+supplies a concrete `x` — and resolving that name requires the graph's primitive table. The graph
+passed in is the interpreter's *live* graph at the call site (which may hold primitives or bindings
+beyond the kernel's), so a captured or global graph would be wrong; it must be threaded from the
+reducer. The complementary case — a higher-order primitive whose result shape is fixed by its data
+argument, e.g. `lists.map` or `eithers.bimap` — can instead return an *unreduced* applicative term
+(`[f x1, f x2, ...]`) and let the outer reducer fold it, needing no graph. The graph is retained for
+the minority of primitives that branch on a reduced function result (filter, find, foldl over Either, …).
 
 (The `Either`-based implementation replaces the former `Flow` monad, removed in #245.
 The host-independent `PrimitiveDefinition` was split out from the implementation in #156.
-The carrier type still threads `InferenceContext` and `Graph` parameters pending the cleanup tracked in #446, sequenced with the `defaultImplementation` integration in #437.)
+The vestigial `InferenceContext` parameter — which no primitive ever consulted — was dropped from the
+carrier in #446, leaving the graph; this was sequenced with the `defaultImplementation` integration in #437.)
 
 #### Level 2: PrimitiveDefinition declaration (the canonical registry)
 
@@ -679,23 +706,25 @@ Per host, two things are needed beyond the kernel metadata:
 
 2. **Host-side primitive registry** — binds names to native impls.
    The Haskell registry lives in
-   `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs`:
+   `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs` (#473):
 
    ```haskell
    hydraLibMath :: Library
-   hydraLibMath = standardLibrary _hydra_lib_math [
-     prim2 _math_add Math.add [] int32 int32 int32,
+   hydraLibMath = standardLibrary (ModuleName "hydra.lib.math") [
+     prim2 (Prims.primName DefMath.add) Math.add [] int32 int32 int32,
      ...]
    ```
 
-   The `prim1`/`prim2`/`prim3` helpers build a `Primitive` by re-deriving a
-   `PrimitiveDefinition` from the host-side argument types (via
-   `defaultPrimitiveDefinition`) and pairing it with the host's native
-   `implementation` function.
+   The `prim1`/`prim2`/`prim3` helpers build a `Primitive` by pairing the host's
+   native `implementation` with a name and signature. The **name is derived from the
+   generated `PrimitiveDefinition`** (`Prims.primName DefMath.add`, where `DefMath` is the
+   generated `Hydra.Lib.Math` def-module) — the single source of truth (#473); the
+   argument-type info passed to the helper is a host-side repetition the registry needs in
+   native type-coder form, not the source of truth for the name.
 
-   The Java and Python heads have analogous host-side registries
-   (`heads/java/.../Libraries.java`, `heads/python/.../sources/libraries.py`)
-   that wrap each native impl in a `Primitive`.
+   Every other host has an analogous registry that likewise derives names from the generated
+   `hydra.lib.*` def-modules: `overlay/{java,python}/.../lib/Libraries.{java,py}` and
+   `heads/<lang>/.../lib/Libraries.<ext>` for Scala and the Lisp dialects.
 
 The type information passed to `prim1`/`prim2`/`prim3` at host registration is
 a sanity-check repetition of the canonical signature in the kernel-side
@@ -762,9 +791,10 @@ Each TermCoder contains:
 
 ### Multi-language generation
 
-Primitive *signatures* are defined once in Haskell (in
-`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs`) and become
-part of the generated kernel in every target language. The *implementations*
+Primitive *names and signatures* are defined once in Haskell, in each kernel
+`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/<Sub>.hs` module
+(as `PrimitiveDefinition`s), and become part of the generated kernel — the `hydra.lib.*`
+def-modules — in every target language. The *implementations*
 shown below are hand-written per host language. For the big three (Haskell, Java,
 Python) they live in the top-level `overlay/<lang>/hydra-kernel/` tree (#418) and
 are overlaid into the published `dist/<host>/hydra-kernel/` artifact during sync
@@ -1635,7 +1665,7 @@ moved to `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/`. The rest of
 
 [`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib/`](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib) — Native Haskell implementations (relocated here from the head by #418)
 
-[`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs`](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs) — Host-side bindings (pairs each name with its native impl via `prim1`/`prim2`/`prim3`)
+[`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs`](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs) — Host-side bindings (pairs each native impl with a name derived from its `PrimitiveDefinition` via `prim1`/`prim2`/`prim3`; relocated here + name-derivation by #473)
 ```
 Sources/Kernel/Lib/
 ├── Math.hs

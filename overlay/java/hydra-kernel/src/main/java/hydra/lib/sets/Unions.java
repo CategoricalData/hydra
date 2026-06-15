@@ -17,7 +17,6 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.schemeOrd;
 import static hydra.dsl.Types.set;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 import hydra.util.PersistentSet;
@@ -32,7 +31,7 @@ public class Unions extends PrimitiveFunction {
      * @return the name "hydra.lib.sets.unions"
      */
     public Name name() {
-        return new Name("hydra.lib.sets.unions");
+        return hydra.lib.Sets.unions().name;
     }
 
     /**
@@ -49,8 +48,8 @@ public class Unions extends PrimitiveFunction {
      * @return a function that transforms terms to a flow of graph and term
      */
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(sets -> Terms.set(apply(sets)), hydra.extract.Core.listOf(t -> hydra.extract.Core.set(graph, t), graph, args.get(0)));
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Map.apply(sets -> Terms.set(apply(sets)), hydra.extract.Core.listOf(t -> hydra.extract.Core.set(graph, t), graph, args.get(0)));
     }
 
     /**

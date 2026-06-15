@@ -15,7 +15,6 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.variable;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.ConsList;
 import hydra.util.Either;
@@ -26,7 +25,7 @@ import hydra.util.Either;
  */
 public class Foldr extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.lists.foldr");
+        return hydra.lib.Lists.foldr().name;
     }
 
     @Override
@@ -39,8 +38,8 @@ public class Foldr extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(graph, args.get(2)), xs -> {
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(graph, args.get(2)), xs -> {
                 Term acc = args.get(1);
                 // Fold from the right: walk the (reversed) list right-to-left, prepending into a stack
                 ConsList<Term> stack = ConsList.empty();

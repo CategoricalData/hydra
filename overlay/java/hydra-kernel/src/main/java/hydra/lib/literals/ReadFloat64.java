@@ -16,7 +16,6 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -31,7 +30,7 @@ public class ReadFloat64 extends PrimitiveFunction {
      * @return the function name "hydra.lib.literals.readFloat64"
      */
     public Name name() {
-        return new Name("hydra.lib.literals.readFloat64");
+        return hydra.lib.Literals.readFloat64().name;
     }
 
     /**
@@ -48,8 +47,8 @@ public class ReadFloat64 extends PrimitiveFunction {
      * @return a function that parses string terms into optional float64 terms
      */
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<String, Term>) s -> Terms.optional(apply(s).map(Terms::float64)), hydra.extract.Core.string(graph, args.get(0)));
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Map.apply((Function<String, Term>) s -> Terms.optional(apply(s).map(Terms::float64)), hydra.extract.Core.string(graph, args.get(0)));
     }
 
     /**

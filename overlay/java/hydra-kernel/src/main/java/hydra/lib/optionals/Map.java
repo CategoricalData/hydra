@@ -14,7 +14,6 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -28,7 +27,7 @@ public class Map extends PrimitiveFunction {
      * @return the name "hydra.lib.optionals.map"
      */
     public Name name() {
-        return new Name("hydra.lib.optionals.map");
+        return hydra.lib.Optionals.map().name;
     }
 
     /**
@@ -46,8 +45,8 @@ public class Map extends PrimitiveFunction {
      * @return a function that maps a function over an optional value
      */
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.optionalTerm(instance -> Either.right(Terms.apply(args.get(0), instance)), graph, args.get(1)), opt -> Either.right(Terms.optional(opt)));
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.optionalTerm(instance -> Either.right(Terms.apply(args.get(0), instance)), graph, args.get(1)), opt -> Either.right(Terms.optional(opt)));
     }
 
     /**

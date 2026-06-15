@@ -15,7 +15,6 @@ import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.schemeOrd;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -25,7 +24,7 @@ import hydra.util.Either;
  */
 public class Gte extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.equality.gte");
+        return hydra.lib.Equality.gte().name;
     }
 
     @Override
@@ -34,8 +33,8 @@ public class Gte extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> {
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> {
             int cmp = Compare.compareTerms(args.get(0), args.get(1));
             return Either.right(Terms.boolean_(cmp >= 0));
         };

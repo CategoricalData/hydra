@@ -15,7 +15,6 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.ConsList;
 import hydra.util.Either;
@@ -25,7 +24,7 @@ import hydra.util.Either;
  */
 public class FindAll extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.regex.findAll");
+        return hydra.lib.Regex.findAll().name;
     }
 
     @Override
@@ -34,8 +33,8 @@ public class FindAll extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Bind.apply(
             hydra.extract.Core.string(graph, args.get(0)),
             pat -> hydra.lib.eithers.Map.apply(
                 input -> Terms.listOfStrings(apply(pat, input)),

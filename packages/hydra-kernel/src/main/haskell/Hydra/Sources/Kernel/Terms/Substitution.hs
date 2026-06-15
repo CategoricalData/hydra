@@ -6,7 +6,6 @@ import Hydra.Kernel hiding (
   composeTypeSubst, composeTypeSubstNonEmpty, composeTypeSubstList, idTypeSubst, singletonTypeSubst, substituteInBinding,
   substituteInConstraint, substituteInConstraints, substInClassConstraints, substInContext, substituteInTerm,
   substInType, substInTypeNonEmpty, substInTypeScheme, substTypesInTerm)
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast

@@ -18,7 +18,8 @@ module Hydra.Sources.Kernel.Manifest (
   testModules,
   jsonModules,
   otherModules,
-  dslTypeModules,
+  mainDslModules,
+  mainEncodingModules,
 ) where
 
 import Hydra.Kernel
@@ -62,15 +63,18 @@ otherModules = [
 mainModules :: [Module]
 mainModules = kernelTypesModules ++ kernelTermsModules ++ jsonModules ++ otherModules
 
--- | Modules in this package whose type definitions should produce derived
--- DSL wrapper modules (Hydra/Dsl/<Name>.hs). The DSL generator consumes
--- this list to emit constructors / accessors / withXxx updaters for each
--- TypeDefinition. Term-only modules (kernelTermsModules: Annotations,
--- Formatting, Lexical, Names, Strip, Dsls, etc.) are deliberately
--- excluded. Extend the list when a new type-defining module needs DSL
--- wrappers.
-dslTypeModules :: [Module]
-dslTypeModules = kernelTypesModules ++ jsonModules ++ otherModules
+-- | Source modules from which DSL wrapper modules (hydra.dsl.<x>) are derived.
+-- Broad: every type-defining module in the package. (#474)
+mainDslModules :: [Module]
+mainDslModules = kernelTypesModules ++ jsonModules ++ otherModules
+
+-- | Source modules from which term encoder + decoder modules
+-- (hydra.encode.<x> / hydra.decode.<x>) are derived. Broad: every
+-- type-defining module in the package. (#475 unblock — the previous
+-- narrowing excluded hydra.validation, hydra.error.packaging,
+-- hydra.yaml.model; restored here as part of the #475 fix.)
+mainEncodingModules :: [Module]
+mainEncodingModules = mainDslModules
 
 testModules :: [Module]
 testModules = Test.testModules

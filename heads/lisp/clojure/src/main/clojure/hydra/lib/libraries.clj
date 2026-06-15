@@ -1,20 +1,27 @@
 (ns hydra.lib.libraries
   (:require [hydra.dsl.prims :as p]
-            [hydra.lib.chars :as chars]
-            [hydra.lib.eithers :as eithers]
-            [hydra.lib.equality :as equality]
-            [hydra.lib.lists :as lists]
-            [hydra.lib.literals :as literals]
-            [hydra.lib.logic :as logic]
-            [hydra.lib.maps :as maps]
-            [hydra.lib.math :as math]
-            [hydra.lib.optionals :as optionals]
-            [hydra.lib.pairs :as pairs]
-            [hydra.lib.regex :as regex]
-            [hydra.lib.sets :as sets]
-            [hydra.lib.strings :as strings]))
+            [hydra.clojure.lib.chars :as chars]
+            [hydra.clojure.lib.eithers :as eithers]
+            [hydra.clojure.lib.equality :as equality]
+            [hydra.clojure.lib.lists :as lists]
+            [hydra.clojure.lib.literals :as literals]
+            [hydra.clojure.lib.logic :as logic]
+            [hydra.clojure.lib.maps :as maps]
+            [hydra.clojure.lib.math :as math]
+            [hydra.clojure.lib.optionals :as optionals]
+            [hydra.clojure.lib.pairs :as pairs]
+            [hydra.clojure.lib.regex :as regex]
+            [hydra.clojure.lib.sets :as sets]
+            [hydra.clojure.lib.strings :as strings]))
 
-(defn- qname [ns local] (str ns "." local))
+(defn- prim-name
+  "Derive a primitive's canonical name from its generated hydra.lib.* PrimitiveDefinition var
+   (the single source of truth for primitive names, #473). `defsym` is the fully-qualified def var,
+   e.g. 'hydra.lib.chars/hydra_lib_chars_is_alpha_num. Uses requiring-resolve so the def-module is
+   loaded lazily on first use — after load-gen-main! has loaded the kernel deps it transitively needs,
+   which is the documented precondition for loading this registry."
+  [defsym]
+  (:name @(requiring-resolve defsym)))
 
 (defn fun
   "A TermCoder for function types using beta reduction to bridge
@@ -33,47 +40,47 @@
 ;; ============================================================
 
 (defn register-chars []
-  (let [ns_ "hydra.lib.chars"]
-    {(qname ns_ "isAlphaNum") (p/prim1 (qname ns_ "isAlphaNum") chars/hydra_lib_chars_is_alpha_num [] (p/tc-int32) (p/tc-boolean))
-     (qname ns_ "isLower")    (p/prim1 (qname ns_ "isLower")    chars/hydra_lib_chars_is_lower    [] (p/tc-int32) (p/tc-boolean))
-     (qname ns_ "isSpace")    (p/prim1 (qname ns_ "isSpace")    chars/hydra_lib_chars_is_space    [] (p/tc-int32) (p/tc-boolean))
-     (qname ns_ "isUpper")    (p/prim1 (qname ns_ "isUpper")    chars/hydra_lib_chars_is_upper    [] (p/tc-int32) (p/tc-boolean))
-     (qname ns_ "toLower")    (p/prim1 (qname ns_ "toLower")    chars/hydra_lib_chars_to_lower    [] (p/tc-int32) (p/tc-int32))
-     (qname ns_ "toUpper")    (p/prim1 (qname ns_ "toUpper")    chars/hydra_lib_chars_to_upper    [] (p/tc-int32) (p/tc-int32))}))
+  (let []
+    {(prim-name 'hydra.lib.chars/hydra_lib_chars_is_alpha_num) (p/prim1 (prim-name 'hydra.lib.chars/hydra_lib_chars_is_alpha_num) chars/hydra_lib_chars_is_alpha_num [] (p/tc-int32) (p/tc-boolean))
+     (prim-name 'hydra.lib.chars/hydra_lib_chars_is_lower)    (p/prim1 (prim-name 'hydra.lib.chars/hydra_lib_chars_is_lower)    chars/hydra_lib_chars_is_lower    [] (p/tc-int32) (p/tc-boolean))
+     (prim-name 'hydra.lib.chars/hydra_lib_chars_is_space)    (p/prim1 (prim-name 'hydra.lib.chars/hydra_lib_chars_is_space)    chars/hydra_lib_chars_is_space    [] (p/tc-int32) (p/tc-boolean))
+     (prim-name 'hydra.lib.chars/hydra_lib_chars_is_upper)    (p/prim1 (prim-name 'hydra.lib.chars/hydra_lib_chars_is_upper)    chars/hydra_lib_chars_is_upper    [] (p/tc-int32) (p/tc-boolean))
+     (prim-name 'hydra.lib.chars/hydra_lib_chars_to_lower)    (p/prim1 (prim-name 'hydra.lib.chars/hydra_lib_chars_to_lower)    chars/hydra_lib_chars_to_lower    [] (p/tc-int32) (p/tc-int32))
+     (prim-name 'hydra.lib.chars/hydra_lib_chars_to_upper)    (p/prim1 (prim-name 'hydra.lib.chars/hydra_lib_chars_to_upper)    chars/hydra_lib_chars_to_upper    [] (p/tc-int32) (p/tc-int32))}))
 
 ;; ============================================================
 ;; Eithers
 ;; ============================================================
 
 (defn register-eithers []
-  (let [ns_ "hydra.lib.eithers"
+  (let [
         x (p/tc-variable "x")
         y (p/tc-variable "y")
         z (p/tc-variable "z")
         w (p/tc-variable "w")]
-    {(qname ns_ "bind")    (p/prim2 (qname ns_ "bind")
+    {(prim-name 'hydra.lib.eithers/hydra_lib_eithers_bind)    (p/prim2 (prim-name 'hydra.lib.eithers/hydra_lib_eithers_bind)
                                      (fn [e f] ((eithers/hydra_lib_eithers_bind e) f))
                                      [] (p/tc-either x y) (fun y (p/tc-either x z)) (p/tc-either x z))
      ;; BUG #438: explicit variable order (see mapList comment below).
-     (qname ns_ "bimap")   (p/prim3 (qname ns_ "bimap")
+     (prim-name 'hydra.lib.eithers/hydra_lib_eithers_bimap)   (p/prim3 (prim-name 'hydra.lib.eithers/hydra_lib_eithers_bimap)
                                      (fn [f g e] (((eithers/hydra_lib_eithers_bimap f) g) e))
                                      ["x" "y" "z" "w"] (fun x z) (fun y w) (p/tc-either x y) (p/tc-either z w))
-     (qname ns_ "either")  (p/prim3 (qname ns_ "either")
+     (prim-name 'hydra.lib.eithers/hydra_lib_eithers_either)  (p/prim3 (prim-name 'hydra.lib.eithers/hydra_lib_eithers_either)
                                      (fn [f g e] (((eithers/hydra_lib_eithers_either f) g) e))
                                      ["x" "y" "z"] (fun x z) (fun y z) (p/tc-either x y) z)
-     (qname ns_ "foldl")   (p/prim3 (qname ns_ "foldl")
+     (prim-name 'hydra.lib.eithers/hydra_lib_eithers_foldl)   (p/prim3 (prim-name 'hydra.lib.eithers/hydra_lib_eithers_foldl)
                                      (fn [f init xs] (((eithers/hydra_lib_eithers_foldl f) init) xs))
                                      [] (fun x (fun y (p/tc-either z x))) x (p/tc-list y) (p/tc-either z x))
-     (qname ns_ "fromLeft")  (p/lazy-args [0] (p/prim2 (qname ns_ "fromLeft")
+     (prim-name 'hydra.lib.eithers/hydra_lib_eithers_from_left)  (p/lazy-args [0] (p/prim2 (prim-name 'hydra.lib.eithers/hydra_lib_eithers_from_left)
                                        (fn [dflt e] ((eithers/hydra_lib_eithers_from_left dflt) e))
                                        [] x (p/tc-either x y) x))
-     (qname ns_ "fromRight") (p/lazy-args [0] (p/prim2 (qname ns_ "fromRight")
+     (prim-name 'hydra.lib.eithers/hydra_lib_eithers_from_right) (p/lazy-args [0] (p/prim2 (prim-name 'hydra.lib.eithers/hydra_lib_eithers_from_right)
                                        (fn [dflt e] ((eithers/hydra_lib_eithers_from_right dflt) e))
                                        ["x" "y"] y (p/tc-either x y) y))
-     (qname ns_ "isLeft")  (p/prim1 (qname ns_ "isLeft")  eithers/hydra_lib_eithers_is_left  [] (p/tc-either x y) (p/tc-boolean))
-     (qname ns_ "isRight") (p/prim1 (qname ns_ "isRight") eithers/hydra_lib_eithers_is_right [] (p/tc-either x y) (p/tc-boolean))
-     (qname ns_ "lefts")   (p/prim1 (qname ns_ "lefts")   eithers/hydra_lib_eithers_lefts   [] (p/tc-list (p/tc-either x y)) (p/tc-list x))
-     (qname ns_ "map")     (p/prim2 (qname ns_ "map")
+     (prim-name 'hydra.lib.eithers/hydra_lib_eithers_is_left)  (p/prim1 (prim-name 'hydra.lib.eithers/hydra_lib_eithers_is_left)  eithers/hydra_lib_eithers_is_left  [] (p/tc-either x y) (p/tc-boolean))
+     (prim-name 'hydra.lib.eithers/hydra_lib_eithers_is_right) (p/prim1 (prim-name 'hydra.lib.eithers/hydra_lib_eithers_is_right) eithers/hydra_lib_eithers_is_right [] (p/tc-either x y) (p/tc-boolean))
+     (prim-name 'hydra.lib.eithers/hydra_lib_eithers_lefts)   (p/prim1 (prim-name 'hydra.lib.eithers/hydra_lib_eithers_lefts)   eithers/hydra_lib_eithers_lefts   [] (p/tc-list (p/tc-either x y)) (p/tc-list x))
+     (prim-name 'hydra.lib.eithers/hydra_lib_eithers_map)     (p/prim2 (prim-name 'hydra.lib.eithers/hydra_lib_eithers_map)
                                      (fn [f e] ((eithers/hydra_lib_eithers_map f) e))
                                      [] (fun x y) (p/tc-either z x) (p/tc-either z y))
      ;; BUG #438: explicit ["x" "y" "z"] order. With auto-detect (empty []),
@@ -89,127 +96,127 @@
      ;; (Binding -> Either<Error, Unit>) swap in type-check errors during
      ;; clojure-to-java codegen of mapList/mapMaybe/mapSet over forBinding
      ;; (`Binding -> Either Error ()`). Mirrors the TS host fix e8a0abf254.
-     (qname ns_ "mapList") (p/prim2 (qname ns_ "mapList")
+     (prim-name 'hydra.lib.eithers/hydra_lib_eithers_map_list) (p/prim2 (prim-name 'hydra.lib.eithers/hydra_lib_eithers_map_list)
                                      (fn [f xs] ((eithers/hydra_lib_eithers_map_list f) xs))
                                      ["x" "y" "z"] (fun x (p/tc-either z y)) (p/tc-list x) (p/tc-either z (p/tc-list y)))
-     (qname ns_ "mapOptional") (p/prim2 (qname ns_ "mapOptional")
+     (prim-name 'hydra.lib.eithers/hydra_lib_eithers_map_optional) (p/prim2 (prim-name 'hydra.lib.eithers/hydra_lib_eithers_map_optional)
                                       (fn [f mx] ((eithers/hydra_lib_eithers_map_optional f) mx))
                                       ["x" "y" "z"] (fun x (p/tc-either z y)) (p/tc-optional x) (p/tc-either z (p/tc-optional y)))
-     (qname ns_ "mapSet")  (p/prim2 (qname ns_ "mapSet")
+     (prim-name 'hydra.lib.eithers/hydra_lib_eithers_map_set)  (p/prim2 (prim-name 'hydra.lib.eithers/hydra_lib_eithers_map_set)
                                      (fn [f s] ((eithers/hydra_lib_eithers_map_set f) s))
                                      ["x" "y" "z"] (fun x (p/tc-either z y)) (p/tc-set x) (p/tc-either z (p/tc-set y)))
-     (qname ns_ "partitionEithers") (p/prim1 (qname ns_ "partitionEithers")
+     (prim-name 'hydra.lib.eithers/hydra_lib_eithers_partition_eithers) (p/prim1 (prim-name 'hydra.lib.eithers/hydra_lib_eithers_partition_eithers)
                                               eithers/hydra_lib_eithers_partition_eithers
                                               [] (p/tc-list (p/tc-either x y)) (p/tc-pair (p/tc-list x) (p/tc-list y)))
-     (qname ns_ "rights")  (p/prim1 (qname ns_ "rights")  eithers/hydra_lib_eithers_rights  [] (p/tc-list (p/tc-either x y)) (p/tc-list y))}))
+     (prim-name 'hydra.lib.eithers/hydra_lib_eithers_rights)  (p/prim1 (prim-name 'hydra.lib.eithers/hydra_lib_eithers_rights)  eithers/hydra_lib_eithers_rights  [] (p/tc-list (p/tc-either x y)) (p/tc-list y))}))
 
 ;; ============================================================
 ;; Equality
 ;; ============================================================
 
 (defn register-equality []
-  (let [ns_ "hydra.lib.equality"
+  (let [
         x (p/tc-variable "x")
         ord-x {"x" ["ordering"]}
         eq-x {"x" ["equality"]}]
-    {(qname ns_ "compare")  (p/prim2 (qname ns_ "compare")  (fn [a b] ((equality/hydra_lib_equality_compare a) b))  [] x x (p/tc-comparison) ord-x)
-     (qname ns_ "equal")    (p/prim2 (qname ns_ "equal")    (fn [a b] ((equality/hydra_lib_equality_equal a) b))    [] x x (p/tc-boolean) eq-x)
-     (qname ns_ "gt")       (p/prim2 (qname ns_ "gt")       (fn [a b] ((equality/hydra_lib_equality_gt a) b))       [] x x (p/tc-boolean) ord-x)
-     (qname ns_ "gte")      (p/prim2 (qname ns_ "gte")      (fn [a b] ((equality/hydra_lib_equality_gte a) b))      [] x x (p/tc-boolean) ord-x)
-     (qname ns_ "identity") (p/prim1 (qname ns_ "identity") identity                             [] x x)
-     (qname ns_ "lt")       (p/prim2 (qname ns_ "lt")       (fn [a b] ((equality/hydra_lib_equality_lt a) b))       [] x x (p/tc-boolean) ord-x)
-     (qname ns_ "lte")      (p/prim2 (qname ns_ "lte")      (fn [a b] ((equality/hydra_lib_equality_lte a) b))      [] x x (p/tc-boolean) ord-x)
-     (qname ns_ "max")      (p/prim2 (qname ns_ "max")      (fn [a b] ((equality/hydra_lib_equality_max a) b))      [] x x x ord-x)
-     (qname ns_ "min")      (p/prim2 (qname ns_ "min")      (fn [a b] ((equality/hydra_lib_equality_min a) b))      [] x x x ord-x)}))
+    {(prim-name 'hydra.lib.equality/hydra_lib_equality_compare)  (p/prim2 (prim-name 'hydra.lib.equality/hydra_lib_equality_compare)  (fn [a b] ((equality/hydra_lib_equality_compare a) b))  [] x x (p/tc-comparison) ord-x)
+     (prim-name 'hydra.lib.equality/hydra_lib_equality_equal)    (p/prim2 (prim-name 'hydra.lib.equality/hydra_lib_equality_equal)    (fn [a b] ((equality/hydra_lib_equality_equal a) b))    [] x x (p/tc-boolean) eq-x)
+     (prim-name 'hydra.lib.equality/hydra_lib_equality_gt)       (p/prim2 (prim-name 'hydra.lib.equality/hydra_lib_equality_gt)       (fn [a b] ((equality/hydra_lib_equality_gt a) b))       [] x x (p/tc-boolean) ord-x)
+     (prim-name 'hydra.lib.equality/hydra_lib_equality_gte)      (p/prim2 (prim-name 'hydra.lib.equality/hydra_lib_equality_gte)      (fn [a b] ((equality/hydra_lib_equality_gte a) b))      [] x x (p/tc-boolean) ord-x)
+     (prim-name 'hydra.lib.equality/hydra_lib_equality_identity) (p/prim1 (prim-name 'hydra.lib.equality/hydra_lib_equality_identity) identity                             [] x x)
+     (prim-name 'hydra.lib.equality/hydra_lib_equality_lt)       (p/prim2 (prim-name 'hydra.lib.equality/hydra_lib_equality_lt)       (fn [a b] ((equality/hydra_lib_equality_lt a) b))       [] x x (p/tc-boolean) ord-x)
+     (prim-name 'hydra.lib.equality/hydra_lib_equality_lte)      (p/prim2 (prim-name 'hydra.lib.equality/hydra_lib_equality_lte)      (fn [a b] ((equality/hydra_lib_equality_lte a) b))      [] x x (p/tc-boolean) ord-x)
+     (prim-name 'hydra.lib.equality/hydra_lib_equality_max)      (p/prim2 (prim-name 'hydra.lib.equality/hydra_lib_equality_max)      (fn [a b] ((equality/hydra_lib_equality_max a) b))      [] x x x ord-x)
+     (prim-name 'hydra.lib.equality/hydra_lib_equality_min)      (p/prim2 (prim-name 'hydra.lib.equality/hydra_lib_equality_min)      (fn [a b] ((equality/hydra_lib_equality_min a) b))      [] x x x ord-x)}))
 
 ;; ============================================================
 ;; Lists
 ;; ============================================================
 
 (defn register-lists []
-  (let [ns_ "hydra.lib.lists"
+  (let [
         a (p/tc-variable "a")
         b (p/tc-variable "b")
         c (p/tc-variable "c")]
-    {(qname ns_ "apply")      (p/prim2 (qname ns_ "apply")
+    {(prim-name 'hydra.lib.lists/hydra_lib_lists_apply)      (p/prim2 (prim-name 'hydra.lib.lists/hydra_lib_lists_apply)
                                         (fn [fs xs] ((lists/hydra_lib_lists_apply fs) xs))
                                         [] (p/tc-list (fun a b)) (p/tc-list a) (p/tc-list b))
-     (qname ns_ "bind")       (p/prim2 (qname ns_ "bind")
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_bind)       (p/prim2 (prim-name 'hydra.lib.lists/hydra_lib_lists_bind)
                                         (fn [xs f] ((lists/hydra_lib_lists_bind xs) f))
                                         [] (p/tc-list a) (fun a (p/tc-list b)) (p/tc-list b))
-     (qname ns_ "concat")     (p/prim1 (qname ns_ "concat")     lists/hydra_lib_lists_concat     [] (p/tc-list (p/tc-list a)) (p/tc-list a))
-     (qname ns_ "concat2")    (p/prim2 (qname ns_ "concat2")
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_concat)     (p/prim1 (prim-name 'hydra.lib.lists/hydra_lib_lists_concat)     lists/hydra_lib_lists_concat     [] (p/tc-list (p/tc-list a)) (p/tc-list a))
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_concat2)    (p/prim2 (prim-name 'hydra.lib.lists/hydra_lib_lists_concat2)
                                         (fn [xs ys] ((lists/hydra_lib_lists_concat2 xs) ys))
                                         [] (p/tc-list a) (p/tc-list a) (p/tc-list a))
-     (qname ns_ "cons")       (p/prim2 (qname ns_ "cons")
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_cons)       (p/prim2 (prim-name 'hydra.lib.lists/hydra_lib_lists_cons)
                                         (fn [x xs] ((lists/hydra_lib_lists_cons x) xs))
                                         [] a (p/tc-list a) (p/tc-list a))
-     (qname ns_ "drop")       (p/prim2 (qname ns_ "drop")
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_drop)       (p/prim2 (prim-name 'hydra.lib.lists/hydra_lib_lists_drop)
                                         (fn [n xs] ((lists/hydra_lib_lists_drop n) xs))
                                         [] (p/tc-int32) (p/tc-list a) (p/tc-list a))
-     (qname ns_ "dropWhile")  (p/prim2 (qname ns_ "dropWhile")
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_drop_while)  (p/prim2 (prim-name 'hydra.lib.lists/hydra_lib_lists_drop_while)
                                         (fn [f xs] ((lists/hydra_lib_lists_drop_while f) xs))
                                         [] (fun a (p/tc-boolean)) (p/tc-list a) (p/tc-list a))
-     (qname ns_ "elem")       (p/prim2 (qname ns_ "elem")
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_elem)       (p/prim2 (prim-name 'hydra.lib.lists/hydra_lib_lists_elem)
                                         (fn [x xs] ((lists/hydra_lib_lists_elem x) xs))
                                         [] a (p/tc-list a) (p/tc-boolean) {"a" ["equality"]})
-     (qname ns_ "filter")     (p/prim2 (qname ns_ "filter")
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_filter)     (p/prim2 (prim-name 'hydra.lib.lists/hydra_lib_lists_filter)
                                         (fn [f xs] ((lists/hydra_lib_lists_filter f) xs))
                                         [] (fun a (p/tc-boolean)) (p/tc-list a) (p/tc-list a))
-     (qname ns_ "find")       (p/prim2 (qname ns_ "find")
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_find)       (p/prim2 (prim-name 'hydra.lib.lists/hydra_lib_lists_find)
                                         (fn [f xs] ((lists/hydra_lib_lists_find f) xs))
                                         [] (fun a (p/tc-boolean)) (p/tc-list a) (p/tc-optional a))
-     (qname ns_ "foldl")      (p/prim3 (qname ns_ "foldl")
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_foldl)      (p/prim3 (prim-name 'hydra.lib.lists/hydra_lib_lists_foldl)
                                         (fn [f init xs] (((lists/hydra_lib_lists_foldl (fn [acc] (fn [el] ((f acc) el)))) init) xs))
                                         [] (fun b (fun a b)) b (p/tc-list a) b)
-     (qname ns_ "foldr")      (p/prim3 (qname ns_ "foldr")
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_foldr)      (p/prim3 (prim-name 'hydra.lib.lists/hydra_lib_lists_foldr)
                                         (fn [f init xs] (((lists/hydra_lib_lists_foldr (fn [el] (fn [acc] ((f el) acc)))) init) xs))
                                         [] (fun a (fun b b)) b (p/tc-list a) b)
-     (qname ns_ "group")      (p/prim1 (qname ns_ "group")      lists/hydra_lib_lists_group      [] (p/tc-list a) (p/tc-list (p/tc-list a)) {"a" ["equality"]})
-     (qname ns_ "intercalate") (p/prim2 (qname ns_ "intercalate")
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_group)      (p/prim1 (prim-name 'hydra.lib.lists/hydra_lib_lists_group)      lists/hydra_lib_lists_group      [] (p/tc-list a) (p/tc-list (p/tc-list a)) {"a" ["equality"]})
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_intercalate) (p/prim2 (prim-name 'hydra.lib.lists/hydra_lib_lists_intercalate)
                                          (fn [sep xss] ((lists/hydra_lib_lists_intercalate sep) xss))
                                          [] (p/tc-list a) (p/tc-list (p/tc-list a)) (p/tc-list a))
-     (qname ns_ "intersperse") (p/prim2 (qname ns_ "intersperse")
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_intersperse) (p/prim2 (prim-name 'hydra.lib.lists/hydra_lib_lists_intersperse)
                                          (fn [sep xs] ((lists/hydra_lib_lists_intersperse sep) xs))
                                          [] a (p/tc-list a) (p/tc-list a))
-     (qname ns_ "length")     (p/prim1 (qname ns_ "length")     lists/hydra_lib_lists_length     [] (p/tc-list a) (p/tc-int32))
-     (qname ns_ "map")        (p/prim2 (qname ns_ "map")
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_length)     (p/prim1 (prim-name 'hydra.lib.lists/hydra_lib_lists_length)     lists/hydra_lib_lists_length     [] (p/tc-list a) (p/tc-int32))
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_map)        (p/prim2 (prim-name 'hydra.lib.lists/hydra_lib_lists_map)
                                         (fn [f xs] ((lists/hydra_lib_lists_map f) xs))
                                         [] (fun a b) (p/tc-list a) (p/tc-list b))
-     (qname ns_ "maybeAt")    (p/prim2 (qname ns_ "maybeAt")
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_maybe_at)    (p/prim2 (prim-name 'hydra.lib.lists/hydra_lib_lists_maybe_at)
                                         (fn [n xs] ((lists/hydra_lib_lists_maybe_at n) xs))
                                         [] (p/tc-int32) (p/tc-list a) (p/tc-optional a))
-     (qname ns_ "maybeHead")  (p/prim1 (qname ns_ "maybeHead")  lists/hydra_lib_lists_maybe_head [] (p/tc-list a) (p/tc-optional a))
-     (qname ns_ "maybeInit")  (p/prim1 (qname ns_ "maybeInit")  lists/hydra_lib_lists_maybe_init [] (p/tc-list a) (p/tc-optional (p/tc-list a)))
-     (qname ns_ "maybeLast")  (p/prim1 (qname ns_ "maybeLast")  lists/hydra_lib_lists_maybe_last [] (p/tc-list a) (p/tc-optional a))
-     (qname ns_ "maybeTail")  (p/prim1 (qname ns_ "maybeTail")  lists/hydra_lib_lists_maybe_tail [] (p/tc-list a) (p/tc-optional (p/tc-list a)))
-     (qname ns_ "nub")        (p/prim1 (qname ns_ "nub")        lists/hydra_lib_lists_nub        [] (p/tc-list a) (p/tc-list a) {"a" ["equality"]})
-     (qname ns_ "null")       (p/prim1 (qname ns_ "null")       lists/hydra_lib_lists_null       [] (p/tc-list a) (p/tc-boolean))
-     (qname ns_ "partition")   (p/prim2 (qname ns_ "partition")
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_maybe_head)  (p/prim1 (prim-name 'hydra.lib.lists/hydra_lib_lists_maybe_head)  lists/hydra_lib_lists_maybe_head [] (p/tc-list a) (p/tc-optional a))
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_maybe_init)  (p/prim1 (prim-name 'hydra.lib.lists/hydra_lib_lists_maybe_init)  lists/hydra_lib_lists_maybe_init [] (p/tc-list a) (p/tc-optional (p/tc-list a)))
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_maybe_last)  (p/prim1 (prim-name 'hydra.lib.lists/hydra_lib_lists_maybe_last)  lists/hydra_lib_lists_maybe_last [] (p/tc-list a) (p/tc-optional a))
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_maybe_tail)  (p/prim1 (prim-name 'hydra.lib.lists/hydra_lib_lists_maybe_tail)  lists/hydra_lib_lists_maybe_tail [] (p/tc-list a) (p/tc-optional (p/tc-list a)))
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_nub)        (p/prim1 (prim-name 'hydra.lib.lists/hydra_lib_lists_nub)        lists/hydra_lib_lists_nub        [] (p/tc-list a) (p/tc-list a) {"a" ["equality"]})
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_null)       (p/prim1 (prim-name 'hydra.lib.lists/hydra_lib_lists_null)       lists/hydra_lib_lists_null       [] (p/tc-list a) (p/tc-boolean))
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_partition)   (p/prim2 (prim-name 'hydra.lib.lists/hydra_lib_lists_partition)
                                          (fn [f xs] ((lists/hydra_lib_lists_partition f) xs))
                                          [] (fun a (p/tc-boolean)) (p/tc-list a) (p/tc-pair (p/tc-list a) (p/tc-list a)))
-     (qname ns_ "pure")       (p/prim1 (qname ns_ "pure")       lists/hydra_lib_lists_pure       [] a (p/tc-list a))
-     (qname ns_ "replicate")  (p/prim2 (qname ns_ "replicate")
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_pure)       (p/prim1 (prim-name 'hydra.lib.lists/hydra_lib_lists_pure)       lists/hydra_lib_lists_pure       [] a (p/tc-list a))
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_replicate)  (p/prim2 (prim-name 'hydra.lib.lists/hydra_lib_lists_replicate)
                                         (fn [n x] ((lists/hydra_lib_lists_replicate n) x))
                                         [] (p/tc-int32) a (p/tc-list a))
-     (qname ns_ "reverse")    (p/prim1 (qname ns_ "reverse")    lists/hydra_lib_lists_reverse    [] (p/tc-list a) (p/tc-list a))
-     (qname ns_ "singleton")  (p/prim1 (qname ns_ "singleton")  lists/hydra_lib_lists_singleton  [] a (p/tc-list a))
-     (qname ns_ "sort")       (p/prim1 (qname ns_ "sort")       lists/hydra_lib_lists_sort       [] (p/tc-list a) (p/tc-list a) {"a" ["ordering"]})
-     (qname ns_ "sortOn")     (p/prim2 (qname ns_ "sortOn")
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_reverse)    (p/prim1 (prim-name 'hydra.lib.lists/hydra_lib_lists_reverse)    lists/hydra_lib_lists_reverse    [] (p/tc-list a) (p/tc-list a))
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_singleton)  (p/prim1 (prim-name 'hydra.lib.lists/hydra_lib_lists_singleton)  lists/hydra_lib_lists_singleton  [] a (p/tc-list a))
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_sort)       (p/prim1 (prim-name 'hydra.lib.lists/hydra_lib_lists_sort)       lists/hydra_lib_lists_sort       [] (p/tc-list a) (p/tc-list a) {"a" ["ordering"]})
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_sort_on)     (p/prim2 (prim-name 'hydra.lib.lists/hydra_lib_lists_sort_on)
                                         (fn [f xs] ((lists/hydra_lib_lists_sort_on f) xs))
                                         [] (fun a b) (p/tc-list a) (p/tc-list a))
-     (qname ns_ "span")       (p/prim2 (qname ns_ "span")
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_span)       (p/prim2 (prim-name 'hydra.lib.lists/hydra_lib_lists_span)
                                         (fn [f xs] ((lists/hydra_lib_lists_span f) xs))
                                         [] (fun a (p/tc-boolean)) (p/tc-list a) (p/tc-pair (p/tc-list a) (p/tc-list a)))
-     (qname ns_ "take")       (p/prim2 (qname ns_ "take")
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_take)       (p/prim2 (prim-name 'hydra.lib.lists/hydra_lib_lists_take)
                                         (fn [n xs] ((lists/hydra_lib_lists_take n) xs))
                                         [] (p/tc-int32) (p/tc-list a) (p/tc-list a))
-     (qname ns_ "transpose")  (p/prim1 (qname ns_ "transpose")  lists/hydra_lib_lists_transpose  [] (p/tc-list (p/tc-list a)) (p/tc-list (p/tc-list a)))
-     (qname ns_ "uncons")     (p/prim1 (qname ns_ "uncons")     lists/hydra_lib_lists_uncons     [] (p/tc-list a) (p/tc-optional (p/tc-pair a (p/tc-list a))))
-     (qname ns_ "zip")        (p/prim2 (qname ns_ "zip")
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_transpose)  (p/prim1 (prim-name 'hydra.lib.lists/hydra_lib_lists_transpose)  lists/hydra_lib_lists_transpose  [] (p/tc-list (p/tc-list a)) (p/tc-list (p/tc-list a)))
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_uncons)     (p/prim1 (prim-name 'hydra.lib.lists/hydra_lib_lists_uncons)     lists/hydra_lib_lists_uncons     [] (p/tc-list a) (p/tc-optional (p/tc-pair a (p/tc-list a))))
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_zip)        (p/prim2 (prim-name 'hydra.lib.lists/hydra_lib_lists_zip)
                                         (fn [xs ys] ((lists/hydra_lib_lists_zip xs) ys))
                                         [] (p/tc-list a) (p/tc-list b) (p/tc-list (p/tc-pair a b)))
-     (qname ns_ "zipWith")    (p/prim3 (qname ns_ "zipWith")
+     (prim-name 'hydra.lib.lists/hydra_lib_lists_zip_with)    (p/prim3 (prim-name 'hydra.lib.lists/hydra_lib_lists_zip_with)
                                         (fn [f xs ys] (((lists/hydra_lib_lists_zip_with (fn [a] (fn [b] ((f a) b)))) xs) ys))
                                         [] (fun a (fun b c)) (p/tc-list a) (p/tc-list b) (p/tc-list c))}))
 
@@ -218,16 +225,16 @@
 ;; ============================================================
 
 (defn register-logic []
-  (let [ns_ "hydra.lib.logic"
+  (let [
         a (p/tc-variable "a")]
-    {(qname ns_ "and")    (p/prim2 (qname ns_ "and")
+    {(prim-name 'hydra.lib.logic/hydra_lib_logic_and)    (p/prim2 (prim-name 'hydra.lib.logic/hydra_lib_logic_and)
                                     (fn [a b] ((logic/hydra_lib_logic_and a) b))
                                     [] (p/tc-boolean) (p/tc-boolean) (p/tc-boolean))
-     (qname ns_ "ifElse") (p/lazy-args [1 2] (p/prim3 (qname ns_ "ifElse")
+     (prim-name 'hydra.lib.logic/hydra_lib_logic_if_else) (p/lazy-args [1 2] (p/prim3 (prim-name 'hydra.lib.logic/hydra_lib_logic_if_else)
                                     (fn [cond t f] (((logic/hydra_lib_logic_if_else cond) t) f))
                                     [] (p/tc-boolean) a a a))
-     (qname ns_ "not")    (p/prim1 (qname ns_ "not")    logic/hydra_lib_logic_not [] (p/tc-boolean) (p/tc-boolean))
-     (qname ns_ "or")     (p/prim2 (qname ns_ "or")
+     (prim-name 'hydra.lib.logic/hydra_lib_logic_not)    (p/prim1 (prim-name 'hydra.lib.logic/hydra_lib_logic_not)    logic/hydra_lib_logic_not [] (p/tc-boolean) (p/tc-boolean))
+     (prim-name 'hydra.lib.logic/hydra_lib_logic_or)     (p/prim2 (prim-name 'hydra.lib.logic/hydra_lib_logic_or)
                                     (fn [a b] ((logic/hydra_lib_logic_or a) b))
                                     [] (p/tc-boolean) (p/tc-boolean) (p/tc-boolean))}))
 
@@ -236,7 +243,7 @@
 ;; ============================================================
 
 (defn register-maps []
-  (let [ns_ "hydra.lib.maps"
+  (let [
         k  (p/tc-variable "k")
         k1 (p/tc-variable "k1")
         k2 (p/tc-variable "k2")
@@ -247,50 +254,50 @@
         ;; All map primitives have ordering constraint on key type(s)
         ord-k {"k" ["ordering"]}
         ord-k1k2 {"k1" ["ordering"] "k2" ["ordering"]}]
-    {(qname ns_ "alter")          (p/prim3 (qname ns_ "alter")
+    {(prim-name 'hydra.lib.maps/hydra_lib_maps_alter)          (p/prim3 (prim-name 'hydra.lib.maps/hydra_lib_maps_alter)
                                             (fn [f key m] (((maps/hydra_lib_maps_alter f) key) m))
                                             [] (fun (p/tc-optional v) (p/tc-optional v)) k map-kv map-kv ord-k)
-     (qname ns_ "bimap")          (p/prim3 (qname ns_ "bimap")
+     (prim-name 'hydra.lib.maps/hydra_lib_maps_bimap)          (p/prim3 (prim-name 'hydra.lib.maps/hydra_lib_maps_bimap)
                                             (fn [fk fv m] (((maps/hydra_lib_maps_bimap fk) fv) m))
                                             [] (fun k1 k2) (fun v1 v2) (p/tc-map k1 v1) (p/tc-map k2 v2) ord-k1k2)
-     (qname ns_ "delete")         (p/prim2 (qname ns_ "delete")
+     (prim-name 'hydra.lib.maps/hydra_lib_maps_delete)         (p/prim2 (prim-name 'hydra.lib.maps/hydra_lib_maps_delete)
                                             (fn [key m] ((maps/hydra_lib_maps_delete key) m))
                                             [] k map-kv map-kv ord-k)
-     (qname ns_ "elems")          (p/prim1 (qname ns_ "elems")  maps/hydra_lib_maps_elems  [] map-kv (p/tc-list v) ord-k)
-     (qname ns_ "empty")          (p/prim0 (qname ns_ "empty")  (fn [] maps/hydra_lib_maps_empty)  [] map-kv ord-k)
-     (qname ns_ "filter")         (p/prim2 (qname ns_ "filter")
+     (prim-name 'hydra.lib.maps/hydra_lib_maps_elems)          (p/prim1 (prim-name 'hydra.lib.maps/hydra_lib_maps_elems)  maps/hydra_lib_maps_elems  [] map-kv (p/tc-list v) ord-k)
+     (prim-name 'hydra.lib.maps/hydra_lib_maps_empty)          (p/prim0 (prim-name 'hydra.lib.maps/hydra_lib_maps_empty)  (fn [] maps/hydra_lib_maps_empty)  [] map-kv ord-k)
+     (prim-name 'hydra.lib.maps/hydra_lib_maps_filter)         (p/prim2 (prim-name 'hydra.lib.maps/hydra_lib_maps_filter)
                                             (fn [f m] ((maps/hydra_lib_maps_filter f) m))
                                             [] (fun v (p/tc-boolean)) map-kv map-kv ord-k)
-     (qname ns_ "filterWithKey")  (p/prim2 (qname ns_ "filterWithKey")
+     (prim-name 'hydra.lib.maps/hydra_lib_maps_filter_with_key)  (p/prim2 (prim-name 'hydra.lib.maps/hydra_lib_maps_filter_with_key)
                                             (fn [f m] ((maps/hydra_lib_maps_filter_with_key f) m))
                                             [] (fun k (fun v (p/tc-boolean))) map-kv map-kv ord-k)
-     (qname ns_ "findWithDefault") (p/lazy-args [0] (p/prim3 (qname ns_ "findWithDefault")
+     (prim-name 'hydra.lib.maps/hydra_lib_maps_find_with_default) (p/lazy-args [0] (p/prim3 (prim-name 'hydra.lib.maps/hydra_lib_maps_find_with_default)
                                              (fn [dflt key m] (((maps/hydra_lib_maps_find_with_default dflt) key) m))
                                              [] v k map-kv v ord-k))
-     (qname ns_ "fromList")       (p/prim1 (qname ns_ "fromList") maps/hydra_lib_maps_from_list [] (p/tc-list (p/tc-pair k v)) map-kv ord-k)
-     (qname ns_ "insert")         (p/prim3 (qname ns_ "insert")
+     (prim-name 'hydra.lib.maps/hydra_lib_maps_from_list)       (p/prim1 (prim-name 'hydra.lib.maps/hydra_lib_maps_from_list) maps/hydra_lib_maps_from_list [] (p/tc-list (p/tc-pair k v)) map-kv ord-k)
+     (prim-name 'hydra.lib.maps/hydra_lib_maps_insert)         (p/prim3 (prim-name 'hydra.lib.maps/hydra_lib_maps_insert)
                                             (fn [key val m] (((maps/hydra_lib_maps_insert key) val) m))
                                             [] k v map-kv map-kv ord-k)
-     (qname ns_ "keys")           (p/prim1 (qname ns_ "keys")   maps/hydra_lib_maps_keys   [] map-kv (p/tc-list k) ord-k)
-     (qname ns_ "lookup")         (p/prim2 (qname ns_ "lookup")
+     (prim-name 'hydra.lib.maps/hydra_lib_maps_keys)           (p/prim1 (prim-name 'hydra.lib.maps/hydra_lib_maps_keys)   maps/hydra_lib_maps_keys   [] map-kv (p/tc-list k) ord-k)
+     (prim-name 'hydra.lib.maps/hydra_lib_maps_lookup)         (p/prim2 (prim-name 'hydra.lib.maps/hydra_lib_maps_lookup)
                                             (fn [key m] ((maps/hydra_lib_maps_lookup key) m))
                                             [] k map-kv (p/tc-optional v) ord-k)
-     (qname ns_ "map")            (p/prim2 (qname ns_ "map")
+     (prim-name 'hydra.lib.maps/hydra_lib_maps_map)            (p/prim2 (prim-name 'hydra.lib.maps/hydra_lib_maps_map)
                                             (fn [f m] ((maps/hydra_lib_maps_map f) m))
                                             [] (fun v1 v2) (p/tc-map k v1) (p/tc-map k v2) ord-k)
-     (qname ns_ "mapKeys")        (p/prim2 (qname ns_ "mapKeys")
+     (prim-name 'hydra.lib.maps/hydra_lib_maps_map_keys)        (p/prim2 (prim-name 'hydra.lib.maps/hydra_lib_maps_map_keys)
                                             (fn [f m] ((maps/hydra_lib_maps_map_keys f) m))
                                             [] (fun k1 k2) (p/tc-map k1 v) (p/tc-map k2 v) ord-k1k2)
-     (qname ns_ "member")         (p/prim2 (qname ns_ "member")
+     (prim-name 'hydra.lib.maps/hydra_lib_maps_member)         (p/prim2 (prim-name 'hydra.lib.maps/hydra_lib_maps_member)
                                             (fn [key m] ((maps/hydra_lib_maps_member key) m))
                                             [] k map-kv (p/tc-boolean) ord-k)
-     (qname ns_ "null")           (p/prim1 (qname ns_ "null")   maps/hydra_lib_maps_null   [] map-kv (p/tc-boolean) ord-k)
-     (qname ns_ "singleton")      (p/prim2 (qname ns_ "singleton")
+     (prim-name 'hydra.lib.maps/hydra_lib_maps_null)           (p/prim1 (prim-name 'hydra.lib.maps/hydra_lib_maps_null)   maps/hydra_lib_maps_null   [] map-kv (p/tc-boolean) ord-k)
+     (prim-name 'hydra.lib.maps/hydra_lib_maps_singleton)      (p/prim2 (prim-name 'hydra.lib.maps/hydra_lib_maps_singleton)
                                             (fn [key val] ((maps/hydra_lib_maps_singleton key) val))
                                             [] k v map-kv ord-k)
-     (qname ns_ "size")           (p/prim1 (qname ns_ "size")   maps/hydra_lib_maps_size   [] map-kv (p/tc-int32) ord-k)
-     (qname ns_ "toList")         (p/prim1 (qname ns_ "toList") maps/hydra_lib_maps_to_list [] map-kv (p/tc-list (p/tc-pair k v)) ord-k)
-     (qname ns_ "union")          (p/prim2 (qname ns_ "union")
+     (prim-name 'hydra.lib.maps/hydra_lib_maps_size)           (p/prim1 (prim-name 'hydra.lib.maps/hydra_lib_maps_size)   maps/hydra_lib_maps_size   [] map-kv (p/tc-int32) ord-k)
+     (prim-name 'hydra.lib.maps/hydra_lib_maps_to_list)         (p/prim1 (prim-name 'hydra.lib.maps/hydra_lib_maps_to_list) maps/hydra_lib_maps_to_list [] map-kv (p/tc-list (p/tc-pair k v)) ord-k)
+     (prim-name 'hydra.lib.maps/hydra_lib_maps_union)          (p/prim2 (prim-name 'hydra.lib.maps/hydra_lib_maps_union)
                                             (fn [m1 m2] ((maps/hydra_lib_maps_union m1) m2))
                                             [] map-kv map-kv map-kv ord-k)}))
 
@@ -299,7 +306,7 @@
 ;; ============================================================
 
 (defn register-math []
-  (let [ns_ "hydra.lib.math"
+  (let [
         i32 (p/tc-int32)
         f32 (p/tc-float32)
         f64 (p/tc-float64)
@@ -307,100 +314,100 @@
         b   (p/tc-boolean)]
     (merge
      ;; Int32 primitives
-     {(qname ns_ "abs")    (p/prim1 (qname ns_ "abs")    math/hydra_lib_math_abs    [] i32 i32)
-      (qname ns_ "add")    (p/prim2 (qname ns_ "add")    (fn [a b] ((math/hydra_lib_math_add a) b))    [] i32 i32 i32)
-      (qname ns_ "even")   (p/prim1 (qname ns_ "even")   math/hydra_lib_math_even   [] i32 b)
-      (qname ns_ "mul")    (p/prim2 (qname ns_ "mul")    (fn [a b] ((math/hydra_lib_math_mul a) b))    [] i32 i32 i32)
-      (qname ns_ "negate") (p/prim1 (qname ns_ "negate") math/hydra_lib_math_negate [] i32 i32)
-      (qname ns_ "odd")    (p/prim1 (qname ns_ "odd")    math/hydra_lib_math_odd    [] i32 b)
-      (qname ns_ "range")  (p/prim2 (qname ns_ "range")  (fn [a b] ((math/hydra_lib_math_range a) b))  [] i32 i32 (p/tc-list i32))
-      (qname ns_ "signum") (p/prim1 (qname ns_ "signum") math/hydra_lib_math_signum [] i32 i32)
-      (qname ns_ "sub")    (p/prim2 (qname ns_ "sub")    (fn [a b] ((math/hydra_lib_math_sub a) b))    [] i32 i32 i32)
-      (qname ns_ "max")    (p/prim2 (qname ns_ "max")    (fn [a b] ((math/hydra_lib_math_max a) b))    [] i32 i32 i32)
-      (qname ns_ "maybeDiv")  (p/prim2 (qname ns_ "maybeDiv")  (fn [a b] ((math/hydra_lib_math_maybe_div a) b))  [] i32 i32 (p/tc-optional i32))
-      (qname ns_ "maybeMod")  (p/prim2 (qname ns_ "maybeMod")  (fn [a b] ((math/hydra_lib_math_maybe_mod a) b))  [] i32 i32 (p/tc-optional i32))
-      (qname ns_ "maybePred") (p/prim1 (qname ns_ "maybePred") math/hydra_lib_math_maybe_pred [] i32 (p/tc-optional i32))
-      (qname ns_ "maybeRem")  (p/prim2 (qname ns_ "maybeRem")  (fn [a b] ((math/hydra_lib_math_maybe_rem a) b))  [] i32 i32 (p/tc-optional i32))
-      (qname ns_ "maybeSucc") (p/prim1 (qname ns_ "maybeSucc") math/hydra_lib_math_maybe_succ [] i32 (p/tc-optional i32))
-      (qname ns_ "min")    (p/prim2 (qname ns_ "min")    (fn [a b] ((math/hydra_lib_math_min a) b))    [] i32 i32 i32)}
+     {(prim-name 'hydra.lib.math/hydra_lib_math_abs)    (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_abs)    math/hydra_lib_math_abs    [] i32 i32)
+      (prim-name 'hydra.lib.math/hydra_lib_math_add)    (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_add)    (fn [a b] ((math/hydra_lib_math_add a) b))    [] i32 i32 i32)
+      (prim-name 'hydra.lib.math/hydra_lib_math_even)   (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_even)   math/hydra_lib_math_even   [] i32 b)
+      (prim-name 'hydra.lib.math/hydra_lib_math_mul)    (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_mul)    (fn [a b] ((math/hydra_lib_math_mul a) b))    [] i32 i32 i32)
+      (prim-name 'hydra.lib.math/hydra_lib_math_negate) (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_negate) math/hydra_lib_math_negate [] i32 i32)
+      (prim-name 'hydra.lib.math/hydra_lib_math_odd)    (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_odd)    math/hydra_lib_math_odd    [] i32 b)
+      (prim-name 'hydra.lib.math/hydra_lib_math_range)  (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_range)  (fn [a b] ((math/hydra_lib_math_range a) b))  [] i32 i32 (p/tc-list i32))
+      (prim-name 'hydra.lib.math/hydra_lib_math_signum) (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_signum) math/hydra_lib_math_signum [] i32 i32)
+      (prim-name 'hydra.lib.math/hydra_lib_math_sub)    (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_sub)    (fn [a b] ((math/hydra_lib_math_sub a) b))    [] i32 i32 i32)
+      (prim-name 'hydra.lib.math/hydra_lib_math_max)    (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_max)    (fn [a b] ((math/hydra_lib_math_max a) b))    [] i32 i32 i32)
+      (prim-name 'hydra.lib.math/hydra_lib_math_maybe_div)  (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_maybe_div)  (fn [a b] ((math/hydra_lib_math_maybe_div a) b))  [] i32 i32 (p/tc-optional i32))
+      (prim-name 'hydra.lib.math/hydra_lib_math_maybe_mod)  (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_maybe_mod)  (fn [a b] ((math/hydra_lib_math_maybe_mod a) b))  [] i32 i32 (p/tc-optional i32))
+      (prim-name 'hydra.lib.math/hydra_lib_math_maybe_pred) (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_maybe_pred) math/hydra_lib_math_maybe_pred [] i32 (p/tc-optional i32))
+      (prim-name 'hydra.lib.math/hydra_lib_math_maybe_rem)  (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_maybe_rem)  (fn [a b] ((math/hydra_lib_math_maybe_rem a) b))  [] i32 i32 (p/tc-optional i32))
+      (prim-name 'hydra.lib.math/hydra_lib_math_maybe_succ) (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_maybe_succ) math/hydra_lib_math_maybe_succ [] i32 (p/tc-optional i32))
+      (prim-name 'hydra.lib.math/hydra_lib_math_min)    (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_min)    (fn [a b] ((math/hydra_lib_math_min a) b))    [] i32 i32 i32)}
      ;; Float64 primitives
-     {(qname ns_ "acos")     (p/prim1 (qname ns_ "acos")     math/hydra_lib_math_acos     [] f64 f64)
-      (qname ns_ "acosh")    (p/prim1 (qname ns_ "acosh")    math/hydra_lib_math_acosh    [] f64 f64)
-      (qname ns_ "addFloat64") (p/prim2 (qname ns_ "addFloat64") (fn [a b] ((math/hydra_lib_math_add_float64 a) b)) [] f64 f64 f64)
-      (qname ns_ "asin")     (p/prim1 (qname ns_ "asin")     math/hydra_lib_math_asin     [] f64 f64)
-      (qname ns_ "asinh")    (p/prim1 (qname ns_ "asinh")    math/hydra_lib_math_asinh    [] f64 f64)
-      (qname ns_ "atan")     (p/prim1 (qname ns_ "atan")     math/hydra_lib_math_atan     [] f64 f64)
-      (qname ns_ "atan2")    (p/prim2 (qname ns_ "atan2")    (fn [a b] ((math/hydra_lib_math_atan2 a) b)) [] f64 f64 f64)
-      (qname ns_ "atanh")    (p/prim1 (qname ns_ "atanh")    math/hydra_lib_math_atanh    [] f64 f64)
-      (qname ns_ "ceiling")  (p/prim1 (qname ns_ "ceiling")  math/hydra_lib_math_ceiling  [] f64 f64)
-      (qname ns_ "cos")      (p/prim1 (qname ns_ "cos")      math/hydra_lib_math_cos      [] f64 f64)
-      (qname ns_ "cosh")     (p/prim1 (qname ns_ "cosh")     math/hydra_lib_math_cosh     [] f64 f64)
-      (qname ns_ "e")        (p/prim0 (qname ns_ "e")        (fn [] math/hydra_lib_math_e)        [] f64)
-      (qname ns_ "exp")      (p/prim1 (qname ns_ "exp")      math/hydra_lib_math_exp      [] f64 f64)
-      (qname ns_ "floor")    (p/prim1 (qname ns_ "floor")    math/hydra_lib_math_floor    [] f64 f64)
-      (qname ns_ "log")      (p/prim1 (qname ns_ "log")      math/hydra_lib_math_log      [] f64 f64)
-      (qname ns_ "logBase")  (p/prim2 (qname ns_ "logBase")  (fn [a b] ((math/hydra_lib_math_log_base a) b)) [] f64 f64 f64)
-      (qname ns_ "mulFloat64") (p/prim2 (qname ns_ "mulFloat64") (fn [a b] ((math/hydra_lib_math_mul_float64 a) b)) [] f64 f64 f64)
-      (qname ns_ "negateFloat64") (p/prim1 (qname ns_ "negateFloat64") math/hydra_lib_math_negate_float64 [] f64 f64)
-      (qname ns_ "pi")       (p/prim0 (qname ns_ "pi")       (fn [] math/hydra_lib_math_pi)       [] f64)
-      (qname ns_ "pow")      (p/prim2 (qname ns_ "pow")      (fn [a b] ((math/hydra_lib_math_pow a) b)) [] f64 f64 f64)
-      (qname ns_ "round")    (p/prim1 (qname ns_ "round")    math/hydra_lib_math_round    [] f64 f64)
-      (qname ns_ "roundFloat32")  (p/prim2 (qname ns_ "roundFloat32")
+     {(prim-name 'hydra.lib.math/hydra_lib_math_acos)     (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_acos)     math/hydra_lib_math_acos     [] f64 f64)
+      (prim-name 'hydra.lib.math/hydra_lib_math_acosh)    (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_acosh)    math/hydra_lib_math_acosh    [] f64 f64)
+      (prim-name 'hydra.lib.math/hydra_lib_math_add_float64) (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_add_float64) (fn [a b] ((math/hydra_lib_math_add_float64 a) b)) [] f64 f64 f64)
+      (prim-name 'hydra.lib.math/hydra_lib_math_asin)     (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_asin)     math/hydra_lib_math_asin     [] f64 f64)
+      (prim-name 'hydra.lib.math/hydra_lib_math_asinh)    (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_asinh)    math/hydra_lib_math_asinh    [] f64 f64)
+      (prim-name 'hydra.lib.math/hydra_lib_math_atan)     (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_atan)     math/hydra_lib_math_atan     [] f64 f64)
+      (prim-name 'hydra.lib.math/hydra_lib_math_atan2)    (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_atan2)    (fn [a b] ((math/hydra_lib_math_atan2 a) b)) [] f64 f64 f64)
+      (prim-name 'hydra.lib.math/hydra_lib_math_atanh)    (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_atanh)    math/hydra_lib_math_atanh    [] f64 f64)
+      (prim-name 'hydra.lib.math/hydra_lib_math_ceiling)  (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_ceiling)  math/hydra_lib_math_ceiling  [] f64 f64)
+      (prim-name 'hydra.lib.math/hydra_lib_math_cos)      (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_cos)      math/hydra_lib_math_cos      [] f64 f64)
+      (prim-name 'hydra.lib.math/hydra_lib_math_cosh)     (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_cosh)     math/hydra_lib_math_cosh     [] f64 f64)
+      (prim-name 'hydra.lib.math/hydra_lib_math_e)        (p/prim0 (prim-name 'hydra.lib.math/hydra_lib_math_e)        (fn [] math/hydra_lib_math_e)        [] f64)
+      (prim-name 'hydra.lib.math/hydra_lib_math_exp)      (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_exp)      math/hydra_lib_math_exp      [] f64 f64)
+      (prim-name 'hydra.lib.math/hydra_lib_math_floor)    (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_floor)    math/hydra_lib_math_floor    [] f64 f64)
+      (prim-name 'hydra.lib.math/hydra_lib_math_log)      (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_log)      math/hydra_lib_math_log      [] f64 f64)
+      (prim-name 'hydra.lib.math/hydra_lib_math_log_base)  (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_log_base)  (fn [a b] ((math/hydra_lib_math_log_base a) b)) [] f64 f64 f64)
+      (prim-name 'hydra.lib.math/hydra_lib_math_mul_float64) (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_mul_float64) (fn [a b] ((math/hydra_lib_math_mul_float64 a) b)) [] f64 f64 f64)
+      (prim-name 'hydra.lib.math/hydra_lib_math_negate_float64) (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_negate_float64) math/hydra_lib_math_negate_float64 [] f64 f64)
+      (prim-name 'hydra.lib.math/hydra_lib_math_pi)       (p/prim0 (prim-name 'hydra.lib.math/hydra_lib_math_pi)       (fn [] math/hydra_lib_math_pi)       [] f64)
+      (prim-name 'hydra.lib.math/hydra_lib_math_pow)      (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_pow)      (fn [a b] ((math/hydra_lib_math_pow a) b)) [] f64 f64 f64)
+      (prim-name 'hydra.lib.math/hydra_lib_math_round)    (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_round)    math/hydra_lib_math_round    [] f64 f64)
+      (prim-name 'hydra.lib.math/hydra_lib_math_round_float32)  (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_round_float32)
                                             (fn [n x] ((math/hydra_lib_math_round_float32 n) x))
                                             [] i32 f32 f32)
-      (qname ns_ "roundFloat64")  (p/prim2 (qname ns_ "roundFloat64")
+      (prim-name 'hydra.lib.math/hydra_lib_math_round_float64)  (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_round_float64)
                                             (fn [n x] ((math/hydra_lib_math_round_float64 n) x))
                                             [] i32 f64 f64)
-      (qname ns_ "sin")      (p/prim1 (qname ns_ "sin")      math/hydra_lib_math_sin      [] f64 f64)
-      (qname ns_ "sinh")     (p/prim1 (qname ns_ "sinh")     math/hydra_lib_math_sinh     [] f64 f64)
-      (qname ns_ "sqrt")     (p/prim1 (qname ns_ "sqrt")     math/hydra_lib_math_sqrt     [] f64 f64)
-      (qname ns_ "subFloat64") (p/prim2 (qname ns_ "subFloat64") (fn [a b] ((math/hydra_lib_math_sub_float64 a) b)) [] f64 f64 f64)
-      (qname ns_ "tan")      (p/prim1 (qname ns_ "tan")      math/hydra_lib_math_tan      [] f64 f64)
-      (qname ns_ "tanh")     (p/prim1 (qname ns_ "tanh")     math/hydra_lib_math_tanh     [] f64 f64)
-      (qname ns_ "truncate") (p/prim1 (qname ns_ "truncate") math/hydra_lib_math_truncate [] f64 f64)})))
+      (prim-name 'hydra.lib.math/hydra_lib_math_sin)      (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_sin)      math/hydra_lib_math_sin      [] f64 f64)
+      (prim-name 'hydra.lib.math/hydra_lib_math_sinh)     (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_sinh)     math/hydra_lib_math_sinh     [] f64 f64)
+      (prim-name 'hydra.lib.math/hydra_lib_math_sqrt)     (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_sqrt)     math/hydra_lib_math_sqrt     [] f64 f64)
+      (prim-name 'hydra.lib.math/hydra_lib_math_sub_float64) (p/prim2 (prim-name 'hydra.lib.math/hydra_lib_math_sub_float64) (fn [a b] ((math/hydra_lib_math_sub_float64 a) b)) [] f64 f64 f64)
+      (prim-name 'hydra.lib.math/hydra_lib_math_tan)      (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_tan)      math/hydra_lib_math_tan      [] f64 f64)
+      (prim-name 'hydra.lib.math/hydra_lib_math_tanh)     (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_tanh)     math/hydra_lib_math_tanh     [] f64 f64)
+      (prim-name 'hydra.lib.math/hydra_lib_math_truncate) (p/prim1 (prim-name 'hydra.lib.math/hydra_lib_math_truncate) math/hydra_lib_math_truncate [] f64 f64)})))
 
 ;; ============================================================
 ;; Maybes
 ;; ============================================================
 
 (defn register-optionals []
-  (let [ns_ "hydra.lib.optionals"
+  (let [
         a (p/tc-variable "a")
         b (p/tc-variable "b")
         c (p/tc-variable "c")]
-    {(qname ns_ "apply")    (p/prim2 (qname ns_ "apply")
+    {(prim-name 'hydra.lib.optionals/hydra_lib_optionals_apply)    (p/prim2 (prim-name 'hydra.lib.optionals/hydra_lib_optionals_apply)
                                       (fn [mf mx] ((optionals/hydra_lib_optionals_apply mf) mx))
                                       [] (p/tc-optional (fun a b)) (p/tc-optional a) (p/tc-optional b))
-     (qname ns_ "bind")     (p/prim2 (qname ns_ "bind")
+     (prim-name 'hydra.lib.optionals/hydra_lib_optionals_bind)     (p/prim2 (prim-name 'hydra.lib.optionals/hydra_lib_optionals_bind)
                                       (fn [mx f] ((optionals/hydra_lib_optionals_bind mx) f))
                                       [] (p/tc-optional a) (fun a (p/tc-optional b)) (p/tc-optional b))
-     (qname ns_ "cases")    (p/lazy-args [1] (p/prim3 (qname ns_ "cases")
+     (prim-name 'hydra.lib.optionals/hydra_lib_optionals_cases)    (p/lazy-args [1] (p/prim3 (prim-name 'hydra.lib.optionals/hydra_lib_optionals_cases)
                                       (fn [mx dflt f] (((optionals/hydra_lib_optionals_cases mx) dflt) f))
                                       [] (p/tc-optional a) b (fun a b) b))
-     (qname ns_ "cat")      (p/prim1 (qname ns_ "cat")      optionals/hydra_lib_optionals_cat      [] (p/tc-list (p/tc-optional a)) (p/tc-list a))
-     (qname ns_ "compose")  (p/prim3 (qname ns_ "compose")
+     (prim-name 'hydra.lib.optionals/hydra_lib_optionals_cat)      (p/prim1 (prim-name 'hydra.lib.optionals/hydra_lib_optionals_cat)      optionals/hydra_lib_optionals_cat      [] (p/tc-list (p/tc-optional a)) (p/tc-list a))
+     (prim-name 'hydra.lib.optionals/hydra_lib_optionals_compose)  (p/prim3 (prim-name 'hydra.lib.optionals/hydra_lib_optionals_compose)
                                       (fn [f g x] (((optionals/hydra_lib_optionals_compose f) g) x))
                                       [] (fun a (p/tc-optional b)) (fun b (p/tc-optional c)) a (p/tc-optional c))
-     (qname ns_ "fromOptional") (p/lazy-args [0] (p/prim2 (qname ns_ "fromOptional")
+     (prim-name 'hydra.lib.optionals/hydra_lib_optionals_from_optional) (p/lazy-args [0] (p/prim2 (prim-name 'hydra.lib.optionals/hydra_lib_optionals_from_optional)
                                        (fn [dflt mx] ((optionals/hydra_lib_optionals_from_optional dflt) mx))
                                        [] a (p/tc-optional a) a))
-     (qname ns_ "isGiven")    (p/prim1 (qname ns_ "isGiven")    optionals/hydra_lib_optionals_is_given    [] (p/tc-optional a) (p/tc-boolean))
-     (qname ns_ "isNone") (p/prim1 (qname ns_ "isNone") optionals/hydra_lib_optionals_is_none [] (p/tc-optional a) (p/tc-boolean))
-     (qname ns_ "map")       (p/prim2 (qname ns_ "map")
+     (prim-name 'hydra.lib.optionals/hydra_lib_optionals_is_given)    (p/prim1 (prim-name 'hydra.lib.optionals/hydra_lib_optionals_is_given)    optionals/hydra_lib_optionals_is_given    [] (p/tc-optional a) (p/tc-boolean))
+     (prim-name 'hydra.lib.optionals/hydra_lib_optionals_is_none) (p/prim1 (prim-name 'hydra.lib.optionals/hydra_lib_optionals_is_none) optionals/hydra_lib_optionals_is_none [] (p/tc-optional a) (p/tc-boolean))
+     (prim-name 'hydra.lib.optionals/hydra_lib_optionals_map)       (p/prim2 (prim-name 'hydra.lib.optionals/hydra_lib_optionals_map)
                                        (fn [f mx] ((optionals/hydra_lib_optionals_map f) mx))
                                        [] (fun a b) (p/tc-optional a) (p/tc-optional b))
-     (qname ns_ "mapOptional")  (p/prim2 (qname ns_ "mapOptional")
+     (prim-name 'hydra.lib.optionals/hydra_lib_optionals_map_optional)  (p/prim2 (prim-name 'hydra.lib.optionals/hydra_lib_optionals_map_optional)
                                        (fn [f xs] ((optionals/hydra_lib_optionals_map_optional f) xs))
                                        [] (fun a (p/tc-optional b)) (p/tc-list a) (p/tc-list b))
-     (qname ns_ "pure")      (p/prim1 (qname ns_ "pure")      optionals/hydra_lib_optionals_pure      [] a (p/tc-optional a))
-     (qname ns_ "toList")    (p/prim1 (qname ns_ "toList")    optionals/hydra_lib_optionals_to_list   [] (p/tc-optional a) (p/tc-list a))}))
+     (prim-name 'hydra.lib.optionals/hydra_lib_optionals_pure)      (p/prim1 (prim-name 'hydra.lib.optionals/hydra_lib_optionals_pure)      optionals/hydra_lib_optionals_pure      [] a (p/tc-optional a))
+     (prim-name 'hydra.lib.optionals/hydra_lib_optionals_to_list)    (p/prim1 (prim-name 'hydra.lib.optionals/hydra_lib_optionals_to_list)    optionals/hydra_lib_optionals_to_list   [] (p/tc-optional a) (p/tc-list a))}))
 
 ;; ============================================================
 ;; Pairs
 ;; ============================================================
 
 (defn register-pairs []
-  (let [ns_ "hydra.lib.pairs"
+  (let [
         a (p/tc-variable "a")
         b (p/tc-variable "b")
         c (p/tc-variable "c")
@@ -409,76 +416,76 @@
      ;; Pairs.bimapSig declares it that way, but auto-detect from body
      ;; (a -> c) -> (b -> d) -> ... yields [a, c, b, d] which swaps
      ;; arguments in inferred Function<A,B> casts at call sites.
-     (qname ns_ "bimap")  (p/prim3 (qname ns_ "bimap")
+     (prim-name 'hydra.lib.pairs/hydra_lib_pairs_bimap)  (p/prim3 (prim-name 'hydra.lib.pairs/hydra_lib_pairs_bimap)
                                     (fn [f g p] (((pairs/hydra_lib_pairs_bimap f) g) p))
                                     ["a" "b" "c" "d"] (fun a c) (fun b d) (p/tc-pair a b) (p/tc-pair c d))
-     (qname ns_ "first")  (p/prim1 (qname ns_ "first")  pairs/hydra_lib_pairs_first  [] (p/tc-pair a b) a)
-     (qname ns_ "second") (p/prim1 (qname ns_ "second") pairs/hydra_lib_pairs_second [] (p/tc-pair a b) b)}))
+     (prim-name 'hydra.lib.pairs/hydra_lib_pairs_first)  (p/prim1 (prim-name 'hydra.lib.pairs/hydra_lib_pairs_first)  pairs/hydra_lib_pairs_first  [] (p/tc-pair a b) a)
+     (prim-name 'hydra.lib.pairs/hydra_lib_pairs_second) (p/prim1 (prim-name 'hydra.lib.pairs/hydra_lib_pairs_second) pairs/hydra_lib_pairs_second [] (p/tc-pair a b) b)}))
 
 ;; ============================================================
 ;; Sets
 ;; ============================================================
 
 (defn register-sets []
-  (let [ns_ "hydra.lib.sets"
+  (let [
         a (p/tc-variable "a")
         b (p/tc-variable "b")
         ;; All set primitives have ordering constraint on element type
         ord-a {"a" ["ordering"]}
         ord-ab {"a" ["ordering"] "b" ["ordering"]}]
-    {(qname ns_ "delete")       (p/prim2 (qname ns_ "delete")
+    {(prim-name 'hydra.lib.sets/hydra_lib_sets_delete)       (p/prim2 (prim-name 'hydra.lib.sets/hydra_lib_sets_delete)
                                           (fn [x s] ((sets/hydra_lib_sets_delete x) s))
                                           [] a (p/tc-set a) (p/tc-set a) ord-a)
-     (qname ns_ "difference")   (p/prim2 (qname ns_ "difference")
+     (prim-name 'hydra.lib.sets/hydra_lib_sets_difference)   (p/prim2 (prim-name 'hydra.lib.sets/hydra_lib_sets_difference)
                                           (fn [s1 s2] ((sets/hydra_lib_sets_difference s1) s2))
                                           [] (p/tc-set a) (p/tc-set a) (p/tc-set a) ord-a)
-     (qname ns_ "empty")        (p/prim0 (qname ns_ "empty")   (fn [] sets/hydra_lib_sets_empty)   [] (p/tc-set a) ord-a)
-     (qname ns_ "fromList")     (p/prim1 (qname ns_ "fromList") sets/hydra_lib_sets_from_list [] (p/tc-list a) (p/tc-set a) ord-a)
-     (qname ns_ "insert")       (p/prim2 (qname ns_ "insert")
+     (prim-name 'hydra.lib.sets/hydra_lib_sets_empty)        (p/prim0 (prim-name 'hydra.lib.sets/hydra_lib_sets_empty)   (fn [] sets/hydra_lib_sets_empty)   [] (p/tc-set a) ord-a)
+     (prim-name 'hydra.lib.sets/hydra_lib_sets_from_list)     (p/prim1 (prim-name 'hydra.lib.sets/hydra_lib_sets_from_list) sets/hydra_lib_sets_from_list [] (p/tc-list a) (p/tc-set a) ord-a)
+     (prim-name 'hydra.lib.sets/hydra_lib_sets_insert)       (p/prim2 (prim-name 'hydra.lib.sets/hydra_lib_sets_insert)
                                           (fn [x s] ((sets/hydra_lib_sets_insert x) s))
                                           [] a (p/tc-set a) (p/tc-set a) ord-a)
-     (qname ns_ "intersection") (p/prim2 (qname ns_ "intersection")
+     (prim-name 'hydra.lib.sets/hydra_lib_sets_intersection) (p/prim2 (prim-name 'hydra.lib.sets/hydra_lib_sets_intersection)
                                           (fn [s1 s2] ((sets/hydra_lib_sets_intersection s1) s2))
                                           [] (p/tc-set a) (p/tc-set a) (p/tc-set a) ord-a)
-     (qname ns_ "map")          (p/prim2 (qname ns_ "map")
+     (prim-name 'hydra.lib.sets/hydra_lib_sets_map)          (p/prim2 (prim-name 'hydra.lib.sets/hydra_lib_sets_map)
                                           (fn [f s] ((sets/hydra_lib_sets_map f) s))
                                           [] (fun a b) (p/tc-set a) (p/tc-set b) ord-ab)
-     (qname ns_ "member")       (p/prim2 (qname ns_ "member")
+     (prim-name 'hydra.lib.sets/hydra_lib_sets_member)       (p/prim2 (prim-name 'hydra.lib.sets/hydra_lib_sets_member)
                                           (fn [x s] ((sets/hydra_lib_sets_member x) s))
                                           [] a (p/tc-set a) (p/tc-boolean) ord-a)
-     (qname ns_ "null")         (p/prim1 (qname ns_ "null")     sets/hydra_lib_sets_null     [] (p/tc-set a) (p/tc-boolean) ord-a)
-     (qname ns_ "singleton")    (p/prim1 (qname ns_ "singleton") sets/hydra_lib_sets_singleton [] a (p/tc-set a) ord-a)
-     (qname ns_ "size")         (p/prim1 (qname ns_ "size")     sets/hydra_lib_sets_size     [] (p/tc-set a) (p/tc-int32) ord-a)
-     (qname ns_ "toList")       (p/prim1 (qname ns_ "toList")   sets/hydra_lib_sets_to_list  [] (p/tc-set a) (p/tc-list a) ord-a)
-     (qname ns_ "union")        (p/prim2 (qname ns_ "union")
+     (prim-name 'hydra.lib.sets/hydra_lib_sets_null)         (p/prim1 (prim-name 'hydra.lib.sets/hydra_lib_sets_null)     sets/hydra_lib_sets_null     [] (p/tc-set a) (p/tc-boolean) ord-a)
+     (prim-name 'hydra.lib.sets/hydra_lib_sets_singleton)    (p/prim1 (prim-name 'hydra.lib.sets/hydra_lib_sets_singleton) sets/hydra_lib_sets_singleton [] a (p/tc-set a) ord-a)
+     (prim-name 'hydra.lib.sets/hydra_lib_sets_size)         (p/prim1 (prim-name 'hydra.lib.sets/hydra_lib_sets_size)     sets/hydra_lib_sets_size     [] (p/tc-set a) (p/tc-int32) ord-a)
+     (prim-name 'hydra.lib.sets/hydra_lib_sets_to_list)       (p/prim1 (prim-name 'hydra.lib.sets/hydra_lib_sets_to_list)   sets/hydra_lib_sets_to_list  [] (p/tc-set a) (p/tc-list a) ord-a)
+     (prim-name 'hydra.lib.sets/hydra_lib_sets_union)        (p/prim2 (prim-name 'hydra.lib.sets/hydra_lib_sets_union)
                                           (fn [s1 s2] ((sets/hydra_lib_sets_union s1) s2))
                                           [] (p/tc-set a) (p/tc-set a) (p/tc-set a) ord-a)
-     (qname ns_ "unions")       (p/prim1 (qname ns_ "unions")   sets/hydra_lib_sets_unions   [] (p/tc-list (p/tc-set a)) (p/tc-set a) ord-a)}))
+     (prim-name 'hydra.lib.sets/hydra_lib_sets_unions)       (p/prim1 (prim-name 'hydra.lib.sets/hydra_lib_sets_unions)   sets/hydra_lib_sets_unions   [] (p/tc-list (p/tc-set a)) (p/tc-set a) ord-a)}))
 
 ;; ============================================================
 ;; Regex
 ;; ============================================================
 
 (defn register-regex []
-  (let [ns_ "hydra.lib.regex"
+  (let [
         s (p/tc-string)
         b (p/tc-boolean)]
-    {(qname ns_ "find")       (p/prim2 (qname ns_ "find")
+    {(prim-name 'hydra.lib.regex/hydra_lib_regex_find)       (p/prim2 (prim-name 'hydra.lib.regex/hydra_lib_regex_find)
                                         (fn [pat input] ((regex/hydra_lib_regex_find pat) input))
                                         [] s s (p/tc-optional s))
-     (qname ns_ "findAll")    (p/prim2 (qname ns_ "findAll")
+     (prim-name 'hydra.lib.regex/hydra_lib_regex_find_all)    (p/prim2 (prim-name 'hydra.lib.regex/hydra_lib_regex_find_all)
                                         (fn [pat input] ((regex/hydra_lib_regex_find_all pat) input))
                                         [] s s (p/tc-list s))
-     (qname ns_ "matches")    (p/prim2 (qname ns_ "matches")
+     (prim-name 'hydra.lib.regex/hydra_lib_regex_matches)    (p/prim2 (prim-name 'hydra.lib.regex/hydra_lib_regex_matches)
                                         (fn [pat input] ((regex/hydra_lib_regex_matches pat) input))
                                         [] s s b)
-     (qname ns_ "replace")    (p/prim3 (qname ns_ "replace")
+     (prim-name 'hydra.lib.regex/hydra_lib_regex_replace)    (p/prim3 (prim-name 'hydra.lib.regex/hydra_lib_regex_replace)
                                         (fn [pat repl input] (((regex/hydra_lib_regex_replace pat) repl) input))
                                         [] s s s s)
-     (qname ns_ "replaceAll") (p/prim3 (qname ns_ "replaceAll")
+     (prim-name 'hydra.lib.regex/hydra_lib_regex_replace_all) (p/prim3 (prim-name 'hydra.lib.regex/hydra_lib_regex_replace_all)
                                         (fn [pat repl input] (((regex/hydra_lib_regex_replace_all pat) repl) input))
                                         [] s s s s)
-     (qname ns_ "split")      (p/prim2 (qname ns_ "split")
+     (prim-name 'hydra.lib.regex/hydra_lib_regex_split)      (p/prim2 (prim-name 'hydra.lib.regex/hydra_lib_regex_split)
                                         (fn [pat input] ((regex/hydra_lib_regex_split pat) input))
                                         [] s s (p/tc-list s))}))
 
@@ -487,38 +494,38 @@
 ;; ============================================================
 
 (defn register-strings []
-  (let [ns_ "hydra.lib.strings"
+  (let [
         s (p/tc-string)
         i (p/tc-int32)
         b (p/tc-boolean)]
-    {(qname ns_ "cat")         (p/prim1 (qname ns_ "cat")         strings/hydra_lib_strings_cat         [] (p/tc-list s) s)
-     (qname ns_ "cat2")        (p/prim2 (qname ns_ "cat2")
+    {(prim-name 'hydra.lib.strings/hydra_lib_strings_cat)         (p/prim1 (prim-name 'hydra.lib.strings/hydra_lib_strings_cat)         strings/hydra_lib_strings_cat         [] (p/tc-list s) s)
+     (prim-name 'hydra.lib.strings/hydra_lib_strings_cat2)        (p/prim2 (prim-name 'hydra.lib.strings/hydra_lib_strings_cat2)
                                          (fn [a b] ((strings/hydra_lib_strings_cat2 a) b))
                                          [] s s s)
-     (qname ns_ "fromList")    (p/prim1 (qname ns_ "fromList")    strings/hydra_lib_strings_from_list    [] (p/tc-list i) s)
-     (qname ns_ "intercalate") (p/prim2 (qname ns_ "intercalate")
+     (prim-name 'hydra.lib.strings/hydra_lib_strings_from_list)    (p/prim1 (prim-name 'hydra.lib.strings/hydra_lib_strings_from_list)    strings/hydra_lib_strings_from_list    [] (p/tc-list i) s)
+     (prim-name 'hydra.lib.strings/hydra_lib_strings_intercalate) (p/prim2 (prim-name 'hydra.lib.strings/hydra_lib_strings_intercalate)
                                          (fn [sep ss] ((strings/hydra_lib_strings_intercalate sep) ss))
                                          [] s (p/tc-list s) s)
-     (qname ns_ "length")      (p/prim1 (qname ns_ "length")      strings/hydra_lib_strings_length      [] s i)
-     (qname ns_ "lines")       (p/prim1 (qname ns_ "lines")       strings/hydra_lib_strings_lines       [] s (p/tc-list s))
-     (qname ns_ "maybeCharAt") (p/prim2 (qname ns_ "maybeCharAt")
+     (prim-name 'hydra.lib.strings/hydra_lib_strings_length)      (p/prim1 (prim-name 'hydra.lib.strings/hydra_lib_strings_length)      strings/hydra_lib_strings_length      [] s i)
+     (prim-name 'hydra.lib.strings/hydra_lib_strings_lines)       (p/prim1 (prim-name 'hydra.lib.strings/hydra_lib_strings_lines)       strings/hydra_lib_strings_lines       [] s (p/tc-list s))
+     (prim-name 'hydra.lib.strings/hydra_lib_strings_maybe_char_at) (p/prim2 (prim-name 'hydra.lib.strings/hydra_lib_strings_maybe_char_at)
                                          (fn [n str] ((strings/hydra_lib_strings_maybe_char_at n) str))
                                          [] i s (p/tc-optional i))
-     (qname ns_ "null")        (p/prim1 (qname ns_ "null")        strings/hydra_lib_strings_null        [] s b)
-     (qname ns_ "splitOn")     (p/prim2 (qname ns_ "splitOn")
+     (prim-name 'hydra.lib.strings/hydra_lib_strings_null)        (p/prim1 (prim-name 'hydra.lib.strings/hydra_lib_strings_null)        strings/hydra_lib_strings_null        [] s b)
+     (prim-name 'hydra.lib.strings/hydra_lib_strings_split_on)     (p/prim2 (prim-name 'hydra.lib.strings/hydra_lib_strings_split_on)
                                          (fn [sep str] ((strings/hydra_lib_strings_split_on sep) str))
                                          [] s s (p/tc-list s))
-     (qname ns_ "toList")      (p/prim1 (qname ns_ "toList")      strings/hydra_lib_strings_to_list     [] s (p/tc-list i))
-     (qname ns_ "toLower")     (p/prim1 (qname ns_ "toLower")     strings/hydra_lib_strings_to_lower    [] s s)
-     (qname ns_ "toUpper")     (p/prim1 (qname ns_ "toUpper")     strings/hydra_lib_strings_to_upper    [] s s)
-     (qname ns_ "unlines")     (p/prim1 (qname ns_ "unlines")     strings/hydra_lib_strings_unlines     [] (p/tc-list s) s)}))
+     (prim-name 'hydra.lib.strings/hydra_lib_strings_to_list)      (p/prim1 (prim-name 'hydra.lib.strings/hydra_lib_strings_to_list)      strings/hydra_lib_strings_to_list     [] s (p/tc-list i))
+     (prim-name 'hydra.lib.strings/hydra_lib_strings_to_lower)     (p/prim1 (prim-name 'hydra.lib.strings/hydra_lib_strings_to_lower)     strings/hydra_lib_strings_to_lower    [] s s)
+     (prim-name 'hydra.lib.strings/hydra_lib_strings_to_upper)     (p/prim1 (prim-name 'hydra.lib.strings/hydra_lib_strings_to_upper)     strings/hydra_lib_strings_to_upper    [] s s)
+     (prim-name 'hydra.lib.strings/hydra_lib_strings_unlines)     (p/prim1 (prim-name 'hydra.lib.strings/hydra_lib_strings_unlines)     strings/hydra_lib_strings_unlines     [] (p/tc-list s) s)}))
 
 ;; ============================================================
 ;; Literals
 ;; ============================================================
 
 (defn register-literals []
-  (let [ns_ "hydra.lib.literals"
+  (let [
         bi  (p/tc-bigint)
         dec (p/tc-decimal)
         f32 (p/tc-float32)
@@ -536,63 +543,63 @@
         bin (p/tc-binary)]
     (merge
      ;; Conversions
-     {(qname ns_ "bigintToDecimal")    (p/prim1 (qname ns_ "bigintToDecimal")    literals/hydra_lib_literals_bigint_to_decimal    [] bi dec)
-      (qname ns_ "bigintToInt8")       (p/prim1 (qname ns_ "bigintToInt8")       literals/hydra_lib_literals_bigint_to_int8       [] bi i8)
-      (qname ns_ "bigintToInt16")      (p/prim1 (qname ns_ "bigintToInt16")      literals/hydra_lib_literals_bigint_to_int16      [] bi i16)
-      (qname ns_ "bigintToInt32")      (p/prim1 (qname ns_ "bigintToInt32")      literals/hydra_lib_literals_bigint_to_int32      [] bi i32)
-      (qname ns_ "bigintToInt64")      (p/prim1 (qname ns_ "bigintToInt64")      literals/hydra_lib_literals_bigint_to_int64      [] bi i64)
-      (qname ns_ "bigintToUint8")      (p/prim1 (qname ns_ "bigintToUint8")      literals/hydra_lib_literals_bigint_to_uint8      [] bi u8)
-      (qname ns_ "bigintToUint16")     (p/prim1 (qname ns_ "bigintToUint16")     literals/hydra_lib_literals_bigint_to_uint16     [] bi u16)
-      (qname ns_ "bigintToUint32")     (p/prim1 (qname ns_ "bigintToUint32")     literals/hydra_lib_literals_bigint_to_uint32     [] bi u32)
-      (qname ns_ "bigintToUint64")     (p/prim1 (qname ns_ "bigintToUint64")     literals/hydra_lib_literals_bigint_to_uint64     [] bi u64)
-      (qname ns_ "binaryToBytes")      (p/prim1 (qname ns_ "binaryToBytes")      literals/hydra_lib_literals_binary_to_bytes      [] bin (p/tc-list i32))
-      (qname ns_ "binaryToString")     (p/prim1 (qname ns_ "binaryToString")     literals/hydra_lib_literals_binary_to_string     [] bin s)
-      (qname ns_ "decimalToBigint")    (p/prim1 (qname ns_ "decimalToBigint")    literals/hydra_lib_literals_decimal_to_bigint    [] dec bi)
-      (qname ns_ "decimalToFloat32")   (p/prim1 (qname ns_ "decimalToFloat32")   literals/hydra_lib_literals_decimal_to_float32   [] dec f32)
-      (qname ns_ "decimalToFloat64")   (p/prim1 (qname ns_ "decimalToFloat64")   literals/hydra_lib_literals_decimal_to_float64   [] dec f64)
-      (qname ns_ "float32ToDecimal")   (p/prim1 (qname ns_ "float32ToDecimal")   literals/hydra_lib_literals_float32_to_decimal   [] f32 dec)
-      (qname ns_ "float32ToFloat64")   (p/prim1 (qname ns_ "float32ToFloat64")   literals/hydra_lib_literals_float32_to_float64   [] f32 f64)
-      (qname ns_ "float64ToDecimal")   (p/prim1 (qname ns_ "float64ToDecimal")   literals/hydra_lib_literals_float64_to_decimal   [] f64 dec)
-      (qname ns_ "float64ToFloat32")   (p/prim1 (qname ns_ "float64ToFloat32")   literals/hydra_lib_literals_float64_to_float32   [] f64 f32)
-      (qname ns_ "int8ToBigint")       (p/prim1 (qname ns_ "int8ToBigint")       literals/hydra_lib_literals_int8_to_bigint       [] i8 bi)
-      (qname ns_ "int16ToBigint")      (p/prim1 (qname ns_ "int16ToBigint")      literals/hydra_lib_literals_int16_to_bigint      [] i16 bi)
-      (qname ns_ "int32ToBigint")      (p/prim1 (qname ns_ "int32ToBigint")      literals/hydra_lib_literals_int32_to_bigint      [] i32 bi)
-      (qname ns_ "int64ToBigint")      (p/prim1 (qname ns_ "int64ToBigint")      literals/hydra_lib_literals_int64_to_bigint      [] i64 bi)
-      (qname ns_ "uint8ToBigint")      (p/prim1 (qname ns_ "uint8ToBigint")      literals/hydra_lib_literals_uint8_to_bigint      [] u8 bi)
-      (qname ns_ "uint16ToBigint")     (p/prim1 (qname ns_ "uint16ToBigint")     literals/hydra_lib_literals_uint16_to_bigint     [] u16 bi)
-      (qname ns_ "uint32ToBigint")     (p/prim1 (qname ns_ "uint32ToBigint")     literals/hydra_lib_literals_uint32_to_bigint     [] u32 bi)
-      (qname ns_ "uint64ToBigint")     (p/prim1 (qname ns_ "uint64ToBigint")     literals/hydra_lib_literals_uint64_to_bigint     [] u64 bi)
-      (qname ns_ "stringToBinary")     (p/prim1 (qname ns_ "stringToBinary")     literals/hydra_lib_literals_string_to_binary     [] s bin)}
+     {(prim-name 'hydra.lib.literals/hydra_lib_literals_bigint_to_decimal)    (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_bigint_to_decimal)    literals/hydra_lib_literals_bigint_to_decimal    [] bi dec)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_bigint_to_int8)       (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_bigint_to_int8)       literals/hydra_lib_literals_bigint_to_int8       [] bi i8)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_bigint_to_int16)      (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_bigint_to_int16)      literals/hydra_lib_literals_bigint_to_int16      [] bi i16)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_bigint_to_int32)      (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_bigint_to_int32)      literals/hydra_lib_literals_bigint_to_int32      [] bi i32)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_bigint_to_int64)      (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_bigint_to_int64)      literals/hydra_lib_literals_bigint_to_int64      [] bi i64)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_bigint_to_uint8)      (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_bigint_to_uint8)      literals/hydra_lib_literals_bigint_to_uint8      [] bi u8)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_bigint_to_uint16)     (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_bigint_to_uint16)     literals/hydra_lib_literals_bigint_to_uint16     [] bi u16)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_bigint_to_uint32)     (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_bigint_to_uint32)     literals/hydra_lib_literals_bigint_to_uint32     [] bi u32)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_bigint_to_uint64)     (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_bigint_to_uint64)     literals/hydra_lib_literals_bigint_to_uint64     [] bi u64)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_binary_to_bytes)      (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_binary_to_bytes)      literals/hydra_lib_literals_binary_to_bytes      [] bin (p/tc-list i32))
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_binary_to_string)     (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_binary_to_string)     literals/hydra_lib_literals_binary_to_string     [] bin s)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_decimal_to_bigint)    (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_decimal_to_bigint)    literals/hydra_lib_literals_decimal_to_bigint    [] dec bi)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_decimal_to_float32)   (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_decimal_to_float32)   literals/hydra_lib_literals_decimal_to_float32   [] dec f32)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_decimal_to_float64)   (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_decimal_to_float64)   literals/hydra_lib_literals_decimal_to_float64   [] dec f64)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_float32_to_decimal)   (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_float32_to_decimal)   literals/hydra_lib_literals_float32_to_decimal   [] f32 dec)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_float32_to_float64)   (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_float32_to_float64)   literals/hydra_lib_literals_float32_to_float64   [] f32 f64)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_float64_to_decimal)   (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_float64_to_decimal)   literals/hydra_lib_literals_float64_to_decimal   [] f64 dec)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_float64_to_float32)   (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_float64_to_float32)   literals/hydra_lib_literals_float64_to_float32   [] f64 f32)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_int8_to_bigint)       (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_int8_to_bigint)       literals/hydra_lib_literals_int8_to_bigint       [] i8 bi)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_int16_to_bigint)      (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_int16_to_bigint)      literals/hydra_lib_literals_int16_to_bigint      [] i16 bi)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_int32_to_bigint)      (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_int32_to_bigint)      literals/hydra_lib_literals_int32_to_bigint      [] i32 bi)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_int64_to_bigint)      (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_int64_to_bigint)      literals/hydra_lib_literals_int64_to_bigint      [] i64 bi)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_uint8_to_bigint)      (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_uint8_to_bigint)      literals/hydra_lib_literals_uint8_to_bigint      [] u8 bi)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_uint16_to_bigint)     (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_uint16_to_bigint)     literals/hydra_lib_literals_uint16_to_bigint     [] u16 bi)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_uint32_to_bigint)     (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_uint32_to_bigint)     literals/hydra_lib_literals_uint32_to_bigint     [] u32 bi)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_uint64_to_bigint)     (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_uint64_to_bigint)     literals/hydra_lib_literals_uint64_to_bigint     [] u64 bi)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_string_to_binary)     (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_string_to_binary)     literals/hydra_lib_literals_string_to_binary     [] s bin)}
      ;; Read primitives
-     {(qname ns_ "readBigint")   (p/prim1 (qname ns_ "readBigint")   literals/hydra_lib_literals_read_bigint   [] s (p/tc-optional bi))
-      (qname ns_ "readBoolean")  (p/prim1 (qname ns_ "readBoolean")  literals/hydra_lib_literals_read_boolean  [] s (p/tc-optional b))
-      (qname ns_ "readDecimal")  (p/prim1 (qname ns_ "readDecimal")  literals/hydra_lib_literals_read_decimal  [] s (p/tc-optional dec))
-      (qname ns_ "readFloat32")  (p/prim1 (qname ns_ "readFloat32")  literals/hydra_lib_literals_read_float32  [] s (p/tc-optional f32))
-      (qname ns_ "readFloat64")  (p/prim1 (qname ns_ "readFloat64")  literals/hydra_lib_literals_read_float64  [] s (p/tc-optional f64))
-      (qname ns_ "readInt8")     (p/prim1 (qname ns_ "readInt8")     literals/hydra_lib_literals_read_int8     [] s (p/tc-optional i8))
-      (qname ns_ "readInt16")    (p/prim1 (qname ns_ "readInt16")    literals/hydra_lib_literals_read_int16    [] s (p/tc-optional i16))
-      (qname ns_ "readInt32")    (p/prim1 (qname ns_ "readInt32")    literals/hydra_lib_literals_read_int32    [] s (p/tc-optional i32))
-      (qname ns_ "readInt64")    (p/prim1 (qname ns_ "readInt64")    literals/hydra_lib_literals_read_int64    [] s (p/tc-optional i64))
-      (qname ns_ "readString")   (p/prim1 (qname ns_ "readString")   literals/hydra_lib_literals_read_string   [] s (p/tc-optional s))
-      (qname ns_ "readUint8")    (p/prim1 (qname ns_ "readUint8")    literals/hydra_lib_literals_read_uint8    [] s (p/tc-optional u8))
-      (qname ns_ "readUint16")   (p/prim1 (qname ns_ "readUint16")   literals/hydra_lib_literals_read_uint16   [] s (p/tc-optional u16))
-      (qname ns_ "readUint32")   (p/prim1 (qname ns_ "readUint32")   literals/hydra_lib_literals_read_uint32   [] s (p/tc-optional u32))
-      (qname ns_ "readUint64")   (p/prim1 (qname ns_ "readUint64")   literals/hydra_lib_literals_read_uint64   [] s (p/tc-optional u64))}
+     {(prim-name 'hydra.lib.literals/hydra_lib_literals_read_bigint)   (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_read_bigint)   literals/hydra_lib_literals_read_bigint   [] s (p/tc-optional bi))
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_read_boolean)  (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_read_boolean)  literals/hydra_lib_literals_read_boolean  [] s (p/tc-optional b))
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_read_decimal)  (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_read_decimal)  literals/hydra_lib_literals_read_decimal  [] s (p/tc-optional dec))
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_read_float32)  (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_read_float32)  literals/hydra_lib_literals_read_float32  [] s (p/tc-optional f32))
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_read_float64)  (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_read_float64)  literals/hydra_lib_literals_read_float64  [] s (p/tc-optional f64))
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_read_int8)     (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_read_int8)     literals/hydra_lib_literals_read_int8     [] s (p/tc-optional i8))
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_read_int16)    (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_read_int16)    literals/hydra_lib_literals_read_int16    [] s (p/tc-optional i16))
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_read_int32)    (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_read_int32)    literals/hydra_lib_literals_read_int32    [] s (p/tc-optional i32))
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_read_int64)    (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_read_int64)    literals/hydra_lib_literals_read_int64    [] s (p/tc-optional i64))
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_read_string)   (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_read_string)   literals/hydra_lib_literals_read_string   [] s (p/tc-optional s))
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_read_uint8)    (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_read_uint8)    literals/hydra_lib_literals_read_uint8    [] s (p/tc-optional u8))
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_read_uint16)   (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_read_uint16)   literals/hydra_lib_literals_read_uint16   [] s (p/tc-optional u16))
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_read_uint32)   (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_read_uint32)   literals/hydra_lib_literals_read_uint32   [] s (p/tc-optional u32))
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_read_uint64)   (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_read_uint64)   literals/hydra_lib_literals_read_uint64   [] s (p/tc-optional u64))}
      ;; Show primitives
-     {(qname ns_ "showBigint")   (p/prim1 (qname ns_ "showBigint")   literals/hydra_lib_literals_show_bigint   [] bi s)
-      (qname ns_ "showBoolean")  (p/prim1 (qname ns_ "showBoolean")  literals/hydra_lib_literals_show_boolean  [] b s)
-      (qname ns_ "showDecimal")  (p/prim1 (qname ns_ "showDecimal")  literals/hydra_lib_literals_show_decimal  [] dec s)
-      (qname ns_ "showFloat32")  (p/prim1 (qname ns_ "showFloat32")  literals/hydra_lib_literals_show_float32  [] f32 s)
-      (qname ns_ "showFloat64")  (p/prim1 (qname ns_ "showFloat64")  literals/hydra_lib_literals_show_float64  [] f64 s)
-      (qname ns_ "showInt8")     (p/prim1 (qname ns_ "showInt8")     literals/hydra_lib_literals_show_int8     [] i8 s)
-      (qname ns_ "showInt16")    (p/prim1 (qname ns_ "showInt16")    literals/hydra_lib_literals_show_int16    [] i16 s)
-      (qname ns_ "showInt32")    (p/prim1 (qname ns_ "showInt32")    literals/hydra_lib_literals_show_int32    [] i32 s)
-      (qname ns_ "showInt64")    (p/prim1 (qname ns_ "showInt64")    literals/hydra_lib_literals_show_int64    [] i64 s)
-      (qname ns_ "showUint8")    (p/prim1 (qname ns_ "showUint8")    literals/hydra_lib_literals_show_uint8    [] u8 s)
-      (qname ns_ "showUint16")   (p/prim1 (qname ns_ "showUint16")   literals/hydra_lib_literals_show_uint16   [] u16 s)
-      (qname ns_ "showUint32")   (p/prim1 (qname ns_ "showUint32")   literals/hydra_lib_literals_show_uint32   [] u32 s)
-      (qname ns_ "showUint64")   (p/prim1 (qname ns_ "showUint64")   literals/hydra_lib_literals_show_uint64   [] u64 s)
-      (qname ns_ "showString")   (p/prim1 (qname ns_ "showString")   literals/hydra_lib_literals_show_string   [] s s)})))
+     {(prim-name 'hydra.lib.literals/hydra_lib_literals_show_bigint)   (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_show_bigint)   literals/hydra_lib_literals_show_bigint   [] bi s)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_show_boolean)  (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_show_boolean)  literals/hydra_lib_literals_show_boolean  [] b s)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_show_decimal)  (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_show_decimal)  literals/hydra_lib_literals_show_decimal  [] dec s)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_show_float32)  (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_show_float32)  literals/hydra_lib_literals_show_float32  [] f32 s)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_show_float64)  (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_show_float64)  literals/hydra_lib_literals_show_float64  [] f64 s)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_show_int8)     (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_show_int8)     literals/hydra_lib_literals_show_int8     [] i8 s)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_show_int16)    (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_show_int16)    literals/hydra_lib_literals_show_int16    [] i16 s)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_show_int32)    (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_show_int32)    literals/hydra_lib_literals_show_int32    [] i32 s)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_show_int64)    (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_show_int64)    literals/hydra_lib_literals_show_int64    [] i64 s)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_show_uint8)    (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_show_uint8)    literals/hydra_lib_literals_show_uint8    [] u8 s)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_show_uint16)   (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_show_uint16)   literals/hydra_lib_literals_show_uint16   [] u16 s)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_show_uint32)   (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_show_uint32)   literals/hydra_lib_literals_show_uint32   [] u32 s)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_show_uint64)   (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_show_uint64)   literals/hydra_lib_literals_show_uint64   [] u64 s)
+      (prim-name 'hydra.lib.literals/hydra_lib_literals_show_string)   (p/prim1 (prim-name 'hydra.lib.literals/hydra_lib_literals_show_string)   literals/hydra_lib_literals_show_string   [] s s)})))
 
 ;; ============================================================
 ;; ============================================================

@@ -15,7 +15,6 @@ import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -24,7 +23,7 @@ import hydra.util.Either;
  */
 public class Null extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.lists.null");
+        return hydra.lib.Lists.null_().name;
     }
 
     @Override
@@ -33,8 +32,8 @@ public class Null extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<List<Term>, Term>) l -> Terms.boolean_(apply(l)), hydra.extract.Core.list(graph, args.get(0)));
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Map.apply((Function<List<Term>, Term>) l -> Terms.boolean_(apply(l)), hydra.extract.Core.list(graph, args.get(0)));
     }
 
     /**

@@ -16,7 +16,6 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
-import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.util.Either;
 
@@ -30,7 +29,7 @@ public class MapOptional extends PrimitiveFunction {
      * @return the name "hydra.lib.optionals.mapOptional"
      */
     public Name name() {
-        return new Name("hydra.lib.optionals.mapOptional");
+        return hydra.lib.Optionals.mapOptional().name;
     }
 
     /**
@@ -47,8 +46,8 @@ public class MapOptional extends PrimitiveFunction {
      * @return a function that maps an optional-returning function over a list
      */
     @Override
-    protected Function<List<Term>, Function<InferenceContext, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(graph, args.get(1)), inputList -> {
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(graph, args.get(1)), inputList -> {
                 Term f = args.get(0);
                 ConsList<Term> reversed = ConsList.empty();
                 for (Term item : inputList) {
