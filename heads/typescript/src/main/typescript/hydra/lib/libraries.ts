@@ -153,12 +153,17 @@ const scheme = (t: Type, vars: readonly string[] = []): TypeScheme =>
   ({ variables: vars.map((v) => ({ value: v } as never)), body: t, constraints: { tag: "none" } } as never);
 
 // Build a TypeScheme with class constraints. `cs` is a list of [typeVar, [className, ...]] pairs.
-// At runtime, constraints have type `Optional<Map<Name, {classes: Set<Name>}>>`.
-// The map keys are wrapped Names; the values are records with a `classes` Set<Name>.
+// At runtime, constraints have type `Optional<Map<Name, TypeVariableConstraints>>`,
+// where `TypeVariableConstraints.classes` is a *list* of `TypeClassConstraint`
+// (each `{tag: "simple", value: <Name>}`) — not a set of Names. The
+// inference engine constructs the same shape in inference.ts (e.g.
+// `{classes: [{tag: "simple", value: {value: "ordering"}}]}`), and both
+// `show.core.typeScheme` and `substitution.substInClassConstraints` rely
+// on `classes` being a list (they call `Lists.map` / `concat2` on it).
 const schemeC = (t: Type, vars: readonly string[], cs: readonly (readonly [string, readonly string[]])[]): TypeScheme => {
   const m = libMaps.fromList(cs.map(([v, classes]) => [
     { value: v } as never,
-    { classes: libSets.fromList(classes.map((c) => ({ value: c } as never))) } as never,
+    { classes: classes.map((c) => ({ tag: "simple", value: { value: c } } as never)) } as never,
   ]));
   return {
     variables: vars.map((v) => ({ value: v } as never)),

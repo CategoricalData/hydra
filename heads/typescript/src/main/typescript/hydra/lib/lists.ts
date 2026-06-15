@@ -112,10 +112,20 @@ export const maybeLast = (xs: any): Optional<any> =>
 export const maybeTail = (xs: any): Optional<readonly any[]> =>
   xs.length === 0 ? None : Given(xs.slice(1));
 
+// Structural deduplication. JS `Set` keys by SameValueZero (object
+// identity for objects), but Hydra values are structural — two
+// `{tag: "simple", value: {value: "ordering"}}` records constructed at
+// different sites must compare equal. Canonicalize to JSON strings so
+// the set membership matches Python's `set` behavior on hashable
+// dataclasses (which is the reference). Matches the same canonicalization
+// strategy maps.ts uses for value-keyed Map<Name,_> lookups.
 export const nub = (xs: any): readonly any[] => {
-  const seen = new Set<any>();
+  const seen = new Set<string>();
   const out: any[] = [];
-  for (const x of xs) if (!seen.has(x)) { seen.add(x); out.push(x); }
+  for (const x of xs) {
+    const k = typeof x === "object" ? JSON.stringify(x) : String(x);
+    if (!seen.has(k)) { seen.add(k); out.push(x); }
+  }
   return out;
 };
 
