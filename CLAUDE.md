@@ -247,6 +247,34 @@ Get explicit user permission before each send.
 For the full protocol (filename format, send/receive sequence, crash recovery),
 see [claude/cross-worktree-messages.md](claude/cross-worktree-messages.md).
 
+### Spawning worker sessions
+
+When the coordinator session needs a sibling worker (typically to fix a
+GitHub issue or run a parallel task), it spawns one via
+`bin/spawn-issue-worktree.sh <issue-number> <slug>`. The script creates a
+worktree, seeds `.claude/`, opens a detached `tmux` session, and starts
+Claude inside it via `claude-remote`.
+
+**Model selection.** `claude-remote` accepts an optional `-m <model>` /
+`--model <model>` flag (e.g. `opus`, `sonnet`, `opusplan`) and defaults to
+`opus`. The spawn script's policy:
+
+- **`bug_NNN_*` and `task_NNN_*` workers** — default to **`opusplan`**.
+  Most spend the bulk of their wall time on mechanical sync/regen/verify
+  loops, which Sonnet handles fine. Opus stays in the loop for the
+  planning/triage phase via opusplan's mode-switching.
+- **`feature_NNN_*` workers** — stay on **`opus`**. Feature work is
+  planning-heavy across the whole branch lifetime (matrix decisions,
+  worker triage, plan-doc curation), so the cost is justified.
+- **Override for tricky bugs**: `SPAWN_MODEL=opus bin/spawn-issue-worktree.sh …`
+  bumps a bug worker to plain Opus when the issue is genuinely
+  architecture-level or under-specified.
+
+Manual spawns (no script) should follow the same defaults:
+`claude-remote bug_NNN_slug -m opusplan` for bug/task workers,
+`claude-remote feature_NNN_slug` (or `-m opus` explicitly) for feature
+workers.
+
 ### Sync workflow
 
 After modifying Haskell sources, regenerate downstream implementations.
