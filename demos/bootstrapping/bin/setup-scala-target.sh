@@ -41,9 +41,17 @@ cp "$HYDRA_SCALA_PKG/project/build.properties" "$OUTPUT_DIR/project/" 2>/dev/nul
 echo "  Copying hand-written source files..."
 if [ -d "$HYDRA_SCALA_HEAD/src/main/scala" ]; then
     mkdir -p "$OUTPUT_DIR/src/main/scala/hydra"
-    # Copy lib/ directory (primitive implementations)
+    # Copy lib/ directory (the primitive registry Libraries.scala). The #473 lib pass also
+    # emits the hydra.lib.* PrimitiveDefinition def-modules here at gen time.
     if [ -d "$HYDRA_SCALA_HEAD/src/main/scala/hydra/lib" ]; then
         cp -r "$HYDRA_SCALA_HEAD/src/main/scala/hydra/lib" "$OUTPUT_DIR/src/main/scala/hydra/"
+    fi
+    # Copy scala/lib/ (the native primitive IMPLEMENTATIONS, relocated to hydra.scala.lib.* by
+    # #473 Step 0). The generated consumers + registry call these; without them the cell fails to
+    # compile with "value scala is not a member of hydra". (Pre-#473 the impls lived in hydra/lib.)
+    if [ -d "$HYDRA_SCALA_HEAD/src/main/scala/hydra/scala/lib" ]; then
+        mkdir -p "$OUTPUT_DIR/src/main/scala/hydra/scala"
+        cp -r "$HYDRA_SCALA_HEAD/src/main/scala/hydra/scala/lib" "$OUTPUT_DIR/src/main/scala/hydra/scala/"
     fi
 fi
 
