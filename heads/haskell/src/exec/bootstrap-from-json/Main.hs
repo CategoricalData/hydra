@@ -818,6 +818,12 @@ main = do
               let dir = packageOutMain pkg
               putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " lib modules → " ++ dir
               paths <- genForDirLib dir pkgMods
+              -- #473: record the lib pass's actual output files in the #357 prune keep-set, so the
+              -- stale-prune below doesn't delete the hydra.lib.* def-modules. The pre-generation
+              -- keep-set (recordOwnedPaths over the un-lowered consumer modules) does NOT cover these:
+              -- the lib pass emits LOWERED modules whose filenames differ (e.g. hydra/lib/Math_.java),
+              -- so they're recorded here from the paths genForDirLib actually wrote.
+              recordKeep dir paths
               return (length paths)
             return (sum counts)
       case (optPackage opts, optAllPackages opts) of
@@ -828,6 +834,7 @@ main = do
         (Nothing, False) -> do
           putStrLn $ "  " ++ show (length libModsLowered) ++ " lib modules → " ++ outMain
           paths <- genForDirLib outMain libModsLowered
+          recordKeep outMain paths
           return (length paths)
     else return 0
   genEnd <- getCurrentTime
