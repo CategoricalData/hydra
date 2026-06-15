@@ -661,7 +661,37 @@
                                     "application": {
                                       "function": {"project": {"typeName": "hydra.core.ForallType", "fieldName": "parameter"}},
                                       "argument": {"variable": "ft"}}}}}},
-                            {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
+                            {
+                              "name": "domain",
+                              "term": {
+                                "optional": {
+                                  "inject": {
+                                    "typeName": "hydra.core.Type",
+                                    "field": {
+                                      "name": "function",
+                                      "term": {
+                                        "record": {
+                                          "typeName": "hydra.core.FunctionType",
+                                          "fields": [
+                                            {
+                                              "name": "domain",
+                                              "term": {
+                                                "inject": {
+                                                  "typeName": "hydra.core.Type",
+                                                  "field": {
+                                                    "name": "variable",
+                                                    "term": {
+                                                      "application": {
+                                                        "function": {"project": {"typeName": "hydra.core.ForallType", "fieldName": "parameter"}},
+                                                        "argument": {"variable": "ft"}}}}}}},
+                                            {
+                                              "name": "codomain",
+                                              "term": {
+                                                "inject": {
+                                                  "typeName": "hydra.core.Type",
+                                                  "field": {
+                                                    "name": "variable",
+                                                    "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.core.Term"}}}}}}}}]}}}}}}},
                             {
                               "name": "body",
                               "term": {
@@ -3335,7 +3365,37 @@
                                                         "application": {
                                                           "function": {"project": {"typeName": "hydra.core.ForallType", "fieldName": "parameter"}},
                                                           "argument": {"variable": "ft"}}}}}},
-                                                {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                {
+                                                  "name": "domain",
+                                                  "term": {
+                                                    "optional": {
+                                                      "inject": {
+                                                        "typeName": "hydra.core.Type",
+                                                        "field": {
+                                                          "name": "function",
+                                                          "term": {
+                                                            "record": {
+                                                              "typeName": "hydra.core.FunctionType",
+                                                              "fields": [
+                                                                {
+                                                                  "name": "domain",
+                                                                  "term": {
+                                                                    "inject": {
+                                                                      "typeName": "hydra.core.Type",
+                                                                      "field": {
+                                                                        "name": "variable",
+                                                                        "term": {
+                                                                          "application": {
+                                                                            "function": {"project": {"typeName": "hydra.core.ForallType", "fieldName": "parameter"}},
+                                                                            "argument": {"variable": "ft"}}}}}}},
+                                                                {
+                                                                  "name": "codomain",
+                                                                  "term": {
+                                                                    "inject": {
+                                                                      "typeName": "hydra.core.Type",
+                                                                      "field": {
+                                                                        "name": "variable",
+                                                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.core.Term"}}}}}}}}]}}}}}}},
                                                 {
                                                   "name": "body",
                                                   "term": {

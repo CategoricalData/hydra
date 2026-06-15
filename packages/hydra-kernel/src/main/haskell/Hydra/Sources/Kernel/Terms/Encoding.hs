@@ -241,10 +241,17 @@ encodeForallType :: TypedTermDefinition (ForallType -> Term)
 encodeForallType = define "encodeForallType" $
   doc "Generate an encoder for a polymorphic (forall) type" $
   "ft" ~>
-    -- Generate a lambda that takes an encoder for the type parameter
+    -- Generate a lambda that takes an encoder for the type parameter.
+    -- The bound parameter IS that encoder; its type is (a -> Term), matching the
+    -- (a -> Term) -> arg prependForallEncoders adds to the encoder scheme. The
+    -- synthesizer must populate this domain annotation: with inference disabled
+    -- for derived modules (#476), an unannotated binder reaches codegen as an
+    -- untyped term variable, which the Java/Scala coders reject.
     Core.termLambda $ Core.lambda
         (encodeBindingName @@ Core.forallTypeParameter (var "ft"))
-        nothing
+        (just $ Core.typeFunction $ Core.functionType
+          (Core.typeVariable (Core.forallTypeParameter (var "ft")))
+          (Core.typeVariable (Core.nameLift _Term)))
         (encodeType @@ Core.forallTypeBody (var "ft"))
 
 -- | Generate an encoder for a Maybe type
@@ -561,7 +568,17 @@ encodeTypeNamed = define "encodeTypeNamed" $
     _Type_either>>: "et" ~>
       encodeEitherType @@ var "et",
     _Type_forall>>: "ft" ~>
-      Core.termLambda $ Core.lambda (encodeBindingName @@ Core.forallTypeParameter (var "ft")) nothing
+      -- The bound parameter IS the encoder for the type parameter; its type is
+      -- (a -> Term), matching the (a -> Term) -> arg prependForallEncoders adds
+      -- to the encoder scheme. The synthesizer must populate this domain: with
+      -- inference disabled for derived modules (#476), an unannotated binder
+      -- reaches codegen as an untyped term variable, which the Java/Scala coders
+      -- reject. This is the arm top-level bindings flow through (via encodeBinding
+      -- -> encodeTypeNamed), so it covers the outer forall encoder. (#476)
+      Core.termLambda $ Core.lambda (encodeBindingName @@ Core.forallTypeParameter (var "ft"))
+          (just $ Core.typeFunction $ Core.functionType
+            (Core.typeVariable (Core.forallTypeParameter (var "ft")))
+            (Core.typeVariable (Core.nameLift _Term)))
           (encodeTypeNamed @@ var "ename" @@ Core.forallTypeBody (var "ft")),
     _Type_function>>: constant identityEncoder,
     _Type_list>>: "elemType" ~>

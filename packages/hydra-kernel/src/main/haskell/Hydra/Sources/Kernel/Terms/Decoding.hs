@@ -398,10 +398,22 @@ decodeForallType :: TypedTermDefinition (ForallType -> Term)
 decodeForallType = define "decodeForallType" $
   doc "Generate a decoder for a polymorphic (forall) type" $
   "ft" ~>
-    -- Generate a lambda that takes a decoder for the type parameter
+    -- Generate a lambda that takes a decoder for the type parameter.
+    -- The bound parameter IS that decoder; its type is
+    -- (Graph -> Term -> Either DecodingError a), matching the argument
+    -- prependForallDecoders adds to the decoder scheme. The synthesizer must
+    -- populate this domain annotation: with inference disabled for derived
+    -- modules (#476), an unannotated binder reaches codegen as an untyped term
+    -- variable, which the Java/Scala coders reject.
     Core.termLambda $ Core.lambda
         (decodeBindingName @@ Core.forallTypeParameter (var "ft"))
-        nothing
+        (just $ Core.typeFunction $ Core.functionType
+          (Core.typeVariable (Core.nameLift _Graph))
+          (Core.typeFunction $ Core.functionType
+            (Core.typeVariable (Core.nameLift _Term))
+            (Core.typeEither $ Core.eitherType
+              (Core.typeVariable (Core.nameLift _DecodingError))
+              (Core.typeVariable (Core.forallTypeParameter (var "ft"))))))
         (decodeType @@ Core.forallTypeBody (var "ft"))
 
 -- | Generate a decoder for an Either type
@@ -735,7 +747,21 @@ decodeTypeNamed = define "decodeTypeNamed" $
         @@@ (decodeType @@ Core.applicationTypeArgument (var "appType")),
     _Type_either>>: "et" ~> decodeEitherType @@ var "et",
     _Type_forall>>: "ft" ~>
-      Core.termLambda $ Core.lambda (decodeBindingName @@ Core.forallTypeParameter (var "ft")) nothing
+      -- The bound parameter IS the decoder for the type parameter; its type is
+      -- (Graph -> Term -> Either DecodingError a), matching the argument
+      -- prependForallDecoders adds to the decoder scheme. The synthesizer must
+      -- populate this domain: with inference disabled for derived modules (#476),
+      -- an unannotated binder reaches codegen as an untyped term variable, which
+      -- the Java/Scala coders reject. This is the arm top-level bindings flow
+      -- through (via decodeBinding -> decodeTypeNamed). (#476)
+      Core.termLambda $ Core.lambda (decodeBindingName @@ Core.forallTypeParameter (var "ft"))
+          (just $ Core.typeFunction $ Core.functionType
+            (Core.typeVariable (Core.nameLift _Graph))
+            (Core.typeFunction $ Core.functionType
+              (Core.typeVariable (Core.nameLift _Term))
+              (Core.typeEither $ Core.eitherType
+                (Core.typeVariable (Core.nameLift _DecodingError))
+                (Core.typeVariable (Core.forallTypeParameter (var "ft"))))))
           (decodeTypeNamed @@ var "ename" @@ Core.forallTypeBody (var "ft")),
     _Type_list>>: "elemType" ~> decodeListType @@ var "elemType",
     _Type_literal>>: "lt" ~> decodeLiteralType @@ var "lt",

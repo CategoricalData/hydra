@@ -223,6 +223,13 @@
             "body": {
               "lambda": {
                 "parameter": "t",
+                "domain": {
+                  "function": {
+                    "domain": {"variable": "hydra.graph.Graph"},
+                    "codomain": {
+                      "function": {
+                        "domain": {"variable": "hydra.core.Term"},
+                        "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "t"}}}}}}},
                 "body": {
                   "lambda": {
                     "parameter": "cx",
@@ -694,6 +701,13 @@
             "body": {
               "lambda": {
                 "parameter": "v",
+                "domain": {
+                  "function": {
+                    "domain": {"variable": "hydra.graph.Graph"},
+                    "codomain": {
+                      "function": {
+                        "domain": {"variable": "hydra.core.Term"},
+                        "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "v"}}}}}}},
                 "body": {
                   "lambda": {
                     "parameter": "cx",
@@ -1005,6 +1019,13 @@
             "body": {
               "lambda": {
                 "parameter": "t",
+                "domain": {
+                  "function": {
+                    "domain": {"variable": "hydra.graph.Graph"},
+                    "codomain": {
+                      "function": {
+                        "domain": {"variable": "hydra.core.Term"},
+                        "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "t"}}}}}}},
                 "body": {
                   "lambda": {
                     "parameter": "cx",
@@ -1281,6 +1302,13 @@
             "body": {
               "lambda": {
                 "parameter": "v",
+                "domain": {
+                  "function": {
+                    "domain": {"variable": "hydra.graph.Graph"},
+                    "codomain": {
+                      "function": {
+                        "domain": {"variable": "hydra.core.Term"},
+                        "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "v"}}}}}}},
                 "body": {
                   "lambda": {
                     "parameter": "cx",
@@ -1416,6 +1444,13 @@
             "body": {
               "lambda": {
                 "parameter": "v",
+                "domain": {
+                  "function": {
+                    "domain": {"variable": "hydra.graph.Graph"},
+                    "codomain": {
+                      "function": {
+                        "domain": {"variable": "hydra.core.Term"},
+                        "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "v"}}}}}}},
                 "body": {
                   "lambda": {
                     "parameter": "cx",

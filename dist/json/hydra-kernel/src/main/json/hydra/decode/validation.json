@@ -492,6 +492,13 @@
             "body": {
               "lambda": {
                 "parameter": "e",
+                "domain": {
+                  "function": {
+                    "domain": {"variable": "hydra.graph.Graph"},
+                    "codomain": {
+                      "function": {
+                        "domain": {"variable": "hydra.core.Term"},
+                        "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "e"}}}}}}},
                 "body": {
                   "lambda": {
                     "parameter": "cx",

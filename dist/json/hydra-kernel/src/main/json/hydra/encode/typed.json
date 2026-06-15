@@ -23,6 +23,7 @@
             "body": {
               "lambda": {
                 "parameter": "a",
+                "domain": {"function": {"domain": {"variable": "a"}, "codomain": {"variable": "hydra.core.Term"}}},
                 "body": {
                   "lambda": {
                     "parameter": "x",
@@ -89,6 +90,7 @@
             "body": {
               "lambda": {
                 "parameter": "a",
+                "domain": {"function": {"domain": {"variable": "a"}, "codomain": {"variable": "hydra.core.Term"}}},
                 "body": {
                   "lambda": {
                     "parameter": "x",
@@ -132,6 +134,7 @@
             "body": {
               "lambda": {
                 "parameter": "a",
+                "domain": {"function": {"domain": {"variable": "a"}, "codomain": {"variable": "hydra.core.Term"}}},
                 "body": {
                   "lambda": {
                     "parameter": "x",
