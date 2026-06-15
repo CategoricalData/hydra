@@ -232,6 +232,25 @@ public class Bootstrap {
                 System.exit(1);
         }
 
+        // #473 Step 0 — lib pass + redirect. The hydra.lib.* primitive IMPLEMENTATIONS live at
+        // hydra.<lang>.lib.* (the analog of Haskell's Hydra.Haskell.Lib.*), so hydra.lib.* is free
+        // for the generated PrimitiveDefinition def-modules. This mirrors the Haskell driver's
+        // twoPassLib logic in bootstrap-from-json/Main.hs: when the Java host generates a target
+        // that consumes def-modules (everything except haskell, which uses the registry), it must
+        //   (1) emit the hydra.lib.* def-modules from their LOWERED form (lib pass), and
+        //   (2) redirect generated CONSUMER call-sites hydra.lib.<sub>.<fn> -> hydra.<lang>.lib.<sub>.<fn>
+        //       so they resolve to the relocated impls (redirect; a no-op for Java, whose def-modules
+        //       are capitalized classes that don't collide with the lowercase impl subpackages).
+        // Without this, self-host (java-to-java, java-to-python, ...) emits impls whose name() refers
+        // to hydra.lib.Math_ etc. but never emits those def-modules -> "cannot find symbol" /
+        // "PrimitiveDefinition object is not callable". See project_473_self_host_lib_pass_gap.
+        // The lib pass runs now (alongside the main pass output); the redirect runs LAST (after the
+        // test + ext-for-tests passes below also write into outMain/<target> and outTest/<target>),
+        // so every generated consumer file gets its hydra.lib.* impl call-sites redirected.
+        if (!target.equals("haskell")) {
+            runLibPass(target, outMain + File.separator + target, allMainMods, modsToGenerate);
+        }
+
         stepTime = System.currentTimeMillis() - stepStart;
 
         Map<String, String> extMap = new java.util.HashMap<>();
@@ -352,6 +371,16 @@ public class Bootstrap {
             System.out.println();
         }
 
+        // #473 redirect — run LAST, over every generated dir (main + test), so consumer call-sites
+        // written by any pass (main, lib, test, ext-for-tests) have their hydra.lib.* impl references
+        // rewritten to hydra.<lang>.lib.*. See the lib-pass note above and project_473_self_host_lib_pass_gap.
+        if (!target.equals("haskell")) {
+            redirectLibCalls(target, outMain + File.separator + target);
+            if (includeTests) {
+                redirectLibCalls(target, outDir + File.separator + "src/test" + File.separator + target);
+            }
+        }
+
         long totalTime = System.currentTimeMillis() - totalStart;
 
         System.out.println("==========================================");
@@ -419,6 +448,102 @@ public class Bootstrap {
             long mins = millis / 60000;
             double secs = (millis % 60000) / 1000.0;
             return String.format("%dm %.1fs", mins, secs);
+        }
+    }
+
+    // The hydra.lib.* sub-namespaces whose primitives get def-modules + impl relocation (#473).
+    private static final List<String> LIB_SUBS = Arrays.asList(
+            "chars", "eithers", "equality", "lists", "literals", "logic", "maps",
+            "math", "optionals", "pairs", "regex", "sets", "strings");
+
+    private static boolean isLibModule(Module m) {
+        return m.name.value.startsWith("hydra.lib.");
+    }
+
+    /**
+     * #473 lib pass: emit the hydra.lib.* PrimitiveDefinition def-modules from their LOWERED form.
+     * The lib modules are filtered from modsToGenerate, lowered via Codegen.lowerPrimitiveDefinitions,
+     * and emitted with a lib-only-lowered universe (consumer modules in the universe stay un-lowered so
+     * a lib default-implementation referencing another primitive resolves to the primitive, not a
+     * lowered binding). Mirrors genForDirLib in bootstrap-from-json/Main.hs.
+     */
+    private static void runLibPass(String target, String langDir,
+                                   List<Module> allMainMods, List<Module> modsToGenerate) {
+        List<Module> libMods = new ArrayList<>();
+        for (Module m : modsToGenerate) {
+            if (isLibModule(m)) libMods.add(Codegen.lowerPrimitiveDefinitions(m));
+        }
+        if (libMods.isEmpty()) return;
+
+        List<Module> libUniverse = new ArrayList<>();
+        for (Module m : allMainMods) {
+            libUniverse.add(isLibModule(m) ? Codegen.lowerPrimitiveDefinitions(m) : m);
+        }
+
+        System.out.println("Lib pass: emitting " + libMods.size()
+                + " hydra.lib.* definition modules to " + target + "...");
+        switch (target) {
+            case "java":        GenerationTargets.writeJava(langDir, libUniverse, libMods); break;
+            case "python":      GenerationTargets.writePython(langDir, libUniverse, libMods); break;
+            case "scala":       GenerationTargets.writeScala(langDir, libUniverse, libMods); break;
+            case "typescript":  GenerationTargets.writeTypeScript(langDir, libUniverse, libMods); break;
+            case "clojure":     GenerationTargets.writeLispDialect(langDir, "clojure", "clj", libUniverse, libMods); break;
+            case "scheme":      GenerationTargets.writeLispDialect(langDir, "scheme", "scm", libUniverse, libMods); break;
+            case "common-lisp": GenerationTargets.writeLispDialect(langDir, "commonLisp", "lisp", libUniverse, libMods); break;
+            case "emacs-lisp":  GenerationTargets.writeLispDialect(langDir, "emacsLisp", "el", libUniverse, libMods); break;
+            default: /* haskell handled by caller guard */ break;
+        }
+    }
+
+    /**
+     * #473 redirect: rewrite generated CONSUMER call-sites hydra.lib.<sub>.<fn> ->
+     * hydra.<lang>.lib.<sub>.<fn> so they resolve to the relocated native impls. Primitive NAME
+     * occurrences inside string literals (canonical "hydra.lib..." names) must stay canonical, so
+     * quote-prefixed occurrences are protected by a sentinel, the rest redirected, then restored.
+     * No-op for Java (def-modules are capitalized classes that don't collide with lowercase impl
+     * subpackages, and consumer calls already target the impl classes). Mirrors redirectFor /
+     * redirectSchemeFor / redirectLispFlat in bootstrap-from-json/Main.hs. (Scheme/Lisp dialects use
+     * different reference shapes; handled here for the dotted languages — Python/Scala/Clojure.)
+     */
+    private static void redirectLibCalls(String target, String langDir) {
+        String langSeg;
+        switch (target) {
+            case "python":  langSeg = "python"; break;
+            case "scala":   langSeg = "scala"; break;
+            case "clojure": langSeg = "clojure"; break;
+            default: return; // java + others: no dotted-path redirect needed here
+        }
+        final String sentinel = "@@HYDRA_LIB_NAME@@"; // improbable token; never appears in generated source
+        java.nio.file.Path root = Paths.get(langDir);
+        if (!Files.isDirectory(root)) return;
+        try {
+            List<java.nio.file.Path> files = new ArrayList<>();
+            Files.walk(root).filter(Files::isRegularFile).forEach(files::add);
+            for (java.nio.file.Path p : files) {
+                String pSlash = p.toString().replace(File.separatorChar, '/');
+                // Skip the lib-pass def-module dir (hydra/lib/) — those keep canonical hydra.lib.* paths
+                // (redirecting would relocate def-modules onto the impls; see the Scala self-host case) —
+                // and the hand-written registry overlay (hydra/sources/libraries.*), which deliberately
+                // imports BOTH the relocated impl and the def-module (aliased, for `def_X.fn.name`). The
+                // Haskell driver keeps both canonical by never transforming them.
+                if (pSlash.contains("/hydra/lib/") || pSlash.contains("hydra/sources/libraries.")) continue;
+                String s = new String(Files.readAllBytes(p), java.nio.charset.StandardCharsets.UTF_8);
+                if (!s.contains("hydra.lib.")) continue;
+                // protect quoted primitive-NAME strings
+                String out = s.replace("\"hydra.lib.", "\"" + sentinel);
+                for (String sub : LIB_SUBS) {
+                    out = out.replace("hydra.lib." + sub + ".",  "hydra." + langSeg + ".lib." + sub + ".");
+                    out = out.replace("hydra.lib." + sub + "\n", "hydra." + langSeg + ".lib." + sub + "\n");
+                    out = out.replace("hydra.lib." + sub + " ",  "hydra." + langSeg + ".lib." + sub + " ");
+                    out = out.replace("hydra.lib import " + sub, "hydra." + langSeg + ".lib import " + sub);
+                }
+                out = out.replace(sentinel, "hydra.lib.");
+                if (!out.equals(s)) {
+                    Files.write(p, out.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+                }
+            }
+        } catch (java.io.IOException e) {
+            throw new RuntimeException("Lib-call redirect failed under " + langDir, e);
         }
     }
 }

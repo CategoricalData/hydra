@@ -489,6 +489,33 @@ receive — e.g. `findWithDefault` returns `def() if callable(def) else def` on 
 coder now passes a thunk where it used to pass a value. Forgetting either half passes Haskell-hosted
 generation but fails self-host (the symptom that motivated the #391 self-host fix).
 
+#### Self-host requires the lib pass + redirect in your host's generation driver (#473)
+
+Under #473, primitive **definitions** (`PrimitiveDefinition` metadata) live in the language-independent
+`hydra.lib.*` modules, while each host's native **implementations** live alongside at
+`hydra.<lang>.lib.*` (the analog of Haskell's `Hydra.Haskell.Lib.*`). The relocation is performed
+**entirely by the generation driver**, not by any coder — so when your language hosts code generation
+(self-hosting), your host's bootstrap driver (e.g. `heads/<lang>/.../Bootstrap.*`, the analog of
+`heads/haskell/src/exec/bootstrap-from-json/Main.hs`) must do two things the Haskell driver does:
+
+1. **Lib pass**: emit the `hydra.lib.*` `PrimitiveDefinition` def-modules from their *lowered* form
+   (`hydra.codegen.lowerPrimitiveDefinitions`), with a universe that lowers only the lib modules.
+2. **Redirect**: rewrite generated *consumer* references to the relocated impl path
+   (`hydra.lib.<sub>` → `hydra.<lang>.lib.<sub>`), in whatever syntactic form your language uses —
+   dotted member access/imports (Java/Python/Scala/Clojure), R7RS `(hydra lib X)` → `(hydra <lang> lib X)`
+   (Scheme), or flat-symbol rename `hydra_lib_<sub>_` → `hydra_<lang>_lib_<sub>_` plus dropping the
+   def-module from `:use` clauses (Common Lisp / Emacs Lisp). The redirect must run **last** (over both
+   `src/main` and `src/test`) and must **skip the `hydra/lib/` directory** — those are the def-modules,
+   which keep their canonical `hydra.lib.*` names; redirecting them relocates the def-modules on top of
+   the impls. Primitive *name strings* (quoted `"hydra.lib..."`) must also be preserved (protect them
+   with a sentinel before redirecting).
+
+Two non-driver gaps to watch when a host self-hosts after the relocation: the per-cell
+`setup-<lang>-target.sh` and the host's own bootstrap loaders may hardcode the old `hydra/lib/` impl
+paths — point them at `hydra/<lang>/lib/`. Like #391, forgetting any of this passes Haskell-hosted
+generation but breaks self-host (`cannot find symbol` / `'PrimitiveDefinition' object is not callable` /
+`Wrong type to apply: PrimitiveDefinition`).
+
 When auto-detecting type variables from the type schemes of primitives, be aware that type variable names
 containing dots (e.g. `hydra.util.Comparison`) are nominal type references, not universally
 quantified type parameters. Exclude qualified names to avoid incorrect generalization.

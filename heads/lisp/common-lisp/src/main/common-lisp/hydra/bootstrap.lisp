@@ -289,6 +289,83 @@
           (force-output)))
       (length files))))
 
+;; #473 Step 0 — lib pass + redirect (mirrors the other host drivers + bootstrap-from-json/Main.hs).
+;; Common Lisp is flat-namespace: native primitive IMPLEMENTATIONS were relocated to symbols
+;; hydra_lisp_lib_<sub>_<fn> (in :cl-user); the def-modules ship as real packages :hydra.lib.<sub>
+;; exporting the bare def symbols hydra_lib_<sub>_<fn> (PrimitiveDefinition values). The CL host must
+;; (1) emit the :hydra.lib.<sub> def-modules from their LOWERED form (lib pass), and (2) in generated
+;; consumers, rename call sites hydra_lib_<sub>_ -> hydra_lisp_lib_<sub>_ (hit the relocated impls) and
+;; DROP the ":hydra.lib.<sub>" token from defpackage (:use ...) clauses (so a consumer doesn't import the
+;; def-module DATA over the impl). Primitive NAME strings are dotted "hydra.lib..." and untouched by the
+;; underscore rename. See project_473_self_host_lib_pass_gap.
+(defparameter *lib-subs*
+  '("chars" "eithers" "equality" "lists" "literals" "logic" "maps"
+    "math" "optionals" "pairs" "regex" "sets" "strings"))
+
+(defun lib-module-p (m)
+  (let* ((mn (funcall 'hydra_packaging_module-name m))
+         (ns (if (stringp mn) mn (funcall 'hydra_packaging_module_name-value mn))))
+    (and (>= (length ns) 10) (string= (subseq ns 0 10) "hydra.lib."))))
+
+(defun run-lib-pass (coder language flags out-main all-mods mods-to-generate)
+  "Emit the :hydra.lib.<sub> def-modules from their LOWERED form (lib modules lowered; universe lowers
+   ONLY lib modules)."
+  (let* ((lower (symbol-value 'hydra_codegen_lower_primitive_definitions))
+         (lib-mods (mapcar lower (remove-if-not #'lib-module-p mods-to-generate))))
+    (when lib-mods
+      (let ((lib-universe (mapcar (lambda (m) (if (lib-module-p m) (funcall lower m) m)) all-mods)))
+        (format t "Lib pass: emitting ~A :hydra.lib.* definition modules~%" (length lib-mods))
+        (force-output)
+        (generate-sources coder language flags out-main lib-universe lib-mods)))))
+
+(defun string-replace-all (s from to)
+  "Replace every occurrence of FROM with TO in S."
+  (let ((flen (length from)))
+    (with-output-to-string (out)
+      (let ((i 0) (slen (length s)))
+        (loop
+          (let ((pos (search from s :start2 i)))
+            (cond
+              ((null pos) (write-string s out :start i) (return))
+              (t (write-string s out :start i :end pos)
+                 (write-string to out)
+                 (setf i (+ pos flen))))))))))
+
+(defun read-file-string (path)
+  (with-open-file (in path :direction :input :external-format :utf-8 :if-does-not-exist nil)
+    (when in
+      (let ((s (make-string (file-length in))))
+        (let ((n (read-sequence s in))) (subseq s 0 n))))))
+
+(defun write-file-string (path content)
+  (with-open-file (out path :direction :output :if-exists :supersede :external-format :utf-8)
+    (write-string content out)))
+
+(defun lib-def-path-p (path)
+  "Files under hydra/lib/ are the lib-pass def-modules + hand-written registry; never redirect them."
+  (search "/hydra/lib/" (namestring path)))
+
+(defun redirect-cl (s)
+  "Rename consumer call sites + drop the def-module :use token, per *lib-subs*."
+  (let ((out s))
+    (dolist (sub *lib-subs* out)
+      (setf out (string-replace-all out
+                                    (concatenate 'string "hydra_lib_" sub "_")
+                                    (concatenate 'string "hydra_lisp_lib_" sub "_")))
+      ;; Drop the ":hydra.lib.<sub>" token from (:use ...) — appears on its own line.
+      (setf out (string-replace-all out
+                                    (concatenate 'string (string #\Newline) ":hydra.lib." sub)
+                                    (string #\Newline))))))
+
+(defun redirect-lib-calls (lang-dir)
+  "#473 redirect over a generated dir (Common Lisp flat-namespace form)."
+  (dolist (path (directory (merge-pathnames "**/*.*" (pathname (concatenate 'string lang-dir "/")))))
+    (when (and (pathname-name path) (not (lib-def-path-p path)))
+      (let ((s (read-file-string path)))
+        (when (and s (or (search "hydra_lib_" s) (search ":hydra.lib." s)))
+          (let ((out (redirect-cl s)))
+            (when (string/= out s) (write-file-string path out))))))))
+
 ;; --- Main ---
 
 ;; Re-set function bindings after coder modules are loaded
@@ -357,6 +434,10 @@
               (format t "  Time: ~,1Fs~%" main-secs)
               (force-output)
 
+              ;; #473 lib pass: emit the :hydra.lib.* def-modules now (redirect runs LAST, below).
+              (unless (string= *target* "haskell")
+                (run-lib-pass coder language flags out-main all-mods mods-to-generate))
+
               ;; Tests
               (when *include-tests*
                 (format t "~%Loading test modules from JSON...~%")
@@ -397,6 +478,15 @@
                   (let ((test-secs (/ (- (get-internal-real-time) test-start) internal-time-units-per-second 1.0)))
                     (format t "  Generated ~A test files.~%" test-file-count)
                     (format t "  Time: ~,1Fs~%" test-secs))))
+
+              ;; #473 redirect — run LAST over every generated dir (main + test) so consumer call sites
+              ;; hydra_lib_<sub>_ are renamed to hydra_lisp_lib_<sub>_ and the def-module :use token dropped.
+              (unless (string= *target* "haskell")
+                (redirect-lib-calls (format nil "~A/common-lisp-to-~A/src/main/~A"
+                                            *output-base* *target* subdir))
+                (when *include-tests*
+                  (redirect-lib-calls (format nil "~A/common-lisp-to-~A/src/test/~A"
+                                              *output-base* *target* subdir))))
 
               (format t "~%==========================================~%")
               (format t "Done: ~A main + ~A test files~%" file-count test-file-count)

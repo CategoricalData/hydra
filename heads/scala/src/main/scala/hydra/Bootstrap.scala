@@ -158,6 +158,16 @@ import _root_.java.io.File
   println(s"  Time: ${Generation.formatTime(stepTime)}")
   println()
 
+  // #473 Step 0 — lib pass + redirect (see project_473_self_host_lib_pass_gap / the Java/Python host
+  // drivers + bootstrap-from-json/Main.hs). The hydra.lib.* primitive IMPLEMENTATIONS live at
+  // hydra.<lang>.lib.*; hydra.lib.* is free for the generated PrimitiveDefinition def-modules. When the
+  // Scala host generates a target that consumes def-modules (everything except haskell, which uses the
+  // registry), it must (1) emit the hydra.lib.* def-modules from their LOWERED form (lib pass, now), and
+  // (2) redirect generated consumer call-sites to hydra.<lang>.lib.* (redirect, LAST — after the test
+  // pass below also writes into outMain/<target> and outTest/<target>).
+  if tgt != "haskell" then
+    BootstrapHelpers.runLibPass(tgt, outMain + File.separator + tgt, allMainMods, modsToGenerate)
+
   // Optionally load and generate test modules. Test modules live under
   // hydra-kernel/src/test/json/, and the kernel's main manifest lists them.
   var testFileCount = 0
@@ -213,6 +223,13 @@ import _root_.java.io.File
     println(s"  Time: ${Generation.formatTime(stepTime)}")
     println()
 
+  // #473 redirect — run LAST, over every generated dir (main + test), so consumer call-sites written by
+  // any pass have their hydra.lib.* impl references rewritten to hydra.<lang>.lib.*. See the lib-pass note.
+  if tgt != "haskell" then
+    BootstrapHelpers.redirectLibCalls(tgt, outMain + File.separator + tgt)
+    if includeTests then
+      BootstrapHelpers.redirectLibCalls(tgt, outDir + File.separator + "src/test" + File.separator + tgt)
+
   val totalTime = System.currentTimeMillis() - totalStart
   val testStr = if includeTests then s" + $testFileCount test" else ""
   println("==========================================")
@@ -224,6 +241,103 @@ end bootstrap
 
 /** Helpers for walking the per-package dist/json/ layout. */
 object BootstrapHelpers:
+
+  /** The hydra.lib.* sub-namespaces whose primitives get def-modules + impl relocation (#473). */
+  private val libSubs = Seq("chars", "eithers", "equality", "lists", "literals", "logic", "maps",
+    "math", "optionals", "pairs", "regex", "sets", "strings")
+
+  private def isLibModule(m: hydra.packaging.Module): Boolean =
+    m.name.startsWith("hydra.lib.")
+
+  /** #473 lib pass: emit the hydra.lib.* PrimitiveDefinition def-modules from their LOWERED form.
+   *  Mirrors genForDirLib in bootstrap-from-json/Main.hs. The lib modules are filtered from
+   *  modsToGenerate and lowered; the universe lowers ONLY the lib modules so a lib
+   *  default-implementation referencing another primitive resolves to the primitive, not a lowered
+   *  binding. */
+  def runLibPass(target: String, langDir: String, allMainMods: Seq[hydra.packaging.Module],
+      modsToGenerate: Seq[hydra.packaging.Module]): Unit =
+    val libMods = modsToGenerate.filter(isLibModule).map(hydra.codegen.lowerPrimitiveDefinitions)
+    if libMods.isEmpty then return
+    val libUniverse = allMainMods.map(m => if isLibModule(m) then hydra.codegen.lowerPrimitiveDefinitions(m) else m)
+    println(s"Lib pass: emitting ${libMods.size} hydra.lib.* definition modules to $target...")
+    target match
+      case "java" => Generation.writeJava(langDir, libUniverse, libMods)
+      case "python" => Generation.writePython(langDir, libUniverse, libMods)
+      case "scala" => Generation.writeScala(langDir, libUniverse, libMods)
+      case "clojure" => Generation.writeLispDialect(langDir, "clojure", "clj", libUniverse, libMods)
+      case "scheme" => Generation.writeLispDialect(langDir, "scheme", "scm", libUniverse, libMods)
+      case "common-lisp" => Generation.writeLispDialect(langDir, "commonLisp", "lisp", libUniverse, libMods)
+      case "emacs-lisp" => Generation.writeLispDialect(langDir, "emacsLisp", "el", libUniverse, libMods)
+      case _ => ()
+
+  /** #473 redirect: rewrite generated CONSUMER references from hydra.lib.<sub> to the relocated
+   *  hydra.<lang>.lib.<sub> impl namespace. Per-dialect shapes mirror bootstrap-from-json/Main.hs:
+   *  dotted (scala/clojure), R7RS space-form (scheme), flat-symbol (common-lisp/emacs). Primitive
+   *  NAME strings ("hydra.lib...") and the hand-written registry are left untouched. No-op for java. */
+  def redirectLibCalls(target: String, langDir: String): Unit =
+    val dir = new File(langDir)
+    if !dir.isDirectory then return
+    val files = allFilesUnder(dir)
+    target match
+      case "scala" | "clojure" =>
+        val langSeg = target
+        for f <- files if !isLibDefFile(f) do
+          val s = readFile(f)
+          if s.contains("hydra.lib.") then
+            val out = redirectDotted(s, langSeg)
+            if out != s then writeFile(f, out)
+      case "scheme" =>
+        for f <- files do
+          val s = readFile(f)
+          if s.contains("(hydra lib ") then
+            var out = s
+            for sub <- libSubs do out = out.replace(s"(hydra lib $sub)", s"(hydra scheme lib $sub)")
+            if out != s then writeFile(f, out)
+      case "common-lisp" | "emacs-lisp" =>
+        for f <- files do
+          val s = readFile(f)
+          if s.contains("hydra_lib_") || s.contains(":hydra.lib.") then
+            var out = s
+            for sub <- libSubs do
+              out = out.replace(s"hydra_lib_${sub}_", s"hydra_lisp_lib_${sub}_")
+              out = out.replace(s" :hydra.lib.$sub", "")
+            if out != s then writeFile(f, out)
+      case _ => () // java + haskell: no redirect
+
+  /** Dotted-language redirect (scala/clojure), protecting quoted primitive-NAME strings. */
+  private def redirectDotted(s: String, langSeg: String): String =
+    val sentinel = "@@HYDRA_LIB_NAME@@" // improbable token; never appears in generated source
+    var out = s.replace("\"hydra.lib.", "\"" + sentinel)
+    for sub <- libSubs do
+      val old = "hydra.lib." + sub
+      val nw = "hydra." + langSeg + ".lib." + sub
+      out = out.replace(old + ".", nw + ".")
+      out = out.replace(old + ";", nw + ";")
+      out = out.replace(old + "\n", nw + "\n")
+      out = out.replace(old + " ", nw + " ")
+      out = out.replace(old + "}", nw + "}")
+    out.replace(sentinel, "hydra.lib.")
+
+  /** Files under `hydra/lib/` must NOT be redirected: the lib pass emits the def-modules there and they
+   *  must keep their canonical `package hydra.lib.*` (redirecting the package decl would relocate the
+   *  def-module on top of the hand-written impl at hydra.<lang>.lib.* and shadow its generic methods with
+   *  the def-module's `lazy val`s — "does not take type parameters"). The hand-written registry
+   *  (`hydra/lib/Libraries.scala`) also lives here and likewise imports the def-module for `.name`
+   *  derivation. The Haskell driver keeps these canonical by running the lib pass with NO redirect.
+   *  Consumers that need redirecting live everywhere EXCEPT hydra/lib/. */
+  private def isLibDefFile(f: File): Boolean =
+    f.getPath.replace(File.separatorChar, '/').contains("/hydra/lib/")
+
+  private def allFilesUnder(dir: File): Seq[File] =
+    val here = Option(dir.listFiles()).getOrElse(Array.empty[File]).toSeq
+    here.flatMap(f => if f.isDirectory then allFilesUnder(f) else Seq(f))
+
+  private def readFile(f: File): String =
+    new String(_root_.java.nio.file.Files.readAllBytes(f.toPath), _root_.java.nio.charset.StandardCharsets.UTF_8)
+
+  private def writeFile(f: File, content: String): Unit =
+    _root_.java.nio.file.Files.write(f.toPath, content.getBytes(_root_.java.nio.charset.StandardCharsets.UTF_8))
+
   /** Return the JSON directory for a package's main modules. */
   def packageMainDir(root: String, pkg: String): String =
     root + File.separator + pkg + File.separator + "src" +
