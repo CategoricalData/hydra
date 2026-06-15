@@ -61,7 +61,7 @@ fileExtension x =
       Core.wrappedTermTypeName = (Core.Name "hydra.util.FileExtension"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Util.unFileExtension x))})
 -- | Encoder for hydra.util.ModuleNames
-moduleNames :: (t0 -> Core.Term) -> Util.ModuleNames t0 -> Core.Term
+moduleNames :: (n -> Core.Term) -> Util.ModuleNames n -> Core.Term
 moduleNames n x =
     Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.util.ModuleNames"),

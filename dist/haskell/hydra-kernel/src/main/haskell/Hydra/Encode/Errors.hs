@@ -19,7 +19,7 @@ decodingError x =
       Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Errors.unDecodingError x))})
 -- | Encoder for hydra.errors.EmptyListError
-emptyListError :: t0 -> Core.Term
+emptyListError :: () -> Core.Term
 emptyListError _ = Core.TermUnit
 -- | Encoder for hydra.errors.Error
 error :: Errors.Error -> Core.Term
@@ -204,7 +204,7 @@ noSuchPrimitiveError x =
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (Errors.noSuchPrimitiveErrorName x))}]})
 -- | Encoder for hydra.errors.NotEnoughCasesError
-notEnoughCasesError :: t0 -> Core.Term
+notEnoughCasesError :: () -> Core.Term
 notEnoughCasesError _ = Core.TermUnit
 -- | Encoder for hydra.errors.OtherError
 otherError :: Errors.OtherError -> Core.Term

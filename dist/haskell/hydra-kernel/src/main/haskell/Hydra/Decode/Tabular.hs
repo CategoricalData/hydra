@@ -26,7 +26,7 @@ columnType cx raw =
           Tabular.columnTypeType = field_type}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.tabular.ColumnType")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.tabular.DataRow
-dataRow :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Tabular.DataRow t0)
+dataRow :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError v) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Tabular.DataRow v)
 dataRow v cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermWrap v0 -> Eithers.map (\b -> Tabular.DataRow b) (ExtractCore.decodeList (ExtractCore.decodeMaybe v) cx (Core.wrappedTermBody v0))
@@ -42,7 +42,7 @@ headerRow cx raw =
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) cx (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.tabular.Table
-table :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Tabular.Table t0)
+table :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError v) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Tabular.Table v)
 table v cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->

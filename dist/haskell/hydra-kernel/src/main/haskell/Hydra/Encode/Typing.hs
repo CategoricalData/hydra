@@ -12,7 +12,7 @@ import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Encoder for hydra.typing.FunctionStructure
-functionStructure :: (t0 -> Core.Term) -> Typing.FunctionStructure t0 -> Core.Term
+functionStructure :: (env -> Core.Term) -> Typing.FunctionStructure env -> Core.Term
 functionStructure env x =
     Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.typing.FunctionStructure"),

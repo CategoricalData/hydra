@@ -11,7 +11,7 @@
           "parameters": [
             {
               "name": "arg0",
-              "type": {"map": {"keys": {"literal": {"integer": {"int32": {}}}}, "values": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+              "type": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"list": {"variable": "hydra.topology.Vertex"}}}},
               "isLazy": false}],
           "result": {"type": {"variable": "hydra.core.Term"}}},
         "body": {
@@ -19,7 +19,7 @@
             "body": {
               "lambda": {
                 "parameter": "m",
-                "domain": {"map": {"keys": {"literal": {"integer": {"int32": {}}}}, "values": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                "domain": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"list": {"variable": "hydra.topology.Vertex"}}}},
                 "body": {
                   "inject": {
                     "typeName": "hydra.core.Term",
@@ -37,15 +37,15 @@
                                         "typeApplication": {
                                           "body": {
                                             "typeApplication": {
-                                              "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.bimap"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                              "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.bimap"}, "type": {"variable": "hydra.topology.Vertex"}}},
                                               "type": {"variable": "hydra.core.Term"}}},
-                                          "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                          "type": {"list": {"variable": "hydra.topology.Vertex"}}}},
                                       "type": {"variable": "hydra.core.Term"}}},
                                   "argument": {"variable": "hydra.encode.topology.vertex"}}},
                               "argument": {
                                 "lambda": {
                                   "parameter": "xs",
-                                  "domain": {"list": {"literal": {"integer": {"int32": {}}}}},
+                                  "domain": {"list": {"variable": "hydra.topology.Vertex"}},
                                   "body": {
                                     "inject": {
                                       "typeName": "hydra.core.Term",
@@ -57,7 +57,7 @@
                                               "application": {
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.topology.Vertex"}}},
                                                     "type": {"variable": "hydra.core.Term"}}},
                                                 "argument": {"variable": "hydra.encode.topology.vertex"}}},
                                             "argument": {"variable": "xs"}}}}}}}}}},
@@ -132,7 +132,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "parameter": "m",
-                                                  "domain": {"map": {"keys": {"literal": {"integer": {"int32": {}}}}, "values": {"literal": {"integer": {"int32": {}}}}}},
+                                                  "domain": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}},
                                                   "body": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Term",
@@ -150,7 +150,7 @@
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
-                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.bimap"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.bimap"}, "type": {"variable": "hydra.topology.Vertex"}}},
                                                                                 "type": {"variable": "hydra.core.Term"}}},
                                                                             "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                         "type": {"variable": "hydra.core.Term"}}},
@@ -187,7 +187,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "parameter": "m",
-                                                  "domain": {"map": {"keys": {"literal": {"integer": {"int32": {}}}}, "values": {"literal": {"integer": {"int32": {}}}}}},
+                                                  "domain": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}},
                                                   "body": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Term",
@@ -205,7 +205,7 @@
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
-                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.bimap"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.bimap"}, "type": {"variable": "hydra.topology.Vertex"}}},
                                                                                 "type": {"variable": "hydra.core.Term"}}},
                                                                             "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                         "type": {"variable": "hydra.core.Term"}}},
@@ -242,7 +242,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "parameter": "xs",
-                                                  "domain": {"list": {"literal": {"integer": {"int32": {}}}}},
+                                                  "domain": {"list": {"variable": "hydra.topology.Vertex"}},
                                                   "body": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Term",
@@ -254,7 +254,7 @@
                                                               "application": {
                                                                 "function": {
                                                                   "typeApplication": {
-                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.topology.Vertex"}}},
                                                                     "type": {"variable": "hydra.core.Term"}}},
                                                                 "argument": {"variable": "hydra.encode.topology.vertex"}}},
                                                             "argument": {"variable": "xs"}}}}}}}},
@@ -274,7 +274,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "parameter": "s",
-                                                  "domain": {"set": {"literal": {"integer": {"int32": {}}}}},
+                                                  "domain": {"set": {"variable": "hydra.topology.Vertex"}},
                                                   "body": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Term",
@@ -286,7 +286,7 @@
                                                               "application": {
                                                                 "function": {
                                                                   "typeApplication": {
-                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.sets.map"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.sets.map"}, "type": {"variable": "hydra.topology.Vertex"}}},
                                                                     "type": {"variable": "hydra.core.Term"}}},
                                                                 "argument": {"variable": "hydra.encode.topology.vertex"}}},
                                                             "argument": {"variable": "s"}}}}}}}},
@@ -306,7 +306,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "parameter": "xs",
-                                                  "domain": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}},
+                                                  "domain": {"list": {"list": {"variable": "hydra.topology.Vertex"}}},
                                                   "body": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Term",
@@ -319,12 +319,12 @@
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {
-                                                                      "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                                      "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"list": {"variable": "hydra.topology.Vertex"}}}},
                                                                     "type": {"variable": "hydra.core.Term"}}},
                                                                 "argument": {
                                                                   "lambda": {
                                                                     "parameter": "xs",
-                                                                    "domain": {"list": {"literal": {"integer": {"int32": {}}}}},
+                                                                    "domain": {"list": {"variable": "hydra.topology.Vertex"}},
                                                                     "body": {
                                                                       "inject": {
                                                                         "typeName": "hydra.core.Term",
@@ -336,7 +336,7 @@
                                                                                 "application": {
                                                                                   "function": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.topology.Vertex"}}},
                                                                                       "type": {"variable": "hydra.core.Term"}}},
                                                                                   "argument": {"variable": "hydra.encode.topology.vertex"}}},
                                                                               "argument": {"variable": "xs"}}}}}}}}}},

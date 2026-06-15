@@ -1071,13 +1071,14 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"unit": {}}}},
+                                                                                                "body": {
+                                                                                                  "typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"variable": "hydra.errors.EmptyListError"}}},
                                                                                                 "type": {"variable": "hydra.errors.ExtractionError"}}},
                                                                                             "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                         "argument": {
                                                                                           "lambda": {
                                                                                             "parameter": "t",
-                                                                                            "domain": {"unit": {}},
+                                                                                            "domain": {"variable": "hydra.errors.EmptyListError"},
                                                                                             "body": {"inject": {"typeName": "hydra.errors.ExtractionError", "field": {"name": "emptyList", "term": {"variable": "t"}}}}}}}},
                                                                                     "argument": {
                                                                                       "application": {
@@ -1257,13 +1258,14 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"unit": {}}}},
+                                                                                                "body": {
+                                                                                                  "typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"variable": "hydra.errors.NotEnoughCasesError"}}},
                                                                                                 "type": {"variable": "hydra.errors.ExtractionError"}}},
                                                                                             "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                         "argument": {
                                                                                           "lambda": {
                                                                                             "parameter": "t",
-                                                                                            "domain": {"unit": {}},
+                                                                                            "domain": {"variable": "hydra.errors.NotEnoughCasesError"},
                                                                                             "body": {"inject": {"typeName": "hydra.errors.ExtractionError", "field": {"name": "notEnoughCases", "term": {"variable": "t"}}}}}}}},
                                                                                     "argument": {
                                                                                       "application": {

@@ -29,7 +29,7 @@ validationProfile x =
           Core.fieldName = (Core.Name "maxWarnings"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x2))) (Validation.validationProfileMaxWarnings x))}]})
 -- | Encoder for hydra.validation.ValidationResult
-validationResult :: (t0 -> Core.Term) -> Validation.ValidationResult t0 -> Core.Term
+validationResult :: (e -> Core.Term) -> Validation.ValidationResult e -> Core.Term
 validationResult e x =
     Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.validation.ValidationResult"),

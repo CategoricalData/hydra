@@ -20,7 +20,7 @@ parseError x =
           Core.fieldName = (Core.Name "remainder"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Parsing.parseErrorRemainder x))}]})
 -- | Encoder for hydra.parsing.ParseResult
-parseResult :: (t0 -> Core.Term) -> Parsing.ParseResult t0 -> Core.Term
+parseResult :: (a -> Core.Term) -> Parsing.ParseResult a -> Core.Term
 parseResult a x =
     case x of
       Parsing.ParseResultSuccess v0 -> Core.TermInject (Core.Injection {
@@ -34,7 +34,7 @@ parseResult a x =
           Core.fieldName = (Core.Name "failure"),
           Core.fieldTerm = (parseError v0)}})
 -- | Encoder for hydra.parsing.ParseSuccess
-parseSuccess :: (t0 -> Core.Term) -> Parsing.ParseSuccess t0 -> Core.Term
+parseSuccess :: (a -> Core.Term) -> Parsing.ParseSuccess a -> Core.Term
 parseSuccess a x =
     Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.parsing.ParseSuccess"),

@@ -40,7 +40,7 @@ validationProfile cx raw =
           Validation.validationProfileMaxWarnings = field_maxWarnings}))))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.validation.ValidationProfile")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.validation.ValidationResult
-validationResult :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Validation.ValidationResult t0)
+validationResult :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError e) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Validation.ValidationResult e)
 validationResult e cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->

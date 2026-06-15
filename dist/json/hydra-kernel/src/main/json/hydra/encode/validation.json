@@ -159,116 +159,106 @@
       "term": {
         "name": "hydra.encode.validation.validationResult",
         "signature": {
-          "typeParameters": [{"name": "t0", "constraints": []}],
+          "typeParameters": [{"name": "e", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
-              "type": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.Term"}}},
+              "type": {"function": {"domain": {"variable": "e"}, "codomain": {"variable": "hydra.core.Term"}}},
               "isLazy": false},
             {
               "name": "arg1",
-              "type": {"application": {"function": {"variable": "hydra.validation.ValidationResult"}, "argument": {"variable": "t0"}}},
+              "type": {"application": {"function": {"variable": "hydra.validation.ValidationResult"}, "argument": {"variable": "e"}}},
               "isLazy": false}],
           "result": {"type": {"variable": "hydra.core.Term"}}},
         "body": {
-          "typeLambda": {
-            "parameter": "t0",
+          "annotated": {
             "body": {
-              "annotated": {
+              "lambda": {
+                "parameter": "e",
                 "body": {
                   "lambda": {
-                    "parameter": "e",
-                    "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.Term"}}},
+                    "parameter": "x",
+                    "domain": {"variable": "hydra.validation.ValidationResult"},
                     "body": {
-                      "lambda": {
-                        "parameter": "x",
-                        "domain": {"application": {"function": {"variable": "hydra.validation.ValidationResult"}, "argument": {"variable": "t0"}}},
-                        "body": {
-                          "inject": {
-                            "typeName": "hydra.core.Term",
-                            "field": {
-                              "name": "record",
-                              "term": {
-                                "record": {
-                                  "typeName": "hydra.core.Record",
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.validation.ValidationResult"}}}}},
-                                    {
-                                      "name": "fields",
-                                      "term": {
-                                        "list": [
-                                          {
-                                            "record": {
-                                              "typeName": "hydra.core.Field",
-                                              "fields": [
-                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "errors"}}}}},
-                                                {
-                                                  "name": "term",
-                                                  "term": {
-                                                    "application": {
-                                                      "function": {
-                                                        "lambda": {
-                                                          "parameter": "xs",
-                                                          "domain": {"list": {"variable": "t0"}},
-                                                          "body": {
-                                                            "inject": {
-                                                              "typeName": "hydra.core.Term",
-                                                              "field": {
-                                                                "name": "list",
-                                                                "term": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "record",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Record",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.validation.ValidationResult"}}}}},
+                                {
+                                  "name": "fields",
+                                  "term": {
+                                    "list": [
+                                      {
+                                        "record": {
+                                          "typeName": "hydra.core.Field",
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "errors"}}}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "application": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "parameter": "xs",
+                                                      "domain": {"list": {"variable": "e"}},
+                                                      "body": {
+                                                        "inject": {
+                                                          "typeName": "hydra.core.Term",
+                                                          "field": {
+                                                            "name": "list",
+                                                            "term": {
+                                                              "application": {
+                                                                "function": {
                                                                   "application": {
                                                                     "function": {
-                                                                      "application": {
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "t0"}}},
-                                                                            "type": {"variable": "hydra.core.Term"}}},
-                                                                        "argument": {"variable": "e"}}},
-                                                                    "argument": {"variable": "xs"}}}}}}}},
-                                                      "argument": {
-                                                        "application": {
-                                                          "function": {
-                                                            "typeApplication": {
-                                                              "body": {"project": {"typeName": "hydra.validation.ValidationResult", "fieldName": "errors"}},
-                                                              "type": {"variable": "t0"}}},
-                                                          "argument": {"variable": "x"}}}}}}]}},
-                                          {
-                                            "record": {
-                                              "typeName": "hydra.core.Field",
-                                              "fields": [
-                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "warnings"}}}}},
-                                                {
-                                                  "name": "term",
-                                                  "term": {
+                                                                      "typeApplication": {
+                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "e"}}},
+                                                                        "type": {"variable": "hydra.core.Term"}}},
+                                                                    "argument": {"variable": "e"}}},
+                                                                "argument": {"variable": "xs"}}}}}}}},
+                                                  "argument": {
                                                     "application": {
-                                                      "function": {
-                                                        "lambda": {
-                                                          "parameter": "xs",
-                                                          "domain": {"list": {"variable": "t0"}},
-                                                          "body": {
-                                                            "inject": {
-                                                              "typeName": "hydra.core.Term",
-                                                              "field": {
-                                                                "name": "list",
-                                                                "term": {
+                                                      "function": {"project": {"typeName": "hydra.validation.ValidationResult", "fieldName": "errors"}},
+                                                      "argument": {"variable": "x"}}}}}}]}},
+                                      {
+                                        "record": {
+                                          "typeName": "hydra.core.Field",
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "warnings"}}}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "application": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "parameter": "xs",
+                                                      "domain": {"list": {"variable": "e"}},
+                                                      "body": {
+                                                        "inject": {
+                                                          "typeName": "hydra.core.Term",
+                                                          "field": {
+                                                            "name": "list",
+                                                            "term": {
+                                                              "application": {
+                                                                "function": {
                                                                   "application": {
                                                                     "function": {
-                                                                      "application": {
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "t0"}}},
-                                                                            "type": {"variable": "hydra.core.Term"}}},
-                                                                        "argument": {"variable": "e"}}},
-                                                                    "argument": {"variable": "xs"}}}}}}}},
-                                                      "argument": {
-                                                        "application": {
-                                                          "function": {
-                                                            "typeApplication": {
-                                                              "body": {"project": {"typeName": "hydra.validation.ValidationResult", "fieldName": "warnings"}},
-                                                              "type": {"variable": "t0"}}},
-                                                          "argument": {"variable": "x"}}}}}}]}}]}}]}}}}}}}}},
-                "annotation": {
-                  "map": [
-                    {"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.validation.ValidationResult"}}}]}}}}}}}]}
+                                                                      "typeApplication": {
+                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "e"}}},
+                                                                        "type": {"variable": "hydra.core.Term"}}},
+                                                                    "argument": {"variable": "e"}}},
+                                                                "argument": {"variable": "xs"}}}}}}}},
+                                                  "argument": {
+                                                    "application": {
+                                                      "function": {"project": {"typeName": "hydra.validation.ValidationResult", "fieldName": "warnings"}},
+                                                      "argument": {"variable": "x"}}}}}}]}}]}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.validation.ValidationResult"}}}]}}}}}]}
