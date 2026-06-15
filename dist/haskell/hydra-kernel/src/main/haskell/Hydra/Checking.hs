@@ -62,7 +62,7 @@ allEqual els =
           t = Pairs.second uc
       in (Lists.foldl (\b -> \x -> Logic.and b (Equality.equal x h)) True t))
 -- | Apply type arguments to a type, substituting forall-bound variables
-applyTypeArgumentsToType :: t0 -> Graph.Graph -> [Core.Type] -> Core.Type -> Either Errors.Error Core.Type
+applyTypeArgumentsToType :: Typing.InferenceContext -> Graph.Graph -> [Core.Type] -> Core.Type -> Either Errors.Error Core.Type
 applyTypeArgumentsToType cx tx typeArgs t =
     Optionals.cases (Lists.uncons typeArgs) (Right t) (\uc ->
       let ah = Pairs.first uc
@@ -72,6 +72,19 @@ applyTypeArgumentsToType cx tx typeArgs t =
           let v = Core.forallTypeParameter v0
               tbody = Core.forallTypeBody v0
           in (applyTypeArgumentsToType cx tx at (Substitution.substInType (Typing.TypeSubst (Maps.singleton v ah)) tbody))
+        Core.TypeVariable v0 -> Eithers.either (\_ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
+          Errors.unexpectedShapeErrorExpected = "forall type",
+          Errors.unexpectedShapeErrorActual = (Strings.cat [
+            ShowCore.type_ t,
+            ". Trying to apply ",
+            (Literals.showInt32 (Lists.length typeArgs)),
+            " type args: ",
+            (Formatting.showList ShowCore.type_ typeArgs)])})))) (\schemaRes ->
+          let schemaType = Pairs.first schemaRes
+              schemaBody = Strip.deannotateType (Core.typeSchemeBody schemaType)
+          in case schemaBody of
+            Core.TypeForall _ -> applyTypeArgumentsToType cx tx typeArgs schemaBody
+            _ -> Right t) (Resolution.requireSchemaType cx (Graph.graphSchemaTypes tx) v0)
         _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = "forall type",
           Errors.unexpectedShapeErrorActual = (Strings.cat [
@@ -420,7 +433,7 @@ typeOfList cx tx typeArgs els =
               cx2 = Pairs.second foldR
           in (Eithers.bind (checkSameType cx2 tx "list elements" eltypes) (\unifiedType -> Right (Core.TypeList unifiedType, cx2)))))))
 -- | Reconstruct the type of a literal (Either/InferenceContext version)
-typeOfLiteral :: t0 -> Graph.Graph -> [Core.Type] -> Core.Literal -> Either Errors.Error (Core.Type, t0)
+typeOfLiteral :: Typing.InferenceContext -> Graph.Graph -> [Core.Type] -> Core.Literal -> Either Errors.Error (Core.Type, Typing.InferenceContext)
 typeOfLiteral cx tx typeArgs lit =
 
       let t = Core.TypeLiteral (Reflect.literalType lit)
@@ -626,7 +639,7 @@ typeOfTypeLambda cx tx typeArgs tl =
           Core.forallTypeParameter = v,
           Core.forallTypeBody = t1}))) (\applied -> Right (applied, cx2)))))
 -- | Reconstruct the type of the unit term (Either/InferenceContext version)
-typeOfUnit :: t0 -> Graph.Graph -> [Core.Type] -> Either Errors.Error (Core.Type, t0)
+typeOfUnit :: Typing.InferenceContext -> Graph.Graph -> [Core.Type] -> Either Errors.Error (Core.Type, Typing.InferenceContext)
 typeOfUnit cx tx typeArgs =
     Eithers.bind (applyTypeArgumentsToType cx tx typeArgs Core.TypeUnit) (\applied -> Right (applied, cx))
 -- | Reconstruct the type of an unwrap operation (Either/InferenceContext version)
@@ -649,15 +662,16 @@ typeOfUnwrap cx tx typeArgs tname =
 typeOfVariable :: Typing.InferenceContext -> Graph.Graph -> [Core.Type] -> Core.Name -> Either Errors.Error (Core.Type, Typing.InferenceContext)
 typeOfVariable cx tx typeArgs name =
 
-      let rawTypeScheme = Maps.lookup name (Graph.graphBoundTypes tx)
-          forScheme =
-                  \ts ->
-                    let tResult =
-                            Logic.ifElse (Lists.null typeArgs) (Resolution.instantiateType cx (Scoping.typeSchemeToFType ts)) (Scoping.typeSchemeToFType ts, cx)
-                        t = Pairs.first tResult
-                        cx2 = Pairs.second tResult
-                    in (Eithers.bind (applyTypeArgumentsToType cx2 tx typeArgs t) (\applied -> Right (applied, cx2)))
-      in (Optionals.cases rawTypeScheme (Optionals.cases (Optionals.map (\_p -> Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition _p))) (Maps.lookup name (Graph.graphPrimitives tx))) (Left (Errors.ErrorUntypedTermVariable (ErrorCore.UntypedTermVariableError {
+      let forScheme =
+              \ts ->
+                let tResult =
+                        Logic.ifElse (Lists.null typeArgs) (Resolution.instantiateType cx (Scoping.typeSchemeToFType ts)) (Scoping.typeSchemeToFType ts, cx)
+                    t = Pairs.first tResult
+                    cx2 = Pairs.second tResult
+                in (Eithers.bind (applyTypeArgumentsToType cx2 tx typeArgs t) (\applied -> Right (applied, cx2)))
+          primScheme =
+                  Optionals.map (\_p -> Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition _p))) (Maps.lookup name (Graph.graphPrimitives tx))
+      in (Optionals.cases primScheme (Optionals.cases (Maps.lookup name (Graph.graphBoundTypes tx)) (Left (Errors.ErrorUntypedTermVariable (ErrorCore.UntypedTermVariableError {
         ErrorCore.untypedTermVariableErrorLocation = (Paths.SubtermPath []),
         ErrorCore.untypedTermVariableErrorName = name}))) forScheme) forScheme)
 -- | Reconstruct the type of a wrapped term (Either/InferenceContext version)

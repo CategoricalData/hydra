@@ -36,7 +36,7 @@ parseError cx raw =
           Parsing.parseErrorRemainder = field_remainder}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.parsing.ParseError")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.parsing.ParseResult
-parseResult :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Parsing.ParseResult t0)
+parseResult :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError a) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Parsing.ParseResult a)
 parseResult a cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermInject v0 ->
@@ -53,7 +53,7 @@ parseResult a cx raw =
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.parsing.ParseSuccess
-parseSuccess :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Parsing.ParseSuccess t0)
+parseSuccess :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError a) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Parsing.ParseSuccess a)
 parseSuccess a cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->

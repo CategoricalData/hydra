@@ -2,7 +2,7 @@ module Hydra.Sources.Kernel.Terms.Show.Paths where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
-import Hydra.Sources.Libraries
+import Hydra.Dsl.Libraries
 import qualified Hydra.Dsl.Paths       as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast

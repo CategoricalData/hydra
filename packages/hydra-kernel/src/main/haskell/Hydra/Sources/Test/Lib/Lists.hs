@@ -17,7 +17,11 @@ import qualified Data.Map                     as M
 
 -- Additional imports specific to this file
 import Hydra.Testing
-import Hydra.Sources.Libraries
+import qualified Hydra.Dsl.Prims as Prims
+import qualified Hydra.Lib.Equality as DefEquality
+import qualified Hydra.Lib.Lists as DefLists
+import qualified Hydra.Lib.Math as DefMath
+import qualified Hydra.Lib.Strings as DefStrings
 
 
 ns :: ModuleName
@@ -80,22 +84,22 @@ allTests = define "allTests" $
     where
       listsApply = supergroup "apply" [
         subgroup "string transformations" [
-          testStr "string transformations" [primitive _strings_toUpper, primitive _strings_toLower] ["One", "Two", "Three"] ["ONE", "TWO", "THREE", "one", "two", "three"]],
+          testStr "string transformations" [primitive DefStrings.toUpper, primitive DefStrings.toLower] ["One", "Two", "Three"] ["ONE", "TWO", "THREE", "one", "two", "three"]],
         subgroup "edge cases" [
           testStr "empty function list" [] ["a", "b"] [],
-          testStr "empty input list" [primitive _strings_toUpper] [] [],
-          testStr "single function" [primitive _strings_toUpper] ["hello"] ["HELLO"],
-          testStr "single input" [primitive _strings_toUpper, primitive _strings_toLower] ["Test"] ["TEST", "test"]]]
+          testStr "empty input list" [primitive DefStrings.toUpper] [] [],
+          testStr "single function" [primitive DefStrings.toUpper] ["hello"] ["HELLO"],
+          testStr "single input" [primitive DefStrings.toUpper, primitive DefStrings.toLower] ["Test"] ["TEST", "test"]]]
         where
-          testStr name funs lst result = primCase name _lists_apply [list funs, stringList lst] (stringList result)
+          testStr name funs lst result = primCase name DefLists.apply [list funs, stringList lst] (stringList result)
   
       listsBind = subgroup "bind" [
-        test "negation function" [1, 2, 3, 4] (lambda "x" (primitive _lists_pure @@ (primitive _math_negate @@ var "x"))) (negate <$> [1, 2, 3, 4]),
-        test "empty list" [] (lambda "x" (primitive _lists_pure @@ (primitive _math_negate @@ var "x"))) [],
-        test "single element" [5] (lambda "x" (primitive _lists_pure @@ (primitive _math_negate @@ var "x"))) [-5],
-        test "duplicate elements" [1, 1, 2] (lambda "x" (primitive _lists_pure @@ (primitive _math_negate @@ var "x"))) [-1, -1, -2]]
+        test "negation function" [1, 2, 3, 4] (lambda "x" (primitive DefLists.pure @@ (primitive DefMath.negate @@ var "x"))) (negate <$> [1, 2, 3, 4]),
+        test "empty list" [] (lambda "x" (primitive DefLists.pure @@ (primitive DefMath.negate @@ var "x"))) [],
+        test "single element" [5] (lambda "x" (primitive DefLists.pure @@ (primitive DefMath.negate @@ var "x"))) [-5],
+        test "duplicate elements" [1, 1, 2] (lambda "x" (primitive DefLists.pure @@ (primitive DefMath.negate @@ var "x"))) [-1, -1, -2]]
         where
-          test name lst fun result = primCase name _lists_bind [intList lst, fun] (intList result)
+          test name lst fun result = primCase name DefLists.bind [intList lst, fun] (intList result)
   
       listsConcat = subgroup "concat" [
         test "multiple non-empty lists" [[1, 2, 3], [4, 5], [6, 7, 8]] [1, 2, 3, 4, 5, 6, 7, 8],
@@ -104,7 +108,7 @@ allTests = define "allTests" $
         test "all empty lists" [[], [], []] [],
         test "empty list of lists" [] []]
         where
-          test name lists result = primCase name _lists_concat [intListList lists] (intList result)
+          test name lists result = primCase name DefLists.concat [intListList lists] (intList result)
   
       listsConcat2 = subgroup "concat2" [
         testInt "two non-empty lists" [1, 2] [3, 4] [1, 2, 3, 4],
@@ -114,8 +118,8 @@ allTests = define "allTests" $
         testInt "single elements" [1] [2] [1, 2],
         testStr "string lists" ["a", "b"] ["c", "d"] ["a", "b", "c", "d"]]
         where
-          testInt name lst1 lst2 result = primCase name _lists_concat2 [intList lst1, intList lst2] (intList result)
-          testStr name lst1 lst2 result = primCase name _lists_concat2 [stringList lst1, stringList lst2] (stringList result)
+          testInt name lst1 lst2 result = primCase name DefLists.concat2 [intList lst1, intList lst2] (intList result)
+          testStr name lst1 lst2 result = primCase name DefLists.concat2 [stringList lst1, stringList lst2] (stringList result)
   
       listsCons = subgroup "cons" [
         testInt "cons to non-empty list" 1 [2, 3] [1, 2, 3],
@@ -123,8 +127,8 @@ allTests = define "allTests" $
         testInt "cons negative number" (-1) [2, 3] [-1, 2, 3],
         testStr "cons string" "hello" ["world"] ["hello", "world"]]
         where
-          testInt name x lst result = primCase name _lists_cons [int32 x, intList lst] (intList result)
-          testStr name x lst result = primCase name _lists_cons [string x, stringList lst] (stringList result)
+          testInt name x lst result = primCase name DefLists.cons [int32 x, intList lst] (intList result)
+          testStr name x lst result = primCase name DefLists.cons [string x, stringList lst] (stringList result)
   
       listsDrop = subgroup "drop" [
         test "drop from beginning" 2 [1, 2, 3, 4, 5] [3, 4, 5],
@@ -134,15 +138,15 @@ allTests = define "allTests" $
         test "drop from empty list" 3 [] [],
         test "drop negative amount" (-1) [1, 2, 3] [1, 2, 3]]
         where
-          test name n lst result = primCase name _lists_drop [int32 n, intList lst] (intList result)
+          test name n lst result = primCase name DefLists.drop [int32 n, intList lst] (intList result)
   
       listsDropWhile = subgroup "dropWhile" [
-        test "drop while less than 3" (lambda "x" (primitive _equality_lt @@ var "x" @@ int32 3)) [1, 2, 3, 2, 1] [3, 2, 1],
-        test "drop all elements" (lambda "x" (primitive _equality_lt @@ var "x" @@ int32 10)) [1, 2, 3] [],
-        test "drop no elements" (lambda "x" (primitive _equality_lt @@ var "x" @@ int32 0)) [1, 2, 3] [1, 2, 3],
-        test "empty list" (lambda "x" (primitive _equality_lt @@ var "x" @@ int32 5)) [] []]
+        test "drop while less than 3" (lambda "x" (primitive DefEquality.lt @@ var "x" @@ int32 3)) [1, 2, 3, 2, 1] [3, 2, 1],
+        test "drop all elements" (lambda "x" (primitive DefEquality.lt @@ var "x" @@ int32 10)) [1, 2, 3] [],
+        test "drop no elements" (lambda "x" (primitive DefEquality.lt @@ var "x" @@ int32 0)) [1, 2, 3] [1, 2, 3],
+        test "empty list" (lambda "x" (primitive DefEquality.lt @@ var "x" @@ int32 5)) [] []]
         where
-          test name pred lst result = primCase name _lists_dropWhile [pred, intList lst] (intList result)
+          test name pred lst result = primCase name DefLists.dropWhile [pred, intList lst] (intList result)
   
       listsElem = subgroup "elem" [
         testInt "element present" 2 [1, 2, 3] True,
@@ -154,43 +158,43 @@ allTests = define "allTests" $
         testStr "string element present" "hello" ["world", "hello", "test"] True,
         testStr "string element not present" "missing" ["world", "hello"] False]
         where
-          testInt name x lst result = primCase name _lists_elem [int32 x, intList lst] (boolean result)
-          testStr name x lst result = primCase name _lists_elem [string x, stringList lst] (boolean result)
+          testInt name x lst result = primCase name DefLists.elem [int32 x, intList lst] (boolean result)
+          testStr name x lst result = primCase name DefLists.elem [string x, stringList lst] (boolean result)
   
       listsFilter = subgroup "filter" [
-        test "filter positive numbers" (lambda "x" (primitive _equality_gt @@ var "x" @@ int32 0)) [-1, 2, -3, 4, 5] [2, 4, 5],
-        test "filter all elements" (lambda "x" (primitive _equality_lt @@ var "x" @@ int32 10)) [1, 2, 3] [1, 2, 3],
-        test "filter no elements" (lambda "x" (primitive _equality_gt @@ var "x" @@ int32 10)) [1, 2, 3] [],
-        test "empty list" (lambda "x" (primitive _equality_gt @@ var "x" @@ int32 0)) [] []]
+        test "filter positive numbers" (lambda "x" (primitive DefEquality.gt @@ var "x" @@ int32 0)) [-1, 2, -3, 4, 5] [2, 4, 5],
+        test "filter all elements" (lambda "x" (primitive DefEquality.lt @@ var "x" @@ int32 10)) [1, 2, 3] [1, 2, 3],
+        test "filter no elements" (lambda "x" (primitive DefEquality.gt @@ var "x" @@ int32 10)) [1, 2, 3] [],
+        test "empty list" (lambda "x" (primitive DefEquality.gt @@ var "x" @@ int32 0)) [] []]
         where
-          test name pred lst result = primCase name _lists_filter [pred, intList lst] (intList result)
+          test name pred lst result = primCase name DefLists.filter [pred, intList lst] (intList result)
 
       listsFind = subgroup "find" [
-        test "find existing element" (lambda "x" (primitive _equality_gt @@ var "x" @@ int32 3)) [1, 2, 4, 5] (Just 4),
-        test "find first matching" (lambda "x" (primitive _equality_gt @@ var "x" @@ int32 0)) [1, 2, 3] (Just 1),
-        test "find no match" (lambda "x" (primitive _equality_gt @@ var "x" @@ int32 10)) [1, 2, 3] Nothing,
-        test "find in empty list" (lambda "x" (primitive _equality_gt @@ var "x" @@ int32 0)) [] Nothing,
-        test "find single element" (lambda "x" (primitive _equality_equal @@ var "x" @@ int32 42)) [42] (Just 42)]
+        test "find existing element" (lambda "x" (primitive DefEquality.gt @@ var "x" @@ int32 3)) [1, 2, 4, 5] (Just 4),
+        test "find first matching" (lambda "x" (primitive DefEquality.gt @@ var "x" @@ int32 0)) [1, 2, 3] (Just 1),
+        test "find no match" (lambda "x" (primitive DefEquality.gt @@ var "x" @@ int32 10)) [1, 2, 3] Nothing,
+        test "find in empty list" (lambda "x" (primitive DefEquality.gt @@ var "x" @@ int32 0)) [] Nothing,
+        test "find single element" (lambda "x" (primitive DefEquality.equal @@ var "x" @@ int32 42)) [42] (Just 42)]
         where
-          test name pred lst result = primCase name _lists_find [pred, intList lst] (optionalInt32 result)
+          test name pred lst result = primCase name DefLists.find [pred, intList lst] (optionalInt32 result)
 
       listsFoldl = subgroup "foldl" [
-        test "sum with addition" (primitive _math_add) 0 [1, 2, 3, 4] 10,
-        test "product with multiplication" (primitive _math_mul) 1 [2, 3, 4] 24,
-        test "empty list" (primitive _math_add) 5 [] 5,
-        test "single element" (primitive _math_add) 10 [5] 15,
-        test "subtraction fold" (primitive _math_sub) 10 [1, 2, 3] 4]
+        test "sum with addition" (primitive DefMath.add) 0 [1, 2, 3, 4] 10,
+        test "product with multiplication" (primitive DefMath.mul) 1 [2, 3, 4] 24,
+        test "empty list" (primitive DefMath.add) 5 [] 5,
+        test "single element" (primitive DefMath.add) 10 [5] 15,
+        test "subtraction fold" (primitive DefMath.sub) 10 [1, 2, 3] 4]
         where
-          test name op acc lst result = primCase name _lists_foldl [op, int32 acc, intList lst] (int32 result)
+          test name op acc lst result = primCase name DefLists.foldl [op, int32 acc, intList lst] (int32 result)
 
       listsFoldr = subgroup "foldr" [
-        test "subtraction fold right" (primitive _math_sub) 0 [1, 2, 3] 2,
-        test "empty list" (primitive _math_add) 5 [] 5,
-        test "single element" (primitive _math_add) 10 [5] 15,
-        test "sum with addition" (primitive _math_add) 0 [1, 2, 3, 4] 10,
-        test "subtraction vs foldl" (primitive _math_sub) 10 [1, 2, 3] (-8)]
+        test "subtraction fold right" (primitive DefMath.sub) 0 [1, 2, 3] 2,
+        test "empty list" (primitive DefMath.add) 5 [] 5,
+        test "single element" (primitive DefMath.add) 10 [5] 15,
+        test "sum with addition" (primitive DefMath.add) 0 [1, 2, 3, 4] 10,
+        test "subtraction vs foldl" (primitive DefMath.sub) 10 [1, 2, 3] (-8)]
         where
-          test name op acc lst result = primCase name _lists_foldr [op, int32 acc, intList lst] (int32 result)
+          test name op acc lst result = primCase name DefLists.foldr [op, int32 acc, intList lst] (int32 result)
 
       listsGroup = subgroup "group" [
         test "consecutive duplicates" [1, 1, 2, 2, 2, 3, 1] [[1, 1], [2, 2, 2], [3], [1]],
@@ -199,7 +203,7 @@ allTests = define "allTests" $
         test "empty list" [] [],
         test "single element" [1] [[1]]]
         where
-          test name lst result = primCase name _lists_group [intList lst] (intListList result)
+          test name lst result = primCase name DefLists.group [intList lst] (intListList result)
   
       listsIntercalate = subgroup "intercalate" [
         test "double zero separator" [0, 0] [[1, 2, 3], [4, 5], [6, 7, 8]] [1, 2, 3, 0, 0, 4, 5, 0, 0, 6, 7, 8],
@@ -209,7 +213,7 @@ allTests = define "allTests" $
         test "single list" [0] [[1, 2, 3]] [1, 2, 3],
         test "lists with empty lists" [0] [[], [1], []] [0, 1, 0]]
         where
-          test name ifx lists result = primCase name _lists_intercalate [intList ifx, intListList lists] (intList result)
+          test name ifx lists result = primCase name DefLists.intercalate [intList ifx, intListList lists] (intList result)
   
       listsIntersperse = subgroup "intersperse" [
         testStr "string interspersion" "and" ["one", "two", "three"] ["one", "and", "two", "and", "three"],
@@ -218,8 +222,8 @@ allTests = define "allTests" $
         testStr "two elements" "+" ["a", "b"] ["a", "+", "b"],
         testInt "number interspersion" 0 [1, 2, 3] [1, 0, 2, 0, 3]]
         where
-          testStr name ifx lst result = primCase name _lists_intersperse [string ifx, stringList lst] (stringList result)
-          testInt name ifx lst result = primCase name _lists_intersperse [int32 ifx, intList lst] (intList result)
+          testStr name ifx lst result = primCase name DefLists.intersperse [string ifx, stringList lst] (stringList result)
+          testInt name ifx lst result = primCase name DefLists.intersperse [int32 ifx, intList lst] (intList result)
   
       listsLength = subgroup "length" [
         testInt "three elements" [1, 2, 3] 3,
@@ -228,18 +232,18 @@ allTests = define "allTests" $
         testInt "many elements" [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] 10,
         testStr "string list" ["a", "b", "c"] 3]
         where
-          testInt name lst result = primCase name _lists_length [intList lst] (int32 result)
-          testStr name lst result = primCase name _lists_length [stringList lst] (int32 result)
+          testInt name lst result = primCase name DefLists.length [intList lst] (int32 result)
+          testStr name lst result = primCase name DefLists.length [stringList lst] (int32 result)
   
       listsMap = subgroup "map" [
-        testStr "string to uppercase" (primitive _strings_toUpper) ["one", "two"] ["ONE", "TWO"],
-        testStr "empty list" (primitive _strings_toUpper) [] [],
-        testStr "single element" (primitive _strings_toUpper) ["hello"] ["HELLO"],
-        testInt "number negation" (primitive _math_negate) [1, 2, 3] [-1, -2, -3],
-        testInt "identity function" (primitive _equality_identity) [1, 2, 3] [1, 2, 3]]
+        testStr "string to uppercase" (primitive DefStrings.toUpper) ["one", "two"] ["ONE", "TWO"],
+        testStr "empty list" (primitive DefStrings.toUpper) [] [],
+        testStr "single element" (primitive DefStrings.toUpper) ["hello"] ["HELLO"],
+        testInt "number negation" (primitive DefMath.negate) [1, 2, 3] [-1, -2, -3],
+        testInt "identity function" (primitive DefEquality.identity) [1, 2, 3] [1, 2, 3]]
         where
-          testStr name fun lst result = primCase name _lists_map [fun, stringList lst] (stringList result)
-          testInt name fun lst result = primCase name _lists_map [fun, intList lst] (intList result)
+          testStr name fun lst result = primCase name DefLists.map [fun, stringList lst] (stringList result)
+          testInt name fun lst result = primCase name DefLists.map [fun, intList lst] (intList result)
   
       listsMaybeAt = subgroup "maybeAt" [
         test "valid index" 1 [10, 20, 30] (Just 20),
@@ -249,7 +253,7 @@ allTests = define "allTests" $
         test "negative index" (-1) [10, 20, 30] Nothing,
         test "empty list" 0 [] Nothing]
         where
-          test name i lst result = primCase name _lists_maybeAt [int32 i, intList lst] (optionalInt32 result)
+          test name i lst result = primCase name DefLists.maybeAt [int32 i, intList lst] (optionalInt32 result)
 
       listsMaybeHead = subgroup "maybeHead" [
         testInt "non-empty int list" [1, 2, 3] (Just 1),
@@ -258,8 +262,8 @@ allTests = define "allTests" $
         testStr "non-empty string list" ["hello", "world"] (Just "hello"),
         testStr "empty string list" [] Nothing]
         where
-          testInt name lst result = primCase name _lists_maybeHead [intList lst] (optionalInt32 result)
-          testStr name lst result = primCase name _lists_maybeHead [stringList lst] (optionalString result)
+          testInt name lst result = primCase name DefLists.maybeHead [intList lst] (optionalInt32 result)
+          testStr name lst result = primCase name DefLists.maybeHead [stringList lst] (optionalString result)
 
       listsMaybeInit = subgroup "maybeInit" [
         testInt "three elements" [1, 2, 3] (Just [1, 2]),
@@ -267,8 +271,8 @@ allTests = define "allTests" $
         testInt "empty list" [] Nothing,
         testStr "string list" ["a", "b", "c"] (Just ["a", "b"])]
         where
-          testInt name lst result = primCase name _lists_maybeInit [intList lst] (optionalIntList result)
-          testStr name lst result = primCase name _lists_maybeInit [stringList lst] (optionalStringList result)
+          testInt name lst result = primCase name DefLists.maybeInit [intList lst] (optionalIntList result)
+          testStr name lst result = primCase name DefLists.maybeInit [stringList lst] (optionalStringList result)
 
       listsMaybeLast = subgroup "maybeLast" [
         testInt "three elements" [1, 2, 3] (Just 3),
@@ -276,8 +280,8 @@ allTests = define "allTests" $
         testInt "empty list" [] Nothing,
         testStr "string list" ["hello", "world"] (Just "world")]
         where
-          testInt name lst result = primCase name _lists_maybeLast [intList lst] (optionalInt32 result)
-          testStr name lst result = primCase name _lists_maybeLast [stringList lst] (optionalString result)
+          testInt name lst result = primCase name DefLists.maybeLast [intList lst] (optionalInt32 result)
+          testStr name lst result = primCase name DefLists.maybeLast [stringList lst] (optionalString result)
 
       listsMaybeTail = subgroup "maybeTail" [
         testInt "three elements" [1, 2, 3] (Just [2, 3]),
@@ -285,8 +289,8 @@ allTests = define "allTests" $
         testInt "empty list" [] Nothing,
         testStr "string list" ["a", "b", "c"] (Just ["b", "c"])]
         where
-          testInt name lst result = primCase name _lists_maybeTail [intList lst] (optionalIntList result)
-          testStr name lst result = primCase name _lists_maybeTail [stringList lst] (optionalStringList result)
+          testInt name lst result = primCase name DefLists.maybeTail [intList lst] (optionalIntList result)
+          testStr name lst result = primCase name DefLists.maybeTail [stringList lst] (optionalStringList result)
 
       listsNub = subgroup "nub" [
         testInt "remove duplicates" [1, 2, 1, 3, 2, 4] [1, 2, 3, 4],
@@ -296,8 +300,8 @@ allTests = define "allTests" $
         testInt "single element" [1] [1],
         testStr "string duplicates" ["a", "b", "a", "c"] ["a", "b", "c"]]
         where
-          testInt name lst result = primCase name _lists_nub [intList lst] (intList result)
-          testStr name lst result = primCase name _lists_nub [stringList lst] (stringList result)
+          testInt name lst result = primCase name DefLists.nub [intList lst] (intList result)
+          testStr name lst result = primCase name DefLists.nub [stringList lst] (stringList result)
   
       listsNull = subgroup "null" [
         testInt "empty int list" [] True,
@@ -306,17 +310,17 @@ allTests = define "allTests" $
         testStr "empty string list" [] True,
         testStr "non-empty string list" ["a"] False]
         where
-          testInt name lst result = primCase name _lists_null [intList lst] (boolean result)
-          testStr name lst result = primCase name _lists_null [stringList lst] (boolean result)
+          testInt name lst result = primCase name DefLists.null [intList lst] (boolean result)
+          testStr name lst result = primCase name DefLists.null [stringList lst] (boolean result)
 
       listsPartition = subgroup "partition" [
-        test "partition greater than 3" (lambda "x" (primitive _equality_gt @@ var "x" @@ int32 3)) [1, 2, 3, 4, 5, 6] ([4, 5, 6], [1, 2, 3]),
-        test "partition all elements" (lambda "x" (primitive _equality_lt @@ var "x" @@ int32 10)) [1, 2, 3] ([1, 2, 3], []),
-        test "partition no elements" (lambda "x" (primitive _equality_gt @@ var "x" @@ int32 10)) [1, 2, 3] ([], [1, 2, 3]),
-        test "partition even numbers" (lambda "x" (primitive _math_even @@ var "x")) [1, 2, 3, 4, 5, 6] ([2, 4, 6], [1, 3, 5]),
-        test "empty list" (lambda "x" (primitive _equality_lt @@ var "x" @@ int32 5)) [] ([], [])]
+        test "partition greater than 3" (lambda "x" (primitive DefEquality.gt @@ var "x" @@ int32 3)) [1, 2, 3, 4, 5, 6] ([4, 5, 6], [1, 2, 3]),
+        test "partition all elements" (lambda "x" (primitive DefEquality.lt @@ var "x" @@ int32 10)) [1, 2, 3] ([1, 2, 3], []),
+        test "partition no elements" (lambda "x" (primitive DefEquality.gt @@ var "x" @@ int32 10)) [1, 2, 3] ([], [1, 2, 3]),
+        test "partition even numbers" (lambda "x" (primitive DefMath.even @@ var "x")) [1, 2, 3, 4, 5, 6] ([2, 4, 6], [1, 3, 5]),
+        test "empty list" (lambda "x" (primitive DefEquality.lt @@ var "x" @@ int32 5)) [] ([], [])]
         where
-          test name pred lst (yes, no) = primCase name _lists_partition [pred, intList lst] (pair (intList yes) (intList no))
+          test name pred lst (yes, no) = primCase name DefLists.partition [pred, intList lst] (pair (intList yes) (intList no))
 
       listsPure = subgroup "pure" [
         testStr "string element" "one" ["one"],
@@ -324,8 +328,8 @@ allTests = define "allTests" $
         testInt "number element" 42 [42],
         testInt "negative number" (-5) [-5]]
         where
-          testStr name arg result = primCase name _lists_pure [string arg] (stringList result)
-          testInt name arg result = primCase name _lists_pure [int32 arg] (intList result)
+          testStr name arg result = primCase name DefLists.pure [string arg] (stringList result)
+          testInt name arg result = primCase name DefLists.pure [int32 arg] (intList result)
   
       listsReplicate = subgroup "replicate" [
         testInt "replicate three times" 3 42 [42, 42, 42],
@@ -333,8 +337,8 @@ allTests = define "allTests" $
         testInt "replicate once" 1 99 [99],
         testStr "replicate string" 2 "hello" ["hello", "hello"]]
         where
-          testInt name n x result = primCase name _lists_replicate [int32 n, int32 x] (intList result)
-          testStr name n x result = primCase name _lists_replicate [int32 n, string x] (stringList result)
+          testInt name n x result = primCase name DefLists.replicate [int32 n, int32 x] (intList result)
+          testStr name n x result = primCase name DefLists.replicate [int32 n, string x] (stringList result)
   
       listsReverse = subgroup "reverse" [
         testInt "multiple elements" [1, 2, 3, 4] [4, 3, 2, 1],
@@ -343,8 +347,8 @@ allTests = define "allTests" $
         testInt "two elements" [1, 2] [2, 1],
         testStr "string list" ["a", "b", "c"] ["c", "b", "a"]]
         where
-          testInt name lst result = primCase name _lists_reverse [intList lst] (intList result)
-          testStr name lst result = primCase name _lists_reverse [stringList lst] (stringList result)
+          testInt name lst result = primCase name DefLists.reverse [intList lst] (intList result)
+          testStr name lst result = primCase name DefLists.reverse [stringList lst] (stringList result)
   
       listsSingleton = subgroup "singleton" [
         testInt "number element" 42 [42],
@@ -352,8 +356,8 @@ allTests = define "allTests" $
         testInt "zero" 0 [0],
         testStr "string element" "hello" ["hello"]]
         where
-          testInt name x result = primCase name _lists_singleton [int32 x] (intList result)
-          testStr name x result = primCase name _lists_singleton [string x] (stringList result)
+          testInt name x result = primCase name DefLists.singleton [int32 x] (intList result)
+          testStr name x result = primCase name DefLists.singleton [string x] (stringList result)
   
       listsSort = subgroup "sort" [
         testInt "unsorted numbers" [3, 1, 4, 1, 5] [1, 1, 3, 4, 5],
@@ -364,26 +368,26 @@ allTests = define "allTests" $
         testInt "duplicates" [2, 1, 2, 3, 1] [1, 1, 2, 2, 3],
         testStr "string sort" ["zebra", "apple", "banana"] ["apple", "banana", "zebra"]]
         where
-          testInt name lst result = primCase name _lists_sort [intList lst] (intList result)
-          testStr name lst result = primCase name _lists_sort [stringList lst] (stringList result)
+          testInt name lst result = primCase name DefLists.sort [intList lst] (intList result)
+          testStr name lst result = primCase name DefLists.sort [stringList lst] (stringList result)
   
       listsSortOn = subgroup "sortOn" [
-       testStr "sort by string length" (primitive _strings_length) ["hello", "hi", "world"] ["hi", "hello", "world"],
-       testStr "empty string list" (primitive _strings_length) [] [],
-       testStr "single string element" (primitive _strings_length) ["test"] ["test"],
-       testInt "sort by negation" (primitive _math_negate) [1, 3, 2] [3, 2, 1],
-       testInt "sort by absolute value" (primitive _math_abs) [-1, -3, 2] [-1, 2, -3]]
+       testStr "sort by string length" (primitive DefStrings.length) ["hello", "hi", "world"] ["hi", "hello", "world"],
+       testStr "empty string list" (primitive DefStrings.length) [] [],
+       testStr "single string element" (primitive DefStrings.length) ["test"] ["test"],
+       testInt "sort by negation" (primitive DefMath.negate) [1, 3, 2] [3, 2, 1],
+       testInt "sort by absolute value" (primitive DefMath.abs) [-1, -3, 2] [-1, 2, -3]]
        where
-         testStr name keyFn lst result = primCase name _lists_sortOn [keyFn, stringList lst] (stringList result)
-         testInt name keyFn lst result = primCase name _lists_sortOn [keyFn, intList lst] (intList result)
+         testStr name keyFn lst result = primCase name DefLists.sortOn [keyFn, stringList lst] (stringList result)
+         testInt name keyFn lst result = primCase name DefLists.sortOn [keyFn, intList lst] (intList result)
   
       listsSpan = subgroup "span" [
-        test "span less than 3" (lambda "x" (primitive _equality_lt @@ var "x" @@ int32 3)) [1, 2, 3, 1, 2] ([1, 2], [3, 1, 2]),
-        test "span all elements" (lambda "x" (primitive _equality_lt @@ var "x" @@ int32 10)) [1, 2, 3] ([1, 2, 3], []),
-        test "span no elements" (lambda "x" (primitive _equality_gt @@ var "x" @@ int32 10)) [1, 2, 3] ([], [1, 2, 3]),
-        test "empty list" (lambda "x" (primitive _equality_lt @@ var "x" @@ int32 5)) [] ([], [])]
+        test "span less than 3" (lambda "x" (primitive DefEquality.lt @@ var "x" @@ int32 3)) [1, 2, 3, 1, 2] ([1, 2], [3, 1, 2]),
+        test "span all elements" (lambda "x" (primitive DefEquality.lt @@ var "x" @@ int32 10)) [1, 2, 3] ([1, 2, 3], []),
+        test "span no elements" (lambda "x" (primitive DefEquality.gt @@ var "x" @@ int32 10)) [1, 2, 3] ([], [1, 2, 3]),
+        test "empty list" (lambda "x" (primitive DefEquality.lt @@ var "x" @@ int32 5)) [] ([], [])]
         where
-          test name pred lst (prefix, suffix) = primCase name _lists_span [pred, intList lst] (pair (intList prefix) (intList suffix))
+          test name pred lst (prefix, suffix) = primCase name DefLists.span [pred, intList lst] (pair (intList prefix) (intList suffix))
   
       listsTake = subgroup "take" [
         test "take from beginning" 2 [1, 2, 3, 4, 5] [1, 2],
@@ -393,7 +397,7 @@ allTests = define "allTests" $
         test "take from empty list" 3 [] [],
         test "take negative amount" (-1) [1, 2, 3] []]
         where
-          test name n lst result = primCase name _lists_take [int32 n, intList lst] (intList result)
+          test name n lst result = primCase name DefLists.take [int32 n, intList lst] (intList result)
   
       listsTranspose = subgroup "transpose" [
         test "square matrix" [[1, 2, 3], [4, 5, 6]] [[1, 4], [2, 5], [3, 6]],
@@ -402,14 +406,14 @@ allTests = define "allTests" $
         test "single column" [[1], [2], [3]] [[1, 2, 3]],
         test "ragged matrix" [[1, 2], [3], [4, 5, 6]] [[1, 3, 4], [2, 5], [6]]]
         where
-          test name matrix result = primCase name _lists_transpose [intListList matrix] (intListList result)
+          test name matrix result = primCase name DefLists.transpose [intListList matrix] (intListList result)
 
       listsUncons = subgroup "uncons" [
         test "three elements" [1, 2, 3] (Just (1, [2, 3])),
         test "single element" [42] (Just (42, [])),
         test "empty list" [] Nothing]
         where
-          test name lst result = primCase name _lists_uncons [intList lst] (optionalIntAndIntList result)
+          test name lst result = primCase name DefLists.uncons [intList lst] (optionalIntAndIntList result)
 
       listsZip = subgroup "zip" [
         test "equal length lists" [1, 2, 3] ["a", "b", "c"] [(1, "a"), (2, "b"), (3, "c")],
@@ -419,18 +423,18 @@ allTests = define "allTests" $
         test "empty second list" [1, 2] [] [],
         test "both empty lists" [] [] []]
         where
-          test name lst1 lst2 result = primCase name _lists_zip [intList lst1, stringList lst2] (list ((\(x, y) -> pair (int32 x) (string y)) <$> result))
+          test name lst1 lst2 result = primCase name DefLists.zip [intList lst1, stringList lst2] (list ((\(x, y) -> pair (int32 x) (string y)) <$> result))
   
       listsZipWith = subgroup "zipWith" [
-        testInt "addition" (primitive _math_add) [1, 2, 3] [4, 5, 6] [5, 7, 9],
-        testInt "first list shorter" (primitive _math_add) [1, 2] [4, 5, 6] [5, 7],
-        testInt "second list shorter" (primitive _math_add) [1, 2, 3] [4, 5] [5, 7],
-        testInt "empty first list" (primitive _math_add) [] [1, 2, 3] [],
-        testInt "empty second list" (primitive _math_add) [1, 2, 3] [] [],
-        testStr "string concatenation" (primitive _strings_cat2) ["a", "b"] ["1", "2"] ["a1", "b2"]]
+        testInt "addition" (primitive DefMath.add) [1, 2, 3] [4, 5, 6] [5, 7, 9],
+        testInt "first list shorter" (primitive DefMath.add) [1, 2] [4, 5, 6] [5, 7],
+        testInt "second list shorter" (primitive DefMath.add) [1, 2, 3] [4, 5] [5, 7],
+        testInt "empty first list" (primitive DefMath.add) [] [1, 2, 3] [],
+        testInt "empty second list" (primitive DefMath.add) [1, 2, 3] [] [],
+        testStr "string concatenation" (primitive DefStrings.cat2) ["a", "b"] ["1", "2"] ["a1", "b2"]]
         where
-          testInt name op lst1 lst2 result = primCase name _lists_zipWith [op, intList lst1, intList lst2] (intList result)
-          testStr name op lst1 lst2 result = primCase name _lists_zipWith [op, stringList lst1, stringList lst2] (stringList result)
+          testInt name op lst1 lst2 result = primCase name DefLists.zipWith [op, intList lst1, intList lst2] (intList result)
+          testStr name op lst1 lst2 result = primCase name DefLists.zipWith [op, stringList lst1, stringList lst2] (stringList result)
 
 -- Helper functions for building test terms
 intList :: [Int] -> TypedTerm Term

@@ -24,7 +24,7 @@ import hydra.util.Either;
  */
 public class FindAll extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.regex.findAll");
+        return hydra.lib.Regex.findAll().name;
     }
 
     @Override

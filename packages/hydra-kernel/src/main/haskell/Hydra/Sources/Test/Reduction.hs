@@ -19,11 +19,15 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 import Hydra.Testing
-import Hydra.Sources.Libraries
 
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Reduction as Reduction
 import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers
+import qualified Hydra.Dsl.Prims as Prims
+import qualified Hydra.Lib.Lists as DefLists
+import qualified Hydra.Lib.Math as DefMath
+import qualified Hydra.Lib.Sets as DefSets
+import qualified Hydra.Lib.Strings as DefStrings
 
 
 -- Local alias for polymorphic application (Phantoms.@@ applies TypedBindings; Terms.@@ only works on TypedTerm Term)
@@ -145,13 +149,13 @@ etaExpandTermGroup = subgroup "etaExpandTerm" [
       (list [string "foo", string "bar"]),
 
     etaCase "fully applied binary function unchanged"
-      (apply (apply (primitive _strings_splitOn) (string "foo")) (string "bar"))
-      (apply (apply (primitive _strings_splitOn) (string "foo")) (string "bar")),
+      (apply (apply (primitive DefStrings.splitOn) (string "foo")) (string "bar"))
+      (apply (apply (primitive DefStrings.splitOn) (string "foo")) (string "bar")),
 
     -- Lambda with fully applied primitive using a string literal (matches EtaExpansion.hs pattern)
     etaCase "lambda with fully applied primitive unchanged"
-      (lambda "x" (apply (apply (primitive _strings_splitOn) (string ",")) (var "x")))
-      (lambda "x" (apply (apply (primitive _strings_splitOn) (string ",")) (var "x"))),
+      (lambda "x" (apply (apply (primitive DefStrings.splitOn) (string ",")) (var "x")))
+      (lambda "x" (apply (apply (primitive DefStrings.splitOn) (string ",")) (var "x"))),
 
     etaCase "lambda returning constant unchanged"
       (lambda "x" (int32 42))
@@ -159,16 +163,16 @@ etaExpandTermGroup = subgroup "etaExpandTerm" [
 
     -- Bare primitives are NOT expanded (they stay as-is)
     etaCase "bare unary primitive unchanged"
-      (primitive _strings_toLower)
-      (primitive _strings_toLower),
+      (primitive DefStrings.toLower)
+      (primitive DefStrings.toLower),
 
     etaCase "bare binary primitive unchanged"
-      (primitive _strings_splitOn)
-      (primitive _strings_splitOn),
+      (primitive DefStrings.splitOn)
+      (primitive DefStrings.splitOn),
 
     etaCase "partially applied binary primitive expands to one lambda"
-      (apply (primitive _strings_splitOn) (var "foo"))
-      (lambda "v1" (apply (apply (primitive _strings_splitOn) (var "foo")) (var "v1"))),
+      (apply (primitive DefStrings.splitOn) (var "foo"))
+      (lambda "v1" (apply (apply (primitive DefStrings.splitOn) (var "foo")) (var "v1"))),
 
     etaCase "projection expands to lambda"
       (project (nm "Person") (nm "firstName"))
@@ -176,8 +180,8 @@ etaExpandTermGroup = subgroup "etaExpandTerm" [
 
     -- Subterms within applications
     etaCase "partial application inside lambda expands"
-      (lambda "x" (apply (primitive _strings_splitOn) (var "x")))
-      (lambda "x" (lambda "v1" (apply (apply (primitive _strings_splitOn) (var "x")) (var "v1")))),
+      (lambda "x" (apply (primitive DefStrings.splitOn) (var "x")))
+      (lambda "x" (lambda "v1" (apply (apply (primitive DefStrings.splitOn) (var "x")) (var "v1")))),
 
     -- Let bindings
     etaCase "let with constant body unchanged"
@@ -185,18 +189,18 @@ etaExpandTermGroup = subgroup "etaExpandTerm" [
       (letExpr "foo" (int32 137) (int32 42)),
 
     etaCase "let with bare primitive value unchanged"
-      (letExpr "foo" (primitive _strings_splitOn) (var "foo"))
-      (letExpr "foo" (primitive _strings_splitOn) (var "foo")),
+      (letExpr "foo" (primitive DefStrings.splitOn) (var "foo"))
+      (letExpr "foo" (primitive DefStrings.splitOn) (var "foo")),
 
     -- Complete applications are no-ops
     etaCase "fully applied unary unchanged"
-      (apply (primitive _strings_toLower) (string "FOO"))
-      (apply (primitive _strings_toLower) (string "FOO")),
+      (apply (primitive DefStrings.toLower) (string "FOO"))
+      (apply (primitive DefStrings.toLower) (string "FOO")),
 
     -- Subterms
     etaCase "partial application in list expands"
-      (list [lambda "x" (list [string "foo"]), apply (primitive _strings_splitOn) (string "bar")])
-      (list [lambda "x" (list [string "foo"]), lambda "v1" (apply (apply (primitive _strings_splitOn) (string "bar")) (var "v1"))])]
+      (list [lambda "x" (list [string "foo"]), apply (primitive DefStrings.splitOn) (string "bar")])
+      (list [lambda "x" (list [string "foo"]), lambda "v1" (apply (apply (primitive DefStrings.splitOn) (string "bar")) (var "v1"))])]
 
 -- Helper for single-binding let
 letExpr :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm Term
@@ -268,54 +272,54 @@ monomorphicPrimitiveTests :: TypedTerm TestGroup
 monomorphicPrimitiveTests = subgroup "monomorphic primitives" [
   -- Unary string functions
   test "toUpper on lowercase"
-    (primitive _strings_toUpper @@ string "hello")
+    (primitive DefStrings.toUpper @@ string "hello")
     (string "HELLO"),
   test "toUpper on mixed case"
-    (primitive _strings_toUpper @@ string "Hello World")
+    (primitive DefStrings.toUpper @@ string "Hello World")
     (string "HELLO WORLD"),
   test "toUpper on empty string"
-    (primitive _strings_toUpper @@ string "")
+    (primitive DefStrings.toUpper @@ string "")
     (string ""),
   test "toLower on uppercase"
-    (primitive _strings_toLower @@ string "HELLO")
+    (primitive DefStrings.toLower @@ string "HELLO")
     (string "hello"),
   test "string length"
-    (primitive _strings_length @@ string "hello")
+    (primitive DefStrings.length @@ string "hello")
     (int32 5),
   test "string length of empty"
-    (primitive _strings_length @@ string "")
+    (primitive DefStrings.length @@ string "")
     (int32 0),
   -- Binary arithmetic functions
   test "add two positive integers"
-    (primitive _math_add @@ int32 3 @@ int32 5)
+    (primitive DefMath.add @@ int32 3 @@ int32 5)
     (int32 8),
   test "add negative and positive"
-    (primitive _math_add @@ int32 (-10) @@ int32 3)
+    (primitive DefMath.add @@ int32 (-10) @@ int32 3)
     (int32 (-7)),
   test "add with zero"
-    (primitive _math_add @@ int32 0 @@ int32 42)
+    (primitive DefMath.add @@ int32 0 @@ int32 42)
     (int32 42),
   test "subtract integers"
-    (primitive _math_sub @@ int32 10 @@ int32 3)
+    (primitive DefMath.sub @@ int32 10 @@ int32 3)
     (int32 7),
   test "multiply integers"
-    (primitive _math_mul @@ int32 6 @@ int32 7)
+    (primitive DefMath.mul @@ int32 6 @@ int32 7)
     (int32 42),
   test "multiply by zero"
-    (primitive _math_mul @@ int32 100 @@ int32 0)
+    (primitive DefMath.mul @@ int32 100 @@ int32 0)
     (int32 0),
   test "divide integers"
-    (primitive _math_maybeDiv @@ int32 20 @@ int32 4)
+    (primitive DefMath.maybeDiv @@ int32 20 @@ int32 4)
     (Core.termOptional $ just (int32 5)),
   test "modulo"
-    (primitive _math_maybeMod @@ int32 17 @@ int32 5)
+    (primitive DefMath.maybeMod @@ int32 17 @@ int32 5)
     (Core.termOptional $ just (int32 2)),
   -- Binary string functions
   test "splitOn basic"
-    (primitive _strings_splitOn @@ string "," @@ string "a,b,c")
+    (primitive DefStrings.splitOn @@ string "," @@ string "a,b,c")
     (list [string "a", string "b", string "c"]),
   test "cat2 strings"
-    (primitive _strings_cat2 @@ string "hello" @@ string "world")
+    (primitive DefStrings.cat2 @@ string "hello" @@ string "world")
     (string "helloworld")]
   -- Note: "extra arguments are tolerated" test removed; it produces non-well-typed output
   where
@@ -329,7 +333,7 @@ nm s = Core.name $ Phantoms.string s
 nullaryPrimitiveTests :: TypedTerm TestGroup
 nullaryPrimitiveTests = subgroup "nullary primitives" [
   test "empty set has size zero"
-    (primitive _sets_size @@ primitive _sets_empty)
+    (primitive DefSets.size @@ primitive DefSets.empty)
     (int32 0)]
   where
     test name input output = evalCase name input output
@@ -355,41 +359,41 @@ polymorphicPrimitiveTests :: TypedTerm TestGroup
 polymorphicPrimitiveTests = subgroup "polymorphic primitives" [
   -- List length (polymorphic in element type)
   test "length of integer list"
-    (primitive _lists_length @@ list [int32 1, int32 2, int32 3])
+    (primitive DefLists.length @@ list [int32 1, int32 2, int32 3])
     (int32 3),
   test "length of string list"
-    (primitive _lists_length @@ list [string "a", string "b"])
+    (primitive DefLists.length @@ list [string "a", string "b"])
     (int32 2),
   test "length of empty list"
-    (primitive _lists_length @@ list [])
+    (primitive DefLists.length @@ list [])
     (int32 0),
   test "length of single element list"
-    (primitive _lists_length @@ list [true])
+    (primitive DefLists.length @@ list [true])
     (int32 1),
   -- List maybeHead
   test "maybeHead of integer list"
-    (primitive _lists_maybeHead @@ list [int32 10, int32 20, int32 30])
+    (primitive DefLists.maybeHead @@ list [int32 10, int32 20, int32 30])
     (Core.termOptional $ just (int32 10)),
   test "maybeHead of string list"
-    (primitive _lists_maybeHead @@ list [string "first", string "second"])
+    (primitive DefLists.maybeHead @@ list [string "first", string "second"])
     (Core.termOptional $ just (string "first")),
   -- List maybeLast
   test "maybeLast of integer list"
-    (primitive _lists_maybeLast @@ list [int32 10, int32 20, int32 30])
+    (primitive DefLists.maybeLast @@ list [int32 10, int32 20, int32 30])
     (Core.termOptional $ just (int32 30)),
   -- List concat
   test "concat two integer lists"
-    (primitive _lists_concat2 @@ list [int32 1, int32 2] @@ list [int32 3, int32 4])
+    (primitive DefLists.concat2 @@ list [int32 1, int32 2] @@ list [int32 3, int32 4])
     (list [int32 1, int32 2, int32 3, int32 4]),
   test "concat with empty list"
-    (primitive _lists_concat2 @@ list [] @@ list [int32 1, int32 2])
+    (primitive DefLists.concat2 @@ list [] @@ list [int32 1, int32 2])
     (list [int32 1, int32 2]),
   -- List reverse
   test "reverse integer list"
-    (primitive _lists_reverse @@ list [int32 1, int32 2, int32 3])
+    (primitive DefLists.reverse @@ list [int32 1, int32 2, int32 3])
     (list [int32 3, int32 2, int32 1]),
   test "reverse empty list"
-    (primitive _lists_reverse @@ list [])
+    (primitive DefLists.reverse @@ list [])
     (list [])]
   where
     test name input output = evalCase name input output

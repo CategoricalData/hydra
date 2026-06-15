@@ -44,7 +44,7 @@ primNoDef localName description s comments =
 sig :: TypeScheme -> TermSignature
 sig = typeSchemeToTermSignature
 
--- Signatures (derived from Hydra.Sources.Libraries primN declarations).
+-- Signatures (derived from Hydra.Dsl.Libraries primN declarations).
 
 -- bimap : forall a b c d. (a -> c) -> (b -> d) -> (a, b) -> (c, d)
 bimapSig :: TermSignature

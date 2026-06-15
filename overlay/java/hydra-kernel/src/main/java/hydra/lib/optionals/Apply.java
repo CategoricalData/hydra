@@ -28,7 +28,7 @@ public class Apply extends PrimitiveFunction {
      * @return the name "hydra.lib.optionals.apply"
      */
     public Name name() {
-        return new Name("hydra.lib.optionals.apply");
+        return hydra.lib.Optionals.apply().name;
     }
 
     /**

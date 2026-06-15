@@ -21,7 +21,6 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 import Hydra.Testing
-import Hydra.Sources.Libraries
 
 
 ns :: ModuleName

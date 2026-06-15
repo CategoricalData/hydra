@@ -24,7 +24,7 @@ import hydra.util.Either;
  */
 public class MaybeRem extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.math.maybeRem");
+        return hydra.lib.Math_.maybeRem().name;
     }
 
     @Override

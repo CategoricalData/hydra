@@ -23,7 +23,7 @@ import hydra.util.Either;
  */
 public class DecimalToFloat32 extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.literals.decimalToFloat32");
+        return hydra.lib.Literals.decimalToFloat32().name;
     }
 
     @Override

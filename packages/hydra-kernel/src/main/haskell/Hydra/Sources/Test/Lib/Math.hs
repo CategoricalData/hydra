@@ -1,7 +1,10 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 module Hydra.Sources.Test.Lib.Math where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
+import Hydra.Dsl.Terms (ToPrimName)
 import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
@@ -17,8 +20,9 @@ import qualified Data.Map                     as M
 
 -- Additional imports specific to this file
 import Hydra.Testing
-import Hydra.Sources.Libraries
 import qualified Hydra.Haskell.Lib.Math as Math
+import qualified Hydra.Dsl.Prims as Prims
+import qualified Hydra.Lib.Math as DefMath
 
 
 ns :: ModuleName
@@ -98,14 +102,14 @@ mathAbs = subgroup "abs" [
   test "negative" (-5) 5,
   test "zero" 0 0]
   where
-    test name x result = primCase name _math_abs [int32 x] (int32 result)
+    test name x result = primCase name DefMath.abs [int32 x] (int32 result)
 
 mathAcos :: TypedTerm TestGroup
 mathAcos = subgroup "acos" [
   test "acos 1" 1.0 0.0,
-  roundedPrimCase1 "acos 0" _math_acos 0.0 (pi / 2),
-  roundedPrimCase1 "acos -1" _math_acos (-1.0) pi,
-  roundedPrimCase1 "acos 0.5" _math_acos 0.5 (acos 0.5),
+  roundedPrimCase1 "acos 0" DefMath.acos 0.0 (pi / 2),
+  roundedPrimCase1 "acos -1" DefMath.acos (-1.0) pi,
+  roundedPrimCase1 "acos 0.5" DefMath.acos 0.5 (acos 0.5),
   -- Out-of-domain: returns NaN
   test "acos below domain" (-2.0) nan64,
   test "acos above domain" 2.0 nan64,
@@ -114,13 +118,13 @@ mathAcos = subgroup "acos" [
   test "acos +Inf" posInf64 nan64,
   test "acos -Inf" negInf64 nan64]
   where
-    test name x result = primCase name _math_acos [float64 x] (float64 result)
+    test name x result = primCase name DefMath.acos [float64 x] (float64 result)
 
 mathAcosh :: TypedTerm TestGroup
 mathAcosh = subgroup "acosh" [
   test "acosh 1" 1.0 0.0,
-  roundedPrimCase1 "acosh 2" _math_acosh 2.0 (acosh 2.0),
-  roundedPrimCase1 "acosh 3" _math_acosh 3.0 (acosh 3.0),
+  roundedPrimCase1 "acosh 2" DefMath.acosh 2.0 (acosh 2.0),
+  roundedPrimCase1 "acosh 3" DefMath.acosh 3.0 (acosh 3.0),
   -- Out-of-domain: returns NaN (lower limit is 1)
   test "acosh below domain" 0.5 nan64,
   test "acosh negative" (-1.0) nan64,
@@ -129,7 +133,7 @@ mathAcosh = subgroup "acosh" [
   test "acosh +Inf" posInf64 posInf64,
   test "acosh -Inf" negInf64 nan64]
   where
-    test name x result = primCase name _math_acosh [float64 x] (float64 result)
+    test name x result = primCase name DefMath.acosh [float64 x] (float64 result)
 
 mathAdd :: TypedTerm TestGroup
 mathAdd = subgroup "add" [
@@ -138,7 +142,7 @@ mathAdd = subgroup "add" [
   test "mixed sign" 10 (-3) 7,
   test "with zero" 42 0 42]
   where
-    test name x y result = primCase name _math_add [int32 x, int32 y] (int32 result)
+    test name x y result = primCase name DefMath.add [int32 x, int32 y] (int32 result)
 
 mathAddFloat64 :: TypedTerm TestGroup
 mathAddFloat64 = subgroup "addFloat64" [
@@ -148,14 +152,14 @@ mathAddFloat64 = subgroup "addFloat64" [
   test "with zero" 42.0 0.0 42.0,
   test "fractional" 1.5 2.5 4.0]
   where
-    test name x y result = primCase name _math_addFloat64 [float64 x, float64 y] (float64 result)
+    test name x y result = primCase name DefMath.addFloat64 [float64 x, float64 y] (float64 result)
 
 mathAsin :: TypedTerm TestGroup
 mathAsin = subgroup "asin" [
   test "asin 0" 0.0 0.0,
-  roundedPrimCase1 "asin 1" _math_asin 1.0 (pi / 2),
-  roundedPrimCase1 "asin -1" _math_asin (-1.0) (-(pi / 2)),
-  roundedPrimCase1 "asin 0.5" _math_asin 0.5 (asin 0.5),
+  roundedPrimCase1 "asin 1" DefMath.asin 1.0 (pi / 2),
+  roundedPrimCase1 "asin -1" DefMath.asin (-1.0) (-(pi / 2)),
+  roundedPrimCase1 "asin 0.5" DefMath.asin 0.5 (asin 0.5),
   -- Out-of-domain: returns NaN
   test "asin below domain" (-2.0) nan64,
   test "asin above domain" 2.0 nan64,
@@ -164,46 +168,46 @@ mathAsin = subgroup "asin" [
   test "asin +Inf" posInf64 nan64,
   test "asin -Inf" negInf64 nan64]
   where
-    test name x result = primCase name _math_asin [float64 x] (float64 result)
+    test name x result = primCase name DefMath.asin [float64 x] (float64 result)
 
 mathAsinh :: TypedTerm TestGroup
 mathAsinh = subgroup "asinh" [
   test "asinh 0" 0.0 0.0,
-  roundedPrimCase1 "asinh 1" _math_asinh 1.0 (asinh 1.0),
-  roundedPrimCase1 "asinh 0.5" _math_asinh 0.5 (asinh 0.5),
+  roundedPrimCase1 "asinh 1" DefMath.asinh 1.0 (asinh 1.0),
+  roundedPrimCase1 "asinh 0.5" DefMath.asinh 0.5 (asinh 0.5),
   -- Special values
   test "asinh NaN" nan64 nan64,
   test "asinh +Inf" posInf64 posInf64,
   test "asinh -Inf" negInf64 negInf64]
   where
-    test name x result = primCase name _math_asinh [float64 x] (float64 result)
+    test name x result = primCase name DefMath.asinh [float64 x] (float64 result)
 
 mathAtan :: TypedTerm TestGroup
 mathAtan = subgroup "atan" [
   test "atan 0" 0.0 0.0,
-  roundedPrimCase1 "atan 1" _math_atan 1.0 (pi / 4),
-  roundedPrimCase1 "atan 0.5" _math_atan 0.5 (atan 0.5),
+  roundedPrimCase1 "atan 1" DefMath.atan 1.0 (pi / 4),
+  roundedPrimCase1 "atan 0.5" DefMath.atan 0.5 (atan 0.5),
   -- Special values: atan's range is (-pi/2, pi/2); saturates at infinities
   test "atan NaN" nan64 nan64,
-  roundedPrimCase1 "atan +Inf" _math_atan posInf64 (pi / 2),
-  roundedPrimCase1 "atan -Inf" _math_atan negInf64 (-(pi / 2))]
+  roundedPrimCase1 "atan +Inf" DefMath.atan posInf64 (pi / 2),
+  roundedPrimCase1 "atan -Inf" DefMath.atan negInf64 (-(pi / 2))]
   where
-    test name x result = primCase name _math_atan [float64 x] (float64 result)
+    test name x result = primCase name DefMath.atan [float64 x] (float64 result)
 
 mathAtan2 :: TypedTerm TestGroup
 mathAtan2 = subgroup "atan2" [
-  roundedPrimCase2 "atan2 1 1" _math_atan2 1.0 1.0 (pi / 4),
-  roundedPrimCase2 "atan2 1 0" _math_atan2 1.0 0.0 (pi / 2),
+  roundedPrimCase2 "atan2 1 1" DefMath.atan2 1.0 1.0 (pi / 4),
+  roundedPrimCase2 "atan2 1 0" DefMath.atan2 1.0 0.0 (pi / 2),
   test "atan2 0 1" 0.0 1.0 0.0,
-  roundedPrimCase2 "atan2 3 4" _math_atan2 3.0 4.0 (atan2 3.0 4.0),
+  roundedPrimCase2 "atan2 3 4" DefMath.atan2 3.0 4.0 (atan2 3.0 4.0),
   -- Special values in y (first argument)
   test "atan2 NaN 1" nan64 1.0 nan64,
-  roundedPrimCase2 "atan2 +Inf 1" _math_atan2 posInf64 1.0 (pi / 2),
-  roundedPrimCase2 "atan2 -Inf 1" _math_atan2 negInf64 1.0 (-(pi / 2)),
+  roundedPrimCase2 "atan2 +Inf 1" DefMath.atan2 posInf64 1.0 (pi / 2),
+  roundedPrimCase2 "atan2 -Inf 1" DefMath.atan2 negInf64 1.0 (-(pi / 2)),
   -- Special values in x (second argument)
   test "atan2 1 NaN" 1.0 nan64 nan64,
   test "atan2 1 +Inf" 1.0 posInf64 0.0,
-  roundedPrimCase2 "atan2 1 -Inf" _math_atan2 1.0 negInf64 pi,
+  roundedPrimCase2 "atan2 1 -Inf" DefMath.atan2 1.0 negInf64 pi,
   -- Cross-infinity combinations: Haskell returns NaN; other languages' native atan2
   -- returns ±pi/4 or ±3pi/4, so each implementation must special-case these.
   test "atan2 +Inf +Inf" posInf64 posInf64 nan64,
@@ -211,13 +215,13 @@ mathAtan2 = subgroup "atan2" [
   test "atan2 -Inf +Inf" negInf64 posInf64 nan64,
   test "atan2 -Inf -Inf" negInf64 negInf64 nan64]
   where
-    test name y x result = primCase name _math_atan2 [float64 y, float64 x] (float64 result)
+    test name y x result = primCase name DefMath.atan2 [float64 y, float64 x] (float64 result)
 
 mathAtanh :: TypedTerm TestGroup
 mathAtanh = subgroup "atanh" [
   test "atanh 0" 0.0 0.0,
-  roundedPrimCase1 "atanh 0.5" _math_atanh 0.5 (atanh 0.5),
-  roundedPrimCase1 "atanh 0.1" _math_atanh 0.1 (atanh 0.1),
+  roundedPrimCase1 "atanh 0.5" DefMath.atanh 0.5 (atanh 0.5),
+  roundedPrimCase1 "atanh 0.1" DefMath.atanh 0.1 (atanh 0.1),
   -- Boundary: open interval (-1, 1); at the boundary atanh returns infinity
   test "atanh upper boundary" 1.0 posInf64,
   test "atanh lower boundary" (-1.0) negInf64,
@@ -229,7 +233,7 @@ mathAtanh = subgroup "atanh" [
   test "atanh +Inf" posInf64 nan64,
   test "atanh -Inf" negInf64 nan64]
   where
-    test name x result = primCase name _math_atanh [float64 x] (float64 result)
+    test name x result = primCase name DefMath.atanh [float64 x] (float64 result)
 
 mathCeiling :: TypedTerm TestGroup
 mathCeiling = subgroup "ceiling" [
@@ -242,38 +246,38 @@ mathCeiling = subgroup "ceiling" [
   test "ceiling +Inf" posInf64 posInf64,
   test "ceiling -Inf" negInf64 negInf64]
   where
-    test name x result = primCase name _math_ceiling [float64 x] (float64 result)
+    test name x result = primCase name DefMath.ceiling [float64 x] (float64 result)
 
 mathCos :: TypedTerm TestGroup
 mathCos = subgroup "cos" [
   test "cos 0" 0.0 1.0,
-  roundedPrimCase1 "cos pi/2" _math_cos (pi / 2) (cos (pi / 2)),
+  roundedPrimCase1 "cos pi/2" DefMath.cos (pi / 2) (cos (pi / 2)),
   test "cos pi" pi (-1.0),
-  roundedPrimCase1 "cos 1" _math_cos 1.0 (cos 1.0),
-  roundedPrimCase1 "cos 0.5" _math_cos 0.5 (cos 0.5),
+  roundedPrimCase1 "cos 1" DefMath.cos 1.0 (cos 1.0),
+  roundedPrimCase1 "cos 0.5" DefMath.cos 0.5 (cos 0.5),
   -- Special values
   test "cos NaN" nan64 nan64,
   test "cos +Inf" posInf64 nan64,
   test "cos -Inf" negInf64 nan64]
   where
-    test name x result = primCase name _math_cos [float64 x] (float64 result)
+    test name x result = primCase name DefMath.cos [float64 x] (float64 result)
 
 mathCosh :: TypedTerm TestGroup
 mathCosh = subgroup "cosh" [
   test "cosh 0" 0.0 1.0,
-  roundedPrimCase1 "cosh 1" _math_cosh 1.0 (cosh 1.0),
-  roundedPrimCase1 "cosh 2" _math_cosh 2.0 (cosh 2.0),
+  roundedPrimCase1 "cosh 1" DefMath.cosh 1.0 (cosh 1.0),
+  roundedPrimCase1 "cosh 2" DefMath.cosh 2.0 (cosh 2.0),
   -- Special values
   test "cosh NaN" nan64 nan64,
   test "cosh +Inf" posInf64 posInf64,
   test "cosh -Inf" negInf64 posInf64]
   where
-    test name x result = primCase name _math_cosh [float64 x] (float64 result)
+    test name x result = primCase name DefMath.cosh [float64 x] (float64 result)
 
 mathE :: TypedTerm TestGroup
 mathE = subgroup "e" [
   evalCase "Euler's number"
-    (Terms.primitive _math_roundFloat64 @@ int32 roundDigits @@ Terms.primitive _math_e)
+    (Terms.primitive DefMath.roundFloat64 @@ int32 roundDigits @@ Terms.primitive DefMath.e)
     (float64 (Math.roundFloat64 roundDigits (exp 1)))]
 
 mathEven :: TypedTerm TestGroup
@@ -284,21 +288,21 @@ mathEven = subgroup "even" [
   test "odd negative" (-5) false,
   test "zero" 0 true]
   where
-    test name x result = primCase name _math_even [int32 x] result
+    test name x result = primCase name DefMath.even [int32 x] result
 
 mathExp :: TypedTerm TestGroup
 mathExp = subgroup "exp" [
   test "exp 0" 0.0 1.0,
-  roundedPrimCase1 "exp 1" _math_exp 1.0 (exp 1.0),
-  roundedPrimCase1 "exp -1" _math_exp (-1.0) (exp (-1.0)),
-  roundedPrimCase1 "exp 2" _math_exp 2.0 (exp 2.0),
-  roundedPrimCase1 "exp 0.5" _math_exp 0.5 (exp 0.5),
+  roundedPrimCase1 "exp 1" DefMath.exp 1.0 (exp 1.0),
+  roundedPrimCase1 "exp -1" DefMath.exp (-1.0) (exp (-1.0)),
+  roundedPrimCase1 "exp 2" DefMath.exp 2.0 (exp 2.0),
+  roundedPrimCase1 "exp 0.5" DefMath.exp 0.5 (exp 0.5),
   -- Special values
   test "exp NaN" nan64 nan64,
   test "exp +Inf" posInf64 posInf64,
   test "exp -Inf" negInf64 0.0]
   where
-    test name x result = primCase name _math_exp [float64 x] (float64 result)
+    test name x result = primCase name DefMath.exp [float64 x] (float64 result)
 
 mathFloor :: TypedTerm TestGroup
 mathFloor = subgroup "floor" [
@@ -311,14 +315,14 @@ mathFloor = subgroup "floor" [
   test "floor +Inf" posInf64 posInf64,
   test "floor -Inf" negInf64 negInf64]
   where
-    test name x result = primCase name _math_floor [float64 x] (float64 result)
+    test name x result = primCase name DefMath.floor [float64 x] (float64 result)
 
 mathLog :: TypedTerm TestGroup
 mathLog = subgroup "log" [
   test "log 1" 1.0 0.0,
-  roundedPrimCase1 "log e" _math_log (exp 1.0) 1.0,
-  roundedPrimCase1 "log 2" _math_log 2.0 (log 2.0),
-  roundedPrimCase1 "log 10" _math_log 10.0 (log 10.0),
+  roundedPrimCase1 "log e" DefMath.log (exp 1.0) 1.0,
+  roundedPrimCase1 "log 2" DefMath.log 2.0 (log 2.0),
+  roundedPrimCase1 "log 10" DefMath.log 10.0 (log 10.0),
   -- Boundary: domain is (0, inf); at the boundary log returns -Inf
   test "log 0" 0.0 negInf64,
   -- Out-of-domain: returns NaN
@@ -328,7 +332,7 @@ mathLog = subgroup "log" [
   test "log +Inf" posInf64 posInf64,
   test "log -Inf" negInf64 nan64]
   where
-    test name x result = primCase name _math_log [float64 x] (float64 result)
+    test name x result = primCase name DefMath.log [float64 x] (float64 result)
 
 mathLogBase :: TypedTerm TestGroup
 mathLogBase = subgroup "logBase" [
@@ -336,7 +340,7 @@ mathLogBase = subgroup "logBase" [
   test "log10 10" 10.0 10.0 1.0,
   test "log10 100" 10.0 100.0 2.0,
   test "log2 8" 2.0 8.0 3.0,
-  roundedPrimCase2 "log2 10" _math_logBase 2.0 10.0 (logBase 2.0 10.0),
+  roundedPrimCase2 "log2 10" DefMath.logBase 2.0 10.0 (logBase 2.0 10.0),
   -- Boundary/out-of-domain in x (second argument): x=0 -> -Inf, x<0 -> NaN
   test "logBase 10 0" 10.0 0.0 negInf64,
   test "logBase 10 negative" 10.0 (-1.0) nan64,
@@ -351,7 +355,7 @@ mathLogBase = subgroup "logBase" [
   test "logBase +Inf 10" posInf64 10.0 0.0,
   test "logBase -Inf 10" negInf64 10.0 nan64]
   where
-    test name base x result = primCase name _math_logBase [float64 base, float64 x] (float64 result)
+    test name base x result = primCase name DefMath.logBase [float64 base, float64 x] (float64 result)
 
 mathMax :: TypedTerm TestGroup
 mathMax = subgroup "max" [
@@ -362,7 +366,7 @@ mathMax = subgroup "max" [
   test "mixed sign" (-5) 5 5,
   test "with zero" 0 42 42]
   where
-    test name x y result = primCase name _math_max [int32 x, int32 y] (int32 result)
+    test name x y result = primCase name DefMath.max [int32 x, int32 y] (int32 result)
 
 mathMaybeDiv :: TypedTerm TestGroup
 mathMaybeDiv = subgroup "maybeDiv" [
@@ -373,7 +377,7 @@ mathMaybeDiv = subgroup "maybeDiv" [
   test "negative dividend" (-10) 3 (Just (-4)),
   test "negative divisor" 10 (-3) (Just (-4))]
   where
-    test name x y result = primCase name _math_maybeDiv [int32 x, int32 y] (optionalInt32 result)
+    test name x y result = primCase name DefMath.maybeDiv [int32 x, int32 y] (optionalInt32 result)
 
 mathMin = subgroup "min" [
   test "first is smaller" 5 10 5,
@@ -383,7 +387,7 @@ mathMin = subgroup "min" [
   test "mixed sign" (-5) 5 (-5),
   test "with zero" 0 42 0]
   where
-    test name x y result = primCase name _math_min [int32 x, int32 y] (int32 result)
+    test name x y result = primCase name DefMath.min [int32 x, int32 y] (int32 result)
 
 mathMaybeMod :: TypedTerm TestGroup
 mathMaybeMod = subgroup "maybeMod" [
@@ -393,7 +397,7 @@ mathMaybeMod = subgroup "maybeMod" [
   test "negative dividend" (-10) 3 (Just 2),
   test "negative divisor" 10 (-3) (Just (-2))]
   where
-    test name x y result = primCase name _math_maybeMod [int32 x, int32 y] (optionalInt32 result)
+    test name x y result = primCase name DefMath.maybeMod [int32 x, int32 y] (optionalInt32 result)
 
 mathMaybePred :: TypedTerm TestGroup
 mathMaybePred = subgroup "maybePred" [
@@ -402,7 +406,7 @@ mathMaybePred = subgroup "maybePred" [
   test "negative" (-5) (Just (-6)),
   test "minBound" (-2147483648) Nothing]
   where
-    test name x result = primCase name _math_maybePred [int32 x] (optionalInt32 result)
+    test name x result = primCase name DefMath.maybePred [int32 x] (optionalInt32 result)
 
 mathMaybeRem :: TypedTerm TestGroup
 mathMaybeRem = subgroup "maybeRem" [
@@ -412,7 +416,7 @@ mathMaybeRem = subgroup "maybeRem" [
   test "negative dividend" (-10) 3 (Just (-1)),
   test "negative divisor" 10 (-3) (Just 1)]
   where
-    test name x y result = primCase name _math_maybeRem [int32 x, int32 y] (optionalInt32 result)
+    test name x y result = primCase name DefMath.maybeRem [int32 x, int32 y] (optionalInt32 result)
 
 mathMaybeSucc :: TypedTerm TestGroup
 mathMaybeSucc = subgroup "maybeSucc" [
@@ -421,7 +425,7 @@ mathMaybeSucc = subgroup "maybeSucc" [
   test "negative" (-5) (Just (-4)),
   test "maxBound" 2147483647 Nothing]
   where
-    test name x result = primCase name _math_maybeSucc [int32 x] (optionalInt32 result)
+    test name x result = primCase name DefMath.maybeSucc [int32 x] (optionalInt32 result)
 
 -- Float64 tests
 --
@@ -446,7 +450,7 @@ mathMul = subgroup "mul" [
   test "with zero" 42 0 0,
   test "with one" 42 1 42]
   where
-    test name x y result = primCase name _math_mul [int32 x, int32 y] (int32 result)
+    test name x y result = primCase name DefMath.mul [int32 x, int32 y] (int32 result)
 
 mathMulFloat64 :: TypedTerm TestGroup
 mathMulFloat64 = subgroup "mulFloat64" [
@@ -457,7 +461,7 @@ mathMulFloat64 = subgroup "mulFloat64" [
   test "with one" 42.0 1.0 42.0,
   test "fractional" 1.5 2.0 3.0]
   where
-    test name x y result = primCase name _math_mulFloat64 [float64 x, float64 y] (float64 result)
+    test name x y result = primCase name DefMath.mulFloat64 [float64 x, float64 y] (float64 result)
 
 mathNegate :: TypedTerm TestGroup
 mathNegate = subgroup "negate" [
@@ -465,7 +469,7 @@ mathNegate = subgroup "negate" [
   test "negative" (-5) 5,
   test "zero" 0 0]
   where
-    test name x result = primCase name _math_negate [int32 x] (int32 result)
+    test name x result = primCase name DefMath.negate [int32 x] (int32 result)
 
 mathNegateFloat64 :: TypedTerm TestGroup
 mathNegateFloat64 = subgroup "negateFloat64" [
@@ -477,7 +481,7 @@ mathNegateFloat64 = subgroup "negateFloat64" [
   -- Tracking: follow-up to #340 on IEEE negative zero preservation.
   test "fractional" 1.5 (-1.5)]
   where
-    test name x result = primCase name _math_negateFloat64 [float64 x] (float64 result)
+    test name x result = primCase name DefMath.negateFloat64 [float64 x] (float64 result)
 
 mathOdd :: TypedTerm TestGroup
 mathOdd = subgroup "odd" [
@@ -487,12 +491,12 @@ mathOdd = subgroup "odd" [
   test "even negative" (-4) false,
   test "zero" 0 false]
   where
-    test name x result = primCase name _math_odd [int32 x] result
+    test name x result = primCase name DefMath.odd [int32 x] result
 
 mathPi :: TypedTerm TestGroup
 mathPi = subgroup "pi" [
   evalCase "pi constant"
-    (Terms.primitive _math_roundFloat64 @@ int32 roundDigits @@ Terms.primitive _math_pi)
+    (Terms.primitive DefMath.roundFloat64 @@ int32 roundDigits @@ Terms.primitive DefMath.pi)
     (float64 (Math.roundFloat64 roundDigits pi))]
 
 mathPow :: TypedTerm TestGroup
@@ -500,7 +504,7 @@ mathPow = subgroup "pow" [
   test "2^3" 2.0 3.0 8.0,
   test "10^0" 10.0 0.0 1.0,
   test "2^-1" 2.0 (-1.0) 0.5,
-  roundedPrimCase2 "2^0.5" _math_pow 2.0 0.5 (2.0 ** 0.5),
+  roundedPrimCase2 "2^0.5" DefMath.pow 2.0 0.5 (2.0 ** 0.5),
   -- Boundaries: 0^0 = 1, 0^(-1) = +Inf, negative^fractional = NaN
   test "0^0" 0.0 0.0 1.0,
   test "0^-1" 0.0 (-1.0) posInf64,
@@ -515,7 +519,7 @@ mathPow = subgroup "pow" [
   test "2^+Inf" 2.0 posInf64 posInf64,
   test "2^-Inf" 2.0 negInf64 0.0]
   where
-    test name base exp result = primCase name _math_pow [float64 base, float64 exp] (float64 result)
+    test name base exp result = primCase name DefMath.pow [float64 base, float64 exp] (float64 result)
 
 mathRange :: TypedTerm TestGroup
 mathRange = subgroup "range" [
@@ -524,7 +528,7 @@ mathRange = subgroup "range" [
   test "two elements" 3 4 [3, 4],
   test "negative start" (-2) 2 [(-2), (-1), 0, 1, 2]]
   where
-    test name start end result = primCase name _math_range [int32 start, int32 end] (list $ int32 <$> result)
+    test name start end result = primCase name DefMath.range [int32 start, int32 end] (list $ int32 <$> result)
 
 mathRound :: TypedTerm TestGroup
 mathRound = subgroup "round" [
@@ -538,7 +542,7 @@ mathRound = subgroup "round" [
   test "round +Inf" posInf64 posInf64,
   test "round -Inf" negInf64 negInf64]
   where
-    test name x result = primCase name _math_round [float64 x] (float64 result)
+    test name x result = primCase name DefMath.round [float64 x] (float64 result)
 
 mathRoundFloat32 :: TypedTerm TestGroup
 mathRoundFloat32 = subgroup "roundFloat32" [
@@ -551,7 +555,7 @@ mathRoundFloat32 = subgroup "roundFloat32" [
   test "+Inf" 3 (1/0) (1/0),
   test "-Inf" 3 (-1/0) (-1/0)]
   where
-    test name n x result = primCase name _math_roundFloat32 [int32 n, float32 x] (float32 result)
+    test name n x result = primCase name DefMath.roundFloat32 [int32 n, float32 x] (float32 result)
 
 mathRoundFloat64 :: TypedTerm TestGroup
 mathRoundFloat64 = subgroup "roundFloat64" [
@@ -567,7 +571,7 @@ mathRoundFloat64 = subgroup "roundFloat64" [
   test "+Inf" 3 posInf64 posInf64,
   test "-Inf" 3 negInf64 negInf64]
   where
-    test name n x result = primCase name _math_roundFloat64 [int32 n, float64 x] (float64 result)
+    test name n x result = primCase name DefMath.roundFloat64 [int32 n, float64 x] (float64 result)
 
 mathSignum :: TypedTerm TestGroup
 mathSignum = subgroup "signum" [
@@ -575,33 +579,33 @@ mathSignum = subgroup "signum" [
   test "negative" (-5) (-1),
   test "zero" 0 0]
   where
-    test name x result = primCase name _math_signum [int32 x] (int32 result)
+    test name x result = primCase name DefMath.signum [int32 x] (int32 result)
 
 mathSin :: TypedTerm TestGroup
 mathSin = subgroup "sin" [
   test "sin 0" 0.0 0.0,
-  roundedPrimCase1 "sin pi/2" _math_sin (pi / 2) 1.0,
-  roundedPrimCase1 "sin pi" _math_sin pi (sin pi),
-  roundedPrimCase1 "sin 1" _math_sin 1.0 (sin 1.0),
-  roundedPrimCase1 "sin 0.5" _math_sin 0.5 (sin 0.5),
+  roundedPrimCase1 "sin pi/2" DefMath.sin (pi / 2) 1.0,
+  roundedPrimCase1 "sin pi" DefMath.sin pi (sin pi),
+  roundedPrimCase1 "sin 1" DefMath.sin 1.0 (sin 1.0),
+  roundedPrimCase1 "sin 0.5" DefMath.sin 0.5 (sin 0.5),
   -- Special values
   test "sin NaN" nan64 nan64,
   test "sin +Inf" posInf64 nan64,
   test "sin -Inf" negInf64 nan64]
   where
-    test name x result = primCase name _math_sin [float64 x] (float64 result)
+    test name x result = primCase name DefMath.sin [float64 x] (float64 result)
 
 mathSinh :: TypedTerm TestGroup
 mathSinh = subgroup "sinh" [
   test "sinh 0" 0.0 0.0,
-  roundedPrimCase1 "sinh 1" _math_sinh 1.0 (sinh 1.0),
-  roundedPrimCase1 "sinh 2" _math_sinh 2.0 (sinh 2.0),
+  roundedPrimCase1 "sinh 1" DefMath.sinh 1.0 (sinh 1.0),
+  roundedPrimCase1 "sinh 2" DefMath.sinh 2.0 (sinh 2.0),
   -- Special values
   test "sinh NaN" nan64 nan64,
   test "sinh +Inf" posInf64 posInf64,
   test "sinh -Inf" negInf64 negInf64]
   where
-    test name x result = primCase name _math_sinh [float64 x] (float64 result)
+    test name x result = primCase name DefMath.sinh [float64 x] (float64 result)
 
 mathSqrt :: TypedTerm TestGroup
 mathSqrt = subgroup "sqrt" [
@@ -609,7 +613,7 @@ mathSqrt = subgroup "sqrt" [
   test "sqrt 9" 9.0 3.0,
   test "sqrt 2" 2.0 (sqrt 2.0),
   test "sqrt 0" 0.0 0.0,
-  roundedPrimCase1 "sqrt 3" _math_sqrt 3.0 (sqrt 3.0),
+  roundedPrimCase1 "sqrt 3" DefMath.sqrt 3.0 (sqrt 3.0),
   -- Out-of-domain: returns NaN (domain [0, inf))
   test "sqrt negative" (-1.0) nan64,
   -- Special values
@@ -617,7 +621,7 @@ mathSqrt = subgroup "sqrt" [
   test "sqrt +Inf" posInf64 posInf64,
   test "sqrt -Inf" negInf64 nan64]
   where
-    test name x result = primCase name _math_sqrt [float64 x] (float64 result)
+    test name x result = primCase name DefMath.sqrt [float64 x] (float64 result)
 
 mathSub :: TypedTerm TestGroup
 mathSub = subgroup "sub" [
@@ -626,7 +630,7 @@ mathSub = subgroup "sub" [
   test "mixed sign" 10 (-3) 13,
   test "with zero" 42 0 42]
   where
-    test name x y result = primCase name _math_sub [int32 x, int32 y] (int32 result)
+    test name x y result = primCase name DefMath.sub [int32 x, int32 y] (int32 result)
 
 mathSubFloat64 :: TypedTerm TestGroup
 mathSubFloat64 = subgroup "subFloat64" [
@@ -637,32 +641,32 @@ mathSubFloat64 = subgroup "subFloat64" [
   test "same value" 42.0 42.0 0.0,
   test "fractional" 2.5 1.5 1.0]
   where
-    test name x y result = primCase name _math_subFloat64 [float64 x, float64 y] (float64 result)
+    test name x y result = primCase name DefMath.subFloat64 [float64 x, float64 y] (float64 result)
 
 mathTan :: TypedTerm TestGroup
 mathTan = subgroup "tan" [
   test "tan 0" 0.0 0.0,
-  roundedPrimCase1 "tan pi/4" _math_tan (pi / 4) (tan (pi / 4)),
-  roundedPrimCase1 "tan 1" _math_tan 1.0 (tan 1.0),
-  roundedPrimCase1 "tan 0.5" _math_tan 0.5 (tan 0.5),
+  roundedPrimCase1 "tan pi/4" DefMath.tan (pi / 4) (tan (pi / 4)),
+  roundedPrimCase1 "tan 1" DefMath.tan 1.0 (tan 1.0),
+  roundedPrimCase1 "tan 0.5" DefMath.tan 0.5 (tan 0.5),
   -- Special values
   test "tan NaN" nan64 nan64,
   test "tan +Inf" posInf64 nan64,
   test "tan -Inf" negInf64 nan64]
   where
-    test name x result = primCase name _math_tan [float64 x] (float64 result)
+    test name x result = primCase name DefMath.tan [float64 x] (float64 result)
 
 mathTanh :: TypedTerm TestGroup
 mathTanh = subgroup "tanh" [
   test "tanh 0" 0.0 0.0,
-  roundedPrimCase1 "tanh 1" _math_tanh 1.0 (tanh 1.0),
-  roundedPrimCase1 "tanh 0.5" _math_tanh 0.5 (tanh 0.5),
+  roundedPrimCase1 "tanh 1" DefMath.tanh 1.0 (tanh 1.0),
+  roundedPrimCase1 "tanh 0.5" DefMath.tanh 0.5 (tanh 0.5),
   -- Special values: tanh's range is (-1, 1); saturates at infinities
   test "tanh NaN" nan64 nan64,
   test "tanh +Inf" posInf64 1.0,
   test "tanh -Inf" negInf64 (-1.0)]
   where
-    test name x result = primCase name _math_tanh [float64 x] (float64 result)
+    test name x result = primCase name DefMath.tanh [float64 x] (float64 result)
 
 mathTruncate :: TypedTerm TestGroup
 mathTruncate = subgroup "truncate" [
@@ -675,7 +679,7 @@ mathTruncate = subgroup "truncate" [
   test "truncate +Inf" posInf64 posInf64,
   test "truncate -Inf" negInf64 negInf64]
   where
-    test name x result = primCase name _math_truncate [float64 x] (float64 result)
+    test name x result = primCase name DefMath.truncate [float64 x] (float64 result)
 
 -- | Special float64 values: positive infinity, negative infinity, and NaN.
 -- These are used to test that domain-restricted primitives return IEEE 754
@@ -700,14 +704,14 @@ roundDigits = 12
 -- a fixed number of significant digits using roundFloat64. This makes
 -- transcendental function tests portable across platforms with different libm
 -- implementations.
-roundedPrimCase1 :: String -> Name -> Double -> Double -> TypedTerm TestCaseWithMetadata
-roundedPrimCase1 cname primName x result = evalCase cname input output
+roundedPrimCase1 :: ToPrimName n => String -> n -> Double -> Double -> TypedTerm TestCaseWithMetadata
+roundedPrimCase1 cname prim x result = evalCase cname input output
   where
-    input = Terms.primitive _math_roundFloat64 @@ int32 roundDigits @@ (Terms.primitive primName @@ float64 x)
+    input = Terms.primitive DefMath.roundFloat64 @@ int32 roundDigits @@ (Terms.primitive prim @@ float64 x)
     output = float64 (Math.roundFloat64 roundDigits result)
 
-roundedPrimCase2 :: String -> Name -> Double -> Double -> Double -> TypedTerm TestCaseWithMetadata
-roundedPrimCase2 cname primName x y result = evalCase cname input output
+roundedPrimCase2 :: ToPrimName n => String -> n -> Double -> Double -> Double -> TypedTerm TestCaseWithMetadata
+roundedPrimCase2 cname prim x y result = evalCase cname input output
   where
-    input = Terms.primitive _math_roundFloat64 @@ int32 roundDigits @@ (Terms.primitive primName @@ float64 x @@ float64 y)
+    input = Terms.primitive DefMath.roundFloat64 @@ int32 roundDigits @@ (Terms.primitive prim @@ float64 x @@ float64 y)
     output = float64 (Math.roundFloat64 roundDigits result)

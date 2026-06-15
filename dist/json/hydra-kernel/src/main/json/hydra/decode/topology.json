@@ -21,7 +21,7 @@
             "type": {
               "either": {
                 "left": {"variable": "hydra.errors.DecodingError"},
-                "right": {"map": {"keys": {"literal": {"integer": {"int32": {}}}}, "values": {"list": {"literal": {"integer": {"int32": {}}}}}}}}}}},
+                "right": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"list": {"variable": "hydra.topology.Vertex"}}}}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -31,13 +31,13 @@
                     "function": {
                       "typeApplication": {
                         "body": {
-                          "typeApplication": {"body": {"variable": "hydra.extract.core.decodeMap"}, "type": {"literal": {"integer": {"int32": {}}}}}},
-                        "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                          "typeApplication": {"body": {"variable": "hydra.extract.core.decodeMap"}, "type": {"variable": "hydra.topology.Vertex"}}},
+                        "type": {"list": {"variable": "hydra.topology.Vertex"}}}},
                     "argument": {"variable": "hydra.decode.topology.vertex"}}},
                 "argument": {
                   "application": {
                     "function": {
-                      "typeApplication": {"body": {"variable": "hydra.extract.core.decodeList"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                      "typeApplication": {"body": {"variable": "hydra.extract.core.decodeList"}, "type": {"variable": "hydra.topology.Vertex"}}},
                     "argument": {"variable": "hydra.decode.topology.vertex"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Decoder for hydra.topology.Graph"}}}]}}}}},
     {
@@ -264,7 +264,7 @@
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"map": {"keys": {"literal": {"integer": {"int32": {}}}}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                            "type": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
                                                                         "type": {"variable": "hydra.topology.TarjanState"}}},
                                                                     "argument": {
                                                                       "application": {
@@ -281,7 +281,7 @@
                                                                                             "body": {
                                                                                               "typeApplication": {"body": {"variable": "hydra.extract.core.requireField"}, "type": {"variable": "hydra.graph.Graph"}}},
                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                        "type": {"map": {"keys": {"literal": {"integer": {"int32": {}}}}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                                        "type": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
                                                                                     "argument": {"literal": {"string": "indices"}}}},
                                                                                 "argument": {
                                                                                   "application": {
@@ -290,7 +290,7 @@
                                                                                         "function": {
                                                                                           "typeApplication": {
                                                                                             "body": {
-                                                                                              "typeApplication": {"body": {"variable": "hydra.extract.core.decodeMap"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                              "typeApplication": {"body": {"variable": "hydra.extract.core.decodeMap"}, "type": {"variable": "hydra.topology.Vertex"}}},
                                                                                             "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                         "argument": {"variable": "hydra.decode.topology.vertex"}}},
                                                                                     "argument": {
@@ -399,7 +399,7 @@
                                                                 "argument": {
                                                                   "lambda": {
                                                                     "parameter": "field_indices",
-                                                                    "domain": {"map": {"keys": {"literal": {"integer": {"int32": {}}}}, "values": {"literal": {"integer": {"int32": {}}}}}},
+                                                                    "domain": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}},
                                                                     "body": {
                                                                       "application": {
                                                                         "function": {
@@ -410,7 +410,7 @@
                                                                                   "typeApplication": {
                                                                                     "body": {
                                                                                       "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                                    "type": {"map": {"keys": {"literal": {"integer": {"int32": {}}}}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                                    "type": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
                                                                                 "type": {"variable": "hydra.topology.TarjanState"}}},
                                                                             "argument": {
                                                                               "application": {
@@ -427,7 +427,7 @@
                                                                                                     "body": {
                                                                                                       "typeApplication": {"body": {"variable": "hydra.extract.core.requireField"}, "type": {"variable": "hydra.graph.Graph"}}},
                                                                                                     "type": {"variable": "hydra.core.Term"}}},
-                                                                                                "type": {"map": {"keys": {"literal": {"integer": {"int32": {}}}}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                                                "type": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}}}},
                                                                                             "argument": {"literal": {"string": "lowLinks"}}}},
                                                                                         "argument": {
                                                                                           "application": {
@@ -436,7 +436,7 @@
                                                                                                 "function": {
                                                                                                   "typeApplication": {
                                                                                                     "body": {
-                                                                                                      "typeApplication": {"body": {"variable": "hydra.extract.core.decodeMap"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                                      "typeApplication": {"body": {"variable": "hydra.extract.core.decodeMap"}, "type": {"variable": "hydra.topology.Vertex"}}},
                                                                                                     "type": {"literal": {"integer": {"int32": {}}}}}},
                                                                                                 "argument": {"variable": "hydra.decode.topology.vertex"}}},
                                                                                             "argument": {
@@ -545,7 +545,7 @@
                                                                         "argument": {
                                                                           "lambda": {
                                                                             "parameter": "field_lowLinks",
-                                                                            "domain": {"map": {"keys": {"literal": {"integer": {"int32": {}}}}, "values": {"literal": {"integer": {"int32": {}}}}}},
+                                                                            "domain": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}},
                                                                             "body": {
                                                                               "application": {
                                                                                 "function": {
@@ -556,7 +556,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                                            "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                                                            "type": {"list": {"variable": "hydra.topology.Vertex"}}}},
                                                                                         "type": {"variable": "hydra.topology.TarjanState"}}},
                                                                                     "argument": {
                                                                                       "application": {
@@ -573,19 +573,19 @@
                                                                                                             "body": {
                                                                                                               "typeApplication": {"body": {"variable": "hydra.extract.core.requireField"}, "type": {"variable": "hydra.graph.Graph"}}},
                                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                                        "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                                                                        "type": {"list": {"variable": "hydra.topology.Vertex"}}}},
                                                                                                     "argument": {"literal": {"string": "stack"}}}},
                                                                                                 "argument": {
                                                                                                   "application": {
                                                                                                     "function": {
-                                                                                                      "typeApplication": {"body": {"variable": "hydra.extract.core.decodeList"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                                      "typeApplication": {"body": {"variable": "hydra.extract.core.decodeList"}, "type": {"variable": "hydra.topology.Vertex"}}},
                                                                                                     "argument": {"variable": "hydra.decode.topology.vertex"}}}}},
                                                                                             "argument": {"variable": "fieldMap"}}},
                                                                                         "argument": {"variable": "cx"}}}}},
                                                                                 "argument": {
                                                                                   "lambda": {
                                                                                     "parameter": "field_stack",
-                                                                                    "domain": {"list": {"literal": {"integer": {"int32": {}}}}},
+                                                                                    "domain": {"list": {"variable": "hydra.topology.Vertex"}},
                                                                                     "body": {
                                                                                       "application": {
                                                                                         "function": {
@@ -596,7 +596,7 @@
                                                                                                   "typeApplication": {
                                                                                                     "body": {
                                                                                                       "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                                                    "type": {"set": {"literal": {"integer": {"int32": {}}}}}}},
+                                                                                                    "type": {"set": {"variable": "hydra.topology.Vertex"}}}},
                                                                                                 "type": {"variable": "hydra.topology.TarjanState"}}},
                                                                                             "argument": {
                                                                                               "application": {
@@ -613,19 +613,19 @@
                                                                                                                     "body": {
                                                                                                                       "typeApplication": {"body": {"variable": "hydra.extract.core.requireField"}, "type": {"variable": "hydra.graph.Graph"}}},
                                                                                                                     "type": {"variable": "hydra.core.Term"}}},
-                                                                                                                "type": {"set": {"literal": {"integer": {"int32": {}}}}}}},
+                                                                                                                "type": {"set": {"variable": "hydra.topology.Vertex"}}}},
                                                                                                             "argument": {"literal": {"string": "onStack"}}}},
                                                                                                         "argument": {
                                                                                                           "application": {
                                                                                                             "function": {
-                                                                                                              "typeApplication": {"body": {"variable": "hydra.extract.core.decodeSet"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                                              "typeApplication": {"body": {"variable": "hydra.extract.core.decodeSet"}, "type": {"variable": "hydra.topology.Vertex"}}},
                                                                                                             "argument": {"variable": "hydra.decode.topology.vertex"}}}}},
                                                                                                     "argument": {"variable": "fieldMap"}}},
                                                                                                 "argument": {"variable": "cx"}}}}},
                                                                                         "argument": {
                                                                                           "lambda": {
                                                                                             "parameter": "field_onStack",
-                                                                                            "domain": {"set": {"literal": {"integer": {"int32": {}}}}},
+                                                                                            "domain": {"set": {"variable": "hydra.topology.Vertex"}},
                                                                                             "body": {
                                                                                               "application": {
                                                                                                 "function": {
@@ -636,7 +636,7 @@
                                                                                                           "typeApplication": {
                                                                                                             "body": {
                                                                                                               "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                                                            "type": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                                                            "type": {"list": {"list": {"variable": "hydra.topology.Vertex"}}}}},
                                                                                                         "type": {"variable": "hydra.topology.TarjanState"}}},
                                                                                                     "argument": {
                                                                                                       "application": {
@@ -653,23 +653,23 @@
                                                                                                                             "body": {
                                                                                                                               "typeApplication": {"body": {"variable": "hydra.extract.core.requireField"}, "type": {"variable": "hydra.graph.Graph"}}},
                                                                                                                             "type": {"variable": "hydra.core.Term"}}},
-                                                                                                                        "type": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                                                                        "type": {"list": {"list": {"variable": "hydra.topology.Vertex"}}}}},
                                                                                                                     "argument": {"literal": {"string": "sccs"}}}},
                                                                                                                 "argument": {
                                                                                                                   "application": {
                                                                                                                     "function": {
-                                                                                                                      "typeApplication": {"body": {"variable": "hydra.extract.core.decodeList"}, "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                                                                                      "typeApplication": {"body": {"variable": "hydra.extract.core.decodeList"}, "type": {"list": {"variable": "hydra.topology.Vertex"}}}},
                                                                                                                     "argument": {
                                                                                                                       "application": {
                                                                                                                         "function": {
-                                                                                                                          "typeApplication": {"body": {"variable": "hydra.extract.core.decodeList"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                                                          "typeApplication": {"body": {"variable": "hydra.extract.core.decodeList"}, "type": {"variable": "hydra.topology.Vertex"}}},
                                                                                                                         "argument": {"variable": "hydra.decode.topology.vertex"}}}}}}},
                                                                                                             "argument": {"variable": "fieldMap"}}},
                                                                                                         "argument": {"variable": "cx"}}}}},
                                                                                                 "argument": {
                                                                                                   "lambda": {
                                                                                                     "parameter": "field_sccs",
-                                                                                                    "domain": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                                    "domain": {"list": {"list": {"variable": "hydra.topology.Vertex"}}},
                                                                                                     "body": {
                                                                                                       "typeApplication": {
                                                                                                         "body": {

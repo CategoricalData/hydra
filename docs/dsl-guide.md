@@ -529,7 +529,7 @@ produce (var "result")
 
 ```haskell
 -- Call a primitive function
-primitive2 _math_add (int32 2) (int32 3)
+primitive2 DefMath.add (int32 2) (int32 3)
 
 -- Common primitives are wrapped for convenience
 import Hydra.Dsl.Meta.Lib.Math as Math
@@ -750,7 +750,7 @@ The entire Hydra kernel is defined using the meta DSLs.
 (see [Sources/Kernel/Terms](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms)):
 - `Hydra/Sources/Kernel/Terms/Inference.hs` - Type inference algorithm
 - `Hydra/Sources/Kernel/Terms/Reduction.hs` - Term reduction logic
-- `Hydra/Sources/Libraries.hs` - Primitive function signatures
+- `overlay/.../Hydra/Dsl/Libraries.hs` - host-side primitive registry (names derived from PrimitiveDefinitions)
 - These modules import `Hydra.Dsl.Meta.Terms` (unqualified)
 
 ## Operator reference
@@ -829,7 +829,7 @@ add = lambdas ["x", "y"] (
 
 -- Phantom-typed DSL
 add = "x" ~> "y" ~>
-  primitive2 _math_add (var "x") (var "y")
+  primitive2 DefMath.add (var "x") (var "y")
 
 -- Or using library functions
 import Hydra.Dsl.Meta.Lib.Math as Math

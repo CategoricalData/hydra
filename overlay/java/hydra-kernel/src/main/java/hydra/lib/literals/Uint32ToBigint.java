@@ -27,7 +27,7 @@ public class Uint32ToBigint extends PrimitiveFunction {
      * @return the function name "hydra.lib.literals.uint32ToBigint"
      */
     public Name name() {
-        return new Name("hydra.lib.literals.uint32ToBigint");
+        return hydra.lib.Literals.uint32ToBigint().name;
     }
 
     /**

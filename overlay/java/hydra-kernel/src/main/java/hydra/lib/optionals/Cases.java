@@ -28,7 +28,7 @@ public class Cases extends PrimitiveFunction {
      * @return the name "hydra.lib.optionals.cases"
      */
     public Name name() {
-        return new Name("hydra.lib.optionals.cases");
+        return hydra.lib.Optionals.cases().name;
     }
 
     @Override

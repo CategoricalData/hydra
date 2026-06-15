@@ -25,7 +25,7 @@ import hydra.util.Either;
  */
 public class Floor extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.math.floor");
+        return hydra.lib.Math_.floor().name;
     }
 
     @Override

@@ -16,6 +16,8 @@ import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
+import qualified Hydra.Dsl.Prims as Prims
+import qualified Hydra.Lib.Logic as DefLogic
 
 
 ns :: ModuleName
@@ -288,11 +290,11 @@ polymorphicEithersTests = define "polymorphicEithersTests" $
     (T.forAlls ["t0", "t1"] $ T.function (T.var "t0") (T.either_ (T.var "t1") (T.var "t0"))),
   checkTest "either from two lambdas" []
     (lambda "flag" $ lambda "x" $
-      primitive _logic_ifElse @@ var "flag" @@
+      primitive DefLogic.ifElse @@ var "flag" @@
         (left $ var "x") @@
         (right $ var "x"))
     (tylam "t0" $ lambdaTyped "flag" T.boolean $ lambdaTyped "x" (T.var "t0") $
-      tyapp (primitive _logic_ifElse) (T.either_ (T.var "t0") (T.var "t0")) @@ var "flag" @@
+      tyapp (primitive DefLogic.ifElse) (T.either_ (T.var "t0") (T.var "t0")) @@ var "flag" @@
         tyapps (left $ var "x") [T.var "t0", T.var "t0"] @@
         tyapps (right $ var "x") [T.var "t0", T.var "t0"])
     (T.forAlls ["t0"] $ T.function T.boolean (T.function (T.var "t0") (T.either_ (T.var "t0") (T.var "t0"))))]
@@ -397,11 +399,11 @@ polymorphicOptionalsTests = define "polymorphicOptionalsTests" $
     (T.forAlls ["t0", "t1"] $ T.function (T.var "t0") (T.optional $ T.var "t1")),
   checkTest "conditional optional" []
     (lambda "x" $ lambda "flag" $
-      primitive _logic_ifElse @@ var "flag" @@
+      primitive DefLogic.ifElse @@ var "flag" @@
         (optional $ just $ var "x") @@
         (optional nothing))
     (tylams ["t0"] $ lambdaTyped "x" (T.var "t0") $ lambdaTyped "flag" T.boolean $
-      tyapp (primitive _logic_ifElse) (T.optional $ T.var "t0") @@ var "flag" @@
+      tyapp (primitive DefLogic.ifElse) (T.optional $ T.var "t0") @@ var "flag" @@
         (optional $ just $ var "x") @@
         (tyapp (optional nothing) (T.var "t0")))
     (T.forAlls ["t0"] $ T.function (T.var "t0") (T.function T.boolean (T.optional $ T.var "t0")))]

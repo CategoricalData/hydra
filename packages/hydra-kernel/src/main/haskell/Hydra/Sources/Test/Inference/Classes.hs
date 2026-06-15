@@ -14,6 +14,12 @@ import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
+import qualified Hydra.Dsl.Prims as Prims
+import qualified Hydra.Lib.Equality as DefEquality
+import qualified Hydra.Lib.Lists as DefLists
+import qualified Hydra.Lib.Maps as DefMaps
+import qualified Hydra.Lib.Math as DefMath
+import qualified Hydra.Lib.Sets as DefSets
 
 
 ns :: ModuleName
@@ -86,12 +92,12 @@ testGroupForCollectionTerms = define "testGroupForCollectionTerms" $
     subgroup "Collection terms with primitives" [
       -- \x -> set{x, math.negate x}  =>  Int32 -> Set Int32  (negate forces Int32)
       expectMono 1 [tag_disabledForMinimalInference]
-        (lambda "x" $ set [var "x", primitive _math_negate @@ var "x"])
+        (lambda "x" $ set [var "x", primitive DefMath.negate @@ var "x"])
         (T.function T.int32 (T.set T.int32)),
       -- \k -> map{k: lists.sort (list [k])}
       -- Key needs Ord (from map literal), value needs Ord (from lists.sort) — same variable
       expectPolyConstrained 2 [tag_disabledForMinimalInference]
-        (lambda "k" $ mapTerm [(var "k", primitive _lists_sort @@ list [var "k"])])
+        (lambda "k" $ mapTerm [(var "k", primitive DefLists.sort @@ list [var "k"])])
         ["t0"] [("t0", ["ordering"])] (T.function (T.var "t0") (T.map (T.var "t0") (T.list $ T.var "t0")))],
 
     -- Constraint propagation through inferMany: constraints from sub-expressions
@@ -101,23 +107,23 @@ testGroupForCollectionTerms = define "testGroupForCollectionTerms" $
       -- Key is Int32 (concrete), value is Set t0 (Ord t0 from sets.fromList)
       -- Tests: map value inference propagates constraints through inferMany
       expectPolyConstrained 1 [tag_disabledForMinimalInference]
-        (lambda "xs" $ mapTerm [(primitive _lists_length @@ var "xs", primitive _sets_fromList @@ var "xs")])
+        (lambda "xs" $ mapTerm [(primitive DefLists.length @@ var "xs", primitive DefSets.fromList @@ var "xs")])
         ["t0"] [("t0", ["ordering"])] (T.function (T.list $ T.var "t0") (T.map T.int32 (T.set $ T.var "t0"))),
       -- [lists.sort]  =>  forall t0. Ord t0 => [t0 -> t0]
       -- Tests: list element inference propagates constraints through inferMany
       expectPolyConstrained 2 [tag_disabledForMinimalInference]
-        (list [primitive _lists_sort])
+        (list [primitive DefLists.sort])
         ["t0"] [("t0", ["ordering"])] (T.list $ T.function (T.list $ T.var "t0") (T.list $ T.var "t0")),
       -- pair (sets.fromList) 42  =>  forall t0. Ord t0 => pair<([t0] -> Set t0), Int32>
       -- Tests: pair inference propagates constraints through inferMany
       expectPolyConstrained 3 [tag_disabledForMinimalInference]
-        (pair (primitive _sets_fromList) (int32 42))
+        (pair (primitive DefSets.fromList) (int32 42))
         ["t0"] [("t0", ["ordering"])] (T.pair (T.function (T.list $ T.var "t0") (T.set $ T.var "t0")) T.int32),
       -- \xs -> set{sets.fromList xs}
       -- Outer set needs Ord on set<t0>, inner sets.fromList needs Ord on t0
       -- Tests: set element inference propagates constraints through inferMany
       expectPolyConstrained 4 [tag_disabledForMinimalInference]
-        (lambda "xs" $ set [primitive _sets_fromList @@ var "xs"])
+        (lambda "xs" $ set [primitive DefSets.fromList @@ var "xs"])
         ["t0"] [("t0", ["ordering"])] (T.function (T.list $ T.var "t0") (T.set $ T.set $ T.var "t0"))]]
 
 -- | Constraint propagation through function composition.
@@ -129,13 +135,13 @@ testGroupForComposition = define "testGroupForComposition" $
       -- \xs -> maps.fromList (lists.map (\x -> pair x x) xs)
       -- Key type needs Ord (from maps.fromList)
       expectPolyConstrained 1 []
-        (lambda "xs" $ primitive _maps_fromList @@ (primitive _lists_map @@ (lambda "x" $ pair (var "x") (var "x")) @@ var "xs"))
+        (lambda "xs" $ primitive DefMaps.fromList @@ (primitive DefLists.map @@ (lambda "x" $ pair (var "x") (var "x")) @@ var "xs"))
         ["t0"] [("t0", ["ordering"])]
         (T.function (T.list $ T.var "t0") (T.map (T.var "t0") (T.var "t0"))),
       -- \f -> \xs -> sets.fromList (lists.map f xs)
       -- Result element type needs Ord (from sets.fromList)
       expectPolyConstrained 2 []
-        (lambda "f" $ lambda "xs" $ primitive _sets_fromList @@ (primitive _lists_map @@ var "f" @@ var "xs"))
+        (lambda "f" $ lambda "xs" $ primitive DefSets.fromList @@ (primitive DefLists.map @@ var "f" @@ var "xs"))
         ["t0", "t1"] [("t1", ["ordering"])]
         (T.functionMany [T.function (T.var "t0") (T.var "t1"), T.list (T.var "t0"), T.set (T.var "t1")])],
 
@@ -143,7 +149,7 @@ testGroupForComposition = define "testGroupForComposition" $
       -- \m -> maps.map lists.sort m
       -- Value type needs Ord (from lists.sort), key type needs Ord (from maps.map)
       expectPolyConstrained 1 []
-        (lambda "m" $ primitive _maps_map @@ primitive _lists_sort @@ var "m")
+        (lambda "m" $ primitive DefMaps.map @@ primitive DefLists.sort @@ var "m")
         ["t0", "t1"] [("t0", ["ordering"]), ("t1", ["ordering"])]
         (T.function (T.map (T.var "t0") (T.list $ T.var "t1")) (T.map (T.var "t0") (T.list $ T.var "t1")))]]
 
@@ -156,21 +162,21 @@ testGroupForLetBindings = define "testGroupForLetBindings" $
       -- let lookup = \k -> \m -> maps.lookup k m in lookup
       expectPolyConstrained 1 []
         (lets [
-          "lookup">: lambda "k" $ lambda "m" $ primitive _maps_lookup @@ var "k" @@ var "m"]
+          "lookup">: lambda "k" $ lambda "m" $ primitive DefMaps.lookup @@ var "k" @@ var "m"]
           $ var "lookup")
         ["t0", "t1"] [("t0", ["ordering"])]
         (T.functionMany [T.var "t0", T.map (T.var "t0") (T.var "t1"), T.optional (T.var "t1")]),
       -- let member = \x -> \s -> sets.member x s in member
       expectPolyConstrained 2 []
         (lets [
-          "member">: lambda "x" $ lambda "s" $ primitive _sets_member @@ var "x" @@ var "s"]
+          "member">: lambda "x" $ lambda "s" $ primitive DefSets.member @@ var "x" @@ var "s"]
           $ var "member")
         ["t0"] [("t0", ["ordering"])]
         (T.functionMany [T.var "t0", T.set (T.var "t0"), T.boolean]),
       -- let fromList = maps.fromList in fromList
       expectPolyConstrained 3 []
         (lets [
-          "fromList">: primitive _maps_fromList]
+          "fromList">: primitive DefMaps.fromList]
           $ var "fromList")
         ["t0", "t1"] [("t0", ["ordering"])]
         (T.function (T.list $ T.pair (T.var "t0") (T.var "t1")) (T.map (T.var "t0") (T.var "t1")))],
@@ -179,14 +185,14 @@ testGroupForLetBindings = define "testGroupForLetBindings" $
       -- let f = \m -> maps.map math.negate m in f  => Ord k => Map k Int32 -> Map k Int32
       expectPolyConstrained 1 []
         (lets [
-          "f">: lambda "m" $ primitive _maps_map @@ primitive _math_negate @@ var "m"]
+          "f">: lambda "m" $ primitive DefMaps.map @@ primitive DefMath.negate @@ var "m"]
           $ var "f")
         ["t0"] [("t0", ["ordering"])]
         (T.function (T.map (T.var "t0") T.int32) (T.map (T.var "t0") T.int32)),
       -- let f = \xs -> sets.fromList xs in f  => Ord x => [x] -> Set x
       expectPolyConstrained 2 []
         (lets [
-          "f">: lambda "xs" $ primitive _sets_fromList @@ var "xs"]
+          "f">: lambda "xs" $ primitive DefSets.fromList @@ var "xs"]
           $ var "f")
         ["t0"] [("t0", ["ordering"])]
         (T.function (T.list $ T.var "t0") (T.set $ T.var "t0"))],
@@ -196,7 +202,7 @@ testGroupForLetBindings = define "testGroupForLetBindings" $
       -- Both uses instantiate f, constraints vanish at concrete types
       expectMono 1 []
         (lets [
-          "f">: primitive _maps_fromList]
+          "f">: primitive DefMaps.fromList]
           $ pair (var "f" @@ list [pair (string "a") (int32 1)])
                  (var "f" @@ list [pair true (string "x")]))
         (T.pair (T.map T.string T.int32) (T.map T.boolean T.string))]]
@@ -209,41 +215,41 @@ testGroupForMonomorphicConstraints = define "testGroupForMonomorphicConstraints"
     subgroup "Map operations with concrete types" [
       -- maps.fromList [("a", 1)] => Map String Int32
       expectMono 1 []
-        (primitive _maps_fromList @@ list [pair (string "a") (int32 1)])
+        (primitive DefMaps.fromList @@ list [pair (string "a") (int32 1)])
         (T.map T.string T.int32),
       -- maps.lookup "k" (maps.singleton "k" 42) => Optional Int32
       expectMono 2 []
-        (primitive _maps_lookup @@ string "k" @@ (primitive _maps_singleton @@ string "k" @@ int32 42))
+        (primitive DefMaps.lookup @@ string "k" @@ (primitive DefMaps.singleton @@ string "k" @@ int32 42))
         (T.optional T.int32),
       -- maps.insert "k" 42 maps.empty => Map String Int32
       expectMono 3 []
-        (primitive _maps_insert @@ string "k" @@ int32 42 @@ primitive _maps_empty)
+        (primitive DefMaps.insert @@ string "k" @@ int32 42 @@ primitive DefMaps.empty)
         (T.map T.string T.int32)],
 
     subgroup "Set operations with concrete types" [
       -- sets.fromList [1, 2, 3] => Set Int32
       expectMono 1 []
-        (primitive _sets_fromList @@ list [int32 1, int32 2, int32 3])
+        (primitive DefSets.fromList @@ list [int32 1, int32 2, int32 3])
         (T.set T.int32),
       -- sets.member 42 (sets.singleton 42) => Boolean
       expectMono 2 []
-        (primitive _sets_member @@ int32 42 @@ (primitive _sets_singleton @@ int32 42))
+        (primitive DefSets.member @@ int32 42 @@ (primitive DefSets.singleton @@ int32 42))
         T.boolean],
 
     subgroup "Equality operations with concrete types" [
       -- equality.equal 1 2 => Boolean
       expectMono 1 []
-        (primitive _equality_equal @@ int32 1 @@ int32 2)
+        (primitive DefEquality.equal @@ int32 1 @@ int32 2)
         T.boolean,
       -- equality.compare "a" "b" => Comparison
       expectMono 2 []
-        (primitive _equality_compare @@ string "a" @@ string "b")
+        (primitive DefEquality.compare @@ string "a" @@ string "b")
         (T.var "hydra.util.Comparison")],
 
     subgroup "List operations with concrete types" [
       -- lists.sort [3, 1, 2] => [Int32]
       expectMono 1 []
-        (primitive _lists_sort @@ list [int32 3, int32 1, int32 2])
+        (primitive DefLists.sort @@ list [int32 3, int32 1, int32 2])
         (T.list T.int32)]]
 
 -- | Nested container types where constraints apply at multiple levels.
@@ -255,7 +261,7 @@ testGroupForNestedContainers = define "testGroupForNestedContainers" $
       -- \m -> maps.map sets.fromList m
       -- Map key needs Ord, set element needs Ord
       expectPolyConstrained 1 []
-        (lambda "m" $ primitive _maps_map @@ primitive _sets_fromList @@ var "m")
+        (lambda "m" $ primitive DefMaps.map @@ primitive DefSets.fromList @@ var "m")
         ["t0", "t1"] [("t0", ["ordering"]), ("t1", ["ordering"])]
         (T.function (T.map (T.var "t0") (T.list $ T.var "t1")) (T.map (T.var "t0") (T.set $ T.var "t1")))],
 
@@ -264,7 +270,7 @@ testGroupForNestedContainers = define "testGroupForNestedContainers" $
       -- Outer: Set (List x) needs Ord on (List x); inner: sets.fromList needs Ord on x
       -- Both source and target element types need Ord
       expectPolyConstrained 1 []
-        (lambda "xss" $ primitive _sets_map @@ primitive _sets_fromList @@ var "xss")
+        (lambda "xss" $ primitive DefSets.map @@ primitive DefSets.fromList @@ var "xss")
         ["t0"] [("t0", ["ordering"])]
         (T.function (T.set $ T.list $ T.var "t0") (T.set $ T.set $ T.var "t0"))],
 
@@ -272,8 +278,8 @@ testGroupForNestedContainers = define "testGroupForNestedContainers" $
       -- \xs -> maps.fromList (lists.map (\x -> pair x (sets.singleton x)) xs)
       -- Key needs Ord (maps.fromList), element needs Ord (sets.singleton) — same variable
       expectPolyConstrained 1 []
-        (lambda "xs" $ primitive _maps_fromList @@
-          (primitive _lists_map @@ (lambda "x" $ pair (var "x") (primitive _sets_singleton @@ var "x")) @@ var "xs"))
+        (lambda "xs" $ primitive DefMaps.fromList @@
+          (primitive DefLists.map @@ (lambda "x" $ pair (var "x") (primitive DefSets.singleton @@ var "x")) @@ var "xs"))
         ["t0"] [("t0", ["ordering"])]
         (T.function (T.list $ T.var "t0") (T.map (T.var "t0") (T.set $ T.var "t0")))]]
 
@@ -285,33 +291,33 @@ testGroupForPartialApplication = define "testGroupForPartialApplication" $
     subgroup "Map partial application" [
       -- \k -> maps.lookup k => forall k v. Ord k => k -> Map k v -> Optional v
       expectPolyConstrained 1 []
-        (lambda "k" $ primitive _maps_lookup @@ var "k")
+        (lambda "k" $ primitive DefMaps.lookup @@ var "k")
         ["t0", "t1"] [("t0", ["ordering"])]
         (T.functionMany [T.var "t0", T.map (T.var "t0") (T.var "t1"), T.optional (T.var "t1")]),
       -- \k -> \v -> maps.singleton k v => forall k v. Ord k => k -> v -> Map k v
       expectPolyConstrained 2 []
-        (lambda "k" $ lambda "v" $ primitive _maps_singleton @@ var "k" @@ var "v")
+        (lambda "k" $ lambda "v" $ primitive DefMaps.singleton @@ var "k" @@ var "v")
         ["t0", "t1"] [("t0", ["ordering"])]
         (T.functionMany [T.var "t0", T.var "t1", T.map (T.var "t0") (T.var "t1")])],
 
     subgroup "Set partial application" [
       -- \x -> sets.member x => forall x. Ord x => x -> Set x -> Boolean
       expectPolyConstrained 1 []
-        (lambda "x" $ primitive _sets_member @@ var "x")
+        (lambda "x" $ primitive DefSets.member @@ var "x")
         ["t0"] [("t0", ["ordering"])]
         (T.functionMany [T.var "t0", T.set (T.var "t0"), T.boolean])],
 
     subgroup "Equality partial application" [
       -- \x -> \y -> equality.equal x y => forall x. Eq x => x -> x -> Boolean
       expectPolyConstrained 1 []
-        (lambda "x" $ lambda "y" $ primitive _equality_equal @@ var "x" @@ var "y")
+        (lambda "x" $ lambda "y" $ primitive DefEquality.equal @@ var "x" @@ var "y")
         ["t0"] [("t0", ["equality"])]
         (T.functionMany [T.var "t0", T.var "t0", T.boolean])],
 
     subgroup "Partial application fixing the constrained variable" [
       -- \v -> maps.singleton "key" v => forall v. String -> v -> Map String v (no constraint)
       expectPoly 1 []
-        (lambda "v" $ primitive _maps_singleton @@ string "key" @@ var "v")
+        (lambda "v" $ primitive DefMaps.singleton @@ string "key" @@ var "v")
         ["t0"] (T.function (T.var "t0") (T.map T.string (T.var "t0")))]]
 
 -- | Bare primitive references should retain constraints on type variables.
@@ -322,77 +328,77 @@ testGroupForPrimitiveReferences = define "testGroupForPrimitiveReferences" $
     subgroup "Map primitives (ordering on key type)" [
       -- maps.fromList => forall k v. Ord k => [(k, v)] -> Map k v
       expectPolyConstrained 1 []
-        (primitive _maps_fromList)
+        (primitive DefMaps.fromList)
         ["t0", "t1"] [("t0", ["ordering"])]
         (T.function (T.list $ T.pair (T.var "t0") (T.var "t1")) (T.map (T.var "t0") (T.var "t1"))),
       -- maps.lookup => forall k v. Ord k => k -> Map k v -> Optional v
       expectPolyConstrained 2 []
-        (primitive _maps_lookup)
+        (primitive DefMaps.lookup)
         ["t0", "t1"] [("t0", ["ordering"])]
         (T.functionMany [T.var "t0", T.map (T.var "t0") (T.var "t1"), T.optional (T.var "t1")]),
       -- maps.insert => forall k v. Ord k => k -> v -> Map k v -> Map k v
       expectPolyConstrained 3 []
-        (primitive _maps_insert)
+        (primitive DefMaps.insert)
         ["t0", "t1"] [("t0", ["ordering"])]
         (T.functionMany [T.var "t0", T.var "t1", T.map (T.var "t0") (T.var "t1"), T.map (T.var "t0") (T.var "t1")]),
       -- maps.map => forall k v1 v2. Ord k => (v1 -> v2) -> Map k v1 -> Map k v2
       expectPolyConstrained 4 []
-        (primitive _maps_map)
+        (primitive DefMaps.map)
         ["t0", "t1", "t2"] [("t2", ["ordering"])]
         (T.functionMany [T.function (T.var "t0") (T.var "t1"), T.map (T.var "t2") (T.var "t0"), T.map (T.var "t2") (T.var "t1")]),
       -- maps.empty => forall k v. Ord k => Map k v
       expectPolyConstrained 5 []
-        (primitive _maps_empty)
+        (primitive DefMaps.empty)
         ["t0", "t1"] [("t0", ["ordering"])]
         (T.map (T.var "t0") (T.var "t1"))],
 
     subgroup "Set primitives (ordering on element type)" [
       -- sets.fromList => forall x. Ord x => [x] -> Set x
       expectPolyConstrained 1 []
-        (primitive _sets_fromList)
+        (primitive DefSets.fromList)
         ["t0"] [("t0", ["ordering"])]
         (T.function (T.list $ T.var "t0") (T.set $ T.var "t0")),
       -- sets.member => forall x. Ord x => x -> Set x -> Boolean
       expectPolyConstrained 2 []
-        (primitive _sets_member)
+        (primitive DefSets.member)
         ["t0"] [("t0", ["ordering"])]
         (T.functionMany [T.var "t0", T.set (T.var "t0"), T.boolean]),
       -- sets.insert => forall x. Ord x => x -> Set x -> Set x
       expectPolyConstrained 3 []
-        (primitive _sets_insert)
+        (primitive DefSets.insert)
         ["t0"] [("t0", ["ordering"])]
         (T.functionMany [T.var "t0", T.set (T.var "t0"), T.set (T.var "t0")]),
       -- sets.map => forall a b. (Ord a, Ord b) => (a -> b) -> Set a -> Set b
       expectPolyConstrained 4 []
-        (primitive _sets_map)
+        (primitive DefSets.map)
         ["t0", "t1"] [("t0", ["ordering"]), ("t1", ["ordering"])]
         (T.functionMany [T.function (T.var "t0") (T.var "t1"), T.set (T.var "t0"), T.set (T.var "t1")])],
 
     subgroup "Equality primitives" [
       -- equality.equal => forall x. Eq x => x -> x -> Boolean
       expectPolyConstrained 1 []
-        (primitive _equality_equal)
+        (primitive DefEquality.equal)
         ["t0"] [("t0", ["equality"])]
         (T.functionMany [T.var "t0", T.var "t0", T.boolean]),
       -- equality.compare => forall x. Ord x => x -> x -> Comparison
       expectPolyConstrained 2 []
-        (primitive _equality_compare)
+        (primitive DefEquality.compare)
         ["t0"] [("t0", ["ordering"])]
         (T.functionMany [T.var "t0", T.var "t0", T.var "hydra.util.Comparison"])],
 
     subgroup "List primitives with constraints" [
       -- lists.sort => forall x. Ord x => [x] -> [x]
       expectPolyConstrained 1 []
-        (primitive _lists_sort)
+        (primitive DefLists.sort)
         ["t0"] [("t0", ["ordering"])]
         (T.function (T.list $ T.var "t0") (T.list $ T.var "t0")),
       -- lists.nub => forall x. Eq x => [x] -> [x]
       expectPolyConstrained 2 []
-        (primitive _lists_nub)
+        (primitive DefLists.nub)
         ["t0"] [("t0", ["equality"])]
         (T.function (T.list $ T.var "t0") (T.list $ T.var "t0")),
       -- lists.elem => forall x. Eq x => x -> [x] -> Boolean
       expectPolyConstrained 3 []
-        (primitive _lists_elem)
+        (primitive DefLists.elem)
         ["t0"] [("t0", ["equality"])]
         (T.functionMany [T.var "t0", T.list (T.var "t0"), T.boolean])]]

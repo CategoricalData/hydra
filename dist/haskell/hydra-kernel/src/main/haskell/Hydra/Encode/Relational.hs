@@ -17,7 +17,7 @@ columnName x =
       Core.wrappedTermTypeName = (Core.Name "hydra.relational.ColumnName"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Relational.unColumnName x))})
 -- | Encoder for hydra.relational.ColumnSchema
-columnSchema :: (t0 -> Core.Term) -> Relational.ColumnSchema t0 -> Core.Term
+columnSchema :: (t -> Core.Term) -> Relational.ColumnSchema t -> Core.Term
 columnSchema t x =
     Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.relational.ColumnSchema"),
@@ -47,7 +47,7 @@ primaryKey x =
       Core.wrappedTermTypeName = (Core.Name "hydra.relational.PrimaryKey"),
       Core.wrappedTermBody = ((\xs -> Core.TermList (Lists.map columnName xs)) (Relational.unPrimaryKey x))})
 -- | Encoder for hydra.relational.Relation
-relation :: (t0 -> Core.Term) -> Relational.Relation t0 -> Core.Term
+relation :: (v -> Core.Term) -> Relational.Relation v -> Core.Term
 relation v x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.relational.Relation"),
@@ -59,7 +59,7 @@ relationName x =
       Core.wrappedTermTypeName = (Core.Name "hydra.relational.RelationName"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Relational.unRelationName x))})
 -- | Encoder for hydra.relational.RelationSchema
-relationSchema :: (t0 -> Core.Term) -> Relational.RelationSchema t0 -> Core.Term
+relationSchema :: (t -> Core.Term) -> Relational.RelationSchema t -> Core.Term
 relationSchema t x =
     Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.relational.RelationSchema"),
@@ -77,13 +77,13 @@ relationSchema t x =
           Core.fieldName = (Core.Name "foreignKeys"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map foreignKey xs)) (Relational.relationSchemaForeignKeys x))}]})
 -- | Encoder for hydra.relational.Relationship
-relationship :: Ord t0 => ((t0 -> Core.Term) -> Relational.Relationship t0 -> Core.Term)
+relationship :: Ord v => ((v -> Core.Term) -> Relational.Relationship v -> Core.Term)
 relationship v x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.relational.Relationship"),
       Core.wrappedTermBody = ((\s -> Core.TermSet (Sets.map (\m -> Core.TermMap (Maps.bimap columnName v m)) s)) (Relational.unRelationship x))})
 -- | Encoder for hydra.relational.Row
-row :: (t0 -> Core.Term) -> Relational.Row t0 -> Core.Term
+row :: (v -> Core.Term) -> Relational.Row v -> Core.Term
 row v x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.relational.Row"),

@@ -1,8 +1,11 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 -- | Test cases for automatic differentiation
 module Hydra.Sources.Test.Differentiation where
 
 -- Standard imports for shallow DSL tests
 import Hydra.Kernel
+import Hydra.Dsl.Terms (ToPrimName(..))
 import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Sources.Kernel.Types.All
@@ -16,7 +19,6 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 import Hydra.Testing
-import Hydra.Sources.Libraries
 import qualified Hydra.Sources.Kernel.Terms.Differentiation as Diff
 import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
@@ -25,6 +27,8 @@ import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Meta.Terms         as Terms
 import qualified Hydra.Haskell.Lib.Math              as Math
+import qualified Hydra.Dsl.Prims as Prims
+import qualified Hydra.Lib.Math as DefMath
 
 
 ns :: ModuleName
@@ -97,30 +101,30 @@ basicDiffGroup = subgroup "basic rules" [
 binaryDiffGroup :: TypedTerm TestGroup
 binaryDiffGroup = subgroup "binary primitives" [
     diffCase "add variable to itself"
-      (prim2 _math_add (mkVar "x") (mkVar "x"))
-      (prim2 _math_addFloat64 (f64 1.0) (f64 1.0)),
+      (prim2 DefMath.add (mkVar "x") (mkVar "x"))
+      (prim2 DefMath.addFloat64 (f64 1.0) (f64 1.0)),
 
     diffCase "multiply variable by itself"
-      (prim2 _math_mul (mkVar "x") (mkVar "x"))
-      (prim2 _math_addFloat64
-        (prim2 _math_mulFloat64 (mkVar "x") (f64 1.0))
-        (prim2 _math_mulFloat64 (mkVar "x") (f64 1.0))),
+      (prim2 DefMath.mul (mkVar "x") (mkVar "x"))
+      (prim2 DefMath.addFloat64
+        (prim2 DefMath.mulFloat64 (mkVar "x") (f64 1.0))
+        (prim2 DefMath.mulFloat64 (mkVar "x") (f64 1.0))),
 
     diffCase "subtract constant from variable"
-      (prim2 _math_sub (mkVar "x") (f64 5.0))
-      (prim2 _math_subFloat64 (f64 1.0) (f64 0.0))]
+      (prim2 DefMath.sub (mkVar "x") (f64 5.0))
+      (prim2 DefMath.subFloat64 (f64 1.0) (f64 0.0))]
 
 chainRuleGroup :: TypedTerm TestGroup
 chainRuleGroup = subgroup "chain rule" [
     diffCase "nested sin(cos(x))"
-      (prim1 _math_sin (prim1 _math_cos (mkVar "x")))
-      (prim2 _math_mulFloat64
+      (prim1 DefMath.sin (prim1 DefMath.cos (mkVar "x")))
+      (prim2 DefMath.mulFloat64
         (Core.termApplication $ Core.application
-          (Core.termVariable $ encodedName _math_cos)
-          (prim1 _math_cos (mkVar "x")))
-        (prim2 _math_mulFloat64
+          (Core.termVariable $ encodedName (Prims.primName DefMath.cos))
+          (prim1 DefMath.cos (mkVar "x")))
+        (prim2 DefMath.mulFloat64
           (Core.termApplication $ Core.application
-            (mkLambda "_x" (prim1 _math_negateFloat64 (prim1 _math_sin (mkVar "_x"))))
+            (mkLambda "_x" (prim1 DefMath.negateFloat64 (prim1 DefMath.sin (mkVar "_x"))))
             (mkVar "x"))
           (f64 1.0)))]
 
@@ -155,75 +159,75 @@ evalDiffGroup = subgroup "evaluate derivatives" [
       3.0 0.0,
 
     evalDiffCase "d/dx(x+x) at 3.0"
-      (prim2 _math_add (mkVar "x") (mkVar "x"))
+      (prim2 DefMath.add (mkVar "x") (mkVar "x"))
       3.0 2.0,
 
     evalDiffCase "d/dx(x*x) at 3.0"
-      (prim2 _math_mul (mkVar "x") (mkVar "x"))
+      (prim2 DefMath.mul (mkVar "x") (mkVar "x"))
       3.0 6.0,
 
     evalDiffCase "d/dx(x*x) at 5.0"
-      (prim2 _math_mul (mkVar "x") (mkVar "x"))
+      (prim2 DefMath.mul (mkVar "x") (mkVar "x"))
       5.0 10.0,
 
     evalDiffCase "d/dx(x-5) at 7.0"
-      (prim2 _math_sub (mkVar "x") (f64 5.0))
+      (prim2 DefMath.sub (mkVar "x") (f64 5.0))
       7.0 1.0,
 
     evalDiffCase "d/dx(sin(x)) at 0.0"
-      (prim1 _math_sin (mkVar "x"))
+      (prim1 DefMath.sin (mkVar "x"))
       0.0 1.0,
 
     evalDiffCase "d/dx(sin(x)) at pi/2"
-      (prim1 _math_sin (mkVar "x"))
+      (prim1 DefMath.sin (mkVar "x"))
       (pi / 2) (cos (pi / 2)),
 
     evalDiffCase "d/dx(cos(x)) at 1.0"
-      (prim1 _math_cos (mkVar "x"))
+      (prim1 DefMath.cos (mkVar "x"))
       1.0 (-(sin 1.0)),
 
     evalDiffCase "d/dx(cos(x)) at pi"
-      (prim1 _math_cos (mkVar "x"))
+      (prim1 DefMath.cos (mkVar "x"))
       pi (-(sin pi)),
 
     evalDiffCase "d/dx(exp(x)) at 0.0"
-      (prim1 _math_exp (mkVar "x"))
+      (prim1 DefMath.exp (mkVar "x"))
       0.0 1.0,
 
     evalDiffCase "d/dx(exp(x)) at 1.0"
-      (prim1 _math_exp (mkVar "x"))
+      (prim1 DefMath.exp (mkVar "x"))
       1.0 (exp 1.0),
 
     evalDiffCase "d/dx(log(x)) at 1.0"
-      (prim1 _math_log (mkVar "x"))
+      (prim1 DefMath.log (mkVar "x"))
       1.0 1.0,
 
     evalDiffCase "d/dx(log(x)) at e"
-      (prim1 _math_log (mkVar "x"))
+      (prim1 DefMath.log (mkVar "x"))
       (exp 1.0) (1.0 / exp 1.0),
 
     evalDiffCase "d/dx(sqrt(x)) at 4.0"
-      (prim1 _math_sqrt (mkVar "x"))
+      (prim1 DefMath.sqrt (mkVar "x"))
       4.0 0.25,
 
     evalDiffCase "d/dx(x^3) at 2.0"
-      (prim2 _math_pow (mkVar "x") (f64 3.0))
+      (prim2 DefMath.pow (mkVar "x") (f64 3.0))
       2.0 12.0,
 
     evalDiffCase "d/dx(sin(cos(x))) at 0.5"
-      (prim1 _math_sin (prim1 _math_cos (mkVar "x")))
+      (prim1 DefMath.sin (prim1 DefMath.cos (mkVar "x")))
       0.5 (cos (cos 0.5) * (-(sin 0.5))),
 
     evalDiffCase "d/dx(sin(cos(x))) at 1.0"
-      (prim1 _math_sin (prim1 _math_cos (mkVar "x")))
+      (prim1 DefMath.sin (prim1 DefMath.cos (mkVar "x")))
       1.0 (cos (cos 1.0) * (-(sin 1.0))),
 
     evalDiffCase "d/dx(exp(sin(x))) at 0.0"
-      (prim1 _math_exp (prim1 _math_sin (mkVar "x")))
+      (prim1 DefMath.exp (prim1 DefMath.sin (mkVar "x")))
       0.0 1.0,
 
     evalDiffCase "d/dx(x*sin(x)) at pi"
-      (prim2 _math_mul (mkVar "x") (prim1 _math_sin (mkVar "x")))
+      (prim2 DefMath.mul (mkVar "x") (prim1 DefMath.sin (mkVar "x")))
       pi (sin pi + pi * cos pi)]
 
 -- ============================================================
@@ -241,14 +245,14 @@ gradCase cname input vars expected =
 
 gradientCheckGroup :: TypedTerm TestGroup
 gradientCheckGroup = subgroup "gradient check" [
-    gradCheck "x^2" (\x -> x * x) (prim2 _math_mul (mkVar "x") (mkVar "x")) 2.0,
-    gradCheck "sin(x)" sin (prim1 _math_sin (mkVar "x")) 1.0,
-    gradCheck "exp(x)" exp (prim1 _math_exp (mkVar "x")) 0.5,
-    gradCheck "x^3" (\x -> x ** 3) (prim2 _math_pow (mkVar "x") (f64 3.0)) 1.5,
-    gradCheck "log(x)" log (prim1 _math_log (mkVar "x")) 2.0,
-    gradCheck "cos(x)" cos (prim1 _math_cos (mkVar "x")) 1.0,
-    gradCheck "sin(cos(x))" (\x -> sin (cos x)) (prim1 _math_sin (prim1 _math_cos (mkVar "x"))) 1.0,
-    gradCheck "x*sin(x)" (\x -> x * sin x) (prim2 _math_mul (mkVar "x") (prim1 _math_sin (mkVar "x"))) 2.0]
+    gradCheck "x^2" (\x -> x * x) (prim2 DefMath.mul (mkVar "x") (mkVar "x")) 2.0,
+    gradCheck "sin(x)" sin (prim1 DefMath.sin (mkVar "x")) 1.0,
+    gradCheck "exp(x)" exp (prim1 DefMath.exp (mkVar "x")) 0.5,
+    gradCheck "x^3" (\x -> x ** 3) (prim2 DefMath.pow (mkVar "x") (f64 3.0)) 1.5,
+    gradCheck "log(x)" log (prim1 DefMath.log (mkVar "x")) 2.0,
+    gradCheck "cos(x)" cos (prim1 DefMath.cos (mkVar "x")) 1.0,
+    gradCheck "sin(cos(x))" (\x -> sin (cos x)) (prim1 DefMath.sin (prim1 DefMath.cos (mkVar "x"))) 1.0,
+    gradCheck "x*sin(x)" (\x -> x * sin x) (prim2 DefMath.mul (mkVar "x") (prim1 DefMath.sin (mkVar "x"))) 2.0]
   where
     h :: Double
     h = 1.0e-6
@@ -262,7 +266,7 @@ gradientCheckGroup = subgroup "gradient check" [
         deriv = Diff.differentiateTerm @@ mkName "x" @@ expr
         adSubst = Variables.replaceFreeTermVariable @@ mkName "x" @@ f64 xVal @@ deriv
         -- Round the AD result for comparison with finite differences
-        adResult = prim2 _math_roundFloat64
+        adResult = prim2 DefMath.roundFloat64
           (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 (int32 gradDigits))
           (retype adSubst)
 
@@ -277,24 +281,24 @@ gradientGroup :: TypedTerm TestGroup
 gradientGroup = subgroup "gradient" [
     -- gradient of x+y w.r.t. [x, y] => {x: 1+0, y: 0+1}
     gradCase "add two variables"
-      (prim2 _math_addFloat64 (mkVar "x") (mkVar "y"))
+      (prim2 DefMath.addFloat64 (mkVar "x") (mkVar "y"))
       ["x", "y"]
       (mkRecord "Gradient"
-        [ ("x", prim2 _math_addFloat64 (f64 1.0) (f64 0.0))
-        , ("y", prim2 _math_addFloat64 (f64 0.0) (f64 1.0))
+        [ ("x", prim2 DefMath.addFloat64 (f64 1.0) (f64 0.0))
+        , ("y", prim2 DefMath.addFloat64 (f64 0.0) (f64 1.0))
         ]),
 
     -- gradient of x*y w.r.t. [x, y] => {x: x*0+y*1, y: x*1+y*0}
     gradCase "product of two variables"
-      (prim2 _math_mulFloat64 (mkVar "x") (mkVar "y"))
+      (prim2 DefMath.mulFloat64 (mkVar "x") (mkVar "y"))
       ["x", "y"]
       (mkRecord "Gradient"
-        [ ("x", prim2 _math_addFloat64
-            (prim2 _math_mulFloat64 (mkVar "x") (f64 0.0))
-            (prim2 _math_mulFloat64 (mkVar "y") (f64 1.0)))
-        , ("y", prim2 _math_addFloat64
-            (prim2 _math_mulFloat64 (mkVar "x") (f64 1.0))
-            (prim2 _math_mulFloat64 (mkVar "y") (f64 0.0)))
+        [ ("x", prim2 DefMath.addFloat64
+            (prim2 DefMath.mulFloat64 (mkVar "x") (f64 0.0))
+            (prim2 DefMath.mulFloat64 (mkVar "y") (f64 1.0)))
+        , ("y", prim2 DefMath.addFloat64
+            (prim2 DefMath.mulFloat64 (mkVar "x") (f64 1.0))
+            (prim2 DefMath.mulFloat64 (mkVar "y") (f64 0.0)))
         ]),
 
     -- gradient of x w.r.t. [x, y] => {x: 1.0, y: 0.0}
@@ -324,32 +328,32 @@ mkVar :: String -> TypedTerm Term
 mkVar s = Core.termVariable $ mkName s
 
 -- Deep-level primitive application (for structural test expectations)
-prim1 :: Name -> TypedTerm Term -> TypedTerm Term
-prim1 name arg = Core.termApplication $ Core.application (Core.termVariable $ encodedName name) arg
+prim1 :: ToPrimName n => n -> TypedTerm Term -> TypedTerm Term
+prim1 n arg = Core.termApplication $ Core.application (Core.termVariable $ encodedName $ toPrimName n) arg
 
-prim2 :: Name -> TypedTerm Term -> TypedTerm Term -> TypedTerm Term
-prim2 name a b = Core.termApplication $ Core.application
-  (Core.termApplication $ Core.application (Core.termVariable $ encodedName name) a)
+prim2 :: ToPrimName n => n -> TypedTerm Term -> TypedTerm Term -> TypedTerm Term
+prim2 n a b = Core.termApplication $ Core.application
+  (Core.termApplication $ Core.application (Core.termVariable $ encodedName $ toPrimName n) a)
   b
 
 primitiveDiffGroup :: TypedTerm TestGroup
 primitiveDiffGroup = subgroup "unary primitives" [
     diffCase "sin of variable"
-      (prim1 _math_sin (mkVar "x"))
-      (prim2 _math_mulFloat64
-        (Core.termApplication $ Core.application (Core.termVariable $ encodedName _math_cos) (mkVar "x"))
+      (prim1 DefMath.sin (mkVar "x"))
+      (prim2 DefMath.mulFloat64
+        (Core.termApplication $ Core.application (Core.termVariable $ encodedName (Prims.primName DefMath.cos)) (mkVar "x"))
         (f64 1.0)),
 
     diffCase "exp of variable"
-      (prim1 _math_exp (mkVar "x"))
-      (prim2 _math_mulFloat64
-        (Core.termApplication $ Core.application (Core.termVariable $ encodedName _math_exp) (mkVar "x"))
+      (prim1 DefMath.exp (mkVar "x"))
+      (prim2 DefMath.mulFloat64
+        (Core.termApplication $ Core.application (Core.termVariable $ encodedName (Prims.primName DefMath.exp)) (mkVar "x"))
         (f64 1.0)),
 
     diffCase "sin of different variable"
-      (prim1 _math_sin (mkVar "y"))
-      (prim2 _math_mulFloat64
-        (Core.termApplication $ Core.application (Core.termVariable $ encodedName _math_cos) (mkVar "y"))
+      (prim1 DefMath.sin (mkVar "y"))
+      (prim2 DefMath.mulFloat64
+        (Core.termApplication $ Core.application (Core.termVariable $ encodedName (Prims.primName DefMath.cos)) (mkVar "y"))
         (f64 0.0))]
 
 -- Coerce phantom types
@@ -366,7 +370,7 @@ roundedEvalDiffCase cname expr xVal expected = evalCase cname input output
     digits = 12
     deriv = Diff.differentiateTerm @@ mkName "x" @@ expr
     substituted = Variables.replaceFreeTermVariable @@ mkName "x" @@ f64 xVal @@ deriv
-    input = prim2 _math_roundFloat64
+    input = prim2 DefMath.roundFloat64
       (Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 (int32 digits))
       (retype substituted)
     output = Terms.float64 (Math.roundFloat64 digits expected)

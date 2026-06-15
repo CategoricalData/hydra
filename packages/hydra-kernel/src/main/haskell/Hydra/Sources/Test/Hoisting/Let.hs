@@ -21,10 +21,11 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 import Hydra.Testing
-import Hydra.Sources.Libraries
 
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Hoisting as Hoisting
+import qualified Hydra.Dsl.Prims as Prims
+import qualified Hydra.Lib.Math as DefMath
 
 
 ns :: ModuleName
@@ -92,14 +93,14 @@ hoistLetBindingsGroup = subgroup "hoistLetBindings" [
     hoistAllCase "nested let inside lambda: binding hoisted with lambda capture"
       -- Input: let f = \a -> (let g = a + 1 in g * 2) in f 10
       (mkLetUntyped [(nm "f",
-        lambda "a" (Core.termLet $ mkLetUntyped [(nm "g", apply (apply (primitive _math_add) (var "a")) (int32 1))]
-          (apply (apply (primitive _math_mul) (var "g")) (int32 2))))]
+        lambda "a" (Core.termLet $ mkLetUntyped [(nm "g", apply (apply (primitive DefMath.add) (var "a")) (int32 1))]
+          (apply (apply (primitive DefMath.mul) (var "g")) (int32 2))))]
         (apply (var "f") (int32 10)))
       -- Output: f comes first (original binding), then f_g is hoisted with lambda to capture 'a', reference becomes (f_g a)
       (mkLetUntyped [
         (nm "f",
-          lambda "a" (apply (apply (primitive _math_mul) (apply (var "f_g") (var "a"))) (int32 2))),
-        (nm "f_g", lambda "a" (apply (apply (primitive _math_add) (var "a")) (int32 1)))]
+          lambda "a" (apply (apply (primitive DefMath.mul) (apply (var "f_g") (var "a"))) (int32 2))),
+        (nm "f_g", lambda "a" (apply (apply (primitive DefMath.add) (var "a")) (int32 1)))]
         (apply (var "f") (int32 10))),
 
     -- ============================================================
@@ -112,12 +113,12 @@ hoistLetBindingsGroup = subgroup "hoistLetBindings" [
       -- The let is OUTSIDE the lambda, so y can be hoisted without capture
       (mkLetUntyped [(nm "f",
         tyapp (Core.termLet $ mkLetUntyped [(nm "y", int32 1)]
-          (lambda "x" (apply (apply (primitive _math_add) (var "x")) (var "y")))) T.int32)]
+          (lambda "x" (apply (apply (primitive DefMath.add) (var "x")) (var "y")))) T.int32)]
         (apply (var "f") (int32 10)))
       -- Output: f comes first (original binding), then f_y is hoisted
       (mkLetUntyped [
         (nm "f",
-          tyapp (lambda "x" (apply (apply (primitive _math_add) (var "x")) (var "f_y"))) T.int32),
+          tyapp (lambda "x" (apply (apply (primitive DefMath.add) (var "x")) (var "f_y"))) T.int32),
         (nm "f_y", int32 1)]
         (apply (var "f") (int32 10)))]
 
@@ -254,8 +255,8 @@ hoistPolymorphicLetBindingsGroup = subgroup "hoistPolymorphicLetBindings" [
       (mkLet [(nm "f",
         lambdaTyped "a" T.int32 (Core.termLet $ mkLet [
           (nm "x", int32 1, monoType T.int32),
-          (nm "g", lambda "y" (apply (apply (primitive _math_add)
-                    (apply (apply (primitive _math_add) (var "a")) (var "x"))) (var "y")),
+          (nm "g", lambda "y" (apply (apply (primitive DefMath.add)
+                    (apply (apply (primitive DefMath.add) (var "a")) (var "x"))) (var "y")),
             polyType ["b"] (T.function (T.var "b") (T.var "b")))]
           (apply (var "g") (int32 42))),
         monoType (T.function T.int32 T.int32))]
@@ -268,8 +269,8 @@ hoistPolymorphicLetBindingsGroup = subgroup "hoistPolymorphicLetBindings" [
             (apply (apply (apply (var "f_g") (var "a")) (var "x")) (int32 42))),
           monoType (T.function T.int32 T.int32)),
         (nm "f_g", tylam "b" (lambdaTyped "a" T.int32 (lambdaTyped "x" T.int32
-          (lambda "y" (apply (apply (primitive _math_add)
-            (apply (apply (primitive _math_add) (var "a")) (var "x"))) (var "y"))))),
+          (lambda "y" (apply (apply (primitive DefMath.add)
+            (apply (apply (primitive DefMath.add) (var "a")) (var "x"))) (var "y"))))),
           polyType ["b"] (T.function T.int32 (T.function T.int32 (T.function (T.var "b") (T.var "b")))))]
         (apply (var "f") (int32 10))),
 
@@ -280,7 +281,7 @@ hoistPolymorphicLetBindingsGroup = subgroup "hoistPolymorphicLetBindings" [
       -- g captures 'outer', h calls g which means h must transitively capture 'outer'
       (mkLet [(nm "wrapper",
         lambdaTyped "outer" T.int32 (Core.termLet $ mkLet [
-          (nm "g", lambda "y" (apply (apply (primitive _math_add) (var "outer")) (var "y")),
+          (nm "g", lambda "y" (apply (apply (primitive DefMath.add) (var "outer")) (var "y")),
             polyType ["a"] (T.function (T.var "a") (T.var "a"))),
           (nm "h", lambda "z" (apply (var "g") (var "z")),
             polyType ["b"] (T.function (T.var "b") (T.var "b")))]
@@ -295,7 +296,7 @@ hoistPolymorphicLetBindingsGroup = subgroup "hoistPolymorphicLetBindings" [
         (nm "wrapper",
           lambdaTyped "outer" T.int32 (apply (apply (var "wrapper_h") (var "outer")) (int32 42)),
           monoType (T.function T.int32 T.int32)),
-        (nm "wrapper_g", tylam "a" (lambdaTyped "outer" T.int32 (lambda "y" (apply (apply (primitive _math_add) (var "outer")) (var "y")))),
+        (nm "wrapper_g", tylam "a" (lambdaTyped "outer" T.int32 (lambda "y" (apply (apply (primitive DefMath.add) (var "outer")) (var "y")))),
           polyType ["a"] (T.function T.int32 (T.function (T.var "a") (T.var "a")))),
         (nm "wrapper_h", tylam "b" (lambdaTyped "outer" T.int32 (lambda "z" (apply (apply (var "wrapper_g") (var "outer")) (var "z")))),
           polyType ["b"] (T.function T.int32 (T.function (T.var "b") (T.var "b"))))]
@@ -312,8 +313,8 @@ hoistPolymorphicLetBindingsGroup = subgroup "hoistPolymorphicLetBindings" [
       -- The reference to g in h should NOT duplicate outer, v, or t
       (mkLet [(nm "wrapper",
         lambdaTyped "outer" T.int32 (Core.termLet $ mkLet [
-          (nm "g", lambda "v" (lambda "t" (apply (apply (primitive _math_add) (var "outer"))
-            (apply (apply (primitive _math_add) (var "v")) (var "t")))),
+          (nm "g", lambda "v" (lambda "t" (apply (apply (primitive DefMath.add) (var "outer"))
+            (apply (apply (primitive DefMath.add) (var "v")) (var "t")))),
             polyType ["a"] (T.function (T.var "a") (T.function (T.var "a") (T.var "a")))),
           (nm "h", lambda "v" (lambda "t" (apply (apply (var "g") (var "v")) (var "t"))),
             polyType ["b"] (T.function (T.var "b") (T.function (T.var "b") (T.var "b"))))]
@@ -328,8 +329,8 @@ hoistPolymorphicLetBindingsGroup = subgroup "hoistPolymorphicLetBindings" [
           lambdaTyped "outer" T.int32 (apply (apply (apply (var "wrapper_h") (var "outer")) (int32 1)) (int32 2)),
           monoType (T.function T.int32 T.int32)),
         (nm "wrapper_g", tylam "a" (lambdaTyped "outer" T.int32
-          (lambda "v" (lambda "t" (apply (apply (primitive _math_add) (var "outer"))
-            (apply (apply (primitive _math_add) (var "v")) (var "t")))))),
+          (lambda "v" (lambda "t" (apply (apply (primitive DefMath.add) (var "outer"))
+            (apply (apply (primitive DefMath.add) (var "v")) (var "t")))))),
           polyType ["a"] (T.function T.int32 (T.function (T.var "a") (T.function (T.var "a") (T.var "a"))))),
         (nm "wrapper_h", tylam "b" (lambdaTyped "outer" T.int32
           (lambda "v" (lambda "t" (apply (apply (apply (var "wrapper_g") (var "outer")) (var "v")) (var "t"))))),
@@ -345,11 +346,11 @@ hoistPolymorphicLetBindingsGroup = subgroup "hoistPolymorphicLetBindings" [
       -- Neither binding has a type, so neither is polymorphic
       (mkLetUntyped [(nm "x", int32 1)]
         (Core.termLet $ mkLetUntyped [(nm "y", int32 2)]
-          (apply (apply (primitive _math_add) (var "x")) (var "y"))))
+          (apply (apply (primitive DefMath.add) (var "x")) (var "y"))))
       -- Output: unchanged (untyped bindings are not polymorphic)
       (mkLetUntyped [(nm "x", int32 1)]
         (Core.termLet $ mkLetUntyped [(nm "y", int32 2)]
-          (apply (apply (primitive _math_add) (var "x")) (var "y")))),
+          (apply (apply (primitive DefMath.add) (var "x")) (var "y")))),
 
     -- ============================================================
     -- Test: Name collision - nested binding has same name as top-level (after unshadowing)
@@ -462,8 +463,8 @@ hoistPolymorphicLetBindingsGroup = subgroup "hoistPolymorphicLetBindings" [
               (nm "sleft", apply (var "f") (var "left"), monoType T.int32),
               (nm "sright", apply (var "f") (var "right"), monoType T.int32),
               (nm "cannotUnify",
-                lambda "x" (apply (apply (primitive _math_add) (var "sleft"))
-                  (apply (apply (primitive _math_add) (var "sright")) (var "x"))),
+                lambda "x" (apply (apply (primitive DefMath.add) (var "sleft"))
+                  (apply (apply (primitive DefMath.add) (var "sright")) (var "x"))),
                 polyType ["a"] (T.function (T.var "a") (T.var "a")))]
               (apply (var "cannotUnify") (int32 42)))),
         monoType (T.function T.int32 (T.function T.int32 T.int32)))]
@@ -485,8 +486,8 @@ hoistPolymorphicLetBindingsGroup = subgroup "hoistPolymorphicLetBindings" [
           tylam "a"
             (lambdaTyped "sleft" T.int32
               (lambdaTyped "sright" T.int32
-                (lambda "x" (apply (apply (primitive _math_add) (var "sleft"))
-                  (apply (apply (primitive _math_add) (var "sright")) (var "x")))))),
+                (lambda "x" (apply (apply (primitive DefMath.add) (var "sleft"))
+                  (apply (apply (primitive DefMath.add) (var "sright")) (var "x")))))),
           polyType ["a"] (T.function T.int32 (T.function T.int32 (T.function (T.var "a") (T.var "a")))))]
         (apply (apply (var "wrapper") (int32 1)) (int32 2))),
 
@@ -514,7 +515,7 @@ hoistPolymorphicLetBindingsGroup = subgroup "hoistPolymorphicLetBindings" [
             -- Middle nested let: cannotUnify (poly, refs sleft)
             (Core.termLet $ mkLet [
               (nm "cannotUnify",
-                lambda "x" (apply (apply (primitive _math_add) (var "sleft")) (var "x")),
+                lambda "x" (apply (apply (primitive DefMath.add) (var "sleft")) (var "x")),
                 polyType ["a"] (T.function (T.var "a") (T.var "a")))]
               -- Inner nested let: joinList (poly, refs cannotUnify)
               (Core.termLet $ mkLet [
@@ -539,7 +540,7 @@ hoistPolymorphicLetBindingsGroup = subgroup "hoistPolymorphicLetBindings" [
         (nm "wrapper_cannotUnify",
           tylam "a"
             (lambdaTyped "sleft" T.int32
-              (lambda "x" (apply (apply (primitive _math_add) (var "sleft")) (var "x")))),
+              (lambda "x" (apply (apply (primitive DefMath.add) (var "sleft")) (var "x")))),
           polyType ["a"] (T.function T.int32 (T.function (T.var "a") (T.var "a")))),
         (nm "wrapper_joinList",
           tylam "b"

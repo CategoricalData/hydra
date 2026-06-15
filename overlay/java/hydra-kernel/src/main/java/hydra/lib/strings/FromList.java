@@ -27,7 +27,7 @@ public class FromList extends PrimitiveFunction {
      * @return the name "hydra.lib.strings.fromList"
      */
     public Name name() {
-        return new Name("hydra.lib.strings.fromList");
+        return hydra.lib.Strings.fromList().name;
     }
 
     /**

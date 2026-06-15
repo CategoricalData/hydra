@@ -27,7 +27,7 @@ import hydra.util.Either;
  */
 public class Span extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.lists.span");
+        return hydra.lib.Lists.span().name;
     }
 
     @Override

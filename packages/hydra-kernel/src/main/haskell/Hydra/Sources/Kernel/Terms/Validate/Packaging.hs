@@ -18,7 +18,6 @@ import Hydra.Error.Packaging (
   _InvalidPackageError_duplicateModuleName,
   _InvalidPackageError_invalidPackageName)
 import Hydra.Packaging (Package)
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Error.Packaging       as ErrorPackaging
 import qualified Hydra.Dsl.Meta.Core             as Core
 import qualified Hydra.Dsl.Meta.Lib.Equality     as Equality

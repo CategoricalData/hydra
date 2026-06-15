@@ -14,7 +14,6 @@ import Hydra.Packaging (_Module)
 import Hydra.Testing (TestGroup(..))
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Writer as JsonWriter
-import Hydra.Sources.Libraries
 import qualified Hydra.Decoding as Decoding
 import qualified Hydra.Digest as Digest
 import qualified Hydra.Dsls as Dsls
@@ -1324,28 +1323,19 @@ writeDerivedJsonPackageSplit routingMap distJsonRoot universeModules dslSourceMo
     dslMods <- generateDslModules universeModules dslSourceModules
     encMods <- generateEncoderModules universeModules encodingSourceModules
     decMods <- generateDecoderModules universeModules encodingSourceModules
-    let dslDerived = filter (not . null . moduleDefinitions) dslMods
-        encDecDerived = filter (not . null . moduleDefinitions) (encMods ++ decMods)
-        derived = dslDerived ++ encDecDerived
-    -- Derived modules must NEVER be inferred: the synthesizer is the source of
-    -- truth for their type annotations, and inference over a derived module is
-    -- at best a no-op and at worst corrupts those annotations.
-    --
-    -- DSL wrappers (Dsls.hs) ALREADY fully populate their in-term annotations
-    -- (explicit lambda domains + binding TypeSchemes), so they are written with
-    -- doInfer=False — matching writeDslJsonPackageSplit.
-    writeModulesJsonPackageSplit routingMap False distJsonRoot universeModules dslDerived
-    -- Encoder/decoder modules do NOT yet fully populate their in-term annotations
-    -- (the synthesizer omits lambda domains and the type-applications that
-    -- instantiate polymorphic primitive calls), so they STILL require inference
-    -- here (doInfer=True) to specialize before the JSON is written — without it
-    -- the coarse types leak into the JSON and produce type-incorrect generated
-    -- code in the targets. This is the one remaining inference-on-derived-modules
-    -- violation; the fix is to extend Encoding.hs / Decoding.hs to stamp those
-    -- in-term annotations at construction (like Dsls.hs does), after which this
-    -- becomes doInfer=False. Tracked by #476 (defining requirement: doInfer=False
-    -- for encode/decode); related symptom in the Java/Python targets is #475.
-    writeModulesJsonPackageSplit routingMap True distJsonRoot universeModules encDecDerived
+    let derived = filter (not . null . moduleDefinitions) (dslMods ++ encMods ++ decMods)
+    -- doInfer=False: the synthesizer is the sole source of truth for these derived
+    -- modules' in-term annotations (lambda domains, type-applications, result-type
+    -- signatures) — it fully populates them at construction, mirroring the DSL
+    -- wrapper synthesis. Running inference over them is at best redundant and at
+    -- worst incorrect: for polymorphic decoders (e.g. hydra.decode.parsing.parseResult,
+    -- result type either<DecodingError, ParseResult @ a>) HM's occurs-check rejects
+    -- the saturated nominal self-application that the synthesizer emits, so inference
+    -- cannot even reproduce its own prior committed output. The synthesizer's nominal
+    -- form is also the PREFERRED form: inference cannot re-produce a transparent type
+    -- alias once expanded (type Vertex = int32 stays `Vertex`, not `literal<int32>`).
+    -- (#476)
+    writeModulesJsonPackageSplit routingMap False distJsonRoot universeModules derived
     mergeDslJsonIntoPerPackageDigests routingMap distJsonRoot derived
     finalizePerPackageDigests distJsonRoot
     reconcilePackageJsonOrphans routingMap distJsonRoot (writtenMainModules ++ derived)
@@ -1630,4 +1620,32 @@ loadModulesFromJson basePath universeModules namespaces = do
           Right mod -> do
             putStrLn $ "  Loaded: " ++ unModuleName ns
             return mod
+
+-- | Load the hydra-java and hydra-python modules (hydra.{java,python}.* +
+-- hydra.dsl.{java,python}.*) from their already-generated dist/json so they can
+-- seed the inference universe. Their Haskell DSL sources have been deleted
+-- (#346/#370); the native drivers are the sole writers, but the Haskell generator
+-- still needs these modules present to resolve cross-package references (e.g.
+-- hydra-scala -> hydra.java.serde.escapeJavaString). Missing manifests (a truly
+-- cold tree before Phase 1.5 seeds them) are tolerated: such a run cannot
+-- reference them yet either. The decode context is the base universe (kernel etc.).
+--
+-- Lives here (not in a single exe's Main) so every JSON-writing driver shares
+-- one loader: update-json-main AND transform-haskell-dsl-to-json must seed the
+-- native packages identically, else the on-demand sync path (sync-packages.sh)
+-- can't resolve hydra.java.serde.* for hydra-scala. (#346)
+loadNativePackageModules :: FilePath -> [Module] -> IO [Module]
+loadNativePackageModules distRoot baseUniverse =
+    fmap L.concat $ CM.forM ["hydra-java", "hydra-python"] $ \pkg -> do
+      let pkgJson = distRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
+          manifest = pkgJson FP.</> "manifest.json"
+      exists <- SD.doesFileExist manifest
+      if not exists
+        then do
+          putStrLn $ "  (skipping " ++ pkg ++ ": no manifest yet — cold tree)"
+          return []
+        else do
+          mainNs <- readManifestField pkgJson "mainModules"
+          dslNs  <- readManifestField pkgJson "dslModules"
+          loadModulesFromJson pkgJson baseUniverse (mainNs ++ dslNs)
 

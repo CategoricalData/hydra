@@ -69,12 +69,12 @@ import qualified Data.Set as S
 analyzePythonFunction :: Typing.InferenceContext -> PythonEnvironment.PythonEnvironment -> Core.Term -> Either t0 (Typing.FunctionStructure PythonEnvironment.PythonEnvironment)
 analyzePythonFunction cx env term =
     Analysis.analyzeFunctionTermWith cx pythonBindingMetadata pythonEnvironmentGetGraph pythonEnvironmentSetGraph env term
--- | Escape a builder setter name that would collide with build()/builder()
+-- | Escape a builder setter name that would collide with build()/builder()/self
 builderSetterName :: PythonEnvironment.PythonEnvironment -> Core.Name -> String
 builderSetterName env fname =
 
       let base = Syntax.unName (PythonNames.encodeFieldName env fname)
-      in (Logic.ifElse (Logic.or (Equality.equal base "build") (Equality.equal base "builder")) (Strings.cat2 base "_") base)
+      in (Logic.ifElse (Logic.or (Equality.equal base "build") (Logic.or (Equality.equal base "builder") (Equality.equal base "self"))) (Strings.cat2 base "_") base)
 -- | Encode a single case (Field) into a CaseBlock for a match statement
 caseBlockToExpr :: t0 -> PythonEnvironment.PythonEnvironment -> Core.Name -> [Core.FieldType] -> Bool -> (PythonEnvironment.PythonEnvironment -> Core.Term -> Either t1 [Syntax.Statement]) -> Core.CaseAlternative -> Either t1 Syntax.CaseBlock
 caseBlockToExpr cx env tname rowType isEnum encodeBody field =
@@ -2023,10 +2023,12 @@ recordWithMethod env fieldType =
       let fname = Core.fieldTypeName fieldType
           snake = Syntax.unName (PythonNames.encodeFieldName env fname)
           methodName = Strings.cat2 "with_" snake
-          paramName = Syntax.Name snake
+          kwargKey = Syntax.Name snake
+          paramSnake = Logic.ifElse (Equality.equal snake "self") "_self" snake
+          paramName = Syntax.Name paramSnake
           kwarg =
                   Syntax.KwargOrStarredKwarg (Syntax.Kwarg {
-                    Syntax.kwargName = paramName,
+                    Syntax.kwargName = kwargKey,
                     Syntax.kwargValue = (Utils.pyNameToPyExpression paramName)})
       in (Syntax.StatementCompound (Syntax.CompoundStatementFunction (Syntax.FunctionDefinition {
         Syntax.functionDefinitionDecorators = Nothing,

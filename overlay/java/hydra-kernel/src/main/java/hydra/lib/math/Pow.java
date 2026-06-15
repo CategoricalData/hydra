@@ -26,7 +26,7 @@ public class Pow extends PrimitiveFunction {
      * @return the function name
      */
     public Name name() {
-        return new Name("hydra.lib.math.pow");
+        return hydra.lib.Math_.pow().name;
     }
 
     /**

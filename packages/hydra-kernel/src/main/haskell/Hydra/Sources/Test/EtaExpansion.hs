@@ -20,9 +20,12 @@ import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
 
 import Hydra.Testing
-import Hydra.Sources.Libraries
 
 import Prelude hiding (foldl)
+import qualified Hydra.Dsl.Prims as Prims
+import qualified Hydra.Lib.Lists as DefLists
+import qualified Hydra.Lib.Literals as DefLiterals
+import qualified Hydra.Lib.Strings as DefStrings
 
 
 ns :: ModuleName
@@ -122,7 +125,7 @@ allTests = define "allTests" $
                     (project TestTypes.testTypeTripleName (Core.name (Phantoms.string "first")))
                     [T.function T.string T.string, T.string, T.string]
                   @@ tyapps
-                    (record TestTypes.testTypeTripleName ["first">: primitive _strings_toLower, "second">: string "middle", "third">: string "last"])
+                    (record TestTypes.testTypeTripleName ["first">: primitive DefStrings.toLower, "second">: string "middle", "third">: string "last"])
                     [T.function T.string T.string, T.string, T.string]
                   @@ string "DATA")])
 
@@ -323,14 +326,14 @@ allTests = define "allTests" $
                 ("test",
                  tyapp (match TestTypes.testTypeUnionPolymorphicRecursiveName
                    (just $ string "other") [
-                   "value">: lambdaTyped "i" T.int32 $ primitive _literals_showInt32 @@ var "i"]) T.int32,
+                   "value">: lambdaTyped "i" T.int32 $ primitive DefLiterals.showInt32 @@ var "i"]) T.int32,
                  T.mono $ T.function (T.apply (Core.typeVariable TestTypes.testTypeUnionPolymorphicRecursiveName) T.int32) T.string)] $
               var "test")
             (letsTyped [
                 ("test",
                  lambda "v1" $ tyapp (match TestTypes.testTypeUnionPolymorphicRecursiveName
                      (just $ string "other") [
-                     "value">: lambdaTyped "i" T.int32 $ primitive _literals_showInt32 @@ var "i"]) T.int32
+                     "value">: lambdaTyped "i" T.int32 $ primitive DefLiterals.showInt32 @@ var "i"]) T.int32
                    @@ var "v1",
                  T.mono $ T.function (T.apply (Core.typeVariable TestTypes.testTypeUnionPolymorphicRecursiveName) T.int32) T.string)] $
               var "test"),
@@ -339,7 +342,7 @@ allTests = define "allTests" $
               ("test",
                tyapp (match TestTypes.testTypeUnionPolymorphicRecursiveName
                    (just $ string "other") [
-                   "value">: lambdaTyped "i" T.int32 $ primitive _literals_showInt32 @@ var "i"]) T.int32
+                   "value">: lambdaTyped "i" T.int32 $ primitive DefLiterals.showInt32 @@ var "i"]) T.int32
                  @@ tyapp (inject TestTypes.testTypeUnionPolymorphicRecursiveName "value" (int32 42)) T.int32,
                T.mono $ T.string)] $
               var "test"),
@@ -349,7 +352,7 @@ allTests = define "allTests" $
                lambdaTyped "x" (T.apply (Core.typeVariable TestTypes.testTypeUnionPolymorphicRecursiveName) T.int32) $
                  tyapp (match TestTypes.testTypeUnionPolymorphicRecursiveName
                      (just $ string "other") [
-                     "value">: lambdaTyped "i" T.int32 $ primitive _literals_showInt32 @@ var "i"]) T.int32
+                     "value">: lambdaTyped "i" T.int32 $ primitive DefLiterals.showInt32 @@ var "i"]) T.int32
                    @@ var "x",
                T.mono $ T.function (T.apply (Core.typeVariable TestTypes.testTypeUnionPolymorphicRecursiveName) T.int32) T.string)] $
               var "test"),
@@ -435,10 +438,10 @@ noChangeDisabled name term = testCaseWithMetadata (Phantoms.string name)
     retype :: TypedTerm x -> TypedTerm String
     retype (TypedTerm x) = TypedTerm x
 
-cat = primitive $ _strings_cat
-foldl = primitive $ _lists_foldl
-splitOn = primitive $ _strings_splitOn
-toLower = primitive $ _strings_toLower
+cat = primitive $ DefStrings.cat
+foldl = primitive $ DefLists.foldl
+splitOn = primitive $ DefStrings.splitOn
+toLower = primitive $ DefStrings.toLower
 --toLower = Core.termFunction $ Core.functionPrimitive $ Core.name (Phantoms.string "hydra.lib.strings.toLower")
 
 testCase :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata

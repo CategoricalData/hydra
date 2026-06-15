@@ -30,7 +30,7 @@ public class ReadUint8 extends PrimitiveFunction {
      * @return the function name "hydra.lib.literals.readUint8"
      */
     public Name name() {
-        return new Name("hydra.lib.literals.readUint8");
+        return hydra.lib.Literals.readUint8().name;
     }
 
     /**

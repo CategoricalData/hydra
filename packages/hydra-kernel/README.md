@@ -82,10 +82,12 @@ for the full signature list, and
 for the recipe to add a new one.
 
 Host-side primitive registries — including the Haskell-side
-[`Hydra/Sources/Libraries.hs`](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs)
-that pairs each primitive name with its native implementation — are
-distinct from this canonical registry: they reference primitives by name
-and provide host-specific implementations.
+[`Hydra/Dsl/Libraries.hs`](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs)
+(in `overlay/haskell` since #473) that pairs each native implementation with a
+primitive name — are distinct from this canonical registry: they provide
+host-specific implementations and **derive** each primitive's name from its
+generated `PrimitiveDefinition` (the single source of truth), rather than
+re-declaring it.
 
 ## Code organization
 

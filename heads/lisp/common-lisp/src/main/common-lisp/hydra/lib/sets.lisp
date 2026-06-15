@@ -55,7 +55,7 @@
   (sets-from-list-raw xs))
 
 ;; delete :: a -> Set a -> Set a
-(defvar hydra_lib_sets_delete
+(defvar hydra_lisp_lib_sets_delete
   (lambda (x)
     (lambda (s)
       (cond
@@ -65,7 +65,7 @@
         (t s)))))
 
 ;; difference :: Set a -> Set a -> Set a
-(defvar hydra_lib_sets_difference
+(defvar hydra_lisp_lib_sets_difference
   (lambda (s1)
     (lambda (s2)
       (let ((result nil))
@@ -75,14 +75,14 @@
         result))))
 
 ;; empty :: Set a
-(defvar hydra_lib_sets_empty nil)
+(defvar hydra_lisp_lib_sets_empty nil)
 
 ;; from_list :: [a] -> Set a
-(defvar hydra_lib_sets_from_list
+(defvar hydra_lisp_lib_sets_from_list
   (lambda (xs) (sets-from-list-raw xs)))
 
 ;; insert :: a -> Set a -> Set a
-(defvar hydra_lib_sets_insert
+(defvar hydra_lisp_lib_sets_insert
   (lambda (x)
     (lambda (s)
       (cond
@@ -91,7 +91,7 @@
         (t (rb-insert nil x t))))))
 
 ;; intersection :: Set a -> Set a -> Set a
-(defvar hydra_lib_sets_intersection
+(defvar hydra_lisp_lib_sets_intersection
   (lambda (s1)
     (lambda (s2)
       (let ((result nil))
@@ -101,7 +101,7 @@
         result))))
 
 ;; map :: (a -> b) -> Set a -> Set b
-(defvar hydra_lib_sets_map
+(defvar hydra_lisp_lib_sets_map
   (lambda (f)
     (lambda (s)
       (let ((result nil))
@@ -109,16 +109,16 @@
         result))))
 
 ;; member :: a -> Set a -> Bool
-(defvar hydra_lib_sets_member
+(defvar hydra_lisp_lib_sets_member
   (lambda (x)
     (lambda (s) (sets-member-raw x s))))
 
 ;; null :: Set a -> Bool
-(defvar hydra_lib_sets_null
+(defvar hydra_lisp_lib_sets_null
   (lambda (s) (sets-empty-p s)))
 
 ;; size :: Set a -> Int
-(defvar hydra_lib_sets_size
+(defvar hydra_lisp_lib_sets_size
   (lambda (s)
     (cond
       ((null s) 0)
@@ -127,17 +127,17 @@
       (t 0))))
 
 ;; singleton :: a -> Set a
-(defvar hydra_lib_sets_singleton
+(defvar hydra_lisp_lib_sets_singleton
   (lambda (x)
     (rb-insert nil x t)))
 
 ;; to_list :: Set a -> [a]
 ;; Sorted via generic-compare for determinism.
-(defvar hydra_lib_sets_to_list
+(defvar hydra_lisp_lib_sets_to_list
   (lambda (s) (sets-elements-sorted s)))
 
 ;; union :: Set a -> Set a -> Set a
-(defvar hydra_lib_sets_union
+(defvar hydra_lisp_lib_sets_union
   (lambda (s1)
     (lambda (s2)
       (cond
@@ -152,7 +152,7 @@
            result))))))
 
 ;; unions :: [Set a] -> Set a
-(defvar hydra_lib_sets_unions
+(defvar hydra_lisp_lib_sets_unions
   (lambda (sets)
     (let ((result nil))
       (dolist (s sets result)

@@ -49,78 +49,72 @@
       "term": {
         "name": "hydra.encode.relational.columnSchema",
         "signature": {
-          "typeParameters": [{"name": "t0", "constraints": []}],
+          "typeParameters": [{"name": "t", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
-              "type": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.Term"}}},
+              "type": {"function": {"domain": {"variable": "t"}, "codomain": {"variable": "hydra.core.Term"}}},
               "isLazy": false},
             {
               "name": "arg1",
-              "type": {"application": {"function": {"variable": "hydra.relational.ColumnSchema"}, "argument": {"variable": "t0"}}},
+              "type": {"application": {"function": {"variable": "hydra.relational.ColumnSchema"}, "argument": {"variable": "t"}}},
               "isLazy": false}],
           "result": {"type": {"variable": "hydra.core.Term"}}},
         "body": {
-          "typeLambda": {
-            "parameter": "t0",
+          "annotated": {
             "body": {
-              "annotated": {
+              "lambda": {
+                "parameter": "t",
                 "body": {
                   "lambda": {
-                    "parameter": "t",
-                    "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.Term"}}},
+                    "parameter": "x",
+                    "domain": {"variable": "hydra.relational.ColumnSchema"},
                     "body": {
-                      "lambda": {
-                        "parameter": "x",
-                        "domain": {"application": {"function": {"variable": "hydra.relational.ColumnSchema"}, "argument": {"variable": "t0"}}},
-                        "body": {
-                          "inject": {
-                            "typeName": "hydra.core.Term",
-                            "field": {
-                              "name": "record",
-                              "term": {
-                                "record": {
-                                  "typeName": "hydra.core.Record",
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.relational.ColumnSchema"}}}}},
-                                    {
-                                      "name": "fields",
-                                      "term": {
-                                        "list": [
-                                          {
-                                            "record": {
-                                              "typeName": "hydra.core.Field",
-                                              "fields": [
-                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "name"}}}}},
-                                                {
-                                                  "name": "term",
-                                                  "term": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "record",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Record",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.relational.ColumnSchema"}}}}},
+                                {
+                                  "name": "fields",
+                                  "term": {
+                                    "list": [
+                                      {
+                                        "record": {
+                                          "typeName": "hydra.core.Field",
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "name"}}}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "application": {
+                                                  "function": {"variable": "hydra.encode.relational.columnName"},
+                                                  "argument": {
                                                     "application": {
-                                                      "function": {"variable": "hydra.encode.relational.columnName"},
-                                                      "argument": {
-                                                        "application": {
-                                                          "function": {
-                                                            "typeApplication": {"body": {"project": {"typeName": "hydra.relational.ColumnSchema", "fieldName": "name"}}, "type": {"variable": "t0"}}},
-                                                          "argument": {"variable": "x"}}}}}}]}},
-                                          {
-                                            "record": {
-                                              "typeName": "hydra.core.Field",
-                                              "fields": [
-                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "domain"}}}}},
-                                                {
-                                                  "name": "term",
-                                                  "term": {
+                                                      "function": {"project": {"typeName": "hydra.relational.ColumnSchema", "fieldName": "name"}},
+                                                      "argument": {"variable": "x"}}}}}}]}},
+                                      {
+                                        "record": {
+                                          "typeName": "hydra.core.Field",
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "domain"}}}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "application": {
+                                                  "function": {"variable": "t"},
+                                                  "argument": {
                                                     "application": {
-                                                      "function": {"variable": "t"},
-                                                      "argument": {
-                                                        "application": {
-                                                          "function": {
-                                                            "typeApplication": {"body": {"project": {"typeName": "hydra.relational.ColumnSchema", "fieldName": "domain"}}, "type": {"variable": "t0"}}},
-                                                          "argument": {"variable": "x"}}}}}}]}}]}}]}}}}}}}}},
-                "annotation": {
-                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.relational.ColumnSchema"}}}]}}}}}}},
+                                                      "function": {"project": {"typeName": "hydra.relational.ColumnSchema", "fieldName": "domain"}},
+                                                      "argument": {"variable": "x"}}}}}}]}}]}}]}}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.relational.ColumnSchema"}}}]}}}}},
     {
       "term": {
         "name": "hydra.encode.relational.foreignKey",
@@ -262,77 +256,67 @@
       "term": {
         "name": "hydra.encode.relational.relation",
         "signature": {
-          "typeParameters": [{"name": "t0", "constraints": []}],
+          "typeParameters": [{"name": "v", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
-              "type": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.Term"}}},
+              "type": {"function": {"domain": {"variable": "v"}, "codomain": {"variable": "hydra.core.Term"}}},
               "isLazy": false},
             {
               "name": "arg1",
-              "type": {"application": {"function": {"variable": "hydra.relational.Relation"}, "argument": {"variable": "t0"}}},
+              "type": {"application": {"function": {"variable": "hydra.relational.Relation"}, "argument": {"variable": "v"}}},
               "isLazy": false}],
           "result": {"type": {"variable": "hydra.core.Term"}}},
         "body": {
-          "typeLambda": {
-            "parameter": "t0",
+          "annotated": {
             "body": {
-              "annotated": {
+              "lambda": {
+                "parameter": "v",
                 "body": {
                   "lambda": {
-                    "parameter": "v",
-                    "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.Term"}}},
+                    "parameter": "x",
+                    "domain": {"variable": "hydra.relational.Relation"},
                     "body": {
-                      "lambda": {
-                        "parameter": "x",
-                        "domain": {"application": {"function": {"variable": "hydra.relational.Relation"}, "argument": {"variable": "t0"}}},
-                        "body": {
-                          "inject": {
-                            "typeName": "hydra.core.Term",
-                            "field": {
-                              "name": "wrap",
-                              "term": {
-                                "record": {
-                                  "typeName": "hydra.core.WrappedTerm",
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.relational.Relation"}}}}},
-                                    {
-                                      "name": "body",
-                                      "term": {
-                                        "application": {
-                                          "function": {
-                                            "lambda": {
-                                              "parameter": "xs",
-                                              "domain": {"list": {"application": {"function": {"variable": "hydra.relational.Row"}, "argument": {"variable": "t0"}}}},
-                                              "body": {
-                                                "inject": {
-                                                  "typeName": "hydra.core.Term",
-                                                  "field": {
-                                                    "name": "list",
-                                                    "term": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "wrap",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.WrappedTerm",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.relational.Relation"}}}}},
+                                {
+                                  "name": "body",
+                                  "term": {
+                                    "application": {
+                                      "function": {
+                                        "lambda": {
+                                          "parameter": "xs",
+                                          "domain": {"list": {"application": {"function": {"variable": "hydra.relational.Row"}, "argument": {"variable": "v"}}}},
+                                          "body": {
+                                            "inject": {
+                                              "typeName": "hydra.core.Term",
+                                              "field": {
+                                                "name": "list",
+                                                "term": {
+                                                  "application": {
+                                                    "function": {
                                                       "application": {
                                                         "function": {
-                                                          "application": {
-                                                            "function": {
+                                                          "typeApplication": {
+                                                            "body": {
                                                               "typeApplication": {
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {"variable": "hydra.lib.lists.map"},
-                                                                    "type": {"application": {"function": {"variable": "hydra.relational.Row"}, "argument": {"variable": "t0"}}}}},
-                                                                "type": {"variable": "hydra.core.Term"}}},
-                                                            "argument": {
-                                                              "application": {
-                                                                "function": {"typeApplication": {"body": {"variable": "hydra.encode.relational.row"}, "type": {"variable": "t0"}}},
-                                                                "argument": {"variable": "v"}}}}},
-                                                        "argument": {"variable": "xs"}}}}}}}},
-                                          "argument": {
-                                            "application": {
-                                              "function": {"typeApplication": {"body": {"unwrap": "hydra.relational.Relation"}, "type": {"variable": "t0"}}},
-                                              "argument": {"variable": "x"}}}}}}]}}}}}}}}},
-                "annotation": {
-                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.relational.Relation"}}}]}}}}}}},
+                                                                "body": {"variable": "hydra.lib.lists.map"},
+                                                                "type": {"application": {"function": {"variable": "hydra.relational.Row"}, "argument": {"variable": "v"}}}}},
+                                                            "type": {"variable": "hydra.core.Term"}}},
+                                                        "argument": {"application": {"function": {"variable": "hydra.encode.relational.row"}, "argument": {"variable": "v"}}}}},
+                                                    "argument": {"variable": "xs"}}}}}}}},
+                                      "argument": {"application": {"function": {"unwrap": "hydra.relational.Relation"}, "argument": {"variable": "x"}}}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.relational.Relation"}}}]}}}}},
     {
       "term": {
         "name": "hydra.encode.relational.relationName",
@@ -379,338 +363,307 @@
       "term": {
         "name": "hydra.encode.relational.relationSchema",
         "signature": {
-          "typeParameters": [{"name": "t0", "constraints": []}],
+          "typeParameters": [{"name": "t", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
-              "type": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.Term"}}},
+              "type": {"function": {"domain": {"variable": "t"}, "codomain": {"variable": "hydra.core.Term"}}},
               "isLazy": false},
             {
               "name": "arg1",
-              "type": {"application": {"function": {"variable": "hydra.relational.RelationSchema"}, "argument": {"variable": "t0"}}},
+              "type": {"application": {"function": {"variable": "hydra.relational.RelationSchema"}, "argument": {"variable": "t"}}},
               "isLazy": false}],
           "result": {"type": {"variable": "hydra.core.Term"}}},
         "body": {
-          "typeLambda": {
-            "parameter": "t0",
+          "annotated": {
             "body": {
-              "annotated": {
+              "lambda": {
+                "parameter": "t",
                 "body": {
                   "lambda": {
-                    "parameter": "t",
-                    "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.Term"}}},
+                    "parameter": "x",
+                    "domain": {"variable": "hydra.relational.RelationSchema"},
                     "body": {
-                      "lambda": {
-                        "parameter": "x",
-                        "domain": {"application": {"function": {"variable": "hydra.relational.RelationSchema"}, "argument": {"variable": "t0"}}},
-                        "body": {
-                          "inject": {
-                            "typeName": "hydra.core.Term",
-                            "field": {
-                              "name": "record",
-                              "term": {
-                                "record": {
-                                  "typeName": "hydra.core.Record",
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.relational.RelationSchema"}}}}},
-                                    {
-                                      "name": "fields",
-                                      "term": {
-                                        "list": [
-                                          {
-                                            "record": {
-                                              "typeName": "hydra.core.Field",
-                                              "fields": [
-                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "name"}}}}},
-                                                {
-                                                  "name": "term",
-                                                  "term": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "record",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Record",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.relational.RelationSchema"}}}}},
+                                {
+                                  "name": "fields",
+                                  "term": {
+                                    "list": [
+                                      {
+                                        "record": {
+                                          "typeName": "hydra.core.Field",
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "name"}}}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "application": {
+                                                  "function": {"variable": "hydra.encode.relational.relationName"},
+                                                  "argument": {
                                                     "application": {
-                                                      "function": {"variable": "hydra.encode.relational.relationName"},
-                                                      "argument": {
-                                                        "application": {
-                                                          "function": {
-                                                            "typeApplication": {"body": {"project": {"typeName": "hydra.relational.RelationSchema", "fieldName": "name"}}, "type": {"variable": "t0"}}},
-                                                          "argument": {"variable": "x"}}}}}}]}},
-                                          {
-                                            "record": {
-                                              "typeName": "hydra.core.Field",
-                                              "fields": [
-                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "columns"}}}}},
-                                                {
-                                                  "name": "term",
-                                                  "term": {
-                                                    "application": {
-                                                      "function": {
-                                                        "lambda": {
-                                                          "parameter": "xs",
-                                                          "domain": {"list": {"application": {"function": {"variable": "hydra.relational.ColumnSchema"}, "argument": {"variable": "t0"}}}},
-                                                          "body": {
-                                                            "inject": {
-                                                              "typeName": "hydra.core.Term",
-                                                              "field": {
-                                                                "name": "list",
-                                                                "term": {
+                                                      "function": {"project": {"typeName": "hydra.relational.RelationSchema", "fieldName": "name"}},
+                                                      "argument": {"variable": "x"}}}}}}]}},
+                                      {
+                                        "record": {
+                                          "typeName": "hydra.core.Field",
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "columns"}}}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "application": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "parameter": "xs",
+                                                      "domain": {"list": {"application": {"function": {"variable": "hydra.relational.ColumnSchema"}, "argument": {"variable": "t"}}}},
+                                                      "body": {
+                                                        "inject": {
+                                                          "typeName": "hydra.core.Term",
+                                                          "field": {
+                                                            "name": "list",
+                                                            "term": {
+                                                              "application": {
+                                                                "function": {
                                                                   "application": {
                                                                     "function": {
-                                                                      "application": {
-                                                                        "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {
                                                                           "typeApplication": {
-                                                                            "body": {
-                                                                              "typeApplication": {
-                                                                                "body": {"variable": "hydra.lib.lists.map"},
-                                                                                "type": {"application": {"function": {"variable": "hydra.relational.ColumnSchema"}, "argument": {"variable": "t0"}}}}},
-                                                                            "type": {"variable": "hydra.core.Term"}}},
-                                                                        "argument": {
-                                                                          "application": {
-                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.encode.relational.columnSchema"}, "type": {"variable": "t0"}}},
-                                                                            "argument": {"variable": "t"}}}}},
-                                                                    "argument": {"variable": "xs"}}}}}}}},
-                                                      "argument": {
-                                                        "application": {
-                                                          "function": {
-                                                            "typeApplication": {
-                                                              "body": {"project": {"typeName": "hydra.relational.RelationSchema", "fieldName": "columns"}},
-                                                              "type": {"variable": "t0"}}},
-                                                          "argument": {"variable": "x"}}}}}}]}},
-                                          {
-                                            "record": {
-                                              "typeName": "hydra.core.Field",
-                                              "fields": [
-                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "primaryKeys"}}}}},
-                                                {
-                                                  "name": "term",
-                                                  "term": {
+                                                                            "body": {"variable": "hydra.lib.lists.map"},
+                                                                            "type": {"application": {"function": {"variable": "hydra.relational.ColumnSchema"}, "argument": {"variable": "t"}}}}},
+                                                                        "type": {"variable": "hydra.core.Term"}}},
+                                                                    "argument": {"application": {"function": {"variable": "hydra.encode.relational.columnSchema"}, "argument": {"variable": "t"}}}}},
+                                                                "argument": {"variable": "xs"}}}}}}}},
+                                                  "argument": {
                                                     "application": {
-                                                      "function": {
-                                                        "lambda": {
-                                                          "parameter": "xs",
-                                                          "domain": {"list": {"variable": "hydra.relational.PrimaryKey"}},
-                                                          "body": {
-                                                            "inject": {
-                                                              "typeName": "hydra.core.Term",
-                                                              "field": {
-                                                                "name": "list",
-                                                                "term": {
+                                                      "function": {"project": {"typeName": "hydra.relational.RelationSchema", "fieldName": "columns"}},
+                                                      "argument": {"variable": "x"}}}}}}]}},
+                                      {
+                                        "record": {
+                                          "typeName": "hydra.core.Field",
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "primaryKeys"}}}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "application": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "parameter": "xs",
+                                                      "domain": {"list": {"variable": "hydra.relational.PrimaryKey"}},
+                                                      "body": {
+                                                        "inject": {
+                                                          "typeName": "hydra.core.Term",
+                                                          "field": {
+                                                            "name": "list",
+                                                            "term": {
+                                                              "application": {
+                                                                "function": {
                                                                   "application": {
                                                                     "function": {
-                                                                      "application": {
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.relational.PrimaryKey"}}},
-                                                                            "type": {"variable": "hydra.core.Term"}}},
-                                                                        "argument": {"variable": "hydra.encode.relational.primaryKey"}}},
-                                                                    "argument": {"variable": "xs"}}}}}}}},
-                                                      "argument": {
-                                                        "application": {
-                                                          "function": {
-                                                            "typeApplication": {
-                                                              "body": {"project": {"typeName": "hydra.relational.RelationSchema", "fieldName": "primaryKeys"}},
-                                                              "type": {"variable": "t0"}}},
-                                                          "argument": {"variable": "x"}}}}}}]}},
-                                          {
-                                            "record": {
-                                              "typeName": "hydra.core.Field",
-                                              "fields": [
-                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "foreignKeys"}}}}},
-                                                {
-                                                  "name": "term",
-                                                  "term": {
+                                                                      "typeApplication": {
+                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.relational.PrimaryKey"}}},
+                                                                        "type": {"variable": "hydra.core.Term"}}},
+                                                                    "argument": {"variable": "hydra.encode.relational.primaryKey"}}},
+                                                                "argument": {"variable": "xs"}}}}}}}},
+                                                  "argument": {
                                                     "application": {
-                                                      "function": {
-                                                        "lambda": {
-                                                          "parameter": "xs",
-                                                          "domain": {"list": {"variable": "hydra.relational.ForeignKey"}},
-                                                          "body": {
-                                                            "inject": {
-                                                              "typeName": "hydra.core.Term",
-                                                              "field": {
-                                                                "name": "list",
-                                                                "term": {
+                                                      "function": {"project": {"typeName": "hydra.relational.RelationSchema", "fieldName": "primaryKeys"}},
+                                                      "argument": {"variable": "x"}}}}}}]}},
+                                      {
+                                        "record": {
+                                          "typeName": "hydra.core.Field",
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "foreignKeys"}}}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "application": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "parameter": "xs",
+                                                      "domain": {"list": {"variable": "hydra.relational.ForeignKey"}},
+                                                      "body": {
+                                                        "inject": {
+                                                          "typeName": "hydra.core.Term",
+                                                          "field": {
+                                                            "name": "list",
+                                                            "term": {
+                                                              "application": {
+                                                                "function": {
                                                                   "application": {
                                                                     "function": {
-                                                                      "application": {
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.relational.ForeignKey"}}},
-                                                                            "type": {"variable": "hydra.core.Term"}}},
-                                                                        "argument": {"variable": "hydra.encode.relational.foreignKey"}}},
-                                                                    "argument": {"variable": "xs"}}}}}}}},
-                                                      "argument": {
-                                                        "application": {
-                                                          "function": {
-                                                            "typeApplication": {
-                                                              "body": {"project": {"typeName": "hydra.relational.RelationSchema", "fieldName": "foreignKeys"}},
-                                                              "type": {"variable": "t0"}}},
-                                                          "argument": {"variable": "x"}}}}}}]}}]}}]}}}}}}}}},
-                "annotation": {
-                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.relational.RelationSchema"}}}]}}}}}}},
+                                                                      "typeApplication": {
+                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.relational.ForeignKey"}}},
+                                                                        "type": {"variable": "hydra.core.Term"}}},
+                                                                    "argument": {"variable": "hydra.encode.relational.foreignKey"}}},
+                                                                "argument": {"variable": "xs"}}}}}}}},
+                                                  "argument": {
+                                                    "application": {
+                                                      "function": {"project": {"typeName": "hydra.relational.RelationSchema", "fieldName": "foreignKeys"}},
+                                                      "argument": {"variable": "x"}}}}}}]}}]}}]}}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.relational.RelationSchema"}}}]}}}}},
     {
       "term": {
         "name": "hydra.encode.relational.relationship",
         "signature": {
-          "typeParameters": [{"name": "t0", "constraints": [{"simple": "ordering"}]}],
+          "typeParameters": [{"name": "v", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
             {
               "name": "arg0",
-              "type": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.Term"}}},
+              "type": {"function": {"domain": {"variable": "v"}, "codomain": {"variable": "hydra.core.Term"}}},
               "isLazy": false},
             {
               "name": "arg1",
-              "type": {"application": {"function": {"variable": "hydra.relational.Relationship"}, "argument": {"variable": "t0"}}},
+              "type": {"application": {"function": {"variable": "hydra.relational.Relationship"}, "argument": {"variable": "v"}}},
               "isLazy": false}],
           "result": {"type": {"variable": "hydra.core.Term"}}},
         "body": {
-          "typeLambda": {
-            "parameter": "t0",
+          "annotated": {
             "body": {
-              "annotated": {
+              "lambda": {
+                "parameter": "v",
                 "body": {
                   "lambda": {
-                    "parameter": "v",
-                    "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.Term"}}},
+                    "parameter": "x",
+                    "domain": {"variable": "hydra.relational.Relationship"},
                     "body": {
-                      "lambda": {
-                        "parameter": "x",
-                        "domain": {"application": {"function": {"variable": "hydra.relational.Relationship"}, "argument": {"variable": "t0"}}},
-                        "body": {
-                          "inject": {
-                            "typeName": "hydra.core.Term",
-                            "field": {
-                              "name": "wrap",
-                              "term": {
-                                "record": {
-                                  "typeName": "hydra.core.WrappedTerm",
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.relational.Relationship"}}}}},
-                                    {
-                                      "name": "body",
-                                      "term": {
-                                        "application": {
-                                          "function": {
-                                            "lambda": {
-                                              "parameter": "s",
-                                              "domain": {"set": {"map": {"keys": {"variable": "hydra.relational.ColumnName"}, "values": {"variable": "t0"}}}},
-                                              "body": {
-                                                "inject": {
-                                                  "typeName": "hydra.core.Term",
-                                                  "field": {
-                                                    "name": "set",
-                                                    "term": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "wrap",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.WrappedTerm",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.relational.Relationship"}}}}},
+                                {
+                                  "name": "body",
+                                  "term": {
+                                    "application": {
+                                      "function": {
+                                        "lambda": {
+                                          "parameter": "s",
+                                          "domain": {"set": {"map": {"keys": {"variable": "hydra.relational.ColumnName"}, "values": {"variable": "v"}}}},
+                                          "body": {
+                                            "inject": {
+                                              "typeName": "hydra.core.Term",
+                                              "field": {
+                                                "name": "set",
+                                                "term": {
+                                                  "application": {
+                                                    "function": {
                                                       "application": {
                                                         "function": {
-                                                          "application": {
-                                                            "function": {
+                                                          "typeApplication": {
+                                                            "body": {
                                                               "typeApplication": {
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {"variable": "hydra.lib.sets.map"},
-                                                                    "type": {"map": {"keys": {"variable": "hydra.relational.ColumnName"}, "values": {"variable": "t0"}}}}},
-                                                                "type": {"variable": "hydra.core.Term"}}},
-                                                            "argument": {
-                                                              "lambda": {
-                                                                "parameter": "m",
-                                                                "domain": {"map": {"keys": {"variable": "hydra.relational.ColumnName"}, "values": {"variable": "t0"}}},
-                                                                "body": {
-                                                                  "inject": {
-                                                                    "typeName": "hydra.core.Term",
-                                                                    "field": {
-                                                                      "name": "map",
-                                                                      "term": {
+                                                                "body": {"variable": "hydra.lib.sets.map"},
+                                                                "type": {"map": {"keys": {"variable": "hydra.relational.ColumnName"}, "values": {"variable": "v"}}}}},
+                                                            "type": {"variable": "hydra.core.Term"}}},
+                                                        "argument": {
+                                                          "lambda": {
+                                                            "parameter": "m",
+                                                            "domain": {"map": {"keys": {"variable": "hydra.relational.ColumnName"}, "values": {"variable": "v"}}},
+                                                            "body": {
+                                                              "inject": {
+                                                                "typeName": "hydra.core.Term",
+                                                                "field": {
+                                                                  "name": "map",
+                                                                  "term": {
+                                                                    "application": {
+                                                                      "function": {
                                                                         "application": {
                                                                           "function": {
                                                                             "application": {
                                                                               "function": {
-                                                                                "application": {
-                                                                                  "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
                                                                                     "typeApplication": {
                                                                                       "body": {
                                                                                         "typeApplication": {
-                                                                                          "body": {
-                                                                                            "typeApplication": {
-                                                                                              "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.bimap"}, "type": {"variable": "hydra.relational.ColumnName"}}},
-                                                                                              "type": {"variable": "hydra.core.Term"}}},
-                                                                                          "type": {"variable": "t0"}}},
-                                                                                      "type": {"variable": "hydra.core.Term"}}},
-                                                                                  "argument": {"variable": "hydra.encode.relational.columnName"}}},
-                                                                              "argument": {"variable": "v"}}},
-                                                                          "argument": {"variable": "m"}}}}}}}}}},
-                                                        "argument": {"variable": "s"}}}}}}}},
-                                          "argument": {
-                                            "application": {
-                                              "function": {"typeApplication": {"body": {"unwrap": "hydra.relational.Relationship"}, "type": {"variable": "t0"}}},
-                                              "argument": {"variable": "x"}}}}}}]}}}}}}}}},
-                "annotation": {
-                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.relational.Relationship"}}}]}}}}}}},
+                                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.bimap"}, "type": {"variable": "hydra.relational.ColumnName"}}},
+                                                                                          "type": {"variable": "hydra.core.Term"}}},
+                                                                                      "type": {"variable": "v"}}},
+                                                                                  "type": {"variable": "hydra.core.Term"}}},
+                                                                              "argument": {"variable": "hydra.encode.relational.columnName"}}},
+                                                                          "argument": {"variable": "v"}}},
+                                                                      "argument": {"variable": "m"}}}}}}}}}},
+                                                    "argument": {"variable": "s"}}}}}}}},
+                                      "argument": {"application": {"function": {"unwrap": "hydra.relational.Relationship"}, "argument": {"variable": "x"}}}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.relational.Relationship"}}}]}}}}},
     {
       "term": {
         "name": "hydra.encode.relational.row",
         "signature": {
-          "typeParameters": [{"name": "t0", "constraints": []}],
+          "typeParameters": [{"name": "v", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
-              "type": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.Term"}}},
+              "type": {"function": {"domain": {"variable": "v"}, "codomain": {"variable": "hydra.core.Term"}}},
               "isLazy": false},
             {
               "name": "arg1",
-              "type": {"application": {"function": {"variable": "hydra.relational.Row"}, "argument": {"variable": "t0"}}},
+              "type": {"application": {"function": {"variable": "hydra.relational.Row"}, "argument": {"variable": "v"}}},
               "isLazy": false}],
           "result": {"type": {"variable": "hydra.core.Term"}}},
         "body": {
-          "typeLambda": {
-            "parameter": "t0",
+          "annotated": {
             "body": {
-              "annotated": {
+              "lambda": {
+                "parameter": "v",
                 "body": {
                   "lambda": {
-                    "parameter": "v",
-                    "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.Term"}}},
+                    "parameter": "x",
+                    "domain": {"variable": "hydra.relational.Row"},
                     "body": {
-                      "lambda": {
-                        "parameter": "x",
-                        "domain": {"application": {"function": {"variable": "hydra.relational.Row"}, "argument": {"variable": "t0"}}},
-                        "body": {
-                          "inject": {
-                            "typeName": "hydra.core.Term",
-                            "field": {
-                              "name": "wrap",
-                              "term": {
-                                "record": {
-                                  "typeName": "hydra.core.WrappedTerm",
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.relational.Row"}}}}},
-                                    {
-                                      "name": "body",
-                                      "term": {
-                                        "application": {
-                                          "function": {
-                                            "lambda": {
-                                              "parameter": "xs",
-                                              "domain": {"list": {"variable": "t0"}},
-                                              "body": {
-                                                "inject": {
-                                                  "typeName": "hydra.core.Term",
-                                                  "field": {
-                                                    "name": "list",
-                                                    "term": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "wrap",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.WrappedTerm",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.relational.Row"}}}}},
+                                {
+                                  "name": "body",
+                                  "term": {
+                                    "application": {
+                                      "function": {
+                                        "lambda": {
+                                          "parameter": "xs",
+                                          "domain": {"list": {"variable": "v"}},
+                                          "body": {
+                                            "inject": {
+                                              "typeName": "hydra.core.Term",
+                                              "field": {
+                                                "name": "list",
+                                                "term": {
+                                                  "application": {
+                                                    "function": {
                                                       "application": {
                                                         "function": {
-                                                          "application": {
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "t0"}}},
-                                                                "type": {"variable": "hydra.core.Term"}}},
-                                                            "argument": {"variable": "v"}}},
-                                                        "argument": {"variable": "xs"}}}}}}}},
-                                          "argument": {
-                                            "application": {
-                                              "function": {"typeApplication": {"body": {"unwrap": "hydra.relational.Row"}, "type": {"variable": "t0"}}},
-                                              "argument": {"variable": "x"}}}}}}]}}}}}}}}},
-                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.relational.Row"}}}]}}}}}}}]}
+                                                          "typeApplication": {
+                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "v"}}},
+                                                            "type": {"variable": "hydra.core.Term"}}},
+                                                        "argument": {"variable": "v"}}},
+                                                    "argument": {"variable": "xs"}}}}}}}},
+                                      "argument": {"application": {"function": {"unwrap": "hydra.relational.Row"}, "argument": {"variable": "x"}}}}}}]}}}}}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.relational.Row"}}}]}}}}}]}

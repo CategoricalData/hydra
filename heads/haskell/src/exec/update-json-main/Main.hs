@@ -19,7 +19,7 @@
 module Main where
 
 import Hydra.Generation (writeModulesJsonPackageSplit, writeDerivedJsonPackageSplit, modulesToGraph,
-  loadModulesFromJson, readManifestField)
+  loadModulesFromJson, readManifestField, loadNativePackageModules)
 import Hydra.PackageRouting (defaultDistJsonRoot, buildRoutingMap)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules, kernelModules, haskellModules, jsonModules, otherModules,
@@ -52,28 +52,8 @@ import qualified System.FilePath as FP
 import System.IO (hFlush, stdout)
 
 
--- | Load the hydra-java and hydra-python modules (hydra.{java,python}.* +
--- hydra.dsl.{java,python}.*) from their already-generated dist/json so they can
--- seed the inference universe. Their Haskell DSL sources have been deleted
--- (#346/#370); the native drivers are the sole writers, but the Haskell generator
--- still needs these modules present to resolve cross-package references (e.g.
--- hydra-scala -> hydra.java.serde.escapeJavaString). Missing manifests (a truly
--- cold tree before Phase 1.5 seeds them) are tolerated: such a run cannot
--- reference them yet either. The decode context is the base universe (kernel etc.).
-loadNativePackageModules :: FilePath -> [Kernel.Module] -> IO [Kernel.Module]
-loadNativePackageModules distRoot baseUniverse =
-    fmap L.concat $ CM.forM ["hydra-java", "hydra-python"] $ \pkg -> do
-      let pkgJson = distRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
-          manifest = pkgJson FP.</> "manifest.json"
-      exists <- DD.doesFileExist manifest
-      if not exists
-        then do
-          putStrLn $ "  (skipping " ++ pkg ++ ": no manifest yet — cold tree)"
-          return []
-        else do
-          mainNs <- readManifestField pkgJson "mainModules"
-          dslNs  <- readManifestField pkgJson "dslModules"
-          loadModulesFromJson pkgJson baseUniverse (mainNs ++ dslNs)
+-- 'loadNativePackageModules' moved to Hydra.Generation (#346) so that
+-- transform-haskell-dsl-to-json shares the same native-JSON loader.
 
 -- | Deduplicate a list of modules by namespace, keeping the first occurrence.
 dedupByNamespace :: [Kernel.Module] -> [Kernel.Module]
@@ -181,9 +161,22 @@ main = do
       isNativeDslWrapper m =
         let ns = Packaging.unModuleName (Kernel.moduleName m)
         in L.isPrefixOf "hydra.dsl.java." ns || L.isPrefixOf "hydra.dsl.python." ns
+      -- Derived encode/decode modules (hydra.encode.*, hydra.decode.*) are compiled
+      -- into mainModules and so reach this universe, but they are DERIVED: the
+      -- synthesizer is authoritative for their in-term annotations and the derived
+      -- pass below re-emits them with doInfer=False. They must NOT be re-inferred
+      -- by this main (doInfer=True) pass — inference's occurs-check rejects the
+      -- saturated nominal self-applications in polymorphic decoder signatures (e.g.
+      -- hydra.decode.parsing.parseResult : ParseResult @ a). They are loaded only to
+      -- seed the inference universe for the hand-written modules. Exclude them here;
+      -- the derived pass is their sole writer. (#476)
+      isDerivedEncodeDecode m =
+        let ns = Packaging.unModuleName (Kernel.moduleName m)
+        in L.isPrefixOf "hydra.encode." ns || L.isPrefixOf "hydra.decode." ns
+      isDerived m = isNativeDslWrapper m || isDerivedEncodeDecode m
       writeUniverse
-        | includeJavaPython = filter (not . isNativeDslWrapper) universe
-        | otherwise         = filter (\m -> not (isNativeOwned m) && not (isNativeDslWrapper m)) universe
+        | includeJavaPython = filter (not . isDerived) universe
+        | otherwise         = filter (\m -> not (isNativeOwned m) && not (isDerived m)) universe
       excluded = length universe - length writeUniverse
 
   putStrLn $ "Generating " ++ show (length writeUniverse) ++ " modules to JSON, routed per package..."

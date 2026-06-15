@@ -65,7 +65,7 @@ fileExtension cx raw =
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.util.ModuleNames
-moduleNames :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Util.ModuleNames t0)
+moduleNames :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError n) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Util.ModuleNames n)
 moduleNames n cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->

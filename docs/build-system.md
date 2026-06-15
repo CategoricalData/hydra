@@ -198,6 +198,32 @@ and `hydraPythonModules` are empty and `update-json-main` no longer writes those
 It does still *load* the `hydra.{java,python}.*` JSON into its inference universe so
 cross-package references resolve (e.g. `hydra-scala` → `hydra.java.serde.escapeJavaString`).
 
+The general invariant: **when a package is inferred, the typed output of every package it
+depends on must already be in its inference universe** — that is just the dependency DAG, and it
+holds for any inter-package edge. The default model is that packages may be written in *different*
+source languages and depend on each other through their generated JSON: a package's types are read
+from its `dist/json`, regardless of what language authored it.
+
+The one current exception is the package whose source language is compiled directly into the
+generator. Today that is `hydra-kernel`, written in the Haskell DSL — its modules are in the
+inference universe automatically without reading any JSON. This is not a property of Haskell *per
+se*; Haskell just happens to be the kernel's source language and the bootstrap host right now.
+That is provisional: [#459](https://github.com/CategoricalData/hydra/issues/459) tracks moving the
+build's default host off Haskell (the Haskell host must be built from Hackage sources, while the
+Java host ships as Maven bytecode), and the kernel's source language could itself change. Treat
+"compiled into the generator" as the special, shrinking case — not the rule.
+
+Everything else is loaded from JSON. `hydra-java` and `hydra-python` are simply the packages
+already operating this way (their DSL sources were removed in #346, so `dist/json` is their only
+typed representation); the driver loads them via `Hydra.Generation.loadNativePackageModules`. As
+more packages move off the compiled-in path, the same on-disk loading applies to them. Every
+JSON-writing driver that runs per-package inference must satisfy the invariant — not just
+`update-json-main`. The concrete bug this prevents: `transform-haskell-dsl-to-json` (the on-demand
+sync, `bin/sync-packages.sh hydra-pg/rdf/ext`) once skipped that load, so inferring `hydra-scala`
+— which references `hydra.java.serde.escapeJavaString` — failed with `no such binding`. That
+on-demand path is CI-exercised but a plain `bin/sync.sh` does not run it (see the local-vs-CI gap
+note in [claude/pitfalls.md](../claude/pitfalls.md)).
+
 Phase 5 completed the migration for [#344](https://github.com/CategoricalData/hydra/issues/344):
 `hydra-java` and `hydra-python` are authored in their own host languages, and as of #346 those
 host-native sources are the **sole** source of truth — the Haskell DSL copies are deleted. The
@@ -365,8 +391,8 @@ generation, including ones whose JSON output is written by a different producer.
 The Layer 2 cache is keyed on (a) per-module-name input hashes and (b) a per-target
 **generator stamp** — a fingerprint of the transform that produced the output. Without
 the stamp, edits to the transform (the per-target coder, the kernel orchestrator code,
-the assembler script) would change downstream emission without changing any tracked
-input, and the cache would erroneously hit.
+the generation driver, the assembler script) would change downstream emission without
+changing any tracked input, and the cache would erroneously hit.
 
 The stamp is computed by `compute_generator_stamp <lang>` in `bin/lib/assemble-common.sh`
 and exported as `HYDRA_GENERATOR_STAMP` before each Layer 2 freshness check. `digest-check
@@ -379,7 +405,8 @@ The stamp is **compositional**, mirroring the actual structure of a host transfo
 stamp(L) = hash(
     kernel-id  = component_identity hydra-kernel,
     coder-id   = component_identity hydra-L,
-    runtime-id = runtime_identity L
+    runtime-id = runtime_identity L,
+    driver-id  = driver_identity        -- target-independent; see below
 )
 ```
 
@@ -387,6 +414,19 @@ Each component is independent. A `hydra-kernel` change invalidates every target'
 a Java-coder change invalidates only Java; an edit to `heads/python/src/main/` invalidates
 only Python. This is the desired precision: the dependency graph determines the
 invalidation graph.
+
+`driver-id` (`driver_identity`) is the **target-independent** leaf: a hash of the Haskell
+generation driver — `heads/haskell/src/exec/bootstrap-from-json/` plus the orchestrator
+modules `Hydra.Generation`, `Hydra.ExtGeneration`, `Hydra.PackageRouting`. That single binary
+emits *every* target, so a change to its emission logic must invalidate *all* targets. It is
+mixed into every target's stamp for exactly that reason. This leaf was added for
+[#473](https://github.com/CategoricalData/hydra/issues/473): the lib-pass / `hydra.lib.* →
+hydra.<lang>.lib.*` redirect logic lives in that driver, and a Step-0-class emission change
+there left the per-package *input* JSON hashes unchanged — so without `driver-id`, warm
+builds (surviving gitignored output digests) cache-skipped regeneration and shipped stale
+output. The lesson generalizes: **if a change alters generated bytes without altering any
+tracked input or any `component_identity`/`runtime_identity` source, it must be reachable from
+`driver_identity`, or the cache will silently serve stale output.**
 
 `component_identity` is the swappable layer, and it now has two modes:
 

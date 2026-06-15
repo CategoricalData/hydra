@@ -11,40 +11,40 @@
   (or (= x 1.0e+INF) (= x -1.0e+INF)))
 
 ;; abs :: Int -> Int
-(defvar hydra_lib_math_abs
+(defvar hydra_lisp_lib_math_abs
   (lambda (n) (abs n)))
 
 ;; acos :: Double -> Double
-(defvar hydra_lib_math_acos
+(defvar hydra_lisp_lib_math_acos
   (lambda (x) (acos (float x))))
 
 ;; acosh :: Double -> Double
 ;; acosh(x) = ln(x + sqrt(x^2 - 1))
-(defvar hydra_lib_math_acosh
+(defvar hydra_lisp_lib_math_acosh
   (lambda (x)
     (let ((fx (float x)))
       (log (+ fx (sqrt (- (* fx fx) 1.0)))))))
 
 ;; add :: Int -> Int -> Int
-(defvar hydra_lib_math_add
+(defvar hydra_lisp_lib_math_add
   (lambda (a)
     (lambda (b)
       (+ a b))))
 
 ;; addFloat64 :: Double -> Double -> Double
-(defvar hydra_lib_math_add_float64
+(defvar hydra_lisp_lib_math_add_float64
   (lambda (a)
     (lambda (b)
       (+ (float a) (float b)))))
 
 ;; asin :: Double -> Double
-(defvar hydra_lib_math_asin
+(defvar hydra_lisp_lib_math_asin
   (lambda (x) (asin (float x))))
 
 ;; asinh :: Double -> Double
 ;; asinh(x) = ln(x + sqrt(x^2 + 1))
 ;; Special-case infinities: asinh(±Inf) = ±Inf (naive formula gives NaN for -Inf).
-(defvar hydra_lib_math_asinh
+(defvar hydra_lisp_lib_math_asinh
   (lambda (x)
     (let ((fx (float x)))
       (if (hydra--infinitep fx)
@@ -52,12 +52,12 @@
         (log (+ fx (sqrt (+ (* fx fx) 1.0))))))))
 
 ;; atan :: Double -> Double
-(defvar hydra_lib_math_atan
+(defvar hydra_lisp_lib_math_atan
   (lambda (x) (atan (float x))))
 
 ;; atan2 :: Double -> Double -> Double
 ;; Match Haskell: atan2 returns NaN when both arguments are infinite.
-(defvar hydra_lib_math_atan2
+(defvar hydra_lisp_lib_math_atan2
   (lambda (y)
     (lambda (x)
       (let ((fy (float y)) (fx (float x)))
@@ -67,7 +67,7 @@
 
 ;; atanh :: Double -> Double
 ;; atanh(x) = 0.5 * ln((1+x)/(1-x))
-(defvar hydra_lib_math_atanh
+(defvar hydra_lisp_lib_math_atanh
   (lambda (x)
     (let ((fx (float x)))
       (* 0.5 (log (/ (+ 1.0 fx) (- 1.0 fx)))))))
@@ -75,7 +75,7 @@
 ;; ceiling :: Double -> Double
 ;; DIVERGENCE FROM HASKELL: Hydra returns a float, not an integer, so that
 ;; NaN/Inf propagate naturally per IEEE 754.
-(defvar hydra_lib_math_ceiling
+(defvar hydra_lisp_lib_math_ceiling
   (lambda (x)
     (let ((fx (float x)))
       (cond ((isnan fx) fx)
@@ -83,30 +83,30 @@
             (t (float (ceiling fx)))))))
 
 ;; cos :: Double -> Double
-(defvar hydra_lib_math_cos
+(defvar hydra_lisp_lib_math_cos
   (lambda (x) (cos (float x))))
 
 ;; cosh :: Double -> Double
 ;; cosh(x) = (e^x + e^(-x)) / 2
-(defvar hydra_lib_math_cosh
+(defvar hydra_lisp_lib_math_cosh
   (lambda (x)
     (let ((fx (float x)))
       (/ (+ (exp fx) (exp (- fx))) 2.0))))
 
 ;; e :: Double
-(defvar hydra_lib_math_e (exp 1.0))
+(defvar hydra_lisp_lib_math_e (exp 1.0))
 
 ;; even :: Int -> Bool
-(defvar hydra_lib_math_even
+(defvar hydra_lisp_lib_math_even
   (lambda (n) (cl-evenp n)))
 
 ;; exp :: Double -> Double
-(defvar hydra_lib_math_exp
+(defvar hydra_lisp_lib_math_exp
   (lambda (x) (exp (float x))))
 
 ;; floor :: Double -> Double
 ;; DIVERGENCE FROM HASKELL: returns a float, not an integer (see ceiling).
-(defvar hydra_lib_math_floor
+(defvar hydra_lisp_lib_math_floor
   (lambda (x)
     (let ((fx (float x)))
       (cond ((isnan fx) fx)
@@ -114,26 +114,26 @@
             (t (float (floor fx)))))))
 
 ;; log :: Double -> Double
-(defvar hydra_lib_math_log
+(defvar hydra_lisp_lib_math_log
   (lambda (x) (log (float x))))
 
 ;; logBase :: Double -> Double -> Double
-(defvar hydra_lib_math_logBase
+(defvar hydra_lisp_lib_math_logBase
   (lambda (base)
     (lambda (x)
       (/ (log (float x)) (log (float base))))))
 
 ;; log_base alias
-(defvar hydra_lib_math_log_base hydra_lib_math_logBase)
+(defvar hydra_lisp_lib_math_log_base hydra_lisp_lib_math_logBase)
 
 ;; max :: Int -> Int -> Int
-(defvar hydra_lib_math_max
+(defvar hydra_lisp_lib_math_max
   (lambda (a)
     (lambda (b)
       (max a b))))
 
 ;; maybe_div :: Int -> Int -> Maybe Int
-(defvar hydra_lib_math_maybe_div
+(defvar hydra_lisp_lib_math_maybe_div
   (lambda (a)
     (lambda (b)
       (if (= b 0)
@@ -141,7 +141,7 @@
           (list :given (floor a b))))))
 
 ;; maybe_mod :: Int -> Int -> Maybe Int
-(defvar hydra_lib_math_maybe_mod
+(defvar hydra_lisp_lib_math_maybe_mod
   (lambda (a)
     (lambda (b)
       (if (= b 0)
@@ -149,14 +149,14 @@
           (list :given (mod a b))))))
 
 ;; maybe_pred :: Int -> Maybe Int
-(defvar hydra_lib_math_maybe_pred
+(defvar hydra_lisp_lib_math_maybe_pred
   (lambda (n)
     (if (= n -2147483648)
         (list :none)
         (list :given (1- n)))))
 
 ;; maybe_rem :: Int -> Int -> Maybe Int
-(defvar hydra_lib_math_maybe_rem
+(defvar hydra_lisp_lib_math_maybe_rem
   (lambda (a)
     (lambda (b)
       (if (= b 0)
@@ -164,55 +164,55 @@
           (list :given (% a b))))))
 
 ;; maybe_succ :: Int -> Maybe Int
-(defvar hydra_lib_math_maybe_succ
+(defvar hydra_lisp_lib_math_maybe_succ
   (lambda (n)
     (if (= n 2147483647)
         (list :none)
         (list :given (1+ n)))))
 
 ;; min :: Int -> Int -> Int
-(defvar hydra_lib_math_min
+(defvar hydra_lisp_lib_math_min
   (lambda (a)
     (lambda (b)
       (min a b))))
 
 ;; mul :: Int -> Int -> Int
-(defvar hydra_lib_math_mul
+(defvar hydra_lisp_lib_math_mul
   (lambda (a)
     (lambda (b)
       (* a b))))
 
 ;; mulFloat64 :: Double -> Double -> Double
-(defvar hydra_lib_math_mul_float64
+(defvar hydra_lisp_lib_math_mul_float64
   (lambda (a)
     (lambda (b)
       (* (float a) (float b)))))
 
 ;; negate :: Int -> Int
-(defvar hydra_lib_math_negate
+(defvar hydra_lisp_lib_math_negate
   (lambda (a)
     (- a)))
 
 ;; negateFloat64 :: Double -> Double
-(defvar hydra_lib_math_negate_float64
+(defvar hydra_lisp_lib_math_negate_float64
   (lambda (a)
     (- (float a))))
 
 ;; odd :: Int -> Bool
-(defvar hydra_lib_math_odd
+(defvar hydra_lisp_lib_math_odd
   (lambda (n) (cl-oddp n)))
 
 ;; pi :: Double
-(defvar hydra_lib_math_pi float-pi)
+(defvar hydra_lisp_lib_math_pi float-pi)
 
 ;; pow :: Double -> Double -> Double
-(defvar hydra_lib_math_pow
+(defvar hydra_lisp_lib_math_pow
   (lambda (base)
     (lambda (exp-val)
       (expt (float base) (float exp-val)))))
 
 ;; range :: Int -> Int -> [Int]  (inclusive both ends)
-(defvar hydra_lib_math_range
+(defvar hydra_lisp_lib_math_range
   (lambda (start)
     (lambda (end)
       (let ((acc nil))
@@ -224,7 +224,7 @@
 
 ;; round :: Double -> Double
 ;; DIVERGENCE FROM HASKELL: returns a float, not an integer (see ceiling).
-(defvar hydra_lib_math_round
+(defvar hydra_lisp_lib_math_round
   (lambda (x)
     (let ((fx (float x)))
       (cond ((isnan fx) fx)
@@ -232,45 +232,45 @@
             (t (float (round fx)))))))
 
 ;; signum :: Int -> Int
-(defvar hydra_lib_math_signum
+(defvar hydra_lisp_lib_math_signum
   (lambda (n)
     (cond ((> n 0) 1) ((< n 0) -1) (t 0))))
 
 ;; sin :: Double -> Double
-(defvar hydra_lib_math_sin
+(defvar hydra_lisp_lib_math_sin
   (lambda (x) (sin (float x))))
 
 ;; sinh :: Double -> Double
 ;; sinh(x) = (e^x - e^(-x)) / 2
-(defvar hydra_lib_math_sinh
+(defvar hydra_lisp_lib_math_sinh
   (lambda (x)
     (let ((fx (float x)))
       (/ (- (exp fx) (exp (- fx))) 2.0))))
 
 ;; sqrt :: Double -> Double
-(defvar hydra_lib_math_sqrt
+(defvar hydra_lisp_lib_math_sqrt
   (lambda (x) (sqrt (float x))))
 
 ;; sub :: Int -> Int -> Int
-(defvar hydra_lib_math_sub
+(defvar hydra_lisp_lib_math_sub
   (lambda (a)
     (lambda (b)
       (- a b))))
 
 ;; subFloat64 :: Double -> Double -> Double
-(defvar hydra_lib_math_sub_float64
+(defvar hydra_lisp_lib_math_sub_float64
   (lambda (a)
     (lambda (b)
       (- (float a) (float b)))))
 
 ;; tan :: Double -> Double
-(defvar hydra_lib_math_tan
+(defvar hydra_lisp_lib_math_tan
   (lambda (x) (tan (float x))))
 
 ;; tanh :: Double -> Double
 ;; tanh(x) = sinh(x) / cosh(x) = (e^x - e^(-x)) / (e^x + e^(-x))
 ;; Special-case infinities: tanh(±Inf) = ±1.0 (naive formula gives NaN).
-(defvar hydra_lib_math_tanh
+(defvar hydra_lisp_lib_math_tanh
   (lambda (x)
     (let ((fx (float x)))
       (cond ((hydra--infinitep fx) (if (> fx 0) 1.0 -1.0))
@@ -280,7 +280,7 @@
 
 ;; truncate :: Double -> Double
 ;; DIVERGENCE FROM HASKELL: returns a float, not an integer (see ceiling).
-(defvar hydra_lib_math_truncate
+(defvar hydra_lisp_lib_math_truncate
   (lambda (x)
     (let ((fx (float x)))
       (cond ((isnan fx) fx)
@@ -289,7 +289,7 @@
 
 ;; roundFloat64 :: Int -> Double -> Double
 ;; Returns NaN/Inf inputs unchanged (no rounding is possible).
-(defvar hydra_lib_math_round_float64
+(defvar hydra_lisp_lib_math_round_float64
   (lambda (n)
     (lambda (x)
       (let ((fx (float x)))
@@ -312,9 +312,9 @@
                   (scale (expt 2.0 (- 23 e)))
                   (mantissa (round (* ax scale))))
              (* sign (/ mantissa scale))))))
-(defvar hydra_lib_math_round_float32
+(defvar hydra_lisp_lib_math_round_float32
   (lambda (n)
     (lambda (x)
-      (snap-to-float32 (funcall (funcall hydra_lib_math_round_float64 n) x)))))
+      (snap-to-float32 (funcall (funcall hydra_lisp_lib_math_round_float64 n) x)))))
 
 (provide 'hydra.lib.math)

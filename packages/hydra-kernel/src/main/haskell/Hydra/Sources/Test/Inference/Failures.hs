@@ -14,6 +14,15 @@ import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
+import qualified Hydra.Dsl.Prims as Prims
+import qualified Hydra.Lib.Lists as DefLists
+import qualified Hydra.Lib.Logic as DefLogic
+import qualified Hydra.Lib.Maps as DefMaps
+import qualified Hydra.Lib.Math as DefMath
+import qualified Hydra.Lib.Optionals as DefOptionals
+import qualified Hydra.Lib.Pairs as DefPairs
+import qualified Hydra.Lib.Sets as DefSets
+import qualified Hydra.Lib.Strings as DefStrings
 
 
 ns :: ModuleName
@@ -68,17 +77,17 @@ arityMismatchTests = define "arityMismatchTests" $
   supergroup "Arity mismatch" [
   subgroup "Too many arguments" [
     expectFailure 1 []
-      (primitive _math_add @@ int32 42 @@ int32 137 @@ int32 999),
+      (primitive DefMath.add @@ int32 42 @@ int32 137 @@ int32 999),
     expectFailure 2 []
       ((lambda "x" $ lambda "y" $ var "x") @@ int32 42 @@ string "foo" @@ true),
     expectFailure 3 []
-      (primitive _lists_cons @@ int32 42 @@ list [int32 137] @@ string "extra")],
+      (primitive DefLists.cons @@ int32 42 @@ list [int32 137] @@ string "extra")],
 
   subgroup "Wrong argument types with extra args" [
     expectFailure 1 []
-      (primitive _strings_length @@ int32 42 @@ string "extra"),
+      (primitive DefStrings.length @@ int32 42 @@ string "extra"),
     expectFailure 2 []
-      (primitive _logic_not @@ int32 42 @@ true),
+      (primitive DefLogic.not @@ int32 42 @@ true),
     expectFailure 3 []
       ((lambda "x" $ int32 42) @@ string "arg" @@ int32 137 @@ true)]]
 
@@ -99,22 +108,22 @@ complexConstraintFailureTests = define "complexConstraintFailureTests" $
       (lets [
         "nested">: lambda "f" $ lambda "g" $ lambda "x" $
           var "f" @@ (var "g" @@ (var "f" @@ (var "g" @@ var "x"))),
-        "int_f">: lambda "n" $ primitive _math_add @@ var "n" @@ int32 1,
-        "str_g">: lambda "s" $ primitive _strings_cat @@ list [var "s", string "!"],
+        "int_f">: lambda "n" $ primitive DefMath.add @@ var "n" @@ int32 1,
+        "str_g">: lambda "s" $ primitive DefStrings.cat @@ list [var "s", string "!"],
         "bad">: var "nested" @@ var "int_f" @@ var "str_g"] $ var "bad")],
 
   subgroup "Function composition failures" [
     expectFailure 1 []
       (lets [
         "triple">: lambda "f" $ lambda "x" $ var "f" @@ (var "f" @@ (var "f" @@ var "x")),
-        "increment">: lambda "n" $ primitive _math_add @@ var "n" @@ int32 1,
-        "stringify">: lambda "s" $ primitive _strings_cat @@ list [var "s", string "!"],
+        "increment">: lambda "n" $ primitive DefMath.add @@ var "n" @@ int32 1,
+        "stringify">: lambda "s" $ primitive DefStrings.cat @@ list [var "s", string "!"],
         "bad">: var "triple" @@ var "increment" @@ var "stringify"] $ var "bad"),
     expectFailure 2 []
       (lets [
         "compose">: lambda "f" $ lambda "g" $ lambda "x" $ var "f" @@ (var "g" @@ var "x"),
         "reverse_compose">: lambda "g" $ lambda "f" $ lambda "x" $ var "f" @@ (var "g" @@ var "x"),
-        "bad">: var "compose" @@ var "reverse_compose" @@ primitive _math_add @@ primitive _strings_length] $
+        "bad">: var "compose" @@ var "reverse_compose" @@ primitive DefMath.add @@ primitive DefStrings.length] $
         var "bad")]]
 
 constraintSolverEdgeCaseTests :: TypedTermDefinition TestGroup
@@ -179,9 +188,9 @@ invalidApplicationTests = define "invalidApplicationTests" $
 
   subgroup "Primitive misapplication" [
     expectFailure 1 []
-      (primitive _maps_empty @@ string "foo"),
+      (primitive DefMaps.empty @@ string "foo"),
     expectFailure 2 []
-      (primitive _sets_empty @@ int32 42),
+      (primitive DefSets.empty @@ int32 42),
     expectFailure 3 []
       (optional nothing @@ string "value"),
     expectFailure 4 []
@@ -208,21 +217,21 @@ letBindingMismatchTests = define "letBindingMismatchTests" $
     expectFailure 1 []
       (lets [
         "list1">: list [int32 42],
-        "list2">: primitive _lists_cons @@ string "foo" @@ var "list1"] $ var "list2"),
+        "list2">: primitive DefLists.cons @@ string "foo" @@ var "list1"] $ var "list2"),
     expectFailure 2 []
       (lets [
         "nums">: list [int32 1, int32 2],
-        "mixed">: primitive _lists_cons @@ string "bad" @@ var "nums"] $ var "mixed"),
+        "mixed">: primitive DefLists.cons @@ string "bad" @@ var "nums"] $ var "mixed"),
     expectFailure 3 []
       (lets [
         "pair1">: pair (int32 42) (string "foo"),
         "pair2">: pair (string "bar") (var "pair1")] $
-        primitive _math_add @@ (primitive _pairs_first @@ var "pair2") @@ int32 1)],
+        primitive DefMath.add @@ (primitive DefPairs.first @@ var "pair2") @@ int32 1)],
 
   subgroup "Function binding mismatches" [
     expectFailure 1 []
       (lets [
-        "add">: primitive _math_add,
+        "add">: primitive DefMath.add,
         "badCall">: var "add" @@ string "not a number" @@ int32 42] $
         var "badCall"),
     expectFailure 2 []
@@ -265,7 +274,7 @@ polymorphismViolationTests = define "polymorphismViolationTests" $
   subgroup "Identity function violations" [
     expectFailure 1 []
       (lets ["id">: lambda "x" $ var "x"] $
-        primitive _math_add @@ (var "id" @@ int32 42) @@ (var "id" @@ string "foo")),
+        primitive DefMath.add @@ (var "id" @@ int32 42) @@ (var "id" @@ string "foo")),
     expectFailure 2 []
       (lets ["id">: lambda "x" $ var "x"] $
         list [var "id" @@ int32 42, var "id" @@ string "foo"]),
@@ -278,11 +287,11 @@ polymorphismViolationTests = define "polymorphismViolationTests" $
       (lets ["f">: lambda "x" $ list [var "x", int32 42]] $ var "f" @@ string "foo"),
     expectFailure 2 []
       (lets ["g">: lambda "x" $ pair (var "x") (string "constant")] $
-        primitive _math_add
-          @@ (primitive _pairs_first @@ (var "g" @@ int32 42))
-          @@ (primitive _pairs_first @@ (var "g" @@ string "bad"))),
+        primitive DefMath.add
+          @@ (primitive DefPairs.first @@ (var "g" @@ int32 42))
+          @@ (primitive DefPairs.first @@ (var "g" @@ string "bad"))),
     expectFailure 3 []
-      (lets ["h">: lambda "x" $ primitive _lists_cons @@ var "x" @@ list [int32 0]] $
+      (lets ["h">: lambda "x" $ primitive DefLists.cons @@ var "x" @@ list [int32 0]] $
         var "h" @@ string "incompatible")],
 
   subgroup "Higher-order polymorphism violations" [
@@ -291,40 +300,40 @@ polymorphismViolationTests = define "polymorphismViolationTests" $
     expectFailure 2 []
       (lambda "g" $ list [var "g" @@ int32 1, var "g" @@ string "bad"]),
     expectFailure 3 []
-      (lambda "h" $ primitive _math_add @@ (var "h" @@ int32 42) @@ (var "h" @@ string "error"))]]
+      (lambda "h" $ primitive DefMath.add @@ (var "h" @@ int32 42) @@ (var "h" @@ string "error"))]]
 
 primitiveTypeErrorTests :: TypedTermDefinition TestGroup
 primitiveTypeErrorTests = define "primitiveTypeErrorTests" $
   supergroup "Primitive function type errors" [
   subgroup "Logic primitive errors" [
     expectFailure 1 []
-      (primitive _logic_ifElse @@ int32 42 @@ true @@ false),  -- Condition not boolean
+      (primitive DefLogic.ifElse @@ int32 42 @@ true @@ false),  -- Condition not boolean
     expectFailure 2 []
-      (primitive _logic_ifElse @@ true @@ int32 42 @@ false),  -- Branch type mismatch
+      (primitive DefLogic.ifElse @@ true @@ int32 42 @@ false),  -- Branch type mismatch
     expectFailure 3 []
-      (primitive _logic_and @@ int32 42 @@ true),
+      (primitive DefLogic.and @@ int32 42 @@ true),
     expectFailure 4 []
-      (primitive _logic_or @@ true @@ string "not boolean")],
+      (primitive DefLogic.or @@ true @@ string "not boolean")],
 
   subgroup "Collection primitive errors" [
     expectFailure 1 []
-      (primitive _maps_lookup @@ int32 42 @@ string "not a map"),  -- Not a map
+      (primitive DefMaps.lookup @@ int32 42 @@ string "not a map"),  -- Not a map
     expectFailure 2 []
-      (primitive _sets_member @@ int32 42 @@ list [int32 42]),  -- Not a set
+      (primitive DefSets.member @@ int32 42 @@ list [int32 42]),  -- Not a set
     expectFailure 3 []
-      (primitive _lists_maybeHead @@ string "not a list"),
+      (primitive DefLists.maybeHead @@ string "not a list"),
     expectFailure 4 []
-      (primitive _optionals_fromOptional @@ int32 42 @@ string "not optional")],
+      (primitive DefOptionals.fromOptional @@ int32 42 @@ string "not optional")],
 
   subgroup "Math primitive errors" [
     expectFailure 1 []
-      (primitive _math_add @@ string "not a number" @@ int32 42),
+      (primitive DefMath.add @@ string "not a number" @@ int32 42),
     expectFailure 2 []
-      (primitive _math_mul @@ true @@ false),
+      (primitive DefMath.mul @@ true @@ false),
     expectFailure 3 []
-      (primitive _math_maybeDiv @@ list [int32 42] @@ int32 2),
+      (primitive DefMath.maybeDiv @@ list [int32 42] @@ int32 2),
     expectFailure 4 []
-      (primitive _math_maybeMod @@ int32 42 @@ string "not a number")]]
+      (primitive DefMath.maybeMod @@ int32 42 @@ string "not a number")]]
 
 recursiveTypeTests :: TypedTermDefinition TestGroup
 recursiveTypeTests = define "recursiveTypeTests" $
@@ -375,33 +384,33 @@ typeConstructorMisuseTests = define "typeConstructorMisuseTests" $
   supergroup "Type constructor misuse" [
   subgroup "List constructor errors" [
     expectFailure 1 []
-      (primitive _lists_cons @@ (list [int32 42]) @@ int32 137),  -- Wrong order
+      (primitive DefLists.cons @@ (list [int32 42]) @@ int32 137),  -- Wrong order
     expectFailure 2 []
-      (primitive _lists_length @@ int32 42),  -- Not a list
+      (primitive DefLists.length @@ int32 42),  -- Not a list
     expectFailure 3 []
-      (primitive _lists_maybeHead @@ string "not a list"),
+      (primitive DefLists.maybeHead @@ string "not a list"),
     expectFailure 4 []
-      (primitive _lists_maybeTail @@ int32 42)],
+      (primitive DefLists.maybeTail @@ int32 42)],
 
   subgroup "String constructor errors" [
     expectFailure 1 []
-      (primitive _strings_length @@ list [string "foo"]),  -- Not a string
+      (primitive DefStrings.length @@ list [string "foo"]),  -- Not a string
     expectFailure 2 []
-      (primitive _strings_cat @@ int32 42),
+      (primitive DefStrings.cat @@ int32 42),
     expectFailure 3 []
-      (primitive _strings_fromList @@ string "not a list"),
+      (primitive DefStrings.fromList @@ string "not a list"),
     expectFailure 4 []
-      (primitive _strings_toList @@ int32 42)],
+      (primitive DefStrings.toList @@ int32 42)],
 
   subgroup "Math constructor errors" [
     expectFailure 1 []
-      (primitive _math_add @@ list [int32 42] @@ int32 137),  -- Wrong type for math
+      (primitive DefMath.add @@ list [int32 42] @@ int32 137),  -- Wrong type for math
     expectFailure 2 []
-      (primitive _math_sub @@ string "not a number" @@ int32 42),
+      (primitive DefMath.sub @@ string "not a number" @@ int32 42),
     expectFailure 3 []
-      (primitive _math_mul @@ int32 42 @@ string "not a number"),
+      (primitive DefMath.mul @@ int32 42 @@ string "not a number"),
     expectFailure 4 []
-      (primitive _math_maybeDiv @@ true @@ false)]]
+      (primitive DefMath.maybeDiv @@ true @@ false)]]
 
 undefinedVariableTests :: TypedTermDefinition TestGroup
 undefinedVariableTests = define "undefinedVariableTests" $
@@ -435,7 +444,7 @@ unificationFailureTests = define "unificationFailureTests" $
   supergroup "Unification failure" [
   subgroup "Basic type mismatches" [
     expectFailure 1 []
-      (primitive _math_add @@ int32 42 @@ string "foo"),
+      (primitive DefMath.add @@ int32 42 @@ string "foo"),
     expectFailure 2 []
       (list [int32 42, string "foo"]),
     expectFailure 3 []
@@ -445,21 +454,21 @@ unificationFailureTests = define "unificationFailureTests" $
 
   subgroup "Collection type mismatches" [
     expectFailure 1 []
-      (primitive _lists_cons @@ int32 42 @@ string "not a list"),
+      (primitive DefLists.cons @@ int32 42 @@ string "not a list"),
     expectFailure 2 []
       (list [int32 42, list [string "foo"]]),
     expectFailure 3 []
       (pair (list [int32 42]) (list [string "foo"]) @@ int32 137),
     expectFailure 4 []
-      (primitive _lists_concat @@ list [list [int32 42], list [string "foo"]])],
+      (primitive DefLists.concat @@ list [list [int32 42], list [string "foo"]])],
 
   subgroup "Conditional type mismatches" [
     expectFailure 1 []
-      (primitive _logic_ifElse @@ true @@ int32 42 @@ string "foo"),
+      (primitive DefLogic.ifElse @@ true @@ int32 42 @@ string "foo"),
     expectFailure 2 []
-      (primitive _logic_ifElse @@ true @@ list [int32 42] @@ string "foo"),
+      (primitive DefLogic.ifElse @@ true @@ list [int32 42] @@ string "foo"),
     expectFailure 3 []
-      (primitive _logic_ifElse @@ true @@ (lambda "x" $ var "x") @@ int32 42)],
+      (primitive DefLogic.ifElse @@ true @@ (lambda "x" $ var "x") @@ int32 42)],
 
   subgroup "Polymorphic instantiation conflicts" [
     expectFailure 1 []
@@ -469,5 +478,5 @@ unificationFailureTests = define "unificationFailureTests" $
       (lets ["id">: lambda "x" $ var "x"] $
         pair (var "id" @@ int32 42) (var "id" @@ string "foo") @@ true),
     expectFailure 3 []
-      (lets ["cons">: primitive _lists_cons] $
+      (lets ["cons">: primitive DefLists.cons] $
         list [var "cons" @@ int32 42, var "cons" @@ string "foo"])]]

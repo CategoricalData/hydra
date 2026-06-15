@@ -27,7 +27,7 @@ public class Map extends PrimitiveFunction {
      * @return the name "hydra.lib.optionals.map"
      */
     public Name name() {
-        return new Name("hydra.lib.optionals.map");
+        return hydra.lib.Optionals.map().name;
     }
 
     /**

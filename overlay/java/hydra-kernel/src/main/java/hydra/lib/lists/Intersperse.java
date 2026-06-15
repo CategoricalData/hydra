@@ -23,7 +23,7 @@ import hydra.util.Either;
  */
 public class Intersperse extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.lists.intersperse");
+        return hydra.lib.Lists.intersperse().name;
     }
 
     @Override

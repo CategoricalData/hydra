@@ -16,7 +16,7 @@ import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Decoder for hydra.typing.FunctionStructure
-functionStructure :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Typing.FunctionStructure t0)
+functionStructure :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError env) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Typing.FunctionStructure env)
 functionStructure env cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->

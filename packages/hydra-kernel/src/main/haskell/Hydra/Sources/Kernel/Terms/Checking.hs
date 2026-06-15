@@ -38,7 +38,6 @@ import Hydra.Kernel hiding (
   typeOfUnwrap, typeOfUnwrapE,
   typeOfVariable, typeOfVariableE,
   typeOfWrappedTerm, typeOfWrappedTermE)
-import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast
@@ -107,6 +106,7 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors  as ShowError
 import qualified Hydra.Sources.Kernel.Terms.Show.Variants    as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
+import qualified Hydra.Lib.Pairs as DefPairs
 
 
 ns :: ModuleName
@@ -207,7 +207,34 @@ applyTypeArgumentsToType = define "applyTypeArgumentsToType" $
             @@ (var "at")
             @@ (Substitution.substInType
               @@ (Typing.typeSubst $ Maps.singleton (var "v") (var "ah"))
-              @@ (var "tbody"))])
+              @@ (var "tbody")),
+        -- A nominal type whose schema is non-polymorphic (no forall parameters)
+        -- is already saturated: type arguments applied to it are vacuous. This
+        -- arises when a coder reconstructs the type of a term-encoded value of a
+        -- monomorphic record type (e.g. hydra.packaging.PrimitiveDefinition) that
+        -- contains an inner type-application node; the outer nominal type has no
+        -- forall to substitute into, so we return it unchanged rather than failing.
+        -- Genuinely polymorphic nominal types still substitute via their resolved
+        -- forall (handled by dereferencing the schema type below).
+        _Type_variable>>: "tname" ~>
+          Eithers.either_
+            -- Unresolvable nominal name: preserve the original behaviour by failing.
+            ("_" ~> left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "forall type") (Strings.cat $ list [
+              ShowCore.type_ @@ var "t",
+              string ". Trying to apply ",
+              Literals.showInt32 (Lists.length $ var "typeArgs"),
+              string " type args: ",
+              Formatting.showList @@ ShowCore.type_ @@ var "typeArgs"])))
+            ("schemaRes" ~>
+              "schemaType" <~ Pairs.first (var "schemaRes") $
+              "schemaBody" <~ (Strip.deannotateType @@ (Core.typeSchemeBody $ var "schemaType")) $
+              cases _Type (var "schemaBody")
+                -- Non-forall schema: saturated nominal type; arguments are vacuous.
+                (Just $ right $ var "t") [
+                -- Polymorphic schema: substitute the args into the resolved forall.
+                _Type_forall>>: "_" ~>
+                  applyTypeArgumentsToType @@ var "cx" @@ var "tx" @@ var "typeArgs" @@ var "schemaBody"])
+            (Resolution.requireSchemaType @@ var "cx" @@ (Graph.graphSchemaTypes $ var "tx") @@ var "tname")])
 
 checkForUnboundTypeVariables :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Prelude.Either Error ())
 checkForUnboundTypeVariables = define "checkForUnboundTypeVariables" $
@@ -780,7 +807,7 @@ typeOfTerm :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Either E
 typeOfTerm = define "typeOfTerm" $
   doc "Check the type of a term" $
   "cx" ~> "g" ~> "term" ~>
-  Eithers.map (primitive _pairs_first)
+  Eithers.map (primitive DefPairs.first)
     (typeOf @@ var "cx" @@ var "g" @@ list ([] :: [TypedTerm Type]) @@ var "term")
 
 typeOfTypeApplication :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> TypeApplicationTerm -> Prelude.Either Error (Type, InferenceContext))
@@ -833,7 +860,6 @@ typeOfVariable :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> Na
 typeOfVariable = define "typeOfVariable" $
   doc "Reconstruct the type of a variable (Either/InferenceContext version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "name" ~>
-  "rawTypeScheme" <~ Maps.lookup (var "name") (Graph.graphBoundTypes $ var "tx") $
   "forScheme" <~ ("ts" ~>
       "tResult" <~ Logic.ifElse (Lists.null $ var "typeArgs")
         (Resolution.instantiateType @@ var "cx" @@ (Scoping.typeSchemeToFType @@ var "ts"))
@@ -842,11 +868,23 @@ typeOfVariable = define "typeOfVariable" $
       "cx2" <~ Pairs.second (var "tResult") $
       "applied" <<~ applyTypeArgumentsToType @@ var "cx2" @@ var "tx" @@ var "typeArgs" @@ var "t" $
       right $ pair (var "applied") (var "cx2")) $
+  -- A variable naming a primitive is a primitive INVOCATION and resolves to the
+  -- primitive's function type via graphPrimitives. This takes precedence over any
+  -- same-named graphBoundTypes entry: when the hydra.lib.* primitive-definition
+  -- modules are lowered to PrimitiveDefinition data (Generation.lowerPrimitiveDefinitions),
+  -- each such binding (e.g. hydra.lib.strings.cat2 :: PrimitiveDefinition) would
+  -- otherwise shadow the callable primitive of the same name, breaking the ~28 kernel
+  -- modules that call those primitives. Primitive names are fully qualified, so they
+  -- never collide with local (unqualified) let/lambda bindings; graphPrimitives wins
+  -- only for genuine primitive names.
+  "primScheme" <~ Optionals.map ("_p" ~> Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition (var "_p")))
+      (Maps.lookup (var "name") (Graph.graphPrimitives $ var "tx")) $
   Optionals.cases
-    (var "rawTypeScheme")
-    -- Not found in graphBoundTypes: fall through to graphPrimitives
-    (Optionals.cases (Optionals.map ("_p" ~> Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition (var "_p")))
-        (Maps.lookup (var "name") (Graph.graphPrimitives $ var "tx"))) (left (Error.errorUntypedTermVariable $ ErrorsCore.untypedTermVariableError (Paths.subtermPath $ list ([] :: [TypedTerm SubtermStep])) (var "name"))) (var "forScheme"))
+    (var "primScheme")
+    -- Not a primitive: fall through to graphBoundTypes (let/lambda/data bindings).
+    (Optionals.cases (Maps.lookup (var "name") (Graph.graphBoundTypes $ var "tx"))
+      (left (Error.errorUntypedTermVariable $ ErrorsCore.untypedTermVariableError (Paths.subtermPath $ list ([] :: [TypedTerm SubtermStep])) (var "name")))
+      (var "forScheme"))
     (var "forScheme")
 
 typeOfWrappedTerm :: TypedTermDefinition (InferenceContext -> Graph -> [Type] -> WrappedTerm -> Prelude.Either Error (Type, InferenceContext))

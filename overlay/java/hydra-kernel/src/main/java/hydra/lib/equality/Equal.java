@@ -24,7 +24,7 @@ import hydra.util.Either;
  */
 public class Equal extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.equality.equal");
+        return hydra.lib.Equality.equal().name;
     }
 
     @Override

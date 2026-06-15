@@ -35,8 +35,6 @@ import qualified Hydra.Sources.Kernel.Lib.Logic             as LibLogic
 import qualified Hydra.Sources.Kernel.Lib.Maps              as LibMaps
 import qualified Hydra.Sources.Kernel.Lib.Math              as LibMath
 import qualified Hydra.Sources.Kernel.Lib.Optionals            as LibOptionals
--- Hydra.Sources.Kernel.Lib.Names is a Haskell-side derived index (no
--- module_ declaration; no kernel-module emission).
 import qualified Hydra.Sources.Kernel.Lib.Pairs             as LibPairs
 import qualified Hydra.Sources.Kernel.Lib.Regex             as LibRegex
 import qualified Hydra.Sources.Kernel.Lib.Sets              as LibSets

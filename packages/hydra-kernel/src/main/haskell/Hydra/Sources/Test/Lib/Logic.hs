@@ -17,7 +17,8 @@ import qualified Data.Map                     as M
 
 -- Additional imports specific to this file
 import Hydra.Testing
-import Hydra.Sources.Libraries
+import qualified Hydra.Dsl.Prims as Prims
+import qualified Hydra.Lib.Logic as DefLogic
 
 
 ns :: ModuleName
@@ -50,7 +51,7 @@ logicAnd = subgroup "and" [
   test "false and true" false true false,
   test "false and false" false false false]
   where
-    test name x y result = primCase name _logic_and [x, y] (result)
+    test name x y result = primCase name DefLogic.and [x, y] (result)
 
 logicIfElse :: TypedTerm TestGroup
 logicIfElse = supergroup "ifElse" [
@@ -65,18 +66,18 @@ logicIfElse = supergroup "ifElse" [
     testStr "false selects second string" false "yes" "no" "no"]]
   where
     testBool name cond thenVal elseVal result =
-      primCase name _logic_ifElse [cond, thenVal, elseVal] (result)
+      primCase name DefLogic.ifElse [cond, thenVal, elseVal] (result)
     testInt name cond thenVal elseVal result =
-      primCase name _logic_ifElse [cond, int32 thenVal, int32 elseVal] (int32 result)
+      primCase name DefLogic.ifElse [cond, int32 thenVal, int32 elseVal] (int32 result)
     testStr name cond thenVal elseVal result =
-      primCase name _logic_ifElse [cond, string thenVal, string elseVal] (string result)
+      primCase name DefLogic.ifElse [cond, string thenVal, string elseVal] (string result)
 
 logicNot :: TypedTerm TestGroup
 logicNot = subgroup "not" [
   test "not true" true false,
   test "not false" false true]
   where
-    test name x result = primCase name _logic_not [x] (result)
+    test name x result = primCase name DefLogic.not [x] (result)
 
 logicOr :: TypedTerm TestGroup
 logicOr = subgroup "or" [
@@ -85,4 +86,4 @@ logicOr = subgroup "or" [
   test "false or true" false true true,
   test "false or false" false false false]
   where
-    test name x y result = primCase name _logic_or [x, y] (result)
+    test name x y result = primCase name DefLogic.or [x, y] (result)

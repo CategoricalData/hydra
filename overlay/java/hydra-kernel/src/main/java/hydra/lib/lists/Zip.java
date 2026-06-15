@@ -27,7 +27,7 @@ import hydra.util.Either;
  */
 public class Zip extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.lists.zip");
+        return hydra.lib.Lists.zip().name;
     }
 
     @Override

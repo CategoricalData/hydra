@@ -1,14 +1,14 @@
-"""Python implementations of primitive name constants and registration functions."""
+"""Python primitive registration functions.
+
+Primitive names are derived from the generated hydra.lib.* PrimitiveDefinition def-modules
+(via def_<sub>.<fn>.name) — the single source of truth for primitive names (#473) — rather than
+hand-written name strings. Signatures remain explicit here because the registry must present each
+primitive's type to the interpreter in native type-coder form."""
 
 
 from hydra.core import Name
 from hydra.graph import Primitive
 from hydra.dsl import prims
-
-
-def qname(namespace: str, local_name: str) -> Name:
-    """Qualified name constructor."""
-    return Name(f"{namespace}.{local_name}")
 
 
 def fun(dom, cod):
@@ -21,28 +21,28 @@ def fun(dom, cod):
 
 def register_chars_primitives() -> dict[Name, Primitive]:
     """Register all chars primitive functions."""
-    from hydra.lib import chars
+    from hydra.python.lib import chars
+    from hydra.lib import chars as def_chars
 
-    namespace = "hydra.lib.chars"
     primitives: dict[Name, Primitive] = {}
 
-    primitives[qname(namespace, "isAlphaNum")] = prims.prim1(
-        qname(namespace, "isAlphaNum"), chars.is_alpha_num, [], prims.int32(), prims.boolean()
+    primitives[def_chars.is_alpha_num.name] = prims.prim1(
+        def_chars.is_alpha_num.name, chars.is_alpha_num, [], prims.int32(), prims.boolean()
     )
-    primitives[qname(namespace, "isLower")] = prims.prim1(
-        qname(namespace, "isLower"), chars.is_lower, [], prims.int32(), prims.boolean()
+    primitives[def_chars.is_lower.name] = prims.prim1(
+        def_chars.is_lower.name, chars.is_lower, [], prims.int32(), prims.boolean()
     )
-    primitives[qname(namespace, "isSpace")] = prims.prim1(
-        qname(namespace, "isSpace"), chars.is_space, [], prims.int32(), prims.boolean()
+    primitives[def_chars.is_space.name] = prims.prim1(
+        def_chars.is_space.name, chars.is_space, [], prims.int32(), prims.boolean()
     )
-    primitives[qname(namespace, "isUpper")] = prims.prim1(
-        qname(namespace, "isUpper"), chars.is_upper, [], prims.int32(), prims.boolean()
+    primitives[def_chars.is_upper.name] = prims.prim1(
+        def_chars.is_upper.name, chars.is_upper, [], prims.int32(), prims.boolean()
     )
-    primitives[qname(namespace, "toLower")] = prims.prim1(
-        qname(namespace, "toLower"), chars.to_lower, [], prims.int32(), prims.int32()
+    primitives[def_chars.to_lower.name] = prims.prim1(
+        def_chars.to_lower.name, chars.to_lower, [], prims.int32(), prims.int32()
     )
-    primitives[qname(namespace, "toUpper")] = prims.prim1(
-        qname(namespace, "toUpper"), chars.to_upper, [], prims.int32(), prims.int32()
+    primitives[def_chars.to_upper.name] = prims.prim1(
+        def_chars.to_upper.name, chars.to_upper, [], prims.int32(), prims.int32()
     )
 
     return primitives
@@ -50,9 +50,9 @@ def register_chars_primitives() -> dict[Name, Primitive]:
 
 def register_equality_primitives() -> dict[Name, Primitive]:
     """Register all equality primitive functions."""
-    from hydra.lib import equality
+    from hydra.python.lib import equality
+    from hydra.lib import equality as def_equality
 
-    namespace = "hydra.lib.equality"
     primitives: dict[Name, Primitive] = {}
 
     x = prims.variable("x")
@@ -60,40 +60,40 @@ def register_equality_primitives() -> dict[Name, Primitive]:
     _xEq = prims.v_eq("x")
     _x = prims.v("x")
 
-    primitives[qname(namespace, "compare")] = prims.prim2(
-        qname(namespace, "compare"), equality.compare, [_xOrd],
+    primitives[def_equality.compare.name] = prims.prim2(
+        def_equality.compare.name, equality.compare, [_xOrd],
         x, x, prims.comparison()
     )
-    primitives[qname(namespace, "equal")] = prims.prim2(
-        qname(namespace, "equal"), equality.equal, [_xEq],
+    primitives[def_equality.equal.name] = prims.prim2(
+        def_equality.equal.name, equality.equal, [_xEq],
         x, x, prims.boolean()
     )
-    primitives[qname(namespace, "identity")] = prims.prim1(
-        qname(namespace, "identity"), equality.identity, [_x],
+    primitives[def_equality.identity.name] = prims.prim1(
+        def_equality.identity.name, equality.identity, [_x],
         x, x
     )
-    primitives[qname(namespace, "gt")] = prims.prim2(
-        qname(namespace, "gt"), equality.gt, [_xOrd],
+    primitives[def_equality.gt.name] = prims.prim2(
+        def_equality.gt.name, equality.gt, [_xOrd],
         x, x, prims.boolean()
     )
-    primitives[qname(namespace, "gte")] = prims.prim2(
-        qname(namespace, "gte"), equality.gte, [_xOrd],
+    primitives[def_equality.gte.name] = prims.prim2(
+        def_equality.gte.name, equality.gte, [_xOrd],
         x, x, prims.boolean()
     )
-    primitives[qname(namespace, "lt")] = prims.prim2(
-        qname(namespace, "lt"), equality.lt, [_xOrd],
+    primitives[def_equality.lt.name] = prims.prim2(
+        def_equality.lt.name, equality.lt, [_xOrd],
         x, x, prims.boolean()
     )
-    primitives[qname(namespace, "lte")] = prims.prim2(
-        qname(namespace, "lte"), equality.lte, [_xOrd],
+    primitives[def_equality.lte.name] = prims.prim2(
+        def_equality.lte.name, equality.lte, [_xOrd],
         x, x, prims.boolean()
     )
-    primitives[qname(namespace, "max")] = prims.prim2(
-        qname(namespace, "max"), equality.max, [_xOrd],
+    primitives[def_equality.max.name] = prims.prim2(
+        def_equality.max.name, equality.max, [_xOrd],
         x, x, x
     )
-    primitives[qname(namespace, "min")] = prims.prim2(
-        qname(namespace, "min"), equality.min, [_xOrd],
+    primitives[def_equality.min.name] = prims.prim2(
+        def_equality.min.name, equality.min, [_xOrd],
         x, x, x
     )
 
@@ -102,9 +102,9 @@ def register_equality_primitives() -> dict[Name, Primitive]:
 
 def register_eithers_primitives() -> dict[Name, Primitive]:
     """Register all eithers primitive functions."""
-    from hydra.lib import eithers
+    from hydra.python.lib import eithers
+    from hydra.lib import eithers as def_eithers
 
-    namespace = "hydra.lib.eithers"
     primitives: dict[Name, Primitive] = {}
 
     x = prims.variable("x")
@@ -115,75 +115,75 @@ def register_eithers_primitives() -> dict[Name, Primitive]:
     _z = prims.v("z")
 
     # bind :: Either x y -> (y -> Either x z) -> Either x z
-    primitives[qname(namespace, "bind")] = prims.prim2(
-        qname(namespace, "bind"), eithers.bind, [_x, _y, _z],
+    primitives[def_eithers.bind.name] = prims.prim2(
+        def_eithers.bind.name, eithers.bind, [_x, _y, _z],
         prims.either(x, y), fun(y, prims.either(x, z)), prims.either(x, z)
     )
     # bimap :: (x -> z) -> (y -> w) -> Either x y -> Either z w
     w = prims.variable("w")
     _w = prims.v("w")
-    primitives[qname(namespace, "bimap")] = prims.prim3(
-        qname(namespace, "bimap"), eithers.bimap, [_x, _y, _z, _w],
+    primitives[def_eithers.bimap.name] = prims.prim3(
+        def_eithers.bimap.name, eithers.bimap, [_x, _y, _z, _w],
         fun(x, z), fun(y, w), prims.either(x, y), prims.either(z, w)
     )
     # either :: (x -> z) -> (y -> z) -> Either x y -> z
-    primitives[qname(namespace, "either")] = prims.prim3(
-        qname(namespace, "either"), eithers.either, [_x, _y, _z],
+    primitives[def_eithers.either.name] = prims.prim3(
+        def_eithers.either.name, eithers.either, [_x, _y, _z],
         fun(x, z), fun(y, z), prims.either(x, y), z
     )
     # foldl :: (x -> y -> Either z x) -> x -> [y] -> Either z x
-    primitives[qname(namespace, "foldl")] = prims.prim3(
-        qname(namespace, "foldl"), eithers.foldl, [_x, _y, _z],
+    primitives[def_eithers.foldl.name] = prims.prim3(
+        def_eithers.foldl.name, eithers.foldl, [_x, _y, _z],
         fun(x, fun(y, prims.either(z, x))), x, prims.list_(y), prims.either(z, x)
     )
-    primitives[qname(namespace, "fromLeft")] = prims.prim2(
-        qname(namespace, "fromLeft"), eithers.from_left, [_x, _y],
+    primitives[def_eithers.from_left.name] = prims.prim2(
+        def_eithers.from_left.name, eithers.from_left, [_x, _y],
         x, prims.either(x, y), x,
         lazy_args=[0]
     )
-    primitives[qname(namespace, "fromRight")] = prims.prim2(
-        qname(namespace, "fromRight"), eithers.from_right, [_x, _y],
+    primitives[def_eithers.from_right.name] = prims.prim2(
+        def_eithers.from_right.name, eithers.from_right, [_x, _y],
         y, prims.either(x, y), y,
         lazy_args=[0]
     )
-    primitives[qname(namespace, "isLeft")] = prims.prim1(
-        qname(namespace, "isLeft"), eithers.is_left, [_x, _y],
+    primitives[def_eithers.is_left.name] = prims.prim1(
+        def_eithers.is_left.name, eithers.is_left, [_x, _y],
         prims.either(x, y), prims.boolean()
     )
-    primitives[qname(namespace, "isRight")] = prims.prim1(
-        qname(namespace, "isRight"), eithers.is_right, [_x, _y],
+    primitives[def_eithers.is_right.name] = prims.prim1(
+        def_eithers.is_right.name, eithers.is_right, [_x, _y],
         prims.either(x, y), prims.boolean()
     )
-    primitives[qname(namespace, "lefts")] = prims.prim1(
-        qname(namespace, "lefts"), eithers.lefts, [_x, _y],
+    primitives[def_eithers.lefts.name] = prims.prim1(
+        def_eithers.lefts.name, eithers.lefts, [_x, _y],
         prims.list_(prims.either(x, y)), prims.list_(x)
     )
     # map :: (x -> y) -> Either z x -> Either z y
-    primitives[qname(namespace, "map")] = prims.prim2(
-        qname(namespace, "map"), eithers.map, [_x, _y, _z],
+    primitives[def_eithers.map.name] = prims.prim2(
+        def_eithers.map.name, eithers.map, [_x, _y, _z],
         fun(x, y), prims.either(z, x), prims.either(z, y)
     )
     # mapList :: (x -> Either z y) -> [x] -> Either z [y]
-    primitives[qname(namespace, "mapList")] = prims.prim2(
-        qname(namespace, "mapList"), eithers.map_list, [_x, _y, _z],
+    primitives[def_eithers.map_list.name] = prims.prim2(
+        def_eithers.map_list.name, eithers.map_list, [_x, _y, _z],
         fun(x, prims.either(z, y)), prims.list_(x), prims.either(z, prims.list_(y))
     )
     # mapOptional :: (x -> Either z y) -> optional x -> Either z (optional y)
-    primitives[qname(namespace, "mapOptional")] = prims.prim2(
-        qname(namespace, "mapOptional"), eithers.map_optional, [_x, _y, _z],
+    primitives[def_eithers.map_optional.name] = prims.prim2(
+        def_eithers.map_optional.name, eithers.map_optional, [_x, _y, _z],
         fun(x, prims.either(z, y)), prims.optional(x), prims.either(z, prims.optional(y))
     )
     # mapSet :: (x -> Either z y) -> Set x -> Either z (Set y)
-    primitives[qname(namespace, "mapSet")] = prims.prim2(
-        qname(namespace, "mapSet"), eithers.map_set, [_x, _y, _z],
+    primitives[def_eithers.map_set.name] = prims.prim2(
+        def_eithers.map_set.name, eithers.map_set, [_x, _y, _z],
         fun(x, prims.either(z, y)), prims.set_(x), prims.either(z, prims.set_(y))
     )
-    primitives[qname(namespace, "partitionEithers")] = prims.prim1(
-        qname(namespace, "partitionEithers"), eithers.partition_eithers, [_x, _y],
+    primitives[def_eithers.partition_eithers.name] = prims.prim1(
+        def_eithers.partition_eithers.name, eithers.partition_eithers, [_x, _y],
         prims.list_(prims.either(x, y)), prims.pair(prims.list_(x), prims.list_(y))
     )
-    primitives[qname(namespace, "rights")] = prims.prim1(
-        qname(namespace, "rights"), eithers.rights, [_x, _y],
+    primitives[def_eithers.rights.name] = prims.prim1(
+        def_eithers.rights.name, eithers.rights, [_x, _y],
         prims.list_(prims.either(x, y)), prims.list_(y)
     )
 
@@ -192,9 +192,9 @@ def register_eithers_primitives() -> dict[Name, Primitive]:
 
 def register_lists_primitives() -> dict[Name, Primitive]:
     """Register all list primitive functions."""
-    from hydra.lib import lists
+    from hydra.python.lib import lists
+    from hydra.lib import lists as def_lists
 
-    namespace = "hydra.lib.lists"
     primitives: dict[Name, Primitive] = {}
 
     a = prims.variable("a")
@@ -208,186 +208,186 @@ def register_lists_primitives() -> dict[Name, Primitive]:
     _bOrd = prims.v_ord("b")
 
     # prim2: apply :: [a -> b] -> [a] -> [b]
-    primitives[qname(namespace, "apply")] = prims.prim2(
-        qname(namespace, "apply"), lists.apply, [_a, _b],
+    primitives[def_lists.apply.name] = prims.prim2(
+        def_lists.apply.name, lists.apply, [_a, _b],
         prims.list_(fun(a, b)), prims.list_(a), prims.list_(b)
     )
     # prim2: bind :: [a] -> (a -> [b]) -> [b]
-    primitives[qname(namespace, "bind")] = prims.prim2(
-        qname(namespace, "bind"), lists.bind, [_a, _b],
+    primitives[def_lists.bind.name] = prims.prim2(
+        def_lists.bind.name, lists.bind, [_a, _b],
         prims.list_(a), fun(a, prims.list_(b)), prims.list_(b)
     )
     # prim1: concat :: [[a]] -> [a]
-    primitives[qname(namespace, "concat")] = prims.prim1(
-        qname(namespace, "concat"), lists.concat, [_a],
+    primitives[def_lists.concat.name] = prims.prim1(
+        def_lists.concat.name, lists.concat, [_a],
         prims.list_(prims.list_(a)), prims.list_(a)
     )
     # prim2: concat2 :: [a] -> [a] -> [a]
-    primitives[qname(namespace, "concat2")] = prims.prim2(
-        qname(namespace, "concat2"), lists.concat2, [_a],
+    primitives[def_lists.concat2.name] = prims.prim2(
+        def_lists.concat2.name, lists.concat2, [_a],
         prims.list_(a), prims.list_(a), prims.list_(a)
     )
     # prim2: cons :: a -> [a] -> [a]
-    primitives[qname(namespace, "cons")] = prims.prim2(
-        qname(namespace, "cons"), lists.cons, [_a],
+    primitives[def_lists.cons.name] = prims.prim2(
+        def_lists.cons.name, lists.cons, [_a],
         a, prims.list_(a), prims.list_(a)
     )
     # prim2: drop :: Int32 -> [a] -> [a]
-    primitives[qname(namespace, "drop")] = prims.prim2(
-        qname(namespace, "drop"), lists.drop, [_a],
+    primitives[def_lists.drop.name] = prims.prim2(
+        def_lists.drop.name, lists.drop, [_a],
         prims.int32(), prims.list_(a), prims.list_(a)
     )
     # prim2: dropWhile :: (a -> Bool) -> [a] -> [a]
-    primitives[qname(namespace, "dropWhile")] = prims.prim2(
-        qname(namespace, "dropWhile"), lists.drop_while, [_a],
+    primitives[def_lists.drop_while.name] = prims.prim2(
+        def_lists.drop_while.name, lists.drop_while, [_a],
         fun(a, prims.boolean()), prims.list_(a), prims.list_(a)
     )
     # prim2: elem :: Eq a => a -> [a] -> Bool
-    primitives[qname(namespace, "elem")] = prims.prim2(
-        qname(namespace, "elem"), lists.elem, [_aEq],
+    primitives[def_lists.elem.name] = prims.prim2(
+        def_lists.elem.name, lists.elem, [_aEq],
         a, prims.list_(a), prims.boolean()
     )
     # prim2: filter :: (a -> Bool) -> [a] -> [a]
-    primitives[qname(namespace, "filter")] = prims.prim2(
-        qname(namespace, "filter"), lists.filter, [_a],
+    primitives[def_lists.filter.name] = prims.prim2(
+        def_lists.filter.name, lists.filter, [_a],
         fun(a, prims.boolean()), prims.list_(a), prims.list_(a)
     )
     # prim2: find :: (a -> Bool) -> [a] -> optional a
-    primitives[qname(namespace, "find")] = prims.prim2(
-        qname(namespace, "find"), lists.find, [_a],
+    primitives[def_lists.find.name] = prims.prim2(
+        def_lists.find.name, lists.find, [_a],
         fun(a, prims.boolean()), prims.list_(a), prims.optional(a)
     )
     # prim3: foldl :: (b -> a -> b) -> b -> [a] -> b
-    primitives[qname(namespace, "foldl")] = prims.prim3(
-        qname(namespace, "foldl"), lambda f, init, xs: lists.foldl(lambda acc, el: f(acc)(el), init, xs), [_b, _a],
+    primitives[def_lists.foldl.name] = prims.prim3(
+        def_lists.foldl.name, lambda f, init, xs: lists.foldl(lambda acc, el: f(acc)(el), init, xs), [_b, _a],
         fun(b, fun(a, b)), b, prims.list_(a), b
     )
     # prim3: foldr :: (a -> b -> b) -> b -> [a] -> b
-    primitives[qname(namespace, "foldr")] = prims.prim3(
-        qname(namespace, "foldr"), lambda f, init, xs: lists.foldr(lambda el, acc: f(el)(acc), init, xs), [_a, _b],
+    primitives[def_lists.foldr.name] = prims.prim3(
+        def_lists.foldr.name, lambda f, init, xs: lists.foldr(lambda el, acc: f(el)(acc), init, xs), [_a, _b],
         fun(a, fun(b, b)), b, prims.list_(a), b
     )
     # prim1: group :: Eq a => [a] -> [[a]]
-    primitives[qname(namespace, "group")] = prims.prim1(
-        qname(namespace, "group"), lists.group, [_aEq],
+    primitives[def_lists.group.name] = prims.prim1(
+        def_lists.group.name, lists.group, [_aEq],
         prims.list_(a), prims.list_(prims.list_(a))
     )
     # prim2: intercalate :: [a] -> [[a]] -> [a]
-    primitives[qname(namespace, "intercalate")] = prims.prim2(
-        qname(namespace, "intercalate"), lists.intercalate, [_a],
+    primitives[def_lists.intercalate.name] = prims.prim2(
+        def_lists.intercalate.name, lists.intercalate, [_a],
         prims.list_(a), prims.list_(prims.list_(a)), prims.list_(a)
     )
     # prim2: intersperse :: a -> [a] -> [a]
-    primitives[qname(namespace, "intersperse")] = prims.prim2(
-        qname(namespace, "intersperse"), lists.intersperse, [_a],
+    primitives[def_lists.intersperse.name] = prims.prim2(
+        def_lists.intersperse.name, lists.intersperse, [_a],
         a, prims.list_(a), prims.list_(a)
     )
     # prim1: length :: [a] -> Int32
-    primitives[qname(namespace, "length")] = prims.prim1(
-        qname(namespace, "length"), lists.length, [_a], prims.list_(a), prims.int32()
+    primitives[def_lists.length.name] = prims.prim1(
+        def_lists.length.name, lists.length, [_a], prims.list_(a), prims.int32()
     )
     # prim2: map :: (a -> b) -> [a] -> [b]
-    primitives[qname(namespace, "map")] = prims.prim2(
-        qname(namespace, "map"), lists.map, [_a, _b],
+    primitives[def_lists.map.name] = prims.prim2(
+        def_lists.map.name, lists.map, [_a, _b],
         fun(a, b), prims.list_(a), prims.list_(b)
     )
     # prim2: maybeAt :: Int32 -> [a] -> optional a
-    primitives[qname(namespace, "maybeAt")] = prims.prim2(
-        qname(namespace, "maybeAt"), lists.maybe_at, [_a],
+    primitives[def_lists.maybe_at.name] = prims.prim2(
+        def_lists.maybe_at.name, lists.maybe_at, [_a],
         prims.int32(), prims.list_(a), prims.optional(a)
     )
     # prim1: maybeHead :: [a] -> optional a
-    primitives[qname(namespace, "maybeHead")] = prims.prim1(
-        qname(namespace, "maybeHead"), lists.maybe_head, [_a],
+    primitives[def_lists.maybe_head.name] = prims.prim1(
+        def_lists.maybe_head.name, lists.maybe_head, [_a],
         prims.list_(a), prims.optional(a)
     )
     # prim1: maybeInit :: [a] -> optional [a]
-    primitives[qname(namespace, "maybeInit")] = prims.prim1(
-        qname(namespace, "maybeInit"), lists.maybe_init, [_a],
+    primitives[def_lists.maybe_init.name] = prims.prim1(
+        def_lists.maybe_init.name, lists.maybe_init, [_a],
         prims.list_(a), prims.optional(prims.list_(a))
     )
     # prim1: maybeLast :: [a] -> optional a
-    primitives[qname(namespace, "maybeLast")] = prims.prim1(
-        qname(namespace, "maybeLast"), lists.maybe_last, [_a],
+    primitives[def_lists.maybe_last.name] = prims.prim1(
+        def_lists.maybe_last.name, lists.maybe_last, [_a],
         prims.list_(a), prims.optional(a)
     )
     # prim1: maybeTail :: [a] -> optional [a]
-    primitives[qname(namespace, "maybeTail")] = prims.prim1(
-        qname(namespace, "maybeTail"), lists.maybe_tail, [_a],
+    primitives[def_lists.maybe_tail.name] = prims.prim1(
+        def_lists.maybe_tail.name, lists.maybe_tail, [_a],
         prims.list_(a), prims.optional(prims.list_(a))
     )
     # prim1: nub :: Eq a => [a] -> [a]
-    primitives[qname(namespace, "nub")] = prims.prim1(
-        qname(namespace, "nub"), lists.nub, [_aEq],
+    primitives[def_lists.nub.name] = prims.prim1(
+        def_lists.nub.name, lists.nub, [_aEq],
         prims.list_(a), prims.list_(a)
     )
     # prim1: null :: [a] -> Bool
-    primitives[qname(namespace, "null")] = prims.prim1(
-        qname(namespace, "null"), lists.null, [_a],
+    primitives[def_lists.null.name] = prims.prim1(
+        def_lists.null.name, lists.null, [_a],
         prims.list_(a), prims.boolean()
     )
     # prim2: partition :: (a -> Bool) -> [a] -> ([a], [a])
-    primitives[qname(namespace, "partition")] = prims.prim2(
-        qname(namespace, "partition"), lists.partition, [_a],
+    primitives[def_lists.partition.name] = prims.prim2(
+        def_lists.partition.name, lists.partition, [_a],
         fun(a, prims.boolean()), prims.list_(a), prims.pair(prims.list_(a), prims.list_(a))
     )
     # prim1: pure :: a -> [a]
-    primitives[qname(namespace, "pure")] = prims.prim1(
-        qname(namespace, "pure"), lists.pure, [_a],
+    primitives[def_lists.pure.name] = prims.prim1(
+        def_lists.pure.name, lists.pure, [_a],
         a, prims.list_(a)
     )
     # prim2: replicate :: Int32 -> a -> [a]
-    primitives[qname(namespace, "replicate")] = prims.prim2(
-        qname(namespace, "replicate"), lists.replicate, [_a],
+    primitives[def_lists.replicate.name] = prims.prim2(
+        def_lists.replicate.name, lists.replicate, [_a],
         prims.int32(), a, prims.list_(a)
     )
     # prim1: reverse :: [a] -> [a]
-    primitives[qname(namespace, "reverse")] = prims.prim1(
-        qname(namespace, "reverse"), lists.reverse, [_a], prims.list_(a), prims.list_(a)
+    primitives[def_lists.reverse.name] = prims.prim1(
+        def_lists.reverse.name, lists.reverse, [_a], prims.list_(a), prims.list_(a)
     )
     # prim1: singleton :: a -> [a]
-    primitives[qname(namespace, "singleton")] = prims.prim1(
-        qname(namespace, "singleton"), lists.singleton, [_a],
+    primitives[def_lists.singleton.name] = prims.prim1(
+        def_lists.singleton.name, lists.singleton, [_a],
         a, prims.list_(a)
     )
     # prim1: sort :: Ord a => [a] -> [a]
-    primitives[qname(namespace, "sort")] = prims.prim1(
-        qname(namespace, "sort"), lists.sort, [_aOrd],
+    primitives[def_lists.sort.name] = prims.prim1(
+        def_lists.sort.name, lists.sort, [_aOrd],
         prims.list_(a), prims.list_(a)
     )
     # prim2: sortOn :: Ord b => (a -> b) -> [a] -> [a]
-    primitives[qname(namespace, "sortOn")] = prims.prim2(
-        qname(namespace, "sortOn"), lists.sort_on, [_a, _bOrd],
+    primitives[def_lists.sort_on.name] = prims.prim2(
+        def_lists.sort_on.name, lists.sort_on, [_a, _bOrd],
         fun(a, b), prims.list_(a), prims.list_(a)
     )
     # prim2: span :: (a -> Bool) -> [a] -> ([a], [a])
-    primitives[qname(namespace, "span")] = prims.prim2(
-        qname(namespace, "span"), lists.span, [_a],
+    primitives[def_lists.span.name] = prims.prim2(
+        def_lists.span.name, lists.span, [_a],
         fun(a, prims.boolean()), prims.list_(a), prims.pair(prims.list_(a), prims.list_(a))
     )
     # prim2: take :: Int32 -> [a] -> [a]
-    primitives[qname(namespace, "take")] = prims.prim2(
-        qname(namespace, "take"), lists.take, [_a],
+    primitives[def_lists.take.name] = prims.prim2(
+        def_lists.take.name, lists.take, [_a],
         prims.int32(), prims.list_(a), prims.list_(a)
     )
     # prim1: transpose :: [[a]] -> [[a]]
-    primitives[qname(namespace, "transpose")] = prims.prim1(
-        qname(namespace, "transpose"), lists.transpose, [_a],
+    primitives[def_lists.transpose.name] = prims.prim1(
+        def_lists.transpose.name, lists.transpose, [_a],
         prims.list_(prims.list_(a)), prims.list_(prims.list_(a))
     )
     # prim1: uncons :: [a] -> optional (a, [a])
-    primitives[qname(namespace, "uncons")] = prims.prim1(
-        qname(namespace, "uncons"), lists.uncons, [_a],
+    primitives[def_lists.uncons.name] = prims.prim1(
+        def_lists.uncons.name, lists.uncons, [_a],
         prims.list_(a), prims.optional(prims.pair(a, prims.list_(a)))
     )
     # prim2: zip :: [a] -> [b] -> [(a, b)]
-    primitives[qname(namespace, "zip")] = prims.prim2(
-        qname(namespace, "zip"), lists.zip, [_a, _b],
+    primitives[def_lists.zip.name] = prims.prim2(
+        def_lists.zip.name, lists.zip, [_a, _b],
         prims.list_(a), prims.list_(b), prims.list_(prims.pair(a, b))
     )
     # prim3: zipWith :: (a -> b -> c) -> [a] -> [b] -> [c]
-    primitives[qname(namespace, "zipWith")] = prims.prim3(
-        qname(namespace, "zipWith"), lambda f, xs, ys: lists.zip_with(lambda a, b: f(a)(b), xs, ys), [_a, _b, _c],
+    primitives[def_lists.zip_with.name] = prims.prim3(
+        def_lists.zip_with.name, lambda f, xs, ys: lists.zip_with(lambda a, b: f(a)(b), xs, ys), [_a, _b, _c],
         fun(a, fun(b, c)), prims.list_(a), prims.list_(b), prims.list_(c)
     )
 
@@ -396,27 +396,27 @@ def register_lists_primitives() -> dict[Name, Primitive]:
 
 def register_logic_primitives() -> dict[Name, Primitive]:
     """Register all logic primitive functions."""
-    from hydra.lib import logic
+    from hydra.python.lib import logic
+    from hydra.lib import logic as def_logic
 
-    namespace = "hydra.lib.logic"
     primitives: dict[Name, Primitive] = {}
 
     a = prims.variable("a")
     _a = prims.v("a")
 
-    primitives[qname(namespace, "and")] = prims.prim2(
-        qname(namespace, "and"), logic.and_, [], prims.boolean(), prims.boolean(), prims.boolean()
+    primitives[def_logic.and_.name] = prims.prim2(
+        def_logic.and_.name, logic.and_, [], prims.boolean(), prims.boolean(), prims.boolean()
     )
-    primitives[qname(namespace, "ifElse")] = prims.prim3(
-        qname(namespace, "ifElse"), logic.if_else, [_a],
+    primitives[def_logic.if_else.name] = prims.prim3(
+        def_logic.if_else.name, logic.if_else, [_a],
         prims.boolean(), a, a, a,
         lazy_args=[1, 2]
     )
-    primitives[qname(namespace, "not")] = prims.prim1(
-        qname(namespace, "not"), logic.not_, [], prims.boolean(), prims.boolean()
+    primitives[def_logic.not_.name] = prims.prim1(
+        def_logic.not_.name, logic.not_, [], prims.boolean(), prims.boolean()
     )
-    primitives[qname(namespace, "or")] = prims.prim2(
-        qname(namespace, "or"), logic.or_, [], prims.boolean(), prims.boolean(), prims.boolean()
+    primitives[def_logic.or_.name] = prims.prim2(
+        def_logic.or_.name, logic.or_, [], prims.boolean(), prims.boolean(), prims.boolean()
     )
 
     return primitives
@@ -424,9 +424,9 @@ def register_logic_primitives() -> dict[Name, Primitive]:
 
 def register_maps_primitives() -> dict[Name, Primitive]:
     """Register all map primitive functions."""
-    from hydra.lib import maps
+    from hydra.python.lib import maps
+    from hydra.lib import maps as def_maps
 
-    namespace = "hydra.lib.maps"
     primitives: dict[Name, Primitive] = {}
 
     k = prims.variable("k")
@@ -444,104 +444,104 @@ def register_maps_primitives() -> dict[Name, Primitive]:
     _k2Ord = prims.v_ord("k2")
 
     # prim3: alter :: Ord k => (optional v -> optional v) -> k -> Map k v -> Map k v
-    primitives[qname(namespace, "alter")] = prims.prim3(
-        qname(namespace, "alter"), maps.alter, [_v, _kOrd],
+    primitives[def_maps.alter.name] = prims.prim3(
+        def_maps.alter.name, maps.alter, [_v, _kOrd],
         fun(prims.optional(v), prims.optional(v)), k, map_kv, map_kv
     )
     # prim3: bimap :: (Ord k1, Ord k2) => (k1 -> k2) -> (v1 -> v2) -> Map k1 v1 -> Map k2 v2
-    primitives[qname(namespace, "bimap")] = prims.prim3(
-        qname(namespace, "bimap"), maps.bimap, [_k1Ord, _k2Ord, _v1, _v2],
+    primitives[def_maps.bimap.name] = prims.prim3(
+        def_maps.bimap.name, maps.bimap, [_k1Ord, _k2Ord, _v1, _v2],
         fun(k1, k2), fun(v1, v2), prims.map_(k1, v1), prims.map_(k2, v2)
     )
     # prim2: delete :: Ord k => k -> Map k v -> Map k v
-    primitives[qname(namespace, "delete")] = prims.prim2(
-        qname(namespace, "delete"), maps.delete, [_kOrd, _v],
+    primitives[def_maps.delete.name] = prims.prim2(
+        def_maps.delete.name, maps.delete, [_kOrd, _v],
         k, map_kv, map_kv
     )
     # prim1: elems :: Ord k => Map k v -> [v]
-    primitives[qname(namespace, "elems")] = prims.prim1(
-        qname(namespace, "elems"), maps.elems, [_kOrd, _v],
+    primitives[def_maps.elems.name] = prims.prim1(
+        def_maps.elems.name, maps.elems, [_kOrd, _v],
         map_kv, prims.list_(v)
     )
     # prim0: empty :: Ord k => Map k v
-    primitives[qname(namespace, "empty")] = prims.prim0(
-        qname(namespace, "empty"), maps.empty, [_kOrd, _v],
+    primitives[def_maps.empty.name] = prims.prim0(
+        def_maps.empty.name, maps.empty, [_kOrd, _v],
         map_kv
     )
     # prim2: filter :: Ord k => (v -> Bool) -> Map k v -> Map k v
-    primitives[qname(namespace, "filter")] = prims.prim2(
-        qname(namespace, "filter"), maps.filter, [_v, _kOrd],
+    primitives[def_maps.filter.name] = prims.prim2(
+        def_maps.filter.name, maps.filter, [_v, _kOrd],
         fun(v, prims.boolean()), map_kv, map_kv
     )
     # prim2: filterWithKey :: Ord k => (k -> v -> Bool) -> Map k v -> Map k v
-    primitives[qname(namespace, "filterWithKey")] = prims.prim2(
-        qname(namespace, "filterWithKey"), lambda f, m: maps.filter_with_key(lambda k, v: f(k)(v), m), [_kOrd, _v],
+    primitives[def_maps.filter_with_key.name] = prims.prim2(
+        def_maps.filter_with_key.name, lambda f, m: maps.filter_with_key(lambda k, v: f(k)(v), m), [_kOrd, _v],
         fun(k, fun(v, prims.boolean())), map_kv, map_kv
     )
     # prim3: findWithDefault :: Ord k => v -> k -> Map k v -> v
-    primitives[qname(namespace, "findWithDefault")] = prims.prim3(
-        qname(namespace, "findWithDefault"), maps.find_with_default, [_v, _kOrd],
+    primitives[def_maps.find_with_default.name] = prims.prim3(
+        def_maps.find_with_default.name, maps.find_with_default, [_v, _kOrd],
         v, k, map_kv, v,
         lazy_args=[0]
     )
     # prim1: fromList :: Ord k => [(k, v)] -> Map k v
-    primitives[qname(namespace, "fromList")] = prims.prim1(
-        qname(namespace, "fromList"), maps.from_list, [_kOrd, _v],
+    primitives[def_maps.from_list.name] = prims.prim1(
+        def_maps.from_list.name, maps.from_list, [_kOrd, _v],
         prims.list_(prims.pair(k, v)), map_kv
     )
     # prim3: insert :: Ord k => k -> v -> Map k v -> Map k v
-    primitives[qname(namespace, "insert")] = prims.prim3(
-        qname(namespace, "insert"), maps.insert, [_kOrd, _v],
+    primitives[def_maps.insert.name] = prims.prim3(
+        def_maps.insert.name, maps.insert, [_kOrd, _v],
         k, v, map_kv, map_kv
     )
     # prim1: keys :: Ord k => Map k v -> [k]
-    primitives[qname(namespace, "keys")] = prims.prim1(
-        qname(namespace, "keys"), maps.keys, [_kOrd, _v],
+    primitives[def_maps.keys.name] = prims.prim1(
+        def_maps.keys.name, maps.keys, [_kOrd, _v],
         map_kv, prims.list_(k)
     )
     # prim2: lookup :: Ord k => k -> Map k v -> optional v
-    primitives[qname(namespace, "lookup")] = prims.prim2(
-        qname(namespace, "lookup"), maps.lookup, [_kOrd, _v],
+    primitives[def_maps.lookup.name] = prims.prim2(
+        def_maps.lookup.name, maps.lookup, [_kOrd, _v],
         k, map_kv, prims.optional(v)
     )
     # prim2: map :: Ord k => (v1 -> v2) -> Map k v1 -> Map k v2
-    primitives[qname(namespace, "map")] = prims.prim2(
-        qname(namespace, "map"), maps.map, [_v1, _v2, _kOrd],
+    primitives[def_maps.map.name] = prims.prim2(
+        def_maps.map.name, maps.map, [_v1, _v2, _kOrd],
         fun(v1, v2), prims.map_(k, v1), prims.map_(k, v2)
     )
     # prim2: mapKeys :: (Ord k1, Ord k2) => (k1 -> k2) -> Map k1 v -> Map k2 v
-    primitives[qname(namespace, "mapKeys")] = prims.prim2(
-        qname(namespace, "mapKeys"), maps.map_keys, [_k1Ord, _k2Ord, _v],
+    primitives[def_maps.map_keys.name] = prims.prim2(
+        def_maps.map_keys.name, maps.map_keys, [_k1Ord, _k2Ord, _v],
         fun(k1, k2), prims.map_(k1, v), prims.map_(k2, v)
     )
     # prim2: member :: Ord k => k -> Map k v -> Bool
-    primitives[qname(namespace, "member")] = prims.prim2(
-        qname(namespace, "member"), maps.member, [_kOrd, _v],
+    primitives[def_maps.member.name] = prims.prim2(
+        def_maps.member.name, maps.member, [_kOrd, _v],
         k, map_kv, prims.boolean()
     )
     # prim1: null :: Ord k => Map k v -> Bool
-    primitives[qname(namespace, "null")] = prims.prim1(
-        qname(namespace, "null"), maps.null, [_kOrd, _v],
+    primitives[def_maps.null.name] = prims.prim1(
+        def_maps.null.name, maps.null, [_kOrd, _v],
         map_kv, prims.boolean()
     )
     # prim2: singleton :: Ord k => k -> v -> Map k v
-    primitives[qname(namespace, "singleton")] = prims.prim2(
-        qname(namespace, "singleton"), maps.singleton, [_kOrd, _v],
+    primitives[def_maps.singleton.name] = prims.prim2(
+        def_maps.singleton.name, maps.singleton, [_kOrd, _v],
         k, v, map_kv
     )
     # prim1: size :: Ord k => Map k v -> Int32
-    primitives[qname(namespace, "size")] = prims.prim1(
-        qname(namespace, "size"), maps.size, [_kOrd, _v],
+    primitives[def_maps.size.name] = prims.prim1(
+        def_maps.size.name, maps.size, [_kOrd, _v],
         map_kv, prims.int32()
     )
     # prim1: toList :: Ord k => Map k v -> [(k, v)]
-    primitives[qname(namespace, "toList")] = prims.prim1(
-        qname(namespace, "toList"), maps.to_list, [_kOrd, _v],
+    primitives[def_maps.to_list.name] = prims.prim1(
+        def_maps.to_list.name, maps.to_list, [_kOrd, _v],
         map_kv, prims.list_(prims.pair(k, v))
     )
     # prim2: union :: Ord k => Map k v -> Map k v -> Map k v
-    primitives[qname(namespace, "union")] = prims.prim2(
-        qname(namespace, "union"), maps.union, [_kOrd, _v],
+    primitives[def_maps.union.name] = prims.prim2(
+        def_maps.union.name, maps.union, [_kOrd, _v],
         map_kv, map_kv, map_kv
     )
 
@@ -550,151 +550,151 @@ def register_maps_primitives() -> dict[Name, Primitive]:
 
 def register_math_primitives() -> dict[Name, Primitive]:
     """Register all math primitive functions."""
-    from hydra.lib import math
+    from hydra.python.lib import math
+    from hydra.lib import math as def_math
 
-    namespace = "hydra.lib.math"
     primitives: dict[Name, Primitive] = {}
 
     # Int32 primitives
-    primitives[qname(namespace, "abs")] = prims.prim1(
-        qname(namespace, "abs"), math.abs_, [], prims.int32(), prims.int32()
+    primitives[def_math.abs.name] = prims.prim1(
+        def_math.abs.name, math.abs_, [], prims.int32(), prims.int32()
     )
-    primitives[qname(namespace, "add")] = prims.prim2(
-        qname(namespace, "add"), math.add, [], prims.int32(), prims.int32(), prims.int32()
+    primitives[def_math.add.name] = prims.prim2(
+        def_math.add.name, math.add, [], prims.int32(), prims.int32(), prims.int32()
     )
-    primitives[qname(namespace, "addFloat64")] = prims.prim2(
-        qname(namespace, "addFloat64"), math.add_float64, [], prims.float64(), prims.float64(), prims.float64()
+    primitives[def_math.add_float64.name] = prims.prim2(
+        def_math.add_float64.name, math.add_float64, [], prims.float64(), prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "even")] = prims.prim1(
-        qname(namespace, "even"), math.even, [], prims.int32(), prims.boolean()
+    primitives[def_math.even.name] = prims.prim1(
+        def_math.even.name, math.even, [], prims.int32(), prims.boolean()
     )
-    primitives[qname(namespace, "mul")] = prims.prim2(
-        qname(namespace, "mul"), math.mul, [], prims.int32(), prims.int32(), prims.int32()
+    primitives[def_math.mul.name] = prims.prim2(
+        def_math.mul.name, math.mul, [], prims.int32(), prims.int32(), prims.int32()
     )
-    primitives[qname(namespace, "mulFloat64")] = prims.prim2(
-        qname(namespace, "mulFloat64"), math.mul_float64, [], prims.float64(), prims.float64(), prims.float64()
+    primitives[def_math.mul_float64.name] = prims.prim2(
+        def_math.mul_float64.name, math.mul_float64, [], prims.float64(), prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "negate")] = prims.prim1(
-        qname(namespace, "negate"), math.negate, [], prims.int32(), prims.int32()
+    primitives[def_math.negate.name] = prims.prim1(
+        def_math.negate.name, math.negate, [], prims.int32(), prims.int32()
     )
-    primitives[qname(namespace, "negateFloat64")] = prims.prim1(
-        qname(namespace, "negateFloat64"), math.negate_float64, [], prims.float64(), prims.float64()
+    primitives[def_math.negate_float64.name] = prims.prim1(
+        def_math.negate_float64.name, math.negate_float64, [], prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "odd")] = prims.prim1(
-        qname(namespace, "odd"), math.odd, [], prims.int32(), prims.boolean()
+    primitives[def_math.odd.name] = prims.prim1(
+        def_math.odd.name, math.odd, [], prims.int32(), prims.boolean()
     )
-    primitives[qname(namespace, "range")] = prims.prim2(
-        qname(namespace, "range"), math.range_, [], prims.int32(), prims.int32(), prims.list_(prims.int32())
+    primitives[def_math.range_.name] = prims.prim2(
+        def_math.range_.name, math.range_, [], prims.int32(), prims.int32(), prims.list_(prims.int32())
     )
-    primitives[qname(namespace, "signum")] = prims.prim1(
-        qname(namespace, "signum"), math.signum, [], prims.int32(), prims.int32()
+    primitives[def_math.signum.name] = prims.prim1(
+        def_math.signum.name, math.signum, [], prims.int32(), prims.int32()
     )
-    primitives[qname(namespace, "sub")] = prims.prim2(
-        qname(namespace, "sub"), math.sub, [], prims.int32(), prims.int32(), prims.int32()
+    primitives[def_math.sub.name] = prims.prim2(
+        def_math.sub.name, math.sub, [], prims.int32(), prims.int32(), prims.int32()
     )
-    primitives[qname(namespace, "subFloat64")] = prims.prim2(
-        qname(namespace, "subFloat64"), math.sub_float64, [], prims.float64(), prims.float64(), prims.float64()
+    primitives[def_math.sub_float64.name] = prims.prim2(
+        def_math.sub_float64.name, math.sub_float64, [], prims.float64(), prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "max")] = prims.prim2(
-        qname(namespace, "max"), math.max, [], prims.int32(), prims.int32(), prims.int32()
+    primitives[def_math.max.name] = prims.prim2(
+        def_math.max.name, math.max, [], prims.int32(), prims.int32(), prims.int32()
     )
-    primitives[qname(namespace, "maybeDiv")] = prims.prim2(
-        qname(namespace, "maybeDiv"), math.maybe_div, [], prims.int32(), prims.int32(), prims.optional(prims.int32())
+    primitives[def_math.maybe_div.name] = prims.prim2(
+        def_math.maybe_div.name, math.maybe_div, [], prims.int32(), prims.int32(), prims.optional(prims.int32())
     )
-    primitives[qname(namespace, "maybeMod")] = prims.prim2(
-        qname(namespace, "maybeMod"), math.maybe_mod, [], prims.int32(), prims.int32(), prims.optional(prims.int32())
+    primitives[def_math.maybe_mod.name] = prims.prim2(
+        def_math.maybe_mod.name, math.maybe_mod, [], prims.int32(), prims.int32(), prims.optional(prims.int32())
     )
-    primitives[qname(namespace, "maybePred")] = prims.prim1(
-        qname(namespace, "maybePred"), math.maybe_pred, [], prims.int32(), prims.optional(prims.int32())
+    primitives[def_math.maybe_pred.name] = prims.prim1(
+        def_math.maybe_pred.name, math.maybe_pred, [], prims.int32(), prims.optional(prims.int32())
     )
-    primitives[qname(namespace, "maybeRem")] = prims.prim2(
-        qname(namespace, "maybeRem"), math.maybe_rem, [], prims.int32(), prims.int32(), prims.optional(prims.int32())
+    primitives[def_math.maybe_rem.name] = prims.prim2(
+        def_math.maybe_rem.name, math.maybe_rem, [], prims.int32(), prims.int32(), prims.optional(prims.int32())
     )
-    primitives[qname(namespace, "maybeSucc")] = prims.prim1(
-        qname(namespace, "maybeSucc"), math.maybe_succ, [], prims.int32(), prims.optional(prims.int32())
+    primitives[def_math.maybe_succ.name] = prims.prim1(
+        def_math.maybe_succ.name, math.maybe_succ, [], prims.int32(), prims.optional(prims.int32())
     )
-    primitives[qname(namespace, "min")] = prims.prim2(
-        qname(namespace, "min"), math.min, [], prims.int32(), prims.int32(), prims.int32()
+    primitives[def_math.min.name] = prims.prim2(
+        def_math.min.name, math.min, [], prims.int32(), prims.int32(), prims.int32()
     )
 
     # Float64 primitives
-    primitives[qname(namespace, "acos")] = prims.prim1(
-        qname(namespace, "acos"), math.acos, [], prims.float64(), prims.float64()
+    primitives[def_math.acos.name] = prims.prim1(
+        def_math.acos.name, math.acos, [], prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "acosh")] = prims.prim1(
-        qname(namespace, "acosh"), math.acosh, [], prims.float64(), prims.float64()
+    primitives[def_math.acosh.name] = prims.prim1(
+        def_math.acosh.name, math.acosh, [], prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "asin")] = prims.prim1(
-        qname(namespace, "asin"), math.asin, [], prims.float64(), prims.float64()
+    primitives[def_math.asin.name] = prims.prim1(
+        def_math.asin.name, math.asin, [], prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "asinh")] = prims.prim1(
-        qname(namespace, "asinh"), math.asinh, [], prims.float64(), prims.float64()
+    primitives[def_math.asinh.name] = prims.prim1(
+        def_math.asinh.name, math.asinh, [], prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "atan")] = prims.prim1(
-        qname(namespace, "atan"), math.atan, [], prims.float64(), prims.float64()
+    primitives[def_math.atan.name] = prims.prim1(
+        def_math.atan.name, math.atan, [], prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "atan2")] = prims.prim2(
-        qname(namespace, "atan2"), math.atan2, [], prims.float64(), prims.float64(), prims.float64()
+    primitives[def_math.atan2.name] = prims.prim2(
+        def_math.atan2.name, math.atan2, [], prims.float64(), prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "atanh")] = prims.prim1(
-        qname(namespace, "atanh"), math.atanh, [], prims.float64(), prims.float64()
+    primitives[def_math.atanh.name] = prims.prim1(
+        def_math.atanh.name, math.atanh, [], prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "ceiling")] = prims.prim1(
-        qname(namespace, "ceiling"), math.ceiling, [], prims.float64(), prims.float64()
+    primitives[def_math.ceiling.name] = prims.prim1(
+        def_math.ceiling.name, math.ceiling, [], prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "cos")] = prims.prim1(
-        qname(namespace, "cos"), math.cos, [], prims.float64(), prims.float64()
+    primitives[def_math.cos.name] = prims.prim1(
+        def_math.cos.name, math.cos, [], prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "cosh")] = prims.prim1(
-        qname(namespace, "cosh"), math.cosh, [], prims.float64(), prims.float64()
+    primitives[def_math.cosh.name] = prims.prim1(
+        def_math.cosh.name, math.cosh, [], prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "e")] = prims.prim0(
-        qname(namespace, "e"), math.e, [], prims.float64()
+    primitives[def_math.e.name] = prims.prim0(
+        def_math.e.name, math.e, [], prims.float64()
     )
-    primitives[qname(namespace, "exp")] = prims.prim1(
-        qname(namespace, "exp"), math.exp, [], prims.float64(), prims.float64()
+    primitives[def_math.exp.name] = prims.prim1(
+        def_math.exp.name, math.exp, [], prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "floor")] = prims.prim1(
-        qname(namespace, "floor"), math.floor, [], prims.float64(), prims.float64()
+    primitives[def_math.floor.name] = prims.prim1(
+        def_math.floor.name, math.floor, [], prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "log")] = prims.prim1(
-        qname(namespace, "log"), math.log, [], prims.float64(), prims.float64()
+    primitives[def_math.log.name] = prims.prim1(
+        def_math.log.name, math.log, [], prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "logBase")] = prims.prim2(
-        qname(namespace, "logBase"), math.log_base, [], prims.float64(), prims.float64(), prims.float64()
+    primitives[def_math.log_base.name] = prims.prim2(
+        def_math.log_base.name, math.log_base, [], prims.float64(), prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "pi")] = prims.prim0(
-        qname(namespace, "pi"), math.pi, [], prims.float64()
+    primitives[def_math.pi.name] = prims.prim0(
+        def_math.pi.name, math.pi, [], prims.float64()
     )
-    primitives[qname(namespace, "pow")] = prims.prim2(
-        qname(namespace, "pow"), math.pow_, [], prims.float64(), prims.float64(), prims.float64()
+    primitives[def_math.pow.name] = prims.prim2(
+        def_math.pow.name, math.pow_, [], prims.float64(), prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "round")] = prims.prim1(
-        qname(namespace, "round"), math.round_, [], prims.float64(), prims.float64()
+    primitives[def_math.round.name] = prims.prim1(
+        def_math.round.name, math.round_, [], prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "roundFloat32")] = prims.prim2(
-        qname(namespace, "roundFloat32"), math.round_float32, [], prims.int32(), prims.float32(), prims.float32()
+    primitives[def_math.round_float32.name] = prims.prim2(
+        def_math.round_float32.name, math.round_float32, [], prims.int32(), prims.float32(), prims.float32()
     )
-    primitives[qname(namespace, "roundFloat64")] = prims.prim2(
-        qname(namespace, "roundFloat64"), math.round_float64, [], prims.int32(), prims.float64(), prims.float64()
+    primitives[def_math.round_float64.name] = prims.prim2(
+        def_math.round_float64.name, math.round_float64, [], prims.int32(), prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "sin")] = prims.prim1(
-        qname(namespace, "sin"), math.sin, [], prims.float64(), prims.float64()
+    primitives[def_math.sin.name] = prims.prim1(
+        def_math.sin.name, math.sin, [], prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "sinh")] = prims.prim1(
-        qname(namespace, "sinh"), math.sinh, [], prims.float64(), prims.float64()
+    primitives[def_math.sinh.name] = prims.prim1(
+        def_math.sinh.name, math.sinh, [], prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "sqrt")] = prims.prim1(
-        qname(namespace, "sqrt"), math.sqrt, [], prims.float64(), prims.float64()
+    primitives[def_math.sqrt.name] = prims.prim1(
+        def_math.sqrt.name, math.sqrt, [], prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "tan")] = prims.prim1(
-        qname(namespace, "tan"), math.tan, [], prims.float64(), prims.float64()
+    primitives[def_math.tan.name] = prims.prim1(
+        def_math.tan.name, math.tan, [], prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "tanh")] = prims.prim1(
-        qname(namespace, "tanh"), math.tanh, [], prims.float64(), prims.float64()
+    primitives[def_math.tanh.name] = prims.prim1(
+        def_math.tanh.name, math.tanh, [], prims.float64(), prims.float64()
     )
-    primitives[qname(namespace, "truncate")] = prims.prim1(
-        qname(namespace, "truncate"), math.truncate, [], prims.float64(), prims.float64()
+    primitives[def_math.truncate.name] = prims.prim1(
+        def_math.truncate.name, math.truncate, [], prims.float64(), prims.float64()
     )
 
     return primitives
@@ -702,9 +702,9 @@ def register_math_primitives() -> dict[Name, Primitive]:
 
 def register_optionals_primitives() -> dict[Name, Primitive]:
     """Register all optional primitive functions."""
-    from hydra.lib import optionals
+    from hydra.python.lib import optionals
+    from hydra.lib import optionals as def_optionals
 
-    namespace = "hydra.lib.optionals"
     primitives: dict[Name, Primitive] = {}
 
     a = prims.variable("a")
@@ -715,62 +715,62 @@ def register_optionals_primitives() -> dict[Name, Primitive]:
     _c = prims.v("c")
 
     # apply :: optional (a -> b) -> optional a -> optional b
-    primitives[qname(namespace, "apply")] = prims.prim2(
-        qname(namespace, "apply"), optionals.apply, [_a, _b],
+    primitives[def_optionals.apply.name] = prims.prim2(
+        def_optionals.apply.name, optionals.apply, [_a, _b],
         prims.optional(fun(a, b)), prims.optional(a), prims.optional(b)
     )
     # bind :: optional a -> (a -> optional b) -> optional b
-    primitives[qname(namespace, "bind")] = prims.prim2(
-        qname(namespace, "bind"), optionals.bind, [_a, _b],
+    primitives[def_optionals.bind.name] = prims.prim2(
+        def_optionals.bind.name, optionals.bind, [_a, _b],
         prims.optional(a), fun(a, prims.optional(b)), prims.optional(b)
     )
     # cases :: optional a -> b -> (a -> b) -> b
-    primitives[qname(namespace, "cases")] = prims.prim3(
-        qname(namespace, "cases"), optionals.cases, [_a, _b],
+    primitives[def_optionals.cases.name] = prims.prim3(
+        def_optionals.cases.name, optionals.cases, [_a, _b],
         prims.optional(a), b, fun(a, b), b,
         lazy_args=[1]
     )
     # cat :: [optional a] -> [a]
-    primitives[qname(namespace, "cat")] = prims.prim1(
-        qname(namespace, "cat"), optionals.cat, [_a],
+    primitives[def_optionals.cat.name] = prims.prim1(
+        def_optionals.cat.name, optionals.cat, [_a],
         prims.list_(prims.optional(a)), prims.list_(a)
     )
     # compose :: (a -> optional b) -> (b -> optional c) -> a -> optional c
-    primitives[qname(namespace, "compose")] = prims.prim3(
-        qname(namespace, "compose"), optionals.compose, [_a, _b, _c],
+    primitives[def_optionals.compose.name] = prims.prim3(
+        def_optionals.compose.name, optionals.compose, [_a, _b, _c],
         fun(a, prims.optional(b)), fun(b, prims.optional(c)),
         a, prims.optional(c)
     )
-    primitives[qname(namespace, "fromOptional")] = prims.prim2(
-        qname(namespace, "fromOptional"), optionals.from_optional, [_a],
+    primitives[def_optionals.from_optional.name] = prims.prim2(
+        def_optionals.from_optional.name, optionals.from_optional, [_a],
         a, prims.optional(a), a,
         lazy_args=[0]
     )
-    primitives[qname(namespace, "isGiven")] = prims.prim1(
-        qname(namespace, "isGiven"), optionals.is_given, [_a],
+    primitives[def_optionals.is_given.name] = prims.prim1(
+        def_optionals.is_given.name, optionals.is_given, [_a],
         prims.optional(a), prims.boolean()
     )
-    primitives[qname(namespace, "isNone")] = prims.prim1(
-        qname(namespace, "isNone"), optionals.is_none, [_a],
+    primitives[def_optionals.is_none.name] = prims.prim1(
+        def_optionals.is_none.name, optionals.is_none, [_a],
         prims.optional(a), prims.boolean()
     )
     # map :: (a -> b) -> optional a -> optional b
-    primitives[qname(namespace, "map")] = prims.prim2(
-        qname(namespace, "map"), optionals.map, [_a, _b],
+    primitives[def_optionals.map.name] = prims.prim2(
+        def_optionals.map.name, optionals.map, [_a, _b],
         fun(a, b), prims.optional(a), prims.optional(b)
     )
     # mapOptional :: (a -> optional b) -> [a] -> [b]
-    primitives[qname(namespace, "mapOptional")] = prims.prim2(
-        qname(namespace, "mapOptional"), optionals.map_optional, [_a, _b],
+    primitives[def_optionals.map_optional.name] = prims.prim2(
+        def_optionals.map_optional.name, optionals.map_optional, [_a, _b],
         fun(a, prims.optional(b)), prims.list_(a), prims.list_(b)
     )
-    primitives[qname(namespace, "pure")] = prims.prim1(
-        qname(namespace, "pure"), optionals.pure, [_a],
+    primitives[def_optionals.pure.name] = prims.prim1(
+        def_optionals.pure.name, optionals.pure, [_a],
         a, prims.optional(a)
     )
     # toList :: optional a -> [a]
-    primitives[qname(namespace, "toList")] = prims.prim1(
-        qname(namespace, "toList"), optionals.to_list, [_a],
+    primitives[def_optionals.to_list.name] = prims.prim1(
+        def_optionals.to_list.name, optionals.to_list, [_a],
         prims.optional(a), prims.list_(a)
     )
 
@@ -779,9 +779,9 @@ def register_optionals_primitives() -> dict[Name, Primitive]:
 
 def register_sets_primitives() -> dict[Name, Primitive]:
     """Register all set primitive functions."""
-    from hydra.lib import sets
+    from hydra.python.lib import sets
+    from hydra.lib import sets as def_sets
 
-    namespace = "hydra.lib.sets"
     primitives: dict[Name, Primitive] = {}
 
     a = prims.variable("a")
@@ -789,61 +789,61 @@ def register_sets_primitives() -> dict[Name, Primitive]:
     _aOrd = prims.v_ord("a")
     _bOrd = prims.v_ord("b")
 
-    primitives[qname(namespace, "delete")] = prims.prim2(
-        qname(namespace, "delete"), sets.delete, [_aOrd],
+    primitives[def_sets.delete.name] = prims.prim2(
+        def_sets.delete.name, sets.delete, [_aOrd],
         a, prims.set_(a), prims.set_(a)
     )
-    primitives[qname(namespace, "difference")] = prims.prim2(
-        qname(namespace, "difference"), sets.difference, [_aOrd],
+    primitives[def_sets.difference.name] = prims.prim2(
+        def_sets.difference.name, sets.difference, [_aOrd],
         prims.set_(a), prims.set_(a), prims.set_(a)
     )
     # prim0: empty :: Ord a => Set a
-    primitives[qname(namespace, "empty")] = prims.prim0(
-        qname(namespace, "empty"), sets.empty, [_aOrd],
+    primitives[def_sets.empty.name] = prims.prim0(
+        def_sets.empty.name, sets.empty, [_aOrd],
         prims.set_(a)
     )
-    primitives[qname(namespace, "fromList")] = prims.prim1(
-        qname(namespace, "fromList"), sets.from_list, [_aOrd],
+    primitives[def_sets.from_list.name] = prims.prim1(
+        def_sets.from_list.name, sets.from_list, [_aOrd],
         prims.list_(a), prims.set_(a)
     )
-    primitives[qname(namespace, "insert")] = prims.prim2(
-        qname(namespace, "insert"), sets.insert, [_aOrd],
+    primitives[def_sets.insert.name] = prims.prim2(
+        def_sets.insert.name, sets.insert, [_aOrd],
         a, prims.set_(a), prims.set_(a)
     )
-    primitives[qname(namespace, "intersection")] = prims.prim2(
-        qname(namespace, "intersection"), sets.intersection, [_aOrd],
+    primitives[def_sets.intersection.name] = prims.prim2(
+        def_sets.intersection.name, sets.intersection, [_aOrd],
         prims.set_(a), prims.set_(a), prims.set_(a)
     )
-    primitives[qname(namespace, "map")] = prims.prim2(
-        qname(namespace, "map"), sets.map, [_aOrd, _bOrd],
+    primitives[def_sets.map.name] = prims.prim2(
+        def_sets.map.name, sets.map, [_aOrd, _bOrd],
         fun(a, b), prims.set_(a), prims.set_(b)
     )
-    primitives[qname(namespace, "member")] = prims.prim2(
-        qname(namespace, "member"), sets.member, [_aOrd],
+    primitives[def_sets.member.name] = prims.prim2(
+        def_sets.member.name, sets.member, [_aOrd],
         a, prims.set_(a), prims.boolean()
     )
-    primitives[qname(namespace, "null")] = prims.prim1(
-        qname(namespace, "null"), sets.null, [_aOrd],
+    primitives[def_sets.null.name] = prims.prim1(
+        def_sets.null.name, sets.null, [_aOrd],
         prims.set_(a), prims.boolean()
     )
-    primitives[qname(namespace, "singleton")] = prims.prim1(
-        qname(namespace, "singleton"), sets.singleton, [_aOrd],
+    primitives[def_sets.singleton.name] = prims.prim1(
+        def_sets.singleton.name, sets.singleton, [_aOrd],
         a, prims.set_(a)
     )
-    primitives[qname(namespace, "size")] = prims.prim1(
-        qname(namespace, "size"), sets.size, [_aOrd],
+    primitives[def_sets.size.name] = prims.prim1(
+        def_sets.size.name, sets.size, [_aOrd],
         prims.set_(a), prims.int32()
     )
-    primitives[qname(namespace, "toList")] = prims.prim1(
-        qname(namespace, "toList"), sets.to_list, [_aOrd],
+    primitives[def_sets.to_list.name] = prims.prim1(
+        def_sets.to_list.name, sets.to_list, [_aOrd],
         prims.set_(a), prims.list_(a)
     )
-    primitives[qname(namespace, "union")] = prims.prim2(
-        qname(namespace, "union"), sets.union, [_aOrd],
+    primitives[def_sets.union.name] = prims.prim2(
+        def_sets.union.name, sets.union, [_aOrd],
         prims.set_(a), prims.set_(a), prims.set_(a)
     )
-    primitives[qname(namespace, "unions")] = prims.prim1(
-        qname(namespace, "unions"), sets.unions, [_aOrd],
+    primitives[def_sets.unions.name] = prims.prim1(
+        def_sets.unions.name, sets.unions, [_aOrd],
         prims.list_(prims.set_(a)), prims.set_(a)
     )
 
@@ -852,28 +852,28 @@ def register_sets_primitives() -> dict[Name, Primitive]:
 
 def register_regex_primitives() -> dict[Name, Primitive]:
     """Register all regex primitive functions."""
-    from hydra.lib import regex
+    from hydra.python.lib import regex
+    from hydra.lib import regex as def_regex
 
-    namespace = "hydra.lib.regex"
     primitives: dict[Name, Primitive] = {}
 
-    primitives[qname(namespace, "find")] = prims.prim2(
-        qname(namespace, "find"), regex.find, [], prims.string(), prims.string(), prims.optional(prims.string())
+    primitives[def_regex.find.name] = prims.prim2(
+        def_regex.find.name, regex.find, [], prims.string(), prims.string(), prims.optional(prims.string())
     )
-    primitives[qname(namespace, "findAll")] = prims.prim2(
-        qname(namespace, "findAll"), regex.find_all, [], prims.string(), prims.string(), prims.list_(prims.string())
+    primitives[def_regex.find_all.name] = prims.prim2(
+        def_regex.find_all.name, regex.find_all, [], prims.string(), prims.string(), prims.list_(prims.string())
     )
-    primitives[qname(namespace, "matches")] = prims.prim2(
-        qname(namespace, "matches"), regex.matches, [], prims.string(), prims.string(), prims.boolean()
+    primitives[def_regex.matches.name] = prims.prim2(
+        def_regex.matches.name, regex.matches, [], prims.string(), prims.string(), prims.boolean()
     )
-    primitives[qname(namespace, "replace")] = prims.prim3(
-        qname(namespace, "replace"), regex.replace, [], prims.string(), prims.string(), prims.string(), prims.string()
+    primitives[def_regex.replace.name] = prims.prim3(
+        def_regex.replace.name, regex.replace, [], prims.string(), prims.string(), prims.string(), prims.string()
     )
-    primitives[qname(namespace, "replaceAll")] = prims.prim3(
-        qname(namespace, "replaceAll"), regex.replace_all, [], prims.string(), prims.string(), prims.string(), prims.string()
+    primitives[def_regex.replace_all.name] = prims.prim3(
+        def_regex.replace_all.name, regex.replace_all, [], prims.string(), prims.string(), prims.string(), prims.string()
     )
-    primitives[qname(namespace, "split")] = prims.prim2(
-        qname(namespace, "split"), regex.split, [], prims.string(), prims.string(), prims.list_(prims.string())
+    primitives[def_regex.split.name] = prims.prim2(
+        def_regex.split.name, regex.split, [], prims.string(), prims.string(), prims.list_(prims.string())
     )
 
     return primitives
@@ -881,50 +881,50 @@ def register_regex_primitives() -> dict[Name, Primitive]:
 
 def register_strings_primitives() -> dict[Name, Primitive]:
     """Register all string primitive functions."""
-    from hydra.lib import strings
+    from hydra.python.lib import strings
+    from hydra.lib import strings as def_strings
 
-    namespace = "hydra.lib.strings"
     primitives: dict[Name, Primitive] = {}
 
-    primitives[qname(namespace, "cat")] = prims.prim1(
-        qname(namespace, "cat"), strings.cat, [], prims.list_(prims.string()), prims.string()
+    primitives[def_strings.cat.name] = prims.prim1(
+        def_strings.cat.name, strings.cat, [], prims.list_(prims.string()), prims.string()
     )
-    primitives[qname(namespace, "cat2")] = prims.prim2(
-        qname(namespace, "cat2"), strings.cat2, [], prims.string(), prims.string(), prims.string()
+    primitives[def_strings.cat2.name] = prims.prim2(
+        def_strings.cat2.name, strings.cat2, [], prims.string(), prims.string(), prims.string()
     )
-    primitives[qname(namespace, "fromList")] = prims.prim1(
-        qname(namespace, "fromList"), strings.from_list, [], prims.list_(prims.int32()), prims.string()
+    primitives[def_strings.from_list.name] = prims.prim1(
+        def_strings.from_list.name, strings.from_list, [], prims.list_(prims.int32()), prims.string()
     )
-    primitives[qname(namespace, "intercalate")] = prims.prim2(
-        qname(namespace, "intercalate"), strings.intercalate, [], prims.string(), prims.list_(prims.string()), prims.string()
+    primitives[def_strings.intercalate.name] = prims.prim2(
+        def_strings.intercalate.name, strings.intercalate, [], prims.string(), prims.list_(prims.string()), prims.string()
     )
-    primitives[qname(namespace, "length")] = prims.prim1(
-        qname(namespace, "length"), strings.length, [], prims.string(), prims.int32()
+    primitives[def_strings.length.name] = prims.prim1(
+        def_strings.length.name, strings.length, [], prims.string(), prims.int32()
     )
-    primitives[qname(namespace, "lines")] = prims.prim1(
-        qname(namespace, "lines"), strings.lines, [], prims.string(), prims.list_(prims.string())
+    primitives[def_strings.lines.name] = prims.prim1(
+        def_strings.lines.name, strings.lines, [], prims.string(), prims.list_(prims.string())
     )
-    primitives[qname(namespace, "maybeCharAt")] = prims.prim2(
-        qname(namespace, "maybeCharAt"), strings.maybe_char_at, [], prims.int32(), prims.string(), prims.optional(prims.int32())
+    primitives[def_strings.maybe_char_at.name] = prims.prim2(
+        def_strings.maybe_char_at.name, strings.maybe_char_at, [], prims.int32(), prims.string(), prims.optional(prims.int32())
     )
-    primitives[qname(namespace, "null")] = prims.prim1(
-        qname(namespace, "null"), strings.null, [], prims.string(), prims.boolean()
+    primitives[def_strings.null.name] = prims.prim1(
+        def_strings.null.name, strings.null, [], prims.string(), prims.boolean()
     )
-    primitives[qname(namespace, "splitOn")] = prims.prim2(
-        qname(namespace, "splitOn"), strings.split_on, [], prims.string(), prims.string(),
+    primitives[def_strings.split_on.name] = prims.prim2(
+        def_strings.split_on.name, strings.split_on, [], prims.string(), prims.string(),
         prims.list_(prims.string())
     )
-    primitives[qname(namespace, "toList")] = prims.prim1(
-        qname(namespace, "toList"), strings.to_list, [], prims.string(), prims.list_(prims.int32())
+    primitives[def_strings.to_list.name] = prims.prim1(
+        def_strings.to_list.name, strings.to_list, [], prims.string(), prims.list_(prims.int32())
     )
-    primitives[qname(namespace, "toLower")] = prims.prim1(
-        qname(namespace, "toLower"), strings.to_lower, [], prims.string(), prims.string()
+    primitives[def_strings.to_lower.name] = prims.prim1(
+        def_strings.to_lower.name, strings.to_lower, [], prims.string(), prims.string()
     )
-    primitives[qname(namespace, "toUpper")] = prims.prim1(
-        qname(namespace, "toUpper"), strings.to_upper, [], prims.string(), prims.string()
+    primitives[def_strings.to_upper.name] = prims.prim1(
+        def_strings.to_upper.name, strings.to_upper, [], prims.string(), prims.string()
     )
-    primitives[qname(namespace, "unlines")] = prims.prim1(
-        qname(namespace, "unlines"), strings.unlines, [], prims.list_(prims.string()), prims.string()
+    primitives[def_strings.unlines.name] = prims.prim1(
+        def_strings.unlines.name, strings.unlines, [], prims.list_(prims.string()), prims.string()
     )
 
     return primitives
@@ -932,234 +932,234 @@ def register_strings_primitives() -> dict[Name, Primitive]:
 
 def register_literals_primitives() -> dict[Name, Primitive]:
     """Register all literals primitive functions."""
-    from hydra.lib import literals
+    from hydra.python.lib import literals
+    from hydra.lib import literals as def_literals
 
-    namespace = "hydra.lib.literals"
     primitives: dict[Name, Primitive] = {}
 
     # Conversion primitives
-    primitives[qname(namespace, "bigintToDecimal")] = prims.prim1(
-        qname(namespace, "bigintToDecimal"), literals.bigint_to_decimal, [],
+    primitives[def_literals.bigint_to_decimal.name] = prims.prim1(
+        def_literals.bigint_to_decimal.name, literals.bigint_to_decimal, [],
         prims.bigint(), prims.decimal()
     )
-    primitives[qname(namespace, "bigintToInt8")] = prims.prim1(
-        qname(namespace, "bigintToInt8"), literals.bigint_to_int8, [],
+    primitives[def_literals.bigint_to_int8.name] = prims.prim1(
+        def_literals.bigint_to_int8.name, literals.bigint_to_int8, [],
         prims.bigint(), prims.int8()
     )
-    primitives[qname(namespace, "bigintToInt16")] = prims.prim1(
-        qname(namespace, "bigintToInt16"), literals.bigint_to_int16, [],
+    primitives[def_literals.bigint_to_int16.name] = prims.prim1(
+        def_literals.bigint_to_int16.name, literals.bigint_to_int16, [],
         prims.bigint(), prims.int16()
     )
-    primitives[qname(namespace, "bigintToInt32")] = prims.prim1(
-        qname(namespace, "bigintToInt32"), literals.bigint_to_int32, [],
+    primitives[def_literals.bigint_to_int32.name] = prims.prim1(
+        def_literals.bigint_to_int32.name, literals.bigint_to_int32, [],
         prims.bigint(), prims.int32()
     )
-    primitives[qname(namespace, "bigintToInt64")] = prims.prim1(
-        qname(namespace, "bigintToInt64"), literals.bigint_to_int64, [],
+    primitives[def_literals.bigint_to_int64.name] = prims.prim1(
+        def_literals.bigint_to_int64.name, literals.bigint_to_int64, [],
         prims.bigint(), prims.int64()
     )
-    primitives[qname(namespace, "bigintToUint8")] = prims.prim1(
-        qname(namespace, "bigintToUint8"), literals.bigint_to_uint8, [],
+    primitives[def_literals.bigint_to_uint8.name] = prims.prim1(
+        def_literals.bigint_to_uint8.name, literals.bigint_to_uint8, [],
         prims.bigint(), prims.uint8()
     )
-    primitives[qname(namespace, "bigintToUint16")] = prims.prim1(
-        qname(namespace, "bigintToUint16"), literals.bigint_to_uint16, [],
+    primitives[def_literals.bigint_to_uint16.name] = prims.prim1(
+        def_literals.bigint_to_uint16.name, literals.bigint_to_uint16, [],
         prims.bigint(), prims.uint16()
     )
-    primitives[qname(namespace, "bigintToUint32")] = prims.prim1(
-        qname(namespace, "bigintToUint32"), literals.bigint_to_uint32, [],
+    primitives[def_literals.bigint_to_uint32.name] = prims.prim1(
+        def_literals.bigint_to_uint32.name, literals.bigint_to_uint32, [],
         prims.bigint(), prims.uint32()
     )
-    primitives[qname(namespace, "bigintToUint64")] = prims.prim1(
-        qname(namespace, "bigintToUint64"), literals.bigint_to_uint64, [],
+    primitives[def_literals.bigint_to_uint64.name] = prims.prim1(
+        def_literals.bigint_to_uint64.name, literals.bigint_to_uint64, [],
         prims.bigint(), prims.uint64()
     )
-    primitives[qname(namespace, "binaryToBytes")] = prims.prim1(
-        qname(namespace, "binaryToBytes"), literals.binary_to_bytes, [],
+    primitives[def_literals.binary_to_bytes.name] = prims.prim1(
+        def_literals.binary_to_bytes.name, literals.binary_to_bytes, [],
         prims.binary(), prims.list_(prims.int32())
     )
-    primitives[qname(namespace, "binaryToString")] = prims.prim1(
-        qname(namespace, "binaryToString"), literals.binary_to_string, [],
+    primitives[def_literals.binary_to_string.name] = prims.prim1(
+        def_literals.binary_to_string.name, literals.binary_to_string, [],
         prims.binary(), prims.string()
     )
-    primitives[qname(namespace, "decimalToBigint")] = prims.prim1(
-        qname(namespace, "decimalToBigint"), literals.decimal_to_bigint, [],
+    primitives[def_literals.decimal_to_bigint.name] = prims.prim1(
+        def_literals.decimal_to_bigint.name, literals.decimal_to_bigint, [],
         prims.decimal(), prims.bigint()
     )
-    primitives[qname(namespace, "decimalToFloat32")] = prims.prim1(
-        qname(namespace, "decimalToFloat32"), literals.decimal_to_float32, [],
+    primitives[def_literals.decimal_to_float32.name] = prims.prim1(
+        def_literals.decimal_to_float32.name, literals.decimal_to_float32, [],
         prims.decimal(), prims.float32()
     )
-    primitives[qname(namespace, "decimalToFloat64")] = prims.prim1(
-        qname(namespace, "decimalToFloat64"), literals.decimal_to_float64, [],
+    primitives[def_literals.decimal_to_float64.name] = prims.prim1(
+        def_literals.decimal_to_float64.name, literals.decimal_to_float64, [],
         prims.decimal(), prims.float64()
     )
-    primitives[qname(namespace, "float32ToDecimal")] = prims.prim1(
-        qname(namespace, "float32ToDecimal"), literals.float32_to_decimal, [],
+    primitives[def_literals.float32_to_decimal.name] = prims.prim1(
+        def_literals.float32_to_decimal.name, literals.float32_to_decimal, [],
         prims.float32(), prims.decimal()
     )
-    primitives[qname(namespace, "float32ToFloat64")] = prims.prim1(
-        qname(namespace, "float32ToFloat64"), literals.float32_to_float64, [],
+    primitives[def_literals.float32_to_float64.name] = prims.prim1(
+        def_literals.float32_to_float64.name, literals.float32_to_float64, [],
         prims.float32(), prims.float64()
     )
-    primitives[qname(namespace, "float64ToDecimal")] = prims.prim1(
-        qname(namespace, "float64ToDecimal"), literals.float64_to_decimal, [],
+    primitives[def_literals.float64_to_decimal.name] = prims.prim1(
+        def_literals.float64_to_decimal.name, literals.float64_to_decimal, [],
         prims.float64(), prims.decimal()
     )
-    primitives[qname(namespace, "float64ToFloat32")] = prims.prim1(
-        qname(namespace, "float64ToFloat32"), literals.float64_to_float32, [],
+    primitives[def_literals.float64_to_float32.name] = prims.prim1(
+        def_literals.float64_to_float32.name, literals.float64_to_float32, [],
         prims.float64(), prims.float32()
     )
-    primitives[qname(namespace, "int8ToBigint")] = prims.prim1(
-        qname(namespace, "int8ToBigint"), literals.int8_to_bigint, [],
+    primitives[def_literals.int8_to_bigint.name] = prims.prim1(
+        def_literals.int8_to_bigint.name, literals.int8_to_bigint, [],
         prims.int8(), prims.bigint()
     )
-    primitives[qname(namespace, "int16ToBigint")] = prims.prim1(
-        qname(namespace, "int16ToBigint"), literals.int16_to_bigint, [],
+    primitives[def_literals.int16_to_bigint.name] = prims.prim1(
+        def_literals.int16_to_bigint.name, literals.int16_to_bigint, [],
         prims.int16(), prims.bigint()
     )
-    primitives[qname(namespace, "int32ToBigint")] = prims.prim1(
-        qname(namespace, "int32ToBigint"), literals.int32_to_bigint, [],
+    primitives[def_literals.int32_to_bigint.name] = prims.prim1(
+        def_literals.int32_to_bigint.name, literals.int32_to_bigint, [],
         prims.int32(), prims.bigint()
     )
-    primitives[qname(namespace, "int64ToBigint")] = prims.prim1(
-        qname(namespace, "int64ToBigint"), literals.int64_to_bigint, [],
+    primitives[def_literals.int64_to_bigint.name] = prims.prim1(
+        def_literals.int64_to_bigint.name, literals.int64_to_bigint, [],
         prims.int64(), prims.bigint()
     )
 
     # Read primitives
-    primitives[qname(namespace, "readBigint")] = prims.prim1(
-        qname(namespace, "readBigint"), literals.read_bigint, [],
+    primitives[def_literals.read_bigint.name] = prims.prim1(
+        def_literals.read_bigint.name, literals.read_bigint, [],
         prims.string(), prims.optional(prims.bigint())
     )
-    primitives[qname(namespace, "readBoolean")] = prims.prim1(
-        qname(namespace, "readBoolean"), literals.read_boolean, [],
+    primitives[def_literals.read_boolean.name] = prims.prim1(
+        def_literals.read_boolean.name, literals.read_boolean, [],
         prims.string(), prims.optional(prims.boolean())
     )
-    primitives[qname(namespace, "readDecimal")] = prims.prim1(
-        qname(namespace, "readDecimal"), literals.read_decimal, [],
+    primitives[def_literals.read_decimal.name] = prims.prim1(
+        def_literals.read_decimal.name, literals.read_decimal, [],
         prims.string(), prims.optional(prims.decimal())
     )
-    primitives[qname(namespace, "readFloat32")] = prims.prim1(
-        qname(namespace, "readFloat32"), literals.read_float32, [],
+    primitives[def_literals.read_float32.name] = prims.prim1(
+        def_literals.read_float32.name, literals.read_float32, [],
         prims.string(), prims.optional(prims.float32())
     )
-    primitives[qname(namespace, "readFloat64")] = prims.prim1(
-        qname(namespace, "readFloat64"), literals.read_float64, [],
+    primitives[def_literals.read_float64.name] = prims.prim1(
+        def_literals.read_float64.name, literals.read_float64, [],
         prims.string(), prims.optional(prims.float64())
     )
-    primitives[qname(namespace, "readInt8")] = prims.prim1(
-        qname(namespace, "readInt8"), literals.read_int8, [],
+    primitives[def_literals.read_int8.name] = prims.prim1(
+        def_literals.read_int8.name, literals.read_int8, [],
         prims.string(), prims.optional(prims.int8())
     )
-    primitives[qname(namespace, "readInt16")] = prims.prim1(
-        qname(namespace, "readInt16"), literals.read_int16, [],
+    primitives[def_literals.read_int16.name] = prims.prim1(
+        def_literals.read_int16.name, literals.read_int16, [],
         prims.string(), prims.optional(prims.int16())
     )
-    primitives[qname(namespace, "readInt32")] = prims.prim1(
-        qname(namespace, "readInt32"), literals.read_int32, [],
+    primitives[def_literals.read_int32.name] = prims.prim1(
+        def_literals.read_int32.name, literals.read_int32, [],
         prims.string(), prims.optional(prims.int32())
     )
-    primitives[qname(namespace, "readInt64")] = prims.prim1(
-        qname(namespace, "readInt64"), literals.read_int64, [],
+    primitives[def_literals.read_int64.name] = prims.prim1(
+        def_literals.read_int64.name, literals.read_int64, [],
         prims.string(), prims.optional(prims.int64())
     )
-    primitives[qname(namespace, "readString")] = prims.prim1(
-        qname(namespace, "readString"), literals.read_string, [],
+    primitives[def_literals.read_string.name] = prims.prim1(
+        def_literals.read_string.name, literals.read_string, [],
         prims.string(), prims.optional(prims.string())
     )
-    primitives[qname(namespace, "readUint8")] = prims.prim1(
-        qname(namespace, "readUint8"), literals.read_uint8, [],
+    primitives[def_literals.read_uint8.name] = prims.prim1(
+        def_literals.read_uint8.name, literals.read_uint8, [],
         prims.string(), prims.optional(prims.uint8())
     )
-    primitives[qname(namespace, "readUint16")] = prims.prim1(
-        qname(namespace, "readUint16"), literals.read_uint16, [],
+    primitives[def_literals.read_uint16.name] = prims.prim1(
+        def_literals.read_uint16.name, literals.read_uint16, [],
         prims.string(), prims.optional(prims.uint16())
     )
-    primitives[qname(namespace, "readUint32")] = prims.prim1(
-        qname(namespace, "readUint32"), literals.read_uint32, [],
+    primitives[def_literals.read_uint32.name] = prims.prim1(
+        def_literals.read_uint32.name, literals.read_uint32, [],
         prims.string(), prims.optional(prims.uint32())
     )
-    primitives[qname(namespace, "readUint64")] = prims.prim1(
-        qname(namespace, "readUint64"), literals.read_uint64, [],
+    primitives[def_literals.read_uint64.name] = prims.prim1(
+        def_literals.read_uint64.name, literals.read_uint64, [],
         prims.string(), prims.optional(prims.uint64())
     )
 
     # Show primitives
-    primitives[qname(namespace, "showBigint")] = prims.prim1(
-        qname(namespace, "showBigint"), literals.show_bigint, [],
+    primitives[def_literals.show_bigint.name] = prims.prim1(
+        def_literals.show_bigint.name, literals.show_bigint, [],
         prims.bigint(), prims.string()
     )
-    primitives[qname(namespace, "showBoolean")] = prims.prim1(
-        qname(namespace, "showBoolean"), literals.show_boolean, [],
+    primitives[def_literals.show_boolean.name] = prims.prim1(
+        def_literals.show_boolean.name, literals.show_boolean, [],
         prims.boolean(), prims.string()
     )
-    primitives[qname(namespace, "showDecimal")] = prims.prim1(
-        qname(namespace, "showDecimal"), literals.show_decimal, [],
+    primitives[def_literals.show_decimal.name] = prims.prim1(
+        def_literals.show_decimal.name, literals.show_decimal, [],
         prims.decimal(), prims.string()
     )
-    primitives[qname(namespace, "showFloat32")] = prims.prim1(
-        qname(namespace, "showFloat32"), literals.show_float32, [],
+    primitives[def_literals.show_float32.name] = prims.prim1(
+        def_literals.show_float32.name, literals.show_float32, [],
         prims.float32(), prims.string()
     )
-    primitives[qname(namespace, "showFloat64")] = prims.prim1(
-        qname(namespace, "showFloat64"), literals.show_float64, [],
+    primitives[def_literals.show_float64.name] = prims.prim1(
+        def_literals.show_float64.name, literals.show_float64, [],
         prims.float64(), prims.string()
     )
-    primitives[qname(namespace, "showInt8")] = prims.prim1(
-        qname(namespace, "showInt8"), literals.show_int8, [],
+    primitives[def_literals.show_int8.name] = prims.prim1(
+        def_literals.show_int8.name, literals.show_int8, [],
         prims.int8(), prims.string()
     )
-    primitives[qname(namespace, "showInt16")] = prims.prim1(
-        qname(namespace, "showInt16"), literals.show_int16, [],
+    primitives[def_literals.show_int16.name] = prims.prim1(
+        def_literals.show_int16.name, literals.show_int16, [],
         prims.int16(), prims.string()
     )
-    primitives[qname(namespace, "showInt32")] = prims.prim1(
-        qname(namespace, "showInt32"), literals.show_int32, [],
+    primitives[def_literals.show_int32.name] = prims.prim1(
+        def_literals.show_int32.name, literals.show_int32, [],
         prims.int32(), prims.string()
     )
-    primitives[qname(namespace, "showInt64")] = prims.prim1(
-        qname(namespace, "showInt64"), literals.show_int64, [],
+    primitives[def_literals.show_int64.name] = prims.prim1(
+        def_literals.show_int64.name, literals.show_int64, [],
         prims.int64(), prims.string()
     )
-    primitives[qname(namespace, "showUint8")] = prims.prim1(
-        qname(namespace, "showUint8"), literals.show_uint8, [],
+    primitives[def_literals.show_uint8.name] = prims.prim1(
+        def_literals.show_uint8.name, literals.show_uint8, [],
         prims.uint8(), prims.string()
     )
-    primitives[qname(namespace, "showUint16")] = prims.prim1(
-        qname(namespace, "showUint16"), literals.show_uint16, [],
+    primitives[def_literals.show_uint16.name] = prims.prim1(
+        def_literals.show_uint16.name, literals.show_uint16, [],
         prims.uint16(), prims.string()
     )
-    primitives[qname(namespace, "showUint32")] = prims.prim1(
-        qname(namespace, "showUint32"), literals.show_uint32, [],
+    primitives[def_literals.show_uint32.name] = prims.prim1(
+        def_literals.show_uint32.name, literals.show_uint32, [],
         prims.uint32(), prims.string()
     )
-    primitives[qname(namespace, "showUint64")] = prims.prim1(
-        qname(namespace, "showUint64"), literals.show_uint64, [],
+    primitives[def_literals.show_uint64.name] = prims.prim1(
+        def_literals.show_uint64.name, literals.show_uint64, [],
         prims.uint64(), prims.string()
     )
-    primitives[qname(namespace, "showString")] = prims.prim1(
-        qname(namespace, "showString"), literals.show_string, [],
+    primitives[def_literals.show_string.name] = prims.prim1(
+        def_literals.show_string.name, literals.show_string, [],
         prims.string(), prims.string()
     )
-    primitives[qname(namespace, "stringToBinary")] = prims.prim1(
-        qname(namespace, "stringToBinary"), literals.string_to_binary, [],
+    primitives[def_literals.string_to_binary.name] = prims.prim1(
+        def_literals.string_to_binary.name, literals.string_to_binary, [],
         prims.string(), prims.binary()
     )
-    primitives[qname(namespace, "uint8ToBigint")] = prims.prim1(
-        qname(namespace, "uint8ToBigint"), literals.uint8_to_bigint, [],
+    primitives[def_literals.uint8_to_bigint.name] = prims.prim1(
+        def_literals.uint8_to_bigint.name, literals.uint8_to_bigint, [],
         prims.uint8(), prims.bigint()
     )
-    primitives[qname(namespace, "uint16ToBigint")] = prims.prim1(
-        qname(namespace, "uint16ToBigint"), literals.uint16_to_bigint, [],
+    primitives[def_literals.uint16_to_bigint.name] = prims.prim1(
+        def_literals.uint16_to_bigint.name, literals.uint16_to_bigint, [],
         prims.uint16(), prims.bigint()
     )
-    primitives[qname(namespace, "uint32ToBigint")] = prims.prim1(
-        qname(namespace, "uint32ToBigint"), literals.uint32_to_bigint, [],
+    primitives[def_literals.uint32_to_bigint.name] = prims.prim1(
+        def_literals.uint32_to_bigint.name, literals.uint32_to_bigint, [],
         prims.uint32(), prims.bigint()
     )
-    primitives[qname(namespace, "uint64ToBigint")] = prims.prim1(
-        qname(namespace, "uint64ToBigint"), literals.uint64_to_bigint, [],
+    primitives[def_literals.uint64_to_bigint.name] = prims.prim1(
+        def_literals.uint64_to_bigint.name, literals.uint64_to_bigint, [],
         prims.uint64(), prims.bigint()
     )
 
@@ -1168,9 +1168,9 @@ def register_literals_primitives() -> dict[Name, Primitive]:
 
 def register_pairs_primitives() -> dict[Name, Primitive]:
     """Register all pairs primitive functions."""
-    from hydra.lib import pairs
+    from hydra.python.lib import pairs
+    from hydra.lib import pairs as def_pairs
 
-    namespace = "hydra.lib.pairs"
     primitives: dict[Name, Primitive] = {}
 
     a = prims.variable("a")
@@ -1183,16 +1183,16 @@ def register_pairs_primitives() -> dict[Name, Primitive]:
     _d = prims.v("d")
 
     # bimap :: (a -> c) -> (b -> d) -> (a, b) -> (c, d)
-    primitives[qname(namespace, "bimap")] = prims.prim3(
-        qname(namespace, "bimap"), pairs.bimap, [_a, _b, _c, _d],
+    primitives[def_pairs.bimap.name] = prims.prim3(
+        def_pairs.bimap.name, pairs.bimap, [_a, _b, _c, _d],
         fun(a, c), fun(b, d), prims.pair(a, b), prims.pair(c, d)
     )
-    primitives[qname(namespace, "first")] = prims.prim1(
-        qname(namespace, "first"), pairs.first, [_a, _b],
+    primitives[def_pairs.first.name] = prims.prim1(
+        def_pairs.first.name, pairs.first, [_a, _b],
         prims.pair(a, b), a
     )
-    primitives[qname(namespace, "second")] = prims.prim1(
-        qname(namespace, "second"), pairs.second, [_a, _b],
+    primitives[def_pairs.second.name] = prims.prim1(
+        def_pairs.second.name, pairs.second, [_a, _b],
         prims.pair(a, b), b
     )
 

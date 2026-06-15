@@ -26,7 +26,7 @@ public class MulFloat64 extends PrimitiveFunction {
      * @return the function name
      */
     public Name name() {
-        return new Name("hydra.lib.math.mulFloat64");
+        return hydra.lib.Math_.mulFloat64().name;
     }
 
     /**

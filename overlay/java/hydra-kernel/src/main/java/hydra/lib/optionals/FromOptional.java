@@ -27,7 +27,7 @@ public class FromOptional extends PrimitiveFunction {
      * @return the name "hydra.lib.optionals.fromOptional"
      */
     public Name name() {
-        return new Name("hydra.lib.optionals.fromOptional");
+        return hydra.lib.Optionals.fromOptional().name;
     }
 
     @Override

@@ -26,7 +26,7 @@ public class Sin extends PrimitiveFunction {
      * @return the function name
      */
     public Name name() {
-        return new Name("hydra.lib.math.sin");
+        return hydra.lib.Math_.sin().name;
     }
 
     /**

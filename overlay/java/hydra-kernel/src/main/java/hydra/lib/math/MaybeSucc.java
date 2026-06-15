@@ -24,7 +24,7 @@ import hydra.util.Either;
  */
 public class MaybeSucc extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.math.maybeSucc");
+        return hydra.lib.Math_.maybeSucc().name;
     }
 
     @Override

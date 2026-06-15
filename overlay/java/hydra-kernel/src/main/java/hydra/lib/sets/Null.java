@@ -30,7 +30,7 @@ public class Null extends PrimitiveFunction {
      * @return the name "hydra.lib.sets.null"
      */
     public Name name() {
-        return new Name("hydra.lib.sets.null");
+        return hydra.lib.Sets.null_().name;
     }
 
     /**

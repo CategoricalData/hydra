@@ -93,6 +93,13 @@ formatTime secs
     remSecs = secs - fromIntegral (mins * 60)
     remTenths = fromIntegral (round (remSecs * 10) :: Int) / 10.0 :: Double
 
+-- | Replace every (non-overlapping) occurrence of a substring with another.
+-- Used by the #473 Step 0 consumer-pass redirect that rewrites primitive
+-- invocations from hydra.lib.* (where the lowered PrimitiveDefinition modules
+-- live) to the relocated native-impl namespace hydra.<lang>.lib.*.
+replaceAll :: String -> String -> String -> String
+replaceAll old new = L.intercalate new . LS.splitOn old
+
 -- | Count files with a given extension in a directory tree.
 countFiles :: FilePath -> String -> IO Int
 countFiles dir ext = go dir
@@ -565,6 +572,35 @@ main = do
   -- term-encoded PrimitiveDefinition record (they fail with "extraction
   -- error" in resolution). Once those coders gain support, drop this
   -- target check and apply lowering universally.
+  -- Lowering of primitive modules (lowerPrimitiveDefinitions rewrites Definition.primitive
+  -- arms to term-encoded PrimitiveDefinition values so a host coder can emit hydra.lib.*
+  -- as ordinary data modules).
+  --
+  -- For HASKELL, lowering applies uniformly to every module in a single pass (the Haskell
+  -- coder doesn't type-check during emission, so the lowered hydra.lib.* bindings coexist
+  -- with the modules that call those primitives).
+  --
+  -- For the OTHER hosts (which DO reconstruct types during emission), the lowered
+  -- hydra.lib.* PrimitiveDefinition bindings would shadow the same-named callable
+  -- primitives and corrupt type reconstruction of consumer modules (e.g. let-hoisted
+  -- higher-order functions whose parameters receive primitives). So we generate in TWO
+  -- passes (#473 Step 0):
+  --   (1) consumer pass: every module UN-lowered; hydra.lib.* stay Definition.primitive
+  --       arms, which non-Haskell coders skip — primitive calls resolve to the primitive.
+  --   (2) lib pass: ONLY the hydra.lib.* modules, lowered, with a universe that contains
+  --       no consumer modules — so no consumer hoisting/inference sees the shadow.
+  let isLibMod m = "hydra.lib." `isPrefixOf` unModuleName (moduleName m)
+  -- The lib pass (#473 Step 0) emits hydra.lib.* PrimitiveDefinition def-modules for
+  -- non-Haskell targets. It is enabled per-target only where the generated def-module
+  -- path does NOT collide with the host's hand-written native implementations:
+  --   * java: SAFE now — defs are capitalized class files (hydra/lib/Chars.java,
+  --     hydra/lib/Math_.java) while impls live in lowercase subpackages
+  --     (hydra/lib/chars/*.java) + Libraries.java/PrimitiveType.java; no filename clash.
+  --   * python / scala / lisp dialects: the generated def path (hydra/lib/math.<ext>)
+  --     collides with the native impl at the same path; those hosts need their impls
+  --     relocated to hydra.<lang>.lib.* first (mirroring Haskell's Hydra.Haskell.Lib.*).
+  --     Enabled here incrementally as each host's impls are relocated.
+  let twoPassLib = target `elem` ["java", "python", "scala", "clojure", "scheme", "common-lisp", "emacs-lisp"]
   let applyLowering = if target == "haskell"
         then map CodeGeneration.lowerPrimitiveDefinitions
         else id
@@ -572,6 +608,15 @@ main = do
         (modsToGenerateScopedFiltered ++ synthesizedSourceMods)
   let allModsFinal'   = applyLowering
         (allModsFinal ++ synthesizedSourceMods)
+  -- Pass-2 (lib) inputs, used only when twoPassLib. The lib modules are lowered; their
+  -- universe is the lowered lib modules plus the (un-lowered) rest for type-dependency
+  -- resolution. Consumer modules in the universe stay un-lowered, so even if a lib
+  -- default-implementation references another primitive, that reference resolves to the
+  -- primitive rather than a lowered binding.
+  let lowerLibOnly ms = map (\m -> if isLibMod m then CodeGeneration.lowerPrimitiveDefinitions m else m) ms
+  let libModsToGenerate = Prelude.filter isLibMod (modsToGenerateScopedFiltered ++ synthesizedSourceMods)
+  let libModsLowered    = map CodeGeneration.lowerPrimitiveDefinitions libModsToGenerate
+  let libUniverse       = lowerLibOnly (allModsFinal ++ synthesizedSourceMods)
 
   -- Generate main modules
   let stepNum = if optIncludeCoders opts then "3" else "2"
@@ -602,19 +647,96 @@ main = do
   -- emits files only for the modsToGenerate argument (per the existing
   -- typeModulesToGenerate / termModulesToGenerate filters in
   -- Hydra.Codegen). No expansion, no prune.
-  let genForDir :: FilePath -> [Module] -> IO [FilePath]
-      genForDir dir mods = case target of
-        "haskell"    -> generateSources moduleToHaskell    haskellLanguage    False dir allModsFinal' mods
-        "java"       -> generateSources moduleToJava       javaLanguage       False dir allModsFinal' mods
-        "python"     -> generateSources moduleToPython     pythonLanguage     False dir allModsFinal' mods
-        "scala"      -> generateSourcesWithTransform wrapLongScalaText moduleToScala scalaLanguage False dir allModsFinal' mods
-        "go"         -> generateSources moduleToGo  goLanguage         False dir allModsFinal' mods
-        "typescript" -> generateSources moduleToTypeScript typeScriptLanguage False dir allModsFinal' mods
+  -- #473 Step 0 — consumer-pass redirect transform. The hydra.lib.* primitive
+  -- IMPLEMENTATIONS live at hydra.<lang>.lib.* (the analog of Haskell's
+  -- Hydra.Haskell.Lib.*), so hydra.lib.* is free for the generated PrimitiveDefinition
+  -- def-modules (emitted by the lib pass). Generated CONSUMER code calls primitives as
+  -- hydra.lib.<sub>.<fn>; rewrite those references to hydra.<lang>.lib.<sub>.<fn> so they
+  -- resolve to the relocated impls. Applied ONLY to the consumer pass (the lib pass keeps
+  -- its hydra.lib.* def-module names). Every hydra.lib.<sub> occurrence in generated source
+  -- is a member access (verified), so this textual redirect is safe. No-op for Haskell/Java
+  -- (Java's impls don't collide; Haskell uses the registry).
+  let libSubs = ["chars","eithers","equality","lists","literals","logic","maps","math","optionals","pairs","regex","sets","strings"]
+  -- For each lib sub-namespace, redirect the CODE-REFERENCE shapes the coders emit:
+  --   1. member access / qualified prefix:  hydra.lib.<sub>.<fn>   (and bare prefix uses)
+  --   2. bare module import (Python/Scala):  import hydra.lib.<sub>
+  --   3. from-import (Python):               from hydra.lib import <sub>
+  -- but NOT primitive-NAME occurrences inside string literals: a primitive's canonical
+  -- name is hydra.lib.<sub>.<fn> and is embedded in term data as Name("hydra.lib...") /
+  -- bare "hydra.lib..." strings. Those must stay canonical (the graph registers
+  -- primitives under hydra.lib.* names; redirecting them breaks name resolution, e.g.
+  -- eta-expansion). We distinguish the two purely textually: a NAME is always preceded
+  -- by a double-quote; a CODE reference never is. So we protect every quote-prefixed
+  -- occurrence with a sentinel, redirect the rest, then restore the sentinel.
+  -- Each sub-namespace name is matched only when followed by a non-identifier boundary
+  -- ('.', ';', newline, space) so e.g. "lists" never clobbers "listsX".
+  let redirectFor langSeg s =
+        let old = "hydra.lib."
+            new = "hydra." ++ langSeg ++ ".lib."
+            sentinel = "\0HYDRALIBNAME\0"  -- cannot occur in generated source
+            protect   = replaceAll "\"hydra.lib." ("\"" ++ sentinel)
+            restore   = replaceAll sentinel "hydra.lib."
+            repl acc sub = replaceAll (old ++ sub ++ ".")  (new ++ sub ++ ".")    -- member access
+                         $ replaceAll (old ++ sub ++ ";")  (new ++ sub ++ ";")    -- import hydra.lib.X; (java/scala)
+                         $ replaceAll (old ++ sub ++ "\n") (new ++ sub ++ "\n")   -- import hydra.lib.X<newline> (python)
+                         $ replaceAll (old ++ sub ++ " ")  (new ++ sub ++ " ")    -- "hydra.lib.X as Y" etc.
+                         $ replaceAll ("hydra.lib import " ++ sub) ("hydra." ++ langSeg ++ ".lib import " ++ sub) acc
+        in restore (L.foldl' repl (protect s) libSubs)
+  -- Scheme (R7RS) names library modules with the space-separated form `(hydra lib <sub>)`
+  -- in both `define-library` headers and `(import ...)` clauses, not dotted. Redirect those
+  -- to `(hydra scheme lib <sub>)`. Call sites use the flattened identifier hydra_lib_<sub>_<fn>
+  -- (unchanged — resolved via the import), and primitive NAME strings are dotted "hydra.lib..."
+  -- (untouched by this space-form rewrite). Idempotent and unambiguous: "(hydra lib X" only
+  -- occurs as a library/import reference.
+  let redirectSchemeFor langSeg s =
+        let repl acc sub = replaceAll ("(hydra lib " ++ sub ++ ")") ("(hydra " ++ langSeg ++ " lib " ++ sub ++ ")") acc
+        in L.foldl' repl s libSubs
+  -- Common Lisp is a flat-namespace dialect: native primitive impls are plain `defvar hydra_lib_<sub>_<fn>`
+  -- in :cl-user (no per-module package). The generated consumer modules, however, emit a defpackage
+  -- `(:use ... :hydra.lib.<sub> ...)` clause for each lib they reference. In baseline `:hydra.lib.<sub>` is
+  -- an EMPTY placeholder package (the loader auto-creates it), so the `:use` is a no-op and the bare
+  -- `hydra_lib_<sub>_<fn>` symbol resolves to the flat :cl-user impl. After Step 0 the lib pass emits a REAL
+  -- `(defpackage :hydra.lib.<sub> (:export :hydra_lib_<sub>_<fn> ...))` whose symbol is a PrimitiveDefinition
+  -- value — so a consumer that `:use`s it imports DATA over the impl. The fix has two parts:
+  --   (1) rename consumer CALL sites hydra_lib_<sub>_ -> hydra_lisp_lib_<sub>_ (impl defvars + registry are
+  --       renamed to match, by hand), so calls hit the relocated impls; and
+  --   (2) DROP the `:hydra.lib.<sub>` token from consumer defpackage (:use ...) clauses, so consumers no
+  --       longer import the real def-module package (they never needed its symbols — they call the flat
+  --       :cl-user impls). The def-modules still ship as standalone packages; nothing :use-imports them.
+  -- Primitive NAME strings are dotted "hydra.lib..." and untouched by the underscore rewrite.
+  let redirectLispFlat langSeg s =
+        let renameCalls acc sub = replaceAll ("hydra_lib_" ++ sub ++ "_") ("hydra_" ++ langSeg ++ "_lib_" ++ sub ++ "_") acc
+            -- drop the package token from `(:use ... :hydra.lib.<sub> ...)` (leading space form)
+            dropUse acc sub = replaceAll (" :hydra.lib." ++ sub) "" acc
+        in L.foldl' dropUse (L.foldl' renameCalls s libSubs) libSubs
+  let consumerTransform = case target of
+        "python"      -> redirectFor "python"
+        "scala"       -> wrapLongScalaText . redirectFor "scala"
+        "clojure"     -> redirectFor "clojure"
+        "scheme"      -> redirectSchemeFor "scheme"
+        "common-lisp" -> redirectLispFlat "lisp"
+        "emacs-lisp"  -> redirectLispFlat "lisp"
+        _             -> id
+  let genForDirT :: (String -> String) -> [Module] -> FilePath -> [Module] -> IO [FilePath]
+      genForDirT xform universe dir mods = case target of
+        "haskell"    -> generateSourcesWithTransform xform moduleToHaskell    haskellLanguage    False dir universe mods
+        "java"       -> generateSourcesWithTransform xform moduleToJava       javaLanguage       False dir universe mods
+        "python"     -> generateSourcesWithTransform xform moduleToPython     pythonLanguage     False dir universe mods
+        "scala"      -> generateSourcesWithTransform xform moduleToScala scalaLanguage False dir universe mods
+        "go"         -> generateSourcesWithTransform xform moduleToGo  goLanguage         False dir universe mods
+        "typescript" -> generateSourcesWithTransform xform moduleToTypeScript typeScriptLanguage False dir universe mods
         _ | Just g <- lispGenerator ->
-              generateSources g lispLanguage True dir allModsFinal' mods
+              generateSourcesWithTransform xform g lispLanguage True dir universe mods
         _ -> do
           putStrLn $ "Unknown target: " ++ target
           exitFailure
+  -- The consumer pass uses the standard (un-lowered, for non-Haskell) universe.
+  -- Consumer pass: standard universe + the lib-call redirect transform (no-op for haskell/java).
+  let genForDir :: FilePath -> [Module] -> IO [FilePath]
+      genForDir = genForDirT consumerTransform allModsFinal'
+  -- Lib pass: isolated lowered universe + NO redirect (def-modules keep their hydra.lib.* names).
+  let genForDirLib :: FilePath -> [Module] -> IO [FilePath]
+      genForDirLib = genForDirT id libUniverse
 
   -- Per-dir keep-set for the #357 prune step. Keys are absolute output
   -- dirs; values are relative paths joinable with the key. Populated
@@ -682,9 +804,42 @@ main = do
       putStrLn $ "  " ++ show (length modsToGenerate') ++ " modules → " ++ outMain
       paths <- genForDir outMain modsToGenerate'
       return (length paths)
+  -- #473 Step 0 — lib pass: for non-Haskell targets, emit the hydra.lib.* primitive
+  -- definition modules from their LOWERED form, in isolation from consumer modules
+  -- (libUniverse contains no consumer bindings that would shadow primitives during the
+  -- coder's type reconstruction). Routes each lib module to its owning package dir, the
+  -- same way the consumer pass does.
+  libFileCount <- if twoPassLib && not (Prelude.null libModsLowered)
+    then do
+      putStrLn $ "Step " ++ stepNum ++ " (lib pass): Mapping " ++ show (length libModsLowered)
+        ++ " hydra.lib.* definition modules to " ++ targetCap ++ "..."
+      let runLibGroups grps = do
+            counts <- CM.forM grps $ \(pkg, pkgMods) -> do
+              let dir = packageOutMain pkg
+              putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " lib modules → " ++ dir
+              paths <- genForDirLib dir pkgMods
+              -- #473: record the lib pass's actual output files in the #357 prune keep-set, so the
+              -- stale-prune below doesn't delete the hydra.lib.* def-modules. The pre-generation
+              -- keep-set (recordOwnedPaths over the un-lowered consumer modules) does NOT cover these:
+              -- the lib pass emits LOWERED modules whose filenames differ (e.g. hydra/lib/Math_.java),
+              -- so they're recorded here from the paths genForDirLib actually wrote.
+              recordKeep dir paths
+              return (length paths)
+            return (sum counts)
+      case (optPackage opts, optAllPackages opts) of
+        (Just pkgArg, _) ->
+          runLibGroups (Prelude.filter (\(pkg, _) -> pkg == pkgArg) (groupByPackageIn routingMap libModsLowered))
+        (Nothing, True) ->
+          runLibGroups (groupByPackageIn routingMap libModsLowered)
+        (Nothing, False) -> do
+          putStrLn $ "  " ++ show (length libModsLowered) ++ " lib modules → " ++ outMain
+          paths <- genForDirLib outMain libModsLowered
+          recordKeep outMain paths
+          return (length paths)
+    else return 0
   genEnd <- getCurrentTime
 
-  putStrLn $ "  Generated " ++ show mainFileCount ++ " files."
+  putStrLn $ "  Generated " ++ show (mainFileCount + libFileCount) ++ " files."
   putStrLn $ "  Time: " ++ formatTime (elapsed genEnd genStart)
   putStrLn ""
 
@@ -762,17 +917,12 @@ main = do
             recordOwnedPaths (packageOutTest pkg) pkgMods
         (Nothing, False) -> return ()
 
-      -- Dispatch helper for the test source set.
+      -- Dispatch helper for the test source set. Uses the SAME consumer-pass
+      -- redirect transform as the main set (genForDirT) so test code's primitive
+      -- invocations are rewritten hydra.lib.* -> hydra.<lang>.lib.* too (#473 Step 0).
+      -- The test universe is allUniverse (main + test modules).
       let genTestForDir :: FilePath -> [Module] -> IO [FilePath]
-          genTestForDir dir mods = case target of
-            "haskell"    -> generateSources moduleToHaskell    haskellLanguage    False dir allUniverse mods
-            "java"       -> generateSources moduleToJava       javaLanguage       False dir allUniverse mods
-            "python"     -> generateSources moduleToPython     pythonLanguage     False dir allUniverse mods
-            "scala"      -> generateSourcesWithTransform wrapLongScalaText moduleToScala scalaLanguage False dir allUniverse mods
-            "go"         -> generateSources moduleToGo  goLanguage         False dir allUniverse mods
-            "typescript" -> generateSources moduleToTypeScript typeScriptLanguage False dir allUniverse mods
-            _ | Just gen <- lispGenerator -> generateSources gen lispLanguage False dir allUniverse mods
-            _ -> return []
+          genTestForDir = genForDirT consumerTransform allUniverse
 
       testStart <- getCurrentTime
       count <- case (optPackage opts, optAllPackages opts) of

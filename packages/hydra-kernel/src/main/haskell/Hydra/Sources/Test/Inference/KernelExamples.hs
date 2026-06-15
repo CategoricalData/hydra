@@ -14,6 +14,15 @@ import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
+import qualified Hydra.Dsl.Prims as Prims
+import qualified Hydra.Lib.Lists as DefLists
+import qualified Hydra.Lib.Literals as DefLiterals
+import qualified Hydra.Lib.Logic as DefLogic
+import qualified Hydra.Lib.Maps as DefMaps
+import qualified Hydra.Lib.Math as DefMath
+import qualified Hydra.Lib.Optionals as DefOptionals
+import qualified Hydra.Lib.Pairs as DefPairs
+import qualified Hydra.Lib.Strings as DefStrings
 
 
 ns :: ModuleName
@@ -45,12 +54,12 @@ testGroupForNestedLet = define "testGroupForNestedLet" $
     subgroup "hydra.formatting.mapFirstLetter" [
       expectMono 1 [tag_disabledForMinimalInference]
         (lambda "mapping" $ lambda "s" $ lets [
-          "list">: primitive _strings_toList @@ var "s",
-          "firstLetter">: var "mapping" @@ (primitive _strings_fromList @@ (primitive _optionals_cat @@ list [primitive _lists_maybeHead @@ var "list"]))] $
-          primitive _logic_ifElse
-            @@ (primitive _strings_null @@ var "s")
+          "list">: primitive DefStrings.toList @@ var "s",
+          "firstLetter">: var "mapping" @@ (primitive DefStrings.fromList @@ (primitive DefOptionals.cat @@ list [primitive DefLists.maybeHead @@ var "list"]))] $
+          primitive DefLogic.ifElse
+            @@ (primitive DefStrings.null @@ var "s")
             @@ (var "s")
-            @@ (primitive _strings_cat2 @@ var "firstLetter" @@ (primitive _strings_fromList @@ (primitive _lists_drop @@ int32 1 @@ var "list"))))
+            @@ (primitive DefStrings.cat2 @@ var "firstLetter" @@ (primitive DefStrings.fromList @@ (primitive DefLists.drop @@ int32 1 @@ var "list"))))
         (T.functionMany [T.function T.string T.string, T.string, T.string])],
 
     -- Simplified reproduction of fullyStripAndNormalizeType's 'go' binding using ifElse.
@@ -61,17 +70,17 @@ testGroupForNestedLet = define "testGroupForNestedLet" $
         (lambda "input" $ lets [
           "go">:
             lambda "depth" $ lambda "subst" $ lambda "s" $
-              primitive _logic_ifElse
-                @@ (primitive _strings_null @@ var "s")
+              primitive DefLogic.ifElse
+                @@ (primitive DefStrings.null @@ var "s")
                 @@ (pair (var "subst") (var "s"))
                 @@ (var "go"
-                      @@ (primitive _math_add @@ var "depth" @@ int32 1)
-                      @@ (primitive _maps_insert @@ string "key" @@ string "val" @@ var "subst")
+                      @@ (primitive DefMath.add @@ var "depth" @@ int32 1)
+                      @@ (primitive DefMaps.insert @@ string "key" @@ string "val" @@ var "subst")
                       @@ var "s")] $
           lets [
-            "result">: var "go" @@ int32 0 @@ primitive _maps_empty @@ var "input",
-            "subst">: primitive _pairs_first @@ var "result",
-            "body">: primitive _pairs_second @@ var "result"] $
+            "result">: var "go" @@ int32 0 @@ primitive DefMaps.empty @@ var "input",
+            "subst">: primitive DefPairs.first @@ var "result",
+            "body">: primitive DefPairs.second @@ var "result"] $
           pair (var "subst") (var "body"))
         (T.function T.string
           (T.pair (T.map T.string T.string) T.string))],
@@ -90,16 +99,16 @@ testGroupForNestedLet = define "testGroupForNestedLet" $
               Terms.match (Core.nameLift _Type) (just $ pair (var "subst") (var "t")) [
                 _Type_forall >>: lambda "ft" $
                   var "go"
-                    @@ (primitive _math_add @@ var "depth" @@ int32 1)
-                    @@ (primitive _maps_insert
+                    @@ (primitive DefMath.add @@ var "depth" @@ int32 1)
+                    @@ (primitive DefMaps.insert
                           @@ (project (Core.nameLift _ForallType) (Core.nameLift _ForallType_parameter) @@ var "ft")
-                          @@ (Terms.wrap (Core.nameLift _Name) (primitive _strings_cat2 @@ string "_" @@ (primitive _literals_showInt32 @@ var "depth")))
+                          @@ (Terms.wrap (Core.nameLift _Name) (primitive DefStrings.cat2 @@ string "_" @@ (primitive DefLiterals.showInt32 @@ var "depth")))
                           @@ var "subst")
                     @@ (project (Core.nameLift _ForallType) (Core.nameLift _ForallType_body) @@ var "ft")]
               @@ var "t"] $
           lets [
-            "result">: var "go" @@ int32 0 @@ primitive _maps_empty @@ var "typ"] $
-          pair (primitive _pairs_first @@ var "result") (primitive _pairs_second @@ var "result"))
+            "result">: var "go" @@ int32 0 @@ primitive DefMaps.empty @@ var "typ"] $
+          pair (primitive DefPairs.first @@ var "result") (primitive DefPairs.second @@ var "result"))
         -- Expected: Type -> (Map Name Name, Type)
         -- Named types appear as TypeVariable in schemes (e.g., hydra.core.Name, hydra.core.Type)
         (T.function (T.variable "hydra.core.Type")

@@ -710,6 +710,9 @@ See the [full style guide](https://github.com/CategoricalData/hydra/wiki/Coding-
   Functions in type-indexed module families are named after the type they operate on.
 - **Error handling**: Fail immediately with informative messages.
   Never silently return defaults or swallow failures.
+  This is a corollary of Hydra's
+  [formal rigor as a north star](https://github.com/CategoricalData/hydra/wiki/Concepts#key-design-principles)
+  design principle.
 
 ---
 
@@ -761,7 +764,7 @@ Each host pairs canonical primitive names with native implementations in a regis
 
 | Host | Binding registry |
 |------|------------------|
-| Haskell    | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs` |
+| Haskell    | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs` |
 | Java       | `overlay/java/hydra-kernel/src/main/java/hydra/lib/Libraries.java` (#418) |
 | Python     | `overlay/python/hydra-kernel/src/main/python/hydra/sources/libraries.py` (#418) |
 | Scala      | `heads/scala/src/main/scala/hydra/lib/Libraries.scala` |

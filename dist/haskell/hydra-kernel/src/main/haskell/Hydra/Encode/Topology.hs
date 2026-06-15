@@ -12,7 +12,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 -- | Encoder for hydra.topology.Graph
-graph :: M.Map Int [Int] -> Core.Term
+graph :: M.Map Topology.Vertex [Topology.Vertex] -> Core.Term
 graph m = Core.TermMap (Maps.bimap vertex (\xs -> Core.TermList (Lists.map vertex xs)) m)
 -- | Encoder for hydra.topology.TarjanState
 tarjanState :: Topology.TarjanState -> Core.Term

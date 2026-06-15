@@ -17,7 +17,7 @@
 # against at import time.
 
 import hydra.typing
-import hydra.lib.maps
+import hydra.python.lib.maps
 
 # Test context: an empty InferenceContext value. Eager — no side effects beyond
 # the InferenceContext constructor.

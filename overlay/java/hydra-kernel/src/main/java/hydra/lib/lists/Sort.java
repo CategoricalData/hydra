@@ -26,7 +26,7 @@ import hydra.util.Either;
  */
 public class Sort extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.lists.sort");
+        return hydra.lib.Lists.sort().name;
     }
 
     @Override

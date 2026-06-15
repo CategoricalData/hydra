@@ -28,7 +28,7 @@ public class Bind extends PrimitiveFunction {
      * @return the name "hydra.lib.optionals.bind"
      */
     public Name name() {
-        return new Name("hydra.lib.optionals.bind");
+        return hydra.lib.Optionals.bind().name;
     }
 
     /**

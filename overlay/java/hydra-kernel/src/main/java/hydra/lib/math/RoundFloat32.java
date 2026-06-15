@@ -23,7 +23,7 @@ import hydra.util.Either;
  */
 public class RoundFloat32 extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.math.roundFloat32");
+        return hydra.lib.Math_.roundFloat32().name;
     }
 
     @Override

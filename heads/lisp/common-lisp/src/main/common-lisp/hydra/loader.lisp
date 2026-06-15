@@ -372,7 +372,7 @@
           (consp (caar form))
           (let ((innermost (caaar form)))
             (and (symbolp innermost)
-                 (eq innermost 'hydra_lib_logic_if_else))))
+                 (eq innermost 'hydra_lisp_lib_logic_if_else))))
      (let ((cond-form (hydra-fix-curried-calls (cadar (car form)) lambda-vars))
            (then-form (hydra-fix-curried-calls (cadr (car form)) lambda-vars))
            (else-form (hydra-fix-curried-calls (cadr form) lambda-vars)))

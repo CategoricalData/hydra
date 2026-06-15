@@ -31,7 +31,7 @@ public class ReadDecimal extends PrimitiveFunction {
      * @return the function name "hydra.lib.literals.readDecimal"
      */
     public Name name() {
-        return new Name("hydra.lib.literals.readDecimal");
+        return hydra.lib.Literals.readDecimal().name;
     }
 
     /**

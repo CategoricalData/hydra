@@ -29,7 +29,7 @@ public class Elems extends PrimitiveFunction {
      * @return the name
      */
     public Name name() {
-        return new Name("hydra.lib.maps.elems");
+        return hydra.lib.Maps.elems().name;
     }
 
     /**

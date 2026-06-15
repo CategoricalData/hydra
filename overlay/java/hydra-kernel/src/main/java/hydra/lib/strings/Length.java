@@ -26,7 +26,7 @@ public class Length extends PrimitiveFunction {
      * @return the name "hydra.lib.strings.length"
      */
     public Name name() {
-        return new Name("hydra.lib.strings.length");
+        return hydra.lib.Strings.length().name;
     }
 
     /**

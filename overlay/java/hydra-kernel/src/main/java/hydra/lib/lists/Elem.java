@@ -25,7 +25,7 @@ import hydra.util.Either;
  */
 public class Elem extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.lists.elem");
+        return hydra.lib.Lists.elem().name;
     }
 
     @Override

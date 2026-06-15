@@ -30,7 +30,7 @@ public class ReadInt64 extends PrimitiveFunction {
      * @return the function name "hydra.lib.literals.readInt64"
      */
     public Name name() {
-        return new Name("hydra.lib.literals.readInt64");
+        return hydra.lib.Literals.readInt64().name;
     }
 
     /**

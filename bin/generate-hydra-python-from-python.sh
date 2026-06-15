@@ -86,7 +86,6 @@ else
     # sync-python.sh covers all three but is a full recursive `sync.sh --hosts
     # python --targets python`, so HYDRA_IN_SYNC=1 (sync.sh is already calling us)
     # must NOT trigger it — that would recurse.
-    KERNEL_PY="$HYDRA_ROOT/dist/python/hydra-kernel/src/main/python/hydra/codegen.py"
     if [ "${HYDRA_IN_SYNC:-0}" != "1" ]; then
         if [ "$FORCE_REBUILD" = "1" ]; then
             echo "=== Forcing Python host rebuild via bin/sync-python.sh ==="
@@ -94,14 +93,19 @@ else
             echo "=== Running bin/sync-python.sh to ensure dist trees are current ==="
         fi
         "$HYDRA_ROOT/bin/sync-python.sh"
-    elif [ ! -f "$KERNEL_PY" ]; then
-        # Cold tree under HYDRA_IN_SYNC (e.g. CI at Phase 1.5, before Phase 3 has
-        # built dist/python): the local-host runtime we are about to put on
-        # PYTHONPATH doesn't exist yet. We can't recurse via sync-python.sh, but
-        # the per-package assembler is NON-recursive and reads dist/json/hydra-kernel
-        # (already produced by Phase 1), so build just the two runtime packages the
-        # shim imports. (#446/#472 hostOverrides interim — see staging-plan.md.)
-        echo "=== dist/python runtime absent under sync; assembling hydra-kernel + hydra-python locally for the shim ==="
+    else
+        # Under HYDRA_IN_SYNC (Phase 1.5 in bin/sync.sh): the local-host runtime
+        # we are about to put on PYTHONPATH must match the current kernel layout
+        # before update-python-json.py imports hydra.codegen. We can't recurse
+        # via sync-python.sh, but the per-package assembler is non-recursive,
+        # reads dist/json/hydra-kernel (already produced by Phase 1), and has
+        # its own digest-based freshness gate — calling it warm is a fast no-op.
+        # Calling it unconditionally fixes #480: presence-only checks let a stale
+        # dist/python/hydra-kernel/ (from an older kernel layout) silently sit on
+        # PYTHONPATH and break update-python-json.py with an ImportError before
+        # any later phase could regenerate it. (#446/#472 hostOverrides interim
+        # — see staging-plan.md.)
+        echo "=== Ensuring dist/python runtime matches current kernel layout (assembling hydra-kernel + hydra-python; #480) ==="
         "$HYDRA_ROOT/heads/python/bin/assemble-distribution.sh" hydra-kernel
         "$HYDRA_ROOT/heads/python/bin/assemble-distribution.sh" hydra-python
     fi
