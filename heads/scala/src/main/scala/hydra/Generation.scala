@@ -157,7 +157,8 @@ object Generation:
         for (filePath, content) <- pairs do
           val fullPath = Paths.get(basePath, filePath)
           Files.createDirectories(fullPath.getParent)
-          Files.write(fullPath, content.getBytes(StandardCharsets.UTF_8))
+          val finalContent = if content.endsWith("\n") then content else content + "\n"
+          Files.write(fullPath, finalContent.getBytes(StandardCharsets.UTF_8))
           count += 1
         count
 
