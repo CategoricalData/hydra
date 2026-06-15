@@ -520,12 +520,13 @@ public class Bootstrap {
             List<java.nio.file.Path> files = new ArrayList<>();
             Files.walk(root).filter(Files::isRegularFile).forEach(files::add);
             for (java.nio.file.Path p : files) {
-                // The primitive REGISTRY (hand-written overlay) deliberately imports BOTH the relocated
-                // impl and the def-module (the latter aliased, for `def_X.fn.name` name derivation).
-                // Redirecting its def-module import would point the alias at the impl module, breaking
-                // name derivation. The Haskell driver never transforms this file (overlay-copied, not
-                // generated); mirror that by skipping it here.
-                if (p.toString().replace(File.separatorChar, '/').contains("hydra/sources/libraries.")) continue;
+                String pSlash = p.toString().replace(File.separatorChar, '/');
+                // Skip the lib-pass def-module dir (hydra/lib/) — those keep canonical hydra.lib.* paths
+                // (redirecting would relocate def-modules onto the impls; see the Scala self-host case) —
+                // and the hand-written registry overlay (hydra/sources/libraries.*), which deliberately
+                // imports BOTH the relocated impl and the def-module (aliased, for `def_X.fn.name`). The
+                // Haskell driver keeps both canonical by never transforming them.
+                if (pSlash.contains("/hydra/lib/") || pSlash.contains("hydra/sources/libraries.")) continue;
                 String s = new String(Files.readAllBytes(p), java.nio.charset.StandardCharsets.UTF_8);
                 if (!s.contains("hydra.lib.")) continue;
                 // protect quoted primitive-NAME strings
