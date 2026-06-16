@@ -565,12 +565,27 @@ loaded explicitly by run-tests.el via `load' and must not be
 re-loaded by hydra-load-file (which only understands the rewriting
 style used by generated code).")
 
+(defvar hydra-handwritten-top-level-files
+  '("loader.el" "lazy.el" "prims.el")
+  "#434: hand-written top-level files copied into the dist hydra/ tree by the
+overlay assembler. They are plain `load'ed (by the loader/runner), never through
+the rewriting hydra-load-file, so (hydra-load-gen-main) must always skip them.
+Skipped unconditionally (the per-caller `hydra-skip-gen-main-files' set is
+bootstrap-demo-only).")
+
 (defun hydra-load-gen-main ()
   "Load all generated main modules, then byte-compile for performance."
   (let* ((base hydra-gen-main-dir)
          (all-files (hydra-collect-el-files base))
          (remaining (cl-remove-if (lambda (f) (or (member f hydra-gen-main-file-order)
-                                                   (string-prefix-p "eval/lib/" f)))
+                                                   (member f hydra-handwritten-top-level-files)
+                                                   (string-prefix-p "eval/lib/" f)
+                                                   ;; #434/#473: the hand-written
+                                                   ;; runtime lives under the
+                                                   ;; dialect tier and is plain-
+                                                   ;; loaded; never feed it through
+                                                   ;; the rewriting loader.
+                                                   (string-prefix-p "emacs_lisp/lib/" f)))
                                   all-files))
          (ordered (cl-remove-if
                    (lambda (f) (member f hydra-skip-gen-main-files))
@@ -654,15 +669,24 @@ style used by generated code).")
 ;; Load hand-written native libraries
 ;; ============================================================================
 
-(dolist (f '("lib/chars.el" "lib/eithers.el" "lib/equality.el"
-             "lib/lists.el" "lib/literals.el" "lib/logic.el"
-             "lib/maps.el" "lib/math.el" "lib/optionals.el"
-             "lib/pairs.el" "lib/regex.el" "lib/sets.el" "lib/strings.el"))
+;; #434/#473: the hand-written runtime lives under the dialect tier
+;; hydra/emacs_lisp/lib/ (a sibling of the generated hydra/lib/ def-modules),
+;; mirroring scheme's hydra/scheme/lib/ and clojure's hydra/clojure/lib/, so it
+;; does NOT collide with the generated hydra.lib.* PrimitiveDefinition modules at
+;; hydra/lib/. Plain-load it here; the generated def-modules are loaded via the
+;; rewriting hydra-load-file by hydra-load-gen-main.
+(dolist (f '("emacs_lisp/lib/chars.el" "emacs_lisp/lib/eithers.el"
+             "emacs_lisp/lib/equality.el" "emacs_lisp/lib/lists.el"
+             "emacs_lisp/lib/literals.el" "emacs_lisp/lib/logic.el"
+             "emacs_lisp/lib/maps.el" "emacs_lisp/lib/math.el"
+             "emacs_lisp/lib/optionals.el" "emacs_lisp/lib/pairs.el"
+             "emacs_lisp/lib/regex.el" "emacs_lisp/lib/sets.el"
+             "emacs_lisp/lib/strings.el"))
   (load (expand-file-name f hydra-loader-dir) nil t))
 
 (defun hydra-load-prims-and-libraries ()
   "Load prims and libraries (must be called after gen-main)."
   (load (expand-file-name "prims.el" hydra-loader-dir) nil t)
-  (load (expand-file-name "lib/libraries.el" hydra-loader-dir) nil t))
+  (load (expand-file-name "emacs_lisp/lib/libraries.el" hydra-loader-dir) nil t))
 
 (provide 'hydra-loader)

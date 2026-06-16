@@ -21,19 +21,13 @@
   ;; dir, which is now the dist tree).
   (load (expand-file-name "loader.el" hydra-gen-main-dir) nil t)
   ;; In the bootstrap demo (HYDRA_LISP_DIST_BASE set), hand-written files
-  ;; live alongside generated files under the same hydra/ tree. Skip them
-  ;; in hydra-load-gen-main — they are loaded separately by the loader's
-  ;; own bookkeeping or are pure-CL files that hydra-load-file's cl-defstruct
-  ;; rewrite would break.
+  ;; live alongside generated files under the same hydra/ tree. Skip the
+  ;; top-level ones here; the hand-written runtime under emacs_lisp/lib/ is
+  ;; excluded from the gen-main walk unconditionally by the loader (the
+  ;; emacs_lisp/lib/ prefix filter in hydra-load-gen-main).
   (when (and env-base (> (length env-base) 0))
     (setq hydra-skip-gen-main-files
-          '("loader.el" "lazy.el" "prims.el"
-            "lib/chars.el" "lib/eithers.el" "lib/equality.el"
-            "lib/libraries.el"
-            "lib/lists.el" "lib/literals.el" "lib/logic.el"
-            "lib/maps.el" "lib/math.el" "lib/optionals.el"
-            "lib/pairs.el" "lib/regex.el" "lib/sets.el"
-            "lib/strings.el"))))
+          '("loader.el" "lazy.el" "prims.el"))))
 
 ;; Load gen-main
 (hydra-load-gen-main)

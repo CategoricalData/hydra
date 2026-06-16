@@ -86,20 +86,25 @@
 ;; ============================================================================
 ;; 2. Load native primitive libraries
 ;; ============================================================================
+;; #434/#473: the hand-written runtime lives under the dialect tier
+;; hydra/common_lisp/lib/ (sibling of the generated hydra/lib/ def-modules), so
+;; plain cl:load it here. The generated hydra.lib.* PrimitiveDefinition modules
+;; (which own hydra/lib/) are loaded later by hydra-load-gen-main via the
+;; rewriting loader.
 (format t "Loading native libraries...~%")
-(dolist (f '("lib/equality.lisp"
-             "lib/maps.lisp"
-             "lib/sets.lisp"
-             "lib/lists.lisp"
-             "lib/strings.lisp"
-             "lib/logic.lisp"
-             "lib/math.lisp"
-             "lib/chars.lisp"
-             "lib/eithers.lisp"
-             "lib/literals.lisp"
-             "lib/optionals.lisp"
-             "lib/pairs.lisp"
-             "lib/regex.lisp"))
+(dolist (f '("common_lisp/lib/equality.lisp"
+             "common_lisp/lib/maps.lisp"
+             "common_lisp/lib/sets.lisp"
+             "common_lisp/lib/lists.lisp"
+             "common_lisp/lib/strings.lisp"
+             "common_lisp/lib/logic.lisp"
+             "common_lisp/lib/math.lisp"
+             "common_lisp/lib/chars.lisp"
+             "common_lisp/lib/eithers.lisp"
+             "common_lisp/lib/literals.lisp"
+             "common_lisp/lib/optionals.lisp"
+             "common_lisp/lib/pairs.lisp"
+             "common_lisp/lib/regex.lisp"))
   (load (hydra-dist-main-path f)))
 
 ;; ============================================================================
@@ -134,16 +139,14 @@
 ;; (hydra-load-gen-main) — hydra-load-file rewrites cl:defstruct to the
 ;; alist-based hydra-defstruct, which can't represent rich features
 ;; (`:constructor`, `:type`, etc.) used by the hand-written primitives.
+;; The hand-written runtime under common_lisp/lib/ is excluded from the
+;; gen-main walk unconditionally by the loader itself (the common_lisp/ prefix
+;; filter in hydra-load-gen-main); these entries cover the remaining top-level
+;; hand-written files that only need skipping in the demo's flat layout.
 (when *hydra-dist-base-env*
   (setf *hydra-skip-gen-main-files*
         '("loader.lisp" "prelude.lisp" "prims.lisp" "lazy.lisp"
-          "struct-compat.lisp" "json-reader.lisp"
-          "lib/chars.lisp" "lib/eithers.lisp" "lib/equality.lisp"
-          "lib/libraries.lisp"
-          "lib/lists.lisp" "lib/literals.lisp" "lib/logic.lisp"
-          "lib/maps.lisp" "lib/math.lisp" "lib/optionals.lisp"
-          "lib/pairs.lisp" "lib/regex.lisp" "lib/sets.lisp"
-          "lib/strings.lisp")))
+          "struct-compat.lisp" "json-reader.lisp")))
 
 ;; Set function bindings for native library defvars (e.g. hydra_lisp_lib_maps_singleton)
 ;; so they can be called in function position in generated code.
@@ -159,7 +162,7 @@
 ;; ============================================================================
 (format t "Loading primitive infrastructure...~%")
 (load (hydra-dist-main-path "prims.lisp"))
-(load (hydra-dist-main-path "lib/libraries.lisp"))
+(load (hydra-dist-main-path "common_lisp/lib/libraries.lisp"))
 
 (format t "Loading test runner...~%")
 (load (hydra-head-path "src/test/common-lisp/hydra/test_runner.lisp"))
@@ -196,7 +199,11 @@
 ;; here. test_graph.lisp's defpackage references :hydra.test.testEnv.
 ;; #434: test_env.lisp now lives in overlay/common-lisp/ and is copied into the
 ;; dist test tree (*test-data-base*), so it loads from dist like the other test data.
-(load-test-file "test_env.lisp")
+;; It is HAND-WRITTEN (uses cl:defpackage :hydra.test.testEnv + cl:import), so it
+;; must be plain cl:load'd — hydra-load-file skips defpackage forms (see
+;; hydra-skip-form-p), which would leave the package uncreated and the import
+;; failing.
+(load (merge-pathnames "test_env.lisp" *test-data-base*))
 ;; Ensure the lambda value bound to hydra_test_test_env_test_graph
 ;; gets a symbol-function cell so it's callable in function position.
 (hydra-set-function-bindings)

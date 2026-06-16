@@ -43,20 +43,31 @@
                         (cdr (assoc ,kw rec))))
                    fields field-keywords)))))
 
-;; Load hand-written native library implementations (before gen-main)
-(dolist (f '("lib/chars.lisp" "lib/eithers.lisp" "lib/equality.lisp"
-             "lib/lists.lisp" "lib/literals.lisp" "lib/logic.lisp"
-             "lib/maps.lisp" "lib/math.lisp" "lib/optionals.lisp"
-             "lib/pairs.lisp" "lib/regex.lisp" "lib/sets.lisp" "lib/strings.lisp"))
+;; Load hand-written native library implementations (before gen-main).
+;; #434/#473: the hand-written runtime lives under hydra/common_lisp/lib/ (a
+;; dialect-tier sibling, mirroring scheme's hydra/scheme/lib/ and clojure's
+;; hydra/clojure/lib/) so it does NOT collide with the generated hydra.lib.*
+;; PrimitiveDefinition def-modules at hydra/lib/. The runtime is plain cl:load'd
+;; here (no defstruct rewriting); the generated def-modules are loaded via
+;; hydra-load-file (the rewriting loader) by hydra-load-gen-main.
+(dolist (f '("common_lisp/lib/chars.lisp" "common_lisp/lib/eithers.lisp"
+             "common_lisp/lib/equality.lisp" "common_lisp/lib/lists.lisp"
+             "common_lisp/lib/literals.lisp" "common_lisp/lib/logic.lisp"
+             "common_lisp/lib/maps.lisp" "common_lisp/lib/math.lisp"
+             "common_lisp/lib/optionals.lisp" "common_lisp/lib/pairs.lisp"
+             "common_lisp/lib/regex.lisp" "common_lisp/lib/sets.lisp"
+             "common_lisp/lib/strings.lisp"))
   (load (merge-pathnames f *hydra-loader-dir*)))
 
-;; Note: prims.lisp and lib/libraries.lisp must be loaded AFTER gen-main
-;; because prims depends on extract/core and libraries depends on prims.
+;; Note: prims.lisp and common_lisp/lib/libraries.lisp must be loaded AFTER
+;; gen-main because prims depends on extract/core and libraries depends on prims
+;; AND on the generated hydra.lib.* def-modules (it derives primitive names from
+;; their PrimitiveDefinitions, #473).
 ;; Call (hydra-load-prims-and-libraries) after (hydra-load-gen-main).
 (defun hydra-load-prims-and-libraries ()
   "Load prims and libraries (must be called after gen-main)."
   (load (merge-pathnames "prims.lisp" *hydra-loader-dir*))
-  (load (merge-pathnames "lib/libraries.lisp" *hydra-loader-dir*)))
+  (load (merge-pathnames "common_lisp/lib/libraries.lisp" *hydra-loader-dir*)))
 
 (defun hydra-set-function-bindings ()
   "For every HYDRA_* variable that holds a function and is not already fbound,
@@ -581,6 +592,16 @@
    by hydra-load-file (which only understands the rewriting style used
    by generated code).")
 
+(defvar *hydra-handwritten-top-level-files*
+  '("loader.lisp" "prelude.lisp" "prims.lisp" "lazy.lisp"
+    "struct-compat.lisp" "json-reader.lisp")
+  "#434: hand-written top-level files copied into the dist hydra/ tree by the
+   overlay assembler. They are plain cl:load'd (by the loader/runner), never
+   through the rewriting hydra-load-file, so (hydra-load-gen-main) must always
+   skip them — they use backtick/comma/defmacro syntax that the cl:defstruct→
+   hydra-defstruct rewriter cannot process. Skipped unconditionally (the
+   per-caller *hydra-skip-gen-main-files* set is bootstrap-demo-only).")
+
 (defun hydra-load-gen-main ()
   "Load all generated main modules. Uses retry loop to handle forward references."
   ;; Resolve `..` segments in base via probe-file. Without this, SBCL's
@@ -638,6 +659,22 @@
                      "org/json/decoding.lisp"))
          ;; Collect ALL .lisp files from gen-main.
          (all-files (collect-lisp-files base))
+         ;; #434/#473: the hand-written runtime lives under the dialect tier
+         ;; hydra/common_lisp/lib/ (a sibling of the generated hydra/lib/
+         ;; def-modules). It is plain cl:load'd before gen-main (see the dolist
+         ;; near the top of this file) and must NOT be re-loaded here through the
+         ;; rewriting hydra-load-file: its real defstructs (e.g. the rbnode
+         ;; persistent-map node, with `:type` / `:constructor` slot options) would
+         ;; be rewritten into the alist-based hydra-defstruct, which can't
+         ;; represent them. Mirrors the Emacs-Lisp loader's "eval/lib/" prefix
+         ;; exclusion. This is unconditional (the *hydra-skip-gen-main-files* set
+         ;; is only populated in the bootstrap-demo's flat layout).
+         (all-files (remove-if (lambda (f)
+                                 (or (member f *hydra-handwritten-top-level-files*
+                                             :test #'equal)
+                                     (and (>= (length f) 16)
+                                          (string= "common_lisp/lib/" (subseq f 0 16)))))
+                               all-files))
          ;; Build ordered list: priority first, then remaining, then drop
          ;; anything in the caller-supplied skip set (see *hydra-skip-gen-main-files*).
          (remaining (remove-if (lambda (f) (member f priority :test #'equal)) all-files))
