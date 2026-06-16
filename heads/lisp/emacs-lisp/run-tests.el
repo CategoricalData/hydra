@@ -4,16 +4,11 @@
 (setq max-lisp-eval-depth 10000)
 (setq max-specpdl-size 10000)
 
-;; Load the loader
-(let ((loader-path (expand-file-name "src/main/emacs-lisp/hydra/loader.el"
-                                      (file-name-directory load-file-name))))
-  (load loader-path nil t))
-
-;; Override gen-main and gen-test dirs to point at the generated content.
-;; HYDRA_LISP_DIST_BASE, when set, points at a flat layout (used by the
-;; bootstrap demo, where generated and hand-written content share the same
-;; <demo>/src/{main,test}/emacs-lisp/ trees). Otherwise fall back to the
-;; repo-relative <head>/../../../dist/emacs-lisp/hydra-kernel/ layout.
+;; #434: the hand-written Emacs Lisp runtime (loader.el, lazy.el, prims.el,
+;; lib/*.el) now lives in overlay/emacs-lisp/ and is COPIED into the dist tree by
+;; the assembler. The head loads it from dist/, never from heads/ or overlay/.
+;; Compute the dist base first (honoring the bootstrap demo's HYDRA_LISP_DIST_BASE
+;; flat layout), then load the loader from dist.
 (let* ((env-base (getenv "HYDRA_LISP_DIST_BASE"))
        (dist-base (if (and env-base (> (length env-base) 0))
                       (file-name-as-directory env-base)
@@ -21,6 +16,10 @@
                                       (file-name-directory load-file-name)))))
   (setq hydra-gen-main-dir (expand-file-name "src/main/emacs-lisp/hydra/" dist-base))
   (setq hydra-gen-test-dir (expand-file-name "src/test/emacs-lisp/hydra/" dist-base))
+
+  ;; Load the loader from the dist copy (it in turn loads lazy.el from its own
+  ;; dir, which is now the dist tree).
+  (load (expand-file-name "loader.el" hydra-gen-main-dir) nil t)
   ;; In the bootstrap demo (HYDRA_LISP_DIST_BASE set), hand-written files
   ;; live alongside generated files under the same hydra/ tree. Skip them
   ;; in hydra-load-gen-main — they are loaded separately by the loader's

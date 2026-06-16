@@ -8,10 +8,10 @@
 #
 # Per-dialect bits only; the shared steps live in heads/lisp/bin/common.sh.
 #
-# Common Lisp does NOT need the test_env.lisp copy that the other three
-# dialects perform: run-tests.lisp loads test_env.lisp directly from
-# heads/lisp/common-lisp/ before loading test_graph.lisp from dist.
-# So LISP_TEST_ENV is left empty.
+# Per #434, the hand-written runtime + test bridge live in
+# overlay/common-lisp/hydra-kernel/ and are copied into dist by common.sh's
+# lisp_copy_overlay (Step 3, kernel-only). run-tests.lisp loads all of it —
+# prelude/prims/loader/lib/* and test_env — from the dist copy, never from heads/.
 
 set -euo pipefail
 
@@ -20,7 +20,6 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 LISP_DIALECT="common-lisp"
 LISP_PRETTY_NAME="Common Lisp"
 LISP_HEAD_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
-LISP_TEST_ENV=""
 
 source "$SCRIPT_DIR/../../bin/common.sh"
 

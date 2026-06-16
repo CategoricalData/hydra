@@ -69,10 +69,16 @@ case "$DIALECT" in
         # to "hydra/test/annotation_bindings.scm" relative to CWD — i.e. the copy
         # placed by the assemble step alongside the generated test_graph.scm.
         cd "$GEN_TEST"
+        # #434: the hand-written Scheme runtime (loader, prims, lib/*, scheme/lib/*,
+        # bytevector/srfi externals) now lives in overlay/scheme/ and is copied into
+        # GEN_MAIN by the assembler, so it resolves via -L "$GEN_MAIN". The old
+        # -L "$HEAD_DIR/src/main/scheme" pointed at the heads runtime (now gone —
+        # only the bootstrap driver remains there) and is dropped. run-tests.scm
+        # itself is the head's test entry point and stays in heads.
         if command -v guile > /dev/null 2>&1; then
-            guile --no-auto-compile -L "$GEN_MAIN" -L "$GEN_TEST" -L "$HEAD_DIR/src/main/scheme" -s "$HEAD_DIR/run-tests.scm"
+            guile --no-auto-compile -L "$GEN_MAIN" -L "$GEN_TEST" -s "$HEAD_DIR/run-tests.scm"
         elif command -v chibi-scheme > /dev/null 2>&1; then
-            chibi-scheme -I "$GEN_MAIN" -I "$GEN_TEST" -I "$HEAD_DIR/src/main/scheme" "$HEAD_DIR/run-tests.scm"
+            chibi-scheme -I "$GEN_MAIN" -I "$GEN_TEST" "$HEAD_DIR/run-tests.scm"
         else
             echo "Error: No Scheme implementation found. Install guile or chibi-scheme." >&2
             exit 1

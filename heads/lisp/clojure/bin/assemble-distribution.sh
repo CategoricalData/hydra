@@ -15,7 +15,6 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 LISP_DIALECT="clojure"
 LISP_PRETTY_NAME="Clojure"
 LISP_HEAD_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
-LISP_TEST_ENV="testEnv.clj"
 
 source "$SCRIPT_DIR/../../bin/common.sh"
 
