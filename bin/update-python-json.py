@@ -58,6 +58,20 @@ for sub in _subs:
     if p not in sys.path:
         sys.path.insert(0, p)
 
+# The `hydra` package is an extend_path namespace package, but in local-host mode
+# it may already be imported (and its __path__ fixed) via the venv's editable
+# install of heads/python before these sys.path inserts take effect — so the
+# namespace never merges in the dist/python/hydra-{kernel,python} trees and
+# `import hydra.codegen` (a generated kernel module that lives ONLY under
+# dist/python/hydra-kernel) fails. This bit CI under `uv run`, where the editable
+# .pth resolves `hydra` to heads/python alone (#472 local-host shim). Re-extend
+# hydra.__path__ over every sys.path entry that carries a hydra/ dir so the merge
+# is deterministic regardless of import order or installer (uv/pip/editable).
+if not _PUBLISHED and "hydra" in sys.modules:
+    import pkgutil
+    sys.modules["hydra"].__path__ = pkgutil.extend_path(
+        sys.modules["hydra"].__path__, "hydra")
+
 import hydra.codegen as codegen
 from hydra.dsl.python import Left, Right
 from hydra.generation import (
