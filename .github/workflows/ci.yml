@@ -103,6 +103,12 @@ jobs:
       - name: Stack tests
         run: stack test
         working-directory: heads/haskell
+      # Self-containment gate: stage the per-package distributions into one
+      # stack project and build them as published, so a package that references
+      # something present only in heads/ (not in dist/) fails here — the #473
+      # cold-build class of bug — before it reaches Hackage.
+      - name: Verify Haskell distribution self-containment
+        run: heads/haskell/bin/verify-distribution.sh
       # Upload dist/<lang>/ trees for downstream target jobs. One
       # artifact per target so each job only pays for its own download.
       - name: Upload dist/java
@@ -176,6 +182,13 @@ jobs:
           path: dist/java/
       - working-directory: heads/java
         run: ./gradlew :hydra-java:test
+      # Self-containment gate: publish the per-package jars to a temp Maven repo
+      # and resolve them from an offline consumer, so a published artifact that
+      # is missing classes its API needs (or whose POM references a sibling not
+      # in the publish set) fails here — the Java analog of #472 — before it
+      # reaches Maven Central. Self-skips if the runner lacks a JDK 17+.
+      - name: Verify Java distribution self-containment
+        run: heads/java/bin/verify-distribution.sh
 
   python:
     name: Python tests
@@ -202,14 +215,8 @@ jobs:
       # code importing a package the wheel omits — on every push, not just at
       # release time. The Python tests above pass against the worktree on the
       # path; this step proves the WHEELS are self-contained.
-      - name: Wheel packaging-boundary smoke test (#472)
-        run: |
-          set -euo pipefail
-          mkdir -p /tmp/ci-wheels
-          for pkg in hydra-kernel hydra-rdf hydra-pg hydra-python; do
-            ( cd "dist/python/$pkg" && uv build --wheel --out-dir /tmp/ci-wheels )
-          done
-          heads/python/bin/smoke-test-wheels.sh --wheels /tmp/ci-wheels
+      - name: Verify Python distribution self-containment (#472 gate)
+        run: heads/python/bin/verify-distribution.sh
 
   clojure:
     name: Clojure tests

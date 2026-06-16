@@ -108,7 +108,7 @@ echo ""
 # leakage can mask it (the gate runs from a neutral cwd with --no-index). It is
 # a hard gate: a failure here aborts the publish.
 echo "=== Smoke-testing wheels across the packaging boundary (#472 gate) ==="
-"$SCRIPT_DIR/smoke-test-wheels.sh" --wheels "$OUT_DIR"
+"$SCRIPT_DIR/verify-distribution.sh" --wheels "$OUT_DIR"
 echo ""
 
 if [ "$DO_UPLOAD" != true ]; then

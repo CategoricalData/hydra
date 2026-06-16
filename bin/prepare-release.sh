@@ -79,7 +79,7 @@ mkdir -p "$LOG_DIR"
 ARTIFACT_DIR="$HYDRA_ROOT/release-artifacts"
 mkdir -p "$ARTIFACT_DIR"
 
-TOTAL_STEPS=11
+TOTAL_STEPS=12
 
 ERRORS=0
 WARNINGS=0
@@ -505,6 +505,42 @@ else
         ERRORS=$((ERRORS + 1))
     fi
 fi
+
+# --- Step 12: Per-host published-package self-containment ---
+# RELEASE GATE. Each head ships a verify-distribution.sh that builds its
+# publish-set packages from the dist/ tree ALONE and proves they are
+# self-contained when consumed as PUBLISHED artifacts — installed/resolved in
+# isolation from the worktree (Python: fresh venv + --no-index; Haskell: the
+# trio staged into one stack project; Java: published to a temp Maven repo and
+# resolved by an offline consumer). This is the class of break that shipped in
+# 0.16.0 — a package importing something present only in heads/, not in the
+# packaged dist/ — which every in-repo test masked because heads/ is always on
+# the path/source-set. The per-host tests above (Steps 2-4) do NOT exercise the
+# packaging boundary; this step does. See #472 (Python wheel) and #473 (Haskell
+# cold-build). Java's verifier self-skips (exit 0) when no JDK 17+ is present.
+step 12 $TOTAL_STEPS "Verifying per-host published-package self-containment"
+echo ""
+
+for hv in \
+    "haskell:$HYDRA_ROOT/heads/haskell/bin/verify-distribution.sh" \
+    "python:$HYDRA_ROOT/heads/python/bin/verify-distribution.sh" \
+    "java:$HYDRA_ROOT/heads/java/bin/verify-distribution.sh"; do
+    host="${hv%%:*}"
+    script="${hv##*:}"
+    echo "--- $host: verify-distribution ---"
+    if [ ! -x "$script" ]; then
+        echo "  FAIL: missing verifier: $script"
+        ERRORS=$((ERRORS + 1))
+        continue
+    fi
+    if "$script" 2>&1 | tee "$LOG_DIR/verify-dist-$host.log"; then
+        echo "  OK: $host distribution is self-contained"
+    else
+        echo "  FAIL: $host distribution self-containment check failed (see verify-logs/verify-dist-$host.log)"
+        ERRORS=$((ERRORS + 1))
+    fi
+    echo ""
+done
 
 # --- Summary ---
 echo ""
