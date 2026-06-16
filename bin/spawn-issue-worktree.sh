@@ -166,7 +166,11 @@ tmux rename-window   -t "bug_${NUM}_${SLUG}" "bug_${NUM}_${SLUG}"
 # respect pane-titles (iTerm2 with set -g set-titles on).
 tmux select-pane     -t "bug_${NUM}_${SLUG}" -T "bug_${NUM}_${SLUG}"
 
-tmux send-keys -t "bug_${NUM}_${SLUG}" 'claude-remote' Enter
+# Default to opusplan for bug_/task_ workers — they spend most of their wall
+# time on mechanical sync/regen/verify, which Sonnet handles fine. Override
+# via SPAWN_MODEL=opus (or any other model alias) for genuinely hard bugs.
+SPAWN_MODEL="${SPAWN_MODEL:-opusplan}"
+tmux send-keys -t "bug_${NUM}_${SLUG}" "claude-remote -m ${SPAWN_MODEL}" Enter
 
 # Give claude time to spin up its TUI before sending the trigger prompt;
 # 8s is comfortable headroom for Claude Code v2.1's startup.

@@ -809,7 +809,16 @@ main = do
   -- (libUniverse contains no consumer bindings that would shadow primitives during the
   -- coder's type reconstruction). Routes each lib module to its owning package dir, the
   -- same way the consumer pass does.
-  libFileCount <- if twoPassLib && not (Prelude.null libModsLowered)
+  --
+  -- Skip in a test-only invocation: the hydra.lib.* def-modules are MAIN-source-set
+  -- artifacts, and a test pass must leave the main dir untouched. Critically, the lib
+  -- pass calls recordKeep on the MAIN dir (packageOutMain) — which would re-enter the
+  -- main dir into the #357 prune walk-set with ONLY the lib files as its keep-set,
+  -- defeating the testOnlyInvocation guard above (which deliberately skips recording the
+  -- main type modules) and pruning every generated main type module. (Found via the CL
+  -- struct-compat regression: the test pass deleted dist/.../hydra/core.lisp etc., so
+  -- gen-compat then emitted an empty struct-compat.lisp.)
+  libFileCount <- if twoPassLib && not (Prelude.null libModsLowered) && not testOnlyInvocation
     then do
       putStrLn $ "Step " ++ stepNum ++ " (lib pass): Mapping " ++ show (length libModsLowered)
         ++ " hydra.lib.* definition modules to " ++ targetCap ++ "..."

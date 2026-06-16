@@ -3176,8 +3176,36 @@ def _encode_term_assignment():
                         ("params", fs_proj("params")),
                         ("bindings", fs_proj("bindings")),
                         ("body", fs_proj("body")),
-                        ("doms", fs_proj("domains")),
-                        ("mcod", fs_proj("codomain")),
+                        ("domsRaw", fs_proj("domains")),
+                        # The binding's TypeScheme is authoritative for the function's
+                        # parameter and result types; analysis-from-the-body can be
+                        # underspecified after eta-expansion (untyped wrapper lambdas)
+                        # or after a host skips post-eta inference. Project signature
+                        # types out and use them as the doms/mcod source. See #488.
+                        (
+                            "sigTermSig",
+                            _kref.scoping_type_scheme_to_term_signature(var("ts")),
+                        ),
+                        (
+                            "sigParamTypes",
+                            Lists.map(
+                                lam("p", _proj("hydra.typing.Parameter", "type", "p")),
+                                _proj("hydra.typing.TermSignature", "parameters", "sigTermSig"),
+                            ),
+                        ),
+                        (
+                            "sigResult",
+                            _proj("hydra.typing.TermSignature", "result", "sigTermSig"),
+                        ),
+                        (
+                            "sigCod",
+                            _proj("hydra.typing.Result", "type", "sigResult"),
+                        ),
+                        (
+                            "doms",
+                            _local("fillDomsFromSignature")(var("domsRaw"), var("sigParamTypes")),
+                        ),
+                        ("mcod", just(var("sigCod"))),
                         ("env2", fs_proj("environment")),
                         ("tc", _env("graph", "env2")),
                         (
@@ -6516,6 +6544,33 @@ def _extract_case_elimination():
     )
 
 
+def _fill_doms_from_signature():
+    # When the lambda-domain list captured by analysis and the parameter-type
+    # list from the binding's TermSignature have the same length, prefer the
+    # signature types. This recovers from `(variable "_")` placeholders that
+    # `analyzeFunctionTermWith` stamps on lambdas whose domain is unset —
+    # typically eta-expanded wrappers added by the adaptation pipeline. The
+    # signature is authoritative because it was set by the kernel at build
+    # time; analysis only sees what's syntactically present in the body. See
+    # #488.
+    body = lambdas(
+        ["doms", "sigParamTypes"],
+        Logic.if_else(
+            Equality.equal(Lists.length(var("doms")), Lists.length(var("sigParamTypes"))),
+            var("sigParamTypes"),
+            var("doms"),
+        ),
+    )
+    return _def(
+        "fillDomsFromSignature",
+        doc(
+            "Prefer signature parameter types over analysis-captured lambda domains "
+            "when both are available in equal length (#488).",
+            body,
+        ),
+    )
+
+
 def _find_type_params():
     body = lambdas(
         ["env", "typ"],
@@ -8361,6 +8416,7 @@ def _build_module() -> Module:
             to_definition(_extend_meta_for_type()),
             to_definition(_extend_meta_for_types()),
             to_definition(_extract_case_elimination()),
+            to_definition(_fill_doms_from_signature()),
             to_definition(_find_type_params()),
             to_definition(_gather_lambdas()),
             to_definition(_gather_metadata()),

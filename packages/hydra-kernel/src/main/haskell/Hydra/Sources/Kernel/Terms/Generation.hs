@@ -373,8 +373,15 @@ generateSourceFiles = define "generateSourceFiles" $
             (Packaging.moduleDefinitions $ var "m"))) $
       "allBindings" <~ Lexical.graphToBindings @@ var "g1" $
       "refreshedMods" <~ Lists.map ("m" ~> var "refreshModule" @@ var "allBindings" @@ var "m") (var "termModulesToGenerate") $
-      -- Deduplicate definitions by name to avoid duplicate functions in generated code
-      "dedupDefs" <~ ("defs" ~> Maps.elems (Maps.fromList (Lists.map ("d" ~> pair (Packaging.termDefinitionName (var "d")) (var "d")) (var "defs")))) $
+      -- Deduplicate definitions by name to avoid duplicate functions in generated code,
+      -- then sort alphabetically by name. The sort is load-bearing: Maps.elems iteration
+      -- order is host-implementation-dependent (Haskell's Data.Map is key-sorted; Clojure
+      -- and Scala HashMaps are not), so without an explicit sort the same DSL produces
+      -- per-host orderings for the generated declarations. CLAUDE.md mandates alphabetical
+      -- definition order; sorting here enforces it uniformly for every coder × host. (#489)
+      "dedupDefs" <~ ("defs" ~>
+        Lists.sortOn ("d" ~> Packaging.termDefinitionName (var "d"))
+          (Maps.elems (Maps.fromList (Lists.map ("d" ~> pair (Packaging.termDefinitionName (var "d")) (var "d")) (var "defs"))))) $
       "dedupedDefLists" <~ Lists.map (var "dedupDefs") (var "defLists") $
       Eithers.map ("xs" ~> Lists.concat (var "xs")) $
         Eithers.mapList ("p" ~>
