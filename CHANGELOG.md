@@ -15,14 +15,201 @@ they are documented here for completeness.
 
 ---
 
-## [0.16.1] - unreleased
+## [0.16.1] - 2026-06-16
+
+Major themes: the first release built by bootstrapping from previously published
+packages, the first full 9 × 9 cross-implementation bootstrapping sweep, and
+published-package self-containment fixes for the artifacts that bootstrap rests on.
+
+### Highlights
+
+- **Bootstrap from published packages**: the build links the published 0.16.0 hosts
+  (Hackage / Maven Central / PyPI) and uses them to build the next version of Hydra,
+  resting on 0.16.0's forward-compatibility guarantees — the published-host consume
+  model with a `--local-host` shim, used for the first time in a release
+  ([#370](https://github.com/CategoricalData/hydra/issues/370)). 0.16.1 still builds
+  against **local** Haskell and Python hosts (`hostOverrides`), because the published
+  0.16.0 artifacts it would otherwise consume are the very ones being repaired below.
+- **First full 9 × 9 bootstrapping sweep** — every implementation generating every
+  other; dozens of cross-host issues surfaced and fixed
+  ([#409](https://github.com/CategoricalData/hydra/issues/409), ongoing).
+- **Published-package self-containment**: relocate each host's hand-written runtime
+  into `overlay/<lang>/hydra-kernel/` so it ships inside the published `hydra-kernel`
+  artifact — Python `hydra.python.util` into the wheel
+  ([#461](https://github.com/CategoricalData/hydra/issues/461),
+  [#472](https://github.com/CategoricalData/hydra/issues/472)) and the Haskell
+  authoring DSL + `Libraries`/`Terms` into the sdist
+  ([#473](https://github.com/CategoricalData/hydra/issues/473)). Generalized to a
+  uniform `overlay/ = transform(packages) + copy(overlay)` model across all hosts
+  ([#434](https://github.com/CategoricalData/hydra/issues/434)).
+- **Kernel self-containment via generated `hydra.lib.*` registries**: primitive
+  names are derived from generated `PrimitiveDefinition` def-modules rather than
+  hand-written name strings, in every host
+  ([#473](https://github.com/CategoricalData/hydra/issues/473)).
+- **In-memory encode/decode synthesis**: derived `hydra.{encode,decode}.*` modules
+  are synthesized at build time and excluded from `dist/`, with the synthesizer (not
+  inference) as the authority for their annotations
+  ([#448](https://github.com/CategoricalData/hydra/issues/448),
+  [#476](https://github.com/CategoricalData/hydra/issues/476)).
+- **Release hardening**: Apache source-release compliance (signed source archive,
+  LICENSE/NOTICE bundling, KEYS) ([#441](https://github.com/CategoricalData/hydra/issues/441)),
+  per-package publish orchestrators ([#449](https://github.com/CategoricalData/hydra/issues/449)),
+  and packaging-boundary verification gated in CI and at publish time
+  ([#472](https://github.com/CategoricalData/hydra/issues/472)).
+
+### New features
+
+- Published-host consume model wired through `bin/sync.sh` for all three hosts
+  (`--published-host` default, `--local-host` shim), with the version basis keyed
+  off `hydra.json` and the `VERSION` file retired
+  ([#370](https://github.com/CategoricalData/hydra/issues/370),
+  [#347](https://github.com/CategoricalData/hydra/issues/347)).
+- Java and Python coder DSL sources made the sole source of truth; the legacy
+  Haskell DSL copies were deleted and cross-package references resolve by name
+  ([#346](https://github.com/CategoricalData/hydra/issues/346)).
+- Per-host `verify-distribution.sh` self-containment gates (Haskell stages the
+  per-package trio and `stack build`s it; Python installs the wheels into an
+  isolated venv and imports the kernel modules; Java resolves the published jars
+  from an offline consumer), run in CI and as a hard gate in `bin/prepare-release.sh`
+  ([#472](https://github.com/CategoricalData/hydra/issues/472)).
+- Apache-compliant canonical source archive: signed + checksummed `git archive`
+  tarball as the release of record, root `NOTICE`, `KEYS`, and a release-verify CI
+  workflow ([#441](https://github.com/CategoricalData/hydra/issues/441)).
+- Per-package publish orchestrators `publish-maven.sh` / `publish-pypi.sh` with
+  dependency-closure and leaves-first ordering checks
+  ([#449](https://github.com/CategoricalData/hydra/issues/449)).
+- `hydra-typescript` published as a target Java/Maven + PyPI artifact
+  ([#468](https://github.com/CategoricalData/hydra/issues/468)).
+- Java coder emits a fluent builder for every generated record type
+  ([#465](https://github.com/CategoricalData/hydra/issues/465)); Python coder emits
+  per-field `with_<field>` copy-update methods and a fluent builder
+  ([#466](https://github.com/CategoricalData/hydra/issues/466)).
+
+### Improvements
+
+- Drop the vestigial `InferenceContext` parameter from the `Primitive.implementation`
+  carrier across all hosts; add a graph-free `funT` coder and six `lists` default
+  implementations ([#446](https://github.com/CategoricalData/hydra/issues/446)).
+- Derive package routing from declared modules; split derived generation into broad
+  `mainDslModules` and scoped `mainEncodingModules`
+  ([#474](https://github.com/CategoricalData/hydra/issues/474),
+  [#475](https://github.com/CategoricalData/hydra/issues/475)).
+- Hash JSON content into the per-package input digest; add `digest-check
+  refresh-input` and a CI guard that force-regenerates and diffs
+  `dist/haskell/hydra-{java,python}` ([#469](https://github.com/CategoricalData/hydra/issues/469)).
+- Per-package inference seeds downstream packages from each package's full universe
+  while inferring only write targets, fixing `hydra-scala` inference within the CI
+  heap budget; declare the `hydra-java` dependency in `hydra-scala` for cold
+  ordering ([#470](https://github.com/CategoricalData/hydra/issues/470)).
+- Remove the vestigial `Lib/Defaults` registry and empty `defaultLibModules`
+  manifest field from all hosts ([#437](https://github.com/CategoricalData/hydra/issues/437)).
+- Bundle LICENSE + NOTICE into Java jars (`META-INF`) and Python wheels
+  (`dist-info`); declare Apache-2.0 in the Scala build
+  ([#441](https://github.com/CategoricalData/hydra/issues/441)).
+- Mark lazy parameters on the Scala and Common Lisp primitive registries so eager
+  coders thunk correctly ([#453](https://github.com/CategoricalData/hydra/issues/453),
+  [#477](https://github.com/CategoricalData/hydra/issues/477),
+  [#425](https://github.com/CategoricalData/hydra/issues/425)).
+- Staging-loop WIP-commit gate to keep `WIP:` commits off `origin/main`
+  ([#466](https://github.com/CategoricalData/hydra/issues/466)).
 
 ### Bug fixes
 
+- **Python wheel self-containment**: the `hydra-kernel` wheel now ships
+  `hydra.python.util`; gated by a packaging-boundary smoke test in CI and
+  `publish-pypi.sh` ([#472](https://github.com/CategoricalData/hydra/issues/472),
+  [#461](https://github.com/CategoricalData/hydra/issues/461)).
+- **Haskell sdist self-containment**: track the generated `Hydra/Dsl/Terms.hs`
+  (was gitignored) so the committed dist exports `ToPrimName`, fixing the cold
+  build of the published `hydra-kernel`
+  ([#473](https://github.com/CategoricalData/hydra/issues/473)).
+- Decode synthesizer threads the fully-applied result type into wrap/record/union
+  decoder bodies, so derived decoders emit `DataRow<v>` rather than raw `DataRow`,
+  fixing Java and Scala generic decode compilation
+  ([#476](https://github.com/CategoricalData/hydra/issues/476)).
+- Scala coder emits explicit type arguments for polymorphic non-primitive
+  references under a type application (e.g. `requireField`), fixing `Any`-inference
+  of curried decoder lambda parameters in `decode/typed`
+  ([#434](https://github.com/CategoricalData/hydra/issues/434)).
+- Common Lisp and Emacs Lisp: move the hand-written runtime to a dialect-tier path
+  so it no longer collides with the generated `hydra.lib.*` def-modules
+  ([#434](https://github.com/CategoricalData/hydra/issues/434)).
+- Python coder uses the binding `TypeScheme` as the authoritative source for
+  parameter and return types ([#488](https://github.com/CategoricalData/hydra/issues/488));
+  fixes a duplicate `self` parameter in builders
+  ([#478](https://github.com/CategoricalData/hydra/issues/478)).
+- Sort term definitions by name in source-file generation so non-Haskell hosts emit
+  deterministic alphabetical Haskell output (host-independent of `Maps.elems`
+  iteration order) ([#489](https://github.com/CategoricalData/hydra/issues/489)).
+- Java coder serializes the `static` method modifier (previously a non-exhaustive
+  case) ([#465](https://github.com/CategoricalData/hydra/issues/465)); JavaDoc
+  `@link`/`@param` sanitization for strict doclint
+  ([#449](https://github.com/CategoricalData/hydra/issues/449)).
+- Scala host writer appends a trailing newline when missing, fixing a Lisp-target
+  byte mismatch ([#463](https://github.com/CategoricalData/hydra/issues/463)).
+- Clojure host: silent wrapping `bigint_to_int{8,16,32,64}` casts per the kernel
+  contract ([#483](https://github.com/CategoricalData/hydra/issues/483)); load-order
+  and `--kernel-only` filter fixes after kernel renames
+  ([#425](https://github.com/CategoricalData/hydra/issues/425)); load the
+  `hydra-haskell` baseline for Clojure→Haskell rebuilds
+  ([#487](https://github.com/CategoricalData/hydra/issues/487),
+  [#460](https://github.com/CategoricalData/hydra/issues/460)).
+- Lisp-dialect bootstrap fixes: emit JSON object entries as 2-element `Pair` lists
+  rather than dotted cons ([#452](https://github.com/CategoricalData/hydra/issues/452),
+  also fixing [#16](https://github.com/CategoricalData/hydra/issues/16)); read
+  module names via the correct struct accessor
+  ([#471](https://github.com/CategoricalData/hydra/issues/471)); drop stale
+  surplus flag arguments from `generate-source-files` calls
+  ([#457](https://github.com/CategoricalData/hydra/issues/457),
+  [#458](https://github.com/CategoricalData/hydra/issues/458),
+  [#464](https://github.com/CategoricalData/hydra/issues/464)); rename eta-wrapped
+  projection/unwrap parameters to avoid kernel shadowing
+  ([#428](https://github.com/CategoricalData/hydra/issues/428)); propagate a
+  non-zero exit from the Scheme test runner on failures and fix Scheme float
+  scientific-notation formatting for `|x| >= 1e7`
+  ([#447](https://github.com/CategoricalData/hydra/issues/447)).
+- Cross-host target dispatch: Common Lisp and Clojure hosts dispatch Scala and
+  TypeScript targets ([#482](https://github.com/CategoricalData/hydra/issues/482),
+  [#483](https://github.com/CategoricalData/hydra/issues/483)); Scala/Java host
+  target-dispatch completions ([#5](https://github.com/CategoricalData/hydra/issues/5),
+  [#7](https://github.com/CategoricalData/hydra/issues/7),
+  [#17](https://github.com/CategoricalData/hydra/issues/17)).
+- TypeScript test runtime reads the kernel JSON field names `body`/`signature`
+  (not legacy `term`/`typeScheme`); `lists.nub` dedups by canonical JSON
+  ([#485](https://github.com/CategoricalData/hydra/issues/485)).
+- Sync robustness: always reassemble `dist/python` under `HYDRA_IN_SYNC` to heal
+  partial-dist state ([#480](https://github.com/CategoricalData/hydra/issues/480));
+  persist the run dir on bootstrap prep-phase failures
+  ([#481](https://github.com/CategoricalData/hydra/issues/481)); complete per-host
+  static deps so the bootstrap demo finds fresh dist
+  ([#445](https://github.com/CategoricalData/hydra/issues/445)).
+- Pin the Python target test interpreter to Python ≥ 3.12
+  ([#486](https://github.com/CategoricalData/hydra/issues/486)); Emacs Lisp / Scheme
+  target test-runner re-copy robustness
+  ([#456](https://github.com/CategoricalData/hydra/issues/456)).
 - JavaDoc Pages publish rewritten to build a combined site from the CI-generated
-  `dist/java/` artifact, fixing the failure mode where the `pages.yml` workflow
-  ran against a bare checkout with no `dist/java/` present
+  `dist/java/` artifact, fixing the failure mode where `pages.yml` ran against a
+  bare checkout with no `dist/java/` present
   ([#450](https://github.com/CategoricalData/hydra/issues/450)).
+
+### Documentation
+
+- Document the `overlay/` self-containment model, the published-host consume model
+  for all three hosts, the `hydra.json` version / host-version basis, and a
+  migration-shims recipe ([#434](https://github.com/CategoricalData/hydra/issues/434),
+  [#370](https://github.com/CategoricalData/hydra/issues/370),
+  [#347](https://github.com/CategoricalData/hydra/issues/347)).
+- Document the kernel self-containment / `hydra.lib.*` def-module model and the
+  derived-module no-inference invariant
+  ([#473](https://github.com/CategoricalData/hydra/issues/473),
+  [#466](https://github.com/CategoricalData/hydra/issues/466)); generated Java and
+  Python record builders documented in the DSL guides
+  ([#465](https://github.com/CategoricalData/hydra/issues/465),
+  [#466](https://github.com/CategoricalData/hydra/issues/466)).
+- Use absolute GitHub URLs in package READMEs so links resolve when published
+  standalone ([#454](https://github.com/CategoricalData/hydra/issues/454)); bundle a
+  README into each Python package dir for sdist metadata
+  ([#418](https://github.com/CategoricalData/hydra/issues/418)).
 
 ---
 
