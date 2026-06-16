@@ -1292,8 +1292,10 @@ one mid-build is much harder than finding it up front.
    flip — these are the literal strings on the JSON wire, not Haskell-level
    field names.
 
-5. **Bootstrap-tier DSL Term snippets.** `dist/haskell/.../Hydra/Sources/Encode/<Module>.hs`
-   and `Sources/Decode/<Module>.hs` are auto-generated DSL Term values that, when
+5. **Bootstrap-tier DSL Term snippets.** The encode/decode modules (`hydra.encode.*`,
+   `hydra.decode.*`) are synthesized in-memory at runtime (#448) and no longer exist as
+   `dist/haskell/.../Hydra/Sources/Encode/<Module>.hs` / `Sources/Decode/<Module>.hs` files.
+   Their content — DSL Term values that, when
    interpreted, *produce* the encoders/decoders described in (4). Inside those
    Term values, the wire-format keys appear as `LiteralString "<old>"` payloads.
    Missing one here produces the unification error described below.
@@ -1369,8 +1371,7 @@ one mid-build is much harder than finding it up front.
      a unification error during inference (the constant name says `typeScheme`
      but its value still resolves to wire-format key `"type"`).
    - **Embedded DSL Term literals.** Inside generated `Dsl/<Module>.hs`,
-     `Encode/<Module>.hs`, `Decode/<Module>.hs`, `Sources/Encode/<Module>.hs`,
-     `Sources/Decode/<Module>.hs`, find every `Core.Name "type"` or
+     `Encode/<Module>.hs`, `Decode/<Module>.hs`, find every `Core.Name "type"` or
      `Core.LiteralString "type"` whose enclosing scope (most-recent
      `recordTypeName`/`projectionTypeName`) is one of the four target records,
      and flip to `"typeScheme"`. **Do not flip** literals whose scope is a
@@ -1511,18 +1512,16 @@ Working example: `UniversalTestCase.actual` and `.expected` from `string` to
 The mechanics overlap with a rename — every reader sees the new shape — but
 there are two extra concerns:
 
-1. **The dist-tier Sources/Encode and Sources/Decode files contain DSL Term
-   values whose construction reflects the *old* field shape**, not just
-   wire-format strings. For `string → (unit → string)`, the encoder DSL Term
-   that previously did
-   `applicationArgument = TermApplication (project actual @@ var "x")`
-   (yielding a string the encoder wraps in `LiteralString`) must become
-   `applicationArgument = TermApplication ((project actual @@ var "x") @@ unit)`
-   so the unit-thunk is forced before being treated as a literal string.
-   The Decode side is the inverse: where the old decoder assigned
-   `universalTestCaseActual = field_actual` (string-typed), it now needs to
-   wrap the decoded string in a unit-lambda: `\_ -> field_actual`.
-   Without these patches, `update-json-main` will fail type inference with
+1. **The synthesized encode/decode modules contain DSL Term values whose
+   construction reflects the *old* field shape**, not just wire-format strings.
+   These are now synthesized in-memory (#448) rather than stored as
+   `dist/haskell/.../Sources/{Encode,Decode}/*.hs` files; the synthesizer
+   derives them from the type schema, so once the schema flips the new
+   shape is picked up automatically on the next sync.
+   If the synthesis produces incorrect output for the new shape (e.g., a
+   `string → (unit → string)` change where the encoder must force a thunk),
+   fix the synthesizer (`Hydra.CodeGeneration`) rather than patching generated files.
+   Without a correct synthesizer, `update-json-main` will fail type inference with
    `cannot unify string with (unit → string)` once the schema flips.
 
 2. **`isSerializableByName` drops the `deriving` clause automatically** for
@@ -1612,17 +1611,17 @@ This is a rename *plus* a new type, with two extra concerns beyond the rename pl
    helper reused for *both* records and case branches needs a sibling
    `forCaseAlternative` so only the case path moves; record/injection paths keep `Field`.
 
-2. **A new *type* (not just a renamed field) must be hand-added to the synthesized
-   `Sources/{Encode,Decode}/*.hs` as a bootstrap patch.** Those files are regenerated
-   by `--synthesize-sources`, but `update-json` infers the *stale* committed versions
-   *before* regenerating them. A renamed field only needs its literals patched; a new
-   type has no encoder/decoder DSL-Term at all, so its container's
-   encoder/decoder references a non-existent `hydra.{encode,decode}.core.<newType>`.
-   Clone the nearest sibling's encoder/decoder term (e.g. copy the `field`
-   encoder/decoder, rename type + wire keys), add it to `Sources/Encode/Core.hs` and
-   `Sources/Decode/Core.hs`, and point the container (`caseStatement`) at it. Also add
-   the runtime `data`, `Dsl` builders/accessors, and `Encode`/`Decode` functions to the
-   dist tier as usual.
+2. **A new *type* (not just a renamed field) requires a synthesizer-level fix.**
+   The encode/decode modules are synthesized in-memory from the schema (#448);
+   `update-json` uses them before writing JSON. If the synthesizer
+   (`Hydra.CodeGeneration`) doesn't yet know how to handle the new type, its
+   container's encoder/decoder will reference a non-existent
+   `hydra.{encode,decode}.core.<newType>`.
+   Fix the synthesizer for the new type, or — as a temporary bootstrap patch —
+   pre-seed the universe by adding the new type's encoder/decoder Module value
+   directly to the driver's universe list in `update-json-main/Main.hs`.
+   Also add the runtime `data`, `Dsl` builders/accessors, and `Encode`/`Decode`
+   functions to the dist tier as usual.
 
 ---
 

@@ -85,10 +85,9 @@ Decoders are not produced by their own writer function — they're
 same Python writer that handles type modules. The pipeline has two
 stages:
 
-1. Synthesize `Hydra.Sources.Decode.<your.namespace>.*` source modules
-   from your `Hydra.Sources.<YourSchema>.*` type modules.
-   Done by `bootstrap-from-json --synthesize-sources`.
-2. Emit Python from the union of (type modules) and (decoder source
+1. Synthesize decoder modules in-memory from your type modules using
+   `generateDecoderModules` (in `Hydra.Generation`).
+2. Emit Python from the union of (type modules) and (synthesized decoder
    modules) via `writePython` (in `Hydra.ExtGeneration`).
 
 See [Generating code with Hydra](code-generation.md) for the broader
@@ -102,8 +101,7 @@ If you've already followed
 [Synchronizing Hydra-Python](syncing-python.md), your schema's
 DSL-defined modules are exported as JSON under
 `dist/json/<your-pkg>/src/main/json/`. From there, `bootstrap-from-json`
-with `--synthesize-sources` will produce both type modules and decoder
-modules under your output directory:
+will produce both type modules and decoder modules under your output directory:
 
 ```bash
 cd heads/haskell
@@ -111,8 +109,7 @@ stack build hydra:exe:bootstrap-from-json   # stack exec never rebuilds; build c
 stack exec -- bootstrap-from-json \
   --target python \
   --output /abs/path/to/out/python \
-  --package <your-pkg> \
-  --synthesize-sources
+  --package <your-pkg>
 ```
 
 The `stack build` matters: `stack exec` runs whatever binary is already in

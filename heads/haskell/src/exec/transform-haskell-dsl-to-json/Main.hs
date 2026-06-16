@@ -23,7 +23,7 @@
 
 module Main where
 
-import Hydra.Generation (writeModulesJson, writeModulesJsonPackageSplit, writeDslJsonPackageSplit, loadNativePackageModules)
+import Hydra.Generation (writeModulesJson, writeModulesJsonPackageSplit, writeDslJsonPackageSplit, loadNativePackageModules, generateEncoderModules, generateDecoderModules)
 import Hydra.PackageRouting (RoutingMap, defaultDistJsonRoot, buildRoutingMap, namespaceToPackageIn)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules,
@@ -31,8 +31,7 @@ import Hydra.Sources.Ext (
   hydraCoqModules, hydraGoModules, hydraJavaModules, hydraTypeScriptModules,
   hydraPythonModules, hydraScalaModules, hydraLispModules,
   hydraPgModules, hydraRdfModules, hydraWasmModules,
-  hydraExtPackageModules,
-  hydraExtDecodingModules, hydraExtEncodingModules,
+  hydraExtPackageModules, allEncodingModules,
   extRoutingInput)
 import Hydra.Sources.Test.All (testModules)
 
@@ -80,25 +79,29 @@ isNativeOwned m =
 --
 -- Every package's DSL sources are included here so that per-package JSON
 -- output can route modules to their owning package via namespaceToPackage.
-fullMainUniverse :: [Kernel.Module]
-fullMainUniverse = dedupByNamespace $ L.concat
-  [ mainModules
-  , dslSourceModules
-  , hydraCoqModules
-  , hydraGoModules
-  , hydraJavaModules
-  , hydraTypeScriptModules
-  , hydraPythonModules
-  , hydraScalaModules
-  , hydraLispModules
-  , hydraPgModules
-  , hydraRdfModules
-  , hydraWasmModules
-  , hydraExtPackageModules
-  , hydraExtDecodingModules
-  , hydraExtEncodingModules
-  , [GenPGTransform.module_]
-  ]
+-- Encode/decode modules are synthesized in-memory (#448) rather than loaded
+-- from dist/haskell Sources/Encode Sources/Decode .hs files.
+buildFullMainUniverse :: IO [Kernel.Module]
+buildFullMainUniverse = do
+  let baseUniverse = dedupByNamespace $ L.concat
+        [ mainModules
+        , dslSourceModules
+        , hydraCoqModules
+        , hydraGoModules
+        , hydraJavaModules
+        , hydraTypeScriptModules
+        , hydraPythonModules
+        , hydraScalaModules
+        , hydraLispModules
+        , hydraPgModules
+        , hydraRdfModules
+        , hydraWasmModules
+        , hydraExtPackageModules
+        , [GenPGTransform.module_]
+        ]
+  encMods <- generateEncoderModules baseUniverse allEncodingModules
+  decMods <- generateDecoderModules baseUniverse allEncodingModules
+  return $ dedupByNamespace (baseUniverse ++ encMods ++ decMods)
 
 
 data Options = Options
@@ -218,16 +221,18 @@ main = do
       includeJavaPython = optIncludeJavaPython opts
       routingMap        = buildRoutingMap extRoutingInput
 
+  fullMainUniverse <- buildFullMainUniverse
+
   case optPackage opts of
-    Just pkg -> runSinglePackage routingMap pkg srcSet distRoot includeJavaPython
-    Nothing  -> runAllPackages      routingMap srcSet distRoot includeJavaPython
+    Just pkg -> runSinglePackage routingMap fullMainUniverse pkg srcSet distRoot includeJavaPython
+    Nothing  -> runAllPackages      routingMap fullMainUniverse srcSet distRoot includeJavaPython
 
   putStrLn "=== Done. ==="
 
 -- | Transform a single package. Historical behaviour, kept for scoped
 -- callers that invoke one package at a time.
-runSinglePackage :: RoutingMap -> String -> String -> FilePath -> Bool -> IO ()
-runSinglePackage routingMap pkg srcSet distRoot includeJavaPython = do
+runSinglePackage :: RoutingMap -> [Kernel.Module] -> String -> String -> FilePath -> Bool -> IO ()
+runSinglePackage routingMap fullMainUniverse pkg srcSet distRoot includeJavaPython = do
   let outDir = distRoot FP.</> pkg FP.</> "src" FP.</> srcSet FP.</> "json"
   putStrLn $ "=== Transform Haskell DSL -> JSON: " ++ pkg ++ " (" ++ srcSet ++ ") ==="
 
@@ -290,8 +295,8 @@ runSinglePackage routingMap pkg srcSet distRoot includeJavaPython = do
 -- per-package JSON tree based on namespaceToPackage, so passing the whole
 -- universe produces the same on-disk layout as per-package calls — but
 -- we only pay the Haskell startup + DSL-compile cost once.
-runAllPackages :: RoutingMap -> String -> FilePath -> Bool -> IO ()
-runAllPackages routingMap srcSet distRoot includeJavaPython = do
+runAllPackages :: RoutingMap -> [Kernel.Module] -> String -> FilePath -> Bool -> IO ()
+runAllPackages routingMap fullMainUniverse srcSet distRoot includeJavaPython = do
   putStrLn $ "=== Transform Haskell DSL -> JSON: all packages (" ++ srcSet ++ ") ==="
 
   -- #346: load already-generated hydra-java / hydra-python JSON so their types

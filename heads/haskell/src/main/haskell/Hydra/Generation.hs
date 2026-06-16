@@ -186,6 +186,20 @@ generateDecoderModules = generateCoderModulesIO Decoding.decodeModule "decoder"
 generateEncoderModules :: [Module] -> [Module] -> IO [Module]
 generateEncoderModules = generateCoderModulesIO Encoding.encodeModule "encoder"
 
+-- | Pure variants for use in contexts that cannot use IO (e.g. test utilities).
+-- Fails with an error message on Left — only call where synthesis is expected to succeed.
+generateDecoderModulesPure :: [Module] -> [Module] -> Either String [Module]
+generateDecoderModulesPure universeModules typeModules =
+  case CodeGeneration.generateCoderModules Decoding.decodeModule bootstrapGraph universeModules typeModules emptyInferenceContext of
+    Left err -> Left ("Decoder synthesis failed: " ++ showError err)
+    Right ms  -> Right ms
+
+generateEncoderModulesPure :: [Module] -> [Module] -> Either String [Module]
+generateEncoderModulesPure universeModules typeModules =
+  case CodeGeneration.generateCoderModules Encoding.encodeModule bootstrapGraph universeModules typeModules emptyInferenceContext of
+    Left err -> Left ("Encoder synthesis failed: " ++ showError err)
+    Right ms  -> Right ms
+
 ----------------------------------------
 
 -- | Generate encoder/decoder Source modules for a list of type modules.
