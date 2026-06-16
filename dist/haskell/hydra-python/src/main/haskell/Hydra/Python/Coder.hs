@@ -874,7 +874,6 @@ encodeTermAssignment cx env topLevel name term ts comment =
           bindings = Typing.functionStructureBindings fs
           body = Typing.functionStructureBody fs
           domsRaw = Typing.functionStructureDomains fs
-          mcodRaw = Typing.functionStructureCodomain fs
           sigTermSig = Scoping.typeSchemeToTermSignature ts
           sigParamTypes = Lists.map (\p -> Typing.parameterType p) (Typing.termSignatureParameters sigTermSig)
           sigResult = Typing.termSignatureResult sigTermSig
