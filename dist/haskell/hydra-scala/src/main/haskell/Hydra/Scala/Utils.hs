@@ -73,6 +73,15 @@ sapplyTypes fun typeArgs =
             let nameStr = Syntax.nameDataValue v1
                 rawName = Syntax.unPredefString nameStr
             in (sname (Strings.cat2 rawName typeArgStr))
+          Syntax.RefDataSelect v1 ->
+            let qual = Syntax.selectDataQual v1
+                selName = Syntax.selectDataName v1
+                nameStr = Syntax.nameDataValue selName
+                rawName = Syntax.unPredefString nameStr
+            in (Syntax.DataRef (Syntax.RefDataSelect (Syntax.SelectData {
+              Syntax.selectDataQual = qual,
+              Syntax.selectDataName = Syntax.NameData {
+                Syntax.nameDataValue = (Syntax.PredefString (Strings.cat2 rawName typeArgStr))}})))
           _ -> fun
         _ -> fun
 -- | Create a Scala assignment expression

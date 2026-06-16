@@ -14,7 +14,14 @@ private var cachedGraph: hydra.graph.Graph = null
 // Curried signature matches the Scala coder's emission pattern for
 // multi-arg DSL functions: Map Name Type -> Map Name Term -> Graph
 // becomes (testTypes)(testTerms) at the call site.
-def testGraph(testTypes: Map[hydra.core.Name, hydra.core.Type])
+//
+// The kernel models testGraph polymorphically, so the Scala coder emits the
+// call with explicit type arguments — testGraph[Map[Name,Type], Map[Name,Term]]
+// — for parity with how it type-applies every generic callee under a type
+// application (#434). The two phantom type parameters T0/T1 absorb those args;
+// they are unused (the concrete Map parameter types are fixed) but let the
+// generated call site type-check.
+def testGraph[T0, T1](testTypes: Map[hydra.core.Name, hydra.core.Type])
              (testTerms: Map[hydra.core.Name, hydra.core.Term]): hydra.graph.Graph = {
   if (cachedGraph == null) {
     cachedGraph = hydra.TestSuiteRunner.buildTestGraph()

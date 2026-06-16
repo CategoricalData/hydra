@@ -150,15 +150,30 @@ sapplyTypes = def "sapplyTypes" $
     "typeToStr">: ("t" ~> asTerm typeToString @@ var "t"),
     "typeStrings">: Lists.map (var "typeToStr") (var "typeArgs"),
     "typeArgStr">: Strings.cat (list [string "[", Strings.intercalate (string ", ") (var "typeStrings"), string "]"])] $
-    -- Combine function with type args: extract name from fun, append type args
+    -- Combine function with type args: append the type-arg string to the
+    -- reference's final name segment. Handles both a bare name (`f` → `f[A]`)
+    -- and a qualified select (`p.q.f` → `p.q.f[A]`); the latter is how a
+    -- non-primitive kernel def like requireField is encoded, and dropping its
+    -- type args there left Scala inferring decoder lambda params as `Any`
+    -- (#434 decode/typed).
     cases _Data (var "fun")
-      (Just $ var "fun") -- If not a name ref, can't add type args
+      (Just $ var "fun") -- If not a ref, can't add type args
       [_Data_ref>>: ("ref" ~> cases _RefData (var "ref")
         (Just $ var "fun")
         [_RefData_name>>: ("dn" ~> lets [
           "nameStr">: project _NameData _NameData_value @@ var "dn",
           "rawName">: unwrap Scala._PredefString @@ var "nameStr"] $
-          sname @@ (var "rawName" ++ var "typeArgStr"))])]
+          sname @@ (var "rawName" ++ var "typeArgStr")),
+         _RefData_select>>: ("sel" ~> lets [
+          "qual">: project _SelectData _SelectData_qual @@ var "sel",
+          "selName">: project _SelectData _SelectData_name @@ var "sel",
+          "nameStr">: project _NameData _NameData_value @@ var "selName",
+          "rawName">: unwrap Scala._PredefString @@ var "nameStr"] $
+          inject _Data _Data_ref (inject _RefData _RefData_select (
+            record _SelectData [
+              _SelectData_qual>>: var "qual",
+              _SelectData_name>>: record _NameData [
+                _NameData_value>>: wrap Scala._PredefString (var "rawName" ++ var "typeArgStr")]])))])]
 
 sassign :: TypedTermDefinition (Scala.Data -> Scala.Data -> Scala.Data)
 sassign = def "sassign" $
@@ -339,6 +354,10 @@ _ParamData_decltpe = Name "decltpe"
 _ParamData_default = Name "default"
 _RefData = Scala._RefData
 _RefData_name = Name "name"
+_RefData_select = Name "select"
+_SelectData = Scala._SelectData
+_SelectData_qual = Name "qual"
+_SelectData_name = Name "name"
 
 _Data_apply = Scala._Data_apply
 _Data_assign = Scala._Data_assign

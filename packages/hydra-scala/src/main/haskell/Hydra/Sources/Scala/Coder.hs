@@ -559,29 +559,41 @@ encodeTerm = def "encodeTerm" $
           _Term_project>>: (constant $ asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "substitutedBody"),
           _Term_cases>>: (constant $ asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "substitutedBody"),
           _Term_unwrap>>: (constant $ asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "substitutedBody"),
-          -- TermVariable referencing a primitive: same treatment as Function_primitive
+          -- TermVariable referencing a primitive OR a (possibly polymorphic) kernel def:
+          -- in both cases the variable may be polymorphic and need explicit type args.
+          -- Always emit the type args. A previous heuristic (a) emitted args only for
+          -- primitives, dropping them for non-primitive defs like requireField, and
+          -- (b) even for primitives dropped the whole list when ANY arg was a type
+          -- variable not found in graphTypeVariables ("forall residual"). That set is
+          -- not populated for type variables bound by a definition's own polymorphic
+          -- SIGNATURE rather than a term-level typeLambda — exactly the shape of the
+          -- synthesized poly decoders (e.g. `def typedTerm[A]` whose body calls
+          -- requireField[Graph, Term, TypedTerm[A]] with no term typeLambda binding A).
+          -- Dropping the args stripped the concrete leading args (Graph, Term) that
+          -- Scala's local type inference needs, leaving curried-decoder lambda params
+          -- inferred as `Any` and failing to compile (#434 decode/typed). Scala accepts
+          -- `ref[A](...)` for an in-scope `A` and infers the concrete args alongside it.
           _Term_variable>>: ("pname" ~>
-            Optionals.cases (Maps.lookup (var "pname") (Graph.graphPrimitives (var "g")))
-              -- Not a primitive: encode the substituted body
-              (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "substitutedBody")
-              (lambda "_prim" $
-                Eithers.bind
-                  (Eithers.mapList ("targ" ~> asTerm encodeType @@ var "cx" @@ var "g" @@ var "targ") (var "typeArgs"))
-                  ("stypeArgs" ~> lets [
-                      "inScopeTypeVarNames">: Sets.fromList (Lists.map
-                        ("n" ~> Formatting.capitalize @@ (Core.unName (var "n")))
-                        (Sets.toList (Graph.graphTypeVariables $ var "g"))),
-                      "hasForallResidual">: Logic.not (Lists.null (Lists.filter ("st" ~>
-                        cases Scala._Type (var "st") (Just false) [
-                          Scala._Type_var>>: ("tv" ~> lets [
-                            "tvName">: project Scala._NameType Scala._NameType_value @@ (project Scala._VarType Scala._VarType_name @@ var "tv")] $
-                            Logic.and
-                              (Logic.not (Lists.elem (int32 46) (Strings.toList (var "tvName"))))
-                              (Logic.not (Sets.member (var "tvName") (var "inScopeTypeVarNames"))))])
-                        (var "stypeArgs")))] $
-                      Logic.ifElse (var "hasForallResidual")
-                        (right (ScalaUtilsSource.sprim @@ var "pname"))
-                        (right (ScalaUtilsSource.sapplyTypes @@ (ScalaUtilsSource.sprim @@ var "pname") @@ var "stypeArgs")))))]),
+            Eithers.bind
+              (Eithers.mapList ("targ" ~> asTerm encodeType @@ var "cx" @@ var "g" @@ var "targ") (var "typeArgs"))
+              ("stypeArgs" ~>
+                Optionals.cases (Maps.lookup (var "pname") (Graph.graphPrimitives (var "g")))
+                  -- Not a primitive: encode the variable reference and apply the type
+                  -- args. A reference under a type application is polymorphic (the
+                  -- kernel only type-applies generic callees), so the args are needed
+                  -- — e.g. requireField[Graph, Term, X] lets Scala resolve the curried
+                  -- decoder lambda params that would otherwise infer as Any (#434).
+                  -- Cross-module the callee's scheme is not in the graph, so we cannot
+                  -- gate on it here; instead, hand-written test/overlay bridges that the
+                  -- kernel models polymorphically (e.g. hydra.test.testEnv.testGraph)
+                  -- declare matching phantom type params in their overlay so they accept
+                  -- the emitted args.
+                  (Eithers.bind
+                    (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "substitutedBody")
+                    ("svar" ~> right (ScalaUtilsSource.sapplyTypes @@ var "svar" @@ var "stypeArgs")))
+                  -- Primitive: emit prim reference with type args.
+                  (lambda "_prim" $
+                    right (ScalaUtilsSource.sapplyTypes @@ (ScalaUtilsSource.sprim @@ var "pname") @@ var "stypeArgs"))))]),
       _Term_typeLambda>>: ("tl" ~>
         asTerm encodeTerm @@ var "cx" @@ (Scoping.extendGraphForTypeLambda @@ var "g" @@ var "tl") @@ (Core.typeLambdaBody $ var "tl")),
       _Term_application>>: ("app" ~> lets [
