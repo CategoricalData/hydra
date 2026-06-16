@@ -57,11 +57,31 @@
   "Resolve a path relative to the head directory (hand-written content)."
   (merge-pathnames relative *hydra-cl-head*))
 
+;; #434: the hand-written Common Lisp runtime (prelude, prims, loader, lib/*,
+;; …) now lives in overlay/common-lisp/ and is COPIED into the dist tree by the
+;; assembler. The head loads it from dist/, never from heads/ or overlay/. The
+;; dist main hydra dir is dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/,
+;; or — in the bootstrap demo's flat layout — <HYDRA_LISP_DIST_BASE>/src/main/
+;; common-lisp/hydra/. (Computed here so the runtime loads below can use it,
+;; before *hydra-gen-main-dir* is set by the loader.)
+(defvar *hydra-cl-dist-base-env*
+  (let ((v (sb-ext:posix-getenv "HYDRA_LISP_DIST_BASE")))
+    (when (and v (> (length v) 0))
+      (if (eql (char v (1- (length v))) #\/) v (concatenate 'string v "/")))))
+(defvar *hydra-cl-dist-main*
+  (if *hydra-cl-dist-base-env*
+      (merge-pathnames "src/main/common-lisp/hydra/" *hydra-cl-dist-base-env*)
+      (merge-pathnames "../../../dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/"
+                       *hydra-cl-head*)))
+(defun hydra-dist-main-path (relative)
+  "Resolve a runtime file relative to the dist main hydra/ dir (the overlay copy)."
+  (merge-pathnames relative *hydra-cl-dist-main*))
+
 ;; ============================================================================
 ;; 1. Load prelude (alist-based struct system)
 ;; ============================================================================
 (format t "~%Loading prelude...~%")
-(load (hydra-head-path "src/main/common-lisp/hydra/prelude.lisp"))
+(load (hydra-dist-main-path "prelude.lisp"))
 
 ;; ============================================================================
 ;; 2. Load native primitive libraries
@@ -80,13 +100,13 @@
              "lib/optionals.lisp"
              "lib/pairs.lisp"
              "lib/regex.lisp"))
-  (load (hydra-head-path (concatenate 'string "src/main/common-lisp/hydra/" f))))
+  (load (hydra-dist-main-path f)))
 
 ;; ============================================================================
 ;; 3. Load the loader + generated main modules
 ;; ============================================================================
 (format t "Loading generated main modules...~%")
-(load (hydra-head-path "src/main/common-lisp/hydra/loader.lisp"))
+(load (hydra-dist-main-path "loader.lisp"))
 
 ;; Override *hydra-gen-main-dir* to point at the generated content.
 ;; Two layouts are supported:
@@ -138,8 +158,8 @@
 ;; 4. Load primitive infrastructure and test runner
 ;; ============================================================================
 (format t "Loading primitive infrastructure...~%")
-(load (hydra-head-path "src/main/common-lisp/hydra/prims.lisp"))
-(load (hydra-head-path "src/main/common-lisp/hydra/lib/libraries.lisp"))
+(load (hydra-dist-main-path "prims.lisp"))
+(load (hydra-dist-main-path "lib/libraries.lisp"))
 
 (format t "Loading test runner...~%")
 (load (hydra-head-path "src/test/common-lisp/hydra/test_runner.lisp"))
@@ -174,7 +194,9 @@
 ;; testSkipEmit set in each host bootstrap), so we provide
 ;; hydra_test_test_env_test_context and hydra_test_test_env_test_graph
 ;; here. test_graph.lisp's defpackage references :hydra.test.testEnv.
-(load (hydra-head-path "src/test/common-lisp/hydra/test/test_env.lisp"))
+;; #434: test_env.lisp now lives in overlay/common-lisp/ and is copied into the
+;; dist test tree (*test-data-base*), so it loads from dist like the other test data.
+(load-test-file "test_env.lisp")
 ;; Ensure the lambda value bound to hydra_test_test_env_test_graph
 ;; gets a symbol-function cell so it's callable in function position.
 (hydra-set-function-bindings)

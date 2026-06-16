@@ -75,7 +75,6 @@ import qualified Hydra.Sources.Kernel.Terms.Strip        as Strip
 
 import qualified Hydra.Sources.Kernel.Terms.Dependencies as Dependencies
 import qualified Hydra.Sources.Kernel.Terms.Lexical     as Lexical
-import qualified Hydra.Sources.Decode.Core              as DecodeCore
 
 
 ns :: ModuleName
@@ -88,7 +87,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Arity.ns, Dependencies.ns, moduleName DecodeCore.module_, Lexical.ns, Reflect.ns, Rewriting.ns, Strip.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Arity.ns, Dependencies.ns, ModuleName "hydra.decode.core", Lexical.ns, Reflect.ns, Rewriting.ns, Strip.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just ("Type and term classification predicates"))}
   where
     definitions = [

@@ -1340,9 +1340,12 @@ mainModules   = kernelModules ++ haskellModules ++ jsonModules ++ otherModules
 kernelModules = kernelTypesModules ++ kernelTermsModules ++ jsonModules
 
 kernelTermsModules = kernelPrimaryTermsModules   -- hand-written logic modules
-                  ++ kernelDecodingModules        -- generated from type modules
-                  ++ kernelEncodingModules         -- generated from type modules
 ```
+
+The encode/decode modules (`hydra.encode.*`, `hydra.decode.*`) are synthesized
+in-memory at runtime by `generateEncoderModules`/`generateDecoderModules` (#448)
+and injected into the driver's universe before inference runs.
+They are no longer shipped as `dist/haskell/.../Sources/{Encode,Decode}/*.hs` files.
 
 ### The sync pipeline
 

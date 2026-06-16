@@ -54,12 +54,15 @@ graphs with deep support for polymorphism.
 
 - **`packages/`** holds each package's DSL-based module definitions, plus source-language helpers used to write them.
 - **`heads/`** holds per-host runtimes that run those modules after translation to a target language.
-- **`overlay/`** holds hand-written, language-specific source that is *overlaid onto* the generated
-  distribution packages to make them complete (the source-package → complete-distribution model).
-  Structure: `overlay/<lang>/<package>/src/...`. Today it holds each big-three language's `hydra-kernel`
-  runtime (e.g. `overlay/haskell/hydra-kernel/`, `overlay/java/hydra-kernel/`,
-  `overlay/python/hydra-kernel/`) plus the Haskell `hydra` umbrella module. The sync copies these onto
-  `dist/<lang>/<pkg>/`; they are authored, not generated, and are never compiled in place. (#418)
+- **`overlay/`** holds hand-written, language-specific source that is *copied onto* the generated
+  distribution packages to make them complete. The governing equation:
+  **`dist/<lang>/<pkg>/` = transform(`packages/<pkg>/`) + copy(`overlay/<lang>/<pkg>/`)** — a
+  distribution package is generated modules plus copied overlay files. Two invariants: (1) **only the
+  copy step reads `overlay/`** — nothing else may reference it; (2) **heads depend on `dist/`**, never on
+  `overlay/` or on `heads/` for shipped runtime (generation drivers and a head's own test runners are not
+  shipped and stay in `heads/`). Structure: `overlay/<lang>/<package>/src/...`. Populated for Haskell,
+  Java, Python, TypeScript (`hydra-kernel` runtime + the Haskell `hydra` umbrella); Scala, the Lisp
+  dialects, and Go are being migrated (#434). Authored, not generated; never compiled in place. (#418, #434)
 - **`dist/`** holds generated and copied artifacts. **Never manually edit**
   (unless doing a bootstrap patch, which must be overwritten by regeneration afterward).
 - **`bindings/`** holds host-specific third-party integrations — adapters that wire Hydra

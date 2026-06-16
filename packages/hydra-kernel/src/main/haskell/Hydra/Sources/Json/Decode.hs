@@ -43,8 +43,6 @@ import qualified Hydra.Dsl.Meta.Tabular                         as Tabular
 import qualified Hydra.Dsl.Terms                           as Terms
 import qualified Hydra.Dsl.Tests                           as Tests
 import qualified Hydra.Dsl.Types                           as Types
-import qualified Hydra.Sources.Decode.Core                 as DecodeCore
-import qualified Hydra.Sources.Encode.Core                 as EncodeCore
 import qualified Hydra.Sources.Kernel.Terms.Adapt           as Adapt
 --import qualified Hydra.Sources.Kernel.Terms.All            as KernelTerms
 import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations

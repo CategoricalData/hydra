@@ -1,4 +1,16 @@
 {
+  // The TypeScript head holds no hand-written runtime sources of its own:
+  // per #434, the kernel runtime (runtime.ts, primitives.ts, bootstrap.ts,
+  // lib/*.ts) and the test bridges (test/testEnv.ts, test/jsonBindings.ts)
+  // live under the top-level overlay/typescript/hydra-kernel/ tree, and the
+  // distribution package dist/typescript/hydra-kernel/ is the *combination*
+  // of generated modules (transformed from packages/) and those overlay
+  // files (copied in by bin/copy-kernel-runtime.sh). The head depends only
+  // on the dist tree — never on overlay/ or its own src/main (which is now
+  // empty). This config type-checks the dist main tree for IDE/`npm run
+  // typecheck`; the authoritative dist validation is bin/test-distribution.sh
+  // (which writes its own tsconfig into the dist tree) plus the vitest specs
+  // under src/test.
   "compilerOptions": {
     "target": "ES2022",
     "module": "NodeNext",
@@ -12,14 +24,7 @@
     "exactOptionalPropertyTypes": true,
     "noUncheckedIndexedAccess": true,
 
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "composite": true,
-    "incremental": true,
-
-    "rootDir": "src/main/typescript",
-    "outDir": "build/main",
+    "noEmit": true,
 
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -27,12 +32,11 @@
 
     "resolveJsonModule": true
   },
-  "include": ["src/main/typescript/**/*.ts"],
+  "include": ["../../dist/typescript/hydra-kernel/src/main/typescript/**/*.ts"],
   "exclude": [
     "build",
     "node_modules",
-    "src/test",
-    "src/main/typescript/hydra/lib/libraries.ts",
-    "src/main/typescript/hydra/bootstrap.ts"
+    "../../dist/typescript/hydra-kernel/src/main/typescript/hydra/lib/libraries.ts",
+    "../../dist/typescript/hydra-kernel/src/main/typescript/hydra/bootstrap.ts"
   ]
 }

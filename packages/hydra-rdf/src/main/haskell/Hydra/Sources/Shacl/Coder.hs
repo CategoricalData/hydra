@@ -41,8 +41,6 @@ import qualified Hydra.Dsl.Meta.Tabular                         as Tabular
 import qualified Hydra.Dsl.Terms                           as Terms
 import qualified Hydra.Dsl.Tests                           as Tests
 import qualified Hydra.Dsl.Types                           as Types
-import qualified Hydra.Sources.Decode.Core                 as DecodeCore
-import qualified Hydra.Sources.Encode.Core                 as EncodeCore
 import qualified Hydra.Sources.Kernel.Terms.Adapt           as Adapt
 import qualified Hydra.Sources.Kernel.Terms.All            as KernelTerms
 import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
@@ -96,7 +94,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, Strip.ns, Annotations.ns, moduleName DecodeCore.module_, ExtractCore.ns, Formatting.ns, Lexical.ns, RdfUtils.ns] L.++ (ShaclModel.ns:RdfSyntax.ns:KernelTypes.kernelTypesModuleNames)),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, Strip.ns, Annotations.ns, ModuleName "hydra.decode.core", ExtractCore.ns, Formatting.ns, Lexical.ns, RdfUtils.ns] L.++ (ShaclModel.ns:RdfSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "SHACL coder: converts Hydra types and terms to SHACL shapes and RDF descriptions")}
   where
     definitions = [

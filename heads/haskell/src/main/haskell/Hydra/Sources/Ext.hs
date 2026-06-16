@@ -8,23 +8,20 @@
 --
 -- Overrides (things not in any package's physical manifest):
 --
---   * `DecodePgMapping`, `DecodePgModel`, `EncodePgMapping`, `EncodePgModel`
---     are second-order DSL sources living under
---     `dist/haskell/hydra-pg/src/main/haskell/`. They are generated from
---     hydra-pg's type modules and fed back in as inputs to ext generation.
---     Packaging them cleanly is deferred to #228 / future cleanup.
 --   * `GenPGTransform` physically lives under `demos/` but today leaks into
 --     `hydraExtModules` via `otherExtModules`. Preserved here to avoid
 --     behavior change; flagged for future cleanup (it should move into a
 --     demo-specific module list).
+--   * The pg decode/encode meta-sources (`DecodePgMapping`, etc.) were previously
+--     imported from dist/haskell/hydra-pg/; they are now synthesized at runtime
+--     by the JSON-writing drivers and no longer imported here (#448).
 --
 -- Legacy compatibility: `hydraExtDemoModules` and `genpgModules` preserve
 -- the exact content they had before the manifest refactor. In particular,
--- `pgLegacyModules` is narrower than `PgManifest.mainModules` (it excludes
--- Graphson, Graphviz, and GQL but includes the decode/encode pg meta-sources).
--- Similarly, `graphsonLegacyModules` is extracted from PgManifest content
--- for use by `genpgModules`. These legacy shapes will be revisited when the
--- demo build files move to per-package source lists.
+-- `pgLegacyModules` no longer includes the pg decode/encode meta-sources (they
+-- are synthesized, not imported). `graphsonLegacyModules` is extracted from
+-- PgManifest content for use by `genpgModules`. These legacy shapes will be
+-- revisited when the demo build files move to per-package source lists.
 
 module Hydra.Sources.Ext (
   module Hydra.Sources.Ext,
@@ -44,12 +41,6 @@ import qualified Hydra.Sources.Pg.Manifest as PgManifest
 import qualified Hydra.Sources.Rdf.Manifest as RdfManifest
 import qualified Hydra.Sources.Scala.Manifest as ScalaManifest
 import qualified Hydra.Sources.Wasm.Manifest as WasmManifest
-
--- Overrides: second-order meta-sources living under dist/haskell/hydra-pg/.
-import qualified Hydra.Sources.Decode.Pg.Mapping as DecodePgMapping
-import qualified Hydra.Sources.Decode.Pg.Model as DecodePgModel
-import qualified Hydra.Sources.Encode.Pg.Mapping as EncodePgMapping
-import qualified Hydra.Sources.Encode.Pg.Model as EncodePgModel
 
 -- Override: demo-only module that today leaks into hydraExtModules.
 import qualified Hydra.Sources.Demos.GenPG.Transform as GenPGTransform
@@ -191,12 +182,10 @@ allEncodingModules =
 -- dslSourceModules + testModules) routes to hydra-kernel; haskellModules to
 -- hydra-haskell.
 --
--- hydra-pg additionally owns the override modules that live in the universe
--- but not in any package's Manifest.mainModules: the GenPGTransform demo
--- source and the pg decode/encode meta-sources. Without these explicit rows
--- they would fall through to the hydra-kernel fallback and drag pg references
--- into kernel inference (the old hardcoded table routed them via
--- hydra.demos.genpg./hydra.{encode,decode}.pg. prefixes).
+-- hydra-pg additionally owns the GenPGTransform demo source, which lives
+-- outside any package's Manifest.mainModules. The pg decode/encode modules
+-- (hydra.{encode,decode}.pg.*) are synthesized at runtime (#448) and route
+-- correctly via buildRoutingMap's derivedNames expansion from hydraPgModules.
 extRoutingInput :: [(String, [ModuleName])]
 extRoutingInput =
   [ ("hydra-kernel",     map moduleName (kernelModules ++ otherModules ++ dslSourceModules ++ testModules))
@@ -209,9 +198,7 @@ extRoutingInput =
   , ("hydra-typescript", map moduleName hydraTypeScriptModules)
   , ("hydra-lisp",       map moduleName hydraLispModules)
   , ("hydra-pg",         map moduleName (hydraPgModules
-                           ++ [GenPGTransform.module_]
-                           ++ hydraExtDecodingModules
-                           ++ hydraExtEncodingModules))
+                           ++ [GenPGTransform.module_]))
   , ("hydra-python",     map moduleName hydraPythonModules)
   , ("hydra-rdf",        map moduleName hydraRdfModules)
   , ("hydra-scala",      map moduleName hydraScalaModules)
@@ -222,19 +209,17 @@ extRoutingInput =
 -- Overrides for second-order and demo-only modules
 -- ----------------------------------------------------------------------
 
--- | Decode-side meta-sources for hydra-pg. Generated from hydra-pg's type
---   modules; live under dist/haskell/hydra-pg/.
+-- | Decode-side meta-sources for hydra-pg. Synthesized at runtime by the
+--   JSON-writing drivers from hydra-pg's type modules (#448); no longer
+--   imported from dist/haskell/hydra-pg/.
 hydraExtDecodingModules :: [Module]
-hydraExtDecodingModules = [
-  DecodePgMapping.module_,
-  DecodePgModel.module_]
+hydraExtDecodingModules = []
 
--- | Encode-side meta-sources for hydra-pg. Generated from hydra-pg's type
---   modules; live under dist/haskell/hydra-pg/.
+-- | Encode-side meta-sources for hydra-pg. Synthesized at runtime by the
+--   JSON-writing drivers from hydra-pg's type modules (#448); no longer
+--   imported from dist/haskell/hydra-pg/.
 hydraExtEncodingModules :: [Module]
-hydraExtEncodingModules = [
-  EncodePgMapping.module_,
-  EncodePgModel.module_]
+hydraExtEncodingModules = []
 
 -- ----------------------------------------------------------------------
 -- Legacy compatibility shapes
@@ -247,10 +232,6 @@ hydraExtEncodingModules = [
 pgLegacyModules :: [Module]
 pgLegacyModules = [
   CypherFeatures.module_,
-  DecodePgMapping.module_,
-  DecodePgModel.module_,
-  EncodePgMapping.module_,
-  EncodePgModel.module_,
   ErrorPg.module_,
   Gremlin.module_,
   OpenCypher.module_,
@@ -307,9 +288,7 @@ hydraExtModules =
   ++ hydraPythonModules
   ++ hydraRdfModules
   ++ hydraScalaModules
-  ++ [DecodePgMapping.module_, DecodePgModel.module_,
-      EncodePgMapping.module_, EncodePgModel.module_,
-      GenPGTransform.module_]
+  ++ [GenPGTransform.module_]
 
 -- | All modules that should be exported to JSON, including decode/encode modules
 --   that are not part of hydraExtModules in all contexts.

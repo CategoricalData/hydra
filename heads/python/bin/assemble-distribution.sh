@@ -74,18 +74,13 @@ KEEP_MANIFEST="$(mktemp -t hydra-keep-paths-python.XXXXXX)"
 trap 'rm -f "$KEEP_MANIFEST"' EXIT
 case "$PACKAGE" in
     hydra-kernel)
-        # Copy test_env.py from heads/python into dist/. The generated
-        # test_graph.py imports hydra.test.test_env, which must resolve
-        # under the dist tree at test time.
-        TEST_ENV_SRC="$HYDRA_PYTHON_HEAD/src/test/python/hydra/test/test_env.py"
-        TEST_ENV_DST="$OUT_TEST/hydra/test/test_env.py"
-        if [ -f "$TEST_ENV_SRC" ]; then
-            echo "Step 0a: Copying test_env.py from heads/python/..."
-            mkdir -p "$(dirname "$TEST_ENV_DST")"
-            cp "$TEST_ENV_SRC" "$TEST_ENV_DST"
-            printf "%s\thydra/test/test_env.py\n" "$OUT_TEST" >> "$KEEP_MANIFEST"
-        fi
-        echo "Step 0b: Copying hand-written Python runtime into hydra-kernel dist..."
+        # Copy the hand-written Python kernel runtime (and the test bridge
+        # hydra/test/test_env.py) from the overlay tree into dist/. The generated
+        # test_graph.py imports hydra.test.test_env, which must resolve under the
+        # dist tree at test time; per #434 the bridge lives in
+        # overlay/python/hydra-kernel/src/test/python/ and is copied by
+        # copy-kernel-runtime.sh, the only reader of overlay/.
+        echo "Step 0: Copying hand-written Python runtime into hydra-kernel dist..."
         "$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT" --manifest "$KEEP_MANIFEST"
         echo ""
         ;;

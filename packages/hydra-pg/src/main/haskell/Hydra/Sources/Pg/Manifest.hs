@@ -4,11 +4,9 @@
 -- Cypher, GQL, TinkerPop, and Graphviz support. See
 -- feature_290_packaging-plan.md, "Sync system redesign / Package manifests".
 --
--- Note: Decode/Encode meta-sources under dist/haskell/hydra-pg/ are NOT
--- included here. They are second-generation DSL sources produced by
--- running code generation against hydra-pg's type modules; they are
--- currently imported directly by heads/haskell/Sources/Ext.hs for onward
--- processing.
+-- Encode/decode meta-sources (hydra.{encode,decode}.pg.*) are synthesized
+-- in-memory at runtime (#448) from mainEncodingModules, not loaded from
+-- dist/haskell .hs files.
 
 module Hydra.Sources.Pg.Manifest (
   mainModules,
@@ -93,9 +91,13 @@ mainDslModules :: [Module]
 mainDslModules = [
   PgModel.module_]
 
--- | Empty for now: encode/decode for this package's modules is not yet supported across eta-expanding targets (see #475). Re-add modules here once #475 is fixed.
+-- | Type modules whose encode/decode wrappers are synthesized in JSON
+-- (#448) and in-memory for universe-seeding. PgModel and PgMapping
+-- produce hydra.{encode,decode}.pg.{model,mapping}.
 mainEncodingModules :: [Module]
-mainEncodingModules = []
+mainEncodingModules = [
+  PgModel.module_,
+  PgMapping.module_]
 
 testModules :: [Module]
 testModules = []

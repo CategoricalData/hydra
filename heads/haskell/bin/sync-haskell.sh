@@ -12,8 +12,8 @@
 # Stage 2 — JSON → Haskell:
 #   Runs bootstrap-from-json; each loaded module is routed to
 #   dist/haskell/<package>/ based on its namespace prefix (via PackageRouting).
-#   Decoder/encoder source modules (Hydra.Sources.{Decode,Encode}.*) are
-#   synthesized from the loaded kernel type modules via --synthesize-sources.
+#   Decoder/encoder modules (hydra.{decode,encode}.*) are synthesized
+#   in-memory at runtime by update-json-main (#448); no --synthesize-sources needed.
 #
 # This replaces the older multi-pass approach (update-haskell-kernel →
 # update-kernel-tests → update-haskell-default-lib → update-haskell-sources →
@@ -259,7 +259,6 @@ else
         --output "../../dist/haskell" \
         --include-dsls \
         --include-tests \
-        --synthesize-sources \
         --prune-stale \
         $RTS_FLAGS
     step_cache_record "$BFJ_CACHE" "$BFJ_HASH"

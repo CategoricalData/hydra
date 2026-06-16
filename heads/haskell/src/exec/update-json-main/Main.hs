@@ -19,7 +19,8 @@
 module Main where
 
 import Hydra.Generation (writeModulesJsonPackageSplit, writeDerivedJsonPackageSplit, modulesToGraph,
-  loadModulesFromJson, readManifestField, loadNativePackageModules)
+  loadModulesFromJson, readManifestField, loadNativePackageModules,
+  generateEncoderModules, generateDecoderModules)
 import Hydra.PackageRouting (defaultDistJsonRoot, buildRoutingMap)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules, kernelModules, haskellModules, jsonModules, otherModules,
@@ -28,7 +29,6 @@ import Hydra.Sources.Ext (
   hydraPythonModules, hydraScalaModules, hydraLispModules,
   hydraPgModules, hydraRdfModules, hydraWasmModules,
   hydraExtPackageModules,
-  hydraExtDecodingModules, hydraExtEncodingModules,
   allDslModules, allEncodingModules, extRoutingInput)
 
 import qualified Hydra.Kernel as Kernel
@@ -99,12 +99,21 @@ main = do
         , hydraRdfModules
         , hydraWasmModules
         , hydraExtPackageModules
-        , hydraExtDecodingModules
-        , hydraExtEncodingModules
         , [GenPGTransform.module_]
         ]
+
+  -- Synthesize all encode/decode modules in-memory from their source type modules
+  -- and add them to the universe so that other modules' inference can resolve
+  -- hydra.encode.*/hydra.decode.* cross-references. These modules are no longer
+  -- imported from dist/haskell/*/Sources/{Encode,Decode}/*.hs (#448); the
+  -- JSON under dist/json is produced independently by writeDerivedJsonPackageSplit
+  -- below. Same synthesizer, same content, no .hs needed.
+  encMods <- generateEncoderModules baseUniverse allEncodingModules
+  decMods <- generateDecoderModules baseUniverse allEncodingModules
+  let synthesizedEncodeDecode = dedupByNamespace (encMods ++ decMods)
+
   nativeModules <- loadNativePackageModules distRoot baseUniverse
-  let universe = dedupByNamespace (baseUniverse ++ nativeModules)
+  let universe = dedupByNamespace (baseUniverse ++ synthesizedEncodeDecode ++ nativeModules)
 
   -- Routing map (#474), derived from each package's compiled mainModules plus
   -- the native (hydra-java / hydra-python) modules loaded from dist/json.

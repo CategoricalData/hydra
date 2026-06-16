@@ -389,12 +389,13 @@ for `/sync` to flush out a second round of fixes after the source-and-`dist` pat
 This is the most complex refactoring operation. A Hydra module name like `hydra.foo` corresponds to:
 - A Haskell source module (e.g., `Hydra/Sources/Kernel/Types/Foo.hs` or `Kernel/Terms/Foo.hs`)
 - Generated Haskell code (e.g., `Hydra/Foo.hs`)
-- Generated decoder/encoder source modules (e.g., `Hydra/Sources/Decode/Foo.hs`,
-  `Hydra/Sources/Encode/Foo.hs`)
 - Generated decoder/encoder implementations (e.g., `Hydra/Decode/Foo.hs`, `Hydra/Encode/Foo.hs`)
 - Generated Python code (e.g., `hydra/foo.py` or `hydra/foo/__init__.py`)
 - Generated Java code (e.g., `hydra/foo/Element.java`)
 - JSON kernel exports (e.g., `hydra/foo.json`)
+
+Note: `Hydra/Sources/Decode/Foo.hs` and `Hydra/Sources/Encode/Foo.hs` no longer exist
+as dist files (#448); the encode/decode modules are synthesized in-memory at runtime.
 
 ### When You Might Need This
 
@@ -432,15 +433,8 @@ This is the most complex refactoring operation. A Hydra module name like `hydra.
 
 1. **Update module registry files**
    - `Hydra/Sources/Kernel/Types/All.hs` — update imports and module lists for the type module.
-   - `Hydra/Sources/Kernel/Terms/All.hs` — update imports for the decoder/encoder modules:
-     ```haskell
-     -- Change:
-     import qualified Hydra.Sources.Decode.Foo as DecodeFoo
-     import qualified Hydra.Sources.Encode.Foo as EncodeFoo
-     -- To:
-     import qualified Hydra.Sources.Decode.Foo.Bar as DecodeFoo
-     import qualified Hydra.Sources.Encode.Foo.Bar as EncodeFoo
-     ```
+   - `Hydra/Sources/Kernel/Terms/All.hs` — no decoder/encoder imports needed (#448:
+     encode/decode modules are synthesized in-memory, not imported from dist files).
 
 2. **Update files that reference the old module name.** Use `grep` to find all references:
    ```bash
@@ -467,18 +461,8 @@ This is the most complex refactoring operation. A Hydra module name like `hydra.
    stack build
    ```
 
-5. **Move and update decoder/encoder modules.** The generated decoder and encoder modules need to be moved
-   to match the new module-name structure:
+5. **Move implementation decoder/encoder modules** (not `Sources/` — those are synthesized in-memory, #448):
    ```bash
-   # Move source decoder/encoder modules
-   mkdir -p dist/haskell/hydra-kernel/src/main/haskell/Hydra/Sources/Decode/Foo
-   mkdir -p dist/haskell/hydra-kernel/src/main/haskell/Hydra/Sources/Encode/Foo
-   mv dist/haskell/hydra-kernel/src/main/haskell/Hydra/Sources/Decode/Foo.hs \
-      dist/haskell/hydra-kernel/src/main/haskell/Hydra/Sources/Decode/Foo/Bar.hs
-   mv dist/haskell/hydra-kernel/src/main/haskell/Hydra/Sources/Encode/Foo.hs \
-      dist/haskell/hydra-kernel/src/main/haskell/Hydra/Sources/Encode/Foo/Bar.hs
-
-   # Move implementation decoder/encoder modules
    mkdir -p dist/haskell/hydra-kernel/src/main/haskell/Hydra/Decode/Foo
    mkdir -p dist/haskell/hydra-kernel/src/main/haskell/Hydra/Encode/Foo
    mv dist/haskell/hydra-kernel/src/main/haskell/Hydra/Decode/Foo.hs \
@@ -489,10 +473,6 @@ This is the most complex refactoring operation. A Hydra module name like `hydra.
 
 6. **Update module declarations in moved files**
    ```bash
-   perl -i -pe 's/module Hydra\.Sources\.Decode\.Foo where/module Hydra.Sources.Decode.Foo.Bar where/g' \
-     dist/haskell/hydra-kernel/src/main/haskell/Hydra/Sources/Decode/Foo/Bar.hs
-   perl -i -pe 's/module Hydra\.Sources\.Encode\.Foo where/module Hydra.Sources.Encode.Foo.Bar where/g' \
-     dist/haskell/hydra-kernel/src/main/haskell/Hydra/Sources/Encode/Foo/Bar.hs
    perl -i -pe 's/module Hydra\.Decode\.Foo where/module Hydra.Decode.Foo.Bar where/g' \
      dist/haskell/hydra-kernel/src/main/haskell/Hydra/Decode/Foo/Bar.hs
    perl -i -pe 's/module Hydra\.Encode\.Foo where/module Hydra.Encode.Foo.Bar where/g' \
@@ -503,16 +483,8 @@ This is the most complex refactoring operation. A Hydra module name like `hydra.
    need updating:
    ```bash
    perl -i -pe 's/hydra\.foo\.Element/hydra.foo.bar.Element/g' \
-     dist/haskell/hydra-kernel/src/main/haskell/Hydra/Sources/Decode/Foo/Bar.hs \
      dist/haskell/hydra-kernel/src/main/haskell/Hydra/Decode/Foo/Bar.hs \
-     dist/haskell/hydra-kernel/src/main/haskell/Hydra/Sources/Encode/Foo/Bar.hs \
      dist/haskell/hydra-kernel/src/main/haskell/Hydra/Encode/Foo/Bar.hs
-
-   # Update decoder function references (e.g., hydra.decode.foo.element -> hydra.decode.foo.bar.element)
-   perl -i -pe 's/hydra\.decode\.foo\.element/hydra.decode.foo.bar.element/g' \
-     dist/haskell/hydra-kernel/src/main/haskell/Hydra/Sources/Decode/Testing.hs
-   perl -i -pe 's/hydra\.encode\.foo\.element/hydra.encode.foo.bar.element/g' \
-     dist/haskell/hydra-kernel/src/main/haskell/Hydra/Sources/Encode/Testing.hs
    ```
 
 8. **Update import aliases in generated files.** Some generated files import the type module with an alias
@@ -548,26 +520,8 @@ This is the most complex refactoring operation. A Hydra module name like `hydra.
       dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/Foo/*.hs
     ```
 
-11. **Regenerate decoder/encoder source modules.** The decoder and encoder source modules are generated
-    from type definitions. Use GHCi to regenerate them:
+11. **Clean up orphan files.** Remove any old dist files left at the old locations:
     ```bash
-    stack ghci
-    ```
-    Then in GHCi:
-    ```haskell
-    import Hydra.Sources.All
-    import Hydra.Generation
-    writeDecoderSourceHaskell "../../dist/haskell/hydra-kernel/src/main/haskell" mainModules kernelTypesModules
-    writeEncoderSourceHaskell "../../dist/haskell/hydra-kernel/src/main/haskell" mainModules kernelTypesModules
-    :quit
-    ```
-    This regenerates the `Hydra.Sources.Decode.*` and `Hydra.Sources.Encode.*` modules with correct module-name
-    references.
-
-12. **Clean up orphan files.** After regeneration, remove any orphan files left at the old locations:
-    ```bash
-    rm -f dist/haskell/hydra-kernel/src/main/haskell/Hydra/Sources/Decode/Foo.hs
-    rm -f dist/haskell/hydra-kernel/src/main/haskell/Hydra/Sources/Encode/Foo.hs
     rm -f dist/haskell/hydra-kernel/src/main/haskell/Hydra/Decode/Foo.hs
     rm -f dist/haskell/hydra-kernel/src/main/haskell/Hydra/Encode/Foo.hs
     rm -f dist/haskell/hydra-kernel/src/main/haskell/Hydra/Foo.hs

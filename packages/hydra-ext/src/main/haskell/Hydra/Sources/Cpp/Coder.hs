@@ -36,8 +36,6 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical        as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as SerializationSource
-import qualified Hydra.Sources.Decode.Core                 as DecodeCore
-import qualified Hydra.Sources.Encode.Core                 as EncodeCore
 import           Prelude hiding ((++))
 import qualified Data.List                  as L
 
@@ -62,7 +60,7 @@ module_ = Module {
       CppSerde.ns,
       Formatting.ns, Names.ns, Dependencies.ns, Strip.ns, Environment.ns, Predicates.ns, Resolution.ns, Lexical.ns,
       ShowCore.ns, Annotations.ns, Sorting.ns, SerializationSource.ns,
-      moduleName DecodeCore.module_, moduleName EncodeCore.module_] L.++ (CppSyntax.ns:KernelTypes.kernelTypesModuleNames)),
+      ModuleName "hydra.decode.core", ModuleName "hydra.encode.core"] L.++ (CppSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = descriptionMetadata (Just "C++ code generator: converts Hydra modules to C++ header files")}
   where
     definitions = [

@@ -462,7 +462,7 @@ Key options:
 | `--include-tests` | Also generate test modules |
 | `--kernel-only` | Only generate kernel modules |
 | `--types-only` | Only generate type-defining modules |
-| `--synthesize-sources` | Derive `Hydra.Sources.Decode.*` and `Hydra.Sources.Encode.*` from kernel + pg types |
+| `--synthesize-sources` | *(removed in #448 — encode/decode modules are now synthesized in-memory, not written to dist)* |
 | `--dist-json-root <dir>` | JSON root (default: `../../dist/json`) |
 
 For non-Haskell hosts, each implementation has its own bootstrap

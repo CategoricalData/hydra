@@ -85,16 +85,20 @@ else
     fi
 fi
 
-# No package-specific post-processing today.
 # (testGraph.scala emptyGraph-to-buildTestGraph patch eliminated: the DSL now
 # emits `hydra.test.testEnv.testGraph(testTypes)` directly, and the hand-written
-# heads/scala testEnv.scala resolves the call to TestSuiteRunner.buildTestGraph.)
+# testEnv.scala resolves the call to TestSuiteRunner.buildTestGraph.)
 #
-# (Scala exception: do NOT copy heads/scala/.../lib/ into dist/scala/hydra-kernel/.
-# packages/hydra-scala/build.sbt lists both heads/scala/src/main/scala AND
-# dist/scala/hydra-kernel/src/main/scala under unmanagedSourceDirectories,
-# so a copy would duplicate every class. Bootstrap-demo target setup
-# handles the runtime layout independently.)
+# Step 3 (hydra-kernel only): copy the hand-written runtime + test runner from
+# the overlay tree into dist/ (#434). Runs AFTER the transform's --prune-stale
+# pass so the prune can't remove the overlay files. build.sbt now consumes the
+# runtime from this dist copy; heads/scala/src/main/scala carries only the
+# drivers (Bootstrap/Generation), so there is no duplicate-class clash.
+if [ "$PACKAGE" = "hydra-kernel" ]; then
+    echo ""
+    echo "Step 3: Copying hand-written Scala runtime into hydra-kernel dist..."
+    "$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT"
+fi
 
 echo ""
 

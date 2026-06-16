@@ -15,7 +15,6 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 LISP_DIALECT="emacs-lisp"
 LISP_PRETTY_NAME="Emacs Lisp"
 LISP_HEAD_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
-LISP_TEST_ENV="test_env.el"
 
 source "$SCRIPT_DIR/../../bin/common.sh"
 
