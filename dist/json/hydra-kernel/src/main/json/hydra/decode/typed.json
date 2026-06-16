@@ -37,6 +37,13 @@
             "body": {
               "lambda": {
                 "parameter": "a",
+                "domain": {
+                  "function": {
+                    "domain": {"variable": "hydra.graph.Graph"},
+                    "codomain": {
+                      "function": {
+                        "domain": {"variable": "hydra.core.Term"},
+                        "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "a"}}}}}}},
                 "body": {
                   "lambda": {
                     "parameter": "cx",
@@ -222,6 +229,13 @@
             "body": {
               "lambda": {
                 "parameter": "a",
+                "domain": {
+                  "function": {
+                    "domain": {"variable": "hydra.graph.Graph"},
+                    "codomain": {
+                      "function": {
+                        "domain": {"variable": "hydra.core.Term"},
+                        "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "a"}}}}}}},
                 "body": {
                   "lambda": {
                     "parameter": "cx",
@@ -334,6 +348,13 @@
             "body": {
               "lambda": {
                 "parameter": "a",
+                "domain": {
+                  "function": {
+                    "domain": {"variable": "hydra.graph.Graph"},
+                    "codomain": {
+                      "function": {
+                        "domain": {"variable": "hydra.core.Term"},
+                        "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "a"}}}}}}},
                 "body": {
                   "lambda": {
                     "parameter": "cx",

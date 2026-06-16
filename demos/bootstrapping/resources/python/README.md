@@ -19,7 +19,7 @@ infrastructure) to form a self-contained, buildable project.
 ## Running the tests
 
 ```
-pytest src/test/ src/test/
+pytest src/test/
 ```
 
 This runs the full test suite. All tests should pass, confirming that the

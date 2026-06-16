@@ -131,12 +131,6 @@ Hydra's Java code is split across three locations
   (Syntax, Language, Coder, Serde, Names, Utils, Environment, Testing, plus the
   hand-written `JavaHelpers` and `SourceDsl` support classes).
 
-  > **Legacy backup:** `packages/hydra-java/src/main/haskell/Hydra/Sources/Java/` still
-  > contains the older Haskell-DSL versions of these modules. They are kept as a backup
-  > through the 0.15 line and produce byte-identical `dist/json/hydra-java/` output, but
-  > will be dropped before 0.16. Edits should go into the Java sources, not the Haskell
-  > ones.
-
 - **Java kernel overlay** ([`overlay/java/hydra-kernel/src/main/java/`](https://github.com/CategoricalData/hydra/tree/main/overlay/java/hydra-kernel/src/main/java))
   — hand-written Java kernel runtime, overlaid onto `dist/java/hydra-kernel/`
   by `bin/copy-kernel-runtime.sh` so the published `hydra-kernel` Maven artifact
@@ -204,10 +198,9 @@ The script:
 End-to-end is ~30 seconds once `dist/` is current.
 
 > **Note:** `bin/sync.sh` Phase 5 invokes `generate-hydra-java-from-java.sh`
-> automatically — the native Java DSL path is authoritative. The legacy
-> Haskell DSL copy at `packages/hydra-java/src/main/haskell/` remains as a
-> bootstrap fallback (used by Phase 1 on a cold checkout) and will be
-> retired before 0.16. See [`claude/pitfalls.md`](https://github.com/CategoricalData/hydra/blob/main/claude/pitfalls.md)
+> automatically — the native Java DSL path is the sole source of truth (the
+> legacy Haskell DSL copies under `packages/hydra-java/src/main/haskell/` were
+> deleted in #346). See [`claude/pitfalls.md`](https://github.com/CategoricalData/hydra/blob/main/claude/pitfalls.md)
 > for the `HYDRA_IN_SYNC` convention around wrapper-script self-syncing.
 
 ### Phase 2: regenerate `dist/java/` from the JSON

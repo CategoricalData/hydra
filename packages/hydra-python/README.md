@@ -117,12 +117,6 @@ Hydra's Python code is split across three locations
   `names.py`, `utils.py`, `environment.py`, `testing.py`, plus the
   `_python_helpers.py` / `_kernel_refs.py` support modules).
 
-  > **Legacy backup:** `packages/hydra-python/src/main/haskell/Hydra/Sources/Python/` still
-  > contains the older Haskell-DSL versions of these modules. They are kept as a backup
-  > through the 0.15 line and produce byte-identical `dist/json/hydra-python/` output, but
-  > will be dropped before 0.16. Edits should go into the Python sources, not the Haskell
-  > ones.
-
 - **Python kernel overlay** ([`overlay/python/hydra-kernel/src/main/python/`](https://github.com/CategoricalData/hydra/tree/main/overlay/python/hydra-kernel/src/main/python))
   — hand-written Python kernel runtime, overlaid onto `dist/python/hydra-kernel/`
   by `bin/copy-kernel-runtime.sh` so the published `hydra-kernel` wheel is self-contained
@@ -186,16 +180,14 @@ and ~500 seconds under CPython, once `dist/` is current. See
 [bin/update-python-json.md](https://github.com/CategoricalData/hydra/blob/main/bin/update-python-json.md) for background.
 
 > **Note:** `bin/sync.sh` Phase 5 invokes `generate-hydra-python-from-python.sh`
-> automatically — the native Python DSL path is authoritative. The legacy
-> Haskell DSL copy at `packages/hydra-python/src/main/haskell/` remains as a
-> bootstrap fallback (used by Phase 1 on a cold checkout) and will be
-> retired before 0.16. See [`claude/pitfalls.md`](https://github.com/CategoricalData/hydra/blob/main/claude/pitfalls.md)
+> automatically — the native Python DSL path is the sole source of truth (the
+> legacy Haskell DSL copies under `packages/hydra-python/src/main/haskell/` were
+> deleted in #346). See [`claude/pitfalls.md`](https://github.com/CategoricalData/hydra/blob/main/claude/pitfalls.md)
 > for the `HYDRA_IN_SYNC` convention around wrapper-script self-syncing.
 
 ### Phase 2: regenerate `dist/python/` from the JSON
 
-The recommended end-to-end script (which currently still drives Phase 1 via the
-legacy Haskell pipeline) is:
+The recommended end-to-end script is:
 
 ```bash
 bin/sync-python.sh
@@ -204,7 +196,7 @@ bin/sync-python.sh
 (equivalent to `bin/sync.sh --hosts python --targets python`)
 
 This will:
-1. Generate / refresh `dist/json/` from the legacy Haskell DSL sources
+1. Generate / refresh `dist/json/` from the native Python DSL sources
 2. Generate the Python kernel into `dist/python/hydra-kernel/src/main/python`
 3. Generate the kernel tests into `dist/python/hydra-kernel/src/test/python`
 4. Run the pytest suite

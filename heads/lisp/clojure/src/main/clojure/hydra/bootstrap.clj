@@ -114,6 +114,34 @@
   (or (ns-resolve 'clojure.core sym)
       (throw (RuntimeException. (str "Cannot resolve: " sym)))))
 
+(defn- dist-json-root-of
+  "Strip a legacy <pkg>/src/main/json suffix to recover the dist/json root.
+   Callers historically pass dist/json/hydra-kernel/src/main/json as --json-dir;
+   we need the parent dist/json/ to find sibling packages."
+  [json-dir]
+  (let [trimmed (.replaceAll ^String json-dir "/+$" "")]
+    (if (.endsWith ^String trimmed "/src/main/json")
+      (let [without-suffix (subs trimmed 0 (- (count trimmed) (count "/src/main/json")))
+            slash (.lastIndexOf ^String without-suffix "/")]
+        (if (>= slash 0) (subs without-suffix 0 slash) "."))
+      trimmed)))
+
+(defn- load-package-main
+  "Load mainModules ∪ defaultLibModules from <root>/<pkg>/src/main/json.
+   Returns [] if the package's manifest.json does not exist."
+  [root pkg read-manifest load-mods]
+  (let [pkg-dir (str root "/" pkg "/src/main/json")
+        manifest-path (str pkg-dir "/manifest.json")]
+    (if-not (.exists (java.io.File. ^String manifest-path))
+      []
+      (let [main-ns (vec (read-manifest pkg-dir "mainModules"))
+            default-ns (vec (read-manifest pkg-dir "defaultLibModules"))
+            all-ns (into main-ns default-ns)]
+        (when (seq all-ns)
+          (println (str "  " pkg ": " (count all-ns) " modules from " pkg-dir))
+          (flush))
+        (load-mods pkg-dir all-ns)))))
+
 (defn- load-coder-modules!
   "Load a coder root namespace plus all of its transitive :require deps in
    topological order. Pre-declares all symbols across all modules first, then
@@ -270,17 +298,23 @@
         (println)
         (flush)
 
-        ;; Step 1: Load main + eval lib modules
-        (println "Step 1: Loading main modules from JSON...")
-        (println (str "  Source: " json-dir))
+        ;; Step 1: Load baseline packages (hydra-kernel + hydra-haskell), mirroring
+        ;; the Scala, Python, and CL hosts. The hydra-haskell package supplies the
+        ;; runtime AST modules (Hydra.Haskell.Syntax, .Environment, etc.) that the
+        ;; generated DSL source modules import. Without it the Haskell rebuild step
+        ;; fails on dangling imports. (#487; CL-host analog: #460.)
+        (println "Step 1: Loading baseline main modules from JSON...")
         (flush)
         (let [step-start (System/currentTimeMillis)
-              all-kernel-ns (vec (read-manifest json-dir "mainModules"))
-              kernel-ns-set (set all-kernel-ns)
-              main-mods (load-mods json-dir all-kernel-ns)
+              dist-json-root (dist-json-root-of json-dir)
+              kernel-mods (load-package-main dist-json-root "hydra-kernel" read-manifest load-mods)
+              haskell-mods (load-package-main dist-json-root "hydra-haskell" read-manifest load-mods)
+              main-mods (vec (concat kernel-mods haskell-mods))
+              ns-str-of-mod (fn [m] (let [n (:name m)] (if (string? n) n (:value n))))
+              kernel-ns-set (set (map ns-str-of-mod main-mods))
               step-time (- (System/currentTimeMillis) step-start)
               total-bindings (reduce + 0 (map #(count (:definitions %)) main-mods))]
-          (println (str "  Loaded " (count main-mods) " modules (" total-bindings " bindings)."))
+          (println (str "  Loaded " (count main-mods) " baseline modules (" total-bindings " bindings)."))
           (println (str "  Time: " (format-time step-time)))
           (println)
           (flush)

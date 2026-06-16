@@ -267,8 +267,15 @@ const convertTypeScheme = (ts: unknown): unknown => {
 };
 
 // Read a kernel JSON file and return both term and type bindings.
-// Each module definition is either `{type: {name, typeScheme}}` (a type
-// definition) or `{term: {name, term, typeScheme?}}` (a term binding).
+//
+// The kernel JSON encodes each module definition as either:
+//   - `{term: {name, signature, body}}`  — a term binding whose `body` is
+//     the Term value and whose `signature` (Optional FunctionSignature)
+//     describes its type. The Term value is stored in boundTerms; the
+//     signature isn't promoted to a TypeScheme here because reduceTerm
+//     only consults `binding.term` during evaluation.
+//   - `{type:  {name, body}}`            — a type definition whose `body`
+//     is already the kernel `TypeScheme` shape (`{variables, body}`).
 interface ModuleParts {
   readonly terms: ReadonlyArray<readonly [Name, Term]>;
   readonly types: ReadonlyArray<readonly [Name, TypeScheme]>;
@@ -280,25 +287,25 @@ const loadFile = (kernelJsonDir: string, ns: string): ModuleParts => {
   try { raw = readFileSync(filePath, "utf-8"); }
   catch { return { terms: [], types: [] }; }
   const parsed = JSON.parse(raw) as { definitions?: Array<{
-    term?: { name?: string; term?: unknown; typeScheme?: unknown };
-    type?: { name?: string; typeScheme?: unknown };
+    term?: { name?: string; body?: unknown };
+    type?: { name?: string; body?: unknown };
   }> };
   const terms: Array<readonly [Name, Term]> = [];
   const types: Array<readonly [Name, TypeScheme]> = [];
   for (const def of parsed.definitions ?? []) {
     if (def.term) {
       const inner = def.term;
-      if (!inner.name || inner.term === undefined) continue;
+      if (!inner.name || inner.body === undefined) continue;
       const name: Name = { value: inner.name } as Name;
       // Convert first, then strip type-level wrappers — the evaluator
       // works at the simply-typed level and chokes on typeApp heads.
-      const term = stripTypeAbstractions(convert(inner.term)) as Term;
+      const term = stripTypeAbstractions(convert(inner.body)) as Term;
       terms.push([name, term] as const);
     } else if (def.type) {
       const inner = def.type;
-      if (!inner.name || inner.typeScheme === undefined) continue;
+      if (!inner.name || inner.body === undefined) continue;
       const name: Name = { value: inner.name } as Name;
-      const scheme = convertTypeScheme(inner.typeScheme) as TypeScheme;
+      const scheme = convertTypeScheme(inner.body) as TypeScheme;
       types.push([name, scheme] as const);
     }
   }

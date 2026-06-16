@@ -726,7 +726,7 @@ main = do
         "go"         -> generateSourcesWithTransform xform moduleToGo  goLanguage         False dir universe mods
         "typescript" -> generateSourcesWithTransform xform moduleToTypeScript typeScriptLanguage False dir universe mods
         _ | Just g <- lispGenerator ->
-              generateSourcesWithTransform xform g lispLanguage True dir universe mods
+              generateSourcesWithTransform xform g lispLanguage False dir universe mods
         _ -> do
           putStrLn $ "Unknown target: " ++ target
           exitFailure

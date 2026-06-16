@@ -123,7 +123,9 @@ encodeForallType :: Core.ForallType -> Core.Term
 encodeForallType ft =
     Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (encodeBindingName (Core.forallTypeParameter ft)),
-      Core.lambdaDomain = Nothing,
+      Core.lambdaDomain = (Just (Core.TypeFunction (Core.FunctionType {
+        Core.functionTypeDomain = (Core.TypeVariable (Core.forallTypeParameter ft)),
+        Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))),
       Core.lambdaBody = (encodeType (Core.forallTypeBody ft))})
 -- | Encode an Injection as a term
 encodeInjection :: Core.Name -> Core.Name -> Core.Term -> Core.Term
@@ -495,7 +497,9 @@ encodeTypeNamed ename typ =
       Core.TypeEither v0 -> encodeEitherType v0
       Core.TypeForall v0 -> Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (encodeBindingName (Core.forallTypeParameter v0)),
-        Core.lambdaDomain = Nothing,
+        Core.lambdaDomain = (Just (Core.TypeFunction (Core.FunctionType {
+          Core.functionTypeDomain = (Core.TypeVariable (Core.forallTypeParameter v0)),
+          Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))),
         Core.lambdaBody = (encodeTypeNamed ename (Core.forallTypeBody v0))})
       Core.TypeFunction _ -> Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "x"),

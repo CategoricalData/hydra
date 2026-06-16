@@ -175,6 +175,7 @@
             "body": {
               "lambda": {
                 "parameter": "e",
+                "domain": {"function": {"domain": {"variable": "e"}, "codomain": {"variable": "hydra.core.Term"}}},
                 "body": {
                   "lambda": {
                     "parameter": "x",
