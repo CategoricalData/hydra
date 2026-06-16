@@ -26,7 +26,7 @@ public class IsLower extends PrimitiveFunction {
      * @return the name "hydra.lib.chars.isLower"
      */
     public Name name() {
-        return new Name("hydra.lib.chars.isLower");
+        return hydra.lib.Chars.isLower().name;
     }
 
     /**

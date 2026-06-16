@@ -29,7 +29,7 @@ public class BinaryToString extends PrimitiveFunction {
      * @return the function name "hydra.lib.literals.binaryToString"
      */
     public Name name() {
-        return new Name("hydra.lib.literals.binaryToString");
+        return hydra.lib.Literals.binaryToString().name;
     }
 
     /**

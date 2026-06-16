@@ -28,7 +28,7 @@ public class IsNone extends PrimitiveFunction {
      * @return the name "hydra.lib.optionals.isNone"
      */
     public Name name() {
-        return new Name("hydra.lib.optionals.isNone");
+        return hydra.lib.Optionals.isNone().name;
     }
 
     /**

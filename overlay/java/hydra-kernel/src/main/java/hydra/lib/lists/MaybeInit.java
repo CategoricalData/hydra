@@ -25,7 +25,7 @@ import hydra.util.Either;
  */
 public class MaybeInit extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.lists.maybeInit");
+        return hydra.lib.Lists.maybeInit().name;
     }
 
     @Override

@@ -28,7 +28,7 @@ public class Insert extends PrimitiveFunction {
      * @return the name
      */
     public Name name() {
-        return new Name("hydra.lib.maps.insert");
+        return hydra.lib.Maps.insert().name;
     }
 
     /**

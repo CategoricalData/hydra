@@ -26,7 +26,7 @@ import hydra.util.Either;
  */
 public class Nub extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.lists.nub");
+        return hydra.lib.Lists.nub().name;
     }
 
     @Override

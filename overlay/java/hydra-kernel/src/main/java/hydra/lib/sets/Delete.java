@@ -30,7 +30,7 @@ public class Delete extends PrimitiveFunction {
      * @return the name "hydra.lib.sets.delete"
      */
     public Name name() {
-        return new Name("hydra.lib.sets.delete");
+        return hydra.lib.Sets.delete().name;
     }
 
     /**

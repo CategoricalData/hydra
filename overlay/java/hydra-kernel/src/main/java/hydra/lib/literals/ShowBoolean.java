@@ -28,7 +28,7 @@ public class ShowBoolean extends PrimitiveFunction {
      * @return the function name "hydra.lib.literals.showBoolean"
      */
     public Name name() {
-        return new Name("hydra.lib.literals.showBoolean");
+        return hydra.lib.Literals.showBoolean().name;
     }
 
     /**

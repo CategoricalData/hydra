@@ -28,7 +28,7 @@ public class ShowDecimal extends PrimitiveFunction {
      * @return the function name "hydra.lib.literals.showDecimal"
      */
     public Name name() {
-        return new Name("hydra.lib.literals.showDecimal");
+        return hydra.lib.Literals.showDecimal().name;
     }
 
     /**

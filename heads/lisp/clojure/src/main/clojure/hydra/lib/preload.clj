@@ -6,10 +6,10 @@
 
 (def ^:private lib-ns-names
   "Library namespaces whose public vars should be globalized."
-  ["hydra.lib.chars" "hydra.lib.eithers" "hydra.lib.equality"
-   "hydra.lib.lists" "hydra.lib.literals" "hydra.lib.logic"
-   "hydra.lib.maps" "hydra.lib.math" "hydra.lib.optionals"
-   "hydra.lib.pairs" "hydra.lib.sets" "hydra.lib.strings"])
+  ["hydra.clojure.lib.chars" "hydra.clojure.lib.eithers" "hydra.clojure.lib.equality"
+   "hydra.clojure.lib.lists" "hydra.clojure.lib.literals" "hydra.clojure.lib.logic"
+   "hydra.clojure.lib.maps" "hydra.clojure.lib.math" "hydra.clojure.lib.optionals"
+   "hydra.clojure.lib.pairs" "hydra.clojure.lib.sets" "hydra.clojure.lib.strings"])
 
 (defn globalize-ns-vars!
   "Intern all public vars from the given namespace into clojure.core,
@@ -182,12 +182,15 @@
 
 (defn coder-load-order
   "Walk the :require closure of `root-ns-names` and return the transitive
-   dependency set in topological order, omitting hydra.lib.* and hydra.eval.*
+   dependency set in topological order, omitting hydra.clojure.lib.* and hydra.eval.*
    (which the runtime preload globalizes ahead of time) and any ns whose
-   source file is not on the classpath (e.g. clojure.string)."
+   source file is not on the classpath (e.g. clojure.string).
+   #473: native primitive impls were relocated hydra.lib.* -> hydra.clojure.lib.*;
+   the generated hydra.lib.* def-modules (PrimitiveDefinition data) are not part of
+   the runtime require-closure, so only hydra.clojure.lib.* is skipped here."
   [root-ns-names]
   (let [skip? (fn [^String n]
-                (or (.startsWith n "hydra.lib.")
+                (or (.startsWith n "hydra.clojure.lib.")
                     (.startsWith n "hydra.eval.")
                     (not (.startsWith n "hydra."))))
         reach (loop [stack (vec root-ns-names) seen #{}]

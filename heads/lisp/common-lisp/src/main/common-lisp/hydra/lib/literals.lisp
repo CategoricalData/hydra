@@ -3,85 +3,85 @@
 ;; bigint_to_decimal :: BigInteger -> Decimal
 ;; Convert a bigint to a decimal. Common Lisp has no native decimal type;
 ;; values represented as double-float (adapter fallback policy).
-(defvar hydra_lib_literals_bigint_to_decimal
+(defvar hydra_lisp_lib_literals_bigint_to_decimal
   (lambda (x)
     (float x 1.0d0)))
 
 ;; bigint_to_int :: BigInteger -> Int  (identity)
 ;; Convert a bigint (Integer) to an int.
-(defvar hydra_lib_literals_bigint_to_int
+(defvar hydra_lisp_lib_literals_bigint_to_int
   (lambda (x) x))
 
 ;; bigint_to_int8 :: BigInteger -> Int8
 ;; Convert a bigint (Integer) to an int8.
-(defvar hydra_lib_literals_bigint_to_int8
+(defvar hydra_lisp_lib_literals_bigint_to_int8
   (lambda (x) x))
 
 ;; bigint_to_int16 :: BigInteger -> Int16
 ;; Convert a bigint (Integer) to an int16.
-(defvar hydra_lib_literals_bigint_to_int16
+(defvar hydra_lisp_lib_literals_bigint_to_int16
   (lambda (x) x))
 
 ;; bigint_to_int32 :: BigInteger -> Int32
 ;; Convert a bigint (Integer) to an int32.
-(defvar hydra_lib_literals_bigint_to_int32
+(defvar hydra_lisp_lib_literals_bigint_to_int32
   (lambda (x) x))
 
 ;; bigint_to_int64 :: BigInteger -> Int64
 ;; Convert a bigint (Integer) to an int64.
-(defvar hydra_lib_literals_bigint_to_int64
+(defvar hydra_lisp_lib_literals_bigint_to_int64
   (lambda (x) x))
 
 ;; bigint_to_uint :: BigInteger -> Uint
 ;; Convert a bigint (Integer) to a uint.
-(defvar hydra_lib_literals_bigint_to_uint
+(defvar hydra_lisp_lib_literals_bigint_to_uint
   (lambda (x) x))
 
 ;; bigint_to_uint8 :: BigInteger -> Uint8
 ;; Convert a bigint (Integer) to a uint8.
-(defvar hydra_lib_literals_bigint_to_uint8
+(defvar hydra_lisp_lib_literals_bigint_to_uint8
   (lambda (x) x))
 
 ;; bigint_to_uint16 :: BigInteger -> Uint16
 ;; Convert a bigint (Integer) to a uint16.
-(defvar hydra_lib_literals_bigint_to_uint16
+(defvar hydra_lisp_lib_literals_bigint_to_uint16
   (lambda (x) x))
 
 ;; bigint_to_uint32 :: BigInteger -> Uint32
 ;; Convert a bigint (Integer) to a uint32.
-(defvar hydra_lib_literals_bigint_to_uint32
+(defvar hydra_lisp_lib_literals_bigint_to_uint32
   (lambda (x) x))
 
 ;; bigint_to_uint64 :: BigInteger -> Uint64
 ;; Convert a bigint (Integer) to a uint64.
-(defvar hydra_lib_literals_bigint_to_uint64
+(defvar hydra_lisp_lib_literals_bigint_to_uint64
   (lambda (x) x))
 
 ;; binary_to_bytes :: Binary -> [Int8]
 ;; Convert binary to a list of byte values (0-255).
-(defvar hydra_lib_literals_binary_to_bytes
+(defvar hydra_lisp_lib_literals_binary_to_bytes
   (lambda (bs)
     (map 'list (lambda (b) (logand b #xFF)) bs)))
 
 ;; decimal_to_bigint :: Decimal -> BigInteger
 ;; Common Lisp has no native decimal; values are double-float.
-(defvar hydra_lib_literals_decimal_to_bigint
+(defvar hydra_lisp_lib_literals_decimal_to_bigint
   (lambda (x)
     (round x)))
 
 ;; decimal_to_float32 :: Decimal -> Float
-(defvar hydra_lib_literals_decimal_to_float32
+(defvar hydra_lisp_lib_literals_decimal_to_float32
   (lambda (x)
     (float (float x 1.0f0) 1.0d0)))
 
 ;; decimal_to_float64 :: Decimal -> Double
-(defvar hydra_lib_literals_decimal_to_float64
+(defvar hydra_lisp_lib_literals_decimal_to_float64
   (lambda (x)
     (float x 1.0d0)))
 
 ;; binary_to_string :: ByteString -> String (base64 encoding)
 ;; Convert binary to string by base64 encoding.
-(defvar hydra_lib_literals_binary_to_string
+(defvar hydra_lisp_lib_literals_binary_to_string
   (let ((b64-chars "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"))
     (lambda (bv)
       (let* ((bytes (coerce bv 'vector))
@@ -104,64 +104,64 @@
 
 ;; float :: FloatPrecision -> Double -> Double
 ;; Convert a float to a given precision.
-(defvar hydra_lib_literals_float
+(defvar hydra_lisp_lib_literals_float
   (lambda (precision)
     (declare (ignore precision))
     (lambda (x)
       (float x 1.0d0))))
 
 ;; float32_to_decimal :: Float -> Decimal
-(defvar hydra_lib_literals_float32_to_decimal
+(defvar hydra_lisp_lib_literals_float32_to_decimal
   (lambda (x)
     (float x 1.0d0)))
 
 ;; float32_to_float64 :: Float -> Double
 ;; Lossless widening from single-float to double-float.
-(defvar hydra_lib_literals_float32_to_float64
+(defvar hydra_lisp_lib_literals_float32_to_float64
   (lambda (x)
     (float x 1.0d0)))
 
 ;; float64_to_decimal :: Double -> Decimal
-(defvar hydra_lib_literals_float64_to_decimal
+(defvar hydra_lisp_lib_literals_float64_to_decimal
   (lambda (x)
     (float x 1.0d0)))
 
 ;; float64_to_float32 :: Double -> Float
 ;; Lossy narrowing from double-float to single-float.
-(defvar hydra_lib_literals_float64_to_float32
+(defvar hydra_lisp_lib_literals_float64_to_float32
   (lambda (x)
     (float x 1.0f0)))
 
 ;; int :: IntPrecision -> Int -> Int
 ;; Convert an int to a given precision.
-(defvar hydra_lib_literals_int
+(defvar hydra_lisp_lib_literals_int
   (lambda (precision)
     (declare (ignore precision))
     (lambda (x) x)))
 
 ;; int8_to_bigint :: Int8 -> BigInteger
 ;; Convert an int8 to a bigint (Integer).
-(defvar hydra_lib_literals_int8_to_bigint
+(defvar hydra_lisp_lib_literals_int8_to_bigint
   (lambda (x) x))
 
 ;; int16_to_bigint :: Int16 -> BigInteger
 ;; Convert an int16 to a bigint (Integer).
-(defvar hydra_lib_literals_int16_to_bigint
+(defvar hydra_lisp_lib_literals_int16_to_bigint
   (lambda (x) x))
 
 ;; int32_to_bigint :: Int32 -> BigInteger
 ;; Convert an int32 to a bigint (Integer).
-(defvar hydra_lib_literals_int32_to_bigint
+(defvar hydra_lisp_lib_literals_int32_to_bigint
   (lambda (x) x))
 
 ;; int64_to_bigint :: Int64 -> BigInteger
 ;; Convert an int64 to a bigint (Integer).
-(defvar hydra_lib_literals_int64_to_bigint
+(defvar hydra_lisp_lib_literals_int64_to_bigint
   (lambda (x) x))
 
 ;; read_decimal :: String -> Maybe Decimal
 ;; No native decimal; parse as double-float.
-(defvar hydra_lib_literals_read_decimal
+(defvar hydra_lisp_lib_literals_read_decimal
   (lambda (s)
     (let* ((*read-default-float-format* 'double-float)
            (n (ignore-errors (read-from-string s))))
@@ -171,7 +171,7 @@
 
 ;; read_bigint :: String -> Maybe BigInteger
 ;; Parse a string to a bigint (Integer).
-(defvar hydra_lib_literals_read_bigint
+(defvar hydra_lisp_lib_literals_read_bigint
   (lambda (s)
     (let ((n (ignore-errors (parse-integer s :junk-allowed nil))))
       (if n
@@ -180,7 +180,7 @@
 
 ;; read_boolean :: String -> Maybe Bool
 ;; Parse a string to a boolean.
-(defvar hydra_lib_literals_read_boolean
+(defvar hydra_lisp_lib_literals_read_boolean
   (lambda (s)
     (cond
       ((string= s "true") (list :given t))
@@ -189,7 +189,7 @@
 
 ;; read_float :: String -> Maybe Double
 ;; Parse a string to a float (Double).
-(defvar hydra_lib_literals_read_float
+(defvar hydra_lisp_lib_literals_read_float
   (lambda (s)
     (let ((n (ignore-errors (read-from-string s))))
       (if (and n (numberp n))
@@ -198,7 +198,7 @@
 
 ;; read_float32 :: String -> Maybe Float
 ;; Parse a string to a float32 (Float). Handles NaN/Infinity sentinels.
-(defvar hydra_lib_literals_read_float32
+(defvar hydra_lisp_lib_literals_read_float32
   (lambda (s)
     (cond
       ((string= s "NaN") (list :given +hydra-nan+))
@@ -211,7 +211,7 @@
 
 ;; read_float64 :: String -> Maybe Float64
 ;; Parse a string to a float64 (Double). Handles NaN/Infinity sentinels.
-(defvar hydra_lib_literals_read_float64
+(defvar hydra_lisp_lib_literals_read_float64
   (lambda (s)
     (cond
       ((string= s "NaN") (list :given +hydra-nan+))
@@ -223,7 +223,7 @@
 
 ;; read_int :: String -> Maybe Int
 ;; Parse a string to an int.
-(defvar hydra_lib_literals_read_int
+(defvar hydra_lisp_lib_literals_read_int
   (lambda (s)
     (let ((n (ignore-errors (parse-integer s :junk-allowed nil))))
       (if n
@@ -232,7 +232,7 @@
 
 ;; read_int8 :: String -> Maybe Int8
 ;; Parse a string to an int8 (-128 to 127).
-(defvar hydra_lib_literals_read_int8
+(defvar hydra_lisp_lib_literals_read_int8
   (lambda (s)
     (handler-case
         (let ((n (parse-integer s)))
@@ -241,7 +241,7 @@
 
 ;; read_int16 :: String -> Maybe Int16
 ;; Parse a string to an int16 (-32768 to 32767).
-(defvar hydra_lib_literals_read_int16
+(defvar hydra_lisp_lib_literals_read_int16
   (lambda (s)
     (handler-case
         (let ((n (parse-integer s)))
@@ -250,14 +250,14 @@
 
 ;; read_int32 :: String -> Maybe Int32
 ;; Parse a string to an int32.
-(defvar hydra_lib_literals_read_int32
+(defvar hydra_lisp_lib_literals_read_int32
   (lambda (s)
     (handler-case (list :given (parse-integer s))
       (error () (list :none)))))
 
 ;; read_int64 :: String -> Maybe Int64
 ;; Parse a string to an int64.
-(defvar hydra_lib_literals_read_int64
+(defvar hydra_lisp_lib_literals_read_int64
   (lambda (s)
     (let ((n (ignore-errors (parse-integer s :junk-allowed nil))))
       (if n
@@ -267,7 +267,7 @@
 ;; read_string :: String -> Maybe String
 ;; Parse a string literal.
 ;; Haskell semantics: reads a quoted string literal, returns Nothing for unquoted.
-(defvar hydra_lib_literals_read_string
+(defvar hydra_lisp_lib_literals_read_string
   (lambda (s)
     (if (and (>= (length s) 2)
              (char= (char s 0) #\")
@@ -296,7 +296,7 @@
 
 ;; read_uint :: String -> Maybe Uint
 ;; Parse a string to a uint (non-negative integer).
-(defvar hydra_lib_literals_read_uint
+(defvar hydra_lisp_lib_literals_read_uint
   (lambda (s)
     (let ((n (ignore-errors (parse-integer s :junk-allowed nil))))
       (if (and n (>= n 0))
@@ -305,7 +305,7 @@
 
 ;; read_uint8 :: String -> Maybe Uint8
 ;; Parse a string to a uint8 (0 to 255).
-(defvar hydra_lib_literals_read_uint8
+(defvar hydra_lisp_lib_literals_read_uint8
   (lambda (s)
     (handler-case
         (let ((n (parse-integer s)))
@@ -314,7 +314,7 @@
 
 ;; read_uint16 :: String -> Maybe Uint16
 ;; Parse a string to a uint16 (0 to 65535).
-(defvar hydra_lib_literals_read_uint16
+(defvar hydra_lisp_lib_literals_read_uint16
   (lambda (s)
     (handler-case
         (let ((n (parse-integer s)))
@@ -323,7 +323,7 @@
 
 ;; read_uint32 :: String -> Maybe Uint32
 ;; Parse a string to a uint32 (0 to 4294967295).
-(defvar hydra_lib_literals_read_uint32
+(defvar hydra_lisp_lib_literals_read_uint32
   (lambda (s)
     (let ((n (ignore-errors (parse-integer s :junk-allowed nil))))
       (if (and n (>= n 0))
@@ -332,7 +332,7 @@
 
 ;; read_uint64 :: String -> Maybe Uint64
 ;; Parse a string to a uint64 (0 to 18446744073709551615).
-(defvar hydra_lib_literals_read_uint64
+(defvar hydra_lisp_lib_literals_read_uint64
   (lambda (s)
     (let ((n (ignore-errors (parse-integer s :junk-allowed nil))))
       (if (and n (>= n 0))
@@ -403,25 +403,25 @@
 
 ;; show_decimal :: Decimal -> String
 ;; No native decimal; formatted as double-float.
-(defvar hydra_lib_literals_show_decimal
+(defvar hydra_lisp_lib_literals_show_decimal
   (lambda (x)
     (haskell-show-float (float x 1.0d0))))
 
 ;; show_bigint :: BigInteger -> String
 ;; Convert a bigint (Integer) to string.
-(defvar hydra_lib_literals_show_bigint
+(defvar hydra_lisp_lib_literals_show_bigint
   (lambda (x)
     (write-to-string x)))
 
 ;; show_boolean :: Bool -> String
 ;; Convert a boolean to string.
-(defvar hydra_lib_literals_show_boolean
+(defvar hydra_lisp_lib_literals_show_boolean
   (lambda (x)
     (if x "true" "false")))
 
 ;; show_float :: Double -> String
 ;; Convert a float (Double) to string.
-(defvar hydra_lib_literals_show_float
+(defvar hydra_lisp_lib_literals_show_float
   (lambda (x)
     (haskell-show-float (float x 1.0d0))))
 
@@ -429,50 +429,50 @@
 ;; Convert a float32 (Float) to string.
 ;; The input is a double representing a single-float value.
 ;; Convert to single-float first for correct precision display.
-(defvar hydra_lib_literals_show_float32
+(defvar hydra_lisp_lib_literals_show_float32
   (lambda (x)
     (haskell-show-float-single (float x 1.0f0))))
 
 ;; show_float64 :: Double -> String
 ;; Convert a float64 (Double) to string.
-(defvar hydra_lib_literals_show_float64
+(defvar hydra_lisp_lib_literals_show_float64
   (lambda (x)
     (haskell-show-float (float x 1.0d0))))
 
 ;; show_int :: Int -> String
 ;; Convert an int to string.
-(defvar hydra_lib_literals_show_int
+(defvar hydra_lisp_lib_literals_show_int
   (lambda (x)
     (write-to-string x)))
 
 ;; show_int8 :: Int8 -> String
 ;; Convert an int8 to string.
-(defvar hydra_lib_literals_show_int8
+(defvar hydra_lisp_lib_literals_show_int8
   (lambda (x)
     (write-to-string x)))
 
 ;; show_int16 :: Int16 -> String
 ;; Convert an int16 to string.
-(defvar hydra_lib_literals_show_int16
+(defvar hydra_lisp_lib_literals_show_int16
   (lambda (x)
     (write-to-string x)))
 
 ;; show_int32 :: Int32 -> String
 ;; Convert an int32 to string.
-(defvar hydra_lib_literals_show_int32
+(defvar hydra_lisp_lib_literals_show_int32
   (lambda (x)
     (write-to-string x)))
 
 ;; show_int64 :: Int64 -> String
 ;; Convert an int64 to string.
-(defvar hydra_lib_literals_show_int64
+(defvar hydra_lisp_lib_literals_show_int64
   (lambda (x)
     (write-to-string x)))
 
 ;; show_string :: String -> String
 ;; Convert a string to a quoted string representation.
 ;; Haskell-compatible quoted representation.
-(defvar hydra_lib_literals_show_string
+(defvar hydra_lisp_lib_literals_show_string
   (lambda (s)
     (let ((acc (make-array 0 :element-type 'character :adjustable t :fill-pointer 0)))
       (vector-push-extend #\" acc)
@@ -507,37 +507,37 @@
 
 ;; show_uint :: Uint -> String
 ;; Convert a uint to string.
-(defvar hydra_lib_literals_show_uint
+(defvar hydra_lisp_lib_literals_show_uint
   (lambda (x)
     (write-to-string x)))
 
 ;; show_uint8 :: Uint8 -> String
 ;; Convert a uint8 to string.
-(defvar hydra_lib_literals_show_uint8
+(defvar hydra_lisp_lib_literals_show_uint8
   (lambda (x)
     (write-to-string x)))
 
 ;; show_uint16 :: Uint16 -> String
 ;; Convert a uint16 to string.
-(defvar hydra_lib_literals_show_uint16
+(defvar hydra_lisp_lib_literals_show_uint16
   (lambda (x)
     (write-to-string x)))
 
 ;; show_uint32 :: Uint32 -> String
 ;; Convert a uint32 to string.
-(defvar hydra_lib_literals_show_uint32
+(defvar hydra_lisp_lib_literals_show_uint32
   (lambda (x)
     (write-to-string x)))
 
 ;; show_uint64 :: Uint64 -> String
 ;; Convert a uint64 to string.
-(defvar hydra_lib_literals_show_uint64
+(defvar hydra_lisp_lib_literals_show_uint64
   (lambda (x)
     (write-to-string x)))
 
 ;; string_to_binary :: String -> ByteString (base64 decoding)
 ;; Convert string to binary by base64 decoding.
-(defvar hydra_lib_literals_string_to_binary
+(defvar hydra_lisp_lib_literals_string_to_binary
   (let ((b64-decode (make-array 128 :initial-element -1)))
     (loop for c across "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
           for i from 0 do (setf (aref b64-decode (char-code c)) i))
@@ -563,27 +563,27 @@
 
 ;; uint :: UintPrecision -> Uint -> Uint
 ;; Convert a uint to a given precision.
-(defvar hydra_lib_literals_uint
+(defvar hydra_lisp_lib_literals_uint
   (lambda (precision)
     (declare (ignore precision))
     (lambda (x) x)))
 
 ;; uint8_to_bigint :: Uint8 -> BigInteger
 ;; Convert a uint8 to a bigint (Integer).
-(defvar hydra_lib_literals_uint8_to_bigint
+(defvar hydra_lisp_lib_literals_uint8_to_bigint
   (lambda (x) x))
 
 ;; uint16_to_bigint :: Uint16 -> BigInteger
 ;; Convert a uint16 to a bigint (Integer).
-(defvar hydra_lib_literals_uint16_to_bigint
+(defvar hydra_lisp_lib_literals_uint16_to_bigint
   (lambda (x) x))
 
 ;; uint32_to_bigint :: Uint32 -> BigInteger
 ;; Convert a uint32 to a bigint (Integer).
-(defvar hydra_lib_literals_uint32_to_bigint
+(defvar hydra_lisp_lib_literals_uint32_to_bigint
   (lambda (x) x))
 
 ;; uint64_to_bigint :: Uint64 -> BigInteger
 ;; Convert a uint64 to a bigint (Integer).
-(defvar hydra_lib_literals_uint64_to_bigint
+(defvar hydra_lisp_lib_literals_uint64_to_bigint
   (lambda (x) x))

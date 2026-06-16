@@ -351,12 +351,7 @@
                                             {
                                               "name": "term",
                                               "term": {
-                                                "application": {
-                                                  "function": {
-                                                    "typeApplication": {
-                                                      "body": {"variable": "hydra.encode.error.checking.untypedLambdaError"},
-                                                      "type": {"variable": "hydra.error.checking.UntypedLambdaError"}}},
-                                                  "argument": {"variable": "y"}}}}]}}}]}}}}}}}},
+                                                "application": {"function": {"variable": "hydra.encode.error.checking.untypedLambdaError"}, "argument": {"variable": "y"}}}}]}}}]}}}}}}}},
                   {
                     "name": "untypedLetBinding",
                     "handler": {
@@ -1159,36 +1154,33 @@
       "term": {
         "name": "hydra.encode.error.checking.untypedLambdaError",
         "signature": {
-          "typeParameters": [{"name": "t0", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"variable": "t0"}, "isLazy": false}],
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.checking.UntypedLambdaError"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.core.Term"}}},
         "body": {
-          "typeLambda": {
-            "parameter": "t0",
+          "annotated": {
             "body": {
-              "annotated": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {"variable": "hydra.error.checking.UntypedLambdaError"},
                 "body": {
-                  "lambda": {
-                    "parameter": "x",
-                    "domain": {"variable": "t0"},
-                    "body": {
-                      "inject": {
-                        "typeName": "hydra.core.Term",
-                        "field": {
-                          "name": "record",
-                          "term": {
-                            "record": {
-                              "typeName": "hydra.core.Record",
-                              "fields": [
-                                {
-                                  "name": "typeName",
-                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.checking.UntypedLambdaError"}}}}},
-                                {"name": "fields", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Field"}}}}]}}}}}}},
-                "annotation": {
-                  "map": [
-                    {
-                      "key": {"variable": "description"},
-                      "value": {"literal": {"string": "Encoder for hydra.error.checking.UntypedLambdaError"}}}]}}}}}}},
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "record",
+                      "term": {
+                        "record": {
+                          "typeName": "hydra.core.Record",
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.checking.UntypedLambdaError"}}}}},
+                            {"name": "fields", "term": {"list": []}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.checking.UntypedLambdaError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.encode.error.checking.untypedLetBindingError",

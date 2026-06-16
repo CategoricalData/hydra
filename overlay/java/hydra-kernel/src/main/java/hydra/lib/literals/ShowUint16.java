@@ -27,7 +27,7 @@ public class ShowUint16 extends PrimitiveFunction {
      * @return the function name "hydra.lib.literals.showUint16"
      */
     public Name name() {
-        return new Name("hydra.lib.literals.showUint16");
+        return hydra.lib.Literals.showUint16().name;
     }
 
     /**

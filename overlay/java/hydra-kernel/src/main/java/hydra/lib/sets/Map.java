@@ -29,7 +29,7 @@ public class Map extends PrimitiveFunction {
      * @return the name "hydra.lib.sets.map"
      */
     public Name name() {
-        return new Name("hydra.lib.sets.map");
+        return hydra.lib.Sets.map().name;
     }
 
     /**

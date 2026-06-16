@@ -28,7 +28,7 @@ public class Delete extends PrimitiveFunction {
      * @return the name
      */
     public Name name() {
-        return new Name("hydra.lib.maps.delete");
+        return hydra.lib.Maps.delete().name;
     }
 
     /**

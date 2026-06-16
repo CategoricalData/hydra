@@ -25,7 +25,7 @@ import hydra.util.Either;
  */
 public class MaybeCharAt extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.strings.maybeCharAt");
+        return hydra.lib.Strings.maybeCharAt().name;
     }
 
     @Override

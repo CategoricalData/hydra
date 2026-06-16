@@ -177,7 +177,7 @@ Before tagging a release, run the preparation script from the repository root:
 This script verifies that all implementations are consistent and passing,
 and produces the upload-ready artifacts in `release-artifacts/`:
 
-1. **Version synchronization** — all version files match (`VERSION`, Haskell, Java, Python, Scala, and bootstrapping resources).
+1. **Version synchronization** — all version files match (`hydra.json:currentVersion`, Haskell, Java, Python, Scala, and bootstrapping resources).
 2. **Haskell tests** — `stack test` in `heads/haskell`.
 3. **Java tests** — `./gradlew test` from the root (requires Java 11+).
 4. **Python tests** — `pytest` plus `ruff check` and `ruff format --check`.
@@ -448,7 +448,7 @@ publish set due to a known Java-coder limitation with parametric union case-elim
 concretely-instantiated arguments. Track this before adding `hydra-ext` to a future Java publish set.
 
 Each artifact's `build.gradle` is regenerated from `packages/<pkg>/package.json` (which declares
-the inter-package `dependencies` array) and the worktree's `VERSION` file by
+the inter-package `dependencies` array) and `hydra.json:currentVersion` by
 `bin/lib/generate-java-package-build.py`.
 The kernel additionally has the hand-written runtime support overlaid in from
 `overlay/java/hydra-kernel/` by `heads/java/bin/copy-kernel-runtime.sh` (#418).
@@ -568,8 +568,8 @@ The published wheels are:
 `hydra-ext` is **not** in the current publish set — it is outside the standard sync matrix and has
 not shipped to PyPI (see the publish steps below). The other four are the active set.
 
-Each wheel's `pyproject.toml` is regenerated from `packages/<pkg>/package.json` and the
-worktree's `VERSION` file by `bin/lib/generate-python-package-build.py`.
+Each wheel's `pyproject.toml` is regenerated from `packages/<pkg>/package.json` and
+`hydra.json:currentVersion` by `bin/lib/generate-python-package-build.py`.
 The kernel additionally has the hand-written runtime support overlaid in from
 `overlay/python/hydra-kernel/` by `heads/python/bin/copy-kernel-runtime.sh` (#418).
 Both are invoked automatically from `heads/python/bin/assemble-distribution.sh`.
@@ -711,7 +711,7 @@ all scripts and Stack executables (including internal ones called by the sync sc
 
 | Script | Location | Purpose |
 |--------|----------|---------|
-| `bump-version.sh` | `bin/` | Bump version in `VERSION` file and propagate to all config files |
+| `bump-version.sh` | `bin/` | Bump `hydra.json:currentVersion` and propagate to all config files |
 | `sync-all.sh` | `bin/` | Exhaustive regen: every package × every target, with tests. Fails fast. Supports `--no-tests`. |
 | `sync-packages.sh` | `bin/` | Per-package orchestrator (Phase 1 → Phase 2 → Phase 3). Supports `--target`, `--from`, `--list`, `--no-tests`. |
 | `sync.sh` | `bin/` | Matrix tool for prep before a bootstrapping run. Supports `--hosts`, `--targets`, `--no-tests`. |
@@ -727,8 +727,8 @@ all scripts and Stack executables (including internal ones called by the sync sc
 | `publish-pypi.sh` | `heads/python/bin/` | Builds (and optionally uploads, `--upload`) the per-package PyPI wheels + sdists. Prefers `uv build`, falls back to `python -m build`. Asserts dependency closure. Invokes `smoke-test-wheels.sh` as a hard gate before any upload. |
 | `smoke-test-wheels.sh` | `heads/python/bin/` | Packaging-boundary gate: installs the just-built wheels into an isolated venv with `--no-index` and imports the top-level kernel modules from a neutral cwd, so a worktree-local `hydra.*` cannot mask a wheel that is missing a package it imports. Catches the 0.16.0-class self-broken-wheel bug (#472) before upload. |
 | `verify-haskell-distribution.sh` | `heads/haskell/bin/` | Stages all per-package distributions into one multi-package stack project and `stack build`s them, proving the trio compiles as published (the dependents' `== <version>` pins resolve against the local staged siblings). |
-| `generate-haskell-package-build.py` | `bin/lib/` | Emits a standalone `dist/haskell/<pkg>/package.yaml` (+ `stack.yaml`) from `packages/<pkg>/package.json` (or a built-in spec for the `hydra` umbrella) and `VERSION`. Inter-Hydra deps emit as exact pins `<dep> == <version>`. |
-| `generate-java-package-build.py` | `bin/lib/` | Emits a standalone `dist/java/<pkg>/build.gradle` + `settings.gradle` from `packages/<pkg>/package.json` and `VERSION`. Inter-Hydra deps emit as `api 'net.fortytwo.hydra:<dep>:<version>'`. |
-| `generate-python-package-build.py` | `bin/lib/` | Emits a standalone `dist/python/<pkg>/pyproject.toml` from `packages/<pkg>/package.json` and `VERSION`. Inter-Hydra deps emit as `"<dep> == <version>"`. |
+| `generate-haskell-package-build.py` | `bin/lib/` | Emits a standalone `dist/haskell/<pkg>/package.yaml` (+ `stack.yaml`) from `packages/<pkg>/package.json` (or a built-in spec for the `hydra` umbrella) and `hydra.json:currentVersion`. Inter-Hydra deps emit as exact pins `<dep> == <version>`. |
+| `generate-java-package-build.py` | `bin/lib/` | Emits a standalone `dist/java/<pkg>/build.gradle` + `settings.gradle` from `packages/<pkg>/package.json` and `hydra.json:currentVersion`. Inter-Hydra deps emit as `api 'net.fortytwo.hydra:<dep>:<version>'`. |
+| `generate-python-package-build.py` | `bin/lib/` | Emits a standalone `dist/python/<pkg>/pyproject.toml` from `packages/<pkg>/package.json` and `hydra.json:currentVersion`. Inter-Hydra deps emit as `"<dep> == <version>"`. |
 | `transform-json-to-<lang>.sh` | `heads/haskell/bin/` | Layer 1 transform. Thin wrapper over `bootstrap-from-json` for one (pkg, source-set). |
 | `transform-haskell-dsl-to-json.sh` | `heads/haskell/bin/` | Layer 1 transform. Supports `--package <pkg>` (one package) or `--all` (batch mode, one universe load). |

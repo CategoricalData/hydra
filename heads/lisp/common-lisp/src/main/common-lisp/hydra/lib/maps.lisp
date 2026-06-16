@@ -338,11 +338,11 @@
     (t m)))
 
 ;; ============================================================================
-;; Public API: hydra_lib_maps_*
+;; Public API: hydra_lisp_lib_maps_*
 ;; ============================================================================
 
 ;; alter :: (Maybe v -> Maybe v) -> k -> Map k v -> Map k v
-(defvar hydra_lib_maps_alter
+(defvar hydra_lisp_lib_maps_alter
   (lambda (f)
     (lambda (k)
       (lambda (m)
@@ -366,7 +366,7 @@
                    (t (rb-insert nil k new-val))))))))))))
 
 ;; bimap :: (k1 -> k2) -> (v1 -> v2) -> Map k1 v1 -> Map k2 v2
-(defvar hydra_lib_maps_bimap
+(defvar hydra_lisp_lib_maps_bimap
   (lambda (fk)
     (lambda (fv)
       (lambda (m)
@@ -381,7 +381,7 @@
           result)))))
 
 ;; delete :: k -> Map k v -> Map k v
-(defvar hydra_lib_maps_delete
+(defvar hydra_lisp_lib_maps_delete
   (lambda (k)
     (lambda (m)
       (cond
@@ -392,15 +392,15 @@
 
 ;; elems :: Map k v -> [v]
 ;; Values in key-sorted order, matching Haskell Data.Map.elems.
-(defvar hydra_lib_maps_elems
+(defvar hydra_lisp_lib_maps_elems
   (lambda (m)
     (mapcar #'cdr (maps-entries-sorted m))))
 
 ;; empty :: Map k v
-(defvar hydra_lib_maps_empty nil)
+(defvar hydra_lisp_lib_maps_empty nil)
 
 ;; filter :: (v -> Bool) -> Map k v -> Map k v
-(defvar hydra_lib_maps_filter
+(defvar hydra_lisp_lib_maps_filter
   (lambda (pred)
     (lambda (m)
       (let ((result nil))
@@ -416,7 +416,7 @@
         result))))
 
 ;; filter_with_key :: (k -> v -> Bool) -> Map k v -> Map k v
-(defvar hydra_lib_maps_filter_with_key
+(defvar hydra_lisp_lib_maps_filter_with_key
   (lambda (pred)
     (lambda (m)
       (let ((result nil))
@@ -433,7 +433,7 @@
 
 ;; find_with_default :: v -> k -> Map k v -> v
 ;; Thunk-aware: the default is lazy (#391); if it is a zero-arg function, only call it on a miss.
-(defvar hydra_lib_maps_find_with_default
+(defvar hydra_lisp_lib_maps_find_with_default
   (lambda (def)
     (lambda (k)
       (lambda (m)
@@ -443,14 +443,14 @@
 ;; from_list :: [Pair k v] -> Map k v
 ;; Pairs are two-element lists (key val).
 ;; Later entries override earlier ones for duplicate keys (last wins).
-(defvar hydra_lib_maps_from_list
+(defvar hydra_lisp_lib_maps_from_list
   (lambda (pairs)
     (let ((result nil))
       (dolist (p pairs result)
         (setf result (rb-insert result (first p) (second p)))))))
 
 ;; insert :: k -> v -> Map k v -> Map k v
-(defvar hydra_lib_maps_insert
+(defvar hydra_lisp_lib_maps_insert
   (lambda (k)
     (lambda (v)
       (lambda (m)
@@ -461,19 +461,19 @@
 
 ;; keys :: Map k v -> [k]
 ;; Sorted via generic-compare.
-(defvar hydra_lib_maps_keys
+(defvar hydra_lisp_lib_maps_keys
   (lambda (m)
     (mapcar #'car (maps-entries-sorted m))))
 
 ;; lookup :: k -> Map k v -> Maybe v
-(defvar hydra_lib_maps_lookup
+(defvar hydra_lisp_lib_maps_lookup
   (lambda (k)
     (lambda (m)
       (multiple-value-bind (v found) (maps-lookup-raw k m)
         (if found (list :given v) (list :none))))))
 
 ;; map :: (v1 -> v2) -> Map k v1 -> Map k v2
-(defvar hydra_lib_maps_map
+(defvar hydra_lisp_lib_maps_map
   (lambda (f)
     (lambda (m)
       (let ((result nil))
@@ -487,7 +487,7 @@
         result))))
 
 ;; map_keys :: (k1 -> k2) -> Map k1 v -> Map k2 v
-(defvar hydra_lib_maps_map_keys
+(defvar hydra_lisp_lib_maps_map_keys
   (lambda (f)
     (lambda (m)
       (let ((result nil))
@@ -501,13 +501,13 @@
         result))))
 
 ;; member :: k -> Map k v -> Bool
-(defvar hydra_lib_maps_member
+(defvar hydra_lisp_lib_maps_member
   (lambda (k)
     (lambda (m)
       (nth-value 1 (maps-lookup-raw k m)))))
 
 ;; null :: Map k v -> Bool
-(defvar hydra_lib_maps_null
+(defvar hydra_lisp_lib_maps_null
   (lambda (m)
     (cond
       ((null m) t)
@@ -516,13 +516,13 @@
       (t t))))
 
 ;; singleton :: k -> v -> Map k v
-(defvar hydra_lib_maps_singleton
+(defvar hydra_lisp_lib_maps_singleton
   (lambda (k)
     (lambda (v)
       (rb-insert nil k v))))
 
 ;; size :: Map k v -> Int
-(defvar hydra_lib_maps_size
+(defvar hydra_lisp_lib_maps_size
   (lambda (m)
     (cond
       ((null m) 0)
@@ -532,7 +532,7 @@
 
 ;; to_list :: Map k v -> [Pair k v]
 ;; Sorted by key for deterministic output. Returns [(k v) ...].
-(defvar hydra_lib_maps_to_list
+(defvar hydra_lisp_lib_maps_to_list
   (lambda (m)
     (mapcar (lambda (pair) (list (car pair) (cdr pair)))
             (maps-entries-sorted m))))
@@ -540,7 +540,7 @@
 ;; union :: Map k v -> Map k v -> Map k v (left-biased)
 ;; m1's values win on key collision.
 ;; Implementation: iterate over the smaller map and insert into the larger.
-(defvar hydra_lib_maps_union
+(defvar hydra_lisp_lib_maps_union
   (lambda (m1)
     (lambda (m2)
       (cond

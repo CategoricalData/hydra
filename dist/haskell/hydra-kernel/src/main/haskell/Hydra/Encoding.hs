@@ -73,7 +73,9 @@ encodeEitherType :: Core.EitherType -> Core.Term
 encodeEitherType et =
     Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "e"),
-      Core.lambdaDomain = Nothing,
+      Core.lambdaDomain = (Just (Core.TypeEither (Core.EitherType {
+        Core.eitherTypeLeft = (encoderFullResultType (Core.eitherTypeLeft et)),
+        Core.eitherTypeRight = (encoderFullResultType (Core.eitherTypeRight et))}))),
       Core.lambdaBody = (Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
@@ -81,7 +83,15 @@ encodeEitherType et =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.bimap")),
+                Core.applicationFunction = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                  Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                    Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                      Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                        Core.typeApplicationTermBody = (Core.TermVariable (Core.Name "hydra.lib.eithers.bimap")),
+                        Core.typeApplicationTermType = (encoderFullResultType (Core.eitherTypeLeft et))})),
+                      Core.typeApplicationTermType = (encoderFullResultType (Core.eitherTypeRight et))})),
+                    Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
+                  Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
                 Core.applicationArgument = (encodeType (Core.eitherTypeLeft et))})),
               Core.applicationArgument = (encodeType (Core.eitherTypeRight et))})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "e"))}))}}))})
@@ -90,7 +100,7 @@ encodeFieldValue :: Core.Name -> Core.Name -> Core.Type -> Core.Term
 encodeFieldValue typeName fieldName fieldType =
     Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "y"),
-      Core.lambdaDomain = Nothing,
+      Core.lambdaDomain = (Just (encoderFullResultType fieldType)),
       Core.lambdaBody = (Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
@@ -113,7 +123,9 @@ encodeForallType :: Core.ForallType -> Core.Term
 encodeForallType ft =
     Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (encodeBindingName (Core.forallTypeParameter ft)),
-      Core.lambdaDomain = Nothing,
+      Core.lambdaDomain = (Just (Core.TypeFunction (Core.FunctionType {
+        Core.functionTypeDomain = (Core.TypeVariable (Core.forallTypeParameter ft)),
+        Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))),
       Core.lambdaBody = (encodeType (Core.forallTypeBody ft))})
 -- | Encode an Injection as a term
 encodeInjection :: Core.Name -> Core.Name -> Core.Term -> Core.Term
@@ -157,14 +169,18 @@ encodeListType :: Core.Type -> Core.Term
 encodeListType elemType =
     Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "xs"),
-      Core.lambdaDomain = Nothing,
+      Core.lambdaDomain = (Just (Core.TypeList (encoderFullResultType elemType))),
       Core.lambdaBody = (Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "list"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.map")),
+              Core.applicationFunction = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                  Core.typeApplicationTermBody = (Core.TermVariable (Core.Name "hydra.lib.lists.map")),
+                  Core.typeApplicationTermType = (encoderFullResultType elemType)})),
+                Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
               Core.applicationArgument = (encodeType elemType)})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}}))})
 -- | Generate an encoder for a literal type
@@ -173,7 +189,7 @@ encodeLiteralType x =
     case x of
       Core.LiteralTypeBinary -> Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "x"),
-        Core.lambdaDomain = Nothing,
+        Core.lambdaDomain = (Just (Core.TypeLiteral Core.LiteralTypeBinary)),
         Core.lambdaBody = (Core.TermInject (Core.Injection {
           Core.injectionTypeName = (Core.Name "hydra.core.Term"),
           Core.injectionField = Core.Field {
@@ -185,7 +201,7 @@ encodeLiteralType x =
                 Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}}))}}))})
       Core.LiteralTypeBoolean -> Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "x"),
-        Core.lambdaDomain = Nothing,
+        Core.lambdaDomain = (Just (Core.TypeLiteral Core.LiteralTypeBoolean)),
         Core.lambdaBody = (Core.TermInject (Core.Injection {
           Core.injectionTypeName = (Core.Name "hydra.core.Term"),
           Core.injectionField = Core.Field {
@@ -197,7 +213,7 @@ encodeLiteralType x =
                 Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}}))}}))})
       Core.LiteralTypeDecimal -> Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "x"),
-        Core.lambdaDomain = Nothing,
+        Core.lambdaDomain = (Just (Core.TypeLiteral Core.LiteralTypeDecimal)),
         Core.lambdaBody = (Core.TermInject (Core.Injection {
           Core.injectionTypeName = (Core.Name "hydra.core.Term"),
           Core.injectionField = Core.Field {
@@ -209,7 +225,7 @@ encodeLiteralType x =
                 Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}}))}}))})
       Core.LiteralTypeString -> Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "x"),
-        Core.lambdaDomain = Nothing,
+        Core.lambdaDomain = (Just (Core.TypeLiteral Core.LiteralTypeString)),
         Core.lambdaBody = (Core.TermInject (Core.Injection {
           Core.injectionTypeName = (Core.Name "hydra.core.Term"),
           Core.injectionField = Core.Field {
@@ -221,7 +237,7 @@ encodeLiteralType x =
                 Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}}))}}))})
       Core.LiteralTypeInteger v0 -> Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "x"),
-        Core.lambdaDomain = Nothing,
+        Core.lambdaDomain = (Just (Core.TypeLiteral (Core.LiteralTypeInteger v0))),
         Core.lambdaBody = (Core.TermInject (Core.Injection {
           Core.injectionTypeName = (Core.Name "hydra.core.Term"),
           Core.injectionField = Core.Field {
@@ -233,7 +249,7 @@ encodeLiteralType x =
                 Core.fieldTerm = (encodeIntegerValue v0 (Core.TermVariable (Core.Name "x")))}}))}}))})
       Core.LiteralTypeFloat v0 -> Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "x"),
-        Core.lambdaDomain = Nothing,
+        Core.lambdaDomain = (Just (Core.TypeLiteral (Core.LiteralTypeFloat v0))),
         Core.lambdaBody = (Core.TermInject (Core.Injection {
           Core.injectionTypeName = (Core.Name "hydra.core.Term"),
           Core.injectionField = Core.Field {
@@ -252,7 +268,9 @@ encodeMapType :: Core.MapType -> Core.Term
 encodeMapType mt =
     Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "m"),
-      Core.lambdaDomain = Nothing,
+      Core.lambdaDomain = (Just (Core.TypeMap (Core.MapType {
+        Core.mapTypeKeys = (encoderFullResultType (Core.mapTypeKeys mt)),
+        Core.mapTypeValues = (encoderFullResultType (Core.mapTypeValues mt))}))),
       Core.lambdaBody = (Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
@@ -260,7 +278,15 @@ encodeMapType mt =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.bimap")),
+                Core.applicationFunction = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                  Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                    Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                      Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                        Core.typeApplicationTermBody = (Core.TermVariable (Core.Name "hydra.lib.maps.bimap")),
+                        Core.typeApplicationTermType = (encoderFullResultType (Core.mapTypeKeys mt))})),
+                      Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
+                    Core.typeApplicationTermType = (encoderFullResultType (Core.mapTypeValues mt))})),
+                  Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
                 Core.applicationArgument = (encodeType (Core.mapTypeKeys mt))})),
               Core.applicationArgument = (encodeType (Core.mapTypeValues mt))})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}}))})
@@ -320,14 +346,18 @@ encodeOptionalType :: Core.Type -> Core.Term
 encodeOptionalType elemType =
     Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "opt"),
-      Core.lambdaDomain = Nothing,
+      Core.lambdaDomain = (Just (Core.TypeOptional (encoderFullResultType elemType))),
       Core.lambdaBody = (Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "optional"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.map")),
+              Core.applicationFunction = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                  Core.typeApplicationTermBody = (Core.TermVariable (Core.Name "hydra.lib.optionals.map")),
+                  Core.typeApplicationTermType = (encoderFullResultType elemType)})),
+                Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
               Core.applicationArgument = (encodeType elemType)})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "opt"))}))}}))})
 -- | Generate an encoder for a pair type
@@ -335,7 +365,9 @@ encodePairType :: Core.PairType -> Core.Term
 encodePairType pt =
     Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "p"),
-      Core.lambdaDomain = Nothing,
+      Core.lambdaDomain = (Just (Core.TypePair (Core.PairType {
+        Core.pairTypeFirst = (encoderFullResultType (Core.pairTypeFirst pt)),
+        Core.pairTypeSecond = (encoderFullResultType (Core.pairTypeSecond pt))}))),
       Core.lambdaBody = (Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
@@ -343,7 +375,15 @@ encodePairType pt =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.bimap")),
+                Core.applicationFunction = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                  Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                    Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                      Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                        Core.typeApplicationTermBody = (Core.TermVariable (Core.Name "hydra.lib.pairs.bimap")),
+                        Core.typeApplicationTermType = (encoderFullResultType (Core.pairTypeFirst pt))})),
+                      Core.typeApplicationTermType = (encoderFullResultType (Core.pairTypeSecond pt))})),
+                    Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
+                  Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
                 Core.applicationArgument = (encodeType (Core.pairTypeFirst pt))})),
               Core.applicationArgument = (encodeType (Core.pairTypeSecond pt))})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))}}))})
@@ -355,7 +395,7 @@ encodeRecordTypeNamed :: Core.Name -> [Core.FieldType] -> Core.Term
 encodeRecordTypeNamed ename rt =
     Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "x"),
-      Core.lambdaDomain = Nothing,
+      Core.lambdaDomain = (Just (Core.TypeVariable ename)),
       Core.lambdaBody = (Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
@@ -388,14 +428,18 @@ encodeSetType :: Core.Type -> Core.Term
 encodeSetType elemType =
     Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "s"),
-      Core.lambdaDomain = Nothing,
+      Core.lambdaDomain = (Just (Core.TypeSet (encoderFullResultType elemType))),
       Core.lambdaBody = (Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "set"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.map")),
+              Core.applicationFunction = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                  Core.typeApplicationTermBody = (Core.TermVariable (Core.Name "hydra.lib.sets.map")),
+                  Core.typeApplicationTermType = (encoderFullResultType elemType)})),
+                Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
               Core.applicationArgument = (encodeType elemType)})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "s"))}))}}))})
 -- | Generate an encoder term for a Type
@@ -423,7 +467,7 @@ encodeType x =
       Core.TypeWrap v0 -> encodeWrappedType v0
       Core.TypeUnit -> Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "_"),
-        Core.lambdaDomain = Nothing,
+        Core.lambdaDomain = (Just Core.TypeUnit),
         Core.lambdaBody = (Core.TermInject (Core.Injection {
           Core.injectionTypeName = (Core.Name "hydra.core.Term"),
           Core.injectionField = Core.Field {
@@ -431,7 +475,7 @@ encodeType x =
             Core.fieldTerm = Core.TermUnit}}))})
       Core.TypeVoid -> Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "_"),
-        Core.lambdaDomain = Nothing,
+        Core.lambdaDomain = (Just Core.TypeUnit),
         Core.lambdaBody = (Core.TermInject (Core.Injection {
           Core.injectionTypeName = (Core.Name "hydra.core.Term"),
           Core.injectionField = Core.Field {
@@ -453,7 +497,9 @@ encodeTypeNamed ename typ =
       Core.TypeEither v0 -> encodeEitherType v0
       Core.TypeForall v0 -> Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (encodeBindingName (Core.forallTypeParameter v0)),
-        Core.lambdaDomain = Nothing,
+        Core.lambdaDomain = (Just (Core.TypeFunction (Core.FunctionType {
+          Core.functionTypeDomain = (Core.TypeVariable (Core.forallTypeParameter v0)),
+          Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))),
         Core.lambdaBody = (encodeTypeNamed ename (Core.forallTypeBody v0))})
       Core.TypeFunction _ -> Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "x"),
@@ -470,7 +516,7 @@ encodeTypeNamed ename typ =
       Core.TypeWrap v0 -> encodeWrappedTypeNamed ename v0
       Core.TypeUnit -> Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "_"),
-        Core.lambdaDomain = Nothing,
+        Core.lambdaDomain = (Just Core.TypeUnit),
         Core.lambdaBody = (Core.TermInject (Core.Injection {
           Core.injectionTypeName = (Core.Name "hydra.core.Term"),
           Core.injectionField = Core.Field {
@@ -478,7 +524,7 @@ encodeTypeNamed ename typ =
             Core.fieldTerm = Core.TermUnit}}))})
       Core.TypeVoid -> Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "_"),
-        Core.lambdaDomain = Nothing,
+        Core.lambdaDomain = (Just Core.TypeUnit),
         Core.lambdaBody = (Core.TermInject (Core.Injection {
           Core.injectionTypeName = (Core.Name "hydra.core.Term"),
           Core.injectionField = Core.Field {
@@ -509,7 +555,7 @@ encodeWrappedTypeNamed :: Core.Name -> Core.Type -> Core.Term
 encodeWrappedTypeNamed ename wt =
     Core.TermLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "x"),
-      Core.lambdaDomain = Nothing,
+      Core.lambdaDomain = (Just (Core.TypeVariable ename)),
       Core.lambdaBody = (Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Term"),
         Core.injectionField = Core.Field {
@@ -587,7 +633,7 @@ encoderFullResultType typ =
         Core.applicationTypeFunction = (encoderFullResultType (Core.forallTypeBody v0)),
         Core.applicationTypeArgument = (Core.TypeVariable (Core.forallTypeParameter v0))})
       Core.TypeList v0 -> Core.TypeList (encoderFullResultType v0)
-      Core.TypeLiteral _ -> Core.TypeVariable (Core.Name "hydra.core.Literal")
+      Core.TypeLiteral v0 -> Core.TypeLiteral v0
       Core.TypeMap v0 -> Core.TypeMap (Core.MapType {
         Core.mapTypeKeys = (encoderFullResultType (Core.mapTypeKeys v0)),
         Core.mapTypeValues = (encoderFullResultType (Core.mapTypeValues v0))})
@@ -601,7 +647,7 @@ encoderFullResultType typ =
       Core.TypeUnit -> Core.TypeUnit
       Core.TypeVariable v0 -> Core.TypeVariable v0
       Core.TypeVoid -> Core.TypeVoid
-      Core.TypeWrap _ -> Core.TypeVariable (Core.Name "hydra.core.Term")
+      Core.TypeWrap v0 -> encoderFullResultType v0
       _ -> Core.TypeVariable (Core.Name "hydra.core.Term")
 -- | Get full result type for encoder input, using element name for nominal types
 encoderFullResultTypeNamed :: Core.Name -> Core.Type -> Core.Type
@@ -618,7 +664,7 @@ encoderFullResultTypeNamed ename typ =
         Core.applicationTypeFunction = (encoderFullResultTypeNamed ename (Core.forallTypeBody v0)),
         Core.applicationTypeArgument = (Core.TypeVariable (Core.forallTypeParameter v0))})
       Core.TypeList v0 -> Core.TypeList (encoderFullResultType v0)
-      Core.TypeLiteral _ -> Core.TypeVariable (Core.Name "hydra.core.Literal")
+      Core.TypeLiteral v0 -> Core.TypeLiteral v0
       Core.TypeMap v0 -> Core.TypeMap (Core.MapType {
         Core.mapTypeKeys = (encoderFullResultType (Core.mapTypeKeys v0)),
         Core.mapTypeValues = (encoderFullResultType (Core.mapTypeValues v0))})

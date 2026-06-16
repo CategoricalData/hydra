@@ -24,7 +24,7 @@ import hydra.util.Either;
  */
 public class BigintToDecimal extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.literals.bigintToDecimal");
+        return hydra.lib.Literals.bigintToDecimal().name;
     }
 
     @Override

@@ -12,60 +12,60 @@ import qualified Hydra.Lib.Eithers as DefEithers
 
 -- | Map over both sides of an Either value.
 bimap :: TypedTerm (a -> c) -> TypedTerm (b -> d) -> TypedTerm (Either a b) -> TypedTerm (Either c d)
-bimap = primitive3 (Prims.primName DefEithers.bimap)
+bimap = primitive3 DefEithers.bimap
 
 -- | Bind (flatMap) for Either: if Right, apply the function; if Left, return unchanged.
 bind :: TypedTerm (Either a b) -> TypedTerm (b -> Either a c) -> TypedTerm (Either a c)
-bind = primitive2 (Prims.primName DefEithers.bind)
+bind = primitive2 DefEithers.bind
 
 -- | Eliminate an Either value by applying one of two functions.
 either_ :: TypedTerm (a -> c) -> TypedTerm (b -> c) -> TypedTerm (Either a b) -> TypedTerm c
-either_ = primitive3 (Prims.primName DefEithers.either)
+either_ = primitive3 DefEithers.either
 
 -- | Left-fold over a list with an Either-returning function, short-circuiting on Left.
 foldl :: TypedTerm (a -> b -> Either c a) -> TypedTerm a -> TypedTerm [b] -> TypedTerm (Either c a)
-foldl = primitive3 (Prims.primName DefEithers.foldl)
+foldl = primitive3 DefEithers.foldl
 
 -- | Extract the Left value, or return a default.
 fromLeft :: TypedTerm a -> TypedTerm (Either a b) -> TypedTerm a
-fromLeft = primitive2 (Prims.primName DefEithers.fromLeft)
+fromLeft = primitive2 DefEithers.fromLeft
 
 -- | Extract the Right value, or return a default.
 fromRight :: TypedTerm b -> TypedTerm (Either a b) -> TypedTerm b
-fromRight = primitive2 (Prims.primName DefEithers.fromRight)
+fromRight = primitive2 DefEithers.fromRight
 
 -- | Check if an Either is a Left value.
 isLeft :: TypedTerm (Either a b) -> TypedTerm Bool
-isLeft = primitive1 (Prims.primName DefEithers.isLeft)
+isLeft = primitive1 DefEithers.isLeft
 
 -- | Check if an Either is a Right value.
 isRight :: TypedTerm (Either a b) -> TypedTerm Bool
-isRight = primitive1 (Prims.primName DefEithers.isRight)
+isRight = primitive1 DefEithers.isRight
 
 -- | Extract all Left values from a list of Eithers.
 lefts :: TypedTerm [Either a b] -> TypedTerm [a]
-lefts = primitive1 (Prims.primName DefEithers.lefts)
+lefts = primitive1 DefEithers.lefts
 
 -- | Map a function over the Right side of an Either (standard functor map).
 map :: TypedTerm (a -> b) -> TypedTerm (Either c a) -> TypedTerm (Either c b)
-map = primitive2 (Prims.primName DefEithers.map)
+map = primitive2 DefEithers.map
 
 -- | Map a function returning Either over a list, collecting results or short-circuiting on Left.
 mapList :: TypedTerm (a -> Either e b) -> TypedTerm [a] -> TypedTerm (Either e [b])
-mapList = primitive2 (Prims.primName DefEithers.mapList)
+mapList = primitive2 DefEithers.mapList
 
 -- | Map a function returning Either over an optional, or return Right Nothing if Nothing.
 mapOptional :: TypedTerm (a -> Either c b) -> TypedTerm (Maybe a) -> TypedTerm (Either c (Maybe b))
-mapOptional = primitive2 (Prims.primName DefEithers.mapOptional)
+mapOptional = primitive2 DefEithers.mapOptional
 
 -- | Map a function returning Either over a Set, collecting results or short-circuiting on Left.
 mapSet :: TypedTerm (a -> Either c b) -> TypedTerm (S.Set a) -> TypedTerm (Either c (S.Set b))
-mapSet = primitive2 (Prims.primName DefEithers.mapSet)
+mapSet = primitive2 DefEithers.mapSet
 
 -- | Partition a list of Eithers into lefts and rights.
 partitionEithers :: TypedTerm [Either a b] -> TypedTerm ([a], [b])
-partitionEithers = primitive1 (Prims.primName DefEithers.partitionEithers)
+partitionEithers = primitive1 DefEithers.partitionEithers
 
 -- | Extract all Right values from a list of Eithers.
 rights :: TypedTerm [Either a b] -> TypedTerm [b]
-rights = primitive1 (Prims.primName DefEithers.rights)
+rights = primitive1 DefEithers.rights

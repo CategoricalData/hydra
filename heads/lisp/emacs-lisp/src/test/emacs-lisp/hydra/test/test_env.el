@@ -41,20 +41,20 @@
            (kernel-schemas
              (mapcar (lambda (entry)
                        (list (car entry) (funcall type-to-ts (cdr entry))))
-                     (hydra_lib_maps_to_list boot-types-raw)))
+                     (hydra_lisp_lib_maps_to_list boot-types-raw)))
            (test-schemas
              (mapcar (lambda (entry)
                        (list (car entry) (funcall type-to-ts (cadr entry))))
-                     (hydra_lib_maps_to_list test-types)))
+                     (hydra_lisp_lib_maps_to_list test-types)))
            (schema-types
-             (hydra_lib_maps_from_list (append kernel-schemas test-schemas)))
+             (hydra_lisp_lib_maps_from_list (append kernel-schemas test-schemas)))
            (prim-map
-             (hydra_lib_maps_from_list
+             (hydra_lisp_lib_maps_from_list
                (mapcar (lambda (p) (list (car p) (cdr p))) std-prims)))
            (bound-terms
-             (hydra_lib_maps_from_list
+             (hydra_lisp_lib_maps_from_list
                (append (hydra-annotation-bindings)
-                       (hydra_lib_maps_to_list test-terms)))))
+                       (hydra_lisp_lib_maps_to_list test-terms)))))
       (list (cons :bound_terms bound-terms)
             (cons :bound_types nil)
             (cons :class_constraints nil)

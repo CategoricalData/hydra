@@ -35,7 +35,7 @@ file.
 
 | Language | Registration file |
 |----------|-------------------|
-| Haskell | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs` |
+| Haskell | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs` |
 | Java | `overlay/java/hydra-kernel/src/main/java/hydra/lib/Libraries.java` (relocated by #418) |
 | Python | `overlay/python/hydra-kernel/src/main/python/hydra/sources/libraries.py` (relocated by #418) |
 | Scala | `heads/scala/src/main/scala/hydra/lib/Libraries.scala` |
@@ -65,7 +65,7 @@ Evaluation tests call `Reduction.reduceTerm` and assert the result matches expec
 
 When a primitive test fails in Java, the call chain is:
 
-1. Test defines a term using `primitive _lists_xxx @@ arg1 @@ arg2`
+1. Test defines a term using `primitive DefLists.xxx @@ arg1 @@ arg2`
 2. `Reduction.reduceTerm` reduces the term
 3. The reducer looks up the primitive in the graph by name
 4. It calls `prim.implementation.apply(reducedArgs)`

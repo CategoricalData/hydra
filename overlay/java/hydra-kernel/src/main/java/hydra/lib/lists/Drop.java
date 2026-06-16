@@ -25,7 +25,7 @@ import hydra.util.Either;
  */
 public class Drop extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.lists.drop");
+        return hydra.lib.Lists.drop().name;
     }
 
     @Override

@@ -16,7 +16,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 -- | Decoder for hydra.topology.Graph
-graph :: Graph.Graph -> Core.Term -> Either Errors.DecodingError (M.Map Int [Int])
+graph :: Graph.Graph -> Core.Term -> Either Errors.DecodingError (M.Map Topology.Vertex [Topology.Vertex])
 graph = ExtractCore.decodeMap vertex (ExtractCore.decodeList vertex)
 -- | Decoder for hydra.topology.TarjanState
 tarjanState :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Topology.TarjanState

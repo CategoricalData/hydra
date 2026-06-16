@@ -23,7 +23,7 @@ import hydra.util.Either;
  */
 public class ReplaceAll extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.regex.replaceAll");
+        return hydra.lib.Regex.replaceAll().name;
     }
 
     @Override

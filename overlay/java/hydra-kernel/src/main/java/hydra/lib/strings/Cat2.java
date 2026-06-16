@@ -25,7 +25,7 @@ public class Cat2 extends PrimitiveFunction {
      * @return the name "hydra.lib.strings.cat2"
      */
     public Name name() {
-        return new Name("hydra.lib.strings.cat2");
+        return hydra.lib.Strings.cat2().name;
     }
 
     /**

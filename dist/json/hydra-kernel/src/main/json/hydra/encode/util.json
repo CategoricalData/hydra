@@ -323,131 +323,122 @@
       "term": {
         "name": "hydra.encode.util.moduleNames",
         "signature": {
-          "typeParameters": [{"name": "t0", "constraints": []}],
+          "typeParameters": [{"name": "n", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
-              "type": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.Term"}}},
+              "type": {"function": {"domain": {"variable": "n"}, "codomain": {"variable": "hydra.core.Term"}}},
               "isLazy": false},
             {
               "name": "arg1",
-              "type": {"application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"variable": "t0"}}},
+              "type": {"application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"variable": "n"}}},
               "isLazy": false}],
           "result": {"type": {"variable": "hydra.core.Term"}}},
         "body": {
-          "typeLambda": {
-            "parameter": "t0",
+          "annotated": {
             "body": {
-              "annotated": {
+              "lambda": {
+                "parameter": "n",
+                "domain": {"function": {"domain": {"variable": "n"}, "codomain": {"variable": "hydra.core.Term"}}},
                 "body": {
                   "lambda": {
-                    "parameter": "n",
-                    "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.Term"}}},
+                    "parameter": "x",
+                    "domain": {"variable": "hydra.util.ModuleNames"},
                     "body": {
-                      "lambda": {
-                        "parameter": "x",
-                        "domain": {"application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"variable": "t0"}}},
-                        "body": {
-                          "inject": {
-                            "typeName": "hydra.core.Term",
-                            "field": {
-                              "name": "record",
-                              "term": {
-                                "record": {
-                                  "typeName": "hydra.core.Record",
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.util.ModuleNames"}}}}},
-                                    {
-                                      "name": "fields",
-                                      "term": {
-                                        "list": [
-                                          {
-                                            "record": {
-                                              "typeName": "hydra.core.Field",
-                                              "fields": [
-                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "focus"}}}}},
-                                                {
-                                                  "name": "term",
-                                                  "term": {
-                                                    "application": {
-                                                      "function": {
-                                                        "lambda": {
-                                                          "parameter": "p",
-                                                          "domain": {"pair": {"first": {"variable": "hydra.packaging.ModuleName"}, "second": {"variable": "t0"}}},
-                                                          "body": {
-                                                            "inject": {
-                                                              "typeName": "hydra.core.Term",
-                                                              "field": {
-                                                                "name": "pair",
-                                                                "term": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "record",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Record",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.util.ModuleNames"}}}}},
+                                {
+                                  "name": "fields",
+                                  "term": {
+                                    "list": [
+                                      {
+                                        "record": {
+                                          "typeName": "hydra.core.Field",
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "focus"}}}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "application": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "parameter": "p",
+                                                      "domain": {"pair": {"first": {"variable": "hydra.packaging.ModuleName"}, "second": {"variable": "n"}}},
+                                                      "body": {
+                                                        "inject": {
+                                                          "typeName": "hydra.core.Term",
+                                                          "field": {
+                                                            "name": "pair",
+                                                            "term": {
+                                                              "application": {
+                                                                "function": {
                                                                   "application": {
                                                                     "function": {
                                                                       "application": {
                                                                         "function": {
-                                                                          "application": {
-                                                                            "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {
                                                                               "typeApplication": {
                                                                                 "body": {
                                                                                   "typeApplication": {
-                                                                                    "body": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.bimap"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
-                                                                                        "type": {"variable": "t0"}}},
+                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.bimap"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                                                                    "type": {"variable": "n"}}},
+                                                                                "type": {"variable": "hydra.core.Term"}}},
+                                                                            "type": {"variable": "hydra.core.Term"}}},
+                                                                        "argument": {"variable": "hydra.encode.packaging.moduleName"}}},
+                                                                    "argument": {"variable": "n"}}},
+                                                                "argument": {"variable": "p"}}}}}}}},
+                                                  "argument": {
+                                                    "application": {"function": {"project": {"typeName": "hydra.util.ModuleNames", "fieldName": "focus"}}, "argument": {"variable": "x"}}}}}}]}},
+                                      {
+                                        "record": {
+                                          "typeName": "hydra.core.Field",
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "mapping"}}}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "application": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "parameter": "m",
+                                                      "domain": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"variable": "n"}}},
+                                                      "body": {
+                                                        "inject": {
+                                                          "typeName": "hydra.core.Term",
+                                                          "field": {
+                                                            "name": "map",
+                                                            "term": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.bimap"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
                                                                                     "type": {"variable": "hydra.core.Term"}}},
-                                                                                "type": {"variable": "hydra.core.Term"}}},
-                                                                            "argument": {"variable": "hydra.encode.packaging.moduleName"}}},
-                                                                        "argument": {"variable": "n"}}},
-                                                                    "argument": {"variable": "p"}}}}}}}},
-                                                      "argument": {
-                                                        "application": {
-                                                          "function": {
-                                                            "typeApplication": {"body": {"project": {"typeName": "hydra.util.ModuleNames", "fieldName": "focus"}}, "type": {"variable": "t0"}}},
-                                                          "argument": {"variable": "x"}}}}}}]}},
-                                          {
-                                            "record": {
-                                              "typeName": "hydra.core.Field",
-                                              "fields": [
-                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "mapping"}}}}},
-                                                {
-                                                  "name": "term",
-                                                  "term": {
-                                                    "application": {
-                                                      "function": {
-                                                        "lambda": {
-                                                          "parameter": "m",
-                                                          "domain": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"variable": "t0"}}},
-                                                          "body": {
-                                                            "inject": {
-                                                              "typeName": "hydra.core.Term",
-                                                              "field": {
-                                                                "name": "map",
-                                                                "term": {
-                                                                  "application": {
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "function": {
-                                                                              "typeApplication": {
-                                                                                "body": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.bimap"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
-                                                                                        "type": {"variable": "hydra.core.Term"}}},
-                                                                                    "type": {"variable": "t0"}}},
-                                                                                "type": {"variable": "hydra.core.Term"}}},
-                                                                            "argument": {"variable": "hydra.encode.packaging.moduleName"}}},
-                                                                        "argument": {"variable": "n"}}},
-                                                                    "argument": {"variable": "m"}}}}}}}},
-                                                      "argument": {
-                                                        "application": {
-                                                          "function": {
-                                                            "typeApplication": {"body": {"project": {"typeName": "hydra.util.ModuleNames", "fieldName": "mapping"}}, "type": {"variable": "t0"}}},
-                                                          "argument": {"variable": "x"}}}}}}]}}]}}]}}}}}}}}},
-                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.util.ModuleNames"}}}]}}}}}}},
+                                                                                "type": {"variable": "n"}}},
+                                                                            "type": {"variable": "hydra.core.Term"}}},
+                                                                        "argument": {"variable": "hydra.encode.packaging.moduleName"}}},
+                                                                    "argument": {"variable": "n"}}},
+                                                                "argument": {"variable": "m"}}}}}}}},
+                                                  "argument": {
+                                                    "application": {"function": {"project": {"typeName": "hydra.util.ModuleNames", "fieldName": "mapping"}}, "argument": {"variable": "x"}}}}}}]}}]}}]}}}}}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.util.ModuleNames"}}}]}}}}},
     {
       "term": {
         "name": "hydra.encode.util.precision",

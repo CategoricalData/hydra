@@ -25,7 +25,7 @@ import hydra.util.Either;
  */
 public class MaybeTail extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.lists.maybeTail");
+        return hydra.lib.Lists.maybeTail().name;
     }
 
     @Override

@@ -23,7 +23,7 @@ columnType x =
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (EncodeCore.type_ (Tabular.columnTypeType x))}]})
 -- | Encoder for hydra.tabular.DataRow
-dataRow :: (t0 -> Core.Term) -> Tabular.DataRow t0 -> Core.Term
+dataRow :: (v -> Core.Term) -> Tabular.DataRow v -> Core.Term
 dataRow v x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.tabular.DataRow"),
@@ -35,7 +35,7 @@ headerRow x =
       Core.wrappedTermTypeName = (Core.Name "hydra.tabular.HeaderRow"),
       Core.wrappedTermBody = ((\xs -> Core.TermList (Lists.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) xs)) (Tabular.unHeaderRow x))})
 -- | Encoder for hydra.tabular.Table
-table :: (t0 -> Core.Term) -> Tabular.Table t0 -> Core.Term
+table :: (v -> Core.Term) -> Tabular.Table v -> Core.Term
 table v x =
     Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.tabular.Table"),

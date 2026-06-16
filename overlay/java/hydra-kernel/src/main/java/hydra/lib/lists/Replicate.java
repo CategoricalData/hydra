@@ -25,7 +25,7 @@ import hydra.util.Either;
  */
 public class Replicate extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.lists.replicate");
+        return hydra.lib.Lists.replicate().name;
     }
 
     @Override

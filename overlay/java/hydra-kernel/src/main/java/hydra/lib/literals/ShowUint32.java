@@ -27,7 +27,7 @@ public class ShowUint32 extends PrimitiveFunction {
      * @return the function name "hydra.lib.literals.showUint32"
      */
     public Name name() {
-        return new Name("hydra.lib.literals.showUint32");
+        return hydra.lib.Literals.showUint32().name;
     }
 
     /**

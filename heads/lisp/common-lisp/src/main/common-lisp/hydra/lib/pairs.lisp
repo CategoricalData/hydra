@@ -4,7 +4,7 @@
 
 ;; bimap :: (a -> c) -> (b -> d) -> Pair a b -> Pair c d
 ;; Map over both elements of a pair.
-(defvar hydra_lib_pairs_bimap
+(defvar hydra_lisp_lib_pairs_bimap
   (lambda (f)
     (lambda (g)
       (lambda (p)
@@ -12,12 +12,12 @@
 
 ;; first :: Pair a b -> a
 ;; Get the first element of a pair.
-(defvar hydra_lib_pairs_first
+(defvar hydra_lisp_lib_pairs_first
   (lambda (p)
     (first p)))
 
 ;; second :: Pair a b -> b
 ;; Get the second element of a pair.
-(defvar hydra_lib_pairs_second
+(defvar hydra_lisp_lib_pairs_second
   (lambda (p)
     (second p)))

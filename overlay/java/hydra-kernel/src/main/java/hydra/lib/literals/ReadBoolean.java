@@ -30,7 +30,7 @@ public class ReadBoolean extends PrimitiveFunction {
      * @return the function name "hydra.lib.literals.readBoolean"
      */
     public Name name() {
-        return new Name("hydra.lib.literals.readBoolean");
+        return hydra.lib.Literals.readBoolean().name;
     }
 
     /**

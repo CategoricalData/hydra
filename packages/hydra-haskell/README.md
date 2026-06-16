@@ -24,12 +24,15 @@ for the full picture.
 - **Kernel DSL sources** ([`packages/hydra-kernel/src/main/haskell/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell))
   - `Hydra/Sources/Kernel/Types/` — core types (Core, Graph, Packaging, Coders, ...)
   - `Hydra/Sources/Kernel/Terms/` — term-level logic (Inference, Checking, Reduction, ...)
-  - `Hydra/Sources/Libraries.hs` — primitive function registration
+  - `Hydra/Sources/Kernel/Lib/` — canonical primitive registry (one `PrimitiveDefinition`-emitting
+    module per `hydra.lib.<sub>` namespace)
 
 - **Haskell kernel overlay** ([`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/`](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra))
   — hand-written Haskell kernel runtime, overlaid onto `dist/haskell/hydra-kernel/`
   so the published `hydra` Hackage package is self-contained
   - `Haskell/Lib/` — native primitive implementations for the Haskell host
+  - `Dsl/Libraries.hs` — host-side primitive registration (the `hydraLib*` library definitions;
+    names derive from the generated `PrimitiveDefinition`s, #473)
   - `Dsl/Terms.hs`, `Dsl/Literals.hs`, `Dsl/Meta/Common.hs` — DSL syntax definitions
     used by the generated kernel
   - `Kernel.hs`, `Settings.hs` — runtime helpers

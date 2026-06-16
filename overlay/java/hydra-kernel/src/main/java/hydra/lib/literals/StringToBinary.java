@@ -28,7 +28,7 @@ public class StringToBinary extends PrimitiveFunction {
      * @return the function name "hydra.lib.literals.stringToBinary"
      */
     public Name name() {
-        return new Name("hydra.lib.literals.stringToBinary");
+        return hydra.lib.Literals.stringToBinary().name;
     }
 
     /**

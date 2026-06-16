@@ -158,8 +158,11 @@ import qualified Data.Set   as S
 
 **Centrally important (unqualified)**:
 - `Hydra.Kernel`
-- `Hydra.Sources.Libraries` — exports the `_strings_toUpper`, `_lists_length`, ...
-  primitive name constants used pervasively in term bodies
+- `Hydra.Dsl.Prims as Prims` and the generated `Hydra.Lib.*` def-modules — DSL builders take a
+  `PrimitiveDefinition` directly (`primitive DefLists.length`, `prim1 DefLists.length ...`) via the
+  `ToPrimName` class, so the name flows from that one definition (the old `Hydra.Sources.Libraries`
+  `_strings_toUpper`/`_lists_length` name constants were removed in #473). `Prims.primName Def...` still
+  yields the bare `Name` for the rare site that needs one explicitly.
 - `Hydra.Dsl.Meta.Phantoms as Phantoms` — the term-construction DSL (`var`, `lambda`,
   `lambdas`, `record`, `match`, `cases`, polymorphic `(@@)`). Aliased so files may use
   `Phantoms.x` for disambiguation when needed.
@@ -183,7 +186,7 @@ module Hydra.Sources.Kernel.Terms.<X> where
 
 -- Standard imports for kernel terms modules
 import           Hydra.Kernel
-import           Hydra.Sources.Libraries
+import           Hydra.Dsl.Libraries
 import           Hydra.Dsl.Meta.Phantoms        as Phantoms
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
@@ -271,7 +274,7 @@ module Hydra.Sources.<Lang>.<X> where
 
 -- Standard imports for term-level sources outside of the kernel
 import           Hydra.Kernel
-import           Hydra.Sources.Libraries
+import           Hydra.Dsl.Libraries
 import           Hydra.Dsl.Meta.Phantoms             as Phantoms
 import           Prelude hiding ((++))
 
@@ -298,7 +301,7 @@ not Hydra-runtime term application.
 
 **Centrally important (unqualified)**:
 - `Hydra.Kernel`
-- `Hydra.Sources.Libraries`
+- `Hydra.Dsl.Libraries`
 - `Hydra.Dsl.Meta.Phantoms as Phantoms`, including the `(@@)` operator
   (brought in unqualified explicitly so bare `@@` is the polymorphic
   `Phantoms.@@`, NOT the monomorphic `Terms.@@`).
@@ -335,7 +338,7 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 import Hydra.Testing
-import Hydra.Sources.Libraries
+import Hydra.Dsl.Libraries
 ```
 
 When a test file references kernel-term primitives directly, add the relevant
@@ -347,7 +350,7 @@ When a test file references kernel-term primitives directly, add the relevant
 
 **Definition shape**: same as category 6, but test cases construct **Hydra-runtime
 term applications** (encoded `Term` values containing lambda applications, primitive
-applications, etc.) — e.g. `lambda "x" body @@ arg`, `primitive _strings_toUpper @@ string "hello"`.
+applications, etc.) — e.g. `lambda "x" body @@ arg`, `primitive DefStrings.toUpper @@ string "hello"`.
 
 **Distinguishing feature**: bare `(@@)` is *term application* (Terms.@@), the
 monomorphic `TypedTerm Term -> TypedTerm Term -> TypedTerm Term`. The polymorphic Phantoms.@@
@@ -377,7 +380,7 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 import Hydra.Testing
-import Hydra.Sources.Libraries
+import Hydra.Dsl.Libraries
 ```
 
 When binding application is needed in a term-encoded test (e.g. applying
@@ -392,8 +395,8 @@ a kernel-side ref like `validateCoreTermRef`), use `Phantoms.@@` qualified.
 
 **Same as category 7, with two deltas**:
 - `Hydra.Testing` is **NOT** imported (no `TestGroup`/`TestCase` constructors needed).
-- `Hydra.Sources.Libraries` is **NOT** imported (fixtures don't reference primitive
-  name constants).
+- `Hydra.Dsl.Libraries` is **NOT** imported (fixtures don't reference the library
+  definitions).
 
 ```haskell
 module Hydra.Sources.Test.<Fixture> where
@@ -431,7 +434,9 @@ nearest category.
   `module_` and follow category 6, but most of the body is `concatMap` over child
   suites' `module_` definitions; the import block is dominated by qualified imports of
   the children.
-- **`Hydra.Sources.Libraries`**. Primitive name registry. Bespoke.
+- **`Hydra.Dsl.Libraries`**. Library/primitive registry (the `hydraLib*` `standardLibrary`
+  definitions + typevar/`TermCoder` helpers); primitive names now derive from the generated
+  `PrimitiveDefinition`s (#473). Bespoke.
 - **`Hydra.Sources.Kernel.Manifest`**. Kernel-package manifest.
 - **`Hydra.Sources.Json.Bootstrap`**. Builds a `Module` from kernel-type metadata using
   raw `TermDefinition` constructors rather than the DSL. Self-tags with a comment

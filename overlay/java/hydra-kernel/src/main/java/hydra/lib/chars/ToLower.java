@@ -25,7 +25,7 @@ public class ToLower extends PrimitiveFunction {
      * @return the name "hydra.lib.chars.toLower"
      */
     public Name name() {
-        return new Name("hydra.lib.chars.toLower");
+        return hydra.lib.Chars.toLower().name;
     }
 
     /**

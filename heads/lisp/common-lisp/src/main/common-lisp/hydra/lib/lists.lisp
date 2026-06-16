@@ -34,7 +34,7 @@
 
 ;; apply :: [a -> b] -> [a] -> [b]
 ;; Apply a list of functions to a list of values (applicative style).
-(defvar hydra_lib_lists_apply
+(defvar hydra_lisp_lib_lists_apply
   (lambda (fs)
     (lambda (xs)
       (loop for f in fs
@@ -42,7 +42,7 @@
 
 ;; bind :: [a] -> (a -> [b]) -> [b]
 ;; Apply a function that returns lists to each element and flatten results.
-(defvar hydra_lib_lists_bind
+(defvar hydra_lisp_lib_lists_bind
   (lambda (xs)
     (lambda (f)
       (loop for x in xs
@@ -50,34 +50,34 @@
 
 ;; concat :: [[a]] -> [a]
 ;; Concatenate a list of lists.
-(defvar hydra_lib_lists_concat
+(defvar hydra_lisp_lib_lists_concat
   (lambda (xss)
     (apply #'append xss)))
 
 ;; concat2 :: [a] -> [a] -> [a]
 ;; Concatenate two lists.
-(defvar hydra_lib_lists_concat2
+(defvar hydra_lisp_lib_lists_concat2
   (lambda (xs)
     (lambda (ys)
       (append xs ys))))
 
 ;; cons :: a -> [a] -> [a]
 ;; Prepend a value to a list.
-(defvar hydra_lib_lists_cons
+(defvar hydra_lisp_lib_lists_cons
   (lambda (x)
     (lambda (xs)
       (cons x xs))))
 
 ;; drop :: Int -> [a] -> [a]
 ;; Drop the first n elements from a list.
-(defvar hydra_lib_lists_drop
+(defvar hydra_lisp_lib_lists_drop
   (lambda (n)
     (lambda (xs)
       (if (<= n 0) xs (nthcdr n xs)))))
 
 ;; drop_while :: (a -> Bool) -> [a] -> [a]
 ;; Drop elements from the beginning of a list while predicate is true.
-(defvar hydra_lib_lists_drop_while
+(defvar hydra_lisp_lib_lists_drop_while
   (lambda (pred)
     (lambda (xs)
       (loop for rest on xs
@@ -86,21 +86,21 @@
 
 ;; elem :: a -> [a] -> Bool
 ;; Check if an element is in a list.
-(defvar hydra_lib_lists_elem
+(defvar hydra_lisp_lib_lists_elem
   (lambda (x)
     (lambda (xs)
       (if (member x xs :test #'equal) t nil))))
 
 ;; filter :: (a -> Bool) -> [a] -> [a]
 ;; Filter a list based on a predicate.
-(defvar hydra_lib_lists_filter
+(defvar hydra_lisp_lib_lists_filter
   (lambda (pred)
     (lambda (xs)
       (remove-if-not pred xs))))
 
 ;; find :: (a -> Bool) -> [a] -> Maybe a
 ;; Find the first element matching a predicate.
-(defvar hydra_lib_lists_find
+(defvar hydra_lisp_lib_lists_find
   (lambda (pred)
     (lambda (xs)
       (let ((found (find-if pred xs)))
@@ -110,7 +110,7 @@
 
 ;; foldl :: (b -> a -> b) -> b -> [a] -> b
 ;; Fold a list from the left.
-(defvar hydra_lib_lists_foldl
+(defvar hydra_lisp_lib_lists_foldl
   (lambda (f)
     (lambda (init)
       (lambda (xs)
@@ -120,7 +120,7 @@
 
 ;; foldr :: (a -> b -> b) -> b -> [a] -> b
 ;; Fold a list from the right.
-(defvar hydra_lib_lists_foldr
+(defvar hydra_lisp_lib_lists_foldr
   (lambda (f)
     (lambda (init)
       (lambda (xs)
@@ -130,7 +130,7 @@
 
 ;; group :: [a] -> [[a]]
 ;; Group consecutive equal elements.
-(defvar hydra_lib_lists_group
+(defvar hydra_lisp_lib_lists_group
   (lambda (xs)
     (if (null xs)
         nil
@@ -149,7 +149,7 @@
 
 ;; intercalate :: [a] -> [[a]] -> [a]
 ;; Intercalate a list of lists with a separator list between each.
-(defvar hydra_lib_lists_intercalate
+(defvar hydra_lisp_lib_lists_intercalate
   (lambda (sep)
     (lambda (xss)
       (if (null xss)
@@ -160,7 +160,7 @@
 
 ;; intersperse :: a -> [a] -> [a]
 ;; Intersperse a value between elements of a list.
-(defvar hydra_lib_lists_intersperse
+(defvar hydra_lisp_lib_lists_intersperse
   (lambda (sep)
     (lambda (xs)
       (if (or (null xs) (null (cdr xs)))
@@ -171,20 +171,20 @@
 
 ;; length :: [a] -> Int
 ;; Get the length of a list.
-(defvar hydra_lib_lists_length
+(defvar hydra_lisp_lib_lists_length
   (lambda (xs)
     (length xs)))
 
 ;; map :: (a -> b) -> [a] -> [b]
 ;; Map a function over a list.
-(defvar hydra_lib_lists_map
+(defvar hydra_lisp_lib_lists_map
   (lambda (f)
     (lambda (xs)
       (mapcar f xs))))
 
 ;; maybe_at :: Int -> [a] -> Maybe a
 ;; Get the element at a specified index, returning Nothing if the index is out of bounds.
-(defvar hydra_lib_lists_maybe_at
+(defvar hydra_lisp_lib_lists_maybe_at
   (lambda (n)
     (lambda (xs)
       (if (and (>= n 0) (< n (length xs)))
@@ -193,7 +193,7 @@
 
 ;; maybe_head :: [a] -> Maybe a
 ;; Get the first element of a list, returning Nothing if the list is empty.
-(defvar hydra_lib_lists_maybe_head
+(defvar hydra_lisp_lib_lists_maybe_head
   (lambda (xs)
     (if (null xs)
         (list :none)
@@ -201,7 +201,7 @@
 
 ;; maybe_init :: [a] -> Maybe [a]
 ;; Return all elements except the last, returning Nothing if the list is empty.
-(defvar hydra_lib_lists_maybe_init
+(defvar hydra_lisp_lib_lists_maybe_init
   (lambda (xs)
     (if (null xs)
         (list :none)
@@ -209,7 +209,7 @@
 
 ;; maybe_last :: [a] -> Maybe a
 ;; Get the last element of a list, returning Nothing if the list is empty.
-(defvar hydra_lib_lists_maybe_last
+(defvar hydra_lisp_lib_lists_maybe_last
   (lambda (xs)
     (if (null xs)
         (list :none)
@@ -217,7 +217,7 @@
 
 ;; maybe_tail :: [a] -> Maybe [a]
 ;; Get all elements except the first, returning Nothing if the list is empty.
-(defvar hydra_lib_lists_maybe_tail
+(defvar hydra_lisp_lib_lists_maybe_tail
   (lambda (xs)
     (if (null xs)
         (list :none)
@@ -225,7 +225,7 @@
 
 ;; nub :: [a] -> [a]
 ;; Remove duplicate elements from a list.
-(defvar hydra_lib_lists_nub
+(defvar hydra_lisp_lib_lists_nub
   (lambda (xs)
     (let ((seen nil)
           (acc nil))
@@ -236,13 +236,13 @@
 
 ;; null :: [a] -> Bool
 ;; Check if a list is empty.
-(defvar hydra_lib_lists_null
+(defvar hydra_lisp_lib_lists_null
   (lambda (xs)
     (null xs)))
 
 ;; partition :: (a -> Bool) -> [a] -> Pair [a] [a]
 ;; Partition a list into elements that satisfy a predicate and elements that do not.
-(defvar hydra_lib_lists_partition
+(defvar hydra_lisp_lib_lists_partition
   (lambda (pred)
     (lambda (xs)
       (let ((yes nil) (no nil))
@@ -253,38 +253,38 @@
 
 ;; pure :: a -> [a]
 ;; Create a list with a single element.
-(defvar hydra_lib_lists_pure
+(defvar hydra_lisp_lib_lists_pure
   (lambda (x)
     (list x)))
 
 ;; replicate :: Int -> a -> [a]
 ;; Create a list with n copies of a value.
-(defvar hydra_lib_lists_replicate
+(defvar hydra_lisp_lib_lists_replicate
   (lambda (n)
     (lambda (x)
       (loop repeat n collect x))))
 
 ;; reverse :: [a] -> [a]
 ;; Reverse a list.
-(defvar hydra_lib_lists_reverse
+(defvar hydra_lisp_lib_lists_reverse
   (lambda (xs)
     (reverse xs)))
 
 ;; singleton :: a -> [a]
 ;; Create a single-element list.
-(defvar hydra_lib_lists_singleton
+(defvar hydra_lisp_lib_lists_singleton
   (lambda (x)
     (list x)))
 
 ;; sort :: [a] -> [a]
 ;; Sort a list.
-(defvar hydra_lib_lists_sort
+(defvar hydra_lisp_lib_lists_sort
   (lambda (xs)
     (merge-sort #'generic<? xs)))
 
 ;; sort_on :: (a -> b) -> [a] -> [a]
 ;; Sort a list based on a key function.
-(defvar hydra_lib_lists_sort_on
+(defvar hydra_lisp_lib_lists_sort_on
   (lambda (f)
     (lambda (xs)
       (merge-sort (lambda (a b)
@@ -293,7 +293,7 @@
 
 ;; span :: (a -> Bool) -> [a] -> Pair [a] [a]
 ;; Split a list at the first element where predicate fails.
-(defvar hydra_lib_lists_span
+(defvar hydra_lisp_lib_lists_span
   (lambda (pred)
     (lambda (xs)
       (let ((acc nil))
@@ -304,7 +304,7 @@
 
 ;; take :: Int -> [a] -> [a]
 ;; Take the first n elements from a list.
-(defvar hydra_lib_lists_take
+(defvar hydra_lisp_lib_lists_take
   (lambda (n)
     (lambda (xs)
       (loop for x in xs
@@ -313,13 +313,13 @@
 
 ;; transpose :: [[a]] -> [[a]]
 ;; Transpose a list of lists.
-(defvar hydra_lib_lists_transpose
+(defvar hydra_lisp_lib_lists_transpose
   (lambda (xss)
     (transpose-helper xss)))
 
 ;; uncons :: [a] -> Maybe (a, [a])
 ;; Split a list into its head and tail, returning Nothing if the list is empty.
-(defvar hydra_lib_lists_uncons
+(defvar hydra_lisp_lib_lists_uncons
   (lambda (xs)
     (if (null xs)
         (list :none)
@@ -327,14 +327,14 @@
 
 ;; zip :: [a] -> [b] -> [Pair a b]
 ;; Zip two lists into pairs.
-(defvar hydra_lib_lists_zip
+(defvar hydra_lisp_lib_lists_zip
   (lambda (xs)
     (lambda (ys)
       (mapcar #'list xs ys))))
 
 ;; zip_with :: (a -> b -> c) -> [a] -> [b] -> [c]
 ;; Zip two lists with a combining function.
-(defvar hydra_lib_lists_zip_with
+(defvar hydra_lisp_lib_lists_zip_with
   (lambda (f)
     (lambda (xs)
       (lambda (ys)

@@ -1324,15 +1324,18 @@ writeDerivedJsonPackageSplit routingMap distJsonRoot universeModules dslSourceMo
     encMods <- generateEncoderModules universeModules encodingSourceModules
     decMods <- generateDecoderModules universeModules encodingSourceModules
     let derived = filter (not . null . moduleDefinitions) (dslMods ++ encMods ++ decMods)
-    -- doInfer=True: the encoder/decoder modules carry only the synthesizer's
-    -- coarse static types — e.g. a decoder for a `type Vertex = int32` alias is
-    -- synthesized returning the raw `hydra.core.Literal`, and ONLY full type
-    -- inference specializes it to `int32`/Int. Without inference the coarse
-    -- types leak into the JSON and produce type-incorrect generated code in the
-    -- targets (e.g. dist/haskell .../Decode/Topology.hs failing to compile, and
-    -- "untyped lambda" after Java/Python eta-expansion). DSL wrappers don't
-    -- need it but re-inferring them is harmless. (#474)
-    writeModulesJsonPackageSplit routingMap True distJsonRoot universeModules derived
+    -- doInfer=False: the synthesizer is the sole source of truth for these derived
+    -- modules' in-term annotations (lambda domains, type-applications, result-type
+    -- signatures) — it fully populates them at construction, mirroring the DSL
+    -- wrapper synthesis. Running inference over them is at best redundant and at
+    -- worst incorrect: for polymorphic decoders (e.g. hydra.decode.parsing.parseResult,
+    -- result type either<DecodingError, ParseResult @ a>) HM's occurs-check rejects
+    -- the saturated nominal self-application that the synthesizer emits, so inference
+    -- cannot even reproduce its own prior committed output. The synthesizer's nominal
+    -- form is also the PREFERRED form: inference cannot re-produce a transparent type
+    -- alias once expanded (type Vertex = int32 stays `Vertex`, not `literal<int32>`).
+    -- (#476)
+    writeModulesJsonPackageSplit routingMap False distJsonRoot universeModules derived
     mergeDslJsonIntoPerPackageDigests routingMap distJsonRoot derived
     finalizePerPackageDigests distJsonRoot
     reconcilePackageJsonOrphans routingMap distJsonRoot (writtenMainModules ++ derived)

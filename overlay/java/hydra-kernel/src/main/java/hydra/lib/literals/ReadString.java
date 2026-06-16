@@ -29,7 +29,7 @@ public class ReadString extends PrimitiveFunction {
      * @return the function name "hydra.lib.literals.readString"
      */
     public Name name() {
-        return new Name("hydra.lib.literals.readString");
+        return hydra.lib.Literals.readString().name;
     }
 
     /**

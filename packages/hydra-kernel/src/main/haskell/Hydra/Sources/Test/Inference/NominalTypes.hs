@@ -75,10 +75,10 @@ testGroupForProjections = define "testGroupForProjections" $
 
     subgroup "Pair projections" [
       expectPoly 1 [tag_disabledForMinimalInference]
-        (primitive (Prims.primName DefPairs.first))
+        (primitive DefPairs.first)
         ["t0", "t1"] (T.function (T.pair (T.var "t0") (T.var "t1")) (T.var "t0")),
       expectMono 2 [tag_disabledForMinimalInference]
-        (primitive (Prims.primName DefPairs.second) @@ pair (int32 42) (string "foo"))
+        (primitive DefPairs.second @@ pair (int32 42) (string "foo"))
         T.string]]
 
 testGroupForRecords :: TypedTermDefinition TestGroup

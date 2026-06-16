@@ -63,7 +63,28 @@ compute_generator_stamp() {
         printf 'kernel:%s\n'  "$(component_identity hydra-kernel)"
         printf 'coder:%s\n'   "$(component_identity "$coder_pkg")"
         printf 'runtime:%s\n' "$(runtime_identity "$lang")"
+        printf 'driver:%s\n'  "$(driver_identity)"
     } | shasum -a 256 | awk '{print substr($1,1,16)}'
+}
+
+# Identity of the Haskell generation DRIVER — the bootstrap-from-json exec plus the
+# generation orchestrator modules it links against (Hydra.Generation, Hydra.ExtGeneration,
+# Hydra.PackageRouting). This single Haskell binary emits EVERY target language, so a change
+# to its emission logic (e.g. #473 Step 0: the hydra.lib.* lib pass, the hydra.<lang>.lib.*
+# redirect transform, lowerPrimitiveDefinitions) changes generated output for the SAME input
+# JSON. The per-package input digest is keyed only on the input JSON hash, so without this
+# component such a change would NOT invalidate any output digest, and warm builds (surviving
+# gitignored digests, e.g. after a pull) would cache-skip regeneration and ship the
+# pre-change layout — silently breaking self-host. Included for ALL targets, since the driver
+# is target-independent. (#473)
+driver_identity() {
+    {
+        find "$HYDRA_ROOT_DIR/heads/haskell/src/exec/bootstrap-from-json" -type f -name '*.hs' 2>/dev/null \
+            | LC_ALL=C sort | xargs cat 2>/dev/null
+        for m in Generation ExtGeneration PackageRouting; do
+            cat "$HYDRA_ROOT_DIR/heads/haskell/src/main/haskell/Hydra/$m.hs" 2>/dev/null
+        done
+    } | shasum -a 256 | awk '{print $1}'
 }
 
 # Identity of a Hydra package, used as a component of the per-target generator

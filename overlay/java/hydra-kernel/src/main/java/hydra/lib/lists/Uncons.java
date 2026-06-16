@@ -28,7 +28,7 @@ import hydra.util.Either;
  */
 public class Uncons extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.lists.uncons");
+        return hydra.lib.Lists.uncons().name;
     }
 
     @Override

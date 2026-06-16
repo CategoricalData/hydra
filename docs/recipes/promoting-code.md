@@ -1092,19 +1092,16 @@ Not all promotions involve functions. Sometimes you need to promote a module of 
 
 ### Example: promoting `Names.hs`
 
-> **Note: historical example.** This walkthrough captures an
-> intermediate stage in which `Hydra.Sources.Kernel.Lib.Names` was
-> emitted as a regular DSL module via `defineNs`/`defineName`
-> returning `TypedTermDefinition` values. The current
-> `Hydra.Sources.Kernel.Lib.Names` is simpler still — a Haskell-side
-> derived index that exposes plain `Name` values built from
-> `qname namespace localName` (no `module_ :: Module`, no
-> `definitions` list). The DSL-emission step shown here is no longer
-> needed; the `qname`-based form is read directly by host-side
-> primitive registrations via the legacy `_<ns>_<local>` aliases in
-> `Hydra.Sources.Libraries`. See
-> [Adding new primitives to Hydra](adding-primitives.md) for the
-> current shape.
+> **Note: historical example — the `Lib.Names` module no longer exists.**
+> This walkthrough captures intermediate stages of promoting a hand-written
+> primitive-name index. `Hydra.Sources.Kernel.Lib.Names` (and the legacy
+> `_<ns>_<local>` aliases in `Libraries.hs`) were **removed entirely in #473**:
+> a primitive's name is now declared once in its kernel `PrimitiveDefinition`
+> and every host registry derives it from the generated `hydra.lib.*` def-modules
+> (no separate name index). The example below is retained only to illustrate the
+> DSL-promotion mechanics on a now-obsolete module. See
+> [Adding new primitives to Hydra](adding-primitives.md#how-primitive-names-flow)
+> for the current shape.
 
 The original `Hydra.Staging.Lib.Names` contained hand-written constants like:
 

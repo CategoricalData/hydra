@@ -1018,9 +1018,10 @@ We created `hydra.hoisting` to separate these concerns.
 > have since moved or been renamed:
 >
 > - **Primitive name constants**: `Hydra.Staging.Lib.Names` →
->   `Hydra.Sources.Kernel.Lib.Names` (constants are now `qname`-defined
->   `Name` values without the `_<ns>_<local>` prefix; the legacy
->   `_<ns>_<local>` form lives as aliases in `Hydra.Sources.Libraries`).
+>   `Hydra.Sources.Kernel.Lib.Names` → **removed entirely in #473**. There is no
+>   longer a primitive-name index module or `_<ns>_<local>` alias layer; each host
+>   registry derives primitive names from the generated `PrimitiveDefinition`
+>   def-modules. See [adding-primitives.md](adding-primitives.md#how-primitive-names-flow).
 > - **Interpreter-friendly default impls**: `Hydra.Sources.Eval.Lib.*` →
 >   briefly lived at `Hydra.Sources.Kernel.Lib.Defaults.*` →
 >   merged into the canonical `Hydra.Sources.Kernel.Lib.<Sub>` registries

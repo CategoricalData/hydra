@@ -199,7 +199,7 @@ unsupportedTermVariantError x =
           Core.fieldName = (Core.Name "termVariant"),
           Core.fieldTerm = (Variants.termVariant (Checking.unsupportedTermVariantErrorTermVariant x))}]})
 -- | Encoder for hydra.error.checking.UntypedLambdaError
-untypedLambdaError :: t0 -> Core.Term
+untypedLambdaError :: Checking.UntypedLambdaError -> Core.Term
 untypedLambdaError x =
     Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.error.checking.UntypedLambdaError"),

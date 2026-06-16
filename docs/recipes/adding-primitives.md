@@ -135,19 +135,39 @@ primitives exist, their signatures, and their default implementations.
 | Concern | Location |
 |---------|----------|
 | Universal primitive metadata (name, description, comments, type signature, purity flags, default implementation) | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/<Sub>.hs` |
-| Primitive-name `Name` constants (`charsIsAlphaNum`, `logicAnd`, ...) | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Names.hs` |
-| Legacy `_<namespace>_<localName>` aliases (`_chars_isAlphaNum`, `_logic_and`, ...) used by host registrations | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs` |
 | Native Haskell implementation | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib/<Sub>.hs` (#418) |
 | Native Java implementation | `overlay/java/hydra-kernel/src/main/java/hydra/lib/<sub>/<FunctionName>.java` (#418) |
-| Native Python implementation | `overlay/python/hydra-kernel/src/main/python/hydra/lib/<sub>.py` (#418) |
-| Host-side primitive registry (binds names to native impls) | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs` (Haskell) and, per host, the registry in that host's runtime: `overlay/{java,python}/hydra-kernel/.../lib/Libraries.<ext>` for Java/Python (#418), `heads/<lang>/.../lib/Libraries.<ext>` for others |
-| Phantom-typed DSL wrappers (for writing Hydra source modules) | `heads/haskell/src/main/haskell/Hydra/Dsl/Meta/Lib/<Sub>.hs` |
+| Native Python implementation | `overlay/python/hydra-kernel/src/main/python/hydra/python/lib/<sub>.py` (#473 — impls live at `hydra.<lang>.lib.*`) |
+| Host-side primitive registry (binds names to native impls) | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs` (Haskell, #473) and, per host, the registry in that host's runtime: `overlay/{java,python}/hydra-kernel/.../lib/Libraries.<ext>` for Java/Python (#418), `heads/<lang>/.../lib/Libraries.<ext>` for others |
+| Phantom-typed DSL wrappers (for writing Hydra source modules) | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Meta/Lib/<Sub>.hs` (#473) |
 | Common test cases | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test/Lib/<Sub>.hs` |
 
-**Important:** the canonical metadata for every primitive is the
+**Important:** the canonical metadata for every primitive — *including its name* — is the
 `PrimitiveDefinition` in `Hydra/Sources/Kernel/Lib/<Sub>.hs`. All other files
-(host registrations, DSL wrappers) reference primitives by name; they do **not**
-re-declare the signature or description.
+(host registrations, DSL wrappers) **derive** the primitive's name from that definition
+(via the generated `hydra.lib.*` def-modules) and do **not** re-declare the name, signature,
+or description. There is no separate hand-maintained name index: the old
+`Hydra.Sources.Kernel.Lib.Names` module and the `_<namespace>_<localName>` alias layer in
+`Libraries.hs` were removed in #473.
+
+### How primitive names flow
+
+A primitive's name is declared once, in its kernel `PrimitiveDefinition`. From there (#473):
+
+1. Code generation emits a per-host `hydra.lib.*` **def-module** for each kernel `Hydra/Sources/Kernel/Lib/<Sub>.hs`,
+   carrying the `PrimitiveDefinition` (name + signature + metadata) as data. Defs live at `hydra.lib.<sub>`;
+   the native implementations live alongside at `hydra.<lang>.lib.<sub>` (mirroring Haskell's
+   `Hydra.Haskell.Lib.*`).
+2. Every host's primitive registry **derives** each name from that def-module rather than hand-writing a
+   string. In Haskell this is fully implicit: the DSL builders (`primitive`, `primN`, `primCase`,
+   `standardLibrary`) accept a `PrimitiveDefinition` directly via the `ToPrimName` class, so you write
+   `prim1 DefChars.isAlphaNum ...` and `primitive1 DefChars.toLower` with no explicit name accessor. Other
+   hosts derive the name with a `.name`/`prim-name` accessor over the loaded def — Python
+   `def_chars.is_alpha_num.name`, Scala `hydra.lib.chars.isAlphaNum.name`, Java
+   `hydra.lib.Chars.isAlphaNum().name`, and the lisp dialects via `prim-name`.
+
+The upshot: there is exactly one place a primitive name is written down (the kernel `PrimitiveDefinition`),
+and a rename there propagates to all hosts through regeneration.
 
 ### Naming conventions
 
@@ -192,34 +212,14 @@ host's native implementation.
 The order is: **kernel metadata first**, then native implementations, then host
 registrations, then DSL wrappers, then tests.
 
-### 1. Pick the module name and add the name constant
+### 1. Declare the primitive's metadata (this is where its name is defined)
 
-Open `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Names.hs`
-and add the primitive's `Name` constant in the appropriate library section
-(alphabetical):
-
-```haskell
-charsIsAlphaNum :: Name
-charsIsAlphaNum = qname chars "isAlphaNum"
-```
-
-This module is a derived Haskell-side index — it has no `module_ :: Module`
-declaration and no `definitions` list to update. Each constant has type
-`Name` (not `TypedTermDefinition Name`), matching the type expected by
-`prim1` / `prim2` / `prim3` and `primitive1` / `primitive2` / `primitive3`.
-
-Then add a legacy-style alias in
-`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs` so
-existing call sites that use the underscored convention keep working:
-
-```haskell
--- Chars
-_chars_isAlphaNum = LibNames.charsIsAlphaNum
-```
-
-Both names refer to the same `Name` value; the alias just adapts to the
-legacy `_<namespace>_<localName>` naming style used by `prim1`/`prim2`/`prim3`
-registrations and host-side primitive lists.
+There is no separate name-constant step. A primitive's name — like its signature and
+documentation — is declared exactly once, in its `PrimitiveDefinition` in the kernel
+`Hydra/Sources/Kernel/Lib/<Sub>.hs` module (next step). Code generation emits that into the
+per-host `hydra.lib.*` def-modules, and every host registry **derives** the name from there
+(see [How primitive names flow](#how-primitive-names-flow)). So just proceed to declaring the
+metadata — the name comes for free.
 
 ### 2. Declare the primitive's metadata
 
@@ -306,19 +306,22 @@ isAlphaNum :: Int -> Bool
 isAlphaNum = C.isAlphaNum . C.chr
 ```
 
-Then register it in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs`:
+Then register it in `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs`:
 
 ```haskell
 hydraLibChars :: Library
-hydraLibChars = standardLibrary _hydra_lib_chars [
-  prim1 _chars_isAlphaNum Chars.isAlphaNum [] int32 boolean,
+hydraLibChars = standardLibrary [
+  prim1 DefChars.isAlphaNum Chars.isAlphaNum [] int32 boolean,
   ...]
 ```
 
-The `prim1` / `prim2` / `prim3` helpers bind a primitive name to a native
-implementation. They reference the canonical metadata in the kernel by name
-(via the `_chars_isAlphaNum` constant) — the type information passed to them is
-a sanity-check repetition, not the source of truth.
+The `prim1` / `prim2` / `prim3` helpers bind a primitive to a native implementation. They take the
+generated `PrimitiveDefinition` directly (`DefChars.isAlphaNum`, where `DefChars` is the generated
+`Hydra.Lib.Chars` def-module) — the single source of truth for the name. `standardLibrary` derives the
+library's module name from the first primitive, so it needs no `ModuleName` argument. The type information
+passed to `primN` is a sanity-check repetition the host registry needs in native form, not the source of
+truth for the name. (Under the hood, `primN`/`primitive`/`standardLibrary` accept a `PrimitiveDefinition`
+through the `ToPrimName` class; passing a bare `Name` still works for the rare site that has only a name.)
 
 #### Per-parameter signature metadata (e.g. laziness)
 
@@ -397,7 +400,8 @@ sensible implementation would have to reference itself.
 
 Host-side registrations are unchanged regardless of which kind of
 default is used: each primitive is bound with `prim1` / `prim2` /
-`prim3` referencing the same `_<namespace>_<localName>` constant.
+`prim3`, passing the generated `PrimitiveDefinition` directly
+(`prim1 DefChars.isAlphaNum ...`) so the name comes from that single source.
 
 #### Java
 
@@ -522,7 +526,7 @@ function-typed arguments).
 ### 4. Add the DSL wrapper
 
 Add typed wrappers in
-`heads/haskell/src/main/haskell/Hydra/Dsl/Meta/Lib/<Library>.hs`:
+`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Meta/Lib/<Library>.hs`:
 
 ```haskell
 -- Hydra/Dsl/Meta/Lib/Chars.hs
@@ -531,13 +535,14 @@ module Hydra.Dsl.Meta.Lib.Chars where
 import Hydra.Typed
 import Hydra.Dsl.Meta.Phantoms
 import qualified Hydra.Dsl.Terms as Terms
-import Hydra.Sources.Libraries
+import qualified Hydra.Dsl.Prims as Prims
+import qualified Hydra.Lib.Chars as DefChars
 
 isAlphaNum :: TypedTerm Int -> TypedTerm Bool
-isAlphaNum = primitive1 _chars_isAlphaNum
+isAlphaNum = primitive1 DefChars.isAlphaNum
 
 toLower :: TypedTerm Int -> TypedTerm Int
-toLower = primitive1 _chars_toLower
+toLower = primitive1 DefChars.toLower
 ```
 
 These wrappers are what Hydra source modules (kernel and per-host DSL)
@@ -548,8 +553,8 @@ signature.
 **Guidelines:**
 - Use phantom types (`TypedTerm`) for type safety.
 - Use `primitive1` for unary, `primitive2` for binary, `primitive3` for ternary.
-- Reference the name constants exposed via `Hydra.Sources.Libraries`
-  (`_chars_isAlphaNum`, etc.).
+- Pass the generated `PrimitiveDefinition` directly — `primitive1 DefChars.isAlphaNum`
+  (import the def-module as `Hydra.Lib.Chars`); the name is taken from it via `ToPrimName`.
 
 ### 5. Add common test cases
 
@@ -563,7 +568,7 @@ charsIsAlphaNum = subgroup "isAlphaNum" [
   test "digit"            (ord '5') true,
   test "space"            (ord ' ') false]
   where
-    test name x result = primCase name _chars_isAlphaNum [int32 x] result
+    test name x result = primCase name DefChars.isAlphaNum [int32 x] result
 ```
 
 Then add the test group to `allTests` in the same file.
@@ -603,21 +608,20 @@ JSON wasn't regenerated.
 
 When adding a new primitive function:
 
-- [ ] **Kernel metadata** (required)
-  - [ ] Name constant in `Hydra.Sources.Kernel.Lib.Names`
-  - [ ] `toPrimitive` or `primNoDef` entry in `Hydra.Sources.Kernel.Lib.<Library>`
+- [ ] **Kernel metadata** (required — this is where the name is declared, once)
+  - [ ] `toPrimitive` or `primNoDef` entry in `Hydra.Sources.Kernel.Lib.<Library>` (the `PrimitiveDefinition`)
   - [ ] Signature definition (`TypeScheme` → `TermSignature` via `typeSchemeToTermSignature`)
   - [ ] **(If applicable)** Default implementation as a `TypedTermDefinition`
 - [ ] **Haskell**
   - [ ] Native implementation in `Hydra.Haskell.Lib.<Library>`
-  - [ ] Registration via `primN` in `Libraries.hs`
+  - [ ] Registration via `primN Def<Library>.<fn> ...` in `Hydra.Dsl.Libraries`
   - [ ] DSL wrapper in `Hydra.Dsl.Meta.Lib.<Library>`
 - [ ] **Java**
-  - [ ] `PrimitiveFunction` class in `hydra.lib.<library>`
+  - [ ] `PrimitiveFunction` class in `hydra.lib.<library>` (its `name()` returns `hydra.lib.<Lib>.<fn>().name`)
   - [ ] Registration in `Libraries.java`
 - [ ] **Python**
-  - [ ] Function in `hydra.lib.<library>`
-  - [ ] Registration in `hydra.sources.libraries`
+  - [ ] Function in `hydra.python.lib.<library>`
+  - [ ] Registration in `hydra.sources.libraries` (name via `def_<library>.<fn>.name`)
 - [ ] **Common test suite** (required)
   - [ ] Test group added to `Hydra.Sources.Test.Lib.<Library>`
   - [ ] Test group registered in `allTests`
@@ -632,9 +636,11 @@ interface that downstream code, generated artifacts, and every host runtime depe
 so changes ripple widely. Treat it deliberately rather than as a routine edit.
 
 Renaming or removing a primitive is the inverse of the recipe above: undo every site
-in the [Checklist](#checklist) (name constant, kernel `definitions` entry, default
+in the [Checklist](#checklist) (kernel `definitions` entry, default
 implementation, each host's native impl + registration + DSL wrapper, and the common
-test group). Two things deserve special care.
+test group). Because every host derives the name from the kernel `PrimitiveDefinition`,
+a rename starts there and flows out through regeneration — there is no separate name
+constant to update. Two things deserve special care.
 
 **Flip every call site, not just the definition.** Removing a primitive in favour of
 another (e.g. the #401 replacement of the value-first `optionals.maybe` eliminator with

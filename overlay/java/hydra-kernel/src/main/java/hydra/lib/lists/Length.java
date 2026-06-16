@@ -23,7 +23,7 @@ import hydra.util.Either;
  */
 public class Length extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.lists.length");
+        return hydra.lib.Lists.length().name;
     }
 
     @Override

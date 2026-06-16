@@ -30,7 +30,7 @@ public class Singleton extends PrimitiveFunction {
      * @return the name "hydra.lib.sets.singleton"
      */
     public Name name() {
-        return new Name("hydra.lib.sets.singleton");
+        return hydra.lib.Sets.singleton().name;
     }
 
     /**

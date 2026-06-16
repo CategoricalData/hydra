@@ -27,7 +27,7 @@ public class ShowFloat32 extends PrimitiveFunction {
      * @return the function name "hydra.lib.literals.showFloat32"
      */
     public Name name() {
-        return new Name("hydra.lib.literals.showFloat32");
+        return hydra.lib.Literals.showFloat32().name;
     }
 
     /**

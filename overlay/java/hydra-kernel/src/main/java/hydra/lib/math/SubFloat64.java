@@ -26,7 +26,7 @@ public class SubFloat64 extends PrimitiveFunction {
      * @return the function name
      */
     public Name name() {
-        return new Name("hydra.lib.math.subFloat64");
+        return hydra.lib.Math_.subFloat64().name;
     }
 
     /**

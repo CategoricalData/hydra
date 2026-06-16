@@ -310,7 +310,7 @@ primitiveDerivative = define "primitiveDerivative" $
   "name" ~>
   -- d/dx(sin(x)) = cos(x)
   Logic.ifElse (Equality.equal (var "name") (encodedName (Prims.primName DefMath.sin)))
-    (just $ DeepMath.ref (Prims.primName DefMath.cos)) $
+    (just $ DeepMath.ref DefMath.cos) $
   -- d/dx(cos(x)) = -sin(x)
   Logic.ifElse (Equality.equal (var "name") (encodedName (Prims.primName DefMath.cos)))
     (just $ DeepCore.lambda "_x" (DeepMath.negateFloat64 (DeepMath.sin (DeepCore.var "_x")))) $
@@ -319,7 +319,7 @@ primitiveDerivative = define "primitiveDerivative" $
     (just $ DeepCore.lambda "_x" (DeepMath.pow (DeepMath.cos (DeepCore.var "_x")) (f64 (-2.0)))) $
   -- d/dx(exp(x)) = exp(x)
   Logic.ifElse (Equality.equal (var "name") (encodedName (Prims.primName DefMath.exp)))
-    (just $ DeepMath.ref (Prims.primName DefMath.exp)) $
+    (just $ DeepMath.ref DefMath.exp) $
   -- d/dx(log(x)) = 1/x
   Logic.ifElse (Equality.equal (var "name") (encodedName (Prims.primName DefMath.log)))
     (just $ DeepCore.lambda "_x" (DeepMath.pow (DeepCore.var "_x") (f64 (-1.0)))) $
@@ -352,10 +352,10 @@ primitiveDerivative = define "primitiveDerivative" $
         (f64 (-1.0)))) $
   -- d/dx(sinh(x)) = cosh(x)
   Logic.ifElse (Equality.equal (var "name") (encodedName (Prims.primName DefMath.sinh)))
-    (just $ DeepMath.ref (Prims.primName DefMath.cosh)) $
+    (just $ DeepMath.ref DefMath.cosh) $
   -- d/dx(cosh(x)) = sinh(x)
   Logic.ifElse (Equality.equal (var "name") (encodedName (Prims.primName DefMath.cosh)))
-    (just $ DeepMath.ref (Prims.primName DefMath.sinh)) $
+    (just $ DeepMath.ref DefMath.sinh) $
   -- d/dx(tanh(x)) = 1 - tanh(x)^2
   Logic.ifElse (Equality.equal (var "name") (encodedName (Prims.primName DefMath.tanh)))
     (just $ DeepCore.lambda "_x" (DeepMath.subFloat64 (f64 1.0)
@@ -394,7 +394,7 @@ primitiveDerivative = define "primitiveDerivative" $
     (just $ DeepCore.lambda "_x" (f64 (-1.0))) $
   -- d/dx(abs(x)) = signum(x)
   Logic.ifElse (Equality.equal (var "name") (encodedName (Prims.primName DefMath.abs)))
-    (just $ DeepMath.ref (Prims.primName DefMath.signum)) $
+    (just $ DeepMath.ref DefMath.signum) $
   -- d/dx(ceiling(x)) = 0  (piecewise constant)
   Logic.ifElse (Equality.equal (var "name") (encodedName (Prims.primName DefMath.ceiling)))
     (just $ DeepCore.lambda "_x" (f64 0.0)) $

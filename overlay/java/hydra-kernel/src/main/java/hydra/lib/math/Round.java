@@ -25,7 +25,7 @@ import hydra.util.Either;
  */
 public class Round extends PrimitiveFunction {
     public Name name() {
-        return new Name("hydra.lib.math.round");
+        return hydra.lib.Math_.round().name;
     }
 
     @Override
