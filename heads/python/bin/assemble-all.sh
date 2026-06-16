@@ -49,23 +49,15 @@ for pkg in $BATCH_PACKAGES; do
     rm -f "$DIST_ROOT/$pkg/build/main/digest.json" "$DIST_ROOT/$pkg/build/test/digest.json"
 done
 
-# Step 0a + 0b: Drop hand-written files BEFORE generation so #357 prune
+# Step 0: Drop hand-written files BEFORE generation so #357 prune
 # (bootstrap-from-json --prune-stale below) can be told which files to
-# preserve via a keep-paths manifest.
+# preserve via a keep-paths manifest. The runtime AND the test bridge
+# (hydra/test/test_env.py) come from the overlay tree via
+# copy-kernel-runtime.sh, the only reader of overlay/ (#434).
 KEEP_MANIFEST="$(mktemp -t hydra-keep-paths-python.XXXXXX)"
 trap 'rm -f "$KEEP_MANIFEST"' EXIT
 
-TEST_ENV_SRC="$HEAD_DIR/src/test/python/hydra/test/test_env.py"
-TEST_ENV_DST_DIR="$DIST_ROOT/hydra-kernel/src/test/python"
-TEST_ENV_DST="$TEST_ENV_DST_DIR/hydra/test/test_env.py"
-if [ -f "$TEST_ENV_SRC" ]; then
-    echo "Step 0a: Copying test_env.py from heads/python/..."
-    mkdir -p "$(dirname "$TEST_ENV_DST")"
-    cp "$TEST_ENV_SRC" "$TEST_ENV_DST"
-    printf "%s\thydra/test/test_env.py\n" "$TEST_ENV_DST_DIR" >> "$KEEP_MANIFEST"
-fi
-
-echo "Step 0b: Copying hand-written Python runtime into hydra-kernel dist..."
+echo "Step 0: Copying hand-written Python runtime into hydra-kernel dist..."
 "$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT" --manifest "$KEEP_MANIFEST"
 echo ""
 

@@ -49,24 +49,48 @@ done
 OVERLAY_DIR="$HYDRA_ROOT_DIR/overlay/python/hydra-kernel/src/main/python"
 OUT_DIR="$DIST_ROOT/hydra-kernel/src/main/python"
 
+# The test bridge (hydra/test/test_env.py) is the runtime counterpart of the
+# generated hydra.test.test_graph module, which imports hydra.test.test_env and
+# must resolve under the dist tree at test time. Per #434 it lives in the overlay
+# test tree (overlay/python/hydra-kernel/src/test/python/), so this one copy step
+# is the only thing that reads overlay/ — the old heads/ Step 0a special-case in
+# assemble-distribution.sh / assemble-all.sh is gone.
+OVERLAY_TEST_DIR="$HYDRA_ROOT_DIR/overlay/python/hydra-kernel/src/test/python"
+OUT_TEST_DIR="$DIST_ROOT/hydra-kernel/src/test/python"
+
 if [ ! -d "$OVERLAY_DIR" ]; then
     echo "error: missing overlay dir $OVERLAY_DIR" >&2
     exit 1
 fi
 
+# append_manifest <dir>: record every file under <dir> in the keep-paths manifest
+# so bootstrap-from-json --prune-stale won't remove the hand-copied files (#357).
+append_manifest() {
+    local dir="$1"
+    [ -n "$MANIFEST_FILE" ] || return 0
+    ( cd "$dir" && find . -type f -print | sed 's|^\./||' \
+        | awk -v d="$dir" '{ printf "%s\t%s\n", d, $0 }' \
+        >> "$MANIFEST_FILE" )
+}
+
 mkdir -p "$OUT_DIR/hydra"
 
-# Merge the entire overlay tree onto the generated kernel dist. Trailing /. copies
-# CONTENTS into the dest, leaving generated siblings untouched.
+# Merge the entire overlay main tree onto the generated kernel dist. Trailing /.
+# copies CONTENTS into the dest, leaving generated siblings untouched.
 cp -R "$OVERLAY_DIR/." "$OUT_DIR/"
 
 # Don't carry __pycache__ directories into the published artifact.
 find "$OUT_DIR" -type d -name __pycache__ -prune -exec rm -rf {} +
 
-if [ -n "$MANIFEST_FILE" ]; then
-    ( cd "$OUT_DIR" && find . -type f -print | sed 's|^\./||' \
-        | awk -v dir="$OUT_DIR" '{ printf "%s\t%s\n", dir, $0 }' \
-        >> "$MANIFEST_FILE" )
-fi
+append_manifest "$OUT_DIR"
 
 echo "  Overlaid hand-written Python kernel runtime from overlay/python/ into $OUT_DIR/hydra/"
+
+# Merge the overlay test tree (the test bridge) onto the generated kernel test dist.
+if [ -d "$OVERLAY_TEST_DIR" ]; then
+    mkdir -p "$OUT_TEST_DIR"
+    cp -R "$OVERLAY_TEST_DIR/." "$OUT_TEST_DIR/"
+    find "$OUT_TEST_DIR" -type d -name __pycache__ -prune -exec rm -rf {} +
+    append_manifest "$OUT_TEST_DIR"
+    echo "  Overlaid hand-written Python kernel test runtime from overlay/python/ into $OUT_TEST_DIR/hydra/"
+fi
