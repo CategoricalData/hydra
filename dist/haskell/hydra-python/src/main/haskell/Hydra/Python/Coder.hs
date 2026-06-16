@@ -873,8 +873,14 @@ encodeTermAssignment cx env topLevel name term ts comment =
           params = Typing.functionStructureParams fs
           bindings = Typing.functionStructureBindings fs
           body = Typing.functionStructureBody fs
-          doms = Typing.functionStructureDomains fs
-          mcod = Typing.functionStructureCodomain fs
+          domsRaw = Typing.functionStructureDomains fs
+          mcodRaw = Typing.functionStructureCodomain fs
+          sigTermSig = Scoping.typeSchemeToTermSignature ts
+          sigParamTypes = Lists.map (\p -> Typing.parameterType p) (Typing.termSignatureParameters sigTermSig)
+          sigResult = Typing.termSignatureResult sigTermSig
+          sigCod = Typing.resultType sigResult
+          doms = fillDomsFromSignature domsRaw sigParamTypes
+          mcod = Just sigCod
           env2 = Typing.functionStructureEnvironment fs
           tc = PythonEnvironment.pythonEnvironmentGraph env2
           binding =
@@ -1519,6 +1525,10 @@ extractCaseElimination term =
     case (Strip.deannotateAndDetypeTerm term) of
       Core.TermCases v0 -> Just v0
       _ -> Nothing
+-- | Prefer signature parameter types over analysis-captured lambda domains when both are available in equal length (#488).
+fillDomsFromSignature :: [t0] -> [t0] -> [t0]
+fillDomsFromSignature doms sigParamTypes =
+    Logic.ifElse (Equality.equal (Lists.length doms) (Lists.length sigParamTypes)) sigParamTypes doms
 -- | Find type parameters in a type that are bound in the environment
 findTypeParams :: PythonEnvironment.PythonEnvironment -> Core.Type -> [Core.Name]
 findTypeParams env typ =
