@@ -15,7 +15,7 @@ import {
   isGiven,
   isLeft,
   isRight,
-} from "../../../main/typescript/hydra/runtime.js";
+} from "../../../../../../dist/typescript/hydra-kernel/src/main/typescript/hydra/runtime.js";
 
 describe("core", () => {
   it("wraps Name and Namespace", () => {
