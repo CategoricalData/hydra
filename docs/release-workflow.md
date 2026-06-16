@@ -491,7 +491,7 @@ The following are Java-specific release steps:
     package. Default is a build-only dry run; `--upload` does the real Central upload:
     ```bash
     export JAVA_HOME=$(/usr/libexec/java_home -v 19)   # JDK 17+ required (nmcp plugin)
-    heads/java/bin/publish-maven.sh                    # dry run: build all 4, no upload
+    heads/java/bin/publish-maven.sh                    # dry run: build all published artifacts, no upload
     heads/java/bin/publish-maven.sh --upload           # upload pending deployments
     ```
     Or manually, in dependency order, from each `dist/java/<pkg>/`:
@@ -522,7 +522,7 @@ The following are Java-specific release steps:
     strict, so a plain `gradle build` keeps failing on #449 until it is fixed). Remove the flag and
     the init script once #449 lands.
   * Go to [Deployments](https://central.sonatype.com/publishing/deployments) in the Central Portal.
-    Find the four deployments, verify they have passed validation, then click "Publish" on each.
+    Find the nine deployments, verify they have passed validation, then click "Publish" on each.
 
 It will take a short time (a couple of minutes) for validation,
 and a longer time (as little as 15 minutes, or as much as nearly an hour) for promotion,
@@ -725,7 +725,7 @@ all scripts and Stack executables (including internal ones called by the sync sc
 | `publish-hackage.sh` | `heads/haskell/bin/` | Assembles (and optionally uploads, `--upload`/`--publish`) the per-package Hackage distributions in leaves-first order. Asserts the publish set is dependency-closed before assembling. |
 | `publish-maven.sh` | `heads/java/bin/` | Builds (and optionally uploads, `--upload`) the per-package Maven Central distributions leaves-first. Guards JDK 17+ and credentials; refreshes `~/.m2` with freshly-built siblings to avoid the stale-same-version trap. `--allow-javadoc-errors` applies a transient init script for #449. |
 | `publish-pypi.sh` | `heads/python/bin/` | Builds (and optionally uploads, `--upload`) the per-package PyPI wheels + sdists. Prefers `uv build`, falls back to `python -m build`. Asserts dependency closure. Invokes `verify-distribution.sh` as a hard gate before any upload. |
-| `verify-distribution.sh` | `heads/{haskell,python,java}/bin/` | **Per-host self-containment gate (uniform name across heads).** Builds the host's publish-set packages from the `dist/` tree alone and proves they are self-contained when consumed as published artifacts, in isolation from the worktree. **Python:** builds the wheels (or `--wheels <dir>`), installs them into a fresh venv with `--no-index`, imports the top-level kernel modules from a neutral cwd (catches #472). **Haskell:** stages the per-package distributions into one multi-package stack project and `stack build`s them, so dependents' `== <version>` pins resolve against the local staged siblings (catches the #473 cold-build class). **Java:** publishes the per-package jars to a temp Maven repo and resolves them from an offline consumer, so a jar missing classes its API needs (or a POM referencing a sibling not in the publish set) fails; self-skips when no JDK 17+ is present. Run by CI per host and as a hard gate in `prepare-release.sh` (Step 12) + `publish-pypi.sh`. |
+| `verify-distribution.sh` | `heads/{haskell,python,java}/bin/` | **Per-host self-containment gate (uniform name across heads).** Builds the host's publish-set packages from the `dist/` tree alone and proves they are self-contained when consumed as published artifacts, in isolation from the worktree. **Python:** builds the wheels (or `--wheels <dir>`), installs them into a fresh venv with `--no-index`, imports the top-level kernel modules from a neutral cwd (catches #472). **Haskell:** stages the per-package distributions into one multi-package stack project and `stack build`s them, so dependents' `== <version>` pins resolve against the local staged siblings (catches the #473 cold-build class). **Java:** publishes the per-package jars to a temp Maven repo and resolves them from an offline consumer, so a jar missing classes its API needs (or a POM referencing a sibling not in the publish set) fails; hard-fails when no JDK 17+ is present. Run by CI per host and as a hard gate in `prepare-release.sh` (Step 12) + `publish-pypi.sh`. |
 | `generate-haskell-package-build.py` | `bin/lib/` | Emits a standalone `dist/haskell/<pkg>/package.yaml` (+ `stack.yaml`) from `packages/<pkg>/package.json` (or a built-in spec for the `hydra` umbrella) and `hydra.json:currentVersion`. Inter-Hydra deps emit as exact pins `<dep> == <version>`. |
 | `generate-java-package-build.py` | `bin/lib/` | Emits a standalone `dist/java/<pkg>/build.gradle` + `settings.gradle` from `packages/<pkg>/package.json` and `hydra.json:currentVersion`. Inter-Hydra deps emit as `api 'net.fortytwo.hydra:<dep>:<version>'`. |
 | `generate-python-package-build.py` | `bin/lib/` | Emits a standalone `dist/python/<pkg>/pyproject.toml` from `packages/<pkg>/package.json` and `hydra.json:currentVersion`. Inter-Hydra deps emit as `"<dep> == <version>"`. |

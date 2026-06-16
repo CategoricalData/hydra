@@ -15,10 +15,10 @@
 #
 # How it works (mirrors the Haskell verifier's "stage the not-yet-published trio
 # together" approach, adapted to Maven coordinates):
-#   1. Publish the Java publish-set packages (hydra-kernel -> hydra-rdf ->
-#      hydra-pg -> hydra-java, leaves-first) from each dist/java/<pkg>/ build
-#      into a FRESH, TEMPORARY local Maven repo (-Dmaven.repo.local=<tmp>), NOT
-#      into ~/.m2 (so a stale or published artifact can't mask a gap).
+#   1. Publish the Java publish-set packages (the 0.16.1 Maven release set,
+#      leaves-first) from each dist/java/<pkg>/ build into a FRESH, TEMPORARY
+#      local Maven repo (-Dmaven.repo.local=<tmp>), NOT into ~/.m2 (so a stale
+#      or published artifact can't mask a gap).
 #   2. Build a tiny throwaway consumer project that depends on
 #      net.fortytwo.hydra:hydra-kernel:<version> (+ the other publish-set
 #      coordinates) and resolves ONLY from that temp repo, OFFLINE. mavenCentral
@@ -49,7 +49,17 @@ KEEP=false
 [ "${1:-}" = "--keep" ] && KEEP=true
 
 # Java publish set, leaves-first (mirror of publish-maven.sh PUBLISH_SET).
-PUBLISH_SET=(hydra-kernel hydra-rdf hydra-pg hydra-java)
+PUBLISH_SET=(
+    hydra-kernel
+    hydra-haskell
+    hydra-java
+    hydra-python
+    hydra-scala
+    hydra-lisp
+    hydra-typescript
+    hydra-rdf
+    hydra-pg
+)
 GROUP="net.fortytwo.hydra"
 VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 

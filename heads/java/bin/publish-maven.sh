@@ -3,8 +3,9 @@
 # order: leaves first.
 #
 # Java analog of heads/haskell/bin/publish-hackage.sh. The published artifacts
-# live under group net.fortytwo.hydra. The 0.16.0 Java publish set is:
-#   hydra-kernel -> hydra-rdf -> hydra-pg -> hydra-java
+# live under group net.fortytwo.hydra. The 0.16.1 Java publish set is:
+#   hydra-kernel -> hydra-haskell/hydra-java/hydra-python/hydra-lisp/
+#   hydra-typescript/hydra-rdf -> hydra-scala/hydra-pg
 # (hydra-ext is intentionally excluded; see docs/release-workflow.md.)
 #
 # Each dist/java/<pkg>/ is a self-contained Gradle build whose generated
@@ -68,8 +69,18 @@ done
 
 VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 
-# The 0.16.0 Java publish set, in LEAVES-FIRST topological order.
-PUBLISH_SET=(hydra-kernel hydra-rdf hydra-pg hydra-java)
+# The 0.16.1 Java publish set, in LEAVES-FIRST topological order.
+PUBLISH_SET=(
+    hydra-kernel
+    hydra-haskell
+    hydra-java
+    hydra-python
+    hydra-scala
+    hydra-lisp
+    hydra-typescript
+    hydra-rdf
+    hydra-pg
+)
 
 GRADLE_TASK="publishAggregationToCentralPortal"
 
@@ -180,6 +191,8 @@ if [ "$DO_UPLOAD" = true ]; then
     echo "=== Uploaded ${#PUBLISH_SET[@]} package(s) at $VERSION as pending deployments. ==="
     echo "Finalize at https://central.sonatype.com/publishing/deployments —"
     echo "verify each passed validation, then click Publish (leaves first)."
+    echo "Expected deployment order:"
+    printf '  %s\n' "${PUBLISH_SET[@]}"
 else
     echo "=== Dry run complete (no upload). Re-run with --upload to push to the Central Portal. ==="
 fi
