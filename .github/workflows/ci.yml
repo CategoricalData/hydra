@@ -195,10 +195,10 @@ jobs:
       # and resolve them from an offline consumer, so a published artifact that
       # is missing classes its API needs (or whose POM references a sibling not
       # in the publish set) fails here — the Java analog of #472 — before it
-      # reaches Maven Central. Self-skips if the runner lacks a JDK 17+.
+      # reaches Maven Central. Fails if the runner lacks a JDK 17+.
       - name: Verify Java distribution self-containment
         # Run on JDK 17 (the gradle publish plugins require it); the verifier
-        # self-skips below 17, so point JAVA_HOME/PATH at the JDK-17 install set
+        # hard-fails below 17, so point JAVA_HOME/PATH at the JDK-17 install set
         # up above rather than the JDK-11 default used for the gradle test build.
         env:
           JAVA_HOME: ${{ steps.jdk17.outputs.path }}

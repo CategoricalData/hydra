@@ -31,9 +31,9 @@
 # This is verification only — it does NOT upload anything (see publish-maven.sh).
 #
 # Requirements: JDK 17+ to RUN gradle (the nmcp/publish plugins require it, even
-# though the artifacts target Java 11). If no 17+ JDK is found, the script SKIPS
-# with a warning and exits 0 — it must not hard-fail an environment (CI/local)
-# that only has the Java 11 runtime the artifacts target. CI provides a 17+ JDK.
+# though the artifacts target Java 11). If no 17+ JDK is found, this verifier
+# fails: a release gate must not report success when the packaging boundary was
+# not exercised. CI provides a 17+ JDK.
 #
 # Usage:
 #   verify-distribution.sh [--keep]
@@ -53,7 +53,7 @@ PUBLISH_SET=(hydra-kernel hydra-rdf hydra-pg hydra-java)
 GROUP="net.fortytwo.hydra"
 VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 
-# --- JDK 17+ guard: skip (do not fail) if unavailable. -----------------------
+# --- JDK 17+ guard. ----------------------------------------------------------
 jdk_major() {
     # Parses "11.0.19" / "17.0.10" / "1.8.0_xxx" from `java -version`.
     local v
@@ -64,15 +64,15 @@ jdk_major() {
     esac
 }
 if ! command -v java >/dev/null 2>&1; then
-    echo "SKIP: no 'java' on PATH; Java distribution verification needs a JDK 17+." >&2
-    exit 0
+    echo "ERROR: no 'java' on PATH; Java distribution verification needs a JDK 17+." >&2
+    exit 1
 fi
 MAJOR="$(jdk_major)"
 if [ -z "$MAJOR" ] || [ "$MAJOR" -lt 17 ] 2>/dev/null; then
-    echo "SKIP: active JDK is $(java -version 2>&1 | head -1) — Java distribution" >&2
-    echo "      verification needs JDK 17+ (gradle publish plugins). Skipping (exit 0)." >&2
-    echo "      Run on a 17+ JDK (CI does) to exercise the packaging boundary." >&2
-    exit 0
+    echo "ERROR: active JDK is $(java -version 2>&1 | head -1) — Java distribution" >&2
+    echo "       verification needs JDK 17+ (gradle publish plugins)." >&2
+    echo "       Set JAVA_HOME/PATH to a 17+ JDK and rerun this release gate." >&2
+    exit 1
 fi
 
 WORK="$(mktemp -d -t hydra-verify-java-XXXXXX)"
@@ -130,6 +130,9 @@ GRADLE_SETTINGS
         echo "    implementation '${GROUP}:${pkg}:${VERSION}'"
     done
     echo "}"
+    echo "tasks.withType(JavaCompile).configureEach {"
+    echo "    options.encoding = 'UTF-8'"
+    echo "}"
 } > "$CONSUMER/build.gradle"
 
 # A trivial probe that touches a public kernel type, forcing the kernel jar's
@@ -138,7 +141,7 @@ cat > "$CONSUMER/src/main/java/probe/Probe.java" <<'JAVA'
 package probe;
 
 // Imports a public kernel type. If the published hydra-kernel jar does not
-// carry this class (a self-broken artifact), compilation fails — which is
+// carry this class (a self-broken artifact), compilation fails, which is
 // exactly the packaging-boundary break this verifier exists to catch.
 public final class Probe {
     public static void main(String[] args) {

@@ -490,7 +490,11 @@ else
             if [ -n "${HYDRA_RELEASE_SIGNING_KEY:-}" ]; then
                 GPG_KEY_ARGS=(--local-user "$HYDRA_RELEASE_SIGNING_KEY")
             fi
-            if gpg "${GPG_KEY_ARGS[@]}" --armor --detach-sign --yes \
+            # Expand defensively: under `set -u`, "${arr[@]}" on an EMPTY array is
+            # an "unbound variable" error in bash <= 4.3 (macOS ships bash 3.2),
+            # which would abort the whole script mid-Step-11 when no signing key is
+            # set. The ${arr[@]+...} guard yields nothing for an empty array.
+            if gpg ${GPG_KEY_ARGS[@]+"${GPG_KEY_ARGS[@]}"} --armor --detach-sign --yes \
                  --output "$SRC_ARCHIVE.asc" "$SRC_ARCHIVE" 2>>"$SRC_LOG"; then
                 echo "  OK: detached signature written -> hydra-${EXPECTED}-src.tar.gz.asc"
             else
@@ -517,7 +521,7 @@ fi
 # packaged dist/ — which every in-repo test masked because heads/ is always on
 # the path/source-set. The per-host tests above (Steps 2-4) do NOT exercise the
 # packaging boundary; this step does. See #472 (Python wheel) and #473 (Haskell
-# cold-build). Java's verifier self-skips (exit 0) when no JDK 17+ is present.
+# cold-build). Java's verifier hard-fails when no JDK 17+ is present.
 step 12 $TOTAL_STEPS "Verifying per-host published-package self-containment"
 echo ""
 
