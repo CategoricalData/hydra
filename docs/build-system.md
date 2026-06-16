@@ -31,18 +31,36 @@ The organizing principle of Hydra's build is a clean separation between **source
   kernel runtime (`Hydra.Haskell.Lib.*`, the DSL term helpers, `Hydra.Settings`,
   `Hydra.Kernel`) and the `hydra` umbrella module. The overlay tree is a top-level sibling of
   `packages/`, `dist/`, `heads/`, and `bindings/`, mirroring the `dist/<lang>/<pkg>/` shape.
-  Its contents are *overlaid onto* (merged into) the generated `dist/<lang>/<pkg>/` tree by
-  the sync step, which is what makes the distribution complete. Overlay sources are authored,
-  not generated, and are never compiled in place — only after being overlaid into `dist/`.
-  (`overlay/haskell/`, `overlay/java/`, and `overlay/python/` are populated; TypeScript still
-  keeps the analogous runtime in `heads/typescript/src` pending migration.)
+  Overlay sources are authored, not generated, and are never compiled in place — only after
+  being copied into `dist/`.
+
+The governing equation is:
+
+> **`dist/<lang>/<pkg>/`  =  transform(`packages/<pkg>/`)  +  copy(`overlay/<lang>/<pkg>/`)**
+
+A distribution package is the *combination* of two inputs: modules **transformed** from the
+translingual source package into the target language, plus hand-written files **copied** from
+the overlay tree. Two invariants follow, and both are load-bearing:
+
+1. **Only the copy step reads `overlay/`.** Nothing else — no head build, no test config, no
+   IDE project — may reference the `overlay/` tree directly. Its sole purpose is to feed
+   `dist/`.
+2. **Heads depend on `dist/`, never on `overlay/` or on `heads/` for shipped runtime.** A head
+   that historically compiled or loaded its runtime in place from `heads/<lang>/src` consumes
+   the `dist/` copy instead once that runtime moves to `overlay/`. (Generation *drivers* —
+   `Bootstrap.*`, `Generation.*`, coder drivers, and a head's own test-runner specs — are not
+   shipped and legitimately stay under `heads/`, compiled by the head itself.)
 
 So one translingual source package fans out into one complete distribution package per
 selected target language, and each distribution stands on its own. "Complete" is the bar:
 if a `dist/<lang>/<pkg>/` would need a `../../` reference to build, it is not yet a proper
-distribution package. (The hand-written runtime that `hydra-kernel` needs is *overlaid into*
-the distribution to satisfy this — see
+distribution package. (The hand-written runtime that `hydra-kernel` needs is *copied into*
+the distribution from the overlay to satisfy this — see
 [Hand-written runtime in hydra-kernel](#hand-written-runtime-in-hydra-kernel).)
+
+Per #434 every head is being moved onto this uniform overlay/copy model. `overlay/haskell/`,
+`overlay/java/`, `overlay/python/`, and `overlay/typescript/` are populated; Scala, the four
+Lisp dialects, and Go are in progress.
 
 A consequence worth stating: while `heads/<lang>/` currently both *produces* distributions
 and *consumes* them (the Haskell head, for instance, compiles the `dist/haskell/*` trees
@@ -118,14 +136,15 @@ generated kernel types so the published package is self-contained — downstream
 Stack/cabal / Gradle / pip / npm consumers do not need to know about Hydra's
 `overlay/` or `heads/` layout.
 
-The mechanism: a per-language **overlay** step merges the hand-written runtime
-into `dist/<lang>/hydra-kernel/src/main/<lang>/` during sync (for Haskell, Java,
-and Python the canonical source is the top-level `overlay/<lang>/hydra-kernel/`
-tree; TypeScript still copies from within `heads/typescript/` pending migration).
-For Java/Python it runs as **Step 0** of `heads/<lang>/bin/assemble-distribution.sh
-hydra-kernel`, which invokes `heads/<lang>/bin/copy-kernel-runtime.sh`; for Haskell
-it runs as a post-processing step of `sync-haskell.sh`. It runs only for
-`hydra-kernel` (plus, for Haskell, the `hydra` umbrella).
+The mechanism: a per-language **overlay** step copies the hand-written runtime
+into `dist/<lang>/hydra-kernel/src/main/<lang>/` during sync. The canonical source
+is always the top-level `overlay/<lang>/hydra-kernel/` tree — for Haskell, Java,
+Python, and TypeScript today, and for every head as #434 completes. For
+Java/Python/TypeScript it runs as **Step 0** of
+`heads/<lang>/bin/assemble-distribution.sh hydra-kernel`, which invokes
+`heads/<lang>/bin/copy-kernel-runtime.sh`; for Haskell it runs as a post-processing
+step of `sync-haskell.sh`. It runs only for `hydra-kernel` (plus, for Haskell, the
+`hydra` umbrella).
 
 The copy is a *merge* into the generated tree, not a wholesale overwrite —
 several subdirectories (e.g. `hydra/json/`) contain both generated and
@@ -135,23 +154,31 @@ hand-written files and would clobber the generator's output if replaced.
 from the `--prune-stale` deletion pass.)
 
 Because the `overlay/<lang>/hydra-kernel/` tree holds *only* runtime (nothing
-else), the migrated copy scripts are dumb full-tree merges — no selective file
-lists or per-file exclusions. Files that are NOT kernel runtime (multi-coder
-drivers, test bases, json-io stubs, each language's own coder) stay in
-`heads/<lang>/src` and are compiled by the developer rollup, not copied.
+else), the Java/Python/Haskell copy scripts are dumb full-tree merges — no selective
+file lists or per-file exclusions. (TypeScript's `copy-kernel-runtime.sh` is the one
+exception: it copies a named set of files, because its `dist/.../hydra/` directory
+interleaves generated kernel modules — e.g. `core.ts` — with hand-written runtime
+— `runtime.ts`, `primitives.ts`, `lib/*.ts` — at the same path, so a blind merge
+would risk clobbering generated output.) Files that are NOT kernel runtime
+(multi-coder drivers, test bases, json-io stubs, each language's own coder, and a
+head's own `*.test`/Spec runners) stay in `heads/<lang>/src` and are compiled by the
+developer rollup, not copied.
 
 | Language | Canonical runtime home | Overlaid by | Approx. file count |
 |----------|------------------------|-------------|--------------------|
 | Haskell | `overlay/haskell/hydra-kernel/` (+ `overlay/haskell/hydra/` umbrella): `Hydra.Settings`, `Hydra.Kernel`, 13 `Hydra.Haskell.Lib.*`, `Hydra.Dsl.{Terms,Literals,Meta.Common}` | `sync-haskell.sh` (head compiles from the dist copy, not the overlay; copies gitignored) | 18 |
 | Java | `overlay/java/hydra-kernel/`: `Adapters.java`, `Coders.java`, full `hydra/{util,lib,dsl,tools}/`, `hydra/json/{JsonEncoding,JsonDecoding}.java` | `copy-kernel-runtime.sh` (Step 0 of assemble) | ~282 |
-| Python | `overlay/python/hydra-kernel/`: `tools.py`, `py.typed`, `hydra/{lib,dsl,sources,python/util}/` (no `__init__.py` — PEP 420) | `copy-kernel-runtime.sh` (Step 0 of assemble) | ~53 |
-| TypeScript | (not yet migrated) `heads/typescript/src`: `hydra/{bootstrap,primitives,runtime}.ts`, `hydra/lib/*.ts`, test helpers | `heads/typescript/bin/copy-kernel-runtime.sh` | ~19 |
-| Scala, Go, Lisp dialects | — none — | Their runtimes live under `heads/<lang>/` and are referenced via build-tool source-dir paths (sbt's `unmanagedSourceDirectories`, etc.). Nothing is copied. | 0 |
+| Python | `overlay/python/hydra-kernel/`: `tools.py`, `py.typed`, `hydra/{lib,dsl,sources,python/util}/` (main, no `__init__.py` — PEP 420); `hydra/test/test_env.py` (test bridge) | `copy-kernel-runtime.sh` (Step 0 of assemble; copies overlay main + test) | ~54 |
+| TypeScript | `overlay/typescript/hydra-kernel/`: `hydra/{bootstrap,primitives,runtime}.ts`, `hydra/lib/*.ts` (main); `hydra/test/{testEnv,jsonBindings}.ts` (test) | `copy-kernel-runtime.sh` (Step 0 of assemble) | ~19 |
+| Go (head bud) | `overlay/go/hydra-kernel/`: `hydra/lib/*` primitive impls (only `lib/literals` implemented; rest are package stubs). Generated code imports these via the dist-local module path `hydra.dev/hydra/lib/...` | `copy-kernel-runtime.sh` (Step 3 of assemble, post-prune) | ~13 |
+| Lisp dialects (clojure, scheme, common-lisp, emacs-lisp) | `overlay/<dialect>/hydra-kernel/`: the loader/prims/lazy/prelude/json-reader runtime + `hydra/lib/*` registries + `hydra/<dialect>/lib/*` native impls (+ Scheme's `scheme/`/`srfi/` externals) + the test bridge. Copied by common.sh's `lisp_copy_overlay` (Step 3, kernel-only). Each dialect's test runner loads the runtime from `dist/`. Common Lisp's `struct-compat.lisp` is generated into dist by gen-compat.sh (not overlay). | ~17 (clojure) – ~42 (scheme) |
+| Scala | (#434 in progress) — runtime still under `heads/scala/src`, referenced via sbt's `unmanagedSourceDirectories`. Being relocated to `overlay/scala/` with build.sbt + bootstrap-demo repointed at `dist/`. | 0 → migrating |
 
-The canonical edit point is the `overlay/<lang>/` tree (Haskell/Java/Python) or
-`heads/<lang>/src` (TypeScript and not-yet-migrated cases). Editing the copy in
-`dist/` is wrong for the same reason editing any other `dist/` file is wrong: the
-next sync/assemble overwrites it. (See CLAUDE.md hard rule 3.)
+The canonical edit point is the `overlay/<lang>/` tree (Haskell/Java/Python/TypeScript) or,
+for the not-yet-migrated heads, `heads/<lang>/src`. Editing the copy in `dist/` is wrong for
+the same reason editing any other `dist/` file is wrong: the next sync/assemble overwrites it.
+(See CLAUDE.md hard rule 3.) And per the invariants above, the head's own build/test must read
+the runtime from `dist/`, never from `overlay/` directly.
 
 These files **do not carry** the "automatically generated — do not edit" header
 that generated files carry — they aren't generated. A grep that scans `dist/` for

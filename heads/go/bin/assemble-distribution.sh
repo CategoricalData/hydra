@@ -85,5 +85,15 @@ else
     fi
 fi
 
+# Step 3 (hydra-kernel only): copy the hand-written runtime from the overlay
+# tree into dist/. Runs AFTER the transform's --prune-stale pass so the prune
+# can't remove the overlay files. The generated kernel imports these via the
+# dist-local module path hydra.dev/hydra/lib/... (#434).
+if [ "$PACKAGE" = "hydra-kernel" ]; then
+    echo ""
+    echo "Step 3: Copying hand-written Go runtime into hydra-kernel dist..."
+    "$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT"
+fi
+
 echo ""
 echo "=== Done. $PACKAGE assembled under $OUT_DIR ==="

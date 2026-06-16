@@ -1,29 +1,30 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "composite": false,
     "rootDir": "../..",
     "outDir": "build/test",
     "noEmit": true
   },
+  // The head's own vitest specs (src/test/typescript/**/*.test.ts) import the
+  // kernel runtime and the common test suite from the dist tree
+  // (dist/typescript/hydra-kernel/...), which #434 makes the single source of
+  // truth: generated modules transformed from packages/ plus the hand-written
+  // runtime copied from overlay/. So the type-check surface is the head's test
+  // specs together with the dist main + test trees. Nothing references
+  // heads/typescript/src/main anymore (it is empty post-#434).
   "include": [
-    "src/main/typescript/**/*.ts",
     "src/test/typescript/**/*.ts",
     "../../dist/typescript/hydra-kernel/src/**/*.ts"
   ],
   "exclude": [
     "build",
     "node_modules",
-    "src/main/typescript/hydra/bootstrap.ts",
+    // bootstrap.ts imports from sibling coder packages (hydra-lisp, …) not
+    // present under hydra-kernel/, so it is excluded from the standalone
+    // type-check; it ships in dist for bootstrap-time use only.
     "../../dist/typescript/hydra-kernel/src/main/typescript/hydra/bootstrap.ts",
-    // `libraries.ts` and the test/runtime modules import from generated
-    // kernel paths (context.js, graph.js, …) that only exist after the
-    // sync copies the hand-written runtime into dist/. The COPIES are
-    // type-checked via the dist/typescript/hydra-kernel include path;
-    // the src/ originals are excluded here so the dangling imports don't
-    // produce TS2307. (bin/test-distribution.sh validates the dist
-    // tree end-to-end.)
-    "src/main/typescript/hydra/lib/libraries.ts",
-    "src/test/typescript/hydra/test/**"
+    // libraries.ts imports generated kernel paths that only resolve once the
+    // dist tree is fully assembled; test-distribution.sh validates it there.
+    "../../dist/typescript/hydra-kernel/src/main/typescript/hydra/lib/libraries.ts"
   ]
 }

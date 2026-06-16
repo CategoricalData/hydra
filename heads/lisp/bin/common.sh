@@ -9,13 +9,15 @@
 #   LISP_DIALECT      e.g. "clojure", "common-lisp", "emacs-lisp", "scheme"
 #   LISP_PRETTY_NAME  e.g. "Clojure", "Common Lisp", "Emacs Lisp", "Scheme"
 #   LISP_HEAD_DIR     absolute path to heads/lisp/<dialect>/
-#   LISP_TEST_ENV     basename of the hand-written test_env file
-#                     (e.g. "testEnv.clj"); empty string to skip the copy.
 #
-# Scheme additionally needs to copy runtime libs and write empty
-# define-library stubs after the main + test generation; that's done
-# in the Scheme wrapper after lisp_assemble_main returns, by calling
-# scheme_post_kernel_extras "$OUT_DIR".
+# Step 3 (kernel-only) copies the hand-written runtime + test bridge from
+# overlay/<dialect>/hydra-kernel/ into dist via lisp_copy_overlay (#434) — the
+# single reader of overlay/. The head's test runner then loads the runtime from
+# dist/, never from heads/ or overlay/.
+#
+# Scheme additionally writes empty define-library stub modules after the main +
+# test generation; that's done in the Scheme wrapper after lisp_assemble_main
+# returns, by calling scheme_post_kernel_extras "$OUT_DIR".
 #
 # This file is sourced via:
 #   source "$(dirname "${BASH_SOURCE[0]}")/../../bin/common.sh"
@@ -28,10 +30,9 @@ HYDRA_ROOT_DIR="$( cd "$_LISP_COMMON_SCRIPT_DIR/../../.." && pwd )"
 source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 source "$HYDRA_ROOT_DIR/bin/lib/assemble-common.sh"
 
-# Run Steps 1 (main) + 2 (test) + 3 (testEnv copy for hydra-kernel).
-# Caller must have set LISP_DIALECT, LISP_PRETTY_NAME, LISP_HEAD_DIR,
-# LISP_TEST_ENV before calling, and must pass through "$@" so the
-# package + --dist-root args are seen.
+# Run Steps 1 (main) + 2 (test) + 3 (overlay copy for hydra-kernel).
+# Caller must have set LISP_DIALECT, LISP_PRETTY_NAME, LISP_HEAD_DIR before
+# calling, and must pass through "$@" so the package + --dist-root args are seen.
 #
 # Sets PACKAGE, OUT_DIR, DIST_ROOT in the caller's scope (via standard
 # bash function semantics — variables are global by default) so that
@@ -122,21 +123,45 @@ lisp_assemble_main() {
         fi
     fi
 
-    # Step 3: For hydra-kernel, copy the hand-written test_env file into
-    # the dist tree so the generated test_graph.<ext>'s import resolves.
-    # The kernel filters hydra.test.testEnv from emitted output via
-    # testSkipEmitModuleNames. Common Lisp doesn't need the copy here —
-    # its run-tests.lisp loads test_env.lisp from heads/ directly before
-    # test_graph.lisp.
-    if [ "$PACKAGE" = "hydra-kernel" ] && [ -n "$LISP_TEST_ENV" ]; then
-        local test_env_src="$LISP_HEAD_DIR/src/test/$LISP_DIALECT/hydra/test/$LISP_TEST_ENV"
-        local test_env_dst="$OUT_DIR/src/test/$LISP_DIALECT/hydra/test/$LISP_TEST_ENV"
-        if [ -f "$test_env_src" ]; then
-            echo ""
-            echo "Step 3: Copying $LISP_TEST_ENV from heads/lisp/$LISP_DIALECT..."
-            mkdir -p "$(dirname "$test_env_dst")"
-            cp "$test_env_src" "$test_env_dst"
-        fi
+    # Step 3: For hydra-kernel, copy the hand-written runtime + test bridge
+    # from the overlay tree into the dist tree (#434). The canonical home is
+    # overlay/<dialect>/hydra-kernel/src/{main,test}/<dialect>/ — this copy is
+    # the ONLY reader of overlay/; the head's test runner then loads the runtime
+    # from dist/, never from heads/ or overlay/. The generated test_graph.<ext>
+    # imports hydra.test.testEnv (filtered from emitted output via
+    # testSkipEmitModuleNames), which the copied test bridge satisfies.
+    if [ "$PACKAGE" = "hydra-kernel" ]; then
+        lisp_copy_overlay "$OUT_DIR"
+    fi
+}
+
+# Copy the hand-written runtime + test bridge for $LISP_DIALECT from the overlay
+# tree into the dist package $1 (#434). Mirrors the Java/Python/TypeScript
+# copy-kernel-runtime.sh: a dumb full-tree merge of overlay/<dialect>/hydra-kernel/
+# onto dist/<dialect>/hydra-kernel/, leaving generated siblings untouched.
+# Scheme additionally writes R7RS stubs via scheme_post_kernel_extras (those are
+# generated placeholders, not overlay material).
+lisp_copy_overlay() {
+    local out_dir="$1"
+    local overlay_root="$HYDRA_ROOT_DIR/overlay/$LISP_DIALECT/hydra-kernel/src"
+    local overlay_main="$overlay_root/main/$LISP_DIALECT"
+    local overlay_test="$overlay_root/test/$LISP_DIALECT"
+
+    if [ ! -d "$overlay_main" ] && [ ! -d "$overlay_test" ]; then
+        echo "error: missing overlay tree $overlay_root (main or test)" >&2
+        exit 1
+    fi
+
+    if [ -d "$overlay_main" ]; then
+        echo ""
+        echo "Step 3: Copying hand-written $LISP_PRETTY_NAME runtime from overlay/$LISP_DIALECT into dist..."
+        mkdir -p "$out_dir/src/main/$LISP_DIALECT"
+        cp -R "$overlay_main/." "$out_dir/src/main/$LISP_DIALECT/"
+    fi
+    if [ -d "$overlay_test" ]; then
+        echo "Step 3: Copying hand-written $LISP_PRETTY_NAME test runtime from overlay/$LISP_DIALECT into dist..."
+        mkdir -p "$out_dir/src/test/$LISP_DIALECT"
+        cp -R "$overlay_test/." "$out_dir/src/test/$LISP_DIALECT/"
     fi
 }
 
@@ -161,50 +186,31 @@ scheme_keep_paths() {
     done
     local out_dir="$dist_root/$pkg"
     local scheme_main_dir="$out_dir/src/main/scheme"
-    local scheme_lib_src="$LISP_HEAD_DIR/src/main/scheme/hydra/lib"
-    # Runtime libs: every *.scm under heads/lisp/scheme/src/main/scheme/hydra/lib/
-    # gets copied to <out>/src/main/scheme/hydra/lib/<name>.scm.
-    if [ -d "$scheme_lib_src" ]; then
-        for lib_file in "$scheme_lib_src"/*.scm; do
-            [ -e "$lib_file" ] || continue
-            printf "%s\thydra/lib/%s\n" "$scheme_main_dir" "$(basename "$lib_file")" >> "$manifest_file"
-        done
-    fi
-    # Stub modules: must match the list in scheme_post_kernel_extras Step 3b.
+    # #434: the runtime libs now come from overlay/scheme/ via lisp_copy_overlay
+    # (Step 3, post-prune), so they no longer need keep-paths protection. Only the
+    # generated stub modules (written by scheme_post_kernel_extras, also post-prune)
+    # are enumerated here for completeness / parity with the prune pass.
+    # Stub modules: must match the list in scheme_post_kernel_extras.
     for stub in decode/graph decode/compute encode/graph encode/compute; do
         printf "%s\thydra/%s.scm\n" "$scheme_main_dir" "$stub" >> "$manifest_file"
     done
 }
 
-# Scheme-specific extras for hydra-kernel: copy runtime libs and write
-# empty define-library stubs. Called by the Scheme wrapper after
-# lisp_assemble_main returns (only when PACKAGE = hydra-kernel). Paired
-# with scheme_keep_paths above, which emits a #357 keep-paths manifest
-# enumerating the same files BEFORE generation.
-#
-# Historical note: maps.scm and sets.scm were previously skipped here
-# because two implementations existed — an alist-backed portable version
-# checked into dist/scheme/, and a vhash-backed Guile-specific version
-# in heads/. The dist version was casualty of the dist/scheme/ untrack
-# (commit 0a00d9166, "Stop tracking generated dist/ targets"), and CI
-# only targets Guile, so we now copy the heads/ vhash version
-# unconditionally. If portable Scheme support is needed later, restore
-# the alist version from git history (0a00d9166^) and reintroduce the
-# skip.
+# Scheme-specific extras for hydra-kernel: write empty define-library stubs for
+# modules the coder doesn't emit. Called by the Scheme wrapper after
+# lisp_assemble_main returns (only when PACKAGE = hydra-kernel). Post-#434 the
+# runtime-lib copy is gone — those libs are part of overlay/scheme/ and land in
+# dist via lisp_copy_overlay (Step 3). The Guile-specific vhash maps/sets
+# implementations are likewise just overlay files now (the portable alist
+# versions remain available in git history at 0a00d9166^ if needed).
 scheme_post_kernel_extras() {
     local out_dir="$1"
-    local scheme_lib_src="$LISP_HEAD_DIR/src/main/scheme/hydra/lib"
-    local scheme_lib_dst="$out_dir/src/main/scheme/hydra/lib"
-    echo ""
-    echo "Step 3a: Copying Scheme runtime libraries..."
-    mkdir -p "$scheme_lib_dst"
-    for lib_file in "$scheme_lib_src"/*.scm; do
-        [ -e "$lib_file" ] || continue
-        cp "$lib_file" "$scheme_lib_dst/$(basename "$lib_file")"
-    done
-
-    # Empty R7RS libraries as placeholders for modules that haven't been
-    # generated.
+    # #434: the Scheme runtime libraries (hydra/lib/*, hydra/scheme/lib/*, plus
+    # the bytevector/srfi externals) now live in overlay/scheme/ and are copied
+    # into dist by lisp_copy_overlay (Step 3). This hook is left with only the
+    # generated R7RS stub modules below — empty define-library placeholders for
+    # modules the coder doesn't emit. (The stubs are generated, not overlay
+    # material, so they stay here.)
     local scheme_main="$out_dir/src/main/scheme"
     echo "Step 3b: Writing Scheme stub modules..."
     local stub mod_name path

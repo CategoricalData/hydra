@@ -18,7 +18,6 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 LISP_DIALECT="scheme"
 LISP_PRETTY_NAME="Scheme"
 LISP_HEAD_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
-LISP_TEST_ENV="test_env.scm"
 
 source "$SCRIPT_DIR/../../bin/common.sh"
 

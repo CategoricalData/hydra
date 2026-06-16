@@ -1,11 +1,16 @@
 #!/usr/bin/env bash
-# Copy the hand-written TypeScript runtime support from
-# heads/typescript/src/main/typescript/ into
+# Copy the hand-written TypeScript runtime support from the top-level overlay
+# tree overlay/typescript/hydra-kernel/src/main/typescript/ into
 # dist/typescript/hydra-kernel/src/main/typescript/ so that the published
-# kernel can be consumed standalone.
+# kernel can be consumed standalone. This is the TypeScript analog of the
+# Java/Python copy-kernel-runtime.sh and the Haskell overlay-kernel-runtime.sh
+# (#434): the canonical hand-written sources live, uncompiled, under the
+# top-level overlay/ tree (a sibling of dist/, packages/, heads/), and this
+# script is the ONLY thing that reads overlay/. The head itself depends only
+# on the dist/ copy.
 #
 # Per the 0.15 layout, hydra-kernel is special: it ships not only the
-# generated kernel `.ts` files but also the runtime (`hydra/core.ts`,
+# generated kernel `.ts` files but also the runtime (`hydra/runtime.ts`,
 # `hydra/lib/*.ts`, `hydra/primitives.ts`) that every Hydra TypeScript
 # program needs.
 #
@@ -27,7 +32,8 @@ while [ $# -gt 0 ]; do
     esac
 done
 
-SRC_DIR="$HYDRA_TS_HEAD/src/main/typescript"
+OVERLAY_ROOT="$HYDRA_ROOT_DIR/overlay/typescript/hydra-kernel/src"
+SRC_DIR="$OVERLAY_ROOT/main/typescript"
 OUT_DIR="$DIST_ROOT/hydra-kernel/src/main/typescript"
 
 if [ ! -d "$SRC_DIR" ]; then
@@ -80,7 +86,7 @@ echo "  Copied hand-written TypeScript runtime into $OUT_DIR/hydra/"
 # hand-written equivalents: the DSL declares the FQNs so the coder can
 # resolve references during inference, but the actual runtime values are
 # provided per-language at test time.
-TEST_SRC_DIR="$HYDRA_TS_HEAD/src/test/typescript"
+TEST_SRC_DIR="$OVERLAY_ROOT/test/typescript"
 TEST_OUT_DIR="$DIST_ROOT/hydra-kernel/src/test/typescript"
 if [ -d "$TEST_SRC_DIR/hydra/test" ]; then
     mkdir -p "$TEST_OUT_DIR/hydra/test"

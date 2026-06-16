@@ -9,6 +9,13 @@ lazy val root = project
 
     scalaVersion := scala3Version,
 
+    // The hand-written Scala runtime (hydra/lib/Libraries.scala, hydra/scala/lib/*)
+    // and the test runner (hydra/TestSuiteRunner.scala, hydra/test/testEnv.scala)
+    // now live in overlay/scala/hydra-kernel/ and are copied into the dist tree by
+    // the assembler (#434), so they appear on the dist/scala/hydra-kernel/src paths
+    // below. heads/scala/src/main/scala carries ONLY the generation drivers
+    // (Bootstrap.scala, Generation.scala) now — no longer the runtime, so there is
+    // no duplicate-class clash with the dist copy.
     Compile / unmanagedSourceDirectories ++= Seq(
       baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-kernel" / "src" / "main" / "scala",
       baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-haskell" / "src" / "main" / "scala",
@@ -19,10 +26,10 @@ lazy val root = project
       baseDirectory.value / ".." / ".." / "heads" / "scala" / "src" / "main" / "scala",
     ),
 
-    // Test sources include generated tests
+    // Test sources: generated tests + the hand-written TestSuiteRunner/testEnv,
+    // both under dist/scala/hydra-kernel/src/test/scala after the overlay copy.
     Test / unmanagedSourceDirectories ++= Seq(
       baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-kernel" / "src" / "test" / "scala",
-      baseDirectory.value / ".." / ".." / "heads" / "scala" / "src" / "test" / "scala",
     ),
 
     // Exclude generation tests (Scala coder output tests) which require Array[Byte] binary support
