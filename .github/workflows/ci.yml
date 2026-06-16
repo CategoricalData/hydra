@@ -160,6 +160,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # JDK 17 is installed first (and captured via its step id) so the
+      # distribution self-containment gate below can run on it; setup-java's
+      # last invocation wins for JAVA_HOME, so JDK 11 is set up second and is
+      # the default for the gradle test build.
+      - id: jdk17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -188,7 +197,14 @@ jobs:
       # in the publish set) fails here — the Java analog of #472 — before it
       # reaches Maven Central. Self-skips if the runner lacks a JDK 17+.
       - name: Verify Java distribution self-containment
-        run: heads/java/bin/verify-distribution.sh
+        # Run on JDK 17 (the gradle publish plugins require it); the verifier
+        # self-skips below 17, so point JAVA_HOME/PATH at the JDK-17 install set
+        # up above rather than the JDK-11 default used for the gradle test build.
+        env:
+          JAVA_HOME: ${{ steps.jdk17.outputs.path }}
+        run: |
+          export PATH="$JAVA_HOME/bin:$PATH"
+          heads/java/bin/verify-distribution.sh
 
   python:
     name: Python tests
