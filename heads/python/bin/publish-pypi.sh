@@ -81,6 +81,15 @@ fi
 echo "  Builder: $([ "$BUILD_CMD" = uv ] && echo 'uv build' || echo 'python3 -m build')"
 
 # --- Build each wheel + sdist ------------------------------------------------
+# Start from a clean output dir. Otherwise artifacts from a previous release
+# (e.g. a leftover 0.16.0 build) accumulate alongside the current ones, which
+# both poisons the packaging-boundary gate below (`pip install <dir>/*.whl` then
+# sees two versions of hydra-kernel -> ResolutionImpossible) and would push the
+# stale versions on `twine upload <dir>/*`. Only *.whl/*.tar.gz are removed.
+if [ -d "$OUT_DIR" ]; then
+    echo "Clearing stale build artifacts from $OUT_DIR"
+    rm -f "$OUT_DIR"/*.whl "$OUT_DIR"/*.tar.gz
+fi
 mkdir -p "$OUT_DIR"
 echo "=== Building wheels + sdists into $OUT_DIR ==="
 for pkg in "${PUBLISH_SET[@]}"; do
