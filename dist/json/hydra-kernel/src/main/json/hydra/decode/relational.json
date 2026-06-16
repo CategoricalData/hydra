@@ -251,7 +251,10 @@
                                             "body": {
                                               "typeApplication": {"body": {"variable": "hydra.lib.eithers.either"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                             "type": {"variable": "hydra.core.Term"}}},
-                                        "type": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.relational.ColumnSchema"}}}}},
+                                        "type": {
+                                          "either": {
+                                            "left": {"variable": "hydra.errors.DecodingError"},
+                                            "right": {"application": {"function": {"variable": "hydra.relational.ColumnSchema"}, "argument": {"variable": "t"}}}}}}},
                                     "argument": {
                                       "lambda": {
                                         "parameter": "err",
@@ -260,7 +263,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {"body": {"either": {"left": {"variable": "err"}}}, "type": {"variable": "hydra.errors.DecodingError"}}},
-                                            "type": {"variable": "hydra.relational.ColumnSchema"}}}}}}},
+                                            "type": {"application": {"function": {"variable": "hydra.relational.ColumnSchema"}, "argument": {"variable": "t"}}}}}}}}},
                                 "argument": {
                                   "lambda": {
                                     "parameter": "stripped",
@@ -281,7 +284,7 @@
                                                             "typeName": "hydra.errors.DecodingError",
                                                             "body": {"literal": {"string": "expected a record of type hydra.relational.ColumnSchema"}}}}}},
                                                     "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                "type": {"variable": "hydra.relational.ColumnSchema"}}},
+                                                "type": {"application": {"function": {"variable": "hydra.relational.ColumnSchema"}, "argument": {"variable": "t"}}}}},
                                             "cases": [
                                               {
                                                 "name": "record",
@@ -307,7 +310,7 @@
                                                                         "body": {
                                                                           "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                         "type": {"variable": "hydra.relational.ColumnName"}}},
-                                                                    "type": {"variable": "hydra.relational.ColumnSchema"}}},
+                                                                    "type": {"application": {"function": {"variable": "hydra.relational.ColumnSchema"}, "argument": {"variable": "t"}}}}},
                                                                 "argument": {
                                                                   "application": {
                                                                     "function": {
@@ -343,7 +346,7 @@
                                                                                 "body": {
                                                                                   "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                 "type": {"variable": "t"}}},
-                                                                            "type": {"variable": "hydra.relational.ColumnSchema"}}},
+                                                                            "type": {"application": {"function": {"variable": "hydra.relational.ColumnSchema"}, "argument": {"variable": "t"}}}}},
                                                                         "argument": {
                                                                           "application": {
                                                                             "function": {
@@ -379,7 +382,7 @@
                                                                                         "typeName": "hydra.relational.ColumnSchema",
                                                                                         "fields": [{"name": "name", "term": {"variable": "field_name"}}, {"name": "domain", "term": {"variable": "field_domain"}}]}}}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.relational.ColumnSchema"}}}}}}}}}}}}}}}}]}},
+                                                                            "type": {"application": {"function": {"variable": "hydra.relational.ColumnSchema"}, "argument": {"variable": "t"}}}}}}}}}}}}}}}}}}]}},
                                         "argument": {"variable": "stripped"}}}}}}},
                             "argument": {
                               "application": {
@@ -729,7 +732,10 @@
                                             "body": {
                                               "typeApplication": {"body": {"variable": "hydra.lib.eithers.either"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                             "type": {"variable": "hydra.core.Term"}}},
-                                        "type": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.relational.Relation"}}}}},
+                                        "type": {
+                                          "either": {
+                                            "left": {"variable": "hydra.errors.DecodingError"},
+                                            "right": {"application": {"function": {"variable": "hydra.relational.Relation"}, "argument": {"variable": "v"}}}}}}},
                                     "argument": {
                                       "lambda": {
                                         "parameter": "err",
@@ -738,7 +744,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {"body": {"either": {"left": {"variable": "err"}}}, "type": {"variable": "hydra.errors.DecodingError"}}},
-                                            "type": {"variable": "hydra.relational.Relation"}}}}}}},
+                                            "type": {"application": {"function": {"variable": "hydra.relational.Relation"}, "argument": {"variable": "v"}}}}}}}}},
                                 "argument": {
                                   "lambda": {
                                     "parameter": "stripped",
@@ -755,7 +761,7 @@
                                                     "body": {
                                                       "either": {"left": {"wrap": {"typeName": "hydra.errors.DecodingError", "body": {"literal": {"string": "expected wrapped type"}}}}}},
                                                     "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                "type": {"variable": "hydra.relational.Relation"}}},
+                                                "type": {"application": {"function": {"variable": "hydra.relational.Relation"}, "argument": {"variable": "v"}}}}},
                                             "cases": [
                                               {
                                                 "name": "wrap",
@@ -775,7 +781,7 @@
                                                                       "typeApplication": {
                                                                         "body": {"variable": "hydra.lib.eithers.map"},
                                                                         "type": {"list": {"application": {"function": {"variable": "hydra.relational.Row"}, "argument": {"variable": "v"}}}}}},
-                                                                    "type": {"variable": "hydra.relational.Relation"}}},
+                                                                    "type": {"application": {"function": {"variable": "hydra.relational.Relation"}, "argument": {"variable": "v"}}}}},
                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
                                                             "argument": {
                                                               "lambda": {
@@ -1048,7 +1054,9 @@
                                               "typeApplication": {"body": {"variable": "hydra.lib.eithers.either"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                             "type": {"variable": "hydra.core.Term"}}},
                                         "type": {
-                                          "either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.relational.RelationSchema"}}}}},
+                                          "either": {
+                                            "left": {"variable": "hydra.errors.DecodingError"},
+                                            "right": {"application": {"function": {"variable": "hydra.relational.RelationSchema"}, "argument": {"variable": "t"}}}}}}},
                                     "argument": {
                                       "lambda": {
                                         "parameter": "err",
@@ -1057,7 +1065,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {"body": {"either": {"left": {"variable": "err"}}}, "type": {"variable": "hydra.errors.DecodingError"}}},
-                                            "type": {"variable": "hydra.relational.RelationSchema"}}}}}}},
+                                            "type": {"application": {"function": {"variable": "hydra.relational.RelationSchema"}, "argument": {"variable": "t"}}}}}}}}},
                                 "argument": {
                                   "lambda": {
                                     "parameter": "stripped",
@@ -1078,7 +1086,7 @@
                                                             "typeName": "hydra.errors.DecodingError",
                                                             "body": {"literal": {"string": "expected a record of type hydra.relational.RelationSchema"}}}}}},
                                                     "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                "type": {"variable": "hydra.relational.RelationSchema"}}},
+                                                "type": {"application": {"function": {"variable": "hydra.relational.RelationSchema"}, "argument": {"variable": "t"}}}}},
                                             "cases": [
                                               {
                                                 "name": "record",
@@ -1104,7 +1112,7 @@
                                                                         "body": {
                                                                           "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                         "type": {"variable": "hydra.relational.RelationName"}}},
-                                                                    "type": {"variable": "hydra.relational.RelationSchema"}}},
+                                                                    "type": {"application": {"function": {"variable": "hydra.relational.RelationSchema"}, "argument": {"variable": "t"}}}}},
                                                                 "argument": {
                                                                   "application": {
                                                                     "function": {
@@ -1140,7 +1148,7 @@
                                                                                 "body": {
                                                                                   "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                 "type": {"list": {"application": {"function": {"variable": "hydra.relational.ColumnSchema"}, "argument": {"variable": "t"}}}}}},
-                                                                            "type": {"variable": "hydra.relational.RelationSchema"}}},
+                                                                            "type": {"application": {"function": {"variable": "hydra.relational.RelationSchema"}, "argument": {"variable": "t"}}}}},
                                                                         "argument": {
                                                                           "application": {
                                                                             "function": {
@@ -1182,7 +1190,7 @@
                                                                                         "body": {
                                                                                           "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                         "type": {"list": {"variable": "hydra.relational.PrimaryKey"}}}},
-                                                                                    "type": {"variable": "hydra.relational.RelationSchema"}}},
+                                                                                    "type": {"application": {"function": {"variable": "hydra.relational.RelationSchema"}, "argument": {"variable": "t"}}}}},
                                                                                 "argument": {
                                                                                   "application": {
                                                                                     "function": {
@@ -1222,7 +1230,7 @@
                                                                                                 "body": {
                                                                                                   "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                                 "type": {"list": {"variable": "hydra.relational.ForeignKey"}}}},
-                                                                                            "type": {"variable": "hydra.relational.RelationSchema"}}},
+                                                                                            "type": {"application": {"function": {"variable": "hydra.relational.RelationSchema"}, "argument": {"variable": "t"}}}}},
                                                                                         "argument": {
                                                                                           "application": {
                                                                                             "function": {
@@ -1266,7 +1274,7 @@
                                                                                                           {"name": "primaryKeys", "term": {"variable": "field_primaryKeys"}},
                                                                                                           {"name": "foreignKeys", "term": {"variable": "field_foreignKeys"}}]}}}},
                                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                                            "type": {"variable": "hydra.relational.RelationSchema"}}}}}}}}}}}}}}}}}}}}}}}}]}},
+                                                                                            "type": {"application": {"function": {"variable": "hydra.relational.RelationSchema"}, "argument": {"variable": "t"}}}}}}}}}}}}}}}}}}}}}}}}}}]}},
                                         "argument": {"variable": "stripped"}}}}}}},
                             "argument": {
                               "application": {
@@ -1330,7 +1338,10 @@
                                             "body": {
                                               "typeApplication": {"body": {"variable": "hydra.lib.eithers.either"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                             "type": {"variable": "hydra.core.Term"}}},
-                                        "type": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.relational.Relationship"}}}}},
+                                        "type": {
+                                          "either": {
+                                            "left": {"variable": "hydra.errors.DecodingError"},
+                                            "right": {"application": {"function": {"variable": "hydra.relational.Relationship"}, "argument": {"variable": "v"}}}}}}},
                                     "argument": {
                                       "lambda": {
                                         "parameter": "err",
@@ -1339,7 +1350,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {"body": {"either": {"left": {"variable": "err"}}}, "type": {"variable": "hydra.errors.DecodingError"}}},
-                                            "type": {"variable": "hydra.relational.Relationship"}}}}}}},
+                                            "type": {"application": {"function": {"variable": "hydra.relational.Relationship"}, "argument": {"variable": "v"}}}}}}}}},
                                 "argument": {
                                   "lambda": {
                                     "parameter": "stripped",
@@ -1356,7 +1367,7 @@
                                                     "body": {
                                                       "either": {"left": {"wrap": {"typeName": "hydra.errors.DecodingError", "body": {"literal": {"string": "expected wrapped type"}}}}}},
                                                     "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                "type": {"variable": "hydra.relational.Relationship"}}},
+                                                "type": {"application": {"function": {"variable": "hydra.relational.Relationship"}, "argument": {"variable": "v"}}}}},
                                             "cases": [
                                               {
                                                 "name": "wrap",
@@ -1376,7 +1387,7 @@
                                                                       "typeApplication": {
                                                                         "body": {"variable": "hydra.lib.eithers.map"},
                                                                         "type": {"set": {"map": {"keys": {"variable": "hydra.relational.ColumnName"}, "values": {"variable": "v"}}}}}},
-                                                                    "type": {"variable": "hydra.relational.Relationship"}}},
+                                                                    "type": {"application": {"function": {"variable": "hydra.relational.Relationship"}, "argument": {"variable": "v"}}}}},
                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
                                                             "argument": {
                                                               "lambda": {
@@ -1472,7 +1483,10 @@
                                             "body": {
                                               "typeApplication": {"body": {"variable": "hydra.lib.eithers.either"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                             "type": {"variable": "hydra.core.Term"}}},
-                                        "type": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.relational.Row"}}}}},
+                                        "type": {
+                                          "either": {
+                                            "left": {"variable": "hydra.errors.DecodingError"},
+                                            "right": {"application": {"function": {"variable": "hydra.relational.Row"}, "argument": {"variable": "v"}}}}}}},
                                     "argument": {
                                       "lambda": {
                                         "parameter": "err",
@@ -1481,7 +1495,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {"body": {"either": {"left": {"variable": "err"}}}, "type": {"variable": "hydra.errors.DecodingError"}}},
-                                            "type": {"variable": "hydra.relational.Row"}}}}}}},
+                                            "type": {"application": {"function": {"variable": "hydra.relational.Row"}, "argument": {"variable": "v"}}}}}}}}},
                                 "argument": {
                                   "lambda": {
                                     "parameter": "stripped",
@@ -1498,7 +1512,7 @@
                                                     "body": {
                                                       "either": {"left": {"wrap": {"typeName": "hydra.errors.DecodingError", "body": {"literal": {"string": "expected wrapped type"}}}}}},
                                                     "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                "type": {"variable": "hydra.relational.Row"}}},
+                                                "type": {"application": {"function": {"variable": "hydra.relational.Row"}, "argument": {"variable": "v"}}}}},
                                             "cases": [
                                               {
                                                 "name": "wrap",
@@ -1515,7 +1529,7 @@
                                                                 "body": {
                                                                   "typeApplication": {
                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"list": {"variable": "v"}}}},
-                                                                    "type": {"variable": "hydra.relational.Row"}}},
+                                                                    "type": {"application": {"function": {"variable": "hydra.relational.Row"}, "argument": {"variable": "v"}}}}},
                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
                                                             "argument": {
                                                               "lambda": {

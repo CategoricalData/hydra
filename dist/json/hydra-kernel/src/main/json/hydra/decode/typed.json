@@ -65,7 +65,10 @@
                                             "body": {
                                               "typeApplication": {"body": {"variable": "hydra.lib.eithers.either"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                             "type": {"variable": "hydra.core.Term"}}},
-                                        "type": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.typed.TypedBinding"}}}}},
+                                        "type": {
+                                          "either": {
+                                            "left": {"variable": "hydra.errors.DecodingError"},
+                                            "right": {"application": {"function": {"variable": "hydra.typed.TypedBinding"}, "argument": {"variable": "a"}}}}}}},
                                     "argument": {
                                       "lambda": {
                                         "parameter": "err",
@@ -74,7 +77,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {"body": {"either": {"left": {"variable": "err"}}}, "type": {"variable": "hydra.errors.DecodingError"}}},
-                                            "type": {"variable": "hydra.typed.TypedBinding"}}}}}}},
+                                            "type": {"application": {"function": {"variable": "hydra.typed.TypedBinding"}, "argument": {"variable": "a"}}}}}}}}},
                                 "argument": {
                                   "lambda": {
                                     "parameter": "stripped",
@@ -95,7 +98,7 @@
                                                             "typeName": "hydra.errors.DecodingError",
                                                             "body": {"literal": {"string": "expected a record of type hydra.typed.TypedBinding"}}}}}},
                                                     "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                "type": {"variable": "hydra.typed.TypedBinding"}}},
+                                                "type": {"application": {"function": {"variable": "hydra.typed.TypedBinding"}, "argument": {"variable": "a"}}}}},
                                             "cases": [
                                               {
                                                 "name": "record",
@@ -121,7 +124,7 @@
                                                                         "body": {
                                                                           "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                         "type": {"variable": "hydra.core.Name"}}},
-                                                                    "type": {"variable": "hydra.typed.TypedBinding"}}},
+                                                                    "type": {"application": {"function": {"variable": "hydra.typed.TypedBinding"}, "argument": {"variable": "a"}}}}},
                                                                 "argument": {
                                                                   "application": {
                                                                     "function": {
@@ -157,7 +160,7 @@
                                                                                 "body": {
                                                                                   "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                 "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "a"}}}}},
-                                                                            "type": {"variable": "hydra.typed.TypedBinding"}}},
+                                                                            "type": {"application": {"function": {"variable": "hydra.typed.TypedBinding"}, "argument": {"variable": "a"}}}}},
                                                                         "argument": {
                                                                           "application": {
                                                                             "function": {
@@ -193,7 +196,7 @@
                                                                                         "typeName": "hydra.typed.TypedBinding",
                                                                                         "fields": [{"name": "name", "term": {"variable": "field_name"}}, {"name": "term", "term": {"variable": "field_term"}}]}}}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.typed.TypedBinding"}}}}}}}}}}}}}}}}]}},
+                                                                            "type": {"application": {"function": {"variable": "hydra.typed.TypedBinding"}, "argument": {"variable": "a"}}}}}}}}}}}}}}}}}}]}},
                                         "argument": {"variable": "stripped"}}}}}}},
                             "argument": {
                               "application": {
@@ -257,7 +260,10 @@
                                             "body": {
                                               "typeApplication": {"body": {"variable": "hydra.lib.eithers.either"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                             "type": {"variable": "hydra.core.Term"}}},
-                                        "type": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.typed.TypedTerm"}}}}},
+                                        "type": {
+                                          "either": {
+                                            "left": {"variable": "hydra.errors.DecodingError"},
+                                            "right": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "a"}}}}}}},
                                     "argument": {
                                       "lambda": {
                                         "parameter": "err",
@@ -266,7 +272,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {"body": {"either": {"left": {"variable": "err"}}}, "type": {"variable": "hydra.errors.DecodingError"}}},
-                                            "type": {"variable": "hydra.typed.TypedTerm"}}}}}}},
+                                            "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "a"}}}}}}}}},
                                 "argument": {
                                   "lambda": {
                                     "parameter": "stripped",
@@ -283,7 +289,7 @@
                                                     "body": {
                                                       "either": {"left": {"wrap": {"typeName": "hydra.errors.DecodingError", "body": {"literal": {"string": "expected wrapped type"}}}}}},
                                                     "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                "type": {"variable": "hydra.typed.TypedTerm"}}},
+                                                "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "a"}}}}},
                                             "cases": [
                                               {
                                                 "name": "wrap",
@@ -300,7 +306,7 @@
                                                                 "body": {
                                                                   "typeApplication": {
                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"variable": "hydra.core.Term"}}},
-                                                                    "type": {"variable": "hydra.typed.TypedTerm"}}},
+                                                                    "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "a"}}}}},
                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
                                                             "argument": {
                                                               "lambda": {
@@ -377,7 +383,9 @@
                                               "typeApplication": {"body": {"variable": "hydra.lib.eithers.either"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                             "type": {"variable": "hydra.core.Term"}}},
                                         "type": {
-                                          "either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.typed.TypedTermDefinition"}}}}},
+                                          "either": {
+                                            "left": {"variable": "hydra.errors.DecodingError"},
+                                            "right": {"application": {"function": {"variable": "hydra.typed.TypedTermDefinition"}, "argument": {"variable": "a"}}}}}}},
                                     "argument": {
                                       "lambda": {
                                         "parameter": "err",
@@ -386,7 +394,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {"body": {"either": {"left": {"variable": "err"}}}, "type": {"variable": "hydra.errors.DecodingError"}}},
-                                            "type": {"variable": "hydra.typed.TypedTermDefinition"}}}}}}},
+                                            "type": {"application": {"function": {"variable": "hydra.typed.TypedTermDefinition"}, "argument": {"variable": "a"}}}}}}}}},
                                 "argument": {
                                   "lambda": {
                                     "parameter": "stripped",
@@ -407,7 +415,7 @@
                                                             "typeName": "hydra.errors.DecodingError",
                                                             "body": {"literal": {"string": "expected a record of type hydra.typed.TypedTermDefinition"}}}}}},
                                                     "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                "type": {"variable": "hydra.typed.TypedTermDefinition"}}},
+                                                "type": {"application": {"function": {"variable": "hydra.typed.TypedTermDefinition"}, "argument": {"variable": "a"}}}}},
                                             "cases": [
                                               {
                                                 "name": "record",
@@ -433,7 +441,7 @@
                                                                         "body": {
                                                                           "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                         "type": {"variable": "hydra.core.Name"}}},
-                                                                    "type": {"variable": "hydra.typed.TypedTermDefinition"}}},
+                                                                    "type": {"application": {"function": {"variable": "hydra.typed.TypedTermDefinition"}, "argument": {"variable": "a"}}}}},
                                                                 "argument": {
                                                                   "application": {
                                                                     "function": {
@@ -469,7 +477,7 @@
                                                                                 "body": {
                                                                                   "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                 "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "a"}}}}},
-                                                                            "type": {"variable": "hydra.typed.TypedTermDefinition"}}},
+                                                                            "type": {"application": {"function": {"variable": "hydra.typed.TypedTermDefinition"}, "argument": {"variable": "a"}}}}},
                                                                         "argument": {
                                                                           "application": {
                                                                             "function": {
@@ -505,7 +513,7 @@
                                                                                         "typeName": "hydra.typed.TypedTermDefinition",
                                                                                         "fields": [{"name": "name", "term": {"variable": "field_name"}}, {"name": "term", "term": {"variable": "field_term"}}]}}}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.typed.TypedTermDefinition"}}}}}}}}}}}}}}}}]}},
+                                                                            "type": {"application": {"function": {"variable": "hydra.typed.TypedTermDefinition"}, "argument": {"variable": "a"}}}}}}}}}}}}}}}}}}]}},
                                         "argument": {"variable": "stripped"}}}}}}},
                             "argument": {
                               "application": {

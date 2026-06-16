@@ -67,7 +67,9 @@
                                               "typeApplication": {"body": {"variable": "hydra.lib.eithers.either"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                             "type": {"variable": "hydra.core.Term"}}},
                                         "type": {
-                                          "either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.typing.FunctionStructure"}}}}},
+                                          "either": {
+                                            "left": {"variable": "hydra.errors.DecodingError"},
+                                            "right": {"application": {"function": {"variable": "hydra.typing.FunctionStructure"}, "argument": {"variable": "env"}}}}}}},
                                     "argument": {
                                       "lambda": {
                                         "parameter": "err",
@@ -76,7 +78,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {"body": {"either": {"left": {"variable": "err"}}}, "type": {"variable": "hydra.errors.DecodingError"}}},
-                                            "type": {"variable": "hydra.typing.FunctionStructure"}}}}}}},
+                                            "type": {"application": {"function": {"variable": "hydra.typing.FunctionStructure"}, "argument": {"variable": "env"}}}}}}}}},
                                 "argument": {
                                   "lambda": {
                                     "parameter": "stripped",
@@ -97,7 +99,7 @@
                                                             "typeName": "hydra.errors.DecodingError",
                                                             "body": {"literal": {"string": "expected a record of type hydra.typing.FunctionStructure"}}}}}},
                                                     "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                "type": {"variable": "hydra.typing.FunctionStructure"}}},
+                                                "type": {"application": {"function": {"variable": "hydra.typing.FunctionStructure"}, "argument": {"variable": "env"}}}}},
                                             "cases": [
                                               {
                                                 "name": "record",
@@ -123,7 +125,7 @@
                                                                         "body": {
                                                                           "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                         "type": {"list": {"variable": "hydra.core.Name"}}}},
-                                                                    "type": {"variable": "hydra.typing.FunctionStructure"}}},
+                                                                    "type": {"application": {"function": {"variable": "hydra.typing.FunctionStructure"}, "argument": {"variable": "env"}}}}},
                                                                 "argument": {
                                                                   "application": {
                                                                     "function": {
@@ -162,7 +164,7 @@
                                                                                 "body": {
                                                                                   "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                 "type": {"list": {"variable": "hydra.core.Name"}}}},
-                                                                            "type": {"variable": "hydra.typing.FunctionStructure"}}},
+                                                                            "type": {"application": {"function": {"variable": "hydra.typing.FunctionStructure"}, "argument": {"variable": "env"}}}}},
                                                                         "argument": {
                                                                           "application": {
                                                                             "function": {
@@ -201,7 +203,7 @@
                                                                                         "body": {
                                                                                           "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                         "type": {"list": {"variable": "hydra.core.Binding"}}}},
-                                                                                    "type": {"variable": "hydra.typing.FunctionStructure"}}},
+                                                                                    "type": {"application": {"function": {"variable": "hydra.typing.FunctionStructure"}, "argument": {"variable": "env"}}}}},
                                                                                 "argument": {
                                                                                   "application": {
                                                                                     "function": {
@@ -240,7 +242,7 @@
                                                                                                 "body": {
                                                                                                   "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                                 "type": {"variable": "hydra.core.Term"}}},
-                                                                                            "type": {"variable": "hydra.typing.FunctionStructure"}}},
+                                                                                            "type": {"application": {"function": {"variable": "hydra.typing.FunctionStructure"}, "argument": {"variable": "env"}}}}},
                                                                                         "argument": {
                                                                                           "application": {
                                                                                             "function": {
@@ -276,7 +278,7 @@
                                                                                                         "body": {
                                                                                                           "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                                         "type": {"list": {"variable": "hydra.core.Type"}}}},
-                                                                                                    "type": {"variable": "hydra.typing.FunctionStructure"}}},
+                                                                                                    "type": {"application": {"function": {"variable": "hydra.typing.FunctionStructure"}, "argument": {"variable": "env"}}}}},
                                                                                                 "argument": {
                                                                                                   "application": {
                                                                                                     "function": {
@@ -315,7 +317,7 @@
                                                                                                                 "body": {
                                                                                                                   "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                                                 "type": {"optional": {"variable": "hydra.core.Type"}}}},
-                                                                                                            "type": {"variable": "hydra.typing.FunctionStructure"}}},
+                                                                                                            "type": {"application": {"function": {"variable": "hydra.typing.FunctionStructure"}, "argument": {"variable": "env"}}}}},
                                                                                                         "argument": {
                                                                                                           "application": {
                                                                                                             "function": {
@@ -354,7 +356,7 @@
                                                                                                                         "body": {
                                                                                                                           "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                                                         "type": {"variable": "env"}}},
-                                                                                                                    "type": {"variable": "hydra.typing.FunctionStructure"}}},
+                                                                                                                    "type": {"application": {"function": {"variable": "hydra.typing.FunctionStructure"}, "argument": {"variable": "env"}}}}},
                                                                                                                 "argument": {
                                                                                                                   "application": {
                                                                                                                     "function": {
@@ -397,7 +399,7 @@
                                                                                                                                   {"name": "codomain", "term": {"variable": "field_codomain"}},
                                                                                                                                   {"name": "environment", "term": {"variable": "field_environment"}}]}}}},
                                                                                                                         "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                                                                    "type": {"variable": "hydra.typing.FunctionStructure"}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}]}},
+                                                                                                                    "type": {"application": {"function": {"variable": "hydra.typing.FunctionStructure"}, "argument": {"variable": "env"}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}]}},
                                         "argument": {"variable": "stripped"}}}}}}},
                             "argument": {
                               "application": {

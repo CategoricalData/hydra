@@ -521,7 +521,9 @@
                                               "typeApplication": {"body": {"variable": "hydra.lib.eithers.either"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                             "type": {"variable": "hydra.core.Term"}}},
                                         "type": {
-                                          "either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.validation.ValidationResult"}}}}},
+                                          "either": {
+                                            "left": {"variable": "hydra.errors.DecodingError"},
+                                            "right": {"application": {"function": {"variable": "hydra.validation.ValidationResult"}, "argument": {"variable": "e"}}}}}}},
                                     "argument": {
                                       "lambda": {
                                         "parameter": "err",
@@ -530,7 +532,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {"body": {"either": {"left": {"variable": "err"}}}, "type": {"variable": "hydra.errors.DecodingError"}}},
-                                            "type": {"variable": "hydra.validation.ValidationResult"}}}}}}},
+                                            "type": {"application": {"function": {"variable": "hydra.validation.ValidationResult"}, "argument": {"variable": "e"}}}}}}}}},
                                 "argument": {
                                   "lambda": {
                                     "parameter": "stripped",
@@ -551,7 +553,7 @@
                                                             "typeName": "hydra.errors.DecodingError",
                                                             "body": {"literal": {"string": "expected a record of type hydra.validation.ValidationResult"}}}}}},
                                                     "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                "type": {"variable": "hydra.validation.ValidationResult"}}},
+                                                "type": {"application": {"function": {"variable": "hydra.validation.ValidationResult"}, "argument": {"variable": "e"}}}}},
                                             "cases": [
                                               {
                                                 "name": "record",
@@ -577,7 +579,7 @@
                                                                         "body": {
                                                                           "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                         "type": {"list": {"variable": "e"}}}},
-                                                                    "type": {"variable": "hydra.validation.ValidationResult"}}},
+                                                                    "type": {"application": {"function": {"variable": "hydra.validation.ValidationResult"}, "argument": {"variable": "e"}}}}},
                                                                 "argument": {
                                                                   "application": {
                                                                     "function": {
@@ -616,7 +618,7 @@
                                                                                 "body": {
                                                                                   "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                 "type": {"list": {"variable": "e"}}}},
-                                                                            "type": {"variable": "hydra.validation.ValidationResult"}}},
+                                                                            "type": {"application": {"function": {"variable": "hydra.validation.ValidationResult"}, "argument": {"variable": "e"}}}}},
                                                                         "argument": {
                                                                           "application": {
                                                                             "function": {
@@ -655,7 +657,7 @@
                                                                                         "typeName": "hydra.validation.ValidationResult",
                                                                                         "fields": [{"name": "errors", "term": {"variable": "field_errors"}}, {"name": "warnings", "term": {"variable": "field_warnings"}}]}}}},
                                                                                 "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                            "type": {"variable": "hydra.validation.ValidationResult"}}}}}}}}}}}}}}}}]}},
+                                                                            "type": {"application": {"function": {"variable": "hydra.validation.ValidationResult"}, "argument": {"variable": "e"}}}}}}}}}}}}}}}}}}]}},
                                         "argument": {"variable": "stripped"}}}}}}},
                             "argument": {
                               "application": {
