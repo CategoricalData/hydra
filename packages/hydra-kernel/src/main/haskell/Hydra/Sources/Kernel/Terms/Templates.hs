@@ -50,7 +50,6 @@ import qualified Data.Map                    as M
 import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
-import qualified Hydra.Sources.Decode.Core as DecodeCore
 import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
@@ -62,7 +61,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, moduleName DecodeCore.module_, ShowCore.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, ModuleName "hydra.decode.core", ShowCore.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "A utility which instantiates a nonrecursive type with default values")}
   where
    definitions = [

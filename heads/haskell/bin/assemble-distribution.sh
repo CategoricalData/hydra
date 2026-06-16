@@ -61,18 +61,6 @@ echo "=== Assembling Haskell distribution: $PACKAGE ==="
 echo "  Output: $OUT_DIR"
 echo ""
 
-# --synthesize-sources generates hand-equivalent Hydra.Sources.Decode.* and
-# Hydra.Sources.Encode.* modules from type definitions. The synthesis filter
-# picks up kernel type modules and the two hydra-pg type modules
-# (hydra.pg.model, hydra.pg.mapping). hydra-pg's assembler passes the flag so
-# its own source wrappers land in dist/haskell/hydra-pg/.
-SYNTH_FLAG=""
-case "$PACKAGE" in
-    hydra-kernel|hydra-pg)
-        SYNTH_FLAG="--synthesize-sources"
-        ;;
-esac
-
 # Per-source-set freshness check via digest-check. See
 # heads/java/bin/assemble-distribution.sh for the pattern; same shape
 # across every target language.
@@ -90,7 +78,7 @@ else
     rm -f "$OUTPUT_DIGEST_MAIN"
     echo "Step 1: Generating main Haskell modules..."
     "$SCRIPT_DIR/transform-json-to-haskell.sh" "$PACKAGE" main \
-        --output "$DIST_ROOT" --include-dsls $SYNTH_FLAG \
+        --output "$DIST_ROOT" --include-dsls \
         --prune-stale
     assemble_refresh_digest "$INPUT_DIGEST_MAIN" "$OUT_MAIN" "$OUTPUT_DIGEST_MAIN"
 fi

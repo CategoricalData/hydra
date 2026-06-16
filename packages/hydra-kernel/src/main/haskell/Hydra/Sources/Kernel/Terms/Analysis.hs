@@ -71,7 +71,6 @@ import qualified Hydra.Sources.Kernel.Terms.Annotations  as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Arity        as Arity
 import qualified Hydra.Sources.Kernel.Terms.Checking     as Checking
 import qualified Hydra.Sources.Kernel.Terms.Dependencies  as Dependencies
-import qualified Hydra.Sources.Decode.Core  as DecodeCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical      as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Names        as Names
 import qualified Hydra.Sources.Kernel.Terms.Rewriting    as Rewriting
@@ -92,7 +91,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, Arity.ns, Checking.ns, Dependencies.ns, moduleName DecodeCore.module_, Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, Scoping.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, Arity.ns, Checking.ns, Dependencies.ns, ModuleName "hydra.decode.core", Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, Scoping.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just ("Module dependency module name analysis"))}
   where
     definitions = [

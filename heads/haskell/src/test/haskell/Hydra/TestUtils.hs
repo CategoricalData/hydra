@@ -7,10 +7,11 @@ module Hydra.TestUtils (
 ) where
 
 import Hydra.Kernel
-import Hydra.Generation (moduleAsBindings, showError)
+import Hydra.Generation (moduleAsBindings, showError, generateDecoderModulesPure, generateEncoderModulesPure)
 import Hydra.ArbitraryCore()
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Terms
+import qualified Hydra.Sources.Kernel.Types.All as KernelTypesAll
 import qualified Hydra.Sources.Kernel.Types.Coders as TypeCoders
 import qualified Hydra.Sources.Kernel.Types.Core as TypeCore
 import qualified Hydra.Sources.Kernel.Types.Errors as TypeError
@@ -25,8 +26,6 @@ import qualified Hydra.Sources.Kernel.Terms.Scoping as TermScoping
 import qualified Hydra.Sources.Kernel.Terms.Strip as TermStrip
 import qualified Hydra.Sources.Kernel.Terms.Variables as TermVariables
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as TermShowCore
-import qualified Hydra.Sources.Decode.Core as TermDecodeCore
-import qualified Hydra.Sources.Encode.Core as TermEncodeCore
 import Hydra.Sources.Kernel.Types.Core
 import Hydra.Dsl.Libraries
 import Hydra.Test.TestGraph hiding (testGraph, testContext)
@@ -55,20 +54,35 @@ testGraph = elementsToGraph hydraCoreGraph (decodeSchemaTypes testSchemaGraph) (
   where
     -- Include only essential kernel term definitions for interpreter tests.
     -- The evaluator needs hydra.annotations (and its dependencies).
+    -- hydra.decode.core and hydra.encode.core are synthesized in-memory from
+    -- kernel type modules (#448: no longer imported from dist/haskell/.hs).
     kernelTermBindings = L.concat $ fmap moduleAsBindings
-      [ TermAnnotations.module_
-      , TermConstants.module_
-      , TermDecodeCore.module_
-      , TermDependencies.module_
-      , TermEncodeCore.module_
-      , TermExtractCore.module_
-      , TermLexical.module_
-      , TermRewriting.module_
-      , TermScoping.module_
-      , TermShowCore.module_
-      , TermStrip.module_
-      , TermVariables.module_
-      ]
+      ( [ TermAnnotations.module_
+        , TermConstants.module_
+        , TermDependencies.module_
+        , TermExtractCore.module_
+        , TermLexical.module_
+        , TermRewriting.module_
+        , TermScoping.module_
+        , TermShowCore.module_
+        , TermStrip.module_
+        , TermVariables.module_
+        ]
+        ++ synthesizedDecodeCoreModules
+        ++ synthesizedEncodeCoreModules
+      )
+    -- Synthesize hydra.decode.core and hydra.encode.core from kernel type modules.
+    -- Uses kernelTypesModules as the universe for cross-reference resolution.
+    -- error on failure: synthesis of core modules should always succeed.
+    synthesizedDecodeCoreModules = filterByNs "hydra.decode.core" $
+      case generateDecoderModulesPure KernelTypesAll.kernelTypesModules [TypeCore.module_] of
+        Left err -> error $ "Synthesizing hydra.decode.core in testGraph failed: " ++ err
+        Right ms  -> ms
+    synthesizedEncodeCoreModules = filterByNs "hydra.encode.core" $
+      case generateEncoderModulesPure KernelTypesAll.kernelTypesModules [TypeCore.module_] of
+        Left err -> error $ "Synthesizing hydra.encode.core in testGraph failed: " ++ err
+        Right ms  -> ms
+    filterByNs ns = filter (\m -> unModuleName (moduleName m) == ns)
     dataBindings = (\(name, term) -> Binding name term Nothing) <$> M.toList testTerms
 
 testSchemaGraph :: Graph

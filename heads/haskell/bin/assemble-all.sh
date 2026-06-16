@@ -53,7 +53,7 @@ echo "Step 1: Generating main haskell modules for every package..."
 stack exec bootstrap-from-json -- \
     --target haskell \
     --all-packages \
-    --include-coders --include-dsls --synthesize-sources \
+    --include-coders --include-dsls \
     --prune-stale \
     --output "$DIST_ROOT"
 

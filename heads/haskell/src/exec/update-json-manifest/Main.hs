@@ -7,7 +7,7 @@
 
 module Main where
 
-import Hydra.Generation (writePerPackageManifestsJson)
+import Hydra.Generation (writePerPackageManifestsJson, generateEncoderModules, generateDecoderModules)
 import Hydra.PackageRouting (defaultDistJsonRoot, buildRoutingMap)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules,
@@ -16,7 +16,6 @@ import Hydra.Sources.Ext (
   hydraPythonModules, hydraScalaModules, hydraLispModules,
   hydraPgModules, hydraRdfModules, hydraWasmModules,
   hydraExtPackageModules,
-  hydraExtDecodingModules, hydraExtEncodingModules,
   allDslModules, allEncodingModules, extRoutingInput)
 import Hydra.Sources.Test.All (testModules)
 
@@ -51,7 +50,7 @@ main = do
   -- hydra-bench is opt-in: --include-bench (set by bin/sync-bench.sh) adds the
   -- synthetic inference workloads. Default sync omits them.
   let extraBench = if includeBench then hydraBenchModules else []
-  let mainUniverse = dedupByNamespace $ L.concat
+  let baseUniverse = dedupByNamespace $ L.concat
         [ mainModules
         , dslSourceModules
         , extraBench
@@ -66,10 +65,11 @@ main = do
         , hydraRdfModules
         , hydraWasmModules
         , hydraExtPackageModules
-        , hydraExtDecodingModules
-        , hydraExtEncodingModules
         , [GenPGTransform.module_]
         ]
+  encMods <- generateEncoderModules baseUniverse allEncodingModules
+  decMods <- generateDecoderModules baseUniverse allEncodingModules
+  let mainUniverse = dedupByNamespace (baseUniverse ++ encMods ++ decMods)
   -- Derived-module source list (#474): every package's derivedMainModules,
   -- the source modules from which dsl/encode/decode are derived. Emitted
   -- directly as the manifest's derivedMainModules field, matching the same
