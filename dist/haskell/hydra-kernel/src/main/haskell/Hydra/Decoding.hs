@@ -98,7 +98,8 @@ collectTypeVariablesFromType typ =
 decodeBinding :: t0 -> Graph.Graph -> Core.Binding -> Either Errors.DecodingError Core.Binding
 decodeBinding cx graph b =
     Eithers.bind (DecodeCore.type_ graph (Core.bindingTerm b)) (\typ ->
-      let rawBody = decodeTypeNamed (Core.bindingName b) typ
+      let rtype = decoderFullResultTypeNamed (Core.bindingName b) typ
+          rawBody = decodeTypeNamed (Core.bindingName b) typ rtype
           description =
                   Strings.cat [
                     "Decoder for ",
@@ -1551,12 +1552,12 @@ decodePairType pt =
         Core.applicationArgument = secondDecoder}))
 -- | Generate a decoder for a record type
 decodeRecordType :: [Core.FieldType] -> Core.Term
-decodeRecordType rt = decodeRecordTypeImpl (Core.Name "unknown") rt
--- | Generate a decoder for a record type with a type name
-decodeRecordTypeImpl :: Core.Name -> [Core.FieldType] -> Core.Term
-decodeRecordTypeImpl tname rt =
+decodeRecordType rt = decodeRecordTypeImpl (Core.Name "unknown") rt (Core.TypeVariable (Core.Name "unknown"))
+-- | Generate a decoder for a record type with a type name. rtype is the fully-applied result type (e.g. Table<v>) used for the record's body annotations. (#476)
+decodeRecordTypeImpl :: Core.Name -> [Core.FieldType] -> Core.Type -> Core.Term
+decodeRecordTypeImpl tname rt rtype =
 
-      let recType = Core.TypeVariable tname
+      let recType = rtype
           graphType = Core.TypeVariable (Core.Name "hydra.graph.Graph")
           termType = Core.TypeVariable (Core.Name "hydra.core.Term")
           decodeFieldTerm =
@@ -1672,8 +1673,8 @@ decodeRecordTypeImpl tname rt =
                 Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))}))
 -- | Generate a decoder for a record type with element name
-decodeRecordTypeNamed :: Core.Name -> [Core.FieldType] -> Core.Term
-decodeRecordTypeNamed ename rt = decodeRecordTypeImpl ename rt
+decodeRecordTypeNamed :: Core.Name -> [Core.FieldType] -> Core.Type -> Core.Term
+decodeRecordTypeNamed ename rt rtype = decodeRecordTypeImpl ename rt rtype
 -- | Generate a decoder for a set type
 decodeSetType :: Core.Type -> Core.Term
 decodeSetType elemType =
@@ -1719,11 +1720,11 @@ decodeType typ =
                 Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "unsupported type variant"))})))),
               Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError"))})),
             Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))}))})
--- | Generate a decoder term for a Type, with element name for nominal types
-decodeTypeNamed :: Core.Name -> Core.Type -> Core.Term
-decodeTypeNamed ename typ =
+-- | Generate a decoder term for a Type, with element name for nominal types. rtype is the FULLY-APPLIED result type for nominal bodies (e.g. DataRow<v> for forall v. wrap...), so the body's intermediate type annotations carry the type parameters rather than a bare nominal name — otherwise Java/Scala coders emit raw types that fail to compile against the parameterized signature. (#476)
+decodeTypeNamed :: Core.Name -> Core.Type -> Core.Type -> Core.Term
+decodeTypeNamed ename typ rtype =
     case typ of
-      Core.TypeAnnotated v0 -> decodeTypeNamed ename (Core.annotatedTypeBody v0)
+      Core.TypeAnnotated v0 -> decodeTypeNamed ename (Core.annotatedTypeBody v0) rtype
       Core.TypeApplication v0 -> Core.TermApplication (Core.Application {
         Core.applicationFunction = (decodeType (Core.applicationTypeFunction v0)),
         Core.applicationArgument = (decodeType (Core.applicationTypeArgument v0))})
@@ -1737,18 +1738,18 @@ decodeTypeNamed ename typ =
             Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
               Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
               Core.eitherTypeRight = (Core.TypeVariable (Core.forallTypeParameter v0))}))}))}))),
-        Core.lambdaBody = (decodeTypeNamed ename (Core.forallTypeBody v0))})
+        Core.lambdaBody = (decodeTypeNamed ename (Core.forallTypeBody v0) rtype)})
       Core.TypeList v0 -> decodeListType v0
       Core.TypeLiteral v0 -> decodeLiteralType v0
       Core.TypeMap v0 -> decodeMapType v0
       Core.TypeOptional v0 -> decodeMaybeType v0
       Core.TypePair v0 -> decodePairType v0
-      Core.TypeRecord v0 -> decodeRecordTypeNamed ename v0
+      Core.TypeRecord v0 -> decodeRecordTypeNamed ename v0 rtype
       Core.TypeSet v0 -> decodeSetType v0
-      Core.TypeUnion v0 -> decodeUnionTypeNamed ename v0
+      Core.TypeUnion v0 -> decodeUnionTypeNamed ename v0 rtype
       Core.TypeUnit -> decodeUnitType
       Core.TypeVoid -> decodeUnitType
-      Core.TypeWrap v0 -> decodeWrappedTypeNamed ename v0
+      Core.TypeWrap v0 -> decodeWrappedTypeNamed ename v0 rtype
       Core.TypeVariable v0 -> Core.TermVariable (decodeBindingName v0)
       _ -> Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "cx"),
@@ -1765,12 +1766,12 @@ decodeTypeNamed ename typ =
             Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))}))})
 -- | Generate a decoder for a union type
 decodeUnionType :: [Core.FieldType] -> Core.Term
-decodeUnionType rt = decodeUnionTypeNamed (Core.Name "unknown") rt
--- | Generate a decoder for a union type with the given element name
-decodeUnionTypeNamed :: Core.Name -> [Core.FieldType] -> Core.Term
-decodeUnionTypeNamed ename rt =
+decodeUnionType rt = decodeUnionTypeNamed (Core.Name "unknown") rt (Core.TypeVariable (Core.Name "unknown"))
+-- | Generate a decoder for a union type with the given element name. rtype is the fully-applied result type (e.g. Foo<v>) used for body annotations. (#476)
+decodeUnionTypeNamed :: Core.Name -> [Core.FieldType] -> Core.Type -> Core.Term
+decodeUnionTypeNamed ename rt rtype =
 
-      let unionType = Core.TypeVariable ename
+      let unionType = rtype
           decErrType = Core.TypeVariable (Core.Name "hydra.errors.DecodingError")
           nameType = Core.TypeVariable (Core.Name "hydra.core.Name")
           variantFnType =
@@ -1971,10 +1972,10 @@ decodeUnitType =
           Core.applicationArgument = (Core.TermVariable (Core.Name "t"))}))}))})
 -- | Generate a decoder for a wrapped type
 decodeWrappedType :: Core.Type -> Core.Term
-decodeWrappedType wt = decodeWrappedTypeNamed (Core.Name "unknown") wt
--- | Generate a decoder for a wrapped type with the given element name
-decodeWrappedTypeNamed :: Core.Name -> Core.Type -> Core.Term
-decodeWrappedTypeNamed ename wt =
+decodeWrappedType wt = decodeWrappedTypeNamed (Core.Name "unknown") wt (Core.TypeVariable (Core.Name "unknown"))
+-- | Generate a decoder for a wrapped type with the given element name. rtype is the fully-applied result type (e.g. DataRow<v>) used for body annotations. (#476)
+decodeWrappedTypeNamed :: Core.Name -> Core.Type -> Core.Type -> Core.Term
+decodeWrappedTypeNamed ename wt rtype =
 
       let bodyDecoder = decodeType wt
           bodyType = decoderFullResultType wt
@@ -1995,7 +1996,7 @@ decodeWrappedTypeNamed ename wt =
                     Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
                   Core.typeApplicationTermType = (Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                    Core.eitherTypeRight = (Core.TypeVariable ename)}))})),
+                    Core.eitherTypeRight = rtype}))})),
                 Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "err"),
                   Core.lambdaDomain = (Just (Core.TypeVariable (Core.Name "hydra.errors.DecodingError"))),
@@ -2003,7 +2004,7 @@ decodeWrappedTypeNamed ename wt =
                     Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
                       Core.typeApplicationTermBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err")))),
                       Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError"))})),
-                    Core.typeApplicationTermType = (Core.TypeVariable ename)}))}))})),
+                    Core.typeApplicationTermType = rtype}))}))})),
               Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                 Core.lambdaParameter = (Core.Name "stripped"),
                 Core.lambdaDomain = (Just (Core.TypeVariable (Core.Name "hydra.core.Term"))),
@@ -2016,7 +2017,7 @@ decodeWrappedTypeNamed ename wt =
                           Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
                           Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected wrapped type"))})))),
                         Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError"))})),
-                      Core.typeApplicationTermType = (Core.TypeVariable ename)}))),
+                      Core.typeApplicationTermType = rtype}))),
                     Core.caseStatementCases = [
                       Core.CaseAlternative {
                         Core.caseAlternativeName = (Core.Name "wrap"),
@@ -2030,7 +2031,7 @@ decodeWrappedTypeNamed ename wt =
                                   Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
                                     Core.typeApplicationTermBody = (Core.TermVariable (Core.Name "hydra.lib.eithers.map")),
                                     Core.typeApplicationTermType = bodyType})),
-                                  Core.typeApplicationTermType = (Core.TypeVariable ename)})),
+                                  Core.typeApplicationTermType = rtype})),
                                 Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError"))})),
                               Core.applicationArgument = (Core.TermLambda (Core.Lambda {
                                 Core.lambdaParameter = (Core.Name "b"),
