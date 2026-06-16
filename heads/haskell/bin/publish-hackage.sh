@@ -55,6 +55,7 @@ VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 # (0.16.1+: add hydra-java, hydra-python, hydra-scala, hydra-lisp, hydra-pg,
 # hydra-rdf), append here in topo order — and ensure each one's deps precede it.
 PUBLISH_SET=(hydra-kernel hydra-haskell hydra)
+HACKAGE_BASE="https://hackage.haskell.org/package"
 
 # --- Guard 1: dependency closure ---------------------------------------------
 # For each package in the set, read its Hydra dependencies and assert each is
@@ -151,7 +152,14 @@ done
 if [ "$DO_PUBLISH" = true ]; then
     echo "=== Published ${#PUBLISH_SET[@]} packages at $VERSION. ==="
     echo "Next: upload Haddock docs per package if desired (cabal upload --documentation)."
+    echo "Published package pages:"
+    for pkg in "${PUBLISH_SET[@]}"; do
+        echo "  $HACKAGE_BASE/$pkg-$VERSION"
+    done
 else
     echo "=== Uploaded ${#PUBLISH_SET[@]} candidates at $VERSION. ==="
-    echo "Review on Hackage, then re-run with --publish to finalize."
+    echo "Review candidate pages, then re-run with --publish to finalize:"
+    for pkg in "${PUBLISH_SET[@]}"; do
+        echo "  $HACKAGE_BASE/$pkg-$VERSION/candidate"
+    done
 fi
