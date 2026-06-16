@@ -66,9 +66,22 @@ stack exec bootstrap-from-json -- \
 
 cd "$HYDRA_ROOT_DIR"
 
+# Copy the hand-written runtime + test runner from the overlay tree into
+# dist/scala/hydra-kernel/ (#434). Runs AFTER the batched --prune-stale transform
+# above so the prune can't remove the overlay files. Mirrors the Step 3 copy in
+# heads/scala/bin/assemble-distribution.sh; done before the digest refresh below
+# so the copied files are recorded in the kernel digest. Only if hydra-kernel was
+# part of this batch.
+case " $BATCH_PACKAGES " in
+    *" hydra-kernel "*)
+        echo "Copying hand-written Scala runtime into hydra-kernel dist..."
+        "$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT"
+        ;;
+esac
+
 # (testGraph.scala emptyGraph-to-buildTestGraph patch eliminated: the
 # DSL emits hydra.test.testEnv.testGraph(testTypes) directly, and the
-# hand-written heads/scala testEnv.scala resolves the call to
+# hand-written testEnv.scala resolves the call to
 # TestSuiteRunner.buildTestGraph. Mirrors heads/scala/bin/assemble-distribution.sh.)
 
 # Refresh per-source-set digests for fresh-check cache. Driven by
