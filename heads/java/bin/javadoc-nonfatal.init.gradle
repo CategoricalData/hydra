@@ -1,15 +1,14 @@
-// TEMPORARY Gradle init script — relaxes Javadoc fail-on-error for the 0.16.0
-// Maven Central publish ONLY, applied transiently via
+// TEMPORARY Gradle init script — relaxes Javadoc fail-on-error for the 0.16.1
+// Maven Central publish and packaging-boundary verifier, applied transiently via
 //   gradle --init-script javadoc-nonfatal.init.gradle ...
 //
 // This does NOT modify any generated build.gradle or the generator. The strict
 // default (withJavadocJar + fail-on-error) stays in place, so a plain
-// `gradle build` CONTINUES to fail on the unqualified-@link errors tracked in
-// issue #449 — exactly the gate we want until #449 is fixed (the 0.16.1
-// fast-follow). Once #449 lands, this init script and the --allow-javadoc-errors
-// flag in publish-maven.sh should be deleted.
+// `gradle build` CONTINUES to fail on generated comment HTML escaping errors
+// tracked in issue #493. Once #493 lands, this init script and the
+// --allow-javadoc-errors flag in publish-maven.sh should be deleted.
 //
-// All #449 errors are cosmetic Javadoc reference errors (no structural/compile
+// All #493 errors are cosmetic Javadoc rendering errors (no structural/compile
 // errors); the published jars are unaffected.
 allprojects {
     tasks.withType(Javadoc).configureEach {
