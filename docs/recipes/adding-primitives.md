@@ -35,6 +35,47 @@ native implementation.
 Most primitives are functions (*primitive functions*), but there are also *primitive
 constants* like `hydra.lib.math.pi` and `hydra.lib.sets.empty`.
 
+### No partial functions
+
+Primitive functions must not encode partial operations that can fail for ordinary,
+well-typed inputs.
+Do not add primitives like `fromJust`, `head`, `tail`, or integer division as plain
+functions whose only possible response to some inputs is a runtime failure.
+Use result types that express failure, such as `optional<T>` or `either<E, T>`.
+
+Examples:
+
+- `maybeHead : list<a> -> optional<a>` rather than `head : list<a> -> a`
+- `maybeTail : list<a> -> optional<list<a>>` rather than `tail : list<a> -> list<a>`
+- `maybeDiv : int32 -> int32 -> optional<int32>` rather than `div : int32 -> int32 -> int32`
+
+Hydra removed `hydra.lib.maybes.fromJust` as a primitive in v0.15.0 for this reason.
+If a caller needs to collapse an optional value in a context where absence is impossible,
+return `either<Error, T>` and propagate an informative error instead of hiding the
+partiality in a primitive.
+
+### No named types
+
+Primitive signatures for Hydra's built-in primitives must not depend on named Hydra types.
+Their domains and codomains should be built from core `Type` constructors, literal
+types, and type variables bound by the primitive's own type scheme.
+For example, a primitive may have a polymorphic signature such as
+`forall a. a -> (a, a)`, but it should not have a signature such as
+`hydra.core.Term -> hydra.core.Type`.
+
+This keeps primitive libraries independent of particular model modules and avoids
+special cases where a primitive is only meaningful after resolving named type
+definitions from the graph.
+This rule applies to primitives that ship with the Hydra kernel.
+Developers who extend Hydra for their own applications may define UDFs whose
+signatures consume or produce instances of named types from their application models.
+When an abstraction is foundational enough to appear in primitive signatures, prefer
+adding it as a core type constructor rather than as a named type.
+This is why `either<L, R>` replaced the old named `Flow` monad, and it is the same
+reason effects are modeled as `effect<T>` rather than a named `hydra.effects.Effect<T>`;
+see the wiki discussion in
+[Effects: why a type constructor, not a named type](https://github.com/CategoricalData/hydra/wiki/Effects#why-a-type-constructor-not-a-named-type).
+
 ### How the registry works
 
 For each library module name, e.g. `hydra.lib.logic`, there is a kernel source module
