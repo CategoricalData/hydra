@@ -272,9 +272,10 @@ typeVariant = define "typeVariant" $
   match _Type Nothing [
     _Type_annotated>>: constant Variants.typeVariantAnnotated,
     _Type_application>>: constant Variants.typeVariantApplication,
+    _Type_effect>>: constant Variants.typeVariantEffect,
     _Type_either>>: constant Variants.typeVariantEither,
-    _Type_function>>: constant Variants.typeVariantFunction,
     _Type_forall>>: constant Variants.typeVariantForall,
+    _Type_function>>: constant Variants.typeVariantFunction,
     _Type_list>>: constant Variants.typeVariantList,
     _Type_literal>>: constant Variants.typeVariantLiteral,
     _Type_map>>: constant Variants.typeVariantMap,
@@ -294,13 +295,13 @@ typeVariants = define "typeVariants" $
   list $ injectUnit _TypeVariant <$> [
     _TypeVariant_annotated,
     _TypeVariant_application,
+    _TypeVariant_effect,
     _TypeVariant_either,
-    _TypeVariant_function,
     _TypeVariant_forall,
+    _TypeVariant_function,
     _TypeVariant_list,
     _TypeVariant_literal,
     _TypeVariant_map,
-    _TypeVariant_wrap,
     _TypeVariant_optional,
     _TypeVariant_pair,
     _TypeVariant_record,
@@ -308,4 +309,5 @@ typeVariants = define "typeVariants" $
     _TypeVariant_union,
     _TypeVariant_unit,
     _TypeVariant_variable,
-    _TypeVariant_void]
+    _TypeVariant_void,
+    _TypeVariant_wrap]

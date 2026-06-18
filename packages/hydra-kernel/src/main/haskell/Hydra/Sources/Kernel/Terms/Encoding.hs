@@ -681,6 +681,8 @@ encoderCollectOrdVars = define "encoderCollectOrdVars" $
       Lists.concat2
         (encoderCollectOrdVars @@ Core.applicationTypeFunction (var "appType"))
         (encoderCollectOrdVars @@ Core.applicationTypeArgument (var "appType")),
+    _Type_effect>>: "elemType" ~>
+      encoderCollectOrdVars @@ var "elemType",
     _Type_either>>: "et" ~>
       Lists.concat2
         (encoderCollectOrdVars @@ Core.eitherTypeLeft (var "et"))
@@ -730,6 +732,8 @@ encoderCollectTypeVarsFromType = define "encoderCollectTypeVarsFromType" $
       Lists.concat2
         (encoderCollectTypeVarsFromType @@ Core.applicationTypeFunction (var "appType"))
         (encoderCollectTypeVarsFromType @@ Core.applicationTypeArgument (var "appType")),
+    _Type_effect>>: "elemType" ~>
+      encoderCollectTypeVarsFromType @@ var "elemType",
     _Type_forall>>: "ft" ~>
       encoderCollectTypeVarsFromType @@ Core.forallTypeBody (var "ft"),
     _Type_list>>: "elemType" ~>
@@ -774,6 +778,8 @@ encoderFullResultType = define "encoderFullResultType" $
       Core.typeApplication $ Core.applicationType
         (encoderFullResultType @@ Core.applicationTypeFunction (var "appType"))
         (Core.applicationTypeArgument (var "appType")),
+    _Type_effect>>: "elemType" ~>
+      Core.typeEffect (encoderFullResultType @@ var "elemType"),
     _Type_either>>: "et" ~>
       Core.typeEither $ Core.eitherType
         (encoderFullResultType @@ Core.eitherTypeLeft (var "et"))
@@ -826,6 +832,8 @@ encoderFullResultTypeNamed = define "encoderFullResultTypeNamed" $
       Core.typeApplication $ Core.applicationType
         (encoderFullResultType @@ Core.applicationTypeFunction (var "appType"))
         (Core.applicationTypeArgument (var "appType")),
+    _Type_effect>>: "elemType" ~>
+      Core.typeEffect (encoderFullResultType @@ var "elemType"),
     _Type_either>>: "et" ~>
       Core.typeEither $ Core.eitherType
         (encoderFullResultType @@ Core.eitherTypeLeft (var "et"))

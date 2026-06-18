@@ -924,6 +924,8 @@ type_ = define "type" $
           _Type_application>>: "at" ~>
             "acc2" <~ type_ @@ var "p" @@ var "acc1" @@ var "boundVars" @@ (Core.applicationTypeFunction $ var "at") $
             type_ @@ var "p" @@ var "acc2" @@ var "boundVars" @@ (Core.applicationTypeArgument $ var "at"),
+          _Type_effect>>: "et" ~>
+            type_ @@ var "p" @@ var "acc1" @@ var "boundVars" @@ var "et",
           _Type_either>>: "et" ~>
             "acc2" <~ type_ @@ var "p" @@ var "acc1" @@ var "boundVars" @@ (Core.eitherTypeLeft $ var "et") $
             type_ @@ var "p" @@ var "acc2" @@ var "boundVars" @@ (Core.eitherTypeRight $ var "et"),
@@ -993,6 +995,11 @@ validateTypeNode = define "validateTypeNode" $
           (checkVoid @@ (Core.eitherTypeLeft $ var "et")),
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_voidInNonBottomPosition
           (checkVoid @@ (Core.eitherTypeRight $ var "et"))],
+
+    -- Y10: TypeEffect — void result type
+    _Type_effect>>: "et" ~>
+      guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_voidInNonBottomPosition
+        (checkVoid @@ var "et"),
 
     -- Y7/Y13: TypeForall — type variable shadowing and naming
     _Type_forall>>: "ft" ~>
