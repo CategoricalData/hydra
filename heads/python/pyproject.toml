@@ -1,6 +1,6 @@
 [project]
 name = "hydra"
-version = "0.16.1"
+version = "0.17.0"
 description = "Python host for Hydra, a strongly typed intermediate language for data, schemas, and code"
 readme = "../../packages/hydra-python/README.md"
 license = { text = "Apache-2.0" }

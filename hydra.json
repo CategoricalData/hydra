@@ -1,6 +1,6 @@
 {
-  "currentVersion": "0.16.1",
-  "hostVersion": "0.16.0",
+  "currentVersion": "0.17.0",
+  "hostVersion": "0.16.1",
   "hostOverrides": {
     "haskell": "local",
     "python": "local"
