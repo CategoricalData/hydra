@@ -4783,6 +4783,22 @@
                                                                     "function": {"project": {"typeName": "hydra.core.ApplicationType", "fieldName": "argument"}},
                                                                     "argument": {"variable": "at"}}}}}}}}}},
                                                   {
+                                                    "name": "effect",
+                                                    "handler": {
+                                                      "lambda": {
+                                                        "parameter": "et",
+                                                        "domain": {"variable": "hydra.core.Type"},
+                                                        "body": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "application": {
+                                                                    "function": {"application": {"function": {"variable": "hydra.validate.core.type"}, "argument": {"variable": "p"}}},
+                                                                    "argument": {"variable": "acc1"}}},
+                                                                "argument": {"variable": "boundVars"}}},
+                                                            "argument": {"variable": "et"}}}}}},
+                                                  {
                                                     "name": "either",
                                                     "handler": {
                                                       "lambda": {
@@ -5459,6 +5475,61 @@
                                                       "typeApplication": {
                                                         "body": {"optional": null},
                                                         "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.core.InvalidTypeError"}}}}}}}]}}}}}},
+                                  {
+                                    "name": "effect",
+                                    "handler": {
+                                      "lambda": {
+                                        "parameter": "et",
+                                        "domain": {"variable": "hydra.core.Type"},
+                                        "body": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                        "type": {
+                                                          "optional": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.core.InvalidTypeError"}}}}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {"application": {"function": {"variable": "hydra.validate.core.enabled"}, "argument": {"variable": "p"}}},
+                                                        "argument": {
+                                                          "wrap": {
+                                                            "typeName": "hydra.core.Name",
+                                                            "body": {"literal": {"string": "hydra.error.core.InvalidTypeError.voidInNonBottomPosition"}}}}}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.error.core.InvalidTypeError"}}},
+                                                            "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.core.InvalidTypeError"}}}}},
+                                                        "argument": {
+                                                          "lambda": {
+                                                            "parameter": "f",
+                                                            "domain": {"variable": "hydra.error.core.InvalidTypeError"},
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "first": {
+                                                                          "wrap": {
+                                                                            "typeName": "hydra.core.Name",
+                                                                            "body": {"literal": {"string": "hydra.error.core.InvalidTypeError.voidInNonBottomPosition"}}}},
+                                                                        "second": {"variable": "f"}}},
+                                                                    "type": {"variable": "hydra.core.Name"}}},
+                                                                "type": {"variable": "hydra.error.core.InvalidTypeError"}}}}}}},
+                                                    "argument": {"application": {"function": {"variable": "hydra.validate.core.checkVoid"}, "argument": {"variable": "et"}}}}}}},
+                                            "argument": {
+                                              "typeApplication": {
+                                                "body": {"optional": null},
+                                                "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.core.InvalidTypeError"}}}}}}}}}},
                                   {
                                     "name": "forall",
                                     "handler": {

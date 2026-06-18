@@ -586,6 +586,7 @@ encoderCollectOrdVars typ =
     case typ of
       Core.TypeAnnotated v0 -> encoderCollectOrdVars (Core.annotatedTypeBody v0)
       Core.TypeApplication v0 -> Lists.concat2 (encoderCollectOrdVars (Core.applicationTypeFunction v0)) (encoderCollectOrdVars (Core.applicationTypeArgument v0))
+      Core.TypeEffect v0 -> encoderCollectOrdVars v0
       Core.TypeEither v0 -> Lists.concat2 (encoderCollectOrdVars (Core.eitherTypeLeft v0)) (encoderCollectOrdVars (Core.eitherTypeRight v0))
       Core.TypeForall v0 -> encoderCollectOrdVars (Core.forallTypeBody v0)
       Core.TypeList v0 -> encoderCollectOrdVars v0
@@ -606,6 +607,7 @@ encoderCollectTypeVarsFromType typ =
     case typ of
       Core.TypeAnnotated v0 -> encoderCollectTypeVarsFromType (Core.annotatedTypeBody v0)
       Core.TypeApplication v0 -> Lists.concat2 (encoderCollectTypeVarsFromType (Core.applicationTypeFunction v0)) (encoderCollectTypeVarsFromType (Core.applicationTypeArgument v0))
+      Core.TypeEffect v0 -> encoderCollectTypeVarsFromType v0
       Core.TypeForall v0 -> encoderCollectTypeVarsFromType (Core.forallTypeBody v0)
       Core.TypeList v0 -> encoderCollectTypeVarsFromType v0
       Core.TypeMap v0 -> Lists.concat2 (encoderCollectTypeVarsFromType (Core.mapTypeKeys v0)) (encoderCollectTypeVarsFromType (Core.mapTypeValues v0))
@@ -626,6 +628,7 @@ encoderFullResultType typ =
       Core.TypeApplication v0 -> Core.TypeApplication (Core.ApplicationType {
         Core.applicationTypeFunction = (encoderFullResultType (Core.applicationTypeFunction v0)),
         Core.applicationTypeArgument = (Core.applicationTypeArgument v0)})
+      Core.TypeEffect v0 -> Core.TypeEffect (encoderFullResultType v0)
       Core.TypeEither v0 -> Core.TypeEither (Core.EitherType {
         Core.eitherTypeLeft = (encoderFullResultType (Core.eitherTypeLeft v0)),
         Core.eitherTypeRight = (encoderFullResultType (Core.eitherTypeRight v0))})
@@ -657,6 +660,7 @@ encoderFullResultTypeNamed ename typ =
       Core.TypeApplication v0 -> Core.TypeApplication (Core.ApplicationType {
         Core.applicationTypeFunction = (encoderFullResultType (Core.applicationTypeFunction v0)),
         Core.applicationTypeArgument = (Core.applicationTypeArgument v0)})
+      Core.TypeEffect v0 -> Core.TypeEffect (encoderFullResultType v0)
       Core.TypeEither v0 -> Core.TypeEither (Core.EitherType {
         Core.eitherTypeLeft = (encoderFullResultType (Core.eitherTypeLeft v0)),
         Core.eitherTypeRight = (encoderFullResultType (Core.eitherTypeRight v0))})

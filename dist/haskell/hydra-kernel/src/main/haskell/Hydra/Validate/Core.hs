@@ -354,6 +354,7 @@ type_ p acc boundVars typ =
         Core.TypeApplication v0 ->
           let acc2 = type_ p acc1 boundVars (Core.applicationTypeFunction v0)
           in (type_ p acc2 boundVars (Core.applicationTypeArgument v0))
+        Core.TypeEffect v0 -> type_ p acc1 boundVars v0
         Core.TypeEither v0 ->
           let acc2 = type_ p acc1 boundVars (Core.eitherTypeLeft v0)
           in (type_ p acc2 boundVars (Core.eitherTypeRight v0))
@@ -390,6 +391,7 @@ validateTypeNode p boundVars typ =
       Core.TypeEither v0 -> firstFindingType [
         Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (checkVoid (Core.eitherTypeLeft v0))) Nothing,
         (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (checkVoid (Core.eitherTypeRight v0))) Nothing)]
+      Core.TypeEffect v0 -> Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (checkVoid v0)) Nothing
       Core.TypeForall v0 ->
         let paramName = Core.forallTypeParameter v0
         in (firstFindingType [

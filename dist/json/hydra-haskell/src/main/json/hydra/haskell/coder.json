@@ -4391,6 +4391,48 @@
                                                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                                                 "type": {"variable": "hydra.haskell.syntax.Type"}}}}}}}}}}}}}}}},
                                                   {
+                                                    "name": "effect",
+                                                    "handler": {
+                                                      "lambda": {
+                                                        "parameter": "et",
+                                                        "domain": {"variable": "hydra.core.Type"},
+                                                        "body": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                                        "type": {"variable": "hydra.haskell.syntax.Type"}}},
+                                                                    "type": {"variable": "hydra.haskell.syntax.Type"}}},
+                                                                "argument": {"application": {"function": {"variable": "encode"}, "argument": {"variable": "et"}}}}},
+                                                            "argument": {
+                                                              "lambda": {
+                                                                "parameter": "het",
+                                                                "domain": {"variable": "hydra.haskell.syntax.Type"},
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "either": {
+                                                                            "right": {
+                                                                              "application": {
+                                                                                "function": {"variable": "hydra.haskell.utils.toTypeApplication"},
+                                                                                "argument": {
+                                                                                  "list": [
+                                                                                    {
+                                                                                      "inject": {
+                                                                                        "typeName": "hydra.haskell.syntax.Type",
+                                                                                        "field": {
+                                                                                          "name": "variable",
+                                                                                          "term": {"application": {"function": {"variable": "hydra.haskell.utils.rawName"}, "argument": {"literal": {"string": "IO"}}}}}}},
+                                                                                    {"variable": "het"}]}}}}},
+                                                                        "type": {"variable": "hydra.errors.Error"}}},
+                                                                    "type": {"variable": "hydra.haskell.syntax.Type"}}}}}}}}}},
+                                                  {
                                                     "name": "function",
                                                     "handler": {
                                                       "lambda": {

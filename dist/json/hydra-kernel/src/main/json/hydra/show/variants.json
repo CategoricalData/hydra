@@ -122,6 +122,9 @@
                     "name": "application",
                     "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "application"}}}}},
                   {
+                    "name": "effect",
+                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "effect"}}}}},
+                  {
                     "name": "either",
                     "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "either"}}}}},
                   {

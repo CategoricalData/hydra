@@ -154,6 +154,7 @@
     "hydra.languages",
     "hydra.lexical",
     "hydra.lib.chars",
+    "hydra.lib.effects",
     "hydra.lib.eithers",
     "hydra.lib.equality",
     "hydra.lib.lists",

@@ -401,6 +401,10 @@ type_ typ =
             "(",
             (Strings.intercalate " @ " typeStrs),
             ")"])
+        Core.TypeEffect v0 -> Strings.cat [
+          "effect<",
+          (type_ v0),
+          ">"]
         Core.TypeEither v0 ->
           let leftTyp = Core.eitherTypeLeft v0
               rightTyp = Core.eitherTypeRight v0

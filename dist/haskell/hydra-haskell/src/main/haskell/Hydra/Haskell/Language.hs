@@ -105,6 +105,7 @@ haskellLanguage =
           Variants.TypeVariantAnnotated,
           Variants.TypeVariantApplication,
           Variants.TypeVariantEither,
+          Variants.TypeVariantEffect,
           Variants.TypeVariantFunction,
           Variants.TypeVariantForall,
           Variants.TypeVariantList,

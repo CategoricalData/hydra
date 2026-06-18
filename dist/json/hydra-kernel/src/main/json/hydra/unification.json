@@ -534,6 +534,41 @@
                                                                                                 "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}}}}]}},
                                                                                 "argument": {"variable": "sright"}}}}}},
                                                                       {
+                                                                        "name": "effect",
+                                                                        "handler": {
+                                                                          "lambda": {
+                                                                            "parameter": "l",
+                                                                            "domain": {"variable": "hydra.core.Type"},
+                                                                            "body": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "cases": {
+                                                                                    "typeName": "hydra.core.Type",
+                                                                                    "default": {
+                                                                                      "typeApplication": {"body": {"variable": "cannotUnify"}, "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
+                                                                                    "cases": [
+                                                                                      {
+                                                                                        "name": "effect",
+                                                                                        "handler": {
+                                                                                          "lambda": {
+                                                                                            "parameter": "r",
+                                                                                            "domain": {"variable": "hydra.core.Type"},
+                                                                                            "body": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "either": {
+                                                                                                        "right": {
+                                                                                                          "list": [
+                                                                                                            {
+                                                                                                              "application": {
+                                                                                                                "function": {"application": {"function": {"variable": "joinOne"}, "argument": {"variable": "l"}}},
+                                                                                                                "argument": {"variable": "r"}}}]}}},
+                                                                                                    "type": {"variable": "hydra.errors.UnificationError"}}},
+                                                                                                "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}}}}]}},
+                                                                                "argument": {"variable": "sright"}}}}}},
+                                                                      {
                                                                         "name": "function",
                                                                         "handler": {
                                                                           "lambda": {

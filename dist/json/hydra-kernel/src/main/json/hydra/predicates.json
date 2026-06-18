@@ -756,9 +756,21 @@
                                                       "application": {
                                                         "function": {
                                                           "application": {
-                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.member"}, "type": {"variable": "hydra.variants.TypeVariant"}}},
-                                                            "argument": {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "function", "term": {"unit": {}}}}}}},
-                                                        "argument": {"variable": "allVariants"}}}}}}}}}}},
+                                                            "function": {"variable": "hydra.lib.logic.or"},
+                                                            "argument": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "application": {
+                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.member"}, "type": {"variable": "hydra.variants.TypeVariant"}}},
+                                                                    "argument": {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "effect", "term": {"unit": {}}}}}}},
+                                                                "argument": {"variable": "allVariants"}}}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.member"}, "type": {"variable": "hydra.variants.TypeVariant"}}},
+                                                                "argument": {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "function", "term": {"unit": {}}}}}}},
+                                                            "argument": {"variable": "allVariants"}}}}}}}}}}}}},
                                     "argument": {
                                       "application": {
                                         "function": {
@@ -913,9 +925,21 @@
                                                       "application": {
                                                         "function": {
                                                           "application": {
-                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.member"}, "type": {"variable": "hydra.variants.TypeVariant"}}},
-                                                            "argument": {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "function", "term": {"unit": {}}}}}}},
-                                                        "argument": {"variable": "allVariants"}}}}}}}}}}},
+                                                            "function": {"variable": "hydra.lib.logic.or"},
+                                                            "argument": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "application": {
+                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.member"}, "type": {"variable": "hydra.variants.TypeVariant"}}},
+                                                                    "argument": {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "effect", "term": {"unit": {}}}}}}},
+                                                                "argument": {"variable": "allVariants"}}}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.member"}, "type": {"variable": "hydra.variants.TypeVariant"}}},
+                                                                "argument": {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "function", "term": {"unit": {}}}}}}},
+                                                            "argument": {"variable": "allVariants"}}}}}}}}}}}}},
                                     "argument": {
                                       "application": {
                                         "function": {
@@ -1004,9 +1028,21 @@
                           "application": {
                             "function": {
                               "application": {
-                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.member"}, "type": {"variable": "hydra.variants.TypeVariant"}}},
-                                "argument": {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "function", "term": {"unit": {}}}}}}},
-                            "argument": {"variable": "allVariants"}}}}}}}}},
+                                "function": {"variable": "hydra.lib.logic.or"},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.member"}, "type": {"variable": "hydra.variants.TypeVariant"}}},
+                                        "argument": {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "effect", "term": {"unit": {}}}}}}},
+                                    "argument": {"variable": "allVariants"}}}}},
+                            "argument": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.member"}, "type": {"variable": "hydra.variants.TypeVariant"}}},
+                                    "argument": {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "function", "term": {"unit": {}}}}}}},
+                                "argument": {"variable": "allVariants"}}}}}}}}}}},
             "annotation": {
               "map": [
                 {

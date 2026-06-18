@@ -437,6 +437,12 @@ toPrimitiveNoDefault :: String -> TermSignature -> Name -> [String] -> Definitio
 toPrimitiveNoDefault description sig name comments =
   DefinitionPrimitive $ PrimitiveDefinition name (primitiveMetadata description comments) sig True True Nothing
 
+-- | Convert a Name to an impure primitive Definition. Impure primitives are
+-- host-native and do not have Hydra default implementations.
+toImpurePrimitive :: String -> TermSignature -> Name -> [String] -> Definition
+toImpurePrimitive description sig name comments =
+  DefinitionPrimitive $ PrimitiveDefinition name (primitiveMetadata description comments) sig False True Nothing
+
 -- | Build the entity metadata for a primitive from its (always-present) one-line description and
 -- long-form comments. Folds the former PrimitiveDefinition.description/comments fields into
 -- EntityMetadata without data loss: description -> metadata.description, comments -> metadata.comments.

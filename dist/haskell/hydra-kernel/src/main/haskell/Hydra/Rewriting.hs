@@ -775,6 +775,7 @@ rewriteType f typ0 =
                   Core.TypeApplication v0 -> Core.TypeApplication (Core.ApplicationType {
                     Core.applicationTypeFunction = (recurse (Core.applicationTypeFunction v0)),
                     Core.applicationTypeArgument = (recurse (Core.applicationTypeArgument v0))})
+                  Core.TypeEffect v0 -> Core.TypeEffect (recurse v0)
                   Core.TypeEither v0 -> Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = (recurse (Core.eitherTypeLeft v0)),
                     Core.eitherTypeRight = (recurse (Core.eitherTypeRight v0))})
@@ -814,6 +815,7 @@ rewriteTypeM f typ0 =
                 Core.TypeApplication v0 -> Eithers.bind (recurse (Core.applicationTypeFunction v0)) (\lhs -> Eithers.bind (recurse (Core.applicationTypeArgument v0)) (\rhs -> Right (Core.TypeApplication (Core.ApplicationType {
                   Core.applicationTypeFunction = lhs,
                   Core.applicationTypeArgument = rhs}))))
+                Core.TypeEffect v0 -> Eithers.bind (recurse v0) (\rt -> Right (Core.TypeEffect rt))
                 Core.TypeEither v0 -> Eithers.bind (recurse (Core.eitherTypeLeft v0)) (\left -> Eithers.bind (recurse (Core.eitherTypeRight v0)) (\right -> Right (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = left,
                   Core.eitherTypeRight = right}))))
@@ -938,6 +940,8 @@ subtypes x =
       Core.TypeApplication v0 -> [
         Core.applicationTypeFunction v0,
         (Core.applicationTypeArgument v0)]
+      Core.TypeEffect v0 -> [
+        v0]
       Core.TypeEither v0 -> [
         Core.eitherTypeLeft v0,
         (Core.eitherTypeRight v0)]

@@ -1339,6 +1339,14 @@ typesByName =
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "A type application")))]))}))},
             Core.FieldType {
+              Core.fieldTypeName = (Core.Name "effect"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "An effectful computation which, when interpreted by a host application, may perform host interactions and produce a value of the given type")))]))}))},
+            Core.FieldType {
               Core.fieldTypeName = (Core.Name "either"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                 Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.EitherType")),

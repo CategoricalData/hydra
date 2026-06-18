@@ -198,9 +198,10 @@ typeVariant x =
     case x of
       Core.TypeAnnotated _ -> Variants.TypeVariantAnnotated
       Core.TypeApplication _ -> Variants.TypeVariantApplication
+      Core.TypeEffect _ -> Variants.TypeVariantEffect
       Core.TypeEither _ -> Variants.TypeVariantEither
-      Core.TypeFunction _ -> Variants.TypeVariantFunction
       Core.TypeForall _ -> Variants.TypeVariantForall
+      Core.TypeFunction _ -> Variants.TypeVariantFunction
       Core.TypeList _ -> Variants.TypeVariantList
       Core.TypeLiteral _ -> Variants.TypeVariantLiteral
       Core.TypeMap _ -> Variants.TypeVariantMap
@@ -219,13 +220,13 @@ typeVariants =
     [
       Variants.TypeVariantAnnotated,
       Variants.TypeVariantApplication,
+      Variants.TypeVariantEffect,
       Variants.TypeVariantEither,
-      Variants.TypeVariantFunction,
       Variants.TypeVariantForall,
+      Variants.TypeVariantFunction,
       Variants.TypeVariantList,
       Variants.TypeVariantLiteral,
       Variants.TypeVariantMap,
-      Variants.TypeVariantWrap,
       Variants.TypeVariantOptional,
       Variants.TypeVariantPair,
       Variants.TypeVariantRecord,
@@ -233,4 +234,5 @@ typeVariants =
       Variants.TypeVariantUnion,
       Variants.TypeVariantUnit,
       Variants.TypeVariantVariable,
-      Variants.TypeVariantVoid]
+      Variants.TypeVariantVoid,
+      Variants.TypeVariantWrap]

@@ -115,7 +115,7 @@ isSerializable cx graph el =
               \typ -> Lists.map Reflect.typeVariant (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> Lists.cons t m) [] typ)
       in (Eithers.map (\deps ->
         let allVariants = Sets.fromList (Lists.concat (Lists.map variants (Maps.elems deps)))
-        in (Logic.not (Sets.member Variants.TypeVariantFunction allVariants))) (typeDependencies cx graph False Equality.identity (Core.bindingName el)))
+        in (Logic.not (Logic.or (Sets.member Variants.TypeVariantEffect allVariants) (Sets.member Variants.TypeVariantFunction allVariants)))) (typeDependencies cx graph False Equality.identity (Core.bindingName el)))
 -- | Check if a type (by name) is serializable, resolving all type dependencies (Either version)
 isSerializableByName :: t0 -> Graph.Graph -> Core.Name -> Either Errors.Error Bool
 isSerializableByName cx graph name =
@@ -124,14 +124,14 @@ isSerializableByName cx graph name =
               \typ -> Lists.map Reflect.typeVariant (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> Lists.cons t m) [] typ)
       in (Eithers.map (\deps ->
         let allVariants = Sets.fromList (Lists.concat (Lists.map variants (Maps.elems deps)))
-        in (Logic.not (Sets.member Variants.TypeVariantFunction allVariants))) (typeDependencies cx graph False Equality.identity name))
+        in (Logic.not (Logic.or (Sets.member Variants.TypeVariantEffect allVariants) (Sets.member Variants.TypeVariantFunction allVariants)))) (typeDependencies cx graph False Equality.identity name))
 -- | Check if a type is serializable (no function types in the type itself)
 isSerializableType :: Core.Type -> Bool
 isSerializableType typ =
 
       let allVariants =
               Sets.fromList (Lists.map Reflect.typeVariant (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> Lists.cons t m) [] typ))
-      in (Logic.not (Sets.member Variants.TypeVariantFunction allVariants))
+      in (Logic.not (Logic.or (Sets.member Variants.TypeVariantEffect allVariants) (Sets.member Variants.TypeVariantFunction allVariants)))
 -- | Check if a term is trivially cheap (no thunking needed)
 isTrivialTerm :: Core.Term -> Bool
 isTrivialTerm t =

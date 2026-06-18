@@ -113,6 +113,7 @@
                             {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "annotated", "term": {"unit": {}}}}},
                             {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "application", "term": {"unit": {}}}}},
                             {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "either", "term": {"unit": {}}}}},
+                            {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "effect", "term": {"unit": {}}}}},
                             {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "function", "term": {"unit": {}}}}},
                             {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "forall", "term": {"unit": {}}}}},
                             {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "list", "term": {"unit": {}}}}},

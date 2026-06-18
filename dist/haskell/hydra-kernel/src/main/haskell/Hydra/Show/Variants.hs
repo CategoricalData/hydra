@@ -57,6 +57,7 @@ typeVariant x =
     case x of
       Variants.TypeVariantAnnotated -> "annotated"
       Variants.TypeVariantApplication -> "application"
+      Variants.TypeVariantEffect -> "effect"
       Variants.TypeVariantEither -> "either"
       Variants.TypeVariantForall -> "forall"
       Variants.TypeVariantFunction -> "function"

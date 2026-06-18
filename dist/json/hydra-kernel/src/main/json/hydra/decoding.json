@@ -145,6 +145,14 @@
                                             "function": {"project": {"typeName": "hydra.core.ApplicationType", "fieldName": "argument"}},
                                             "argument": {"variable": "appType"}}}}}}}}}},
                           {
+                            "name": "effect",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "elemType",
+                                "domain": {"variable": "hydra.core.Type"},
+                                "body": {
+                                  "application": {"function": {"variable": "hydra.decoding.collectOrdConstrainedVariables"}, "argument": {"variable": "elemType"}}}}}},
+                          {
                             "name": "either",
                             "handler": {
                               "lambda": {
@@ -397,6 +405,14 @@
                                           "application": {
                                             "function": {"project": {"typeName": "hydra.core.ApplicationType", "fieldName": "argument"}},
                                             "argument": {"variable": "appType"}}}}}}}}}},
+                          {
+                            "name": "effect",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "elemType",
+                                "domain": {"variable": "hydra.core.Type"},
+                                "body": {
+                                  "application": {"function": {"variable": "hydra.decoding.collectTypeVariablesFromType"}, "argument": {"variable": "elemType"}}}}}},
                           {
                             "name": "either",
                             "handler": {
@@ -16638,6 +16654,19 @@
                                                   "function": {"project": {"typeName": "hydra.core.ApplicationType", "fieldName": "argument"}},
                                                   "argument": {"variable": "appType"}}}}]}}}}}}}},
                           {
+                            "name": "effect",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "elemType",
+                                "domain": {"variable": "hydra.core.Type"},
+                                "body": {
+                                  "inject": {
+                                    "typeName": "hydra.core.Type",
+                                    "field": {
+                                      "name": "effect",
+                                      "term": {
+                                        "application": {"function": {"variable": "hydra.decoding.decoderFullResultType"}, "argument": {"variable": "elemType"}}}}}}}}},
+                          {
                             "name": "either",
                             "handler": {
                               "lambda": {
@@ -16985,6 +17014,19 @@
                                                     "application": {
                                                       "function": {"project": {"typeName": "hydra.core.ApplicationType", "fieldName": "argument"}},
                                                       "argument": {"variable": "appType"}}}}]}}}}}}}},
+                              {
+                                "name": "effect",
+                                "handler": {
+                                  "lambda": {
+                                    "parameter": "elemType",
+                                    "domain": {"variable": "hydra.core.Type"},
+                                    "body": {
+                                      "inject": {
+                                        "typeName": "hydra.core.Type",
+                                        "field": {
+                                          "name": "effect",
+                                          "term": {
+                                            "application": {"function": {"variable": "hydra.decoding.decoderFullResultType"}, "argument": {"variable": "elemType"}}}}}}}}},
                               {
                                 "name": "either",
                                 "handler": {

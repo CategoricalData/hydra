@@ -392,6 +392,9 @@ encodeType namespaces typ cx g =
             Syntax.TypeVariable (Utils.rawName "Either"),
             hleft,
             hright]))))
+        Core.TypeEffect v0 -> Eithers.bind (encode v0) (\het -> Right (Utils.toTypeApplication [
+          Syntax.TypeVariable (Utils.rawName "IO"),
+          het]))
         Core.TypeFunction v0 ->
           let dom = Core.functionTypeDomain v0
               cod = Core.functionTypeCodomain v0

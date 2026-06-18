@@ -2265,6 +2265,20 @@
                                                                 "argument": {"variable": "typeStrs"}}},
                                                             {"literal": {"string": ")"}}]}}}}}}}}}},
                                       {
+                                        "name": "effect",
+                                        "handler": {
+                                          "lambda": {
+                                            "parameter": "etyp",
+                                            "domain": {"variable": "hydra.core.Type"},
+                                            "body": {
+                                              "application": {
+                                                "function": {"variable": "hydra.lib.strings.cat"},
+                                                "argument": {
+                                                  "list": [
+                                                    {"literal": {"string": "effect<"}},
+                                                    {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "etyp"}}},
+                                                    {"literal": {"string": ">"}}]}}}}}},
+                                      {
                                         "name": "either",
                                         "handler": {
                                           "lambda": {

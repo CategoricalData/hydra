@@ -71,6 +71,10 @@ joinTypes cx left right comment =
             joinOne (Core.eitherTypeLeft v0) (Core.eitherTypeLeft v1),
             (joinOne (Core.eitherTypeRight v0) (Core.eitherTypeRight v1))]
           _ -> cannotUnify
+        Core.TypeEffect v0 -> case sright of
+          Core.TypeEffect v1 -> Right [
+            joinOne v0 v1]
+          _ -> cannotUnify
         Core.TypeFunction v0 -> case sright of
           Core.TypeFunction v1 -> Right [
             joinOne (Core.functionTypeDomain v0) (Core.functionTypeDomain v1),
