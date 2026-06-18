@@ -576,6 +576,11 @@ encodeType = haskellCoderDefinition "encodeType" $
           inject H._Type H._Type_variable $ HaskellUtilsSource.rawName @@ string "Either",
           var "hleft",
           var "hright"],
+    _Type_effect>>: "et" ~>
+      "het" <<~ var "encode" @@ var "et" $
+        right $ HaskellUtilsSource.toTypeApplication @@ list [
+          inject H._Type H._Type_variable $ HaskellUtilsSource.rawName @@ string "IO",
+          var "het"],
     _Type_function>>: "funType" ~> lets [
       "dom">: Core.functionTypeDomain $ var "funType",
       "cod">: Core.functionTypeCodomain $ var "funType"] $

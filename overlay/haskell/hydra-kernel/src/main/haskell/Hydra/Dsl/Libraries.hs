@@ -10,6 +10,7 @@ import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
 import qualified Hydra.Haskell.Lib.Chars as Chars
+import qualified Hydra.Haskell.Lib.Effects as Effects
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
@@ -23,6 +24,7 @@ import qualified Hydra.Haskell.Lib.Regex as Regex
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
 import qualified Hydra.Lib.Chars as DefChars
+import qualified Hydra.Lib.Effects as DefEffects
 import qualified Hydra.Lib.Eithers as DefEithers
 import qualified Hydra.Lib.Equality as DefEquality
 import qualified Hydra.Lib.Lists as DefLists
@@ -113,6 +115,13 @@ hydraLibChars = standardLibrary [
   prim1 DefChars.isUpper    Chars.isUpper    [] int32 boolean,
   prim1 DefChars.toLower    Chars.toLower    [] int32 int32,
   prim1 DefChars.toUpper    Chars.toUpper    [] int32 int32]
+
+hydraLibEffects :: Library
+hydraLibEffects = standardLibrary [
+    unsupportedEffectPrimitive DefEffects.bind,
+    unsupportedEffectPrimitive DefEffects.fail,
+    unsupportedEffectPrimitive DefEffects.map,
+    unsupportedEffectPrimitive DefEffects.pure]
 
 hydraLibEithers :: Library
 hydraLibEithers = standardLibrary [
@@ -392,6 +401,7 @@ hydraLibStrings = standardLibrary [
 standardLibraries :: [Library]
 standardLibraries = [
   hydraLibChars,
+  hydraLibEffects,
   hydraLibEithers,
   hydraLibEquality,
   hydraLibLists,
@@ -420,3 +430,15 @@ standardLibrary prims = Library {
     -- namespace = the primitive name with its final ".<local>" segment dropped
     firstName = unName $ primitiveDefinitionName $ primitiveDefinition $ head prims
     ns = ModuleName $ reverse $ L.drop 1 $ L.dropWhile (/= '.') $ reverse firstName
+
+-- | Register effect primitives for name resolution and inference, while keeping
+-- Hydra's pure reducer from interpreting host effects as ordinary terms.
+unsupportedEffectPrimitive :: PrimitiveDefinition -> Primitive
+unsupportedEffectPrimitive def = Primitive def implementation
+  where
+    implementation _ _ = Left $ ErrorOther $ OtherError $
+      "effect primitive cannot be reduced by Hydra's pure Haskell reducer: "
+      ++ unName (primitiveDefinitionName def)
+
+_effectImplementations :: (IO a -> (a -> IO b) -> IO b, String -> IO c, (d -> e) -> IO d -> IO e, f -> IO f)
+_effectImplementations = (Effects.bind, Effects.fail, Effects.map, Effects.pure)

@@ -130,6 +130,7 @@ haskellLanguage = haskellLanguageDefinition "haskellLanguage" $
     Variants.typeVariantAnnotated,
     Variants.typeVariantApplication,
     Variants.typeVariantEither,
+    Variants.typeVariantEffect,
     Variants.typeVariantFunction,
     Variants.typeVariantForall,
     Variants.typeVariantList,
