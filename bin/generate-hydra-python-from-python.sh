@@ -41,6 +41,9 @@ set -euo pipefail
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
 
+source "$HYDRA_ROOT/bin/lib/common.sh"
+raise_open_file_limit 4096
+
 # Defaults
 INTERP="uv"
 MODE="published-host"
@@ -193,6 +196,7 @@ if [ "$ACTUAL_OUT_ROOT" = "$HYDRA_ROOT/dist/json" ]; then
     echo ""
     echo "=== Refreshing per-package input digest for hydra-python (#469) ==="
     (cd "$HYDRA_ROOT/heads/haskell" && \
+     stack build hydra:exe:digest-check >/dev/null && \
      stack exec digest-check -- refresh-input \
        --package hydra-python \
        --dist-json-root "$HYDRA_ROOT/dist/json")

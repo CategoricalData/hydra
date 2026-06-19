@@ -68,6 +68,8 @@ HYDRA_HASKELL_DIR="$HYDRA_ROOT/heads/haskell"
 
 source "$HYDRA_ROOT/bin/lib/common.sh"
 
+raise_open_file_limit 4096
+
 ALL_LANGS="haskell java python scala go typescript clojure scheme common-lisp emacs-lisp"
 
 NO_TESTS=false

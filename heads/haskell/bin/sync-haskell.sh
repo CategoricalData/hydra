@@ -61,6 +61,8 @@ HYDRA_ROOT_DIR="$( cd "$HYDRA_HASKELL_DIR/../.." && pwd )"
 
 source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 
+raise_open_file_limit 4096
+
 NO_TESTS=false
 HOST_MODE=published
 

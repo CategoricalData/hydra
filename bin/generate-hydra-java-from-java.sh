@@ -23,6 +23,9 @@ set -euo pipefail
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
 
+source "$HYDRA_ROOT/bin/lib/common.sh"
+raise_open_file_limit 4096
+
 CANON_ROOT="$HYDRA_ROOT/dist/json/hydra-java/src/main/json"
 OUT_ROOT="$CANON_ROOT"
 USER_SET_OUT_ROOT=0
@@ -150,6 +153,7 @@ if [ "$ACTUAL_OUT_ROOT" = "$CANON_ROOT" ]; then
     echo ""
     echo "=== Refreshing per-package input digest for hydra-java (#469) ==="
     (cd "$HYDRA_ROOT/heads/haskell" && \
+     stack build hydra:exe:digest-check >/dev/null && \
      stack exec digest-check -- refresh-input \
        --package hydra-java \
        --dist-json-root "$HYDRA_ROOT/dist/json")

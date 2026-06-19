@@ -35,6 +35,10 @@ if [ -f "$HYDRA_ROOT_DIR/bin/lib/common.sh" ]; then
     source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 fi
 
+if declare -F raise_open_file_limit >/dev/null; then
+    raise_open_file_limit 4096
+fi
+
 # -----------------------------------------------------------------------
 # Package and target configuration
 # -----------------------------------------------------------------------
