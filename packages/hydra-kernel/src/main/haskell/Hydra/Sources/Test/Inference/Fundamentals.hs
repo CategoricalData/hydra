@@ -15,6 +15,7 @@ import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 import qualified Hydra.Dsl.Prims as Prims
+import qualified Hydra.Lib.Effects as DefEffects
 import qualified Hydra.Lib.Eithers as DefEithers
 import qualified Hydra.Lib.Lists as DefLists
 import qualified Hydra.Lib.Logic as DefLogic
@@ -629,6 +630,24 @@ testGroupForPolymorphism = define "testGroupForPolymorphism" $
 testGroupForPrimitives :: TypedTermDefinition TestGroup
 testGroupForPrimitives = define "testGroupForPrimitives" $
   supergroup "Primitives" [
+
+    subgroup "Effect primitives" [
+      expectMono 1 []
+        (primitive DefEffects.pure @@ string "hello")
+        (Core.typeEffect T.string),
+      expectPoly 2 []
+        (primitive DefEffects.fail @@ string "boom")
+        ["t0"] (Core.typeEffect (T.var "t0")),
+      expectMono 3 []
+        (primitive DefEffects.map
+          @@ primitive DefStrings.length
+          @@ (primitive DefEffects.pure @@ string "hello"))
+        (Core.typeEffect T.int32),
+      expectMono 4 []
+        (primitive DefEffects.bind
+          @@ (primitive DefEffects.pure @@ string "hello")
+          @@ (lambda "s" $ primitive DefEffects.pure @@ (primitive DefStrings.length @@ var "s")))
+        (Core.typeEffect T.int32)],
 
     subgroup "Monomorphic primitive functions" [
       expectMono 1 []
