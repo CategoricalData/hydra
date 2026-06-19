@@ -2541,6 +2541,75 @@ testGroupForPrimitives =
       Testing.testGroupDescription = Nothing,
       Testing.testGroupSubgroups = [
         Testing.TestGroup {
+          Testing.testGroupName = "Effect primitives",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = [
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "#1",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> ShowCore.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.effects.pure")),
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))})))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.typeScheme (Core.TypeScheme {
+                  Core.typeSchemeVariables = [],
+                  Core.typeSchemeBody = (Core.TypeEffect (Core.TypeLiteral Core.LiteralTypeString)),
+                  Core.typeSchemeConstraints = Nothing}))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "#2",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> ShowCore.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.effects.fail")),
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "boom"))})))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.typeScheme (Core.TypeScheme {
+                  Core.typeSchemeVariables = [
+                    Core.Name "t0"],
+                  Core.typeSchemeBody = (Core.TypeEffect (Core.TypeVariable (Core.Name "t0"))),
+                  Core.typeSchemeConstraints = Nothing}))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "#3",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> ShowCore.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.effects.map")),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.lib.strings.length"))})),
+                  Core.applicationArgument = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.effects.pure")),
+                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))}))})))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.typeScheme (Core.TypeScheme {
+                  Core.typeSchemeVariables = [],
+                  Core.typeSchemeBody = (Core.TypeEffect (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
+                  Core.typeSchemeConstraints = Nothing}))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "#4",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> ShowCore.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.effects.bind")),
+                    Core.applicationArgument = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.effects.pure")),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))}))})),
+                  Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.Name "s"),
+                    Core.lambdaDomain = Nothing,
+                    Core.lambdaBody = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.effects.pure")),
+                      Core.applicationArgument = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.length")),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "s"))}))}))}))})))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.typeScheme (Core.TypeScheme {
+                  Core.typeSchemeVariables = [],
+                  Core.typeSchemeBody = (Core.TypeEffect (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
+                  Core.typeSchemeConstraints = Nothing}))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []}]},
+        Testing.TestGroup {
           Testing.testGroupName = "Monomorphic primitive functions",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
