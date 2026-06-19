@@ -635,19 +635,44 @@ testGroupForPrimitives = define "testGroupForPrimitives" $
       expectMono 1 []
         (primitive DefEffects.pure @@ string "hello")
         (Core.typeEffect T.string),
-      expectPoly 2 []
-        (primitive DefEffects.fail @@ string "boom")
-        ["t0"] (Core.typeEffect (T.var "t0")),
+      expectMono 2 []
+        (primitive DefEffects.apply
+          @@ (primitive DefEffects.pure @@ (lambda "s" $ primitive DefStrings.length @@ var "s"))
+          @@ (primitive DefEffects.pure @@ string "hello"))
+        (Core.typeEffect T.int32),
       expectMono 3 []
+        (primitive DefEffects.bind
+          @@ (primitive DefEffects.pure @@ string "hello")
+          @@ (lambda "s" $ primitive DefEffects.pure @@ (primitive DefStrings.length @@ var "s")))
+        (Core.typeEffect T.int32),
+      expectMono 4 []
+        (primitive DefEffects.compose
+          @@ (lambda "s" $ primitive DefEffects.pure @@ (primitive DefStrings.length @@ var "s"))
+          @@ (lambda "n" $ primitive DefEffects.pure @@ var "n")
+          @@ string "hello")
+        (Core.typeEffect T.int32),
+      expectMono 5 []
+        (primitive DefEffects.foldl
+          @@ (lambda "acc" $ lambda "s" $
+            primitive DefEffects.pure @@ (primitive DefMath.add @@ var "acc" @@ (primitive DefStrings.length @@ var "s")))
+          @@ int32 0
+          @@ list [string "one", string "two"])
+        (Core.typeEffect T.int32),
+      expectMono 6 []
         (primitive DefEffects.map
           @@ primitive DefStrings.length
           @@ (primitive DefEffects.pure @@ string "hello"))
         (Core.typeEffect T.int32),
-      expectMono 4 []
-        (primitive DefEffects.bind
-          @@ (primitive DefEffects.pure @@ string "hello")
-          @@ (lambda "s" $ primitive DefEffects.pure @@ (primitive DefStrings.length @@ var "s")))
-        (Core.typeEffect T.int32)],
+      expectMono 7 []
+        (primitive DefEffects.mapList
+          @@ (lambda "s" $ primitive DefEffects.pure @@ (primitive DefStrings.length @@ var "s"))
+          @@ list [string "one", string "two"])
+        (Core.typeEffect $ T.list T.int32),
+      expectMono 8 []
+        (primitive DefEffects.mapOptional
+          @@ (lambda "s" $ primitive DefEffects.pure @@ (primitive DefStrings.length @@ var "s"))
+          @@ (optional $ just $ string "hello"))
+        (Core.typeEffect $ T.optional T.int32)],
 
     subgroup "Monomorphic primitive functions" [
       expectMono 1 []

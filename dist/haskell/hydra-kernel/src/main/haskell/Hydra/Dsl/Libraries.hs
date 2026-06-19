@@ -118,9 +118,13 @@ hydraLibChars = standardLibrary [
 
 hydraLibEffects :: Library
 hydraLibEffects = standardLibrary [
+    unsupportedEffectPrimitive DefEffects.apply,
     unsupportedEffectPrimitive DefEffects.bind,
-    unsupportedEffectPrimitive DefEffects.fail,
+    unsupportedEffectPrimitive DefEffects.compose,
+    unsupportedEffectPrimitive DefEffects.foldl,
     unsupportedEffectPrimitive DefEffects.map,
+    unsupportedEffectPrimitive DefEffects.mapList,
+    unsupportedEffectPrimitive DefEffects.mapOptional,
     unsupportedEffectPrimitive DefEffects.pure]
 
 hydraLibEithers :: Library
@@ -440,5 +444,21 @@ unsupportedEffectPrimitive def = Primitive def implementation
       "effect primitive cannot be reduced by Hydra's pure Haskell reducer: "
       ++ unName (primitiveDefinitionName def)
 
-_effectImplementations :: (IO a -> (a -> IO b) -> IO b, String -> IO c, (d -> e) -> IO d -> IO e, f -> IO f)
-_effectImplementations = (Effects.bind, Effects.fail, Effects.map, Effects.pure)
+_effectImplementations ::
+  ( IO (a -> b) -> IO a -> IO b
+  , IO c -> (c -> IO d) -> IO d
+  , (e -> IO f) -> (f -> IO g) -> e -> IO g
+  , (h -> i -> IO h) -> h -> [i] -> IO h
+  , (j -> k) -> IO j -> IO k
+  , (l -> IO m) -> [l] -> IO [m]
+  , (n -> IO o) -> Maybe n -> IO (Maybe o)
+  , p -> IO p)
+_effectImplementations =
+  ( Effects.apply
+  , Effects.bind
+  , Effects.compose
+  , Effects.foldl
+  , Effects.map
+  , Effects.mapList
+  , Effects.mapOptional
+  , Effects.pure)
