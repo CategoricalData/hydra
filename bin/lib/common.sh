@@ -86,6 +86,29 @@ info() {
     echo "$1" >&2
 }
 
+# Raise the soft open-file limit when a build step walks or compiles a large
+# source tree. macOS shells often start at 256, which is low enough for Hydra's
+# JSON export / generated-code sync path to fail with "Too many open files".
+raise_open_file_limit() {
+    local desired="${1:-4096}"
+    local soft hard target
+
+    soft="$(ulimit -n 2>/dev/null || echo "")"
+    [ -n "$soft" ] || return 0
+    [ "$soft" != "unlimited" ] || return 0
+    [ "$soft" -lt "$desired" ] 2>/dev/null || return 0
+
+    hard="$(ulimit -H -n 2>/dev/null || echo "")"
+    target="$desired"
+    if [ "$hard" != "unlimited" ] && [ -n "$hard" ] && [ "$hard" -lt "$target" ] 2>/dev/null; then
+        target="$hard"
+    fi
+
+    if ! ulimit -n "$target" 2>/dev/null; then
+        warn "Could not raise open-file limit from $soft to $target; sync may fail with 'Too many open files'."
+    fi
+}
+
 # Fail (or warn) if the selected JDK is an x86_64 build running under Rosetta 2
 # on an Apple Silicon host. Such JDKs are ~20x slower than a native arm64 JDK
 # and produce bogus benchmark timings. Set HYDRA_ALLOW_ROSETTA_JDK=1 to opt in
