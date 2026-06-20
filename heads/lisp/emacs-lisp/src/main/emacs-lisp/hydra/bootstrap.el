@@ -53,15 +53,17 @@
 
 (let* ((script-path (or load-file-name buffer-file-name
                         (expand-file-name "hydra/bootstrap.el" default-directory)))
-       (hydra-dir (file-name-directory script-path)))
-  ;; Load the kernel loader
-  (load (expand-file-name "loader.el" hydra-dir) nil t)
-  ;; Override gen-main and gen-test dirs to point at the dist/ generated content
-  ;; (loader.el defaults to heads/lisp/emacs-lisp/src/gen-main/..., which no
-  ;; longer exists; mirrors the override in run-tests.el).
-  (let ((dist-base (expand-file-name "../../../../../../../dist/emacs-lisp/hydra-kernel/" hydra-dir)))
-    (setq hydra-gen-main-dir (expand-file-name "src/main/emacs-lisp/hydra/" dist-base))
-    (setq hydra-gen-test-dir (expand-file-name "src/test/emacs-lisp/hydra/" dist-base))))
+       (hydra-dir (file-name-directory script-path))
+       ;; #434 migrated the runtime (loader.el, gen-main/gen-test content) out of the head into
+       ;; overlay -> dist/emacs-lisp/hydra-kernel, leaving only this driver (bootstrap.el) in the head.
+       (dist-base (expand-file-name "../../../../../../../dist/emacs-lisp/hydra-kernel/" hydra-dir))
+       (dist-hydra-dir (expand-file-name "src/main/emacs-lisp/hydra/" dist-base)))
+  ;; Load the kernel loader from dist, not hydra-dir (heads, now empty).
+  (load (expand-file-name "loader.el" dist-hydra-dir) nil t)
+  ;; Point gen-main/gen-test dirs at the dist/ generated content (loader.el defaults to
+  ;; heads/lisp/emacs-lisp/src/gen-main/..., which no longer exists; mirrors run-tests.el).
+  (setq hydra-gen-main-dir dist-hydra-dir)
+  (setq hydra-gen-test-dir (expand-file-name "src/test/emacs-lisp/hydra/" dist-base)))
 
 (princ "Loading kernel...\n")
 
