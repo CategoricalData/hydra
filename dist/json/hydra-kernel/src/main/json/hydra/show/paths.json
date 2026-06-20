@@ -572,7 +572,7 @@
                                                                                             "name": "uniqueLabel",
                                                                                             "term": {
                                                                                               "application": {
-                                                                                                "function": {"application": {"function": {"variable": "hydra.names.uniqueLabel"}, "argument": {"variable": "currentVisited"}}},
+                                                                                                "function": {"application": {"function": {"variable": "hydra.names.chooseUniqueLabel"}, "argument": {"variable": "currentVisited"}}},
                                                                                                 "argument": {"variable": "rawLabel"}}},
                                                                                             "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
                                                                                           {

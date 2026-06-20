@@ -139,7 +139,7 @@ elementSpecsByTable graph =
             vertexMap = Lists.foldl addVertex Maps.empty vertexPairs
         in (Right (Lists.foldl addEdge vertexMap edgePairs)))))
 -- | Evaluate an edge specification against a record term to produce an optional edge
-evaluateEdge :: Typing.InferenceContext -> Graph.Graph -> PgModel.Edge Core.Term -> Core.Term -> Either Errors.Error (Maybe (PgModel.Edge Core.Term))
+evaluateEdge :: t0 -> Graph.Graph -> PgModel.Edge Core.Term -> Core.Term -> Either Errors.Error (Maybe (PgModel.Edge Core.Term))
 evaluateEdge cx g edgeSpec record =
 
       let label = PgModel.edgeLabel edgeSpec
@@ -160,7 +160,7 @@ evaluateEdge cx g edgeSpec record =
         PgModel.edgeIn = inId,
         PgModel.edgeProperties = props}) mInId)))))))
 -- | Evaluate property specifications against a record term
-evaluateProperties :: Ord t0 => (Typing.InferenceContext -> Graph.Graph -> M.Map t0 Core.Term -> Core.Term -> Either Errors.Error (M.Map t0 Core.Term))
+evaluateProperties :: Ord t1 => (t0 -> Graph.Graph -> M.Map t1 Core.Term -> Core.Term -> Either Errors.Error (M.Map t1 Core.Term))
 evaluateProperties cx g specs record =
 
       let extractMaybe =
@@ -173,7 +173,7 @@ evaluateProperties cx g specs record =
           Core.applicationFunction = spec,
           Core.applicationArgument = record}))) (\value -> extractMaybe k (Strip.deannotateTerm value)))) (Maps.toList specs)))
 -- | Evaluate a vertex specification against a record term to produce an optional vertex
-evaluateVertex :: Typing.InferenceContext -> Graph.Graph -> PgModel.Vertex Core.Term -> Core.Term -> Either Errors.Error (Maybe (PgModel.Vertex Core.Term))
+evaluateVertex :: t0 -> Graph.Graph -> PgModel.Vertex Core.Term -> Core.Term -> Either Errors.Error (Maybe (PgModel.Vertex Core.Term))
 evaluateVertex cx g vertexSpec record =
 
       let label = PgModel.vertexLabel vertexSpec
@@ -302,10 +302,10 @@ termRowToRecord tableType row =
             Core.fieldName = (Core.Name cname),
             Core.fieldTerm = (Core.TermOptional mvalue)}) colTypes cells)}))
 -- | Transform a record through vertex and edge specifications to produce vertices and edges
-transformRecord :: Typing.InferenceContext -> Graph.Graph -> [PgModel.Vertex Core.Term] -> [PgModel.Edge Core.Term] -> Core.Term -> Either Errors.Error ([PgModel.Vertex Core.Term], [PgModel.Edge Core.Term])
+transformRecord :: t0 -> Graph.Graph -> [PgModel.Vertex Core.Term] -> [PgModel.Edge Core.Term] -> Core.Term -> Either Errors.Error ([PgModel.Vertex Core.Term], [PgModel.Edge Core.Term])
 transformRecord cx g vspecs especs record =
     Eithers.bind (Eithers.mapList (\spec -> evaluateVertex cx g spec record) vspecs) (\mVertices -> Eithers.bind (Eithers.mapList (\spec -> evaluateEdge cx g spec record) especs) (\mEdges -> Right (Optionals.cat mVertices, (Optionals.cat mEdges))))
 -- | Transform all rows from a table through vertex/edge specifications
-transformTableRows :: Typing.InferenceContext -> Graph.Graph -> [PgModel.Vertex Core.Term] -> [PgModel.Edge Core.Term] -> Tabular.TableType -> [Tabular.DataRow Core.Term] -> Either Errors.Error ([PgModel.Vertex Core.Term], [PgModel.Edge Core.Term])
+transformTableRows :: t0 -> Graph.Graph -> [PgModel.Vertex Core.Term] -> [PgModel.Edge Core.Term] -> Tabular.TableType -> [Tabular.DataRow Core.Term] -> Either Errors.Error ([PgModel.Vertex Core.Term], [PgModel.Edge Core.Term])
 transformTableRows cx g vspecs especs tableType rows =
     Eithers.map (\pairs -> Lists.foldl concatPairs ([], []) pairs) (Eithers.mapList (\row -> transformRecord cx g vspecs especs (termRowToRecord tableType row)) rows)

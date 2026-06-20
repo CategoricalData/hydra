@@ -253,5 +253,5 @@ termToString term =
           Core.FloatValueFloat64 v2 -> Literals.showFloat64 v2
           _ -> ShowCore.term term
         _ -> ShowCore.term term
-      Core.TermOptional v0 -> Optionals.cases v0 "nothing" (\t -> termToString t)
+      Core.TermOptional v0 -> Optionals.cases v0 "none" (\t -> termToString t)
       _ -> ShowCore.term term

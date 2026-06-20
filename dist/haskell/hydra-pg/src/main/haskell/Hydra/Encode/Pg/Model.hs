@@ -10,7 +10,7 @@ import qualified Hydra.Pg.Model as Model
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Encoder for hydra.pg.model.AdjacentEdge
-adjacentEdge :: (t0 -> Core.Term) -> Model.AdjacentEdge t0 -> Core.Term
+adjacentEdge :: (v -> Core.Term) -> Model.AdjacentEdge v -> Core.Term
 adjacentEdge v x =
     Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.model.AdjacentEdge"),
@@ -52,7 +52,7 @@ direction x =
           Core.fieldName = (Core.Name "undirected"),
           Core.fieldTerm = Core.TermUnit}})
 -- | Encoder for hydra.pg.model.Edge
-edge :: (t0 -> Core.Term) -> Model.Edge t0 -> Core.Term
+edge :: (v -> Core.Term) -> Model.Edge v -> Core.Term
 edge v x =
     Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.model.Edge"),
@@ -79,7 +79,7 @@ edgeLabel x =
       Core.wrappedTermTypeName = (Core.Name "hydra.pg.model.EdgeLabel"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Model.unEdgeLabel x))})
 -- | Encoder for hydra.pg.model.EdgeType
-edgeType :: (t0 -> Core.Term) -> Model.EdgeType t0 -> Core.Term
+edgeType :: (t -> Core.Term) -> Model.EdgeType t -> Core.Term
 edgeType t x =
     Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.model.EdgeType"),
@@ -100,7 +100,7 @@ edgeType t x =
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (propertyType t) xs)) (Model.edgeTypeProperties x))}]})
 -- | Encoder for hydra.pg.model.Element
-element :: (t0 -> Core.Term) -> Model.Element t0 -> Core.Term
+element :: (v -> Core.Term) -> Model.Element v -> Core.Term
 element v x =
     case x of
       Model.ElementVertex v0 -> Core.TermInject (Core.Injection {
@@ -128,7 +128,7 @@ elementKind x =
           Core.fieldName = (Core.Name "edge"),
           Core.fieldTerm = Core.TermUnit}})
 -- | Encoder for hydra.pg.model.ElementTree
-elementTree :: (t0 -> Core.Term) -> Model.ElementTree t0 -> Core.Term
+elementTree :: (v -> Core.Term) -> Model.ElementTree v -> Core.Term
 elementTree v x =
     Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.model.ElementTree"),
@@ -140,7 +140,7 @@ elementTree v x =
           Core.fieldName = (Core.Name "dependencies"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (elementTree v) xs)) (Model.elementTreeDependencies x))}]})
 -- | Encoder for hydra.pg.model.ElementType
-elementType :: (t0 -> Core.Term) -> Model.ElementType t0 -> Core.Term
+elementType :: (t -> Core.Term) -> Model.ElementType t -> Core.Term
 elementType t x =
     case x of
       Model.ElementTypeVertex v0 -> Core.TermInject (Core.Injection {
@@ -154,7 +154,7 @@ elementType t x =
           Core.fieldName = (Core.Name "edge"),
           Core.fieldTerm = (edgeType t v0)}})
 -- | Encoder for hydra.pg.model.ElementTypeTree
-elementTypeTree :: (t0 -> Core.Term) -> Model.ElementTypeTree t0 -> Core.Term
+elementTypeTree :: (t -> Core.Term) -> Model.ElementTypeTree t -> Core.Term
 elementTypeTree t x =
     Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.model.ElementTypeTree"),
@@ -166,7 +166,7 @@ elementTypeTree t x =
           Core.fieldName = (Core.Name "dependencies"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (elementTypeTree t) xs)) (Model.elementTypeTreeDependencies x))}]})
 -- | Encoder for hydra.pg.model.Graph
-graph :: Ord t0 => ((t0 -> Core.Term) -> Model.Graph t0 -> Core.Term)
+graph :: Ord v => ((v -> Core.Term) -> Model.Graph v -> Core.Term)
 graph v x =
     Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.model.Graph"),
@@ -178,7 +178,7 @@ graph v x =
           Core.fieldName = (Core.Name "edges"),
           Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap v (edge v) m)) (Model.graphEdges x))}]})
 -- | Encoder for hydra.pg.model.GraphSchema
-graphSchema :: (t0 -> Core.Term) -> Model.GraphSchema t0 -> Core.Term
+graphSchema :: (t -> Core.Term) -> Model.GraphSchema t -> Core.Term
 graphSchema t x =
     Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.model.GraphSchema"),
@@ -204,7 +204,7 @@ label x =
           Core.fieldName = (Core.Name "edge"),
           Core.fieldTerm = (edgeLabel v0)}})
 -- | Encoder for hydra.pg.model.LazyGraph
-lazyGraph :: (t0 -> Core.Term) -> Model.LazyGraph t0 -> Core.Term
+lazyGraph :: (v -> Core.Term) -> Model.LazyGraph v -> Core.Term
 lazyGraph v x =
     Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.model.LazyGraph"),
@@ -216,7 +216,7 @@ lazyGraph v x =
           Core.fieldName = (Core.Name "edges"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (edge v) xs)) (Model.lazyGraphEdges x))}]})
 -- | Encoder for hydra.pg.model.Property
-property :: (t0 -> Core.Term) -> Model.Property t0 -> Core.Term
+property :: (v -> Core.Term) -> Model.Property v -> Core.Term
 property v x =
     Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.model.Property"),
@@ -234,7 +234,7 @@ propertyKey x =
       Core.wrappedTermTypeName = (Core.Name "hydra.pg.model.PropertyKey"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Model.unPropertyKey x))})
 -- | Encoder for hydra.pg.model.PropertyType
-propertyType :: (t0 -> Core.Term) -> Model.PropertyType t0 -> Core.Term
+propertyType :: (t -> Core.Term) -> Model.PropertyType t -> Core.Term
 propertyType t x =
     Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.model.PropertyType"),
@@ -249,7 +249,7 @@ propertyType t x =
           Core.fieldName = (Core.Name "required"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralBoolean x2)) (Model.propertyTypeRequired x))}]})
 -- | Encoder for hydra.pg.model.Vertex
-vertex :: (t0 -> Core.Term) -> Model.Vertex t0 -> Core.Term
+vertex :: (v -> Core.Term) -> Model.Vertex v -> Core.Term
 vertex v x =
     Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.model.Vertex"),
@@ -270,7 +270,7 @@ vertexLabel x =
       Core.wrappedTermTypeName = (Core.Name "hydra.pg.model.VertexLabel"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Model.unVertexLabel x))})
 -- | Encoder for hydra.pg.model.VertexType
-vertexType :: (t0 -> Core.Term) -> Model.VertexType t0 -> Core.Term
+vertexType :: (t -> Core.Term) -> Model.VertexType t -> Core.Term
 vertexType t x =
     Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.model.VertexType"),
@@ -285,7 +285,7 @@ vertexType t x =
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (propertyType t) xs)) (Model.vertexTypeProperties x))}]})
 -- | Encoder for hydra.pg.model.VertexWithAdjacentEdges
-vertexWithAdjacentEdges :: (t0 -> Core.Term) -> Model.VertexWithAdjacentEdges t0 -> Core.Term
+vertexWithAdjacentEdges :: (v -> Core.Term) -> Model.VertexWithAdjacentEdges v -> Core.Term
 vertexWithAdjacentEdges v x =
     Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.pg.model.VertexWithAdjacentEdges"),

@@ -961,7 +961,7 @@
                                                                                   "pair": {
                                                                                     "first": {
                                                                                       "application": {
-                                                                                        "function": {"application": {"function": {"variable": "hydra.names.uniqueLabel"}, "argument": {"variable": "vis"}}},
+                                                                                        "function": {"application": {"function": {"variable": "hydra.names.chooseUniqueLabel"}, "argument": {"variable": "vis"}}},
                                                                                         "argument": {"variable": "l"}}},
                                                                                     "second": {"variable": "s"}}},
                                                                                 "type": {"literal": {"string": {}}}}},
@@ -1260,7 +1260,7 @@
                                                                                 "name": "varLabel",
                                                                                 "term": {
                                                                                   "application": {
-                                                                                    "function": {"application": {"function": {"variable": "hydra.names.uniqueLabel"}, "argument": {"variable": "selfVisited"}}},
+                                                                                    "function": {"application": {"function": {"variable": "hydra.names.chooseUniqueLabel"}, "argument": {"variable": "selfVisited"}}},
                                                                                     "argument": {"variable": "vstr"}}},
                                                                                 "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
                                                                               {
