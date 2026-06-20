@@ -29,9 +29,9 @@
 #      the published jar actually carries the classes its API surface needs.
 #
 # This is verification only — it does NOT upload anything (see publish-maven.sh).
-# It applies the same temporary nonfatal Javadoc init script used for the 0.16.1
-# Maven release, because this gate is about published jar/POM self-containment;
-# generated Javadoc HTML escaping is tracked separately in #493.
+# Javadoc runs strict (fail-on-error): the generated-comment escaping bug (#493)
+# and the unqualified-@link bug (#449) are both fixed, so the publish set passes
+# strict Javadoc and no relaxation is needed.
 #
 # Requirements: JDK 17+ to RUN gradle (the nmcp/publish plugins require it, even
 # though the artifacts target Java 11). If no 17+ JDK is found, this verifier
@@ -103,8 +103,7 @@ echo ""
 
 GRADLE="$HYDRA_JAVA_DIR/gradlew"
 [ -x "$GRADLE" ] || GRADLE="gradle"
-GRADLE_INIT_ARGS=(--init-script "$SCRIPT_DIR/javadoc-nonfatal.init.gradle")
-echo "  javadoc:  non-fatal for this packaging-boundary verifier (#493)"
+echo "  javadoc:  strict (fail-on-error)"
 echo ""
 
 # --- 1. Publish each publish-set package into the temp repo, leaves-first. ----
@@ -112,7 +111,7 @@ for pkg in "${PUBLISH_SET[@]}"; do
     pkgdir="$HYDRA_ROOT/dist/java/$pkg"
     [ -d "$pkgdir" ] || { echo "ERROR: missing dist package: $pkgdir" >&2; exit 1; }
     echo "--- publishing $pkg to temp repo ---"
-    ( cd "$pkgdir" && "$GRADLE" "${GRADLE_INIT_ARGS[@]}" --quiet --no-daemon \
+    ( cd "$pkgdir" && "$GRADLE" --quiet --no-daemon \
         -Dmaven.repo.local="$REPO" \
         publishToMavenLocal ) || {
         echo "ERROR: publishToMavenLocal failed for $pkg" >&2
