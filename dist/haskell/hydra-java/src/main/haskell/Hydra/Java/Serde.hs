@@ -918,7 +918,8 @@ returnStatementToExpr rs =
         (Optionals.map expressionToExpr mex)])))
 -- | Sanitize a string for use in a Java comment
 sanitizeJavaComment :: String -> String
-sanitizeJavaComment s = Strings.intercalate "&gt;" (Strings.splitOn ">" (Strings.intercalate "&lt;" (Strings.splitOn "<" s)))
+sanitizeJavaComment s =
+    Strings.intercalate "&gt;" (Strings.splitOn ">" (Strings.intercalate "&lt;" (Strings.splitOn "<" (Strings.intercalate "&amp;" (Strings.splitOn "&" s)))))
 shiftExpressionToExpr :: Syntax.ShiftExpression -> Ast.Expr
 shiftExpressionToExpr e =
     case e of

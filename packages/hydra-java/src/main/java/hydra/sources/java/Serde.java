@@ -2766,7 +2766,11 @@ public class Serde {
                             string(">"),
                             Strings.intercalate(
                                 string("&lt;"),
-                                Strings.splitOn(string("<"), var("s"))))))));
+                                Strings.splitOn(
+                                    string("<"),
+                                    Strings.intercalate(
+                                        string("&amp;"),
+                                        Strings.splitOn(string("&"), var("s"))))))))));
 
     public static final Def shiftExpressionToExpr = def(
         "shiftExpressionToExpr",
