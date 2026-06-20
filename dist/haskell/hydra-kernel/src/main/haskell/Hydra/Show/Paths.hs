@@ -88,7 +88,7 @@ termToSubtermGraph namespaces term =
                                           currentNodes = Pairs.first currentNodesVisited
                                           currentVisited = Pairs.second currentNodesVisited
                                           rawLabel = Names.compactName namespaces name
-                                          uniqueLabel = Names.uniqueLabel currentVisited rawLabel
+                                          uniqueLabel = Names.chooseUniqueLabel currentVisited rawLabel
                                           node =
                                                   Paths.SubtermNode {
                                                     Paths.subtermNodeName = name,

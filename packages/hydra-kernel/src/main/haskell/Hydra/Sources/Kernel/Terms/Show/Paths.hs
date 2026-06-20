@@ -130,7 +130,7 @@ termToSubtermGraph = define "termToSubtermGraph" $
             "currentNodes">: Pairs.first $ var "currentNodesVisited",
             "currentVisited">: Pairs.second $ var "currentNodesVisited",
             "rawLabel">: Names.compactName @@ var "namespaces" @@ var "name",
-            "uniqueLabel">: Names.uniqueLabel @@ var "currentVisited" @@ var "rawLabel",
+            "uniqueLabel">: Names.chooseUniqueLabel @@ var "currentVisited" @@ var "rawLabel",
             "node">: Paths.subtermNode (var "name") (var "rawLabel") (var "uniqueLabel"),
             "newVisited">: Sets.insert (var "uniqueLabel") (var "currentVisited"),
             "newNodes">: Lists.cons (var "node") (var "currentNodes"),

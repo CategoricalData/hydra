@@ -274,7 +274,7 @@ termToDotStmts = define "termToDotStmts" $
         "tls">: termLabel @@ true @@ var "namespaces" @@ var "t",
         "l">: Pairs.first $ var "tls",
         "s">: Pairs.second $ var "tls"]
-        $ pair (Names.uniqueLabel @@ var "vis" @@ var "l") (var "s"),
+        $ pair (Names.chooseUniqueLabel @@ var "vis" @@ var "l") (var "s"),
       -- Determine actual label and style
       "labstyle">: Optionals.cases (var "mlabstyle") (var "labelOf" @@ var "visited" @@ var "currentTerm") ("ls" ~> var "ls"),
       "label">: Pairs.first $ var "labstyle",
@@ -305,7 +305,7 @@ termToDotStmts = define "termToDotStmts" $
             "v">: Core.lambdaParameter $ var "lam",
             "body">: Core.lambdaBody $ var "lam",
             "vstr">: Core.unName (var "v"),
-            "varLabel">: Names.uniqueLabel @@ var "selfVisited" @@ var "vstr",
+            "varLabel">: Names.chooseUniqueLabel @@ var "selfVisited" @@ var "vstr",
             "varId">: wrap Dot._Id (var "varLabel"),
             "visited1">: Sets.insert (var "varLabel") (var "selfVisited"),
             "ids1">: Maps.insert (var "v") (var "varId") (var "ids"),

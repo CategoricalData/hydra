@@ -18,7 +18,7 @@ import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Decoder for hydra.pg.model.AdjacentEdge
-adjacentEdge :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.AdjacentEdge t0)
+adjacentEdge :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError v) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.AdjacentEdge v)
 adjacentEdge v cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
@@ -28,7 +28,7 @@ adjacentEdge v cx raw =
           Model.adjacentEdgeId = field_id,
           Model.adjacentEdgeVertex = field_vertex,
           Model.adjacentEdgeProperties = field_properties}))))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.pg.model.AdjacentEdge")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.model.Direction
 direction :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Model.Direction
 direction cx raw =
@@ -49,7 +49,7 @@ direction cx raw =
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.model.Edge
-edge :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.Edge t0)
+edge :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError v) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.Edge v)
 edge v cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
@@ -60,7 +60,7 @@ edge v cx raw =
           Model.edgeOut = field_out,
           Model.edgeIn = field_in,
           Model.edgeProperties = field_properties})))))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.pg.model.Edge")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.model.EdgeLabel
 edgeLabel :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Model.EdgeLabel
 edgeLabel cx raw =
@@ -72,7 +72,7 @@ edgeLabel cx raw =
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.model.EdgeType
-edgeType :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.EdgeType t0)
+edgeType :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.EdgeType t)
 edgeType t cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
@@ -83,9 +83,9 @@ edgeType t cx raw =
           Model.edgeTypeOut = field_out,
           Model.edgeTypeIn = field_in,
           Model.edgeTypeProperties = field_properties})))))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.pg.model.EdgeType")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.model.Element
-element :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.Element t0)
+element :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError v) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.Element v)
 element v cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermInject v0 ->
@@ -119,7 +119,7 @@ elementKind cx raw =
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.model.ElementTree
-elementTree :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.ElementTree t0)
+elementTree :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError v) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.ElementTree v)
 elementTree v cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
@@ -127,9 +127,9 @@ elementTree v cx raw =
         in (Eithers.bind (ExtractCore.requireField "self" (element v) fieldMap cx) (\field_self -> Eithers.bind (ExtractCore.requireField "dependencies" (ExtractCore.decodeList (elementTree v)) fieldMap cx) (\field_dependencies -> Right (Model.ElementTree {
           Model.elementTreeSelf = field_self,
           Model.elementTreeDependencies = field_dependencies}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.pg.model.ElementTree")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.model.ElementType
-elementType :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.ElementType t0)
+elementType :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.ElementType t)
 elementType t cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermInject v0 ->
@@ -146,7 +146,7 @@ elementType t cx raw =
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.model.ElementTypeTree
-elementTypeTree :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.ElementTypeTree t0)
+elementTypeTree :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.ElementTypeTree t)
 elementTypeTree t cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
@@ -154,9 +154,9 @@ elementTypeTree t cx raw =
         in (Eithers.bind (ExtractCore.requireField "self" (elementType t) fieldMap cx) (\field_self -> Eithers.bind (ExtractCore.requireField "dependencies" (ExtractCore.decodeList (elementTypeTree t)) fieldMap cx) (\field_dependencies -> Right (Model.ElementTypeTree {
           Model.elementTypeTreeSelf = field_self,
           Model.elementTypeTreeDependencies = field_dependencies}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.pg.model.ElementTypeTree")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.model.Graph
-graph :: Ord t0 => ((Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.Graph t0))
+graph :: Ord v => ((Graph.Graph -> Core.Term -> Either Errors.DecodingError v) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.Graph v))
 graph v cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
@@ -164,9 +164,9 @@ graph v cx raw =
         in (Eithers.bind (ExtractCore.requireField "vertices" (ExtractCore.decodeMap v (vertex v)) fieldMap cx) (\field_vertices -> Eithers.bind (ExtractCore.requireField "edges" (ExtractCore.decodeMap v (edge v)) fieldMap cx) (\field_edges -> Right (Model.Graph {
           Model.graphVertices = field_vertices,
           Model.graphEdges = field_edges}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.pg.model.Graph")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.model.GraphSchema
-graphSchema :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.GraphSchema t0)
+graphSchema :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.GraphSchema t)
 graphSchema t cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
@@ -174,7 +174,7 @@ graphSchema t cx raw =
         in (Eithers.bind (ExtractCore.requireField "vertices" (ExtractCore.decodeMap vertexLabel (vertexType t)) fieldMap cx) (\field_vertices -> Eithers.bind (ExtractCore.requireField "edges" (ExtractCore.decodeMap edgeLabel (edgeType t)) fieldMap cx) (\field_edges -> Right (Model.GraphSchema {
           Model.graphSchemaVertices = field_vertices,
           Model.graphSchemaEdges = field_edges}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.pg.model.GraphSchema")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.model.Label
 label :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Model.Label
 label cx raw =
@@ -193,7 +193,7 @@ label cx raw =
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.model.LazyGraph
-lazyGraph :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.LazyGraph t0)
+lazyGraph :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError v) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.LazyGraph v)
 lazyGraph v cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
@@ -201,9 +201,9 @@ lazyGraph v cx raw =
         in (Eithers.bind (ExtractCore.requireField "vertices" (ExtractCore.decodeList (vertex v)) fieldMap cx) (\field_vertices -> Eithers.bind (ExtractCore.requireField "edges" (ExtractCore.decodeList (edge v)) fieldMap cx) (\field_edges -> Right (Model.LazyGraph {
           Model.lazyGraphVertices = field_vertices,
           Model.lazyGraphEdges = field_edges}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.pg.model.LazyGraph")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.model.Property
-property :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.Property t0)
+property :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError v) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.Property v)
 property v cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
@@ -211,7 +211,7 @@ property v cx raw =
         in (Eithers.bind (ExtractCore.requireField "key" propertyKey fieldMap cx) (\field_key -> Eithers.bind (ExtractCore.requireField "value" v fieldMap cx) (\field_value -> Right (Model.Property {
           Model.propertyKey = field_key,
           Model.propertyValue = field_value}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.pg.model.Property")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.model.PropertyKey
 propertyKey :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Model.PropertyKey
 propertyKey cx raw =
@@ -223,7 +223,7 @@ propertyKey cx raw =
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.model.PropertyType
-propertyType :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.PropertyType t0)
+propertyType :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.PropertyType t)
 propertyType t cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
@@ -236,9 +236,9 @@ propertyType t cx raw =
           Model.propertyTypeKey = field_key,
           Model.propertyTypeValue = field_value,
           Model.propertyTypeRequired = field_required})))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.pg.model.PropertyType")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.model.Vertex
-vertex :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.Vertex t0)
+vertex :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError v) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.Vertex v)
 vertex v cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
@@ -247,7 +247,7 @@ vertex v cx raw =
           Model.vertexLabel = field_label,
           Model.vertexId = field_id,
           Model.vertexProperties = field_properties})))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.pg.model.Vertex")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.model.VertexLabel
 vertexLabel :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Model.VertexLabel
 vertexLabel cx raw =
@@ -259,7 +259,7 @@ vertexLabel cx raw =
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.model.VertexType
-vertexType :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.VertexType t0)
+vertexType :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.VertexType t)
 vertexType t cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
@@ -268,9 +268,9 @@ vertexType t cx raw =
           Model.vertexTypeLabel = field_label,
           Model.vertexTypeId = field_id,
           Model.vertexTypeProperties = field_properties})))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.pg.model.VertexType")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.model.VertexWithAdjacentEdges
-vertexWithAdjacentEdges :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.VertexWithAdjacentEdges t0)
+vertexWithAdjacentEdges :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError v) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Model.VertexWithAdjacentEdges v)
 vertexWithAdjacentEdges v cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
@@ -279,4 +279,4 @@ vertexWithAdjacentEdges v cx raw =
           Model.vertexWithAdjacentEdgesVertex = field_vertex,
           Model.vertexWithAdjacentEdgesIns = field_ins,
           Model.vertexWithAdjacentEdgesOuts = field_outs})))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.pg.model.VertexWithAdjacentEdges")) (ExtractCore.stripWithDecodingError cx raw)

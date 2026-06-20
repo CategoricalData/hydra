@@ -184,7 +184,7 @@ termToDotStmts namespaces term =
                               let tls = termLabel True namespaces t
                                   l = Pairs.first tls
                                   s = Pairs.second tls
-                              in (Names.uniqueLabel vis l, s)
+                              in (Names.chooseUniqueLabel vis l, s)
                     labstyle = Optionals.cases mlabstyle (labelOf visited currentTerm) (\ls -> ls)
                     label = Pairs.first labstyle
                     style = Pairs.second labstyle
@@ -217,7 +217,7 @@ termToDotStmts namespaces term =
                     let v = Core.lambdaParameter v0
                         body = Core.lambdaBody v0
                         vstr = Core.unName v
-                        varLabel = Names.uniqueLabel selfVisited vstr
+                        varLabel = Names.chooseUniqueLabel selfVisited vstr
                         varId = Dot.Id varLabel
                         visited1 = Sets.insert varLabel selfVisited
                         ids1 = Maps.insert v varId ids
