@@ -5,14 +5,14 @@
 # upload-ready release artifacts.
 #
 # Release gate vs. quality check (the cohesive principle, #418): the script
-# HARD-FAILS (blocks the release) only on artifacts that 0.16.0 actually ships —
-# Haskell (Hackage: hydra-kernel/hydra-haskell/hydra), Java (Maven Central, via
-# the hydra-java rollup), Python (PyPI/conda) — plus version sync, the JSON
-# kernel, and lexicon freshness. Targets that are NOT released yet (Scala, the
-# Lisp dialects, and the Java bindings under bindings/java/) are run as
-# non-blocking QUALITY CHECKS: a failure there is a WARNING, not an ERROR. When
-# one of those becomes a released artifact, promote its step from WARNING to
-# ERROR (gate).
+# HARD-FAILS (blocks the release) only on artifacts that are actually shipped —
+# Haskell (Hackage: hydra-kernel/hydra-haskell/hydra), Java (Maven Central,
+# per-package), Scala (Maven Central, per-package, #491), Python (PyPI/conda)
+# — plus version sync, the JSON kernel, and lexicon freshness. Targets that are
+# NOT released yet (the Lisp dialects and the Java bindings under bindings/java/)
+# are run as non-blocking QUALITY CHECKS: a failure there is a WARNING, not an
+# ERROR. When one of those becomes a released artifact, promote its step from
+# WARNING to ERROR (gate).
 #
 # Steps performed:
 #   1.  Version synchronization across all implementations                 [gate]
@@ -219,12 +219,11 @@ else
     WARNINGS=$((WARNINGS + 1))
 fi
 
-# --- Step 5: Scala build and tests (quality check, NOT a release gate) ---
-# Scala is not a released artifact (nothing is published to Maven Central / any
-# registry for the Scala target), so a Scala failure is a non-blocking WARNING,
-# not a release gate. When Scala becomes a released target, promote this to a
-# gate (ERRORS). (#418)
-step 5 $TOTAL_STEPS "Running Scala build and tests (quality check)"
+# --- Step 5: Scala build and tests (release gate, #491) ---
+# Scala is a released artifact on Maven Central (per-package under
+# net.fortytwo.hydra, published via heads/scala/bin/publish-sbt.sh), so a
+# Scala test failure BLOCKS the release.
+step 5 $TOTAL_STEPS "Running Scala build and tests"
 echo ""
 
 cd "$HYDRA_ROOT/packages/hydra-scala"
@@ -233,8 +232,8 @@ if sbt test 2>&1 | tee "$LOG_DIR/scala.log"; then
     echo "  OK: Scala tests passed"
 else
     echo ""
-    echo "  WARNING: Scala tests failed (not a release gate; see verify-logs/scala.log)"
-    WARNINGS=$((WARNINGS + 1))
+    echo "  ERROR: Scala tests failed (see verify-logs/scala.log)" >&2
+    ERRORS=$((ERRORS + 1))
 fi
 
 # --- Step 6: Lisp tests (quality check, NOT a release gate) ---
