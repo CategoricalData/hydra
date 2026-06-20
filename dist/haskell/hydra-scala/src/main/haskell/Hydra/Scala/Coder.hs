@@ -518,41 +518,41 @@ encodeType cx g t =
             sdom],
           Syntax.functionTypeRes = scod})))))
       Core.TypeList v0 -> Eithers.bind (encodeType cx g v0) (\slt -> Right (Utils.stapply1 (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-        Syntax.nameTypeValue = "Seq"}))) slt))
+        Syntax.nameTypeValue = "scala.collection.immutable.Seq"}))) slt))
       Core.TypeLiteral v0 -> case v0 of
         Core.LiteralTypeBinary -> Right (Utils.stapply (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-          Syntax.nameTypeValue = "Array"}))) [
+          Syntax.nameTypeValue = "scala.Array"}))) [
           Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-            Syntax.nameTypeValue = "Byte"}))])
+            Syntax.nameTypeValue = "scala.Byte"}))])
         Core.LiteralTypeBoolean -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-          Syntax.nameTypeValue = "Boolean"})))
+          Syntax.nameTypeValue = "scala.Boolean"})))
         Core.LiteralTypeDecimal -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-          Syntax.nameTypeValue = "BigDecimal"})))
+          Syntax.nameTypeValue = "scala.math.BigDecimal"})))
         Core.LiteralTypeFloat v1 -> case v1 of
           Core.FloatTypeFloat32 -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-            Syntax.nameTypeValue = "Float"})))
+            Syntax.nameTypeValue = "scala.Float"})))
           Core.FloatTypeFloat64 -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-            Syntax.nameTypeValue = "Double"})))
+            Syntax.nameTypeValue = "scala.Double"})))
           _ -> Left (Errors.ErrorOther (Errors.OtherError "unsupported float type"))
         Core.LiteralTypeInteger v1 -> case v1 of
           Core.IntegerTypeBigint -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-            Syntax.nameTypeValue = "BigInt"})))
+            Syntax.nameTypeValue = "scala.math.BigInt"})))
           Core.IntegerTypeInt8 -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-            Syntax.nameTypeValue = "Byte"})))
+            Syntax.nameTypeValue = "scala.Byte"})))
           Core.IntegerTypeInt16 -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-            Syntax.nameTypeValue = "Short"})))
+            Syntax.nameTypeValue = "scala.Short"})))
           Core.IntegerTypeInt32 -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-            Syntax.nameTypeValue = "Int"})))
+            Syntax.nameTypeValue = "scala.Int"})))
           Core.IntegerTypeInt64 -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-            Syntax.nameTypeValue = "Long"})))
+            Syntax.nameTypeValue = "scala.Long"})))
           Core.IntegerTypeUint8 -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-            Syntax.nameTypeValue = "Byte"})))
+            Syntax.nameTypeValue = "scala.Byte"})))
           Core.IntegerTypeUint16 -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-            Syntax.nameTypeValue = "Int"})))
+            Syntax.nameTypeValue = "scala.Int"})))
           Core.IntegerTypeUint32 -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-            Syntax.nameTypeValue = "Long"})))
+            Syntax.nameTypeValue = "scala.Long"})))
           Core.IntegerTypeUint64 -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-            Syntax.nameTypeValue = "BigInt"})))
+            Syntax.nameTypeValue = "scala.math.BigInt"})))
           _ -> Left (Errors.ErrorOther (Errors.OtherError "unsupported integer type"))
         Core.LiteralTypeString -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
           Syntax.nameTypeValue = "scala.Predef.String"})))
@@ -561,9 +561,9 @@ encodeType cx g t =
         let kt = Core.mapTypeKeys v0
             vt = Core.mapTypeValues v0
         in (Eithers.bind (encodeType cx g kt) (\skt -> Eithers.bind (encodeType cx g vt) (\svt -> Right (Utils.stapply2 (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-          Syntax.nameTypeValue = "Map"}))) skt svt))))
+          Syntax.nameTypeValue = "scala.collection.immutable.Map"}))) skt svt))))
       Core.TypeOptional v0 -> Eithers.bind (encodeType cx g v0) (\sot -> Right (Utils.stapply1 (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-        Syntax.nameTypeValue = "Option"}))) sot))
+        Syntax.nameTypeValue = "scala.Option"}))) sot))
       Core.TypePair v0 ->
         let ft = Core.pairTypeFirst v0
             st = Core.pairTypeSecond v0
