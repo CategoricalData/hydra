@@ -188,11 +188,7 @@ scalaReservedWords = define "scalaReservedWords" $
       "Dynamic", "Enumeration", "Equals", "Float", "Function", "Int", "Long", "MatchError", "None",
       "Nothing", "Null", "Option", "PartialFunction", "Predef", "Product", "Proxy",
       "SerialVersionUID", "Short", "Singleton", "Some", "Specializable", "StringContext",
-      "Symbol", "Unit", "ValueOf"],
-  "hydraScalaKeywords">:
-    doc "Reserved words which are specific to Hydra" $
-    list $ string <$> []] $
+      "Symbol", "Unit", "ValueOf"]] $
   Sets.fromList $ Lists.concat $ list [
     var "keywords",
-    var "classNames",
-    var "hydraScalaKeywords"]
+    var "classNames"]
