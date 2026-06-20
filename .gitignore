@@ -69,46 +69,10 @@ docs/reviews/
 docs/work/
 
 # Package distributions.
-# dist/json/ is the source of truth (tracked). dist/haskell/ is tracked
-# through the 0.15 release to support bootstrapping from a fresh clone.
-# All other target-language trees are regenerated from dist/json/ and
-# not checked in.
-#
-# Exception within the tracked dist/haskell/ tree (#418): the hand-written
-# distribution-package content that sync-haskell.sh OVERLAYS from its canonical
-# home under the top-level overlay/haskell/ tree is NOT committed — it would
-# duplicate the canonical source, and the whole dist/haskell/ tree leaves Git
-# after 0.16.0 anyway. The canonical copies under overlay/haskell/ ARE tracked.
-#   - hydra umbrella package (entirely copied)
-dist/haskell/hydra/
-#   - hydra-kernel hand-written runtime (copied from dist-packages/hydra-kernel/)
-dist/haskell/hydra-kernel/src/main/haskell/Hydra/Settings.hs
-dist/haskell/hydra-kernel/src/main/haskell/Hydra/Kernel.hs
-dist/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib/
-dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Literals.hs
-dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Meta/Common.hs
-#   - hydra-kernel hand-written test bridge (overlaid from overlay/haskell/.../src/test/)
-dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/TestEnv.hs
-
-dist/clojure/
-dist/common-lisp/
-dist/coq/
-dist/emacs-lisp/
-dist/go/
-dist/java/
-dist/python/
-dist/scala/
-dist/scheme/
-dist/typescript/
-dist/wasm/
-
-# Test-cache artifacts written by Layer 2.5 testers.
-dist/haskell/test-cache.json
-
-# Per-package input-hash cache stamps written by assemble-distribution.sh
-# to short-circuit redundant work. Local caches, not part of the build.
-dist/haskell/*/.main-input-hash.txt
-dist/haskell/*/.test-input-hash.txt
+# dist/json/ is the source of truth and remains tracked; .gitignore has no
+# effect on already-tracked files, so "dist/*/" safely covers all generated
+# subdirectories without touching dist/json/.
+dist/*/
 
 # Build-cache directories. Each dist/<lang>/<pkg>/build/ holds local
 # cache state (digest.json files for the sync pipeline's freshness
