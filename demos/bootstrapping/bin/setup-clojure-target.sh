@@ -16,6 +16,10 @@ fi
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 HYDRA_CLOJURE_DIR="$HYDRA_ROOT/heads/lisp/clojure"
+# Shipped runtime (hand-written overlay + generated) lives under dist/, not heads/, since #434
+# migrated the Clojure runtime out of the head into overlay/clojure (copied into dist/clojure by sync).
+# The head retains only generation drivers + test infra, which we still source from $HYDRA_CLOJURE_DIR.
+HYDRA_CLOJURE_DIST="$HYDRA_ROOT/dist/clojure/hydra-kernel"
 CLOJURE_RESOURCES="$SCRIPT_DIR/../resources/clojure"
 
 # Clean and create output directory
@@ -34,17 +38,21 @@ echo "Copying static resources for Clojure target..."
 echo "  Copying build files..."
 cp "$CLOJURE_RESOURCES/deps.edn" "$OUTPUT_DIR/"
 
-# Hand-written source files (primitive libraries, DSL).
+# Hand-written runtime + generated kernel sources (primitive libraries, DSL).
+# Sourced from dist/ (= overlay + generated) since #434 moved the hand-written runtime
+# (incl. hydra/lib/libraries.clj) out of the head; copying from heads/ would miss it.
 echo "  Copying hand-written source files..."
 mkdir -p "$OUTPUT_DIR/src/main/clojure"
-cp -r "$HYDRA_CLOJURE_DIR/src/main/clojure/hydra" "$OUTPUT_DIR/src/main/clojure/"
+cp -r "$HYDRA_CLOJURE_DIST/src/main/clojure/hydra" "$OUTPUT_DIR/src/main/clojure/"
 
-# Test infrastructure
+# Test infrastructure. run_tests.clj is the head's own runner entry point (stays in heads/);
+# the hydra/ test tree (incl. hand-written helpers testEnv.clj/testGraph.clj migrated to overlay
+# by #434, plus generated test modules) comes from dist/ — copying it from heads/ would miss them.
 echo "  Copying test infrastructure..."
 mkdir -p "$OUTPUT_DIR/src/test/clojure"
 cp "$HYDRA_CLOJURE_DIR/src/test/clojure/run_tests.clj" "$OUTPUT_DIR/src/test/clojure/"
-if [ -d "$HYDRA_CLOJURE_DIR/src/test/clojure/hydra" ]; then
-    cp -r "$HYDRA_CLOJURE_DIR/src/test/clojure/hydra" "$OUTPUT_DIR/src/test/clojure/"
+if [ -d "$HYDRA_CLOJURE_DIST/src/test/clojure/hydra" ]; then
+    cp -r "$HYDRA_CLOJURE_DIST/src/test/clojure/hydra" "$OUTPUT_DIR/src/test/clojure/"
 fi
 
 # Summary

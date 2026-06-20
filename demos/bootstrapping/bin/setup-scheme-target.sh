@@ -14,6 +14,10 @@ fi
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 HYDRA_SCHEME_DIR="$HYDRA_ROOT/heads/lisp/scheme"
+# Shipped runtime + shims + test tree (hand-written overlay + generated) live under dist/, not heads/,
+# since #434 migrated the Scheme sources into overlay/scheme (copied into dist/scheme by sync). The head
+# retains only generation drivers + the run-tests entry point, still sourced from $HYDRA_SCHEME_DIR.
+HYDRA_SCHEME_DIST="$HYDRA_ROOT/dist/scheme/hydra-kernel"
 
 # Clean and create output directory
 echo "Preparing output directory: $OUTPUT_DIR"
@@ -23,37 +27,31 @@ mkdir -p "$OUTPUT_DIR"
 # Copy static resources
 echo "Copying static resources for Scheme target..."
 
-# Hand-written source files (primitives, loader, prims)
+# Hand-written runtime + generated kernel sources (primitives, loader, prims), incl. the vhash-based
+# hydra/scheme/lib/{maps,sets}.scm (relocated by #473), the bundled srfi/ implementations, and the
+# (scheme ...) compatibility shims. All sourced from dist/ (= overlay + generated) since #434 moved
+# the hand-written Scheme runtime out of the head; copying from heads/ would miss them.
 echo "  Copying hand-written source files..."
 mkdir -p "$OUTPUT_DIR/src/main/scheme"
-cp -r "$HYDRA_SCHEME_DIR/src/main/scheme/hydra" "$OUTPUT_DIR/src/main/scheme/"
-# maps.scm and sets.scm use Guile-specific vhash (ice-9 vlist). #473 Step 0 relocated the native lib
-# impls from hydra/lib/ to hydra/scheme/lib/, so these live there now (the whole-tree copy above already
-# brings them; this explicit copy is kept to mirror the historical intent and guard against partial
-# trees). Source AND dest are the relocated hydra/scheme/lib/ path.
-echo "  Ensuring vhash-based maps/sets present (relocated to hydra/scheme/lib by #473)..."
-cp "$HYDRA_SCHEME_DIR/src/main/scheme/hydra/scheme/lib/maps.scm" "$OUTPUT_DIR/src/main/scheme/hydra/scheme/lib/maps.scm"
-cp "$HYDRA_SCHEME_DIR/src/main/scheme/hydra/scheme/lib/sets.scm" "$OUTPUT_DIR/src/main/scheme/hydra/scheme/lib/sets.scm"
-# Copy bundled SRFI implementations (e.g., SRFI-151 for bitwise ops)
-if [ -d "$HYDRA_SCHEME_DIR/src/main/scheme/srfi" ]; then
-    cp -r "$HYDRA_SCHEME_DIR/src/main/scheme/srfi" "$OUTPUT_DIR/src/main/scheme/"
+cp -r "$HYDRA_SCHEME_DIST/src/main/scheme/hydra" "$OUTPUT_DIR/src/main/scheme/"
+if [ -d "$HYDRA_SCHEME_DIST/src/main/scheme/srfi" ]; then
+    cp -r "$HYDRA_SCHEME_DIST/src/main/scheme/srfi" "$OUTPUT_DIR/src/main/scheme/"
 fi
-# Copy compatibility shims (e.g., (scheme bytevector) for Guile)
-if [ -d "$HYDRA_SCHEME_DIR/src/main/scheme/scheme" ]; then
-    cp -r "$HYDRA_SCHEME_DIR/src/main/scheme/scheme" "$OUTPUT_DIR/src/main/scheme/"
+if [ -d "$HYDRA_SCHEME_DIST/src/main/scheme/scheme" ]; then
+    cp -r "$HYDRA_SCHEME_DIST/src/main/scheme/scheme" "$OUTPUT_DIR/src/main/scheme/"
 fi
-for f in "$HYDRA_SCHEME_DIR/src/main/scheme"/*.scm "$HYDRA_SCHEME_DIR/src/main/scheme"/*.sld; do
+for f in "$HYDRA_SCHEME_DIST/src/main/scheme"/*.scm "$HYDRA_SCHEME_DIST/src/main/scheme"/*.sld; do
     [ -f "$f" ] && cp "$f" "$OUTPUT_DIR/src/main/scheme/"
 done
 
 # Test entry point
 echo "  Copying test infrastructure..."
 mkdir -p "$OUTPUT_DIR/src/test/scheme"
-for f in "$HYDRA_SCHEME_DIR/src/test/scheme"/*.scm "$HYDRA_SCHEME_DIR/src/test/scheme"/*.sld; do
+for f in "$HYDRA_SCHEME_DIST/src/test/scheme"/*.scm "$HYDRA_SCHEME_DIST/src/test/scheme"/*.sld; do
     [ -f "$f" ] && cp "$f" "$OUTPUT_DIR/src/test/scheme/"
 done
-if [ -d "$HYDRA_SCHEME_DIR/src/test/scheme/hydra" ]; then
-    cp -r "$HYDRA_SCHEME_DIR/src/test/scheme/hydra" "$OUTPUT_DIR/src/test/scheme/"
+if [ -d "$HYDRA_SCHEME_DIST/src/test/scheme/hydra" ]; then
+    cp -r "$HYDRA_SCHEME_DIST/src/test/scheme/hydra" "$OUTPUT_DIR/src/test/scheme/"
 fi
 
 # Top-level run-tests entry point

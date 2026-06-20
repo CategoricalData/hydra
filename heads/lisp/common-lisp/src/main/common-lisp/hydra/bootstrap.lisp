@@ -54,17 +54,20 @@
 (let* ((script-path (or *load-truename*
                         (merge-pathnames "hydra/bootstrap.lisp"
                           (make-pathname :directory (pathname-directory (truename *default-pathname-defaults*))))))
-       (hydra-dir (make-pathname :directory (pathname-directory script-path))))
-  ;; Load the kernel loader
-  (load (merge-pathnames "loader.lisp" hydra-dir))
-  ;; Load JSON reader
-  (load (merge-pathnames "json-reader.lisp" hydra-dir))
-  ;; Override *hydra-gen-main-dir* to point at the dist/ generated content
-  ;; (loader.lisp defaults to heads/lisp/common-lisp/src/gen-main/..., which no
-  ;; longer exists; mirrors the override in run-tests.lisp).
-  (setf *hydra-gen-main-dir*
-        (merge-pathnames "../../../../../../../dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/"
+       (hydra-dir (make-pathname :directory (pathname-directory script-path)))
+       ;; #434 migrated the runtime (loader.lisp, json-reader.lisp, gen-main content) out of the head
+       ;; into overlay -> dist/common-lisp/hydra-kernel, leaving only this driver (bootstrap.lisp) in
+       ;; the head. Load the runtime from dist, not hydra-dir (heads, now empty).
+       (dist-hydra-dir (merge-pathnames
+                         "../../../../../../../dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/"
                          hydra-dir)))
+  ;; Load the kernel loader
+  (load (merge-pathnames "loader.lisp" dist-hydra-dir))
+  ;; Load JSON reader
+  (load (merge-pathnames "json-reader.lisp" dist-hydra-dir))
+  ;; Point *hydra-gen-main-dir* at the dist/ generated content (loader.lisp defaults to
+  ;; heads/lisp/common-lisp/src/gen-main/..., which no longer exists; mirrors run-tests.lisp).
+  (setf *hydra-gen-main-dir* dist-hydra-dir))
 
 (format t "Loading kernel...~%")
 (force-output)
