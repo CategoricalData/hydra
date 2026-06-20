@@ -1,7 +1,9 @@
 {
   "currentVersion": "0.17.0",
   "hostVersion": "0.16.1",
-  "hostOverrides": {},
+  "hostOverrides": {
+    "haskell": "local"
+  },
   "group": "net.fortytwo.hydra",
   "author": "Joshua Shinavier and collaborators",
   "url": "https://github.com/CategoricalData/hydra",
