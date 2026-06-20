@@ -14,6 +14,9 @@ fi
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 HYDRA_SCHEME_DIR="$HYDRA_ROOT/heads/lisp/scheme"
+# run-tests.scm is a head-only entry point; the hand-written test_env.scm helper was migrated to
+# overlay → dist by #434, so source it from dist (copying from heads/ silently no-ops, breaking the import).
+HYDRA_SCHEME_DIST="$HYDRA_ROOT/dist/scheme/hydra-kernel"
 
 # Defensive re-copy of static resources that setup-scheme-target.sh laid down.
 # In the typescript-host cells (#444 sibling), run-tests.scm was observed missing
@@ -28,7 +31,7 @@ fi
 # (import (hydra test test_env)) and references hydra_test_test_env_test_*
 # directly. Copy the hand-written test_env.scm into the dist tree so the
 # generated import resolves (load path includes src/test/scheme).
-TEST_ENV_SRC="$HYDRA_SCHEME_DIR/src/test/scheme/hydra/test/test_env.scm"
+TEST_ENV_SRC="$HYDRA_SCHEME_DIST/src/test/scheme/hydra/test/test_env.scm"
 TEST_ENV_DST="$OUTPUT_DIR/src/test/scheme/hydra/test/test_env.scm"
 if [ -f "$TEST_ENV_SRC" ]; then
     mkdir -p "$(dirname "$TEST_ENV_DST")"

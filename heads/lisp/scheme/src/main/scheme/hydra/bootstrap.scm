@@ -90,8 +90,34 @@
                 (string-append (getcwd) "/" dir))))
         (string-append (getcwd) "/"))))
 
-;; Load the kernel loader
-(load (string-append *script-dir* "loader.scm"))
+;; Determine the gen-main base directory: resolves to
+;;   <worktree>/dist/scheme/hydra-kernel/src/main/scheme/hydra/
+;; given that *script-dir* is
+;;   <worktree>/heads/lisp/scheme/src/main/scheme/hydra/
+;; (find "heads/lisp/scheme/" and replace with "dist/scheme/hydra-kernel/").
+;; Defined here, immediately after *script-dir*, so the runtime loads below (loader.scm etc.,
+;; migrated to dist by #434) can reference it.
+(define *gen-main-base*
+  (let* ((main-dir *script-dir*)
+         (len (string-length main-dir))
+         (needle "heads/lisp/scheme/")
+         (nlen (string-length needle))
+         (pos (let loop ((i 0))
+                (cond
+                  ((> (+ i nlen) len) #f)
+                  ((equal? (substring main-dir i (+ i nlen)) needle) i)
+                  (else (loop (+ i 1)))))))
+    (if pos
+        (string-append (substring main-dir 0 pos)
+                       "dist/scheme/hydra-kernel/"
+                       (substring main-dir (+ pos nlen)))
+        ;; Fallback: legacy gen-main location
+        (string-append main-dir "../../gen-main/scheme/hydra/"))))
+
+;; Load the kernel loader. Use *gen-main-base* (dist), not *script-dir* (heads): #434 migrated the
+;; runtime (loader.scm, json-reader.scm, prims.scm, lib/libraries.scm, scheme/lib/*) out of the head
+;; into overlay → dist/scheme/hydra-kernel, leaving only this driver (bootstrap.scm) in the head.
+(load (string-append *gen-main-base* "loader.scm"))
 ;; Re-import SRFI-9 to override (scheme base) define-record-type from loader
 (use-modules (srfi srfi-9))
 ;; Import bitwise operations (arithmetic-shift etc.) needed by literals
@@ -105,8 +131,8 @@
 ;; #473 redirect helpers: directory walk + whole-file read (Guile-specific; the driver already runs
 ;; under Guile — see usage banner + (ice-9 vlist) above).
 (use-modules (ice-9 ftw) (ice-9 textual-ports))
-;; Load the JSON reader
-(load (string-append *script-dir* "json-reader.scm"))
+;; Load the JSON reader (migrated to dist by #434 — see loader.scm note above)
+(load (string-append *gen-main-base* "json-reader.scm"))
 
 ;; Convert a define-record-type form to alist-based constructor/accessors.
 ;; Guile's built-in define-record-type creates syntax-transformer accessors
@@ -174,27 +200,6 @@
                 (else (eval form (interaction-environment))))
               (loop))))))))
 
-;; Determine the gen-main base directory: resolves to
-;;   <worktree>/dist/scheme/hydra-kernel/src/main/scheme/hydra/
-;; given that *script-dir* is
-;;   <worktree>/heads/lisp/scheme/src/main/scheme/hydra/
-;; (find "heads/lisp/scheme/" and replace with "dist/scheme/hydra-kernel/").
-(define *gen-main-base*
-  (let* ((main-dir *script-dir*)
-         (len (string-length main-dir))
-         (needle "heads/lisp/scheme/")
-         (nlen (string-length needle))
-         (pos (let loop ((i 0))
-                (cond
-                  ((> (+ i nlen) len) #f)
-                  ((equal? (substring main-dir i (+ i nlen)) needle) i)
-                  (else (loop (+ i 1)))))))
-    (if pos
-        (string-append (substring main-dir 0 pos)
-                       "dist/scheme/hydra-kernel/"
-                       (substring main-dir (+ pos nlen)))
-        ;; Fallback: legacy gen-main location
-        (string-append main-dir "../../gen-main/scheme/hydra/"))))
 
 (display "Loading kernel...\n")
 (force-output (current-output-port))
@@ -202,12 +207,12 @@
 ;; Load native libraries FIRST (gen-main modules reference hydra_lib_* symbols)
 (display "  Loading native libraries...\n")
 (force-output (current-output-port))
-;; Load bytevector compatibility shim (provides snap-to-float32)
-(hydra-load-native-lib (string-append *script-dir* "../scheme/bytevector.sld"))
+;; Load bytevector compatibility shim (provides snap-to-float32). Migrated to dist by #434 (see above).
+(hydra-load-native-lib (string-append *gen-main-base* "../scheme/bytevector.sld"))
 ;; #473 Step 0 relocated the native lib impls from hydra/lib/ to hydra/scheme/lib/.
 (for-each
   (lambda (f)
-    (hydra-load-native-lib (string-append *script-dir* "scheme/lib/" f)))
+    (hydra-load-native-lib (string-append *gen-main-base* "scheme/lib/" f)))
   '("equality.scm" "maps.scm" "sets.scm" "lists.scm" "strings.scm"
     "logic.scm" "math.scm" "chars.scm" "eithers.scm" "literals.scm"
     "optionals.scm" "pairs.scm" "regex.scm"))
@@ -281,7 +286,7 @@
 ;; Load prims and libraries
 (display "  Loading prims...\n")
 (force-output (current-output-port))
-(hydra-load-native-lib (string-append *script-dir* "prims.scm"))
+(hydra-load-native-lib (string-append *gen-main-base* "prims.scm"))
 ;; #473 KNOWN GAP (scheme-host self-host): the registry (libraries.scm) imports the generated
 ;; hydra.lib.* PrimitiveDefinition def-modules under a `def:` prefix. Flat-preloading those def-modules
 ;; pollutes the global namespace — their exported hydra_lib_<sub>_<fn> symbols (PrimitiveDefinition DATA)
@@ -290,7 +295,7 @@
 ;; %load-path (so only the registry's `def:`-prefixed import sees them), not a flat global load. Deferred;
 ;; scheme-host self-host is validated only up to gen (the driver lib pass + redirect are unit-tested and
 ;; the relocated-path loaders are fixed). See project_473_self_host_lib_pass_gap / the plan doc.
-(hydra-load-native-lib (string-append *script-dir* "lib/libraries.scm"))
+(hydra-load-native-lib (string-append *gen-main-base* "lib/libraries.scm"))
 
 ;; Load coder modules based on target. Coder modules use define-record-type
 ;; with field names where the accessor needs to be a first-class procedure
