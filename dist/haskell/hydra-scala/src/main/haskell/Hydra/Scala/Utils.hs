@@ -90,6 +90,12 @@ sassign lhs rhs =
     Syntax.DataAssign (Syntax.AssignData {
       Syntax.assignDataLhs = lhs,
       Syntax.assignDataRhs = rhs})
+-- | Like scalaEscapeName, but also renames 'values' to 'values_' to avoid conflict with Scala 3 enum's synthesized values() method
+scalaEscapeEnumCaseName :: String -> String
+scalaEscapeEnumCaseName s =
+
+      let renamed = Logic.ifElse (Equality.equal s "values") "values_" s
+      in (scalaEscapeName renamed)
 -- | Sanitize a name for Scala: escape reserved words, replace invalid characters
 scalaEscapeName :: String -> String
 scalaEscapeName s =

@@ -328,22 +328,17 @@ encodeFunction = def "encodeFunction" $
         Optionals.cases
           (var "arg")
           -- Unapplied projection: generate lambda x => x.fieldName
-          -- Try findSdom first (full type with type params), fall back to Projection.typeName
+          -- Use findSdom for the parameter type annotation when available.
+          -- The Projection.typeName fallback is intentionally dropped: it yields an
+          -- unparameterized bare type (e.g. Vertex instead of Vertex[T0]), which is
+          -- a hard error in Scala 3. Omitting the annotation lets Scala infer the
+          -- correct parameterized type from context instead.
           (Eithers.bind
             (Eithers.either_
-              -- findSdom failed: fall back to Projection.typeName
-              (constant $ Eithers.bind
-                (asTerm encodeType @@ var "cx" @@ var "g" @@ (Core.typeVariable (var "typeName")))
-                ("st" ~> right (just (var "st"))))
-              -- findSdom succeeded: check if result is Nothing, fall back to typeName
-              ("msdom" ~> Optionals.cases
-                (var "msdom")
-                -- findSdom returned Nothing: fall back to Projection.typeName
-                (Eithers.bind
-                  (asTerm encodeType @@ var "cx" @@ var "g" @@ (Core.typeVariable (var "typeName")))
-                  ("st" ~> right (just (var "st"))))
-                -- findSdom returned Just: use it
-                ("sdom" ~> right (just (var "sdom"))))
+              -- findSdom failed: omit lambda param type annotation
+              (constant $ right nothing)
+              -- findSdom succeeded: use its result (Nothing → omit annotation)
+              ("msdom" ~> right (var "msdom"))
               (asTerm findSdom @@ var "cx" @@ var "g" @@ var "meta"))
             ("msdom" ~>
               right (ScalaUtilsSource.slambda @@ var "pv" @@
@@ -799,18 +794,41 @@ encodeTermDefinition = def "encodeTermDefinition" $
       (Just false)
       [_Type_function>>: constant true,
        _Type_forall>>: ("fa" ~> cases _Type (Strip.deannotateType @@ Core.forallTypeBody (var "fa"))
-         (Just false) [_Type_function>>: constant true])]] $
+         (Just false) [_Type_function>>: constant true])],
+    -- Free unqualified type variables in the type signature (no dots in name).
+    -- A non-function binding with free type vars cannot be a lazy val (Scala vals
+    -- cannot be generic). Emit it as a zero-param def instead.
+    "freeTypeVarsInTyp">: Lists.filter
+      ("v" ~> Logic.not (Lists.elem (int32 46) (Strings.toList (Core.unName (var "v")))))
+      (Sets.toList (Variables.freeVariablesInType @@ var "typ'"))] $
     Logic.ifElse (var "isFunctionType")
       -- Complex binding: extract parameter types from the type signature
       (asTerm encodeComplexTermDef @@ var "cx" @@ var "g" @@ var "lname" @@ var "term" @@ var "typ'")
-      -- Simple binding: encode as val with type annotation
-      (Eithers.bind
-        (asTerm encodeType @@ var "cx" @@ var "g" @@ var "typ'")
-        ("stype" ~>
-          Eithers.bind
-            (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "term")
-            ("rhs" ~>
-              right (mkLazyVal (var "lname") (just (var "stype")) (var "rhs")))))
+      (Logic.ifElse (Lists.null (var "freeTypeVarsInTyp"))
+        -- Simple binding with no free type vars: encode as lazy val
+        (Eithers.bind
+          (asTerm encodeType @@ var "cx" @@ var "g" @@ var "typ'")
+          ("stype" ~>
+            Eithers.bind
+              (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "term")
+              ("rhs" ~>
+                right (mkLazyVal (var "lname") (just (var "stype")) (var "rhs")))))
+        -- Non-function binding with free type vars: emit as zero-param def so type
+        -- params can be declared (lazy val cannot be generic in Scala).
+        (Eithers.bind
+          (asTerm encodeType @@ var "cx" @@ var "g" @@ var "typ'")
+          ("stype" ~>
+            Eithers.bind
+              (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "term")
+              ("rhs" ~> lets [
+                "tparams">: Lists.map (lambda "tv" $ ScalaUtilsSource.stparam @@ var "tv") (var "freeTypeVarsInTyp")] $
+                right (inject _Stat _Stat_defn (inject _Defn _Defn_def (record _DefDefn [
+                  _DefDefn_mods>>: emptyList,
+                  _DefDefn_name>>: record _NameData [_NameData_value>>: wrap _PredefString (var "lname")],
+                  _DefDefn_tparams>>: var "tparams",
+                  _DefDefn_paramss>>: emptyList,
+                  _DefDefn_decltpe>>: just (var "stype"),
+                  _DefDefn_body>>: var "rhs"])))))))
 
 encodeType :: TypedTermDefinition (InferenceContext -> Graph -> Type -> Either Error Scala.Type)
 encodeType = def "encodeType" $
@@ -1152,7 +1170,7 @@ fieldToEnumCase :: TypedTermDefinition (InferenceContext -> Graph -> String -> [
 fieldToEnumCase = def "fieldToEnumCase" $
   doc "Convert a field type to a Scala enum case" $
   lambda "cx" $ lambda "g" $ lambda "parentName" $ lambda "tparams" $ lambda "ft" $ lets [
-    "fname">: ScalaUtilsSource.scalaEscapeName @@ (Core.unName (project _FieldType _FieldType_name @@ var "ft")),
+    "fname">: ScalaUtilsSource.scalaEscapeEnumCaseName @@ (Core.unName (project _FieldType _FieldType_name @@ var "ft")),
     "ftyp">: project _FieldType _FieldType_type @@ var "ft",
     "caseName">: record _NameData [_NameData_value>>: wrap _PredefString (var "fname")],
     "isUnit">: cases _Type (Strip.deannotateType @@ var "ftyp") (Just false) [
