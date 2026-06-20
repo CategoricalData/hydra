@@ -126,6 +126,24 @@
                                 "argument": {"variable": "app"}}}}},
                         "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}}},
                       {
+                        "name": "funcallWhenComputed",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "cases": {
+                                "typeName": "hydra.lisp.syntax.Expression",
+                                "default": {"literal": {"boolean": true}},
+                                "cases": [
+                                  {
+                                    "name": "variable",
+                                    "handler": {
+                                      "lambda": {
+                                        "parameter": "s",
+                                        "domain": {"variable": "hydra.lisp.syntax.VariableReference"},
+                                        "body": {"literal": {"boolean": false}}}}}]}},
+                            "argument": {"variable": "funExpr"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": {"boolean": {}}}}},
+                      {
                         "name": "needsFuncall",
                         "term": {
                           "application": {
@@ -135,26 +153,11 @@
                                 "default": {"literal": {"boolean": false}},
                                 "cases": [
                                   {
+                                    "name": "commonLisp",
+                                    "handler": {"lambda": {"parameter": "u", "domain": {"unit": {}}, "body": {"variable": "funcallWhenComputed"}}}},
+                                  {
                                     "name": "emacsLisp",
-                                    "handler": {
-                                      "lambda": {
-                                        "parameter": "u",
-                                        "domain": {"unit": {}},
-                                        "body": {
-                                          "application": {
-                                            "function": {
-                                              "cases": {
-                                                "typeName": "hydra.lisp.syntax.Expression",
-                                                "default": {"literal": {"boolean": true}},
-                                                "cases": [
-                                                  {
-                                                    "name": "variable",
-                                                    "handler": {
-                                                      "lambda": {
-                                                        "parameter": "s",
-                                                        "domain": {"variable": "hydra.lisp.syntax.VariableReference"},
-                                                        "body": {"literal": {"boolean": false}}}}}]}},
-                                            "argument": {"variable": "funExpr"}}}}}}]}},
+                                    "handler": {"lambda": {"parameter": "u", "domain": {"unit": {}}, "body": {"variable": "funcallWhenComputed"}}}}]}},
                             "argument": {"variable": "d"}}},
                         "typeScheme": {"variables": [], "body": {"literal": {"boolean": {}}}}},
                       {
