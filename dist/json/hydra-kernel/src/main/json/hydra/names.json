@@ -30,6 +30,92 @@
   "definitions": [
     {
       "term": {
+        "name": "hydra.names.chooseUniqueLabel",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"set": {"literal": {"string": {}}}}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"string": {}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "reserved",
+                "domain": {"set": {"literal": {"string": {}}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "label",
+                    "domain": {"literal": {"string": {}}},
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "tryLabel",
+                            "term": {
+                              "lambda": {
+                                "parameter": "index",
+                                "domain": {"literal": {"integer": {"int32": {}}}},
+                                "body": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "candidate",
+                                        "term": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                            "argument": {"variable": "index"}}},
+                                                        "argument": {"literal": {"integer": {"int32": 1}}}}}}},
+                                                "argument": {"variable": "label"}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "label"}}},
+                                                "argument": {"application": {"function": {"variable": "hydra.lib.literals.showInt32"}, "argument": {"variable": "index"}}}}}}},
+                                        "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
+                                    "body": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.member"}, "type": {"literal": {"string": {}}}}},
+                                                        "argument": {"variable": "candidate"}}},
+                                                    "argument": {"variable": "reserved"}}}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {"variable": "tryLabel"},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "index"}}},
+                                                    "argument": {"literal": {"integer": {"int32": 1}}}}}}}}},
+                                        "argument": {"variable": "candidate"}}}}}}},
+                            "typeScheme": {
+                              "variables": [],
+                              "body": {"function": {"domain": {"literal": {"integer": {"int32": {}}}}, "codomain": {"literal": {"string": {}}}}}}}],
+                        "body": {"application": {"function": {"variable": "tryLabel"}, "argument": {"literal": {"integer": {"int32": 1}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Pick a string label that does not collide with a reserved set, by appending a numeric suffix when necessary"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.names.compactName",
         "signature": {
           "typeParameters": [],
@@ -876,52 +962,6 @@
                   "value": {
                     "literal": {
                       "string": "Restore the original trace from baseCx, while keeping the freshTypeVariableCount from newCx. Used between sibling sub-inferences (e.g. application LHS vs RHS) so that an error in the second sibling doesn't include the first sibling's trace path. Returns a new InferenceContext."}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.names.uniqueLabel",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [
-            {"name": "arg0", "type": {"set": {"literal": {"string": {}}}}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": {"string": {}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "visited",
-                "domain": {"set": {"literal": {"string": {}}}},
-                "body": {
-                  "lambda": {
-                    "parameter": "l",
-                    "domain": {"literal": {"string": {}}},
-                    "body": {
-                      "application": {
-                        "function": {
-                          "application": {
-                            "function": {
-                              "application": {
-                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}},
-                                "argument": {
-                                  "application": {
-                                    "function": {
-                                      "application": {
-                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.member"}, "type": {"literal": {"string": {}}}}},
-                                        "argument": {"variable": "l"}}},
-                                    "argument": {"variable": "visited"}}}}},
-                            "argument": {
-                              "application": {
-                                "function": {"application": {"function": {"variable": "hydra.names.uniqueLabel"}, "argument": {"variable": "visited"}}},
-                                "argument": {
-                                  "application": {
-                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "l"}}},
-                                    "argument": {"literal": {"string": "'"}}}}}}}},
-                        "argument": {"variable": "l"}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Generate a unique label by appending a suffix if the label is already in use"}}}]}}}}},
     {
       "term": {
         "name": "hydra.names.unqualifyName",
