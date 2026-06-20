@@ -538,6 +538,76 @@ dependencies {
 }
 ```
 
+## Scala releases
+
+Hydra-Scala is a **complete Hydra implementation** that passes all tests in the common test suite.
+It requires Scala 3.3 or later and sbt 1.10+.
+
+Starting with 0.17, the Scala release ships **per-package Maven artifacts** under group `net.fortytwo.hydra`,
+mirroring the Java publish set.
+Each `dist/scala/<pkg>/` directory is a self-contained, publishable sbt build with a generated
+`build.sbt` and `project/`.
+The published artifacts are the same nine as the Java set:
+
+| Artifact | Description | `libraryDependencies` |
+|----------|-------------|-----------------------|
+| `hydra-kernel_3` | Core types, terms, DSL, eval, primitives + Scala runtime support. Self-contained. | (none) |
+| `hydra-haskell_3` | Haskell syntax and coder. | `hydra-kernel_3` |
+| `hydra-java_3` | Java syntax, serde, and coder. | `hydra-kernel_3` |
+| `hydra-python_3` | Python syntax and coder. | `hydra-kernel_3` |
+| `hydra-scala_3` | Scala syntax and coder. | `hydra-kernel_3`, `hydra-java_3` |
+| `hydra-lisp_3` | Lisp syntax and the shared coder for the four Lisp dialects. | `hydra-kernel_3` |
+| `hydra-typescript_3` | TypeScript syntax and coder. | `hydra-kernel_3` |
+| `hydra-rdf_3` | RDF, OWL, SHACL, ShEx, XML Schema models. | `hydra-kernel_3` |
+| `hydra-pg_3` _(not yet published)_ | Property graph model, coders, GraphSON, TinkerPop. | `hydra-kernel_3`, `hydra-rdf_3` |
+
+`hydra-pg` is **not** in the current Scala publish set — the generated Scala pg coder has a
+type-variable threading issue that prevents standalone compilation. Track the fix separately before
+adding it (analogous to `hydra-ext` being excluded from the Java and Python publish sets).
+
+Each artifact's `build.sbt` is regenerated from `packages/<pkg>/package.json` and
+`hydra.json:currentVersion` by `bin/lib/generate-scala-package-build.py`, and
+wired into `heads/scala/bin/assemble-distribution.sh` so a clean `bin/sync.sh` produces
+ready-to-publish trees.
+
+The following are Scala-specific release steps:
+
+* Set up your Scala environment (sbt, JDK 11+, GPG).
+* **One-time setup:** Create a Sonatype Central Portal account and obtain a user token at
+  <https://central.sonatype.com/account>.
+  Store credentials in `~/.sbt/1.0/sonatype.sbt` (do NOT check this file in):
+  ```scala
+  credentials += Credentials(
+    "Sonatype Nexus Repository Manager",
+    "central.sonatype.com",
+    "<token-username>",
+    "<token-password>"
+  )
+  ```
+  Or export `SONATYPE_USERNAME` / `SONATYPE_PASSWORD` in the environment.
+  Configure GPG for signing (sbt-pgp reads `~/.gnupg` by default).
+* **Use the orchestrator** `heads/scala/bin/publish-sbt.sh` (analogous to `publish-maven.sh`).
+  Default is a dry run (builds jars locally, no upload); `--upload` does the real Central upload:
+  ```bash
+  heads/scala/bin/publish-sbt.sh             # dry run: build all jars, no upload
+  heads/scala/bin/publish-sbt.sh --upload    # upload pending deployments
+  ```
+  The orchestrator checks dependency closure, publishes each package to the local ivy cache
+  leaves-first (so downstream builds resolve fresh siblings), then runs `sbt publishSigned`
+  per package in topological order.
+* Go to [Deployments](https://central.sonatype.com/publishing/deployments) in the Central Portal.
+  Find the nine deployments, verify they have passed validation, then click "Publish" on each
+  (leaves first).
+
+A Scala consumer adds e.g.:
+```scala
+libraryDependencies += "net.fortytwo.hydra" % "hydra-kernel_3" % "0.17.0"
+```
+or, using sbt's `%%` operator (which appends `_3` automatically):
+```scala
+libraryDependencies += "net.fortytwo.hydra" %% "hydra-kernel" % "0.17.0"
+```
+
 ## Python releases
 
 Hydra-Python is a **complete Hydra implementation** that passes all tests in the common test suite.
