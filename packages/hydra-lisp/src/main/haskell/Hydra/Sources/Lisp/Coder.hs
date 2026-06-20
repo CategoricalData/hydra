@@ -155,14 +155,17 @@ encodeApplication :: TypedTermDefinition (L.Dialect -> InferenceContext -> Graph
 encodeApplication = def "encodeApplication" $
   "dialect" ~> "cx" ~> "g" ~> lambda "rawFun" $ lambda "rawArg" $
     "dFun" <~ (Strip.deannotateTerm @@ var "rawFun") $
-    -- Helper: encode a normal (non-special) application
-    "normal" <~
-      ("fun" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "rawFun") $
+    -- Helper: encode a normal (non-special) application. Wrapped in a 0-arg
+    -- lambda so strict hosts (e.g. self-hosted Clojure) only evaluate it on
+    -- the fallback path; otherwise every application encoded both the special
+    -- and non-special form and the cost grew exponentially with nesting (#479).
+    "normal" <~ ("_" ~>
+      "fun" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "rawFun") $
       "arg" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "rawArg") $
         right (lispApp @@ var "fun" @@ list [var "arg"])) $
     -- Helper: encode a term
     "enc" <~ (lambda "t" $ encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "t") $
-    cases _Term (var "dFun") (Just $ var "normal")
+    cases _Term (var "dFun") (Just $ var "normal" @@ unit)
     [_Term_application>>: lambda "app2" $
        "midFun" <~ Core.applicationFunction (var "app2") $
        "midArg" <~ Core.applicationArgument (var "app2") $
@@ -180,7 +183,7 @@ encodeApplication = def "encodeApplication" $
            right (lispApp @@ (lispApp @@ var "ePrim" @@ list [wrapInThunk @@ var "eDef"])
                           @@ list [var "eArg"]))
          -- Not a 2-arg lazy primitive — check for 3-deep patterns
-         (cases _Term (var "dMidFun") (Just $ var "normal")
+         (cases _Term (var "dMidFun") (Just $ var "normal" @@ unit)
          [_Term_application>>: lambda "app3" $
             "innerFun" <~ Core.applicationFunction (var "app3") $
             "innerArg" <~ Core.applicationArgument (var "app3") $
@@ -217,7 +220,7 @@ encodeApplication = def "encodeApplication" $
                                                @@ list [wrapInThunk @@ var "eN"])
                                    @@ list [var "eJ"]))
                   -- Not a special primitive — encode normally
-                  (var "normal")))])]
+                  (var "normal" @@ unit)))])]
 
 -- | Encode a Hydra field type as a Lisp field definition
 encodeFieldDef :: TypedTermDefinition (FieldType -> L.FieldDefinition)
