@@ -47,6 +47,14 @@ done
 if [ -d "$HYDRA_CL_DIST/src/test/common-lisp/hydra" ]; then
     cp -r "$HYDRA_CL_DIST/src/test/common-lisp/hydra" "$OUTPUT_DIR/src/test/common-lisp/"
 fi
+# Overlay head-only hand-written test files not present in dist (test_runner.lisp,
+# annotation_bindings.lisp). Mirrors setup-emacs-lisp-target.sh's pattern (#496).
+mkdir -p "$OUTPUT_DIR/src/test/common-lisp/hydra"
+for f in annotation_bindings.lisp test_runner.lisp; do
+    if [ -f "$HYDRA_CL_DIR/src/test/common-lisp/hydra/$f" ]; then
+        cp "$HYDRA_CL_DIR/src/test/common-lisp/hydra/$f" "$OUTPUT_DIR/src/test/common-lisp/hydra/$f"
+    fi
+done
 
 # Summary
 STATIC_COUNT=$(find "$OUTPUT_DIR/src/main" -name "*.lisp" 2>/dev/null | wc -l | tr -d ' ')

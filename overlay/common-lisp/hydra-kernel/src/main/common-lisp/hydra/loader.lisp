@@ -81,7 +81,25 @@
                  (boundp sym)
                  (functionp (symbol-value sym))
                  (not (fboundp sym)))
-        (setf (symbol-function sym) (symbol-value sym))))))
+        (setf (symbol-function sym) (symbol-value sym)))))
+  ;; For generated HYDRA_LIB_* symbols whose value is a PrimitiveDefinition (not a
+  ;; function), proxy to the native HYDRA_LISP_LIB_* implementation when available.
+  ;; Bootstrap-generated test_graph.lisp calls e.g. (hydra_lib_maps_from_list ...)
+  ;; in function position; the generated PrimitiveDefinition value won't satisfy
+  ;; functionp, but the corresponding native HYDRA_LISP_LIB_* lambda does.
+  (do-symbols (sym (find-package :cl-user))
+    (let ((name (symbol-name sym)))
+      (when (and (> (length name) 10)
+                 (string= "HYDRA_LIB_" (subseq name 0 10))
+                 (boundp sym)
+                 (not (functionp (symbol-value sym)))
+                 (not (fboundp sym)))
+        (let* ((native-name (concatenate 'string "HYDRA_LISP_" (subseq name 6)))
+               (native-sym (find-symbol native-name (find-package :cl-user))))
+          (when (and native-sym
+                     (boundp native-sym)
+                     (functionp (symbol-value native-sym)))
+            (setf (symbol-function sym) (symbol-value native-sym))))))))
 
 (defun hydra-let-rhs-trivial-p (rhs)
   "True if a let binding's RHS is so cheap that lazy-wrapping would only add
@@ -539,6 +557,9 @@
               (error (e)
                 (push (cons form e) pending))))))
       (setf pending (nreverse pending))
+      ;; Set function bindings after the initial pass so that newly defined
+      ;; HYDRA_ variables have their function cells populated before the first retry.
+      (hydra-set-function-bindings)
       ;; Retry deferred forms up to 10 times to resolve forward references.
       (dotimes (pass 10)
         (when (null pending) (return))
