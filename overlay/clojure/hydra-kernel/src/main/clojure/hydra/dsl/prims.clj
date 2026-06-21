@@ -356,6 +356,40 @@
              (if (= (first sr) :left) sr
                  (list :right (list :pair (list (second fr) (second sr)))))))))))
 
+;; Effectful / nominal type coders (#494)
+;;
+;; effect<t> is transparent in the Lisp dialects (effect<t> = t), so tc-effect reuses the inner
+;; coder's encode/decode and only changes the reported :type. tc-unit and tc-named provide the
+;; unit and nominal-by-name (e.g. hydra.file.FilePath) types used by the files/text signatures.
+;; These coders exist so the standard library can register the effectful primitives' type schemes
+;; for inference name-resolution; the real I/O is performed by the relocated hydra.clojure.lib.*
+;; runtimes (reached via the bootstrap redirect), not through these stub primitive impls.
+
+(defn tc-effect
+  "TermCoder for effect<t>. Transparent: encode/decode pass through the inner coder."
+  [inner-coder]
+  (->hydra_graph_term_coder
+   (list :effect (:type inner-coder))
+   (fn [cx g t] ((.encode inner-coder) cx g t))
+   (fn [cx v] ((.decode inner-coder) cx v))))
+
+(defn tc-unit
+  "TermCoder for the unit type. Represents the unit value as nil at the native level."
+  []
+  (->hydra_graph_term_coder
+   (list :unit nil)
+   (fn [cx g t] (list :right nil))
+   (fn [cx v] (list :right (list :unit)))))
+
+(defn tc-named
+  "TermCoder for a nominal type referenced by name (e.g. hydra.file.FilePath). Passes terms
+   through unchanged; used only for the type-scheme of registered effectful primitives."
+  [type-name]
+  (->hydra_graph_term_coder
+   (list :variable type-name)
+   (fn [cx g t] (list :right t))
+   (fn [cx t] (list :right t))))
+
 ;; Term/variable passthrough coders
 
 (defn tc-variable

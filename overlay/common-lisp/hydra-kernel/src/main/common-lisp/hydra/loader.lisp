@@ -50,13 +50,15 @@
 ;; PrimitiveDefinition def-modules at hydra/lib/. The runtime is plain cl:load'd
 ;; here (no defstruct rewriting); the generated def-modules are loaded via
 ;; hydra-load-file (the rewriting loader) by hydra-load-gen-main.
-(dolist (f '("common_lisp/lib/chars.lisp" "common_lisp/lib/eithers.lisp"
-             "common_lisp/lib/equality.lisp" "common_lisp/lib/lists.lisp"
+(dolist (f '("common_lisp/lib/chars.lisp" "common_lisp/lib/effects.lisp"
+             "common_lisp/lib/eithers.lisp"
+             "common_lisp/lib/equality.lisp" "common_lisp/lib/files.lisp"
+             "common_lisp/lib/lists.lisp"
              "common_lisp/lib/literals.lisp" "common_lisp/lib/logic.lisp"
              "common_lisp/lib/maps.lisp" "common_lisp/lib/math.lisp"
              "common_lisp/lib/optionals.lisp" "common_lisp/lib/pairs.lisp"
              "common_lisp/lib/regex.lisp" "common_lisp/lib/sets.lisp"
-             "common_lisp/lib/strings.lisp"))
+             "common_lisp/lib/strings.lisp" "common_lisp/lib/text.lisp"))
   (load (merge-pathnames f *hydra-loader-dir*)))
 
 ;; Note: prims.lisp and common_lisp/lib/libraries.lisp must be loaded AFTER

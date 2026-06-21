@@ -606,8 +606,10 @@ bootstrap-demo-only).")
                   "test/test_terms.el"
                   "test/test_graph.el"
                   "test/lib/chars.el"
+                  "test/lib/effects.el"
                   "test/lib/eithers.el"
                   "test/lib/equality.el"
+                  "test/lib/files.el"
                   "test/lib/lists.el"
                   "test/lib/literals.el"
                   "test/lib/logic.el"
@@ -675,13 +677,15 @@ bootstrap-demo-only).")
 ;; does NOT collide with the generated hydra.lib.* PrimitiveDefinition modules at
 ;; hydra/lib/. Plain-load it here; the generated def-modules are loaded via the
 ;; rewriting hydra-load-file by hydra-load-gen-main.
-(dolist (f '("emacs_lisp/lib/chars.el" "emacs_lisp/lib/eithers.el"
-             "emacs_lisp/lib/equality.el" "emacs_lisp/lib/lists.el"
+(dolist (f '("emacs_lisp/lib/chars.el" "emacs_lisp/lib/effects.el"
+             "emacs_lisp/lib/eithers.el"
+             "emacs_lisp/lib/equality.el" "emacs_lisp/lib/files.el"
+             "emacs_lisp/lib/lists.el"
              "emacs_lisp/lib/literals.el" "emacs_lisp/lib/logic.el"
              "emacs_lisp/lib/maps.el" "emacs_lisp/lib/math.el"
              "emacs_lisp/lib/optionals.el" "emacs_lisp/lib/pairs.el"
              "emacs_lisp/lib/regex.el" "emacs_lisp/lib/sets.el"
-             "emacs_lisp/lib/strings.el"))
+             "emacs_lisp/lib/strings.el" "emacs_lisp/lib/text.el"))
   (load (expand-file-name f hydra-loader-dir) nil t))
 
 (defun hydra-load-prims-and-libraries ()

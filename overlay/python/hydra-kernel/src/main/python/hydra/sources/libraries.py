@@ -100,6 +100,59 @@ def register_equality_primitives() -> dict[Name, Primitive]:
     return primitives
 
 
+def unsupported_effect_primitive(definition) -> Primitive:
+    """Register an effect primitive for name resolution and inference, while keeping Hydra's pure
+    reducer from interpreting host effects as ordinary terms. Mirrors the Haskell
+    unsupportedEffectPrimitive: the type scheme is taken directly from the def-module's
+    PrimitiveDefinition (the single source of truth), and the term-level implementation fails loudly,
+    since effect primitives are evaluated through the native (host) path, not the interpreter. For #494."""
+    from hydra.errors import ErrorOther, OtherError
+    from hydra.dsl.python import Left
+
+    def impl(g, args):
+        return Left(ErrorOther(OtherError(
+            "effect primitive cannot be reduced by Hydra's pure reducer: "
+            + definition.name.value)))
+
+    return Primitive(definition=definition, implementation=impl)
+
+
+def register_effects_primitives() -> dict[Name, Primitive]:
+    """Register all effects primitive functions. In Python the effect type is transparent
+    (effect<t> = t), so these have no term-level interpreter implementation; they are registered for
+    name resolution and inference only. For #494."""
+    from hydra.lib import effects as def_effects
+
+    primitives: dict[Name, Primitive] = {}
+    primitives[def_effects.apply.name] = unsupported_effect_primitive(def_effects.apply)
+    primitives[def_effects.bind.name] = unsupported_effect_primitive(def_effects.bind)
+    primitives[def_effects.compose.name] = unsupported_effect_primitive(def_effects.compose)
+    primitives[def_effects.foldl.name] = unsupported_effect_primitive(def_effects.foldl)
+    primitives[def_effects.map.name] = unsupported_effect_primitive(def_effects.map)
+    primitives[def_effects.map_list.name] = unsupported_effect_primitive(def_effects.map_list)
+    primitives[def_effects.map_optional.name] = unsupported_effect_primitive(def_effects.map_optional)
+    primitives[def_effects.pure.name] = unsupported_effect_primitive(def_effects.pure)
+    return primitives
+
+
+def register_files_primitives() -> dict[Name, Primitive]:
+    """Register all files primitive functions. As effectful primitives, these have no term-level
+    interpreter implementation; they are registered for name resolution and inference only, and are
+    executed via the native (host) path. For #494."""
+    from hydra.lib import files as def_files
+
+    primitives: dict[Name, Primitive] = {}
+    primitives[def_files.append_file.name] = unsupported_effect_primitive(def_files.append_file)
+    primitives[def_files.create_directory.name] = unsupported_effect_primitive(def_files.create_directory)
+    primitives[def_files.exists.name] = unsupported_effect_primitive(def_files.exists)
+    primitives[def_files.list_directory.name] = unsupported_effect_primitive(def_files.list_directory)
+    primitives[def_files.read_file.name] = unsupported_effect_primitive(def_files.read_file)
+    primitives[def_files.remove_file.name] = unsupported_effect_primitive(def_files.remove_file)
+    primitives[def_files.rename.name] = unsupported_effect_primitive(def_files.rename)
+    primitives[def_files.write_file.name] = unsupported_effect_primitive(def_files.write_file)
+    return primitives
+
+
 def register_eithers_primitives() -> dict[Name, Primitive]:
     """Register all eithers primitive functions."""
     from hydra.python.lib import eithers
@@ -930,6 +983,27 @@ def register_strings_primitives() -> dict[Name, Primitive]:
     return primitives
 
 
+def register_text_primitives() -> dict[Name, Primitive]:
+    """Register all text primitive functions (UTF-8 codecs). For #494."""
+    from hydra.python.lib import text
+    from hydra.lib import text as def_text
+
+    primitives: dict[Name, Primitive] = {}
+
+    # decodeUtf8 :: binary -> Either string string
+    primitives[def_text.decode_utf8.name] = prims.prim1(
+        def_text.decode_utf8.name, text.decode_utf8, [],
+        prims.binary(), prims.either(prims.string(), prims.string())
+    )
+    # encodeUtf8 :: string -> binary
+    primitives[def_text.encode_utf8.name] = prims.prim1(
+        def_text.encode_utf8.name, text.encode_utf8, [],
+        prims.string(), prims.binary()
+    )
+
+    return primitives
+
+
 def register_literals_primitives() -> dict[Name, Primitive]:
     """Register all literals primitive functions."""
     from hydra.python.lib import literals
@@ -1203,8 +1277,10 @@ def standard_library() -> dict[Name, Primitive]:
     """Get all standard library primitives."""
     primitives: dict[Name, Primitive] = {}
     primitives.update(register_chars_primitives())
+    primitives.update(register_effects_primitives())
     primitives.update(register_eithers_primitives())
     primitives.update(register_equality_primitives())
+    primitives.update(register_files_primitives())
     primitives.update(register_lists_primitives())
     primitives.update(register_literals_primitives())
     primitives.update(register_logic_primitives())
@@ -1215,4 +1291,5 @@ def standard_library() -> dict[Name, Primitive]:
     primitives.update(register_regex_primitives())
     primitives.update(register_sets_primitives())
     primitives.update(register_strings_primitives())
+    primitives.update(register_text_primitives())
     return primitives

@@ -7,6 +7,7 @@ All test cases are now UniversalTestCase instances (string comparison).
 
 from __future__ import annotations
 
+import shutil
 import sys
 from pathlib import Path
 
@@ -251,6 +252,25 @@ def get_test_graph() -> hydra.graph.Graph:
     return _test_graph
 
 
+# Canonical root directory for effectful (file I/O) test cases. Must match the testDir constant in
+# Hydra.Sources.Test.Lib.Files and the effectfulTestDir constant in the Haskell test runner
+# (heads/haskell/src/test/haskell/Hydra/TestSuiteSpec.hs). Hard-coded *nix path for now (#494).
+EFFECTFUL_TEST_DIR = "/tmp/hydra-testing"
+
+
+def prepare_effectful_temp_dir() -> None:
+    """Prepare a guaranteed-empty canonical temp directory before an effectful test case.
+
+    Mirrors prepareEffectfulTempDir in the Haskell test runner: currently prepares
+    unconditionally for every effectful case (never for universal cases). A future refinement
+    (#494) is to skip preparation for pure-effect cases whose term references no hydra.lib.files
+    primitive.
+    """
+    if os.path.isdir(EFFECTFUL_TEST_DIR):
+        shutil.rmtree(EFFECTFUL_TEST_DIR)
+    os.makedirs(EFFECTFUL_TEST_DIR, exist_ok=True)
+
+
 def default_test_runner(desc: str, tcase: hydra.testing.TestCaseWithMetadata) -> Optional[Callable[[], None]]:
     """
     Default test runner that handles all test case types.
@@ -282,6 +302,21 @@ def default_test_runner(desc: str, tcase: hydra.testing.TestCaseWithMetadata) ->
                 if actual != expected:
                     raise AssertionError(f"expected {expected!r} but got {actual!r}")
             return run_universal
+
+        case hydra.testing.TestCaseEffectful(value=tc):
+            # For #494: an effectful test case. In Python the effect type is transparent
+            # (effect<t> = t), so the actual thunk is eager native code and forcing it *is* running
+            # the effect. tc.actual and tc.expected are unit-thunks (Callable[[None], str]); the
+            # Python coder emits Hydra's `λ_. body` as `lambda _: body`, so we pass a unit argument
+            # (None is fine since the lambda ignores it). Prepare the canonical temp directory before
+            # forcing the effect (mirrors prepareEffectfulTempDir in the Haskell runner).
+            def run_effectful():
+                prepare_effectful_temp_dir()
+                actual = tc.actual(None)
+                expected = tc.expected(None)
+                if actual != expected:
+                    raise AssertionError(f"expected {expected!r} but got {actual!r}")
+            return run_effectful
 
         case _:
             # Fail on unhandled test case types to catch missing implementations

@@ -46,6 +46,11 @@ public class VisitorTest {
         }
 
         @Override
+        public String visit(Type.Effect instance) {
+            return "effect(" + instance.value.accept(typeToString) + ")";
+        }
+
+        @Override
         public String visit(Type.Either instance) {
             return "either(" + instance.value.left.accept(typeToString)
                     + ", " + instance.value.right.accept(typeToString) + ")";

@@ -629,6 +629,38 @@
           (println (str "  Actual:   " (pr-str actual)))
           [0 1 0]))))
 
+;; Canonical root directory for effectful (file I/O) test cases. Must match the testDir constant in
+;; Hydra.Sources.Test.Lib.Files and the equivalent constants in the other host runners (e.g.
+;; EFFECTFUL_TEST_DIR in heads/python). Hard-coded *nix path for now (#494).
+(def ^:private effectful-test-dir "/tmp/hydra-testing")
+
+(defn- prepare-effectful-temp-dir
+  "Prepare a guaranteed-empty canonical temp directory before an effectful test case.
+   Mirrors prepare_effectful_temp_dir in the Python runner: delete the directory tree if it
+   exists, then recreate it empty. Prepared unconditionally for every effectful case."
+  []
+  (let [dir (java.io.File. effectful-test-dir)]
+    (when (.exists dir)
+      ;; Recursive delete (java.io.File has no rmtree).
+      (doseq [f (reverse (file-seq dir))]
+        (.delete f)))
+    (.mkdirs dir)))
+
+(defn- run-effectful-test [path tc]
+  "Run an effectful (file I/O) test case (#494). The effect type is transparent in Clojure
+   (effect<t> = t), so forcing the actual thunk *is* running the effect. Like universal cases,
+   tc.actual/tc.expected are unit-thunks (Hydra `\\_. body`, emitted as one-arg fn-of-unit), so
+   they are forced with a dummy nil. The canonical temp directory is prepared first."
+  (prepare-effectful-temp-dir)
+  (let [actual ((:actual tc) nil)
+        expected ((:expected tc) nil)]
+    (if (= actual expected)
+      [1 0 0]
+      (do (println (str "FAIL: " path))
+          (println (str "  Expected: " (pr-str expected)))
+          (println (str "  Actual:   " (pr-str actual)))
+          [0 1 0]))))
+
 (defn- run-simple-test [path expected actual-fn]
   "Run a test that compares expected to the result of actual-fn."
   (try
@@ -1384,6 +1416,7 @@
               ;; Skip remaining unimplemented test types
               :delegated_evaluation    [0 0 1]
               :universal               (run-universal-test full case-data)
+              :effectful               (run-effectful-test full case-data)
               [0 0 1]))))
     (catch Throwable e
       (let [tname (:name tcase) full (str path " > " tname)]

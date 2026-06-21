@@ -456,6 +456,18 @@ public class Bootstrap {
             "chars", "eithers", "equality", "lists", "literals", "logic", "maps",
             "math", "optionals", "pairs", "regex", "sets", "strings");
 
+    // The effectful lib sub-namespaces (#286) have native impls in Python only
+    // (hydra.python.lib.{effects,files,text}); other hosts lack hydra.<lang>.lib.{effects,files,text},
+    // so redirecting their call sites would dangle. Restrict the effectful redirect to Python.
+    private static final List<String> LIB_SUBS_PYTHON;
+    static {
+        List<String> subs = new ArrayList<>(LIB_SUBS);
+        subs.add("effects");
+        subs.add("files");
+        subs.add("text");
+        LIB_SUBS_PYTHON = subs;
+    }
+
     private static boolean isLibModule(Module m) {
         return m.name.value.startsWith("hydra.lib.");
     }
@@ -531,7 +543,8 @@ public class Bootstrap {
                 if (!s.contains("hydra.lib.")) continue;
                 // protect quoted primitive-NAME strings
                 String out = s.replace("\"hydra.lib.", "\"" + sentinel);
-                for (String sub : LIB_SUBS) {
+                List<String> subs = "python".equals(target) ? LIB_SUBS_PYTHON : LIB_SUBS;
+                for (String sub : subs) {
                     out = out.replace("hydra.lib." + sub + ".",  "hydra." + langSeg + ".lib." + sub + ".");
                     out = out.replace("hydra.lib." + sub + "\n", "hydra." + langSeg + ".lib." + sub + "\n");
                     out = out.replace("hydra.lib." + sub + " ",  "hydra." + langSeg + ".lib." + sub + " ");
