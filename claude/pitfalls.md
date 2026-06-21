@@ -661,6 +661,22 @@ output and any `Map<Int, _>` test fixture comes out in lex order instead of
 numeric order; downstream algorithms (SCC, eta expansion) that consume `keys`
 also produce subtly wrong output.
 
+### `binary` is represented differently in every host — match the coder, not a uniform buffer
+
+When porting a primitive that takes or returns the `binary` type, the native impl
+must use the representation that *that host's coder* emits, or file/byte I/O
+silently produces empty/wrong results (no compile error). Confirmed: Haskell
+`ByteString`, Java `byte[]`, Scala base64-`String`, Python `bytes`, Clojure
+vector-of-ints `[65 66]`, Scheme vector `#(65 66)` (not a bytevector), Common
+Lisp `#(65 66)`, Emacs Lisp `[65 66]`. Verify against a generated test that
+passes a `binary` literal, or the host's `hydra.lib.literals` runtime
+(`binaryToBytes`/`stringToBinary`). Full table + the new-type-constructor
+checklist (coder `encodeType` case for transparent wrappers, all type-walkers,
+the adapter, `--local-host`, coder cache-busting) live in
+[docs/recipes/adding-primitives.md](../docs/recipes/adding-primitives.md). This
+is how `effect<t>` + `hydra.lib.{effects,files}` were added across all eight
+hosts (#494).
+
 ### Primitive type schemes must carry class constraints
 
 The kernel inference reads `typeScheme.constraints :: Maybe (Map TypeVariable
