@@ -11,8 +11,10 @@
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
     {"module": "hydra.error.packaging"},
     {"module": "hydra.errors"},
+    {"module": "hydra.file"},
     {"module": "hydra.graph"},
     {"module": "hydra.json.model"},
     {"module": "hydra.packaging"},
@@ -21,6 +23,7 @@
     {"module": "hydra.relational"},
     {"module": "hydra.tabular"},
     {"module": "hydra.testing"},
+    {"module": "hydra.time"},
     {"module": "hydra.topology"},
     {"module": "hydra.typed"},
     {"module": "hydra.typing"},
@@ -380,7 +383,7 @@
           "typeParameters": [],
           "parameters": [
             {"name": "arg0", "type": {"variable": "hydra.util.CaseConvention"}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "hydra.util.FileExtension"}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.file.FileExtension"}, "isLazy": false},
             {"name": "arg2", "type": {"variable": "hydra.packaging.ModuleName"}, "isLazy": false}],
           "result": {"type": {"literal": {"string": {}}}}},
         "body": {
@@ -392,7 +395,7 @@
                 "body": {
                   "lambda": {
                     "parameter": "ext",
-                    "domain": {"variable": "hydra.util.FileExtension"},
+                    "domain": {"variable": "hydra.file.FileExtension"},
                     "body": {
                       "lambda": {
                         "parameter": "ns",
@@ -437,7 +440,7 @@
                                                 "function": {"application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": "/"}}}},
                                                 "argument": {"variable": "parts"}}}}},
                                         "argument": {"literal": {"string": "."}}}}}},
-                                "argument": {"application": {"function": {"unwrap": "hydra.util.FileExtension"}, "argument": {"variable": "ext"}}}}}}}}}}}}},
+                                "argument": {"application": {"function": {"unwrap": "hydra.file.FileExtension"}, "argument": {"variable": "ext"}}}}}}}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -451,7 +454,7 @@
           "parameters": [
             {"name": "arg0", "type": {"variable": "hydra.util.CaseConvention"}, "isLazy": false},
             {"name": "arg1", "type": {"variable": "hydra.util.CaseConvention"}, "isLazy": false},
-            {"name": "arg2", "type": {"variable": "hydra.util.FileExtension"}, "isLazy": false},
+            {"name": "arg2", "type": {"variable": "hydra.file.FileExtension"}, "isLazy": false},
             {"name": "arg3", "type": {"variable": "hydra.core.Name"}, "isLazy": false}],
           "result": {"type": {"literal": {"string": {}}}}},
         "body": {
@@ -467,7 +470,7 @@
                     "body": {
                       "lambda": {
                         "parameter": "ext",
-                        "domain": {"variable": "hydra.util.FileExtension"},
+                        "domain": {"variable": "hydra.file.FileExtension"},
                         "body": {
                           "lambda": {
                             "parameter": "name",
@@ -594,7 +597,7 @@
                                                             {"variable": "prefix"},
                                                             {"variable": "suffix"},
                                                             {"literal": {"string": "."}},
-                                                            {"application": {"function": {"unwrap": "hydra.util.FileExtension"}, "argument": {"variable": "ext"}}}]}}}}}}}}}}}}}}}}}}}}}}},
+                                                            {"application": {"function": {"unwrap": "hydra.file.FileExtension"}, "argument": {"variable": "ext"}}}]}}}}}}}}}}}}}}}}}}}}}}},
             "annotation": {
               "map": [
                 {

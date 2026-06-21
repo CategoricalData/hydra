@@ -10,7 +10,6 @@ import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
 
 import qualified Hydra.Haskell.Lib.Chars as Chars
-import qualified Hydra.Haskell.Lib.Effects as Effects
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
@@ -23,10 +22,12 @@ import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Regex as Regex
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Haskell.Lib.Text as Text
 import qualified Hydra.Lib.Chars as DefChars
 import qualified Hydra.Lib.Effects as DefEffects
 import qualified Hydra.Lib.Eithers as DefEithers
 import qualified Hydra.Lib.Equality as DefEquality
+import qualified Hydra.Lib.Files as DefFiles
 import qualified Hydra.Lib.Lists as DefLists
 import qualified Hydra.Lib.Literals as DefLiterals
 import qualified Hydra.Lib.Logic as DefLogic
@@ -37,6 +38,7 @@ import qualified Hydra.Lib.Pairs as DefPairs
 import qualified Hydra.Lib.Regex as DefRegex
 import qualified Hydra.Lib.Sets as DefSets
 import qualified Hydra.Lib.Strings as DefStrings
+import qualified Hydra.Lib.Text as DefText
 
 import qualified Data.List as L
 
@@ -126,6 +128,20 @@ hydraLibEffects = standardLibrary [
     unsupportedEffectPrimitive DefEffects.mapList,
     unsupportedEffectPrimitive DefEffects.mapOptional,
     unsupportedEffectPrimitive DefEffects.pure]
+
+hydraLibFiles :: Library
+hydraLibFiles = standardLibrary [
+    unsupportedEffectPrimitive DefFiles.appendFile,
+    unsupportedEffectPrimitive DefFiles.copy,
+    unsupportedEffectPrimitive DefFiles.createDirectory,
+    unsupportedEffectPrimitive DefFiles.exists,
+    unsupportedEffectPrimitive DefFiles.listDirectory,
+    unsupportedEffectPrimitive DefFiles.readFile,
+    unsupportedEffectPrimitive DefFiles.removeDirectory,
+    unsupportedEffectPrimitive DefFiles.removeFile,
+    unsupportedEffectPrimitive DefFiles.rename,
+    unsupportedEffectPrimitive DefFiles.status,
+    unsupportedEffectPrimitive DefFiles.writeFile]
 
 hydraLibEithers :: Library
 hydraLibEithers = standardLibrary [
@@ -402,12 +418,18 @@ hydraLibStrings = standardLibrary [
   prim1 DefStrings.toUpper     Strings.toUpper     [] string string,
   prim1 DefStrings.unlines     Strings.unlines     [] (list string) string]
 
+hydraLibText :: Library
+hydraLibText = standardLibrary [
+  prim1 DefText.decodeUtf8 Text.decodeUtf8 [] binary (Prims.either_ string string),
+  prim1 DefText.encodeUtf8 Text.encodeUtf8 [] string binary]
+
 standardLibraries :: [Library]
 standardLibraries = [
   hydraLibChars,
   hydraLibEffects,
   hydraLibEithers,
   hydraLibEquality,
+  hydraLibFiles,
   hydraLibLists,
   hydraLibLiterals,
   hydraLibLogic,
@@ -418,7 +440,8 @@ standardLibraries = [
   hydraLibPairs,
   hydraLibRegex,
   hydraLibSets,
-  hydraLibStrings]
+  hydraLibStrings,
+  hydraLibText]
 
 -- | Assemble a library from its primitives. The library's module name (e.g. "hydra.lib.chars")
 -- is *derived* from the primitives' shared namespace rather than passed as a literal string (#473):
@@ -443,22 +466,3 @@ unsupportedEffectPrimitive def = Primitive def implementation
     implementation _ _ = Left $ ErrorOther $ OtherError $
       "effect primitive cannot be reduced by Hydra's pure Haskell reducer: "
       ++ unName (primitiveDefinitionName def)
-
-_effectImplementations ::
-  ( IO (a -> b) -> IO a -> IO b
-  , IO c -> (c -> IO d) -> IO d
-  , (e -> IO f) -> (f -> IO g) -> e -> IO g
-  , (h -> i -> IO h) -> h -> [i] -> IO h
-  , (j -> k) -> IO j -> IO k
-  , (l -> IO m) -> [l] -> IO [m]
-  , (n -> IO o) -> Maybe n -> IO (Maybe o)
-  , p -> IO p)
-_effectImplementations =
-  ( Effects.apply
-  , Effects.bind
-  , Effects.compose
-  , Effects.foldl
-  , Effects.map
-  , Effects.mapList
-  , Effects.mapOptional
-  , Effects.pure)

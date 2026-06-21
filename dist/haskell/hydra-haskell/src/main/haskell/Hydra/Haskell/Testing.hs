@@ -10,8 +10,10 @@ import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Dependencies as Dependencies
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.File as ErrorFile
 import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
+import qualified Hydra.File as File
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Haskell.Syntax as Syntax
@@ -42,6 +44,7 @@ import qualified Hydra.Show.Errors as ShowErrors
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing
+import qualified Hydra.Time as Time
 import qualified Hydra.Topology as Topology
 import qualified Hydra.Typed as Typed
 import qualified Hydra.Typing as Typing
@@ -191,7 +194,7 @@ generateTestFile testModule testGroup namespaces =
       let testModuleContent = buildTestModule testModule testGroup testBody namespaces
           ns_ = Packaging.moduleName testModule
           specNs = Packaging.ModuleName (Strings.cat2 (Packaging.unModuleName ns_) "Spec")
-          filePath = Names.moduleNameToFilePath Util.CaseConventionPascal (Util.FileExtension "hs") specNs
+          filePath = Names.moduleNameToFilePath Util.CaseConventionPascal (File.FileExtension "hs") specNs
       in (filePath, testModuleContent)) (generateTestGroupHierarchy 1 testGroup)
 -- | Generate test hierarchy preserving the structure with H.describe blocks for subgroups
 generateTestGroupHierarchy :: Int -> Testing.TestGroup -> Either t0 String

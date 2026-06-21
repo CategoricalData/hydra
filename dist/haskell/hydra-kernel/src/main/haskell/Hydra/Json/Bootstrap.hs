@@ -335,7 +335,7 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "defaultFileExtension"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.util.FileExtension")),
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.file.FileExtension")),
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (
                     Core.TermVariable (Core.Name "description"),
@@ -2975,14 +2975,6 @@ typesByName =
             (
               Core.TermVariable (Core.Name "description"),
               (Core.TermLiteral (Core.LiteralString "An equality judgement: less than, equal to, or greater than")))]))}))),
-      (
-        Core.Name "hydra.util.FileExtension",
-        (Core.TypeAnnotated (Core.AnnotatedType {
-          Core.annotatedTypeBody = (Core.TypeWrap (Core.TypeLiteral Core.LiteralTypeString)),
-          Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
-            (
-              Core.TermVariable (Core.Name "description"),
-              (Core.TermLiteral (Core.LiteralString "A file extension (without the dot), e.g. \"json\" or \"py\"")))]))}))),
       (
         Core.Name "hydra.util.ModuleNames",
         (Core.TypeAnnotated (Core.AnnotatedType {

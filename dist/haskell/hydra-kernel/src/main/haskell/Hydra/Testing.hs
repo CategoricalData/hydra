@@ -5,6 +5,16 @@ module Hydra.Testing where
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | An effectful test case: the actual value is a thunk producing an effect, which the test runner interprets (performing host interactions, e.g. file I/O within a per-case empty temporary directory) to obtain a result string; the expected value is a thunk producing a string.
+data EffectfulTestCase =
+  EffectfulTestCase {
+    -- | A thunk producing the effect to be interpreted by the test runner. The thunk defers construction of the effect until the runner forces it.
+    effectfulTestCaseActual :: (() -> IO String),
+    -- | A thunk producing the expected result string.
+    effectfulTestCaseExpected :: (() -> String)}
+_EffectfulTestCase = Core.Name "hydra.testing.EffectfulTestCase"
+_EffectfulTestCase_actual = Core.Name "actual"
+_EffectfulTestCase_expected = Core.Name "expected"
 -- | A tag for test cases
 newtype Tag =
   Tag {
@@ -13,9 +23,12 @@ newtype Tag =
 _Tag = Core.Name "hydra.testing.Tag"
 -- | A test case with an actual and expected string for comparison
 data TestCase =
+  -- | An effectful test case (interpret an effect, then string comparison)
+  TestCaseEffectful EffectfulTestCase |
   -- | A universal test case (string comparison)
   TestCaseUniversal UniversalTestCase
 _TestCase = Core.Name "hydra.testing.TestCase"
+_TestCase_effectful = Core.Name "effectful"
 _TestCase_universal = Core.Name "universal"
 -- | A test case together with metadata
 data TestCaseWithMetadata =

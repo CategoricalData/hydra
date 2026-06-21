@@ -3,6 +3,7 @@
   "metadata": {"description": "Abstractions for paired transformations between languages", "comments": [], "seeAlso": []},
   "dependencies": [
     {"module": "hydra.errors"},
+    {"module": "hydra.file"},
     {"module": "hydra.graph"},
     {"module": "hydra.variants"},
     {"module": "hydra.core"},
@@ -399,7 +400,7 @@
                     "name": "defaultFileExtension",
                     "type": {
                       "annotated": {
-                        "body": {"variable": "hydra.util.FileExtension"},
+                        "body": {"variable": "hydra.file.FileExtension"},
                         "annotation": {
                           "map": [
                             {

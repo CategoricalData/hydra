@@ -7,6 +7,7 @@ import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.File as File
 import qualified Hydra.Environment as Environment
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
@@ -661,7 +662,7 @@ moduleToTypeScript mod defs cx g =
                         "\n",
                         itemText]))
             body = Strings.intercalate "\n\n" (Lists.map renderItem allItems)
-            filePath = Names.moduleNameToFilePath Util.CaseConventionCamel (Util.FileExtension "ts") (Packaging.moduleName mod)
+            filePath = Names.moduleNameToFilePath Util.CaseConventionCamel (File.FileExtension "ts") (Packaging.moduleName mod)
         in (Right (Maps.singleton filePath (Strings.cat [
           header,
           importsBlock,

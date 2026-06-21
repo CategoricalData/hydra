@@ -7,8 +7,10 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.File as ErrorFile
 import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
+import qualified Hydra.File as File
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Inference as Inference
 import qualified Hydra.Json.Model as Model
@@ -24,6 +26,7 @@ import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Test.TestGraph as TestGraph
 import qualified Hydra.Testing as Testing
+import qualified Hydra.Time as Time
 import qualified Hydra.Topology as Topology
 import qualified Hydra.Typed as Typed
 import qualified Hydra.Typing as Typing
@@ -32,6 +35,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+import qualified Hydra.Haskell.Lib.Literals as Literals
 -- | Fundamental language feature tests
 allTests :: Testing.TestGroup
 allTests =
@@ -2720,6 +2724,74 @@ testGroupForPrimitives =
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.typeScheme (Core.TypeScheme {
                   Core.typeSchemeVariables = [],
                   Core.typeSchemeBody = (Core.TypeEffect (Core.TypeOptional (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))),
+                  Core.typeSchemeConstraints = Nothing}))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []}]},
+        Testing.TestGroup {
+          Testing.testGroupName = "File primitives",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = [
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "#1",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> ShowCore.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.files.readFile")),
+                  Core.applicationArgument = (Core.TermWrap (Core.WrappedTerm {
+                    Core.wrappedTermTypeName = (Core.Name "hydra.file.FilePath"),
+                    Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "/tmp/input.txt"))}))})))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.typeScheme (Core.TypeScheme {
+                  Core.typeSchemeVariables = [],
+                  Core.typeSchemeBody = (Core.TypeEffect (Core.TypeEither (Core.EitherType {
+                    Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.error.file.FileError")),
+                    Core.eitherTypeRight = (Core.TypeLiteral Core.LiteralTypeBinary)}))),
+                  Core.typeSchemeConstraints = Nothing}))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "#2",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> ShowCore.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.files.writeFile")),
+                    Core.applicationArgument = (Core.TermWrap (Core.WrappedTerm {
+                      Core.wrappedTermTypeName = (Core.Name "hydra.file.FilePath"),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "/tmp/output.txt"))}))})),
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralBinary (Literals.stringToBinary "aGVsbG8=")))})))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.typeScheme (Core.TypeScheme {
+                  Core.typeSchemeVariables = [],
+                  Core.typeSchemeBody = (Core.TypeEffect (Core.TypeEither (Core.EitherType {
+                    Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.error.file.FileError")),
+                    Core.eitherTypeRight = Core.TypeUnit}))),
+                  Core.typeSchemeConstraints = Nothing}))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "#3",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> ShowCore.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.effects.bind")),
+                    Core.applicationArgument = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.files.writeFile")),
+                        Core.applicationArgument = (Core.TermWrap (Core.WrappedTerm {
+                          Core.wrappedTermTypeName = (Core.Name "hydra.file.FilePath"),
+                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "/tmp/output.txt"))}))})),
+                      Core.applicationArgument = (Core.TermLiteral (Core.LiteralBinary (Literals.stringToBinary "aGVsbG8=")))}))})),
+                  Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.Name "result"),
+                    Core.lambdaDomain = Nothing,
+                    Core.lambdaBody = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.files.readFile")),
+                      Core.applicationArgument = (Core.TermWrap (Core.WrappedTerm {
+                        Core.wrappedTermTypeName = (Core.Name "hydra.file.FilePath"),
+                        Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "/tmp/output.txt"))}))}))}))})))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.typeScheme (Core.TypeScheme {
+                  Core.typeSchemeVariables = [],
+                  Core.typeSchemeBody = (Core.TypeEffect (Core.TypeEither (Core.EitherType {
+                    Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.error.file.FileError")),
+                    Core.eitherTypeRight = (Core.TypeLiteral Core.LiteralTypeBinary)}))),
                   Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},

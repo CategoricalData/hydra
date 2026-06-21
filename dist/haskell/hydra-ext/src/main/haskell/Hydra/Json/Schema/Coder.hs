@@ -7,6 +7,7 @@ import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
+import qualified Hydra.File as File
 import qualified Hydra.Dependencies as Dependencies
 import qualified Hydra.Environment as Environment
 import qualified Hydra.Error.Checking as Checking
@@ -163,7 +164,7 @@ nameToPath name =
           mns = Util.qualifiedNameModuleName qn
           local = Util.qualifiedNameLocal qn
           nsPart = Optionals.cases mns "" (\ns -> Strings.cat2 (Packaging.unModuleName ns) ".")
-      in (Names.moduleNameToFilePath Util.CaseConventionCamel (Util.FileExtension "json") (Packaging.ModuleName (Strings.cat2 nsPart local)))
+      in (Names.moduleNameToFilePath Util.CaseConventionCamel (File.FileExtension "json") (Packaging.ModuleName (Strings.cat2 nsPart local)))
 -- | Build the JSON Schema restriction list for a pair type
 pairRestrictions :: Bool -> [Schema.Restriction] -> [Schema.Restriction] -> [Schema.Restriction]
 pairRestrictions optional firstRes secondRes =

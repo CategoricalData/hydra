@@ -2092,7 +2092,7 @@
                                                                         "typeName": "hydra.core.Type",
                                                                         "field": {
                                                                           "name": "variable",
-                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.util.FileExtension"}}}}}}}},
+                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.file.FileExtension"}}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -19884,56 +19884,6 @@
                                                         "inject": {
                                                           "typeName": "hydra.core.Literal",
                                                           "field": {"name": "string", "term": {"literal": {"string": "An equality judgement: less than, equal to, or greater than"}}}}}}}}}]}}}}}]}}}}},
-                      "annotation": {"map": [{"key": {"variable": "type"}, "value": {"variable": "hydra.core.Type"}}]}}}},
-                {
-                  "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.util.FileExtension"}}}},
-                  "value": {
-                    "annotated": {
-                      "body": {
-                        "inject": {
-                          "typeName": "hydra.core.Type",
-                          "field": {
-                            "name": "annotated",
-                            "term": {
-                              "record": {
-                                "typeName": "hydra.core.AnnotatedType",
-                                "fields": [
-                                  {
-                                    "name": "body",
-                                    "term": {
-                                      "inject": {
-                                        "typeName": "hydra.core.Type",
-                                        "field": {
-                                          "name": "wrap",
-                                          "term": {
-                                            "inject": {
-                                              "typeName": "hydra.core.Type",
-                                              "field": {
-                                                "name": "literal",
-                                                "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}}}}},
-                                  {
-                                    "name": "annotation",
-                                    "term": {
-                                      "inject": {
-                                        "typeName": "hydra.core.Term",
-                                        "field": {
-                                          "name": "map",
-                                          "term": {
-                                            "map": [
-                                              {
-                                                "key": {
-                                                  "inject": {
-                                                    "typeName": "hydra.core.Term",
-                                                    "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "description"}}}}}}},
-                                                "value": {
-                                                  "inject": {
-                                                    "typeName": "hydra.core.Term",
-                                                    "field": {
-                                                      "name": "literal",
-                                                      "term": {
-                                                        "inject": {
-                                                          "typeName": "hydra.core.Literal",
-                                                          "field": {"name": "string", "term": {"literal": {"string": "A file extension (without the dot), e.g. \"json\" or \"py\""}}}}}}}}}]}}}}}]}}}}},
                       "annotation": {"map": [{"key": {"variable": "type"}, "value": {"variable": "hydra.core.Type"}}]}}}},
                 {
                   "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.util.ModuleNames"}}}},

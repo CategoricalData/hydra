@@ -5,6 +5,7 @@ module Hydra.TypeScript.Language where
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.File as File
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Error.Packaging as ErrorPackaging
@@ -55,7 +56,7 @@ typeScriptLanguage =
         Coders.caseConventionsTermVariable = Util.CaseConventionCamel,
         Coders.caseConventionsType = Util.CaseConventionPascal,
         Coders.caseConventionsTypeVariable = Util.CaseConventionPascal},
-      Coders.languageDefaultFileExtension = (Util.FileExtension "ts")}
+      Coders.languageDefaultFileExtension = (File.FileExtension "ts")}
   where
     literalVariants =
         Sets.fromList [

@@ -8,8 +8,10 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.File as ErrorFile
 import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
+import qualified Hydra.File as File
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lexical as Lexical
@@ -35,6 +37,7 @@ import qualified Hydra.Strip as Strip
 import qualified Hydra.Substitution as Substitution
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing
+import qualified Hydra.Time as Time
 import qualified Hydra.Topology as Topology
 import qualified Hydra.Typed as Typed
 import qualified Hydra.Typing as Typing
