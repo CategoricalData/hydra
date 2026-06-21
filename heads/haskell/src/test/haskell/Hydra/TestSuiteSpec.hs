@@ -18,6 +18,22 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 import qualified Data.Time.Clock.POSIX as POSIX
 import qualified System.Environment as Env
+import qualified System.Directory as Dir
+
+-- | Canonical root directory for effectful (file I/O) test cases. Must match the testDir constant
+-- in Hydra.Sources.Test.Lib.Files. Hard-coded *nix path for now (configurable later, #494).
+effectfulTestDir :: String
+effectfulTestDir = "/tmp/hydra-testing"
+
+-- | Prepare a guaranteed-empty canonical temp directory before an effectful test case that needs it.
+-- Currently prepares unconditionally for every effectful case (never for universal cases). A future
+-- refinement (#494) is to skip preparation for pure-effect cases whose term references no
+-- hydra.lib.files primitive; that scan happens at test-generation time, not here in compiled code.
+prepareEffectfulTempDir :: TestCaseWithMetadata -> IO ()
+prepareEffectfulTempDir _ = do
+  exists <- Dir.doesDirectoryExist effectfulTestDir
+  CM.when exists $ Dir.removeDirectoryRecursive effectfulTestDir
+  Dir.createDirectoryIfMissing True effectfulTestDir
 
 
 type TestRunner = String -> TestCaseWithMetadata -> Y.Maybe (H.SpecWith ())
@@ -28,6 +44,15 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase
   else Just $ case testCaseWithMetadataCase tcase of
     TestCaseUniversal (UniversalTestCase actual expected) ->
       H.it "universal" $ H.shouldBe (actual ()) (expected ())
+    -- Effectful cases: 'actual' is a thunk producing an effect (mapped to IO String by the
+    -- Haskell coder). Prepare the canonical temp directory iff the effect references a
+    -- hydra.lib.files primitive, then execute the effect and compare to 'expected'. See
+    -- docs/test-suite-architecture.md and Hydra.Effects.Testing.
+    TestCaseEffectful (EffectfulTestCase actual expected) ->
+      H.it "effectful" $ do
+        prepareEffectfulTempDir tcase
+        result <- actual ()
+        H.shouldBe result (expected ())
 
 runTestCase :: String -> TestRunner -> TestCaseWithMetadata -> H.SpecWith ()
 runTestCase pdesc runner tcase@(TestCaseWithMetadata name _ mdesc _) =

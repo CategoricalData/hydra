@@ -23,11 +23,26 @@ module_ = Module {
             moduleMetadata = descriptionMetadata (Just "A model for unit testing")}
   where
     definitions = [
+      effectfulTestCase,
       tag,
       testCase,
       testCaseWithMetadata,
       testGroup,
       universalTestCase]
+
+effectfulTestCase :: TypeDefinition
+effectfulTestCase = define "EffectfulTestCase" $
+  doc ("An effectful test case: the actual value is a thunk producing an effect, which the test runner"
+    ++ " interprets (performing host interactions, e.g. file I/O within a per-case empty temporary"
+    ++ " directory) to obtain a result string; the expected value is a thunk producing a string.") $
+  T.record [
+    "actual">:
+      doc ("A thunk producing the effect to be interpreted by the test runner. The thunk defers"
+        ++ " construction of the effect until the runner forces it.") $
+      T.unit ~> T.effect T.string,
+    "expected">:
+      doc "A thunk producing the expected result string." $
+      T.unit ~> T.string]
 
 tag :: TypeDefinition
 tag = define "Tag" $
@@ -38,6 +53,9 @@ testCase :: TypeDefinition
 testCase = define "TestCase" $
   doc "A test case with an actual and expected string for comparison" $
   T.union [
+    "effectful">:
+      doc "An effectful test case (interpret an effect, then string comparison)"
+      effectfulTestCase,
     "universal">:
       doc "A universal test case (string comparison)"
       universalTestCase]
