@@ -64,6 +64,7 @@ missing or wrongly-scoped credential surfaces only at upload time (often as a
 | **Hackage** | A Hackage account that is a **maintainer** of `hydra`, `hydra-kernel`, `hydra-haskell`; `cabal` configured to upload (interactive login or an API token). | <https://hackage.haskell.org/> |
 | **Maven Central** | A **Sonatype Central Portal** account with publish rights for the `net.fortytwo.hydra` namespace, plus a GPG signing key. Credentials in `~/.gradle/gradle.properties` (`sonatypeUsername`/`sonatypePassword` + `signing.*`). **JDK 17+** to run Gradle (see Java releases). | <https://central.sonatype.com/> |
 | **PyPI** | An account that is **Owner or Maintainer** of every published project (`hydra-kernel`, `hydra-rdf`, `hydra-pg`, `hydra-python`), and an API token scoped to **all** of them (account-wide is simplest). Token goes in `~/.pypirc` or is pasted at the `twine`/`uv` prompt. | <https://pypi.org/manage/projects/> (confirm you own the projects) |
+| **Maven Central (Scala/sbt)** | Same Sonatype Central Portal account as Java (publish rights for `net.fortytwo.hydra`), plus a GPG signing key. Credentials in `~/.sbt/1.0/sonatype.sbt` (`sonatypeUsername`/`sonatypePassword`) or env vars `SONATYPE_USERNAME`/`SONATYPE_PASSWORD`; GPG via sbt-pgp (reads `~/.gnupg` by default). **JDK 11+** required. | <https://central.sonatype.com/> |
 | **conda-forge** | Listed in the `recipe/` maintainers of [`hydra-python-feedstock`](https://github.com/conda-forge/hydra-python-feedstock); updates go via PR to that repo. | the feedstock repo |
 
 **Ownership note.** PyPI (and conda-forge) ownership is per-project and may rest
@@ -538,6 +539,76 @@ dependencies {
 }
 ```
 
+## Scala releases
+
+Hydra-Scala is a **complete Hydra implementation** that passes all tests in the common test suite.
+It requires Scala 3.3 or later and sbt 1.10+.
+
+Starting with 0.17, the Scala release ships **per-package Maven artifacts** under group `net.fortytwo.hydra`,
+mirroring the Java publish set.
+Each `dist/scala/<pkg>/` directory is a self-contained, publishable sbt build with a generated
+`build.sbt` and `project/`.
+The published artifacts are the same nine as the Java set:
+
+| Artifact | Description | `libraryDependencies` |
+|----------|-------------|-----------------------|
+| `hydra-kernel_3` | Core types, terms, DSL, eval, primitives + Scala runtime support. Self-contained. | (none) |
+| `hydra-haskell_3` | Haskell syntax and coder. | `hydra-kernel_3` |
+| `hydra-java_3` | Java syntax, serde, and coder. | `hydra-kernel_3` |
+| `hydra-python_3` | Python syntax and coder. | `hydra-kernel_3` |
+| `hydra-scala_3` | Scala syntax and coder. | `hydra-kernel_3`, `hydra-java_3` |
+| `hydra-lisp_3` | Lisp syntax and the shared coder for the four Lisp dialects. | `hydra-kernel_3` |
+| `hydra-typescript_3` | TypeScript syntax and coder. | `hydra-kernel_3` |
+| `hydra-rdf_3` | RDF, OWL, SHACL, ShEx, XML Schema models. | `hydra-kernel_3` |
+| `hydra-pg_3` _(not yet published)_ | Property graph model, coders, GraphSON, TinkerPop. | `hydra-kernel_3`, `hydra-rdf_3` |
+
+`hydra-pg` is **not** in the current Scala publish set — the generated Scala pg coder has a
+type-variable threading issue that prevents standalone compilation. Track the fix separately before
+adding it (analogous to `hydra-ext` being excluded from the Java and Python publish sets).
+
+Each artifact's `build.sbt` is regenerated from `packages/<pkg>/package.json` and
+`hydra.json:currentVersion` by `bin/lib/generate-scala-package-build.py`, and
+wired into `heads/scala/bin/assemble-distribution.sh` so a clean `bin/sync.sh` produces
+ready-to-publish trees.
+
+The following are Scala-specific release steps:
+
+* Set up your Scala environment (sbt, JDK 11+, GPG).
+* **One-time setup:** Create a Sonatype Central Portal account and obtain a user token at
+  <https://central.sonatype.com/account>.
+  Store credentials in `~/.sbt/1.0/sonatype.sbt` (do NOT check this file in):
+  ```scala
+  credentials += Credentials(
+    "Sonatype Nexus Repository Manager",
+    "central.sonatype.com",
+    "<token-username>",
+    "<token-password>"
+  )
+  ```
+  Or export `SONATYPE_USERNAME` / `SONATYPE_PASSWORD` in the environment.
+  Configure GPG for signing (sbt-pgp reads `~/.gnupg` by default).
+* **Use the orchestrator** `heads/scala/bin/publish-sbt.sh` (analogous to `publish-maven.sh`).
+  Default is a dry run (builds jars locally, no upload); `--upload` does the real Central upload:
+  ```bash
+  heads/scala/bin/publish-sbt.sh             # dry run: build all jars, no upload
+  heads/scala/bin/publish-sbt.sh --upload    # upload pending deployments
+  ```
+  The orchestrator checks dependency closure, publishes each package to the local ivy cache
+  leaves-first (so downstream builds resolve fresh siblings), then runs `sbt publishSigned`
+  per package in topological order.
+* Go to [Deployments](https://central.sonatype.com/publishing/deployments) in the Central Portal.
+  Find the nine deployments, verify they have passed validation, then click "Publish" on each
+  (leaves first).
+
+A Scala consumer adds e.g.:
+```scala
+libraryDependencies += "net.fortytwo.hydra" % "hydra-kernel_3" % "0.17.0"
+```
+or, using sbt's `%%` operator (which appends `_3` automatically):
+```scala
+libraryDependencies += "net.fortytwo.hydra" %% "hydra-kernel" % "0.17.0"
+```
+
 ## Python releases
 
 Hydra-Python is a **complete Hydra implementation** that passes all tests in the common test suite.
@@ -727,7 +798,9 @@ all scripts and Stack executables (including internal ones called by the sync sc
 | `publish-pypi.sh` | `heads/python/bin/` | Builds (and optionally uploads, `--upload`) the per-package PyPI wheels + sdists. Prefers `uv build`, falls back to `python -m build`. Asserts dependency closure. Invokes `verify-distribution.sh` as a hard gate before any upload. |
 | `verify-distribution.sh` | `heads/{haskell,python,java}/bin/` | **Per-host self-containment gate (uniform name across heads).** Builds the host's publish-set packages from the `dist/` tree alone and proves they are self-contained when consumed as published artifacts, in isolation from the worktree. **Python:** builds the wheels (or `--wheels <dir>`), installs them into a fresh venv with `--no-index`, imports the top-level kernel modules from a neutral cwd (catches #472). **Haskell:** stages the per-package distributions into one multi-package stack project and `stack build`s them, so dependents' `== <version>` pins resolve against the local staged siblings (catches the #473 cold-build class). **Java:** publishes the per-package jars to a temp Maven repo and resolves them from an offline consumer, so a jar missing classes its API needs (or a POM referencing a sibling not in the publish set) fails; hard-fails when no JDK 17+ is present. Run by CI per host and as a hard gate in `prepare-release.sh` (Step 12) + `publish-pypi.sh`. |
 | `generate-haskell-package-build.py` | `bin/lib/` | Emits a standalone `dist/haskell/<pkg>/package.yaml` (+ `stack.yaml`) from `packages/<pkg>/package.json` (or a built-in spec for the `hydra` umbrella) and `hydra.json:currentVersion`. Inter-Hydra deps emit as exact pins `<dep> == <version>`. |
+| `publish-sbt.sh` | `heads/scala/bin/` | Builds (and optionally uploads, `--upload`) the per-package Scala Maven Central jars leaves-first via sbt-sonatype. Guards credentials and GPG key; refreshes `~/.ivy2/local` with freshly-built siblings. |
 | `generate-java-package-build.py` | `bin/lib/` | Emits a standalone `dist/java/<pkg>/build.gradle` + `settings.gradle` from `packages/<pkg>/package.json` and `hydra.json:currentVersion`. Inter-Hydra deps emit as `api 'net.fortytwo.hydra:<dep>:<version>'`. |
 | `generate-python-package-build.py` | `bin/lib/` | Emits a standalone `dist/python/<pkg>/pyproject.toml` from `packages/<pkg>/package.json` and `hydra.json:currentVersion`. Inter-Hydra deps emit as `"<dep> == <version>"`. |
+| `generate-scala-package-build.py` | `bin/lib/` | Emits a standalone `dist/scala/<pkg>/build.sbt` + `project/plugins.sbt` + `project/build.properties` from `packages/<pkg>/package.json` and `hydra.json:currentVersion`. Inter-Hydra deps emit as `"net.fortytwo.hydra" %% "<dep>" % version`. |
 | `transform-json-to-<lang>.sh` | `heads/haskell/bin/` | Layer 1 transform. Thin wrapper over `bootstrap-from-json` for one (pkg, source-set). |
 | `transform-haskell-dsl-to-json.sh` | `heads/haskell/bin/` | Layer 1 transform. Supports `--package <pkg>` (one package) or `--all` (batch mode, one universe load). |

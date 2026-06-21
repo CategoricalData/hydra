@@ -321,27 +321,12 @@
                             {"literal": {"string": "ValueOf"}}]},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Classes in the Scala Standard Library 2.13.8"}}}]}}},
-                    "typeScheme": {"variables": [], "body": {"list": {"literal": {"string": {}}}}}},
-                  {
-                    "name": "hydraScalaKeywords",
-                    "term": {
-                      "typeLambda": {
-                        "parameter": "t0",
-                        "body": {
-                          "annotated": {
-                            "body": {"typeApplication": {"body": {"list": []}, "type": {"variable": "t0"}}},
-                            "annotation": {
-                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Reserved words which are specific to Hydra"}}}]}}}}},
-                    "typeScheme": {"variables": ["t0"], "body": {"list": {"variable": "t0"}}}}],
+                    "typeScheme": {"variables": [], "body": {"list": {"literal": {"string": {}}}}}}],
                 "body": {
                   "application": {
                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": {"string": {}}}}},
                     "argument": {
                       "application": {
                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"literal": {"string": {}}}}},
-                        "argument": {
-                          "list": [
-                            {"variable": "keywords"},
-                            {"variable": "classNames"},
-                            {"typeApplication": {"body": {"variable": "hydraScalaKeywords"}, "type": {"literal": {"string": {}}}}}]}}}}}}},
+                        "argument": {"list": [{"variable": "keywords"}, {"variable": "classNames"}]}}}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A set of reserved words in Scala"}}}]}}}}}]}

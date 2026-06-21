@@ -5,7 +5,7 @@ module Hydra.Sources.Kernel.Terms.Names where
 import Hydra.Kernel hiding (
   compactName, freshName, freshNames, localNameOf, moduleNameOf, moduleNameToFilePath, nameToFilePath,
   normalTypeVariable, pushSubtermStep, qname, qualifyName, restoreTrace,
-  uniqueLabel, unqualifyName)
+  chooseUniqueLabel, unqualifyName)
 import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast
@@ -71,6 +71,7 @@ module_ = Module {
             moduleMetadata = Bootstrap.descriptionMetadata (Just ("Functions for working with qualified names."))}
   where
    definitions = [
+     toDefinition chooseUniqueLabel,
      toDefinition compactName,
      toDefinition freshName,
      toDefinition freshNames,
@@ -83,11 +84,23 @@ module_ = Module {
      toDefinition qname,
      toDefinition qualifyName,
      toDefinition restoreTrace,
-     toDefinition uniqueLabel,
      toDefinition unqualifyName]
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
+
+chooseUniqueLabel :: TypedTermDefinition (S.Set String -> String -> String)
+chooseUniqueLabel = define "chooseUniqueLabel" $
+  doc "Pick a string label that does not collide with a reserved set, by appending a numeric suffix when necessary" $
+  "reserved" ~> "label" ~>
+  "tryLabel" <~ ("index" ~>
+    "candidate" <~ Logic.ifElse (Equality.equal (var "index") (int32 1))
+      (var "label")
+      (var "label" ++ Literals.showInt32 (var "index")) $
+    Logic.ifElse (Sets.member (var "candidate") (var "reserved"))
+      (var "tryLabel" @@ (Math.add (var "index") (int32 1)))
+      (var "candidate")) $
+  var "tryLabel" @@ (int32 1)
 
 compactName :: TypedTermDefinition (M.Map ModuleName String -> Name -> String)
 compactName = define "compactName" $
@@ -200,21 +213,6 @@ restoreTrace = define "restoreTrace" $
     <> " doesn't include the first sibling's trace path. Returns a new InferenceContext.") $
   "baseCx" ~> "newCx" ~>
   Typing.inferenceContextWithTrace (var "newCx") (Typing.inferenceContextTrace (var "baseCx"))
-
--- | 'uniqueLabel' uses an apostrophe-suffix idiom (@l@ → @l'@ → @l''@), a
--- holdover from Haskell/ML notation that doesn't translate cleanly to other
--- hosts. Both of its current consumers — 'Hydra.Sources.Kernel.Terms.Show.Paths'
--- for subterm-path labels and 'Hydra.Sources.Graphviz.Coder' for DOT node IDs —
--- would be better served by a numeric-suffix function like 'chooseUniqueName';
--- apostrophes in unquoted DOT IDs are a Graphviz syntax error. Slated for
--- removal: see https://github.com/CategoricalData/hydra/issues/436.
-uniqueLabel :: TypedTermDefinition (S.Set String -> String -> String)
-uniqueLabel = define "uniqueLabel" $
-  doc "Generate a unique label by appending a suffix if the label is already in use" $
-  lambda "visited" $ lambda "l" $
-  Logic.ifElse (Sets.member (var "l") (var "visited"))
-    (uniqueLabel @@ var "visited" @@ Strings.cat2 (var "l") (string "'"))
-    (var "l")
 
 unqualifyName :: TypedTermDefinition (QualifiedName -> Name)
 unqualifyName = define "unqualifyName" $

@@ -50,11 +50,14 @@ applicationToExpr d app =
       let funExpr = Syntax.applicationFunction app
           fun = expressionToExpr d funExpr
           args = Lists.map (expressionToExpr d) (Syntax.applicationArguments app)
+          funcallWhenComputed =
+                  case funExpr of
+                    Syntax.ExpressionVariable _ -> False
+                    _ -> True
           needsFuncall =
                   case d of
-                    Syntax.DialectEmacsLisp -> case funExpr of
-                      Syntax.ExpressionVariable _ -> False
-                      _ -> True
+                    Syntax.DialectCommonLisp -> funcallWhenComputed
+                    Syntax.DialectEmacsLisp -> funcallWhenComputed
                     _ -> False
           allParts =
                   Logic.ifElse needsFuncall (Lists.concat2 [

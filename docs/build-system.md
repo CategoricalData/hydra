@@ -556,6 +556,19 @@ All three resolve the version from `hydra.json` `hostVersion` (with per-host `ho
 default to the published artifact, and offer a `--local-host` shim. The output is byte-identical to a
 local-host build (the forward-compatibility no-op proven for each).
 
+**Why consume instead of build local.** The output is identical either way, so the payoff is purely
+about *build invalidation scope*. A local host **is** your local source: any edit under
+`packages/hydra-kernel/`, `packages/hydra-haskell/`, etc. changes the host's own inputs, so the host
+is recompiled on the next sync — kernel iteration cascades into a host rebuild every time. A published
+host is a fixed, content-addressed artifact pinned by `hostVersion`, so it sits *outside* the
+kernel-source invalidation domain: it is resolved (Java/Python) or compiled into `.stack-work`
+(Haskell) **once per worktree**, then stays a cache hit no matter how much you edit `packages/`.
+Subsequent kernel edits re-run only generation (Phase 1's DSL→JSON and the downstream target
+emission), never a host recompile. That decouples *the compiler you run* from *the code you edit*,
+which is the point: fast inner-loop kernel iteration. The host rebuilds only when you deliberately bump
+`hostVersion` (or flip a host back to `"local"` via `hostOverrides` for a backward-incompatible kernel
+change — the migration-shim path).
+
 **Language vs. host vs. coder package.** `hostOverrides` is keyed by **host** — a language name like
 `java`, `python`, `haskell` — *not* by the coder package (`hydra-java`). These are three distinct
 things with a 1:1 correspondence today, but they diverge once hosts become independently-versioned

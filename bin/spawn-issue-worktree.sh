@@ -172,10 +172,17 @@ tmux select-pane     -t "bug_${NUM}_${SLUG}" -T "bug_${NUM}_${SLUG}"
 SPAWN_MODEL="${SPAWN_MODEL:-opusplan}"
 tmux send-keys -t "bug_${NUM}_${SLUG}" "claude-remote -m ${SPAWN_MODEL}" Enter
 
-# Give claude time to spin up its TUI before sending the trigger prompt;
-# 8s is comfortable headroom for Claude Code v2.1's startup.
+# Give claude time to spin up its TUI before sending the trigger prompt.
+# 8s is comfortable headroom for Claude Code v2.1's startup. We then send
+# the prompt, pause, and send a follow-up Enter — Claude Code occasionally
+# leaves the prompt sitting in the input box (the initial Enter arrives
+# while the TUI is still settling and gets eaten), forcing the human to
+# hit Enter manually to actually submit it. The second Enter is insurance:
+# a no-op if the prompt was already submitted, the missing submit otherwise.
 sleep 8
 tmux send-keys -t "bug_${NUM}_${SLUG}" "Please complete the CLAUDE.md startup procedure and address any pending inbox messages." Enter
+sleep 3
+tmux send-keys -t "bug_${NUM}_${SLUG}" Enter
 
 echo ""
 echo "============================================================"

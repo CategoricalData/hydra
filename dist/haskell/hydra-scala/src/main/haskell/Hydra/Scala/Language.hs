@@ -131,8 +131,7 @@ scalaReservedWords :: S.Set String
 scalaReservedWords =
     Sets.fromList (Lists.concat [
       keywords,
-      classNames,
-      hydraScalaKeywords])
+      classNames])
   where
     keywords =
         [
@@ -219,4 +218,3 @@ scalaReservedWords =
           "Symbol",
           "Unit",
           "ValueOf"]
-    hydraScalaKeywords = []

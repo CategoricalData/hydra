@@ -83,7 +83,7 @@ encodeApplication dialect cx g rawFun rawArg =
 
       let dFun = Strip.deannotateTerm rawFun
           normal =
-                  Eithers.bind (encodeTerm dialect cx g rawFun) (\fun -> Eithers.bind (encodeTerm dialect cx g rawArg) (\arg -> Right (lispApp fun [
+                  \_ -> Eithers.bind (encodeTerm dialect cx g rawFun) (\fun -> Eithers.bind (encodeTerm dialect cx g rawArg) (\arg -> Right (lispApp fun [
                     arg])))
           enc = \t -> encodeTerm dialect cx g t
       in case dFun of
@@ -108,9 +108,9 @@ encodeApplication dialect cx g rawFun rawArg =
                 eM])))))) (Logic.ifElse (primIsLazyAt g dInnerFun 1) (Eithers.bind (enc innerFun) (\eP -> Eithers.bind (enc innerArg) (\eM -> Eithers.bind (enc midArg) (\eN -> Eithers.bind (enc rawArg) (\eJ -> Right (lispApp (lispApp (lispApp eP [
                 eM]) [
                 wrapInThunk eN]) [
-                eJ])))))) normal)))
-            _ -> normal))
-        _ -> normal
+                eJ])))))) (normal ()))))
+            _ -> normal ()))
+        _ -> normal ()
 encodeFieldDef :: Core.FieldType -> Syntax.FieldDefinition
 encodeFieldDef ft =
 

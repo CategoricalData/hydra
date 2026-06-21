@@ -14,6 +14,10 @@ fi
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 HYDRA_ELISP_DIR="$HYDRA_ROOT/heads/lisp/emacs-lisp"
+# Shipped runtime + test hydra/ tree (hand-written overlay + generated) live under dist/, not heads/,
+# since #434 migrated the Emacs Lisp runtime/test helpers into overlay/emacs-lisp (copied into
+# dist/emacs-lisp by sync). The head retains generation drivers + the run-tests.el entry point.
+HYDRA_ELISP_DIST="$HYDRA_ROOT/dist/emacs-lisp/hydra-kernel"
 
 # Clean and create output directory
 echo "Preparing output directory: $OUTPUT_DIR"
@@ -30,15 +34,23 @@ echo "Copying static resources for Emacs Lisp target..."
 # done by the Haskell bootstrap-from-json executable.
 echo "  Copying hand-written source files..."
 mkdir -p "$OUTPUT_DIR/src/main/emacs-lisp"
-cp -r "$HYDRA_ELISP_DIR/src/main/emacs-lisp/hydra" "$OUTPUT_DIR/src/main/emacs-lisp/"
+cp -r "$HYDRA_ELISP_DIST/src/main/emacs-lisp/hydra" "$OUTPUT_DIR/src/main/emacs-lisp/"
 rm -f "$OUTPUT_DIR/src/main/emacs-lisp/hydra/bootstrap.el"
 
-# Test infrastructure
+# Test infrastructure. EL's test tree is only PARTIALLY migrated by #434: the generated test modules
+# + most helpers live in dist/, but a couple of hand-written test files (annotation_bindings.el,
+# test_runner.el) remain in the head. Copy the dist tree first, then overlay the head-only files.
 echo "  Copying test infrastructure..."
 mkdir -p "$OUTPUT_DIR/src/test/emacs-lisp"
-if [ -d "$HYDRA_ELISP_DIR/src/test/emacs-lisp/hydra" ]; then
-    cp -r "$HYDRA_ELISP_DIR/src/test/emacs-lisp/hydra" "$OUTPUT_DIR/src/test/emacs-lisp/"
+if [ -d "$HYDRA_ELISP_DIST/src/test/emacs-lisp/hydra" ]; then
+    cp -r "$HYDRA_ELISP_DIST/src/test/emacs-lisp/hydra" "$OUTPUT_DIR/src/test/emacs-lisp/"
 fi
+# Overlay head-only hand-written test files not present in dist.
+for f in annotation_bindings.el test_runner.el; do
+    if [ -f "$HYDRA_ELISP_DIR/src/test/emacs-lisp/hydra/$f" ]; then
+        cp "$HYDRA_ELISP_DIR/src/test/emacs-lisp/hydra/$f" "$OUTPUT_DIR/src/test/emacs-lisp/hydra/$f"
+    fi
+done
 
 # Top-level run-tests entry point
 cp "$HYDRA_ELISP_DIR/run-tests.el" "$OUTPUT_DIR/" 2>/dev/null || true

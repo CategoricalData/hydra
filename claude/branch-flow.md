@@ -20,9 +20,9 @@ see [worktree-workflow.md](worktree-workflow.md).
 - **integration** is a passive collector. It typically has no Claude session
   attached. It receives merges from feature branches and forwards them to staging.
 - **staging** is the only intermediate tier with an attached Claude session.
-  After integration's batch arrives, the staging session runs `/sync`, `/bootstrap`,
-  and any optional checks the user specifies. Only after those pass does the
-  batch advance to main.
+  After integration's batch arrives, the staging session runs `/sync`, `/test`,
+  `/bootstrap`, and any optional checks the user specifies. Only after those pass
+  does the batch advance to main.
 - **main** is a local stable mirror. No active session. It receives only from
   staging. The user pulls into local main first (so feature branches can pull
   from it to refresh their base), then pushes to `origin/main`.
@@ -55,8 +55,8 @@ staging worktree, with the staging Claude session resolving any conflicts.
   the user must explicitly authorize it — per the "modify only your assigned
   worktree" rule in CLAUDE.md.
 - `main` is pushed to `origin/main` by the staging session as part of its
-  workflow loop (see [Staging workflow](#staging-workflow) below), once `/sync`
-  and `/bootstrap` are green — but the session confirms with the user before
+  workflow loop (see [Staging workflow](#staging-workflow) below), once `/sync`,
+  `/test`, and `/bootstrap` are green — but the session confirms with the user before
   each `origin/main` push, since it is outward-facing and hard to reverse.
   Feature and integration sessions never push to `origin/main`.
 
@@ -84,13 +84,17 @@ Each iteration:
    [Handling pulled WIP commits](#handling-pulled-wip-commits)). Do not `/sync`
    or push past unresolved `WIP:` commits.
 2. **`/sync`** — the default full host × target sync.
-3. **`/bootstrap`** — the default triad (haskell/java/python) bootstrap demo.
-4. **On failure in step 2 or 3:** attempt a fix. If the correct fix is clear,
+3. **`/test`** — the default triad (haskell/java/python) target-language test
+   validation. `/sync` only runs Haskell `stack test`; `/test` closes the gap by
+   running each target head's own suite against the freshly-synced `dist/`,
+   catching target-runtime breakage before it reaches CI.
+4. **`/bootstrap`** — the default triad (haskell/java/python) bootstrap demo.
+5. **On failure in step 2, 3, or 4:** attempt a fix. If the correct fix is clear,
    apply it and re-run the failing step and everything after it (per the
    shorthand-commands "resume from the failing step" rule in CLAUDE.md). If the
    fix is not clear, reach out to the user before proceeding. Repeat the failing
    step until green.
-5. **Push to `origin/main`** once `/sync` and `/bootstrap` are both green.
+6. **Push to `origin/main`** once `/sync`, `/test`, and `/bootstrap` are all green.
    Confirm with the user before the push (see the cadence note above).
    **Pre-push WIP gate:** before pushing, scan the full range that would land
    on main (`git log --oneline origin/main..staging | grep '^[0-9a-f]* WIP:'`).
@@ -100,8 +104,8 @@ Each iteration:
    remain, finalize them first (drop the `WIP:` prefix, squashing into focused
    topic commits where appropriate per [.claude/commands/squash.md](../.claude/commands/squash.md))
    — never push `WIP:` to main.
-6. **Monitor the CI build** after the push.
-7. **Handle CI fallout:**
+7. **Monitor the CI build** after the push.
+8. **Handle CI fallout:**
    - For a clear, simple fix, fold it into the next cycle.
    - For a complicated or non-obvious issue, surface it to the user and draft a
      GitHub issue — **do not file it without explicit approval** (per the
@@ -112,7 +116,7 @@ Each iteration:
 - The next cycle may begin as soon as the push to `origin/main` succeeds; it
   does not wait for CI to go green.
 - When a CI issue surfaces mid-cycle, decide case-by-case whether to **interrupt**
-  the running `/sync` or `/bootstrap` to fix it now, or let the current cycle
+  the running `/sync`, `/test`, or `/bootstrap` to fix it now, or let the current cycle
   finish and fix it in the next one. **If in doubt, ask the user.**
 - This is the staging tier's own loop; promotion *into* staging still follows
   the cadence and conflict rules above (resolve conflicts in the source worktree).

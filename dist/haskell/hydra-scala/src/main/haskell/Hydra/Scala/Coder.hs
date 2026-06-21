@@ -218,7 +218,7 @@ encodeFunction cx g meta funTerm arg =
         let fname = Utils.scalaEscapeName (Core.unName (Core.projectionFieldName v0))
             typeName = Core.projectionTypeName v0
             pv = "x"
-        in (Optionals.cases arg (Eithers.bind (Eithers.either (\_ -> Eithers.bind (encodeType cx g (Core.TypeVariable typeName)) (\st -> Right (Just st))) (\msdom -> Optionals.cases msdom (Eithers.bind (encodeType cx g (Core.TypeVariable typeName)) (\st -> Right (Just st))) (\sdom -> Right (Just sdom))) (findSdom cx g meta)) (\msdom -> Right (Utils.slambda pv (Syntax.DataRef (Syntax.RefDataSelect (Syntax.SelectData {
+        in (Optionals.cases arg (Eithers.bind (Eithers.either (\_ -> Right Nothing) (\msdom -> Right msdom) (findSdom cx g meta)) (\msdom -> Right (Utils.slambda pv (Syntax.DataRef (Syntax.RefDataSelect (Syntax.SelectData {
           Syntax.selectDataQual = (Utils.sname pv),
           Syntax.selectDataName = Syntax.NameData {
             Syntax.nameDataValue = (Syntax.PredefString fname)}}))) msdom))) (\a -> Eithers.bind (encodeTerm cx g a) (\sa -> Right (Syntax.DataRef (Syntax.RefDataSelect (Syntax.SelectData {
@@ -481,7 +481,9 @@ encodeTermDefinition cx g td =
                       Core.TypeFunction _ -> True
                       _ -> False
                     _ -> False
-      in (Logic.ifElse isFunctionType (encodeComplexTermDef cx g lname term typ_) (Eithers.bind (encodeType cx g typ_) (\stype -> Eithers.bind (encodeTerm cx g term) (\rhs -> Right (Syntax.StatDefn (Syntax.DefnVal (Syntax.ValDefn {
+          freeTypeVarsInTyp =
+                  Lists.filter (\v -> Logic.not (Lists.elem 46 (Strings.toList (Core.unName v)))) (Sets.toList (Variables.freeVariablesInType typ_))
+      in (Logic.ifElse isFunctionType (encodeComplexTermDef cx g lname term typ_) (Logic.ifElse (Lists.null freeTypeVarsInTyp) (Eithers.bind (encodeType cx g typ_) (\stype -> Eithers.bind (encodeTerm cx g term) (\rhs -> Right (Syntax.StatDefn (Syntax.DefnVal (Syntax.ValDefn {
         Syntax.valDefnMods = [
           Syntax.ModLazy],
         Syntax.valDefnPats = [
@@ -489,7 +491,16 @@ encodeTermDefinition cx g td =
             Syntax.varPatName = Syntax.NameData {
               Syntax.nameDataValue = (Syntax.PredefString lname)}})],
         Syntax.valDefnDecltpe = (Just stype),
-        Syntax.valDefnRhs = rhs})))))))
+        Syntax.valDefnRhs = rhs})))))) (Eithers.bind (encodeType cx g typ_) (\stype -> Eithers.bind (encodeTerm cx g term) (\rhs ->
+        let tparams = Lists.map (\tv -> Utils.stparam tv) freeTypeVarsInTyp
+        in (Right (Syntax.StatDefn (Syntax.DefnDef (Syntax.DefDefn {
+          Syntax.defDefnMods = [],
+          Syntax.defDefnName = Syntax.NameData {
+            Syntax.nameDataValue = (Syntax.PredefString lname)},
+          Syntax.defDefnTparams = tparams,
+          Syntax.defDefnParamss = [],
+          Syntax.defDefnDecltpe = (Just stype),
+          Syntax.defDefnBody = rhs})))))))))
 -- | Encode a Hydra type as a Scala type
 encodeType :: t0 -> t1 -> Core.Type -> Either Errors.Error Syntax.Type
 encodeType cx g t =
@@ -522,41 +533,41 @@ encodeType cx g t =
             sdom],
           Syntax.functionTypeRes = scod})))))
       Core.TypeList v0 -> Eithers.bind (encodeType cx g v0) (\slt -> Right (Utils.stapply1 (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-        Syntax.nameTypeValue = "Seq"}))) slt))
+        Syntax.nameTypeValue = "scala.collection.immutable.Seq"}))) slt))
       Core.TypeLiteral v0 -> case v0 of
         Core.LiteralTypeBinary -> Right (Utils.stapply (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-          Syntax.nameTypeValue = "Array"}))) [
+          Syntax.nameTypeValue = "scala.Array"}))) [
           Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-            Syntax.nameTypeValue = "Byte"}))])
+            Syntax.nameTypeValue = "scala.Byte"}))])
         Core.LiteralTypeBoolean -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-          Syntax.nameTypeValue = "Boolean"})))
+          Syntax.nameTypeValue = "scala.Boolean"})))
         Core.LiteralTypeDecimal -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-          Syntax.nameTypeValue = "BigDecimal"})))
+          Syntax.nameTypeValue = "scala.math.BigDecimal"})))
         Core.LiteralTypeFloat v1 -> case v1 of
           Core.FloatTypeFloat32 -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-            Syntax.nameTypeValue = "Float"})))
+            Syntax.nameTypeValue = "scala.Float"})))
           Core.FloatTypeFloat64 -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-            Syntax.nameTypeValue = "Double"})))
+            Syntax.nameTypeValue = "scala.Double"})))
           _ -> Left (Errors.ErrorOther (Errors.OtherError "unsupported float type"))
         Core.LiteralTypeInteger v1 -> case v1 of
           Core.IntegerTypeBigint -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-            Syntax.nameTypeValue = "BigInt"})))
+            Syntax.nameTypeValue = "scala.math.BigInt"})))
           Core.IntegerTypeInt8 -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-            Syntax.nameTypeValue = "Byte"})))
+            Syntax.nameTypeValue = "scala.Byte"})))
           Core.IntegerTypeInt16 -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-            Syntax.nameTypeValue = "Short"})))
+            Syntax.nameTypeValue = "scala.Short"})))
           Core.IntegerTypeInt32 -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-            Syntax.nameTypeValue = "Int"})))
+            Syntax.nameTypeValue = "scala.Int"})))
           Core.IntegerTypeInt64 -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-            Syntax.nameTypeValue = "Long"})))
+            Syntax.nameTypeValue = "scala.Long"})))
           Core.IntegerTypeUint8 -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-            Syntax.nameTypeValue = "Byte"})))
+            Syntax.nameTypeValue = "scala.Byte"})))
           Core.IntegerTypeUint16 -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-            Syntax.nameTypeValue = "Int"})))
+            Syntax.nameTypeValue = "scala.Int"})))
           Core.IntegerTypeUint32 -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-            Syntax.nameTypeValue = "Long"})))
+            Syntax.nameTypeValue = "scala.Long"})))
           Core.IntegerTypeUint64 -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-            Syntax.nameTypeValue = "BigInt"})))
+            Syntax.nameTypeValue = "scala.math.BigInt"})))
           _ -> Left (Errors.ErrorOther (Errors.OtherError "unsupported integer type"))
         Core.LiteralTypeString -> Right (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
           Syntax.nameTypeValue = "scala.Predef.String"})))
@@ -565,9 +576,9 @@ encodeType cx g t =
         let kt = Core.mapTypeKeys v0
             vt = Core.mapTypeValues v0
         in (Eithers.bind (encodeType cx g kt) (\skt -> Eithers.bind (encodeType cx g vt) (\svt -> Right (Utils.stapply2 (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-          Syntax.nameTypeValue = "Map"}))) skt svt))))
+          Syntax.nameTypeValue = "scala.collection.immutable.Map"}))) skt svt))))
       Core.TypeOptional v0 -> Eithers.bind (encodeType cx g v0) (\sot -> Right (Utils.stapply1 (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
-        Syntax.nameTypeValue = "Option"}))) sot))
+        Syntax.nameTypeValue = "scala.Option"}))) sot))
       Core.TypePair v0 ->
         let ft = Core.pairTypeFirst v0
             st = Core.pairTypeSecond v0
@@ -782,7 +793,7 @@ extractParams t =
 fieldToEnumCase :: t0 -> t1 -> String -> [Syntax.ParamType] -> Core.FieldType -> Either Errors.Error Syntax.Stat
 fieldToEnumCase cx g parentName tparams ft =
 
-      let fname = Utils.scalaEscapeName (Core.unName (Core.fieldTypeName ft))
+      let fname = Utils.scalaEscapeEnumCaseName (Core.unName (Core.fieldTypeName ft))
           ftyp = Core.fieldTypeType ft
           caseName = Syntax.NameData {
                 Syntax.nameDataValue = (Syntax.PredefString fname)}

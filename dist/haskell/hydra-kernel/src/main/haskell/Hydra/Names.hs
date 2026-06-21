@@ -16,6 +16,7 @@ import qualified Hydra.File as File
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
+import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
 import qualified Hydra.Haskell.Lib.Literals as Literals
 import qualified Hydra.Haskell.Lib.Logic as Logic
@@ -43,6 +44,15 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
+-- | Pick a string label that does not collide with a reserved set, by appending a numeric suffix when necessary
+chooseUniqueLabel :: S.Set String -> String -> String
+chooseUniqueLabel reserved label =
+
+      let tryLabel =
+              \index ->
+                let candidate = Logic.ifElse (Equality.equal index 1) label (Strings.cat2 label (Literals.showInt32 index))
+                in (Logic.ifElse (Sets.member candidate reserved) (tryLabel (Math.add index 1)) candidate)
+      in (tryLabel 1)
 -- | Given a mapping of namespaces to prefixes, convert a name to a compact string representation
 compactName :: M.Map Packaging.ModuleName String -> Core.Name -> String
 compactName namespaces name =
@@ -142,9 +152,6 @@ restoreTrace baseCx newCx =
     Typing.InferenceContext {
       Typing.inferenceContextFreshTypeVariableCount = (Typing.inferenceContextFreshTypeVariableCount newCx),
       Typing.inferenceContextTrace = (Typing.inferenceContextTrace baseCx)}
--- | Generate a unique label by appending a suffix if the label is already in use
-uniqueLabel :: S.Set String -> String -> String
-uniqueLabel visited l = Logic.ifElse (Sets.member l visited) (uniqueLabel visited (Strings.cat2 l "'")) l
 -- | Convert a qualified name to a dot-separated name
 unqualifyName :: Util.QualifiedName -> Core.Name
 unqualifyName qname =
