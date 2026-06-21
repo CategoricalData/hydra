@@ -507,6 +507,10 @@ type_ = define "type" $
         string "(",
         Strings.intercalate (string " @ ") (var "typeStrs"),
         string ")"],
+    _Type_effect>>: "etyp" ~> Strings.cat $ list [
+      string "effect<",
+      type_ @@ var "etyp",
+      string ">"],
     _Type_either>>: "et" ~>
       "leftTyp" <~ Core.eitherTypeLeft (var "et") $
       "rightTyp" <~ Core.eitherTypeRight (var "et") $

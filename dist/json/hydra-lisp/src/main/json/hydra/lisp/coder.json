@@ -20,8 +20,10 @@
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
     {"module": "hydra.error.packaging"},
     {"module": "hydra.errors"},
+    {"module": "hydra.file"},
     {"module": "hydra.graph"},
     {"module": "hydra.json.model"},
     {"module": "hydra.packaging"},
@@ -30,6 +32,7 @@
     {"module": "hydra.relational"},
     {"module": "hydra.tabular"},
     {"module": "hydra.testing"},
+    {"module": "hydra.time"},
     {"module": "hydra.topology"},
     {"module": "hydra.typed"},
     {"module": "hydra.typing"},
@@ -4347,6 +4350,28 @@
                                                                     "field": {"name": "named", "term": {"wrap": {"typeName": "hydra.lisp.syntax.Symbol", "body": {"literal": {"string": "Either"}}}}}}}}},
                                                             "type": {"variable": "t2"}}},
                                                         "type": {"variable": "hydra.lisp.syntax.TypeSpecifier"}}}}}},
+                                              {
+                                                "name": "effect",
+                                                "handler": {
+                                                  "lambda": {
+                                                    "parameter": "inner",
+                                                    "domain": {"variable": "hydra.core.Type"},
+                                                    "body": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lisp.coder.encodeType"}, "type": {"variable": "t0"}}},
+                                                                        "type": {"variable": "t1"}}},
+                                                                    "type": {"variable": "t2"}}},
+                                                                "argument": {"variable": "cx"}}},
+                                                            "argument": {"variable": "g"}}},
+                                                        "argument": {"variable": "inner"}}}}}},
                                               {
                                                 "name": "pair",
                                                 "handler": {

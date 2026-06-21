@@ -12,8 +12,10 @@
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
     {"module": "hydra.error.packaging"},
     {"module": "hydra.errors"},
+    {"module": "hydra.file"},
     {"module": "hydra.graph"},
     {"module": "hydra.json.model"},
     {"module": "hydra.packaging"},
@@ -22,6 +24,7 @@
     {"module": "hydra.relational"},
     {"module": "hydra.tabular"},
     {"module": "hydra.testing"},
+    {"module": "hydra.time"},
     {"module": "hydra.topology"},
     {"module": "hydra.typed"},
     {"module": "hydra.typing"},
@@ -530,6 +533,41 @@
                                                                                                                       "application": {"function": {"project": {"typeName": "hydra.core.EitherType", "fieldName": "right"}}, "argument": {"variable": "l"}}}}},
                                                                                                                 "argument": {
                                                                                                                   "application": {"function": {"project": {"typeName": "hydra.core.EitherType", "fieldName": "right"}}, "argument": {"variable": "r"}}}}}]}}},
+                                                                                                    "type": {"variable": "hydra.errors.UnificationError"}}},
+                                                                                                "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}}}}]}},
+                                                                                "argument": {"variable": "sright"}}}}}},
+                                                                      {
+                                                                        "name": "effect",
+                                                                        "handler": {
+                                                                          "lambda": {
+                                                                            "parameter": "l",
+                                                                            "domain": {"variable": "hydra.core.Type"},
+                                                                            "body": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "cases": {
+                                                                                    "typeName": "hydra.core.Type",
+                                                                                    "default": {
+                                                                                      "typeApplication": {"body": {"variable": "cannotUnify"}, "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
+                                                                                    "cases": [
+                                                                                      {
+                                                                                        "name": "effect",
+                                                                                        "handler": {
+                                                                                          "lambda": {
+                                                                                            "parameter": "r",
+                                                                                            "domain": {"variable": "hydra.core.Type"},
+                                                                                            "body": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "either": {
+                                                                                                        "right": {
+                                                                                                          "list": [
+                                                                                                            {
+                                                                                                              "application": {
+                                                                                                                "function": {"application": {"function": {"variable": "joinOne"}, "argument": {"variable": "l"}}},
+                                                                                                                "argument": {"variable": "r"}}}]}}},
                                                                                                     "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                                                 "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}}}}]}},
                                                                                 "argument": {"variable": "sright"}}}}}},

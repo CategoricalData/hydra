@@ -10,8 +10,10 @@ import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Dependencies as Dependencies
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.File as ErrorFile
 import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
+import qualified Hydra.File as File
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lexical as Lexical
@@ -35,6 +37,7 @@ import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing
+import qualified Hydra.Time as Time
 import qualified Hydra.Topology as Topology
 import qualified Hydra.Typed as Typed
 import qualified Hydra.Typing as Typing
@@ -115,7 +118,7 @@ isSerializable cx graph el =
               \typ -> Lists.map Reflect.typeVariant (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> Lists.cons t m) [] typ)
       in (Eithers.map (\deps ->
         let allVariants = Sets.fromList (Lists.concat (Lists.map variants (Maps.elems deps)))
-        in (Logic.not (Sets.member Variants.TypeVariantFunction allVariants))) (typeDependencies cx graph False Equality.identity (Core.bindingName el)))
+        in (Logic.not (Logic.or (Sets.member Variants.TypeVariantEffect allVariants) (Sets.member Variants.TypeVariantFunction allVariants)))) (typeDependencies cx graph False Equality.identity (Core.bindingName el)))
 -- | Check if a type (by name) is serializable, resolving all type dependencies (Either version)
 isSerializableByName :: t0 -> Graph.Graph -> Core.Name -> Either Errors.Error Bool
 isSerializableByName cx graph name =
@@ -124,14 +127,14 @@ isSerializableByName cx graph name =
               \typ -> Lists.map Reflect.typeVariant (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> Lists.cons t m) [] typ)
       in (Eithers.map (\deps ->
         let allVariants = Sets.fromList (Lists.concat (Lists.map variants (Maps.elems deps)))
-        in (Logic.not (Sets.member Variants.TypeVariantFunction allVariants))) (typeDependencies cx graph False Equality.identity name))
+        in (Logic.not (Logic.or (Sets.member Variants.TypeVariantEffect allVariants) (Sets.member Variants.TypeVariantFunction allVariants)))) (typeDependencies cx graph False Equality.identity name))
 -- | Check if a type is serializable (no function types in the type itself)
 isSerializableType :: Core.Type -> Bool
 isSerializableType typ =
 
       let allVariants =
               Sets.fromList (Lists.map Reflect.typeVariant (Rewriting.foldOverType Coders.TraversalOrderPre (\m -> \t -> Lists.cons t m) [] typ))
-      in (Logic.not (Sets.member Variants.TypeVariantFunction allVariants))
+      in (Logic.not (Logic.or (Sets.member Variants.TypeVariantEffect allVariants) (Sets.member Variants.TypeVariantFunction allVariants)))
 -- | Check if a term is trivially cheap (no thunking needed)
 isTrivialTerm :: Core.Term -> Bool
 isTrivialTerm t =

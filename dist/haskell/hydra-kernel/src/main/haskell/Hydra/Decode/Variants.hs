@@ -92,6 +92,7 @@ typeVariant cx raw =
                       (
                         Core.Name "application",
                         (\input -> Eithers.map (\t -> Variants.TypeVariantApplication) (ExtractCore.decodeUnit cx input))),
+                      (Core.Name "effect", (\input -> Eithers.map (\t -> Variants.TypeVariantEffect) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "either", (\input -> Eithers.map (\t -> Variants.TypeVariantEither) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "forall", (\input -> Eithers.map (\t -> Variants.TypeVariantForall) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "function", (\input -> Eithers.map (\t -> Variants.TypeVariantFunction) (ExtractCore.decodeUnit cx input))),

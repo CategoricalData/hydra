@@ -8,8 +8,10 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.File as ErrorFile
 import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
+import qualified Hydra.File as File
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Equality as Equality
@@ -28,6 +30,7 @@ import qualified Hydra.Relational as Relational
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing
+import qualified Hydra.Time as Time
 import qualified Hydra.Topology as Topology
 import qualified Hydra.Typed as Typed
 import qualified Hydra.Typing as Typing
@@ -354,6 +357,7 @@ type_ p acc boundVars typ =
         Core.TypeApplication v0 ->
           let acc2 = type_ p acc1 boundVars (Core.applicationTypeFunction v0)
           in (type_ p acc2 boundVars (Core.applicationTypeArgument v0))
+        Core.TypeEffect v0 -> type_ p acc1 boundVars v0
         Core.TypeEither v0 ->
           let acc2 = type_ p acc1 boundVars (Core.eitherTypeLeft v0)
           in (type_ p acc2 boundVars (Core.eitherTypeRight v0))
@@ -390,6 +394,7 @@ validateTypeNode p boundVars typ =
       Core.TypeEither v0 -> firstFindingType [
         Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (checkVoid (Core.eitherTypeLeft v0))) Nothing,
         (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (checkVoid (Core.eitherTypeRight v0))) Nothing)]
+      Core.TypeEffect v0 -> Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTypeError.voidInNonBottomPosition", f)) (checkVoid v0)) Nothing
       Core.TypeForall v0 ->
         let paramName = Core.forallTypeParameter v0
         in (firstFindingType [

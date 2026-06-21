@@ -7,8 +7,10 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.File as ErrorFile
 import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
+import qualified Hydra.File as File
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Lists as Lists
@@ -19,6 +21,7 @@ import qualified Hydra.Query as Query
 import qualified Hydra.Relational as Relational
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing
+import qualified Hydra.Time as Time
 import qualified Hydra.Topology as Topology
 import qualified Hydra.Typed as Typed
 import qualified Hydra.Typing as Typing
@@ -198,9 +201,10 @@ typeVariant x =
     case x of
       Core.TypeAnnotated _ -> Variants.TypeVariantAnnotated
       Core.TypeApplication _ -> Variants.TypeVariantApplication
+      Core.TypeEffect _ -> Variants.TypeVariantEffect
       Core.TypeEither _ -> Variants.TypeVariantEither
-      Core.TypeFunction _ -> Variants.TypeVariantFunction
       Core.TypeForall _ -> Variants.TypeVariantForall
+      Core.TypeFunction _ -> Variants.TypeVariantFunction
       Core.TypeList _ -> Variants.TypeVariantList
       Core.TypeLiteral _ -> Variants.TypeVariantLiteral
       Core.TypeMap _ -> Variants.TypeVariantMap
@@ -219,13 +223,13 @@ typeVariants =
     [
       Variants.TypeVariantAnnotated,
       Variants.TypeVariantApplication,
+      Variants.TypeVariantEffect,
       Variants.TypeVariantEither,
-      Variants.TypeVariantFunction,
       Variants.TypeVariantForall,
+      Variants.TypeVariantFunction,
       Variants.TypeVariantList,
       Variants.TypeVariantLiteral,
       Variants.TypeVariantMap,
-      Variants.TypeVariantWrap,
       Variants.TypeVariantOptional,
       Variants.TypeVariantPair,
       Variants.TypeVariantRecord,
@@ -233,4 +237,5 @@ typeVariants =
       Variants.TypeVariantUnion,
       Variants.TypeVariantUnit,
       Variants.TypeVariantVariable,
-      Variants.TypeVariantVoid]
+      Variants.TypeVariantVoid,
+      Variants.TypeVariantWrap]

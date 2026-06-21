@@ -1824,6 +1824,14 @@ typeClassConstraintSimple x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+-- | DSL injection for the effect variant of hydra.core.Type
+typeEffect :: Typed.TypedTerm Core.Type -> Typed.TypedTerm Core.Type
+typeEffect x =
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.core.Type"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "effect"),
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the either variant of hydra.core.Type
 typeEither :: Typed.TypedTerm Core.EitherType -> Typed.TypedTerm Core.Type
 typeEither x =

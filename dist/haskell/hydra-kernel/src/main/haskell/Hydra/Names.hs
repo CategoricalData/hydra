@@ -9,8 +9,10 @@ import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.File as ErrorFile
 import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
+import qualified Hydra.File as File
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
@@ -31,6 +33,7 @@ import qualified Hydra.Query as Query
 import qualified Hydra.Relational as Relational
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing
+import qualified Hydra.Time as Time
 import qualified Hydra.Topology as Topology
 import qualified Hydra.Typed as Typed
 import qualified Hydra.Typing as Typing
@@ -91,13 +94,13 @@ localNameOf arg_ = Util.qualifiedNameLocal (qualifyName arg_)
 moduleNameOf :: Core.Name -> Maybe Packaging.ModuleName
 moduleNameOf arg_ = Util.qualifiedNameModuleName (qualifyName arg_)
 -- | Convert a module name to a file path with the given case convention and file extension
-moduleNameToFilePath :: Util.CaseConvention -> Util.FileExtension -> Packaging.ModuleName -> String
+moduleNameToFilePath :: Util.CaseConvention -> File.FileExtension -> Packaging.ModuleName -> String
 moduleNameToFilePath caseConv ext ns =
 
       let parts = Lists.map (Formatting.convertCase Util.CaseConventionCamel caseConv) (Strings.splitOn "." (Packaging.unModuleName ns))
-      in (Strings.cat2 (Strings.cat2 (Strings.intercalate "/" parts) ".") (Util.unFileExtension ext))
+      in (Strings.cat2 (Strings.cat2 (Strings.intercalate "/" parts) ".") (File.unFileExtension ext))
 -- | Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator
-nameToFilePath :: Util.CaseConvention -> Util.CaseConvention -> Util.FileExtension -> Core.Name -> String
+nameToFilePath :: Util.CaseConvention -> Util.CaseConvention -> File.FileExtension -> Core.Name -> String
 nameToFilePath nsConv localConv ext name =
 
       let qualName = qualifyName name
@@ -111,7 +114,7 @@ nameToFilePath nsConv localConv ext name =
         prefix,
         suffix,
         ".",
-        (Util.unFileExtension ext)])
+        (File.unFileExtension ext)])
 -- | Type variable naming convention follows Haskell: t0, t1, etc.
 normalTypeVariable :: Int -> Core.Name
 normalTypeVariable i = Core.Name (Strings.cat2 "t" (Literals.showInt32 i))

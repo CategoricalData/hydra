@@ -1,0 +1,622 @@
+{
+  "name": "hydra.test.lib.effects",
+  "metadata": {"description": "Effectful test cases for hydra.lib.effects primitives", "comments": [], "seeAlso": []},
+  "dependencies": [{"module": "hydra.core"}, {"module": "hydra.testing"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.test.lib.effects.allTests",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "record": {
+                "typeName": "hydra.testing.TestGroup",
+                "fields": [
+                  {"name": "name", "term": {"literal": {"string": "hydra.lib.effects primitives"}}},
+                  {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                  {
+                    "name": "subgroups",
+                    "term": {
+                      "list": [
+                        {
+                          "record": {
+                            "typeName": "hydra.testing.TestGroup",
+                            "fields": [
+                              {"name": "name", "term": {"literal": {"string": "apply"}}},
+                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                              {
+                                "name": "subgroups",
+                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
+                              {
+                                "name": "cases",
+                                "term": {
+                                  "list": [
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.testing.TestCaseWithMetadata",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "apply applies an effectful function to an effectful argument"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "typeName": "hydra.testing.TestCase",
+                                                "field": {
+                                                  "name": "effectful",
+                                                  "term": {
+                                                    "record": {
+                                                      "typeName": "hydra.testing.EffectfulTestCase",
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": {"unit": {}},
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.effects.apply"}, "type": {"literal": {"string": {}}}}},
+                                                                          "type": {"literal": {"string": {}}}}},
+                                                                      "argument": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "typeApplication": {
+                                                                              "body": {"variable": "hydra.lib.effects.pure"},
+                                                                              "type": {"function": {"domain": {"literal": {"string": {}}}, "codomain": {"literal": {"string": {}}}}}}},
+                                                                          "argument": {
+                                                                            "lambda": {
+                                                                              "parameter": "s",
+                                                                              "domain": {"literal": {"string": {}}},
+                                                                              "body": {
+                                                                                "application": {
+                                                                                  "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": ">"}}}},
+                                                                                  "argument": {"variable": "s"}}}}}}}}},
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "function": {"typeApplication": {"body": {"variable": "hydra.lib.effects.pure"}, "type": {"literal": {"string": {}}}}},
+                                                                      "argument": {"literal": {"string": "y"}}}}}}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": ">y"}}}}}]}}}}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
+                        {
+                          "record": {
+                            "typeName": "hydra.testing.TestGroup",
+                            "fields": [
+                              {"name": "name", "term": {"literal": {"string": "bind"}}},
+                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                              {
+                                "name": "subgroups",
+                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
+                              {
+                                "name": "cases",
+                                "term": {
+                                  "list": [
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.testing.TestCaseWithMetadata",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "bind threads a pure value into the next effect"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "typeName": "hydra.testing.TestCase",
+                                                "field": {
+                                                  "name": "effectful",
+                                                  "term": {
+                                                    "record": {
+                                                      "typeName": "hydra.testing.EffectfulTestCase",
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": {"unit": {}},
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.effects.bind"}, "type": {"literal": {"string": {}}}}},
+                                                                          "type": {"literal": {"string": {}}}}},
+                                                                      "argument": {
+                                                                        "application": {
+                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.lib.effects.pure"}, "type": {"literal": {"string": {}}}}},
+                                                                          "argument": {"literal": {"string": "abc"}}}}}},
+                                                                  "argument": {
+                                                                    "lambda": {
+                                                                      "parameter": "s",
+                                                                      "domain": {"literal": {"string": {}}},
+                                                                      "body": {
+                                                                        "application": {
+                                                                          "function": {"typeApplication": {"body": {"variable": "hydra.lib.effects.pure"}, "type": {"literal": {"string": {}}}}},
+                                                                          "argument": {
+                                                                            "application": {
+                                                                              "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "s"}}},
+                                                                              "argument": {"literal": {"string": "!"}}}}}}}}}}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "abc!"}}}}}]}}}}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
+                        {
+                          "record": {
+                            "typeName": "hydra.testing.TestGroup",
+                            "fields": [
+                              {"name": "name", "term": {"literal": {"string": "compose"}}},
+                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                              {
+                                "name": "subgroups",
+                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
+                              {
+                                "name": "cases",
+                                "term": {
+                                  "list": [
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.testing.TestCaseWithMetadata",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "compose runs two Kleisli arrows in sequence"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "typeName": "hydra.testing.TestCase",
+                                                "field": {
+                                                  "name": "effectful",
+                                                  "term": {
+                                                    "record": {
+                                                      "typeName": "hydra.testing.EffectfulTestCase",
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": {"unit": {}},
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.effects.compose"}, "type": {"literal": {"string": {}}}}},
+                                                                                  "type": {"literal": {"string": {}}}}},
+                                                                              "type": {"literal": {"string": {}}}}},
+                                                                          "argument": {
+                                                                            "lambda": {
+                                                                              "parameter": "a",
+                                                                              "domain": {"literal": {"string": {}}},
+                                                                              "body": {
+                                                                                "application": {
+                                                                                  "function": {"typeApplication": {"body": {"variable": "hydra.lib.effects.pure"}, "type": {"literal": {"string": {}}}}},
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "a"}}},
+                                                                                      "argument": {"literal": {"string": "1"}}}}}}}}}},
+                                                                      "argument": {
+                                                                        "lambda": {
+                                                                          "parameter": "b",
+                                                                          "domain": {"literal": {"string": {}}},
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "function": {"typeApplication": {"body": {"variable": "hydra.lib.effects.pure"}, "type": {"literal": {"string": {}}}}},
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "b"}}},
+                                                                                  "argument": {"literal": {"string": "2"}}}}}}}}}},
+                                                                  "argument": {"literal": {"string": "n"}}}}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "n12"}}}}}]}}}}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
+                        {
+                          "record": {
+                            "typeName": "hydra.testing.TestGroup",
+                            "fields": [
+                              {"name": "name", "term": {"literal": {"string": "foldl"}}},
+                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                              {
+                                "name": "subgroups",
+                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
+                              {
+                                "name": "cases",
+                                "term": {
+                                  "list": [
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.testing.TestCaseWithMetadata",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "foldl sequences an effect-returning step over a list"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "typeName": "hydra.testing.TestCase",
+                                                "field": {
+                                                  "name": "effectful",
+                                                  "term": {
+                                                    "record": {
+                                                      "typeName": "hydra.testing.EffectfulTestCase",
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": {"unit": {}},
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "typeApplication": {
+                                                                              "body": {"typeApplication": {"body": {"variable": "hydra.lib.effects.foldl"}, "type": {"literal": {"string": {}}}}},
+                                                                              "type": {"literal": {"string": {}}}}},
+                                                                          "argument": {
+                                                                            "lambda": {
+                                                                              "parameter": "acc",
+                                                                              "domain": {"literal": {"string": {}}},
+                                                                              "body": {
+                                                                                "lambda": {
+                                                                                  "parameter": "x",
+                                                                                  "domain": {"literal": {"string": {}}},
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "function": {"typeApplication": {"body": {"variable": "hydra.lib.effects.pure"}, "type": {"literal": {"string": {}}}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "acc"}}},
+                                                                                          "argument": {"variable": "x"}}}}}}}}}}},
+                                                                      "argument": {"literal": {"string": ""}}}},
+                                                                  "argument": {"list": [{"literal": {"string": "a"}}, {"literal": {"string": "b"}}, {"literal": {"string": "c"}}]}}}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "abc"}}}}}]}}}}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
+                        {
+                          "record": {
+                            "typeName": "hydra.testing.TestGroup",
+                            "fields": [
+                              {"name": "name", "term": {"literal": {"string": "map"}}},
+                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                              {
+                                "name": "subgroups",
+                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
+                              {
+                                "name": "cases",
+                                "term": {
+                                  "list": [
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.testing.TestCaseWithMetadata",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "map applies a pure function to an effect result"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "typeName": "hydra.testing.TestCase",
+                                                "field": {
+                                                  "name": "effectful",
+                                                  "term": {
+                                                    "record": {
+                                                      "typeName": "hydra.testing.EffectfulTestCase",
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": {"unit": {}},
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.effects.map"}, "type": {"literal": {"string": {}}}}},
+                                                                          "type": {"literal": {"string": {}}}}},
+                                                                      "argument": {
+                                                                        "lambda": {
+                                                                          "parameter": "s",
+                                                                          "domain": {"literal": {"string": {}}},
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "s"}}},
+                                                                              "argument": {"literal": {"string": "-mapped"}}}}}}}},
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "function": {"typeApplication": {"body": {"variable": "hydra.lib.effects.pure"}, "type": {"literal": {"string": {}}}}},
+                                                                      "argument": {"literal": {"string": "x"}}}}}}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "x-mapped"}}}}}]}}}}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
+                        {
+                          "record": {
+                            "typeName": "hydra.testing.TestGroup",
+                            "fields": [
+                              {"name": "name", "term": {"literal": {"string": "mapList"}}},
+                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                              {
+                                "name": "subgroups",
+                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
+                              {
+                                "name": "cases",
+                                "term": {
+                                  "list": [
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.testing.TestCaseWithMetadata",
+                                        "fields": [
+                                          {
+                                            "name": "name",
+                                            "term": {"literal": {"string": "mapList applies an effect-returning function across a list and collects results"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "typeName": "hydra.testing.TestCase",
+                                                "field": {
+                                                  "name": "effectful",
+                                                  "term": {
+                                                    "record": {
+                                                      "typeName": "hydra.testing.EffectfulTestCase",
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": {"unit": {}},
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.effects.map"}, "type": {"list": {"literal": {"string": {}}}}}},
+                                                                          "type": {"literal": {"string": {}}}}},
+                                                                      "argument": {
+                                                                        "lambda": {
+                                                                          "parameter": "xs",
+                                                                          "domain": {"list": {"literal": {"string": {}}}},
+                                                                          "body": {"application": {"function": {"variable": "hydra.lib.strings.cat"}, "argument": {"variable": "xs"}}}}}}},
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "typeApplication": {
+                                                                              "body": {"typeApplication": {"body": {"variable": "hydra.lib.effects.mapList"}, "type": {"literal": {"string": {}}}}},
+                                                                              "type": {"literal": {"string": {}}}}},
+                                                                          "argument": {
+                                                                            "lambda": {
+                                                                              "parameter": "x",
+                                                                              "domain": {"literal": {"string": {}}},
+                                                                              "body": {
+                                                                                "application": {
+                                                                                  "function": {"typeApplication": {"body": {"variable": "hydra.lib.effects.pure"}, "type": {"literal": {"string": {}}}}},
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "x"}}},
+                                                                                      "argument": {"literal": {"string": "."}}}}}}}}}},
+                                                                      "argument": {"list": [{"literal": {"string": "a"}}, {"literal": {"string": "b"}}]}}}}}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "a.b."}}}}}]}}}}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
+                        {
+                          "record": {
+                            "typeName": "hydra.testing.TestGroup",
+                            "fields": [
+                              {"name": "name", "term": {"literal": {"string": "mapOptional"}}},
+                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                              {
+                                "name": "subgroups",
+                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
+                              {
+                                "name": "cases",
+                                "term": {
+                                  "list": [
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.testing.TestCaseWithMetadata",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "mapOptional over a present value applies the function"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "typeName": "hydra.testing.TestCase",
+                                                "field": {
+                                                  "name": "effectful",
+                                                  "term": {
+                                                    "record": {
+                                                      "typeName": "hydra.testing.EffectfulTestCase",
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": {"unit": {}},
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.effects.map"}, "type": {"optional": {"literal": {"string": {}}}}}},
+                                                                          "type": {"literal": {"string": {}}}}},
+                                                                      "argument": {
+                                                                        "lambda": {
+                                                                          "parameter": "m",
+                                                                          "domain": {"optional": {"literal": {"string": {}}}},
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"literal": {"string": {}}}}},
+                                                                                  "argument": {"literal": {"string": "<none>"}}}},
+                                                                              "argument": {"variable": "m"}}}}}}},
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "typeApplication": {
+                                                                              "body": {"typeApplication": {"body": {"variable": "hydra.lib.effects.mapOptional"}, "type": {"literal": {"string": {}}}}},
+                                                                              "type": {"literal": {"string": {}}}}},
+                                                                          "argument": {
+                                                                            "lambda": {
+                                                                              "parameter": "x",
+                                                                              "domain": {"literal": {"string": {}}},
+                                                                              "body": {
+                                                                                "application": {
+                                                                                  "function": {"typeApplication": {"body": {"variable": "hydra.lib.effects.pure"}, "type": {"literal": {"string": {}}}}},
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "x"}}},
+                                                                                      "argument": {"literal": {"string": "!"}}}}}}}}}},
+                                                                      "argument": {"optional": {"literal": {"string": "present"}}}}}}}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "present!"}}}}}]}}}}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.testing.TestCaseWithMetadata",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "mapOptional over none yields none"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "typeName": "hydra.testing.TestCase",
+                                                "field": {
+                                                  "name": "effectful",
+                                                  "term": {
+                                                    "record": {
+                                                      "typeName": "hydra.testing.EffectfulTestCase",
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": {"unit": {}},
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.effects.map"}, "type": {"optional": {"literal": {"string": {}}}}}},
+                                                                          "type": {"literal": {"string": {}}}}},
+                                                                      "argument": {
+                                                                        "lambda": {
+                                                                          "parameter": "m",
+                                                                          "domain": {"optional": {"literal": {"string": {}}}},
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"literal": {"string": {}}}}},
+                                                                                  "argument": {"literal": {"string": "<none>"}}}},
+                                                                              "argument": {"variable": "m"}}}}}}},
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "typeApplication": {
+                                                                              "body": {"typeApplication": {"body": {"variable": "hydra.lib.effects.mapOptional"}, "type": {"literal": {"string": {}}}}},
+                                                                              "type": {"literal": {"string": {}}}}},
+                                                                          "argument": {
+                                                                            "lambda": {
+                                                                              "parameter": "x",
+                                                                              "domain": {"literal": {"string": {}}},
+                                                                              "body": {
+                                                                                "application": {
+                                                                                  "function": {"typeApplication": {"body": {"variable": "hydra.lib.effects.pure"}, "type": {"literal": {"string": {}}}}},
+                                                                                  "argument": {"variable": "x"}}}}}}},
+                                                                      "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}}}}}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "<none>"}}}}}]}}}}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
+                        {
+                          "record": {
+                            "typeName": "hydra.testing.TestGroup",
+                            "fields": [
+                              {"name": "name", "term": {"literal": {"string": "pure"}}},
+                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                              {
+                                "name": "subgroups",
+                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
+                              {
+                                "name": "cases",
+                                "term": {
+                                  "list": [
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.testing.TestCaseWithMetadata",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "pure of a string yields the string"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "typeName": "hydra.testing.TestCase",
+                                                "field": {
+                                                  "name": "effectful",
+                                                  "term": {
+                                                    "record": {
+                                                      "typeName": "hydra.testing.EffectfulTestCase",
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": {"unit": {}},
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {"typeApplication": {"body": {"variable": "hydra.lib.effects.pure"}, "type": {"literal": {"string": {}}}}},
+                                                                  "argument": {"literal": {"string": "hello"}}}}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "hello"}}}}}]}}}}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}]}},
+                  {
+                    "name": "cases",
+                    "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}]}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Effectful test cases for hydra.lib.effects primitives"}}}]}}}}}]}

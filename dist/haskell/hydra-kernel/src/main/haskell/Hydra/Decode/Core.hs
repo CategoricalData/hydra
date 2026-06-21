@@ -502,6 +502,7 @@ type_ cx raw =
                     Maps.fromList [
                       (Core.Name "annotated", (\input -> Eithers.map (\t -> Core.TypeAnnotated t) (annotatedType cx input))),
                       (Core.Name "application", (\input -> Eithers.map (\t -> Core.TypeApplication t) (applicationType cx input))),
+                      (Core.Name "effect", (\input -> Eithers.map (\t -> Core.TypeEffect t) (type_ cx input))),
                       (Core.Name "either", (\input -> Eithers.map (\t -> Core.TypeEither t) (eitherType cx input))),
                       (Core.Name "forall", (\input -> Eithers.map (\t -> Core.TypeForall t) (forallType cx input))),
                       (Core.Name "function", (\input -> Eithers.map (\t -> Core.TypeFunction t) (functionType cx input))),

@@ -104,7 +104,10 @@
              "common_lisp/lib/literals.lisp"
              "common_lisp/lib/optionals.lisp"
              "common_lisp/lib/pairs.lisp"
-             "common_lisp/lib/regex.lisp"))
+             "common_lisp/lib/regex.lisp"
+             "common_lisp/lib/effects.lisp"
+             "common_lisp/lib/files.lisp"
+             "common_lisp/lib/text.lisp"))
   (load (hydra-dist-main-path f)))
 
 ;; ============================================================================
@@ -211,8 +214,10 @@
 
 ;; Library tests
 (dolist (f '("lib/chars.lisp"
+             "lib/effects.lisp"
              "lib/eithers.lisp"
              "lib/equality.lisp"
+             "lib/files.lisp"
              "lib/lists.lisp"
              "lib/literals.lisp"
              "lib/logic.lisp"

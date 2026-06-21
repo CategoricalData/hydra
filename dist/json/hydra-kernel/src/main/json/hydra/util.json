@@ -40,19 +40,6 @@
                     "value": {"literal": {"string": "An equality judgement: less than, equal to, or greater than"}}}]}}}}}},
     {
       "type": {
-        "name": "hydra.util.FileExtension",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A file extension (without the dot), e.g. \"json\" or \"py\""}}}]}}}}}},
-    {
-      "type": {
         "name": "hydra.util.ModuleNames",
         "body": {
           "variables": [],

@@ -16,6 +16,7 @@ import qualified Hydra.Error.Checking as ErrorChecking
 import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
+import qualified Hydra.File as File
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Inference as Inference
@@ -363,6 +364,7 @@ encodeApplicationType env at =
               \t -> \ps -> case (Strip.deannotateType t) of
                 Core.TypeApplication v0 -> gatherParams (Core.applicationTypeFunction v0) (Lists.cons (Core.applicationTypeArgument v0) ps)
                 Core.TypeAnnotated _ -> (t, ps)
+                Core.TypeEffect _ -> (t, ps)
                 Core.TypeFunction _ -> (t, ps)
                 Core.TypeForall _ -> (t, ps)
                 Core.TypeList _ -> (t, ps)
@@ -664,6 +666,7 @@ encodeForallType env lt =
                 Core.TypeForall v0 -> gatherParams (Core.forallTypeBody v0) (Lists.cons (Core.forallTypeParameter v0) ps)
                 Core.TypeAnnotated _ -> (t, (Lists.reverse ps))
                 Core.TypeApplication _ -> (t, (Lists.reverse ps))
+                Core.TypeEffect _ -> (t, (Lists.reverse ps))
                 Core.TypeFunction _ -> (t, (Lists.reverse ps))
                 Core.TypeList _ -> (t, (Lists.reverse ps))
                 Core.TypeLiteral _ -> (t, (Lists.reverse ps))
@@ -714,6 +717,7 @@ encodeFunctionType env ft =
                   Core.TypeFunction v0 -> gatherParams (Lists.cons dom rdoms) v0
                   Core.TypeAnnotated _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
                   Core.TypeApplication _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
+                  Core.TypeEffect _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
                   Core.TypeForall _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
                   Core.TypeList _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
                   Core.TypeLiteral _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
@@ -1169,6 +1173,7 @@ encodeType env typ =
         Core.TypeVariable v0 -> Right (PythonNames.typeVariableReference env v0)
         Core.TypeWrap _ -> dflt
         Core.TypeAnnotated _ -> dflt
+        Core.TypeEffect v0 -> encodeType env v0
 -- | Encode a type definition, dispatching based on type structure
 encodeTypeAssignment :: t0 -> PythonEnvironment.PythonEnvironment -> Core.Name -> Core.Type -> Maybe String -> Either Errors.Error [[Syntax.Statement]]
 encodeTypeAssignment cx env name typ comment =
@@ -1876,7 +1881,7 @@ moduleToPython :: Packaging.Module -> [Packaging.Definition] -> Typing.Inference
 moduleToPython mod defs cx g =
     Eithers.bind (encodePythonModule cx g mod defs) (\file ->
       let s = Serialization.printExpr (Serialization.parenthesize (Serde.moduleToExpr file))
-          path = Names.moduleNameToFilePath Util.CaseConventionLowerSnake (Util.FileExtension "py") (Packaging.moduleName mod)
+          path = Names.moduleNameToFilePath Util.CaseConventionLowerSnake (File.FileExtension "py") (Packaging.moduleName mod)
       in (Right (Maps.singleton path s)))
 -- | Accessor for the graph field of PyGraph
 pyGraphGraph :: PythonEnvironment.PyGraph -> Graph.Graph

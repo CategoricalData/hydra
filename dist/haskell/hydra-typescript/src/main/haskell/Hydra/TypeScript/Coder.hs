@@ -10,8 +10,10 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Environment as Environment
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.File as ErrorFile
 import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
+import qualified Hydra.File as File
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
@@ -39,6 +41,7 @@ import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing
+import qualified Hydra.Time as Time
 import qualified Hydra.Topology as Topology
 import qualified Hydra.TypeScript.Language as Language
 import qualified Hydra.TypeScript.Serde as Serde
@@ -665,7 +668,7 @@ moduleToTypeScript mod defs cx g =
                         "\n",
                         itemText]))
             body = Strings.intercalate "\n\n" (Lists.map renderItem allItems)
-            filePath = Names.moduleNameToFilePath Util.CaseConventionCamel (Util.FileExtension "ts") (Packaging.moduleName mod)
+            filePath = Names.moduleNameToFilePath Util.CaseConventionCamel (File.FileExtension "ts") (Packaging.moduleName mod)
         in (Right (Maps.singleton filePath (Strings.cat [
           header,
           importsBlock,

@@ -3,6 +3,7 @@ module Hydra.Sources.Kernel.Terms.Languages where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (hydraLanguage)
+import           Hydra.File (_FileExtension)
 import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast

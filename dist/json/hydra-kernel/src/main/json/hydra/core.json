@@ -1005,6 +1005,18 @@
                         "body": {"variable": "hydra.core.ApplicationType"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A type application"}}}]}}}},
                   {
+                    "name": "effect",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.Type"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "An effectful computation which, when interpreted by a host application, may perform host interactions and produce a value of the given type"}}}]}}}},
+                  {
                     "name": "either",
                     "type": {
                       "annotated": {

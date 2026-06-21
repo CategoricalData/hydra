@@ -6,6 +6,7 @@ import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.File as File
 import qualified Hydra.Cpp.Language as Language
 import qualified Hydra.Cpp.Serde as Serde
 import qualified Hydra.Cpp.Syntax as Syntax
@@ -55,7 +56,7 @@ import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 bindingNameToFilePath :: Core.Name -> String
 bindingNameToFilePath name =
-    Names.nameToFilePath Util.CaseConventionLowerSnake Util.CaseConventionLowerSnake (Util.FileExtension "h") name
+    Names.nameToFilePath Util.CaseConventionLowerSnake Util.CaseConventionLowerSnake (File.FileExtension "h") name
 className :: Core.Name -> String
 className name = sanitizeCppName (Names.localNameOf name)
 constParameter :: String -> Syntax.TypeExpression -> Syntax.Parameter

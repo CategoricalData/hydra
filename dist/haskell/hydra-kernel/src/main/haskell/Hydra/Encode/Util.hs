@@ -54,12 +54,6 @@ comparison x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "greaterThan"),
           Core.fieldTerm = Core.TermUnit}})
--- | Encoder for hydra.util.FileExtension
-fileExtension :: Util.FileExtension -> Core.Term
-fileExtension x =
-    Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.util.FileExtension"),
-      Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Util.unFileExtension x))})
 -- | Encoder for hydra.util.ModuleNames
 moduleNames :: (n -> Core.Term) -> Util.ModuleNames n -> Core.Term
 moduleNames n x =

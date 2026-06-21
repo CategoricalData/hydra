@@ -12,8 +12,10 @@
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
     {"module": "hydra.error.packaging"},
     {"module": "hydra.errors"},
+    {"module": "hydra.file"},
     {"module": "hydra.graph"},
     {"module": "hydra.json.model"},
     {"module": "hydra.packaging"},
@@ -22,6 +24,7 @@
     {"module": "hydra.relational"},
     {"module": "hydra.tabular"},
     {"module": "hydra.testing"},
+    {"module": "hydra.time"},
     {"module": "hydra.topology"},
     {"module": "hydra.typed"},
     {"module": "hydra.typing"},
@@ -228,11 +231,17 @@
                   "key": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.lib.chars"}}}},
                   "value": {"literal": {"string": "chars"}}},
                 {
+                  "key": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.lib.effects"}}}},
+                  "value": {"literal": {"string": "effects"}}},
+                {
                   "key": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.lib.eithers"}}}},
                   "value": {"literal": {"string": "eithers"}}},
                 {
                   "key": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.lib.equality"}}}},
                   "value": {"literal": {"string": "equality"}}},
+                {
+                  "key": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.lib.files"}}}},
+                  "value": {"literal": {"string": "files"}}},
                 {
                   "key": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.lib.lists"}}}},
                   "value": {"literal": {"string": "lists"}}},
@@ -262,7 +271,10 @@
                   "value": {"literal": {"string": "sets"}}},
                 {
                   "key": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.lib.strings"}}}},
-                  "value": {"literal": {"string": "strings"}}}]},
+                  "value": {"literal": {"string": "strings"}}},
+                {
+                  "key": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.lib.text"}}}},
+                  "value": {"literal": {"string": "text"}}}]},
             "annotation": {
               "map": [
                 {

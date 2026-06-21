@@ -431,6 +431,8 @@ data Type =
   TypeAnnotated AnnotatedType |
   -- | A type application
   TypeApplication ApplicationType |
+  -- | An effectful computation which, when interpreted by a host application, may perform host interactions and produce a value of the given type
+  TypeEffect Type |
   -- | An either (sum) type
   TypeEither EitherType |
   -- | A universally quantified (polymorphic) type
@@ -465,6 +467,7 @@ data Type =
 _Type = Name "hydra.core.Type"
 _Type_annotated = Name "annotated"
 _Type_application = Name "application"
+_Type_effect = Name "effect"
 _Type_either = Name "either"
 _Type_forall = Name "forall"
 _Type_function = Name "function"

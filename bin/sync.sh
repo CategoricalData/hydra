@@ -115,6 +115,25 @@ haskell_host_mode() {
     fi
 }
 
+# Per-host mode for the Java coder DSL→JSON build (the coder compiles + runs
+# against the published net.fortytwo.hydra:hydra-java in "published" mode, or
+# against the locally-generated dist/java kernel via the :compileHeadsExtrasJava
+# rollup in "local" mode). Same per-host override mechanism as python_host_mode:
+# hostOverrides:{"java":"local"} routes just the Java host local — needed when a
+# backward-incompatible kernel change (e.g. the #494 FileExtension move) means the
+# published hydra-java cannot compile the current Java coder DSL sources. An
+# explicit --local-host still forces all hosts local. is-published hydra-java
+# exits non-zero when the host resolves to local.
+java_host_mode() {
+    if [ "$HOST_MODE" = "local" ]; then
+        echo local
+    elif ! python3 "$HYDRA_ROOT/bin/lib/hydra-packages.py" is-published hydra-java >/dev/null 2>&1; then
+        echo local
+    else
+        echo published
+    fi
+}
+
 while [ $# -gt 0 ]; do
     case "$1" in
         --no-tests)
@@ -380,15 +399,15 @@ fi
 # signal), so this gate is correct.
 JP_FRESH_CHECK="$HYDRA_ROOT/bin/lib/check-java-python-json-fresh.py"
 heal_java_python_native() {
-    # Forward the sync's host mode to the native Python driver, exactly as the
-    # Phase 5 invocation does. Phase 1.5's banner says "published hosts" because
-    # that is the default seeding path, but when the user passes --local-host
-    # (e.g. the published hydra-python wheel is incompatible with the current
-    # kernel — the #370/#472 migration-shim case) this heal must also run local,
-    # or it hits the broken published wheel and aborts the whole sync. The Java
-    # wrapper has no published/local switch (its host is a build-presence check),
-    # so this forwarding is Python-only.
-    HYDRA_IN_SYNC=1 "$HYDRA_ROOT/bin/generate-hydra-java-from-java.sh" || return 1
+    # Forward the sync's host mode to both native drivers, exactly as the Phase 5
+    # invocation does. Phase 1.5's banner says "published hosts" because that is the
+    # default seeding path, but when the user passes --local-host (e.g. the published
+    # hydra-python wheel or hydra-java jar is incompatible with the current kernel —
+    # the #370/#472 migration-shim case, and the #494 FileExtension move for Java)
+    # this heal must also run local, or it hits the broken published artifact and
+    # aborts the whole sync.
+    HYDRA_IN_SYNC=1 "$HYDRA_ROOT/bin/generate-hydra-java-from-java.sh" \
+        "--$(java_host_mode)-host" || return 1
     HYDRA_IN_SYNC=1 "$HYDRA_ROOT/bin/generate-hydra-python-from-python.sh" \
         "--$(python_host_mode)-host" || return 1
 }
@@ -695,9 +714,16 @@ export HYDRA_PHASE5_HOST_MODE="$(python_host_mode)"
 # sentinel-based skip alone won't catch them.
 if printf '%s\n' $HOSTS | grep -qx java; then
     echo "--- hydra-java (native Java DSL → JSON) ---"
+    # Forward the sync's host mode to the Java coder driver, exactly as the Python
+    # block does below. Without this, `sync.sh --local-host` would leave Phase 5's
+    # Java re-export on the published host, defeating --local-host when the published
+    # hydra-java jar is incompatible with the current kernel (the #494 FileExtension
+    # move is exactly this case).
+    JAVA_HOST_MODE_FLAG="--$(java_host_mode)-host"   # per-host: hostOverrides[java]=local OR global --local-host
     native_generate_and_report java \
         "$HYDRA_ROOT/bin/generate-hydra-java-from-java.sh" \
-        "$JAVA_HOST_SENTINEL"
+        "$JAVA_HOST_SENTINEL" \
+        "$JAVA_HOST_MODE_FLAG"
 else
     echo "--- hydra-java (skipped: java not in HOSTS) ---"
 fi
@@ -708,8 +734,7 @@ if printf '%s\n' $HOSTS | grep -qx python; then
     # silently leave Phase 5's Python re-export on the published host, defeating
     # the whole point of --local-host (e.g. when the published hydra-python wheel
     # is incompatible with the current kernel — the #370 migration-shim case).
-    # The Java wrapper has no published/local switch (its host is a build-presence
-    # check), so this forwarding is Python-only.
+    # The Java block above forwards its host mode the same way (#494).
     PY_HOST_MODE_FLAG="--$(python_host_mode)-host"   # per-host: hostOverrides[python]=local OR global --local-host
     # Use PyPy when available — ~4x faster than CPython.
     if command -v pypy3 >/dev/null 2>&1; then

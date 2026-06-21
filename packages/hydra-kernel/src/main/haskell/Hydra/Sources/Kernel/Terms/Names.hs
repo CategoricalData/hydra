@@ -11,6 +11,8 @@ import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Coders       as Coders
+import qualified Hydra.Dsl.File      as DslFile
+import           Hydra.File (FileExtension)
 import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
@@ -150,7 +152,7 @@ moduleNameToFilePath = define "moduleNameToFilePath" $
     "parts">: Lists.map
       (Formatting.convertCase @@ Util.caseConventionCamel @@ var "caseConv")
       (Strings.splitOn (string ".") (Packaging.unModuleName $ var "ns"))]
-    $ (Strings.intercalate (string "/") $ var "parts") ++ string "." ++ (Util.unFileExtension $ var "ext")
+    $ (Strings.intercalate (string "/") $ var "parts") ++ string "." ++ (DslFile.unFileExtension $ var "ext")
 
 nameToFilePath :: TypedTermDefinition (CaseConvention -> CaseConvention -> FileExtension -> Name -> FilePath)
 nameToFilePath = define "nameToFilePath" $
@@ -165,7 +167,7 @@ nameToFilePath = define "nameToFilePath" $
       (Strings.splitOn (string ".") (Packaging.unModuleName (var "nsArg"))))) $
   "prefix" <~ Optionals.cases (var "ns") (string "") ("n" ~> Strings.cat2 (var "nsToFilePath" @@ var "n") (string "/")) $
   "suffix" <~ Formatting.convertCase @@ Util.caseConventionPascal @@ var "localConv" @@ var "local" $
-  Strings.cat (list [var "prefix", var "suffix", string ".", Util.unFileExtension (var "ext")])
+  Strings.cat (list [var "prefix", var "suffix", string ".", DslFile.unFileExtension (var "ext")])
 
 normalTypeVariable :: TypedTermDefinition (Int -> Name)
 normalTypeVariable = define "normalTypeVariable" $

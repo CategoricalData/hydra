@@ -251,6 +251,9 @@ object Libraries:
   private def tOpt(t: Type): Type = Type.optional(t)
   private def tEither(l: Type, r: Type): Type = Type.either(EitherType(l, r))
   private def tPair(a: Type, b: Type): Type = Type.pair(PairType(a, b))
+  private def tEffect(t: Type): Type = Type.effect(t)
+  private val tFilePath: Type = Type.variable("hydra.file.FilePath")
+  private val tFileError: Type = Type.variable("hydra.error.file.FileError")
   private val tString: Type = Type.literal(LiteralType.string)
   private val tBool: Type = Type.literal(LiteralType.boolean)
   private val tBinary: Type = Type.literal(LiteralType.binary)
@@ -1228,11 +1231,99 @@ object Libraries:
         impl1(p => exPair(p)._2)),
     )
 
+  // ===== Effects primitives (#494) =====
+  //
+  // effect<t> is transparent in Scala. These are registered so the inference graph can
+  // resolve the hydra.lib.effects.* names; their type schemes match the kernel signatures
+  // exactly (note pure is x -> effect<x>, including the function arrow). The interpreter
+  // implementation is a deferred error (stub): effect primitives are evaluated through the
+  // native (host) path, not Hydra's pure reducer. Forcing implementation() must never throw
+  // at registration, so mkPrim's stubImpl (a deferred Left) is used throughout.
+
+  private def effectsPrimitives(): Map[String, Primitive] =
+    val x = tVar("x")
+    val y = tVar("y")
+    val z = tVar("z")
+    Map(
+      // apply: effect<x -> y> -> effect<x> -> effect<y>
+      hydra.lib.effects.apply.name -> mkPrim(hydra.lib.effects.apply.name, tScheme(Seq("x", "y"),
+        tFun(tEffect(tFun(x, y)), tFun(tEffect(x), tEffect(y))))),
+      // bind: effect<x> -> (x -> effect<y>) -> effect<y>
+      hydra.lib.effects.bind.name -> mkPrim(hydra.lib.effects.bind.name, tScheme(Seq("x", "y"),
+        tFun(tEffect(x), tFun(tFun(x, tEffect(y)), tEffect(y))))),
+      // compose: (x -> effect<y>) -> (y -> effect<z>) -> x -> effect<z>
+      hydra.lib.effects.compose.name -> mkPrim(hydra.lib.effects.compose.name, tScheme(Seq("x", "y", "z"),
+        tFun(tFun(x, tEffect(y)), tFun(tFun(y, tEffect(z)), tFun(x, tEffect(z)))))),
+      // foldl: (x -> y -> effect<x>) -> x -> list<y> -> effect<x>
+      hydra.lib.effects.foldl.name -> mkPrim(hydra.lib.effects.foldl.name, tScheme(Seq("x", "y"),
+        tFun(tFun(x, tFun(y, tEffect(x))), tFun(x, tFun(tList(y), tEffect(x)))))),
+      // map: (x -> y) -> effect<x> -> effect<y>
+      hydra.lib.effects.map.name -> mkPrim(hydra.lib.effects.map.name, tScheme(Seq("x", "y"),
+        tFun(tFun(x, y), tFun(tEffect(x), tEffect(y))))),
+      // mapList: (x -> effect<y>) -> list<x> -> effect<list<y>>
+      hydra.lib.effects.mapList.name -> mkPrim(hydra.lib.effects.mapList.name, tScheme(Seq("x", "y"),
+        tFun(tFun(x, tEffect(y)), tFun(tList(x), tEffect(tList(y)))))),
+      // mapOptional: (x -> effect<y>) -> optional<x> -> effect<optional<y>>
+      hydra.lib.effects.mapOptional.name -> mkPrim(hydra.lib.effects.mapOptional.name, tScheme(Seq("x", "y"),
+        tFun(tFun(x, tEffect(y)), tFun(tOpt(x), tEffect(tOpt(y)))))),
+      // pure: x -> effect<x>
+      hydra.lib.effects.pure.name -> mkPrim(hydra.lib.effects.pure.name, tScheme(Seq("x"),
+        tFun(x, tEffect(x)))),
+    )
+
+  // ===== Files primitives (#494) =====
+  //
+  // FilePath and FileError are nominal kernel types (referenced by name). unit maps to
+  // Scala Unit, binary to Array[Byte], either to scala.util.Either. As with effects, the
+  // interpreter implementation is a deferred stub; real I/O happens in hydra.scala.lib.files.
+
+  private def filesPrimitives(): Map[String, Primitive] =
+    Map(
+      // appendFile: FilePath -> binary -> effect<either<FileError, unit>>
+      hydra.lib.files.appendFile.name -> mkPrim(hydra.lib.files.appendFile.name,
+        tMono(tFun(tFilePath, tFun(tBinary, tEffect(tEither(tFileError, tUnit)))))),
+      // createDirectory: boolean -> FilePath -> effect<either<FileError, unit>>
+      hydra.lib.files.createDirectory.name -> mkPrim(hydra.lib.files.createDirectory.name,
+        tMono(tFun(tBool, tFun(tFilePath, tEffect(tEither(tFileError, tUnit)))))),
+      // exists: FilePath -> effect<either<FileError, boolean>>
+      hydra.lib.files.exists.name -> mkPrim(hydra.lib.files.exists.name,
+        tMono(tFun(tFilePath, tEffect(tEither(tFileError, tBool))))),
+      // listDirectory: FilePath -> effect<either<FileError, list<FilePath>>>
+      hydra.lib.files.listDirectory.name -> mkPrim(hydra.lib.files.listDirectory.name,
+        tMono(tFun(tFilePath, tEffect(tEither(tFileError, tList(tFilePath)))))),
+      // readFile: FilePath -> effect<either<FileError, binary>>
+      hydra.lib.files.readFile.name -> mkPrim(hydra.lib.files.readFile.name,
+        tMono(tFun(tFilePath, tEffect(tEither(tFileError, tBinary))))),
+      // removeFile: FilePath -> effect<either<FileError, unit>>
+      hydra.lib.files.removeFile.name -> mkPrim(hydra.lib.files.removeFile.name,
+        tMono(tFun(tFilePath, tEffect(tEither(tFileError, tUnit))))),
+      // rename: FilePath -> FilePath -> effect<either<FileError, unit>>
+      hydra.lib.files.rename.name -> mkPrim(hydra.lib.files.rename.name,
+        tMono(tFun(tFilePath, tFun(tFilePath, tEffect(tEither(tFileError, tUnit)))))),
+      // writeFile: FilePath -> binary -> effect<either<FileError, unit>>
+      hydra.lib.files.writeFile.name -> mkPrim(hydra.lib.files.writeFile.name,
+        tMono(tFun(tFilePath, tFun(tBinary, tEffect(tEither(tFileError, tUnit)))))),
+    )
+
+  // ===== Text primitives (#494) =====
+
+  private def textPrimitives(): Map[String, Primitive] =
+    Map(
+      // decodeUtf8: binary -> either<string, string>
+      hydra.lib.text.decodeUtf8.name -> mkPrim(hydra.lib.text.decodeUtf8.name,
+        tMono(tFun(tBinary, tEither(tString, tString)))),
+      // encodeUtf8: string -> binary
+      hydra.lib.text.encodeUtf8.name -> mkPrim(hydra.lib.text.encodeUtf8.name,
+        tMono(tFun(tString, tBinary))),
+    )
+
   /** All standard primitives. */
   def standardPrimitives(): Map[String, Primitive] =
     charsPrimitives() ++
+    effectsPrimitives() ++
     equalityPrimitives() ++
     eithersPrimitives() ++
+    filesPrimitives() ++
     listsPrimitives() ++
     literalsPrimitives() ++
     logicPrimitives() ++
@@ -1242,4 +1333,5 @@ object Libraries:
     pairsPrimitives() ++
     regexPrimitives() ++
     setsPrimitives() ++
-    stringsPrimitives()
+    stringsPrimitives() ++
+    textPrimitives()

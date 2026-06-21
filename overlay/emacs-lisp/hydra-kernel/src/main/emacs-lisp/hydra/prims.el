@@ -288,6 +288,28 @@
             (if (eq (car sr) :left) sr
               (list :right (list :pair (list (cadr fr) (cadr sr))))))))))))
 
+;; Effect / unit / named coders (#494)
+;;
+;; effect<t> is transparent in emacs-lisp (effect<t> = t), so tc-effect delegates to its inner
+;; coder. These coders exist so the inference graph can resolve the hydra.lib.{effects,files,text}.*
+;; names; the real I/O is performed by the relocated hydra.<lang>.lib.* runtimes (reached via the
+;; bootstrap redirect), not through these stub primitive impls.
+
+(defun tc-effect (inner-coder)
+  (make-hydra_graph_term_coder (list :effect (hydra_graph_term_coder-type inner-coder))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall (funcall (hydra_graph_term_coder-encode inner-coder) cx) g) t_))))
+    (lambda (cx) (lambda (v) (funcall (funcall (hydra_graph_term_coder-decode inner-coder) cx) v)))))
+
+(defun tc-unit ()
+  (make-hydra_graph_term_coder (list :unit nil)
+    (lambda (_cx) (lambda (_g) (lambda (_t) (list :right nil))))
+    (lambda (_cx) (lambda (_v) (list :right (list :unit))))))
+
+(defun tc-named (type-name)
+  (make-hydra_graph_term_coder (list :variable type-name)
+    (lambda (_cx) (lambda (_g) (lambda (t_) (list :right t_))))
+    (lambda (_cx) (lambda (t_) (list :right t_)))))
+
 ;; Term/variable passthrough coders
 
 (defun tc-variable (name)

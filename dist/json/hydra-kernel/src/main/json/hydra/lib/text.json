@@ -1,0 +1,60 @@
+{
+  "name": "hydra.lib.text",
+  "metadata": {"description": "Primitives in the hydra.lib.text module.", "comments": [], "seeAlso": []},
+  "dependencies": [
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.file"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.time"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "definitions": [
+    {
+      "primitive": {
+        "name": "hydra.lib.text.decodeUtf8",
+        "metadata": {
+          "description": "Decode a sequence of bytes as UTF-8 text.",
+          "comments": [
+            "decodeUtf8(bytes) attempts to interpret bytes as a UTF-8 encoded string. A byte sequence which is not valid UTF-8 yields left(message), where message is a host-provided description of the decoding failure; a successful decode yields right(text).",
+            "Pairs with hydra.lib.files.readFile, which returns raw bytes."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"binary": {}}}, "isLazy": false}],
+          "result": {"type": {"either": {"left": {"literal": {"string": {}}}, "right": {"literal": {"string": {}}}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.text.encodeUtf8",
+        "metadata": {
+          "description": "Encode text as a sequence of UTF-8 bytes.",
+          "comments": [
+            "encodeUtf8(text) returns the UTF-8 encoding of text as raw bytes. Total: every Hydra string is valid Unicode and therefore always encodes.",
+            "Pairs with hydra.lib.files.writeFile, which expects raw bytes."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "result": {"type": {"literal": {"binary": {}}}}},
+        "isPure": true,
+        "isTotal": true}}]}

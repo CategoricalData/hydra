@@ -101,7 +101,7 @@ public class Language {
     }
     /** Wrap a string as a FileExtension. */
     private static TypedTerm<?> codersFileExtension(String ext) {
-        return wrap("hydra.util.FileExtension", string(ext));
+        return wrap("hydra.file.FileExtension", string(ext));
     }
     /** {@code Coders.languageName2(x)} expands to a Wrap term. */
     private static TypedTerm<?> codersLanguageName2(TypedTerm<?> x) {
@@ -199,6 +199,7 @@ public class Language {
                             typeVariantInj("annotated"),
                             typeVariantInj("application"),
                             typeVariantInj("either"),
+                            typeVariantInj("effect"),
                             typeVariantInj("function"),
                             typeVariantInj("forall"),
                             typeVariantInj("list"),

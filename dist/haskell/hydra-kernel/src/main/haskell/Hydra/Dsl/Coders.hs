@@ -6,11 +6,13 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Dsl.Errors as DslErrors
+import qualified Hydra.Dsl.File as DslFile
 import qualified Hydra.Dsl.Graph as DslGraph
 import qualified Hydra.Dsl.Typing as DslTyping
 import qualified Hydra.Dsl.Util as DslUtil
 import qualified Hydra.Dsl.Variants as DslVariants
 import qualified Hydra.Errors as Errors
+import qualified Hydra.File as File
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Typed as Typed
 import qualified Hydra.Typing as Typing
@@ -1271,7 +1273,7 @@ coderWithEncode original newVal =
               Core.projectionFieldName = (Core.Name "decode")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL constructor for hydra.coders.Language
-language :: Typed.TypedTerm Coders.LanguageName -> Typed.TypedTerm Coders.LanguageConstraints -> Typed.TypedTerm (S.Set Coders.LanguageFeature) -> Typed.TypedTerm Coders.CaseConventions -> Typed.TypedTerm Util.FileExtension -> Typed.TypedTerm Coders.Language
+language :: Typed.TypedTerm Coders.LanguageName -> Typed.TypedTerm Coders.LanguageConstraints -> Typed.TypedTerm (S.Set Coders.LanguageFeature) -> Typed.TypedTerm Coders.CaseConventions -> Typed.TypedTerm File.FileExtension -> Typed.TypedTerm Coders.Language
 language name constraints supportedFeatures caseConventions defaultFileExtension =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.coders.Language"),
@@ -1644,7 +1646,7 @@ languageConstraintsWithTypes original newVal =
           Core.fieldName = (Core.Name "types"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL accessor for the defaultFileExtension field of hydra.coders.Language
-languageDefaultFileExtension :: Typed.TypedTerm Coders.Language -> Typed.TypedTerm Util.FileExtension
+languageDefaultFileExtension :: Typed.TypedTerm Coders.Language -> Typed.TypedTerm File.FileExtension
 languageDefaultFileExtension x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1772,7 +1774,7 @@ languageWithConstraints original newVal =
               Core.projectionFieldName = (Core.Name "defaultFileExtension")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL updater for the defaultFileExtension field of hydra.coders.Language
-languageWithDefaultFileExtension :: Typed.TypedTerm Coders.Language -> Typed.TypedTerm Util.FileExtension -> Typed.TypedTerm Coders.Language
+languageWithDefaultFileExtension :: Typed.TypedTerm Coders.Language -> Typed.TypedTerm File.FileExtension -> Typed.TypedTerm Coders.Language
 languageWithDefaultFileExtension original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.coders.Language"),

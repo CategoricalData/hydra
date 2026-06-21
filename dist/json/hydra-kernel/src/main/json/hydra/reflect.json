@@ -11,8 +11,10 @@
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
     {"module": "hydra.error.packaging"},
     {"module": "hydra.errors"},
+    {"module": "hydra.file"},
     {"module": "hydra.graph"},
     {"module": "hydra.json.model"},
     {"module": "hydra.packaging"},
@@ -21,6 +23,7 @@
     {"module": "hydra.relational"},
     {"module": "hydra.tabular"},
     {"module": "hydra.testing"},
+    {"module": "hydra.time"},
     {"module": "hydra.topology"},
     {"module": "hydra.typed"},
     {"module": "hydra.typing"},
@@ -784,6 +787,13 @@
                         "domain": {"variable": "hydra.core.ApplicationType"},
                         "body": {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "application", "term": {"unit": {}}}}}}}},
                   {
+                    "name": "effect",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "_",
+                        "domain": {"variable": "hydra.core.Type"},
+                        "body": {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "effect", "term": {"unit": {}}}}}}}},
+                  {
                     "name": "either",
                     "handler": {
                       "lambda": {
@@ -791,19 +801,19 @@
                         "domain": {"variable": "hydra.core.EitherType"},
                         "body": {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "either", "term": {"unit": {}}}}}}}},
                   {
-                    "name": "function",
-                    "handler": {
-                      "lambda": {
-                        "parameter": "_",
-                        "domain": {"variable": "hydra.core.FunctionType"},
-                        "body": {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "function", "term": {"unit": {}}}}}}}},
-                  {
                     "name": "forall",
                     "handler": {
                       "lambda": {
                         "parameter": "_",
                         "domain": {"variable": "hydra.core.ForallType"},
                         "body": {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "forall", "term": {"unit": {}}}}}}}},
+                  {
+                    "name": "function",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "_",
+                        "domain": {"variable": "hydra.core.FunctionType"},
+                        "body": {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "function", "term": {"unit": {}}}}}}}},
                   {
                     "name": "list",
                     "handler": {
@@ -903,13 +913,13 @@
               "list": [
                 {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "annotated", "term": {"unit": {}}}}},
                 {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "application", "term": {"unit": {}}}}},
+                {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "effect", "term": {"unit": {}}}}},
                 {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "either", "term": {"unit": {}}}}},
-                {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "function", "term": {"unit": {}}}}},
                 {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "forall", "term": {"unit": {}}}}},
+                {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "function", "term": {"unit": {}}}}},
                 {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "list", "term": {"unit": {}}}}},
                 {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "literal", "term": {"unit": {}}}}},
                 {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "map", "term": {"unit": {}}}}},
-                {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "wrap", "term": {"unit": {}}}}},
                 {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "optional", "term": {"unit": {}}}}},
                 {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "pair", "term": {"unit": {}}}}},
                 {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "record", "term": {"unit": {}}}}},
@@ -917,6 +927,7 @@
                 {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "union", "term": {"unit": {}}}}},
                 {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "unit", "term": {"unit": {}}}}},
                 {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "variable", "term": {"unit": {}}}}},
-                {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "void", "term": {"unit": {}}}}}]},
+                {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "void", "term": {"unit": {}}}}},
+                {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "wrap", "term": {"unit": {}}}}}]},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All type variants, in a canonical order"}}}]}}}}}]}

@@ -10,6 +10,7 @@ import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
+import qualified Hydra.File as File
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lexical as Lexical
@@ -56,7 +57,7 @@ pythonLanguage =
         Coders.caseConventionsTermVariable = Util.CaseConventionLowerSnake,
         Coders.caseConventionsType = Util.CaseConventionPascal,
         Coders.caseConventionsTypeVariable = Util.CaseConventionPascal},
-      Coders.languageDefaultFileExtension = (Util.FileExtension "py")}
+      Coders.languageDefaultFileExtension = (File.FileExtension "py")}
   where
     literalVariants =
         Sets.fromList [
@@ -98,6 +99,7 @@ pythonLanguage =
           Variants.TypeVariantAnnotated,
           Variants.TypeVariantApplication,
           Variants.TypeVariantEither,
+          Variants.TypeVariantEffect,
           Variants.TypeVariantFunction,
           Variants.TypeVariantForall,
           Variants.TypeVariantList,

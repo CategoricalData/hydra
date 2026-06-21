@@ -3,6 +3,7 @@
   "metadata": {"description": "Term encoders for hydra.coders", "comments": [], "seeAlso": []},
   "dependencies": [
     {"module": "hydra.encode.errors"},
+    {"module": "hydra.encode.file"},
     {"module": "hydra.encode.graph"},
     {"module": "hydra.encode.variants"},
     {"module": "hydra.encode.core"},

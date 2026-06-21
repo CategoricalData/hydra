@@ -361,6 +361,30 @@
                 (if (eq (first sr) :left) sr
                     (list :right (list :pair (list (second fr) (second sr))))))))))))
 
+;; Effectful / nominal type coders (#494)
+;;
+;; effect<t> is transparent in the Lisp dialects (effect<t> = t), so tc-effect reuses the inner
+;; coder's encode/decode and only changes the reported type. tc-unit and tc-named provide the
+;; unit and nominal-by-name (e.g. hydra.file.FilePath) types used by the files/text signatures.
+;; These coders exist so the standard library can register the effectful primitives' type schemes
+;; for inference name-resolution; the real I/O is performed by the relocated hydra.<lang>.lib.*
+;; runtimes (reached via the bootstrap redirect), not through these stub primitive impls.
+
+(defun tc-effect (inner-coder)
+  (make-term_coder (list :effect (term_coder-type inner-coder))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall (funcall (term_coder-encode inner-coder) cx) g) t_))))
+    (lambda (cx) (lambda (v) (funcall (funcall (term_coder-decode inner-coder) cx) v)))))
+
+(defun tc-unit ()
+  (make-term_coder (list :unit nil)
+    (lambda (cx) (declare (ignore cx)) (lambda (g) (declare (ignore g)) (lambda (t_) (declare (ignore t_)) (list :right nil))))
+    (lambda (cx) (declare (ignore cx)) (lambda (v) (declare (ignore v)) (list :right (list :unit))))))
+
+(defun tc-named (type-name)
+  (make-term_coder (list :variable type-name)
+    (lambda (cx) (declare (ignore cx)) (lambda (g) (declare (ignore g)) (lambda (t_) (list :right t_))))
+    (lambda (cx) (declare (ignore cx)) (lambda (t_) (list :right t_)))))
+
 ;; Term/variable passthrough coders
 
 (defun tc-variable (name)
