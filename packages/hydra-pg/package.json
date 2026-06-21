@@ -3,6 +3,6 @@
   "name": "hydra-pg",
   "description": "Property graph support for Hydra",
   "sourceLanguage": "haskell",
-  "targetLanguages": ["haskell", "java", "python"],
+  "targetLanguages": ["haskell", "java", "python", "typescript"],
   "dependencies": ["hydra-kernel", "hydra-rdf"]
 }

@@ -465,7 +465,7 @@ readInjection = define "readInjection" $
             "key">: Pairs.first $ var "f",
             "val">: Pairs.second $ var "f",
             "matching">: Lists.filter ("c" ~> Equality.equal (Pairs.first $ var "c") (var "key")) (var "cases")] $
-            Optionals.cases (Lists.maybeHead $ var "matching") (left $ Error.errorOther $ Error.otherError $ string "unexpected field: " ++ (Core.unName $ var "key")) (lambda "m" $ (Pairs.second $ var "m") @@ var "val")))
+            Optionals.cases (Lists.maybeHead $ var "matching") (left $ Error.errorOther $ Error.otherError $ string "unexpected field: " ++ (Core.unName $ var "key")) (lambda "m" $ lets ["handler">: Pairs.second $ var "m"] $ var "handler" @@ var "val")))
 
 -- | Read a record from a term as a map of field names to values
 readRecord :: TypedTermDefinition (InferenceContext -> Graph -> (M.Map Name Term -> Either Error x) -> Term -> Either Error x)

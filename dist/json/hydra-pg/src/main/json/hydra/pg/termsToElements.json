@@ -4669,18 +4669,27 @@
                                                                             "domain": {"variable": "hydra.core.Term"},
                                                                             "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "t1"}}}}}}},
                                                                     "body": {
-                                                                      "application": {
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "function": {
-                                                                              "typeApplication": {
-                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                "type": {
-                                                                                  "function": {
-                                                                                    "domain": {"variable": "hydra.core.Term"},
-                                                                                    "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "t1"}}}}}}},
-                                                                            "argument": {"variable": "m"}}},
-                                                                        "argument": {"variable": "val"}}}}}}}}}}}}}}}}}}}}}}}}}}},
+                                                                      "let": {
+                                                                        "bindings": [
+                                                                          {
+                                                                            "name": "handler",
+                                                                            "term": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                    "type": {
+                                                                                      "function": {
+                                                                                        "domain": {"variable": "hydra.core.Term"},
+                                                                                        "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "t1"}}}}}}},
+                                                                                "argument": {"variable": "m"}}},
+                                                                            "typeScheme": {
+                                                                              "variables": [],
+                                                                              "body": {
+                                                                                "function": {
+                                                                                  "domain": {"variable": "hydra.core.Term"},
+                                                                                  "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "t1"}}}}}}}],
+                                                                        "body": {"application": {"function": {"variable": "handler"}, "argument": {"variable": "val"}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
                     "annotation": {
                       "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Read an injection (union value) from a term"}}}]}}}}}}}}},
     {
