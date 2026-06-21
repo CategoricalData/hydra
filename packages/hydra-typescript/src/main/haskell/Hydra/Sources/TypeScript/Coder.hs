@@ -400,13 +400,13 @@ encodeLiteralType = def "encodeLiteralType" $
 -- | Build a TS function parameter as a `Pattern`. Wraps the parameter name in a
 -- `_Pattern_typed` if the domain encodes to anything other than the analyze
 -- pass's `_`-typed-variable sentinel; otherwise emits an untyped identifier.
-encodeParam :: TypedTermDefinition (InferenceContext -> Graph -> Name -> Type -> TS.Pattern)
+encodeParam :: TypedTermDefinition (InferenceContext -> Graph -> ModuleName -> Name -> Type -> TS.Pattern)
 encodeParam = def "encodeParam" $
-  "cx" ~> "g" ~> "pname" ~> "dom" ~>
+  "cx" ~> "g" ~> "currentNs" ~> "pname" ~> "dom" ~>
     "nstr" <~ (sanitizeParamName @@ var "pname") $
     cases _Type (Strip.deannotateType @@ var "dom")
       (Just $ tsTypedIdent @@ var "nstr"
-        @@ (encodeTypeOrAny @@ var "cx" @@ var "g" @@ var "dom")) [
+        @@ (encodeTypeOrAny @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "dom")) [
       -- Bare type variables (e.g. `t0`) come from polymorphic top-level
       -- defs. Function declarations have no generic-binder syntax in our
       -- AST yet, so we cannot bring `T0` into scope. Emit `any` for these
@@ -873,13 +873,13 @@ encodeTermDefinition = def "encodeTermDefinition" $
 -- Anonymous records and unions are rejected — they must appear as the body of
 -- a named TypeDefinition so the coder can emit an interface or discriminated-
 -- union alias.
-encodeType :: TypedTermDefinition (InferenceContext -> Graph -> Type -> Either Error TS.TypeExpression)
+encodeType :: TypedTermDefinition (InferenceContext -> Graph -> ModuleName -> Type -> Either Error TS.TypeExpression)
 encodeType = def "encodeType" $
-  "cx" ~> "g" ~> lambda "t" $
+  "cx" ~> "g" ~> "currentNs" ~> lambda "t" $
     "typ" <~ (Strip.deannotateType @@ var "t") $
     cases _Type (var "typ") Nothing [
       _Type_annotated>>: lambda "at" $
-        encodeType @@ var "cx" @@ var "g" @@ Core.annotatedTypeBody (var "at"),
+        encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ Core.annotatedTypeBody (var "at"),
       -- Type application: unwind nested ApplicationType chains so a Hydra
       -- App(App(F, A), B) becomes a TS `F<A, B>`. The head must encode to
       -- an identifier (otherwise we fall back to the head alone — a known
@@ -887,8 +887,8 @@ encodeType = def "encodeType" $
       _Type_application>>: lambda "at" $
         "fnTyp" <~ Core.applicationTypeFunction (var "at") $
         "argTyp" <~ Core.applicationTypeArgument (var "at") $
-        "encFn" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "fnTyp") $
-        "encArg" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "argTyp") $
+        "encFn" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "fnTyp") $
+        "encArg" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "argTyp") $
           cases TS._TypeExpression (var "encFn") (Just (right (var "encFn"))) [
             -- F<arg>: head was a bare identifier
             TS._TypeExpression_identifier>>: lambda "_id" $
@@ -907,7 +907,7 @@ encodeType = def "encodeType" $
                       (project TS._ParameterizedTypeExpression TS._ParameterizedTypeExpression_arguments @@ var "p")
                       (list [var "encArg"])])],
       _Type_forall>>: lambda "fa" $
-        encodeType @@ var "cx" @@ var "g" @@ Core.forallTypeBody (var "fa"),
+        encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ Core.forallTypeBody (var "fa"),
       _Type_unit>>: constant $
         right (inject TS._TypeExpression TS._TypeExpression_void unit),
       _Type_void>>: constant $
@@ -916,13 +916,13 @@ encodeType = def "encodeType" $
         right (encodeLiteralType @@ var "lt"),
       _Type_list>>: lambda "inner" $
         Eithers.map (lambda "enc" $ tsParamApp1 @@ string "ReadonlyArray" @@ var "enc")
-          (encodeType @@ var "cx" @@ var "g" @@ var "inner"),
+          (encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "inner"),
       _Type_set>>: lambda "inner" $
         Eithers.map (asTerm tsReadonlySet)
-          (encodeType @@ var "cx" @@ var "g" @@ var "inner"),
+          (encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "inner"),
       _Type_map>>: lambda "mt" $
-        "kt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.mapTypeKeys (var "mt")) $
-        "vt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.mapTypeValues (var "mt")) $
+        "kt" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ Core.mapTypeKeys (var "mt")) $
+        "vt" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ Core.mapTypeValues (var "mt")) $
           right (tsReadonlyMap @@ var "kt" @@ var "vt"),
       -- Encode `Optional T` inline as `{tag: "given", value: T} | {tag: "none"}`
       -- matching the runtime value encoding, rather than `T | undefined`
@@ -946,12 +946,12 @@ encodeType = def "encodeType" $
                       record TS._StringLiteral [
                         TS._StringLiteral_value>>: string "none",
                         TS._StringLiteral_singleQuote>>: boolean False])]]))
-          (encodeType @@ var "cx" @@ var "g" @@ var "inner"),
+          (encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "inner"),
       -- Either is emitted inline as `{ tag: "left", value: L } | { tag: "right", value: R }`
       -- to avoid needing a runtime `Either` import in every generated module.
       _Type_either>>: lambda "et" $
-        "lt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.eitherTypeLeft (var "et")) $
-        "rt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.eitherTypeRight (var "et")) $
+        "lt" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ Core.eitherTypeLeft (var "et")) $
+        "rt" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ Core.eitherTypeRight (var "et")) $
           "leftArm" <~ (inject TS._TypeExpression TS._TypeExpression_object $ list [
             tsPropSig @@ string "tag" @@ boolean False
               @@ (inject TS._TypeExpression TS._TypeExpression_literal $
@@ -971,28 +971,47 @@ encodeType = def "encodeType" $
           right (inject TS._TypeExpression TS._TypeExpression_union $ list [
             var "leftArm", var "rightArm"]),
       _Type_pair>>: lambda "pt" $
-        "ft" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.pairTypeFirst (var "pt")) $
-        "st" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.pairTypeSecond (var "pt")) $
+        "ft" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ Core.pairTypeFirst (var "pt")) $
+        "st" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ Core.pairTypeSecond (var "pt")) $
           right (tsTuple @@ list [var "ft", var "st"]),
       _Type_function>>: lambda "ft" $
-        "dom" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.functionTypeDomain (var "ft")) $
-        "cod" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.functionTypeCodomain (var "ft")) $
+        "dom" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ Core.functionTypeDomain (var "ft")) $
+        "cod" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ Core.functionTypeCodomain (var "ft")) $
           right (inject TS._TypeExpression TS._TypeExpression_function $
             record TS._FunctionTypeExpression [
               TS._FunctionTypeExpression_typeParameters>>: list ([] :: [TypedTerm TS.TypeParameter]),
               TS._FunctionTypeExpression_parameters>>: list [var "dom"],
               TS._FunctionTypeExpression_returnType>>: var "cod"]),
+      -- A `_Type_variable` name may be either a local type-scheme variable (no module
+      -- name) or a cross-module nominal type reference (has a different module name).
+      -- Same-module names and no-module names → emit the bare capitalized local name.
+      -- Cross-module names → emit `$type_xxx.LocalName` as an identifier string, using
+      -- the namespace alias that matches `import type * as $type_xxx` in importsToText.
+      -- TypeScript accepts dotted identifiers like `$type_core.Graph` in type position.
       _Type_variable>>: lambda "name" $
-        right (tsNamedType @@ (Formatting.capitalize @@ (Names.localNameOf @@ var "name"))),
+        "lname" <~ (Formatting.capitalize @@ (Names.localNameOf @@ var "name")) $
+        Optionals.cases (Names.moduleNameOf @@ var "name")
+          (right (tsNamedType @@ var "lname"))
+          (lambda "ns" $
+            Logic.ifElse
+              (Equality.equal
+                (unwrap _ModuleName @@ var "currentNs")
+                (unwrap _ModuleName @@ var "ns"))
+              (right (tsNamedType @@ var "lname"))
+              ("nsSegs" <~ (Lists.drop (int32 1)
+                 (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns"))) $
+               "typeAlias" <~ Strings.cat2 (string "$type_")
+                 (Strings.intercalate (string "_") (var "nsSegs")) $
+               right (tsNamedType @@ Strings.cat (list [var "typeAlias", string ".", var "lname"])))),
       _Type_wrap>>: lambda "wt" $
-        encodeType @@ var "cx" @@ var "g" @@ var "wt",
+        encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "wt",
       -- Anonymous records: emit as inline object types `{ readonly f: T, ... }`.
       _Type_record>>: lambda "fts" $
         "members" <<~ (Eithers.mapList
           (lambda "ft" $
             "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
             "ftyp"  <~ Core.fieldTypeType (var "ft") $
-            "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "ftyp") $
+            "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "ftyp") $
               right (tsPropSig @@ var "fname" @@ boolean False @@ var "sftyp"))
           (var "fts")) $
           right (inject TS._TypeExpression TS._TypeExpression_object (var "members")),
@@ -1002,7 +1021,7 @@ encodeType = def "encodeType" $
           (lambda "ft" $
             "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
             "ftyp"  <~ Core.fieldTypeType (var "ft") $
-            "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "ftyp") $
+            "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "ftyp") $
               right (inject TS._TypeExpression TS._TypeExpression_object $ list [
                 tsPropSig @@ string "tag" @@ boolean False
                   @@ (inject TS._TypeExpression TS._TypeExpression_literal $
@@ -1024,9 +1043,9 @@ encodeType = def "encodeType" $
 -- The returned pair carries an optional JSDoc description (pulled from
 -- the type's description annotation, if any) alongside the ModuleItem.
 -- `moduleToTypeScript` prepends the doc above the rendered item.
-encodeTypeDefinition :: TypedTermDefinition (InferenceContext -> Graph -> TypeDefinition -> Either Error (Maybe String, TS.ModuleItem))
+encodeTypeDefinition :: TypedTermDefinition (InferenceContext -> Graph -> ModuleName -> TypeDefinition -> Either Error (Maybe String, TS.ModuleItem))
 encodeTypeDefinition = def "encodeTypeDefinition" $
-  "cx" ~> "g" ~> lambda "tdef" $
+  "cx" ~> "g" ~> "currentNs" ~> lambda "tdef" $
     "name" <~ Packaging.typeDefinitionName (var "tdef") $
     "typScheme" <~ Packaging.typeDefinitionBody (var "tdef") $
     "rawTyp" <~ Core.typeSchemeBody (var "typScheme") $
@@ -1043,7 +1062,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
     "dtyp" <~ (Strip.deannotateType @@ var "typ") $
     cases _Type (var "dtyp") (Just $
         -- Fallback: a plain type alias `type Foo<T...> = <encoded>;`
-        "styp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
+        "styp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "typ") $
           right (pair (var "mdoc") (inject TS._ModuleItem TS._ModuleItem_typeAlias $
             record TS._TypeAliasDeclaration [
               TS._TypeAliasDeclaration_name>>: tsIdent @@ var "lname",
@@ -1054,7 +1073,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
           (lambda "ft" $
             "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
             "ftyp"  <~ Core.fieldTypeType (var "ft") $
-            "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "ftyp") $
+            "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "ftyp") $
             "mfdoc" <<~ (Annotations.commentsFromFieldType @@ var "cx" @@ var "g" @@ var "ft") $
               right (tsPropSigWithDoc @@ var "fname" @@ boolean False @@ var "sftyp" @@ (mkDocComment @@ var "mfdoc")))
           (var "fts")) $
@@ -1075,7 +1094,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
             -- For unit-shaped variants, emit `{ readonly tag: "fname" }`
             -- (no `value` field).
             cases _Type (var "dtyp2") (Just $
-              "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "ftyp") $
+              "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "ftyp") $
                 right (inject TS._TypeExpression TS._TypeExpression_object $ list [
                   tsPropSig @@ string "tag" @@ boolean False
                     @@ (inject TS._TypeExpression TS._TypeExpression_literal $
@@ -1108,7 +1127,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
         -- Structural typing without the brand is good enough — TS unions
         -- still discriminate on shape because each wrap type has a unique
         -- payload-type combination.
-        "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "wt") $
+        "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "wt") $
           right (pair (var "mdoc") (inject TS._ModuleItem TS._ModuleItem_interface $
             record TS._InterfaceDeclaration [
               TS._InterfaceDeclaration_name>>: tsIdent @@ var "lname",
@@ -1139,13 +1158,13 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
 
 -- | Try to encode a Hydra `Core.Type` as a TS `TypeExpression`. If `encodeType`
 -- fails (e.g. anonymous record), fall back to `any`.
-encodeTypeOrAny :: TypedTermDefinition (InferenceContext -> Graph -> Type -> TS.TypeExpression)
+encodeTypeOrAny :: TypedTermDefinition (InferenceContext -> Graph -> ModuleName -> Type -> TS.TypeExpression)
 encodeTypeOrAny = def "encodeTypeOrAny" $
-  "cx" ~> "g" ~> "typ" ~>
+  "cx" ~> "g" ~> "currentNs" ~> "typ" ~>
     Eithers.either_
       (lambda "_e" $ inject TS._TypeExpression TS._TypeExpression_any unit)
       (lambda "te" $ var "te")
-      (encodeType @@ var "cx" @@ var "g" @@ var "typ")
+      (encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "typ")
 
 -- | Shared filter: keep only Names that have a ModuleName distinct from
 -- the current module's. Names without a ModuleName (bare lambda params)
@@ -1219,7 +1238,7 @@ functionDeclarationFromTerm = def "functionDeclarationFromTerm" $
         (Math.sub (Lists.length (var "fsParams")) (Lists.length (var "fsDoms")))
         (var "domPad"))) $
     "paramPatterns" <~ (Lists.map
-      (lambda "pair" $ encodeParam @@ var "cx" @@ var "fsEnv" @@ (Pairs.first $ var "pair") @@ (Pairs.second $ var "pair"))
+      (lambda "pair" $ encodeParam @@ var "cx" @@ var "fsEnv" @@ var "currentNs" @@ (Pairs.first $ var "pair") @@ (Pairs.second $ var "pair"))
       (Lists.zip (var "fsParams") (var "fsDomsPadded"))) $
     "sortedBindings" <~ (sortBindingsTopologically @@ var "fsBindings") $
     "bindingStmts" <~ (Lists.map
@@ -1328,43 +1347,31 @@ importsToText = def "importsToText" $
           (Logic.and (var "currentIsTest") (Logic.not (var "targetIsTest")))
           (Strings.cat2 (var "baseUpPrefix") (string "../../../main/typescript/hydra/"))
           (var "baseUpPrefix") $
-        -- For type imports keep the named form (TS supports same-named
-        -- types imported from multiple sources via separate aliases, but
-        -- we don't expect type clashes today). For value imports use
-        -- namespace-style `import * as <alias>` to dodge collisions
-        -- between like-named helpers (e.g. `map` from lists/maybes/eithers).
+        -- Both type and value imports use namespace-style `import [type] * as <alias>`
+        -- to prevent duplicate-identifier errors when two modules export the same
+        -- local name (e.g. `Literal` from hydra.core and hydra.rdf.syntax).
+        -- Type imports use the `$type_` prefix; value imports use `$mod_`.
         -- Build a unique alias by joining all post-`hydra.` segments with
         -- underscores. So `hydra.test.checking.all` → `test_checking_all`,
         -- `hydra.test.hoisting.all` → `test_hoisting_all`, avoiding the
         -- collisions that bare last-segment aliasing would produce.
-        -- Prefix module aliases with `_` to avoid shadowing by local Hydra
+        -- Prefix module aliases with `$` to avoid shadowing by local Hydra
         -- identifiers. E.g. `hydra.arity` would alias as `arity`, which a
         -- local `const arity = ...` then shadows (TDZ in JS even though
-        -- legal in Haskell). Prefix with `_` to keep aliases out of the
+        -- legal in Haskell). Prefix with `$` to keep aliases out of the
         -- local-name space.
-        "moduleAlias" <~ Strings.cat2 (string "$mod_")
-          (Strings.intercalate (string "_") (var "targetSegs")) $
-        Logic.ifElse (Equality.equal (var "kind") (string "type"))
-          (Strings.cat (list [
-            var "importKeyword",
-            string " { ",
-            Strings.intercalate (string ", ") (var "locals"),
-            string " } from \"",
-            var "upPrefix",
-            var "targetPath",
-            string ".js\";\n"]))
-          (Strings.cat (list [
-            string "import * as ",
-            -- The `$mod_` prefix in moduleAlias keeps the alias out of
-            -- the local-name space and reserves any clashes for the
-            -- generator. No further sanitization needed — `$` is a
-            -- valid JS identifier character and Hydra source can't
-            -- produce a `$` in a name segment.
-            var "moduleAlias",
-            string " from \"",
-            var "upPrefix",
-            var "targetPath",
-            string ".js\";\n"])))
+        "nsSlug" <~ (Strings.intercalate (string "_") (var "targetSegs")) $
+        "moduleAlias" <~ Logic.ifElse (Equality.equal (var "kind") (string "type"))
+          (Strings.cat2 (string "$type_") (var "nsSlug"))
+          (Strings.cat2 (string "$mod_") (var "nsSlug")) $
+        Strings.cat (list [
+          var "importKeyword",
+          string " * as ",
+          var "moduleAlias",
+          string " from \"",
+          var "upPrefix",
+          var "targetPath",
+          string ".js\";\n"]))
       (Maps.toList (var "grouped"))) $
     Strings.cat (var "lines")
 
@@ -1473,7 +1480,7 @@ moduleToTypeScript = def "moduleToTypeScript" $
     "typeImportsBlock" <~ (importsToText @@ string "type" @@ var "currentNs" @@ var "typeImports") $
     "termImportsBlock" <~ (importsToText @@ string "value" @@ var "currentNs" @@ var "termImports") $
     "importsBlock" <~ Strings.cat2 (var "typeImportsBlock") (var "termImportsBlock") $
-    "typeItems" <<~ (Eithers.mapList (encodeTypeDefinition @@ var "cx" @@ var "g") (var "typeDefs")) $
+    "typeItems" <<~ (Eithers.mapList (encodeTypeDefinition @@ var "cx" @@ var "g" @@ var "currentNs") (var "typeDefs")) $
     "termItems" <~ (Lists.map (encodeTermDefinition @@ var "cx" @@ var "g" @@ var "currentNs") (var "termDefs")) $
     "allItems" <~ Lists.concat2 (var "typeItems") (var "termItems") $
     -- Module-level description becomes a JSDoc block at the top of the
