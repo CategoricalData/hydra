@@ -423,7 +423,13 @@ const main = async (): Promise<void> => {
   const printDefinitions = (m: unknown, defs: unknown, c: unknown, g: unknown) =>
     moduleTo(m, defs as unknown[], c, g);
 
-  const writeOne = (isTest: boolean, mods: unknown[]): number => {
+  // Targets where a second "lib pass" is needed to emit hydra.lib.* aggregate
+  // interface files (e.g. hydra/lib/Maps.java). Mirrors Haskell Main.hs
+  // `twoPassLib`. Only Java is safe today: other targets' native lib
+  // implementations collide with the generated def-module paths.
+  const twoPassLibTargets = new Set(["java"]);
+
+  const writeOne = (isTest: boolean, mods: unknown[], universe: unknown[]): number => {
     if (mods.length === 0) return 0;
     const generateSourceFiles = (codegen as { generateSourceFiles: (...args: unknown[]) => { tag: "left"; value: unknown } | { tag: "right"; value: ReadonlyArray<readonly [string, string]> } }).generateSourceFiles;
     const targetBase = isTest ? outTest : outMain;
@@ -439,7 +445,7 @@ const main = async (): Promise<void> => {
         const result = generateSourceFiles(
           printDefinitions, language,
           dispatch.doInfer,
-          bsGraph, allModules, [m], cx);
+          bsGraph, universe, [m], cx);
         if (result.tag === "left") {
           console.error(`  warning: codegen failed for module ${modName}: ${JSON.stringify(result.value).slice(0, 200)}`);
           continue;
@@ -470,15 +476,42 @@ const main = async (): Promise<void> => {
   if (opts.target === "haskell") emitPkgs.add("hydra-haskell");
   const mainMods = modulesByPath.filter((m) => !m.isTest && emitPkgs.has(m.pkg)).map((m) => m.module);
   const testMods = modulesByPath.filter((m) => m.isTest && emitPkgs.has(m.pkg)).map((m) => m.module);
-  const mainFileCount = writeOne(false, mainMods);
-  const testFileCount = writeOne(true, testMods);
+  const mainFileCount = writeOne(false, mainMods, allModules);
+  let testFileCount = writeOne(true, testMods, allModules);
 
-  const fileCount = mainFileCount + testFileCount;
+  // Lib pass: for targets in twoPassLibTargets, emit hydra.lib.* aggregate
+  // definition modules (e.g. hydra/lib/Maps.java). These are generated from
+  // LOWERED modules — DefinitionPrimitive arms rewritten to DefinitionTerm
+  // (term-encoded PrimitiveDefinition) via lowerPrimitiveDefinitions. The
+  // consumer pass above keeps DefinitionPrimitive arms as-is so consumer
+  // code's primitive calls resolve to registered primitives; the lib pass
+  // runs in isolation (lib-only universe) so no consumer module shadows
+  // those primitives during the coder's type reconstruction.
+  // Mirrors Haskell Main.hs lines 592–848.
+  let libFileCount = 0;
+  if (twoPassLibTargets.has(opts.target)) {
+    const lowerPrimDefs = (codegen as { lowerPrimitiveDefinitions: (m: unknown) => unknown }).lowerPrimitiveDefinitions;
+    const isLibMod = (m: unknown): boolean => {
+      const name = (m as { name?: { value?: string } } | null)?.name?.value ?? "";
+      return name.startsWith("hydra.lib.");
+    };
+    const libMods = allModules.filter(isLibMod);
+    if (libMods.length > 0) {
+      const libModsLowered = libMods.map(lowerPrimDefs);
+      // Universe: lowered lib mods + un-lowered non-lib mods (for type-dep resolution).
+      const nonLibMods = allModules.filter((m) => !isLibMod(m));
+      const libUniverse = [...libModsLowered, ...nonLibMods];
+      console.log(`  Lib pass: ${libModsLowered.length} hydra.lib.* modules → ${outMain}`);
+      libFileCount = writeOne(false, libModsLowered, libUniverse);
+    }
+  }
+
+  const fileCount = mainFileCount + testFileCount + libFileCount;
 
   const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
   console.log("");
   console.log("==========================================");
-  console.log(`Done: ${mainFileCount} main + ${testFileCount} test files (${fileCount} total)`);
+  console.log(`Done: ${mainFileCount} main + ${testFileCount} test${libFileCount > 0 ? ` + ${libFileCount} lib` : ""} files (${fileCount} total)`);
   console.log(`  Main: ${outMain}`);
   if (testFileCount > 0) console.log(`  Test: ${outTest}`);
   console.log(`Elapsed: ${elapsed}s`);
