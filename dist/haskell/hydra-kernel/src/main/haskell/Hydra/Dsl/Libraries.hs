@@ -22,9 +22,12 @@ import qualified Hydra.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Haskell.Lib.Regex as Regex
 import qualified Hydra.Haskell.Lib.Sets as Sets
 import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Haskell.Lib.Text as Text
 import qualified Hydra.Lib.Chars as DefChars
+import qualified Hydra.Lib.Effects as DefEffects
 import qualified Hydra.Lib.Eithers as DefEithers
 import qualified Hydra.Lib.Equality as DefEquality
+import qualified Hydra.Lib.Files as DefFiles
 import qualified Hydra.Lib.Lists as DefLists
 import qualified Hydra.Lib.Literals as DefLiterals
 import qualified Hydra.Lib.Logic as DefLogic
@@ -35,6 +38,7 @@ import qualified Hydra.Lib.Pairs as DefPairs
 import qualified Hydra.Lib.Regex as DefRegex
 import qualified Hydra.Lib.Sets as DefSets
 import qualified Hydra.Lib.Strings as DefStrings
+import qualified Hydra.Lib.Text as DefText
 
 import qualified Data.List as L
 
@@ -113,6 +117,31 @@ hydraLibChars = standardLibrary [
   prim1 DefChars.isUpper    Chars.isUpper    [] int32 boolean,
   prim1 DefChars.toLower    Chars.toLower    [] int32 int32,
   prim1 DefChars.toUpper    Chars.toUpper    [] int32 int32]
+
+hydraLibEffects :: Library
+hydraLibEffects = standardLibrary [
+    unsupportedEffectPrimitive DefEffects.apply,
+    unsupportedEffectPrimitive DefEffects.bind,
+    unsupportedEffectPrimitive DefEffects.compose,
+    unsupportedEffectPrimitive DefEffects.foldl,
+    unsupportedEffectPrimitive DefEffects.map,
+    unsupportedEffectPrimitive DefEffects.mapList,
+    unsupportedEffectPrimitive DefEffects.mapOptional,
+    unsupportedEffectPrimitive DefEffects.pure]
+
+hydraLibFiles :: Library
+hydraLibFiles = standardLibrary [
+    unsupportedEffectPrimitive DefFiles.appendFile,
+    unsupportedEffectPrimitive DefFiles.copy,
+    unsupportedEffectPrimitive DefFiles.createDirectory,
+    unsupportedEffectPrimitive DefFiles.exists,
+    unsupportedEffectPrimitive DefFiles.listDirectory,
+    unsupportedEffectPrimitive DefFiles.readFile,
+    unsupportedEffectPrimitive DefFiles.removeDirectory,
+    unsupportedEffectPrimitive DefFiles.removeFile,
+    unsupportedEffectPrimitive DefFiles.rename,
+    unsupportedEffectPrimitive DefFiles.status,
+    unsupportedEffectPrimitive DefFiles.writeFile]
 
 hydraLibEithers :: Library
 hydraLibEithers = standardLibrary [
@@ -389,11 +418,18 @@ hydraLibStrings = standardLibrary [
   prim1 DefStrings.toUpper     Strings.toUpper     [] string string,
   prim1 DefStrings.unlines     Strings.unlines     [] (list string) string]
 
+hydraLibText :: Library
+hydraLibText = standardLibrary [
+  prim1 DefText.decodeUtf8 Text.decodeUtf8 [] binary (Prims.either_ string string),
+  prim1 DefText.encodeUtf8 Text.encodeUtf8 [] string binary]
+
 standardLibraries :: [Library]
 standardLibraries = [
   hydraLibChars,
+  hydraLibEffects,
   hydraLibEithers,
   hydraLibEquality,
+  hydraLibFiles,
   hydraLibLists,
   hydraLibLiterals,
   hydraLibLogic,
@@ -404,7 +440,8 @@ standardLibraries = [
   hydraLibPairs,
   hydraLibRegex,
   hydraLibSets,
-  hydraLibStrings]
+  hydraLibStrings,
+  hydraLibText]
 
 -- | Assemble a library from its primitives. The library's module name (e.g. "hydra.lib.chars")
 -- is *derived* from the primitives' shared namespace rather than passed as a literal string (#473):
@@ -420,3 +457,12 @@ standardLibrary prims = Library {
     -- namespace = the primitive name with its final ".<local>" segment dropped
     firstName = unName $ primitiveDefinitionName $ primitiveDefinition $ head prims
     ns = ModuleName $ reverse $ L.drop 1 $ L.dropWhile (/= '.') $ reverse firstName
+
+-- | Register effect primitives for name resolution and inference, while keeping
+-- Hydra's pure reducer from interpreting host effects as ordinary terms.
+unsupportedEffectPrimitive :: PrimitiveDefinition -> Primitive
+unsupportedEffectPrimitive def = Primitive def implementation
+  where
+    implementation _ _ = Left $ ErrorOther $ OtherError $
+      "effect primitive cannot be reduced by Hydra's pure Haskell reducer: "
+      ++ unName (primitiveDefinitionName def)

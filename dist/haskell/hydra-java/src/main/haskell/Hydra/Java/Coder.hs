@@ -19,6 +19,7 @@ import qualified Hydra.Error.Checking as ErrorChecking
 import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
+import qualified Hydra.File as File
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Inference as Inference
@@ -170,6 +171,7 @@ applySubstFull s t =
       Core.TypeList v0 -> Core.TypeList (applySubstFull s v0)
       Core.TypeSet v0 -> Core.TypeSet (applySubstFull s v0)
       Core.TypeOptional v0 -> Core.TypeOptional (applySubstFull s v0)
+      Core.TypeEffect v0 -> Core.TypeEffect (applySubstFull s v0)
       Core.TypeMap v0 -> Core.TypeMap (Core.MapType {
         Core.mapTypeKeys = (applySubstFull s (Core.mapTypeKeys v0)),
         Core.mapTypeValues = (applySubstFull s (Core.mapTypeValues v0))})
@@ -273,7 +275,7 @@ bindingNameToFilePath name =
                   Names.unqualifyName (Util.QualifiedName {
                     Util.qualifiedNameModuleName = ns_,
                     Util.qualifiedNameLocal = sanitized})
-      in (Names.nameToFilePath Util.CaseConventionCamel Util.CaseConventionPascal (Util.FileExtension "java") unq)
+      in (Names.nameToFilePath Util.CaseConventionCamel Util.CaseConventionPascal (File.FileExtension "java") unq)
 bindingsToStatements :: JavaEnvironment.JavaEnvironment -> [Core.Binding] -> Typing.InferenceContext -> Graph.Graph -> Either Errors.Error ([Syntax.BlockStatement], JavaEnvironment.JavaEnvironment)
 bindingsToStatements env bindings cx g0 =
 
@@ -533,6 +535,7 @@ collectTypeVars_go t =
       Core.TypeList v0 -> collectTypeVars_go (Strip.deannotateType v0)
       Core.TypeSet v0 -> collectTypeVars_go (Strip.deannotateType v0)
       Core.TypeOptional v0 -> collectTypeVars_go (Strip.deannotateType v0)
+      Core.TypeEffect v0 -> collectTypeVars_go (Strip.deannotateType v0)
       Core.TypeMap v0 -> Sets.union (collectTypeVars_go (Strip.deannotateType (Core.mapTypeKeys v0))) (collectTypeVars_go (Strip.deannotateType (Core.mapTypeValues v0)))
       Core.TypePair v0 -> Sets.union (collectTypeVars_go (Strip.deannotateType (Core.pairTypeFirst v0))) (collectTypeVars_go (Strip.deannotateType (Core.pairTypeSecond v0)))
       Core.TypeEither v0 -> Sets.union (collectTypeVars_go (Strip.deannotateType (Core.eitherTypeLeft v0))) (collectTypeVars_go (Strip.deannotateType (Core.eitherTypeRight v0)))
@@ -1755,6 +1758,7 @@ encodeType aliases boundVars t cx g =
         Core.TypeForall v0 -> Eithers.bind (encodeType aliases (Sets.insert (Core.forallTypeParameter v0) boundVars) (Core.forallTypeBody v0) cx g) (\jbody -> Utils.addJavaTypeParameter (Utils.javaTypeVariable (Core.unName (Core.forallTypeParameter v0))) jbody cx)
         Core.TypeList v0 -> Eithers.bind (encodeType aliases boundVars v0 cx g) (\jet -> Eithers.bind (Eithers.bind (Right jet) (\jt_ -> Utils.javaTypeToJavaReferenceType jt_ cx)) (\rt -> Right (Utils.javaRefType [
           rt] JavaNames.javaUtilPackageName "List")))
+        Core.TypeEffect v0 -> encodeType aliases boundVars v0 cx g
         Core.TypeLiteral v0 -> encodeLiteralType v0 cx g
         Core.TypeEither v0 -> Eithers.bind (Eithers.bind (encodeType aliases boundVars (Core.eitherTypeLeft v0) cx g) (\jt_ -> Utils.javaTypeToJavaReferenceType jt_ cx)) (\jlt -> Eithers.bind (Eithers.bind (encodeType aliases boundVars (Core.eitherTypeRight v0) cx g) (\jt_ -> Utils.javaTypeToJavaReferenceType jt_ cx)) (\jrt -> Right (Utils.javaRefType [
           jlt,
@@ -2662,6 +2666,7 @@ substituteTypeVarsWithTypes_go subst t =
       Core.TypeList v0 -> Core.TypeList (substituteTypeVarsWithTypes_go subst v0)
       Core.TypeSet v0 -> Core.TypeSet (substituteTypeVarsWithTypes_go subst v0)
       Core.TypeOptional v0 -> Core.TypeOptional (substituteTypeVarsWithTypes_go subst v0)
+      Core.TypeEffect v0 -> Core.TypeEffect (substituteTypeVarsWithTypes_go subst v0)
       Core.TypeMap v0 -> Core.TypeMap (Core.MapType {
         Core.mapTypeKeys = (substituteTypeVarsWithTypes_go subst (Core.mapTypeKeys v0)),
         Core.mapTypeValues = (substituteTypeVarsWithTypes_go subst (Core.mapTypeValues v0))})

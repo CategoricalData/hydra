@@ -11,8 +11,10 @@ import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.File as ErrorFile
 import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
+import qualified Hydra.File as File
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
@@ -34,6 +36,7 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing
+import qualified Hydra.Time as Time
 import qualified Hydra.Topology as Topology
 import qualified Hydra.Typed as Typed
 import qualified Hydra.Typing as Typing
@@ -586,6 +589,7 @@ encoderCollectOrdVars typ =
     case typ of
       Core.TypeAnnotated v0 -> encoderCollectOrdVars (Core.annotatedTypeBody v0)
       Core.TypeApplication v0 -> Lists.concat2 (encoderCollectOrdVars (Core.applicationTypeFunction v0)) (encoderCollectOrdVars (Core.applicationTypeArgument v0))
+      Core.TypeEffect v0 -> encoderCollectOrdVars v0
       Core.TypeEither v0 -> Lists.concat2 (encoderCollectOrdVars (Core.eitherTypeLeft v0)) (encoderCollectOrdVars (Core.eitherTypeRight v0))
       Core.TypeForall v0 -> encoderCollectOrdVars (Core.forallTypeBody v0)
       Core.TypeList v0 -> encoderCollectOrdVars v0
@@ -606,6 +610,7 @@ encoderCollectTypeVarsFromType typ =
     case typ of
       Core.TypeAnnotated v0 -> encoderCollectTypeVarsFromType (Core.annotatedTypeBody v0)
       Core.TypeApplication v0 -> Lists.concat2 (encoderCollectTypeVarsFromType (Core.applicationTypeFunction v0)) (encoderCollectTypeVarsFromType (Core.applicationTypeArgument v0))
+      Core.TypeEffect v0 -> encoderCollectTypeVarsFromType v0
       Core.TypeForall v0 -> encoderCollectTypeVarsFromType (Core.forallTypeBody v0)
       Core.TypeList v0 -> encoderCollectTypeVarsFromType v0
       Core.TypeMap v0 -> Lists.concat2 (encoderCollectTypeVarsFromType (Core.mapTypeKeys v0)) (encoderCollectTypeVarsFromType (Core.mapTypeValues v0))
@@ -626,6 +631,7 @@ encoderFullResultType typ =
       Core.TypeApplication v0 -> Core.TypeApplication (Core.ApplicationType {
         Core.applicationTypeFunction = (encoderFullResultType (Core.applicationTypeFunction v0)),
         Core.applicationTypeArgument = (Core.applicationTypeArgument v0)})
+      Core.TypeEffect v0 -> Core.TypeEffect (encoderFullResultType v0)
       Core.TypeEither v0 -> Core.TypeEither (Core.EitherType {
         Core.eitherTypeLeft = (encoderFullResultType (Core.eitherTypeLeft v0)),
         Core.eitherTypeRight = (encoderFullResultType (Core.eitherTypeRight v0))})
@@ -657,6 +663,7 @@ encoderFullResultTypeNamed ename typ =
       Core.TypeApplication v0 -> Core.TypeApplication (Core.ApplicationType {
         Core.applicationTypeFunction = (encoderFullResultType (Core.applicationTypeFunction v0)),
         Core.applicationTypeArgument = (Core.applicationTypeArgument v0)})
+      Core.TypeEffect v0 -> Core.TypeEffect (encoderFullResultType v0)
       Core.TypeEither v0 -> Core.TypeEither (Core.EitherType {
         Core.eitherTypeLeft = (encoderFullResultType (Core.eitherTypeLeft v0)),
         Core.eitherTypeRight = (encoderFullResultType (Core.eitherTypeRight v0))})

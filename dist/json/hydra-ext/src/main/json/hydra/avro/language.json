@@ -10,8 +10,10 @@
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
     {"module": "hydra.error.packaging"},
     {"module": "hydra.errors"},
+    {"module": "hydra.file"},
     {"module": "hydra.graph"},
     {"module": "hydra.json.model"},
     {"module": "hydra.packaging"},
@@ -20,6 +22,7 @@
     {"module": "hydra.relational"},
     {"module": "hydra.tabular"},
     {"module": "hydra.testing"},
+    {"module": "hydra.time"},
     {"module": "hydra.topology"},
     {"module": "hydra.typed"},
     {"module": "hydra.typing"},
@@ -204,6 +207,6 @@
                                 "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": {"unit": {}}}}}}]}}},
                       {
                         "name": "defaultFileExtension",
-                        "term": {"wrap": {"typeName": "hydra.util.FileExtension", "body": {"literal": {"string": "avsc"}}}}}]}}}},
+                        "term": {"wrap": {"typeName": "hydra.file.FileExtension", "body": {"literal": {"string": "avsc"}}}}}]}}}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Language constraints for Apache Avro"}}}]}}}}}]}

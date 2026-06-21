@@ -9,6 +9,7 @@ import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
+import qualified Hydra.File as File
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Logic as Logic
@@ -120,4 +121,4 @@ tinkerpopLanguage name features extras =
           Coders.caseConventionsTermVariable = Util.CaseConventionCamel,
           Coders.caseConventionsType = Util.CaseConventionPascal,
           Coders.caseConventionsTypeVariable = Util.CaseConventionPascal},
-        Coders.languageDefaultFileExtension = (Util.FileExtension "groovy")}
+        Coders.languageDefaultFileExtension = (File.FileExtension "groovy")}

@@ -13,6 +13,7 @@ module Hydra.TargetFilePaths (
 ) where
 
 import Hydra.Kernel
+import qualified Hydra.File as File
 import qualified Hydra.Java.Coder as JavaCoder
 import qualified Hydra.Predicates as Predicates
 import qualified Hydra.Names as Names
@@ -39,7 +40,7 @@ moduleFilePaths target m = case target of
   where
     ns = moduleName m
     oneFilePerNamespace conv ext =
-      [Names.moduleNameToFilePath conv (FileExtension ext) ns]
+      [Names.moduleNameToFilePath conv (File.FileExtension ext) ns]
 
 -- | Mirror of Hydra.Go.Coder.goNamespaceToFilePath (not exported there).
 goNamespaceToFilePath :: ModuleName -> FilePath

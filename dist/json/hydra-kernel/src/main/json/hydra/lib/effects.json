@@ -1,0 +1,181 @@
+{
+  "name": "hydra.lib.effects",
+  "metadata": {"description": "Primitives in the hydra.lib.effects module.", "comments": [], "seeAlso": []},
+  "dependencies": [
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.file"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.time"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "definitions": [
+    {
+      "primitive": {
+        "name": "hydra.lib.effects.apply",
+        "metadata": {
+          "description": "Applicative apply for effects.",
+          "comments": [
+            "apply(ef, ex) describes an effectful computation which first interprets ef to produce a function, then interprets ex to produce an argument, and returns the result of applying the function to the argument."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"effect": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"effect": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"effect": {"variable": "y"}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.effects.bind",
+        "metadata": {
+          "description": "Sequence two effectful computations.",
+          "comments": [
+            "bind(e, f) describes an effectful computation which first interprets e, then passes its result to f to obtain the next effect.",
+            "Host interpreters provide the operational meaning; Hydra uses the type effect<t> to keep the effect boundary explicit."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [
+            {"name": "arg0", "type": {"effect": {"variable": "x"}}, "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"effect": {"variable": "y"}}}},
+              "isLazy": false}],
+          "result": {"type": {"effect": {"variable": "y"}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.effects.compose",
+        "metadata": {
+          "description": "Kleisli composition for effects.",
+          "comments": ["compose(f, g, x) describes an effectful computation equivalent to bind(f(x), g)."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"effect": {"variable": "y"}}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {"function": {"domain": {"variable": "y"}, "codomain": {"effect": {"variable": "z"}}}},
+              "isLazy": false},
+            {"name": "arg2", "type": {"variable": "x"}, "isLazy": false}],
+          "result": {"type": {"effect": {"variable": "z"}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.effects.foldl",
+        "metadata": {
+          "description": "Left-fold over a list with an effect-returning function.",
+          "comments": ["foldl(f, acc0, xs) describes an effectful left fold over xs, sequencing applications of f from left to right."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "function": {
+                  "domain": {"variable": "x"},
+                  "codomain": {"function": {"domain": {"variable": "y"}, "codomain": {"effect": {"variable": "x"}}}}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "arg2", "type": {"list": {"variable": "y"}}, "isLazy": false}],
+          "result": {"type": {"effect": {"variable": "x"}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.effects.map",
+        "metadata": {
+          "description": "Map a pure function over the result of an effect.",
+          "comments": [
+            "map(f, e) describes an effectful computation which interprets e and applies f to its result.",
+            "Equivalent to bind(e, \\x -> pure(f x))."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [
+            {"name": "arg0", "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}}, "isLazy": false},
+            {"name": "arg1", "type": {"effect": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"effect": {"variable": "y"}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.effects.mapList",
+        "metadata": {
+          "description": "Map an effect-returning function over a list.",
+          "comments": [
+            "mapList(f, xs) describes an effectful computation which applies f to each element of xs from left to right and collects the results."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"effect": {"variable": "y"}}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"effect": {"list": {"variable": "y"}}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.effects.mapOptional",
+        "metadata": {
+          "description": "Map an effect-returning function over an optional.",
+          "comments": [
+            "mapOptional(f, m) describes an effectful computation which returns none when m is none, or applies f to the contained value and wraps the result in given."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"effect": {"variable": "y"}}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"effect": {"optional": {"variable": "y"}}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.effects.pure",
+        "metadata": {
+          "description": "Lift a pure value into an effect.",
+          "comments": ["pure(x) describes an effectful computation which succeeds with x without requiring host interaction."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}],
+          "parameters": [{"name": "arg0", "type": {"variable": "x"}, "isLazy": false}],
+          "result": {"type": {"effect": {"variable": "x"}}}},
+        "isPure": false,
+        "isTotal": true}}]}

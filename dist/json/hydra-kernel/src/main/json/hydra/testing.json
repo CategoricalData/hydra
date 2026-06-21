@@ -5,6 +5,42 @@
   "definitions": [
     {
       "type": {
+        "name": "hydra.testing.EffectfulTestCase",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "actual",
+                    "type": {
+                      "annotated": {
+                        "body": {"function": {"domain": {"unit": {}}, "codomain": {"effect": {"literal": {"string": {}}}}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "A thunk producing the effect to be interpreted by the test runner. The thunk defers construction of the effect until the runner forces it."}}}]}}}},
+                  {
+                    "name": "expected",
+                    "type": {
+                      "annotated": {
+                        "body": {"function": {"domain": {"unit": {}}, "codomain": {"literal": {"string": {}}}}},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "A thunk producing the expected result string."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "An effectful test case: the actual value is a thunk producing an effect, which the test runner interprets (performing host interactions, e.g. file I/O within a per-case empty temporary directory) to obtain a result string; the expected value is a thunk producing a string."}}}]}}}}}},
+    {
+      "type": {
         "name": "hydra.testing.Tag",
         "body": {
           "variables": [],
@@ -21,6 +57,16 @@
             "annotated": {
               "body": {
                 "union": [
+                  {
+                    "name": "effectful",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.testing.EffectfulTestCase"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "An effectful test case (interpret an effect, then string comparison)"}}}]}}}},
                   {
                     "name": "universal",
                     "type": {

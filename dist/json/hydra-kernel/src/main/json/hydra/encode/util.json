@@ -279,48 +279,6 @@
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.util.Comparison"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.encode.util.fileExtension",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.util.FileExtension"}, "isLazy": false}],
-          "result": {"type": {"variable": "hydra.core.Term"}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "x",
-                "domain": {"variable": "hydra.util.FileExtension"},
-                "body": {
-                  "inject": {
-                    "typeName": "hydra.core.Term",
-                    "field": {
-                      "name": "wrap",
-                      "term": {
-                        "record": {
-                          "typeName": "hydra.core.WrappedTerm",
-                          "fields": [
-                            {
-                              "name": "typeName",
-                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.util.FileExtension"}}}}},
-                            {
-                              "name": "body",
-                              "term": {
-                                "application": {
-                                  "function": {
-                                    "lambda": {
-                                      "parameter": "x",
-                                      "domain": {"literal": {"string": {}}},
-                                      "body": {
-                                        "inject": {
-                                          "typeName": "hydra.core.Term",
-                                          "field": {
-                                            "name": "literal",
-                                            "term": {"inject": {"typeName": "hydra.core.Literal", "field": {"name": "string", "term": {"variable": "x"}}}}}}}}},
-                                  "argument": {"application": {"function": {"unwrap": "hydra.util.FileExtension"}, "argument": {"variable": "x"}}}}}}]}}}}}}},
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.util.FileExtension"}}}]}}}}},
-    {
-      "term": {
         "name": "hydra.encode.util.moduleNames",
         "signature": {
           "typeParameters": [{"name": "n", "constraints": []}],

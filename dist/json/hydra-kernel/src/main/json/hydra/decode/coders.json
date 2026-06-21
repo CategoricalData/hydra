@@ -8,6 +8,7 @@
     {"module": "hydra.coders"},
     {"module": "hydra.util"},
     {"module": "hydra.decode.errors"},
+    {"module": "hydra.decode.file"},
     {"module": "hydra.decode.graph"},
     {"module": "hydra.decode.variants"},
     {"module": "hydra.decode.core"},

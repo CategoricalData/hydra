@@ -35,6 +35,90 @@ native implementation.
 Most primitives are functions (*primitive functions*), but there are also *primitive
 constants* like `hydra.lib.math.pi` and `hydra.lib.sets.empty`.
 
+### When an operation should be a primitive
+
+An operation only needs to be a *primitive* if it requires a native implementation —
+for performance, or for access to host- or platform-specific capabilities. Anything
+expressible in Hydra's own term language should be a **term definition** instead, not
+a primitive.
+
+The decision rule:
+
+- **Make it a primitive** when there is no way to express it in Hydra terms, or no
+  acceptable way: effectful operations (most of `hydra.lib.effects`, file and console
+  I/O), host-native computation (arithmetic, character predicates, regex matching),
+  and fundamental eliminators (`optionals.cases`, `pairs.first`) that bottom out the
+  term language.
+- **Make it a term definition** when it can be written in Hydra in terms of existing
+  primitives and term constructs. For example, `fileName : FilePath -> FileName`
+  (extract the last path component) is pure string manipulation — it can be a Hydra
+  term definition rather than a primitive, even though it lives conceptually alongside
+  the file API. The same goes for most path manipulation (`parentPath`, `withExtension`,
+  `normalizePath`).
+
+Performance *can* justify a primitive, but weigh it carefully. The goal is a balance: keep
+the primitive set — the part of Hydra that every host must implement natively — as small as
+possible, since each primitive is a burden on every current and future implementation; but
+also give Hydra the capabilities and performance it needs when its programs are translated
+into a wide variety of targets. An operation expressible in Hydra terms whose default
+expression is fast enough should stay a term definition. One that is genuinely
+performance-critical across hosts is a reasonable candidate for a primitive even though it
+*could* be written in Hydra. And a user who needs a faster implementation of a particular
+term-defined function in their own application can always override its definition with a
+host-native UDF, without that function having to ship as a kernel primitive — so reserve
+kernel primitives for operations that are broadly performance-critical, not merely faster
+in one application.
+
+A worked example is `copyFile : FilePath -> FilePath -> effect<either<FileError, unit>>`.
+It *could* be written in Hydra as `readFile` followed by `writeFile`, so by the
+expressibility test alone it would not need to be a primitive. But that composition forces
+the entire file's contents to cross from the operating system into the host language's
+runtime (marshaled into a string) and back out again, defeating OS-level fast paths that
+copy bytes directly. It would also misbehave on binary files and hold the whole file in
+memory. Here the performance and capability considerations vastly outweigh the preference
+for minimalism, so `copyFile` is a primitive.
+
+### No partial functions
+
+Primitive functions must not encode partial operations that can fail for ordinary,
+well-typed inputs.
+Do not add primitives like `fromJust`, `head`, `tail`, or integer division as plain
+functions whose only possible response to some inputs is a runtime failure.
+Use result types that express failure, such as `optional<T>` or `either<E, T>`.
+
+Examples:
+
+- `maybeHead : list<a> -> optional<a>` rather than `head : list<a> -> a`
+- `maybeTail : list<a> -> optional<list<a>>` rather than `tail : list<a> -> list<a>`
+- `maybeDiv : int32 -> int32 -> optional<int32>` rather than `div : int32 -> int32 -> int32`
+
+Hydra removed `hydra.lib.maybes.fromJust` as a primitive in v0.15.0 for this reason.
+If a caller needs to collapse an optional value in a context where absence is impossible,
+return `either<Error, T>` and propagate an informative error instead of hiding the
+partiality in a primitive.
+
+### No named types
+
+Primitive signatures for Hydra's built-in primitives must not depend on named Hydra types.
+Their domains and codomains should be built from core `Type` constructors, literal
+types, and type variables bound by the primitive's own type scheme.
+For example, a primitive may have a polymorphic signature such as
+`forall a. a -> (a, a)`, but it should not have a signature such as
+`hydra.core.Term -> hydra.core.Type`.
+
+This keeps primitive libraries independent of particular model modules and avoids
+special cases where a primitive is only meaningful after resolving named type
+definitions from the graph.
+This rule applies to primitives that ship with the Hydra kernel.
+Developers who extend Hydra for their own applications may define UDFs whose
+signatures consume or produce instances of named types from their application models.
+When an abstraction is foundational enough to appear in primitive signatures, prefer
+adding it as a core type constructor rather than as a named type.
+This is why `either<L, R>` replaced the old named `Flow` monad, and it is the same
+reason effects are modeled as `effect<T>` rather than a named `hydra.effects.Effect<T>`;
+see the wiki discussion in
+[Effects: why a type constructor, not a named type](https://github.com/CategoricalData/hydra/wiki/Effects#why-a-type-constructor-not-a-named-type).
+
 ### How the registry works
 
 For each library module name, e.g. `hydra.lib.logic`, there is a kernel source module
@@ -706,6 +790,55 @@ for the matching "untyped bindings" / stale-JSON failure mode see
    `Set` or `Map`, the relevant type variable usually carries an `ordering`
    constraint (e.g. `_sets_member` uses `[_xOrd]`, not `[_x]`). Use
    `Types.polyConstrained` to express the constraint.
+
+7. **`binary` has a different host representation in every target.** A native
+   impl that takes or returns the `binary` type must use the representation that
+   the *coder for that host* emits, not a uniform byte buffer. Verified mappings:
+
+   | Host | `binary` value representation |
+   |------|------------------------------|
+   | Haskell | `ByteString` |
+   | Java | `byte[]` |
+   | Scala | base64-encoded `String` (decode with `java.util.Base64`) |
+   | Python | `bytes` |
+   | Clojure | vector of byte ints `[65 66]` (→ `(byte-array (map unchecked-byte …))`) |
+   | Scheme | Scheme vector `#(65 66)` (not a bytevector — convert before I/O) |
+   | Common Lisp | vector `#(65 66)` |
+   | Emacs Lisp | elisp vector `[65 66]` |
+
+   The symptom of getting this wrong is not a compile error but a silently empty
+   or wrong result at runtime (e.g. a file write that produces no bytes). Confirm
+   the representation by reading a generated test that passes a `binary` literal,
+   or that host's `hydra.lib.literals` runtime (`binaryToBytes`/`stringToBinary`).
+   The registered *type scheme* still uses the abstract kernel `binary` type; only
+   the native impl's parameter/return type changes.
+
+## Adding a new type constructor (kernel core extension)
+
+Most primitive work reuses existing types. Adding a *new* type constructor to
+`hydra.core.Type` (as `effect<t>` was added for `hydra.lib.effects`/`hydra.lib.files`)
+is a heavier, cross-cutting change with steps the per-primitive recipe does not cover:
+
+- **Bootstrap the core type.** Extending `Type` is circular (the kernel describes
+  itself); see [extending-hydra-core.md](extending-hydra-core.md).
+- **Teach every host's coder to encode it.** Each host coder must handle the new
+  variant or code generation crashes with a non-exhaustive-case error. For a
+  *transparent* wrapper like `effect<t>` (which encodes as its inner type `t`),
+  add a recursing case to the host's `encodeType` — and to any other full
+  type-walkers (the Java coder needed it in `applySubstFull` and two more
+  substitution/collection helpers; missing one leaks an uninstantiated type
+  variable into generated code). The host `Language` must also list the variant.
+- **Add it to the type adapter** (`Hydra/Sources/Kernel/Terms/Adapt.hs`
+  `typeAlternatives`) so targets without native support get a fallback.
+- **Watch the published-host gate.** A backward-incompatible core change means no
+  published host can compile the current DSL sources; build the whole branch with
+  `--local-host` (see [build-system.md](../build-system.md) and
+  [migration-shims.md](migration-shims.md)).
+- **Bust coder caches when iterating on a host coder.** The Java/Python native
+  coder freshness check keys on the kernel JSON, not the coder DSL source, so an
+  edit to a host coder can be silently cache-skipped; clear
+  `heads/haskell/.stack-work/{bootstrap-from-json,java-python-json}-cache.txt`
+  and the relevant `dist/<lang>/<pkg>/build/**/digest.json` before re-syncing.
 
 ## Higher-order primitives
 

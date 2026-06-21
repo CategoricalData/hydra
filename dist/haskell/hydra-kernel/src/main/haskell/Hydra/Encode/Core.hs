@@ -571,6 +571,11 @@ type_ x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "application"),
           Core.fieldTerm = (applicationType v0)}})
+      Core.TypeEffect v0 -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.core.Type"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "effect"),
+          Core.fieldTerm = (type_ v0)}})
       Core.TypeEither v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.Type"),
         Core.injectionField = Core.Field {

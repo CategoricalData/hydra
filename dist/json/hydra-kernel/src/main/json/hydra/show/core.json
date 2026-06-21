@@ -8,8 +8,10 @@
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
     {"module": "hydra.error.packaging"},
     {"module": "hydra.errors"},
+    {"module": "hydra.file"},
     {"module": "hydra.graph"},
     {"module": "hydra.json.model"},
     {"module": "hydra.packaging"},
@@ -18,6 +20,7 @@
     {"module": "hydra.relational"},
     {"module": "hydra.tabular"},
     {"module": "hydra.testing"},
+    {"module": "hydra.time"},
     {"module": "hydra.topology"},
     {"module": "hydra.typed"},
     {"module": "hydra.typing"},
@@ -2264,6 +2267,20 @@
                                                                 "function": {"application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": " @ "}}}},
                                                                 "argument": {"variable": "typeStrs"}}},
                                                             {"literal": {"string": ")"}}]}}}}}}}}}},
+                                      {
+                                        "name": "effect",
+                                        "handler": {
+                                          "lambda": {
+                                            "parameter": "etyp",
+                                            "domain": {"variable": "hydra.core.Type"},
+                                            "body": {
+                                              "application": {
+                                                "function": {"variable": "hydra.lib.strings.cat"},
+                                                "argument": {
+                                                  "list": [
+                                                    {"literal": {"string": "effect<"}},
+                                                    {"application": {"function": {"variable": "hydra.show.core.type"}, "argument": {"variable": "etyp"}}},
+                                                    {"literal": {"string": ">"}}]}}}}}},
                                       {
                                         "name": "either",
                                         "handler": {

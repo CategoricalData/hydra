@@ -67,9 +67,38 @@ class TestSuiteRunner extends AnyFunSuite with BeforeAndAfterAll {
         // block so ScalaTest's per-test timer covers expression evaluation, rather
         // than firing them at allTests build time.
         test(name) { assert(uc.expected(()) == uc.actual(())) }
+      case TestCase.effectful(ec) =>
+        // For #494: effect<t> is transparent in Scala (effect<t> = t), so the 'actual'
+        // thunk eagerly performs the effect (e.g. file I/O) and returns the resulting
+        // string. Prepare a guaranteed-empty canonical temp directory first, then force
+        // both unit-thunks inside the per-test timer. Mirrors the Java/Haskell runners.
+        test(name) {
+          prepareEffectfulTempDir()
+          assert(ec.expected(()) == ec.actual(()))
+        }
       case _ =>
         test(name) { cancel("Unhandled test case type") }
     }
+  }
+
+  // Canonical root directory for effectful (file I/O) test cases. Must match the testDir
+  // constant in Hydra.Sources.Test.Lib.Files and the per-host runners (Haskell, Java).
+  // Hard-coded *nix path for now (configurable later, #494).
+  private val EffectfulTestDir: String = "/tmp/hydra-testing"
+
+  // Prepare a guaranteed-empty canonical temp directory before an effectful test case:
+  // recursively remove it if it exists, then recreate it empty. Mirrors the Haskell/Java
+  // runners' prepareEffectfulTempDir. For #494.
+  private def prepareEffectfulTempDir(): Unit = {
+    val dir = _root_.java.nio.file.Paths.get(EffectfulTestDir)
+    if (_root_.java.nio.file.Files.exists(dir)) {
+      val walk = _root_.java.nio.file.Files.walk(dir)
+      try {
+        walk.sorted(_root_.java.util.Comparator.reverseOrder())
+          .forEach(p => _root_.java.nio.file.Files.delete(p))
+      } finally walk.close()
+    }
+    _root_.java.nio.file.Files.createDirectories(dir)
   }
 
   // ---- Benchmark JSON writer (matches the JSON shape used by other heads) ----

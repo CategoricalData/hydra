@@ -7,6 +7,7 @@ import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.File as File
 import qualified Hydra.Dependencies as Dependencies
 import qualified Hydra.Environment as Environment
 import qualified Hydra.Error.Checking as Checking
@@ -241,7 +242,7 @@ toPair mod aliases schemaPair =
           ns_ = pdlNameForModule mod
           local = Pdl.unName (Pdl.qualifiedNameName (Pdl.namedSchemaQualifiedName schema))
           path =
-                  Names.moduleNameToFilePath Util.CaseConventionCamel (Util.FileExtension "pdl") (Packaging.ModuleName (Strings.cat2 (Packaging.unModuleName (Packaging.moduleName mod)) (Strings.cat2 "/" local)))
+                  Names.moduleNameToFilePath Util.CaseConventionCamel (File.FileExtension "pdl") (Packaging.ModuleName (Strings.cat2 (Packaging.unModuleName (Packaging.moduleName mod)) (Strings.cat2 "/" local)))
       in (
         path,
         Pdl.SchemaFile {

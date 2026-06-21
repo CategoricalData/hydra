@@ -240,6 +240,14 @@ typeVariantApplication =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "application"),
         Core.fieldTerm = Core.TermUnit}}))
+-- | DSL injection for the effect variant of hydra.variants.TypeVariant
+typeVariantEffect :: Typed.TypedTerm Variants.TypeVariant
+typeVariantEffect =
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "effect"),
+        Core.fieldTerm = Core.TermUnit}}))
 -- | DSL injection for the either variant of hydra.variants.TypeVariant
 typeVariantEither :: Typed.TypedTerm Variants.TypeVariant
 typeVariantEither =

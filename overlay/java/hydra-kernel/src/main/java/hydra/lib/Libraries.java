@@ -39,8 +39,10 @@ public class Libraries {
         ConsList<PrimitiveFunction> reversed = ConsList.empty();
         for (List<PrimitiveFunction> group : Arrays.asList(
                 charsPrimitives(),
+                effectsPrimitives(),
                 eithersPrimitives(),
                 equalityPrimitives(),
+                filesPrimitives(),
                 listsPrimitives(),
                 literalsPrimitives(),
                 logicPrimitives(),
@@ -50,7 +52,8 @@ public class Libraries {
                 pairsPrimitives(),
                 regexPrimitives(),
                 setsPrimitives(),
-                stringsPrimitives())) {
+                stringsPrimitives(),
+                textPrimitives())) {
             for (PrimitiveFunction p : group) {
                 reversed = ConsList.cons(p, reversed);
             }
@@ -66,6 +69,18 @@ public class Libraries {
                 new IsUpper(),
                 new hydra.lib.chars.ToLower(),
                 new hydra.lib.chars.ToUpper());
+    }
+
+    private static List<PrimitiveFunction> effectsPrimitives() {
+        return Arrays.asList(
+                new hydra.lib.effects.Apply(),
+                new hydra.lib.effects.Bind(),
+                new hydra.lib.effects.Compose(),
+                new hydra.lib.effects.Foldl(),
+                new hydra.lib.effects.Map(),
+                new hydra.lib.effects.MapList(),
+                new hydra.lib.effects.MapOptional(),
+                new hydra.lib.effects.Pure());
     }
 
     private static List<PrimitiveFunction> eithersPrimitives() {
@@ -98,6 +113,18 @@ public class Libraries {
                 new Lte(),
                 new Max(),
                 new Min());
+    }
+
+    private static List<PrimitiveFunction> filesPrimitives() {
+        return Arrays.asList(
+                new hydra.lib.files.AppendFile(),
+                new hydra.lib.files.CreateDirectory(),
+                new hydra.lib.files.Exists(),
+                new hydra.lib.files.ListDirectory(),
+                new hydra.lib.files.ReadFile(),
+                new hydra.lib.files.RemoveFile(),
+                new hydra.lib.files.Rename(),
+                new hydra.lib.files.WriteFile());
     }
 
     private static List<PrimitiveFunction> listsPrimitives() {
@@ -348,6 +375,12 @@ public class Libraries {
                 new hydra.lib.strings.ToLower(),
                 new hydra.lib.strings.ToUpper(),
                 new hydra.lib.strings.Unlines());
+    }
+
+    private static List<PrimitiveFunction> textPrimitives() {
+        return Arrays.asList(
+                new hydra.lib.text.DecodeUtf8(),
+                new hydra.lib.text.EncodeUtf8());
     }
 
 }

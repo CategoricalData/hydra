@@ -19,8 +19,8 @@
 ;; auto-vivify an EMPTY :hydra.lib.<sub> package during gen-main load, so a find-package guard would
 ;; skip the real def-module and leave the def vars unbound. hydra-load-file populating an existing
 ;; (empty) package is fine.
-(dolist (sub '("chars" "eithers" "equality" "lists" "literals" "logic" "maps"
-               "math" "optionals" "pairs" "regex" "sets" "strings"))
+(dolist (sub '("chars" "effects" "eithers" "equality" "files" "lists" "literals" "logic" "maps"
+               "math" "optionals" "pairs" "regex" "sets" "strings" "text"))
   (hydra-load-file (merge-pathnames (concatenate 'string "lib/" sub ".lisp")
                                     *hydra-gen-main-dir*)))
 
@@ -52,6 +52,48 @@
       (cons (prim-name hydra_lib_chars_is_upper)    (prim1 (prim-name hydra_lib_chars_is_upper)    hydra_lisp_lib_chars_is_upper    nil (tc-int32) (tc-boolean)))
       (cons (prim-name hydra_lib_chars_to_lower)    (prim1 (prim-name hydra_lib_chars_to_lower)    hydra_lisp_lib_chars_to_lower    nil (tc-int32) (tc-int32)))
       (cons (prim-name hydra_lib_chars_to_upper)    (prim1 (prim-name hydra_lib_chars_to_upper)    hydra_lisp_lib_chars_to_upper    nil (tc-int32) (tc-int32))))))
+
+;; ============================================================================
+;; Effects (#494)
+;; ============================================================================
+;;
+;; effect<t> is transparent in Common Lisp (effect<t> = t). These are registered so the inference
+;; graph can resolve the hydra.lib.effects.* names; their type schemes match the kernel signatures
+;; exactly (note pure is x -> effect<x>, including the function arrow). The real evaluation happens
+;; through the relocated hydra.common_lisp.lib.effects runtime (flat hydra_lisp_lib_effects_*),
+;; reached via the bootstrap redirect.
+
+(defun register-effects ()
+  (let (
+        (x (tc-variable "x"))
+        (y (tc-variable "y"))
+        (z (tc-variable "z")))
+    (let ((eff (lambda (c) (tc-effect c))))
+      (list
+        (cons (prim-name hydra_lib_effects_apply)        (prim2 (prim-name hydra_lib_effects_apply)
+                                                   hydra_lisp_lib_effects_apply
+                                                   '("x" "y") (funcall eff (tc-function x y)) (funcall eff x) (funcall eff y)))
+        (cons (prim-name hydra_lib_effects_bind)         (prim2 (prim-name hydra_lib_effects_bind)
+                                                   hydra_lisp_lib_effects_bind
+                                                   '("x" "y") (funcall eff x) (tc-function x (funcall eff y)) (funcall eff y)))
+        (cons (prim-name hydra_lib_effects_compose)      (prim3 (prim-name hydra_lib_effects_compose)
+                                                   hydra_lisp_lib_effects_compose
+                                                   '("x" "y" "z") (tc-function x (funcall eff y)) (tc-function y (funcall eff z)) x (funcall eff z)))
+        (cons (prim-name hydra_lib_effects_foldl)        (prim3 (prim-name hydra_lib_effects_foldl)
+                                                   hydra_lisp_lib_effects_foldl
+                                                   '("x" "y") (tc-function x (tc-function y (funcall eff x))) x (tc-list y) (funcall eff x)))
+        (cons (prim-name hydra_lib_effects_map)          (prim2 (prim-name hydra_lib_effects_map)
+                                                   hydra_lisp_lib_effects_map
+                                                   '("x" "y") (tc-function x y) (funcall eff x) (funcall eff y)))
+        (cons (prim-name hydra_lib_effects_map_list)     (prim2 (prim-name hydra_lib_effects_map_list)
+                                                   hydra_lisp_lib_effects_map_list
+                                                   '("x" "y") (tc-function x (funcall eff y)) (tc-list x) (funcall eff (tc-list y))))
+        (cons (prim-name hydra_lib_effects_map_optional) (prim2 (prim-name hydra_lib_effects_map_optional)
+                                                   hydra_lisp_lib_effects_map_optional
+                                                   '("x" "y") (tc-function x (funcall eff y)) (tc-optional x) (funcall eff (tc-optional y))))
+        (cons (prim-name hydra_lib_effects_pure)         (prim1 (prim-name hydra_lib_effects_pure)
+                                                   hydra_lisp_lib_effects_pure
+                                                   '("x") x (funcall eff x)))))))
 
 ;; ============================================================================
 ;; Eithers
@@ -121,6 +163,49 @@
       (cons (prim-name hydra_lib_equality_lte)      (prim2 (prim-name hydra_lib_equality_lte)      hydra_lisp_lib_equality_lte      nil x x (tc-boolean) ord-x))
       (cons (prim-name hydra_lib_equality_max)      (prim2 (prim-name hydra_lib_equality_max)      hydra_lisp_lib_equality_max      nil x x x ord-x))
       (cons (prim-name hydra_lib_equality_min)      (prim2 (prim-name hydra_lib_equality_min)      hydra_lisp_lib_equality_min      nil x x x ord-x)))))
+
+;; ============================================================================
+;; Files (#494)
+;; ============================================================================
+;;
+;; FilePath and FileError are nominal kernel types (referenced by name). unit maps to nil, binary
+;; to a byte vector, either to the (list :left/:right) representation. As with effects, the type
+;; schemes are registered for inference name-resolution; the real I/O happens in the relocated
+;; hydra.common_lisp.lib.files runtime (flat hydra_lisp_lib_files_*), reached via the redirect.
+
+(defun register-files ()
+  (let (
+        (bool (tc-boolean))
+        (bin (tc-binary))
+        (fp (tc-named "hydra.file.FilePath"))
+        (ferr (tc-named "hydra.error.file.FileError"))
+        (unit (tc-unit)))
+    (let ((eff (lambda (c) (tc-effect c))))
+      (list
+        (cons (prim-name hydra_lib_files_append_file)     (prim2 (prim-name hydra_lib_files_append_file)
+                                                   hydra_lisp_lib_files_append_file
+                                                   nil fp bin (funcall eff (tc-either ferr unit))))
+        (cons (prim-name hydra_lib_files_create_directory) (prim2 (prim-name hydra_lib_files_create_directory)
+                                                   hydra_lisp_lib_files_create_directory
+                                                   nil bool fp (funcall eff (tc-either ferr unit))))
+        (cons (prim-name hydra_lib_files_exists)          (prim1 (prim-name hydra_lib_files_exists)
+                                                   hydra_lisp_lib_files_exists
+                                                   nil fp (funcall eff (tc-either ferr bool))))
+        (cons (prim-name hydra_lib_files_list_directory)  (prim1 (prim-name hydra_lib_files_list_directory)
+                                                   hydra_lisp_lib_files_list_directory
+                                                   nil fp (funcall eff (tc-either ferr (tc-list fp)))))
+        (cons (prim-name hydra_lib_files_read_file)       (prim1 (prim-name hydra_lib_files_read_file)
+                                                   hydra_lisp_lib_files_read_file
+                                                   nil fp (funcall eff (tc-either ferr bin))))
+        (cons (prim-name hydra_lib_files_remove_file)     (prim1 (prim-name hydra_lib_files_remove_file)
+                                                   hydra_lisp_lib_files_remove_file
+                                                   nil fp (funcall eff (tc-either ferr unit))))
+        (cons (prim-name hydra_lib_files_rename)          (prim2 (prim-name hydra_lib_files_rename)
+                                                   hydra_lisp_lib_files_rename
+                                                   nil fp fp (funcall eff (tc-either ferr unit))))
+        (cons (prim-name hydra_lib_files_write_file)      (prim2 (prim-name hydra_lib_files_write_file)
+                                                   hydra_lisp_lib_files_write_file
+                                                   nil fp bin (funcall eff (tc-either ferr unit))))))))
 
 ;; ============================================================================
 ;; Lists
@@ -497,6 +582,26 @@
       (cons (prim-name hydra_lib_strings_unlines)     (prim1 (prim-name hydra_lib_strings_unlines)     hydra_lisp_lib_strings_unlines     nil (tc-list s) s)))))
 
 ;; ============================================================================
+;; Text (#494)
+;; ============================================================================
+;;
+;; UTF-8 codecs bridging Hydra strings and raw bytes. decodeUtf8 :: binary -> either<string, string>
+;; (Left message on invalid UTF-8); encodeUtf8 :: string -> binary (total). The real codecs live in
+;; the relocated hydra.common_lisp.lib.text runtime (flat hydra_lisp_lib_text_*).
+
+(defun register-text ()
+  (let (
+        (s (tc-string))
+        (bin (tc-binary)))
+    (list
+      (cons (prim-name hydra_lib_text_decode_utf8) (prim1 (prim-name hydra_lib_text_decode_utf8)
+                                                 hydra_lisp_lib_text_decode_utf8
+                                                 nil bin (tc-either s s)))
+      (cons (prim-name hydra_lib_text_encode_utf8) (prim1 (prim-name hydra_lib_text_encode_utf8)
+                                                 hydra_lisp_lib_text_encode_utf8
+                                                 nil s bin)))))
+
+;; ============================================================================
 ;; Literals
 ;; ============================================================================
 
@@ -701,8 +806,10 @@
   "Returns an alist from primitive name (string) to Primitive record."
   (append
     (register-chars)
+    (register-effects)
     (register-eithers)
     (register-equality)
+    (register-files)
     (register-lists)
     (register-literals)
     (register-logic)
@@ -713,4 +820,5 @@
     (register-regex)
     (register-sets)
     (register-strings)
+    (register-text)
     (register-annotations)))

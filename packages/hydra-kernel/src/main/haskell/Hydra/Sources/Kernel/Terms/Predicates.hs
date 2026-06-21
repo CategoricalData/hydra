@@ -231,7 +231,9 @@ isSerializable = define "isSerializable" $
   Eithers.map
     ("deps" ~>
       "allVariants" <~ Sets.fromList (Lists.concat (Lists.map (var "variants") (Maps.elems (var "deps")))) $
-      Logic.not (Sets.member Variants.typeVariantFunction (var "allVariants")))
+      Logic.not (Logic.or
+        (Sets.member Variants.typeVariantEffect (var "allVariants"))
+        (Sets.member Variants.typeVariantFunction (var "allVariants"))))
     (typeDependencies @@ var "cx" @@ var "graph" @@ false @@ (reify Equality.identity) @@ Core.bindingName (var "el"))
 
 isSerializableByName :: TypedTermDefinition (InferenceContext -> Graph -> Name -> Either Error Bool)
@@ -244,7 +246,9 @@ isSerializableByName = define "isSerializableByName" $
   Eithers.map
     ("deps" ~>
       "allVariants" <~ Sets.fromList (Lists.concat (Lists.map (var "variants") (Maps.elems (var "deps")))) $
-      Logic.not (Sets.member Variants.typeVariantFunction (var "allVariants")))
+      Logic.not (Logic.or
+        (Sets.member Variants.typeVariantEffect (var "allVariants"))
+        (Sets.member Variants.typeVariantFunction (var "allVariants"))))
     (typeDependencies @@ var "cx" @@ var "graph" @@ false @@ (reify Equality.identity) @@ var "name")
 
 isSerializableType :: TypedTermDefinition (Type -> Bool)
@@ -254,7 +258,9 @@ isSerializableType = define "isSerializableType" $
   "allVariants" <~ Sets.fromList (Lists.map (Reflect.typeVariant)
     (Rewriting.foldOverType @@ Coders.traversalOrderPre @@
       ("m" ~> "t" ~> Lists.cons (var "t") (var "m")) @@ list ([] :: [TypedTerm Type]) @@ var "typ")) $
-  Logic.not (Sets.member Variants.typeVariantFunction (var "allVariants"))
+  Logic.not (Logic.or
+    (Sets.member Variants.typeVariantEffect (var "allVariants"))
+    (Sets.member Variants.typeVariantFunction (var "allVariants")))
 
 isTrivialTerm :: TypedTermDefinition (Term -> Bool)
 isTrivialTerm = define "isTrivialTerm" $

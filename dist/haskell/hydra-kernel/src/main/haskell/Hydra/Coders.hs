@@ -4,6 +4,7 @@
 module Hydra.Coders where
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
+import qualified Hydra.File as File
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
@@ -116,7 +117,7 @@ data Language =
     -- | Per-target case conventions for the various kinds of identifiers emitted by the coder
     languageCaseConventions :: CaseConventions,
     -- | Conventional file extension for emitted source files, without the leading dot (e.g. "scala", "py")
-    languageDefaultFileExtension :: Util.FileExtension}
+    languageDefaultFileExtension :: File.FileExtension}
 _Language = Core.Name "hydra.coders.Language"
 _Language_name = Core.Name "name"
 _Language_constraints = Core.Name "constraints"

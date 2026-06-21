@@ -29,12 +29,6 @@ _Comparison = Core.Name "hydra.util.Comparison"
 _Comparison_lessThan = Core.Name "lessThan"
 _Comparison_equalTo = Core.Name "equalTo"
 _Comparison_greaterThan = Core.Name "greaterThan"
--- | A file extension (without the dot), e.g. "json" or "py"
-newtype FileExtension =
-  FileExtension {
-    unFileExtension :: String}
-  deriving (Eq, Ord, Read, Show)
-_FileExtension = Core.Name "hydra.util.FileExtension"
 -- | A mapping from module names to values of type n, with a focus on one module name
 data ModuleNames n =
   ModuleNames {

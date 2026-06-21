@@ -12,10 +12,15 @@ import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
+import qualified Data.ByteString.Char8        as BC
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 import qualified Hydra.Dsl.Prims as Prims
+import qualified Hydra.Error.File as FileError
+import qualified Hydra.File as File
+import qualified Hydra.Lib.Effects as DefEffects
 import qualified Hydra.Lib.Eithers as DefEithers
+import qualified Hydra.Lib.Files as DefFiles
 import qualified Hydra.Lib.Lists as DefLists
 import qualified Hydra.Lib.Logic as DefLogic
 import qualified Hydra.Lib.Math as DefMath
@@ -630,6 +635,62 @@ testGroupForPrimitives :: TypedTermDefinition TestGroup
 testGroupForPrimitives = define "testGroupForPrimitives" $
   supergroup "Primitives" [
 
+    subgroup "Effect primitives" [
+      expectMono 1 []
+        (primitive DefEffects.pure @@ string "hello")
+        (Core.typeEffect T.string),
+      expectMono 2 []
+        (primitive DefEffects.apply
+          @@ (primitive DefEffects.pure @@ (lambda "s" $ primitive DefStrings.length @@ var "s"))
+          @@ (primitive DefEffects.pure @@ string "hello"))
+        (Core.typeEffect T.int32),
+      expectMono 3 []
+        (primitive DefEffects.bind
+          @@ (primitive DefEffects.pure @@ string "hello")
+          @@ (lambda "s" $ primitive DefEffects.pure @@ (primitive DefStrings.length @@ var "s")))
+        (Core.typeEffect T.int32),
+      expectMono 4 []
+        (primitive DefEffects.compose
+          @@ (lambda "s" $ primitive DefEffects.pure @@ (primitive DefStrings.length @@ var "s"))
+          @@ (lambda "n" $ primitive DefEffects.pure @@ var "n")
+          @@ string "hello")
+        (Core.typeEffect T.int32),
+      expectMono 5 []
+        (primitive DefEffects.foldl
+          @@ (lambda "acc" $ lambda "s" $
+            primitive DefEffects.pure @@ (primitive DefMath.add @@ var "acc" @@ (primitive DefStrings.length @@ var "s")))
+          @@ int32 0
+          @@ list [string "one", string "two"])
+        (Core.typeEffect T.int32),
+      expectMono 6 []
+        (primitive DefEffects.map
+          @@ primitive DefStrings.length
+          @@ (primitive DefEffects.pure @@ string "hello"))
+        (Core.typeEffect T.int32),
+      expectMono 7 []
+        (primitive DefEffects.mapList
+          @@ (lambda "s" $ primitive DefEffects.pure @@ (primitive DefStrings.length @@ var "s"))
+          @@ list [string "one", string "two"])
+        (Core.typeEffect $ T.list T.int32),
+      expectMono 8 []
+        (primitive DefEffects.mapOptional
+          @@ (lambda "s" $ primitive DefEffects.pure @@ (primitive DefStrings.length @@ var "s"))
+          @@ (optional $ just $ string "hello"))
+        (Core.typeEffect $ T.optional T.int32)],
+
+    subgroup "File primitives" [
+      expectMono 1 []
+        (primitive DefFiles.readFile @@ filePathTerm "/tmp/input.txt")
+        (Core.typeEffect $ T.either_ fileErrorType T.binary),
+      expectMono 2 []
+        (primitive DefFiles.writeFile @@ filePathTerm "/tmp/output.txt" @@ binaryTerm "hello")
+        (Core.typeEffect $ T.either_ fileErrorType T.unit),
+      expectMono 3 []
+        (primitive DefEffects.bind
+          @@ (primitive DefFiles.writeFile @@ filePathTerm "/tmp/output.txt" @@ binaryTerm "hello")
+          @@ (lambda "result" $ primitive DefFiles.readFile @@ filePathTerm "/tmp/output.txt"))
+        (Core.typeEffect $ T.either_ fileErrorType T.binary)],
+
     subgroup "Monomorphic primitive functions" [
       expectMono 1 []
         (primitive $ DefStrings.length)
@@ -665,3 +726,12 @@ testGroupForPrimitives = define "testGroupForPrimitives" $
       expectPoly 8 []
         (lambda "lists" (primitive DefLists.length @@ (primitive DefLists.concat @@ var "lists")))
         ["t0"] (T.function (T.list $ T.list $ T.var "t0") T.int32)]]
+
+fileErrorType :: TypedTerm Type
+fileErrorType = Core.typeVariable $ Phantoms.nameLift FileError._FileError
+
+filePathTerm :: String -> TypedTerm Term
+filePathTerm path = wrap (Phantoms.nameLift File._FilePath) (string path)
+
+binaryTerm :: String -> TypedTerm Term
+binaryTerm s = Terms.binary (BC.pack s)

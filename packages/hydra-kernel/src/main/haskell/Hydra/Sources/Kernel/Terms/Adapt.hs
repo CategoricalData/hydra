@@ -1090,6 +1090,8 @@ typeAlternatives = define "typeAlternatives" $
     _Type_annotated>>: "at" ~>
       "type2" <~ Core.annotatedTypeBody (var "at") $
        list [var "type2"], -- TODO: lossy
+    _Type_effect>>: "et" ~> list [
+      var "et"], -- effect<t> adapts transparently to its inner type t
     _Type_optional>>: "ot" ~> list [
       Core.typeList $ var "ot"],
     _Type_union>>: "rt" ~>

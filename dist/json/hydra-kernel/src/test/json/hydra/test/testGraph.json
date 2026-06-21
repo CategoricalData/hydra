@@ -12,8 +12,10 @@
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
     {"module": "hydra.error.packaging"},
     {"module": "hydra.errors"},
+    {"module": "hydra.file"},
     {"module": "hydra.graph"},
     {"module": "hydra.json.model"},
     {"module": "hydra.packaging"},
@@ -22,6 +24,7 @@
     {"module": "hydra.relational"},
     {"module": "hydra.tabular"},
     {"module": "hydra.testing"},
+    {"module": "hydra.time"},
     {"module": "hydra.topology"},
     {"module": "hydra.typed"},
     {"module": "hydra.typing"},
@@ -69,6 +72,94 @@
                 "type": {"variable": "hydra.core.Type"}}},
             "argument": {
               "list": [
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.file.FileError"}}}},
+                            "second": {
+                              "inject": {
+                                "typeName": "hydra.core.Type",
+                                "field": {
+                                  "name": "union",
+                                  "term": {
+                                    "list": [
+                                      {
+                                        "record": {
+                                          "typeName": "hydra.core.FieldType",
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "invalidPath"}}}}},
+                                            {
+                                              "name": "type",
+                                              "term": {
+                                                "inject": {
+                                                  "typeName": "hydra.core.Type",
+                                                  "field": {
+                                                    "name": "literal",
+                                                    "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}}]}},
+                                      {
+                                        "record": {
+                                          "typeName": "hydra.core.FieldType",
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "notFound"}}}}},
+                                            {
+                                              "name": "type",
+                                              "term": {
+                                                "inject": {
+                                                  "typeName": "hydra.core.Type",
+                                                  "field": {
+                                                    "name": "variable",
+                                                    "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.file.FilePath"}}}}}}}}]}},
+                                      {
+                                        "record": {
+                                          "typeName": "hydra.core.FieldType",
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "other"}}}}},
+                                            {
+                                              "name": "type",
+                                              "term": {
+                                                "inject": {
+                                                  "typeName": "hydra.core.Type",
+                                                  "field": {
+                                                    "name": "literal",
+                                                    "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}}]}},
+                                      {
+                                        "record": {
+                                          "typeName": "hydra.core.FieldType",
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "permissionDenied"}}}}},
+                                            {
+                                              "name": "type",
+                                              "term": {
+                                                "inject": {
+                                                  "typeName": "hydra.core.Type",
+                                                  "field": {
+                                                    "name": "variable",
+                                                    "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.file.FilePath"}}}}}}}}]}}]}}}}}},
+                        "type": {"variable": "hydra.core.Name"}}},
+                    "type": {"variable": "hydra.core.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.file.FilePath"}}}},
+                            "second": {
+                              "inject": {
+                                "typeName": "hydra.core.Type",
+                                "field": {
+                                  "name": "wrap",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.Type",
+                                      "field": {
+                                        "name": "literal",
+                                        "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}}}}}},
+                        "type": {"variable": "hydra.core.Name"}}},
+                    "type": {"variable": "hydra.core.Type"}}},
                 {
                   "typeApplication": {
                     "body": {

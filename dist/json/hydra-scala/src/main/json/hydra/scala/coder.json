@@ -29,8 +29,10 @@
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
     {"module": "hydra.error.packaging"},
     {"module": "hydra.errors"},
+    {"module": "hydra.file"},
     {"module": "hydra.graph"},
     {"module": "hydra.json.model"},
     {"module": "hydra.packaging"},
@@ -39,6 +41,7 @@
     {"module": "hydra.relational"},
     {"module": "hydra.tabular"},
     {"module": "hydra.testing"},
+    {"module": "hydra.time"},
     {"module": "hydra.topology"},
     {"module": "hydra.typed"},
     {"module": "hydra.typing"},
@@ -6581,6 +6584,25 @@
                                                                             "type": {"variable": "hydra.errors.Error"}}},
                                                                         "type": {"variable": "hydra.scala.syntax.Type"}}}}}}}}}}}}}}}},
                                           {
+                                            "name": "effect",
+                                            "handler": {
+                                              "lambda": {
+                                                "parameter": "et",
+                                                "domain": {"variable": "hydra.core.Type"},
+                                                "body": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.scala.coder.encodeType"}, "type": {"variable": "t0"}}},
+                                                                "type": {"variable": "t1"}}},
+                                                            "argument": {"variable": "cx"}}},
+                                                        "argument": {"variable": "g"}}},
+                                                    "argument": {"variable": "et"}}}}}},
+                                          {
                                             "name": "function",
                                             "handler": {
                                               "lambda": {
@@ -10308,7 +10330,7 @@
                                                                           "application": {
                                                                             "function": {"variable": "hydra.names.moduleNameToFilePath"},
                                                                             "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": {"unit": {}}}}}}},
-                                                                        "argument": {"wrap": {"typeName": "hydra.util.FileExtension", "body": {"literal": {"string": "scala"}}}}}},
+                                                                        "argument": {"wrap": {"typeName": "hydra.file.FileExtension", "body": {"literal": {"string": "scala"}}}}}},
                                                                     "argument": {
                                                                       "application": {"function": {"project": {"typeName": "hydra.packaging.Module", "fieldName": "name"}}, "argument": {"variable": "mod"}}}}}}},
                                                             "argument": {"variable": "s"}}}}},

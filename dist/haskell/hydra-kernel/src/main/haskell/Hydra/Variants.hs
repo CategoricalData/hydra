@@ -71,6 +71,7 @@ _TermVariant_wrap = Core.Name "wrap"
 data TypeVariant =
   TypeVariantAnnotated |
   TypeVariantApplication |
+  TypeVariantEffect |
   TypeVariantEither |
   TypeVariantForall |
   TypeVariantFunction |
@@ -90,6 +91,7 @@ data TypeVariant =
 _TypeVariant = Core.Name "hydra.variants.TypeVariant"
 _TypeVariant_annotated = Core.Name "annotated"
 _TypeVariant_application = Core.Name "application"
+_TypeVariant_effect = Core.Name "effect"
 _TypeVariant_either = Core.Name "either"
 _TypeVariant_forall = Core.Name "forall"
 _TypeVariant_function = Core.Name "function"

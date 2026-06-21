@@ -3453,6 +3453,34 @@
                                               "name": "term",
                                               "term": {"application": {"function": {"variable": "hydra.encode.core.applicationType"}, "argument": {"variable": "y"}}}}]}}}]}}}}}}}},
                   {
+                    "name": "effect",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "y",
+                        "domain": {"variable": "hydra.core.Type"},
+                        "body": {
+                          "inject": {
+                            "typeName": "hydra.core.Term",
+                            "field": {
+                              "name": "inject",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.Injection",
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.core.Type"}}}}},
+                                    {
+                                      "name": "field",
+                                      "term": {
+                                        "record": {
+                                          "typeName": "hydra.core.Field",
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "effect"}}}}},
+                                            {
+                                              "name": "term",
+                                              "term": {"application": {"function": {"variable": "hydra.encode.core.type"}, "argument": {"variable": "y"}}}}]}}}]}}}}}}}},
+                  {
                     "name": "either",
                     "handler": {
                       "lambda": {

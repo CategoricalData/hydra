@@ -8,12 +8,80 @@ import qualified Hydra.Testing as Testing
 import qualified Hydra.Typed as Typed
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | DSL constructor for hydra.testing.EffectfulTestCase
+effectfulTestCase :: Typed.TypedTerm (() -> IO String) -> Typed.TypedTerm (() -> String) -> Typed.TypedTerm Testing.EffectfulTestCase
+effectfulTestCase actual expected =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.testing.EffectfulTestCase"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "actual"),
+          Core.fieldTerm = (Typed.unTypedTerm actual)},
+        Core.Field {
+          Core.fieldName = (Core.Name "expected"),
+          Core.fieldTerm = (Typed.unTypedTerm expected)}]}))
+-- | DSL accessor for the actual field of hydra.testing.EffectfulTestCase
+effectfulTestCaseActual :: Typed.TypedTerm Testing.EffectfulTestCase -> Typed.TypedTerm (() -> IO String)
+effectfulTestCaseActual x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.testing.EffectfulTestCase"),
+        Core.projectionFieldName = (Core.Name "actual")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL accessor for the expected field of hydra.testing.EffectfulTestCase
+effectfulTestCaseExpected :: Typed.TypedTerm Testing.EffectfulTestCase -> Typed.TypedTerm (() -> String)
+effectfulTestCaseExpected x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.testing.EffectfulTestCase"),
+        Core.projectionFieldName = (Core.Name "expected")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL updater for the actual field of hydra.testing.EffectfulTestCase
+effectfulTestCaseWithActual :: Typed.TypedTerm Testing.EffectfulTestCase -> Typed.TypedTerm (() -> IO String) -> Typed.TypedTerm Testing.EffectfulTestCase
+effectfulTestCaseWithActual original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.testing.EffectfulTestCase"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "actual"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "expected"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.testing.EffectfulTestCase"),
+              Core.projectionFieldName = (Core.Name "expected")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+-- | DSL updater for the expected field of hydra.testing.EffectfulTestCase
+effectfulTestCaseWithExpected :: Typed.TypedTerm Testing.EffectfulTestCase -> Typed.TypedTerm (() -> String) -> Typed.TypedTerm Testing.EffectfulTestCase
+effectfulTestCaseWithExpected original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.testing.EffectfulTestCase"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "actual"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.testing.EffectfulTestCase"),
+              Core.projectionFieldName = (Core.Name "actual")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "expected"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL constructor for the hydra.testing.Tag wrapper
 tag :: Typed.TypedTerm String -> Typed.TypedTerm Testing.Tag
 tag x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.testing.Tag"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+-- | DSL injection for the effectful variant of hydra.testing.TestCase
+testCaseEffectful :: Typed.TypedTerm Testing.EffectfulTestCase -> Typed.TypedTerm Testing.TestCase
+testCaseEffectful x =
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "effectful"),
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the universal variant of hydra.testing.TestCase
 testCaseUniversal :: Typed.TypedTerm Testing.UniversalTestCase -> Typed.TypedTerm Testing.TestCase
 testCaseUniversal x =

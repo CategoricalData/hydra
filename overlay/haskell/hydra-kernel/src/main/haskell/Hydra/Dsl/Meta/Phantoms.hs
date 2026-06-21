@@ -437,6 +437,18 @@ toPrimitiveNoDefault :: String -> TermSignature -> Name -> [String] -> Definitio
 toPrimitiveNoDefault description sig name comments =
   DefinitionPrimitive $ PrimitiveDefinition name (primitiveMetadata description comments) sig True True Nothing
 
+-- | Convert a Name to an impure primitive Definition. Impure primitives are
+-- host-native and do not have Hydra default implementations.
+toImpurePrimitive :: String -> TermSignature -> Name -> [String] -> Definition
+toImpurePrimitive description sig name comments =
+  DefinitionPrimitive $ PrimitiveDefinition name (primitiveMetadata description comments) sig False True Nothing
+
+-- | Declare an impure primitive within a module namespace, given its local name.
+-- A convenience over toImpurePrimitive which qualifies the local name with the namespace.
+impurePrimitiveInModule :: ModuleName -> String -> String -> TermSignature -> [String] -> Definition
+impurePrimitiveInModule ns localName description sig comments =
+  toImpurePrimitive description sig (unqualifyName (QualifiedName (Just ns) localName)) comments
+
 -- | Build the entity metadata for a primitive from its (always-present) one-line description and
 -- long-form comments. Folds the former PrimitiveDefinition.description/comments fields into
 -- EntityMetadata without data loss: description -> metadata.description, comments -> metadata.comments.

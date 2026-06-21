@@ -7,8 +7,10 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.File as ErrorFile
 import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
+import qualified Hydra.File as File
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Packaging as Packaging
@@ -31,8 +33,10 @@ import qualified Hydra.Test.Json.Roundtrip as Roundtrip
 import qualified Hydra.Test.Json.Writer as Writer
 import qualified Hydra.Test.Json.Yaml as Yaml
 import qualified Hydra.Test.Lib.Chars as Chars
+import qualified Hydra.Test.Lib.Effects as Effects
 import qualified Hydra.Test.Lib.Eithers as Eithers
 import qualified Hydra.Test.Lib.Equality as Equality
+import qualified Hydra.Test.Lib.Files as Files
 import qualified Hydra.Test.Lib.Lists as Lists
 import qualified Hydra.Test.Lib.Literals as Literals
 import qualified Hydra.Test.Lib.Logic as Logic
@@ -54,6 +58,7 @@ import qualified Hydra.Test.Unification as Unification
 import qualified Hydra.Test.Validate.All as ValidateAll
 import qualified Hydra.Test.Variables as Variables
 import qualified Hydra.Testing as Testing
+import qualified Hydra.Time as Time
 import qualified Hydra.Topology as Topology
 import qualified Hydra.Typed as Typed
 import qualified Hydra.Typing as Typing
@@ -70,8 +75,10 @@ allTests =
       Testing.testGroupDescription = Nothing,
       Testing.testGroupSubgroups = [
         Chars.allTests,
+        Effects.allTests,
         Eithers.allTests,
         Equality.allTests,
+        Files.allTests,
         Lists.allTests,
         Literals.allTests,
         Logic.allTests,

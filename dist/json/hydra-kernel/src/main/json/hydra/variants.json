@@ -69,6 +69,7 @@
                 "union": [
                   {"name": "annotated", "type": {"unit": {}}},
                   {"name": "application", "type": {"unit": {}}},
+                  {"name": "effect", "type": {"unit": {}}},
                   {"name": "either", "type": {"unit": {}}},
                   {"name": "forall", "type": {"unit": {}}},
                   {"name": "function", "type": {"unit": {}}},

@@ -152,7 +152,7 @@ import hydra.java.syntax.VariableDeclaratorId;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.java.syntax.VariableInitializer;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.java.syntax.WhileStatement;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.packaging.EntityMetadata;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.util.FileExtension;  // AUTO-IMPORT (hydra-java DSL)
+import hydra.file.FileExtension;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.packaging.PrimitiveDefinition;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.util.QualifiedName;  // AUTO-IMPORT (hydra-java DSL)
 import hydra.packaging.TermDefinition;  // AUTO-IMPORT (hydra-java DSL)
@@ -707,6 +707,12 @@ public class Coder {
                         lambda("inner",
                             inject(Type.TYPE_,
                                 Type.OPTIONAL,
+                                apply(ref(Coder.applySubstFull), var("s"), var("inner"))))),
+                    field(
+                        Type.EFFECT,
+                        lambda("inner",
+                            inject(Type.TYPE_,
+                                Type.EFFECT,
                                 apply(ref(Coder.applySubstFull), var("s"), var("inner"))))),
                     field(
                         Type.MAP,
@@ -2238,6 +2244,12 @@ public class Coder {
                                 apply(var("hydra.strip.deannotateType"), var("inner"))))),
                     field(
                         Type.OPTIONAL,
+                        lambda("inner",
+                            apply(
+                                ref(Coder.collectTypeVars_go),
+                                apply(var("hydra.strip.deannotateType"), var("inner"))))),
+                    field(
+                        Type.EFFECT,
                         lambda("inner",
                             apply(
                                 ref(Coder.collectTypeVars_go),
@@ -9082,6 +9094,18 @@ public class Coder {
                                                         ref(Names.javaUtilPackageName),
                                                         string("List"))))))))),
                         field(
+                            Type.EFFECT,
+                            // effect<t> is transparent in Java: it encodes to the same type as its
+                            // inner type t. Java has no distinguished effect wrapper (#494).
+                            lambda("et",
+                                apply(
+                                    ref(Coder.encodeType),
+                                    var("aliases"),
+                                    var("boundVars"),
+                                    var("et"),
+                                    var("cx"),
+                                    var("g")))),
+                        field(
                             Type.LITERAL,
                             lambda("lt",
                                 apply(ref(Coder.encodeLiteralType), var("lt"), var("cx"), var("g")))),
@@ -12853,6 +12877,15 @@ public class Coder {
                         lambda("inner",
                             inject(Type.TYPE_,
                                 Type.OPTIONAL,
+                                apply(
+                                    ref(Coder.substituteTypeVarsWithTypes_go),
+                                    var("subst"),
+                                    var("inner"))))),
+                    field(
+                        Type.EFFECT,
+                        lambda("inner",
+                            inject(Type.TYPE_,
+                                Type.EFFECT,
                                 apply(
                                     ref(Coder.substituteTypeVarsWithTypes_go),
                                     var("subst"),

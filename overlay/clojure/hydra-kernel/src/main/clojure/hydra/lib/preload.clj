@@ -6,10 +6,12 @@
 
 (def ^:private lib-ns-names
   "Library namespaces whose public vars should be globalized."
-  ["hydra.clojure.lib.chars" "hydra.clojure.lib.eithers" "hydra.clojure.lib.equality"
+  ["hydra.clojure.lib.chars" "hydra.clojure.lib.effects" "hydra.clojure.lib.eithers"
+   "hydra.clojure.lib.equality" "hydra.clojure.lib.files"
    "hydra.clojure.lib.lists" "hydra.clojure.lib.literals" "hydra.clojure.lib.logic"
    "hydra.clojure.lib.maps" "hydra.clojure.lib.math" "hydra.clojure.lib.optionals"
-   "hydra.clojure.lib.pairs" "hydra.clojure.lib.sets" "hydra.clojure.lib.strings"])
+   "hydra.clojure.lib.pairs" "hydra.clojure.lib.sets" "hydra.clojure.lib.strings"
+   "hydra.clojure.lib.text"])
 
 (defn globalize-ns-vars!
   "Intern all public vars from the given namespace into clojure.core,

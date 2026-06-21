@@ -5,6 +5,7 @@ module Hydra.Sources.Scala.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
+import Hydra.File (_FileExtension)
 import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
@@ -861,6 +862,11 @@ encodeType = def "encodeType" $
               (asTerm encodeType @@ var "cx" @@ var "g" @@ var "rt")
               ("srt" ~>
                 right (ScalaUtilsSource.stapply2 @@ stref (string "Either") @@ var "slt" @@ var "srt")))),
+      -- effect<t> is transparent in Scala: encode it as the encoding of its inner type t.
+      -- The effectfulness is carried by the surrounding thunk (unit -> effect<t> becomes the
+      -- Scala thunk Unit => t); forcing the thunk performs the effect. Mirrors the Java coder's
+      -- Type.EFFECT case (transparent recurse) and the Python coder's effect field recurse.
+      _Type_effect>>: ("et" ~> asTerm encodeType @@ var "cx" @@ var "g" @@ var "et"),
       _Type_function>>: ("ft" ~> lets [
         "dom">: project _FunctionType _FunctionType_domain @@ var "ft",
         "cod">: project _FunctionType _FunctionType_codomain @@ var "ft"] $

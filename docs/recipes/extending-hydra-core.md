@@ -47,13 +47,20 @@ While `Either` is now built-in (available as `hydra.core.EitherType` and `Term.e
 the process described here can be followed for adding new type/term constructors
 like pairs, sum types, or other constructs.
 
-Adding a new type/term constructor to Hydra Core involves:
+Start by identifying the shape of the change:
 
-1. **Schema updates** - Defining the new constructors in the type system
-2. **Type inference** - Teaching the type checker about the new constructors
-3. **Rewriting/traversal** - Updating all term manipulation functions
-4. **Code generation** - Adding target language encoding support
-5. **Bootstrap patching** - Manually patching generated files to break circular dependencies
+- **Type-only constructor**: add a `Type` union case, `TypeVariant` metadata,
+  type traversals, display/reflection, core schema encode/decode support, and
+  any value-serialization or language-support policy. Skip term inference and
+  checking cases.
+- **Term-only constructor**: add a `Term` union case, `TermVariant` metadata,
+  term traversals, display/reflection, inference/checking, and target-language
+  encoding if the term is meant to generate code.
+- **Paired type/term constructor**: do both. `Either` is the example followed
+  by this guide.
+
+Most changes involve schema updates, traversal updates, generated-code support,
+and bootstrap patching. Term constructors also require inference and checking.
 
 The most challenging aspect is the **bootstrap problem**:
 the code generator needs to understand the new constructors to generate itself.
@@ -89,7 +96,10 @@ New DSL Code → Needs Generator → Generator Needs New Code → ⚠️  Circul
 
 **File:** `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Core.hs`
 
-Add your new type constructor to the `Type` union and your new term constructor to the `Term` union.
+Add the new constructor to the appropriate union:
+
+- `Type` for type-only or paired type/term constructors
+- `Term` for term-only or paired type/term constructors
 
 **Example (Either):**
 
@@ -121,6 +131,9 @@ def "Term" $
   - `list` for list types
   - `Types.map` for map types
 - Add supporting type definitions if needed (e.g., `EitherType`)
+- Core encode/decode modules must serialize the schema representation of
+  `hydra.core.Type`; this is separate from whether values of the new type are
+  serializable.
 
 ---
 
@@ -128,7 +141,7 @@ def "Term" $
 
 **File:** `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Meta/Phantoms.hs`
 
-Check that term-level constructors exist in the DSL:
+For term constructors, check that term-level constructors exist in the DSL:
 
 ```haskell
 -- Example: Either constructors (already present)
@@ -139,7 +152,8 @@ right :: TypedTerm b -> TypedTerm (Either a b)
 right (TypedTerm term) = TypedTerm $ Terms.right term
 ```
 
-If missing, add them following existing patterns like `just` and `nothing` for `Maybe`.
+Type-only changes can skip this step. If a term constructor is missing, add it
+following existing patterns like `just` and `nothing` for `Maybe`.
 
 ---
 
@@ -175,6 +189,17 @@ termVariants = [
 ```
 
 Similarly, if adding a Type constructor, update `typeVariant` and `typeVariants`.
+
+For a constructor added to the generated `hydra.variants.TypeVariant` enum,
+bootstrap may also require temporary patches to these generated modules:
+
+- `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Variants.hs`
+- `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Variants.hs`
+- `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Encode/Variants.hs`
+- `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Decode/Variants.hs`
+
+These patches are only to break the circular dependency. A successful sync
+should regenerate them from `Hydra.Sources.Kernel.Types.Variants`.
 
 #### 2.5.2: Update Hydra.Dsl.Mantle
 
@@ -478,6 +503,15 @@ standardLibraries = [
 stack build
 ```
 
+For the current Haskell distribution sync path, prefer running from the worktree root:
+
+```bash
+ulimit -n 4096; heads/haskell/bin/sync-haskell.sh --local-host --no-tests
+```
+
+The higher file-descriptor limit avoids `resource exhausted (Too many open files)`
+failures during JSON export on systems with a low default limit.
+
 **Expected Result:** Build succeeds (source files compile correctly)
 
 **If build fails:** Fix syntax/type errors before proceeding
@@ -588,6 +622,9 @@ they usually indicate which generated file needs additional patching
 stack runghc tmp_write_haskell.hs
 ```
 
+For the current generated JSON-to-Haskell pipeline, the sync command in Step 7
+performs the JSON export, JSON kernel verification, and Haskell regeneration.
+
 **Expected Result:**
 - Process completes with only warnings (no errors)
 - Outputs key/value pairs at the end
@@ -626,6 +663,8 @@ stack build
 
 If you want target languages (Python, Java, Scala, etc.) to support the new constructor,
 update their language definitions and regenerate code.
+Fixed `termVariants` and `typeVariants` sets in language modules are also the
+place to explicitly reject a new constructor by omission.
 
 #### 11.5.1: Update Python Language Definition
 
@@ -781,13 +820,13 @@ Inference tests verify that types are correctly inferred without explicit type a
 
 ```bash
 # Run checking tests specifically
-stack test --test-arguments "--match 'Type checking'"
+ulimit -n 4096; stack test --test-arguments "--match 'Type checking'"
 
 # Run inference tests specifically
-stack test --test-arguments "--match 'Type inference'"
+ulimit -n 4096; stack test --test-arguments "--match 'Type inference'"
 
 # Run all tests
-stack test
+ulimit -n 4096; stack test
 ```
 
 **Expected Result:** All tests pass (e.g., 2278 examples, 0 failures)
@@ -808,6 +847,9 @@ stack test
 | Missing rewrite function cases | Forgot to add to all rewriting variants | Search for `_Term_maybe` in `Rewriting.hs` to find all functions needing updates |
 | Variants not updated | Missing from `Hydra.Variants` or `Hydra.Dsl.Mantle` | Add to `termVariant` function, `termVariants` list, and DSL helpers |
 | Language support missing | Constructor not in language definition | Add to `termVariants` in `Hydra/Sources/Python/Language.hs` (or other language) and regenerate |
+| `typeVariantX` not in scope during bootstrap | Generated variant enum/DSL files do not yet include the new `TypeVariant` case | Temporarily patch `Hydra/Variants.hs`, `Hydra/Dsl/Variants.hs`, `Hydra/Encode/Variants.hs`, and `Hydra/Decode/Variants.hs`, then rerun sync |
+| `resource exhausted (Too many open files)` during JSON export or test source discovery | Process file descriptor limit is too low | Run sync/tests with `ulimit -n 4096` |
+| Confusing core schema serialization with value serialization | Core encode/decode must handle the new `hydra.core.Type` case even if values of that type are not serializable | Update `Hydra.Encode.Core`/`Hydra.Decode.Core` through generation, and separately update serializability predicates to reject unsupported value types |
 
 ---
 
@@ -833,7 +875,8 @@ stack test
 
 5. **Don't skip bootstrap patching** - Manual patching is necessary to break the circular dependency
 
-6. **Check both Term and Type** - Most constructors need updates to both
+6. **Check the right grammar branch** - Type-only changes do not need term
+   inference/checking; term-only changes do not need type traversal cases.
 
 7. **Follow alphabetical order** - Makes code easier to navigate and maintain
 
@@ -851,40 +894,53 @@ stack test
 
 ## File Modification Checklist
 
-### Source Files (Always Modified)
+### Core Source Files
 
 - [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Core.hs`
-  - [ ] Add to Term union
-  - [ ] Add to Type union (if applicable)
+  - [ ] Add to `Type` and/or `Term` union
   - [ ] Add supporting type definitions
 
 - [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Variants.hs` (**CRITICAL!**)
-  - [ ] Add to `TermVariant` enum definition
-  - [ ] Add to `TypeVariant` enum definition (if applicable)
+  - [ ] Add to `TermVariant` and/or `TypeVariant` enum definition
 
 - [ ] `heads/haskell/src/main/haskell/Hydra/Dsl/Mantle.hs`
-  - [ ] Add case to `termVariant` pattern match
-  - [ ] Add `termVariantX` helper function
-  - [ ] Add case to `typeVariant` pattern match (if applicable)
-  - [ ] Add `typeVariantX` helper function (if applicable)
+  - [ ] Add variant pattern-match case and helper function
 
 - [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Inference.hs`
-  - [ ] Create `inferTypeOfXDef` function with type applications
-  - [ ] Add case to `inferTypeOfTermDef`
-  - [ ] Register in `definitions` list
-  - [ ] Add necessary imports
+  - [ ] For term constructors, create `inferTypeOfXDef`, add the case, and register it
 
 - [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Checking.hs`
-  - [ ] Create `typeOfXDef` function
-  - [ ] Verify type arguments are provided correctly
-  - [ ] Add case to main checking function
-  - [ ] Register in `definitions` list
-  - [ ] Add necessary imports
+  - [ ] For term constructors, create `typeOfXDef`, add the case, and register it
 
 - [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Rewriting.hs`
-  - [ ] Add cases to all `rewriteTerm*` functions (search for `_Term_maybe` to find them all)
-  - [ ] Add case in `subtermsDef`
-  - [ ] Add necessary imports
+  - [ ] Add term traversal cases and `subtermsDef` for term constructors
+  - [ ] Add type traversal cases and `subtypesDef` for type constructors
+
+- [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Reflect.hs`
+  - [ ] Map the new core constructor to its `TermVariant` or `TypeVariant`
+  - [ ] Add the new variant to the complete variant list
+
+- [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Show/Core.hs`
+  - [ ] Add display logic for the new constructor
+
+- [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Show/Variants.hs`
+  - [ ] Add display logic for the new variant metadata
+
+- [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Unification.hs`
+  - [ ] Add unification and type-join behavior for type constructors
+
+- [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Validate/Core.hs`
+  - [ ] Traverse child types or terms
+  - [ ] Add any constructor-specific validation rules
+
+- [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Predicates.hs`
+  - [ ] Update serializability predicates if the new type affects value serialization
+
+- [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Encoding.hs`
+  - [ ] Traverse or reject the new type in encoder helper functions
+
+- [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Decoding.hs`
+  - [ ] Traverse or reject the new type in decoder helper functions
 
 ### Source Files (Sometimes Modified)
 
@@ -899,6 +955,15 @@ stack test
   - [ ] Add to `termVariants` list
   - [ ] Add case to `typeVariant` function (if applicable)
   - [ ] Add to `typeVariants` list (if applicable)
+
+- [ ] `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Variants.hs`
+  - [ ] Add generated DSL injection for the new `TermVariant` or `TypeVariant`
+
+- [ ] `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Encode/Variants.hs`
+  - [ ] Add generated encoder case for the new variant enum
+
+- [ ] `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Decode/Variants.hs`
+  - [ ] Add generated decoder case for the new variant enum
 
 - [ ] `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Inference.hs`
   - [ ] Add inference function implementation (with type applications)

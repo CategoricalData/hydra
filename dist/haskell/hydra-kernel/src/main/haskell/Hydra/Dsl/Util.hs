@@ -67,12 +67,6 @@ comparisonLessThan =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lessThan"),
         Core.fieldTerm = Core.TermUnit}}))
--- | DSL constructor for the hydra.util.FileExtension wrapper
-fileExtension :: Typed.TypedTerm String -> Typed.TypedTerm Util.FileExtension
-fileExtension x =
-    Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.util.FileExtension"),
-      Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 -- | DSL constructor for hydra.util.ModuleNames
 moduleNames :: Typed.TypedTerm (Packaging.ModuleName, n) -> Typed.TypedTerm (M.Map Packaging.ModuleName n) -> Typed.TypedTerm (Util.ModuleNames n)
 moduleNames focus mapping =
@@ -209,9 +203,3 @@ qualifiedNameWithModuleName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.util.QualifiedName"),
               Core.projectionFieldName = (Core.Name "local")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
--- | DSL accessor for the body of hydra.util.FileExtension
-unFileExtension :: Typed.TypedTerm Util.FileExtension -> Typed.TypedTerm String
-unFileExtension x =
-    Typed.TypedTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.util.FileExtension")),
-      Core.applicationArgument = (Typed.unTypedTerm x)}))

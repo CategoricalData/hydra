@@ -164,6 +164,11 @@ typeVariant x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "application"),
           Core.fieldTerm = Core.TermUnit}})
+      Variants.TypeVariantEffect -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "effect"),
+          Core.fieldTerm = Core.TermUnit}})
       Variants.TypeVariantEither -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
         Core.injectionField = Core.Field {

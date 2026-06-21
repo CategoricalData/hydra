@@ -101,6 +101,11 @@ individualEncoderTestCases = do
           Field _FunctionType_codomain $ inject _Type _Type_literal $ inject _LiteralType _LiteralType_integer $
             injectUnit _IntegerType _IntegerType_int32])
 
+    H.it "effect type" $ do
+      H.shouldBe
+        (strip $ EncodeCore.type_ (TypeEffect Types.string) :: Term)
+        (strip $ inject _Type _Type_effect $ inject _Type _Type_literal $ injectUnit _LiteralType _LiteralType_string)
+
     H.it "list type" $ do
       H.shouldBe
         (strip $ EncodeCore.type_ (Types.list Types.boolean) :: Term)
@@ -193,6 +198,12 @@ individualDecoderTestCases = do
             Field _FunctionType_codomain $ inject _Type _Type_literal $ inject _LiteralType _LiteralType_integer $
               injectUnit _IntegerType _IntegerType_int32])
         (Types.function Types.string Types.int32)
+
+    H.it "effect type" $ do
+      shouldSucceedWith
+        (decodeE $ DecodeCore.type_ (testGraph) $
+          inject _Type _Type_effect $ inject _Type _Type_literal $ injectUnit _LiteralType _LiteralType_string)
+        (TypeEffect Types.string)
 
     H.it "list type" $ do
       shouldSucceedWith

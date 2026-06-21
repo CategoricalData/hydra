@@ -34,6 +34,9 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 import qualified Data.Set                     as S
 import qualified Data.Maybe                   as Y
+import           Hydra.Dsl.Meta.Base          ((>:))
+import qualified Hydra.Error.File             as FileError
+import qualified Hydra.File                   as File
 
 
 ns :: ModuleName
@@ -82,6 +85,8 @@ testTerms = define "testTerms" $
 testTypes :: TypedTermDefinition (M.Map Name Type)
 testTypes = define "testTypes" $
   Maps.fromList $ Phantoms.list [
+    Phantoms.pair fileErrorName fileErrorType,
+    Phantoms.pair filePathName filePathType,
     Phantoms.pair TestTypes.testTypeBuddyListAName TestTypes.testTypeBuddyListA,
     Phantoms.pair TestTypes.testTypeBuddyListBName TestTypes.testTypeBuddyListB,
     Phantoms.pair TestTypes.testTypeComparisonName TestTypes.testTypeComparison,
@@ -104,3 +109,19 @@ testTypes = define "testTypes" $
     Phantoms.pair TestTypes.testTypeUnionMonomorphicName TestTypes.testTypeUnionMonomorphic,
     Phantoms.pair TestTypes.testTypeUnionPolymorphicRecursiveName TestTypes.testTypeUnionPolymorphicRecursive,
     Phantoms.pair TestTypes.testTypeUnitName TestTypes.testTypeUnit]
+
+fileErrorName :: TypedTerm Name
+fileErrorName = Phantoms.nameLift FileError._FileError
+
+fileErrorType :: TypedTerm Type
+fileErrorType = T.union fileErrorName [
+  "invalidPath">: T.string,
+  "notFound">: Core.typeVariable filePathName,
+  "other">: T.string,
+  "permissionDenied">: Core.typeVariable filePathName]
+
+filePathName :: TypedTerm Name
+filePathName = Phantoms.nameLift File._FilePath
+
+filePathType :: TypedTerm Type
+filePathType = T.wrap filePathName T.string
