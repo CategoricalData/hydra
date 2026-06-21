@@ -94,7 +94,7 @@ dslDefinitionName typeName localName =
                   "dsl"] nsParts))
         in (Core.Name (Strings.intercalate "." (Lists.concat2 dslNsParts [
           localName])))))
--- | Transform a type module into a DSL module
+-- | Transform a source module into a DSL module
 dslModule :: t0 -> Graph.Graph -> Packaging.Module -> Either Errors.Error (Maybe Packaging.Module)
 dslModule cx graph mod =
     Eithers.bind (filterTypeBindings cx graph (Optionals.cat (Lists.map (\d -> case d of
@@ -112,25 +112,27 @@ dslModule cx graph mod =
             Core.typeSchemeVariables = [],
             Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
             Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionBody v0)))
-      _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (generateBindingsForType cx graph b)) typeBindings) (\dslBindings -> Right (Just (Packaging.Module {
-      Packaging.moduleName = (dslModuleName (Packaging.moduleName mod)),
-      Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
-        Packaging.entityMetadataDescription = (Just (Strings.cat [
-          "DSL functions for ",
-          (Packaging.unModuleName (Packaging.moduleName mod))])),
-        Packaging.entityMetadataComments = [],
-        Packaging.entityMetadataSeeAlso = [],
-        Packaging.entityMetadataLifecycle = Nothing})),
-      Packaging.moduleDependencies = (Lists.map (\ns -> Packaging.ModuleDependency {
-        Packaging.moduleDependencyModule = ns,
-        Packaging.moduleDependencyPackage = Nothing}) (Lists.nub (Lists.concat2 [
-        Packaging.moduleName mod,
-        (Packaging.ModuleName "hydra.typed")] (Lists.concat2 (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod)) (Lists.map dslModuleName (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod))))))),
-      Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
-        Packaging.termDefinitionName = (Core.bindingName b),
-        Packaging.termDefinitionMetadata = Nothing,
-        Packaging.termDefinitionSignature = (Optionals.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b)),
-        Packaging.termDefinitionBody = (Core.bindingTerm b)})) (deduplicateBindings (Lists.concat dslBindings)))})))))
+      _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (generateBindingsForType cx graph b)) typeBindings) (\typeDslBindings -> Eithers.bind (Eithers.mapList (\d -> generateRefBindings d) (Packaging.moduleDefinitions mod)) (\refDslBindings ->
+      let allBindings = deduplicateBindings (Lists.concat2 (Lists.concat typeDslBindings) (Lists.concat refDslBindings))
+      in (Logic.ifElse (Lists.null allBindings) (Right Nothing) (Right (Just (Packaging.Module {
+        Packaging.moduleName = (dslModuleName (Packaging.moduleName mod)),
+        Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
+          Packaging.entityMetadataDescription = (Just (Strings.cat [
+            "DSL functions for ",
+            (Packaging.unModuleName (Packaging.moduleName mod))])),
+          Packaging.entityMetadataComments = [],
+          Packaging.entityMetadataSeeAlso = [],
+          Packaging.entityMetadataLifecycle = Nothing})),
+        Packaging.moduleDependencies = (Lists.map (\ns -> Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = ns,
+          Packaging.moduleDependencyPackage = Nothing}) (Lists.nub (Lists.concat2 [
+          Packaging.moduleName mod,
+          (Packaging.ModuleName "hydra.typed")] (Lists.concat2 (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod)) (Lists.map dslModuleName (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod))))))),
+        Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.bindingName b),
+          Packaging.termDefinitionMetadata = Nothing,
+          Packaging.termDefinitionSignature = (Optionals.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b)),
+          Packaging.termDefinitionBody = (Core.bindingTerm b)})) allBindings)})))))))
 -- | Generate a DSL module name from a source module name
 dslModuleName :: Packaging.ModuleName -> Packaging.ModuleName
 dslModuleName ns =
@@ -143,6 +145,27 @@ dslModuleName ns =
       in (Optionals.cases (Lists.uncons parts) prefixFull (\ht -> Logic.ifElse (Equality.equal (Pairs.first ht) "hydra") (Packaging.ModuleName (Strings.cat [
         "hydra.dsl.",
         (Strings.intercalate "." (Pairs.second ht))])) prefixFull))
+-- | Build a TypedTerm-wrapped TypeScheme (functions of phantom terms) from a TermSignature
+dslSignatureTypeScheme :: Typing.TermSignature -> Core.TypeScheme
+dslSignatureTypeScheme sig =
+
+      let typeVars = Lists.map (\tp -> Typing.typeParameterName tp) (Typing.termSignatureTypeParameters sig)
+          paramTypes = Lists.map (\p -> Typing.parameterType p) (Typing.termSignatureParameters sig)
+          resultType = Typing.resultType (Typing.termSignatureResult sig)
+          wrappedResult =
+                  Core.TypeApplication (Core.ApplicationType {
+                    Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.typed.TypedTerm")),
+                    Core.applicationTypeArgument = resultType})
+          funType =
+                  Lists.foldr (\paramType -> \acc -> Core.TypeFunction (Core.FunctionType {
+                    Core.functionTypeDomain = (Core.TypeApplication (Core.ApplicationType {
+                      Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.typed.TypedTerm")),
+                      Core.applicationTypeArgument = paramType})),
+                    Core.functionTypeCodomain = acc})) wrappedResult paramTypes
+      in Core.TypeScheme {
+        Core.typeSchemeVariables = typeVars,
+        Core.typeSchemeBody = funType,
+        Core.typeSchemeConstraints = Nothing}
 -- | Build a TypeScheme with TypedTerm-wrapped parameter and result types
 dslTypeScheme :: Core.Type -> [Core.Type] -> Core.Type -> Core.TypeScheme
 dslTypeScheme origType paramTypes resultType =
@@ -406,6 +429,68 @@ generateRecordWithUpdater origType typeName allFields targetField =
                     (Core.fieldTypeType targetField)] recType
       in Core.Binding {
         Core.bindingName = updaterName,
+        Core.bindingTerm = body,
+        Core.bindingTypeScheme = (Just ts)}
+-- | Generate typed reference DSL bindings for a primitive (or signature-carrying term) definition
+generateRefBindings :: Packaging.Definition -> Either t0 [Core.Binding]
+generateRefBindings d =
+    case d of
+      Packaging.DefinitionType _ -> Right []
+      Packaging.DefinitionTerm v0 -> Optionals.cases (Packaging.termDefinitionSignature v0) (Right []) (\sig -> Right [
+        generateSignatureRef (Packaging.termDefinitionName v0) sig])
+      Packaging.DefinitionPrimitive v0 -> Right [
+        generateSignatureRef (Packaging.primitiveDefinitionName v0) (Packaging.primitiveDefinitionSignature v0)]
+      _ -> Right []
+-- | Generate a typed-reference DSL wrapper from a term/primitive name and signature
+generateSignatureRef :: Core.Name -> Typing.TermSignature -> Core.Binding
+generateSignatureRef refName sig =
+
+      let params = Typing.termSignatureParameters sig
+          paramPairs =
+                  Lists.map (\p -> (
+                    Core.unName (Typing.parameterName p),
+                    (Core.TypeApplication (Core.ApplicationType {
+                      Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.typed.TypedTerm")),
+                      Core.applicationTypeArgument = (Typing.parameterType p)})))) params
+          appBody =
+                  Lists.foldl (\acc -> \pp -> Core.TermInject (Core.Injection {
+                    Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+                    Core.injectionField = Core.Field {
+                      Core.fieldName = (Core.Name "application"),
+                      Core.fieldTerm = (Core.TermRecord (Core.Record {
+                        Core.recordTypeName = (Core.Name "hydra.core.Application"),
+                        Core.recordFields = [
+                          Core.Field {
+                            Core.fieldName = (Core.Name "function"),
+                            Core.fieldTerm = acc},
+                          Core.Field {
+                            Core.fieldName = (Core.Name "argument"),
+                            Core.fieldTerm = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.typed.TypedTerm")),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name (Pairs.first pp)))}))}]}))}})) (Core.TermInject (Core.Injection {
+                    Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+                    Core.injectionField = Core.Field {
+                      Core.fieldName = (Core.Name "variable"),
+                      Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                        Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                        Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName refName)))}))}})) paramPairs
+          refTerm =
+                  Core.TermWrap (Core.WrappedTerm {
+                    Core.wrappedTermTypeName = (Core.Name "hydra.typed.TypedTerm"),
+                    Core.wrappedTermBody = appBody})
+          rawBody =
+                  Lists.foldl (\acc -> \pp -> Core.TermLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.Name (Pairs.first pp)),
+                    Core.lambdaDomain = (Just (Pairs.second pp)),
+                    Core.lambdaBody = acc})) refTerm (Lists.reverse paramPairs)
+          description =
+                  Strings.cat [
+                    "DSL reference to ",
+                    (Core.unName refName)]
+          body = Annotations.setTermDescription (Just description) rawBody
+          ts = dslSignatureTypeScheme sig
+      in Core.Binding {
+        Core.bindingName = (dslDefinitionName refName (Names.localNameOf refName)),
         Core.bindingTerm = body,
         Core.bindingTypeScheme = (Just ts)}
 -- | Generate a union injection helper

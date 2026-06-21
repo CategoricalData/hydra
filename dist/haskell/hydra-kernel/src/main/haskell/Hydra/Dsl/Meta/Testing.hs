@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 -- | Meta-DSL for constructing test-related terms
 -- TODO: merge with Hydra.Dsl.Tests
@@ -18,11 +19,11 @@ import Hydra.Error.Core (InvalidTermError)
 import Hydra.Error.Packaging (InvalidModuleError, InvalidPackageError)
 import Hydra.Testing as Testing
 import Hydra.Dsl.Meta.Phantoms as Phantoms hiding ((++))
-import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Lists as Lists
-import qualified Hydra.Dsl.Meta.Lib.Optionals as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
+import qualified Hydra.Dsl.Lib.Eithers as Eithers
+import qualified Hydra.Dsl.Lib.Lists as Lists
+import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Pairs as Pairs
+import qualified Hydra.Dsl.Lib.Strings as Strings
 import qualified Hydra.Dsl.Meta.Terms as MetaTerms
 import Hydra.Dsl.Terms (ToPrimName)
 import qualified Hydra.Dsl.Meta.Types as T
@@ -79,7 +80,7 @@ checkPackageNameConventionRef = TypedTerm $ TermVariable $ Name "hydra.validate.
 checkTest :: String -> [Tag] -> TypedTerm Term -> TypedTerm Term -> TypedTerm Type -> TypedTerm TestCaseWithMetadata
 checkTest name tags input _outputTerm outputType = testCaseWithMetadata (Phantoms.string name)
   (testCaseUniversal $ universalTestCase
-    (retype $ Eithers.either_
+    (retype $ Eithers.either
       (Phantoms.lambda "e" (Phantoms.string "<<inference error>>"))
       (Phantoms.lambda "result"
         (showTypeRef @@ (typeSchemeToFTypeRef @@ Pairs.second (Pairs.first (Phantoms.var "result")))))
@@ -97,7 +98,7 @@ evalCase cname input output = evalCaseWithTags cname [] input output
 evalCaseWithTags :: String -> [Tag] -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 evalCaseWithTags cname tags input output = testCaseWithMetadata (Phantoms.string cname)
   (testCaseUniversal $ universalTestCase
-    (retype $ Eithers.either_
+    (retype $ Eithers.either
       (Phantoms.lambda "e" (Phantoms.string "<<eval error>>"))
       (Phantoms.lambda "t" (showTermRef @@ Phantoms.var "t"))
       (reduceTermRef @@ testContextRef @@ testGraphRef @@ true @@ input))
@@ -142,7 +143,7 @@ groupRef = MetaTerms.varNamePhantom . bindingName
 infFailureTest :: String -> [Tag] -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 infFailureTest name tags term = testCaseWithMetadata (Phantoms.string name)
   (testCaseUniversal $ universalTestCase
-    (retype $ Eithers.either_
+    (retype $ Eithers.either
       (Phantoms.lambda "e" (Phantoms.string "FAIL"))
       (Phantoms.lambda "result" (Strings.cat2 (Phantoms.string "unexpected: ")
         (showTypeSchemeRef @@ Pairs.second (Pairs.first (Phantoms.var "result")))))
@@ -157,7 +158,7 @@ infFailureTest name tags term = testCaseWithMetadata (Phantoms.string name)
 infTest :: String -> [Tag] -> TypedTerm Term -> TypedTerm TypeScheme -> TypedTerm TestCaseWithMetadata
 infTest name tags term ts = testCaseWithMetadata (Phantoms.string name)
   (testCaseUniversal $ universalTestCase
-    (retype $ Eithers.either_
+    (retype $ Eithers.either
       (Phantoms.lambda "e" (Strings.cat2 (Phantoms.string "INFERENCE ERROR: ") (Phantoms.string "failed")))
       (Phantoms.lambda "result"
         (showTypeSchemeRef @@ Pairs.second (Pairs.first (Phantoms.var "result"))))
@@ -456,7 +457,7 @@ testGroup name description subgroups cases = Phantoms.record _TestGroup [
 -- | Convenience function for creating type reduction test cases
 typeRedCase :: String -> TypedTerm Type -> TypedTerm Type -> TypedTerm TestCaseWithMetadata
 typeRedCase cname input output = universalCase cname
-  (retype $ Eithers.either_
+  (retype $ Eithers.either
     (Phantoms.lambda "e" (Phantoms.string "<<type reduction error>>"))
     (Phantoms.lambda "t" (showTypeRef @@ Phantoms.var "t"))
     (betaReduceTypeRef @@ testContextRef @@ testGraphRef @@ input))
