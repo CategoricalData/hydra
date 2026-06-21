@@ -82,6 +82,7 @@ def _python_language_term():
                         Variants.type_variant_annotated,
                         Variants.type_variant_application,
                         Variants.type_variant_either,
+                        Variants.type_variant_effect,
                         Variants.type_variant_function,
                         Variants.type_variant_forall,
                         Variants.type_variant_list,
@@ -121,7 +122,7 @@ def _python_language_term():
                     Util.case_convention_lower_snake, Util.case_convention_lower_snake, Util.case_convention_pascal,
                     Util.case_convention_pascal,
                 ),
-                wrap("hydra.util.FileExtension", string("py")),
+                wrap("hydra.file.FileExtension", string("py")),
             ),
         ),
     )

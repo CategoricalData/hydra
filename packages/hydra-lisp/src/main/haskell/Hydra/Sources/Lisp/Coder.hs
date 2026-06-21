@@ -689,6 +689,10 @@ encodeType = def "encodeType" $
      _Type_either>>: lambda "et" $
        right (inject L._TypeSpecifier L._TypeSpecifier_named $
          wrap L._Symbol (string "Either")),
+     -- effect<t> is transparent in the Lisp dialects (effect<t> = t), so encode it as the
+     -- encoding of the inner type, mirroring _Type_optional/_Type_list. For #494.
+     _Type_effect>>: lambda "inner" $
+       encodeType @@ var "cx" @@ var "g" @@ var "inner",
      _Type_pair>>: lambda "pt" $
        right (inject L._TypeSpecifier L._TypeSpecifier_named $
          wrap L._Symbol (string "Pair")),

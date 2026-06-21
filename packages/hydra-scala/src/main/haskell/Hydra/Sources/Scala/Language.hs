@@ -2,6 +2,7 @@ module Hydra.Sources.Scala.Language where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
+import Hydra.File (_FileExtension)
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
@@ -137,6 +138,7 @@ scalaLanguage = define "scalaLanguage" $
     Variants.typeVariantAnnotated,
     Variants.typeVariantApplication,
     Variants.typeVariantEither,
+    Variants.typeVariantEffect,
     Variants.typeVariantFunction,
     Variants.typeVariantList,
     Variants.typeVariantLiteral,
