@@ -97,7 +97,7 @@ chooseUniqueLabel = define "chooseUniqueLabel" $
     "candidate" <~ Logic.ifElse (Equality.equal (var "index") (int32 1))
       (var "label")
       (var "label" ++ Literals.showInt32 (var "index")) $
-    Logic.ifElse (Sets.member (var "candidate") (var "reserved"))
+    Logic.ifElse (Sets.member (var "candidate" :: TypedTerm String) (var "reserved"))
       (var "tryLabel" @@ (Math.add (var "index") (int32 1)))
       (var "candidate")) $
   var "tryLabel" @@ (int32 1)
