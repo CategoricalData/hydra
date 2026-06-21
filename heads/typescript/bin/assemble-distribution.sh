@@ -68,5 +68,15 @@ case "$PKG" in
                 fi
             done < <(find "$KERNEL_HYDRA" -name "*.ts" -not -path "*/node_modules/*")
         fi
+        # hydra-scala's serde imports ../java/serde.js (a sibling coder package).
+        # Symlink hydra-java's java/ subdir into hydra-scala so the import resolves.
+        if [ "$PKG" = "hydra-scala" ]; then
+            JAVA_HYDRA="$HYDRA_ROOT/dist/typescript/hydra-java/src/main/typescript/hydra/java"
+            SCALA_JAVA_DEST="$PKG_HYDRA/java"
+            if [ -d "$JAVA_HYDRA" ] && [ ! -e "$SCALA_JAVA_DEST" ]; then
+                ln -sf "$JAVA_HYDRA" "$SCALA_JAVA_DEST"
+                echo "  Symlinked hydra-java/java/ into $PKG for cross-coder import"
+            fi
+        fi
         ;;
 esac
