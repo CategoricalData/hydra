@@ -20,18 +20,18 @@ import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Lib.Math     as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -170,11 +170,11 @@ extendGraphWithBindings = define "extendGraphWithBindings" $
   doc "Add bindings to an existing graph" $
   "bindings" ~> "g" ~>
   -- Merge new binding terms/types into existing graph
-  "newTerms" <~ Maps.fromList (Lists.map ("b" ~>
-    pair (Core.bindingName (var "b")) (Core.bindingTerm (var "b"))) (var "bindings")) $
-  "newTypes" <~ Maps.fromList (Optionals.cat (Lists.map ("b" ~>
+  "newTerms" <~ (Maps.fromList (Lists.map ("b" ~>
+    pair (Core.bindingName (var "b")) (Core.bindingTerm (var "b"))) (var "bindings")) :: TypedTerm (M.Map Name Term)) $
+  "newTypes" <~ (Maps.fromList (Optionals.cat (Lists.map ("b" ~>
     Optionals.map ("ts" ~> pair (Core.bindingName (var "b")) (var "ts"))
-      (Core.bindingTypeScheme (var "b"))) (var "bindings"))) $
+      (Core.bindingTypeScheme (var "b"))) (var "bindings"))) :: TypedTerm (M.Map Name TypeScheme)) $
   Graph.graph
     (Maps.union (var "newTerms") (Graph.graphBoundTerms (var "g")))
     (Maps.union (var "newTypes") (Graph.graphBoundTypes (var "g")))
@@ -219,10 +219,10 @@ termSignatureToTypeScheme = define "termSignatureToTypeScheme" $
     false
     (var "typeParams") $
   "constraints" <~ Logic.ifElse (var "hasConstraints")
-    (Phantoms.just $ Maps.fromList $ Lists.map
+    (Phantoms.just (Maps.fromList (Lists.map
       ("tp" ~> pair (Typing.typeParameterName $ var "tp")
         (Core.typeVariableConstraints $ Typing.typeParameterConstraints $ var "tp"))
-      (var "typeParams"))
+      (var "typeParams")) :: TypedTerm (M.Map Name TypeVariableConstraints)))
     Phantoms.nothing $
   Core.typeScheme (var "variables") (var "body") (var "constraints")
 
@@ -249,7 +249,7 @@ typeSchemeToTermSignature = define "typeSchemeToTermSignature" $
   -- Build TypeParameters, looking up each variable's class constraints in the constraints map.
   "typeParams" <~ Lists.map
     ("v" ~> Typing.typeParameter (var "v") $ optCases
-      (Maps.lookup (var "v") (var "constraintsMap"))
+      (Maps.lookup (var "v" :: TypedTerm Name) (var "constraintsMap"))
       (list ([] :: [TypedTerm TypeClassConstraint]))
       ("tvm" ~> Core.typeVariableConstraintsClasses $ var "tvm"))
     (var "variables") $

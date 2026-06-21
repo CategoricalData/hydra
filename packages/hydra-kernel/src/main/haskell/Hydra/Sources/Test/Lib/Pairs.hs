@@ -19,10 +19,10 @@ import qualified Data.Map                     as M
 
 -- Additional imports specific to this file
 import Hydra.Testing
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Math as Math
-import qualified Hydra.Dsl.Meta.Lib.Pairs as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Math as Math
+import qualified Hydra.Dsl.Lib.Pairs as Pairs
+import qualified Hydra.Dsl.Lib.Strings as Strings
 
 
 ns :: ModuleName

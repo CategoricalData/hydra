@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hydra.Sources.Kernel.Terms.Show.Paths where
 
 -- Standard imports for kernel terms modules
@@ -12,18 +14,18 @@ import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Lib.Math     as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -132,9 +134,9 @@ termToSubtermGraph = define "termToSubtermGraph" $
             "rawLabel">: Names.compactName @@ var "namespaces" @@ var "name",
             "uniqueLabel">: Names.uniqueLabel @@ var "currentVisited" @@ var "rawLabel",
             "node">: Paths.subtermNode (var "name") (var "rawLabel") (var "uniqueLabel"),
-            "newVisited">: Sets.insert (var "uniqueLabel") (var "currentVisited"),
+            "newVisited">: Sets.insert (var "uniqueLabel" :: TypedTerm String) (var "currentVisited"),
             "newNodes">: Lists.cons (var "node") (var "currentNodes"),
-            "newIds">: Maps.insert (var "name") (var "node") (var "currentIds")]
+            "newIds">: Maps.insert (var "name" :: TypedTerm Name) (var "node") (var "currentIds")]
             $ pair (pair (var "newNodes") (var "newVisited")) (var "newIds"),
           "nodesVisitedIds1">: Lists.foldl
             (var "addBindingName")
@@ -159,14 +161,14 @@ termToSubtermGraph = define "termToSubtermGraph" $
             pair Paths.subtermStepLetBody (var "env"),
         _Term_variable>>: lambda "name" $
           Optionals.cases (var "mroot") (var "state") (lambda "root" $
-              Optionals.cases (Maps.lookup (var "name") (var "ids")) (var "state") (lambda "node" $ lets [
+              Optionals.cases (Maps.lookup (var "name" :: TypedTerm Name) (var "ids")) (var "state") (lambda "node" $ lets [
                   "edge">: Paths.subtermEdge (var "root")
                     (Paths.subtermPath $ Lists.reverse $ var "nextPath") (var "node"),
                   "newEdges">: Lists.cons (var "edge") (var "edges")]
                   $ pair (pair (var "nodes") (var "newEdges")) (var "visited")))]
       @@ var "currentTerm",
-    "initialState">: pair (pair (list ([] :: [TypedTerm SubtermNode])) (list ([] :: [TypedTerm SubtermEdge]))) Sets.empty,
-    "result">: var "helper" @@ Maps.empty @@ nothing @@ list ([] :: [TypedTerm SubtermStep]) @@ var "initialState" @@
+    "initialState">: pair (pair (list ([] :: [TypedTerm SubtermNode])) (list ([] :: [TypedTerm SubtermEdge]))) (Sets.empty :: TypedTerm (S.Set String)),
+    "result">: var "helper" @@ (Maps.empty :: TypedTerm (M.Map Name SubtermNode)) @@ nothing @@ list ([] :: [TypedTerm SubtermStep]) @@ var "initialState" @@
       pair (var "dontCareStep") (var "term"),
     "finalNodesEdges">: Pairs.first $ var "result",
     "finalNodes">: Pairs.first $ var "finalNodesEdges",

@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 -- | Haskell test code generation in Hydra DSL.
 -- This module generates HSpec-based test files for Haskell from universal test cases.
 
@@ -6,19 +8,19 @@ module Hydra.Sources.Haskell.Testing where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Meta.Core                       as Core
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Constants      as Constants
@@ -78,13 +80,13 @@ addNamespacesToNamespaces :: TypedTermDefinition (ModuleNames H.ModuleName -> S.
 addNamespacesToNamespaces = define "addNamespacesToNamespaces" $
   doc "Add namespaces from a set of names to existing namespaces" $
   lambda "ns0" $ lambda "names" $ lets [
-    "newNamespaces">: Sets.fromList (Optionals.cat (Lists.map Names.moduleNameOf (Sets.toList (var "names")))),
+    "newNamespaces">: Sets.fromList (Optionals.cat (Lists.map (asTerm Names.moduleNameOf) (Sets.toList (var "names")))),
     "toModuleName">: lambda "namespace" $
       wrap H._ModuleName (Formatting.capitalize @@ (Optionals.fromOptional (unwrap _ModuleName @@ var "namespace") (Lists.maybeLast (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "namespace"))))),
-    "newMappings">: Maps.fromList (Lists.map (lambda "ns_" $ pair (var "ns_") (var "toModuleName" @@ var "ns_")) (Sets.toList (var "newNamespaces")))] $
+    "newMappings">: (Maps.fromList (Lists.map (lambda "ns_" $ pair (var "ns_") (var "toModuleName" @@ var "ns_")) (Sets.toList (var "newNamespaces" :: TypedTerm (S.Set ModuleName)))) :: TypedTerm (M.Map ModuleName H.ModuleName))] $
     record _ModuleNames [
       _ModuleNames_focus>>: project _ModuleNames _ModuleNames_focus @@ var "ns0",
-      _ModuleNames_mapping>>: Maps.union (project _ModuleNames _ModuleNames_mapping @@ var "ns0") (var "newMappings")]
+      _ModuleNames_mapping>>: Maps.union (project _ModuleNames _ModuleNames_mapping @@ var "ns0") (var "newMappings" :: TypedTerm (M.Map ModuleName H.ModuleName))]
 
 
 -- | Build namespaces for a test group including encoded term references
@@ -93,7 +95,7 @@ buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
   doc "Build namespaces for a test group including encoded term references" $
   lambda "mod" $ lambda "tgroup" $ lambda "graph_" $ lets [
     "testCases_">: collectTestCases @@ var "tgroup",
-    "testTerms">: Lists.concat (Lists.map extractTestTerms (var "testCases_")),
+    "testTerms">: Lists.concat (Lists.map (asTerm extractTestTerms) (var "testCases_")),
     "testBindings">: Lists.map
       (lambda "term" $
         record _Binding [
@@ -107,7 +109,7 @@ buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
       _Module_dependencies>>: project _Module _Module_dependencies @@ var "mod",
       _Module_definitions>>: Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
         (Core.bindingName $ var "b") nothing
-        (Optionals.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")
+        (Optionals.map (asTerm Scoping.typeSchemeToTermSignature) $ Core.bindingTypeScheme $ var "b")
         (Core.bindingTerm $ var "b")))
         (var "testBindings")]] $
     Eithers.bind
@@ -116,7 +118,7 @@ buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
         (lambda "a" $ var "a")
         (HaskellUtilsSource.namespacesForModule @@ var "tempModule" @@ asTerm Lexical.emptyInferenceContext @@ var "graph_"))
       (lambda "baseNamespaces" $ lets [
-        "encodedNames">: Sets.unions (Lists.map (lambda "t" $ extractEncodedTermVariableNames @@ var "graph_" @@ var "t") (var "testTerms"))] $
+        "encodedNames">: (Sets.unions (Lists.map (lambda "t" $ extractEncodedTermVariableNames @@ var "graph_" @@ var "t") (var "testTerms")) :: TypedTerm (S.Set Name))] $
         right (addNamespacesToNamespaces @@ var "baseNamespaces" @@ var "encodedNames"))
 
 
@@ -160,7 +162,7 @@ collectNames = define "collectNames" $
   doc "Collect variable names from encoded terms within a single term node" $
   lambda "graf" $ lambda "names" $ lambda "t" $
     Logic.ifElse (Predicates.isEncodedTerm @@ (Strip.deannotateTerm @@ var "t"))
-      (Eithers.either_
+      (Eithers.either
         (lambda "_" $ var "names")
         (lambda "decodedTerm" $
           Sets.union (var "names") (Dependencies.termDependencyNames @@ true @@ true @@ true @@ var "decodedTerm"))
@@ -178,7 +180,7 @@ collectTestCases = define "collectTestCases" $
   lambda "tg" $
     Lists.concat2
       (project _TestGroup _TestGroup_cases @@ var "tg")
-      (Lists.concat (Lists.map collectTestCases (project _TestGroup _TestGroup_subgroups @@ var "tg")))
+      (Lists.concat (Lists.map (asTerm collectTestCases) (project _TestGroup _TestGroup_subgroups @@ var "tg")))
 
 
 -- | Extract all variable names from term-encoded terms in a given term
@@ -208,14 +210,14 @@ findHaskellImports = define "findHaskellImports" $
         Logic.not (Equality.equal
           (Optionals.fromOptional (string "") (Lists.maybeHead (Strings.splitOn (string "hydra.test.") (unwrap _ModuleName @@ var "ns_"))))
           (string "")))
-      (var "mapping_")] $
+      (var "mapping_" :: TypedTerm (M.Map ModuleName H.ModuleName))] $
     Lists.map
       (lambda "entry" $ Strings.cat (list [
         string "import qualified ",
-        Strings.intercalate (string ".") (Lists.map Formatting.capitalize (Strings.splitOn (string ".") (unwrap _ModuleName @@ Pairs.first (var "entry")))),
+        Strings.intercalate (string ".") (Lists.map (asTerm Formatting.capitalize) (Strings.splitOn (string ".") (unwrap _ModuleName @@ Pairs.first (var "entry")))),
         string " as ",
         unwrap H._ModuleName @@ Pairs.second (var "entry")]))
-      (Maps.toList (var "filtered"))
+      (Maps.toList (var "filtered" :: TypedTerm (M.Map ModuleName H.ModuleName)))
 
 
 -- | Generate a Haskell test file for a test group, with type inference and namespace building
@@ -307,6 +309,6 @@ namespaceToModuleName :: TypedTermDefinition (ModuleName -> String)
 namespaceToModuleName = define "namespaceToModuleName" $
   doc "Convert namespace to Haskell module name" $
   lambda "ns_" $
-    Strings.intercalate (string ".") (Lists.map Formatting.capitalize (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns_")))
+    Strings.intercalate (string ".") (Lists.map (asTerm Formatting.capitalize) (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns_")))
 
 

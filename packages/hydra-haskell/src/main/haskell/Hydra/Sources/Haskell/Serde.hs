@@ -1,10 +1,11 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Haskell.Serde where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Dsl.Libraries
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -18,17 +19,17 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -157,7 +158,7 @@ applicationPatternToExpr = haskellSerdeDefinition "applicationPatternToExpr" $
   lambda "appPat" $ lets [
             "name">: project H._ApplicationPattern H._ApplicationPattern_name @@ var "appPat",
     "pats">: project H._ApplicationPattern H._ApplicationPattern_args @@ var "appPat"] $
-    Serialization.spaceSep @@ (Lists.cons (nameToExpr @@ var "name") (Lists.map (patternToExpr) (var "pats")))
+    Serialization.spaceSep @@ (Lists.cons (nameToExpr @@ var "name") (Lists.map (asTerm patternToExpr) (var "pats")))
 
 caseExpressionToExpr :: TypedTermDefinition (H.CaseExpression -> Expr)
 caseExpressionToExpr = haskellSerdeDefinition "caseExpressionToExpr" $
@@ -171,7 +172,7 @@ caseExpressionToExpr = haskellSerdeDefinition "caseExpressionToExpr" $
       (Ast.precedence $ int32 0)
       Ast.associativityNone,
     "lhs">: Serialization.spaceSep @@ list [Serialization.cst @@ (string "case"), expressionToExpr @@ var "cs"],
-    "rhs">: Serialization.newlineSep @@ (Lists.map (alternativeToExpr) (var "alts"))] $
+    "rhs">: Serialization.newlineSep @@ (Lists.map (asTerm alternativeToExpr) (var "alts"))] $
     Serialization.ifx @@ var "ofOp" @@ var "lhs" @@ var "rhs"
 
 caseRhsToExpr :: TypedTermDefinition (H.CaseRhs -> Expr)
@@ -186,7 +187,7 @@ classConstraintToExpr = haskellSerdeDefinition "classConstraintToExpr" $
     "name">: project H._ClassConstraint H._ClassConstraint_name @@ var "clsAsrt",
     "types">: project H._ClassConstraint H._ClassConstraint_types @@ var "clsAsrt"] $
     Serialization.spaceSep @@ (Lists.cons (nameToExpr @@ var "name") (list [
-      Serialization.commaSep @@ Serialization.halfBlockStyle @@ (Lists.map (typeToExpr) (var "types"))]))
+      Serialization.commaSep @@ Serialization.halfBlockStyle @@ (Lists.map (asTerm typeToExpr) (var "types"))]))
 
 constraintToExpr :: TypedTermDefinition (H.Constraint -> Expr)
 constraintToExpr = haskellSerdeDefinition "constraintToExpr" $
@@ -195,7 +196,7 @@ constraintToExpr = haskellSerdeDefinition "constraintToExpr" $
     cases H._Constraint (var "sert") Nothing [
       H._Constraint_class>>: lambda "cls" $ classConstraintToExpr @@ var "cls",
       H._Constraint_tuple>>: lambda "serts" $
-        Serialization.parenList @@ false @@ (Lists.map (constraintToExpr) (var "serts"))]
+        Serialization.parenList @@ false @@ (Lists.map (asTerm constraintToExpr) (var "serts"))]
 
 constructorToExpr :: TypedTermDefinition (H.Constructor -> Expr)
 constructorToExpr = haskellSerdeDefinition "constructorToExpr" $
@@ -208,12 +209,12 @@ constructorToExpr = haskellSerdeDefinition "constructorToExpr" $
       H._Constructor_ordinary>>: lambda "ord" $ lets [
         "name">: project H._PositionalConstructor H._PositionalConstructor_name @@ var "ord",
         "types">: project H._PositionalConstructor H._PositionalConstructor_fields @@ var "ord"] $
-        Serialization.spaceSep @@ (Lists.cons (nameToExpr @@ var "name") (list [Serialization.spaceSep @@ (Lists.map (typeToExpr) (var "types"))])),
+        Serialization.spaceSep @@ (Lists.cons (nameToExpr @@ var "name") (list [Serialization.spaceSep @@ (Lists.map (asTerm typeToExpr) (var "types"))])),
       H._Constructor_record>>: lambda "rec" $ lets [
         "name">: project H._RecordConstructor H._RecordConstructor_name @@ var "rec",
         "fields">: project H._RecordConstructor H._RecordConstructor_fields @@ var "rec"] $
         Serialization.spaceSep @@ (Lists.cons (nameToExpr @@ var "name") (list [
-          Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@ (Lists.map (fieldToExpr) (var "fields"))]))]] $
+          Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@ (Lists.map (asTerm fieldToExpr) (var "fields"))]))]] $
     Optionals.cases (var "mc") (var "body") (lambda "c" $ Serialization.newlineSep @@ (Lists.cons (Serialization.cst @@ (toHaskellComments @@ var "c")) (list [var "body"])))
 
 dataKeywordToExpr :: TypedTermDefinition (H.DataKeyword -> Expr)
@@ -252,11 +253,11 @@ declarationToExpr = haskellSerdeDefinition "declarationToExpr" $
         "cons">: project H._DataDeclaration H._DataDeclaration_constructors @@ var "dataDecl",
         "deriv">: project H._DataDeclaration H._DataDeclaration_deriving @@ var "dataDecl",
         "derivCat">: Lists.concat $ Lists.map (unwrap H._DerivingClause) (var "deriv"),
-        "constructors">: Serialization.orSep @@ Serialization.halfBlockStyle @@ (Lists.map (constructorToExpr) (var "cons")),
+        "constructors">: Serialization.orSep @@ Serialization.halfBlockStyle @@ (Lists.map (asTerm constructorToExpr) (var "cons")),
         "derivingClause">: Logic.ifElse (Lists.null $ var "derivCat")
           (list ([] :: [TypedTerm Expr]))
           (list [Serialization.spaceSep @@ (Lists.cons (Serialization.cst @@ (string "deriving")) (list [
-            Serialization.parenList @@ false @@ (Lists.map (nameToExpr) (var "derivCat"))]))]),
+            Serialization.parenList @@ false @@ (Lists.map (asTerm nameToExpr) (var "derivCat"))]))]),
         "mainParts">: list [
           Serialization.spaceSep @@ (Lists.cons (dataKeywordToExpr @@ var "kw") (Lists.cons (declarationHeadToExpr @@ var "hd") (list [Serialization.cst @@ (string "=")]))),
           var "constructors"]] $
@@ -285,7 +286,7 @@ expressionToExpr = haskellSerdeDefinition "expressionToExpr" $
       H._Expression_case>>: lambda "cases" $ caseExpressionToExpr @@ var "cases",
       H._Expression_constructRecord>>: lambda "r" $ recordExpressionToExpr @@ var "r",
       H._Expression_do>>: lambda "statements" $
-        Serialization.indentBlock @@ Lists.cons (Serialization.cst @@ (string "do")) (Lists.map (statementToExpr) (var "statements")),
+        Serialization.indentBlock @@ Lists.cons (Serialization.cst @@ (string "do")) (Lists.map (asTerm statementToExpr) (var "statements")),
       H._Expression_if>>: lambda "ifte" $ ifExpressionToExpr @@ var "ifte",
       H._Expression_literal>>: lambda "lit" $ literalToExpr @@ var "lit",
       H._Expression_lambda>>: lambda "lam" $ Serialization.parenthesize @@ (lambdaExpressionToExpr @@ var "lam"),
@@ -298,9 +299,9 @@ expressionToExpr = haskellSerdeDefinition "expressionToExpr" $
           (Serialization.spaceSep @@ (Lists.cons (Serialization.cst @@ (string "let")) (list [Serialization.customIndentBlock @@ (string "    ") @@ (Lists.map (var "encodeBinding") (var "bindings"))])))
           (list [Serialization.spaceSep @@ (Lists.cons (Serialization.cst @@ (string "in")) (list [expressionToExpr @@ var "inner"]))]))),
       H._Expression_list>>: lambda "exprs" $
-        Serialization.bracketList @@ Serialization.halfBlockStyle @@ (Lists.map (expressionToExpr) (var "exprs")),
+        Serialization.bracketList @@ Serialization.halfBlockStyle @@ (Lists.map (asTerm expressionToExpr) (var "exprs")),
       H._Expression_tuple>>: lambda "exprs" $
-        Serialization.parenListAdaptive @@ (Lists.map (expressionToExpr) (var "exprs")),
+        Serialization.parenListAdaptive @@ (Lists.map (asTerm expressionToExpr) (var "exprs")),
       H._Expression_variable>>: lambda "name" $ nameToExpr @@ var "name"]
 
 fieldToExpr :: TypedTermDefinition (H.Field -> Expr)
@@ -350,7 +351,7 @@ importToExpr = haskellSerdeDefinition "importToExpr" $
           Serialization.spaceSep @@ (Lists.cons
             (Serialization.cst @@ (string "hiding "))
             (list [Serialization.parens @@
-              (Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map (namedImportExportToExpr) (var "names")))]))],
+              (Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map (asTerm namedImportExportToExpr) (var "names")))]))],
     "parts">: Optionals.cat $ list [
       just $ Serialization.cst @@ (string "import"),
       Logic.ifElse (var "qual") (just $ Serialization.cst @@ (string "qualified")) nothing,
@@ -365,7 +366,7 @@ lambdaExpressionToExpr = haskellSerdeDefinition "lambdaExpressionToExpr" $
   lambda "lambdaExpr" $ lets [
     "bindings">: project H._LambdaExpression H._LambdaExpression_bindings @@ var "lambdaExpr",
             "inner">: project H._LambdaExpression H._LambdaExpression_inner @@ var "lambdaExpr",
-    "head">: Serialization.spaceSep @@ (Lists.map (patternToExpr) (var "bindings")),
+    "head">: Serialization.spaceSep @@ (Lists.map (asTerm patternToExpr) (var "bindings")),
     "body">: expressionToExpr @@ var "inner"] $
     Serialization.ifx @@ HaskellOperators.lambdaOp @@
       (Serialization.prefix @@ (string "\\") @@ var "head") @@
@@ -469,10 +470,10 @@ moduleToExpr = haskellSerdeDefinition "moduleToExpr" $
     "decls">: project H._Module H._Module_declarations @@ var "module",
     "warning">: list [Serialization.cst @@ (toSimpleComments @@ Constants.warningAutoGeneratedFile)],
     "headerLine">: Optionals.cases (var "mh") (list ([] :: [TypedTerm Expr])) (lambda "h" $ list [moduleHeadToExpr @@ var "h"]),
-    "declLines">: Lists.map (declarationToExpr) (var "decls"),
+    "declLines">: Lists.map (asTerm declarationToExpr) (var "decls"),
     "importLines">: Logic.ifElse (Lists.null $ var "imports")
       (list ([] :: [TypedTerm Expr]))
-      (list [Serialization.newlineSep @@ (Lists.map (importToExpr) (var "imports"))])] $
+      (list [Serialization.newlineSep @@ (Lists.map (asTerm importToExpr) (var "imports"))])] $
     Serialization.doubleNewlineSep @@ (Lists.concat $ list [var "warning", var "headerLine", var "importLines", var "declLines"])
 
 nameToExpr :: TypedTermDefinition (H.Name -> Expr)
@@ -496,11 +497,11 @@ patternToExpr = haskellSerdeDefinition "patternToExpr" $
     cases H._Pattern (var "pat") Nothing [
       H._Pattern_application>>: lambda "app" $ applicationPatternToExpr @@ var "app",
       H._Pattern_list>>: lambda "pats" $
-        Serialization.bracketList @@ Serialization.halfBlockStyle @@ (Lists.map (patternToExpr) (var "pats")),
+        Serialization.bracketList @@ Serialization.halfBlockStyle @@ (Lists.map (asTerm patternToExpr) (var "pats")),
       H._Pattern_literal>>: lambda "lit" $ literalToExpr @@ var "lit",
       H._Pattern_name>>: lambda "name" $ nameToExpr @@ var "name",
       H._Pattern_tuple>>: lambda "pats" $
-        Serialization.parenListAdaptive @@ (Lists.map (patternToExpr) (var "pats")),
+        Serialization.parenListAdaptive @@ (Lists.map (asTerm patternToExpr) (var "pats")),
       H._Pattern_wildcard>>: constant $ Serialization.cst @@ (string "_")]
 
 recordExpressionToExpr :: TypedTermDefinition (H.RecordExpression -> Expr)
@@ -582,7 +583,7 @@ typeToExpr = haskellSerdeDefinition "typeToExpr" $
       H._Type_list>>: lambda "htype'" $
         Serialization.bracketList @@ Serialization.inlineStyle @@ list [typeToExpr @@ var "htype'"],
       H._Type_tuple>>: lambda "types" $
-        Serialization.parenListAdaptive @@ (Lists.map (typeToExpr) (var "types")),
+        Serialization.parenListAdaptive @@ (Lists.map (asTerm typeToExpr) (var "types")),
       H._Type_variable>>: lambda "name" $ nameToExpr @@ var "name"]
 
 valueBindingToExpr :: TypedTermDefinition (H.ValueBinding -> Expr)
@@ -606,7 +607,7 @@ valueBindingToExpr = haskellSerdeDefinition "valueBindingToExpr" $
             "bindings">: unwrap H._LocalBindings @@ var "localBindings"] $
             Serialization.indentBlock @@ (Lists.cons
               (var "body")
-              (list [Serialization.indentBlock @@ Lists.cons (Serialization.cst @@ (string "where")) (Lists.map (localBindingToExpr) (var "bindings"))])))]
+              (list [Serialization.indentBlock @@ Lists.cons (Serialization.cst @@ (string "where")) (Lists.map (asTerm localBindingToExpr) (var "bindings"))])))]
 
 variableToExpr :: TypedTermDefinition (H.Variable -> Expr)
 variableToExpr = haskellSerdeDefinition "variableToExpr" $

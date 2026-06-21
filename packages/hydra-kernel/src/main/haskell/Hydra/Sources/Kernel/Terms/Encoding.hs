@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Terms.Encoding where
 
@@ -13,18 +14,18 @@ import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Lib.Math     as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -404,7 +405,7 @@ encodeModule = define "encodeModule" $
             (list [Packaging.moduleName (var "mod")]))))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") nothing
-            (Optionals.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")
+            (Optionals.map (asTerm Scoping.typeSchemeToTermSignature) $ Core.bindingTypeScheme $ var "b")
             (Core.bindingTerm $ var "b")))
             (var "encodedBindings")))))
 
@@ -907,9 +908,9 @@ encoderTypeScheme = define "encoderTypeScheme" $
     "constraints">:
       Logic.ifElse (Lists.null (var "ordVars"))
         nothing
-        (just $ Maps.fromList $ Lists.map
+        (just ((Maps.fromList $ Lists.map
           ("v" ~> pair (var "v") (Core.typeVariableConstraints $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
-          (var "ordVars"))] $
+          (var "ordVars")) :: TypedTerm (M.Map Name TypeVariableConstraints)))] $
   Core.typeScheme (var "typeVars") (var "encoderFunType") (var "constraints")
 
 -- | Collect forall type variables from a type
@@ -933,9 +934,9 @@ encoderTypeSchemeNamed = define "encoderTypeSchemeNamed" $
     "constraints">:
       Logic.ifElse (Lists.null (var "ordVars"))
         nothing
-        (just $ Maps.fromList $ Lists.map
+        (just ((Maps.fromList $ Lists.map
           ("v" ~> pair (var "v") (Core.typeVariableConstraints $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
-          (var "ordVars"))] $
+          (var "ordVars")) :: TypedTerm (M.Map Name TypeVariableConstraints)))] $
   Core.typeScheme (var "typeVars") (var "encoderFunType") (var "constraints")
 -- | Filter bindings to only encodable type definitions
 -- A binding is encodable if it is a native type AND is serializable (no function types in dependencies)

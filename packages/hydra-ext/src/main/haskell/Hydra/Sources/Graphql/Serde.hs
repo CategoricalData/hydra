@@ -1,8 +1,10 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hydra.Sources.Graphql.Serde where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -16,17 +18,17 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -135,7 +137,7 @@ documentToExpr :: TypedTermDefinition (G.Document -> Expr)
 documentToExpr = define "documentToExpr" $
   doc "Convert a GraphQL document to an expression" $
   lambda "d" $ Serialization.doubleNewlineSep @@
-    (Lists.map definitionToExpr (unwrap G._Document @@ var "d"))
+    (Lists.map (asTerm definitionToExpr) (unwrap G._Document @@ var "d"))
 
 enumTypeDefinitionToExpr :: TypedTermDefinition (G.EnumTypeDefinition -> Expr)
 enumTypeDefinitionToExpr = define "enumTypeDefinitionToExpr" $
@@ -144,7 +146,7 @@ enumTypeDefinitionToExpr = define "enumTypeDefinitionToExpr" $
     "desc">: project G._EnumTypeDefinition G._EnumTypeDefinition_Description @@ var "def",
     "name">: project G._EnumTypeDefinition G._EnumTypeDefinition_Name @@ var "def",
     "values">: project G._EnumTypeDefinition G._EnumTypeDefinition_EnumValuesDefinition @@ var "def",
-    "valuesExpr">: Optionals.cases (var "values") (list ([] :: [TypedTerm Expr])) (lambda "vs" $ Lists.map enumValueDefinitionToExpr (unwrap G._EnumValuesDefinition @@ var "vs"))] $
+    "valuesExpr">: Optionals.cases (var "values") (list ([] :: [TypedTerm Expr])) (lambda "vs" $ Lists.map (asTerm enumValueDefinitionToExpr) (unwrap G._EnumValuesDefinition @@ var "vs"))] $
     withDescription @@ var "desc" @@
       (Serialization.spaceSep @@ list [
         Serialization.cst @@ string "enum",
@@ -210,7 +212,7 @@ objectTypeDefinitionToExpr = define "objectTypeDefinitionToExpr" $
     "desc">: project G._ObjectTypeDefinition G._ObjectTypeDefinition_Description @@ var "def",
     "name">: project G._ObjectTypeDefinition G._ObjectTypeDefinition_Name @@ var "def",
     "fields">: project G._ObjectTypeDefinition G._ObjectTypeDefinition_FieldsDefinition @@ var "def",
-    "fieldsExpr">: Optionals.cases (var "fields") (list ([] :: [TypedTerm Expr])) (lambda "fs" $ Lists.map fieldDefinitionToExpr (unwrap G._FieldsDefinition @@ var "fs"))] $
+    "fieldsExpr">: Optionals.cases (var "fields") (list ([] :: [TypedTerm Expr])) (lambda "fs" $ Lists.map (asTerm fieldDefinitionToExpr) (unwrap G._FieldsDefinition @@ var "fs"))] $
     withDescription @@ var "desc" @@
       (Serialization.spaceSep @@ list [
         Serialization.cst @@ string "type",
@@ -268,5 +270,5 @@ withDescription = define "withDescription" $
   doc "Prepend an optional description to an expression" $
   lambda "mdesc" $ lambda "expr" $
     Serialization.newlineSep @@ (Optionals.cat $ list [
-      Optionals.map descriptionToExpr (var "mdesc"),
+      Optionals.map (asTerm descriptionToExpr) (var "mdesc"),
       Optionals.pure (var "expr")])

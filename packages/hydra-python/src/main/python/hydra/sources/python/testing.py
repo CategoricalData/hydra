@@ -7,13 +7,13 @@ from hydra.core import Name
 from hydra.dsl.python import Given, None_
 from hydra.packaging import EntityMetadata, Module, ModuleName
 
-import hydra.dsl.meta.lib.chars as Chars
-import hydra.dsl.meta.lib.eithers as Eithers
-import hydra.dsl.meta.lib.equality as Equality
-import hydra.dsl.meta.lib.lists as Lists
-import hydra.dsl.meta.lib.logic as Logic
-import hydra.dsl.meta.lib.optionals as Optionals
-import hydra.dsl.meta.lib.strings as Strings
+import hydra.dsl.lib.chars as Chars
+import hydra.dsl.lib.eithers as Eithers
+import hydra.dsl.lib.equality as Equality
+import hydra.dsl.lib.lists as Lists
+import hydra.dsl.lib.logic as Logic
+import hydra.dsl.lib.optionals as Optionals
+import hydra.dsl.lib.strings as Strings
 from hydra.dsl.meta.phantoms import *  # noqa: F401,F403
 import hydra.dsl.core as Core
 import hydra.dsl.packaging as Packaging
@@ -247,7 +247,7 @@ def _generate_python_test_group_hierarchy():
             var("subgroupsStr"),
         ]))),
     )
-    # Subgroups bind body — Haskell: "subgroupBlocks" <<~ Eithers.mapList ... $ inner
+    # Subgroups bind body — Haskell: "subgroupBlocks" <<~ Eithers.map_list ... $ inner
     # Translates to: Eithers.bind(<map_list>, lam("subgroupBlocks", inner))
     subgroups_bind_body = Eithers.bind(
         Eithers.map_list(
@@ -262,7 +262,7 @@ def _generate_python_test_group_hierarchy():
                             Strings.cat2(string("# "), var("groupName")),
                         ),
                     ],
-                    Eithers.map_(
+                    Eithers.map(
                         lam(
                             "content",
                             Strings.cat(list_([
@@ -355,7 +355,7 @@ def _generate_test_file_with_python_codec():
         ],
         pair(var("filePath"), var("testModuleContent")),
     )
-    body = Eithers.map_(
+    body = Eithers.map(
         lam("testBody", test_body_body),
         _local("generatePythonTestGroupHierarchy")(list_([]), var("testGroup")),
     )

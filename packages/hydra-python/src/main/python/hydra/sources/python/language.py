@@ -9,8 +9,8 @@ from hydra.core import Name
 from hydra.dsl.python import Given
 from hydra.packaging import EntityMetadata, Module, ModuleName
 
-import hydra.dsl.meta.lib.lists as Lists
-import hydra.dsl.meta.lib.sets as Sets
+import hydra.dsl.lib.lists as Lists
+import hydra.dsl.lib.sets as Sets
 from hydra.dsl.meta.phantoms import *  # noqa: F401,F403
 import hydra.dsl.core as Core
 import hydra.dsl.variants as Variants

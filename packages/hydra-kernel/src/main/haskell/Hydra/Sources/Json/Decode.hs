@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 -- | The decoder half of Hydra's JSON coder, paired with 'Hydra.Sources.Json.Encode'.
 -- Every choice in this module is in service of byte-stable round-trip with the
 -- encoder; the wire-format rules are specified in @docs/json-format.md@.
@@ -5,7 +7,7 @@ module Hydra.Sources.Json.Decode where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -19,17 +21,17 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -147,7 +149,7 @@ decodeInteger = define "decodeInteger" $
     -- Large integers: decode from JSON string
     _IntegerType_bigint>>: constant $
       "strResult" <~ (expectString @@ var "value") $
-      Eithers.either_
+      Eithers.either
         ("err" ~> left $ var "err")
         ("s" ~>
           "parsed" <~ (Literals.readBigint $ var "s") $
@@ -155,7 +157,7 @@ decodeInteger = define "decodeInteger" $
         (var "strResult"),
     _IntegerType_int64>>: constant $
       "strResult" <~ (expectString @@ var "value") $
-      Eithers.either_
+      Eithers.either
         ("err" ~> left $ var "err")
         ("s" ~>
           "parsed" <~ (Literals.readInt64 $ var "s") $
@@ -163,7 +165,7 @@ decodeInteger = define "decodeInteger" $
         (var "strResult"),
     _IntegerType_uint64>>: constant $
       "strResult" <~ (expectString @@ var "value") $
-      Eithers.either_
+      Eithers.either
         ("err" ~> left $ var "err")
         ("s" ~>
           "parsed" <~ (Literals.readUint64 $ var "s") $
@@ -265,7 +267,7 @@ expectObject = define "expectObject" $
   doc "Extract an object from a JSON value as a name-keyed map. Field order is not preserved here; decoding looks fields up by name." $
   "value" ~> cases _Value (var "value")
     (Just $ left $ string "expected object") [
-    _Value_object>>: "obj" ~> right $ Maps.fromList $ var "obj"]
+    _Value_object>>: "obj" ~> right $ (Maps.fromList $ var "obj" :: TypedTerm (M.Map String Value))]
 
 -- | Extract a number from a JSON value
 -- | Extract a string from a JSON value
@@ -296,7 +298,7 @@ fromJson = define "fromJson" $
     _Type_list>>: "elemType" ~>
       "decodeElem" <~ ("v" ~> fromJson @@ var "types" @@ var "tname" @@ var "elemType" @@ var "v") $
       "arrResult" <~ (expectArray @@ var "value") $
-      Eithers.either_
+      Eithers.either
         ("err" ~> left $ var "err")
         ("arr" ~>
           "decoded" <~ (Eithers.mapList (var "decodeElem") (var "arr")) $
@@ -307,7 +309,7 @@ fromJson = define "fromJson" $
     _Type_set>>: "elemType" ~>
       "decodeElem" <~ ("v" ~> fromJson @@ var "types" @@ var "tname" @@ var "elemType" @@ var "v") $
       "arrResult" <~ (expectArray @@ var "value") $
-      Eithers.either_
+      Eithers.either
         ("err" ~> left $ var "err")
         ("arr" ~>
           "decoded" <~ (Eithers.mapList (var "decodeElem") (var "arr")) $
@@ -348,7 +350,7 @@ fromJson = define "fromJson" $
     -- Records
     _Type_record>>: "rt" ~>
       "objResult" <~ (expectObject @@ var "value") $
-      Eithers.either_
+      Eithers.either
         ("err" ~> left $ var "err")
         ("obj" ~>
           "decodeField" <~ ("ft" ~>
@@ -385,17 +387,17 @@ fromJson = define "fromJson" $
             (var "fts")) (left $ Strings.cat $ list [string "unknown variant: ", var "key"]) ("ft" ~> var "decodeVariant" @@ var "key" @@ var "val" @@ (Core.fieldTypeType $ var "ft"))) $
       -- Helper to decode a single-key object
       "decodeSingleKey" <~ ("obj" ~>
-        Optionals.cases (Lists.maybeHead $ Maps.keys $ var "obj") (left $ string "expected single-key object for union") ("k" ~> var "findAndDecode"
+        Optionals.cases (Lists.maybeHead $ Maps.keys (var "obj" :: TypedTerm (M.Map String Value))) (left $ string "expected single-key object for union") ("k" ~> var "findAndDecode"
             @@ var "k"
-            @@ (Maps.lookup (var "k") (var "obj"))
+            @@ (Maps.lookup (var "k" :: TypedTerm String) (var "obj"))
             @@ var "rt")) $
       -- Process the union object
       "processUnion" <~ ("obj" ~>
-        Logic.ifElse (Equality.equal (Lists.length $ Maps.keys $ var "obj") (int32 1))
+        Logic.ifElse (Equality.equal (Lists.length $ Maps.keys (var "obj" :: TypedTerm (M.Map String Value))) (int32 1))
           (var "decodeSingleKey" @@ var "obj")
           (left $ string "expected single-key object for union")) $
       "objResult" <~ (expectObject @@ var "value") $
-      Eithers.either_
+      Eithers.either
         ("err" ~> left $ var "err")
         ("obj" ~> var "processUnion" @@ var "obj")
         (var "objResult"),
@@ -418,12 +420,12 @@ fromJson = define "fromJson" $
       "keyType" <~ (Core.mapTypeKeys $ var "mt") $
       "valType" <~ (Core.mapTypeValues $ var "mt") $
       "arrResult" <~ (expectArray @@ var "value") $
-      Eithers.either_
+      Eithers.either
         ("err" ~> left $ var "err")
         ("arr" ~>
           "decodeEntry" <~ ("entryJson" ~>
             "objResult" <~ (expectObject @@ var "entryJson") $
-            Eithers.either_
+            Eithers.either
               ("err" ~> left $ var "err")
               ("entryObj" ~>
                 "keyJson" <~ (Maps.lookup (string "key") (var "entryObj")) $
@@ -431,7 +433,7 @@ fromJson = define "fromJson" $
                 Optionals.cases (var "keyJson") (left $ string "missing key in map entry") ("kj" ~> Optionals.cases (var "valJson") (left $ string "missing value in map entry") ("vj" ~>
                       "decodedKey" <~ (fromJson @@ var "types" @@ var "tname" @@ var "keyType" @@ var "kj") $
                       "decodedVal" <~ (fromJson @@ var "types" @@ var "tname" @@ var "valType" @@ var "vj") $
-                      Eithers.either_
+                      Eithers.either
                         ("err" ~> left $ var "err")
                         ("k" ~> Eithers.map ("v" ~> pair (var "k") (var "v")) (var "decodedVal"))
                         (var "decodedKey"))))
@@ -445,7 +447,7 @@ fromJson = define "fromJson" $
       "firstType" <~ (Core.pairTypeFirst $ var "pt") $
       "secondType" <~ (Core.pairTypeSecond $ var "pt") $
       "objResult" <~ (expectObject @@ var "value") $
-      Eithers.either_
+      Eithers.either
         ("err" ~> left $ var "err")
         ("obj" ~>
           "firstJson" <~ (Maps.lookup (string "first") (var "obj")) $
@@ -453,7 +455,7 @@ fromJson = define "fromJson" $
           Optionals.cases (var "firstJson") (left $ string "missing first in pair") ("fj" ~> Optionals.cases (var "secondJson") (left $ string "missing second in pair") ("sj" ~>
                 "decodedFirst" <~ (fromJson @@ var "types" @@ var "tname" @@ var "firstType" @@ var "fj") $
                 "decodedSecond" <~ (fromJson @@ var "types" @@ var "tname" @@ var "secondType" @@ var "sj") $
-                Eithers.either_
+                Eithers.either
                   ("err" ~> left $ var "err")
                   ("f" ~> Eithers.map ("s" ~> Core.termPair $ pair (var "f") (var "s")) (var "decodedSecond"))
                   (var "decodedFirst"))))
@@ -464,7 +466,7 @@ fromJson = define "fromJson" $
       "leftType" <~ (Core.eitherTypeLeft $ var "et") $
       "rightType" <~ (Core.eitherTypeRight $ var "et") $
       "objResult" <~ (expectObject @@ var "value") $
-      Eithers.either_
+      Eithers.either
         ("err" ~> left $ var "err")
         ("obj" ~>
           "leftJson" <~ (Maps.lookup (string "left") (var "obj")) $
@@ -478,7 +480,7 @@ fromJson = define "fromJson" $
 
     -- Type variables (look up in type table and recurse)
     _Type_variable>>: "name" ~>
-      "lookedUp" <~ (Maps.lookup (var "name") (var "types")) $
+      "lookedUp" <~ (Maps.lookup (var "name" :: TypedTerm Name) (var "types")) $
       Optionals.cases (var "lookedUp") (left $ Strings.cat $ list [
           string "unknown type variable: ",
           Core.unName $ var "name"]) ("resolvedType" ~> fromJson @@ var "types" @@ var "name" @@ var "resolvedType" @@ var "value")]

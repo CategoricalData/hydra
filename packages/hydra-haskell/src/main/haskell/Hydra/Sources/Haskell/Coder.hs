@@ -1,10 +1,11 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Haskell.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Dsl.Libraries
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -18,17 +19,17 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -205,7 +206,7 @@ constructModule = haskellCoderDefinition "constructModule" $
         "d" <<~ toDataDeclaration @@ var "namespaces" @@ var "term" @@ var "cx" @@ var "g" $
         right $ list [var "d"]],
     "importName">: "name" ~>
-      wrap H._ModuleName $ Strings.intercalate (string ".") (Lists.map (Formatting.capitalize) (Strings.splitOn (string ".") (var "name"))),
+      wrap H._ModuleName $ Strings.intercalate (string ".") (Lists.map (asTerm Formatting.capitalize) (Strings.splitOn (string ".") (var "name"))),
     "imports">: Lists.concat2 (var "domainImports") (var "standardImports"),
     "domainImports">: lets [
       "toImport">: "pair" ~> lets [
@@ -301,10 +302,10 @@ encodeCaseExpression = haskellCoderDefinition "encodeCaseExpression" $
       "raw">: MetaTerms.apply (var "fun'") (Core.termVariable $ Core.name $ var "v0"),
       "rhsTerm">: Dependencies.simplifyTerm @@ var "raw",
       "v1">: Logic.ifElse (Variables.isFreeVariableInTerm @@ (wrap _Name $ var "v0") @@ var "rhsTerm")
-        (Constants.ignoredVariable)
+        (asTerm Constants.ignoredVariable)
         (var "v0"),
       "hname">: HaskellUtilsSource.unionFieldReference @@ (Sets.union (Sets.fromList (Maps.keys (Graph.graphBoundTerms $ var "g"))) (Sets.fromList (Maps.keys (Graph.graphSchemaTypes $ var "g")))) @@ var "namespaces" @@ var "dn" @@ var "fn"] $
-          "args" <<~ (Optionals.cases (Maps.lookup (var "fn") (var "fieldMap"))
+          "args" <<~ (Optionals.cases (Maps.lookup (var "fn") (var "fieldMap" :: TypedTerm (M.Map Name FieldType)))
               (left (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fn"))) $
               "fieldType" ~> lets [
                 "ft">: Core.fieldTypeType $ var "fieldType",
@@ -322,7 +323,7 @@ encodeCaseExpression = haskellCoderDefinition "encodeCaseExpression" $
     "rt" <<~ Resolution.requireUnionType @@ var "cx" @@ var "g" @@ var "dn" $ lets [
     "toFieldMapEntry">: "f" ~>
       pair (Core.fieldTypeName $ var "f") (var "f"),
-    "fieldMap">: Maps.fromList $ Lists.map (var "toFieldMapEntry") (var "rt")] $
+    "fieldMap">: ((Maps.fromList $ Lists.map (var "toFieldMapEntry") (var "rt")) :: TypedTerm (M.Map Name FieldType))] $
     "ecases" <<~ Eithers.mapList (var "toAlt" @@ var "fieldMap") (var "fields") $
     "dcases" <<~ (Optionals.cases (var "def")
       (right $ list ([] :: [TypedTerm H.CaseRhs])) $
@@ -425,11 +426,11 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
         right $ inject H._Expression H._Expression_tuple $ list [var "hk", var "hv"]] $
       "rhs" <<~ Eithers.map
         (reify $ inject H._Expression H._Expression_list)
-        (Eithers.mapList (var "encodePair") $ Maps.toList (var "m")) $
+        (Eithers.mapList (var "encodePair") $ Maps.toList (var "m" :: TypedTerm (M.Map Term Term))) $
       right $ HaskellUtilsSource.hsapp @@ var "lhs" @@ var "rhs") $
     "nonemptySet" <~ ("s" ~> lets [
       "lhs">: HaskellUtilsSource.hsvar @@ string "S.fromList" ] $
-      "rhs" <<~ encodeTerm @@ var "depth" @@ var "namespaces" @@ (inject _Term _Term_list $ Sets.toList $ var "s") @@ var "cx" @@ var "g" $
+      "rhs" <<~ encodeTerm @@ var "depth" @@ var "namespaces" @@ (inject _Term _Term_list $ Sets.toList $ (var "s" :: TypedTerm (S.Set Term))) @@ var "cx" @@ var "g" $
       right $ HaskellUtilsSource.hsapp @@ var "lhs" @@ var "rhs") $
     cases _Term (Strip.deannotateTerm @@ var "term")
       (Just $ left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "supported term") (ShowCore.term @@ var "term"))) [
@@ -449,7 +450,7 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
               encodeCaseExpression @@ var "depth" @@ var "namespaces" @@ var "stmt" @@ var "harg" @@ var "cx" @@ var "g"],
       _Term_cases>>: "stmt" ~>
         encodeStandaloneCases @@ var "depth" @@ var "namespaces" @@ var "stmt" @@ var "cx" @@ var "g",
-      _Term_either>>: "e" ~> Eithers.either_
+      _Term_either>>: "e" ~> Eithers.either
           ("l" ~>
             "hl" <<~ var "encode" @@ var "l" $
               right $ HaskellUtilsSource.hsapp @@ (HaskellUtilsSource.hsvar @@ string "Left") @@ var "hl")
@@ -491,7 +492,7 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
           right $ inject H._Expression H._Expression_list $ var "helems",
       _Term_literal>>: "v" ~>
         encodeLiteral @@ var "v" @@ var "cx",
-      _Term_map>>: "m" ~> Logic.ifElse (Maps.null $ var "m")
+      _Term_map>>: "m" ~> Logic.ifElse (Maps.null $ (var "m" :: TypedTerm (M.Map Term Term)))
         (right $ HaskellUtilsSource.hsvar @@ string "M.empty")
         (var "nonemptyMap" @@ var "m"),
       _Term_optional>>: "m" ~>
@@ -520,7 +521,7 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
           right $ inject H._Expression H._Expression_constructRecord $ record H._RecordExpression [
             H._RecordExpression_name>>: var "typeName",
             H._RecordExpression_fields>>: var "updates"],
-      _Term_set>>: "s" ~> Logic.ifElse (Sets.null $ var "s")
+      _Term_set>>: "s" ~> Logic.ifElse (Sets.null $ (var "s" :: TypedTerm (S.Set Term)))
         (right $ HaskellUtilsSource.hsvar @@ string "S.empty")
         (var "nonemptySet" @@ var "s"),
       _Term_typeLambda>>: "abs" ~> lets [
@@ -670,13 +671,13 @@ encodeTypeWithClassAssertions = haskellCoderDefinition "encodeTypeWithClassAsser
       inject H._Constraint H._Constraint_class $ record H._ClassConstraint [
         H._ClassConstraint_name>>: var "hname",
         H._ClassConstraint_types>>: list [var "htype"]],
-    "assertPairs">: Lists.concat $ Lists.map (var "toPairs") (Maps.toList $ var "classes"),
+    "assertPairs">: Lists.concat $ Lists.map (var "toPairs") (Maps.toList $ (var "classes" :: TypedTerm (M.Map Name (S.Set Name)))),
     "toPairs">: "mapEntry" ~> lets [
       "name">: Pairs.first $ var "mapEntry",
       "clsSet">: Pairs.second $ var "mapEntry",
       "toPair">: "c" ~>
         pair (var "name") (var "c")] $
-      Lists.map (var "toPair") (Sets.toList $ var "clsSet")] $
+      Lists.map (var "toPair") (Sets.toList $ (var "clsSet" :: TypedTerm (S.Set Name)))] $
       "htyp" <<~ adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "typ" @@ var "cx" @@ var "g" $
       Logic.ifElse (Lists.null $ var "assertPairs")
         (right $ var "htyp") (lets [
@@ -743,9 +744,9 @@ findOrdVariables = haskellCoderDefinition "findOrdVariables" $
         (Just $ var "names") [
         _Type_variable>>: "v" ~>
           Logic.ifElse (var "isTypeVariable" @@ var "v")
-            (Sets.insert (var "v") (var "names"))
+            (Sets.insert (var "v") (var "names" :: TypedTerm (S.Set Name)))
             (var "names")]] $
-    Rewriting.foldOverType @@ Coders.traversalOrderPre @@ var "fold" @@ Sets.empty @@ var "typ"
+    Rewriting.foldOverType @@ Coders.traversalOrderPre @@ var "fold" @@ (Sets.empty :: TypedTerm (S.Set Name)) @@ var "typ"
 
 formatError :: TypedTerm (Error -> String)
 formatError = "e" ~> ShowError.error_ @@ var "e"
@@ -760,7 +761,7 @@ gatherMetadata = haskellCoderDefinition "gatherMetadata" $
           "term" <~ Packaging.termDefinitionBody (var "termDef") $
           "metaWithTerm" <~ (Rewriting.foldOverTerm @@ Coders.traversalOrderPre
             @@ ("m" ~> "t" ~> extendMetaForTerm @@ var "m" @@ var "t") @@ var "meta" @@ var "term") $
-          Optionals.cases (Optionals.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature $ var "termDef") (var "metaWithTerm") ("ts" ~>
+          Optionals.cases (Optionals.map (asTerm Scoping.termSignatureToTypeScheme) $ Packaging.termDefinitionSignature $ var "termDef") (var "metaWithTerm") ("ts" ~>
               Rewriting.foldOverType @@ Coders.traversalOrderPre
                 @@ ("m" ~> "t" ~> extendMetaForType @@ var "m" @@ var "t") @@ var "metaWithTerm" @@ (Core.typeSchemeBody $ var "ts")),
         _Definition_type>>: "typeDef" ~>
@@ -775,7 +776,7 @@ getImplicitTypeClasses = haskellCoderDefinition "getImplicitTypeClasses" $
   "typ" ~> lets [
     "toPair">: "name" ~>
       pair (var "name") (Sets.fromList $ list [Core.name (string "ordering")])] $
-    Maps.fromList $ Lists.map (var "toPair") (Sets.toList $ findOrdVariables @@ var "typ")
+    ((Maps.fromList $ Lists.map (var "toPair") (Sets.toList $ findOrdVariables @@ var "typ")) :: TypedTerm (M.Map Name (S.Set Name)))
 
 haskellCoderDefinition :: String -> TypedTerm a -> TypedTermDefinition a
 haskellCoderDefinition = definitionInModule module_
@@ -803,7 +804,7 @@ moduleToHaskell = haskellCoderDefinition "moduleToHaskell" $
   "hsmod" <<~ moduleToHaskellModule @@ var "mod" @@ var "defs" @@ var "cx" @@ var "g" $ lets [
   "s">: Serialization.printExpr @@ (Serialization.parenthesize @@ (HaskellSerde.moduleToExpr @@ var "hsmod")),
   "filepath">: Names.moduleNameToFilePath @@ Util.caseConventionPascal @@ (wrap _FileExtension $ string "hs") @@ (Packaging.moduleName $ var "mod")] $
-  right $ Maps.singleton (var "filepath") (var "s")
+  right $ (Maps.singleton (var "filepath") (var "s") :: TypedTerm (M.Map String String))
 
 moduleToHaskellModule :: TypedTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Prelude.Either Error H.Module)
 moduleToHaskellModule = haskellCoderDefinition "moduleToHaskellModule" $
@@ -832,7 +833,7 @@ nameDecls = haskellCoderDefinition "nameDecls" $
     "toConstant">: "fieldType" ~> lets [
       "fname">: Core.fieldTypeName $ var "fieldType"] $
       pair (constantForFieldName @@ var "name" @@ var "fname") (Core.unName $ var "fname")] $
-    Logic.ifElse (useCoreImport)
+    Logic.ifElse (asTerm useCoreImport)
       (Lists.cons (var "toDecl" @@ Core.nameLift _Name @@ var "nameDecl") (Lists.map (var "toDecl" @@ Core.nameLift _Name) (var "fieldDecls")))
       (list ([] :: [TypedTerm H.Declaration]))
 
@@ -890,7 +891,7 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
   "namespaces" ~> "def" ~> "cx" ~> "g" ~> lets [
     "name">: Packaging.termDefinitionName $ var "def",
     "term">: Packaging.termDefinitionBody $ var "def",
-    "typ">: Optionals.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature $ var "def",
+    "typ">: Optionals.map (asTerm Scoping.termSignatureToTypeScheme) $ Packaging.termDefinitionSignature $ var "def",
     "hname">: HaskellUtilsSource.simpleName @@ (Names.localNameOf @@ var "name"),
     "rewriteValueBinding">: "vb" ~>
       cases H._ValueBinding (var "vb") Nothing [
@@ -926,7 +927,7 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
          "schemeClasses">: typeSchemeConstraintsToClassMap @@ var "schemeConstraints"] $
          "explicitClasses" <<~ Annotations.getTypeClasses @@ var "cx" @@ var "g" @@ (Strip.removeTypesFromTerm @@ var "term") $
          -- Combine constraints from TypeScheme with any explicit annotations
-         "combinedClasses" <~ Maps.union (var "schemeClasses") (var "explicitClasses") $
+         "combinedClasses" <~ Maps.union (var "schemeClasses" :: TypedTerm (M.Map Name (S.Set Name))) (var "explicitClasses") $
          "schemeType" <~ optCases (var "typ") Core.typeUnit ("ts" ~> Core.typeSchemeBody (var "ts")) $
          "htype" <<~ encodeTypeWithClassAssertions @@ var "namespaces" @@ var "combinedClasses" @@ var "schemeType" @@ var "cx" @@ var "g" $ lets [
          "decl">: inject H._Declaration H._Declaration_typedBinding $ record H._TypedBinding [
@@ -1010,7 +1011,7 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
         "tname">: Names.unqualifyName @@ record _QualifiedName [
           _QualifiedName_moduleName>>: just $ Pairs.first $ Util.moduleNamesFocus $ var "namespaces",
           _QualifiedName_local>>: var "name"]] $
-        Logic.ifElse (Sets.member (var "tname") (var "boundNames'"))
+        Logic.ifElse (Sets.member (var "tname") (var "boundNames'" :: TypedTerm (S.Set Name)))
           (var "deconflict" @@ Strings.cat2 (var "name") (string "_"))
           (var "name")] $
       "comments" <<~ Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "ftype" $ lets [
@@ -1025,7 +1026,7 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
         H._PositionalConstructor_comments>>: var "comments"]] $
       "isSer" <<~ Predicates.isSerializableByName @@ var "cx" @@ var "g" @@ var "elementName" $ lets [
       "deriv">: wrap H._DerivingClause $ Logic.ifElse (var "isSer")
-        (Lists.map (HaskellUtilsSource.rawName) (list [string "Eq", string "Ord", string "Read", string "Show"]))
+        (Lists.map (asTerm HaskellUtilsSource.rawName) (list [string "Eq", string "Ord", string "Read", string "Show"]))
         (list ([] :: [TypedTerm H.Name])),
       "unpackResult">: HaskellUtilsSource.unpackForallType @@ var "typ",
       "vars">: Pairs.first $ var "unpackResult",
@@ -1065,7 +1066,7 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
               H._DataDeclaration_constructors>>: list [var "cons"],
               H._DataDeclaration_deriving>>: list [var "deriv"],
               H._DataDeclaration_comments>>: var "comments"]]) $
-      "tdecls" <<~ (Logic.ifElse (includeTypeDefinitions)
+      "tdecls" <<~ (Logic.ifElse (asTerm includeTypeDefinitions)
         ("decl'" <<~ typeDecl @@ var "namespaces" @@ var "elementName" @@ var "typ" @@ var "cx" @@ var "g" $
           right $ list [var "decl'"])
         (right $ list ([] :: [TypedTerm H.Declaration]))) $ lets [
@@ -1133,11 +1134,11 @@ typeSchemeConstraintsToClassMap = haskellCoderDefinition "typeSchemeConstraintsT
   "maybeConstraints" ~> lets [
     "constraintToName">: "tcc" ~> match _TypeClassConstraint Nothing [
       _TypeClassConstraint_simple>>: "className" ~> just (var "className")] @@ (var "tcc")] $
-    Optionals.cases (var "maybeConstraints") Maps.empty ("constraints" ~>
+    Optionals.cases (var "maybeConstraints") (Maps.empty :: TypedTerm (M.Map Name (S.Set Name))) ("constraints" ~>
         Maps.map
-          ("meta" ~> Sets.fromList $
-            Optionals.cat $ Lists.map (var "constraintToName") $ Core.typeVariableConstraintsClasses (var "meta"))
-          (var "constraints"))
+          ("meta" ~> ((Sets.fromList $
+            Optionals.cat $ Lists.map (var "constraintToName") $ Core.typeVariableConstraintsClasses (var "meta")) :: TypedTerm (S.Set Name)))
+          (var "constraints" :: TypedTerm (M.Map Name TypeVariableConstraints)))
 
 useCoreImport :: TypedTermDefinition Bool
 useCoreImport = haskellCoderDefinition "useCoreImport" $

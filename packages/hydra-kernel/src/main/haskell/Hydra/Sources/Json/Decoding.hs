@@ -1,9 +1,10 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Json.Decoding where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -17,17 +18,17 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -138,14 +139,14 @@ decodeObject :: TypedTermDefinition (Value -> Either String (M.Map String Value)
 decodeObject  = define "Object" $
   doc "Decode a JSON object value to a name-keyed map. Field order is not preserved; decoding looks fields up by name." $
   match _Value (Just $ left (string "expected an object")) [
-    _Value_object>>: lambda "o" $ right $ Maps.fromList $ var "o"]
+    _Value_object>>: lambda "o" $ right $ (Maps.fromList (var "o") :: TypedTerm (M.Map String Value))]
 
 decodeOptionalField :: TypedTermDefinition ((Value -> Either String a) -> String -> (M.Map String Value) -> Either String (Maybe a))
 decodeOptionalField  = define "OptionalField" $
   doc "Decode an optional field from a JSON object" $
   lambda "decodeValue" $ lambda "name" $ lambda "m" $
     primitive DefOptionals.cases
-        @@ (Maps.lookup (var "name") (var "m"))
+        @@ (Maps.lookup (var "name") (var "m" :: TypedTerm (M.Map String Value)))
         @@ (right nothing)
         @@ (lambda "v" (Eithers.map (lambda "x" (just $ var "x")) (var "decodeValue" @@ var "v")))
 

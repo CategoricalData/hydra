@@ -10,9 +10,9 @@ import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
-import qualified Hydra.Dsl.Meta.Lib.Lists     as Lists
-import qualified Hydra.Dsl.Meta.Lib.Maps       as Maps
-import qualified Hydra.Dsl.Meta.Lib.Sets      as Sets
+import qualified Hydra.Dsl.Lib.Lists     as Lists
+import qualified Hydra.Dsl.Lib.Maps       as Maps
+import qualified Hydra.Dsl.Lib.Sets      as Sets
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
 import           Hydra.Dsl.Meta.Phantoms                ((@@))
 import qualified Hydra.Dsl.Packaging          as Packaging

@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 -- | Scala code generator in Hydra DSL.
 -- This module provides DSL versions of Scala code generation functions.
 
@@ -7,18 +9,18 @@ module Hydra.Sources.Scala.Coder where
 import Hydra.Kernel
 import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Libraries
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Errors                      as Error
@@ -177,7 +179,7 @@ encodeCase = def "encodeCase" $
     "fterm">: project _CaseAlternative _CaseAlternative_handler @@ var "f",
     -- Determine if the field has unit type: check ftypes if available, otherwise check if term is a lambda
     "isUnit">: Optionals.cases
-      (Maps.lookup (var "fname") (var "ftypes"))
+      (Maps.lookup (var "fname") (var "ftypes" :: TypedTerm (M.Map Name Type)))
       -- If ftypes doesn't have this field, check the term structure
       (cases _Term (Strip.deannotateAndDetypeTerm @@ var "fterm") (Just false) [
         -- Check lambda: unit if domain=Unit, or if lambda body doesn't use the parameter
@@ -300,12 +302,12 @@ encodeFunction = def "encodeFunction" $
           ("dom" ~> lets [
             "freeVars">: Variables.freeVariablesInType @@ var "dom",
             -- Filter to unqualified vars (no dots in name)
-            "unqualifiedFreeVars">: Sets.fromList (Lists.filter
+            "unqualifiedFreeVars">: (Sets.fromList (Lists.filter
               ("n" ~> Logic.not (Lists.elem (int32 46) (Strings.toList (Core.unName (var "n")))))
-              (Sets.toList (var "freeVars"))),
+              (Sets.toList (var "freeVars" :: TypedTerm (S.Set Name)))) :: TypedTerm (S.Set Name)),
             -- Check if any unqualified free vars are not in the graph's type variables
-            "unresolvedVars">: Sets.difference (var "unqualifiedFreeVars") (Graph.graphTypeVariables $ var "g")] $
-            Logic.ifElse (Sets.null (var "unresolvedVars"))
+            "unresolvedVars">: (Sets.difference (var "unqualifiedFreeVars") (Graph.graphTypeVariables $ var "g") :: TypedTerm (S.Set Name))] $
+            Logic.ifElse (Sets.null (var "unresolvedVars" :: TypedTerm (S.Set Name)))
               (just (var "dom"))
               nothing)] $
         -- Encode lambda body and wrap in lambda with typed parameter
@@ -330,7 +332,7 @@ encodeFunction = def "encodeFunction" $
           -- Unapplied projection: generate lambda x => x.fieldName
           -- Try findSdom first (full type with type params), fall back to Projection.typeName
           (Eithers.bind
-            (Eithers.either_
+            (Eithers.either
               -- findSdom failed: fall back to Projection.typeName
               (constant $ Eithers.bind
                 (asTerm encodeType @@ var "cx" @@ var "g" @@ (Core.typeVariable (var "typeName")))
@@ -372,7 +374,7 @@ encodeFunction = def "encodeFunction" $
         "cases">: project _CaseStatement _CaseStatement_cases @@ var "cs",
         "dflt">: project _CaseStatement _CaseStatement_default @@ var "cs",
         -- Try to get field types from the graph; fall back to empty map if unavailable
-        "ftypes">: Eithers.either_
+        "ftypes">: Eithers.either
           (constant Maps.empty)
           identity
           (Resolution.fieldTypes @@ var "cx" @@ var "g" @@ var "dom")] $
@@ -428,7 +430,7 @@ encodeLetBinding = def "encodeLetBinding" $
       (Eithers.bind (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "bterm")
         ("srhs" ~> right (mkLazyVal (var "bname") nothing (var "srhs"))))
       ("ts" ~> lets [
-        "newVars">: Lists.filter ("v" ~> Logic.not (Sets.member (var "v") (var "outerTypeVars"))) (Core.typeSchemeVariables $ var "ts"),
+        "newVars">: Lists.filter ("v" ~> Logic.not (Sets.member (var "v") (var "outerTypeVars" :: TypedTerm (S.Set Name)))) (Core.typeSchemeVariables $ var "ts"),
         -- Use def when: function type, or has locally-quantified type vars (like Java's static <T0> method)
         "useDef">: Logic.or (var "isFn") (Logic.not (Lists.null (var "newVars")))] $
         Logic.ifElse (var "useDef")
@@ -470,8 +472,8 @@ encodeLocalDef = def "encodeLocalDef" $
     "freeTypeVars">: Lists.filter
       ("v" ~> Logic.and
         (Logic.not (Lists.elem (int32 46) (Strings.toList (Core.unName (var "v")))))
-        (Logic.not (Sets.member (var "v") (var "outerTypeVars"))))
-      (Sets.toList (Variables.freeVariablesInType @@ var "typ")),
+        (Logic.not (Sets.member (var "v") (var "outerTypeVars" :: TypedTerm (S.Set Name)))))
+      (Sets.toList (Variables.freeVariablesInType @@ var "typ") :: TypedTerm [Name]),
     "doms">: extractDomains @@ var "typ",
     "paramNames">: extractParams @@ var "term",
     "paramCount">: Math.min (Lists.length (var "paramNames")) (Lists.length (var "doms")),
@@ -481,7 +483,7 @@ encodeLocalDef = def "encodeLocalDef" $
     "letBindings">: extractLetBindings @@ var "term",
     "tparams">: Lists.map (lambda "tv" $ ScalaUtilsSource.stparam @@ var "tv") (var "freeTypeVars"),
     -- All type vars in scope: outer + this def's own
-    "allTypeVars">: Sets.union (var "outerTypeVars") (Sets.fromList (var "freeTypeVars")),
+    "allTypeVars">: (Sets.union (var "outerTypeVars") (Sets.fromList (var "freeTypeVars")) :: TypedTerm (S.Set Name)),
     -- Extend graph with accumulated type variables
     "gWithTypeVars">: Graph.graph
       (Graph.graphBoundTerms $ var "g")
@@ -683,7 +685,7 @@ encodeTerm = def "encodeTerm" $
                   (asTerm encodeTerm @@ var "cx" @@ var "g" @@ (Pairs.second (var "kv")))
                   ("sv" ~>
                     right (ScalaUtilsSource.sassign @@ var "sk" @@ var "sv"))))
-            (Maps.toList (var "m")))
+            (Maps.toList (var "m" :: TypedTerm (M.Map Term Term))))
           ("spairs" ~>
             right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "Map") @@ var "spairs"))),
       _Term_wrap>>: ("wt" ~>
@@ -703,7 +705,7 @@ encodeTerm = def "encodeTerm" $
             right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ var "n") @@ var "args"))),
       _Term_set>>: ("s" ~>
         Eithers.bind
-          (Eithers.mapList ("e" ~> asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "e") (Sets.toList (var "s")))
+          (Eithers.mapList ("e" ~> asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "e") (Sets.toList (var "s" :: TypedTerm (S.Set Term))))
           ("sels" ~>
             right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "scala.collection.immutable.Set") @@ var "sels"))),
       _Term_inject>>: ("inj" ~> lets [
@@ -712,13 +714,13 @@ encodeTerm = def "encodeTerm" $
         "ft">: project _Field _Field_term @@ (project _Injection _Injection_field @@ var "inj"),
         "lhs">: ScalaUtilsSource.sname @@ (ScalaUtilsSource.qualifyUnionFieldName @@ string "UNION." @@ just (var "sn") @@ var "fn"),
         -- Get field types from the union type definition if available
-        "unionFtypes">: Eithers.either_
+        "unionFtypes">: (Eithers.either
           (constant Maps.empty)
           identity
-          (Resolution.fieldTypes @@ var "cx" @@ var "g" @@ Core.typeVariable (var "sn"))] $
+          (Resolution.fieldTypes @@ var "cx" @@ var "g" @@ Core.typeVariable (var "sn")) :: TypedTerm (M.Map Name Type))] $
         -- Check if the field is unit-typed using ftypes, then term structure
         Logic.ifElse (Optionals.cases
-          (Maps.lookup (var "fn") (var "unionFtypes"))
+          (Maps.lookup (var "fn") (var "unionFtypes" :: TypedTerm (M.Map Name Type)))
           -- No ftypes: check term structure
           (cases _Term (Strip.deannotateAndDetypeTerm @@ var "ft") (Just false) [
             _Term_unit>>: constant true,
@@ -752,7 +754,7 @@ encodeTerm = def "encodeTerm" $
       _Term_annotated>>: ("at" ~>
         asTerm encodeTerm @@ var "cx" @@ var "g" @@ (Core.annotatedTermBody $ var "at")),
       _Term_either>>: ("e" ~>
-        Eithers.either_
+        Eithers.either
           ("l" ~>
             Eithers.bind
               (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "l")
@@ -793,7 +795,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "name">: project _TermDefinition _TermDefinition_name @@ var "td",
     "term">: project _TermDefinition _TermDefinition_body @@ var "td",
     "lname">: ScalaUtilsSource.scalaEscapeName @@ (Names.localNameOf @@ var "name"),
-    "typ'">: Optionals.cases (Optionals.map Scoping.termSignatureToTypeScheme (project _TermDefinition _TermDefinition_signature @@ var "td")) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) (reify Core.typeSchemeBody),
+    "typ'">: Optionals.cases (Optionals.map (asTerm Scoping.termSignatureToTypeScheme) (project _TermDefinition _TermDefinition_signature @@ var "td")) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) (reify Core.typeSchemeBody),
     -- Check if the type is a function type (needs def) by looking at the stripped type
     "isFunctionType">: cases _Type (Strip.deannotateType @@ var "typ'")
       (Just false)
@@ -1000,7 +1002,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
             _TypeDefn_tparams>>: tparams,
             _TypeDefn_body>>: var "styp"])))) $
       -- Try encodeType; if it fails (e.g. for anonymous wrap/record/union), produce a type alias to Any
-      Eithers.either_
+      Eithers.either
         (constant $ var "mkAlias" @@ (ScalaUtilsSource.stref @@ string "Any"))
         (var "mkAlias")
         (asTerm encodeType @@ cx @@ g @@ typ)

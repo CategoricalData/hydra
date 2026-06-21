@@ -1,9 +1,11 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hydra.Sources.Demos.GenPG.Transform where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Dsl.Libraries
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -18,17 +20,17 @@ import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -149,7 +151,7 @@ evaluateProperties = define "evaluateProperties" $
           right $ Optionals.map ("v" ~> pair (var "k") (var "v")) (var "mv")]
       @@ var "term") $
     Eithers.map
-      ("pairs" ~> Maps.fromList $ Optionals.cat $ var "pairs")
+      ("pairs" ~> ((Maps.fromList $ Optionals.cat $ var "pairs") :: TypedTerm (M.Map PG.PropertyKey Term)))
       (Eithers.mapList
         ("pair" ~>
           "k" <~ Pairs.first (var "pair") $
@@ -157,7 +159,7 @@ evaluateProperties = define "evaluateProperties" $
           Eithers.bind
             (Reduction.reduceTerm @@ var "cx" @@ var "g" @@ boolean True @@ (Core.termApplication $ Core.application (var "spec") (var "record")))
             ("value" ~> var "extractMaybe" @@ var "k" @@ (Strip.deannotateTerm @@ var "value")))
-        (Maps.toList $ var "specs"))
+        (Maps.toList $ (var "specs" :: TypedTerm (M.Map PG.PropertyKey Term))))
 
 -- | Evaluate an edge specification against a record term
 evaluateEdge :: TypedTermDefinition (InferenceContext -> Graph -> PG.Edge Term -> Term -> Either Error (Maybe (PG.Edge Term)))
@@ -257,7 +259,7 @@ findTablesInTerm = define "findTablesInTerm" $
               (Core.unName (project _Projection _Projection_typeName @@ var "proj"))
               (var "names")]
         @@ var "t")
-      @@ Sets.empty
+      @@ (Sets.empty :: TypedTerm (S.Set String))
       @@ var "term"
 
 -- | Find table names referenced in multiple terms
@@ -265,7 +267,7 @@ findTablesInTerms :: TypedTermDefinition ([Term] -> S.Set String)
 findTablesInTerms = define "findTablesInTerms" $
   doc "Find table names referenced in multiple terms" $
   "terms" ~>
-    Sets.unions $ Lists.map findTablesInTerm (var "terms")
+    Sets.unions $ Lists.map (asTerm findTablesInTerm) (var "terms")
 
 -- | Get the table name for an edge specification
 tableForEdge :: TypedTermDefinition (PG.Edge Term -> Either String String)
@@ -279,10 +281,10 @@ tableForEdge = define "tableForEdge" $
     "props" <~ (project PG._Edge PG._Edge_properties @@ var "edge") $
     "tables" <~ (findTablesInTerms @@ Lists.concat2
       (list [var "id", var "outId", var "inId"])
-      (Maps.elems $ var "props")) $
-    Logic.ifElse (Equality.equal (Sets.size $ var "tables") (int32 1))
+      (Maps.elems $ (var "props" :: TypedTerm (M.Map PG.PropertyKey Term)))) $
+    Logic.ifElse (Equality.equal (Sets.size $ (var "tables" :: TypedTerm (S.Set String))) (int32 1))
       (Optionals.cases
-        (Lists.maybeHead $ Sets.toList $ var "tables")
+        (Lists.maybeHead $ Sets.toList $ (var "tables" :: TypedTerm (S.Set String)))
         (left $ string "unreachable: empty tables set")
         (reify right))
       (left $ Strings.cat $ list [
@@ -298,10 +300,10 @@ tableForVertex = define "tableForVertex" $
     "label" <~ (project PG._Vertex PG._Vertex_label @@ var "vertex") $
     "id" <~ (project PG._Vertex PG._Vertex_id @@ var "vertex") $
     "props" <~ (project PG._Vertex PG._Vertex_properties @@ var "vertex") $
-    "tables" <~ (findTablesInTerms @@ Lists.cons (var "id") (Maps.elems $ var "props")) $
-    Logic.ifElse (Equality.equal (Sets.size $ var "tables") (int32 1))
+    "tables" <~ (findTablesInTerms @@ Lists.cons (var "id") (Maps.elems $ (var "props" :: TypedTerm (M.Map PG.PropertyKey Term)))) $
+    Logic.ifElse (Equality.equal (Sets.size $ (var "tables" :: TypedTerm (S.Set String))) (int32 1))
       (Optionals.cases
-        (Lists.maybeHead $ Sets.toList $ var "tables")
+        (Lists.maybeHead $ Sets.toList $ (var "tables" :: TypedTerm (S.Set String)))
         (left $ string "unreachable: empty tables set")
         (reify right))
       (left $ Strings.cat $ list [
@@ -332,24 +334,24 @@ elementSpecsByTable = define "elementSpecsByTable" $
             "addVertex" <~ ("m" ~> "p" ~>
               "table" <~ Pairs.first (var "p") $
               "v" <~ Pairs.second (var "p") $
-              "existing" <~ Maps.lookup (var "table") (var "m") $
+              "existing" <~ Maps.lookup (var "table") (var "m" :: TypedTerm (M.Map String ([PG.Vertex Term], [PG.Edge Term]))) $
               "current" <~ Optionals.fromOptional (pair (list ([] :: [TypedTerm (PG.Vertex Term)])) (list ([] :: [TypedTerm (PG.Edge Term)]))) (var "existing") $
               Maps.insert (var "table")
                 (pair
                   (Lists.cons (var "v") (Pairs.first $ var "current"))
                   (Pairs.second $ var "current"))
-                (var "m")) $
+                (var "m" :: TypedTerm (M.Map String ([PG.Vertex Term], [PG.Edge Term])))) $
             "addEdge" <~ ("m" ~> "p" ~>
               "table" <~ Pairs.first (var "p") $
               "e" <~ Pairs.second (var "p") $
-              "existing" <~ Maps.lookup (var "table") (var "m") $
+              "existing" <~ Maps.lookup (var "table") (var "m" :: TypedTerm (M.Map String ([PG.Vertex Term], [PG.Edge Term]))) $
               "current" <~ Optionals.fromOptional (pair (list ([] :: [TypedTerm (PG.Vertex Term)])) (list ([] :: [TypedTerm (PG.Edge Term)]))) (var "existing") $
               Maps.insert (var "table")
                 (pair
                   (Pairs.first $ var "current")
                   (Lists.cons (var "e") (Pairs.second $ var "current")))
-                (var "m")) $
-            "vertexMap" <~ Lists.foldl (var "addVertex") Maps.empty (var "vertexPairs") $
+                (var "m" :: TypedTerm (M.Map String ([PG.Vertex Term], [PG.Edge Term])))) $
+            "vertexMap" <~ Lists.foldl (var "addVertex") (Maps.empty :: TypedTerm (M.Map String ([PG.Vertex Term], [PG.Edge Term]))) (var "vertexPairs") $
             right $ Lists.foldl (var "addEdge") (var "vertexMap") (var "edgePairs")))
 
 -- | Convert a data row to a record term given a table type
@@ -395,7 +397,7 @@ parseCsvLine = define "parseCsvLine" $
     -- ((acc, field), inQuotes)
     "chars" <~ Strings.toList (var "line") $
     "initState" <~ pair (pair (list ([] :: [TypedTerm (Maybe String)])) (string "")) (boolean False) $
-    "finalState" <~ Lists.foldl parseCsvChar (var "initState") (var "chars") $
+    "finalState" <~ Lists.foldl (asTerm parseCsvChar) (var "initState") (var "chars") $
     -- Extract final state
     "acc" <~ Pairs.first (Pairs.first $ var "finalState") $
     "field" <~ Pairs.second (Pairs.first $ var "finalState") $
@@ -454,9 +456,9 @@ tableTypesByName :: TypedTermDefinition ([Tab.TableType] -> M.Map Rel.RelationNa
 tableTypesByName = define "tableTypesByName" $
   doc "Build a map from table name to table type" $
   "tableTypes" ~>
-    Maps.fromList $ Lists.map
+    ((Maps.fromList $ Lists.map
       ("t" ~> pair (project Tab._TableType Tab._TableType_name @@ var "t") (var "t"))
-      (var "tableTypes")
+      (var "tableTypes")) :: TypedTerm (M.Map Rel.RelationName Tab.TableType))
 
 -- | Strip leading and trailing whitespace from a string
 stripWhitespace :: TypedTermDefinition (String -> String)
@@ -527,7 +529,7 @@ transformTableRows = define "transformTableRows" $
   doc "Transform all rows from a table through vertex/edge specifications" $
   "cx" ~> "g" ~> "vspecs" ~> "especs" ~> "tableType" ~> "rows" ~>
     Eithers.map
-      ("pairs" ~> Lists.foldl concatPairs (pair (list ([] :: [TypedTerm (PG.Vertex Term)])) (list ([] :: [TypedTerm (PG.Edge Term)]))) (var "pairs"))
+      ("pairs" ~> Lists.foldl (asTerm concatPairs) (pair (list ([] :: [TypedTerm (PG.Vertex Term)])) (list ([] :: [TypedTerm (PG.Edge Term)]))) (var "pairs"))
       (Eithers.mapList
         ("row" ~> transformRecord @@ var "cx" @@ var "g" @@ var "vspecs" @@ var "especs" @@ (termRowToRecord @@ var "tableType" @@ var "row"))
         (var "rows"))

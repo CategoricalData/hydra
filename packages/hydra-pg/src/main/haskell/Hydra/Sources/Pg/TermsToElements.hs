@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 module Hydra.Sources.Pg.TermsToElements where
 
 -- Standard imports for term-level sources outside of the kernel
@@ -10,7 +11,7 @@ import Hydra.Kernel hiding (
   readInjection, readRecord, requireUnique, termToElementsAdapter,
   termToString)
 import Hydra.Dsl.Libraries
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -25,17 +26,17 @@ import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -325,7 +326,10 @@ parseEdgeIdPattern = define "parseEdgeIdPattern" $
             ("terms" ~> Eithers.mapList (Coders.coderEncode (project PGM._Schema PGM._Schema_edgeIds @@ var "schema") @@ var "cx'") (var "terms"))))
 
 -- | Parse an edge specification into a label and encoder function
-parseEdgeSpec :: TypedTermDefinition (InferenceContext -> Graph -> PGM.Schema s t v -> PGM.EdgeSpec
+-- This and parseVertexSpec use `forall s t v.` (no constraint) only to bring `v` into scope for an
+-- in-body `:: TypedTerm (M.Map PG.PropertyKey v)` annotation, needed now that the generated
+-- `Hydra.Dsl.Lib.Maps` requires the map type to be pinned (the key here is concrete, so no `Ord`). See #467.
+parseEdgeSpec :: forall s t v. TypedTermDefinition (InferenceContext -> Graph -> PGM.Schema s t v -> PGM.EdgeSpec
   -> Either Error (PG.Label, InferenceContext -> Term -> Either Error [PG.Element v]))
 parseEdgeSpec = define "parseEdgeSpec" $
   doc "Parse an edge specification into a label and encoder function" $
@@ -345,7 +349,7 @@ parseEdgeSpec = define "parseEdgeSpec" $
                 Eithers.bind (requireUnique @@ var "cx'" @@ string "edge id" @@ (var "getId" @@ var "cx'") @@ var "term")
                   ("tid" ~> Eithers.bind (requireUnique @@ var "cx'" @@ string "vertex id" @@ (var "getOut" @@ var "cx'") @@ var "term")
                     ("tout" ~> Eithers.bind (requireUnique @@ var "cx'" @@ string "edge id" @@ (var "getIn" @@ var "cx'") @@ var "term")
-                      ("tin" ~> Eithers.bind (Eithers.map ("_xs" ~> Maps.fromList (var "_xs")) (Eithers.mapList ("gf" ~> requireUnique @@ var "cx'" @@ string "property key" @@ (var "gf" @@ var "cx'") @@ var "term") (var "getProps")))
+                      ("tin" ~> Eithers.bind (Eithers.map ("_xs" ~> (Maps.fromList (var "_xs") :: TypedTerm (M.Map PG.PropertyKey v))) (Eithers.mapList ("gf" ~> requireUnique @@ var "cx'" @@ string "property key" @@ (var "gf" @@ var "cx'") @@ var "term") (var "getProps")))
                         ("tprops" ~> right (list [inject PG._Element PG._Element_edge
                           (record PG._Edge [
                             PG._Edge_label>>: var "label",
@@ -425,7 +429,7 @@ parseVertexIdPattern = define "parseVertexIdPattern" $
             ("terms" ~> Eithers.mapList (Coders.coderEncode (project PGM._Schema PGM._Schema_vertexIds @@ var "schema") @@ var "cx'") (var "terms"))))
 
 -- | Parse a vertex specification into a label and encoder function
-parseVertexSpec :: TypedTermDefinition (InferenceContext -> Graph -> PGM.Schema s t v -> PGM.VertexSpec
+parseVertexSpec :: forall s t v. TypedTermDefinition (InferenceContext -> Graph -> PGM.Schema s t v -> PGM.VertexSpec
   -> Either Error (PG.Label, InferenceContext -> Term -> Either Error [PG.Element v]))
 parseVertexSpec = define "parseVertexSpec" $
   doc "Parse a vertex specification into a label and encoder function" $
@@ -439,7 +443,7 @@ parseVertexSpec = define "parseVertexSpec" $
           (inject PG._Label PG._Label_vertex $ var "label")
           ("cx'" ~> "term" ~>
             Eithers.bind (requireUnique @@ var "cx'" @@ string "vertex id" @@ (var "getId" @@ var "cx'") @@ var "term")
-              ("tid" ~> Eithers.bind (Eithers.map ("_xs" ~> Maps.fromList (var "_xs")) (Eithers.mapList ("gf" ~> requireUnique @@ var "cx'" @@ string "property key" @@ (var "gf" @@ var "cx'") @@ var "term") (var "getProps")))
+              ("tid" ~> Eithers.bind (Eithers.map ("_xs" ~> (Maps.fromList (var "_xs") :: TypedTerm (M.Map PG.PropertyKey v))) (Eithers.mapList ("gf" ~> requireUnique @@ var "cx'" @@ string "property key" @@ (var "gf" @@ var "cx'") @@ var "term") (var "getProps")))
                 ("tprops" ~> right (list [inject PG._Element PG._Element_vertex
                   (record PG._Vertex [
                     PG._Vertex_label>>: var "label",
@@ -451,16 +455,16 @@ readField :: TypedTermDefinition (InferenceContext -> M.Map Name Term -> Name ->
 readField = define "readField" $
   doc "Read a field from a map of fields by name" $
   "cx" ~> "fields" ~> "fname" ~> "fun" ~>
-    Optionals.cases (Maps.lookup (var "fname") (var "fields")) (left $ Error.errorOther $ Error.otherError (string "no such field: " ++ (Core.unName $ var "fname"))) (var "fun")
+    Optionals.cases (Maps.lookup (var "fname") ((var "fields") :: TypedTerm (M.Map Name Term))) (left $ Error.errorOther $ Error.otherError (string "no such field: " ++ (Core.unName $ var "fname"))) (var "fun")
 
 -- | Read an injection (union value) from a term
 readInjection :: TypedTermDefinition (InferenceContext -> Graph -> [(Name, Term -> Either Error x)] -> Term -> Either Error x)
 readInjection = define "readInjection" $
   doc "Read an injection (union value) from a term" $
   "cx" ~> "g" ~> "cases" ~> "encoded" ~>
-    Eithers.bind (ExtractCore.map @@ ("k" ~> Eithers.map ("_n" ~> Core.name (var "_n")) (ExtractCore.string @@ var "g" @@ var "k")) @@ ("_v" ~> right (var "_v")) @@ var "g" @@ var "encoded")
+    Eithers.bind ((ExtractCore.map @@ ("k" ~> Eithers.map ("_n" ~> Core.name (var "_n")) (ExtractCore.string @@ var "g" @@ var "k")) @@ ("_v" ~> right (var "_v")) @@ var "g" @@ var "encoded") :: TypedTerm (Either Error (M.Map Name Term)))
       ("mp" ~> lets [
-        "entries">: Maps.toList $ var "mp"] $
+        "entries">: Maps.toList ((var "mp") :: TypedTerm (M.Map Name Term))] $
         Optionals.cases (Lists.maybeHead $ var "entries") (left $ Error.errorOther $ Error.otherError $ string "empty injection") (lambda "f" $ lets [
             "key">: Pairs.first $ var "f",
             "val">: Pairs.second $ var "f",
@@ -472,7 +476,7 @@ readRecord :: TypedTermDefinition (InferenceContext -> Graph -> (M.Map Name Term
 readRecord = define "readRecord" $
   doc "Read a record from a term as a map of field names to values" $
   "cx" ~> "g" ~> "cons" ~> "term" ~>
-    Eithers.bind (ExtractCore.map @@ ("k" ~> Eithers.map ("_n" ~> Core.name (var "_n")) (ExtractCore.string @@ var "g" @@ var "k")) @@ ("_v" ~> right (var "_v")) @@ var "g" @@ var "term")
+    Eithers.bind ((ExtractCore.map @@ ("k" ~> Eithers.map ("_n" ~> Core.name (var "_n")) (ExtractCore.string @@ var "g" @@ var "k")) @@ ("_v" ~> right (var "_v")) @@ var "g" @@ var "term") :: TypedTerm (Either Error (M.Map Name Term)))
       (var "cons")
 
 -- | Require exactly one result from a list-producing function

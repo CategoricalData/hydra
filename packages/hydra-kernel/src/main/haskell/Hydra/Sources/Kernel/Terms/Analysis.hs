@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Terms.Analysis where
 
@@ -29,18 +30,18 @@ import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Lib.Math     as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -118,11 +119,11 @@ addNamesToModuleNames = define "addNamesToModuleNames" $
   doc "Add names to existing module names mapping" $
   "encodeModuleName" ~> "names" ~> "ns0" ~>
 --  "nss" <~ Sets.empty $
-  "nss" <~ Sets.fromList (Optionals.cat $ Lists.map (Names.moduleNameOf) $ Sets.toList $ var "names") $
+  "nss" <~ Sets.fromList (Optionals.cat $ Lists.map (asTerm Names.moduleNameOf) $ Sets.toList $ var "names") $
   "toPair" <~ ("ns" ~> pair (var "ns") (var "encodeModuleName" @@ var "ns")) $
   Util.moduleNamesWithMapping (var "ns0") $ Maps.union
     (Util.moduleNamesMapping $ var "ns0")
-    (Maps.fromList $ Lists.map (var "toPair") $ Sets.toList $ var "nss")
+    (Maps.fromList $ Lists.map (var "toPair") $ Sets.toList (var "nss" :: TypedTerm (S.Set ModuleName)))
 
 analyzeFunctionTerm :: TypedTermDefinition (
   InferenceContext ->
@@ -171,7 +172,7 @@ analyzeFunctionTermWithFinish = define "analyzeFunctionTermWithFinish" $
     (var "body")
     (var "tapps") $
   -- Use typeOfTerm but fall back to Nothing if type inference fails (e.g. for untyped hoisted bindings)
-  "mcod" <~ Eithers.either_ (constant nothing) ("c" ~> just (var "c"))
+  "mcod" <~ Eithers.either (constant nothing) ("c" ~> just (var "c"))
     (Checking.typeOfTerm @@ var "cx" @@ (var "getTC" @@ var "fEnv") @@ var "bodyWithTapps") $
   right $ record _FunctionStructure [
     _FunctionStructure_typeParams>>: Lists.reverse (var "tparams"),
@@ -258,8 +259,8 @@ definitionDependencyModuleNames = define "definitionDependencyModuleNames" $
       Dependencies.termDependencyNames @@ true @@ true @@ true @@ Packaging.termDefinitionBody (var "termDef"),
     _Definition_primitive>>: "primDef" ~>
       Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeBody $ Scoping.termSignatureToTypeScheme @@ Packaging.primitiveDefinitionSignature (var "primDef"))]) $
-  "allNames" <~ Sets.unions (Lists.map (var "defNames") (var "defs")) $
-  Sets.fromList (Optionals.cat (Lists.map (Names.moduleNameOf) (Sets.toList (var "allNames"))))
+  "allNames" <~ Sets.unions (Lists.map (var "defNames") (var "defs") :: TypedTerm [S.Set Name]) $
+  Sets.fromList (Optionals.cat (Lists.map (asTerm Names.moduleNameOf) (Sets.toList (var "allNames"))))
 
 dependencyModuleNames :: TypedTermDefinition (InferenceContext -> Graph -> Bool -> Bool -> Bool -> Bool -> [Binding] -> Either Error (S.Set ModuleName))
 dependencyModuleNames = define "dependencyModuleNames" $
@@ -270,8 +271,8 @@ dependencyModuleNames = define "dependencyModuleNames" $
     "deannotatedTerm" <~ Strip.deannotateTerm @@ var "term" $
     "dataNames" <~ Dependencies.termDependencyNames @@ var "binds" @@ var "withPrims" @@ var "withNoms" @@ var "term" $
     "schemaNames" <~ Logic.ifElse (var "withSchema")
-      (Optionals.cases (Core.bindingTypeScheme (var "el")) Sets.empty ("ts" ~> Dependencies.typeDependencyNames @@ true @@ Core.typeSchemeBody (var "ts")))
-      Sets.empty $
+      (Optionals.cases (Core.bindingTypeScheme (var "el")) (Sets.empty :: TypedTerm (S.Set Name)) ("ts" ~> Dependencies.typeDependencyNames @@ true @@ Core.typeSchemeBody (var "ts")))
+      (Sets.empty :: TypedTerm (S.Set Name)) $
     -- Handle encoded types: decode as Type and extract type dependency names
     Logic.ifElse (Predicates.isEncodedType @@ var "deannotatedTerm")
       (Eithers.map ("typ" ~> Sets.unions (list [
@@ -286,8 +287,8 @@ dependencyModuleNames = define "dependencyModuleNames" $
             Dependencies.termDependencyNames @@ var "binds" @@ var "withPrims" @@ var "withNoms" @@ var "decodedTerm"]))
           (Eithers.bimap ("_e" ~> Error.errorDecoding $ var "_e") ("_a" ~> var "_a")
               (decoderFor _Term @@ var "graph" @@ var "term")))
-        (right (Sets.unions (list [var "dataNames", var "schemaNames"]))))) $
-  Eithers.map ("namesList" ~> Sets.fromList (Optionals.cat (Lists.map (Names.moduleNameOf) (
+        (right (Sets.unions (list [var "dataNames", var "schemaNames"] :: TypedTerm [S.Set Name]))))) $
+  Eithers.map ("namesList" ~> Sets.fromList (Optionals.cat (Lists.map (asTerm Names.moduleNameOf) (
       Sets.toList (Sets.unions (var "namesList"))))))
     (Eithers.mapList (var "depNames") (var "els"))
 
@@ -502,7 +503,7 @@ moduleDependencyModuleNames = define "moduleDependencyModuleNames" $
         just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td")),
       _Definition_term>>: "td" ~>
         just (Core.binding (Packaging.termDefinitionName $ var "td") (Packaging.termDefinitionBody $ var "td")
-          (Optionals.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature $ var "td"))])
+          (Optionals.map (asTerm Scoping.termSignatureToTypeScheme) $ Packaging.termDefinitionSignature $ var "td"))])
     (Packaging.moduleDefinitions (var "mod"))) $
   Eithers.map
     ("deps" ~> Sets.delete (Packaging.moduleName (var "mod")) (var "deps"))
@@ -515,5 +516,5 @@ moduleNamesForDefinitions = define "moduleNamesForDefinitions" $
   "encodeModuleName" ~> "focusNs" ~> "defs" ~>
   "nss" <~ Sets.delete (var "focusNs") (definitionDependencyModuleNames @@ var "defs") $
   "toPair" <~ ("ns" ~> pair (var "ns") (var "encodeModuleName" @@ var "ns")) $
-  Util.moduleNames (var "toPair" @@ var "focusNs") (Maps.fromList (Lists.map (var "toPair") (Sets.toList (var "nss"))))
+  Util.moduleNames (var "toPair" @@ var "focusNs") (Maps.fromList (Lists.map (var "toPair") (Sets.toList (var "nss" :: TypedTerm (S.Set ModuleName)))))
 

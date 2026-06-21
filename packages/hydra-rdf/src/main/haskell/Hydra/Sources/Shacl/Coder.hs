@@ -1,8 +1,9 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 module Hydra.Sources.Shacl.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -17,17 +18,17 @@ import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -122,14 +123,14 @@ common = define "common" $
   doc "Construct CommonProperties from a list of constraints, using defaults for other fields" $
   lambda "constraints" $
     record Shacl._CommonProperties [
-      Shacl._CommonProperties_constraints>>: Sets.fromList (var "constraints"),
+      Shacl._CommonProperties_constraints>>: (Sets.fromList (var "constraints") :: TypedTerm (S.Set Shacl.CommonConstraint)),
       Shacl._CommonProperties_deactivated>>: nothing,
-      Shacl._CommonProperties_message>>: wrap Rdf._LangStrings Maps.empty,
+      Shacl._CommonProperties_message>>: wrap Rdf._LangStrings (Maps.empty :: TypedTerm (M.Map (Maybe Rdf.LanguageTag) String)),
       Shacl._CommonProperties_severity>>: inject Shacl._Severity Shacl._Severity_info unit,
-      Shacl._CommonProperties_targetClass>>: Sets.empty,
-      Shacl._CommonProperties_targetNode>>: Sets.empty,
-      Shacl._CommonProperties_targetObjectsOf>>: Sets.empty,
-      Shacl._CommonProperties_targetSubjectsOf>>: Sets.empty]
+      Shacl._CommonProperties_targetClass>>: (Sets.empty :: TypedTerm (S.Set Rdf.RdfsClass)),
+      Shacl._CommonProperties_targetNode>>: (Sets.empty :: TypedTerm (S.Set Rdf.IriOrLiteral)),
+      Shacl._CommonProperties_targetObjectsOf>>: (Sets.empty :: TypedTerm (S.Set Rdf.Property)),
+      Shacl._CommonProperties_targetSubjectsOf>>: (Sets.empty :: TypedTerm (S.Set Rdf.Property))]
 
 -- | Default (empty) CommonProperties
 defaultCommonProperties :: TypedTermDefinition Shacl.CommonProperties
@@ -193,10 +194,10 @@ encodeFieldType = define "encodeFieldType" $
             Shacl._Definition_target>>:
               record Shacl._PropertyShape [
                 Shacl._PropertyShape_common>>: var "__cp",
-                Shacl._PropertyShape_constraints>>: Sets.fromList (Optionals.cat $ list [var "minC", var "maxC"]),
+                Shacl._PropertyShape_constraints>>: (Sets.fromList (Optionals.cat $ list [var "minC", var "maxC"]) :: TypedTerm (S.Set Shacl.PropertyShapeConstraint)),
                 Shacl._PropertyShape_defaultValue>>: nothing,
-                Shacl._PropertyShape_description>>: wrap Rdf._LangStrings Maps.empty,
-                Shacl._PropertyShape_name>>: wrap Rdf._LangStrings Maps.empty,
+                Shacl._PropertyShape_description>>: wrap Rdf._LangStrings (Maps.empty :: TypedTerm (M.Map (Maybe Rdf.LanguageTag) String)),
+                Shacl._PropertyShape_name>>: wrap Rdf._LangStrings (Maps.empty :: TypedTerm (M.Map (Maybe Rdf.LanguageTag) String)),
                 Shacl._PropertyShape_order>>: var "order",
                 Shacl._PropertyShape_path>>: var "iri"]])
         (encodeType @@ var "rname" @@ var "t" @@ var "cx")] $
@@ -212,7 +213,7 @@ encodeList = define "encodeList" $
       (right $ pair
         (list [record Rdf._Description [
           Rdf._Description_subject>>: inject Rdf._Node Rdf._Node_iri (wrap Rdf._Iri (string "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil")),
-          Rdf._Description_graph>>: wrap Rdf._Graph Sets.empty]])
+          Rdf._Description_graph>>: wrap Rdf._Graph (Sets.empty :: TypedTerm (S.Set Rdf.Triple))]])
         (var "cx0"))
       (Optionals.cases (Lists.uncons (var "terms")) (right $ pair (list ([] :: [TypedTerm Rdf.Description])) (var "cx0")) (lambda "p" $ lets [
           "pair1">: nextBlankNode @@ var "cx0",
@@ -239,7 +240,7 @@ encodeList = define "encodeList" $
                   pair
                     (list [record Rdf._Description [
                       Rdf._Description_subject>>: resourceToNode @@ var "subj",
-                      Rdf._Description_graph>>: wrap Rdf._Graph (Sets.fromList (Lists.concat2 (var "firstTriples") (var "restTriples")))]])
+                      Rdf._Description_graph>>: wrap Rdf._Graph (Sets.fromList (Lists.concat2 (var "firstTriples") (var "restTriples")) :: TypedTerm (S.Set Rdf.Triple))]])
                     (var "cx4"))
                 (encodeList @@ var "next" @@ Pairs.second (var "p") @@ var "cx3" @@ var "g"))))
 
@@ -288,14 +289,14 @@ encodeTerm = define "encodeTerm" $
       _Term_literal>>: lambda "lit" $ right $ pair
         (list [record Rdf._Description [
           Rdf._Description_subject>>: inject Rdf._Node Rdf._Node_literal (encodeLiteral @@ var "lit"),
-          Rdf._Description_graph>>: wrap Rdf._Graph Sets.empty]])
+          Rdf._Description_graph>>: wrap Rdf._Graph (Sets.empty :: TypedTerm (S.Set Rdf.Triple))]])
         (var "cx"),
       _Term_map>>: lambda "m" $
         Eithers.map
           ("__r" ~> pair
             (list [record Rdf._Description [
               Rdf._Description_subject>>: resourceToNode @@ var "subject",
-              Rdf._Description_graph>>: wrap Rdf._Graph (Sets.fromList (Lists.concat (Pairs.first (var "__r"))))]])
+              Rdf._Description_graph>>: wrap Rdf._Graph (Sets.fromList (Lists.concat (Pairs.first (var "__r"))) :: TypedTerm (S.Set Rdf.Triple))]])
             (Pairs.second (var "__r")))
           (foldAccumResult
             @@ ("__cx0" ~> lambda "kv" $
@@ -313,7 +314,7 @@ encodeTerm = define "encodeTerm" $
                       (Pairs.second (var "__dr")))
                     (encodeTerm @@ var "node2" @@ (Pairs.second (var "kv")) @@ var "cx2" @@ var "g")))
             @@ var "cx"
-            @@ (Maps.toList (var "m"))),
+            @@ (Maps.toList (var "m" :: TypedTerm (M.Map Term Term)))),
       _Term_wrap>>: lambda "wt" $
         Eithers.map
           ("__dr" ~> lets [
@@ -336,7 +337,7 @@ encodeTerm = define "encodeTerm" $
           ("__r" ~> pair
             (list [withType @@ var "rname" @@ record Rdf._Description [
               Rdf._Description_subject>>: resourceToNode @@ var "subject",
-              Rdf._Description_graph>>: wrap Rdf._Graph (Sets.fromList (Lists.concat (Pairs.first (var "__r"))))]])
+              Rdf._Description_graph>>: wrap Rdf._Graph (Sets.fromList (Lists.concat (Pairs.first (var "__r"))) :: TypedTerm (S.Set Rdf.Triple))]])
             (Pairs.second (var "__r")))
           (foldAccumResult
             @@ ("__cx0" ~> lambda "field" $
@@ -355,7 +356,7 @@ encodeTerm = define "encodeTerm" $
               "cx3">: Pairs.second (var "pair3")] $
               encodeTerm @@ var "node3" @@ var "t" @@ var "cx3" @@ var "g")
             @@ var "cx"
-            @@ (Sets.toList (var "terms"))),
+            @@ (Sets.toList (var "terms" :: TypedTerm (S.Set Term)))),
       _Term_inject>>: lambda "inj" $ lets [
         "rname">: Core.injectionTypeName (var "inj"),
         "field">: Core.injectionField (var "inj")] $
@@ -363,7 +364,7 @@ encodeTerm = define "encodeTerm" $
           ("__r" ~> pair
             (list [withType @@ var "rname" @@ record Rdf._Description [
               Rdf._Description_subject>>: resourceToNode @@ var "subject",
-              Rdf._Description_graph>>: wrap Rdf._Graph (Sets.fromList (Pairs.first (var "__r")))]])
+              Rdf._Description_graph>>: wrap Rdf._Graph (Sets.fromList (Pairs.first (var "__r")) :: TypedTerm (S.Set Rdf.Triple))]])
             (Pairs.second (var "__r")))
           (encodeField @@ var "rname" @@ var "subject" @@ var "field" @@ var "cx" @@ var "g")]
 
@@ -386,7 +387,7 @@ encodeType = define "encodeType" $
             inject Shacl._CommonConstraint Shacl._CommonConstraint_property
               (Sets.fromList (Lists.map
                 ("__p" ~> inject Shacl._Reference Shacl._Reference_definition (var "__p"))
-                (var "__props")))])
+                (var "__props")) :: TypedTerm (S.Set (Shacl.Reference Shacl.PropertyShape)))])
           (Eithers.mapList
             ("__pair" ~> encodeFieldType @@ var "tname" @@ (just (Pairs.first (var "__pair"))) @@ (Pairs.second (var "__pair")) @@ var "cx")
             (Lists.zip (Lists.map ("__i" ~> Literals.int32ToBigint (var "__i")) (Math.range (int32 0) (Lists.length (var "fts")))) (var "fts"))),
@@ -398,8 +399,8 @@ encodeType = define "encodeType" $
               (Sets.fromList (Lists.map
                 ("__p" ~> inject Shacl._Reference Shacl._Reference_anonymous (node @@ list [
                   inject Shacl._CommonConstraint Shacl._CommonConstraint_property
-                    (Sets.fromList (list [inject Shacl._Reference Shacl._Reference_definition (var "__p")]))]))
-                (var "__props")))])
+                    (Sets.fromList (list [inject Shacl._Reference Shacl._Reference_definition (var "__p")]) :: TypedTerm (S.Set (Shacl.Reference Shacl.PropertyShape)))]))
+                (var "__props")) :: TypedTerm (S.Set (Shacl.Reference Shacl.Shape)))])
           (Eithers.mapList
             ("__ft" ~> encodeFieldType @@ var "tname" @@ nothing @@ var "__ft" @@ var "cx")
             (var "fts")),
@@ -408,7 +409,7 @@ encodeType = define "encodeType" $
         right (common @@ list [
           inject Shacl._CommonConstraint Shacl._CommonConstraint_node
             (Sets.fromList (list [
-              inject Shacl._Reference Shacl._Reference_named (nameToIri @@ var "vname")]))])]
+              inject Shacl._Reference Shacl._Reference_named (nameToIri @@ var "vname")]) :: TypedTerm (S.Set (Shacl.Reference Shacl.NodeShape)))])]
 
 -- | Construct a Left Error
 err :: TypedTermDefinition (String -> Either Error a)
@@ -462,10 +463,10 @@ property = define "property" $
   lambda "iri" $
     record Shacl._PropertyShape [
       Shacl._PropertyShape_common>>: defaultCommonProperties,
-      Shacl._PropertyShape_constraints>>: Sets.empty,
+      Shacl._PropertyShape_constraints>>: (Sets.empty :: TypedTerm (S.Set Shacl.PropertyShapeConstraint)),
       Shacl._PropertyShape_defaultValue>>: nothing,
-      Shacl._PropertyShape_description>>: wrap Rdf._LangStrings Maps.empty,
-      Shacl._PropertyShape_name>>: wrap Rdf._LangStrings Maps.empty,
+      Shacl._PropertyShape_description>>: wrap Rdf._LangStrings (Maps.empty :: TypedTerm (M.Map (Maybe Rdf.LanguageTag) String)),
+      Shacl._PropertyShape_name>>: wrap Rdf._LangStrings (Maps.empty :: TypedTerm (M.Map (Maybe Rdf.LanguageTag) String)),
       Shacl._PropertyShape_order>>: nothing,
       Shacl._PropertyShape_path>>: var "iri"]
 
@@ -505,7 +506,7 @@ shaclCoder = define "shaclCoder" $
           (encodeType @@ (Core.bindingName (var "el")) @@ var "__typ" @@ var "cx"))] $
     Eithers.map
       ("__shapes" ~> pair
-        (wrap Shacl._ShapesGraph (Sets.fromList (var "__shapes")))
+        (wrap Shacl._ShapesGraph (Sets.fromList (var "__shapes") :: TypedTerm (S.Set (Shacl.Definition Shacl.Shape))))
         (var "cx"))
       (Eithers.mapList (var "toShape") (var "typeEls"))
 
@@ -544,7 +545,7 @@ withType = define "withType" $
       Rdf._Triple_object>>: inject Rdf._Node Rdf._Node_iri (nameToIri @@ var "name")]] $
     record Rdf._Description [
       Rdf._Description_subject>>: var "subj",
-      Rdf._Description_graph>>: wrap Rdf._Graph (Sets.insert (var "triple") (var "triples"))]
+      Rdf._Description_graph>>: wrap Rdf._Graph (Sets.insert (var "triple") (var "triples") :: TypedTerm (S.Set Rdf.Triple))]
 
 
 -- Utility functions referenced by the coder but defined in Rdf.Utils.

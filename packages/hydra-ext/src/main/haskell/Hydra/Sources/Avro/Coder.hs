@@ -1,8 +1,10 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hydra.Sources.Avro.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel hiding (Result)
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -17,17 +19,17 @@ import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -199,17 +201,17 @@ avroHydraAdapter = define "avroHydraAdapter" $
                       Eithers.map (lambda "pairs" $ Core.termMap (Maps.fromList (var "pairs")))
                         (Eithers.mapList (lambda "e" $ var "pairToHydra" @@ var "cx1" @@ var "e") (var "m"))])
                 (lambda "cx1" $ lambda "m" $
-                  Eithers.map (lambda "mp'" $ inject JM._Value JM._Value_object (Maps.toList (var "mp'")))
+                  Eithers.map (lambda "mp'" $ inject JM._Value JM._Value_object (Maps.toList (var "mp'" :: TypedTerm (M.Map String JM.Value))))
                     (ExtractCore.map @@ (lambda "t" $ ExtractCore.string @@ Graph.emptyGraph @@ var "t")
                       @@ (lambda "t" $ Coders.coderDecode (Coders.adapterCoder (var "ad")) @@ var "cx1" @@ var "t")
-                      @@ Graph.emptyGraph @@ var "m"))))
+                      @@ Graph.emptyGraph @@ var "m" :: TypedTerm (Either Error (M.Map String JM.Value))))))
             (var "env1"))),
 
       -- SchemaNamed
       Avro._Schema_named>>: lambda "n" $ lets [
         "ns">: project Avro._Named Avro._Named_namespace @@ var "n",
         "manns">: namedAnnotationsToCore @@ var "n",
-        "ann">: Logic.ifElse (Maps.null (var "manns")) nothing (just (var "manns")),
+        "ann">: Logic.ifElse (Maps.null (var "manns" :: TypedTerm (M.Map Name Term))) nothing (just (var "manns")),
         "lastNs">: project AvroEnv._AvroEnvironment AvroEnv._AvroEnvironment_namespace @@ var "env0",
         "nextNs">: Optionals.cases (var "ns") (var "lastNs") (lambda "s" $ just (var "s")),
         "env1">: record AvroEnv._AvroEnvironment [
@@ -267,24 +269,24 @@ avroHydraAdapter = define "avroHydraAdapter" $
                     "encodePair">: lambda "cx1" $ lambda "entry" $ lets [
                       "k">: Pairs.first (var "entry"),
                       "v">: Pairs.second (var "entry")] $
-                      Optionals.cases (Maps.lookup (var "k") (var "adaptersByFieldName")) (err @@ var "cx1" @@ Strings.cat (list [string "unrecognized field for ", showQname @@ var "qname", string ": ", var "k"])) (lambda "fad" $ Eithers.map
+                      Optionals.cases (Maps.lookup (var "k") (var "adaptersByFieldName" :: TypedTerm (M.Map String (Avro.Field, AvroHydraAdapter)))) (err @@ var "cx1" @@ Strings.cat (list [string "unrecognized field for ", showQname @@ var "qname", string ": ", var "k"])) (lambda "fad" $ Eithers.map
                           (lambda "v'" $ Core.field (Core.name (var "k")) (var "v'"))
                           (Coders.coderEncode (Coders.adapterCoder (Pairs.second (var "fad"))) @@ var "cx1" @@ var "v")),
                     -- decodeField: decode a Hydra field back to a key-value pair
                     "decodeField">: lambda "cx1" $ lambda "fld" $ lets [
                       "k">: unwrap _Name @@ (project _Field _Field_name @@ var "fld"),
                       "v">: project _Field _Field_term @@ var "fld"] $
-                      Optionals.cases (Maps.lookup (var "k") (var "adaptersByFieldName")) (err @@ var "cx1" @@ Strings.cat (list [string "unrecognized field for ", showQname @@ var "qname", string ": ", var "k"])) (lambda "fad" $ Eithers.map
+                      Optionals.cases (Maps.lookup (var "k") (var "adaptersByFieldName" :: TypedTerm (M.Map String (Avro.Field, AvroHydraAdapter)))) (err @@ var "cx1" @@ Strings.cat (list [string "unrecognized field for ", showQname @@ var "qname", string ": ", var "k"])) (lambda "fad" $ Eithers.map
                           (lambda "v'" $ pair (var "k") (var "v'"))
                           (Coders.coderDecode (Coders.adapterCoder (Pairs.second (var "fad"))) @@ var "cx1" @@ var "v")),
                     -- lossy: any adapter is lossy?
                     "lossy">: Lists.foldl (lambda "b" $ lambda "fad" $ Logic.or (var "b") (Coders.adapterIsLossy (Pairs.second (var "fad"))))
-                      (boolean False) (Maps.elems (var "adaptersByFieldName")),
+                      (boolean False) (Maps.elems (var "adaptersByFieldName" :: TypedTerm (M.Map String (Avro.Field, AvroHydraAdapter)))),
                     -- hfields: Hydra field types
                     "hfields">: Lists.map (lambda "fad" $
                       Core.fieldType (Core.name (project Avro._Field Avro._Field_name @@ Pairs.first (var "fad")))
                         (Coders.adapterTarget (Pairs.second (var "fad"))))
-                      (Maps.elems (var "adaptersByFieldName")),
+                      (Maps.elems (var "adaptersByFieldName" :: TypedTerm (M.Map String (Avro.Field, AvroHydraAdapter)))),
                     "target">: Core.typeRecord (var "hfields")] $
                     right (pair
                       (Coders.adapter (var "lossy") (var "schema") (var "target")
@@ -465,9 +467,9 @@ emptyAvroEnvironment :: TypedTermDefinition AvroEnv.AvroEnvironment
 emptyAvroEnvironment = define "emptyAvroEnvironment" $
   doc "An empty Avro environment with no named adapters, no namespace, and no elements" $
   record (Name "hydra.avro.environment.AvroEnvironment") [
-    (Name "namedAdapters")>>: Maps.empty,
+    (Name "namedAdapters")>>: (Maps.empty :: TypedTerm (M.Map AvroEnv.AvroQualifiedName AvroHydraAdapter)),
     (Name "namespace")>>: nothing,
-    (Name "elements")>>: Maps.empty]
+    (Name "elements")>>: (Maps.empty :: TypedTerm (M.Map Name Binding))]
 
 
 -- | Core functions
@@ -478,7 +480,7 @@ encodeAnnotationValue = define "encodeAnnotationValue" $
   lambda "v" $
     cases JM._Value (var "v") Nothing [
       JM._Value_array>>: lambda "vals" $
-        Core.termList (Lists.map encodeAnnotationValue (var "vals")),
+        Core.termList (Lists.map (asTerm encodeAnnotationValue) (var "vals")),
       JM._Value_boolean>>: lambda "b" $
         MetaTerms.booleanLift (var "b"),
       JM._Value_null>>: constant $
@@ -513,7 +515,7 @@ expectObjectE = define "expectObjectE" $
   doc "Extract a JSON object or return an error" $
   lambda "cx" $ lambda "value" $
     cases JM._Value (var "value") Nothing [
-      JM._Value_object>>: lambda "v" $ right (Maps.fromList (var "v"))]
+      JM._Value_object>>: lambda "v" $ right (Maps.fromList (var "v") :: TypedTerm (M.Map String JM.Value))]
 
 expectStringE :: TypedTermDefinition (InferenceContext -> JM.Value -> Result String)
 expectStringE = define "expectStringE" $
@@ -526,12 +528,12 @@ fieldAnnotationsToCore :: TypedTermDefinition (Avro.Field -> M.Map Name Term)
 fieldAnnotationsToCore = define "fieldAnnotationsToCore" $
   doc "Extract field annotations and convert them to core Name/Term pairs" $
   lambda "f" $
-    Maps.fromList (Lists.map
+    (Maps.fromList (Lists.map
       (lambda "entry" $ lets [
         "k">: Pairs.first (var "entry"),
         "v">: Pairs.second (var "entry")] $
         pair (Core.name (var "k")) (encodeAnnotationValue @@ var "v"))
-      (Maps.toList (project Avro._Field Avro._Field_annotations @@ var "f")))
+      (Maps.toList (project Avro._Field Avro._Field_annotations @@ var "f" :: TypedTerm (M.Map String JM.Value)))) :: TypedTerm (M.Map Name Term))
 
 findAvroPrimaryKeyField :: TypedTermDefinition (InferenceContext -> AvroEnv.AvroQualifiedName -> [Avro.Field] -> Result (Maybe AvroEnv.AvroPrimaryKey))
 findAvroPrimaryKeyField = define "findAvroPrimaryKeyField" $
@@ -548,7 +550,7 @@ foreignKeyE :: TypedTermDefinition (InferenceContext -> Avro.Field -> Result (Ma
 foreignKeyE = define "foreignKeyE" $
   doc "Extract a foreign key annotation from a field, if present" $
   lambda "cx" $ lambda "f" $
-    Optionals.cases (Maps.lookup (avro_foreignKey) (project Avro._Field Avro._Field_annotations @@ var "f")) (right nothing) (lambda "v" $
+    Optionals.cases (Maps.lookup (asTerm avro_foreignKey) (project Avro._Field Avro._Field_annotations @@ var "f")) (right nothing) (lambda "v" $
         Eithers.bind (expectObjectE @@ var "cx" @@ var "v") (lambda "m" $
         Eithers.bind (Eithers.map (lambda "s" $ Core.name (var "s")) (requireStringE @@ var "cx" @@ string "type" @@ var "m")) (lambda "tname" $
         Eithers.bind (optStringE @@ var "cx" @@ string "pattern" @@ var "m") (lambda "pattern_" $
@@ -562,7 +564,7 @@ getAvroHydraAdapter :: TypedTermDefinition (AvroEnv.AvroQualifiedName -> AvroEnv
 getAvroHydraAdapter = define "getAvroHydraAdapter" $
   doc "Look up an adapter by qualified name in the environment" $
   lambda "qname" $ lambda "env" $
-    Maps.lookup (var "qname") (project AvroEnv._AvroEnvironment AvroEnv._AvroEnvironment_namedAdapters @@ var "env")
+    Maps.lookup (var "qname") (project AvroEnv._AvroEnvironment AvroEnv._AvroEnvironment_namedAdapters @@ var "env" :: TypedTerm (M.Map AvroEnv.AvroQualifiedName AvroHydraAdapter))
 
 jsonModelNs :: ModuleName
 jsonModelNs = ModuleName "hydra.json.model"
@@ -583,18 +585,18 @@ namedAnnotationsToCore :: TypedTermDefinition (Avro.Named -> M.Map Name Term)
 namedAnnotationsToCore = define "namedAnnotationsToCore" $
   doc "Extract named type annotations and convert them to core Name/Term pairs" $
   lambda "n" $
-    Maps.fromList (Lists.map
+    (Maps.fromList (Lists.map
       (lambda "entry" $ lets [
         "k">: Pairs.first (var "entry"),
         "v">: Pairs.second (var "entry")] $
         pair (Core.name (var "k")) (encodeAnnotationValue @@ var "v"))
-      (Maps.toList (project Avro._Named Avro._Named_annotations @@ var "n")))
+      (Maps.toList (project Avro._Named Avro._Named_annotations @@ var "n" :: TypedTerm (M.Map String JM.Value)))) :: TypedTerm (M.Map Name Term))
 
 optStringE :: TypedTermDefinition (InferenceContext -> String -> M.Map String JM.Value -> Result (Maybe String))
 optStringE = define "optStringE" $
   doc "Look up an optional string attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
-    Optionals.cases (Maps.lookup (var "fname") (var "m")) (right nothing) (lambda "v" $ Eithers.map (lambda "s" $ Optionals.pure (var "s")) (expectStringE @@ var "cx" @@ var "v"))
+    Optionals.cases (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String JM.Value))) (right nothing) (lambda "v" $ Eithers.map (lambda "s" $ Optionals.pure (var "s")) (expectStringE @@ var "cx" @@ var "v"))
 
 
 -- | Constants
@@ -624,7 +626,7 @@ prepareField = define "prepareField" $
   doc "Prepare a single field, producing an adapter and updated environment" $
   lambda "cx" $ lambda "env" $ lambda "f" $ lets [
     "manns">: fieldAnnotationsToCore @@ var "f",
-    "ann">: Logic.ifElse (Maps.null (var "manns")) nothing (just (var "manns"))] $
+    "ann">: Logic.ifElse (Maps.null (var "manns" :: TypedTerm (M.Map Name Term))) nothing (just (var "manns"))] $
     Eithers.bind (foreignKeyE @@ var "cx" @@ var "f") (lambda "fk" $
     Eithers.bind
       (Optionals.cases
@@ -704,16 +706,16 @@ prepareFields = define "prepareFields" $
             "env2">: Pairs.second (var "result"),
             "k">: Pairs.first (var "kv"),
             "v">: Pairs.second (var "kv")] $
-            right (pair (Maps.insert (var "k") (var "v") (var "m")) (var "env2")))))
-      (right (pair Maps.empty (var "env")))
+            right (pair (Maps.insert (var "k") (var "v") (var "m" :: TypedTerm (M.Map String (Avro.Field, AvroHydraAdapter)))) (var "env2")))))
+      (right (pair (Maps.empty :: TypedTerm (M.Map String (Avro.Field, AvroHydraAdapter))) (var "env")))
       (var "fields")
 
 primaryKeyE :: TypedTermDefinition (InferenceContext -> Avro.Field -> Maybe AvroEnv.AvroPrimaryKey)
 primaryKeyE = define "primaryKeyE" $
   doc "Extract a primary key annotation from a field, if present" $
   lambda "cx" $ lambda "f" $
-    Optionals.cases (Maps.lookup (avro_primaryKey) (project Avro._Field Avro._Field_annotations @@ var "f")) nothing (lambda "v" $
-        Eithers.either_
+    Optionals.cases (Maps.lookup (asTerm avro_primaryKey) (project Avro._Field Avro._Field_annotations @@ var "f")) nothing (lambda "v" $
+        Eithers.either
           (lambda "_" $ nothing)
           (lambda "s" $ just $ record AvroEnv._AvroPrimaryKey [
             AvroEnv._AvroPrimaryKey_fieldName>>: Core.name (project Avro._Field Avro._Field_name @@ var "f"),
@@ -727,7 +729,7 @@ putAvroHydraAdapter = define "putAvroHydraAdapter" $
     record AvroEnv._AvroEnvironment [
       AvroEnv._AvroEnvironment_namedAdapters>>:
         Maps.insert (var "qname") (var "ad")
-          (project AvroEnv._AvroEnvironment AvroEnv._AvroEnvironment_namedAdapters @@ var "env"),
+          (project AvroEnv._AvroEnvironment AvroEnv._AvroEnvironment_namedAdapters @@ var "env" :: TypedTerm (M.Map AvroEnv.AvroQualifiedName AvroHydraAdapter)),
       AvroEnv._AvroEnvironment_namespace>>:
         project AvroEnv._AvroEnvironment AvroEnv._AvroEnvironment_namespace @@ var "env",
       AvroEnv._AvroEnvironment_elements>>:
@@ -737,7 +739,7 @@ requireStringE :: TypedTermDefinition (InferenceContext -> String -> M.Map Strin
 requireStringE = define "requireStringE" $
   doc "Look up a required string attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
-    Optionals.cases (Maps.lookup (var "fname") (var "m")) (err @@ var "cx" @@ (Strings.cat $ list [string "required attribute ", Literals.showString (var "fname"), string " not found"])) (lambda "v" $ expectStringE @@ var "cx" @@ var "v")
+    Optionals.cases (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String JM.Value))) (err @@ var "cx" @@ (Strings.cat $ list [string "required attribute ", Literals.showString (var "fname"), string " not found"])) (lambda "v" $ expectStringE @@ var "cx" @@ var "v")
 
 rewriteAvroSchemaM :: TypedTermDefinition (((Avro.Schema -> Result Avro.Schema) -> Avro.Schema -> Result Avro.Schema) -> Avro.Schema -> Result Avro.Schema)
 rewriteAvroSchemaM = define "rewriteAvroSchemaM" $

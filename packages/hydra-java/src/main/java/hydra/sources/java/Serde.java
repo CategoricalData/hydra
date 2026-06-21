@@ -7,17 +7,17 @@ import hydra.dsl.Packaging;
 import hydra.dsl.Types;
 import hydra.dsl.java.Environment;
 import hydra.dsl.java.Syntax;
-import hydra.dsl.meta.lib.Eithers;
-import hydra.dsl.meta.lib.Equality;
-import hydra.dsl.meta.lib.Lists;
-import hydra.dsl.meta.lib.Literals;
-import hydra.dsl.meta.lib.Logic;
-import hydra.dsl.meta.lib.Maps;
-import hydra.dsl.meta.lib.Math_;
-import hydra.dsl.meta.lib.Optionals;
-import hydra.dsl.meta.lib.Pairs;
-import hydra.dsl.meta.lib.Sets;
-import hydra.dsl.meta.lib.Strings;
+import hydra.dsl.lib.Eithers;
+import hydra.dsl.lib.Equality;
+import hydra.dsl.lib.Lists;
+import hydra.dsl.lib.Literals;
+import hydra.dsl.lib.Logic;
+import hydra.dsl.lib.Maps;
+import hydra.dsl.lib.Math_;
+import hydra.dsl.lib.Optionals;
+import hydra.dsl.lib.Pairs;
+import hydra.dsl.lib.Sets;
+import hydra.dsl.lib.Strings;
 import hydra.packaging.Definition;
 import hydra.packaging.EntityMetadata;
 import hydra.packaging.Module;
@@ -1203,7 +1203,7 @@ public class Serde {
                                             Equality.equal(var("c"), int32(12)),
                                             string("\\f"),
                                             Logic.ifElse(
-                                                Logic.and_(
+                                                Logic.and(
                                                     Equality.gte(var("c"), int32(32)),
                                                     Equality.lt(var("c"), int32(127))),
                                                 Strings.fromList(list(var("c"))),
@@ -1532,7 +1532,7 @@ public class Serde {
                         apply(unwrap(IntegerLiteral.TYPE_), var("il"))),
                     field("suffix",
                         Logic.ifElse(
-                            Logic.or_(
+                            Logic.or(
                                 Equality.gt(
                                     var("i"),
                                     bigint(java.math.BigInteger.valueOf(2147483647L))),
@@ -1850,7 +1850,7 @@ public class Serde {
                                                                 Equality.equal(var("ci"), int32(9)),
                                                                 string("\\t"),
                                                                 Logic.ifElse(
-                                                                    Logic.and_(
+                                                                    Logic.and(
                                                                         Equality.gte(
                                                                             var("ci"),
                                                                             int32(32)),

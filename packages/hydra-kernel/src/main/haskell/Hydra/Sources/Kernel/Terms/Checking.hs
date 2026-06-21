@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 
 {-
 TODO:
@@ -47,18 +48,18 @@ import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Lib.Math     as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -217,7 +218,7 @@ applyTypeArgumentsToType = define "applyTypeArgumentsToType" $
         -- Genuinely polymorphic nominal types still substitute via their resolved
         -- forall (handled by dereferencing the schema type below).
         _Type_variable>>: "tname" ~>
-          Eithers.either_
+          Eithers.either
             -- Unresolvable nominal name: preserve the original behaviour by failing.
             ("_" ~> left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "forall type") (Strings.cat $ list [
               ShowCore.type_ @@ var "t",
@@ -248,8 +249,8 @@ checkForUnboundTypeVariables = define "checkForUnboundTypeVariables" $
         ("_" ~> right unit)) $
     "check" <~ ("typ" ~>
       "freevars" <~ Variables.freeVariablesInType @@ var "typ" $
-      "badvars" <~ Sets.difference (Sets.difference (var "freevars") (var "vars")) (var "svars") $
-      Logic.ifElse (Sets.null $ var "badvars")
+      "badvars" <~ Sets.difference (Sets.difference (var "freevars" :: TypedTerm (S.Set Name)) (var "vars" :: TypedTerm (S.Set Name))) (var "svars" :: TypedTerm (S.Set Name)) $
+      Logic.ifElse (Sets.null (var "badvars" :: TypedTerm (S.Set Name)))
         (right unit)
         (left (Error.errorChecking $ ErrorsChecking.checkingErrorUnboundTypeVariables $ ErrorsChecking.unboundTypeVariablesError (var "badvars") (var "typ")))) $
     "checkOptional" <~ ("m" ~>
@@ -276,7 +277,7 @@ checkForUnboundTypeVariables = define "checkForUnboundTypeVariables" $
       _Term_typeLambda>>: "tl" ~>
         Eithers.bind (var "check" @@ (Core.typeVariable $ Core.typeLambdaParameter $ var "tl"))
           ("_" ~> var "recurse" @@ (Core.typeLambdaBody $ var "tl"))]) $
-  var "checkRecursive" @@ Sets.empty @@ list [string "top level"] @@ nothing @@ var "term0"
+  var "checkRecursive" @@ (Sets.empty :: TypedTerm (S.Set Name)) @@ list [string "top level"] @@ nothing @@ var "term0"
 
 checkNominalApplication :: TypedTermDefinition (InferenceContext -> Graph -> Name -> [Type] -> Prelude.Either Error ((), InferenceContext))
 checkNominalApplication = define "checkNominalApplication" $
@@ -308,7 +309,7 @@ checkType = define "checkType" $
   doc "Check that a term has the expected type" $
   "cx" ~> "tx" ~> "term" ~> "typ" ~>
   "vars" <~ Graph.graphTypeVariables (var "tx") $
-  Logic.ifElse (Constants.debugInference)
+  Logic.ifElse (asTerm Constants.debugInference)
     ("t0" <<~ (Eithers.map ("_p" ~> Pairs.first (var "_p")) (typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "term")) $
       Logic.ifElse (typesEffectivelyEqual @@ var "tx" @@ var "t0" @@ var "typ")
         (right unit)
@@ -321,7 +322,7 @@ checkTypeSubst = define "checkTypeSubst" $
     <> " inappropriately unified with type variables inferred from terms.") $
   "cx" ~> "tx" ~> "subst" ~>
   "s" <~ Typing.unTypeSubst (var "subst") $
-  "vars" <~ Sets.fromList (Maps.keys $ var "s") $
+  "vars" <~ Sets.fromList (Maps.keys (var "s" :: TypedTerm (M.Map Name Type))) $
   "suspectVars" <~ Sets.intersection (var "vars") (Sets.fromList $ Maps.keys $ Graph.graphSchemaTypes $ var "tx") $
   "isNominal" <~ ("ts" ~> cases _Type (Strip.deannotateType @@ (Core.typeSchemeBody $ var "ts"))
     (Just false) [
@@ -332,10 +333,10 @@ checkTypeSubst = define "checkTypeSubst" $
     ("v" ~> Optionals.cases
       (Lexical.dereferenceSchemaType @@ var "v" @@ (Graph.graphSchemaTypes $ var "tx"))
       false (var "isNominal"))
-    (Sets.toList $ var "suspectVars")) $
-  "badPairs" <~ Lists.filter ("p" ~> Sets.member (Pairs.first $ var "p") (var "badVars")) (Maps.toList $ var "s") $
+    (Sets.toList (var "suspectVars" :: TypedTerm (S.Set Name)))) $
+  "badPairs" <~ Lists.filter ("p" ~> Sets.member (Pairs.first $ var "p") (var "badVars" :: TypedTerm (S.Set Name))) (Maps.toList (var "s" :: TypedTerm (M.Map Name Type))) $
   "printPair" <~ ("p" ~> (Core.unName $ Pairs.first $ var "p") ++ (string " --> ") ++ (ShowCore.type_ @@ Pairs.second (var "p"))) $
-  Logic.ifElse (Sets.null $ var "badVars")
+  Logic.ifElse (Sets.null (var "badVars" :: TypedTerm (S.Set Name)))
     (right $ var "subst")
     (left (Error.errorChecking $ ErrorsChecking.checkingErrorIncorrectUnification $ ErrorsChecking.incorrectUnificationError (var "subst")))
 
@@ -356,7 +357,7 @@ containsInScopeTypeVars = define "containsInScopeTypeVars" $
   "tx" ~> "t" ~>
   "vars" <~ Graph.graphTypeVariables (var "tx") $
   "freeVars" <~ Variables.freeVariablesInTypeSimple @@ var "t" $
-  Logic.not $ Sets.null $ Sets.intersection (var "vars") (var "freeVars")
+  Logic.not $ Sets.null $ Sets.intersection (var "vars" :: TypedTerm (S.Set Name)) (var "freeVars" :: TypedTerm (S.Set Name))
 
 formatError :: TypedTerm (Error -> String)
 formatError = "e" ~> ShowError.error_ @@ var "e"
@@ -369,17 +370,17 @@ normalizeTypeFreeVars = define "normalizeTypeFreeVars" $
     cases _Type (var "t")
       (Just $ var "acc") [
       _Type_variable>>: "v" ~>
-        Logic.ifElse (Maps.member (var "v") (var "acc"))
+        Logic.ifElse (Maps.member (var "v") (var "acc" :: TypedTerm (M.Map Name Name)))
           (var "acc")
-          (Maps.insert (var "v") (Core.name $ Strings.cat2 (string "_tv") (Literals.showInt32 $ Maps.size $ var "acc")) (var "acc"))]) $
-  "subst" <~ Rewriting.foldOverType @@ Coders.traversalOrderPre @@ var "collectVars" @@ Maps.empty @@ var "typ" $
+          (Maps.insert (var "v") (Core.name $ Strings.cat2 (string "_tv") (Literals.showInt32 $ Maps.size (var "acc" :: TypedTerm (M.Map Name Name)))) (var "acc" :: TypedTerm (M.Map Name Name)))]) $
+  "subst" <~ Rewriting.foldOverType @@ Coders.traversalOrderPre @@ var "collectVars" @@ (Maps.empty :: TypedTerm (M.Map Name Name)) @@ var "typ" $
   Variables.substituteTypeVariables @@ var "subst" @@ var "typ"
 
 -- Note: with Graph, this converts TypeSchemes back to System F types
 toFContext :: TypedTermDefinition (Graph -> M.Map Name Type)
 toFContext = define "toFContext" $
   doc "Get the bound types from a graph as a type environment" $
-  "cx" ~> Maps.map (Scoping.typeSchemeToFType) $ Graph.graphBoundTypes $ var "cx"
+  "cx" ~> Maps.map (asTerm Scoping.typeSchemeToFType) $ Graph.graphBoundTypes $ var "cx"
 
 typeListsEffectivelyEqual :: TypedTermDefinition (Graph -> [Type] -> [Type] -> Bool)
 typeListsEffectivelyEqual = define "typeListsEffectivelyEqual" $
@@ -515,7 +516,7 @@ typeOfEither = define "typeOfEither" $
       Optionals.cases (Lists.uncons (Pairs.second (var "uc0"))) (var "arityErr") ("uc1" ~>
           "ta1" <~ Pairs.first (var "uc1") $
           Logic.ifElse (Equality.equal (var "n") (int32 2))
-            (Eithers.either_
+            (Eithers.either
               ("leftTerm" ~>
                 "result" <<~ typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "leftTerm" $
                 "leftType" <~ Pairs.first (var "result") $
@@ -589,7 +590,7 @@ typeOfLet = define "typeOfLet" $
   -- Extended type context
   "tx2" <~ (Graph.graphWithBoundTypes (var "tx")
     (Maps.union
-      (Maps.fromList $ Lists.zip (var "bnames") (Lists.map (Scoping.fTypeToTypeScheme) $ var "btypes"))
+      (Maps.fromList $ Lists.zip (var "bnames") (Lists.map (asTerm Scoping.fTypeToTypeScheme) $ var "btypes"))
       (Graph.graphBoundTypes $ var "tx"))) $
   "tResult" <<~ typeOf @@ var "cx" @@ var "tx2" @@ noTypeArgs @@ var "body" $
   "t" <~ Pairs.first (var "tResult") $
@@ -637,7 +638,7 @@ typeOfMap = define "typeOfMap" $
   doc "Reconstruct the type of a map (Either/InferenceContext version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "m" ~>
   "mapArityErr" <~ (left (Error.errorChecking $ ErrorsChecking.checkingErrorTypeArityMismatch $ ErrorsChecking.typeArityMismatchError (Core.typeMap $ Core.mapType Core.typeUnit Core.typeUnit) (int32 2) (Lists.length $ var "typeArgs") (var "typeArgs"))) $
-  Logic.ifElse (Maps.null $ var "m")
+  Logic.ifElse (Maps.null (var "m" :: TypedTerm (M.Map Term Term)))
     (Logic.ifElse (Equality.equal (Lists.length $ var "typeArgs") (int32 2))
       (Optionals.cases (Lists.uncons $ var "typeArgs") (var "mapArityErr") ("uc0" ~>
           "ta0" <~ Pairs.first (var "uc0") $
@@ -646,7 +647,7 @@ typeOfMap = define "typeOfMap" $
               right $ pair (Core.typeMap $ Core.mapType (var "ta0") (var "ta1")) (var "cx"))))
       (var "mapArityErr"))
     -- Nonempty map: type keys and values
-    ("pairs" <~ Maps.toList (var "m") $
+    ("pairs" <~ Maps.toList (var "m" :: TypedTerm (M.Map Term Term)) $
     -- Fold over keys
     "keyFoldResult" <~ Lists.foldl
       ("acc" ~> "p" ~>
@@ -781,7 +782,7 @@ typeOfSet = define "typeOfSet" $
   doc "Reconstruct the type of a set (Either/InferenceContext version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "els" ~>
   "setArityErr" <~ (left (Error.errorChecking $ ErrorsChecking.checkingErrorTypeArityMismatch $ ErrorsChecking.typeArityMismatchError (Core.typeSet Core.typeUnit) (int32 1) (Lists.length $ var "typeArgs") (var "typeArgs"))) $
-  Logic.ifElse (Sets.null $ var "els")
+  Logic.ifElse (Sets.null (var "els" :: TypedTerm (S.Set Term)))
     (Logic.ifElse (Equality.equal (Lists.length $ var "typeArgs") (int32 1))
       (Optionals.cases (Lists.maybeHead $ var "typeArgs") (var "setArityErr") ("ta0" ~> right $ pair (Core.typeSet $ var "ta0") (var "cx")))
       (var "setArityErr"))
@@ -796,7 +797,7 @@ typeOfSet = define "typeOfSet" $
         "cxB" <~ Pairs.second (var "tResult") $
         right $ pair (Lists.concat2 (var "types") (Lists.pure $ var "t")) (var "cxB"))
       (right $ pair (list ([] :: [TypedTerm Type])) (var "cx"))
-      (Sets.toList $ var "els") $
+      (Sets.toList (var "els" :: TypedTerm (S.Set Term))) $
     "foldR" <<~ var "foldResult" $
     "eltypes" <~ Pairs.first (var "foldR") $
     "cx2" <~ Pairs.second (var "foldR") $
@@ -906,8 +907,8 @@ typesAllEffectivelyEqual = define "typesAllEffectivelyEqual" $
   "types" <~ (Graph.graphSchemaTypes $ var "tx") $
   "containsFreeVar" <~ ("t" ~>
     "allVars" <~ Variables.freeVariablesInTypeSimple @@ var "t" $
-    "schemaNames" <~ Sets.fromList (Maps.keys $ var "types") $
-    Logic.not $ Sets.null $ Sets.difference (var "allVars") (var "schemaNames")) $
+    "schemaNames" <~ Sets.fromList (Maps.keys (var "types" :: TypedTerm (M.Map Name TypeScheme))) $
+    Logic.not $ Sets.null $ Sets.difference (var "allVars" :: TypedTerm (S.Set Name)) (var "schemaNames" :: TypedTerm (S.Set Name))) $
   "anyContainsFreeVar" <~ Lists.foldl ("acc" ~> "t" ~> Logic.or (var "acc") (var "containsFreeVar" @@ var "t")) false (var "tlist") $
   Logic.ifElse (var "anyContainsFreeVar")
     true

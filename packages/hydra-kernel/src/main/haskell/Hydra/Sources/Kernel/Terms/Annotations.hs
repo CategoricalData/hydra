@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Terms.Annotations where
 
@@ -22,18 +23,18 @@ import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Lib.Math     as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -117,9 +118,9 @@ aggregateAnnotations = define "aggregateAnnotations" $
   doc "Aggregate annotations from nested structures" $
   "getValue" ~> "getX" ~> "getAnns" ~> "t" ~>
   "toPairs" <~ ("rest" ~> "t" ~> Optionals.cases (var "getValue" @@ var "t") (var "rest") (lambda "yy" (var "toPairs"
-      @@ Lists.cons (Maps.toList (var "getAnns" @@ var "yy")) (var "rest")
+      @@ Lists.cons (Maps.toList (var "getAnns" @@ var "yy" :: TypedTerm (M.Map Name Term))) (var "rest")
       @@ (var "getX" @@ var "yy")))) $
-  Maps.fromList (Lists.concat (var "toPairs" @@ list ([] :: [TypedTerm [(Name, Term)]]) @@ var "t"))
+  (Maps.fromList (Lists.concat (var "toPairs" @@ list ([] :: [TypedTerm [(Name, Term)]]) @@ var "t")) :: TypedTerm (M.Map Name Term))
 
 commentsFromBinding :: TypedTermDefinition (InferenceContext -> Graph -> Binding -> Either Error (Maybe String))
 commentsFromBinding = define "commentsFromBinding" $
@@ -161,7 +162,7 @@ getType :: TypedTermDefinition (Graph -> M.Map Name Term -> Prelude.Either Decod
 getType = define "getType" $
   doc "Get type from annotations" $
   "graph" ~> "anns" ~>
-  Optionals.cases (Maps.lookup (Constants.keyType) (var "anns")) (right nothing) ("dat" ~> Eithers.map (reify just) (decoderFor _Type @@ var "graph" @@ var "dat"))
+  Optionals.cases (Maps.lookup (asTerm Constants.keyType) (var "anns")) (right nothing) ("dat" ~> Eithers.map (reify just) (decoderFor _Type @@ var "graph" @@ var "dat"))
 
 getTypeAnnotation :: TypedTermDefinition (Name -> Type -> Maybe Term)
 getTypeAnnotation = define "getTypeAnnotation" $
@@ -176,12 +177,12 @@ getTypeClasses = define "getTypeClasses" $
     ("de" ~> Error.errorDecoding $ var "de")
     ("x" ~> var "x")
     (decoderFor _Name @@ var "graph" @@ var "term")) $
-  Optionals.cases (getTermAnnotation @@ Constants.keyClasses @@ var "term") (right Maps.empty) ("term" ~>
-      ExtractCore.map
+  Optionals.cases (getTermAnnotation @@ Constants.keyClasses @@ var "term") (right (Maps.empty :: TypedTerm (M.Map Name (S.Set Name)))) ("term" ~>
+      (ExtractCore.map
         @@ var "decodeName"
-        @@ (ExtractCore.setOf @@ var "decodeName" @@ var "graph")
+        @@ ((ExtractCore.setOf @@ var "decodeName" @@ var "graph") :: TypedTerm (Term -> Either Error (S.Set Name)))
         @@ var "graph"
-        @@ (var "term"))
+        @@ (var "term") :: TypedTerm (Either Error (M.Map Name (S.Set Name)))))
 
 getTypeDescription :: TypedTermDefinition (InferenceContext -> Graph -> Type -> Prelude.Either Error (Maybe String))
 getTypeDescription = define "getTypeDescription" $
@@ -192,7 +193,7 @@ getTypeDescription = define "getTypeDescription" $
 hasDescription :: TypedTermDefinition (M.Map Name Term -> Bool)
 hasDescription = define "hasDescription" $
   doc "Check if annotations contain description" $
-  "anns" ~> Optionals.isGiven (Maps.lookup (Constants.keyDescription) (var "anns"))
+  "anns" ~> Optionals.isGiven (Maps.lookup (asTerm Constants.keyDescription) (var "anns"))
 
 hasTypeDescription :: TypedTermDefinition (Type -> Bool)
 hasTypeDescription = define "hasTypeDescription" $
@@ -218,7 +219,7 @@ normalizeTermAnnotations = define "normalizeTermAnnotations" $
   "term" ~>
   "anns" <~ termAnnotationInternal @@ var "term" $
   "stripped" <~ Strip.deannotateTerm @@ var "term" $
-  Logic.ifElse (Maps.null (var "anns"))
+  Logic.ifElse (Maps.null (var "anns" :: TypedTerm (M.Map Name Term)))
     (var "stripped")
     (Core.termAnnotated (Core.annotatedTerm (var "stripped") (wrapAnnotationMap @@ var "anns")))
 
@@ -228,14 +229,14 @@ normalizeTypeAnnotations = define "normalizeTypeAnnotations" $
   "typ" ~>
   "anns" <~ typeAnnotationInternal @@ var "typ" $
   "stripped" <~ Strip.deannotateType @@ var "typ" $
-  Logic.ifElse (Maps.null (var "anns"))
+  Logic.ifElse (Maps.null (var "anns" :: TypedTerm (M.Map Name Term)))
     (var "stripped")
     (Core.typeAnnotated (Core.annotatedType (var "stripped") (wrapAnnotationMap @@ var "anns")))
 
 setAnnotation :: TypedTermDefinition (Name -> Maybe Term -> M.Map Name Term -> M.Map Name Term)
 setAnnotation = define "setAnnotation" $
   doc "Set annotation in map" $
-  "key" ~> "val" ~> "m" ~> Maps.alter (constant (var "val")) (var "key") (var "m")
+  "key" ~> "val" ~> "m" ~> Maps.alter (constant (var "val")) (var "key" :: TypedTerm Name) (var "m" :: TypedTerm (M.Map Name Term))
 
 setDescription :: TypedTermDefinition (Maybe String -> M.Map Name Term -> M.Map Name Term)
 setDescription = define "setDescription" $
@@ -250,7 +251,7 @@ setTermAnnotation = define "setTermAnnotation" $
   "key" ~> "val" ~> "term" ~>
   "term'" <~ Strip.deannotateTerm @@ var "term" $
   "anns" <~ setAnnotation @@ var "key" @@ var "val" @@ (termAnnotationInternal @@ var "term") $
-  Logic.ifElse (Maps.null (var "anns"))
+  Logic.ifElse (Maps.null (var "anns" :: TypedTerm (M.Map Name Term)))
     (var "term'")
     (Core.termAnnotated (Core.annotatedTerm (var "term'") (wrapAnnotationMap @@ var "anns")))
 
@@ -272,7 +273,7 @@ setTypeAnnotation = define "setTypeAnnotation" $
   "key" ~> "val" ~> "typ" ~>
   "typ'" <~ Strip.deannotateType @@ var "typ" $
   "anns" <~ setAnnotation @@ var "key" @@ var "val" @@ (typeAnnotationInternal @@ var "typ") $
-  Logic.ifElse (Maps.null (var "anns"))
+  Logic.ifElse (Maps.null (var "anns" :: TypedTerm (M.Map Name Term)))
     (var "typ'")
     (Core.typeAnnotated (Core.annotatedType (var "typ'") (wrapAnnotationMap @@ var "anns")))
 
@@ -285,10 +286,10 @@ setTypeClasses = define "setTypeClasses" $
     "classes" <~ Pairs.second (var "nameClasses") $
     pair
       (encoderFor _Name @@ var "name")
-      (Core.termSet (Sets.fromList (Lists.map (encoderFor _Name) (Sets.toList (var "classes")))))) $
-  "encoded" <~ Logic.ifElse (Maps.null (var "m"))
+      (Core.termSet (Sets.fromList (Lists.map (encoderFor _Name) (Sets.toList (var "classes" :: TypedTerm (S.Set Name))))))) $
+  "encoded" <~ Logic.ifElse (Maps.null (var "m" :: TypedTerm (M.Map Name (S.Set Name))))
     nothing
-    (just (Core.termMap (Maps.fromList (Lists.map (var "encodePair") (Maps.toList (var "m")))))) $
+    (just (Core.termMap (Maps.fromList (Lists.map (var "encodePair") (Maps.toList (var "m" :: TypedTerm (M.Map Name (S.Set Name)))))))) $
   setTermAnnotation @@ Constants.keyClasses @@ var "encoded" @@ var "term"
 
 setTypeDescription :: TypedTermDefinition (Maybe String -> Type -> Type)
@@ -355,9 +356,9 @@ getAnnotationMap = define "getAnnotationMap" $
       "v" <~ Pairs.second (var "p") $
       Optionals.map ("n" ~> pair (var "n") (var "v")) (var "extractName" @@ var "k")) $
     cases _Term (var "t")
-      (Just Maps.empty) [
-      _Term_map>>: "m" ~> Maps.fromList
-        (Optionals.cat (Lists.map (var "fromEntry") (Maps.toList (var "m"))))]
+      (Just (Maps.empty :: TypedTerm (M.Map Name Term))) [
+      _Term_map>>: "m" ~> (Maps.fromList
+        (Optionals.cat (Lists.map (var "fromEntry") (Maps.toList (var "m" :: TypedTerm (M.Map Term Term))))) :: TypedTerm (M.Map Name Term))]
 
 -- | Wrap a Map<Name, Term> as a TermMap annotation. Each Name key becomes a
 -- TermVariable. Inverse of getAnnotationMap on map-shaped inputs.
@@ -366,7 +367,7 @@ wrapAnnotationMap = define "wrapAnnotationMap" $
   doc "Wrap a Map<Name, Term> as a TermMap annotation. Each Name key becomes a TermVariable." $
   "m" ~> Core.termMap (Maps.fromList
     (Lists.map ("p" ~> pair (Core.termVariable (Pairs.first (var "p"))) (Pairs.second (var "p")))
-      (Maps.toList (var "m"))))
+      (Maps.toList (var "m" :: TypedTerm (M.Map Name Term)))))
 
 -- | Helper (not a registered definition) for creating a type binding from a name and type.
 -- This was previously the deprecated "typeElement" definition.

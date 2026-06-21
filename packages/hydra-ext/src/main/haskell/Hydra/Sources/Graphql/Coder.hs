@@ -1,8 +1,10 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hydra.Sources.Graphql.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -16,17 +18,17 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -348,7 +350,7 @@ encodeTypeName = define "encodeTypeName" $
     "qualName">: Names.qualifyName @@ var "name",
     "local">: Util.qualifiedNameLocal (var "qualName"),
     "mns">: Util.qualifiedNameModuleName (var "qualName"),
-    "prefix">: Optionals.cases (var "mns") (string "") (lambda "ns_" $ Optionals.cases (Maps.lookup (var "ns_") (var "prefixes")) (string "") ("p" ~> var "p"))] $
+    "prefix">: Optionals.cases (var "mns") (string "") (lambda "ns_" $ Optionals.cases (Maps.lookup (var "ns_") (var "prefixes" :: TypedTerm (M.Map ModuleName String))) (string "") ("p" ~> var "p"))] $
     wrap G._Name (Strings.cat2 (var "prefix") (sanitize @@ var "local"))
 
 -- | Encode a union variant field type to a nullable GraphQL FieldDefinition.
@@ -377,12 +379,12 @@ findPrefixes = lambda "modNs" $ lambda "tdefs" $ lets [
   "namespaces">: (Lists.nub :: TypedTerm [ModuleName] -> TypedTerm [ModuleName]) $ Optionals.cat $ Lists.map
     (lambda "td" $ Names.moduleNameOf @@ (Packaging.typeDefinitionName $ var "td"))
     (var "tdefs")] $
-  Maps.fromList $ Lists.map
+  (Maps.fromList $ Lists.map
     (lambda "ns_" $ pair (var "ns_")
       (Logic.ifElse (Equality.equal (var "ns_") (var "modNs"))
         (string "")
         (Strings.cat2 (Formatting.sanitizeWithUnderscores @@ Sets.empty @@ (Packaging.unModuleName $ var "ns_")) (string "_"))))
-    (var "namespaces")
+    (var "namespaces") :: TypedTerm (M.Map ModuleName String))
 
 -- | Top-level entry point: convert a module to GraphQL schema files.
 moduleToGraphql :: TypedTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map FilePath String))
@@ -394,7 +396,7 @@ moduleToGraphql = define "moduleToGraphql" $
     "prefixes">: findPrefixes @@ Packaging.moduleName (var "mod") @@ var "typeDefs",
     "filePath">: Names.moduleNameToFilePath @@ Util.caseConventionCamel @@ (wrap _FileExtension (string "graphql")) @@ Packaging.moduleName (var "mod")] $
     "gtdefs" <<~ (Eithers.mapList (lambda "td" $ encodeTypeDefinition @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "td") (var "typeDefs")) $
-    right (Maps.fromList $ Lists.pure $ pair (var "filePath")
+    right ((Maps.fromList $ Lists.pure $ pair (var "filePath")
       (Serialization.printExpr @@ (Serialization.parenthesize @@
         (GraphqlSerde.documentToExpr @@ (wrap G._Document
           (Lists.map
@@ -402,7 +404,7 @@ moduleToGraphql = define "moduleToGraphql" $
               inject G._Definition G._Definition_typeSystem
                 (inject G._TypeSystemDefinitionOrExtension G._TypeSystemDefinitionOrExtension_definition
                   (inject G._TypeSystemDefinition G._TypeSystemDefinition_type (var "gtdef"))))
-            (var "gtdefs")))))))
+            (var "gtdefs")))))) :: TypedTerm (M.Map FilePath String)))
 
 -- | Sanitize a string for use as a GraphQL identifier
 sanitize :: TypedTermDefinition (String -> String)

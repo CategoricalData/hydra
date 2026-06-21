@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 -- | Coq code generation driver: per-module pipeline, sentence producers,
 -- and cross-module pre-passes. This is the DSL port of the previously
@@ -11,18 +12,18 @@ import Hydra.Kernel
 import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.AsTerm (asTerm)
 import Hydra.Dsl.Libraries
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Coq.Syntax                      as CSyntax
 import qualified Hydra.Dsl.Packaging                       as Packaging
@@ -160,9 +161,9 @@ buildFullModule = define "buildFullModule" $
   "termDefsForSort" <~ Lists.map
     ("td" ~> pair (Pairs.first $ var "td") (Pairs.first $ Pairs.second $ var "td"))
     (var "termDefs") $
-  "termDefMap" <~ Maps.fromList (Lists.map
+  "termDefMap" <~ (Maps.fromList (Lists.map
     ("td" ~> pair (Pairs.first $ var "td") (Pairs.second $ var "td"))
-    (var "termDefs")) $
+    (var "termDefs")) :: TypedTerm (M.Map String (Term, ([Name], Maybe Type)))) $
   "termGroups" <~ (CoqUtils.sortTermDefsSCC @@ var "termDefsForSort") $
   -- Enrich each SCC member with its (term, vars, mType), normalize inner
   -- type lambdas, and rewrite field names.
@@ -185,7 +186,7 @@ buildFullModule = define "buildFullModule" $
               "vs" <~ Pairs.first (var "rest") $
               "mty" <~ Pairs.second (var "rest") $
               pair (var "nm") (pair (var "body2") (pair (var "vs") (var "mty"))))
-            (Maps.lookup (var "nm") (var "termDefMap")))
+            (Maps.lookup (var "nm") (var "termDefMap" :: TypedTerm (M.Map String (Term, ([Name], Maybe Type))))))
         (var "grp")) $
       pair (var "cyc") (var "enriched"))
     (var "termGroups") $
@@ -209,8 +210,8 @@ buildFullModule = define "buildFullModule" $
             "nm" <~ Pairs.first (var "td") $
             "body" <~ Pairs.first (Pairs.second (var "td")) $
             "tv" <~ Pairs.first (Pairs.second (Pairs.second (var "td"))) $
-            "schemeVarNames" <~ (Sets.fromList $ Lists.map
-              ("n" ~> unwrap _Name @@ var "n") (var "tv")) $
+            "schemeVarNames" <~ ((Sets.fromList $ Lists.map
+              ("n" ~> unwrap _Name @@ var "n") (var "tv")) :: TypedTerm (S.Set String)) $
             "body2" <~ (CoqUtils.reorderLetBindings @@
               (CoqUtils.eraseUnboundTypeVarDomains @@ var "schemeVarNames" @@ var "body")) $
             "binders" <~ (mkTypeBinders @@ var "body2" @@ var "tv") $
@@ -231,14 +232,14 @@ buildFullModule = define "buildFullModule" $
     (var "termGroups2")) $
   -- Discover cross-module namespace dependencies via the already-ported
   -- walkers.
-  "allQualifiedNamesFromTypes" <~ (Sets.unions $ Lists.map
+  "allQualifiedNamesFromTypes" <~ ((Sets.unions $ Lists.map
     ("nt" ~> CoqUtils.collectQualifiedNamesInType @@ Pairs.second (var "nt"))
-    (var "typeDefs")) $
-  "allQualifiedNamesFromTerms" <~ (Sets.unions $ Lists.map
+    (var "typeDefs")) :: TypedTerm (S.Set String)) $
+  "allQualifiedNamesFromTerms" <~ ((Sets.unions $ Lists.map
     ("td" ~> CoqUtils.collectQualifiedNamesInTerm @@
       (Pairs.first (Pairs.second (var "td"))))
-    (var "termDefs")) $
-  "allQualifiedNamesFromTermTypes" <~ (Sets.unions $ Optionals.cat $ Lists.map
+    (var "termDefs")) :: TypedTerm (S.Set String)) $
+  "allQualifiedNamesFromTermTypes" <~ ((Sets.unions $ Optionals.cat $ Lists.map
     ("td" ~>
       "mty" <~ Pairs.second (Pairs.second (Pairs.second (var "td"))) $
       Optionals.map
@@ -247,12 +248,12 @@ buildFullModule = define "buildFullModule" $
           "bodyTy">: Pairs.second (var "ep")] $
           CoqUtils.collectQualifiedNamesInType @@ var "bodyTy")
         (var "mty"))
-    (var "termDefs")) $
-  "allQualifiedNames" <~ (Sets.union (var "allQualifiedNamesFromTypes")
-    (Sets.union (var "allQualifiedNamesFromTerms") (var "allQualifiedNamesFromTermTypes"))) $
-  "nsSet" <~ (Sets.fromList $ Lists.map
+    (var "termDefs")) :: TypedTerm (S.Set String)) $
+  "allQualifiedNames" <~ ((Sets.union (var "allQualifiedNamesFromTypes")
+    (Sets.union (var "allQualifiedNamesFromTerms") (var "allQualifiedNamesFromTermTypes"))) :: TypedTerm (S.Set String)) $
+  "nsSet" <~ ((Sets.fromList $ Lists.map
     ("q" ~> CoqUtils.extractQualifiedNamespace @@ var "q")
-    (Sets.toList $ var "allQualifiedNames")) $
+    (Sets.toList (var "allQualifiedNames" :: TypedTerm (S.Set String)))) :: TypedTerm (S.Set String)) $
   -- Keep only namespaces that aren't the current one and have no strict
   -- suffix present in the set (avoid importing both `hydra.foo` and
   -- `hydra.foo.bar` redundantly).
@@ -273,8 +274,8 @@ buildFullModule = define "buildFullModule" $
   "referencedNs" <~ ((Lists.nub :: TypedTerm [String] -> TypedTerm [String]) $ Lists.filter
     ("nsC" ~> Logic.and
       (Logic.not (Equality.equal (var "nsC") (var "nsStr")))
-      (Logic.not (var "hasStrictSuffix" @@ var "nsC" @@ (Sets.toList $ var "nsSet"))))
-    (Sets.toList $ var "nsSet")) $
+      (Logic.not (var "hasStrictSuffix" @@ var "nsC" @@ (Sets.toList (var "nsSet" :: TypedTerm (S.Set String))))))
+    (Sets.toList (var "nsSet" :: TypedTerm (S.Set String)))) $
   "depSentences" <~ (dependencyImports @@ var "referencedNs") $
   -- Assemble the final output: header + imports + type sentences + term
   -- parts + Arguments declarations for parameterized types.
@@ -291,7 +292,7 @@ buildFullModule = define "buildFullModule" $
     var "allTermText",
     var "typeArgsDecls",
     string "\n"]) $
-  Maps.fromList (list [pair (var "path") (var "content")])
+  (Maps.fromList (list [pair (var "path") (var "content")]) :: TypedTerm (M.Map String String))
 
 -- | Produce the list of Coq `Require Import` sentences for a list of
 -- dependency namespace strings. Returns an empty list when the input is
@@ -321,13 +322,13 @@ encodeMutualGroupText = define "encodeMutualGroupText" $
   lambdas ["env", "group"] $
   -- Collect scheme vars across the entire group so each body's unbound-var
   -- erasure uses the union.
-  "groupSchemeVars" <~ (Sets.fromList $ Lists.concat $ Lists.map
+  "groupSchemeVars" <~ ((Sets.fromList $ Lists.concat $ Lists.map
     ("td" ~>
       "rest1" <~ Pairs.second (var "td") $
       "rest2" <~ Pairs.second (var "rest1") $
       "tv" <~ Pairs.first (var "rest2") $
       Lists.map ("n" ~> unwrap _Name @@ var "n") (var "tv"))
-    (var "group")) $
+    (var "group")) :: TypedTerm (S.Set String)) $
   -- For each entry, produce (name, typeText, bodyText).
   "funInfos" <~ (Lists.map
     ("td" ~>
@@ -451,7 +452,7 @@ encodeTermGroupSingleton = define "encodeTermGroupSingleton" $
   "rest2" <~ Pairs.second (var "rest1") $
   "typeVars" <~ Pairs.first (var "rest2") $
   "mType" <~ Pairs.second (var "rest2") $
-  "schemeVarNames" <~ (Sets.fromList $ Lists.map ("n" ~> unwrap _Name @@ var "n") (var "typeVars")) $
+  "schemeVarNames" <~ ((Sets.fromList $ Lists.map ("n" ~> unwrap _Name @@ var "n") (var "typeVars")) :: TypedTerm (S.Set String)) $
   "body2" <~ (CoqUtils.reorderLetBindings @@
     (CoqUtils.eraseUnboundTypeVarDomains @@ var "schemeVarNames" @@ var "body")) $
   "coqBody" <~ (CoqCoderSource.encodeTerm @@ var "env" @@ var "body2") $
@@ -562,7 +563,7 @@ generateTypeGroup = define "generateTypeGroup" $
       (Lists.maybeHead $ var "defs")))
     -- Mutual group (possibly with positivity sanitization).
     (lets [
-      "groupNames">: Sets.fromList $ Lists.map (lambda "d" $ Pairs.first $ var "d") (var "defs"),
+      "groupNames">: ((Sets.fromList $ Lists.map (lambda "d" $ Pairs.first $ var "d") (var "defs")) :: TypedTerm (S.Set String)),
       "hasPositivity">: CoqUtils.hasPositivityIssue @@ var "groupNames" @@ var "defs",
       "sanitizedGroup">: Logic.ifElse (var "hasPositivity")
         (Lists.map
@@ -686,17 +687,17 @@ globalAmbiguousNames = define "globalAmbiguousNames" $
         "nsVal" <~ Pairs.second (var "np") $
         "existing" <~ Optionals.fromOptional
           (Sets.empty :: TypedTerm (S.Set String))
-          (Maps.lookup (var "n") (var "acc")) $
-        Maps.insert (var "n") (Sets.insert (var "nsVal") (var "existing")) (var "acc"))
+          (Maps.lookup (var "n") (var "acc" :: TypedTerm (M.Map String (S.Set String)))) $
+        Maps.insert (var "n") (Sets.insert (var "nsVal") (var "existing" :: TypedTerm (S.Set String))) (var "acc" :: TypedTerm (M.Map String (S.Set String))))
       (Maps.empty :: TypedTerm (M.Map String (S.Set String)))
       (var "allNames")] $
     -- A name is ambiguous iff it appears in >= 2 distinct namespaces.
-    Sets.fromList $ Optionals.cat $ Lists.map
+    (Sets.fromList $ Optionals.cat $ Lists.map
       ("entry" ~> Logic.ifElse
-        (Equality.gte (Lists.length $ Sets.toList $ Pairs.second $ var "entry") (int32 2))
+        (Equality.gte (Lists.length $ Sets.toList $ (Pairs.second $ var "entry" :: TypedTerm (S.Set String))) (int32 2))
         (Phantoms.just $ Pairs.first $ var "entry")
         (Phantoms.nothing :: TypedTerm (Maybe String)))
-      (Maps.toList $ var "nameToNs")
+      (Maps.toList (var "nameToNs" :: TypedTerm (M.Map String (S.Set String)))) :: TypedTerm (S.Set String))
 
 -- | Build the global map from each union-type name to its constructor count.
 -- Used by the encoder's match-exhaustiveness decision.
@@ -1006,15 +1007,15 @@ mkTypeBinders :: TypedTermDefinition (Term -> [Name] -> ([String], [C.Binder]))
 mkTypeBinders = define "mkTypeBinders" $
   doc "Collect type-variable names and the Coq binders needed for a term definition" $
   lambdas ["body", "typeVars"] $
-  "schemeVarNames" <~ (Sets.fromList $ Lists.map
-    ("n" ~> unwrap _Name @@ var "n") (var "typeVars")) $
+  "schemeVarNames" <~ ((Sets.fromList $ Lists.map
+    ("n" ~> unwrap _Name @@ var "n") (var "typeVars")) :: TypedTerm (S.Set String)) $
   "innerTypeVars" <~ Logic.ifElse (Lists.null $ var "typeVars")
     (Sets.empty :: TypedTerm (S.Set String))
     (CoqUtils.collectFreeTypeVars @@ var "body") $
   "explicit" <~ (Lists.map ("n" ~> unwrap _Name @@ var "n") (var "typeVars")) $
   "extras" <~ (Lists.filter
-    ("nm" ~> Logic.not (Sets.member (var "nm") (var "schemeVarNames")))
-    (Sets.toList $ var "innerTypeVars")) $
+    ("nm" ~> Logic.not (Sets.member (var "nm") (var "schemeVarNames" :: TypedTerm (S.Set String))))
+    (Sets.toList (var "innerTypeVars" :: TypedTerm (S.Set String)))) $
   "allTypeVarNames" <~ ((Lists.nub :: TypedTerm [String] -> TypedTerm [String])
     (Lists.concat2 (var "explicit") (var "extras"))) $
   "binders" <~ Lists.map (lambda "v" $ makeTypeBinder @@ var "v") (var "allTypeVarNames") $
@@ -1055,7 +1056,7 @@ moduleToCoq = define "moduleToCoq" $
       (Just (Phantoms.nothing :: TypedTerm (Maybe (String, (Term, ([Name], Maybe Type)))))) [
       _Definition_term>>: "td" ~>
         "msig" <~ (Packaging.termDefinitionSignature $ var "td") $
-        "mts" <~ Optionals.map Scoping.termSignatureToTypeScheme (var "msig") $
+        "mts" <~ Optionals.map (asTerm Scoping.termSignatureToTypeScheme) (var "msig") $
         "vs" <~ Optionals.cases (var "mts") (list ([] :: [TypedTerm Name])) ("ts" ~> Core.typeSchemeVariables $ var "ts") $
         "mty" <~ Optionals.map ("ts" ~> Core.typeSchemeBody $ var "ts") (var "mts") $
         Phantoms.just $ pair
@@ -1067,10 +1068,10 @@ moduleToCoq = define "moduleToCoq" $
   -- Local definition names (both type and term), used to extend the
   -- ambiguous-names set so that cross-module references to those names
   -- stay fully qualified.
-  "localDefNames" <~ (Sets.fromList $ Lists.concat2
+  "localDefNames" <~ ((Sets.fromList $ Lists.concat2
     (Lists.map (lambda "nt" $ Pairs.first $ var "nt") (var "typeDefs"))
-    (Lists.map (lambda "td" $ Pairs.first $ var "td") (var "termDefs"))) $
-  "moduleAmbig" <~ (Sets.union (var "ambiguousNames") (var "localDefNames")) $
+    (Lists.map (lambda "td" $ Pairs.first $ var "td") (var "termDefs"))) :: TypedTerm (S.Set String)) $
+  "moduleAmbig" <~ ((Sets.union (var "ambiguousNames") (var "localDefNames")) :: TypedTerm (S.Set String)) $
   -- Construct the CoqEnvironment record that threads through every encoder.
   "env" <~ (record CE._CoqEnvironment [
     CE._CoqEnvironment_currentNamespace>>: var "nsStr",

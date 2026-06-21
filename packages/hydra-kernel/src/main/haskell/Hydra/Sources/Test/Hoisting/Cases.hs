@@ -22,7 +22,7 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 import Hydra.Testing
-import qualified Hydra.Dsl.Meta.Lib.Pairs as Pairs
+import qualified Hydra.Dsl.Lib.Pairs as Pairs
 
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Hoisting as Hoisting

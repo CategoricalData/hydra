@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Terms.Resolution where
 
@@ -31,18 +32,18 @@ import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Lib.Math     as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -136,22 +137,22 @@ fieldMap = define "fieldMap" $
   doc "Build a map from field name to field term, given a list of fields" $
   "fields" ~>
   "toPair" <~ ("f" ~> pair (Core.fieldName $ var "f") (Core.fieldTerm $ var "f")) $
-  Maps.fromList $ Lists.map (var "toPair") (var "fields")
+  (Maps.fromList $ Lists.map (var "toPair") (var "fields") :: TypedTerm (M.Map Name Term))
 
 fieldTypeMap :: TypedTermDefinition ([FieldType] -> M.Map Name Type)
 fieldTypeMap = define "fieldTypeMap" $
   doc "Build a map from field name to field type, given a list of field types" $
   "fields" ~>
   "toPair" <~ ("f" ~> pair (Core.fieldTypeName $ var "f") (Core.fieldTypeType $ var "f")) $
-  Maps.fromList $ Lists.map (var "toPair") (var "fields")
+  (Maps.fromList $ Lists.map (var "toPair") (var "fields") :: TypedTerm (M.Map Name Type))
 
 fieldTypes :: TypedTermDefinition (InferenceContext -> Graph -> Type -> Either Error (M.Map Name Type))
 fieldTypes = define "fieldTypes" $
   doc "Get field types from a record or union type (Either version)" $
   "cx" ~> "graph" ~> "t" ~>
-  "toMap" <~ ("fields" ~> Maps.fromList (Lists.map
+  "toMap" <~ ("fields" ~> (Maps.fromList (Lists.map
     ("ft" ~> pair (Core.fieldTypeName (var "ft")) (Core.fieldTypeType (var "ft")))
-    (var "fields"))) $
+    (var "fields")) :: TypedTerm (M.Map Name Type))) $
   match _Type (Just (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $
     Error.unexpectedShapeError (string "record or union type") (ShowCore.type_ @@ var "t")))) [
     _Type_forall>>: "ft" ~> fieldTypes @@ var "cx" @@ var "graph" @@ Core.forallTypeBody (var "ft"),
@@ -192,9 +193,9 @@ fullyStripAndNormalizeType = define "fullyStripAndNormalizeType" $
         "newVar" <~ Core.name (Strings.cat2 (string "_") (Literals.showInt32 $ var "depth")) $
         var "go"
           @@ (Math.add (var "depth") (int32 1))
-          @@ (Maps.insert (var "oldVar") (var "newVar") (var "subst"))
+          @@ (Maps.insert (var "oldVar" :: TypedTerm Name) (var "newVar") (var "subst"))
           @@ (Core.forallTypeBody (var "ft"))]) $
-  "result" <~ var "go" @@ int32 0 @@ Maps.empty @@ var "typ" $
+  "result" <~ var "go" @@ int32 0 @@ (Maps.empty :: TypedTerm (M.Map Name Name)) @@ var "typ" $
   "subst" <~ Pairs.first (var "result") $
   "body" <~ Pairs.second (var "result") $
   -- Apply the renaming substitution
@@ -225,14 +226,14 @@ instantiateTypeScheme = define "instantiateTypeScheme" $
   "cx2" <~ Pairs.second (var "result") $
   "subst" <~ Typing.typeSubst (Maps.fromList $ Lists.zip (var "oldVars") (Lists.map (reify Core.typeVariable) $ var "newVars")) $
   -- Build a name-to-name substitution for renaming constraint keys
-  "nameSubst" <~ Maps.fromList (Lists.zip (var "oldVars") (var "newVars")) $
+  "nameSubst" <~ (Maps.fromList (Lists.zip (var "oldVars") (var "newVars")) :: TypedTerm (M.Map Name Name)) $
   -- Rename the keys in the constraints map using the name substitution
   "renamedConstraints" <~ Optionals.map
-    ("oldConstraints" ~> Maps.fromList (Lists.map
+    ("oldConstraints" ~> (Maps.fromList (Lists.map
       ("kv" ~> pair
-        (Optionals.fromOptional (Pairs.first $ var "kv") (Maps.lookup (Pairs.first $ var "kv") (var "nameSubst")))
+        (Optionals.fromOptional (Pairs.first $ var "kv") (Maps.lookup (Pairs.first $ var "kv" :: TypedTerm Name) (var "nameSubst")))
         (Pairs.second $ var "kv"))
-      (Maps.toList $ var "oldConstraints")))
+      (Maps.toList (var "oldConstraints" :: TypedTerm (M.Map Name TypeVariableConstraints)))) :: TypedTerm (M.Map Name TypeVariableConstraints)))
     (Core.typeSchemeConstraints (var "scheme")) $
   pair
     (Core.typeScheme (var "newVars")
@@ -274,7 +275,7 @@ requireSchemaType :: TypedTermDefinition (InferenceContext -> M.Map Name TypeSch
 requireSchemaType = define "requireSchemaType" $
   doc "Look up a schema type and instantiate it, threading InferenceContext" $
   "cx" ~> "types" ~> "tname" ~>
-  Optionals.cases (Maps.lookup (var "tname") (var "types")) (left $
+  Optionals.cases (Maps.lookup (var "tname" :: TypedTerm Name) (var "types")) (left $
       Error.errorResolution $ Error.resolutionErrorNoSuchBinding $ Error.noSuchBindingError (var "tname")) ("ts" ~> right $ instantiateTypeScheme @@ var "cx" @@ (Strip.deannotateTypeSchemeRecursive @@ var "ts"))
 
 requireType :: TypedTermDefinition (InferenceContext -> Graph -> Name -> Either Error Type)

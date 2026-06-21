@@ -26,7 +26,7 @@ import qualified Hydra.Dsl.Parsing as Parsing
 import qualified Hydra.Sources.Kernel.Terms.Parsers as Parsers
 import qualified Hydra.Sources.Json.Parser as JsonParser
 import qualified Hydra.Sources.Json.Writer as JsonWriter
-import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
+import qualified Hydra.Dsl.Lib.Strings as Strings
 
 
 ns :: ModuleName

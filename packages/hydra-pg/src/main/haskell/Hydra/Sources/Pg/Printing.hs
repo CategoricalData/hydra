@@ -1,9 +1,10 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 module Hydra.Sources.Pg.Printing where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel hiding (
   printEdge, printGraph, printLazyGraph, printProperty, printVertex)
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -17,17 +18,17 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -95,13 +96,13 @@ module_ = Module {
   where
     definitions = [
       toDefinition printEdge,
-      toDefinition printGraph,
+      toDefinition (printGraph :: TypedTermDefinition ((String -> String) -> PG.Graph String -> String)),
       toDefinition printLazyGraph,
       toDefinition printProperty,
       toDefinition printVertex]
 
 -- | Print an edge using the provided printer functions
-printEdge :: TypedTermDefinition ((v -> String) -> PG.Edge v -> String)
+printEdge :: forall v. TypedTermDefinition ((v -> String) -> PG.Edge v -> String)
 printEdge = define "printEdge" $
   doc "Print an edge using the provided value printer" $
   "printValue" ~> "edge" ~> lets [
@@ -111,7 +112,7 @@ printEdge = define "printEdge" $
     "inId">: var "printValue" @@ (project PG._Edge PG._Edge_in @@ var "edge"),
     "props">: Strings.intercalate (string ", ") (Lists.map
       ("p" ~> printProperty @@ var "printValue" @@ (Pairs.first $ var "p") @@ (Pairs.second $ var "p"))
-      (Maps.toList $ project PG._Edge PG._Edge_properties @@ var "edge"))] $
+      (Maps.toList ((project PG._Edge PG._Edge_properties @@ var "edge") :: TypedTerm (M.Map PG.PropertyKey v))))] $
     Strings.cat $ list [
       var "id", string ": ",
       string "(", var "outId", string ")-[:",
@@ -121,14 +122,19 @@ printEdge = define "printEdge" $
       var "inId", string ")"]
 
 -- | Print a graph using the provided printer functions
-printGraph :: TypedTermDefinition ((v -> String) -> PG.Graph v -> String)
+-- `Ord v` + `forall` because the graph's vertex/edge maps are keyed by the polymorphic vertex type
+-- `v`, and the generated `Hydra.Dsl.Lib.Maps` exposes the primitive's `Ord` key constraint (the old
+-- hand-written `Meta.Lib.Maps` did not). This also forces a placeholder concrete type at registration
+-- in `definitions`; `v` is phantom/erased so the choice is arbitrary. (printEdge/printVertex below use
+-- a bare `forall v.` with no `Ord` — there the `forall` only names `v` for body annotations.) See #467.
+printGraph :: forall v. Ord v => TypedTermDefinition ((v -> String) -> PG.Graph v -> String)
 printGraph = define "printGraph" $
   doc "Print a graph using the provided value printer" $
   "printValue" ~> "graph" ~>
     printLazyGraph @@ var "printValue" @@
       (record PG._LazyGraph [
-        PG._LazyGraph_vertices>>: Maps.elems (project PG._Graph PG._Graph_vertices @@ var "graph"),
-        PG._LazyGraph_edges>>: Maps.elems (project PG._Graph PG._Graph_edges @@ var "graph")])
+        PG._LazyGraph_vertices>>: Maps.elems ((project PG._Graph PG._Graph_vertices @@ var "graph") :: TypedTerm (M.Map v (PG.Vertex v))),
+        PG._LazyGraph_edges>>: Maps.elems ((project PG._Graph PG._Graph_edges @@ var "graph") :: TypedTerm (M.Map v (PG.Edge v)))])
 
 -- | Print a lazy graph using the provided printer functions
 printLazyGraph :: TypedTermDefinition ((v -> String) -> PG.LazyGraph v -> String)
@@ -154,7 +160,7 @@ printProperty = define "printProperty" $
       var "printValue" @@ var "value"]
 
 -- | Print a vertex using the provided printer functions
-printVertex :: TypedTermDefinition ((v -> String) -> PG.Vertex v -> String)
+printVertex :: forall v. TypedTermDefinition ((v -> String) -> PG.Vertex v -> String)
 printVertex = define "printVertex" $
   doc "Print a vertex using the provided value printer" $
   "printValue" ~> "vertex" ~> lets [
@@ -162,7 +168,7 @@ printVertex = define "printVertex" $
     "id">: var "printValue" @@ (project PG._Vertex PG._Vertex_id @@ var "vertex"),
     "props">: Strings.intercalate (string ", ") (Lists.map
       ("p" ~> printProperty @@ var "printValue" @@ (Pairs.first $ var "p") @@ (Pairs.second $ var "p"))
-      (Maps.toList $ project PG._Vertex PG._Vertex_properties @@ var "vertex"))] $
+      (Maps.toList ((project PG._Vertex PG._Vertex_properties @@ var "vertex") :: TypedTerm (M.Map PG.PropertyKey v))))] $
     Strings.cat $ list [
       var "id", string ": (", var "label", string ": {",
       var "props",

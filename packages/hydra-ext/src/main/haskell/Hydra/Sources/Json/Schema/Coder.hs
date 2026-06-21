@@ -1,8 +1,10 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hydra.Sources.Json.Schema.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -16,17 +18,17 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -129,10 +131,10 @@ constructModule = define "constructModule" $
   lambda "cx" $ lambda "g" $ lambda "mod" $ lambda "typeDefs" $ lets [
     "typeBody">: lambda "td" $
       Core.typeSchemeBody (project _TypeDefinition _TypeDefinition_body @@ var "td"),
-    "typeMap">: Maps.fromList (Lists.map
+    "typeMap">: (Maps.fromList (Lists.map
       ("td" ~> pair (project _TypeDefinition _TypeDefinition_name @@ var "td") (var "typeBody" @@ var "td"))
-      (var "typeDefs"))] $
-    Eithers.map (lambda "ps" $ Maps.fromList (var "ps")) (Eithers.mapList
+      (var "typeDefs")) :: TypedTerm (M.Map Name Type))] $
+    Eithers.map (lambda "ps" $ (Maps.fromList (var "ps") :: TypedTerm (M.Map FilePath JS.Document))) (Eithers.mapList
       ("td" ~> typeDefToDocument @@ var "cx" @@ var "g" @@ var "typeMap"
         @@ (project _TypeDefinition _TypeDefinition_name @@ var "td")
         @@ (var "typeBody" @@ var "td"))
@@ -147,7 +149,7 @@ eitherBranch = define "eitherBranch" $
         (inject JS._Type JS._Type_single (inject JS._TypeName JS._TypeName_object unit)),
       inject JS._Restriction JS._Restriction_object
         (inject JS._ObjectRestriction JS._ObjectRestriction_properties
-          (Maps.singleton (wrap JS._Keyword (var "label")) (wrap JS._Schema (var "res")))),
+          ((Maps.singleton (wrap JS._Keyword (var "label")) (wrap JS._Schema (var "res"))) :: TypedTerm (M.Map JS.Keyword JS.Schema))),
       inject JS._Restriction JS._Restriction_object
         (inject JS._ObjectRestriction JS._ObjectRestriction_required
           (list [wrap JS._Keyword (var "label")])),
@@ -189,7 +191,7 @@ encodeRecordOrUnion = define "encodeRecordOrUnion" $
       (Eithers.mapList ("ft" ~> encodeField @@ var "cx" @@ var "g" @@ var "ft") (var "fields"))
       ("props" ~> lets [
         "objRes">: list [inject JS._Restriction JS._Restriction_object
-          (inject JS._ObjectRestriction JS._ObjectRestriction_properties (Maps.fromList (var "props")))],
+          (inject JS._ObjectRestriction JS._ObjectRestriction_properties ((Maps.fromList (var "props")) :: TypedTerm (M.Map JS.Keyword JS.Schema)))],
         "reqs">: Lists.foldl
           (lambda "acc" $ lambda "f" $ Logic.ifElse (isRequiredField @@ var "f")
             (Lists.concat2 (var "acc") (list [wrap JS._Keyword (Core.unName (project _FieldType _FieldType_name @@ var "f"))]))
@@ -284,7 +286,7 @@ moduleToJsonSchema = define "moduleToJsonSchema" $
     "partitioned">: Environment.partitionDefinitions @@ var "defs",
     "typeDefs">: Pairs.first (var "partitioned")] $
     Eithers.map
-      (lambda "docs" $ Maps.map (lambda "doc" $ JsonSchemaSerde.jsonSchemaDocumentToString @@ var "doc") (var "docs"))
+      (lambda "docs" $ Maps.map (lambda "doc" $ JsonSchemaSerde.jsonSchemaDocumentToString @@ var "doc") (var "docs" :: TypedTerm (M.Map FilePath JS.Document)))
       (constructModule @@ var "cx" @@ var "g" @@ var "mod" @@ var "typeDefs")
 
 nameToPath :: TypedTermDefinition (Name -> FilePath)
@@ -308,9 +310,9 @@ pairRestrictions = define "pairRestrictions" $
       jsType @@ var "optional" @@ inject JS._TypeName JS._TypeName_object unit,
       list [inject JS._Restriction JS._Restriction_object
         (inject JS._ObjectRestriction JS._ObjectRestriction_properties
-          (Maps.fromList (list [
+          ((Maps.fromList (list [
             pair (wrap JS._Keyword (string "first")) (wrap JS._Schema (var "firstRes")),
-            pair (wrap JS._Keyword (string "second")) (wrap JS._Schema (var "secondRes"))])))],
+            pair (wrap JS._Keyword (string "second")) (wrap JS._Schema (var "secondRes"))])) :: TypedTerm (M.Map JS.Keyword JS.Schema)))],
       list [inject JS._Restriction JS._Restriction_object
         (inject JS._ObjectRestriction JS._ObjectRestriction_required
           (list [wrap JS._Keyword (string "first"), wrap JS._Keyword (string "second")]))],
@@ -331,11 +333,11 @@ transitiveTypeDeps = define "transitiveTypeDeps" $
   lambda "typeMap" $ lambda "visited" $ lambda "rootType" $ lets [
     "directDeps">: Dependencies.typeDependencyNames @@ true @@ var "rootType",
     "step">: lambda "acc" $ lambda "n" $
-      Logic.ifElse (Sets.member (var "n") (var "acc"))
+      Logic.ifElse (Sets.member (var "n") (var "acc" :: TypedTerm (S.Set Name)))
         (var "acc")
-        (lets ["acc1">: Sets.insert (var "n") (var "acc")] $
-          Optionals.cases (Maps.lookup (var "n") (var "typeMap")) (var "acc1") ("t" ~> asTerm transitiveTypeDeps @@ var "typeMap" @@ var "acc1" @@ var "t"))] $
-    Lists.foldl (var "step") (var "visited") (Sets.toList (var "directDeps"))
+        (lets ["acc1">: (Sets.insert (var "n") (var "acc") :: TypedTerm (S.Set Name))] $
+          Optionals.cases (Maps.lookup (var "n") (var "typeMap" :: TypedTerm (M.Map Name Type))) (var "acc1") ("t" ~> asTerm transitiveTypeDeps @@ var "typeMap" @@ var "acc1" @@ var "t"))] $
+    Lists.foldl (var "step") (var "visited") (Sets.toList (var "directDeps" :: TypedTerm (S.Set Name)))
 
 typeDefToDocument :: TypedTermDefinition (InferenceContext -> Graph -> M.Map Name Type -> Name -> Type -> Either Error (FilePath, JS.Document))
 typeDefToDocument = define "typeDefToDocument" $
@@ -346,12 +348,12 @@ typeDefToDocument = define "typeDefToDocument" $
       (list [var "rootName"])
       (Lists.filter ("n" ~> Logic.not (Equality.equal (var "n") (var "rootName"))) (var "depNames")),
     "allTypes">: Lists.map
-      ("n" ~> Optionals.fromOptional (Core.typeVariable (var "n")) (Maps.lookup (var "n") (var "typeMap")))
+      ("n" ~> Optionals.fromOptional (Core.typeVariable (var "n")) (Maps.lookup (var "n") (var "typeMap" :: TypedTerm (M.Map Name Type))))
       (var "allNames"),
     "nameSubst">: Dependencies.toShortNames @@ var "allNames",
     "types">: Lists.map ("t" ~> Variables.substituteTypeVariables @@ var "nameSubst" @@ var "t") (var "allTypes"),
-    "names">: Lists.map ("n" ~> Optionals.fromOptional (var "n") (Maps.lookup (var "n") (var "nameSubst"))) (var "allNames"),
-    "subRoot">: Optionals.fromOptional (var "rootName") (Maps.lookup (var "rootName") (var "nameSubst")),
+    "names">: Lists.map ("n" ~> Optionals.fromOptional (var "n") (Maps.lookup (var "n") (var "nameSubst" :: TypedTerm (M.Map Name Name)))) (var "allNames"),
+    "subRoot">: Optionals.fromOptional (var "rootName") (Maps.lookup (var "rootName") (var "nameSubst" :: TypedTerm (M.Map Name Name))),
     "pairs">: Lists.zip (var "names") (var "types")] $
     Eithers.bind
       (Eithers.mapList ("p" ~> typeToKeywordSchemaPair @@ var "cx" @@ var "g"
@@ -360,7 +362,7 @@ typeDefToDocument = define "typeDefToDocument" $
         (nameToPath @@ var "rootName")
         (record JS._Document [
           JS._Document_id>>: nothing,
-          JS._Document_definitions>>: just (Maps.fromList (var "schemas")),
+          JS._Document_definitions>>: just (Maps.fromList (var "schemas") :: TypedTerm (M.Map JS.Keyword JS.Schema)),
           JS._Document_root>>: wrap JS._Schema (list [referenceRestriction @@ var "subRoot"])])))
 
 typeToExpr :: TypedTermDefinition (InferenceContext -> Graph -> Bool -> Type -> Either Error [JS.Restriction])

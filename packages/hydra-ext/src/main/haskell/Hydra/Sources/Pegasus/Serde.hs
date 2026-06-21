@@ -1,8 +1,10 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hydra.Sources.Pegasus.Serde where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -16,17 +18,17 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -144,14 +146,14 @@ namedSchemaToExpr = define "namedSchemaToExpr" $
             Serialization.cst @@ string "record",
             qualifiedNameToExpr @@ var "qn",
             Serialization.curlyBracesList @@ nothing @@ Serialization.fullBlockStyle @@
-              (Lists.map recordFieldToExpr (var "fields"))],
+              (Lists.map (asTerm recordFieldToExpr) (var "fields"))],
         PDL._NamedSchemaType_enum>>: lambda "es" $ lets [
           "fields">: project PDL._EnumSchema PDL._EnumSchema_fields @@ var "es"] $
           Serialization.spaceSep @@ list [
             Serialization.cst @@ string "enum",
             qualifiedNameToExpr @@ var "qn",
             Serialization.curlyBracesList @@ nothing @@ Serialization.fullBlockStyle @@
-              (Lists.map enumFieldToExpr (var "fields"))],
+              (Lists.map (asTerm enumFieldToExpr) (var "fields"))],
         PDL._NamedSchemaType_typeref>>: lambda "schema" $
           Serialization.spaceSep @@ list [
             Serialization.cst @@ string "typeref",
@@ -217,7 +219,7 @@ schemaFileToExpr = define "schemaFileToExpr" $
       (var "pkg"),
     "importsSec">: Logic.ifElse (Lists.null (var "imports"))
       nothing
-      (Optionals.pure (Serialization.newlineSep @@ (Lists.map importToExpr (var "imports")))),
+      (Optionals.pure (Serialization.newlineSep @@ (Lists.map (asTerm importToExpr) (var "imports")))),
     "schemaSecs">: Lists.map (lambda "s" $ Optionals.pure (namedSchemaToExpr @@ var "s")) (var "schemas")] $
     Serialization.doubleNewlineSep @@ (Optionals.cat $
       Lists.concat $ list [
@@ -244,7 +246,7 @@ schemaToExpr = define "schemaToExpr" $
         Serialization.noSep @@ list [
           Serialization.cst @@ string "union",
           Serialization.bracketList @@ Serialization.fullBlockStyle @@
-            (Lists.map unionMemberToExpr (unwrap PDL._UnionSchema @@ var "us"))]]
+            (Lists.map (asTerm unionMemberToExpr) (unwrap PDL._UnionSchema @@ var "us"))]]
 
 unionMemberToExpr :: TypedTermDefinition (PDL.UnionMember -> Expr)
 unionMemberToExpr = define "unionMemberToExpr" $

@@ -1,24 +1,26 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hydra.Demos.Genpg.ExampleMapping where
 
 import Hydra.Core (Term)
 import Hydra.Pg.Model (Edge, Vertex, LazyGraph)
 import Hydra.Formatting (decapitalize)
 import Hydra.Typed (TypedTerm)
-import Hydra.Dsl.Meta.Phantoms ((@@), constant, just, lambda, nothing, string, var)
+import Hydra.Dsl.Meta.Phantoms ((@@), constant, just, lambda, list, nothing, string, var)
 import Hydra.Dsl.Pg.Mappings (column, edge, edgeNoId, graph, property, vertex)
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Optionals as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Strings as Strings
 import Hydra.Demos.Genpg.ExampleGraphSchema
 
 -- Helpers -----------------------
 
 labeledIntId :: String -> TypedTerm (r -> Maybe Int) -> TypedTerm (r -> String)
 labeledIntId itype iid = lambda "r" $ Optionals.map
-  (lambda "i" $ Strings.concat [
+  (lambda "i" $ Strings.cat (list [
     string $ decapitalize itype,
     string "_",
-    Literals.showInt32 $ var "i"])
+    Literals.showInt32 $ var "i"]))
   (iid @@ var "r")
 
 interactionVertex :: String -> String -> Vertex Term

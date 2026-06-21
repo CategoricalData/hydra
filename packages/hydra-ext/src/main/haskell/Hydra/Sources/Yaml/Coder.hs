@@ -1,23 +1,24 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Yaml.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Errors                      as Error
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Yaml.Model                       as Yaml
 import qualified Hydra.Dsl.Terms                           as Terms
 import qualified Hydra.Dsl.Types                           as Types
@@ -279,13 +280,13 @@ termCoder = define "termCoder" $
           cases _Term (var "term")
             (Just $ left (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected map term, found: ", ShowCore.term @@ var "term"]))) [
             _Term_map>>: "m" ~>
-              "entries" <<~ Eithers.mapList ("entry" ~> var "encodeEntry" @@ var "cx" @@ var "entry") (Maps.toList $ var "m") $
+              "entries" <<~ Eithers.mapList ("entry" ~> var "encodeEntry" @@ var "cx" @@ var "entry") (Maps.toList (var "m" :: TypedTerm (M.Map Term Term))) $
               right (Yaml.nodeMapping $ Maps.fromList $ var "entries")])
         ("cx" ~> "n" ~>
           cases YM._Node (var "n")
             (Just $ left (Error.errorOther $ Error.otherError (string "expected mapping"))) [
             YM._Node_mapping>>: "m" ~>
-              "entries" <<~ Eithers.mapList ("entry" ~> var "decodeEntry" @@ var "cx" @@ var "entry") (Maps.toList $ var "m") $
+              "entries" <<~ Eithers.mapList ("entry" ~> var "decodeEntry" @@ var "cx" @@ var "entry") (Maps.toList (var "m" :: TypedTerm (M.Map YM.Node YM.Node))) $
               right (Core.termMap $ Maps.fromList $ var "entries")]),
     _Type_optional>>: "maybeElementType" ~>
       "maybeElementCoder" <<~ termCoder @@ var "maybeElementType" @@ var "cx" @@ var "g" $

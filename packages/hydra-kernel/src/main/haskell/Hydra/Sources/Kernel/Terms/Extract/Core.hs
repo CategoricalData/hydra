@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Terms.Extract.Core where
 
@@ -13,18 +14,18 @@ import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Lib.Math     as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -88,10 +89,10 @@ module_ = Module {
      toDefinition decimalLiteral,
      toDefinition decodeEither,
      toDefinition decodeList,
-     toDefinition decodeMap,
+     toDefinition (decodeMap :: TypedTermDefinition ((Graph -> Term -> Either DecodingError Int) -> (Graph -> Term -> Either DecodingError v) -> Graph -> Term -> Either DecodingError (M.Map Int v))),
      toDefinition decodeMaybe,
      toDefinition decodePair,
-     toDefinition decodeSet,
+     toDefinition (decodeSet :: TypedTermDefinition ((Graph -> Term -> Either DecodingError Int) -> Graph -> Term -> Either DecodingError (S.Set Int))),
      toDefinition decodeUnit,
      toDefinition decodeWrapped,
      toDefinition eitherTerm,
@@ -124,7 +125,7 @@ module_ = Module {
      toDefinition listOf,
      toDefinition listType,
      toDefinition literal,
-     toDefinition map,
+     toDefinition (map :: TypedTermDefinition ((Term -> Prelude.Either Error Int) -> (Term -> Prelude.Either Error v) -> Graph -> Term -> Prelude.Either Error (M.Map Int v))),
      toDefinition mapType,
      toDefinition nArgs,
      toDefinition optionalTerm,
@@ -134,7 +135,7 @@ module_ = Module {
      toDefinition recordType,
      toDefinition requireField,
      toDefinition set,
-     toDefinition setOf,
+     toDefinition (setOf :: TypedTermDefinition ((Term -> Prelude.Either Error Int) -> Graph -> Term -> Prelude.Either Error (S.Set Int))),
      toDefinition setType,
      toDefinition string,
      toDefinition stringLiteral,
@@ -265,7 +266,7 @@ decodeEither = define "decodeEither" $
     ("stripped" ~> Phantoms.cases _Term (var "stripped")
       (Just $ left $ Error.decodingError $ Phantoms.string "expected either value") [
       _Term_either>>: "e" ~>
-        Eithers.either_
+        Eithers.either
           -- Left case: decode the left value, then wrap result in Left
           ("lv" ~> Eithers.map ("x" ~> left (var "x")) (var "leftDecoder" @@ var "g" @@ var "lv"))
           -- Right case: decode the right value, then wrap result in Right
@@ -288,7 +289,12 @@ decodeList = define "decodeList" $
 -- | Decode a Map using the provided key and value decoders
 
 -- | Decode a Map using the provided key and value decoders
-decodeMap :: TypedTermDefinition ((Graph -> Term -> Either DecodingError k) -> (Graph -> Term -> Either DecodingError v) -> Graph -> Term -> Either DecodingError (M.Map k v))
+-- The generic decoders below (decodeMap/decodeSet/map/setOf) carry an `Ord` constraint and a `forall`
+-- because the generated `Hydra.Dsl.Lib.{Maps,Sets}` expose the primitive's `Ord` key/element
+-- constraint (the old hand-written `Meta.Lib.*` did not). This also forces the otherwise-bare builder
+-- `reify Maps.fromList` to be spelled out as `reify (Maps.fromList :: TypedTerm [(k,v)] -> TypedTerm
+-- (M.Map k v))` so GHC can see the `Ord k`, and a placeholder concrete type at registration. See #467.
+decodeMap :: forall k v. Ord k => TypedTermDefinition ((Graph -> Term -> Either DecodingError k) -> (Graph -> Term -> Either DecodingError v) -> Graph -> Term -> Either DecodingError (M.Map k v))
 decodeMap = define "decodeMap" $
   doc "Decode a Map using the provided key and value decoders" $
   "keyDecoder" ~> "valDecoder" ~> "g" ~> "term" ~>
@@ -297,13 +303,13 @@ decodeMap = define "decodeMap" $
     ("stripped" ~> Phantoms.cases _Term (var "stripped")
       (Just $ left $ Error.decodingError $ Phantoms.string "expected map") [
       _Term_map>>: "m" ~>
-        Eithers.map (reify Maps.fromList)
+        Eithers.map (reify (Maps.fromList :: TypedTerm [(k, v)] -> TypedTerm (M.Map k v)))
           (Eithers.mapList
             ("kv" ~>
               Eithers.bind (var "keyDecoder" @@ var "g" @@ (Pairs.first $ var "kv"))
                 ("k" ~> Eithers.map ("v" ~> Phantoms.pair (var "k") (var "v"))
                   (var "valDecoder" @@ var "g" @@ (Pairs.second $ var "kv"))))
-            (Maps.toList $ var "m"))])
+            (Maps.toList (var "m" :: TypedTerm (M.Map Term Term))))])
 
 -- | Decode a Maybe value using the provided element decoder
 
@@ -337,7 +343,7 @@ decodePair = define "decodePair" $
 -- | Decode a Set using the provided element decoder
 
 -- | Decode a Set using the provided element decoder
-decodeSet :: TypedTermDefinition ((Graph -> Term -> Either DecodingError a) -> Graph -> Term -> Either DecodingError (S.Set a))
+decodeSet :: forall a. Ord a => TypedTermDefinition ((Graph -> Term -> Either DecodingError a) -> Graph -> Term -> Either DecodingError (S.Set a))
 decodeSet = define "decodeSet" $
   doc "Decode a Set using the provided element decoder" $
   "elemDecoder" ~> "g" ~> "term" ~>
@@ -346,8 +352,8 @@ decodeSet = define "decodeSet" $
     ("stripped" ~> Phantoms.cases _Term (var "stripped")
       (Just $ left $ Error.decodingError $ Phantoms.string "expected set") [
       _Term_set>>: "s" ~>
-        Eithers.map (reify Sets.fromList)
-          (Eithers.mapList (var "elemDecoder" @@ var "g") (Sets.toList $ var "s"))])
+        Eithers.map (reify (Sets.fromList :: TypedTerm [a] -> TypedTerm (S.Set a)))
+          (Eithers.mapList (var "elemDecoder" @@ var "g") (Sets.toList (var "s" :: TypedTerm (S.Set Term))))])
 
 -- | Decode a unit value
 
@@ -388,7 +394,7 @@ eitherTerm = define "eitherTerm" $
     (Just (unexpected
       (Phantoms.string "either value")
       (ShowCore.term @@ var "term"))) [
-    _Term_either>>: "et" ~> Eithers.either_
+    _Term_either>>: "et" ~> Eithers.either
       ("l" ~> Eithers.map (reify left) (var "leftFun" @@ var "l"))
       ("r" ~> Eithers.map (reify right) (var "rightFun" @@ var "r"))
       (var "et")]
@@ -641,7 +647,7 @@ literal = define "literal" $
     (Just (unexpected(Phantoms.string "literal") (ShowCore.term @@ var "term"))) [
     _Term_literal>>: "lit" ~> right (var "lit")]
 
-map :: TypedTermDefinition ((Term -> Prelude.Either Error k) -> (Term -> Prelude.Either Error v) -> Graph -> Term -> Prelude.Either Error (M.Map k v))
+map :: forall k v. Ord k => TypedTermDefinition ((Term -> Prelude.Either Error k) -> (Term -> Prelude.Either Error v) -> Graph -> Term -> Prelude.Either Error (M.Map k v))
 map = define "map" $
   doc "Extract a map of key-value pairs from a term, mapping functions over each key and value" $
   "fk" ~> "fv" ~> "graph" ~> "term0" ~>
@@ -656,7 +662,7 @@ map = define "map" $
     (Just (unexpected
       (Phantoms.string "map")
       (ShowCore.term @@ var "term"))) [
-    _Term_map>>: "m" ~> Eithers.map (reify Maps.fromList) (Eithers.mapList (var "pair") (Maps.toList (var "m")))]
+    _Term_map>>: "m" ~> Eithers.map (reify (Maps.fromList :: TypedTerm [(k, v)] -> TypedTerm (M.Map k v))) (Eithers.mapList (var "pair") (Maps.toList (var "m" :: TypedTerm (M.Map Term Term))))]
 
 mapType :: TypedTermDefinition (Type -> Prelude.Either Error MapType)
 mapType = define "mapType" $
@@ -696,10 +702,10 @@ nArgs = define "nArgs" $
   "name" ~> "n" ~> "args" ~>
   Logic.ifElse (Equality.equal (Lists.length (var "args")) (var "n"))
     (right Phantoms.unit)
-    (unexpected(Strings.concat [
+    (unexpected(Strings.cat (Phantoms.list [
       Literals.showInt32 (var "n"),
       Phantoms.string " arguments to primitive ",
-      Literals.showString (Core.unName (var "name"))]) (Literals.showInt32 (Lists.length (var "args"))))
+      Literals.showString (Core.unName (var "name"))])) (Literals.showInt32 (Lists.length (var "args"))))
 
 pair :: TypedTermDefinition ((Term -> Prelude.Either Error k) -> (Term -> Prelude.Either Error v) -> Graph -> Term -> Prelude.Either Error (k, v))
 pair = define "pair" $
@@ -747,7 +753,7 @@ requireField :: TypedTermDefinition (String -> (Graph -> Term -> Either Decoding
 requireField = define "requireField" $
   doc "Require a field from a record's field map and decode it" $
   "fieldName" ~> "decoder" ~> "fieldMap" ~> "g" ~>
-  Optionals.cases (Maps.lookup (Phantoms.wrap _Name $ var "fieldName") $ var "fieldMap") (left $ Error.decodingError $ Strings.cat $ Phantoms.list [Phantoms.string "missing field ", var "fieldName", Phantoms.string " in record"]) ("fieldTerm" ~> var "decoder" @@ var "g" @@ var "fieldTerm")
+  Optionals.cases (Maps.lookup (Phantoms.wrap _Name $ var "fieldName") (var "fieldMap" :: TypedTerm (M.Map Name Term))) (left $ Error.decodingError $ Strings.cat $ Phantoms.list [Phantoms.string "missing field ", var "fieldName", Phantoms.string " in record"]) ("fieldTerm" ~> var "decoder" @@ var "g" @@ var "fieldTerm")
 
 -- | Convert a Record to a Map from field Name to Term
 
@@ -760,12 +766,12 @@ set = define "set" $
     (Just (unexpected(Phantoms.string "set") (ShowCore.term @@ var "stripped"))) [
     _Term_set>>: "s" ~> right (var "s")]
 
-setOf :: TypedTermDefinition ((Term -> Prelude.Either Error x) -> Graph -> Term -> Prelude.Either Error (S.Set x))
+setOf :: forall x. Ord x => TypedTermDefinition ((Term -> Prelude.Either Error x) -> Graph -> Term -> Prelude.Either Error (S.Set x))
 setOf = define "setOf" $
   doc "Extract a set of values from a term, mapping a function over each element" $
   "f" ~> "graph" ~> "term" ~>
   "els" <<~ set @@ var "graph" @@ var "term" $
-  Eithers.mapSet (var "f") (var "els")
+  Eithers.mapSet (var "f" :: TypedTerm (Term -> Either Error x)) (var "els" :: TypedTerm (S.Set Term))
 
 setType :: TypedTermDefinition (Type -> Prelude.Either Error Type)
 setType = define "setType" $
@@ -816,10 +822,10 @@ toFieldMap :: TypedTermDefinition (Record -> M.Map Name Term)
 toFieldMap = define "toFieldMap" $
   doc "Convert a Record's fields to a Map from Name to Term" $
   "record" ~>
-  Maps.fromList $
+  (Maps.fromList (
     Lists.map
       ("f" ~> Phantoms.pair (Core.fieldName $ var "f") (Core.fieldTerm $ var "f"))
-      (Core.recordFields $ var "record")
+      (Core.recordFields $ var "record")) :: TypedTerm (M.Map Name Term))
 uint16 :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error Int)
 uint16 = define "uint16" $
   doc "Extract a 16-bit unsigned integer value from a term" $

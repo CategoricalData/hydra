@@ -1,18 +1,19 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 module Hydra.Sources.Validate.Pg where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel hiding (Edge(..), _Edge, _Edge_in, _Edge_out, Element(..), _Element, Graph(..), _Graph)
 import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Meta.Core                       as Core
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Validation                      as Validation
 import           Prelude hiding ((++))
 import qualified Data.List                                 as L
@@ -41,7 +42,7 @@ module_ = Module {
      toDefinition defaultPgProfile,
      toDefinition enabledPg,
      toDefinition validateEdge,
-     toDefinition validateGraph,
+     toDefinition (validateGraph :: TypedTermDefinition (ValidationProfile -> ValidationResult (InvalidGraphError Int) -> (t -> Int -> Maybe InvalidValueError) -> PG.GraphSchema t -> PG.Graph Int -> ValidationResult (InvalidGraphError Int))),
      toDefinition validateProperties,
      toDefinition validateVertex]
 
@@ -391,7 +392,11 @@ validateEdge = validationDefinition "validateEdge" $
 -- The accumulator is threaded across the two phases (vertices, then
 -- edges) so 'maxErrors' is enforced over the entire graph, not per
 -- phase.
-validateGraph :: TypedTermDefinition (
+-- `Ord v` + `forall` here because the graph's vertex/edge maps are keyed by the polymorphic vertex
+-- type `v`, and the generated `Hydra.Dsl.Lib.Maps` exposes the primitive's `Ord` key constraint (the
+-- old hand-written `Meta.Lib.Maps` did not). This also forces a placeholder concrete type (`Int`) at
+-- registration in `definitions`; `v` is phantom/erased so the choice is arbitrary. See #467.
+validateGraph :: forall t v. Ord v => TypedTermDefinition (
      ValidationProfile
   -> ValidationResult (InvalidGraphError v)
   -> (t -> v -> Maybe InvalidValueError)
@@ -406,21 +411,21 @@ validateGraph = validationDefinition "validateGraph" $
     -- in/out vertex existence/label checks. Lifted into Just so the
     -- profile is the only thing controlling whether those rules fire.
     "labelForVertexId">: just $ "i" ~>
-      Optionals.map (project _Vertex _Vertex_label) (Maps.lookup (var "i") (project _Graph _Graph_vertices @@ var "graph")),
+      Optionals.map (project _Vertex _Vertex_label) (Maps.lookup (var "i" :: TypedTerm v) (project _Graph _Graph_vertices @@ var "graph")),
     -- vertexFindings: for each vertex, run validateVertex and lift each
     -- per-vertex finding into InvalidGraphError via the wrapper. The
     -- lift is unconditional — it does not go through the per-rule
     -- guard machinery; the gating already happened inside
     -- validateVertex.
     "vertexFindings">: Lists.bind
-      (Maps.elems $ project _Graph _Graph_vertices @@ var "graph")
+      (Maps.elems (project _Graph _Graph_vertices @@ var "graph" :: TypedTerm (M.Map v (PG.Vertex v))))
       ("el" ~> lets [
         -- For each vertex, look up its expected type. If the vertex's
         -- label is not in the schema, synthesize a one-finding
         -- ValidationResult so the orchestrator can lift it as if it
         -- came from validateVertex.
         "tOpt">: Maps.lookup
-          (project _Vertex _Vertex_label @@ var "el")
+          (project _Vertex _Vertex_label @@ var "el" :: TypedTerm PG.VertexLabel)
           (project _GraphSchema _GraphSchema_vertices @@ var "schema"),
         "perVertex">: Optionals.cases (var "tOpt") (Validation.validationResult
             (list [
@@ -437,10 +442,10 @@ validateGraph = validationDefinition "validateGraph" $
             (Validation.validationResultErrors $ var "perVertex")),
     -- edgeFindings: same shape for edges.
     "edgeFindings">: Lists.bind
-      (Maps.elems $ project _Graph _Graph_edges @@ var "graph")
+      (Maps.elems (project _Graph _Graph_edges @@ var "graph" :: TypedTerm (M.Map v (PG.Edge v))))
       ("el" ~> lets [
         "tOpt">: Maps.lookup
-          (project _Edge _Edge_label @@ var "el")
+          (project _Edge _Edge_label @@ var "el" :: TypedTerm PG.EdgeLabel)
           (project _GraphSchema _GraphSchema_edges @@ var "schema"),
         "perEdge">: Optionals.cases (var "tOpt") (Validation.validationResult
             (list [
@@ -475,7 +480,10 @@ validateGraph = validationDefinition "validateGraph" $
 -- not in schema), 'invalidValue' (per actual key whose value fails the
 -- caller's checkValue). Each finding is a per-property
 -- 'InvalidElementPropertyError' (key + inner InvalidPropertyError).
-validateProperties :: TypedTermDefinition (
+-- The `forall t v.` (no constraint) exists only to bring the type vars into scope for in-body
+-- `:: TypedTerm (M.Map PG.PropertyKey v)` annotations, needed now that the generated
+-- `Hydra.Dsl.Lib.Maps` requires the map type to be pinned (the key here is concrete, so no `Ord`). See #467.
+validateProperties :: forall t v. TypedTermDefinition (
      ValidationProfile
   -> (t -> v -> Maybe InvalidValueError)
   -> [PG.PropertyType t]
@@ -486,16 +494,16 @@ validateProperties = validationDefinition "validateProperties" $
   "p" ~> "checkValue" ~> "types" ~> "props" ~>
   lets [
     -- m: property-key -> expected-type, for fast lookup during invalidValue/unexpectedKey checks
-    "m">: Maps.fromList (Lists.map
+    "m">: (Maps.fromList (Lists.map
       ("pt" ~> pair
         (project _PropertyType _PropertyType_key @@ var "pt")
         (project _PropertyType _PropertyType_value @@ var "pt"))
-      (var "types")),
+      (var "types")) :: TypedTerm (M.Map PG.PropertyKey (PG.PropertyType t))),
     -- For each schema entry, build a guarded missingRequired finding.
     "missingChecks">: Lists.map
       ("t" ~> guardedPropertyRule (var "p") _InvalidPropertyError _InvalidPropertyError_missingRequired
         (Logic.ifElse (project _PropertyType _PropertyType_required @@ var "t")
-          (Optionals.cases (Maps.lookup (project _PropertyType _PropertyType_key @@ var "t") $ var "props") (just (record _InvalidElementPropertyError [
+          (Optionals.cases (Maps.lookup (project _PropertyType _PropertyType_key @@ var "t") (var "props" :: TypedTerm (M.Map PG.PropertyKey v))) (just (record _InvalidElementPropertyError [
               _InvalidElementPropertyError_key>>: project _PropertyType _PropertyType_key @@ var "t",
               _InvalidElementPropertyError_error>>:
                 inject _InvalidPropertyError _InvalidPropertyError_missingRequired $
@@ -508,18 +516,18 @@ validateProperties = validationDefinition "validateProperties" $
     -- schema, only unexpectedKey fires (invalidValue produces nothing
     -- because there's no expected type). If the key is in the schema,
     -- only invalidValue can fire.
-    "valueChecks">: Lists.bind (Maps.toList $ var "props")
+    "valueChecks">: Lists.bind (Maps.toList (var "props" :: TypedTerm (M.Map PG.PropertyKey v)))
       ("kv" ~> lets [
         "key">: Pairs.first $ var "kv",
         "val">: Pairs.second $ var "kv"]
         $ list [
           guardedPropertyRule (var "p") _InvalidPropertyError _InvalidPropertyError_unexpectedKey
-            (Optionals.cases (Maps.lookup (var "key") (var "m")) (just (record _InvalidElementPropertyError [
+            (Optionals.cases (Maps.lookup (var "key" :: TypedTerm PG.PropertyKey) (var "m")) (just (record _InvalidElementPropertyError [
                 _InvalidElementPropertyError_key>>: var "key",
                 _InvalidElementPropertyError_error>>:
                   inject _InvalidPropertyError _InvalidPropertyError_unexpectedKey $ var "key"])) (constant nothing)),
           guardedPropertyRule (var "p") _InvalidPropertyError _InvalidPropertyError_invalidValue
-            (Optionals.cases (Maps.lookup (var "key") (var "m")) nothing ("typ" ~> Optionals.map
+            (Optionals.cases (Maps.lookup (var "key" :: TypedTerm PG.PropertyKey) (var "m")) nothing ("typ" ~> Optionals.map
                 ("err" ~> record _InvalidElementPropertyError [
                   _InvalidElementPropertyError_key>>: var "key",
                   _InvalidElementPropertyError_error>>:

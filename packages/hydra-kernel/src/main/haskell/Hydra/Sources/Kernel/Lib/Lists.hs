@@ -1,12 +1,13 @@
 -- | Primitive declarations for the hydra.lib.lists namespace.
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Lib.Lists where
 
 import Hydra.Kernel
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All

@@ -1,10 +1,12 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hydra.Sources.Pg.Graphson.Utils where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel hiding (
   elementsToVerticesWithAdjacentEdges, encodeStringValue, encodeTermValue,
   pgElementsToGraphson)
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -18,18 +20,18 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
 import qualified Hydra.Dsl.Errors                      as Error
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -100,16 +102,20 @@ module_ = Module {
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Utility functions for GraphSON encoding and property graph conversion.")}
   where
     definitions = [
-      toDefinition elementsToVerticesWithAdjacentEdges,
+      toDefinition (elementsToVerticesWithAdjacentEdges :: TypedTermDefinition ([PG.Element String] -> [PG.VertexWithAdjacentEdges String])),
       toDefinition encodeStringValue,
       toDefinition encodeTermValue,
-      toDefinition pgElementsToGraphson]
+      toDefinition (pgElementsToGraphson :: TypedTermDefinition ((String -> Either Error G.Value) -> [PG.Element String] -> Either Error [JM.Value]))]
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 -- | Convert a list of PG elements to vertices with adjacent edges
-elementsToVerticesWithAdjacentEdges :: TypedTermDefinition ([PG.Element v] -> [PG.VertexWithAdjacentEdges v])
+-- This and pgElementsToGraphson carry `Ord v` + `forall` because their maps are keyed by the
+-- polymorphic vertex type `v`, and the generated `Hydra.Dsl.Lib.Maps` exposes the primitive's `Ord`
+-- key constraint (the old hand-written `Meta.Lib.Maps` did not). This also forces a placeholder
+-- concrete type at registration in `definitions`; `v` is phantom/erased so the choice is arbitrary. See #467.
+elementsToVerticesWithAdjacentEdges :: forall v. Ord v => TypedTermDefinition ([PG.Element v] -> [PG.VertexWithAdjacentEdges v])
 elementsToVerticesWithAdjacentEdges = define "elementsToVerticesWithAdjacentEdges" $
   doc "Convert a list of property graph elements to a list of vertices with their adjacent edges" $
   "els" ~>
@@ -132,7 +138,7 @@ elementsToVerticesWithAdjacentEdges = define "elementsToVerticesWithAdjacentEdge
     "vertices" <~ (Lists.reverse $ Pairs.first $ var "partitioned") $
     "edges" <~ (Lists.reverse $ Pairs.second $ var "partitioned") $
     -- Build initial vertex map (vertex id -> VertexWithAdjacentEdges with empty edge lists)
-    "vertexMap0" <~ (Maps.fromList $ Lists.map
+    "vertexMap0" <~ ((Maps.fromList $ Lists.map
       ("v" ~>
         pair
           (project PG._Vertex PG._Vertex_id @@ var "v")
@@ -140,7 +146,7 @@ elementsToVerticesWithAdjacentEdges = define "elementsToVerticesWithAdjacentEdge
             PG._VertexWithAdjacentEdges_vertex>>: var "v",
             PG._VertexWithAdjacentEdges_ins>>: list ([] :: [TypedTerm (PG.AdjacentEdge v)]),
             PG._VertexWithAdjacentEdges_outs>>: list ([] :: [TypedTerm (PG.AdjacentEdge v)])]))
-      (var "vertices")) $
+      (var "vertices")) :: TypedTerm (M.Map v (PG.VertexWithAdjacentEdges v))) $
     -- Add edges to the vertex map
     "vertexMap1" <~ (Lists.foldl
       ("vmap" ~> "edge" ~>
@@ -162,24 +168,24 @@ elementsToVerticesWithAdjacentEdges = define "elementsToVerticesWithAdjacentEdge
           PG._AdjacentEdge_vertex>>: var "outV",
           PG._AdjacentEdge_properties>>: var "props"]) $
         -- Add to out-vertex's outs list
-        "vmap1" <~ (Optionals.cases (Maps.lookup (var "outV") (var "vmap")) (var "vmap") ("vae" ~>
+        "vmap1" <~ (Optionals.cases (Maps.lookup (var "outV") (var "vmap" :: TypedTerm (M.Map v (PG.VertexWithAdjacentEdges v)))) (var "vmap") ("vae" ~>
             Maps.insert (var "outV")
               (record PG._VertexWithAdjacentEdges [
                 PG._VertexWithAdjacentEdges_vertex>>: project PG._VertexWithAdjacentEdges PG._VertexWithAdjacentEdges_vertex @@ var "vae",
                 PG._VertexWithAdjacentEdges_ins>>: project PG._VertexWithAdjacentEdges PG._VertexWithAdjacentEdges_ins @@ var "vae",
                 PG._VertexWithAdjacentEdges_outs>>: Lists.cons (var "adjEdgeOut") (project PG._VertexWithAdjacentEdges PG._VertexWithAdjacentEdges_outs @@ var "vae")])
-              (var "vmap"))) $
+              (var "vmap" :: TypedTerm (M.Map v (PG.VertexWithAdjacentEdges v))))) $
         -- Add to in-vertex's ins list
-        Optionals.cases (Maps.lookup (var "inV") (var "vmap1")) (var "vmap1") ("vae" ~>
+        Optionals.cases (Maps.lookup (var "inV") (var "vmap1" :: TypedTerm (M.Map v (PG.VertexWithAdjacentEdges v)))) (var "vmap1") ("vae" ~>
             Maps.insert (var "inV")
               (record PG._VertexWithAdjacentEdges [
                 PG._VertexWithAdjacentEdges_vertex>>: project PG._VertexWithAdjacentEdges PG._VertexWithAdjacentEdges_vertex @@ var "vae",
                 PG._VertexWithAdjacentEdges_ins>>: Lists.cons (var "adjEdgeIn") (project PG._VertexWithAdjacentEdges PG._VertexWithAdjacentEdges_ins @@ var "vae"),
                 PG._VertexWithAdjacentEdges_outs>>: project PG._VertexWithAdjacentEdges PG._VertexWithAdjacentEdges_outs @@ var "vae"])
-              (var "vmap1")))
+              (var "vmap1" :: TypedTerm (M.Map v (PG.VertexWithAdjacentEdges v)))))
       (var "vertexMap0")
       (var "edges")) $
-    Maps.elems (var "vertexMap1")
+    Maps.elems (var "vertexMap1" :: TypedTerm (M.Map v (PG.VertexWithAdjacentEdges v)))
 
 -- | Encode a String value to GraphSON
 encodeStringValue :: TypedTermDefinition (String -> Either Error G.Value)
@@ -236,10 +242,10 @@ pg :: String -> Type
 pg = Bootstrap.typeref PgModel.ns
 
 -- | Convert PG elements to GraphSON JSON values
-pgElementsToGraphson :: TypedTermDefinition ((v -> Either Error G.Value) -> [PG.Element v] -> Either Error [JM.Value])
+pgElementsToGraphson :: forall v. Ord v => TypedTermDefinition ((v -> Either Error G.Value) -> [PG.Element v] -> Either Error [JM.Value])
 pgElementsToGraphson = define "pgElementsToGraphson" $
   doc "Convert property graph elements to a list of GraphSON JSON values" $
   "encodeValue" ~> "els" ~>
     Eithers.mapList
       (GraphsonConstruct.pgVertexWithAdjacentEdgesToJson @@ var "encodeValue")
-      (elementsToVerticesWithAdjacentEdges @@ var "els")
+      ((elementsToVerticesWithAdjacentEdges :: TypedTermDefinition ([PG.Element v] -> [PG.VertexWithAdjacentEdges v])) @@ var "els")

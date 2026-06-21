@@ -4,16 +4,16 @@ module Hydra.Sources.Yaml.Serde where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Terms                           as Terms
 import qualified Hydra.Dsl.Types                           as Types
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
@@ -181,7 +181,7 @@ writeMappingEntry = define "writeMappingEntry" $
         (Strings.cat $ list [writeNodeInline @@ var "key", string ": []\n"])
         (Strings.cat $ list [writeNodeInline @@ var "key", string ":\n", indentString @@ (writeNode @@ var "value")]),
     YM._Node_mapping>>: "m" ~>
-      Logic.ifElse (Equality.equal (Maps.size (var "m")) (int32 0))
+      Logic.ifElse (Equality.equal (Maps.size (var "m" :: TypedTerm (M.Map YM.Node YM.Node))) (int32 0))
         (Strings.cat $ list [writeNodeInline @@ var "key", string ": {}\n"])
         (Strings.cat $ list [writeNodeInline @@ var "key", string ":\n", indentString @@ (writeNode @@ var "value")])]
 
@@ -199,7 +199,7 @@ writeMappingEntryInline = define "writeMappingEntryInline" $
         (Strings.cat $ list [writeNodeInline @@ var "key", string ": []\n"])
         (Strings.cat $ list [writeNodeInline @@ var "key", string ":\n", indentString @@ (writeNode @@ var "value")]),
     YM._Node_mapping>>: "m" ~>
-      Logic.ifElse (Equality.equal (Maps.size (var "m")) (int32 0))
+      Logic.ifElse (Equality.equal (Maps.size (var "m" :: TypedTerm (M.Map YM.Node YM.Node))) (int32 0))
         (Strings.cat $ list [writeNodeInline @@ var "key", string ": {}\n"])
         (Strings.cat $ list [writeNodeInline @@ var "key", string ":\n", indentString @@ (writeNode @@ var "value")])]
 
@@ -214,9 +214,9 @@ writeNode = define "writeNode" $
         (string "[]\n")
         (Strings.cat $ Lists.map (lambda "item" $ writeSequenceItem @@ var "item") (var "items")),
     YM._Node_mapping>>: "m" ~>
-      Logic.ifElse (Equality.equal (Maps.size (var "m")) (int32 0))
+      Logic.ifElse (Equality.equal (Maps.size (var "m" :: TypedTerm (M.Map YM.Node YM.Node))) (int32 0))
         (string "{}\n")
-        (Strings.cat $ Lists.map (lambda "e" $ writeMappingEntry @@ var "e") (Maps.toList $ var "m"))]
+        (Strings.cat $ Lists.map (lambda "e" $ writeMappingEntry @@ var "e") (Maps.toList (var "m" :: TypedTerm (M.Map YM.Node YM.Node))))]
 
 -- | Write a node inline (for use as a mapping key)
 writeNodeInline :: TypedTermDefinition (YM.Node -> String)
@@ -237,7 +237,7 @@ writeNodeInline = define "writeNodeInline" $
           writeNodeInline @@ (Pairs.second $ var "e")]) $
       Strings.cat $ list [
         string "{",
-        Strings.intercalate (string ", ") (Lists.map (var "writeFlowEntry") (Maps.toList $ var "m")),
+        Strings.intercalate (string ", ") (Lists.map (var "writeFlowEntry") (Maps.toList (var "m" :: TypedTerm (M.Map YM.Node YM.Node)))),
         string "}"]]
 
 -- | Write a scalar value
@@ -263,9 +263,9 @@ writeSequenceItem = define "writeSequenceItem" $
         (string "- []\n")
         (Strings.cat2 (string "-\n") (indentString @@ (writeNode @@ var "node"))),
     YM._Node_mapping>>: "m" ~>
-      Logic.ifElse (Equality.equal (Maps.size (var "m")) (int32 0))
+      Logic.ifElse (Equality.equal (Maps.size (var "m" :: TypedTerm (M.Map YM.Node YM.Node))) (int32 0))
         (string "- {}\n")
-        ("entries" <~ Maps.toList (var "m") $
+        ("entries" <~ Maps.toList (var "m" :: TypedTerm (M.Map YM.Node YM.Node)) $
          Optionals.fromOptional (string "") $ Optionals.map
            (lambda "p" $ lets [
              "firstEntry">: Pairs.first (var "p"),

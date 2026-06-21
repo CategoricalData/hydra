@@ -138,15 +138,15 @@ def un_namespace(ns: TypedTerm) -> TypedTerm:
 
 def equal_name(left: TypedTerm, right: TypedTerm) -> TypedTerm:
     """Check equality of two Names by comparing their string values."""
-    import hydra.dsl.meta.lib.equality as Equality
+    import hydra.dsl.lib.equality as Equality
     return Equality.equal(un_name(left), un_name(right))
 
 
 def equal_name_list(lefts: TypedTerm, rights: TypedTerm) -> TypedTerm:
     """Check equality of two Name lists."""
-    import hydra.dsl.meta.lib.equality as Equality
-    import hydra.dsl.meta.lib.lists as Lists
-    import hydra.dsl.meta.lib.logic as Logic
+    import hydra.dsl.lib.equality as Equality
+    import hydra.dsl.lib.lists as Lists
+    import hydra.dsl.lib.logic as Logic
     equal_name_fn = Phantoms.lambdas(
         ["left", "right"],
         Equality.equal(un_name(Phantoms.var("left")), un_name(Phantoms.var("right"))))

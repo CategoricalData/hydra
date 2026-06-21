@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 -- | WebAssembly serializer: converts WAT AST to concrete WAT text format.
 -- Serializes the WASM syntax model (Hydra.Wasm.Syntax) into properly formatted WAT source code.
 
@@ -5,7 +7,7 @@ module Hydra.Sources.Wasm.Serde where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -19,17 +21,17 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -148,7 +150,7 @@ blockInstructionToExpr = define "blockInstructionToExpr" $
     "body">: project W._BlockInstruction W._BlockInstruction_body @@ var "b",
     "labelStr">: Optionals.cases (var "label") (string "") (lambda "l" $ Strings.cat2 (string " $") (var "l")),
     "btPart">: blockTypeToExpr @@ var "bt",
-    "bodyParts">: Lists.map instructionToExpr (var "body"),
+    "bodyParts">: Lists.map (asTerm instructionToExpr) (var "body"),
     "header">: Serialization.spaceSep @@ Optionals.cat (list [
       just (Serialization.cst @@ Strings.cat (list [string "(", var "keyword", var "labelStr"])),
       var "btPart"])] $
@@ -201,7 +203,7 @@ dataSegmentToExpr = define "dataSegmentToExpr" $
           Serialization.cst @@ Strings.cat2 (string "(data") (var "nameStr"),
           Serialization.spaceSep @@ list [
             Serialization.cst @@ string "(offset",
-            Serialization.spaceSep @@ Lists.map instructionToExpr (var "offset"),
+            Serialization.spaceSep @@ Lists.map (asTerm instructionToExpr) (var "offset"),
             Serialization.cst @@ string ")"],
           Serialization.cst @@ Strings.cat (list [string "\"", var "bytes", string "\")"]) ],
       W._DataMode_passive>>: constant $
@@ -266,8 +268,8 @@ funcToExpr = define "funcToExpr" $
     "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n")),
     "headerStr">: Strings.cat2 (string "(func") (var "nameStr"),
     "typeUsePart">: typeUseToExpr @@ var "typeUse",
-    "localParts">: Lists.map funcLocalToExpr (var "locals"),
-    "bodyParts">: Lists.map instructionToExpr (var "body"),
+    "localParts">: Lists.map (asTerm funcLocalToExpr) (var "locals"),
+    "bodyParts">: Lists.map (asTerm instructionToExpr) (var "body"),
     "innerParts">: Lists.concat2 (var "localParts") (var "bodyParts")] $
     Logic.ifElse (Lists.null (var "innerParts"))
       (Serialization.spaceSep @@ list [
@@ -308,7 +310,7 @@ globalDefToExpr = define "globalDefToExpr" $
     Serialization.spaceSep @@ list [
       Serialization.cst @@ Strings.cat2 (string "(global") (var "nameStr"),
       globalTypeToExpr @@ var "gt",
-      Serialization.spaceSep @@ Lists.map instructionToExpr (var "init"),
+      Serialization.spaceSep @@ Lists.map (asTerm instructionToExpr) (var "init"),
       Serialization.cst @@ string ")"]
 
 globalTypeToExpr :: TypedTermDefinition (W.GlobalType -> Expr)
@@ -336,8 +338,8 @@ ifInstructionToExpr = define "ifInstructionToExpr" $
     "elseBranch">: project W._IfInstruction W._IfInstruction_else @@ var "i",
     "labelStr">: Optionals.cases (var "label") (string "") (lambda "l" $ Strings.cat2 (string " $") (var "l")),
     "btPart">: blockTypeToExpr @@ var "bt",
-    "thenParts">: Lists.map instructionToExpr (var "thenBranch"),
-    "elseParts">: Lists.map instructionToExpr (var "elseBranch"),
+    "thenParts">: Lists.map (asTerm instructionToExpr) (var "thenBranch"),
+    "elseParts">: Lists.map (asTerm instructionToExpr) (var "elseBranch"),
     "header">: Serialization.spaceSep @@ Optionals.cat (list [
       just (Serialization.cst @@ Strings.cat (list [string "(if", var "labelStr"])),
       var "btPart"]),
@@ -560,7 +562,7 @@ moduleToExpr = define "moduleToExpr" $
     "name">: project W._Module W._Module_name @@ var "mod",
     "fields">: project W._Module W._Module_fields @@ var "mod",
     "nameStr">: Optionals.cases (var "name") (string "") (lambda "n" $ Strings.cat2 (string " $") (var "n")),
-    "fieldExprs">: Lists.map moduleFieldToExpr (var "fields")] $
+    "fieldExprs">: Lists.map (asTerm moduleFieldToExpr) (var "fields")] $
     Serialization.newlineSep @@ Lists.concat (list [
       list [Serialization.cst @@ Strings.cat2 (string "(module") (var "nameStr")],
       Lists.map (lambda "fe" $ Serialization.cst @@ Strings.cat2 (string "  ") (Serialization.printExpr @@ var "fe")) (var "fieldExprs"),
@@ -635,7 +637,7 @@ typeUseToExpr = define "typeUseToExpr" $
     "idxPart">: Optionals.map
       (lambda "i" $ Serialization.cst @@ Strings.cat (list [string "(type $", var "i", string ")"]))
       (var "idx"),
-    "paramParts">: Lists.map (paramToExpr) (var "params"),
+    "paramParts">: Lists.map (asTerm paramToExpr) (var "params"),
     "resultParts">: Lists.map
       (lambda "r" $ Serialization.cst @@ Strings.cat (list [string "(result ", valTypeToStr @@ var "r", string ")"]))
       (var "results")] $

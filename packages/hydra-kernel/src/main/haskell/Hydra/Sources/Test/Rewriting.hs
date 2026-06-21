@@ -24,11 +24,11 @@ import qualified Hydra.Dsl.Coders        as Coders
 
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
-import qualified Hydra.Dsl.Meta.Lib.Lists as Lists
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Logic as Logic
-import qualified Hydra.Dsl.Meta.Lib.Math as Math
-import qualified Hydra.Dsl.Meta.Lib.Pairs as Pairs
+import qualified Hydra.Dsl.Lib.Lists as Lists
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Logic as Logic
+import qualified Hydra.Dsl.Lib.Math as Math
+import qualified Hydra.Dsl.Lib.Pairs as Pairs
 
 -- NOTE: This file previously used T for Terms and Ty for Types.
 -- After standardization: Terms are unqualified, T is for Types.

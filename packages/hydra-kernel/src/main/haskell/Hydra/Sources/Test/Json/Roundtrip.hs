@@ -16,8 +16,8 @@ import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
 import           Hydra.Dsl.Meta.Phantoms                ((@@))
-import qualified Hydra.Dsl.Meta.Lib.Eithers   as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Maps      as Maps
+import qualified Hydra.Dsl.Lib.Eithers   as Eithers
+import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
@@ -67,10 +67,10 @@ allTests = define "allTests" $
 -- Encodes term to JSON, decodes back, shows both and compares.
 roundtripTest :: String -> TypedTerm Type -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 roundtripTest testName typ term = universalCase testName
-  (Eithers.either_
+  (Eithers.either
     (Phantoms.lambda "e" $ Phantoms.var "e")
     (Phantoms.lambda "json" $
-      Eithers.either_
+      Eithers.either
         (Phantoms.lambda "e" $ Phantoms.var "e")
         (Phantoms.lambda "decoded" $ ShowCore.term @@ Phantoms.var "decoded")
         (JsonDecode.fromJson @@ Maps.empty @@ Core.name (Phantoms.string "test") @@ typ @@ Phantoms.var "json"))
@@ -83,7 +83,7 @@ roundtripTest testName typ term = universalCase testName
 -- such as a small integer being quoted as a string.
 wireShapeTest :: String -> TypedTerm Type -> TypedTerm Term -> String -> TypedTerm TestCaseWithMetadata
 wireShapeTest testName typ term expectedJson = universalCase testName
-  (Eithers.either_
+  (Eithers.either
     (Phantoms.lambda "e" $ Phantoms.var "e")
     (Phantoms.lambda "json" $ JsonWriter.printJson @@ Phantoms.var "json")
     (EncodeModule.toJson @@ Maps.empty @@ Core.name (Phantoms.string "test") @@ typ @@ term))

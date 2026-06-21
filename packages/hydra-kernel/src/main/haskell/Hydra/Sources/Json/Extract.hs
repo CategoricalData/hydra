@@ -1,9 +1,10 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Json.Extract where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms hiding (opt)
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -17,17 +18,17 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -127,7 +128,7 @@ expectObject = define "expectObject" $
   doc "Extract an object from a JSON value as a name-keyed map, failing if the value is not an object. Field order is not preserved; lookups are by name." $
   lambda "value" $ cases _Value (var "value")
     (Just $ left $ Strings.cat2 (Strings.cat2 (string "expected ") (string "JSON object")) (Strings.cat2 (string " but found ") (showValue @@ var "value"))) [
-    _Value_object>>: lambda "m" $ right $ Maps.fromList $ var "m"]
+    _Value_object>>: lambda "m" $ right $ (Maps.fromList (var "m") :: TypedTerm (M.Map String Value))]
 
 expectString :: TypedTermDefinition (Value -> Either String String)
 expectString = define "expectString" $
@@ -139,7 +140,7 @@ expectString = define "expectString" $
 opt :: TypedTermDefinition (String -> M.Map String Value -> Maybe Value)
 opt = define "opt" $
   doc "Look up an optional field in a JSON object" $
-  lambdas ["fname", "m"] $ Maps.lookup (var "fname") (var "m")
+  lambdas ["fname", "m"] $ Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String Value))
 
 optArray :: TypedTermDefinition (String -> M.Map String Value -> Either String (Maybe [Value]))
 optArray = define "optArray" $
@@ -154,7 +155,7 @@ optString = define "optString" $
 require :: TypedTermDefinition (String -> M.Map String Value -> Either String Value)
 require = define "require" $
   doc "Look up a required field in a JSON object, failing if not found" $
-  lambdas ["fname", "m"] $ Optionals.cases (Maps.lookup (var "fname") (var "m")) (left $ Strings.cat $ list [
+  lambdas ["fname", "m"] $ Optionals.cases (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String Value))) (left $ Strings.cat $ list [
       string "required attribute ",
       showValue @@ var "fname",
       string " not found"]) (lambda "value" $ right $ var "value")

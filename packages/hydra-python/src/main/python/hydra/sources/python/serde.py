@@ -8,11 +8,11 @@ from hydra.core import Name
 from hydra.dsl.python import Given, None_
 from hydra.packaging import EntityMetadata, Module, ModuleName
 
-import hydra.dsl.meta.lib.equality as Equality
-import hydra.dsl.meta.lib.lists as Lists
-import hydra.dsl.meta.lib.logic as Logic
-import hydra.dsl.meta.lib.optionals as Optionals
-import hydra.dsl.meta.lib.strings as Strings
+import hydra.dsl.lib.equality as Equality
+import hydra.dsl.lib.lists as Lists
+import hydra.dsl.lib.logic as Logic
+import hydra.dsl.lib.optionals as Optionals
+import hydra.dsl.lib.strings as Strings
 from hydra.dsl.meta.phantoms import *  # noqa: F401,F403
 
 from hydra.sources.python._kernel_refs import (

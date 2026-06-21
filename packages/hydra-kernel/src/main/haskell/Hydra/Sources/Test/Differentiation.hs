@@ -22,9 +22,9 @@ import Hydra.Testing
 import qualified Hydra.Sources.Kernel.Terms.Differentiation as Diff
 import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Eithers as Eithers
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Meta.Terms         as Terms
 import qualified Hydra.Haskell.Lib.Math              as Math
 import qualified Hydra.Dsl.Prims as Prims

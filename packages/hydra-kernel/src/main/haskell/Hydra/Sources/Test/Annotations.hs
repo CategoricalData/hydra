@@ -17,7 +17,7 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 import Hydra.Testing
-import qualified Hydra.Dsl.Meta.Lib.Maps as Maps
+import qualified Hydra.Dsl.Lib.Maps as Maps
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
 import qualified Hydra.Dsl.Meta.Graph as Graph

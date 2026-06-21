@@ -12,14 +12,14 @@ import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
 import           Hydra.Dsl.Meta.Phantoms                ((@@))
-import qualified Hydra.Dsl.Meta.Lib.Pairs     as Pairs
+import qualified Hydra.Dsl.Lib.Pairs     as Pairs
 import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Dsl.Typing             as Typing
-import qualified Hydra.Dsl.Meta.Lib.Eithers   as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Lists     as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals  as Literals
-import qualified Hydra.Dsl.Meta.Lib.Maps      as Maps
-import qualified Hydra.Dsl.Meta.Lib.Strings   as Strings
+import qualified Hydra.Dsl.Lib.Eithers   as Eithers
+import qualified Hydra.Dsl.Lib.Lists     as Lists
+import qualified Hydra.Dsl.Lib.Literals  as Literals
+import qualified Hydra.Dsl.Lib.Maps      as Maps
+import qualified Hydra.Dsl.Lib.Strings   as Strings
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
@@ -82,7 +82,7 @@ emptySubst = []
 -- | Universal joinTypes test case (expecting success)
 joinTypesCase :: String -> TypedTerm Type -> TypedTerm Type -> TypedTerm [TypeConstraint] -> TypedTerm TestCaseWithMetadata
 joinTypesCase cname left right constraints = universalCase cname
-  (Eithers.either_
+  (Eithers.either
     (Phantoms.lambda "_" $ Phantoms.string "failure")
     (Phantoms.lambda "cs" $ showConstraints (Phantoms.var "cs"))
     (UnificationModule.joinTypes @@ Lexical.emptyInferenceContext @@ left @@ right @@ Phantoms.string "test"))
@@ -91,7 +91,7 @@ joinTypesCase cname left right constraints = universalCase cname
 -- | Universal joinTypes test case (expecting failure)
 joinTypesFailCase :: String -> TypedTerm Type -> TypedTerm Type -> TypedTerm TestCaseWithMetadata
 joinTypesFailCase cname left right = universalCase cname
-  (Eithers.either_
+  (Eithers.either
     (Phantoms.lambda "_" $ Phantoms.string "failure")
     (Phantoms.lambda "cs" $ showConstraints (Phantoms.var "cs"))
     (UnificationModule.joinTypes @@ Lexical.emptyInferenceContext @@ left @@ right @@ Phantoms.string "test"))
@@ -219,7 +219,7 @@ showTypeSubst ts = Strings.cat (Phantoms.list [
 -- | Universal unifyTypes test case (expecting success)
 unifyTypesCase :: String -> TypedTerm [Name] -> TypedTerm Type -> TypedTerm Type -> [(TypedTerm Name, TypedTerm Type)] -> TypedTerm TestCaseWithMetadata
 unifyTypesCase cname schemaTypes left right substPairs = universalCase cname
-  (Eithers.either_
+  (Eithers.either
     (Phantoms.lambda "_" $ Phantoms.string "failure")
     (Phantoms.lambda "ts" $ showTypeSubst (Phantoms.var "ts"))
     (UnificationModule.unifyTypes @@ Lexical.emptyInferenceContext @@ buildSchemaMap schemaTypes @@ left @@ right @@ Phantoms.string "test"))
@@ -228,7 +228,7 @@ unifyTypesCase cname schemaTypes left right substPairs = universalCase cname
 -- | Universal unifyTypes test case (expecting failure)
 unifyTypesFailCase :: String -> TypedTerm [Name] -> TypedTerm Type -> TypedTerm Type -> String -> TypedTerm TestCaseWithMetadata
 unifyTypesFailCase cname schemaTypes left right _errSubstring = universalCase cname
-  (Eithers.either_
+  (Eithers.either
     (Phantoms.lambda "_" $ Phantoms.string "failure")
     (Phantoms.lambda "ts" $ showTypeSubst (Phantoms.var "ts"))
     (UnificationModule.unifyTypes @@ Lexical.emptyInferenceContext @@ buildSchemaMap schemaTypes @@ left @@ right @@ Phantoms.string "test"))

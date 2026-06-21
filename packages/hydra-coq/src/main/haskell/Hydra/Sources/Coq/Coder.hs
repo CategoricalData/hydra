@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 -- | Coq code generator: converts Hydra type and term modules to Coq source code (.v files).
 -- This is a DSL port of the previously hand-written Hydra.Coq.Coder.
@@ -9,17 +10,17 @@ module Hydra.Sources.Coq.Coder where
 import Hydra.Kernel
 import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Libraries
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
@@ -302,7 +303,7 @@ encodeProjectionElim = define "encodeProjectionElim" $
     "fname">: Core.projectionFieldName $ var "p",
     "rawFname">: unwrap _Name @@ var "fname",
     "sanitizedSet">: project CE._CoqEnvironment CE._CoqEnvironment_sanitizedAccessors @@ var "env"] $
-    Logic.ifElse (Sets.member (var "rawFname") (var "sanitizedSet"))
+    Logic.ifElse (Sets.member (var "rawFname" :: TypedTerm String) (var "sanitizedSet"))
       -- Sanitised accessor: the field is typed as `unit` in the generated
       -- record (positivity workaround). Any call site that projects it would
       -- get `tt`, which is never the real value. Emit `hydra_unreachable`
@@ -333,7 +334,7 @@ encodeTerm = define "encodeTerm" $
         @@ (encodeTerm @@ var "env" @@ (Core.applicationFunction $ var "app"))
         @@ list [encodeTerm @@ var "env" @@ (Core.applicationArgument $ var "app")],
     _Term_cases>>: "cs" ~> encodeUnionElim @@ var "env" @@ var "cs",
-    _Term_either>>: "e" ~> Eithers.either_
+    _Term_either>>: "e" ~> Eithers.either
       (lambda "l" $ coqTermApp @@ (coqTermQualid @@ string "inl") @@ list [encodeTerm @@ var "env" @@ var "l"])
       (lambda "r" $ coqTermApp @@ (coqTermQualid @@ string "inr") @@ list [encodeTerm @@ var "env" @@ var "r"])
       (var "e"),
@@ -400,7 +401,7 @@ encodeTerm = define "encodeTerm" $
             encodeTerm @@ var "env" @@ Pairs.second (var "kv")],
           var "acc"])
         (coqTermQualid @@ string "nil")
-        (Maps.toList $ var "mt"),
+        (Maps.toList (var "mt" :: TypedTerm (M.Map Term Term))),
     _Term_optional>>: "mt" ~> Optionals.cases (var "mt") (coqTermQualid @@ string "None") (lambda "v" $ coqTermApp @@ (coqTermQualid @@ string "Some") @@ list [encodeTerm @@ var "env" @@ var "v"]),
     _Term_pair>>: "p" ~>
       coqTermApp @@ (coqTermQualid @@ string "pair") @@ list [
@@ -426,7 +427,7 @@ encodeTerm = define "encodeTerm" $
         (lambdas ["el", "acc"] $ coqTermApp @@ (coqTermQualid @@ string "cons") @@ list [
           encodeTerm @@ var "env" @@ var "el", var "acc"])
         (coqTermQualid @@ string "nil")
-        (Sets.toList $ var "st"),
+        (Sets.toList (var "st" :: TypedTerm (S.Set Term))),
     _Term_typeApplication>>: "ta" ~> lets [
       "body">: Core.typeApplicationTermBody $ var "ta",
       "tyArg">: Core.typeApplicationTermType $ var "ta",
@@ -636,7 +637,7 @@ encodeUnionElim = define "encodeUnionElim" $
     "csCases">: Core.caseStatementCases $ var "cs",
     "csDefault">: Core.caseStatementDefault $ var "cs",
     "csLocalName">: localTypeName @@ (unwrap _Name @@ var "csName"),
-    "expectedCount">: Maps.lookup (var "csLocalName")
+    "expectedCount">: Maps.lookup (var "csLocalName" :: TypedTerm String)
       (project CE._CoqEnvironment CE._CoqEnvironment_constructorCounts @@ var "env"),
     "caseCount">: Lists.length $ var "csCases",
     "baseEqs">: Lists.map
@@ -892,7 +893,7 @@ resolveQualifiedName = define "resolveQualifiedName" $
             -- Ambiguity check is against the raw (unsanitised) local name,
             -- since the ambiguous-names set in the environment is populated
             -- from pre-sanitisation Hydra names (`localName td`).
-            "isAmbig">: Sets.member (var "localRaw") (var "ambig"),
+            "isAmbig">: Sets.member (var "localRaw" :: TypedTerm String) (var "ambig"),
             -- Non-lib modules whose function names may collide with other imports
             -- (e.g. `parsers.map` vs `maps.map`). Cross-namespace references to
             -- these are kept in `<mod>.<func>` form.
@@ -985,7 +986,7 @@ termReferencesVar = define "termReferencesVar" $
     _Term_inject>>: "inj" ~>
       termReferencesVar @@ var "name" @@
         (Core.fieldTerm $ Core.injectionField $ var "inj"),
-    _Term_either>>: "e" ~> Eithers.either_
+    _Term_either>>: "e" ~> Eithers.either
       (lambda "l" $ termReferencesVar @@ var "name" @@ var "l")
       (lambda "r" $ termReferencesVar @@ var "name" @@ var "r")
       (var "e"),

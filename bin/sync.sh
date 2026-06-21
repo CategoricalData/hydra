@@ -97,6 +97,23 @@ python_host_mode() {
     fi
 }
 
+# Per-host mode for the native Java DSL→JSON driver (update-java-json.sh's
+# #370 published/local switch). Mirrors python_host_mode: an explicit
+# --local-host (or hostOverrides[java]=local) forces the Java driver to
+# compile against the local dist/java host instead of the published
+# hydra-java Maven artifact. Needed when the kernel carries new public DSL
+# modules the last published host lacks — e.g. #467's hydra.dsl.lib.* added
+# to the kernel but not yet in published hydra-java.
+java_host_mode() {
+    if [ "$HOST_MODE" = "local" ]; then
+        echo local
+    elif ! python3 "$HYDRA_ROOT/bin/lib/hydra-packages.py" is-published hydra-java >/dev/null 2>&1; then
+        echo local
+    else
+        echo published
+    fi
+}
+
 # Per-host mode for the Haskell host build (the head links published hydra-kernel
 # + hydra-haskell from Hackage in "published" mode, or compiles them from local
 # source in "local" mode). Same per-host override mechanism as python_host_mode:
@@ -386,9 +403,11 @@ heal_java_python_native() {
     # (e.g. the published hydra-python wheel is incompatible with the current
     # kernel — the #370/#472 migration-shim case) this heal must also run local,
     # or it hits the broken published wheel and aborts the whole sync. The Java
-    # wrapper has no published/local switch (its host is a build-presence check),
-    # so this forwarding is Python-only.
-    HYDRA_IN_SYNC=1 "$HYDRA_ROOT/bin/generate-hydra-java-from-java.sh" || return 1
+    # wrapper forwards --local-host to update-java-json.sh's #370 published/local
+    # switch (needed when the kernel carries new public DSL modules the published
+    # hydra-java lacks — #467's hydra.dsl.lib.*).
+    HYDRA_IN_SYNC=1 "$HYDRA_ROOT/bin/generate-hydra-java-from-java.sh" \
+        "--$(java_host_mode)-host" || return 1
     HYDRA_IN_SYNC=1 "$HYDRA_ROOT/bin/generate-hydra-python-from-python.sh" \
         "--$(python_host_mode)-host" || return 1
 }
@@ -699,9 +718,15 @@ export HYDRA_PHASE5_HOST_MODE="$(python_host_mode)"
 # sentinel-based skip alone won't catch them.
 if printf '%s\n' $HOSTS | grep -qx java; then
     echo "--- hydra-java (native Java DSL → JSON) ---"
+    # Forward the sync's host mode to the Java coder driver (#370 published/local
+    # switch in update-java-json.sh). Without this, `sync.sh --local-host` would
+    # leave Phase 5's Java re-export on the published host, which fails when the
+    # kernel carries new public DSL modules the published hydra-java lacks (e.g.
+    # #467's hydra.dsl.lib.*).
     native_generate_and_report java \
         "$HYDRA_ROOT/bin/generate-hydra-java-from-java.sh" \
-        "$JAVA_HOST_SENTINEL"
+        "$JAVA_HOST_SENTINEL" \
+        "--$(java_host_mode)-host"
 else
     echo "--- hydra-java (skipped: java not in HOSTS) ---"
 fi

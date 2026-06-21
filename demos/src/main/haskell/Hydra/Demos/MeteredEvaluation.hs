@@ -1,20 +1,22 @@
 -- | A small demo of "metered" Hydra evaluation. In this example, the evaluator keeps track of the number of times it
 --   calls each primitive function (as a proxy for API calls, which can consume time and resources).
 
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hydra.Demos.MeteredEvaluation (demoMeteredEvaluation) where
 
 import Hydra.Kernel
 import qualified Hydra.Show.Errors as ShowError
 import Hydra.Dsl.Meta.Phantoms
 import qualified Hydra.Dsl.Types as Types
-import Hydra.Dsl.Meta.Lib.Lists as Lists
-import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
+import Hydra.Dsl.Lib.Lists as Lists
+import qualified Hydra.Dsl.Lib.Strings as Strings
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import Hydra.ExtGeneration
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Math as Math
-import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Math as Math
+import qualified Hydra.Dsl.Lib.Strings as Strings
 
 import System.IO
 import qualified Control.Monad as CM

@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Terms.Decoding where
 
@@ -13,18 +14,18 @@ import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Lib.Math     as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -531,7 +532,7 @@ decodeMapType = define "decodeMapType" $
   "valDecoder" <~ decodeType @@ Core.mapTypeValues (var "mt") $
   -- decodeMap : forall t0,t1. (ord t0) => decoder<t0> -> decoder<t1> -> decoder<map<t0,t1>>;
   -- instantiate t0,t1 to the decoded key/value types. (#476)
-  MetaTerms.tyapps (DeepCore.ref ExtractCore.decodeMap)
+  MetaTerms.tyapps (DeepCore.ref (ExtractCore.decodeMap :: TypedTermDefinition ((Graph -> Term -> Either DecodingError Int) -> (Graph -> Term -> Either DecodingError Int) -> Graph -> Term -> Either DecodingError (M.Map Int Int))))
     [decoderFullResultType @@ Core.mapTypeKeys (var "mt"),
      decoderFullResultType @@ Core.mapTypeValues (var "mt")]
     @@@ var "keyDecoder" @@@ var "valDecoder"
@@ -572,7 +573,7 @@ decodeModule = define "decodeModule" $
         -- 2. Decoded versions of source dependencies (e.g., hydra.core -> hydra.decode.core).
         --    If type A references type B, the decoder for A needs to call the decoder for B.
         -- 3. The original module's namespace (the schema being decoded) and hydra.util
-        "allDecodedDeps" <~ (primitive DefLists.nub @@ (Lists.map decodeModuleName (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))) $
+        "allDecodedDeps" <~ (primitive DefLists.nub @@ (Lists.map (asTerm decodeModuleName) (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))) $
         right (just (Packaging.module_
           (decodeModuleName @@ (Packaging.moduleName (var "mod")))
           (just (Packaging.entityMetadata
@@ -590,7 +591,7 @@ decodeModule = define "decodeModule" $
             (var "allDecodedDeps")))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") nothing
-            (Optionals.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")
+            (Optionals.map (asTerm Scoping.typeSchemeToTermSignature) $ Core.bindingTypeScheme $ var "b")
             (Core.bindingTerm $ var "b")))
             (var "decodedBindings")))))
 
@@ -709,7 +710,7 @@ decodeSetType = define "decodeSetType" $
   "elemType" ~>
   "elemDecoder" <~ decodeType @@ var "elemType" $
   -- decodeSet : forall t0. (ord t0) => decoder<t0> -> decoder<set<t0>>; instantiate t0. (#476)
-  MetaTerms.tyapp (DeepCore.ref ExtractCore.decodeSet) (decoderFullResultType @@ var "elemType")
+  MetaTerms.tyapp (DeepCore.ref (ExtractCore.decodeSet :: TypedTermDefinition ((Graph -> Term -> Either DecodingError Int) -> Graph -> Term -> Either DecodingError (S.Set Int)))) (decoderFullResultType @@ var "elemType")
     @@@ var "elemDecoder"
 
 -- | Generate a decoder term for a given Type with element name context
@@ -1077,9 +1078,9 @@ decoderTypeScheme = define "decoderTypeScheme" $
     "constraints" <~ (
       Logic.ifElse (Lists.null (var "ordVars"))
         Phantoms.nothing
-        (just $ Maps.fromList $ Lists.map
+        (just ((Maps.fromList $ Lists.map
           ("v" ~> pair (var "v") (Core.typeVariableConstraints $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
-          (var "ordVars"))) $
+          (var "ordVars")) :: TypedTerm (M.Map Name TypeVariableConstraints)))) $
     Core.typeScheme
       (var "typeVars")
       (decoderType @@ var "typ")
@@ -1099,9 +1100,9 @@ decoderTypeSchemeNamed = define "decoderTypeSchemeNamed" $
     "constraints" <~ (
       Logic.ifElse (Lists.null (var "ordVars"))
         Phantoms.nothing
-        (just $ Maps.fromList $ Lists.map
+        (just ((Maps.fromList $ Lists.map
           ("v" ~> pair (var "v") (Core.typeVariableConstraints $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
-          (var "ordVars"))) $
+          (var "ordVars")) :: TypedTerm (M.Map Name TypeVariableConstraints)))) $
     Core.typeScheme
       (var "typeVars")
       (decoderTypeNamed @@ var "ename" @@ var "typ")

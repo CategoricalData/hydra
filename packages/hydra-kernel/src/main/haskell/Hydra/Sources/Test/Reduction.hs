@@ -22,7 +22,7 @@ import Hydra.Testing
 
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Reduction as Reduction
-import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers
+import qualified Hydra.Dsl.Lib.Eithers as Eithers
 import qualified Hydra.Dsl.Prims as Prims
 import qualified Hydra.Lib.Lists as DefLists
 import qualified Hydra.Lib.Math as DefMath
@@ -129,7 +129,7 @@ betaReductionTests = subgroup "beta reduction" [
 -- | Universal eta expansion test case: applies etaExpandTypedTerm with testContext and testGraph
 etaCase :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 etaCase cname input output = universalCase cname
-  (Eithers.either_
+  (Eithers.either
     (Phantoms.lambda "_" $ Phantoms.string "eta expansion failed")
     (Phantoms.lambda "t" $ ShowCore.term # Phantoms.var "t")
     (Reduction.etaExpandTypedTerm # TestGraph.testContext # TestGraph.testGraph # input))

@@ -10,17 +10,17 @@ module Hydra.Sources.Lisp.Serde where
 import Hydra.Kernel
 import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Libraries
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Constants       as Constants
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
@@ -266,7 +266,7 @@ docstringToExpr = define "docstringToExpr" $
 exportDeclarationToExpr :: TypedTermDefinition (L.Dialect -> L.ExportDeclaration -> Expr)
 exportDeclarationToExpr = define "exportDeclarationToExpr" $
   lambda "d" $ lambda "edecl" $ lets [
-    "syms">: Lists.map symbolToExpr (project L._ExportDeclaration L._ExportDeclaration_symbols @@ var "edecl")] $
+    "syms">: Lists.map (asTerm symbolToExpr) (project L._ExportDeclaration L._ExportDeclaration_symbols @@ var "edecl")] $
     cases L._Dialect (var "d") Nothing [
       -- Clojure: public by default, no export form
       L._Dialect_clojure>>: constant $ Serialization.cst @@ string "",
@@ -446,7 +446,7 @@ functionDefinitionToExpr :: TypedTermDefinition (L.Dialect -> L.FunctionDefiniti
 functionDefinitionToExpr = define "functionDefinitionToExpr" $
   lambda "d" $ lambda "fdef" $ lets [
     "name">: symbolToExpr @@ (project L._FunctionDefinition L._FunctionDefinition_name @@ var "fdef"),
-    "params">: Lists.map symbolToExpr (project L._FunctionDefinition L._FunctionDefinition_params @@ var "fdef"),
+    "params">: Lists.map (asTerm symbolToExpr) (project L._FunctionDefinition L._FunctionDefinition_params @@ var "fdef"),
     "body">: Lists.map (expressionToExpr @@ var "d") (project L._FunctionDefinition L._FunctionDefinition_body @@ var "fdef")] $
     cases L._Dialect (var "d") Nothing [
       -- (defn name [params] body...)
@@ -541,7 +541,7 @@ lambdaKeyword = define "lambdaKeyword" $
 lambdaToExpr :: TypedTermDefinition (L.Dialect -> L.Lambda -> Expr)
 lambdaToExpr = define "lambdaToExpr" $
   lambda "d" $ lambda "lam" $ lets [
-    "params">: Lists.map symbolToExpr (project L._Lambda L._Lambda_params @@ var "lam"),
+    "params">: Lists.map (asTerm symbolToExpr) (project L._Lambda L._Lambda_params @@ var "lam"),
     "body">: Lists.map (expressionToExpr @@ var "d") (project L._Lambda L._Lambda_body @@ var "lam"),
     "mname">: project L._Lambda L._Lambda_name @@ var "lam",
     "kw">: lambdaKeyword @@ var "d"] $
@@ -633,7 +633,7 @@ letExpressionToExpr = define "letExpressionToExpr" $
               Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
                 var "name", expressionToExpr @@ d @@ var "val"])) [
               L._Expression_lambda>>: lambda "lam" $ lets [
-                "params">: Lists.map symbolToExpr (project L._Lambda L._Lambda_params @@ var "lam"),
+                "params">: Lists.map (asTerm symbolToExpr) (project L._Lambda L._Lambda_params @@ var "lam"),
                 "lbody">: Lists.map (expressionToExpr @@ d) (project L._Lambda L._Lambda_body @@ var "lam")] $
                 Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat (list [
                   list [var "name"],
@@ -742,7 +742,7 @@ macroDefinitionToExpr :: TypedTermDefinition (L.Dialect -> L.MacroDefinition -> 
 macroDefinitionToExpr = define "macroDefinitionToExpr" $
   lambda "d" $ lambda "mdef" $ lets [
     "name">: symbolToExpr @@ (project L._MacroDefinition L._MacroDefinition_name @@ var "mdef"),
-    "params">: Lists.map symbolToExpr (project L._MacroDefinition L._MacroDefinition_params @@ var "mdef"),
+    "params">: Lists.map (asTerm symbolToExpr) (project L._MacroDefinition L._MacroDefinition_params @@ var "mdef"),
     "body">: Lists.map (expressionToExpr @@ var "d") (project L._MacroDefinition L._MacroDefinition_body @@ var "mdef")] $
     cases L._Dialect (var "d") Nothing [
       -- (defmacro name [params] body)
@@ -894,7 +894,7 @@ programToExpr = define "programToExpr" $
       (var "imports"),
     -- Helper: get all export symbols as expr strings
     "exportSyms">: Lists.concat (Lists.map (lambda "edecl" $
-      Lists.map symbolToExpr (project L._ExportDeclaration L._ExportDeclaration_symbols @@ var "edecl"))
+      Lists.map (asTerm symbolToExpr) (project L._ExportDeclaration L._ExportDeclaration_symbols @@ var "edecl"))
       (var "exports"))] $
     cases L._Dialect (var "d") Nothing [
       -- Clojure: (ns name (:require [dep1 :refer :all] [dep2 :refer :all] ...)) then forms
@@ -1093,7 +1093,7 @@ sExpressionToExpr = define "sExpressionToExpr" $
     cases L._SExpression (var "sexpr") Nothing [
       L._SExpression_atom>>: lambda "a" $ Serialization.cst @@ var "a",
       L._SExpression_list>>: lambda "elems" $
-        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.map sExpressionToExpr (var "elems"))]
+        Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.map (asTerm sExpressionToExpr) (var "elems"))]
 
 -- | Serialize a set literal
 setLiteralToExpr :: TypedTermDefinition (L.Dialect -> L.SetLiteral -> Expr)

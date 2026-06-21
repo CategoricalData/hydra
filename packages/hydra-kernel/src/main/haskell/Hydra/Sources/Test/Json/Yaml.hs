@@ -15,8 +15,8 @@ import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
 import           Hydra.Dsl.Meta.Phantoms                ((@@))
-import qualified Hydra.Dsl.Meta.Lib.Eithers   as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Maps      as Maps
+import qualified Hydra.Dsl.Lib.Eithers   as Eithers
+import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
@@ -85,7 +85,7 @@ decimalBridgeGroup = subgroup "decimal round-trip" [
 -- JSON -> YAML -> JSON must preserve the full decimal value for any JSON number.
 yamlBridgeCase :: String -> TypedTerm Value -> TypedTerm TestCaseWithMetadata
 yamlBridgeCase testName jsonValue = universalCase testName
-  (Eithers.either_
+  (Eithers.either
     (Phantoms.lambda "e" $ Phantoms.var "e")
     (Phantoms.lambda "back" $ JsonWriter.printJson @@ Phantoms.var "back")
     (JsonYamlDecode.yamlToJson @@ (JsonYamlEncode.jsonToYaml @@ jsonValue)))

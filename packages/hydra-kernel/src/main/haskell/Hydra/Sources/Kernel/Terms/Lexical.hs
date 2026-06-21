@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Terms.Lexical where
 
@@ -12,19 +13,19 @@ import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Literals     as MetaLiterals
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Lib.Math     as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -107,13 +108,13 @@ buildGraph = define "buildGraph" $
   doc "Build a Graph from element bindings, environment, and primitives" $
   "elements" ~> "environment" ~> "primitives" ~>
   -- boundTerms: element bindings (name -> term) merged with let-bound vars from environment (Just term)
-  "elementTerms" <~ Maps.fromList (Lists.map ("b" ~>
-    pair (Core.bindingName (var "b")) (Core.bindingTerm (var "b"))) (var "elements")) $
+  "elementTerms" <~ (Maps.fromList (Lists.map ("b" ~>
+    pair (Core.bindingName (var "b")) (Core.bindingTerm (var "b"))) (var "elements")) :: TypedTerm (M.Map Name Term)) $
   -- Keep only entries whose value is Just, and strip the Just wrapper.
-  "letTerms" <~ Maps.fromList (Optionals.mapOptional
+  "letTerms" <~ (Maps.fromList (Optionals.mapOptional
     ("kv" ~> Optionals.map ("t" ~> pair (Pairs.first $ var "kv") (var "t")) (Pairs.second $ var "kv"))
-    (Maps.toList $ var "environment")) $
-  "mergedTerms" <~ Maps.union (var "elementTerms") (var "letTerms") $
+    (Maps.toList (var "environment" :: TypedTerm (M.Map Name (Maybe Term))))) :: TypedTerm (M.Map Name Term)) $
+  "mergedTerms" <~ (Maps.union (var "elementTerms") (var "letTerms") :: TypedTerm (M.Map Name Term)) $
   -- Construction-time filter: any local binding (let-bound or element-bound)
   -- whose name collides with a primitive is dropped from the bindings map.
   -- The effective override order is therefore primitive > local binding for
@@ -125,14 +126,14 @@ buildGraph = define "buildGraph" $
   -- whether to switch to standard "local binding wins" scoping and resolve the
   -- default-impl vs native-impl decision separately at primitive-registration
   -- time.
-  "filteredTerms" <~ Maps.filterWithKey ("k" ~> "_v" ~>
-    Logic.not (Maps.member (var "k") (var "primitives"))) (var "mergedTerms") $
+  "filteredTerms" <~ (Maps.filterWithKey ("k" ~> "_v" ~>
+    Logic.not (Maps.member (var "k" :: TypedTerm Name) (var "primitives"))) (var "mergedTerms") :: TypedTerm (M.Map Name Term)) $
   -- boundTypes: extract bindingType from each element (preserving TypeScheme with constraints)
-  "elementTypes" <~ Maps.fromList (Optionals.cat (Lists.map ("b" ~>
+  "elementTypes" <~ (Maps.fromList (Optionals.cat (Lists.map ("b" ~>
     Optionals.map ("ts" ~> pair (Core.bindingName (var "b")) (var "ts"))
-      (Core.bindingTypeScheme (var "b"))) (var "elements"))) $
-  "filteredTypes" <~ Maps.filterWithKey ("k" ~> "_v" ~>
-    Logic.not (Maps.member (var "k") (var "primitives"))) (var "elementTypes") $
+      (Core.bindingTypeScheme (var "b"))) (var "elements"))) :: TypedTerm (M.Map Name TypeScheme)) $
+  "filteredTypes" <~ (Maps.filterWithKey ("k" ~> "_v" ~>
+    Logic.not (Maps.member (var "k" :: TypedTerm Name) (var "primitives"))) (var "elementTypes") :: TypedTerm (M.Map Name TypeScheme)) $
   Graph.graph
     (var "filteredTerms")
     (var "filteredTypes")
@@ -151,7 +152,7 @@ chooseUniqueName = define "chooseUniqueName" $
     "candidate" <~ Logic.ifElse (Equality.equal (var "index") (int32 1))
       (var "name")
       (Core.name $ (Core.unName (var "name") ++ Literals.showInt32 (var "index"))) $
-    Logic.ifElse (Sets.member (var "candidate") (var "reserved"))
+    Logic.ifElse (Sets.member (var "candidate" :: TypedTerm Name) (var "reserved"))
       (var "tryName" @@ (Math.add (var "index") (int32 1)))
       (var "candidate")) $
   var "tryName" @@ (int32 1)
@@ -172,7 +173,7 @@ dereferenceSchemaType = define "dereferenceSchemaType" $
       (var "forType" @@ (Core.forallTypeBody (var "ft"))),
     _Type_variable>>: "v" ~> dereferenceSchemaType @@ var "v" @@ var "types"]) $
   Optionals.bind
-    (Maps.lookup (var "name") (var "types"))
+    (Maps.lookup (var "name" :: TypedTerm Name) (var "types"))
     ("ts" ~> Optionals.map
       ("ts2" ~> Core.typeScheme
         -- Note: no alpha-renaming of type variables
@@ -223,7 +224,7 @@ getField :: TypedTermDefinition (M.Map Name Term -> Name -> (Term -> Either Erro
 getField = define "getField" $
   doc "Look up a field by name in a record's field map and decode its value, failing if the field is missing" $
   "m" ~> "fname" ~> "decode" ~>
-  Optionals.cases (Maps.lookup (var "fname") (var "m")) (left (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname"))) (var "decode")
+  Optionals.cases (Maps.lookup (var "fname" :: TypedTerm Name) (var "m")) (left (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname"))) (var "decode")
 
 graphToBindings :: TypedTermDefinition (Graph -> [Binding])
 graphToBindings = define "graphToBindings" $
@@ -233,17 +234,17 @@ graphToBindings = define "graphToBindings" $
     "name" <~ Pairs.first (var "p") $
     "term" <~ Pairs.second (var "p") $
     Core.binding (var "name") (var "term")
-      (Maps.lookup (var "name") (Graph.graphBoundTypes (var "g"))))
+      (Maps.lookup (var "name" :: TypedTerm Name) (Graph.graphBoundTypes (var "g"))))
     (Maps.toList (Graph.graphBoundTerms (var "g")))
 
 graphWithPrimitives :: TypedTermDefinition ([Primitive] -> [Primitive] -> Graph)
 graphWithPrimitives = define "graphWithPrimitives" $
   doc "Build a graph with primitives assembled from built-in and user-provided lists. User-provided primitives shadow built-in ones." $
   "builtIn" ~> "userProvided" ~>
-  "toMap" <~ ("ps" ~> Maps.fromList (Lists.map ("p" ~>
-    pair (Packaging.primitiveDefinitionName $ Graph.primitiveDefinition (var "p")) (var "p")) (var "ps"))) $
-  "prims" <~ Maps.union (var "toMap" @@ var "userProvided") (var "toMap" @@ var "builtIn") $
-  buildGraph @@ list ([] :: [TypedTerm Binding]) @@ Maps.empty @@ var "prims"
+  "toMap" <~ ("ps" ~> (Maps.fromList (Lists.map ("p" ~>
+    pair (Packaging.primitiveDefinitionName $ Graph.primitiveDefinition (var "p")) (var "p")) (var "ps")) :: TypedTerm (M.Map Name Primitive))) $
+  "prims" <~ (Maps.union (var "toMap" @@ var "userProvided") (var "toMap" @@ var "builtIn") :: TypedTerm (M.Map Name Primitive)) $
+  buildGraph @@ list ([] :: [TypedTerm Binding]) @@ (Maps.empty :: TypedTerm (M.Map Name (Maybe Term))) @@ var "prims"
 
 lookupBinding :: TypedTermDefinition (Graph -> Name -> Maybe Binding)
 lookupBinding = define "lookupBinding" $
@@ -251,20 +252,20 @@ lookupBinding = define "lookupBinding" $
   "graph" ~> "name" ~>
   Optionals.map
     ("term" ~> Core.binding (var "name") (var "term")
-      (Maps.lookup (var "name") (Graph.graphBoundTypes (var "graph"))))
-    (Maps.lookup (var "name") (Graph.graphBoundTerms (var "graph")))
+      (Maps.lookup (var "name" :: TypedTerm Name) (Graph.graphBoundTypes (var "graph"))))
+    (Maps.lookup (var "name" :: TypedTerm Name) (Graph.graphBoundTerms (var "graph")))
 
 lookupPrimitive :: TypedTermDefinition (Graph -> Name -> Maybe Primitive)
 lookupPrimitive = define "lookupPrimitive" $
   doc "Look up a primitive function in a graph by name" $
   "graph" ~> "name" ~>
-  Maps.lookup (var "name") (Graph.graphPrimitives (var "graph"))
+  Maps.lookup (var "name" :: TypedTerm Name) (Graph.graphPrimitives (var "graph"))
 
 lookupTerm :: TypedTermDefinition (Graph -> Name -> Maybe Term)
 lookupTerm = define "lookupTerm" $
   doc "Look up a term by name in a graph" $
   "graph" ~> "name" ~>
-  Maps.lookup (var "name") (Graph.graphBoundTerms (var "graph"))
+  Maps.lookup (var "name" :: TypedTerm Name) (Graph.graphBoundTerms (var "graph"))
 
 matchEnum :: TypedTermDefinition (Graph -> Name -> [(Name, b)] -> Term -> Either Error b)
 matchEnum = define "matchEnum" $
@@ -283,14 +284,17 @@ matchRecord = define "matchRecord" $
     _Term_record>>: "record" ~> var "decode" @@
       (Maps.fromList (Lists.map
         ("field" ~> pair (Core.fieldName (var "field")) (Core.fieldTerm (var "field")))
-        (Core.recordFields (var "record"))))]
+        (Core.recordFields (var "record"))) :: TypedTerm (M.Map Name Term))]
 
-matchUnion :: TypedTermDefinition (Graph -> Name -> [(Name, Term -> Either Error b)] -> Term -> Either Error b)
+-- The `forall b.` (with no constraint) exists only to bring `b` into scope for an in-body
+-- `:: TypedTerm (M.Map ... b)` annotation, needed now that the generated `Hydra.Dsl.Lib.Maps`
+-- requires the map type to be pinned. See #467.
+matchUnion :: forall b. TypedTermDefinition (Graph -> Name -> [(Name, Term -> Either Error b)] -> Term -> Either Error b)
 matchUnion = define "matchUnion" $
   doc "Match a term against a union type, dispatching on the injected variant to the appropriate decoder. Variable terms are dereferenced through the graph before matching." $
   "graph" ~> "tname" ~> "pairs" ~> "term" ~>
   "stripped" <~ Strip.deannotateAndDetypeTerm @@ var "term" $
-  "mapping" <~ Maps.fromList (var "pairs") $
+  "mapping" <~ (Maps.fromList (var "pairs") :: TypedTerm (M.Map Name (Term -> Either Error b))) $
   cases _Term (var "stripped")
     (Just (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (Strings.cat2 (string "injection for type ") (Core.unName (var "tname"))) (ShowCore.term @@ var "stripped")))) [
     _Term_variable>>: "name" ~>
@@ -300,7 +304,7 @@ matchUnion = define "matchUnion" $
       "exp" <~ (
         "fname" <~ Core.fieldName (Core.injectionField (var "injection")) $
         "val" <~ Core.fieldTerm (Core.injectionField (var "injection")) $
-        Optionals.cases (Maps.lookup (var "fname") (var "mapping")) (left (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname"))) ("f" ~> var "f" @@ var "val")) $
+        Optionals.cases (Maps.lookup (var "fname" :: TypedTerm Name) (var "mapping")) (left (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname"))) ("f" ~> var "f" @@ var "val")) $
       Logic.ifElse (Core.equalName_ (Core.injectionTypeName (var "injection")) (var "tname"))
         (var "exp")
         (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (Strings.cat2 (string "injection for type ") (Core.unName (var "tname"))) (ShowCore.term @@ var "term")))]
@@ -338,7 +342,7 @@ requirePrimitiveType = define "requirePrimitiveType" $
   "tx" ~> "name" ~>
   -- Look up the primitive directly and extract its type, avoiding O(p) map reconstruction.
   "mts" <~ Optionals.map ("_p" ~> Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition (var "_p")))
-    (Maps.lookup (var "name") (Graph.graphPrimitives $ var "tx")) $
+    (Maps.lookup (var "name" :: TypedTerm Name) (Graph.graphPrimitives $ var "tx")) $
   optCases (var "mts")
     (left (Error.errorResolution $ Error.resolutionErrorNoSuchPrimitive $ Error.noSuchPrimitiveError (var "name")))
     ("ts" ~> right $ var "ts")
@@ -379,7 +383,7 @@ stripAndDereferenceTermEither = define "stripAndDereferenceTermEither" $
   cases _Term (var "stripped")
     (Just (right (var "stripped"))) [
     _Term_variable>>: "v" ~>
-      Eithers.either_
+      Eithers.either
         left_  -- propagate error
         ("binding" ~> stripAndDereferenceTermEither @@ var "graph" @@ (Core.bindingTerm (var "binding")))
         (dereferenceVariable @@ var "graph" @@ var "v")]

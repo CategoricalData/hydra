@@ -1,8 +1,10 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hydra.Sources.Haskell.Utils where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -17,17 +19,17 @@ import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Errors                     as Error
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -139,7 +141,7 @@ elementReference = haskellUtilsDefinition "elementReference" $
     Optionals.cases (Util.qualifiedNameModuleName $ var "qname")
       (simpleName @@ var "local") $
       "ns" ~>
-        Optionals.cases (Maps.lookup (var "ns") (var "namespacesMap"))
+        Optionals.cases (Maps.lookup (var "ns") (var "namespacesMap" :: TypedTerm (M.Map ModuleName H.ModuleName)))
           (simpleName @@ var "local") $
           "mn" ~> lets [
             "aliasStr">: unwrap H._ModuleName @@ var "mn"] $
@@ -200,18 +202,18 @@ namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
     -- hydra.decode.graph in hydra.decode.coders) don't produce import
     -- lines for nonexistent modules.
     "termNss" <<~ Analysis.moduleDependencyModuleNames @@ var "cx" @@ var "g" @@ true @@ true @@ true @@ true @@ var "mod" $
-    "knownNss" <~ Sets.fromList (Optionals.cat
-      (Lists.map Names.moduleNameOf (Lists.concat2
+    "knownNss" <~ (Sets.fromList (Optionals.cat
+      (Lists.map (asTerm Names.moduleNameOf) (Lists.concat2
         (Maps.keys (Graph.graphSchemaTypes (var "g")))
-        (Maps.keys (Graph.graphBoundTerms (var "g")))))) $
-    "rawDeclaredNss" <~ Sets.fromList (Lists.map
+        (Maps.keys (Graph.graphBoundTerms (var "g")))))) :: TypedTerm (S.Set ModuleName)) $
+    "rawDeclaredNss" <~ (Sets.fromList (Lists.map
       ("dep" ~> Packaging.moduleDependencyModule (var "dep"))
-      (Packaging.moduleDependencies (var "mod"))) $
-    "declaredNss" <~ Sets.fromList (Lists.filter
-      ("ns" ~> Sets.member (var "ns") (var "knownNss"))
-      (Sets.toList (var "rawDeclaredNss"))) $
+      (Packaging.moduleDependencies (var "mod"))) :: TypedTerm (S.Set ModuleName)) $
+    "declaredNss" <~ (Sets.fromList (Lists.filter
+      ("ns" ~> Sets.member (var "ns") (var "knownNss" :: TypedTerm (S.Set ModuleName)))
+      (Sets.toList (var "rawDeclaredNss" :: TypedTerm (S.Set ModuleName)))) :: TypedTerm (S.Set ModuleName)) $
     "ownNs" <~ (Packaging.moduleName $ var "mod") $
-    "nss" <~ Sets.delete (var "ownNs") (Sets.union (var "termNss") (var "declaredNss")) $
+    "nss" <~ (Sets.delete (var "ownNs") (Sets.union (var "termNss") (var "declaredNss")) :: TypedTerm (S.Set ModuleName)) $
     "ns" <~ var "ownNs" $
     "segmentsOf" <~ ("namespace" ~>
       Strings.splitOn (string ".") (unwrap _ModuleName @@ var "namespace")) $
@@ -220,15 +222,15 @@ namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
     "aliasFromSuffix" <~ ("segs" ~> "n" ~> lets [
       "dropCount">: Math.sub (Lists.length $ var "segs") (var "n"),
       "suffix">: Lists.drop (var "dropCount") (var "segs"),
-      "capitalizedSuffix">: Lists.map (Formatting.capitalize) (var "suffix")] $
+      "capitalizedSuffix">: Lists.map (asTerm Formatting.capitalize) (var "suffix")] $
       wrap H._ModuleName $ Strings.cat $ var "capitalizedSuffix") $
     "toModuleName" <~ ("namespace" ~>
       var "aliasFromSuffix" @@ (var "segmentsOf" @@ var "namespace") @@ (int32 1)) $
     "focusPair" <~ pair (var "ns") (var "toModuleName" @@ var "ns") $
-    "nssAsList" <~ (Sets.toList $ var "nss") $
-    "segsMap" <~ (Maps.fromList $ Lists.map
+    "nssAsList" <~ (Sets.toList (var "nss" :: TypedTerm (S.Set ModuleName))) $
+    "segsMap" <~ ((Maps.fromList $ Lists.map
       ("nm" ~> pair (var "nm") (var "segmentsOf" @@ var "nm"))
-      (var "nssAsList")) $
+      (var "nssAsList")) :: TypedTerm (M.Map ModuleName [String])) $
     -- Maximum number of segments across all dependency namespaces; used as an
     -- upper bound on how many disambiguation passes are needed. At least 1 so
     -- the fold runs at least once even for single-namespace inputs.
@@ -239,11 +241,11 @@ namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
     -- Disambiguation state: Map ModuleName Int, where the Int is the number of
     -- trailing segments currently used to form the alias. Every namespace starts
     -- at 1 (just the last segment, matching the legacy behavior).
-    "initialState" <~ (Maps.fromList $ Lists.map
+    "initialState" <~ ((Maps.fromList $ Lists.map
       ("nm" ~> pair (var "nm") (int32 1))
-      (var "nssAsList")) $
-    "segsFor" <~ ("nm" ~> Optionals.fromOptional (list ([] :: [TypedTerm String])) (Maps.lookup (var "nm") (var "segsMap"))) $
-    "takenFor" <~ ("state" ~> "nm" ~> Optionals.fromOptional (int32 1) (Maps.lookup (var "nm") (var "state"))) $
+      (var "nssAsList")) :: TypedTerm (M.Map ModuleName Int)) $
+    "segsFor" <~ ("nm" ~> Optionals.fromOptional (list ([] :: [TypedTerm String])) (Maps.lookup (var "nm") (var "segsMap" :: TypedTerm (M.Map ModuleName [String])))) $
+    "takenFor" <~ ("state" ~> "nm" ~> Optionals.fromOptional (int32 1) (Maps.lookup (var "nm") (var "state" :: TypedTerm (M.Map ModuleName Int)))) $
     -- One pass of the fixed point: within each collision group (namespaces
     -- currently sharing an alias), only namespaces with *more* segments than
     -- the shortest in the group grow. This realizes the "shortest module
@@ -261,53 +263,53 @@ namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
           pair (var "nm") (pair (var "n") (pair (var "segCount") (var "aliasStr"))))
         (var "nssAsList"),
       -- Map alias-string -> number of namespaces producing that alias.
-      "aliasCounts">: Lists.foldl
+      "aliasCounts">: (Lists.foldl
         ("m" ~> "e" ~> lets [
           "k">: Pairs.second $ Pairs.second $ Pairs.second $ var "e"] $
           Maps.insert (var "k")
-            (Math.add (int32 1) (Optionals.fromOptional (int32 0) (Maps.lookup (var "k") (var "m"))))
-            (var "m"))
-        Maps.empty
-        (var "aliasEntries"),
+            (Math.add (int32 1) (Optionals.fromOptional (int32 0) (Maps.lookup (var "k") (var "m" :: TypedTerm (M.Map String Int)))))
+            (var "m" :: TypedTerm (M.Map String Int)))
+        (Maps.empty :: TypedTerm (M.Map String Int))
+        (var "aliasEntries") :: TypedTerm (M.Map String Int)),
       -- Map alias-string -> smallest total segment count among colliding namespaces.
       -- Used to identify the "winner" (shortest name) in each collision group.
-      "aliasMinSegs">: Lists.foldl
+      "aliasMinSegs">: (Lists.foldl
         ("m" ~> "e" ~> lets [
           "segCount">: Pairs.first $ Pairs.second $ Pairs.second $ var "e",
           "k">: Pairs.second $ Pairs.second $ Pairs.second $ var "e",
-          "existing">: Maps.lookup (var "k") (var "m")] $
+          "existing">: Maps.lookup (var "k") (var "m" :: TypedTerm (M.Map String Int))] $
           Maps.insert (var "k")
             (Optionals.cases (var "existing")
               (var "segCount") $
               "prev" ~> Logic.ifElse (Equality.lt (var "segCount") (var "prev")) (var "segCount") (var "prev"))
-            (var "m"))
-        Maps.empty
-        (var "aliasEntries")] $
+            (var "m" :: TypedTerm (M.Map String Int)))
+        (Maps.empty :: TypedTerm (M.Map String Int))
+        (var "aliasEntries") :: TypedTerm (M.Map String Int))] $
       -- Map alias-string -> number of colliding namespaces tied at the minimum
       -- segment count. If >1, every tied-minimum member must grow too (no one
       -- can unambiguously claim the shortest alias).
       lets [
-        "aliasMinSegsCount">: Lists.foldl
+        "aliasMinSegsCount">: (Lists.foldl
           ("m" ~> "e" ~> lets [
             "segCount">: Pairs.first $ Pairs.second $ Pairs.second $ var "e",
             "k">: Pairs.second $ Pairs.second $ Pairs.second $ var "e",
-            "minSegs">: Optionals.fromOptional (var "segCount") (Maps.lookup (var "k") (var "aliasMinSegs"))] $
+            "minSegs">: Optionals.fromOptional (var "segCount") (Maps.lookup (var "k") (var "aliasMinSegs" :: TypedTerm (M.Map String Int)))] $
             Logic.ifElse (Equality.equal (var "segCount") (var "minSegs"))
               (Maps.insert (var "k")
-                (Math.add (int32 1) (Optionals.fromOptional (int32 0) (Maps.lookup (var "k") (var "m"))))
-                (var "m"))
-              (var "m"))
-          Maps.empty
-          (var "aliasEntries")] $
-      Maps.fromList $ Lists.map
+                (Math.add (int32 1) (Optionals.fromOptional (int32 0) (Maps.lookup (var "k") (var "m" :: TypedTerm (M.Map String Int)))))
+                (var "m" :: TypedTerm (M.Map String Int)))
+              (var "m" :: TypedTerm (M.Map String Int)))
+          (Maps.empty :: TypedTerm (M.Map String Int))
+          (var "aliasEntries") :: TypedTerm (M.Map String Int))] $
+      (Maps.fromList $ Lists.map
         ("e" ~> lets [
           "nm">: Pairs.first $ var "e",
           "n">: Pairs.first $ Pairs.second $ var "e",
           "segCount">: Pairs.first $ Pairs.second $ Pairs.second $ var "e",
           "aliasStr">: Pairs.second $ Pairs.second $ Pairs.second $ var "e",
-          "count">: Optionals.fromOptional (int32 0) (Maps.lookup (var "aliasStr") (var "aliasCounts")),
-          "minSegs">: Optionals.fromOptional (var "segCount") (Maps.lookup (var "aliasStr") (var "aliasMinSegs")),
-          "minSegsCount">: Optionals.fromOptional (int32 0) (Maps.lookup (var "aliasStr") (var "aliasMinSegsCount")),
+          "count">: Optionals.fromOptional (int32 0) (Maps.lookup (var "aliasStr") (var "aliasCounts" :: TypedTerm (M.Map String Int))),
+          "minSegs">: Optionals.fromOptional (var "segCount") (Maps.lookup (var "aliasStr") (var "aliasMinSegs" :: TypedTerm (M.Map String Int))),
+          "minSegsCount">: Optionals.fromOptional (int32 0) (Maps.lookup (var "aliasStr") (var "aliasMinSegsCount" :: TypedTerm (M.Map String Int))),
           -- A namespace grows iff (1) its alias currently collides, (2) it
           -- still has room to grow, and (3) it is strictly longer than the
           -- shortest in its group OR the shortest position is tied (in which
@@ -321,12 +323,12 @@ namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
                 (Equality.gt (var "minSegsCount") (int32 1)))),
           "newN">: Logic.ifElse (var "canGrow") (Math.add (var "n") (int32 1)) (var "n")] $
           pair (var "nm") (var "newN"))
-        (var "aliasEntries")) $
+        (var "aliasEntries") :: TypedTerm (M.Map ModuleName Int))) $
     "finalState" <~ (Lists.foldl (var "growStep") (var "initialState") (Lists.replicate (var "maxSegs") unit)) $
-    "resultMap" <~ (Maps.fromList $ Lists.map
+    "resultMap" <~ ((Maps.fromList $ Lists.map
       ("nm" ~> pair (var "nm")
         (var "aliasFromSuffix" @@ (var "segsFor" @@ var "nm") @@ (var "takenFor" @@ var "finalState" @@ var "nm"))) $
-      (var "nssAsList")) $
+      (var "nssAsList")) :: TypedTerm (M.Map ModuleName H.ModuleName)) $
     right $ Util.moduleNames (var "focusPair") (var "resultMap")
 
 newtypeAccessorName :: TypedTermDefinition (Name -> String)
@@ -428,7 +430,7 @@ unionFieldReference = haskellUtilsDefinition "unionFieldReference" $
       "tname">: Names.unqualifyName @@ record _QualifiedName [
         _QualifiedName_moduleName>>: var "ns",
         _QualifiedName_local>>: var "name"]] $
-      Logic.ifElse (Sets.member (var "tname") (var "boundNames"))
+      Logic.ifElse (Sets.member (var "tname") (var "boundNames" :: TypedTerm (S.Set Name)))
         (var "deconflict" @@ Strings.cat2 (var "name") (string "_"))
         (var "name"),
     "nm">: var "deconflict" @@ Strings.cat2 (var "capitalizedTypeName") (var "capitalizedFieldName"),

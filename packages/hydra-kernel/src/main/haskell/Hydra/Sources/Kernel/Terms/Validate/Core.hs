@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 
 -- | Validation rules for core terms and types.
 --
@@ -29,18 +30,18 @@ import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Lib.Math     as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -278,7 +279,7 @@ checkTerm = define "checkTerm" $
       firstFinding @@ list [
         -- T21. EmptyTermAnnotationError
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_emptyTermAnnotation
-          (Logic.ifElse (Maps.null $ var "annMap")
+          (Logic.ifElse (Maps.null (var "annMap" :: TypedTerm (M.Map Name Term)))
             (mkJust $ inject _InvalidTermError _InvalidTermError_emptyTermAnnotation $
               record _EmptyTermAnnotationError [
                 _EmptyTermAnnotationError_location>>: var "path"])
@@ -568,8 +569,8 @@ checkUndefinedTypeVariablesInType = define "checkUndefinedTypeVariablesInType" $
   doc "Check a type for type variables not bound in the current scope" $
   "path" ~> "cx" ~> "typ" ~> "mkError" ~>
   "freeVars" <~ Variables.freeVariablesInType @@ var "typ" $
-  "undefined" <~ Sets.difference (var "freeVars") (Graph.graphTypeVariables $ var "cx") $
-  Optionals.cases (Lists.maybeHead $ Sets.toList $ var "undefined") noError ("firstUndefined" ~> var "mkError" @@ var "firstUndefined")
+  "undefined" <~ (Sets.difference (var "freeVars") (Graph.graphTypeVariables $ var "cx") :: TypedTerm (S.Set Name)) $
+  Optionals.cases (Lists.maybeHead $ Sets.toList (var "undefined" :: TypedTerm (S.Set Name))) noError ("firstUndefined" ~> var "mkError" @@ var "firstUndefined")
 
 -- | Check a type scheme for undefined type variables against the current graph scope.
 -- The scheme's own bound variables are excluded before checking.
@@ -580,8 +581,8 @@ checkUndefinedTypeVariablesInTypeScheme = define "checkUndefinedTypeVariablesInT
   doc "Check a type scheme for type variables not bound by the scheme or the current scope" $
   "path" ~> "cx" ~> "ts" ~> "mkError" ~>
   "freeVars" <~ Variables.freeVariablesInTypeScheme @@ var "ts" $
-  "undefined" <~ Sets.difference (var "freeVars") (Graph.graphTypeVariables $ var "cx") $
-  Optionals.cases (Lists.maybeHead $ Sets.toList $ var "undefined") noError ("firstUndefined" ~> var "mkError" @@ var "firstUndefined")
+  "undefined" <~ (Sets.difference (var "freeVars") (Graph.graphTypeVariables $ var "cx") :: TypedTerm (S.Set Name)) $
+  Optionals.cases (Lists.maybeHead $ Sets.toList (var "undefined" :: TypedTerm (S.Set Name))) noError ("firstUndefined" ~> var "mkError" @@ var "firstUndefined")
 
 -- ============================================================================
 -- Type validation
@@ -666,11 +667,11 @@ findDuplicate = define "findDuplicate" $
       "seen" <~ Pairs.first (var "acc") $
       "dup" <~ Pairs.second (var "acc") $
       Optionals.cases (var "dup")
-        (Logic.ifElse (Sets.member (var "name") (var "seen"))
+        (Logic.ifElse (Sets.member (var "name" :: TypedTerm Name) (var "seen"))
           (pair (var "seen") (just $ var "name"))
-          (pair (Sets.insert (var "name") (var "seen")) nothing))
+          (pair (Sets.insert (var "name" :: TypedTerm Name) (var "seen")) nothing))
         (constant $ var "acc"))
-    (pair Sets.empty nothing)
+    (pair (Sets.empty :: TypedTerm (S.Set Name)) nothing)
     (var "names") $
   Pairs.second (var "result")
 
@@ -686,11 +687,11 @@ findDuplicateFieldType = define "findDuplicateFieldType" $
       "seen" <~ Pairs.first (var "acc") $
       "dup" <~ Pairs.second (var "acc") $
       Optionals.cases (var "dup")
-        (Logic.ifElse (Sets.member (var "name") (var "seen"))
+        (Logic.ifElse (Sets.member (var "name" :: TypedTerm Name) (var "seen"))
           (pair (var "seen") (just $ var "name"))
-          (pair (Sets.insert (var "name") (var "seen")) nothing))
+          (pair (Sets.insert (var "name" :: TypedTerm Name) (var "seen")) nothing))
         (constant $ var "acc"))
-    (pair Sets.empty nothing)
+    (pair (Sets.empty :: TypedTerm (S.Set Name)) nothing)
     (var "names") $
   Pairs.second (var "result")
 -- | Return the first Just from a list of Maybe values, or Nothing
@@ -973,7 +974,7 @@ validateTypeNode = define "validateTypeNode" $
       firstFindingType @@ list [
         -- Y9. EmptyTypeAnnotationError
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_emptyTypeAnnotation
-          (Logic.ifElse (Maps.null $ var "annMap")
+          (Logic.ifElse (Maps.null (var "annMap" :: TypedTerm (M.Map Name Term)))
             (mkJustType $ inject _InvalidTypeError _InvalidTypeError_emptyTypeAnnotation $
               record _EmptyTypeAnnotationError [
                 _EmptyTypeAnnotationError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep]))])
@@ -1000,7 +1001,7 @@ validateTypeNode = define "validateTypeNode" $
       firstFindingType @@ list [
         -- Y7. TypeVariableShadowingInForallError
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_typeVariableShadowingInForall
-          (Logic.ifElse (Sets.member (var "paramName") (var "boundVars"))
+          (Logic.ifElse (Sets.member (var "paramName" :: TypedTerm Name) (var "boundVars"))
             (mkJustType $ inject _InvalidTypeError _InvalidTypeError_typeVariableShadowingInForall $
               record _TypeVariableShadowingInForallError [
                 _TypeVariableShadowingInForallError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep])),
@@ -1126,7 +1127,7 @@ validateTypeNode = define "validateTypeNode" $
     -- Y6. UndefinedTypeVariableError
     _Type_variable>>: "varName" ~>
       guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_undefinedTypeVariable
-        (Logic.ifElse (Sets.member (var "varName") (var "boundVars"))
+        (Logic.ifElse (Sets.member (var "varName" :: TypedTerm Name) (var "boundVars"))
           noTypeError
           (mkJustType $ inject _InvalidTypeError _InvalidTypeError_undefinedTypeVariable $
             record _UndefinedTypeVariableError [

@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hydra.Sources.Pg.Graphson.Construct where
 
 -- Standard imports for term-level sources outside of the kernel
@@ -5,7 +7,7 @@ import Hydra.Kernel hiding (
   aggregateMap, adjacentEdgeToGraphson, edgePropertyToGraphson,
   graphsonVertexToJsonCoder, pgVertexWithAdjacentEdgesToGraphsonVertex,
   pgVertexWithAdjacentEdgesToJson, vertexPropertyToGraphson)
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -20,17 +22,17 @@ import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -102,7 +104,7 @@ module_ = Module {
   where
     definitions = [
       toDefinition adjacentEdgeToGraphson,
-      toDefinition aggregateMap,
+      toDefinition (aggregateMap :: TypedTermDefinition ([(G.PropertyKey, G.Value)] -> M.Map G.PropertyKey [G.Value])),
       toDefinition edgePropertyToGraphson,
       toDefinition graphsonVertexToJsonCoder,
       toDefinition pgVertexWithAdjacentEdgesToGraphsonVertex,
@@ -136,22 +138,25 @@ adjacentEdgeToGraphson = define "adjacentEdgeToGraphson" $
                     (record G._AdjacentEdge [
                       G._AdjacentEdge_id>>: var "gid",
                       G._AdjacentEdge_vertexId>>: var "gv",
-                      G._AdjacentEdge_properties>>: Maps.fromList (var "propPairs")]))))
+                      G._AdjacentEdge_properties>>: ((Maps.fromList (var "propPairs")) :: TypedTerm (M.Map G.PropertyKey G.Value))]))))
 
 -- | Aggregate a list of key-value pairs into a map of lists
-aggregateMap :: TypedTermDefinition ([(k, v)] -> M.Map k [v])
+-- `Ord k` + `forall` because the generated `Hydra.Dsl.Lib.Maps` exposes the primitive's `Ord` key
+-- constraint (the old hand-written `Meta.Lib.Maps` did not), which also forces a placeholder concrete
+-- type at registration in `definitions`. See #467.
+aggregateMap :: forall k v. Ord k => TypedTermDefinition ([(k, v)] -> M.Map k [v])
 aggregateMap = define "aggregateMap" $
   doc "Aggregate a list of key-value pairs into a map where each key maps to a list of values" $
   "pairs" ~>
     Lists.foldl
       ("m" ~> "p" ~>
-        "k" <~ (Pairs.first $ var "p") $
+        "k" <~ ((Pairs.first $ var "p") :: TypedTerm k) $
         "v" <~ (Pairs.second $ var "p") $
-        "existing" <~ (Maps.lookup (var "k") (var "m")) $
-        Maps.insert (var "k")
+        "existing" <~ ((Maps.lookup (var "k") ((var "m") :: TypedTerm (M.Map k [v]))) :: TypedTerm (Y.Maybe [v])) $
+        ((Maps.insert (var "k")
           (Optionals.cases (var "existing") (Lists.pure $ var "v") ("vs" ~> Lists.cons (var "v") (var "vs")))
-          (var "m"))
-      Maps.empty
+          ((var "m") :: TypedTerm (M.Map k [v]))) :: TypedTerm (M.Map k [v])))
+      (Maps.empty :: TypedTerm (M.Map k [v]))
       (var "pairs")
 
 -- | Convert a PG edge property to GraphSON format
@@ -211,9 +216,9 @@ pgVertexWithAdjacentEdgesToGraphsonVertex = define "pgVertexWithAdjacentEdgesToG
                       record G._Vertex [
                         G._Vertex_id>>: var "gid",
                         G._Vertex_label>>: just (wrap G._VertexLabel (unwrap PG._VertexLabel @@ var "label")),
-                        G._Vertex_inEdges>>: aggregateMap @@ var "inPairs",
-                        G._Vertex_outEdges>>: aggregateMap @@ var "outPairs",
-                        G._Vertex_properties>>: aggregateMap @@ var "propPairs"]))))
+                        G._Vertex_inEdges>>: (aggregateMap :: TypedTermDefinition ([(G.EdgeLabel, G.AdjacentEdge)] -> M.Map G.EdgeLabel [G.AdjacentEdge])) @@ var "inPairs",
+                        G._Vertex_outEdges>>: (aggregateMap :: TypedTermDefinition ([(G.EdgeLabel, G.AdjacentEdge)] -> M.Map G.EdgeLabel [G.AdjacentEdge])) @@ var "outPairs",
+                        G._Vertex_properties>>: (aggregateMap :: TypedTermDefinition ([(G.PropertyKey, G.VertexPropertyValue)] -> M.Map G.PropertyKey [G.VertexPropertyValue])) @@ var "propPairs"]))))
 
 -- | Convert a PG vertex with adjacent edges directly to JSON
 pgVertexWithAdjacentEdgesToJson :: TypedTermDefinition ((v -> Either Error G.Value) -> PG.VertexWithAdjacentEdges v -> Either Error JM.Value)

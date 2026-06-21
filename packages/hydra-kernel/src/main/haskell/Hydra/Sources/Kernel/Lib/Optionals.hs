@@ -1,11 +1,12 @@
 -- | Primitive declarations for the hydra.lib.optionals namespace.
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Lib.Optionals where
 
 import Hydra.Kernel
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Optionals as Optionals
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All

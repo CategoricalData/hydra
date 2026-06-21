@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 -- | Rust code generator in Hydra DSL.
 -- This module provides DSL versions of Rust code generation functions.
 -- Type definitions are mapped to structs/enums/newtypes; term definitions are mapped to functions.
@@ -8,17 +10,17 @@ module Hydra.Sources.Rust.Coder where
 import Hydra.Kernel
 import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Libraries
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Errors                      as Error
@@ -291,7 +293,7 @@ encodeTerm = def "encodeTerm" $
        "arg" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ Core.applicationArgument (var "app")) $
          right (rustCall @@ var "fun" @@ list [var "arg"]),
      _Term_either>>: lambda "e" $
-       Eithers.either_
+       Eithers.either
          (lambda "l" $
            "sl" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "l") $
              right (rustCall @@ (rustExprPath @@ string "Left") @@ list [var "sl"]))
@@ -333,7 +335,7 @@ encodeTerm = def "encodeTerm" $
            "k" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ Pairs.first (var "entry")) $
            "v" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ Pairs.second (var "entry")) $
              right (inject R._Expression R._Expression_tuple $ list [var "k", var "v"]))
-         (Maps.toList (var "m"))) $
+         (Maps.toList (var "m" :: TypedTerm (M.Map Term Term)))) $
          right (rustCall @@ (rustExprPath @@ string "BTreeMap::from") @@
            list [inject R._Expression R._Expression_array $
              inject R._ArrayExpr R._ArrayExpr_elements (var "pairs")]),
@@ -407,7 +409,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "name" <~ Packaging.termDefinitionName (var "tdef") $
     "term" <~ Packaging.termDefinitionBody (var "tdef") $
     "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ (Names.localNameOf @@ var "name")) $
-    "typ" <~ Optionals.cases (Optionals.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature (var "tdef")) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) (reify Core.typeSchemeBody) $
+    "typ" <~ Optionals.cases (Optionals.map (asTerm Scoping.termSignatureToTypeScheme) $ Packaging.termDefinitionSignature (var "tdef")) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) (reify Core.typeSchemeBody) $
     "body" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "term") $
     "retType" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
       right (record R._ItemWithComments [
@@ -666,7 +668,7 @@ moduleToRust = def "moduleToRust" $
     "crate" <~ (record R._Crate [R._Crate_items>>: var "allItems"]) $
     "code" <~ (SerializationSource.printExpr @@ (SerializationSource.parenthesize @@ (RustSerdeSource.crateToExpr @@ var "crate"))) $
     "filePath" <~ (Names.moduleNameToFilePath @@ Util.caseConventionLowerSnake @@ wrap _FileExtension (string "rs") @@ (Packaging.moduleName (var "mod"))) $
-      right (Maps.singleton (var "filePath") (var "code"))
+      right (Maps.singleton (var "filePath") (var "code") :: TypedTerm (M.Map FilePath String))
 
 -- | Apply a type constructor to one type argument (e.g., Vec<T>)
 rustApply1 :: TypedTermDefinition (String -> R.Type -> R.Type)

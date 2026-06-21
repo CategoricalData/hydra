@@ -1,8 +1,10 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hydra.Sources.Protobuf.Serde where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -16,17 +18,17 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -146,7 +148,7 @@ enumDefinitionToExpr = define "enumDefinitionToExpr" $
       (Serialization.spaceSep @@ list [
         Serialization.cst @@ string "enum",
         Serialization.cst @@ (unwrap P3._TypeName @@ var "name"),
-        protoBlock @@ (Lists.map enumValueToExpr (var "values"))])
+        protoBlock @@ (Lists.map (asTerm enumValueToExpr) (var "values"))])
 
 enumValueToExpr :: TypedTermDefinition (P3.EnumValue -> Expr)
 enumValueToExpr = define "enumValueToExpr" $
@@ -191,7 +193,7 @@ fieldOptionsToExpr = define "fieldOptionsToExpr" $
     Logic.ifElse (Lists.null (var "opts"))
       nothing
       (Optionals.pure (Serialization.bracketList @@ Serialization.inlineStyle @@
-        (Lists.map fieldOptionToExpr (var "opts"))))
+        (Lists.map (asTerm fieldOptionToExpr) (var "opts"))))
 
 fieldToExpr :: TypedTermDefinition (P3.Field -> Expr)
 fieldToExpr = define "fieldToExpr" $
@@ -207,7 +209,7 @@ fieldToExpr = define "fieldToExpr" $
           Serialization.spaceSep @@ list [
             Serialization.cst @@ string "oneof",
             Serialization.cst @@ (unwrap P3._FieldName @@ var "name"),
-            protoBlock @@ (Lists.map fieldToExpr (var "fields"))],
+            protoBlock @@ (Lists.map (asTerm fieldToExpr) (var "fields"))],
         P3._FieldType_map>>: lambda "mt" $ lets [
           "kt">: project P3._MapType P3._MapType_keys @@ var "mt",
           "vt">: project P3._MapType P3._MapType_values @@ var "mt"] $
@@ -272,7 +274,7 @@ fileOptionsToExpr = define "fileOptionsToExpr" $
     "opts">: excludeInternalOptions @@ var "opts0"] $
     Logic.ifElse (Lists.null (var "opts"))
       nothing
-      (Optionals.pure (Serialization.newlineSep @@ (Lists.map fileOptionToExpr (var "opts"))))
+      (Optionals.pure (Serialization.newlineSep @@ (Lists.map (asTerm fileOptionToExpr) (var "opts"))))
 
 importToExpr :: TypedTermDefinition (P3.FileReference -> Expr)
 importToExpr = define "importToExpr" $
@@ -293,7 +295,7 @@ messageDefinitionToExpr = define "messageDefinitionToExpr" $
       (Serialization.spaceSep @@ list [
         Serialization.cst @@ string "message",
         Serialization.cst @@ (unwrap P3._TypeName @@ var "name"),
-        protoBlock @@ (Lists.map fieldToExpr (var "fields"))])
+        protoBlock @@ (Lists.map (asTerm fieldToExpr) (var "fields"))])
 
 optDesc :: TypedTermDefinition (Bool -> [P3.Option] -> Expr -> Expr)
 optDesc = define "optDesc" $
@@ -340,14 +342,14 @@ protoFileToExpr = define "protoFileToExpr" $
         Serialization.cst @@ (unwrap P3._PackageName @@ var "pkg")])]),
     "importsSec">: Logic.ifElse (Lists.null (var "imports"))
       nothing
-      (Optionals.pure (Serialization.newlineSep @@ (Lists.map importToExpr (var "imports")))),
+      (Optionals.pure (Serialization.newlineSep @@ (Lists.map (asTerm importToExpr) (var "imports")))),
     "options1">: Lists.filter
       (lambda "opt" $ Logic.not $ Equality.equal (project P3._Option P3._Option_name @@ var "opt") (string "_description"))
       (var "options"),
     "optionsSec">: fileOptionsToExpr @@ var "options1",
     "defsSec">: Logic.ifElse (Lists.null (var "defs"))
       nothing
-      (Optionals.pure (Serialization.doubleNewlineSep @@ (Lists.map definitionToExpr (var "defs"))))] $
+      (Optionals.pure (Serialization.doubleNewlineSep @@ (Lists.map (asTerm definitionToExpr) (var "defs"))))] $
     optDesc @@ true @@ var "options" @@
       (Serialization.doubleNewlineSep @@ (Optionals.cat $ list [
         var "headerSec", var "importsSec", var "optionsSec", var "defsSec"]))

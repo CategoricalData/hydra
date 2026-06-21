@@ -15,18 +15,18 @@ import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Lib.Math     as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -95,7 +95,7 @@ compactName = define "compactName" $
     "mns">: Util.qualifiedNameModuleName $ var "qualName",
     "local">: Util.qualifiedNameLocal $ var "qualName"]
     $ Optionals.cases (var "mns") (Core.unName $ var "name") (lambda "ns" $
-          Optionals.cases (Maps.lookup (var "ns") (var "namespaces")) (var "local") (lambda "pre" $ Strings.cat $ list [var "pre", string ":", var "local"]))
+          Optionals.cases (Maps.lookup (var "ns" :: TypedTerm ModuleName) (var "namespaces")) (var "local") (lambda "pre" $ Strings.cat $ list [var "pre", string ":", var "local"]))
 
 freshName :: TypedTermDefinition (InferenceContext -> (Name, InferenceContext))
 freshName = define "freshName" $
@@ -210,7 +210,7 @@ uniqueLabel :: TypedTermDefinition (S.Set String -> String -> String)
 uniqueLabel = define "uniqueLabel" $
   doc "Generate a unique label by appending a suffix if the label is already in use" $
   lambda "visited" $ lambda "l" $
-  Logic.ifElse (Sets.member (var "l") (var "visited"))
+  Logic.ifElse (Sets.member (var "l" :: TypedTerm String) (var "visited"))
     (uniqueLabel @@ var "visited" @@ Strings.cat2 (var "l") (string "'"))
     (var "l")
 

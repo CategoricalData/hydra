@@ -1,9 +1,10 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 module Hydra.Sources.Scala.Serde where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Dsl.Libraries
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -17,17 +18,17 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -159,11 +160,11 @@ dataFunctionToExpr = define "dataFunctionToExpr" $
     -- For long lambda bodies (>60 chars), put body on indented new line
     Logic.ifElse (Equality.gt (var "bodyLen") (int32 60))
       (Serialization.noSep @@ list [
-        Serialization.parenListAdaptive @@ (Lists.map dataParamToExpr (var "params")),
+        Serialization.parenListAdaptive @@ (Lists.map (asTerm dataParamToExpr) (var "params")),
         Serialization.cst @@ string " =>\n  ",
         var "bodyExpr"])
       (Serialization.spaceSep @@ list [
-        Serialization.parenListAdaptive @@ (Lists.map dataParamToExpr (var "params")),
+        Serialization.parenListAdaptive @@ (Lists.map (asTerm dataParamToExpr) (var "params")),
         Serialization.cst @@ string "=>",
         var "bodyExpr"])
 
@@ -215,13 +216,13 @@ defnToExpr = define "defnToExpr" $
         "body">: project Scala._DefDefn Scala._DefDefn_body @@ var "dd",
         "tparamsExpr">: Logic.ifElse (Lists.null (var "tparams"))
           nothing
-          (Optionals.pure (Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map typeParamToExpr (var "tparams")))),
+          (Optionals.pure (Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map (asTerm typeParamToExpr) (var "tparams")))),
         "scodExpr">: Optionals.map
           (lambda "t" $ Serialization.spaceSep @@ list [Serialization.cst @@ string ":", typeToExpr @@ var "t"])
           (var "scod"),
         -- Render each parameter list in its own parens (for curried defs)
         "paramssExprs">: Lists.map
-          ("ps" ~> Serialization.parenListAdaptive @@ (Lists.map dataParamToExpr (var "ps")))
+          ("ps" ~> Serialization.parenListAdaptive @@ (Lists.map (asTerm dataParamToExpr) (var "ps")))
           (var "paramss"),
         "nameAndParams">: Serialization.noSep @@ (Optionals.cat $ Lists.concat (list [
           list [Optionals.pure (dataNameToExpr @@ var "name")],
@@ -248,7 +249,7 @@ defnToExpr = define "defnToExpr" $
           Optionals.pure (typeNameToExpr @@ var "name"),
           Logic.ifElse (Lists.null (var "tparams"))
             nothing
-            (Optionals.pure (Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map typeParamToExpr (var "tparams")))),
+            (Optionals.pure (Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map (asTerm typeParamToExpr) (var "tparams")))),
           Optionals.pure (Serialization.cst @@ string "="),
           Optionals.pure (typeToExpr @@ var "body")]),
 
@@ -281,16 +282,16 @@ defnToExpr = define "defnToExpr" $
         "paramss">: project Scala._PrimaryCtor Scala._PrimaryCtor_paramss @@ var "ctor",
         "tparamsExpr">: Logic.ifElse (Lists.null (var "tparams"))
           nothing
-          (Optionals.pure (Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map typeParamToExpr (var "tparams")))),
+          (Optionals.pure (Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map (asTerm typeParamToExpr) (var "tparams")))),
         "paramsExpr">: Logic.ifElse (Lists.null (var "paramss"))
           nothing
-          (Optionals.pure (Serialization.parenListAdaptive @@ (Lists.map dataParamToExpr (Lists.concat (var "paramss"))))),
+          (Optionals.pure (Serialization.parenListAdaptive @@ (Lists.map (asTerm dataParamToExpr) (Lists.concat (var "paramss"))))),
         "nameAndParams">: Serialization.noSep @@ (Optionals.cat $ list [
           Optionals.pure (typeNameToExpr @@ var "name"),
           var "tparamsExpr",
           var "paramsExpr"])] $
         Serialization.spaceSep @@ (Lists.concat $ list [
-          Lists.map modToExpr (var "mods"),
+          Lists.map (asTerm modToExpr) (var "mods"),
           list [Serialization.cst @@ string "class", var "nameAndParams"]]),
 
       Scala._Defn_enum>>: lambda "de" $ lets [
@@ -304,7 +305,7 @@ defnToExpr = define "defnToExpr" $
             Optionals.pure (typeNameToExpr @@ var "name"),
             Logic.ifElse (Lists.null (var "tparams"))
               nothing
-              (Optionals.pure (Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map typeParamToExpr (var "tparams"))))]),
+              (Optionals.pure (Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map (asTerm typeParamToExpr) (var "tparams"))))]),
           Serialization.cst @@ string ":"],
         "enumCases">: Lists.map
           (lambda "s" $ Serialization.spaceSep @@ list [Serialization.cst @@ string "  ", statToExpr @@ var "s"])
@@ -319,12 +320,12 @@ defnToExpr = define "defnToExpr" $
         "allParams">: Lists.concat (var "paramss"),
         "params">: Logic.ifElse (Lists.null (var "allParams"))
           (Serialization.cst @@ string "")
-          (Serialization.parenListAdaptive @@ (Lists.map dataParamToExpr (var "allParams"))),
+          (Serialization.parenListAdaptive @@ (Lists.map (asTerm dataParamToExpr) (var "allParams"))),
         "extendsClause">: Logic.ifElse (Lists.null (var "inits"))
           (Serialization.cst @@ string "")
           (Serialization.spaceSep @@ list [
             Serialization.cst @@ string "extends",
-            Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map initToExpr (var "inits"))])] $
+            Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map (asTerm initToExpr) (var "inits"))])] $
         Serialization.spaceSep @@ list [
           Serialization.cst @@ string "case",
           Serialization.noSep @@ list [dataNameToExpr @@ var "name", var "params"],
@@ -347,7 +348,7 @@ importExportStatToExpr = define "importExportStatToExpr" $
     cases Scala._ImportExportStat (var "ie") Nothing [
       Scala._ImportExportStat_import>>: lambda "imp" $ lets [
         "importers">: project Scala._Import Scala._Import_importers @@ var "imp"] $
-        Serialization.newlineSep @@ (Lists.map importerToExpr (var "importers"))]
+        Serialization.newlineSep @@ (Lists.map (asTerm importerToExpr) (var "importers"))]
 
 importerToExpr :: TypedTermDefinition (Scala.Importer -> Expr)
 importerToExpr = define "importerToExpr" $
@@ -452,7 +453,7 @@ patToExpr = define "patToExpr" $
           (termToExpr @@ var "fun")
           (Serialization.noSep @@ list [
             termToExpr @@ var "fun",
-            Serialization.parenListAdaptive @@ (Lists.map patToExpr (var "args"))]),
+            Serialization.parenListAdaptive @@ (Lists.map (asTerm patToExpr) (var "args"))]),
       Scala._Pat_var>>: lambda "pv" $
         dataNameToExpr @@ (project Scala._VarPat Scala._VarPat_name @@ var "pv"),
       Scala._Pat_wildcard>>: constant (Serialization.cst @@ string "_")]
@@ -466,7 +467,7 @@ pkgToExpr = define "pkgToExpr" $
     "package">: Serialization.spaceSep @@ list [Serialization.cst @@ string "package", dataNameToExpr @@ var "name"]] $
     Serialization.doubleNewlineSep @@ (Lists.concat $ list [
       list [var "package"],
-      Lists.map statToExpr (var "stats")])
+      Lists.map (asTerm statToExpr) (var "stats")])
 
 -- | Convert a showFloat32/showFloat64 result into valid Scala source syntax,
 -- mapping NaN and ±Infinity to {Float,Double}.{NaN,PositiveInfinity,NegativeInfinity}.
@@ -503,22 +504,22 @@ termToExpr = define "termToExpr" $
         "args">: project Scala._ApplyData Scala._ApplyData_args @@ var "app"] $
         Serialization.noSep @@ list [
           termToExpr @@ var "fun",
-          Serialization.parenListAdaptive @@ (Lists.map termToExpr (var "args"))],
+          Serialization.parenListAdaptive @@ (Lists.map (asTerm termToExpr) (var "args"))],
       Scala._Data_assign>>: lambda "a" $ lets [
         "lhs">: project Scala._AssignData Scala._AssignData_lhs @@ var "a",
         "rhs">: project Scala._AssignData Scala._AssignData_rhs @@ var "a"] $
         Serialization.spaceSep @@ list [termToExpr @@ var "lhs", Serialization.cst @@ string "->", termToExpr @@ var "rhs"],
       Scala._Data_tuple>>: lambda "tup" $
-        Serialization.parenListAdaptive @@ (Lists.map termToExpr (project Scala._TupleData Scala._TupleData_args @@ var "tup")),
+        Serialization.parenListAdaptive @@ (Lists.map (asTerm termToExpr) (project Scala._TupleData Scala._TupleData_args @@ var "tup")),
       Scala._Data_match>>: lambda "m" $ lets [
         "expr">: project Scala._MatchData Scala._MatchData_expr @@ var "m",
         "mCases">: project Scala._MatchData Scala._MatchData_cases @@ var "m"] $
         Serialization.ifx @@ matchOp @@ (termToExpr @@ var "expr") @@
-          (Serialization.newlineSep @@ (Lists.map caseToExpr (var "mCases"))),
+          (Serialization.newlineSep @@ (Lists.map (asTerm caseToExpr) (var "mCases"))),
       Scala._Data_function>>: lambda "f" $ dataFunctionToExpr @@ var "f",
       Scala._Data_block>>: lambda "blk" $ lets [
         "stats">: project Scala._BlockData Scala._BlockData_stats @@ var "blk"] $
-        Serialization.curlyBlock @@ Serialization.fullBlockStyle @@ (Serialization.newlineSep @@ (Lists.map statToExpr (var "stats")))]
+        Serialization.curlyBlock @@ Serialization.fullBlockStyle @@ (Serialization.newlineSep @@ (Lists.map (asTerm statToExpr) (var "stats")))]
 
 typeNameToExpr :: TypedTermDefinition (Scala.NameType -> Expr)
 typeNameToExpr = define "typeNameToExpr" $
@@ -545,7 +546,7 @@ typeToExpr = define "typeToExpr" $
         "args">: project Scala._ApplyType Scala._ApplyType_args @@ var "ta"] $
         Serialization.noSep @@ list [
           typeToExpr @@ var "fun",
-          Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map typeToExpr (var "args"))],
+          Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map (asTerm typeToExpr) (var "args"))],
       Scala._Type_function>>: lambda "tf" $ lets [
         "cod">: project Scala._FunctionType Scala._FunctionType_res @@ var "tf",
         "dom">: Optionals.fromOptional (var "cod") (Lists.maybeHead (project Scala._FunctionType Scala._FunctionType_params @@ var "tf"))] $
@@ -555,6 +556,6 @@ typeToExpr = define "typeToExpr" $
         "body">: project Scala._LambdaType Scala._LambdaType_tpe @@ var "tl"] $
         Serialization.noSep @@ list [
           typeToExpr @@ var "body",
-          Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map typeParamToExpr (var "params"))],
+          Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map (asTerm typeParamToExpr) (var "params"))],
       Scala._Type_var>>: lambda "tv" $
         typeNameToExpr @@ (project Scala._VarType Scala._VarType_name @@ var "tv")]

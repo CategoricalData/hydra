@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hydra.Sources.Kernel.Terms.Validate.Packaging where
 
 -- Standard imports for kernel terms modules
@@ -20,15 +22,15 @@ import Hydra.Error.Packaging (
 import Hydra.Packaging (Package)
 import qualified Hydra.Dsl.Error.Packaging       as ErrorPackaging
 import qualified Hydra.Dsl.Meta.Core             as Core
-import qualified Hydra.Dsl.Meta.Lib.Equality     as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists        as Lists
-import qualified Hydra.Dsl.Meta.Lib.Logic        as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps         as Maps
-import qualified Hydra.Dsl.Meta.Lib.Optionals       as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs        as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Regex        as Regex
-import qualified Hydra.Dsl.Meta.Lib.Sets         as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings      as Strings
+import qualified Hydra.Dsl.Lib.Equality     as Equality
+import qualified Hydra.Dsl.Lib.Lists        as Lists
+import qualified Hydra.Dsl.Lib.Logic        as Logic
+import qualified Hydra.Dsl.Lib.Maps         as Maps
+import qualified Hydra.Dsl.Lib.Optionals       as Optionals
+import qualified Hydra.Dsl.Lib.Pairs        as Pairs
+import qualified Hydra.Dsl.Lib.Regex        as Regex
+import qualified Hydra.Dsl.Lib.Sets         as Sets
+import qualified Hydra.Dsl.Lib.Strings      as Strings
 import qualified Hydra.Dsl.Packaging                as Packaging
 import qualified Hydra.Dsl.Packaging             as Packaging
 import qualified Hydra.Dsl.Util                  as Util
@@ -42,6 +44,7 @@ import qualified Hydra.Sources.Kernel.Terms.Names      as Names
 import qualified Data.List                       as L
 import           Prelude hiding ((++))
 import qualified Data.List                       as L
+import qualified Data.Map                        as M
 import qualified Data.Set                        as S
 
 
@@ -166,17 +169,17 @@ checkConflictingModuleNames = define "checkConflictingModuleNames" $
       Optionals.cases (var "err")
         ("ns" <~ Packaging.moduleName (var "mod") $
           "key" <~ Strings.toLower (Packaging.unModuleName $ var "ns") $
-          "existing" <~ Maps.lookup (var "key") (var "seen") $
+          "existing" <~ Maps.lookup (var "key" :: TypedTerm String) (var "seen") $
           Optionals.cases (var "existing")
             -- No conflict: add to map
-            (pair (Maps.insert (var "key") (var "ns") (var "seen")) nothing)
+            (pair (Maps.insert (var "key" :: TypedTerm String) (var "ns") (var "seen")) nothing)
             -- Conflict found
             ("first" ~>
               pair (var "seen") (just $
                 ErrorPackaging.invalidPackageErrorConflictingModuleName $
                   ErrorPackaging.conflictingModuleNameError (var "first") (var "ns"))))
         (constant $ var "acc"))
-    (pair Maps.empty nothing)
+    (pair (Maps.empty :: TypedTerm (M.Map String Name)) nothing)
     (Packaging.packageModules $ var "pkg") $
   Pairs.second (var "result")
 
@@ -194,7 +197,7 @@ checkConflictingVariantNames = define "checkConflictingVariantNames" $
   "defNames" <~ Lists.foldl
     ("acc" ~> "def" ~>
       Sets.insert (Names.localNameOf @@ (definitionName @@ var "def")) (var "acc"))
-    Sets.empty
+    (Sets.empty :: TypedTerm (S.Set String))
     (var "defs") $
   -- For each type definition that is a union, check each field
   Lists.foldl
@@ -216,7 +219,7 @@ checkConflictingVariantNames = define "checkConflictingVariantNames" $
                         "constructorName" <~ Strings.cat2
                           (Formatting.capitalize @@ var "localTypeName")
                           (Formatting.capitalize @@ var "localFieldName") $
-                        Logic.ifElse (Sets.member (var "constructorName") (var "defNames"))
+                        Logic.ifElse (Sets.member (var "constructorName") (var "defNames" :: TypedTerm (S.Set String)))
                           (just $ ErrorPackaging.invalidModuleErrorConflictingVariantName $
                             ErrorPackaging.conflictingVariantNameError
                               (var "ns")
@@ -384,14 +387,14 @@ checkDuplicateDefinitionNames = define "checkDuplicateDefinitionNames" $
       Optionals.cases (var "err")
         -- No error yet: check this definition
         ("name" <~ (definitionName @@ var "def") $
-          Logic.ifElse (Sets.member (var "name") (var "seen"))
+          Logic.ifElse (Sets.member (var "name") (var "seen" :: TypedTerm (S.Set Name)))
             (pair (var "seen") (just $
               ErrorPackaging.invalidModuleErrorDuplicateDefinitionName $
                 ErrorPackaging.duplicateDefinitionNameError (var "ns") (var "name")))
-            (pair (Sets.insert (var "name") (var "seen")) nothing))
+            (pair (Sets.insert (var "name") (var "seen" :: TypedTerm (S.Set Name))) nothing))
         -- Already have an error: stop
         (constant $ var "acc"))
-    (pair Sets.empty nothing)
+    (pair (Sets.empty :: TypedTerm (S.Set Name)) nothing)
     (Packaging.moduleDefinitions $ var "mod") $
   Pairs.second (var "result")
 
@@ -407,13 +410,13 @@ checkDuplicateModuleNames = define "checkDuplicateModuleNames" $
       "err" <~ Pairs.second (var "acc") $
       Optionals.cases (var "err")
         ("ns" <~ Packaging.moduleName (var "mod") $
-          Logic.ifElse (Sets.member (var "ns") (var "seen"))
+          Logic.ifElse (Sets.member (var "ns") (var "seen" :: TypedTerm (S.Set ModuleName)))
             (pair (var "seen") (just $
               ErrorPackaging.invalidPackageErrorDuplicateModuleName $
                 ErrorPackaging.duplicateModuleNameError (var "ns")))
-            (pair (Sets.insert (var "ns") (var "seen")) nothing))
+            (pair (Sets.insert (var "ns") (var "seen" :: TypedTerm (S.Set ModuleName))) nothing))
         (constant $ var "acc"))
-    (pair Sets.empty nothing)
+    (pair (Sets.empty :: TypedTerm (S.Set ModuleName)) nothing)
     (Packaging.packageModules $ var "pkg") $
   Pairs.second (var "result")
 

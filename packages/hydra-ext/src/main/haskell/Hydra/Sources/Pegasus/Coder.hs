@@ -1,8 +1,10 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hydra.Sources.Pegasus.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -17,17 +19,17 @@ import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -150,7 +152,7 @@ encode = def "encode" $
         cases _Type (Strip.deannotateType @@ var "t")
           (Just $
             "res" <<~ (encodeType_ @@ var "cx" @@ var "g" @@ var "aliases" @@ var "t") $
-            Eithers.either_
+            Eithers.either
               (lambda "schema" $ right (var "schema"))
               (lambda "_" $ err (var "cx") (Strings.cat2 (string "type resolved to an unsupported nested named schema: ") (ShowCore.type_ @@ var "t")))
               (var "res")) [
@@ -159,7 +161,7 @@ encode = def "encode" $
             Logic.ifElse (Lists.null (var "rt"))
               (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ MetaTypes.int32)
               ("res" <<~ (encodeType_ @@ var "cx" @@ var "g" @@ var "aliases" @@ var "t") $
-               Eithers.either_
+               Eithers.either
                  (lambda "schema" $ right (var "schema"))
                  (lambda "_" $ err (var "cx") (Strings.cat2 (string "type resolved to an unsupported nested named schema: ") (ShowCore.type_ @@ var "t")))
                  (var "res"))]
@@ -363,7 +365,7 @@ importAliasesForModule = def "importAliasesForModule" $
     "nss" <<~ (Analysis.moduleDependencyModuleNames @@ var "cx" @@ var "g" @@ false @@ true @@ true @@ false @@ var "mod") $
     right (Maps.fromList (Lists.map
       (lambda "ns_" $ pair (var "ns_") (slashesToDots @@ (unwrap _ModuleName @@ var "ns_")))
-      (Sets.toList (var "nss"))))
+      (Sets.toList (var "nss") :: TypedTerm [ModuleName])) :: TypedTerm (M.Map ModuleName String))
 
 moduleToPdl :: TypedTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map FilePath String))
 moduleToPdl = def "moduleToPdl" $
@@ -375,7 +377,7 @@ moduleToPdl = def "moduleToPdl" $
         pair
           (Pairs.first (var "pair"))
           (Serialization.printExpr @@ (Serialization.parenthesize @@ (PegasusSerdeSource.schemaFileToExpr @@ Pairs.second (var "pair")))))
-      (Maps.toList (var "files"))))
+      (Maps.toList (var "files") :: TypedTerm [(FilePath, PDL.SchemaFile)])) :: TypedTerm (M.Map FilePath String))
 
 moduleToPegasusSchemas :: TypedTermDefinition (InferenceContext -> Graph -> Module -> [Definition] -> Either Error (M.Map FilePath PDL.SchemaFile))
 moduleToPegasusSchemas = def "moduleToPegasusSchemas" $
@@ -400,7 +402,7 @@ pdlNameForElement = def "pdlNameForElement" $
     "qn" <~ (Names.qualifyName @@ var "name") $
     "ns_" <~ project _QualifiedName _QualifiedName_moduleName @@ var "qn" $
     "local" <~ project _QualifiedName _QualifiedName_local @@ var "qn" $
-    "alias" <~ Optionals.bind (var "ns_") (lambda "n" $ Maps.lookup (var "n") (var "aliases")) $
+    "alias" <~ Optionals.bind (var "ns_") (lambda "n" $ (Maps.lookup (var "n") (var "aliases" :: TypedTerm (M.Map ModuleName String)))) $
     record PDL._QualifiedName [
       PDL._QualifiedName_name>>: wrap PDL._Name (var "local"),
       PDL._QualifiedName_namespace>>: Logic.ifElse (var "withNs")
@@ -444,7 +446,7 @@ typeToSchema = def "typeToSchema" $
   "cx" ~> "g" ~> "aliases" ~> "mod" ~> "typeDef" ~>
     "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "typeDef")) $
     "res" <<~ (encodeType_ @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
-    "ptype" <~ (Eithers.either_
+    "ptype" <~ (Eithers.either
       (lambda "schema" $ inject PDL._NamedSchemaType PDL._NamedSchemaType_typeref (var "schema"))
       (lambda "t" $ var "t")
       (var "res")) $

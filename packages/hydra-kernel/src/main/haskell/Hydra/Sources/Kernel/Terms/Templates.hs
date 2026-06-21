@@ -12,18 +12,18 @@ import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Lib.Math     as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -80,7 +80,7 @@ graphToSchema = define "graphToSchema" $
     Eithers.bind (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "el"))) (
       "t" ~> right (pair (var "name") (var "t")))) $
   Eithers.bind (Eithers.mapList (var "toPair") (var "els")) (
-    "pairs" ~> right (Maps.fromList (var "pairs")))
+    "pairs" ~> right (Maps.fromList (var "pairs") :: TypedTerm (M.Map Name Type)))
 
 instantiateTemplate :: TypedTermDefinition (InferenceContext -> Bool -> M.Map Name Type -> Name -> Type -> Either Error Term)
 instantiateTemplate = define "instantiateTemplate" $
@@ -149,7 +149,7 @@ instantiateTemplate = define "instantiateTemplate" $
       (Eithers.bind (var "inst" @@ var "tname" @@ var "et") (
         "e" ~> right (Core.termSet (Sets.fromList (list [var "e"]))))),
     _Type_variable>>: "vname" ~>
-      Optionals.cases (Maps.lookup (var "vname") (var "schema")) (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (string "bound type variable") (Strings.cat2 (string "unbound variable ") (Core.unName (var "vname"))))) (var "inst" @@ var "vname"),
+      Optionals.cases (Maps.lookup (var "vname" :: TypedTerm Name) (var "schema")) (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (string "bound type variable") (Strings.cat2 (string "unbound variable ") (Core.unName (var "vname"))))) (var "inst" @@ var "vname"),
     _Type_wrap>>: "wt" ~>
       Eithers.bind (var "inst" @@ var "tname" @@ var "wt") (
         "e" ~> right (Core.termWrap (Core.wrappedTerm (var "tname") (var "e"))))]

@@ -17,7 +17,7 @@ module Hydra.Sources.Bench.PolymorphicChain where
 
 import Hydra.Kernel
 import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import           Hydra.Sources.Kernel.Types.All
 
