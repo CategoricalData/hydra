@@ -9,8 +9,10 @@ import qualified Hydra.Sources.Kernel.Types.Coders      as Coders
 import qualified Hydra.Sources.Kernel.Types.Core        as Core
 import qualified Hydra.Sources.Kernel.Types.Error.Checking as ErrorChecking
 import qualified Hydra.Sources.Kernel.Types.Error.Core     as ErrorCore
+import qualified Hydra.Sources.Kernel.Types.Error.File     as ErrorFile
 import qualified Hydra.Sources.Kernel.Types.Error.Packaging as ErrorPackaging
 import qualified Hydra.Sources.Kernel.Types.Errors     as Error
+import qualified Hydra.Sources.Kernel.Types.File        as File
 import qualified Hydra.Sources.Kernel.Types.Graph       as Graph
 import qualified Hydra.Sources.Json.Model               as JsonModel
 import qualified Hydra.Sources.Kernel.Types.Variants    as Variants
@@ -20,6 +22,7 @@ import qualified Hydra.Sources.Kernel.Types.Query       as Query
 import qualified Hydra.Sources.Kernel.Types.Relational  as Relational
 import qualified Hydra.Sources.Kernel.Types.Tabular     as Tabular
 import qualified Hydra.Sources.Kernel.Types.Testing     as Testing
+import qualified Hydra.Sources.Kernel.Types.Time        as Time
 import qualified Hydra.Sources.Kernel.Types.Topology    as Topology
 import qualified Hydra.Sources.Kernel.Types.Typed       as Typed
 import qualified Hydra.Sources.Kernel.Types.Typing      as Typing
@@ -35,8 +38,10 @@ kernelTypesModules = [
   Core.module_,
   ErrorChecking.module_,
   ErrorCore.module_,
+  ErrorFile.module_,
   ErrorPackaging.module_,
   Error.module_,
+  File.module_,
   Graph.module_,
   JsonModel.module_,
   Packaging.module_,
@@ -45,6 +50,7 @@ kernelTypesModules = [
   Relational.module_,
   Tabular.module_,
   Testing.module_,
+  Time.module_,
   Topology.module_,
   Typed.module_,
   Typing.module_,

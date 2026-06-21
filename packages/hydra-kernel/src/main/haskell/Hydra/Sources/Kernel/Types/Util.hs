@@ -30,7 +30,6 @@ module_ = Module {
     definitions = [
       caseConvention,
       comparison,
-      fileExtension,
       moduleNames,
       precision,
       qualifiedName]
@@ -58,11 +57,6 @@ either_ = define "Either" $
     "right">:
       doc "The right alternative"
       (T.var "b")]
-
-fileExtension :: TypeDefinition
-fileExtension = define "FileExtension" $
-  doc "A file extension (without the dot), e.g. \"json\" or \"py\"" $
-  T.wrap T.string
 
 moduleNames :: TypeDefinition
 moduleNames = define "ModuleNames" $
