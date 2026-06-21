@@ -97,27 +97,35 @@ If a caller needs to collapse an optional value in a context where absence is im
 return `either<Error, T>` and propagate an informative error instead of hiding the
 partiality in a primitive.
 
-### No named types
+### Prefer core type constructors in signatures
 
-Primitive signatures for Hydra's built-in primitives must not depend on named Hydra types.
-Their domains and codomains should be built from core `Type` constructors, literal
-types, and type variables bound by the primitive's own type scheme.
+Built-in primitive signatures should lean on core `Type` constructors, literal types,
+and type variables bound by the primitive's own type scheme, rather than on named Hydra
+types defined in model modules.
 For example, a primitive may have a polymorphic signature such as
-`forall a. a -> (a, a)`, but it should not have a signature such as
-`hydra.core.Term -> hydra.core.Type`.
+`forall a. a -> (a, a)`, but a signature such as `hydra.core.Term -> hydra.core.Type` —
+referencing named types defined outside the primitive's own scheme — is something to
+avoid where a core constructor will do.
 
 This keeps primitive libraries independent of particular model modules and avoids
 special cases where a primitive is only meaningful after resolving named type
 definitions from the graph.
-This rule applies to primitives that ship with the Hydra kernel.
-Developers who extend Hydra for their own applications may define UDFs whose
-signatures consume or produce instances of named types from their application models.
 When an abstraction is foundational enough to appear in primitive signatures, prefer
 adding it as a core type constructor rather than as a named type.
-This is why `either<L, R>` replaced the old named `Flow` monad, and it is the same
-reason effects are modeled as `effect<T>` rather than a named `hydra.effects.Effect<T>`;
-see the wiki discussion in
-[Effects: why a type constructor, not a named type](https://github.com/CategoricalData/hydra/wiki/Effects#why-a-type-constructor-not-a-named-type).
+This is why `either<L, R>` replaced the old named `Flow` monad, and the same reasoning
+makes effects a core `effect<T>` constructor rather than a named `hydra.effects.Effect<T>`
+(see the [Effects](https://github.com/CategoricalData/hydra/wiki/Effects) wiki page).
+
+This is a preference, not an absolute rule, and it applies to kernel primitives — not to
+UDFs, which application developers routinely write against named types from their own
+models.
+A domain library may deliberately use named types in its signatures when they make the
+intent clearer than bare core types would.
+`hydra.lib.files` is the standard example: its operations take a `FilePath` and return a
+`FileError` or `FileStatus` rather than passing raw `string`s and integers around, because
+a small, self-describing POSIX vocabulary is worth the named-type dependency.
+The judgement to make is whether the named type earns its keep, not whether named types
+are forbidden.
 
 ### How the registry works
 
