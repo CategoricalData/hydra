@@ -70,10 +70,10 @@ The hosts are not peers. **Haskell is the bootstrap root** for *generating* ever
 Java and Python coder runtimes are produced by the Haskell host (`dist/java/`, `dist/python/` come out
 of Phase 3/4), so a local rebuild must start with Haskell.
 
-Note that the Haskell host itself now *consumes* the published `hydra-kernel` + `hydra-haskell` Hackage
-packages by default for its own compile (#370) — it is no longer "always from source." But it has the
-same `--local-host` escape (build the whole host from local source), and that is what you use here. So
-the local-host shims compose in order:
+Note that the Haskell host always compiles the kernel from the co-generated `dist/haskell/hydra-kernel`
+(#500: consuming it from Hackage would link generated coders against a stale kernel). The `--local-host`
+flag means "build the whole host from local source" (i.e. skip published-Hackage coder substitution,
+if any secondary coders are ever consumed). So the local-host shims compose in order:
 
 ```
 Haskell (--local-host: kernel from source)  →  dist/{java,python}/  →  Java/Python --local-host  →  DSL→JSON
@@ -119,15 +119,14 @@ of the published-wheel venv.
 heads/haskell/bin/sync-haskell.sh --local-host
 ```
 
-By default (`--published-host`) the host links `hydra-kernel` + `hydra-haskell` from Hackage (pinned at
-`hydra.json` `hostVersion`) and compiles only the other coders + drivers + DSL sources. `--local-host`
-puts the kernel + Haskell-coder runtime back on the local compile path (today's from-source behavior),
-for a backward-incompatible kernel change the published kernel can't express, or for cutting a kernel
+The kernel (`dist/haskell/hydra-kernel`) is always compiled locally — it is never consumed from Hackage
+(#500). `--published-host` vs `--local-host` controls whether *secondary* coders (hydra-coq, etc.) are
+consumed from Hackage once published; today none are published so both modes are equivalent. `--local-host`
+puts everything back on the local compile path (the from-source behavior), useful for cutting a kernel
 release. The Hackage-consumable set is *derived by probing* whether `hydra-<pkg>-<hostVersion>` actually
-exists on Hackage — so a coder published in a future cycle is consumed automatically with no config
-change. To force just one package local while consuming the rest, set
-`hostOverrides["<host>"] = "local"` in `hydra.json` (no flag needed); a local coder still
-compiles against the published kernel, valid under the forward-compatibility contract.
+exists on Hackage, excluding the kernel/haskell packages — so a coder published in a future cycle is
+consumed automatically with no config change. To force just one package local while consuming the rest,
+set `hostOverrides["<host>"] = "local"` in `hydra.json` (no flag needed).
 
 ### Publish the interim host, then pin to it
 

@@ -33,18 +33,18 @@
 # Prerequisites:
 #   - Stack is installed and configured
 #
-# Host mode (#370):
-#   --published-host  (DEFAULT)  Link the kernel + Haskell-coder runtime as the
-#                                PUBLISHED hydra-kernel / hydra-haskell packages
-#                                from Hackage (pinned at hydra.json hostVersion).
-#                                The head compiles only the other coders + drivers
-#                                + DSL sources, not the ~215 kernel modules.
-#   --local-host                 Build the whole host from local source (today's
-#                                behavior): kernel + Haskell coder back on the
-#                                compile path, overlay applied in full. The
-#                                foolproof escape — use for cutting a kernel/coder
-#                                release, or a backward-incompatible kernel change
-#                                the published kernel can't express. Per-package:
+# Host mode (#370/#500):
+#   --published-host  (DEFAULT)  Kernel always compiled from co-generated
+#                                dist/haskell/hydra-kernel (#500: consuming it
+#                                from Hackage would link generated coders against
+#                                a stale kernel). Secondary coders (hydra-coq,
+#                                etc.) consumed from Hackage once published.
+#                                Today equivalent to --local-host since no
+#                                secondary coders are yet on Hackage.
+#   --local-host                 Explicitly build the whole host from local
+#                                source; no Hackage consumption of any coder.
+#                                The foolproof escape — use for cutting a
+#                                kernel/coder release. Per-package:
 #                                set hydra.json hostOverrides[pkg]="local".
 #
 # Usage:
