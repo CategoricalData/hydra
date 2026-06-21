@@ -105,6 +105,11 @@ defaultPrimitiveDefinition name typ = PrimitiveDefinition {
   primitiveDefinitionIsTotal = True,
   primitiveDefinitionDefaultImplementation = Nothing}
 
+-- | Convert a TypeScheme to a TermSignature. A convenience alias for
+-- typeSchemeToTermSignature, used by primitive-declaration source modules.
+sig :: TypeScheme -> Typing.TermSignature
+sig = typeSchemeToTermSignature
+
 -- | Mark the value parameters at the given (0-based) positions of a primitive's
 -- signature as lazy. Used at the prim*-based registration sites in
 -- Hydra.Dsl.Libraries to record which arguments coders must thunk in hosts
