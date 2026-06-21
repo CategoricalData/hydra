@@ -3,14 +3,12 @@
 #
 # Called by bin/sync.sh during Phase 3 (target=typescript). Generates
 # `<pkg>` into dist/typescript/<pkg>/src/main/typescript/ and, for the
-# kernel, copies the hand-written TS runtime alongside.
+# kernel, copies the hand-written TS runtime alongside. Also calls
+# bin/lib/generate-typescript-package-build.py to emit the publishable
+# package.json + tsconfig.build.json for each package (#492).
 #
 # Usage:
 #   assemble-distribution.sh <pkg>
-#
-# Currently the kernel is the only meaningful target; other packages
-# (hydra-pg, hydra-rdf) can be added incrementally once their runtime
-# bindings are written.
 
 set -euo pipefail
 
@@ -25,6 +23,31 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_TS_HEAD="$( cd "$SCRIPT_DIR/.." && pwd )"
 HYDRA_ROOT="$( cd "$HYDRA_TS_HEAD/../.." && pwd )"
 
+# Generate the npm package.json + tsconfig.build.json for any package that has
+# a packages/<pkg>/package.json entry (i.e. all non-skipped packages).
+generate_npm_build() {
+    local pkg="$1"
+    HYDRA_ROOT_DIR="$HYDRA_ROOT" python3 \
+        "$HYDRA_ROOT/bin/lib/generate-typescript-package-build.py" "$pkg"
+}
+
+# Symlink all .ts files from a source hydra/ tree into a target hydra/ tree,
+# skipping files that already exist (own or previously symlinked sources win).
+symlink_hydra_tree() {
+    local src_hydra="$1"
+    local dest_hydra="$2"
+    if [ -d "$dest_hydra" ] && [ -d "$src_hydra" ]; then
+        while IFS= read -r sfile; do
+            rel="${sfile#$src_hydra/}"
+            dest="$dest_hydra/$rel"
+            if [ ! -e "$dest" ]; then
+                mkdir -p "$(dirname "$dest")"
+                ln -sf "$sfile" "$dest"
+            fi
+        done < <(find "$src_hydra" -name "*.ts" -not -path "*/node_modules/*")
+    fi
+}
+
 case "$PKG" in
     hydra-kernel)
         echo "  Generating $PKG -> typescript (main + test)"
@@ -36,8 +59,34 @@ case "$PKG" in
             --output "$HYDRA_ROOT/dist/typescript"
         "$HYDRA_TS_HEAD/bin/copy-kernel-runtime.sh" \
             --dist-root "$HYDRA_ROOT/dist/typescript"
+        generate_npm_build "$PKG"
         ;;
-    hydra-pg|hydra-rdf|hydra-coq|hydra-wasm|hydra-ext)
+    hydra-rdf)
+        echo "  Generating $PKG -> typescript (main)"
+        "$HYDRA_ROOT/heads/haskell/bin/transform-json-to-target.sh" \
+            typescript "$PKG" main \
+            --output "$HYDRA_ROOT/dist/typescript"
+        # Symlink kernel files so relative imports resolve at compile time.
+        PKG_HYDRA="$HYDRA_ROOT/dist/typescript/$PKG/src/main/typescript/hydra"
+        KERNEL_HYDRA="$HYDRA_ROOT/dist/typescript/hydra-kernel/src/main/typescript/hydra"
+        symlink_hydra_tree "$KERNEL_HYDRA" "$PKG_HYDRA"
+        generate_npm_build "$PKG"
+        ;;
+    hydra-pg)
+        echo "  Generating $PKG -> typescript (main)"
+        "$HYDRA_ROOT/heads/haskell/bin/transform-json-to-target.sh" \
+            typescript "$PKG" main \
+            --output "$HYDRA_ROOT/dist/typescript"
+        # Symlink kernel and hydra-rdf files so all relative imports resolve.
+        # hydra-rdf must be assembled before hydra-pg (sync.sh ensures this order).
+        PKG_HYDRA="$HYDRA_ROOT/dist/typescript/$PKG/src/main/typescript/hydra"
+        KERNEL_HYDRA="$HYDRA_ROOT/dist/typescript/hydra-kernel/src/main/typescript/hydra"
+        RDF_HYDRA="$HYDRA_ROOT/dist/typescript/hydra-rdf/src/main/typescript/hydra"
+        symlink_hydra_tree "$KERNEL_HYDRA" "$PKG_HYDRA"
+        symlink_hydra_tree "$RDF_HYDRA" "$PKG_HYDRA"
+        generate_npm_build "$PKG"
+        ;;
+    hydra-coq|hydra-wasm|hydra-ext)
         echo "  skipping: $PKG -> typescript (not yet supported)"
         ;;
     *)
@@ -45,28 +94,20 @@ case "$PKG" in
         "$HYDRA_ROOT/heads/haskell/bin/transform-json-to-target.sh" \
             typescript "$PKG" main \
             --output "$HYDRA_ROOT/dist/typescript"
-        # Cross-package self-containment: each dist/typescript/<pkg>/.../hydra/
-        # imports kernel modules via relative paths (../lib/maps.js, ../names.js,
-        # etc.). They resolve to kernel-pkg-local paths but the kernel sources
-        # only physically exist under dist/typescript/hydra-kernel/. Symlink
-        # every kernel file into this package so the imports resolve at runtime
-        # under node's NodeNext module resolution. Mirrors how Java's gradle
-        # source-set crossover and Python's pyright extraPaths bridge the two
-        # trees at compile time.
+        # Cross-package self-containment: symlink kernel files into this package.
         PKG_HYDRA="$HYDRA_ROOT/dist/typescript/$PKG/src/main/typescript/hydra"
         KERNEL_HYDRA="$HYDRA_ROOT/dist/typescript/hydra-kernel/src/main/typescript/hydra"
-        if [ -d "$PKG_HYDRA" ] && [ -d "$KERNEL_HYDRA" ]; then
-            # Walk all kernel .ts files (including subdirs: show/, validate/,
-            # decode/, encode/, error/, json/, extract/, lib/, lib/defaults/, ...).
-            while IFS= read -r kfile; do
-                rel="${kfile#$KERNEL_HYDRA/}"
-                dest="$PKG_HYDRA/$rel"
-                # Only link if the package didn't generate its own file at that path.
-                if [ ! -e "$dest" ]; then
-                    mkdir -p "$(dirname "$dest")"
-                    ln -sf "$kfile" "$dest"
-                fi
-            done < <(find "$KERNEL_HYDRA" -name "*.ts" -not -path "*/node_modules/*")
+        symlink_hydra_tree "$KERNEL_HYDRA" "$PKG_HYDRA"
+        # hydra-scala's serde imports ../java/serde.js (a sibling coder package).
+        # Symlink hydra-java's java/ subdir into hydra-scala so the import resolves.
+        if [ "$PKG" = "hydra-scala" ]; then
+            JAVA_HYDRA="$HYDRA_ROOT/dist/typescript/hydra-java/src/main/typescript/hydra/java"
+            SCALA_JAVA_DEST="$PKG_HYDRA/java"
+            if [ -d "$JAVA_HYDRA" ] && [ ! -e "$SCALA_JAVA_DEST" ]; then
+                ln -sf "$JAVA_HYDRA" "$SCALA_JAVA_DEST"
+                echo "  Symlinked hydra-java/java/ into $PKG for cross-coder import"
+            fi
         fi
+        generate_npm_build "$PKG"
         ;;
 esac

@@ -3,17 +3,14 @@
 A TypeScript implementation of the [Hydra](https://github.com/CategoricalData/hydra) type
 system and kernel.
 
-**Status:** TypeScript-as-target is complete. The kernel passes the full common test
-suite (2570 of 2577 tests passing, 7 skipped as `disabled` upstream, 0 failing), the
-coder lives under `packages/hydra-typescript` and emits valid TypeScript with full
-type signatures, and the head participates in `bin/run-bootstrapping-demo.sh` as a
-target.
-
-**TypeScript-as-host** can drive code generation for 7 of the 8 other heads from
-the language-neutral JSON kernel: TypeScript, Haskell, Python, Scala, Clojure, Scheme,
-Common Lisp, and Emacs Lisp. The Java target fails — see the "TS-as-host stack-limit
-caveat" below. **Writing Hydra DSL sources in TypeScript** (the other half of "host"
-status) is still deferred: it would require TS analogues of the Hydra DSL meta-builders,
+**Status:** TypeScript is a full Hydra implementation.
+As a **target**, the kernel passes the full common test suite
+(2570 of 2577 tests passing, 7 skipped as `disabled` upstream, 0 failing).
+As a **host**, TypeScript drives code generation for all other supported targets
+(Haskell, Python, Scala, Clojure, Scheme, Common Lisp, Emacs Lisp, and Java)
+from the language-neutral JSON kernel with no heap or stack failures (#462).
+**Writing Hydra DSL sources in TypeScript** (the third pillar of host status) is
+still deferred: it would require TS analogues of the Hydra DSL meta-builders,
 which Scala and Lisp heads also lack today.
 
 Hydra is a type-aware data transformation toolkit which aims to be highly flexible and
@@ -101,37 +98,18 @@ by the `Expression_asExpression` AST node):
 - **Term_cases** — the discriminator binds via `(u as any)` so `.value`
   access compiles on unit-shaped variants (`{tag: "lessThan"}`).
 
-### TS-as-host stack-limit caveat (TS → Java only)
+### TS-as-host Java generation
 
-TypeScript-as-host generates clean output for all currently-supported
-targets except **Java**, where ~30% of kernel modules with deeply-
-polymorphic types overflow V8's stack mid-codegen. The shipped
-`bin/run-bootstrapping-demo.sh --hosts typescript --targets java` path
-reflects this: TS emits most files correctly but a handful of modules
-(e.g. `hydra.adapt`, `hydra.checking`, `hydra.inference`) come out
-missing — enough that the resulting Java source set won't compile.
+TypeScript-as-host generates clean output for all targets including Java (#462).
+The generation completes in ~15 minutes with zero stack overflows; the shipped
+`demos/bootstrapping/bin/invoke-typescript-host.sh` raises the V8 stack to 56 MB
+(`--stack-size=57344`) which is sufficient for the deepest kernel inference paths.
 
-Root cause is the **V8 stack budget**, not the per-step frame overhead:
-- TS-emitted kernel uses ~10 JS frames per recursion step
-- Haskell-emitted Java uses ~6–16 JVM frames per step (comparable)
-- The Java host runs with `-Xss256m` (~16M raw frames available)
-- Node maxes out around ~611K raw frames (`ulimit -s 65520` plus V8
-  `--stack-size=57344`; pushing higher segfaults). That's ~26× less
-  headroom than Java.
-
-`demos/bootstrapping/bin/invoke-typescript-host.sh` already applies the
-full bump. Where Java host walks ~999K-forall types without trouble at
-`-Xss256m`, the TS host caps out around ~777-forall depth — fine for
-most real kernel terms but insufficient for the deepest polymorphic
-chains that arise during inference of certain kernel modules. Java is
-the only target whose codegen-time inference paths actually reach this
-depth in the current kernel.
-
-This is a runtime constraint, not a coder bug: the Java that TS does
-emit is byte-identical to Haskell-/Python-emitted Java for the modules
-that complete. Workarounds would be a kernel refactor toward
-accumulator-passing style for `rewriteType`/`typeOf`, or running TS-as-host
-on a runtime with a larger native stack.
+The resulting Java source set does not yet compile cleanly due to a separate
+codegen correctness gap: the TS Java coder does not yet emit aggregate namespace
+interface files (`hydra.lib.Maps`, `hydra.lib.Strings`, etc.) that the individual
+primitive stub classes reference (#499). This is a coder bug, not a stack or heap
+limitation.
 
 ### TS-as-host Lisp-dialect slowness
 

@@ -128,6 +128,9 @@ export const readFloat = (s: string): Optional<number> => {
 
 export const readDecimal = readFloat;
 
+export const readBoolean = (s: string): Optional<boolean> =>
+  s === "true" ? Given(true) : s === "false" ? Given(false) : None;
+
 // === conversions ===
 
 // "bigint" here means Hydra's BigInteger value — represented as JS bigint.

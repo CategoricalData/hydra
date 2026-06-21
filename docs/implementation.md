@@ -1027,7 +1027,7 @@ dist/haskell/hydra-ext/src/main/haskell/Hydra/                # Long-tail coders
 │   ├── Cpp/, Csharp/, Go/, Rust/, Yaml/, ...                # Other languages
 │   └── Atlas/, Azure/, Datalog/, Delta/, Geojson/, Iana/, Kusto/, Osv/, Parquet/, Sql/, Stac/, Workflow/
 dist/haskell/hydra-coq/src/main/haskell/Hydra/Coq/            # Coq coder
-dist/haskell/hydra-typescript/src/main/haskell/Hydra/TypeScript/  # TypeScript (in progress)
+dist/haskell/hydra-typescript/src/main/haskell/Hydra/TypeScript/  # TypeScript coder
 dist/haskell/hydra-wasm/src/main/haskell/Hydra/Wasm/          # WebAssembly (in progress)
 ```
 

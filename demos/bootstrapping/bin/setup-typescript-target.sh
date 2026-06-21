@@ -23,6 +23,10 @@ fi
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 HYDRA_TS_HEAD="$HYDRA_ROOT/heads/typescript"
+# Runtime sources live in dist/typescript/hydra-kernel/ (assembled by
+# copy-kernel-runtime.sh from overlay/typescript/). heads/typescript/src/
+# only contains test/; the hand-written main/ was migrated to overlay/ in #434.
+HYDRA_TS_DIST="$HYDRA_ROOT/dist/typescript/hydra-kernel/src/main/typescript"
 TS_RESOURCES="$SCRIPT_DIR/../resources/typescript"
 
 # Clean and create output directory
@@ -44,11 +48,12 @@ cp "$TS_RESOURCES/vitest.config.ts" "$OUTPUT_DIR/"
 # lib/* (including libraries.ts). These are copied so the demo layout
 # matches the in-tree heads/typescript layout. The host invoker writes
 # generated kernel files alongside; `runtime.ts` does not collide.
+# Source: dist/typescript/hydra-kernel/ (assembled from overlay/ by #434).
 echo "  Copying hand-written runtime..."
 mkdir -p "$OUTPUT_DIR/src/main/typescript/hydra/lib"
-cp "$HYDRA_TS_HEAD/src/main/typescript/hydra/runtime.ts" "$OUTPUT_DIR/src/main/typescript/hydra/"
-cp "$HYDRA_TS_HEAD/src/main/typescript/hydra/primitives.ts" "$OUTPUT_DIR/src/main/typescript/hydra/"
-cp -r "$HYDRA_TS_HEAD/src/main/typescript/hydra/lib/." "$OUTPUT_DIR/src/main/typescript/hydra/lib/"
+cp "$HYDRA_TS_DIST/hydra/runtime.ts" "$OUTPUT_DIR/src/main/typescript/hydra/"
+cp "$HYDRA_TS_DIST/hydra/primitives.ts" "$OUTPUT_DIR/src/main/typescript/hydra/"
+cp -r "$HYDRA_TS_DIST/hydra/lib/." "$OUTPUT_DIR/src/main/typescript/hydra/lib/"
 
 # Mark the bootstrap target tree as ESM so `import.meta` works under
 # NodeNext (same as dist/typescript/hydra-kernel/package.json written by
