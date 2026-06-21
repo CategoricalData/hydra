@@ -452,21 +452,17 @@ echo ""
 for L in $LANG_UNION; do
     if [ "$L" = "haskell" ]; then continue; fi
     # Go remains a "head bud" (#289): only hydra-kernel meaningful today.
-    # TypeScript was promoted by #126; still only kernel is wired through here
-    # because hydra-pg / hydra-rdf TypeScript runtime bindings haven't landed yet.
-    if [ "$L" = "go" ] || [ "$L" = "typescript" ]; then
-        for pkg in hydra-kernel; do
-            echo ""
-            echo "--- $pkg -> $L ---"
-            "$HYDRA_ROOT/heads/$L/bin/assemble-distribution.sh" "$pkg"
-        done
+    if [ "$L" = "go" ]; then
+        echo ""
+        echo "--- hydra-kernel -> $L ---"
+        "$HYDRA_ROOT/heads/$L/bin/assemble-distribution.sh" hydra-kernel
         continue
     fi
-    for pkg in hydra-kernel hydra-pg hydra-rdf; do
+    for pkg in hydra-kernel hydra-rdf hydra-pg; do
         echo ""
         echo "--- $pkg -> $L ---"
         case "$L" in
-            java|python|scala)
+            java|python|scala|typescript)
                 "$HYDRA_ROOT/heads/$L/bin/assemble-distribution.sh" "$pkg"
                 ;;
             clojure|scheme|common-lisp|emacs-lisp)

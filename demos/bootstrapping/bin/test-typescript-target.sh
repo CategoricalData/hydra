@@ -16,18 +16,21 @@ echo "Running TypeScript tests..."
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 HYDRA_TS_HEAD="$HYDRA_ROOT/heads/typescript"
+# Runtime sources live in dist/typescript/hydra-kernel/ since #434 moved
+# them from heads/typescript/src/main/ to overlay/typescript/.
+HYDRA_TS_DIST="$HYDRA_ROOT/dist/typescript/hydra-kernel/src/main/typescript"
 
 # Restore hand-written runtime files. After #126's rename, `runtime.ts`
 # no longer collides with generated `core.ts`, so we just re-copy
 # `runtime.ts` and `primitives.ts` (`primitives.ts` is hand-written and
 # is not overwritten by the host invoker, but copying defensively is
 # cheap).
-if [ -f "$HYDRA_TS_HEAD/src/main/typescript/hydra/runtime.ts" ]; then
-    cp "$HYDRA_TS_HEAD/src/main/typescript/hydra/runtime.ts" \
+if [ -f "$HYDRA_TS_DIST/hydra/runtime.ts" ]; then
+    cp "$HYDRA_TS_DIST/hydra/runtime.ts" \
        "$OUTPUT_DIR/src/main/typescript/hydra/runtime.ts"
 fi
-if [ -f "$HYDRA_TS_HEAD/src/main/typescript/hydra/primitives.ts" ]; then
-    cp "$HYDRA_TS_HEAD/src/main/typescript/hydra/primitives.ts" \
+if [ -f "$HYDRA_TS_DIST/hydra/primitives.ts" ]; then
+    cp "$HYDRA_TS_DIST/hydra/primitives.ts" \
        "$OUTPUT_DIR/src/main/typescript/hydra/primitives.ts"
 fi
 # Same for test-tree files: testEnv.ts and jsonBindings.ts are
@@ -44,8 +47,8 @@ done
 # The libraries.ts primitive registry is hand-written under src/main/lib/
 # (see gap 4 commit b6d603409). The TS host doesn't emit it (no DSL stub
 # for it), but in the bootstrap layout it lives where testEnv expects it.
-if [ -f "$HYDRA_TS_HEAD/src/main/typescript/hydra/lib/libraries.ts" ]; then
-    cp "$HYDRA_TS_HEAD/src/main/typescript/hydra/lib/libraries.ts" \
+if [ -f "$HYDRA_TS_DIST/hydra/lib/libraries.ts" ]; then
+    cp "$HYDRA_TS_DIST/hydra/lib/libraries.ts" \
        "$OUTPUT_DIR/src/main/typescript/hydra/lib/libraries.ts"
 fi
 

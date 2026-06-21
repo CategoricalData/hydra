@@ -126,5 +126,15 @@ for pkg in $BATCH_PACKAGES; do
     fi
 done
 
+# Generate per-package build.sbt + project/ for every package in the batch,
+# so each dist/scala/<pkg>/ is a standalone publishable sbt build.
+# Mirrors the Step 4 call in heads/scala/bin/assemble-distribution.sh.
+echo "Generating per-package build.sbt files..."
+for pkg in $BATCH_PACKAGES; do
+    HYDRA_ROOT_DIR="$HYDRA_ROOT_DIR" \
+        "$HYDRA_ROOT_DIR/bin/lib/generate-scala-package-build.py" \
+        "$pkg" --out-dir "$DIST_ROOT/$pkg"
+done
+
 echo ""
 echo "=== Done. Batch scala assembly complete under $DIST_ROOT ==="

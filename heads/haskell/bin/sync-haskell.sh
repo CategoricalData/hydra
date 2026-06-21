@@ -359,16 +359,16 @@ if [ "$NO_TESTS" = false ]; then
 fi
 
 echo ""
-echo "Checking for new files..."
+echo "Checking for new dist/json files..."
 echo ""
 
-NEW_FILES=$(git status --porcelain ../../dist/haskell/hydra-kernel/src/main/haskell ../../dist/haskell/hydra-kernel/src/test/haskell ../../dist/json/hydra-kernel/src/main/json ../../dist/haskell/hydra-haskell/src/main/haskell 2>/dev/null | grep "^??" | awk '{print $2}' || true)
+NEW_FILES=$(git status --porcelain ../../dist/json/hydra-kernel/src/main/json 2>/dev/null | grep "^??" | awk '{print $2}' || true)
 
 if [ -n "$NEW_FILES" ]; then
-    echo "New files were created. You may want to run:"
+    echo "New dist/json files were created. You may want to run:"
     echo ""
     echo "  cd $HYDRA_HASKELL_DIR"
-    echo "  git add ../../dist/haskell/hydra-kernel/src/main/haskell ../../dist/haskell/hydra-kernel/src/test/haskell ../../dist/json/hydra-kernel/src/main/json ../../dist/haskell/hydra-haskell/src/main/haskell"
+    echo "  git add ../../dist/json/hydra-kernel/src/main/json"
     echo ""
     echo "New files:"
     echo "$NEW_FILES" | head -20
@@ -377,7 +377,7 @@ if [ -n "$NEW_FILES" ]; then
         echo "  ... and $((NEW_COUNT - 20)) more"
     fi
 else
-    echo "No new files created."
+    echo "No new dist/json files created."
 fi
 
 banner2_done "Hydra-Haskell sync complete!"
