@@ -5,7 +5,9 @@ module Hydra.Sources.Kernel.Lib.Effects where
 import Hydra.Kernel
 import qualified Hydra.Dsl.Bootstrap     as Bootstrap
 import           Hydra.Dsl.Meta.Phantoms as Phantoms
+import           Hydra.Dsl.Prims         (sig)
 import qualified Hydra.Dsl.Types         as Types
+import           Hydra.Dsl.Types         (effect)
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++), foldl, map, pure)
 
@@ -49,14 +51,7 @@ module_ = Module {
         \ interaction."]]
 
 primImpure :: String -> String -> TermSignature -> [String] -> Definition
-primImpure localName description s comments =
-  toImpurePrimitive description s (unqualifyName (QualifiedName (Just ns) localName)) comments
-
-sig :: TypeScheme -> TermSignature
-sig = typeSchemeToTermSignature
-
-effect :: Type -> Type
-effect = TypeEffect
+primImpure = Phantoms.impurePrimitiveInModule ns
 
 tx, ty, tz :: Type
 tx = Types.var "x"
