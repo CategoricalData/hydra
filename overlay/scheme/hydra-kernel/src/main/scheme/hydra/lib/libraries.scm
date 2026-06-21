@@ -6,8 +6,10 @@
           (hydra prims)
           (hydra reduction)
           (hydra scheme lib chars)
+          (hydra scheme lib effects)
           (hydra scheme lib eithers)
           (hydra scheme lib equality)
+          (hydra scheme lib files)
           (hydra scheme lib lists)
           (hydra scheme lib literals)
           (hydra scheme lib logic)
@@ -18,12 +20,15 @@
           (hydra scheme lib regex)
           (hydra scheme lib sets)
           (hydra scheme lib strings)
+          (hydra scheme lib text)
           ;; #473: import the generated hydra.lib.* PrimitiveDefinition def-modules under a `def:`
           ;; prefix (their exported names collide with the impl libs above) so the registry can derive
           ;; each primitive's canonical name from its definition — the single source of truth.
           (prefix (hydra lib chars) def:)
+          (prefix (hydra lib effects) def:)
           (prefix (hydra lib eithers) def:)
           (prefix (hydra lib equality) def:)
+          (prefix (hydra lib files) def:)
           (prefix (hydra lib lists) def:)
           (prefix (hydra lib literals) def:)
           (prefix (hydra lib logic) def:)
@@ -33,7 +38,8 @@
           (prefix (hydra lib pairs) def:)
           (prefix (hydra lib regex) def:)
           (prefix (hydra lib sets) def:)
-          (prefix (hydra lib strings) def:))
+          (prefix (hydra lib strings) def:)
+          (prefix (hydra lib text) def:))
   (export standard-library)
   (begin
 
@@ -67,6 +73,48 @@
           (cons (prim-name def:hydra_lib_chars_is_upper)    (prim1 (prim-name def:hydra_lib_chars_is_upper)    hydra_lib_chars_is_upper    #f (tc-int32) (tc-boolean)))
           (cons (prim-name def:hydra_lib_chars_to_lower)    (prim1 (prim-name def:hydra_lib_chars_to_lower)    hydra_lib_chars_to_lower    #f (tc-int32) (tc-int32)))
           (cons (prim-name def:hydra_lib_chars_to_upper)    (prim1 (prim-name def:hydra_lib_chars_to_upper)    hydra_lib_chars_to_upper    #f (tc-int32) (tc-int32))))))
+
+    ;; ============================================================================
+    ;; Effects (#494)
+    ;; ============================================================================
+    ;;
+    ;; effect<t> is transparent in Scheme (effect<t> = t). These are registered so the inference
+    ;; graph can resolve the hydra.lib.effects.* names; their type schemes match the kernel
+    ;; signatures exactly (note pure is x -> effect<x>, including the function arrow). The real
+    ;; evaluation happens through the relocated hydra.scheme.lib.effects runtime, reached via the
+    ;; bootstrap redirect; the impls wired here are consistent with that runtime.
+
+    (define (register-effects)
+      (let (
+            (x (tc-variable "x"))
+            (y (tc-variable "y"))
+            (z (tc-variable "z")))
+        (let ((eff (lambda (c) (tc-effect c))))
+          (list
+            (cons (prim-name def:hydra_lib_effects_apply)   (prim2 (prim-name def:hydra_lib_effects_apply)
+                                               hydra_lib_effects_apply
+                                               #f (eff (tc-function x y)) (eff x) (eff y)))
+            (cons (prim-name def:hydra_lib_effects_bind)    (prim2 (prim-name def:hydra_lib_effects_bind)
+                                               hydra_lib_effects_bind
+                                               #f (eff x) (tc-function x (eff y)) (eff y)))
+            (cons (prim-name def:hydra_lib_effects_compose) (prim3 (prim-name def:hydra_lib_effects_compose)
+                                               hydra_lib_effects_compose
+                                               #f (tc-function x (eff y)) (tc-function y (eff z)) x (eff z)))
+            (cons (prim-name def:hydra_lib_effects_foldl)   (prim3 (prim-name def:hydra_lib_effects_foldl)
+                                               hydra_lib_effects_foldl
+                                               #f (tc-function x (tc-function y (eff x))) x (tc-list y) (eff x)))
+            (cons (prim-name def:hydra_lib_effects_map)     (prim2 (prim-name def:hydra_lib_effects_map)
+                                               hydra_lib_effects_map
+                                               #f (tc-function x y) (eff x) (eff y)))
+            (cons (prim-name def:hydra_lib_effects_map_list) (prim2 (prim-name def:hydra_lib_effects_map_list)
+                                               hydra_lib_effects_map_list
+                                               #f (tc-function x (eff y)) (tc-list x) (eff (tc-list y))))
+            (cons (prim-name def:hydra_lib_effects_map_optional) (prim2 (prim-name def:hydra_lib_effects_map_optional)
+                                               hydra_lib_effects_map_optional
+                                               #f (tc-function x (eff y)) (tc-optional x) (eff (tc-optional y))))
+            (cons (prim-name def:hydra_lib_effects_pure)    (prim1 (prim-name def:hydra_lib_effects_pure)
+                                               hydra_lib_effects_pure
+                                               #f x (eff x)))))))
 
     ;; ============================================================================
     ;; Eithers
@@ -136,6 +184,49 @@
           (cons (prim-name def:hydra_lib_equality_lte)      (prim2 (prim-name def:hydra_lib_equality_lte)      hydra_lib_equality_lte      #f x x (tc-boolean) ord-x))
           (cons (prim-name def:hydra_lib_equality_max)      (prim2 (prim-name def:hydra_lib_equality_max)      hydra_lib_equality_max      #f x x x ord-x))
           (cons (prim-name def:hydra_lib_equality_min)      (prim2 (prim-name def:hydra_lib_equality_min)      hydra_lib_equality_min      #f x x x ord-x)))))
+
+    ;; ============================================================================
+    ;; Files (#494)
+    ;; ============================================================================
+    ;;
+    ;; FilePath and FileError are nominal kernel types (referenced by name). unit maps to '(),
+    ;; binary to a bytevector, either to the (list 'left/'right) representation. As with effects,
+    ;; the type schemes are registered for inference name-resolution; the real I/O happens in
+    ;; hydra.scheme.lib.files, reached via the bootstrap redirect.
+
+    (define (register-files)
+      (let (
+            (bool (tc-boolean))
+            (bin (tc-binary))
+            (fp (tc-named "hydra.file.FilePath"))
+            (ferr (tc-named "hydra.error.file.FileError"))
+            (unit (tc-unit)))
+        (let ((eff (lambda (c) (tc-effect c))))
+          (list
+            (cons (prim-name def:hydra_lib_files_append_file) (prim2 (prim-name def:hydra_lib_files_append_file)
+                                               (lambda (path) (lambda (contents) ((hydra_lib_files_append_file path) contents)))
+                                               #f fp bin (eff (tc-either ferr unit))))
+            (cons (prim-name def:hydra_lib_files_create_directory) (prim2 (prim-name def:hydra_lib_files_create_directory)
+                                               (lambda (recursive) (lambda (path) ((hydra_lib_files_create_directory recursive) path)))
+                                               #f bool fp (eff (tc-either ferr unit))))
+            (cons (prim-name def:hydra_lib_files_exists) (prim1 (prim-name def:hydra_lib_files_exists)
+                                               hydra_lib_files_exists
+                                               #f fp (eff (tc-either ferr bool))))
+            (cons (prim-name def:hydra_lib_files_list_directory) (prim1 (prim-name def:hydra_lib_files_list_directory)
+                                               hydra_lib_files_list_directory
+                                               #f fp (eff (tc-either ferr (tc-list fp)))))
+            (cons (prim-name def:hydra_lib_files_read_file) (prim1 (prim-name def:hydra_lib_files_read_file)
+                                               hydra_lib_files_read_file
+                                               #f fp (eff (tc-either ferr bin))))
+            (cons (prim-name def:hydra_lib_files_remove_file) (prim1 (prim-name def:hydra_lib_files_remove_file)
+                                               hydra_lib_files_remove_file
+                                               #f fp (eff (tc-either ferr unit))))
+            (cons (prim-name def:hydra_lib_files_rename) (prim2 (prim-name def:hydra_lib_files_rename)
+                                               (lambda (source) (lambda (destination) ((hydra_lib_files_rename source) destination)))
+                                               #f fp fp (eff (tc-either ferr unit))))
+            (cons (prim-name def:hydra_lib_files_write_file) (prim2 (prim-name def:hydra_lib_files_write_file)
+                                               (lambda (path) (lambda (contents) ((hydra_lib_files_write_file path) contents)))
+                                               #f fp bin (eff (tc-either ferr unit))))))))
 
     ;; ============================================================================
     ;; Lists
@@ -514,6 +605,25 @@
           (cons (prim-name def:hydra_lib_strings_unlines)     (prim1 (prim-name def:hydra_lib_strings_unlines)     hydra_lib_strings_unlines     #f (tc-list s) s)))))
 
     ;; ============================================================================
+    ;; Text (#494)
+    ;; ============================================================================
+    ;;
+    ;; UTF-8 codecs bridging Hydra strings and raw bytes. decodeUtf8 :: binary -> either<string, string>
+    ;; (Left message on invalid UTF-8); encodeUtf8 :: string -> binary (total).
+
+    (define (register-text)
+      (let (
+            (s (tc-string))
+            (bin (tc-binary)))
+        (list
+          (cons (prim-name def:hydra_lib_text_decode_utf8) (prim1 (prim-name def:hydra_lib_text_decode_utf8)
+                                             hydra_lib_text_decode_utf8
+                                             #f bin (tc-either s s)))
+          (cons (prim-name def:hydra_lib_text_encode_utf8) (prim1 (prim-name def:hydra_lib_text_encode_utf8)
+                                             hydra_lib_text_encode_utf8
+                                             #f s bin)))))
+
+    ;; ============================================================================
     ;; Literals
     ;; ============================================================================
 
@@ -629,8 +739,10 @@
     (define (standard-library)
       (append
         (register-chars)
+        (register-effects)
         (register-eithers)
         (register-equality)
+        (register-files)
         (register-lists)
         (register-literals)
         (register-logic)
@@ -640,7 +752,8 @@
         (register-pairs)
         (register-regex)
         (register-sets)
-        (register-strings)))
+        (register-strings)
+        (register-text)))
 
 )
 )

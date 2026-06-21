@@ -5,30 +5,32 @@
 # upload-ready release artifacts.
 #
 # Release gate vs. quality check (the cohesive principle, #418): the script
-# HARD-FAILS (blocks the release) only on artifacts that 0.16.0 actually ships —
-# Haskell (Hackage: hydra-kernel/hydra-haskell/hydra), Java (Maven Central, via
-# the hydra-java rollup), Python (PyPI/conda) — plus version sync, the JSON
-# kernel, and lexicon freshness. Targets that are NOT released yet (Scala, the
-# Lisp dialects, and the Java bindings under bindings/java/) are run as
-# non-blocking QUALITY CHECKS: a failure there is a WARNING, not an ERROR. When
-# one of those becomes a released artifact, promote its step from WARNING to
-# ERROR (gate).
+# HARD-FAILS (blocks the release) only on artifacts that are actually shipped —
+# Haskell (Hackage: hydra-kernel/hydra-haskell/hydra), Java (Maven Central,
+# per-package), Scala (Maven Central, per-package, #491), Python (PyPI/conda)
+# — plus version sync, the JSON kernel, and lexicon freshness. Targets that are
+# NOT released yet (the Lisp dialects and the Java bindings under bindings/java/)
+# are run as non-blocking QUALITY CHECKS: a failure there is a WARNING, not an
+# ERROR. When one of those becomes a released artifact, promote its step from
+# WARNING to ERROR (gate).
 #
 # Steps performed:
 #   1.  Version synchronization across all implementations                 [gate]
 #   2.  Haskell tests (hydra-test Stack target: hydra-kernel + hydra-ext)  [gate]
 #   3.  Java: hydra-java rollup tests [gate]; bindings build [quality check]
 #   4.  Python tests [gate] + ruff code quality [quality check]
-#   5.  Scala build and tests                                    [quality check]
-#   6.  Lisp tests (Clojure, Common Lisp, Emacs Lisp, Scheme)    [quality check]
-#   7.  JSON kernel verification (round-trips vs the in-memory kernel)     [gate]
-#   8.  Lexicon freshness (docs/hydra-lexicon.txt matches the kernel)      [gate]
-#   9.  Per-package Hackage sdist case-sensitivity check (assembles cleanly
+#   5.  TypeScript tests (tsc --strict + vitest)                           [gate]
+#   6.  Scala build and tests                                    [quality check]
+#   7.  Lisp tests (Clojure, Common Lisp, Emacs Lisp, Scheme)    [quality check]
+#   8.  JSON kernel verification (round-trips vs the in-memory kernel)     [gate]
+#   9.  Lexicon freshness (docs/hydra-lexicon.txt matches the kernel)      [gate]
+#   10. Per-package Hackage sdist case-sensitivity check (assembles cleanly
 #       on a case-sensitive filesystem + `cabal v2-build --dry-run`)       [gate]
-#   10. Per-package Haddock-for-Hackage docs build (ready for `cabal upload`)[gate]
-#   11. Canonical source archive + checksum + signature: a single
+#   11. Per-package Haddock-for-Hackage docs build (ready for `cabal upload`)[gate]
+#   12. Canonical source archive + checksum + signature: a single
 #       `git archive` source tarball (the Apache "release of record"),
 #       its SHA-512 checksum, and a detached GPG signature.               [gate*]
+#   13. Per-host published-package self-containment                        [gate]
 #
 # On success, the upload-ready per-package artifacts (sdists + docs tarballs)
 # plus the canonical source archive (tarball + .sha512 + .asc) land in
@@ -79,7 +81,7 @@ mkdir -p "$LOG_DIR"
 ARTIFACT_DIR="$HYDRA_ROOT/release-artifacts"
 mkdir -p "$ARTIFACT_DIR"
 
-TOTAL_STEPS=12
+TOTAL_STEPS=13
 
 ERRORS=0
 WARNINGS=0
@@ -98,6 +100,8 @@ BOOT_JAVA_VERSION=$(grep "version = " demos/bootstrapping/resources/java/build.g
 PYTHON_VERSION=$(grep '^version' heads/python/pyproject.toml | sed 's/.*"\(.*\)"/\1/')
 BOOT_PYTHON_VERSION=$(grep '^version' demos/bootstrapping/resources/python/pyproject.toml | sed 's/.*"\(.*\)"/\1/')
 SCALA_VERSION=$(grep 'version :=' packages/hydra-scala/build.sbt | sed 's/.*"\(.*\)".*/\1/' 2>/dev/null || echo "")
+TS_VERSION=$(python3 -c "import json; d=open('heads/typescript/package.json').read().split('\n'); lines=[l for l in d if '\"version\"' in l and '//' not in l]; print(lines[0].split('\"')[3])" 2>/dev/null || echo "")
+BOOT_TS_VERSION=$(python3 -c "import json; d=open('demos/bootstrapping/resources/typescript/package.json').read().split('\n'); lines=[l for l in d if '\"version\"' in l and '//' not in l]; print(lines[0].split('\"')[3])" 2>/dev/null || echo "")
 
 echo "  hydra.json currentVersion:            $CANONICAL_VERSION"
 echo "  heads/haskell/package.yaml:           $HASKELL_VERSION"
@@ -106,6 +110,8 @@ echo "  heads/java/build.gradle:              $JAVA_VERSION"
 echo "  demos/bootstrapping/.../java:         $BOOT_JAVA_VERSION"
 echo "  heads/python/pyproject.toml:          $PYTHON_VERSION"
 echo "  demos/bootstrapping/.../python:       $BOOT_PYTHON_VERSION"
+echo "  heads/typescript/package.json:        $TS_VERSION"
+echo "  demos/bootstrapping/.../typescript:   $BOOT_TS_VERSION"
 echo "  packages/hydra-scala/build.sbt:       $SCALA_VERSION"
 echo ""
 
@@ -123,6 +129,8 @@ for pair in \
     "demos/bootstrapping/.../java:$BOOT_JAVA_VERSION" \
     "heads/python/pyproject.toml:$PYTHON_VERSION" \
     "demos/bootstrapping/.../python:$BOOT_PYTHON_VERSION" \
+    "heads/typescript/package.json:$TS_VERSION" \
+    "demos/bootstrapping/.../typescript:$BOOT_TS_VERSION" \
     "packages/hydra-scala/build.sbt:$SCALA_VERSION"; do
     file="${pair%%:*}"
     ver="${pair##*:}"
@@ -219,12 +227,33 @@ else
     WARNINGS=$((WARNINGS + 1))
 fi
 
-# --- Step 5: Scala build and tests (quality check, NOT a release gate) ---
-# Scala is not a released artifact (nothing is published to Maven Central / any
-# registry for the Scala target), so a Scala failure is a non-blocking WARNING,
-# not a release gate. When Scala becomes a released target, promote this to a
-# gate (ERRORS). (#418)
-step 5 $TOTAL_STEPS "Running Scala build and tests (quality check)"
+# --- Step 5: TypeScript tests ---
+# RELEASE GATE: TypeScript is a released artifact (npm). The test runner
+# exercises tsc --strict on the dist tree plus the vitest common test suite.
+step 5 $TOTAL_STEPS "Running TypeScript tests (tsc --strict + vitest)"
+echo ""
+
+cd "$HYDRA_ROOT"
+TS_DIST="$HYDRA_ROOT/dist/typescript/hydra-kernel"
+if [ ! -d "$TS_DIST/src/main/typescript/hydra" ]; then
+    echo "  FAIL: TypeScript dist not found at $TS_DIST"
+    echo "        Run bin/sync-typescript.sh first."
+    ERRORS=$((ERRORS + 1))
+elif "$HYDRA_ROOT/heads/typescript/bin/test-distribution.sh" hydra-kernel \
+       2>&1 | tee "$LOG_DIR/typescript.log"; then
+    echo ""
+    echo "  OK: TypeScript tests passed"
+else
+    echo ""
+    echo "  FAIL: TypeScript tests failed (see verify-logs/typescript.log)"
+    ERRORS=$((ERRORS + 1))
+fi
+
+# --- Step 6: Scala build and tests (release gate, #491) ---
+# Scala is a released artifact on Maven Central (per-package under
+# net.fortytwo.hydra, published via heads/scala/bin/publish-sbt.sh), so a
+# Scala test failure BLOCKS the release.
+step 6 $TOTAL_STEPS "Running Scala build and tests"
 echo ""
 
 cd "$HYDRA_ROOT/packages/hydra-scala"
@@ -233,11 +262,11 @@ if sbt test 2>&1 | tee "$LOG_DIR/scala.log"; then
     echo "  OK: Scala tests passed"
 else
     echo ""
-    echo "  WARNING: Scala tests failed (not a release gate; see verify-logs/scala.log)"
-    WARNINGS=$((WARNINGS + 1))
+    echo "  ERROR: Scala tests failed (see verify-logs/scala.log)" >&2
+    ERRORS=$((ERRORS + 1))
 fi
 
-# --- Step 6: Lisp tests (quality check, NOT a release gate) ---
+# --- Step 7: Lisp tests (quality check, NOT a release gate) ---
 # The Lisp dialects (Clojure, Common Lisp, Emacs Lisp, Scheme) are not released
 # artifacts (nothing published to Clojars / any registry), so failures here are
 # non-blocking WARNINGS, not release gates. Each dialect runs through the unified
@@ -245,7 +274,7 @@ fi
 # NOTE: the runner is known to under-report (it can exit 0 despite individual
 # test failures); since Lisp is non-gating that does not affect the release
 # decision, but it is tracked separately as a runner bug.
-step 6 $TOTAL_STEPS "Running Lisp tests (quality check)"
+step 7 $TOTAL_STEPS "Running Lisp tests (quality check)"
 echo ""
 
 cd "$HYDRA_ROOT"
@@ -262,8 +291,8 @@ for dialect in clojure common-lisp emacs-lisp scheme; do
     echo ""
 done
 
-# --- Step 7: JSON kernel verification ---
-step 7 $TOTAL_STEPS "Verifying JSON kernel"
+# --- Step 8: JSON kernel verification ---
+step 8 $TOTAL_STEPS "Verifying JSON kernel"
 echo ""
 
 cd "$HYDRA_ROOT/heads/haskell"
@@ -276,8 +305,8 @@ else
     ERRORS=$((ERRORS + 1))
 fi
 
-# --- Step 8: Lexicon freshness ---
-step 8 $TOTAL_STEPS "Verifying lexicon freshness"
+# --- Step 9: Lexicon freshness ---
+step 9 $TOTAL_STEPS "Verifying lexicon freshness"
 echo ""
 
 cd "$HYDRA_ROOT"
@@ -303,7 +332,7 @@ else
 fi
 rm -f "$LEXICON_BACKUP"
 
-# --- Step 9: Per-package Hackage sdists + case-sensitivity check ---
+# --- Step 10: Per-package Hackage sdists + case-sensitivity check ---
 # Hydra now ships per-package Hackage distributions (hydra-kernel, hydra-haskell,
 # and the hydra umbrella) rather than one monolithic `hydra` sdist (#418). We
 # assemble all three (leaves first) on a case-sensitive volume — the Hackage
@@ -311,7 +340,7 @@ rm -f "$LEXICON_BACKUP"
 # default, masking case-only directory clashes — then extract and run
 # `cabal v2-build --dry-run` per package to catch GHC-28623 module/path
 # case-mismatches without the full compile cost.
-step 9 $TOTAL_STEPS "Verifying per-package Hackage sdists on case-sensitive filesystem"
+step 10 $TOTAL_STEPS "Verifying per-package Hackage sdists on case-sensitive filesystem"
 echo ""
 
 cd "$HYDRA_ROOT"
@@ -392,10 +421,10 @@ if [ "$SDIST_OK" = true ]; then
     fi
 fi
 
-# --- Step 10: Per-package Haddock-for-Hackage docs build ---
+# --- Step 11: Per-package Haddock-for-Hackage docs build ---
 # Hackage's auto-doc-builder is best-effort; pre-build docs per package so they
 # can be uploaded via `cabal upload --documentation --publish` after release.
-step 10 $TOTAL_STEPS "Building per-package Haddock-for-Hackage docs"
+step 11 $TOTAL_STEPS "Building per-package Haddock-for-Hackage docs"
 echo ""
 
 DOC_LOG="$LOG_DIR/haddock.log"
@@ -435,7 +464,7 @@ else
     ERRORS=$((ERRORS + 1))
 fi
 
-# --- Step 11: Canonical source archive + checksum + signature ---
+# --- Step 12: Canonical source archive + checksum + signature ---
 # The Apache "release of record" is a single source archive, not the per-registry
 # convenience artifacts (Hackage sdists, Maven jars, PyPI wheels). We build it with
 # `git archive` from HEAD so it is exactly the tracked source at the release commit
@@ -447,7 +476,7 @@ fi
 # to a WARNING when no signing key is configured, so a developer can run this script
 # outside a real release without a key. Set HYDRA_RELEASE_SIGNING_KEY to a gpg key
 # id/email to choose the signing identity; otherwise gpg's default key is used.
-step 11 $TOTAL_STEPS "Building canonical source archive (tarball + sha512 + signature)"
+step 12 $TOTAL_STEPS "Building canonical source archive (tarball + sha512 + signature)"
 echo ""
 
 cd "$HYDRA_ROOT"
@@ -510,7 +539,7 @@ else
     fi
 fi
 
-# --- Step 12: Per-host published-package self-containment ---
+# --- Step 13: Per-host published-package self-containment ---
 # RELEASE GATE. Each head ships a verify-distribution.sh that builds its
 # publish-set packages from the dist/ tree ALONE and proves they are
 # self-contained when consumed as PUBLISHED artifacts — installed/resolved in
@@ -522,13 +551,14 @@ fi
 # the path/source-set. The per-host tests above (Steps 2-4) do NOT exercise the
 # packaging boundary; this step does. See #472 (Python wheel) and #473 (Haskell
 # cold-build). Java's verifier hard-fails when no JDK 17+ is present.
-step 12 $TOTAL_STEPS "Verifying per-host published-package self-containment"
+step 13 $TOTAL_STEPS "Verifying per-host published-package self-containment"
 echo ""
 
 for hv in \
     "haskell:$HYDRA_ROOT/heads/haskell/bin/verify-distribution.sh" \
     "python:$HYDRA_ROOT/heads/python/bin/verify-distribution.sh" \
-    "java:$HYDRA_ROOT/heads/java/bin/verify-distribution.sh"; do
+    "java:$HYDRA_ROOT/heads/java/bin/verify-distribution.sh" \
+    "typescript:$HYDRA_ROOT/heads/typescript/bin/verify-distribution.sh"; do
     host="${hv%%:*}"
     script="${hv##*:}"
     echo "--- $host: verify-distribution ---"
@@ -593,7 +623,7 @@ if [ $ERRORS -eq 0 ]; then
             echo "       cabal upload --documentation --publish $ARTIFACT_DIR/$pkg-${EXPECTED}-docs.tar.gz"
         done
     fi
-    echo "       (then Maven Central and conda-forge per docs/release-workflow.md)"
+    echo "       (then Maven Central, npm, and conda-forge per docs/release-workflow.md)"
 else
     echo "FAIL: $ERRORS check(s) failed. Please fix before releasing."
     exit 1

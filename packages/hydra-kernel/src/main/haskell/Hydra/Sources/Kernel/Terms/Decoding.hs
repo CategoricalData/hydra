@@ -238,6 +238,8 @@ collectOrdConstrainedVariables = define "collectOrdConstrainedVariables" $
       Lists.concat2
         (collectOrdConstrainedVariables @@ Core.applicationTypeFunction (var "appType"))
         (collectOrdConstrainedVariables @@ Core.applicationTypeArgument (var "appType")),
+    _Type_effect>>: "elemType" ~>
+      collectOrdConstrainedVariables @@ var "elemType",
     _Type_either>>: "et" ~>
       Lists.concat2
         (collectOrdConstrainedVariables @@ Core.eitherTypeLeft (var "et"))
@@ -300,6 +302,8 @@ collectTypeVariablesFromType = define "collectTypeVariablesFromType" $
       Lists.concat2
         (collectTypeVariablesFromType @@ Core.applicationTypeFunction (var "appType"))
         (collectTypeVariablesFromType @@ Core.applicationTypeArgument (var "appType")),
+    _Type_effect>>: "elemType" ~>
+      collectTypeVariablesFromType @@ var "elemType",
     _Type_either>>: "et" ~>
       Lists.concat2
         (collectTypeVariablesFromType @@ Core.eitherTypeLeft (var "et"))
@@ -899,6 +903,8 @@ decoderFullResultType = define "decoderFullResultType" $
       Core.typeApplication $ Core.applicationType
         (decoderFullResultType @@ Core.applicationTypeFunction (var "appType"))
         (Core.applicationTypeArgument (var "appType")),
+    _Type_effect>>: "elemType" ~>
+      Core.typeEffect (decoderFullResultType @@ var "elemType"),
     _Type_either>>: "et" ~>
       -- Either L R -> Either (decoded L) (decoded R)
       Core.typeEither $ Core.eitherType
@@ -967,6 +973,8 @@ decoderFullResultTypeNamed = define "decoderFullResultTypeNamed" $
       Core.typeApplication $ Core.applicationType
         (decoderFullResultType @@ Core.applicationTypeFunction (var "appType"))
         (Core.applicationTypeArgument (var "appType")),
+    _Type_effect>>: "elemType" ~>
+      Core.typeEffect (decoderFullResultType @@ var "elemType"),
     _Type_either>>: "et" ~>
       Core.typeEither $ Core.eitherType
         (decoderFullResultType @@ Core.eitherTypeLeft (var "et"))

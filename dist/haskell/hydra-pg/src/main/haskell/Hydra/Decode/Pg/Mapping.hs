@@ -101,7 +101,7 @@ annotationSchema cx raw =
           Mapping.annotationSchemaInEdge = field_inEdge,
           Mapping.annotationSchemaInEdgeLabel = field_inEdgeLabel,
           Mapping.annotationSchemaIgnore = field_ignore})))))))))))))))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.pg.mapping.AnnotationSchema")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.mapping.EdgeSpec
 edgeSpec :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Mapping.EdgeSpec
 edgeSpec cx raw =
@@ -114,7 +114,7 @@ edgeSpec cx raw =
           Mapping.edgeSpecOut = field_out,
           Mapping.edgeSpecIn = field_in,
           Mapping.edgeSpecProperties = field_properties})))))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.pg.mapping.EdgeSpec")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.mapping.ElementSpec
 elementSpec :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Mapping.ElementSpec
 elementSpec cx raw =
@@ -141,7 +141,7 @@ propertySpec cx raw =
         in (Eithers.bind (ExtractCore.requireField "key" Model.propertyKey fieldMap cx) (\field_key -> Eithers.bind (ExtractCore.requireField "value" valueSpec fieldMap cx) (\field_value -> Right (Mapping.PropertySpec {
           Mapping.propertySpecKey = field_key,
           Mapping.propertySpecValue = field_value}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.pg.mapping.PropertySpec")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.pg.mapping.ValueSpec
 valueSpec :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Mapping.ValueSpec
 valueSpec cx raw =
@@ -175,4 +175,4 @@ vertexSpec cx raw =
           Mapping.vertexSpecLabel = field_label,
           Mapping.vertexSpecId = field_id,
           Mapping.vertexSpecProperties = field_properties})))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.pg.mapping.VertexSpec")) (ExtractCore.stripWithDecodingError cx raw)

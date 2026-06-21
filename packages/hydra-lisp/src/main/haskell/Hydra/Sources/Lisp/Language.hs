@@ -3,6 +3,7 @@ module Hydra.Sources.Lisp.Language where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import qualified Hydra.Dsl.Lib.Strings                as Strings
+import           Hydra.File (_FileExtension)
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -175,6 +176,7 @@ lispLanguage = define "lispLanguage" $
       Variants.typeVariantAnnotated,
       Variants.typeVariantApplication,
       Variants.typeVariantEither,
+      Variants.typeVariantEffect,
       Variants.typeVariantFunction,
       Variants.typeVariantForall,
       Variants.typeVariantList,

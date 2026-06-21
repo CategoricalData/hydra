@@ -77,6 +77,11 @@ decimal = literal LiteralTypeDecimal
 either_ :: (AsType a, AsType b) => a -> b -> Type
 either_ left right = TypeEither $ EitherType (asType left) (asType right)
 
+-- | Create an effect type (a computation producing a value of the given type)
+-- Example: effect (either_ fileError string)
+effect :: AsType a => a -> Type
+effect = TypeEffect . asType
+
 -- | Create an enum type with the given variant names (conventionally in camelCase)
 -- Example: enum ["red", "green", "blue"]
 enum :: [String] -> Type

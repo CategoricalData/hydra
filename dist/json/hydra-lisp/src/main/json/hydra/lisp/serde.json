@@ -15,8 +15,10 @@
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
     {"module": "hydra.error.packaging"},
     {"module": "hydra.errors"},
+    {"module": "hydra.file"},
     {"module": "hydra.graph"},
     {"module": "hydra.json.model"},
     {"module": "hydra.packaging"},
@@ -25,6 +27,7 @@
     {"module": "hydra.relational"},
     {"module": "hydra.tabular"},
     {"module": "hydra.testing"},
+    {"module": "hydra.time"},
     {"module": "hydra.topology"},
     {"module": "hydra.typed"},
     {"module": "hydra.typing"},
@@ -126,6 +129,24 @@
                                 "argument": {"variable": "app"}}}}},
                         "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}}},
                       {
+                        "name": "funcallWhenComputed",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "cases": {
+                                "typeName": "hydra.lisp.syntax.Expression",
+                                "default": {"literal": {"boolean": true}},
+                                "cases": [
+                                  {
+                                    "name": "variable",
+                                    "handler": {
+                                      "lambda": {
+                                        "parameter": "s",
+                                        "domain": {"variable": "hydra.lisp.syntax.VariableReference"},
+                                        "body": {"literal": {"boolean": false}}}}}]}},
+                            "argument": {"variable": "funExpr"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": {"boolean": {}}}}},
+                      {
                         "name": "needsFuncall",
                         "term": {
                           "application": {
@@ -135,26 +156,11 @@
                                 "default": {"literal": {"boolean": false}},
                                 "cases": [
                                   {
+                                    "name": "commonLisp",
+                                    "handler": {"lambda": {"parameter": "u", "domain": {"unit": {}}, "body": {"variable": "funcallWhenComputed"}}}},
+                                  {
                                     "name": "emacsLisp",
-                                    "handler": {
-                                      "lambda": {
-                                        "parameter": "u",
-                                        "domain": {"unit": {}},
-                                        "body": {
-                                          "application": {
-                                            "function": {
-                                              "cases": {
-                                                "typeName": "hydra.lisp.syntax.Expression",
-                                                "default": {"literal": {"boolean": true}},
-                                                "cases": [
-                                                  {
-                                                    "name": "variable",
-                                                    "handler": {
-                                                      "lambda": {
-                                                        "parameter": "s",
-                                                        "domain": {"variable": "hydra.lisp.syntax.VariableReference"},
-                                                        "body": {"literal": {"boolean": false}}}}}]}},
-                                            "argument": {"variable": "funExpr"}}}}}}]}},
+                                    "handler": {"lambda": {"parameter": "u", "domain": {"unit": {}}, "body": {"variable": "funcallWhenComputed"}}}}]}},
                             "argument": {"variable": "d"}}},
                         "typeScheme": {"variables": [], "body": {"literal": {"boolean": {}}}}},
                       {

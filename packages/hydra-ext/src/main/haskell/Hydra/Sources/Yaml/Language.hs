@@ -3,6 +3,7 @@ module Hydra.Sources.Yaml.Language where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
+import Hydra.File (_FileExtension)
 import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms

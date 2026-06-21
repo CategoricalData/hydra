@@ -173,7 +173,7 @@ public class GenerationTargets {
                             hydra.Serialization.parenthesize(
                                     hydra.lisp.Serde.programToExpr(program)));
                     String filePath = hydra.Names.moduleNameToFilePath(
-                            cc, new hydra.util.FileExtension(fileExt), mod.name);
+                            cc, new hydra.file.FileExtension(fileExt), mod.name);
                     Map<String, String> fileMap = new java.util.TreeMap<>();
                     fileMap.put(filePath, code);
                     return new hydra.util.Either.Right(fileMap);

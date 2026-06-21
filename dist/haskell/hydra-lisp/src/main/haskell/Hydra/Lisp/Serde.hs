@@ -8,8 +8,10 @@ import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.File as ErrorFile
 import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
+import qualified Hydra.File as File
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
@@ -29,6 +31,7 @@ import qualified Hydra.Relational as Relational
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing
+import qualified Hydra.Time as Time
 import qualified Hydra.Topology as Topology
 import qualified Hydra.Typed as Typed
 import qualified Hydra.Typing as Typing
@@ -47,11 +50,14 @@ applicationToExpr d app =
       let funExpr = Syntax.applicationFunction app
           fun = expressionToExpr d funExpr
           args = Lists.map (expressionToExpr d) (Syntax.applicationArguments app)
+          funcallWhenComputed =
+                  case funExpr of
+                    Syntax.ExpressionVariable _ -> False
+                    _ -> True
           needsFuncall =
                   case d of
-                    Syntax.DialectEmacsLisp -> case funExpr of
-                      Syntax.ExpressionVariable _ -> False
-                      _ -> True
+                    Syntax.DialectCommonLisp -> funcallWhenComputed
+                    Syntax.DialectEmacsLisp -> funcallWhenComputed
                     _ -> False
           allParts =
                   Logic.ifElse needsFuncall (Lists.concat2 [

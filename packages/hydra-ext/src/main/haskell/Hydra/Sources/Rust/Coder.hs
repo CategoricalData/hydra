@@ -8,6 +8,7 @@ module Hydra.Sources.Rust.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
+import Hydra.File (_FileExtension)
 import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Libraries
 import qualified Hydra.Dsl.Lib.Strings                as Strings

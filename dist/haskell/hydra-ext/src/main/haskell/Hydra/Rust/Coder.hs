@@ -5,6 +5,7 @@ module Hydra.Rust.Coder where
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.File as File
 import qualified Hydra.Environment as Environment
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
@@ -389,7 +390,7 @@ moduleToRust mod defs cx g =
             crate = Syntax.Crate {
                   Syntax.crateItems = allItems}
             code = Serialization.printExpr (Serialization.parenthesize (Serde.crateToExpr crate))
-            filePath = Names.moduleNameToFilePath Util.CaseConventionLowerSnake (Util.FileExtension "rs") (Packaging.moduleName mod)
+            filePath = Names.moduleNameToFilePath Util.CaseConventionLowerSnake (File.FileExtension "rs") (Packaging.moduleName mod)
         in (Right (Maps.singleton filePath code)))))
 rustApply1 :: String -> Syntax.Type -> Syntax.Type
 rustApply1 name arg =

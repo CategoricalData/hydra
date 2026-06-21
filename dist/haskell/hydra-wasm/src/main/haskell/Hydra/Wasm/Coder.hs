@@ -6,6 +6,7 @@ import qualified Hydra.Analysis as Analysis
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.File as File
 import qualified Hydra.Environment as Environment
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
@@ -940,7 +941,7 @@ moduleToWasm mod defs cx g =
                         funcExports,
                         allFields])}
             code = Serialization.printExpr (Serialization.parenthesize (Serde.moduleToExpr wasmMod))
-            filePath = Names.moduleNameToFilePath Util.CaseConventionLowerSnake (Util.FileExtension "wat") (Packaging.moduleName mod)
+            filePath = Names.moduleNameToFilePath Util.CaseConventionLowerSnake (File.FileExtension "wat") (Packaging.moduleName mod)
         in (Right (Maps.singleton filePath code)))))
 peelLambdaApp :: Core.Term -> [t0] -> ([Core.Name], Core.Term)
 peelLambdaApp term args =

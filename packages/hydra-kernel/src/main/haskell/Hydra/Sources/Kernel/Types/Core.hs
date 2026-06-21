@@ -509,6 +509,9 @@ type_ = define "Type" $
     "application">:
       doc "A type application"
       applicationType,
+    "effect">:
+      doc "An effectful computation which, when interpreted by a host application, may perform host interactions and produce a value of the given type"
+      type_,
     "either">:
       doc "An either (sum) type"
       eitherType,
@@ -623,4 +626,3 @@ wrappedTerm = define "WrappedTerm" $
     "body">:
       doc "The wrapped term"
       term]
-

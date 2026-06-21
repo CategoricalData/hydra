@@ -1,6 +1,7 @@
 (import (scheme base) (scheme write) (scheme cxr) (scheme char)
         (scheme time) (scheme process-context) (scheme file)
         (scheme bytevector)
+        (only (guile) mkdir rmdir opendir readdir closedir)  ; #494: directory ops for effectful temp-dir prep
         (hydra core) (hydra graph) (hydra prims)
         (hydra reduction) (hydra rewriting) (hydra show core) (hydra testing)
         (hydra formatting) (hydra sorting) (hydra serialization)

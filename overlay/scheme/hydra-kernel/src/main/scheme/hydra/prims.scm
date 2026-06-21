@@ -16,6 +16,7 @@
           tc-uint8 tc-uint16 tc-uint32 tc-uint64
           tc-string tc-binary
           tc-list tc-set tc-map tc-optional tc-either tc-pair
+          tc-effect tc-unit tc-named
           tc-variable tc-term tc-comparison
           tc-function tc-function-with-reduce
           prim0 prim1 prim2 prim3)
@@ -328,6 +329,33 @@
                   (let ((sr (((hydra_graph_term_coder-decode second-coder) cx) (hydra_lib_pairs_second p))))
                     (if (eq? (car sr) 'left) sr
                         (list 'right (list 'pair (list (cadr fr) (cadr sr))))))))))))
+
+    ;; Effectful / nominal type coders (#494)
+    ;;
+    ;; effect<t> is transparent in the Lisp dialects (effect<t> = t), so tc-effect reuses the inner
+    ;; coder's encode/decode and only changes the reported type. tc-unit and tc-named provide the
+    ;; unit and nominal-by-name (e.g. hydra.file.FilePath) types used by the files/text signatures.
+    ;; These coders exist so the standard library can register the effectful primitives' type schemes
+    ;; for inference name-resolution; the real I/O is performed by the relocated hydra.scheme.lib.*
+    ;; runtimes (reached via the bootstrap redirect), not through these stub primitive impls.
+
+    (define (tc-effect inner-coder)
+      (make-hydra_graph_term_coder
+       (list 'effect (hydra_graph_term_coder-type inner-coder))
+        (lambda (cx) (lambda (g) (lambda (t) ((((hydra_graph_term_coder-encode inner-coder) cx) g) t))))
+        (lambda (cx) (lambda (v) (((hydra_graph_term_coder-decode inner-coder) cx) v)))))
+
+    (define (tc-unit)
+      (make-hydra_graph_term_coder
+       (list 'unit '())
+        (lambda (cx) (lambda (g) (lambda (t) (list 'right '()))))
+        (lambda (cx) (lambda (v) (list 'right (list 'unit))))))
+
+    (define (tc-named type-name)
+      (make-hydra_graph_term_coder
+       (list 'variable type-name)
+        (lambda (cx) (lambda (g) (lambda (t) (list 'right t))))
+        (lambda (cx) (lambda (t) (list 'right t)))))
 
     ;; Term/variable passthrough coders
 

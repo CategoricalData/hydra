@@ -9,8 +9,10 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Environment as Environment
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.File as ErrorFile
 import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
+import qualified Hydra.File as File
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
@@ -39,6 +41,7 @@ import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing
+import qualified Hydra.Time as Time
 import qualified Hydra.Topology as Topology
 import qualified Hydra.Typed as Typed
 import qualified Hydra.Typing as Typing
@@ -80,7 +83,7 @@ encodeApplication dialect cx g rawFun rawArg =
 
       let dFun = Strip.deannotateTerm rawFun
           normal =
-                  Eithers.bind (encodeTerm dialect cx g rawFun) (\fun -> Eithers.bind (encodeTerm dialect cx g rawArg) (\arg -> Right (lispApp fun [
+                  \_ -> Eithers.bind (encodeTerm dialect cx g rawFun) (\fun -> Eithers.bind (encodeTerm dialect cx g rawArg) (\arg -> Right (lispApp fun [
                     arg])))
           enc = \t -> encodeTerm dialect cx g t
       in case dFun of
@@ -105,9 +108,9 @@ encodeApplication dialect cx g rawFun rawArg =
                 eM])))))) (Logic.ifElse (primIsLazyAt g dInnerFun 1) (Eithers.bind (enc innerFun) (\eP -> Eithers.bind (enc innerArg) (\eM -> Eithers.bind (enc midArg) (\eN -> Eithers.bind (enc rawArg) (\eJ -> Right (lispApp (lispApp (lispApp eP [
                 eM]) [
                 wrapInThunk eN]) [
-                eJ])))))) normal)))
-            _ -> normal))
-        _ -> normal
+                eJ])))))) (normal ()))))
+            _ -> normal ()))
+        _ -> normal ()
 encodeFieldDef :: Core.FieldType -> Syntax.FieldDefinition
 encodeFieldDef ft =
 
@@ -339,6 +342,7 @@ encodeType cx g t =
         Core.TypeMap _ -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol "Map"))
         Core.TypeOptional v0 -> Eithers.map (\enc -> Syntax.TypeSpecifierMaybe enc) (encodeType cx g v0)
         Core.TypeEither _ -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol "Either"))
+        Core.TypeEffect v0 -> encodeType cx g v0
         Core.TypePair _ -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol "Pair"))
         Core.TypeFunction _ -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol "Function"))
         Core.TypeRecord _ -> Right (Syntax.TypeSpecifierNamed (Syntax.Symbol "Record"))

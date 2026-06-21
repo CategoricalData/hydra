@@ -129,6 +129,7 @@
                             {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "annotated", "term": {"unit": {}}}}},
                             {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "application", "term": {"unit": {}}}}},
                             {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "either", "term": {"unit": {}}}}},
+                            {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "effect", "term": {"unit": {}}}}},
                             {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "function", "term": {"unit": {}}}}},
                             {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "forall", "term": {"unit": {}}}}},
                             {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "list", "term": {"unit": {}}}}},
@@ -220,7 +221,7 @@
                                 "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": {"unit": {}}}}}}]}}},
                       {
                         "name": "defaultFileExtension",
-                        "term": {"wrap": {"typeName": "hydra.util.FileExtension", "body": {"literal": {"string": "java"}}}}}]}}}},
+                        "term": {"wrap": {"typeName": "hydra.file.FileExtension", "body": {"literal": {"string": "java"}}}}}]}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Language constraints for Java"}}}]}}}}},
     {
       "term": {

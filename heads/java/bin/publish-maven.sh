@@ -47,18 +47,11 @@ HYDRA_ROOT="$( cd "$HYDRA_JAVA_DIR/../.." && pwd )"
 
 DO_UPLOAD=false
 ONLY_PKG=""
-ALLOW_JAVADOC_ERRORS=false
 
 while [ $# -gt 0 ]; do
     case "$1" in
         --upload) DO_UPLOAD=true; shift ;;
         --package) ONLY_PKG="$2"; shift 2 ;;
-        # TEMPORARY for the 0.16.0 publish: apply an init script that makes the
-        # Javadoc task non-fatal, so the cosmetic unqualified-@link errors (#449)
-        # don't block the build. Transient by design — the generated build.gradle
-        # stays strict, so a plain `gradle build` keeps failing until #449 is
-        # fixed (0.16.1 fast-follow). Remove this flag + the init script then.
-        --allow-javadoc-errors) ALLOW_JAVADOC_ERRORS=true; shift ;;
         --help|-h)
             sed -n '2,/^$/p' "$0" | sed 's/^# \{0,1\}//'
             exit 0
@@ -144,16 +137,9 @@ for pkg in "${PUBLISH_SET[@]}"; do
     fi
 done
 
-# Transient #449 workaround: a runtime init script that relaxes Javadoc
-# fail-on-error WITHOUT editing any generated build.gradle or the generator.
-# Applied only with --allow-javadoc-errors, so strict javadoc remains the
-# default and `gradle build` keeps failing on #449 until it is fixed.
-GRADLE_INIT_ARGS=()
-if [ "$ALLOW_JAVADOC_ERRORS" = true ]; then
-    GRADLE_INIT_ARGS=(--init-script "$SCRIPT_DIR/javadoc-nonfatal.init.gradle")
-    echo "  NOTE: --allow-javadoc-errors set — Javadoc non-fatal for this run only (#449)."
-    echo ""
-fi
+# Javadoc runs strict (fail-on-error). The two generated-Javadoc bugs that once
+# required a relaxation — unqualified @link refs (#449) and unescaped '&' in
+# comments (#493) — are both fixed, so the publish set builds cleanly.
 
 # --- Per-package gradle invocation (leaves first) ----------------------------
 # Each downstream package resolves its Hydra deps from mavenLocal()+mavenCentral()
@@ -170,7 +156,7 @@ for pkg in "${PUBLISH_SET[@]}"; do
     [ -n "$ONLY_PKG" ] && [ "$ONLY_PKG" != "$pkg" ] && continue
     echo "--- publishToMavenLocal $pkg @ $VERSION ---"
     ( cd "$HYDRA_ROOT/dist/java/$pkg" \
-        && gradle "${GRADLE_INIT_ARGS[@]}" publishToMavenLocal -x test --refresh-dependencies )
+        && gradle publishToMavenLocal -x test --refresh-dependencies )
 done
 echo ""
 
@@ -179,10 +165,10 @@ for pkg in "${PUBLISH_SET[@]}"; do
     pkgdir="$HYDRA_ROOT/dist/java/$pkg"
     if [ "$DO_UPLOAD" = true ]; then
         echo "=== gradle $GRADLE_TASK  ($pkg @ $VERSION) ==="
-        ( cd "$pkgdir" && gradle "${GRADLE_INIT_ARGS[@]}" "$GRADLE_TASK" )
+        ( cd "$pkgdir" && gradle "$GRADLE_TASK" )
     else
         echo "=== [dry run] gradle build  ($pkg @ $VERSION) — verifying artifacts assemble, no upload ==="
-        ( cd "$pkgdir" && gradle "${GRADLE_INIT_ARGS[@]}" build -x test --refresh-dependencies )
+        ( cd "$pkgdir" && gradle build -x test --refresh-dependencies )
     fi
     echo ""
 done

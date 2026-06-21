@@ -1291,7 +1291,7 @@ def _encode_application_type():
                         )),
                 ),
             ),
-            ["annotated", "function", "forall", "list", "literal", "map",
+            ["annotated", "effect", "function", "forall", "list", "literal", "map",
              "optional", "either", "pair", "record", "set", "union", "unit",
              "variable", "void", "wrap"],
         ),
@@ -4687,6 +4687,14 @@ def _encode_type():
         ),
         field("annotated", constant(var("dflt"))
         ),
+        # effect<t> is transparent in Python: it encodes to the same type as its inner type t.
+        # Python has no distinguished effect wrapper (the Python Language lacks TypeVariantEffect).
+        field("effect",
+            lam(
+                "et",
+                call_self("et"),
+            ),
+        ),
     ]
     body = lambdas(
         ["env", "typ"],
@@ -5159,7 +5167,7 @@ def _encode_forall_type():
                         )),
                 ),
             ),
-            ["annotated", "application", "function", "list", "literal", "map",
+            ["annotated", "application", "effect", "function", "list", "literal", "map",
              "optional", "either", "pair", "record", "set", "union", "unit",
              "variable", "void", "wrap"],
         ),
@@ -5234,7 +5242,7 @@ def _encode_function_type():
                         var("gatherParams")(Lists.cons(var("dom"), var("rdoms")), var("ft2")),
                     ),
                 ),
-                ["annotated", "application", "forall", "list", "literal", "map",
+                ["annotated", "application", "effect", "forall", "list", "literal", "map",
                  "optional", "either", "pair", "record", "set", "union", "unit",
                  "variable", "void", "wrap"],
             ),
@@ -7571,7 +7579,7 @@ def _module_to_python():
                         ),
                         (
                             "path",
-                            var("hydra.names.moduleNameToFilePath")(_kref.util_case_convention_lower_snake, wrap("hydra.util.FileExtension",
+                            var("hydra.names.moduleNameToFilePath")(_kref.util_case_convention_lower_snake, wrap("hydra.file.FileExtension",
                                     string("py"),
                                 ), Pkg.module_name(var("mod"))),
                         ),

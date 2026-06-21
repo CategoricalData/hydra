@@ -139,13 +139,28 @@ The `ref` function creates a reference to a binding defined in another module, w
 
 ## Test Case Shape
 
-Since #246, every test case is a single variant: `UniversalTestCase`. The kernel
-schema (`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Testing.hs`)
+A test case is one of two variants of the `TestCase` union:
+
+- **`UniversalTestCase`** — the pervasive variant: `actual` and `expected` are both
+  unit-thunks producing **strings**, compared for equality.
+- **`EffectfulTestCase`** (#494) — for testing effectful primitives (`hydra.lib.effects`,
+  `hydra.lib.files`): `actual` is a unit-thunk producing an **`effect<string>`** that the
+  runner *executes* (performing real host interactions, e.g. file I/O); `expected` is a
+  unit-thunk producing a string. See [The field terms, and two ways the mapping translates
+  them](#the-field-terms-and-two-ways-the-mapping-translates-them) below for how Hydra maps
+  these field terms into each target (effectful cases use only the native mapping).
+
+The kernel schema
+(`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Testing.hs`)
 declares:
 
 ```haskell
 universalTestCase = T.record [
   "actual"   >: T.unit ~> T.string,
+  "expected" >: T.unit ~> T.string]
+
+effectfulTestCase = T.record [
+  "actual"   >: T.unit ~> T.effect T.string,  -- executed, not reduced
   "expected" >: T.unit ~> T.string]
 ```
 
@@ -222,6 +237,72 @@ Python suite, ~180 ms for the Haskell suite).
 Pre-#311, all four complete Lisps reported 0 ms per group because every test
 expression was evaluated at test-data load time — outside the runner's
 `(System/nanoTime)` bracket.
+
+## The field terms, and two ways the mapping translates them
+
+A test case's `actual` and `expected` fields **always hold a term of the field's declared
+value type**: `string` for `UniversalTestCase`, `effect<string>` (for `actual`) and
+`string` (for `expected`) for `EffectfulTestCase`. There is no other "form" of these
+fields — `actual` is always a term that simply *is* a `string` (or `effect<string>`). You
+author it as an ordinary typed term and nothing more.
+
+Reification is **not** something that happens in the field or in how you author it. It is
+one of two ways the **mapping** translates that already-typed field term into a target test
+case:
+
+1. **Interpreter-based mapping.** The mapping *reifies* the field term — turning it into a
+   `hydra.core.Term` value — and produces a derived term that applies the kernel interpreter
+   (`hydra.reduction.reduceTerm`, with `hydra.show.core.term` rendering the result). That
+   *derived* term is what gets encoded into the target, which therefore runs the expression
+   through Hydra's own evaluator. (Today this is set up by the explicit `evalCase`/`primCase`
+   helpers, which build the `reduceTerm` application by hand; #420 moves this into the
+   mapping itself.)
+2. **Native-based mapping.** The mapping does *not* reify the term; the field term is
+   translated directly into native code in each target language (real Haskell `IO String`,
+   etc.), which the runner evaluates natively.
+
+Both mappings start from the *same* field term. **A single pure test case can be mapped both
+ways**, yielding two target test cases — one interpreted, one native. Hydra did this
+historically and #420 is moving back toward that dual-emission model.
+
+**Effectful test cases can only use the native-based mapping.** Hydra's pure reducer cannot
+reduce effects, so the interpreter-based mapping does not apply to them. The `actual` field
+is still just an `effect<string>` term (e.g. `readFile (path "foo.txt")`); only its
+translation is restricted to the native path.
+
+### Authoring note: a field term must have the field's type
+
+Because `actual`/`expected` hold a term of the field's value type, author them with builders
+that produce a term *of that type*:
+
+- **Value-typed builders** (`Hydra.Dsl.Meta.Phantoms`, `Hydra.Dsl.Meta.Literals` — e.g.
+  `Literals.string :: String -> TypedTerm String`, `Phantoms.primitive`, `Phantoms.@@`)
+  produce a term of its own value type: `Literals.string "x"` is a `string`,
+  `readFile (path "f")` is an `effect<string>`. Use these for the `actual`/`expected` fields.
+- **Reified-AST builders** (`Hydra.Dsl.Meta.Terms` — e.g. `Terms.string`, which is
+  `termLiteral (literalString …)`, and `Terms.primitive`, which is `termVariable
+  (encodeName …)`) produce a term whose *type* is `hydra.core.Term` — a `Term`-valued AST.
+  These are for slots that genuinely take `hydra.core.Term` data, e.g. the argument the
+  current `evalCase`/`primCase` helpers hand to `reduceTerm` when they construct the
+  interpreter mapping by hand. They are **not** the field term itself.
+
+The pitfall that motivated this note: putting a reified `Terms.string`/`Terms.primitive`
+(type `hydra.core.Term`) directly into an `EffectfulTestCase` field is a type error — the
+field requires `effect<string>`/`string`, not `hydra.core.Term`. Every field body then
+infers as `hydra.core.Term`, and per-package inference fails with `cannot unify string with
+effect<string>`, because the schema's two distinct field types collide on the single
+`hydra.core.Term` variable. (Universal cases happen not to surface this, since both their
+fields are `string`, so the one `hydra.core.Term` variable unifies consistently — but a
+universal field term should still be an honest `string` term.)
+
+This is the same rule in both cases: supply a term of the required type. Putting a reified
+`Terms.string`/`Terms.primitive` (type `hydra.core.Term`) into an `EffectfulTestCase` field
+is simply a type error: every field body then infers as `hydra.core.Term`, and per-package
+inference fails with `cannot unify string with effect<string>`, because the schema's two
+distinct field types collide on the single `hydra.core.Term` variable. (Universal cases
+never expose this collision: both their fields are `string`, so the one `hydra.core.Term`
+variable unifies consistently — but they are still relying on the reduce-it-as-data path,
+which is unavailable to effects.)
 
 ## Meta-Level vs Term-Level DSLs
 

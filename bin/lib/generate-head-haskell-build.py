@@ -12,8 +12,8 @@ heads/haskell/{package.yaml,stack.yaml} ARE the local-mode source of truth
 them in place:
 
   - drop the library source-dirs for any coder package consumable from Hackage
-    (probed via `hydra-packages.py haskell-hackage <pkg>` — today hydra-kernel +
-    hydra-haskell; a coder published in a future cycle flips automatically),
+    (probed via `hydra-packages.py haskell-hackage <pkg>` — hydra-kernel and
+    hydra-haskell are excluded from candidates; see HACKAGE_CANDIDATES below),
   - add those packages to the library `dependencies`,
   - write `extra-deps: [hydra-<pkg>-<ver>, ...]` into stack.yaml.
 
@@ -43,9 +43,16 @@ HYDRA_PACKAGES = ROOT / "bin" / "lib" / "hydra-packages.py"
 # domains rdf/pg/ext/wasm/bench and the native-driver java/python coders are not
 # candidates here.) Probed per-package; only those actually on Hackage are
 # consumed.
+#
+# hydra-kernel and hydra-haskell are intentionally excluded: all other generated
+# coders (hydra-pg, hydra-rdf, hydra-ext, ...) import from hydra-kernel, so the
+# kernel must always be compiled from the co-generated dist/haskell/hydra-kernel
+# rather than a potentially stale published Hackage release. Dropping the
+# kernel/haskell source-dirs would link generated coders against the published
+# kernel, breaking them when the kernel term-level API changes (e.g. #436,
+# #500). The published-host model is for the translation *runtime* (exec
+# drivers), not the generated *output*. See issue #500.
 HACKAGE_CANDIDATES = [
-    "hydra-kernel",
-    "hydra-haskell",
     "hydra-coq",
     "hydra-typescript",
     "hydra-scala",

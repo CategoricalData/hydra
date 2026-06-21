@@ -1,0 +1,60 @@
+{
+  "name": "hydra.error.file",
+  "metadata": {"description": "File-system error types", "comments": [], "seeAlso": []},
+  "dependencies": [{"module": "hydra.file"}],
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.error.file.FileError",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "alreadyExists",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.file.FilePath"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "A path already exists where one was required not to (POSIX EEXIST), e.g. creating a directory that is already present"}}}]}}}},
+                  {
+                    "name": "invalidPath",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"string": {}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The path is syntactically invalid or cannot be represented by the host file system"}}}]}}}},
+                  {
+                    "name": "notFound",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.file.FilePath"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The requested path does not exist"}}}]}}}},
+                  {
+                    "name": "other",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"string": {}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Any other file-system error, represented as a host-provided message"}}}]}}}},
+                  {
+                    "name": "permissionDenied",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.file.FilePath"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The host denied access to the requested path"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A recoverable file-system error"}}}]}}}}}}]}

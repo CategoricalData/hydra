@@ -27,8 +27,10 @@ import qualified Hydra.Sources.Kernel.Terms.Lexical         as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Literals        as Literals
 
 import qualified Hydra.Sources.Kernel.Lib.Chars             as LibChars
+import qualified Hydra.Sources.Kernel.Lib.Effects           as LibEffects
 import qualified Hydra.Sources.Kernel.Lib.Eithers           as LibEithers
 import qualified Hydra.Sources.Kernel.Lib.Equality          as LibEquality
+import qualified Hydra.Sources.Kernel.Lib.Files             as LibFiles
 import qualified Hydra.Sources.Kernel.Lib.Lists              as LibLists
 import qualified Hydra.Sources.Kernel.Lib.Literals          as LibLiterals
 import qualified Hydra.Sources.Kernel.Lib.Logic             as LibLogic
@@ -39,6 +41,7 @@ import qualified Hydra.Sources.Kernel.Lib.Pairs             as LibPairs
 import qualified Hydra.Sources.Kernel.Lib.Regex             as LibRegex
 import qualified Hydra.Sources.Kernel.Lib.Sets              as LibSets
 import qualified Hydra.Sources.Kernel.Lib.Strings           as LibStrings
+import qualified Hydra.Sources.Kernel.Lib.Text              as LibText
 import qualified Hydra.Sources.Kernel.Terms.Names           as Names
 import qualified Hydra.Sources.Kernel.Terms.Parsers         as Parsers
 import qualified Hydra.Sources.Kernel.Terms.Predicates     as Predicates
@@ -94,8 +97,10 @@ kernelPrimaryTermsModules = [
   Languages.module_,
   Lexical.module_,
   LibChars.module_,
+  LibEffects.module_,
   LibEithers.module_,
   LibEquality.module_,
+  LibFiles.module_,
   LibLists.module_,
   LibLiterals.module_,
   LibLogic.module_,
@@ -106,6 +111,7 @@ kernelPrimaryTermsModules = [
   LibRegex.module_,
   LibSets.module_,
   LibStrings.module_,
+  LibText.module_,
   Literals.module_,
 
   Names.module_,
@@ -153,4 +159,3 @@ kernelLibModules = [
   LibRegex.module_,
   LibSets.module_,
   LibStrings.module_]
-

@@ -7,8 +7,10 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.File as ErrorFile
 import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
+import qualified Hydra.File as File
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
@@ -30,6 +32,7 @@ import qualified Hydra.Scala.Syntax as Syntax
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing
+import qualified Hydra.Time as Time
 import qualified Hydra.Topology as Topology
 import qualified Hydra.Typed as Typed
 import qualified Hydra.Typing as Typing
@@ -90,6 +93,12 @@ sassign lhs rhs =
     Syntax.DataAssign (Syntax.AssignData {
       Syntax.assignDataLhs = lhs,
       Syntax.assignDataRhs = rhs})
+-- | Like scalaEscapeName, but also renames 'values' to 'values_' to avoid conflict with Scala 3 enum's synthesized values() method
+scalaEscapeEnumCaseName :: String -> String
+scalaEscapeEnumCaseName s =
+
+      let renamed = Logic.ifElse (Equality.equal s "values") "values_" s
+      in (scalaEscapeName renamed)
 -- | Sanitize a name for Scala: escape reserved words, replace invalid characters
 scalaEscapeName :: String -> String
 scalaEscapeName s =

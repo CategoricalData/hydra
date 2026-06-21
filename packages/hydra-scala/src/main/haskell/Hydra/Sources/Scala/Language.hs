@@ -3,6 +3,7 @@ module Hydra.Sources.Scala.Language where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import qualified Hydra.Dsl.Lib.Strings                as Strings
+import Hydra.File (_FileExtension)
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -137,6 +138,7 @@ scalaLanguage = define "scalaLanguage" $
     Variants.typeVariantAnnotated,
     Variants.typeVariantApplication,
     Variants.typeVariantEither,
+    Variants.typeVariantEffect,
     Variants.typeVariantFunction,
     Variants.typeVariantList,
     Variants.typeVariantLiteral,
@@ -188,11 +190,7 @@ scalaReservedWords = define "scalaReservedWords" $
       "Dynamic", "Enumeration", "Equals", "Float", "Function", "Int", "Long", "MatchError", "None",
       "Nothing", "Null", "Option", "PartialFunction", "Predef", "Product", "Proxy",
       "SerialVersionUID", "Short", "Singleton", "Some", "Specializable", "StringContext",
-      "Symbol", "Unit", "ValueOf"],
-  "hydraScalaKeywords">:
-    doc "Reserved words which are specific to Hydra" $
-    list $ string <$> []] $
+      "Symbol", "Unit", "ValueOf"]] $
   Sets.fromList $ Lists.concat $ list [
     var "keywords",
-    var "classNames",
-    var "hydraScalaKeywords"]
+    var "classNames"]

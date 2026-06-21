@@ -1006,6 +1006,7 @@ rewriteType = define "rewriteType" $
       _Type_application>>: "app" ~> Core.typeApplication $ Core.applicationType
         (var "recurse" @@ (Core.applicationTypeFunction $ var "app"))
         (var "recurse" @@ (Core.applicationTypeArgument $ var "app")),
+      _Type_effect>>: "t" ~> Core.typeEffect $ var "recurse" @@ var "t",
       _Type_either>>: "et" ~> Core.typeEither $ Core.eitherType
         (var "recurse" @@ (Core.eitherTypeLeft $ var "et"))
         (var "recurse" @@ (Core.eitherTypeRight $ var "et")),
@@ -1050,6 +1051,9 @@ rewriteTypeM = define "rewriteTypeM" $
       "lhs" <<~ var "recurse" @@ (Core.applicationTypeFunction $ var "at") $
       "rhs" <<~ var "recurse" @@ (Core.applicationTypeArgument $ var "at") $
       right $ Core.typeApplication $ Core.applicationType (var "lhs") (var "rhs"),
+    _Type_effect>>: "t" ~>
+      "rt" <<~ var "recurse" @@ var "t" $
+      right $ Core.typeEffect $ var "rt",
     _Type_either>>: "et" ~>
       "left" <<~ var "recurse" @@ (Core.eitherTypeLeft $ var "et") $
       "right" <<~ var "recurse" @@ (Core.eitherTypeRight $ var "et") $
@@ -1205,6 +1209,7 @@ subtypes = define "subtypes" $
     _Type_application>>: "at" ~> list [
       Core.applicationTypeFunction $ var "at",
       Core.applicationTypeArgument $ var "at"],
+    _Type_effect>>: "et" ~> list [var "et"],
     _Type_either>>: "et" ~> list [
       Core.eitherTypeLeft $ var "et",
       Core.eitherTypeRight $ var "et"],

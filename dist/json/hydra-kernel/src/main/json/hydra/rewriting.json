@@ -9,8 +9,10 @@
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
     {"module": "hydra.error.packaging"},
     {"module": "hydra.errors"},
+    {"module": "hydra.file"},
     {"module": "hydra.graph"},
     {"module": "hydra.json.model"},
     {"module": "hydra.packaging"},
@@ -19,6 +21,7 @@
     {"module": "hydra.relational"},
     {"module": "hydra.tabular"},
     {"module": "hydra.testing"},
+    {"module": "hydra.time"},
     {"module": "hydra.topology"},
     {"module": "hydra.typed"},
     {"module": "hydra.typing"},
@@ -11367,6 +11370,16 @@
                                                                               "function": {"project": {"typeName": "hydra.core.ApplicationType", "fieldName": "argument"}},
                                                                               "argument": {"variable": "app"}}}}}}]}}}}}}}},
                                                   {
+                                                    "name": "effect",
+                                                    "handler": {
+                                                      "lambda": {
+                                                        "parameter": "t",
+                                                        "domain": {"variable": "hydra.core.Type"},
+                                                        "body": {
+                                                          "inject": {
+                                                            "typeName": "hydra.core.Type",
+                                                            "field": {"name": "effect", "term": {"application": {"function": {"variable": "recurse"}, "argument": {"variable": "t"}}}}}}}}},
+                                                  {
                                                     "name": "either",
                                                     "handler": {
                                                       "lambda": {
@@ -11836,6 +11849,36 @@
                                                                                                   "fields": [{"name": "function", "term": {"variable": "lhs"}}, {"name": "argument", "term": {"variable": "rhs"}}]}}}}}}},
                                                                                     "type": {"variable": "t1"}}},
                                                                                 "type": {"variable": "hydra.core.Type"}}}}}}}}}}}}}},
+                                                      {
+                                                        "name": "effect",
+                                                        "handler": {
+                                                          "lambda": {
+                                                            "parameter": "t",
+                                                            "domain": {"variable": "hydra.core.Type"},
+                                                            "body": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "t1"}}},
+                                                                            "type": {"variable": "hydra.core.Type"}}},
+                                                                        "type": {"variable": "hydra.core.Type"}}},
+                                                                    "argument": {"application": {"function": {"variable": "recurse"}, "argument": {"variable": "t"}}}}},
+                                                                "argument": {
+                                                                  "lambda": {
+                                                                    "parameter": "rt",
+                                                                    "domain": {"variable": "hydra.core.Type"},
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "either": {"right": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "effect", "term": {"variable": "rt"}}}}}},
+                                                                            "type": {"variable": "t1"}}},
+                                                                        "type": {"variable": "hydra.core.Type"}}}}}}}}}},
                                                       {
                                                         "name": "either",
                                                         "handler": {
@@ -13498,6 +13541,9 @@
                               "application": {
                                 "function": {"project": {"typeName": "hydra.core.ApplicationType", "fieldName": "argument"}},
                                 "argument": {"variable": "at"}}}]}}}},
+                  {
+                    "name": "effect",
+                    "handler": {"lambda": {"parameter": "et", "domain": {"variable": "hydra.core.Type"}, "body": {"list": [{"variable": "et"}]}}}},
                   {
                     "name": "either",
                     "handler": {

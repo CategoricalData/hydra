@@ -7,8 +7,10 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.File as ErrorFile
 import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
+import qualified Hydra.File as File
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
@@ -26,6 +28,7 @@ import qualified Hydra.Relational as Relational
 import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing
+import qualified Hydra.Time as Time
 import qualified Hydra.Topology as Topology
 import qualified Hydra.Typed as Typed
 import qualified Hydra.Typing as Typing
@@ -775,6 +778,7 @@ rewriteType f typ0 =
                   Core.TypeApplication v0 -> Core.TypeApplication (Core.ApplicationType {
                     Core.applicationTypeFunction = (recurse (Core.applicationTypeFunction v0)),
                     Core.applicationTypeArgument = (recurse (Core.applicationTypeArgument v0))})
+                  Core.TypeEffect v0 -> Core.TypeEffect (recurse v0)
                   Core.TypeEither v0 -> Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = (recurse (Core.eitherTypeLeft v0)),
                     Core.eitherTypeRight = (recurse (Core.eitherTypeRight v0))})
@@ -814,6 +818,7 @@ rewriteTypeM f typ0 =
                 Core.TypeApplication v0 -> Eithers.bind (recurse (Core.applicationTypeFunction v0)) (\lhs -> Eithers.bind (recurse (Core.applicationTypeArgument v0)) (\rhs -> Right (Core.TypeApplication (Core.ApplicationType {
                   Core.applicationTypeFunction = lhs,
                   Core.applicationTypeArgument = rhs}))))
+                Core.TypeEffect v0 -> Eithers.bind (recurse v0) (\rt -> Right (Core.TypeEffect rt))
                 Core.TypeEither v0 -> Eithers.bind (recurse (Core.eitherTypeLeft v0)) (\left -> Eithers.bind (recurse (Core.eitherTypeRight v0)) (\right -> Right (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = left,
                   Core.eitherTypeRight = right}))))
@@ -938,6 +943,8 @@ subtypes x =
       Core.TypeApplication v0 -> [
         Core.applicationTypeFunction v0,
         (Core.applicationTypeArgument v0)]
+      Core.TypeEffect v0 -> [
+        v0]
       Core.TypeEither v0 -> [
         Core.eitherTypeLeft v0,
         (Core.eitherTypeRight v0)]

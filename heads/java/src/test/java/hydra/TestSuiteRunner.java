@@ -18,6 +18,9 @@ import org.junit.jupiter.api.TestFactory;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -33,7 +36,8 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Java executor for Hydra's language-agnostic test suite.
  *
- * All test cases are now UniversalTestCase instances (string comparison).
+ * Handles both UniversalTestCase instances (pure string comparison) and
+ * EffectfulTestCase instances (interpret an effect, e.g. file I/O, then string comparison).
  * Legacy per-type handlers have been removed.
  */
 public class TestSuiteRunner {
@@ -510,6 +514,11 @@ public class TestSuiteRunner {
 
     private static final Duration TEST_TIMEOUT = Duration.ofSeconds(10);
 
+    // Canonical root directory for effectful (file I/O) test cases. Must match the testDir constant
+    // in Hydra.Sources.Test.Lib.Files and the effectfulTestDir in the Haskell runner. Hard-coded
+    // *nix path for now (configurable later, #494).
+    private static final String EFFECTFUL_TEST_DIR = "/tmp/hydra-testing";
+
     private static DynamicTest runTestCase(String name, TestCaseWithMetadata tc) {
         return tc.case_.accept(new TestCase.Visitor<>() {
             @Override
@@ -521,7 +530,40 @@ public class TestSuiteRunner {
                 return withTimeout(name, () ->
                     assertEquals(utc.expected.apply(null), utc.actual.apply(null)));
             }
+
+            @Override
+            public DynamicTest visit(TestCase.Effectful instance) {
+                EffectfulTestCase eutc = instance.value;
+                // For #494: in Java the effect type is transparent (effect<t> = t), so the
+                // 'actual' thunk eagerly performs the effect (e.g. file I/O) and returns the
+                // resulting string. Prepare a guaranteed-empty canonical temp directory first,
+                // then force both thunks inside the per-test timer.
+                return withTimeout(name, () -> {
+                    prepareEffectfulTempDir();
+                    assertEquals(eutc.expected.apply(null), eutc.actual.apply(null));
+                });
+            }
         });
+    }
+
+    // Prepare a guaranteed-empty canonical temp directory before an effectful test case.
+    // Mirrors prepareEffectfulTempDir in the Haskell runner: recursively remove the directory
+    // if it exists, then recreate it empty. For #494.
+    private static void prepareEffectfulTempDir() throws IOException {
+        Path dir = Paths.get(EFFECTFUL_TEST_DIR);
+        if (Files.exists(dir)) {
+            try (Stream<Path> walk = Files.walk(dir)) {
+                walk.sorted(java.util.Comparator.reverseOrder())
+                    .forEach(p -> {
+                        try {
+                            Files.delete(p);
+                        } catch (IOException e) {
+                            throw new RuntimeException("Failed to delete " + p, e);
+                        }
+                    });
+            }
+        }
+        Files.createDirectories(dir);
     }
 
     private static DynamicTest withTimeout(String name, org.junit.jupiter.api.function.Executable executable) {

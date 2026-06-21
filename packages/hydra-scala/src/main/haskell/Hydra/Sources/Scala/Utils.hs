@@ -99,6 +99,7 @@ module_ = Module {
       toDefinition sapply,
       toDefinition sapplyTypes,
       toDefinition sassign,
+      toDefinition scalaEscapeEnumCaseName,
       toDefinition scalaEscapeName,
       toDefinition scalaReservedWordsRef,
       toDefinition scalaTypeName,
@@ -183,6 +184,18 @@ sassign = def "sassign" $
       record _AssignData [
         _AssignData_lhs>>: var "lhs",
         _AssignData_rhs>>: var "rhs"])
+
+scalaEscapeEnumCaseName :: TypedTermDefinition (String -> String)
+scalaEscapeEnumCaseName = def "scalaEscapeEnumCaseName" $
+  doc "Like scalaEscapeName, but also renames 'values' to 'values_' to avoid conflict with Scala 3 enum's synthesized values() method" $
+  lambda "s" $ lets [
+    -- Rename values to values_ before applying general escape rules.
+    -- Scala 3 synthesizes a values() method for every enum object; a case
+    -- literally named 'values' (even backtick-quoted) conflicts with it.
+    "renamed">: Logic.ifElse (Equality.equal (var "s") (string "values"))
+      (string "values_")
+      (var "s")] $
+  asTerm scalaEscapeName @@ var "renamed"
 
 scalaEscapeName :: TypedTermDefinition (String -> String)
 scalaEscapeName = def "scalaEscapeName" $

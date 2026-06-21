@@ -54,16 +54,6 @@ comparison cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
--- | Decoder for hydra.util.FileExtension
-fileExtension :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Util.FileExtension
-fileExtension cx raw =
-    Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermWrap v0 -> Eithers.map (\b -> Util.FileExtension b) ((\raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-        Core.TermLiteral v1 -> case v1 of
-          Core.LiteralString v2 -> Right v2
-          _ -> Left (Errors.DecodingError "expected string literal")
-        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
-      _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.util.ModuleNames
 moduleNames :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError n) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Util.ModuleNames n)
 moduleNames n cx raw =

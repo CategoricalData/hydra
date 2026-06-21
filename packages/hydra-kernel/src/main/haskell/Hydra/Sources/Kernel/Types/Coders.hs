@@ -9,6 +9,7 @@ import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Typing as Typing
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Errors as Error
+import qualified Hydra.Sources.Kernel.Types.File as File
 import qualified Hydra.Sources.Kernel.Types.Graph as Graph
 import qualified Hydra.Sources.Kernel.Types.Util as Util
 import qualified Hydra.Sources.Kernel.Types.Variants as Variants
@@ -24,7 +25,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
-            moduleDependencies = unqualifiedDep <$> [Error.ns, Graph.ns, Variants.ns, Core.ns, Typing.ns, Util.ns],
+            moduleDependencies = unqualifiedDep <$> [Error.ns, File.ns, Graph.ns, Variants.ns, Core.ns, Typing.ns, Util.ns],
             moduleMetadata = descriptionMetadata (Just "Abstractions for paired transformations between languages")}
   where
     definitions = [
@@ -157,7 +158,7 @@ language = define "Language" $
       caseConventions,
     "defaultFileExtension">:
       doc "Conventional file extension for emitted source files, without the leading dot (e.g. \"scala\", \"py\")"
-      Util.fileExtension]
+      File.fileExtension]
 
 languageConstraints :: TypeDefinition
 languageConstraints = define "LanguageConstraints" $

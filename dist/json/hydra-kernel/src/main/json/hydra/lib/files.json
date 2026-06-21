@@ -1,0 +1,203 @@
+{
+  "name": "hydra.lib.files",
+  "metadata": {"description": "Primitives in the hydra.lib.files module.", "comments": [], "seeAlso": []},
+  "dependencies": [
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.file"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.time"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "definitions": [
+    {
+      "primitive": {
+        "name": "hydra.lib.files.appendFile",
+        "metadata": {
+          "description": "Append bytes to the end of a file.",
+          "comments": [
+            "appendFile(path, contents) describes an effectful computation which attempts to append the raw bytes contents to the end of the file at path, creating the file if it does not exist. Unlike writeFile, existing contents are preserved. File I/O is byte-oriented; to append text, encode it to bytes first (e.g. via hydra.lib.text.encodeUtf8). A recoverable file-system failure is returned as left(error); success is returned as right(unit)."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": {"binary": {}}}, "isLazy": false}],
+          "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"unit": {}}}}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.files.copy",
+        "metadata": {
+          "description": "Copy a file, or a directory tree, to a destination path.",
+          "comments": [
+            "copy(recursive, source, destination) describes an effectful computation which attempts to copy source to destination. When recursive is false, source must be a single file. When recursive is true, source may be a directory, whose entire tree is copied. Copying is performed by the host operating system rather than by reading and rewriting contents, preserving binary data and avoiding a round trip through the language runtime. A recoverable file-system failure is returned as left(error); success is returned as right(unit)."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": {"boolean": {}}}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false},
+            {"name": "arg2", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false}],
+          "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"unit": {}}}}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.files.createDirectory",
+        "metadata": {
+          "description": "Create a directory.",
+          "comments": [
+            "createDirectory(recursive, path) describes an effectful computation which attempts to create a directory at path. When recursive is false this corresponds to POSIX mkdir: it fails if path already exists or if a parent is missing. When recursive is true, any missing parent directories are created as well (as with mkdir -p) and an already-existing directory is not an error. A recoverable file-system failure is returned as left(error); success is returned as right(unit)."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": {"boolean": {}}}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false}],
+          "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"unit": {}}}}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.files.exists",
+        "metadata": {
+          "description": "Test whether a path exists.",
+          "comments": [
+            "exists(path) describes an effectful computation which reports whether anything exists at path, whether a file, directory, or other type of file. It does not error when the path is absent; a missing path is reported as right(false). Use status to obtain the type of an existing path. A recoverable file-system failure is returned as left(error)."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false}],
+          "result": {
+            "type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"literal": {"boolean": {}}}}}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.files.listDirectory",
+        "metadata": {
+          "description": "List the immediate entries of a directory.",
+          "comments": [
+            "listDirectory(path) describes an effectful computation which returns the immediate entries of the directory at path, excluding the special entries \".\" and \"..\". The result is one level deep and is not ordered; to traverse a tree recursively, recurse using status. A recoverable file-system failure is returned as left(error)."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false}],
+          "result": {
+            "type": {
+              "effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"list": {"variable": "hydra.file.FilePath"}}}}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.files.readFile",
+        "metadata": {
+          "description": "Read the complete contents of a file as raw bytes.",
+          "comments": [
+            "readFile(path) describes an effectful computation which attempts to read the entire contents of the file at path as raw bytes, with no character decoding or newline translation. To interpret the result as text, decode it (e.g. via hydra.lib.text.decodeUtf8). A recoverable file-system failure is returned as left(error); success is returned as right(contents)."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false}],
+          "result": {
+            "type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"literal": {"binary": {}}}}}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.files.removeDirectory",
+        "metadata": {
+          "description": "Remove a directory.",
+          "comments": [
+            "removeDirectory(recursive, path) describes an effectful computation which attempts to remove the directory at path. When recursive is false this corresponds to POSIX rmdir: it fails unless the directory is empty. When recursive is true, the directory and its entire contents are removed (as with rm -r). Removal is performed by the host operating system rather than by walking and deleting entries individually. A recoverable file-system failure is returned as left(error); success is returned as right(unit)."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": {"boolean": {}}}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false}],
+          "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"unit": {}}}}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.files.removeFile",
+        "metadata": {
+          "description": "Remove a file.",
+          "comments": [
+            "removeFile(path) describes an effectful computation which attempts to remove the file at path (POSIX unlink). A recoverable file-system failure is returned as left(error); success is returned as right(unit)."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false}],
+          "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"unit": {}}}}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.files.rename",
+        "metadata": {
+          "description": "Rename or move a file or directory.",
+          "comments": [
+            "rename(source, destination) describes an effectful computation which attempts to rename the file or directory at source to destination. When source and destination are on the same file system this is atomic (POSIX rename) and cannot be reproduced by a copy followed by a delete. A recoverable file-system failure is returned as left(error); success is returned as right(unit)."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false}],
+          "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"unit": {}}}}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.files.status",
+        "metadata": {
+          "description": "Retrieve metadata about a file or directory.",
+          "comments": [
+            "status(path) describes an effectful computation which retrieves metadata about the file at path (POSIX stat), including its type, size, and modification time. Symbolic links are followed. A path which does not exist yields left(notFound); other recoverable file-system failures are also returned as left(error). Use exists for a boolean presence check that does not error on absence."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false}],
+          "result": {
+            "type": {
+              "effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"variable": "hydra.file.FileStatus"}}}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.files.writeFile",
+        "metadata": {
+          "description": "Write raw bytes as the complete contents of a file.",
+          "comments": [
+            "writeFile(path, contents) describes an effectful computation which attempts to replace the file at path with the raw bytes contents, with no character encoding or newline translation. To write text, encode it to bytes first (e.g. via hydra.lib.text.encodeUtf8). A recoverable file-system failure is returned as left(error); success is returned as right(unit)."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": {"binary": {}}}, "isLazy": false}],
+          "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"unit": {}}}}}}},
+        "isPure": false,
+        "isTotal": true}}]}

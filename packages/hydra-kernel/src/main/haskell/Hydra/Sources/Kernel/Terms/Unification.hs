@@ -112,6 +112,9 @@ joinTypes = define "joinTypes" $
       _Type_either>>: "r" ~> right (list [
         var "joinOne" @@ (Core.eitherTypeLeft (var "l")) @@ (Core.eitherTypeLeft (var "r")),
         var "joinOne" @@ (Core.eitherTypeRight (var "l")) @@ (Core.eitherTypeRight (var "r"))])],
+    _Type_effect>>: "l" ~> cases _Type (var "sright") (Just (var "cannotUnify")) [
+      _Type_effect>>: "r" ~> right (list [
+        var "joinOne" @@ (var "l") @@ (var "r")])],
     _Type_function>>: "l" ~> cases _Type (var "sright") (Just (var "cannotUnify")) [
       _Type_function>>: "r" ~> right (list [
         var "joinOne" @@ (Core.functionTypeDomain (var "l")) @@ (Core.functionTypeDomain (var "r")),

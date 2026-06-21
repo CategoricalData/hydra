@@ -6,6 +6,7 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Decode.Errors as DecodeErrors
+import qualified Hydra.Decode.File as File
 import qualified Hydra.Decode.Typing as Typing
 import qualified Hydra.Decode.Util as DecodeUtil
 import qualified Hydra.Decode.Variants as Variants

@@ -78,6 +78,7 @@ typeVariant = define "TypeVariant" $
   T.enum [
     "annotated",
     "application",
+    "effect",
     "either",
     "forall",
     "function",

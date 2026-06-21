@@ -10,8 +10,10 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Environment as Environment
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.File as ErrorFile
 import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
+import qualified Hydra.File as File
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
@@ -39,6 +41,7 @@ import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing
+import qualified Hydra.Time as Time
 import qualified Hydra.Topology as Topology
 import qualified Hydra.TypeScript.Language as Language
 import qualified Hydra.TypeScript.Serde as Serde
@@ -176,13 +179,13 @@ encodeLiteralType lt =
         Core.IntegerTypeUint32 -> tsNamedType "number"
         Core.IntegerTypeUint64 -> tsNamedType "bigint"
       Core.LiteralTypeString -> tsNamedType "string"
-encodeParam :: t0 -> t1 -> Core.Name -> Core.Type -> Syntax.Pattern
-encodeParam cx g pname dom =
+encodeParam :: t0 -> t1 -> Packaging.ModuleName -> Core.Name -> Core.Type -> Syntax.Pattern
+encodeParam cx g currentNs pname dom =
 
       let nstr = sanitizeParamName pname
       in case (Strip.deannotateType dom) of
         Core.TypeVariable _ -> tsTypedIdent nstr Syntax.TypeExpressionAny
-        _ -> tsTypedIdent nstr (encodeTypeOrAny cx g dom)
+        _ -> tsTypedIdent nstr (encodeTypeOrAny cx g currentNs dom)
 encodeTerm :: Typing.InferenceContext -> Graph.Graph -> Packaging.ModuleName -> Core.Term -> Syntax.Expression
 encodeTerm cx g currentNs term =
     case term of
@@ -391,16 +394,16 @@ encodeTermDefinition cx g currentNs td =
                                       declarator]}
                       in (asExport (Syntax.StatementVariableDeclaration varDecl))
       in (mdoc, item)
-encodeType :: t0 -> t1 -> Core.Type -> Either t2 Syntax.TypeExpression
-encodeType cx g t =
+encodeType :: t0 -> t1 -> Packaging.ModuleName -> Core.Type -> Either t2 Syntax.TypeExpression
+encodeType cx g currentNs t =
 
       let typ = Strip.deannotateType t
       in case typ of
-        Core.TypeAnnotated v0 -> encodeType cx g (Core.annotatedTypeBody v0)
+        Core.TypeAnnotated v0 -> encodeType cx g currentNs (Core.annotatedTypeBody v0)
         Core.TypeApplication v0 ->
           let fnTyp = Core.applicationTypeFunction v0
               argTyp = Core.applicationTypeArgument v0
-          in (Eithers.bind (encodeType cx g fnTyp) (\encFn -> Eithers.bind (encodeType cx g argTyp) (\encArg -> case encFn of
+          in (Eithers.bind (encodeType cx g currentNs fnTyp) (\encFn -> Eithers.bind (encodeType cx g currentNs argTyp) (\encArg -> case encFn of
             Syntax.TypeExpressionIdentifier _ -> Right (Syntax.TypeExpressionParameterized (Syntax.ParameterizedTypeExpression {
               Syntax.parameterizedTypeExpressionBase = encFn,
               Syntax.parameterizedTypeExpressionArguments = [
@@ -410,13 +413,13 @@ encodeType cx g t =
               Syntax.parameterizedTypeExpressionArguments = (Lists.concat2 (Syntax.parameterizedTypeExpressionArguments v1) [
                 encArg])}))
             _ -> Right encFn)))
-        Core.TypeForall v0 -> encodeType cx g (Core.forallTypeBody v0)
+        Core.TypeForall v0 -> encodeType cx g currentNs (Core.forallTypeBody v0)
         Core.TypeUnit -> Right Syntax.TypeExpressionVoid
         Core.TypeVoid -> Right Syntax.TypeExpressionNever
         Core.TypeLiteral v0 -> Right (encodeLiteralType v0)
-        Core.TypeList v0 -> Eithers.map (\enc -> tsParamApp1 "ReadonlyArray" enc) (encodeType cx g v0)
-        Core.TypeSet v0 -> Eithers.map tsReadonlySet (encodeType cx g v0)
-        Core.TypeMap v0 -> Eithers.bind (encodeType cx g (Core.mapTypeKeys v0)) (\kt -> Eithers.bind (encodeType cx g (Core.mapTypeValues v0)) (\vt -> Right (tsReadonlyMap kt vt)))
+        Core.TypeList v0 -> Eithers.map (\enc -> tsParamApp1 "ReadonlyArray" enc) (encodeType cx g currentNs v0)
+        Core.TypeSet v0 -> Eithers.map tsReadonlySet (encodeType cx g currentNs v0)
+        Core.TypeMap v0 -> Eithers.bind (encodeType cx g currentNs (Core.mapTypeKeys v0)) (\kt -> Eithers.bind (encodeType cx g currentNs (Core.mapTypeValues v0)) (\vt -> Right (tsReadonlyMap kt vt)))
         Core.TypeOptional v0 -> Eithers.map (\enc -> Syntax.TypeExpressionUnion [
           Syntax.TypeExpressionObject [
             tsPropSig "tag" False (Syntax.TypeExpressionLiteral (Syntax.LiteralString (Syntax.StringLiteral {
@@ -426,8 +429,8 @@ encodeType cx g t =
           (Syntax.TypeExpressionObject [
             tsPropSig "tag" False (Syntax.TypeExpressionLiteral (Syntax.LiteralString (Syntax.StringLiteral {
               Syntax.stringLiteralValue = "none",
-              Syntax.stringLiteralSingleQuote = False})))])]) (encodeType cx g v0)
-        Core.TypeEither v0 -> Eithers.bind (encodeType cx g (Core.eitherTypeLeft v0)) (\lt -> Eithers.bind (encodeType cx g (Core.eitherTypeRight v0)) (\rt ->
+              Syntax.stringLiteralSingleQuote = False})))])]) (encodeType cx g currentNs v0)
+        Core.TypeEither v0 -> Eithers.bind (encodeType cx g currentNs (Core.eitherTypeLeft v0)) (\lt -> Eithers.bind (encodeType cx g currentNs (Core.eitherTypeRight v0)) (\rt ->
           let leftArm =
                   Syntax.TypeExpressionObject [
                     tsPropSig "tag" False (Syntax.TypeExpressionLiteral (Syntax.LiteralString (Syntax.StringLiteral {
@@ -443,30 +446,38 @@ encodeType cx g t =
           in (Right (Syntax.TypeExpressionUnion [
             leftArm,
             rightArm]))))
-        Core.TypePair v0 -> Eithers.bind (encodeType cx g (Core.pairTypeFirst v0)) (\ft -> Eithers.bind (encodeType cx g (Core.pairTypeSecond v0)) (\st -> Right (tsTuple [
+        Core.TypePair v0 -> Eithers.bind (encodeType cx g currentNs (Core.pairTypeFirst v0)) (\ft -> Eithers.bind (encodeType cx g currentNs (Core.pairTypeSecond v0)) (\st -> Right (tsTuple [
           ft,
           st])))
-        Core.TypeFunction v0 -> Eithers.bind (encodeType cx g (Core.functionTypeDomain v0)) (\dom -> Eithers.bind (encodeType cx g (Core.functionTypeCodomain v0)) (\cod -> Right (Syntax.TypeExpressionFunction (Syntax.FunctionTypeExpression {
+        Core.TypeFunction v0 -> Eithers.bind (encodeType cx g currentNs (Core.functionTypeDomain v0)) (\dom -> Eithers.bind (encodeType cx g currentNs (Core.functionTypeCodomain v0)) (\cod -> Right (Syntax.TypeExpressionFunction (Syntax.FunctionTypeExpression {
           Syntax.functionTypeExpressionTypeParameters = [],
           Syntax.functionTypeExpressionParameters = [
             dom],
           Syntax.functionTypeExpressionReturnType = cod}))))
-        Core.TypeVariable v0 -> Right (tsNamedType (Formatting.capitalize (Names.localNameOf v0)))
-        Core.TypeWrap v0 -> encodeType cx g v0
+        Core.TypeVariable v0 ->
+          let lname = Formatting.capitalize (Names.localNameOf v0)
+          in (Optionals.cases (Names.moduleNameOf v0) (Right (tsNamedType lname)) (\ns -> Logic.ifElse (Equality.equal (Packaging.unModuleName currentNs) (Packaging.unModuleName ns)) (Right (tsNamedType lname)) (
+            let nsSegs = Lists.drop 1 (Strings.splitOn "." (Packaging.unModuleName ns))
+                typeAlias = Strings.cat2 "$type_" (Strings.intercalate "_" nsSegs)
+            in (Right (tsNamedType (Strings.cat [
+              typeAlias,
+              ".",
+              lname]))))))
+        Core.TypeWrap v0 -> encodeType cx g currentNs v0
         Core.TypeRecord v0 -> Eithers.bind (Eithers.mapList (\ft ->
           let fname = Core.unName (Core.fieldTypeName ft)
               ftyp = Core.fieldTypeType ft
-          in (Eithers.bind (encodeType cx g ftyp) (\sftyp -> Right (tsPropSig fname False sftyp)))) v0) (\members -> Right (Syntax.TypeExpressionObject members))
+          in (Eithers.bind (encodeType cx g currentNs ftyp) (\sftyp -> Right (tsPropSig fname False sftyp)))) v0) (\members -> Right (Syntax.TypeExpressionObject members))
         Core.TypeUnion v0 -> Eithers.bind (Eithers.mapList (\ft ->
           let fname = Core.unName (Core.fieldTypeName ft)
               ftyp = Core.fieldTypeType ft
-          in (Eithers.bind (encodeType cx g ftyp) (\sftyp -> Right (Syntax.TypeExpressionObject [
+          in (Eithers.bind (encodeType cx g currentNs ftyp) (\sftyp -> Right (Syntax.TypeExpressionObject [
             tsPropSig "tag" False (Syntax.TypeExpressionLiteral (Syntax.LiteralString (Syntax.StringLiteral {
               Syntax.stringLiteralValue = fname,
               Syntax.stringLiteralSingleQuote = False}))),
             (tsPropSig "value" False sftyp)])))) v0) (\arms -> Right (Syntax.TypeExpressionUnion arms))
-encodeTypeDefinition :: t0 -> Graph.Graph -> Packaging.TypeDefinition -> Either Errors.Error (Maybe String, Syntax.ModuleItem)
-encodeTypeDefinition cx g tdef =
+encodeTypeDefinition :: t0 -> Graph.Graph -> Packaging.ModuleName -> Packaging.TypeDefinition -> Either Errors.Error (Maybe String, Syntax.ModuleItem)
+encodeTypeDefinition cx g currentNs tdef =
 
       let name = Packaging.typeDefinitionName tdef
           typScheme = Packaging.typeDefinitionBody tdef
@@ -481,7 +492,7 @@ encodeTypeDefinition cx g tdef =
           Core.TypeRecord v0 -> Eithers.bind (Eithers.mapList (\ft ->
             let fname = Core.unName (Core.fieldTypeName ft)
                 ftyp = Core.fieldTypeType ft
-            in (Eithers.bind (encodeType cx g ftyp) (\sftyp -> Eithers.bind (Annotations.commentsFromFieldType cx g ft) (\mfdoc -> Right (tsPropSigWithDoc fname False sftyp (mkDocComment mfdoc)))))) v0) (\members -> Right (
+            in (Eithers.bind (encodeType cx g currentNs ftyp) (\sftyp -> Eithers.bind (Annotations.commentsFromFieldType cx g ft) (\mfdoc -> Right (tsPropSigWithDoc fname False sftyp (mkDocComment mfdoc)))))) v0) (\members -> Right (
             mdoc,
             (Syntax.ModuleItemInterface (Syntax.InterfaceDeclaration {
               Syntax.interfaceDeclarationName = (tsIdent lname),
@@ -497,7 +508,7 @@ encodeTypeDefinition cx g tdef =
                 tsPropSig "tag" False (Syntax.TypeExpressionLiteral (Syntax.LiteralString (Syntax.StringLiteral {
                   Syntax.stringLiteralValue = fname,
                   Syntax.stringLiteralSingleQuote = False})))])
-              _ -> Eithers.bind (encodeType cx g ftyp) (\sftyp -> Right (Syntax.TypeExpressionObject [
+              _ -> Eithers.bind (encodeType cx g currentNs ftyp) (\sftyp -> Right (Syntax.TypeExpressionObject [
                 tsPropSig "tag" False (Syntax.TypeExpressionLiteral (Syntax.LiteralString (Syntax.StringLiteral {
                   Syntax.stringLiteralValue = fname,
                   Syntax.stringLiteralSingleQuote = False}))),
@@ -507,7 +518,7 @@ encodeTypeDefinition cx g tdef =
               Syntax.typeAliasDeclarationName = (tsIdent lname),
               Syntax.typeAliasDeclarationTypeParameters = typeParams,
               Syntax.typeAliasDeclarationType = (Syntax.TypeExpressionUnion arms)}))))
-          Core.TypeWrap v0 -> Eithers.bind (encodeType cx g v0) (\sftyp -> Right (
+          Core.TypeWrap v0 -> Eithers.bind (encodeType cx g currentNs v0) (\sftyp -> Right (
             mdoc,
             (Syntax.ModuleItemInterface (Syntax.InterfaceDeclaration {
               Syntax.interfaceDeclarationName = (tsIdent lname),
@@ -515,14 +526,15 @@ encodeTypeDefinition cx g tdef =
               Syntax.interfaceDeclarationExtends = [],
               Syntax.interfaceDeclarationMembers = [
                 tsPropSig "value" False sftyp]}))))
-          _ -> Eithers.bind (encodeType cx g typ) (\styp -> Right (
+          _ -> Eithers.bind (encodeType cx g currentNs typ) (\styp -> Right (
             mdoc,
             (Syntax.ModuleItemTypeAlias (Syntax.TypeAliasDeclaration {
               Syntax.typeAliasDeclarationName = (tsIdent lname),
               Syntax.typeAliasDeclarationTypeParameters = typeParams,
               Syntax.typeAliasDeclarationType = styp}))))))
-encodeTypeOrAny :: t0 -> t1 -> Core.Type -> Syntax.TypeExpression
-encodeTypeOrAny cx g typ = Eithers.either (\_e -> Syntax.TypeExpressionAny) (\te -> te) (encodeType cx g typ)
+encodeTypeOrAny :: t0 -> t1 -> Packaging.ModuleName -> Core.Type -> Syntax.TypeExpression
+encodeTypeOrAny cx g currentNs typ =
+    Eithers.either (\_e -> Syntax.TypeExpressionAny) (\te -> te) (encodeType cx g currentNs typ)
 filterNonLocalNames :: Packaging.ModuleName -> S.Set Core.Name -> S.Set Core.Name
 filterNonLocalNames currentNs names =
     Sets.fromList (Optionals.cat (Lists.map (\n -> Optionals.cases (Names.moduleNameOf n) Nothing (\nameNs -> Logic.ifElse (Equality.equal (Packaging.unModuleName currentNs) (Packaging.unModuleName nameNs)) Nothing (Just n))) (Sets.toList names)))
@@ -558,7 +570,7 @@ functionDeclarationFromTerm cx g currentNs lname term _mScheme =
           domPad = Core.TypeVariable (Core.Name "_")
           fsDomsPadded = Lists.concat2 fsDoms (Lists.replicate (Math.sub (Lists.length fsParams) (Lists.length fsDoms)) domPad)
           paramPatterns =
-                  Lists.map (\pair -> encodeParam cx fsEnv (Pairs.first pair) (Pairs.second pair)) (Lists.zip fsParams fsDomsPadded)
+                  Lists.map (\pair -> encodeParam cx fsEnv currentNs (Pairs.first pair) (Pairs.second pair)) (Lists.zip fsParams fsDomsPadded)
           sortedBindings = sortBindingsTopologically fsBindings
           bindingStmts = Lists.map (\b -> encodeBindingAsStatement cx fsEnv currentNs b) sortedBindings
           bodyExpr = encodeTerm cx fsEnv currentNs fsBody
@@ -601,21 +613,16 @@ importsToText kind currentNs names =
                         targetPath = Strings.intercalate "/" targetSegs
                         upPrefix =
                                 Logic.ifElse (Logic.and currentIsTest (Logic.not targetIsTest)) (Strings.cat2 baseUpPrefix "../../../main/typescript/hydra/") baseUpPrefix
-                        moduleAlias = Strings.cat2 "$mod_" (Strings.intercalate "_" targetSegs)
-                    in (Logic.ifElse (Equality.equal kind "type") (Strings.cat [
+                        nsSlug = Strings.intercalate "_" targetSegs
+                        moduleAlias = Logic.ifElse (Equality.equal kind "type") (Strings.cat2 "$type_" nsSlug) (Strings.cat2 "$mod_" nsSlug)
+                    in (Strings.cat [
                       importKeyword,
-                      " { ",
-                      (Strings.intercalate ", " locals),
-                      " } from \"",
-                      upPrefix,
-                      targetPath,
-                      ".js\";\n"]) (Strings.cat [
-                      "import * as ",
+                      " * as ",
                       moduleAlias,
                       " from \"",
                       upPrefix,
                       targetPath,
-                      ".js\";\n"]))) (Maps.toList grouped)
+                      ".js\";\n"])) (Maps.toList grouped)
       in (Strings.cat lines)
 lazyFlagsForPrimitive :: Graph.Graph -> Core.Name -> [Bool]
 lazyFlagsForPrimitive g name =
@@ -645,7 +652,7 @@ moduleToTypeScript mod defs cx g =
           typeImportsBlock = importsToText "type" currentNs typeImports
           termImportsBlock = importsToText "value" currentNs termImports
           importsBlock = Strings.cat2 typeImportsBlock termImportsBlock
-      in (Eithers.bind (Eithers.mapList (encodeTypeDefinition cx g) typeDefs) (\typeItems ->
+      in (Eithers.bind (Eithers.mapList (encodeTypeDefinition cx g currentNs) typeDefs) (\typeItems ->
         let termItems = Lists.map (encodeTermDefinition cx g currentNs) termDefs
             allItems = Lists.concat2 typeItems termItems
             mModuleDoc = Optionals.bind (Packaging.moduleMetadata mod) (\em -> Packaging.entityMetadataDescription em)
@@ -661,7 +668,7 @@ moduleToTypeScript mod defs cx g =
                         "\n",
                         itemText]))
             body = Strings.intercalate "\n\n" (Lists.map renderItem allItems)
-            filePath = Names.moduleNameToFilePath Util.CaseConventionCamel (Util.FileExtension "ts") (Packaging.moduleName mod)
+            filePath = Names.moduleNameToFilePath Util.CaseConventionCamel (File.FileExtension "ts") (Packaging.moduleName mod)
         in (Right (Maps.singleton filePath (Strings.cat [
           header,
           importsBlock,

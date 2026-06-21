@@ -5,12 +5,14 @@
     {"module": "hydra.coders"},
     {"module": "hydra.typed"},
     {"module": "hydra.errors"},
+    {"module": "hydra.file"},
     {"module": "hydra.graph"},
     {"module": "hydra.variants"},
     {"module": "hydra.core"},
     {"module": "hydra.typing"},
     {"module": "hydra.util"},
     {"module": "hydra.dsl.errors"},
+    {"module": "hydra.dsl.file"},
     {"module": "hydra.dsl.graph"},
     {"module": "hydra.dsl.variants"},
     {"module": "hydra.dsl.core"},
@@ -8549,7 +8551,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"variable": "hydra.util.FileExtension"},
+                      "body": {"variable": "hydra.file.FileExtension"},
                       "annotation": {
                         "map": [
                           {
@@ -8621,7 +8623,7 @@
                                     "function": {"variable": "hydra.typed.TypedTerm"},
                                     "argument": {
                                       "annotated": {
-                                        "body": {"variable": "hydra.util.FileExtension"},
+                                        "body": {"variable": "hydra.file.FileExtension"},
                                         "annotation": {
                                           "map": [
                                             {
@@ -8961,7 +8963,7 @@
                 "function": {"variable": "hydra.typed.TypedTerm"},
                 "argument": {
                   "annotated": {
-                    "body": {"variable": "hydra.util.FileExtension"},
+                    "body": {"variable": "hydra.file.FileExtension"},
                     "annotation": {
                       "map": [
                         {
@@ -9912,7 +9914,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"variable": "hydra.util.FileExtension"},
+                      "body": {"variable": "hydra.file.FileExtension"},
                       "annotation": {
                         "map": [
                           {
@@ -9936,7 +9938,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"variable": "hydra.util.FileExtension"},
+                            "body": {"variable": "hydra.file.FileExtension"},
                             "annotation": {
                               "map": [
                                 {

@@ -10,7 +10,8 @@ module Hydra.Dsl.Meta.Testing (
 ) where
 
 import Hydra.Dsl.Testing hiding (
-  tag, testCaseUniversal, testCaseWithMetadata,
+  effectfulTestCase,
+  tag, testCaseEffectful, testCaseUniversal, testCaseWithMetadata,
   testCaseWithMetadataCase, testCaseWithMetadataDescription,
   testCaseWithMetadataName, testCaseWithMetadataTags, testGroup,
   universalTestCase, unTag)
@@ -276,6 +277,21 @@ universalCase cname actual expected = testCaseWithMetadata (Phantoms.string cnam
     retype :: TypedTerm x -> TypedTerm String
     retype (TypedTerm t) = TypedTerm t
 
+-- | Create an effectful test case: 'actual' is an effect<string>-typed term that the test runner
+-- interprets (within a per-case empty temporary directory) to a result string; 'expected' is a
+-- string-typed term. As with universalCase, both are passed bare and codegen wraps them as the
+-- unit-thunk fields of EffectfulTestCase.
+effectfulCase :: String -> TypedTerm a -> TypedTerm b -> TypedTerm TestCaseWithMetadata
+effectfulCase cname actual expected = effectfulCaseWithTags cname [] actual expected
+
+effectfulCaseWithTags :: String -> [Tag] -> TypedTerm a -> TypedTerm b -> TypedTerm TestCaseWithMetadata
+effectfulCaseWithTags cname tags actual expected = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseEffectful $ effectfulTestCase (retype actual) (retype expected))
+  nothing (Phantoms.list $ tag . unTag <$> tags)
+  where
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm t) = TypedTerm t
+
 -- | Reference to the profile-aware core term validator. Used by
 -- 'validateCoreTermCase' (with 'kernelDefaultCoreProfileRef'-applied,
 -- head-extracted to preserve the legacy 'Maybe E' shape) and by
@@ -425,6 +441,9 @@ validateCoreTermCaseWithProfile cname profile typed input expected = universalCa
     (validateCoreTermProfiledRef @@ profile @@ typed @@ testGraphRef @@ input))
   (showValidationResultTerm expected)
 
+testCaseEffectful :: TypedTerm EffectfulTestCase -> TypedTerm TestCase
+testCaseEffectful = inject _TestCase _TestCase_effectful
+
 testCaseUniversal :: TypedTerm UniversalTestCase -> TypedTerm TestCase
 testCaseUniversal = inject _TestCase _TestCase_universal
 
@@ -476,6 +495,16 @@ universalTestCase :: TypedTerm String -> TypedTerm String -> TypedTerm Universal
 universalTestCase actual expected = Phantoms.record _UniversalTestCase [
   _UniversalTestCase_actual Phantoms.>>: thunk actual,
   _UniversalTestCase_expected Phantoms.>>: thunk expected]
+  where
+    thunk :: TypedTerm String -> TypedTerm (() -> String)
+    thunk body = Phantoms.lambda "_" body
+
+-- | Build an EffectfulTestCase from a bare effect<string> term (the action) and a bare string term
+-- (the expected value); both are wrapped as unit-thunk fields, mirroring universalTestCase.
+effectfulTestCase :: TypedTerm String -> TypedTerm String -> TypedTerm EffectfulTestCase
+effectfulTestCase actual expected = Phantoms.record _EffectfulTestCase [
+  _EffectfulTestCase_actual Phantoms.>>: thunk actual,
+  _EffectfulTestCase_expected Phantoms.>>: thunk expected]
   where
     thunk :: TypedTerm String -> TypedTerm (() -> String)
     thunk body = Phantoms.lambda "_" body

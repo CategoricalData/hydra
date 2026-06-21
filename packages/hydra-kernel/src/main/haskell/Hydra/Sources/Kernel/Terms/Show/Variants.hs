@@ -100,6 +100,7 @@ typeVariant = define "typeVariant" $
   match _TypeVariant Nothing [
     _TypeVariant_annotated>>: constant $ string "annotated",
     _TypeVariant_application>>: constant $ string "application",
+    _TypeVariant_effect>>: constant $ string "effect",
     _TypeVariant_either>>: constant $ string "either",
     _TypeVariant_forall>>: constant $ string "forall",
     _TypeVariant_function>>: constant $ string "function",

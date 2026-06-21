@@ -549,8 +549,9 @@ As of 0.16 the consume half is implemented for **all three big hosts**:
 
 - **Java and Python** consume their published coder runtime in the DSL→JSON step that regenerates
   `dist/json/hydra-{java,python}/` (Maven `hydra-java` / PyPI `hydra-python`) — see below.
-- **Haskell** consumes the published `hydra-kernel` + `hydra-haskell` from Hackage as its *host
-  runtime* — see [The Haskell host: runtime vs. sources](#the-haskell-host-runtime-vs-sources) below.
+- **Haskell** compiles the kernel from the co-generated `dist/haskell/hydra-kernel` (always compiled
+  as a target); secondary coders may be consumed from Hackage once published —
+  see [The Haskell host: runtime vs. sources](#the-haskell-host-runtime-vs-sources) below.
 
 All three resolve the version from `hydra.json` `hostVersion` (with per-host `hostOverrides`),
 default to the published artifact, and offer a `--local-host` shim. The output is byte-identical to a
@@ -623,18 +624,21 @@ The Haskell case is shaped by a host/target split. The
 Haskell DSL *sources* are Haskell code compiled into the head (`Hydra.Sources.*`; `mainModules ::
 [Module]` is built by running compiled Haskell), and they stay local — they are the source of truth and
 must be recompiled to pick up edits. But the *kernel runtime* the head links to **run** the build
-(`Hydra.Codegen`, `Hydra.Inference`, `Hydra.Lib.*`, …) is exactly what the published `hydra-kernel` +
-`hydra-haskell` Hackage packages provide. So `heads/haskell` consumes those two from Hackage (Stack
-`extra-deps`, pinned at `hostVersion`) and compiles only the drivers, the DSL sources, and the
-not-yet-published target coders — not the ~200 kernel modules. The host-vs-target distinction matters:
-`dist/haskell/hydra-kernel` is still *generated* as a target (other Haskell targets depend on that
-freshly-generated current-version kernel), but it is no longer a prerequisite for the host's own compile.
+(`Hydra.Codegen`, `Hydra.Inference`, `Hydra.Lib.*`, …) comes from the co-generated
+`dist/haskell/hydra-kernel` source tree. The kernel is always compiled from this dist copy — consuming
+it from the published Hackage release would link generated coder packages (`hydra-pg`, `hydra-rdf`, etc.)
+against a potentially stale kernel, breaking them when the kernel term-level API changes (#500). The
+published Hackage packages are not consumed for the kernel; only secondary, fully self-contained coders
+(hydra-coq, hydra-typescript, etc.) become Hackage candidates once published. The host-vs-target
+distinction still matters: `dist/haskell/hydra-kernel` is *generated* as a target (other Haskell targets
+depend on that freshly-generated current-version kernel) and is also the kernel the head compiles from.
 
 `heads/haskell/bin/sync-haskell.sh` defaults to `--published-host`; `bin/lib/generate-head-haskell-build.py`
 rewrites `package.yaml`/`stack.yaml` for the mode (the committed form is the hand-maintained local-mode
 source of truth, restored after a published sync). Which coder packages are consumed is *derived by
 probing* actual Hackage availability of `hydra-<pkg>-<hostVersion>` (`hydra-packages.py haskell-hackage`)
-— today only `hydra-kernel` + `hydra-haskell`; a coder published next cycle is consumed automatically
+— `hydra-kernel` and `hydra-haskell` are excluded (the kernel must always be compiled from the
+co-generated dist; see #500); a secondary coder published in a future cycle is consumed automatically
 with no config change. `--local-host` (build the whole host from source) and
 `hostOverrides["<host>"] = "local"` (one package local, the rest from Hackage) are the shims.
 Consuming the published kernel is a no-op for codegen: the host generates byte-identical output whether

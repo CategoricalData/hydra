@@ -70,8 +70,10 @@
 (register-make 'hydra.coders "LanguageConstraints" 'make-languageConstraints)
 (register-make 'hydra.coders "LanguageName" 'make-languageName)
 
+;; ---- hydra.file ----
+(register-make 'hydra.file "FileExtension" 'make-fileExtension)
+
 ;; ---- hydra.module ----
-(register-make 'hydra.module "FileExtension" 'make-fileExtension)
 (register-make 'hydra.module "Library" 'make-library)
 (register-make 'hydra.module "Module" 'make-module)
 (register-make 'hydra.module "Namespace" 'make-namespace)

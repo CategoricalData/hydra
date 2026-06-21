@@ -740,6 +740,34 @@
     ((string? err) err)
     (else (obj->string err))))
 
+;; Canonical root directory for effectful (file I/O) test cases (#494). Must match the testDir
+;; constant in Hydra.Sources.Test.Lib.Files and the equivalent constants in the other host runners
+;; (e.g. effectful-test-dir in heads/lisp/clojure, EFFECTFUL_TEST_DIR in heads/python).
+;; Hard-coded *nix path for now.
+(define effectful-test-dir "/tmp/hydra-testing")
+
+(define (prepare-effectful-temp-dir)
+  ;; Prepare a guaranteed-empty canonical temp directory before an effectful test case. Delete the
+  ;; tree if it exists, then recreate it empty. Prepared unconditionally for every effectful case.
+  ;; Uses the same guile directory primitives as hydra.scheme.lib.files.
+  (define (rmtree path)
+    (guard (exn (#t #f))
+      (let ((dir (opendir path)))
+        (let loop ()
+          (let ((entry (readdir dir)))
+            (if (eof-object? entry)
+                (closedir dir)
+                (begin
+                  (if (not (or (string=? entry ".") (string=? entry "..")))
+                      (let ((child (string-append path "/" entry)))
+                        (guard (e (#t (rmtree child) (guard (e2 (#t #f)) (rmdir child))))
+                          (delete-file child))))
+                  (loop))))))
+      (guard (exn (#t #f)) (rmdir path))))
+  (when (file-exists? effectful-test-dir)
+    (rmtree effectful-test-dir))
+  (mkdir effectful-test-dir))
+
 (define (run-simple-test path expected actual-fn)
   "Run a test that compares expected to the result of actual-fn."
   (guard (exn (#t
@@ -1618,6 +1646,25 @@
               ((eq? case-type 'json_decode)             (run-json-decode-test full case-data))
               ((eq? case-type 'json_encode)             (run-json-encode-test full case-data))
               ((eq? case-type 'validate_core_term)      (run-validate-core-term-test full case-data))
+              ((eq? case-type 'effectful)
+               ;; #494: effect<t> is transparent in Scheme (effect<t> = t), so forcing the actual
+               ;; thunk *is* running the effect. Like universal cases, actual/expected are unit-thunks
+               ;; (Hydra `\_. body`, emitted as one-arg procedure); pass '() as the unit arg. The
+               ;; canonical temp directory is prepared (deleted + recreated empty) first.
+               (prepare-effectful-temp-dir)
+               (guard (exn (#t
+                            (display (string-append "FAIL: " full "\n"))
+                            (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
+                            (list 0 1 0)))
+                 (let ((actual ((hydra_testing_effectful_test_case-actual case-data) '()))
+                       (expected ((hydra_testing_effectful_test_case-expected case-data) '())))
+                   (if (equal? actual expected)
+                     (list 1 0 0)
+                     (begin
+                       (display (string-append "FAIL: " full "\n"))
+                       (display (string-append "  Expected: " (if (string? expected) expected (obj->string expected)) "\n"))
+                       (display (string-append "  Actual:   " (if (string? actual) actual (obj->string actual)) "\n"))
+                       (list 0 1 0))))))
               ;; Skip remaining unimplemented test types
               ((eq? case-type 'delegated_evaluation)    (list 0 0 1))
               ((eq? case-type 'universal)

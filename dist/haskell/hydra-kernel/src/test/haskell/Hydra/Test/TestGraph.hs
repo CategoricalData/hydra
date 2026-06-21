@@ -7,8 +7,10 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.File as ErrorFile
 import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
+import qualified Hydra.File as File
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lexical as Lexical
@@ -23,6 +25,7 @@ import qualified Hydra.Test.TestEnv as TestEnv
 import qualified Hydra.Test.TestTerms as TestTerms
 import qualified Hydra.Test.TestTypes as TestTypes
 import qualified Hydra.Testing as Testing
+import qualified Hydra.Time as Time
 import qualified Hydra.Topology as Topology
 import qualified Hydra.Typed as Typed
 import qualified Hydra.Typing as Typing
@@ -46,6 +49,22 @@ testTerms = Maps.fromList [
 testTypes :: M.Map Core.Name Core.Type
 testTypes =
     Maps.fromList [
+      (
+        Core.Name "hydra.error.file.FileError",
+        (Core.TypeUnion [
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "invalidPath"),
+            Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "notFound"),
+            Core.fieldTypeType = (Core.TypeVariable (Core.Name "hydra.file.FilePath"))},
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "other"),
+            Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
+          Core.FieldType {
+            Core.fieldTypeName = (Core.Name "permissionDenied"),
+            Core.fieldTypeType = (Core.TypeVariable (Core.Name "hydra.file.FilePath"))}])),
+      (Core.Name "hydra.file.FilePath", (Core.TypeWrap (Core.TypeLiteral Core.LiteralTypeString))),
       (TestTypes.testTypeBuddyListAName, TestTypes.testTypeBuddyListA),
       (TestTypes.testTypeBuddyListBName, TestTypes.testTypeBuddyListB),
       (TestTypes.testTypeComparisonName, TestTypes.testTypeComparison),

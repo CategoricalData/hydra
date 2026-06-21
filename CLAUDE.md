@@ -32,10 +32,10 @@ and [Migration shims](docs/recipes/migration-shims.md). Note: the Haskell genera
 `hydra.{java,python}.*` JSON into its inference universe (so cross-package references like
 `hydra-scala` → `hydra.java.serde` resolve), but no longer *generates* those packages.
 
-The **Haskell host** now likewise consumes published artifacts: `heads/haskell` links published
-`hydra-kernel` + `hydra-haskell` from **Hackage** as its runtime, compiling only drivers + DSL sources +
-not-yet-published coders — not the kernel. `dist/haskell/hydra-kernel` is still *generated* as a target
-but is no longer a host prerequisite (the host-vs-target split). `sync-haskell.sh` / `bin/sync.sh`
+The **Haskell host** compiles the kernel from the co-generated `dist/haskell/hydra-kernel` (always
+generated as a target); secondary coders may be consumed from Hackage once published. `dist/haskell/hydra-kernel`
+is *both* a generated target and the kernel the host compiles from (host-vs-target split for the exec
+drivers, shared kernel source for generated coder output; see #500). `sync-haskell.sh` / `bin/sync.sh`
 default to `--published-host`; `--local-host` builds the whole host from source, and
 `hostOverrides[pkg]="local"` forces one package local while the rest come from the registry. See
 [build-system.md § Consuming published hosts](docs/build-system.md#consuming-published-hosts) for the

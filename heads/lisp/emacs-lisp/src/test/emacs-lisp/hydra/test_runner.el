@@ -612,6 +612,36 @@ skip silently."
       (message "  Actual:   %S" actual)
       (list 0 1 0))))
 
+;; Canonical root directory for effectful (file I/O) test cases (#494). Must match the testDir
+;; constant in Hydra.Sources.Test.Lib.Files and the equivalent constants in the other host runners
+;; (e.g. EFFECTFUL_TEST_DIR in heads/python, *effectful-test-dir* in the Common Lisp runner).
+;; Hard-coded *nix path for now.
+(defconst hydra-effectful-test-dir "/tmp/hydra-testing")
+
+(defun hydra-prepare-effectful-temp-dir ()
+  "Prepare a guaranteed-empty canonical temp directory before an effectful test case.
+Mirrors prepare_effectful_temp_dir in the Python runner and the Clojure/Scheme/Common-Lisp
+runners: delete the directory tree if it exists, then recreate it empty.  Prepared
+unconditionally for every effectful case."
+  (when (file-directory-p hydra-effectful-test-dir)
+    (delete-directory hydra-effectful-test-dir t))
+  (make-directory hydra-effectful-test-dir t))
+
+(defun hydra-run-effectful-test (path tc)
+  "Run an effectful (file I/O) test case (#494).  The effect type is transparent in the Lisp
+dialects (effect<t> = t), so forcing the actual thunk *is* running the effect.  Like :universal
+cases, :actual/:expected are unit-thunks (Hydra `\\_. body', emitted as one-arg fn-of-unit), so
+they are forced with a dummy nil.  The canonical temp directory is prepared first."
+  (hydra-prepare-effectful-temp-dir)
+  (let ((actual (funcall (cdr (assq :actual tc)) nil))
+        (expected (funcall (cdr (assq :expected tc)) nil)))
+    (if (equal actual expected)
+        (list 1 0 0)
+      (message "FAIL: %s" path)
+      (message "  Expected: %S" expected)
+      (message "  Actual:   %S" actual)
+      (list 0 1 0))))
+
 (defun hydra-run-simple-test (path expected actual-fn)
   (condition-case err
       (let ((actual (funcall actual-fn)))
@@ -1077,6 +1107,7 @@ skip silently."
              ((eq case-type :validate_core_term)      (hydra-run-validate-core-term-test full case-data))
              ((eq case-type :delegated_evaluation)    (list 0 0 1))
              ((eq case-type :universal)               (hydra-run-universal-test full case-data))
+             ((eq case-type :effectful)               (hydra-run-effectful-test full case-data))
              (t (list 0 0 1))))))
     (error
      (message "FAIL: %s > %s" path (cdr (assq :name tcase)))

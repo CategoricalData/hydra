@@ -100,6 +100,13 @@ if [ "$PACKAGE" = "hydra-kernel" ]; then
     "$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT"
 fi
 
+# Step 4: Generate per-package build.sbt + project/ so each
+# dist/scala/<pkg>/ is a standalone publishable sbt build.
+echo ""
+echo "Step 4: Generating per-package build.sbt..."
+HYDRA_ROOT_DIR="$HYDRA_ROOT_DIR" "$HYDRA_ROOT_DIR/bin/lib/generate-scala-package-build.py" \
+    "$PACKAGE" --out-dir "$OUT_DIR"
+
 echo ""
 
 echo "=== Done. $PACKAGE assembled under $OUT_DIR ==="

@@ -9,6 +9,7 @@ import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
+import qualified Hydra.File as File
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Haskell.Lib.Logic as Logic
@@ -104,4 +105,20 @@ tinkerpopLanguage name features extras =
           Coders.languageConstraintsIntegerTypes = integerTypes,
           Coders.languageConstraintsTermVariants = termVariants,
           Coders.languageConstraintsTypeVariants = typeVariants,
-          Coders.languageConstraintsTypes = typePredicate}}
+          Coders.languageConstraintsTypes = typePredicate},
+        Coders.languageSupportedFeatures = (Sets.fromList [
+          Coders.LanguageFeaturePartialApplication,
+          Coders.LanguageFeatureNestedCaseStatements,
+          Coders.LanguageFeatureNestedPolymorphicLetBindings]),
+        Coders.languageCaseConventions = Coders.CaseConventions {
+          Coders.caseConventionsConstant = Util.CaseConventionUpperSnake,
+          Coders.caseConventionsDirectory = Util.CaseConventionLowerSnake,
+          Coders.caseConventionsEnumValue = Util.CaseConventionPascal,
+          Coders.caseConventionsField = Util.CaseConventionCamel,
+          Coders.caseConventionsFile = Util.CaseConventionLowerSnake,
+          Coders.caseConventionsModule = Util.CaseConventionLowerSnake,
+          Coders.caseConventionsTerm = Util.CaseConventionCamel,
+          Coders.caseConventionsTermVariable = Util.CaseConventionCamel,
+          Coders.caseConventionsType = Util.CaseConventionPascal,
+          Coders.caseConventionsTypeVariable = Util.CaseConventionPascal},
+        Coders.languageDefaultFileExtension = (File.FileExtension "groovy")}
