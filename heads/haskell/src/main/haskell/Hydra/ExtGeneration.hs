@@ -9,6 +9,7 @@ module Hydra.ExtGeneration (
 ) where
 
 import Hydra.Kernel
+import qualified Hydra.File as File
 import Hydra.Generation
 import Hydra.Haskell.Generation
 import Hydra.Sources.Ext
@@ -184,7 +185,7 @@ moduleToLispDialect dialect ext mod defs cx g =
           caseConvention = case dialect of
             LispSyntax.DialectClojure -> Util.CaseConventionCamel
             _ -> Util.CaseConventionLowerSnake
-          filePath = Names.moduleNameToFilePath caseConvention (FileExtension ext) (moduleName mod)
+          filePath = Names.moduleNameToFilePath caseConvention (File.FileExtension ext) (moduleName mod)
       in Right (M.singleton filePath code)
 
 writeClojure :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
