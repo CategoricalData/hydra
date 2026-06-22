@@ -85,8 +85,9 @@ packages/<pkg>/src/main/<lang>/  → dist/json/<pkg>/src/<set>/json/  →  dist/
 - **JSON modules** are the language-neutral interchange representation. `dist/json/` is
   tracked in git as the source of truth for non-Haskell hosts.
 - **Target distributions** are generated source trees, one per (target language × package).
-  `dist/haskell/` is tracked through 0.15 to bootstrap a fresh clone;
-  all other `dist/<lang>/` trees are regenerated on demand and are not checked in.
+  `dist/haskell/` is still tracked to bootstrap a fresh clone; removing it from SCM is deferred
+  ([#376](https://github.com/CategoricalData/hydra/issues/376), see below).
+  All other `dist/<lang>/` trees are regenerated on demand and are not checked in.
 
 This factoring serves Hydra's core premise: there is a single language for
 representing data, schemas, and code, with encodings in many other languages.

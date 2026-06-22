@@ -19,9 +19,9 @@ in Hydra, programs are graphs, and graphs are programs
 
 * **Translingual programming**. Write a program or domain model once in a Hydra DSL,
   using the host language you are most comfortable with, and the same logic becomes
-  available in every other supported language, with test-driven guarantees of  semantic equivalence.
+  available in every other supported language, with test-driven guarantees of semantic equivalence.
   The Hydra kernel is the most thoroughly exercised example: a working programming language, with its
-  tests, ported across seven languages from a single source of truth.
+  tests, ported across eight languages from a single source of truth.
 * **Graph construction**. Hydra supports TinkerPop-style property graphs
   as well as [RDF](https://en.wikipedia.org/wiki/Resource_Description_Framework)
   and [SHACL](https://en.wikipedia.org/wiki/SHACL),
@@ -72,7 +72,7 @@ and heterogeneous distributed systems.
 
 ## Releases
 
-The latest Hydra release is **0.16.0**. Published artifacts:
+The latest Hydra release is **0.17.0**. Published artifacts:
 
 | Channel | Packages |
 |---|---|
@@ -109,8 +109,8 @@ entry to Hydra: you can pick the head you're most comfortable with and ignore th
 | [Clojure](packages/hydra-lisp/hydra-clojure/README.md) | Complete | A Lisp dialect on the JVM. ([Clojure](https://clojure.org/)) |
 | [Scheme](packages/hydra-lisp/hydra-scheme/README.md) | Complete | ([Scheme](https://en.wikipedia.org/wiki/Scheme_(programming_language))) |
 | [Common Lisp](packages/hydra-lisp/hydra-common-lisp/README.md) | Complete | ([Common Lisp](https://common-lisp.net/)) |
-| [Emacs Lisp](packages/hydra-lisp/hydra-emacs-lisp/README.md) | In progress | ([Emacs Lisp](https://www.gnu.org/software/emacs/manual/eintr.html)) |
-| [TypeScript](packages/hydra-typescript/README.md) | Complete | Passes the common test suite as a target; as a host can bootstrap all other supported heads including Java. ([TypeScript](https://www.typescriptlang.org/)) |
+| [Emacs Lisp](packages/hydra-lisp/hydra-emacs-lisp/README.md) | Complete | Passes the common test suite; still maturing as a self-hosting host. ([Emacs Lisp](https://www.gnu.org/software/emacs/manual/eintr.html)) |
+| [TypeScript](packages/hydra-typescript/README.md) | Complete | Self-hosts and passes the common test suite; published to npm. ([TypeScript](https://www.typescriptlang.org/)) |
 | [Go](packages/hydra-go/README.md) | In progress | ([Go](https://go.dev/)) |
 | [Rust](packages/hydra-ext/src/main/haskell/Hydra/Sources/Rust) | In progress | Coder lives in `hydra-ext`; the Rust head has not yet been split into its own package. ([Rust](https://www.rust-lang.org/)) |
 | [Coq](packages/hydra-coq/README.md) | In progress | Generation-only target; there is no Coq-side runtime. ([Coq](https://coq.inria.fr/)) |

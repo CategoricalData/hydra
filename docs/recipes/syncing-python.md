@@ -12,11 +12,9 @@ under `packages/hydra-python/src/main/python/hydra/sources/python/`. They are
 the source of truth for `dist/json/hydra-python/`, exported via
 `bin/generate-hydra-python-from-python.sh`.
 
-> A legacy Haskell-DSL copy of these same Python coder modules lives at
-> `packages/hydra-python/src/main/haskell/Hydra/Sources/Python/` and produces
-> byte-identical output. It was kept as a backup through the 0.15 line and
-> is scheduled for removal during 0.16 development. Edits to the Python
-> coder should go into the Python sources.
+> A legacy Haskell-DSL copy of these Python coder modules was kept as a backup through the
+> 0.15 line and was removed in 0.16 ([#346](https://github.com/CategoricalData/hydra/issues/346)).
+> The native Python sources are now the sole source of truth; edits to the Python coder go there.
 
 `bin/sync.sh` runs `bin/generate-hydra-python-from-python.sh` automatically in
 Phase 5 on every invocation. The native generator owns `dist/json/hydra-python/`;

@@ -855,12 +855,12 @@ expr =
 ### Pattern 4: Pattern matching
 
 ```haskell
--- Match on a Maybe value
-handleMaybe = match _Maybe (Just defaultValue) [
-  _Maybe_nothing >>: "unit" ~> defaultValue,
-  _Maybe_just >>: "val" ~> processValue (var "val")]
+-- Match on an optional value (hydra.lib.optionals)
+handleOptional = Optionals.cases optValue
+  defaultValue                          -- the `nothing` case
+  ("val" ~> processValue (var "val"))   -- the `just` case
 
--- Match on a union type
+-- Match on a (hypothetical) union type with `match` / `>>:`
 handleResult = match _Result Nothing [
   _Result_success >>: "val" ~> var "val",
   _Result_error >>: "err" ~> handleError (var "err")]
