@@ -1,8 +1,10 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hydra.Sources.Rdf.Serde where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -16,17 +18,17 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -145,7 +147,7 @@ escapeIriStr :: TypedTermDefinition (String -> String)
 escapeIriStr = define "escapeIriStr" $
   doc "Escape a string for use in an N-Triples IRI. Disallowed characters are emitted as 4-digit UCHAR escapes." $
   lambda "s" $
-    Strings.cat (Lists.map escapeIriChar (Strings.toList (var "s")))
+    Strings.cat (Lists.map (asTerm escapeIriChar) (Strings.toList (var "s")))
 
 -- | Escape a single literal character. Handles \", \\, \n, \r;
 --   non-ASCII code points pass through (N-Triples allows any Unicode code point in literals).
@@ -167,13 +169,13 @@ escapeLiteralString :: TypedTermDefinition (String -> String)
 escapeLiteralString = define "escapeLiteralString" $
   doc "Escape a string for use in an N-Triples literal" $
   lambda "s" $
-    Strings.cat (Lists.map escapeLiteralChar (Strings.toList (var "s")))
+    Strings.cat (Lists.map (asTerm escapeLiteralChar) (Strings.toList (var "s")))
 
 graphToExpr :: TypedTermDefinition (Rdf.Graph -> Expr)
 graphToExpr = define "graphToExpr" $
   doc "Convert an RDF graph to an expression" $
   lambda "g" $
-    Serialization.newlineSep @@ (Lists.map tripleToExpr (Sets.toList (unwrap Rdf._Graph @@ var "g")))
+    Serialization.newlineSep @@ (Lists.map (asTerm tripleToExpr) (Sets.toList (unwrap Rdf._Graph @@ var "g")))
 
 -- | Convert a value 0-15 to an uppercase hex digit code point ('0'-'9' or 'A'-'F').
 hexDigit :: TypedTermDefinition (Int -> Int)
@@ -210,7 +212,7 @@ literalToExpr = define "literalToExpr" $
     "lang">: project Rdf._Literal Rdf._Literal_languageTag @@ var "lit",
     "lexExpr">: Serialization.cst @@
       (Strings.cat $ list [string "\"", escapeLiteralString @@ var "lex", string "\""]),
-    "suffix">: Optionals.cases (var "lang") (Serialization.noSep @@ list [Serialization.cst @@ string "^^", iriToExpr @@ var "dt"]) languageTagToExpr] $
+    "suffix">: Optionals.cases (var "lang") (Serialization.noSep @@ list [Serialization.cst @@ string "^^", iriToExpr @@ var "dt"]) (asTerm languageTagToExpr)] $
     Serialization.noSep @@ list [var "lexExpr", var "suffix"]
 
 nodeToExpr :: TypedTermDefinition (Rdf.Node -> Expr)

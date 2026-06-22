@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 -- | Term-level definitions for property graph to RDF/SHACL mapping.
 -- Includes both instance-level (PG data → RDF triples) and schema-level
 -- (GraphSchema → SHACL ShapesGraph) mappings.
@@ -6,7 +8,7 @@ module Hydra.Sources.Pg.Rdf.Mappings where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -20,17 +22,17 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -110,7 +112,7 @@ module_ = Module {
       toDefinition edgeTypesToPropertyShapes,
       toDefinition encodeEdge,
       toDefinition encodeLazyGraph,
-      toDefinition encodeVertex,
+      toDefinition (encodeVertex :: TypedTermDefinition (Graph -> PG.Vertex String -> Rdf.Description)),
       toDefinition graphSchemaToShapesGraph,
       toDefinition propertyTypeToPropertyShape,
       toDefinition vertexTypeToNodeShape]
@@ -167,7 +169,10 @@ encodeLazyGraph = define "encodeLazyGraph" $
 -- | Encode a property graph vertex as an RDF description.
 -- The vertex id becomes the subject IRI, the vertex label becomes an rdf:type triple,
 -- and each property becomes a triple with the property key as predicate and value as object.
-encodeVertex :: TypedTermDefinition (env -> PG.Vertex v -> Rdf.Description)
+-- The `forall env v.` (no constraint) exists only to bring `v` into scope for an in-body
+-- `:: TypedTerm [(PG.PropertyKey, v)]` annotation, needed now that the generated `Hydra.Dsl.Lib.Maps`
+-- requires the map type to be pinned (the key here is concrete, so no `Ord`). See #467.
+encodeVertex :: forall env v. TypedTermDefinition (env -> PG.Vertex v -> Rdf.Description)
 encodeVertex = define "encodeVertex" $
   doc "Encode a property graph vertex as an RDF description" $
   lambda "env" $ lambda "vertex" $
@@ -187,7 +192,7 @@ encodeVertex = define "encodeVertex" $
             "obj">: RdfDsl.nodeLiteral (envEncodePropertyValue (var "env") @@ var "val")
           ] $
           RdfDsl.triple (var "subj") (var "pred") (var "obj"))
-        (Maps.toList (var "vprops")),
+        ((Maps.toList (var "vprops")) :: TypedTerm [(PG.PropertyKey, v)]),
       "allTriples">: Lists.cons (var "typeTriple") (var "propTriples")
     ] $
     RdfDsl.description

@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Terms.Unification where
 
@@ -12,18 +13,18 @@ import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Lib.Math     as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -183,8 +184,8 @@ unifyTypeConstraints = define "unifyTypeConstraints" $
         (Just (var "tryBinding" @@ var "name" @@ var "sright")) [
         _Type_variable>>: "name2" ~> Logic.ifElse (Core.equalName_ (var "name") (var "name2"))
           (unifyTypeConstraints @@ var "cx" @@ var "schemaTypes" @@ var "rest")
-          (Logic.ifElse (Optionals.isGiven (Maps.lookup (var "name") (var "schemaTypes")))
-            (Logic.ifElse (Optionals.isGiven (Maps.lookup (var "name2") (var "schemaTypes")))
+          (Logic.ifElse (Optionals.isGiven (Maps.lookup (var "name" :: TypedTerm Name) (var "schemaTypes")))
+            (Logic.ifElse (Optionals.isGiven (Maps.lookup (var "name2" :: TypedTerm Name) (var "schemaTypes")))
               (left (Error.unificationError (var "sleft") (var "sright")
                   ((string "Attempted to unify schema names ") ++ (Core.unName (var "name")) ++ (string " and ") ++ (Core.unName (var "name2"))
                     ++ (string " (") ++ var "comment" ++ (string ")"))))

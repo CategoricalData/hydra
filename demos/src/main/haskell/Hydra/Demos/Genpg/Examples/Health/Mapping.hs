@@ -1,22 +1,24 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hydra.Demos.Genpg.Examples.Health.Mapping where
 
 import Hydra.Core (Term)
 import Hydra.Pg.Model (Vertex, Edge, LazyGraph)
 import Hydra.Formatting (decapitalize)
 import Hydra.Typed (TypedTerm)
-import Hydra.Dsl.Meta.Phantoms ((@@), constant, just, lambda, nothing, string, var)
+import Hydra.Dsl.Meta.Phantoms ((@@), constant, just, lambda, list, nothing, string, var)
 import Hydra.Dsl.Pg.Mappings (column, edgeNoId, graph, property, vertex)
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Optionals as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Strings as Strings
 import Hydra.Demos.Genpg.Examples.Health.GraphSchema
 
 labeledIntId :: String -> TypedTerm (r -> Maybe Int) -> TypedTerm (r -> String)
 labeledIntId itype iid = lambda "r" $ Optionals.map
-  (lambda "i" $ Strings.concat [
+  (lambda "i" $ Strings.cat (list [
     string $ decapitalize itype,
     string "_",
-    Literals.showInt32 (var "i")])
+    Literals.showInt32 (var "i")]))
   (iid @@ var "r")
 
 healthGraph :: LazyGraph Term

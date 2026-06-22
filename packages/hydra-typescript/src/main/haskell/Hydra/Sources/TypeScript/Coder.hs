@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 -- | TypeScript code generator in Hydra DSL.
 --
 -- Initial scope (types only): converts a Hydra module's type definitions to a
@@ -17,18 +18,18 @@ module Hydra.Sources.TypeScript.Coder where
 import Hydra.Kernel
 import Hydra.File (_FileExtension)
 import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Errors                          as Error
@@ -469,7 +470,7 @@ encodeTerm = def "encodeTerm" $
      _Term_lambda>>: lambda "_lam" $
        "lamTerm" <~ inject _Term _Term_lambda (var "_lam") $
        "fsLE" <~ (analyzeTypeScriptFunction @@ var "cx" @@ var "g" @@ var "lamTerm") $
-       "fsL" <~ Eithers.either_
+       "fsL" <~ Eithers.either
          (lambda "_err" $ record _FunctionStructure [
            _FunctionStructure_typeParams>>: list ([] :: [TypedTerm Name]),
            _FunctionStructure_params>>: list ([] :: [TypedTerm Name]),
@@ -612,7 +613,7 @@ encodeTerm = def "encodeTerm" $
            (lambda "entry" $ tsArray @@ list [
              encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ Pairs.first (var "entry"),
              encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ Pairs.second (var "entry")])
-           (Maps.toList (var "m"))],
+           (Maps.toList (var "m" :: TypedTerm (M.Map Term Term)))],
      _Term_pair>>: lambda "p" $
        -- A Hydra pair (a, b) emits as `[a, b] as any`. The `as any` cast
        -- bypasses tsc's array-vs-tuple inference: a bare `[a, b]` literal
@@ -800,7 +801,7 @@ encodeTerm = def "encodeTerm" $
      -- Either constructor at the term level: { tag: "left", value: l } or
      -- { tag: "right", value: r }.
      _Term_either>>: lambda "e" $
-       Eithers.either_
+       Eithers.either
          (lambda "l" $ tsAsAny @@ (tsObject @@ list [
            pair (string "tag") (tsExprStr @@ string "left"),
            pair (string "value") (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "l")]))
@@ -828,7 +829,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     -- Pull the term's description annotation. Extraction errors (rare —
     -- only when the value isn't a string) collapse to "no doc" so we
     -- never fail the whole module emit over a single bad annotation.
-    "mdoc" <~ Eithers.either_ (constant nothing) identity
+    "mdoc" <~ Eithers.either (constant nothing) identity
       (Annotations.getTermDescription @@ var "cx" @@ var "g" @@ var "rawTerm") $
     "asExport" <~ (lambda "stmt" $
       inject TS._ModuleItem TS._ModuleItem_export
@@ -1162,7 +1163,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
 encodeTypeOrAny :: TypedTermDefinition (InferenceContext -> Graph -> ModuleName -> Type -> TS.TypeExpression)
 encodeTypeOrAny = def "encodeTypeOrAny" $
   "cx" ~> "g" ~> "currentNs" ~> "typ" ~>
-    Eithers.either_
+    Eithers.either
       (lambda "_e" $ inject TS._TypeExpression TS._TypeExpression_any unit)
       (lambda "te" $ var "te")
       (encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "typ")
@@ -1173,7 +1174,7 @@ encodeTypeOrAny = def "encodeTypeOrAny" $
 filterNonLocalNames :: TypedTermDefinition (ModuleName -> S.Set Name -> S.Set Name)
 filterNonLocalNames = def "filterNonLocalNames" $
   lambda "currentNs" $ lambda "names" $
-    Sets.fromList $ Optionals.cat $ Lists.map
+    ((Sets.fromList $ Optionals.cat $ Lists.map
       (lambda "n" $
         Optionals.cases (Names.moduleNameOf @@ var "n")
           nothing
@@ -1184,7 +1185,7 @@ filterNonLocalNames = def "filterNonLocalNames" $
                 (unwrap _ModuleName @@ var "nameNs"))
               nothing
               (just $ var "n")))
-      (Sets.toList (var "names"))
+      (Sets.toList (var "names" :: TypedTerm (S.Set Name)))) :: TypedTerm (S.Set Name))
 
 -- | Walk an application spine, returning (innermost head term, args in
 -- application order). For `App (App (App f a) b) c)` returns `(f, [a,b,c])`.
@@ -1211,7 +1212,7 @@ functionDeclarationFromTerm :: TypedTermDefinition (InferenceContext -> Graph ->
 functionDeclarationFromTerm = def "functionDeclarationFromTerm" $
   "cx" ~> "g" ~> "currentNs" ~> "lname" ~> "term" ~> "_mScheme" ~>
     "fsE" <~ (analyzeTypeScriptFunction @@ var "cx" @@ var "g" @@ var "term") $
-    "fs" <~ Eithers.either_
+    "fs" <~ Eithers.either
       (lambda "_err" $ record _FunctionStructure [
         _FunctionStructure_typeParams>>: list ([] :: [TypedTerm Name]),
         _FunctionStructure_params>>: list ([] :: [TypedTerm Name]),
@@ -1279,7 +1280,7 @@ importsToText = def "importsToText" $
                 (unwrap _ModuleName @@ var "ns"))
               nothing
               (just $ pair (var "ns") (var "n"))))
-      (Sets.toList (var "names"))) $
+      (Sets.toList (var "names" :: TypedTerm (S.Set Name)))) $
     -- Apply the kind's case convention. `kind == "type"` → capitalize.
     -- Value-kind imports also get reserved-word sanitization so e.g. `null`
     -- becomes `null_`, matching the runtime's exported binding name.
@@ -1298,8 +1299,8 @@ importsToText = def "importsToText" $
         "n" <~ Pairs.second (var "p") $
         "local" <~ (var "transformLocal" @@ (Names.localNameOf @@ var "n")) $
         "existing" <~ (Optionals.fromOptional (list ([] :: [TypedTerm String]))
-          (Maps.lookup (var "ns") (var "acc"))) $
-        Maps.insert (var "ns") (Lists.cons (var "local") (var "existing")) (var "acc"))
+          (Maps.lookup (var "ns") (var "acc" :: TypedTerm (M.Map ModuleName [String])))) $
+        Maps.insert (var "ns") (Lists.cons (var "local") (var "existing")) (var "acc" :: TypedTerm (M.Map ModuleName [String])))
       (Maps.empty :: TypedTerm (M.Map ModuleName [String]))
       (var "pairs")) $
     -- Path computation: every Hydra namespace has the form `hydra.<a>.<b>...`.
@@ -1373,7 +1374,7 @@ importsToText = def "importsToText" $
           var "upPrefix",
           var "targetPath",
           string ".js\";\n"]))
-      (Maps.toList (var "grouped"))) $
+      (Maps.toList (var "grouped" :: TypedTerm (M.Map ModuleName [String])))) $
     Strings.cat (var "lines")
 
 -- =============================================================================
@@ -1469,8 +1470,8 @@ moduleToTypeScript = def "moduleToTypeScript" $
             @@ (Packaging.termDefinitionBody (var "td"))))
       (Sets.empty :: TypedTerm (S.Set Name))
       (var "termDefs")) $
-    "typeImports" <~ Sets.union (Sets.union (var "typeImportsFromTypes") (var "typeImportsFromTerms"))
-                                (var "typeImportsFromInner") $
+    "typeImports" <~ (Sets.union (Sets.union (var "typeImportsFromTypes") (var "typeImportsFromTerms"))
+                                (var "typeImportsFromInner") :: TypedTerm (S.Set Name)) $
     "termImports" <~ (Lists.foldl
       (lambda "acc" $ lambda "td" $
         Sets.union (var "acc")
@@ -1520,7 +1521,7 @@ moduleToTypeScript = def "moduleToTypeScript" $
         var "importsBlock",
         Logic.ifElse (Equality.equal (var "importsBlock") (string "")) (string "") (string "\n"),
         var "body",
-        Logic.ifElse (Equality.equal (var "body") (string "")) (string "") (string "\n")])))
+        Logic.ifElse (Equality.equal (var "body") (string "")) (string "") (string "\n")])) :: TypedTerm (M.Map FilePath String))
 
 -- | Render an interface declaration:
 --
@@ -1735,20 +1736,20 @@ sortBindingsTopologically = def "sortBindingsTopologically" $
   lambda "bindings" $
     "byName" <~ (Maps.fromList $ Lists.map
       (lambda "b" $ pair (Core.bindingName (var "b")) (var "b"))
-      (var "bindings")) $
+      (var "bindings") :: TypedTerm (M.Map Name Binding)) $
     "adjacency" <~ (Lists.map
       (lambda "b" $
         "bname" <~ Core.bindingName (var "b") $
         "bterm" <~ Core.bindingTerm (var "b") $
         "freeVars" <~ (Variables.freeVariablesInTerm @@ var "bterm") $
         "deps" <~ (Lists.filter
-          (lambda "n" $ Maps.member (var "n") (var "byName"))
-          (Sets.toList (var "freeVars"))) $
+          (lambda "n" $ Maps.member (var "n") (var "byName" :: TypedTerm (M.Map Name Binding)))
+          (Sets.toList (var "freeVars" :: TypedTerm (S.Set Name)))) $
         pair (var "bname") (var "deps"))
-      (var "bindings")) $
-    "sccs" <~ (Sorting.topologicalSortComponents @@ var "adjacency") $
+      (var "bindings") :: TypedTerm [(Name, [Name])]) $
+    "sccs" <~ (Sorting.topologicalSortComponents @@ (var "adjacency" :: TypedTerm [(Name, [Name])])) $
     Optionals.cat $ Lists.map
-      (lambda "n" $ Maps.lookup (var "n") (var "byName"))
+      (lambda "n" $ Maps.lookup (var "n") (var "byName" :: TypedTerm (M.Map Name Binding)))
       (Lists.concat (var "sccs"))
 
 -- | Reorder term definitions so each definition appears after the
@@ -1762,7 +1763,7 @@ sortTermDefsTopologically = def "sortTermDefsTopologically" $
     "byName" <~ (Maps.fromList $ Lists.map
       (lambda "td" $
         pair (Packaging.termDefinitionName (var "td")) (var "td"))
-      (var "tdefs")) $
+      (var "tdefs") :: TypedTerm (M.Map Name TermDefinition)) $
     -- Build adjacency: each Name → list of in-module Names referenced
     -- by its body.
     "adjacency" <~ (Lists.map
@@ -1772,17 +1773,17 @@ sortTermDefsTopologically = def "sortTermDefsTopologically" $
         "freeVars" <~ (Variables.freeVariablesInTerm @@ var "tterm") $
         -- Keep only references that point to defs in this module.
         "deps" <~ (Lists.filter
-          (lambda "n" $ Maps.member (var "n") (var "byName"))
-          (Sets.toList (var "freeVars"))) $
+          (lambda "n" $ Maps.member (var "n") (var "byName" :: TypedTerm (M.Map Name TermDefinition)))
+          (Sets.toList (var "freeVars" :: TypedTerm (S.Set Name)))) $
         pair (var "tname") (var "deps"))
-      (var "tdefs")) $
+      (var "tdefs") :: TypedTerm [(Name, [Name])]) $
     -- topologicalSortComponents returns SCCs in dependency-first order,
     -- which is exactly what we need for hoisting-safe init order.
-    "sccs" <~ (Sorting.topologicalSortComponents @@ var "adjacency") $
+    "sccs" <~ (Sorting.topologicalSortComponents @@ (var "adjacency" :: TypedTerm [(Name, [Name])])) $
     -- Flatten SCCs (cycles are tolerated; their order within is the input
     -- order) and map names back to TermDefinitions.
     Optionals.cat $ Lists.map
-      (lambda "n" $ Maps.lookup (var "n") (var "byName"))
+      (lambda "n" $ Maps.lookup (var "n") (var "byName" :: TypedTerm (M.Map Name TermDefinition)))
       (Lists.concat (var "sccs"))
 
 -- =============================================================================

@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Terms.Predicates where
 
@@ -29,18 +30,18 @@ import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Lib.Math     as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -226,11 +227,11 @@ isSerializable = define "isSerializable" $
   doc "Check if an element is serializable (no function types in dependencies) (Either version)" $
   "cx" ~> "graph" ~> "el" ~>
   "variants" <~ ("typ" ~>
-    Lists.map (Reflect.typeVariant) (Rewriting.foldOverType @@ Coders.traversalOrderPre @@
+    Lists.map (asTerm Reflect.typeVariant) (Rewriting.foldOverType @@ Coders.traversalOrderPre @@
       ("m" ~> "t" ~> Lists.cons (var "t") (var "m")) @@ list ([] :: [TypedTerm Type]) @@ var "typ")) $
   Eithers.map
     ("deps" ~>
-      "allVariants" <~ Sets.fromList (Lists.concat (Lists.map (var "variants") (Maps.elems (var "deps")))) $
+      "allVariants" <~ (Sets.fromList (Lists.concat (Lists.map (var "variants") (Maps.elems (var "deps" :: TypedTerm (M.Map Name Type))))) :: TypedTerm (S.Set TypeVariant)) $
       Logic.not (Logic.or
         (Sets.member Variants.typeVariantEffect (var "allVariants"))
         (Sets.member Variants.typeVariantFunction (var "allVariants"))))
@@ -241,11 +242,11 @@ isSerializableByName = define "isSerializableByName" $
   doc "Check if a type (by name) is serializable, resolving all type dependencies (Either version)" $
   "cx" ~> "graph" ~> "name" ~>
   "variants" <~ ("typ" ~>
-    Lists.map (Reflect.typeVariant) (Rewriting.foldOverType @@ Coders.traversalOrderPre @@
+    Lists.map (asTerm Reflect.typeVariant) (Rewriting.foldOverType @@ Coders.traversalOrderPre @@
       ("m" ~> "t" ~> Lists.cons (var "t") (var "m")) @@ list ([] :: [TypedTerm Type]) @@ var "typ")) $
   Eithers.map
     ("deps" ~>
-      "allVariants" <~ Sets.fromList (Lists.concat (Lists.map (var "variants") (Maps.elems (var "deps")))) $
+      "allVariants" <~ (Sets.fromList (Lists.concat (Lists.map (var "variants") (Maps.elems (var "deps" :: TypedTerm (M.Map Name Type))))) :: TypedTerm (S.Set TypeVariant)) $
       Logic.not (Logic.or
         (Sets.member Variants.typeVariantEffect (var "allVariants"))
         (Sets.member Variants.typeVariantFunction (var "allVariants"))))
@@ -255,7 +256,7 @@ isSerializableType :: TypedTermDefinition (Type -> Bool)
 isSerializableType = define "isSerializableType" $
   doc "Check if a type is serializable (no function types in the type itself)" $
   "typ" ~>
-  "allVariants" <~ Sets.fromList (Lists.map (Reflect.typeVariant)
+  "allVariants" <~ Sets.fromList (Lists.map (asTerm Reflect.typeVariant)
     (Rewriting.foldOverType @@ Coders.traversalOrderPre @@
       ("m" ~> "t" ~> Lists.cons (var "t") (var "m")) @@ list ([] :: [TypedTerm Type]) @@ var "typ")) $
   Logic.not (Logic.or
@@ -332,15 +333,15 @@ typeDependencies = define "typeDependencies" $
     Eithers.map ("typ" ~> pair (var "name") (var "transform" @@ var "typ"))
       (var "requireType" @@ var "name")) $
   "deps" <~ ("seeds" ~> "names" ~>
-    Logic.ifElse (Sets.null (var "seeds"))
+    Logic.ifElse (Sets.null (var "seeds" :: TypedTerm (S.Set Name)))
       (right (var "names"))
-      (Eithers.bind (Eithers.mapList (var "toPair") (Sets.toList (var "seeds"))) (
+      (Eithers.bind (Eithers.mapList (var "toPair") (Sets.toList (var "seeds" :: TypedTerm (S.Set Name)))) (
         "pairs" ~>
-        "newNames" <~ Maps.union (var "names") (Maps.fromList (var "pairs")) $
-        "refs" <~ Lists.foldl (reify2 Sets.union) Sets.empty (Lists.map
+        "newNames" <~ Maps.union (var "names" :: TypedTerm (M.Map Name Type)) (Maps.fromList (var "pairs") :: TypedTerm (M.Map Name Type)) $
+        "refs" <~ Lists.foldl (reify2 Sets.union) (Sets.empty :: TypedTerm (S.Set Name)) (Lists.map
           ("pair" ~> Dependencies.typeDependencyNames @@ var "withSchema" @@ Pairs.second (var "pair"))
           (var "pairs")) $
-        "visited" <~ Sets.fromList (Maps.keys (var "names")) $
-        "newSeeds" <~ Sets.difference (var "refs") (var "visited") $
+        "visited" <~ (Sets.fromList (Maps.keys (var "names" :: TypedTerm (M.Map Name Type))) :: TypedTerm (S.Set Name)) $
+        "newSeeds" <~ (Sets.difference (var "refs") (var "visited") :: TypedTerm (S.Set Name)) $
         var "deps" @@ var "newSeeds" @@ var "newNames"))) $
-  var "deps" @@ Sets.singleton (var "name") @@ Maps.empty
+  var "deps" @@ (Sets.singleton (var "name") :: TypedTerm (S.Set Name)) @@ (Maps.empty :: TypedTerm (M.Map Name Type))

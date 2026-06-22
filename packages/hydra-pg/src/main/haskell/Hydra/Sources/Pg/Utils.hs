@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hydra.Sources.Pg.Utils where
 
 -- Standard imports for term-level sources outside of the kernel
@@ -5,7 +7,7 @@ import Hydra.Kernel hiding (
   defaultTinkerpopAnnotations, examplePgSchema, expString,
   lazyGraphToElements, pgElementToJson, pgElementsToJson,
   propertyGraphElements, typeApplicationTermToPropertyGraph)
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -20,17 +22,17 @@ import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -108,7 +110,7 @@ module_ = Module {
       toDefinition lazyGraphToElements,
       toDefinition pgElementToJson,
       toDefinition pgElementsToJson,
-      toDefinition propertyGraphElements,
+      toDefinition (propertyGraphElements :: TypedTermDefinition (PG.Graph String -> [PG.Element String])),
       toDefinition typeApplicationTermToPropertyGraph]
 
 -- | Default Tinkerpop annotation schema
@@ -205,18 +207,22 @@ pgElementsToJson = define "pgElementsToJson" $
     Eithers.map ("els'" ~> Json.valueArray (var "els'")) (Eithers.mapList ("el" ~> pgElementToJson @@ var "schema" @@ var "el" @@ var "cx") (var "els"))
 
 -- | Get all elements from a property graph
-propertyGraphElements :: TypedTermDefinition (PG.Graph v -> [PG.Element v])
+-- `Ord v` + `forall` because the graph's vertex/edge maps are keyed by the polymorphic vertex type
+-- `v`, and the generated `Hydra.Dsl.Lib.Maps` exposes the primitive's `Ord` key constraint (the old
+-- hand-written `Meta.Lib.Maps` did not). This also forces a placeholder concrete type at registration
+-- in `definitions`; `v` is phantom/erased so the choice is arbitrary. See #467.
+propertyGraphElements :: forall v. Ord v => TypedTermDefinition (PG.Graph v -> [PG.Element v])
 propertyGraphElements = define "propertyGraphElements" $
   doc "Get all elements from a property graph" $
   "g" ~>
     Lists.concat2
-      (Lists.map ("x" ~> inject PG._Element PG._Element_vertex (var "x")) (Maps.elems $ project PG._Graph PG._Graph_vertices @@ var "g"))
-      (Lists.map ("x" ~> inject PG._Element PG._Element_edge (var "x")) (Maps.elems $ project PG._Graph PG._Graph_edges @@ var "g"))
+      (Lists.map ("x" ~> inject PG._Element PG._Element_vertex (var "x")) (Maps.elems ((project PG._Graph PG._Graph_vertices @@ var "g") :: TypedTerm (M.Map v (PG.Vertex v)))))
+      (Lists.map ("x" ~> inject PG._Element PG._Element_edge (var "x")) (Maps.elems ((project PG._Graph PG._Graph_edges @@ var "g") :: TypedTerm (M.Map v (PG.Edge v)))))
 
 -- Internal helper (not exported as a binding)
-propsToJson :: TypedTerm (PGM.Schema Graph t v -> InferenceContext -> M.Map PG.PropertyKey v -> Either Error (Y.Maybe (String, JM.Value)))
+propsToJson :: forall t v. TypedTerm (PGM.Schema Graph t v -> InferenceContext -> M.Map PG.PropertyKey v -> Either Error (Y.Maybe (String, JM.Value)))
 propsToJson = "schema" ~> "cx" ~> "pairs" ~>
-  Logic.ifElse (Maps.null $ var "pairs")
+  Logic.ifElse (Maps.null $ (var "pairs" :: TypedTerm (M.Map PG.PropertyKey v)))
     (right nothing)
     (Eithers.map
       ("p" ~> just (pair (string "properties") (Json.valueObject $ var "p")))
@@ -226,7 +232,7 @@ propsToJson = "schema" ~> "cx" ~> "pairs" ~>
           "v">: Pairs.second $ var "pair"] $
           Eithers.bind (Coders.coderDecode (project PGM._Schema PGM._Schema_propertyValues @@ var "schema") @@ var "cx" @@ var "v")
             ("term" ~> right (pair (unwrap PG._PropertyKey @@ var "key") (Json.valueString $ ShowCore.term @@ var "term"))))
-        (Maps.toList $ var "pairs")))
+        (Maps.toList $ (var "pairs" :: TypedTerm (M.Map PG.PropertyKey v)))))
 
 -- | Convert a type-annotated term to property graph elements
 typeApplicationTermToPropertyGraph :: TypedTermDefinition (PGM.Schema Graph t v -> Type -> t -> t -> InferenceContext -> Graph

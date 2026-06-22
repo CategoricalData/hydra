@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 -- | Protobuf code generator in Hydra DSL.
 -- This module provides DSL versions of Protobuf code generation functions.
 -- Hydra type definitions are mapped to Protocol Buffers v3 message and enum types.
@@ -7,18 +9,18 @@ module Hydra.Sources.Protobuf.Coder where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Errors                      as Error
@@ -130,7 +132,7 @@ collectStructuralTypes = def "collectStructuralTypes" $
   "types" ~>
     Lists.foldl
       ("acc" ~> "t" ~> Sets.union (var "acc") (asTerm collectStructuralTypes_collectFromType @@ var "t"))
-      Sets.empty
+      (Sets.empty :: TypedTerm (S.Set Term))
       (var "types")
 
 collectStructuralTypes_collectFromType :: TypedTermDefinition (Type -> S.Set Term)
@@ -143,14 +145,14 @@ collectStructuralTypes_collectFromType = def "collectStructuralTypes_collectFrom
         cases _Type (var "st")
           (Just $ var "acc") [
           _Type_either>>: "et" ~>
-            Sets.insert
+            (Sets.insert
               (inject _StructuralTypeRef (Name "either") (pair (Core.eitherTypeLeft (var "et")) (Core.eitherTypeRight (var "et"))))
-              (var "acc"),
+              (var "acc") :: TypedTerm (S.Set Term)),
           _Type_pair>>: "pt" ~>
-            Sets.insert
+            (Sets.insert
               (inject _StructuralTypeRef (Name "pair") (pair (Core.pairTypeFirst (var "pt")) (Core.pairTypeSecond (var "pt"))))
-              (var "acc")]) @@
-      Sets.empty @@
+              (var "acc") :: TypedTerm (S.Set Term))]) @@
+      (Sets.empty :: TypedTerm (S.Set Term)) @@
       (var "typ")
 
 -- =============================================================================
@@ -215,11 +217,11 @@ constructModule = def "constructModule" $
       emptyList] $
     "schemaImports" <<~ (Analysis.moduleDependencyModuleNames @@ esContext (var "cx") @@ var "g" @@ true @@ false @@ false @@ false @@ var "mod") $
     "definitions" <<~ (Eithers.mapList (var "toDef") (var "typeDefs")) $ lets [
-      "schemaImportList">: Lists.map (lambda "n" $ asTerm namespaceToFileReference @@ var "n") (Sets.toList (var "schemaImports"))] $
+      "schemaImportList">: Lists.map (lambda "n" $ asTerm namespaceToFileReference @@ var "n") (Sets.toList (var "schemaImports") :: TypedTerm [ModuleName])] $
       "helperResult" <<~ (asTerm mapAccumResult @@
         ("cx0" ~> "ref" ~> asTerm generateStructuralTypeMessage @@ var "cx0" @@ var "g" @@ var "ns_" @@ var "ref") @@
         var "cx" @@
-        (Sets.toList (var "structRefs"))) $ lets [
+        (Sets.toList (var "structRefs") :: TypedTerm [Term])) $ lets [
         "helperDefs">: Pairs.first (var "helperResult")] $
         right $ record P3._ProtoFile [
           P3._ProtoFile_package>>: asTerm namespaceToPackageName @@ var "ns_",
@@ -727,7 +729,7 @@ moduleToProtobuf = def "moduleToProtobuf" $
     "pfile" <<~ (asTerm constructModule @@ var "es" @@ var "g" @@ var "mod" @@ var "typeDefs") $ lets [
       "content">: Serialization.printExpr @@ (Serialization.parenthesize @@ (ProtobufSerdeSource.protoFileToExpr @@ var "pfile")),
       "path">: unwrap P3._FileReference @@ (asTerm namespaceToFileReference @@ var "ns_")] $
-      right $ Maps.singleton (var "path") (var "content")
+      right (Maps.singleton (var "path") (var "content") :: TypedTerm (M.Map FilePath String))
 
 -- =============================================================================
 -- Option name constants

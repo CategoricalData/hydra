@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 
 -- Note: this file was created with the help of a large language model. It requires further human review.
 
@@ -5,7 +6,7 @@ module Hydra.Sources.Cpp.Serde where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -19,17 +20,17 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -354,7 +355,7 @@ captureListToExpr = define "captureListToExpr" $
     cases Cpp._CaptureList (var "cl") Nothing [
       Cpp._CaptureList_captureByValue>>: constant $ Serialization.cst @@ string "[=]",
       Cpp._CaptureList_captures>>: lambda "cs" $
-        Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map captureToExpr (var "cs"))]
+        Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map (asTerm captureToExpr) (var "cs"))]
 
 captureToExpr :: TypedTermDefinition (Cpp.Capture -> Expr)
 captureToExpr = define "captureToExpr" $
@@ -431,7 +432,7 @@ classSpecifierToExpr = define "classSpecifierToExpr" $
       Logic.ifElse (Lists.null (var "inheritance"))
         (list ([] :: [TypedTerm Expr]))
         (list [Serialization.cst @@ string ":",
-          Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map baseSpecifierToExpr (var "inheritance"))])])
+          Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map (asTerm baseSpecifierToExpr) (var "inheritance"))])])
 
 commaExpressionToExpr :: TypedTermDefinition (Cpp.CommaExpression -> Expr)
 commaExpressionToExpr = define "commaExpressionToExpr" $
@@ -457,7 +458,7 @@ compoundStatementToExpr = define "compoundStatementToExpr" $
   doc "Convert a compound statement to an expression" $
   lambda "cs" $
     Serialization.curlyBracesList @@ (just (string "")) @@ Serialization.fullBlockStyle @@
-      (Lists.map statementToExpr (unwrap Cpp._CompoundStatement @@ var "cs"))
+      (Lists.map (asTerm statementToExpr) (unwrap Cpp._CompoundStatement @@ var "cs"))
 
 conditionalExpressionToExpr :: TypedTermDefinition (Cpp.ConditionalExpression -> Expr)
 conditionalExpressionToExpr = define "conditionalExpressionToExpr" $
@@ -478,12 +479,12 @@ constructorDeclarationToExpr = define "constructorDeclarationToExpr" $
     Serialization.spaceSep @@ (Optionals.cat $ list [
       just (Serialization.noSep @@ list [
         Serialization.cst @@ var "name",
-        Serialization.parenListAdaptive @@ (Lists.map parameterToExpr (var "params"))]),
+        Serialization.parenListAdaptive @@ (Lists.map (asTerm parameterToExpr) (var "params"))]),
       Logic.ifElse (Lists.null (var "inits"))
         nothing
         (just (Serialization.spaceSep @@ list [
           Serialization.cst @@ string ":",
-          Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map memInitializerToExpr (var "inits"))])),
+          Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map (asTerm memInitializerToExpr) (var "inits"))])),
       just (functionBodyToExpr @@ var "body")])
 
 declarationToExpr :: TypedTermDefinition (Cpp.Declaration -> Expr)
@@ -520,11 +521,11 @@ destructorDeclarationToExpr = define "destructorDeclarationToExpr" $
     "suffixSpecs">: project Cpp._DestructorDeclaration Cpp._DestructorDeclaration_suffixSpecifiers @@ var "dd",
     "body">: project Cpp._DestructorDeclaration Cpp._DestructorDeclaration_body @@ var "dd"] $
     Serialization.spaceSep @@ (Lists.concat $ list [
-      Lists.map functionSpecifierPrefixToExpr (var "prefixSpecs"),
+      Lists.map (asTerm functionSpecifierPrefixToExpr) (var "prefixSpecs"),
       list [Serialization.noSep @@ list [
         Serialization.cst @@ (Strings.cat2 (string "~") (var "name")),
         Serialization.parens @@ (Serialization.cst @@ string "")]],
-      Lists.map functionSpecifierSuffixToExpr (var "suffixSpecs"),
+      Lists.map (asTerm functionSpecifierSuffixToExpr) (var "suffixSpecs"),
       list [functionBodyToExpr @@ var "body"]])
 
 divideOperationToExpr :: TypedTermDefinition (Cpp.DivideOperation -> Expr)
@@ -661,7 +662,7 @@ functionApplicationToExpr = define "functionApplicationToExpr" $
     "args">: project Cpp._FunctionApplication Cpp._FunctionApplication_arguments @@ var "fa"] $
     Serialization.spaceSep @@ list [
       functionIdentifierToExpr @@ var "func",
-      Serialization.parenListAdaptive @@ (Lists.map expressionToExpr (var "args"))]
+      Serialization.parenListAdaptive @@ (Lists.map (asTerm expressionToExpr) (var "args"))]
 
 functionBodyToExpr :: TypedTermDefinition (Cpp.FunctionBody -> Expr)
 functionBodyToExpr = define "functionBodyToExpr" $
@@ -681,7 +682,7 @@ functionCallOperationToExpr = define "functionCallOperationToExpr" $
     "args">: project Cpp._FunctionCallOperation Cpp._FunctionCallOperation_arguments @@ var "fco"] $
     Serialization.noSep @@ list [
       postfixExpressionToExpr @@ var "func",
-      Serialization.parenListAdaptive @@ (Lists.map expressionToExpr (var "args"))]
+      Serialization.parenListAdaptive @@ (Lists.map (asTerm expressionToExpr) (var "args"))]
 
 functionDeclarationToExpr :: TypedTermDefinition (Cpp.FunctionDeclaration -> Expr)
 functionDeclarationToExpr = define "functionDeclarationToExpr" $
@@ -694,13 +695,13 @@ functionDeclarationToExpr = define "functionDeclarationToExpr" $
     "suffixSpecs">: project Cpp._FunctionDeclaration Cpp._FunctionDeclaration_suffixSpecifiers @@ var "fd",
     "body">: project Cpp._FunctionDeclaration Cpp._FunctionDeclaration_body @@ var "fd"] $
     Serialization.spaceSep @@ (Lists.concat $ list [
-      Lists.map functionSpecifierPrefixToExpr (var "prefixSpecs"),
+      Lists.map (asTerm functionSpecifierPrefixToExpr) (var "prefixSpecs"),
       list [
         typeExpressionToExpr @@ var "retType",
         Serialization.noSep @@ list [
           Serialization.cst @@ var "name",
-          Serialization.parenListAdaptive @@ (Lists.map parameterToExpr (var "params"))]],
-      Lists.map functionSpecifierSuffixToExpr (var "suffixSpecs"),
+          Serialization.parenListAdaptive @@ (Lists.map (asTerm parameterToExpr) (var "params"))]],
+      Lists.map (asTerm functionSpecifierSuffixToExpr) (var "suffixSpecs"),
       list [functionBodyToExpr @@ var "body"]])
 
 functionIdentifierToExpr :: TypedTermDefinition (Cpp.FunctionIdentifier -> Expr)
@@ -739,7 +740,7 @@ functionTypeToExpr = define "functionTypeToExpr" $
     "params">: project Cpp._FunctionType Cpp._FunctionType_parameters @@ var "ft"] $
     Serialization.spaceSep @@ list [
       typeExpressionToExpr @@ var "retType",
-      Serialization.parenListAdaptive @@ (Lists.map parameterToExpr (var "params"))]
+      Serialization.parenListAdaptive @@ (Lists.map (asTerm parameterToExpr) (var "params"))]
 
 greaterEqualOperationToExpr :: TypedTermDefinition (Cpp.GreaterEqualOperation -> Expr)
 greaterEqualOperationToExpr = define "greaterEqualOperationToExpr" $
@@ -860,7 +861,7 @@ lambdaExpressionToExpr = define "lambdaExpressionToExpr" $
       captureListToExpr @@ var "captures",
       Logic.ifElse (Lists.null (var "params"))
         (Serialization.parens @@ (Serialization.cst @@ string ""))
-        (Serialization.parenListAdaptive @@ (Lists.map parameterToExpr (var "params"))),
+        (Serialization.parenListAdaptive @@ (Lists.map (asTerm parameterToExpr) (var "params"))),
       Optionals.cases (var "retType") (Serialization.cst @@ string "") (lambda "t" $ Serialization.spaceSep @@ list [Serialization.cst @@ string "->", typeExpressionToExpr @@ var "t"]),
       compoundStatementToExpr @@ var "body"]
 
@@ -983,7 +984,7 @@ mapToExpr = define "mapToExpr" $
         typeExpressionToExpr @@ var "keyType",
         typeExpressionToExpr @@ var "valType"],
       Serialization.cst @@ string ">",
-      Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ (Lists.map mapEntryToExpr (var "entries"))]
+      Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ (Lists.map (asTerm mapEntryToExpr) (var "entries"))]
 
 memInitializerToExpr :: TypedTermDefinition (Cpp.MemInitializer -> Expr)
 memInitializerToExpr = define "memInitializerToExpr" $
@@ -993,7 +994,7 @@ memInitializerToExpr = define "memInitializerToExpr" $
     "args">: project Cpp._MemInitializer Cpp._MemInitializer_arguments @@ var "mi"] $
     Serialization.noSep @@ list [
       Serialization.cst @@ var "name",
-      Serialization.parenListAdaptive @@ (Lists.map expressionToExpr (var "args"))]
+      Serialization.parenListAdaptive @@ (Lists.map (asTerm expressionToExpr) (var "args"))]
 
 memberAccessOperationToExpr :: TypedTermDefinition (Cpp.MemberAccessOperation -> Expr)
 memberAccessOperationToExpr = define "memberAccessOperationToExpr" $
@@ -1068,7 +1069,7 @@ namespaceDeclarationToExpr = define "namespaceDeclarationToExpr" $
     Serialization.spaceSep @@ list [
       Serialization.cst @@ (Strings.cat2 (string "namespace ") (var "name")),
       Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
-        (Serialization.doubleNewlineSep @@ (Lists.map declarationToExpr (var "decls")))]
+        (Serialization.doubleNewlineSep @@ (Lists.map (asTerm declarationToExpr) (var "decls")))]
 
 notEqualOperationToExpr :: TypedTermDefinition (Cpp.NotEqualOperation -> Expr)
 notEqualOperationToExpr = define "notEqualOperationToExpr" $
@@ -1100,7 +1101,7 @@ overloadedLambdasToExpr = define "overloadedLambdasToExpr" $
     Serialization.spaceSep @@ list [
       Serialization.cst @@ string "overloaded",
       Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
-        (Serialization.newlineSep @@ (Lists.map lambdaExpressionToExpr (unwrap Cpp._OverloadedLambdas @@ var "ol")))]
+        (Serialization.newlineSep @@ (Lists.map (asTerm lambdaExpressionToExpr) (unwrap Cpp._OverloadedLambdas @@ var "ol")))]
 
 parameterToExpr :: TypedTermDefinition (Cpp.Parameter -> Expr)
 parameterToExpr = define "parameterToExpr" $
@@ -1203,9 +1204,9 @@ programToExpr = define "programToExpr" $
         nothing
         (just (var "sep" @@ var "defs"))] $
     Serialization.doubleNewlineSep @@ (Optionals.cat $ list [
-      var "separate" @@ Serialization.newlineSep @@ (Lists.map preprocessorDirectiveToExpr (var "preps")),
-      var "separate" @@ Serialization.newlineSep @@ (Lists.map includeDirectiveToExpr (var "includes")),
-      var "separate" @@ Serialization.doubleNewlineSep @@ (Lists.map declarationToExpr (var "decls"))])
+      var "separate" @@ Serialization.newlineSep @@ (Lists.map (asTerm preprocessorDirectiveToExpr) (var "preps")),
+      var "separate" @@ Serialization.newlineSep @@ (Lists.map (asTerm includeDirectiveToExpr) (var "includes")),
+      var "separate" @@ Serialization.doubleNewlineSep @@ (Lists.map (asTerm declarationToExpr) (var "decls"))])
 
 qualifiedIdentifierToExpr :: TypedTermDefinition (Cpp.QualifiedIdentifier -> Expr)
 qualifiedIdentifierToExpr = define "qualifiedIdentifierToExpr" $
@@ -1295,7 +1296,7 @@ setToExpr = define "setToExpr" $
       Serialization.cst @@ string "std::set<",
       typeExpressionToExpr @@ var "elemType",
       Serialization.cst @@ string ">",
-      Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ (Lists.map expressionToExpr (var "elems"))]
+      Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ (Lists.map (asTerm expressionToExpr) (var "elems"))]
 
 shiftExpressionToExpr :: TypedTermDefinition (Cpp.ShiftExpression -> Expr)
 shiftExpressionToExpr = define "shiftExpressionToExpr" $
@@ -1361,7 +1362,7 @@ switchStatementToExpr = define "switchStatementToExpr" $
       Serialization.cst @@ string "switch",
       Serialization.parens @@ (expressionToExpr @@ var "value"),
       Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
-        (Serialization.newlineSep @@ (Lists.map caseStatementToExpr (var "cases")))]
+        (Serialization.newlineSep @@ (Lists.map (asTerm caseStatementToExpr) (var "cases")))]
 
 templateArgumentToExpr :: TypedTermDefinition (Cpp.TemplateArgument -> Expr)
 templateArgumentToExpr = define "templateArgumentToExpr" $
@@ -1378,7 +1379,7 @@ templateDeclarationToExpr = define "templateDeclarationToExpr" $
     "inline">: project Cpp._TemplateDeclaration Cpp._TemplateDeclaration_inline @@ var "td",
     "params">: project Cpp._TemplateDeclaration Cpp._TemplateDeclaration_parameters @@ var "td",
     "declaration">: project Cpp._TemplateDeclaration Cpp._TemplateDeclaration_declaration @@ var "td",
-    "sep">: Logic.ifElse (var "inline") Serialization.spaceSep Serialization.newlineSep] $
+    "sep">: Logic.ifElse (var "inline") (asTerm Serialization.spaceSep) (asTerm Serialization.newlineSep)] $
     var "sep" @@ list [
       Serialization.noSep @@ list [
         Serialization.cst @@ string "template",
@@ -1395,8 +1396,8 @@ templateFunctionCallOperationToExpr = define "templateFunctionCallOperationToExp
     "args">: project Cpp._TemplateFunctionCallOperation Cpp._TemplateFunctionCallOperation_arguments @@ var "tfco"] $
     Serialization.noSep @@ list [
       postfixExpressionToExpr @@ var "func",
-      Serialization.angleBracesList @@ Serialization.inlineStyle @@ (Lists.map templateArgumentToExpr (var "templateArgs")),
-      Serialization.parenListAdaptive @@ (Lists.map expressionToExpr (var "args"))]
+      Serialization.angleBracesList @@ Serialization.inlineStyle @@ (Lists.map (asTerm templateArgumentToExpr) (var "templateArgs")),
+      Serialization.parenListAdaptive @@ (Lists.map (asTerm expressionToExpr) (var "args"))]
 
 templateTypeToExpr :: TypedTermDefinition (Cpp.TemplateType -> Expr)
 templateTypeToExpr = define "templateTypeToExpr" $
@@ -1406,7 +1407,7 @@ templateTypeToExpr = define "templateTypeToExpr" $
     "args">: project Cpp._TemplateType Cpp._TemplateType_arguments @@ var "tt"] $
     Serialization.noSep @@ list [
       Serialization.cst @@ var "name",
-      Serialization.angleBracesList @@ Serialization.inlineStyle @@ (Lists.map templateArgumentToExpr (var "args"))]
+      Serialization.angleBracesList @@ Serialization.inlineStyle @@ (Lists.map (asTerm templateArgumentToExpr) (var "args"))]
 
 ternaryExpressionToExpr :: TypedTermDefinition (Cpp.TernaryExpression -> Expr)
 ternaryExpressionToExpr = define "ternaryExpressionToExpr" $
@@ -1510,7 +1511,7 @@ variableDeclarationToExpr = define "variableDeclarationToExpr" $
     "name">: project Cpp._VariableDeclaration Cpp._VariableDeclaration_name @@ var "vd",
     "init">: project Cpp._VariableDeclaration Cpp._VariableDeclaration_initializer @@ var "vd",
     "isAuto">: project Cpp._VariableDeclaration Cpp._VariableDeclaration_isAuto @@ var "vd",
-    "terminator">: Logic.ifElse (var "commas") Serialization.withComma Serialization.withSemi] $
+    "terminator">: Logic.ifElse (var "commas") (asTerm Serialization.withComma) (asTerm Serialization.withSemi)] $
     var "terminator" @@ (Serialization.spaceSep @@ (Lists.concat $ list [
       Logic.ifElse (var "isAuto")
         (list [Serialization.cst @@ string "auto"])
@@ -1528,7 +1529,7 @@ vectorToExpr = define "vectorToExpr" $
       Serialization.cst @@ string "std::vector<",
       typeExpressionToExpr @@ var "elemType",
       Serialization.cst @@ string ">",
-      Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ (Lists.map expressionToExpr (var "elems"))]
+      Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ (Lists.map (asTerm expressionToExpr) (var "elems"))]
 
 visitorToExpr :: TypedTermDefinition (Cpp.Visitor -> Expr)
 visitorToExpr = define "visitorToExpr" $

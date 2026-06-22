@@ -1,9 +1,11 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hydra.Sources.Tinkerpop.Language where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.File (_FileExtension)
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -17,17 +19,17 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -134,7 +136,7 @@ tinkerpopLanguage = define "tinkerpopLanguage" $
     "supportsMaps">: project TF._DataTypeFeatures TF._DataTypeFeatures_supportsMapValues @@ var "vpFeatures",
 
 
-    "literalVariants">: Sets.fromList (Optionals.cat $ list [
+    "literalVariants">: (Sets.fromList (Optionals.cat $ list [
       var "cond" @@ Variants.literalVariantBinary
         @@ (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsByteArrayValues @@ var "vpFeatures"),
       var "cond" @@ Variants.literalVariantBoolean
@@ -146,20 +148,20 @@ tinkerpopLanguage = define "tinkerpopLanguage" $
         @@ (Logic.or (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsIntegerValues @@ var "vpFeatures")
                      (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsLongValues @@ var "vpFeatures")),
       var "cond" @@ Variants.literalVariantString
-        @@ (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsStringValues @@ var "vpFeatures")]),
+        @@ (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsStringValues @@ var "vpFeatures")]) :: TypedTerm (S.Set LiteralVariant)),
 
-    "floatTypes">: Sets.fromList (Optionals.cat $ list [
+    "floatTypes">: (Sets.fromList (Optionals.cat $ list [
       var "cond" @@ Core.floatTypeFloat32
         @@ (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsFloatValues @@ var "vpFeatures"),
       var "cond" @@ Core.floatTypeFloat64
-        @@ (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsDoubleValues @@ var "vpFeatures")]),
+        @@ (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsDoubleValues @@ var "vpFeatures")]) :: TypedTerm (S.Set FloatType)),
 
 
-    "integerTypes">: Sets.fromList (Optionals.cat $ list [
+    "integerTypes">: (Sets.fromList (Optionals.cat $ list [
       var "cond" @@ Core.integerTypeInt32
         @@ (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsIntegerValues @@ var "vpFeatures"),
       var "cond" @@ Core.integerTypeInt64
-        @@ (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsLongValues @@ var "vpFeatures")]),
+        @@ (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsLongValues @@ var "vpFeatures")]) :: TypedTerm (S.Set IntegerType)),
 
     -- Only lists and literal values may be explicitly supported via Graph.Features.
     "termVariants">: Sets.fromList (Optionals.cat $ list [

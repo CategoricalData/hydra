@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hydra.Sources.Kernel.Terms.Dependencies where
 
 -- Standard imports for kernel terms modules
@@ -26,18 +28,18 @@ import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Lib.Math     as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -139,7 +141,7 @@ flattenLetTerms = define "flattenLetTerms" $
         "prefix" <~ Strings.cat2 (unwrap _Name @@ var "key0") (string "_") $
         "qualify" <~ ("n" ~> Core.name $ Strings.cat2 (var "prefix") (unwrap _Name @@ var "n")) $
         "toSubstPair" <~ ("b" ~> pair (Core.bindingName $ var "b") (var "qualify" @@ (Core.bindingName $ var "b"))) $
-        "subst" <~ Maps.fromList (Lists.map (var "toSubstPair") (var "bindings1")) $
+        "subst" <~ (Maps.fromList (Lists.map (var "toSubstPair") (var "bindings1")) :: TypedTerm (M.Map Name Name)) $
         "replaceVars" <~ Variables.substituteVariables @@ var "subst" $
         "newBody" <~ var "replaceVars" @@ var "body1" $
         "newBinding" <~ ("b" ~> Core.binding
@@ -185,7 +187,7 @@ inlineType = define "inlineType" $
     "afterRecurse" <~ ("tr" ~> cases _Type (var "tr")
       (Just $ right $ var "tr") [
       _Type_variable>>: "v" ~>
-        Optionals.cases (Maps.lookup (var "v") (var "schema")) (left $ Error.errorOther $ Error.otherError $ Strings.cat2 (string "No such type in schema: ") (unwrap _Name @@ var "v")) (inlineType @@ var "schema")]) $
+        Optionals.cases (Maps.lookup (var "v" :: TypedTerm Name) (var "schema")) (left $ Error.errorOther $ Error.otherError $ Strings.cat2 (string "No such type in schema: ") (unwrap _Name @@ var "v")) (inlineType @@ var "schema")]) $
     "tr" <<~ var "recurse" @@ var "typ" $
     var "afterRecurse" @@ var "tr") $
   Rewriting.rewriteTypeM @@ var "f" @@ var "typ"
@@ -236,16 +238,16 @@ pruneLet = define "pruneLet" $
   doc ("Given a let expression, remove any unused bindings. The resulting expression is still a let,"
     <> " even if has no remaining bindings") $
   "l" ~>
-  "bindingMap" <~ Maps.fromList (Lists.map
-    ("b" ~> pair (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")) $ Core.letBindings $ var "l") $
+  "bindingMap" <~ (Maps.fromList (Lists.map
+    ("b" ~> pair (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")) $ Core.letBindings $ var "l") :: TypedTerm (M.Map Name Term)) $
   "rootName" <~ Core.name (string "[[[root]]]") $
   -- Look up n in bindingMap; a missing name is unreachable here since the
   -- caller only calls adj on names present in the map. Fall back to Unit.
   "adj" <~ ("n" ~> Sets.intersection (Sets.fromList $ Maps.keys $ var "bindingMap")
       (Variables.freeVariablesInTerm @@ (Logic.ifElse (Equality.equal (var "n") (var "rootName"))
         (Core.letBody $ var "l")
-        (Optionals.fromOptional Core.termUnit (Maps.lookup (var "n") (var "bindingMap")))))) $
-  "reachable" <~ Sorting.findReachableNodes @@ var "adj" @@ var "rootName" $
+        (Optionals.fromOptional Core.termUnit (Maps.lookup (var "n" :: TypedTerm Name) (var "bindingMap")))))) $
+  "reachable" <~ (Sorting.findReachableNodes @@ var "adj" @@ (var "rootName" :: TypedTerm Name)) $
   "prunedBindings" <~ Lists.filter
     ("b" ~> Sets.member (Core.bindingName $ var "b") (var "reachable"))
     (Core.letBindings $ var "l") $
@@ -280,7 +282,7 @@ replaceTypedefs = define "replaceTypedefs" $
           Logic.ifElse (Lists.null $ Core.typeSchemeVariables $ var "ts")
             (var "forMono" @@ var "t")
             (var "typ")) $ -- TODO: this may be too simple
-        optCases (Maps.lookup (var "v") (var "types"))
+        optCases (Maps.lookup (var "v" :: TypedTerm Name) (var "types"))
         (var "typ")
         ("ts" ~> var "forTypeScheme" @@ var "ts"),
       _Type_wrap>>: constant $ var "typ"]) $
@@ -320,13 +322,13 @@ termDependencyNames = define "termDependencyNames" $
   "binds" ~> "withPrims" ~> "withNoms" ~> "term0" ~>
   "addNames" <~ ("names" ~> "term" ~>
     "nominal" <~ ("name" ~> Logic.ifElse (var "withNoms")
-      (Sets.insert (var "name") (var "names"))
+      (Sets.insert (var "name" :: TypedTerm Name) (var "names"))
       (var "names")) $
     "prim" <~ ("name" ~> Logic.ifElse (var "withPrims")
-      (Sets.insert (var "name") (var "names"))
+      (Sets.insert (var "name" :: TypedTerm Name) (var "names"))
       (var "names")) $
     "var" <~ ("name" ~> Logic.ifElse (var "binds")
-      (Sets.insert (var "name") (var "names"))
+      (Sets.insert (var "name" :: TypedTerm Name) (var "names"))
       (var "names")) $
     cases _Term (var "term")
       (Just $ var "names") [
@@ -337,7 +339,7 @@ termDependencyNames = define "termDependencyNames" $
       _Term_inject>>: "injection" ~> var "nominal" @@ (Core.injectionTypeName $ var "injection"),
       _Term_variable>>: "name" ~> var "var" @@ var "name",
       _Term_wrap>>: "wrappedTerm" ~> var "nominal" @@ (Core.wrappedTermTypeName $ var "wrappedTerm")]) $
-  Rewriting.foldOverTerm @@ Coders.traversalOrderPre @@ var "addNames" @@ Sets.empty @@ var "term0"
+  Rewriting.foldOverTerm @@ Coders.traversalOrderPre @@ var "addNames" @@ (Sets.empty :: TypedTerm (S.Set Name)) @@ var "term0"
 
 toShortNames :: TypedTermDefinition ([Name] -> M.Map Name Name)
 toShortNames = define "toShortNames" $
@@ -345,9 +347,9 @@ toShortNames = define "toShortNames" $
   "original" ~>
   "addName" <~ ("acc" ~> "name" ~>
     "local" <~ Names.localNameOf @@ var "name" $
-    "group" <~ Optionals.fromOptional Sets.empty (Maps.lookup (var "local") (var "acc")) $
-    Maps.insert (var "local") (Sets.insert (var "name") (var "group")) (var "acc")) $
-  "groupNamesByLocal" <~ ("names" ~> Lists.foldl (var "addName") Maps.empty (var "names")) $
+    "group" <~ Optionals.fromOptional (Sets.empty :: TypedTerm (S.Set Name)) (Maps.lookup (var "local" :: TypedTerm Name) (var "acc")) $
+    Maps.insert (var "local" :: TypedTerm Name) (Sets.insert (var "name" :: TypedTerm Name) (var "group")) (var "acc")) $
+  "groupNamesByLocal" <~ ("names" ~> Lists.foldl (var "addName") (Maps.empty :: TypedTerm (M.Map Name (S.Set Name))) (var "names")) $
   "groups" <~ var "groupNamesByLocal" @@ var "original" $
   "renameGroup" <~ ("localNames" ~>
     "local" <~ Pairs.first (var "localNames") $
@@ -357,8 +359,8 @@ toShortNames = define "toShortNames" $
       Logic.ifElse (Equality.gt (var "i") (int32 1))
         (Strings.cat2 (var "local") (Literals.showInt32 $ var "i"))
         (var "local")) $
-    Lists.zipWith (var "rename") (Sets.toList $ var "names") (var "rangeFrom" @@ int32 1)) $
-  Maps.fromList $ Lists.concat $ Lists.map (var "renameGroup") $ Maps.toList $ var "groups"
+    Lists.zipWith (var "rename") (Sets.toList (var "names" :: TypedTerm (S.Set Name))) (var "rangeFrom" @@ int32 1)) $
+  ((Maps.fromList $ Lists.concat $ Lists.map (var "renameGroup") $ Maps.toList (var "groups" :: TypedTerm (M.Map Name (S.Set Name)))) :: TypedTerm (M.Map Name Name))
 
 topologicalSortBindingMap :: TypedTermDefinition (M.Map Name Term -> [[(Name, Term)]])
 topologicalSortBindingMap = define "topologicalSortBindingMap" $
@@ -368,8 +370,8 @@ topologicalSortBindingMap = define "topologicalSortBindingMap" $
     <> " together so the emitter can wrap it in whatever construct the host requires (mutual `let`s, joint"
     <> " class files, forward declarations).") $
   "bindingMap" ~>
-  "bindings" <~ Maps.toList (var "bindingMap") $
-  "keys" <~ Sets.fromList (Lists.map (reify Pairs.first) (var "bindings")) $
+  "bindings" <~ Maps.toList (var "bindingMap" :: TypedTerm (M.Map Name Term)) $
+  "keys" <~ (Sets.fromList (Lists.map (reify Pairs.first) (var "bindings")) :: TypedTerm (S.Set Name)) $
   -- TODO: this function currently serves no purpose; it always yields false
   "hasTypeAnnotation" <~ ("term" ~>
     cases _Term (var "term")
@@ -383,8 +385,8 @@ topologicalSortBindingMap = define "topologicalSortBindingMap" $
       (Sets.toList $ Sets.intersection (var "keys") $ Variables.freeVariablesInTerm @@ var "term")) $
   "toPair" <~ ("name" ~> pair (var "name") $ Optionals.fromOptional
     (Core.termLiteral $ Core.literalString $ string "Impossible!")
-    (Maps.lookup (var "name") (var "bindingMap"))) $
-  Lists.map (reify $ Lists.map $ var "toPair") (Sorting.topologicalSortComponents @@ Lists.map (var "depsOf") (var "bindings"))
+    (Maps.lookup (var "name" :: TypedTerm Name) (var "bindingMap"))) $
+  Lists.map (reify $ Lists.map $ var "toPair") (Sorting.topologicalSortComponents @@ (Lists.map (var "depsOf") (var "bindings") :: TypedTerm [(Name, [Name])]))
 
 topologicalSortBindings :: TypedTermDefinition ([Binding] -> Either [[Name]] [Name])
 topologicalSortBindings = define "topologicalSortBindings" $
@@ -397,7 +399,7 @@ topologicalSortBindings = define "topologicalSortBindings" $
   "adjlist" <~ ("e" ~> pair
     (Core.bindingName $ var "e")
     (Sets.toList $ termDependencyNames @@ false @@ true @@ true @@ (Core.bindingTerm $ var "e"))) $
-  Sorting.topologicalSort @@ Lists.map (var "adjlist") (var "els")
+  Sorting.topologicalSort @@ (Lists.map (var "adjlist") (var "els") :: TypedTerm [(Name, [Name])])
 
 topologicalSortTypeDefinitions :: TypedTermDefinition ([TypeDefinition] -> [[TypeDefinition]])
 topologicalSortTypeDefinitions = define "topologicalSortTypeDefinitions" $
@@ -409,11 +411,11 @@ topologicalSortTypeDefinitions = define "topologicalSortTypeDefinitions" $
   "toPair" <~ ("def" ~> pair
     (Packaging.typeDefinitionName (var "def"))
     (Sets.toList (typeDependencyNames @@ false @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "def"))))) $
-  "nameToDef" <~ Maps.fromList (Lists.map
+  "nameToDef" <~ (Maps.fromList (Lists.map
     ("d" ~> pair (Packaging.typeDefinitionName (var "d")) (var "d"))
-    (var "defs")) $
-  "sorted" <~ Sorting.topologicalSortComponents @@ Lists.map (var "toPair") (var "defs") $
-  Lists.map ("names" ~> Optionals.cat (Lists.map ("n" ~> Maps.lookup (var "n") (var "nameToDef")) (var "names"))) (
+    (var "defs")) :: TypedTerm (M.Map Name TypeDefinition)) $
+  "sorted" <~ Sorting.topologicalSortComponents @@ (Lists.map (var "toPair") (var "defs") :: TypedTerm [(Name, [Name])]) $
+  Lists.map ("names" ~> Optionals.cat (Lists.map ("n" ~> Maps.lookup (var "n" :: TypedTerm Name) (var "nameToDef")) (var "names"))) (
     var "sorted")
 
 typeDependencyNames :: TypedTermDefinition (Bool -> Type -> S.Set Name)
@@ -430,4 +432,4 @@ typeNamesInType = define "typeNamesInType" $
   doc "Collect every type name that appears anywhere inside a type expression" $
   "typ0" ~>
   "addNames" <~ ("names" ~> "typ" ~> var "names") $
-  Rewriting.foldOverType @@ Coders.traversalOrderPre @@ var "addNames" @@ Sets.empty @@ var "typ0"
+  Rewriting.foldOverType @@ Coders.traversalOrderPre @@ var "addNames" @@ (Sets.empty :: TypedTerm (S.Set Name)) @@ var "typ0"

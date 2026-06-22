@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 module Hydra.Sources.Kernel.Terms.Reduction where
 
 -- Standard imports for kernel terms modules
@@ -14,18 +15,18 @@ import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Lib.Math     as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -198,11 +199,11 @@ etaExpandTerm = define "etaExpandTerm" $
   "tx0" ~> "term0" ~>
 
   -- Pre-compute primitive types map once (primitives don't change during recursion)
-  "primTypes" <~ Maps.fromList (Lists.map
+  "primTypes" <~ (Maps.fromList (Lists.map
     ("_gpt_p" ~> pair
       (Packaging.primitiveDefinitionName $ Graph.primitiveDefinition $ var "_gpt_p")
       (Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition $ var "_gpt_p")))
-    (Maps.elems $ Graph.graphPrimitives $ var "tx0")) $
+    (Maps.elems $ Graph.graphPrimitives $ var "tx0")) :: TypedTerm (M.Map Name TypeScheme)) $
 
   -- termArityWithContext: compute arity of a term using Graph for lookups
   "termArityWithContext" <~ ("tx" ~> "term" ~>
@@ -227,9 +228,9 @@ etaExpandTerm = define "etaExpandTerm" $
       _Term_typeApplication>>: "tat" ~>
         var "termArityWithContext" @@ var "tx" @@ Core.typeApplicationTermBody (var "tat"),
       _Term_variable>>: "name" ~>
-        optCases (Optionals.map (Scoping.typeSchemeToFType) $ Maps.lookup (var "name") (Graph.graphBoundTypes $ var "tx"))
+        optCases (Optionals.map (asTerm Scoping.typeSchemeToFType) $ Maps.lookup (var "name") (Graph.graphBoundTypes $ var "tx"))
           -- Not found in graphBoundTypes: fall through to graphPrimitives
-          (optCases (Maps.lookup (var "name") (var "primTypes"))
+          (optCases (Maps.lookup (var "name" :: TypedTerm Name) (var "primTypes" :: TypedTerm (M.Map Name TypeScheme)))
             (int32 0) Arity.typeSchemeArity)
           Arity.typeArity]) $
 
@@ -355,7 +356,7 @@ etaExpandTerm = define "etaExpandTerm" $
                   @@ Core.typeApplicationTermType (var "tat2")
                   @@ Core.forallTypeBody (var "ft2")]),
         _Term_variable>>: "vn2" ~>
-          Optionals.map (Scoping.typeSchemeToFType) $ Maps.lookup (var "vn2") (Graph.graphBoundTypes $ var "tx2")]) $
+          Optionals.map (asTerm Scoping.typeSchemeToFType) $ Maps.lookup (var "vn2") (Graph.graphBoundTypes $ var "tx2")]) $
 
     -- afterRecursion: apply expansion logic after subterms have been processed
     "afterRecursion" <~ ("trm" ~>
@@ -378,7 +379,7 @@ etaExpandTerm = define "etaExpandTerm" $
     "forMap" <~ ("mp" ~>
       "forPair" <~ ("pr" ~> pair (var "recurse" @@ var "tx" @@ Pairs.first (var "pr"))
                                  (var "recurse" @@ var "tx" @@ Pairs.second (var "pr"))) $
-      Maps.fromList $ Lists.map (var "forPair") $ Maps.toList $ var "mp") $
+      ((Maps.fromList $ Lists.map (var "forPair") $ Maps.toList (var "mp" :: TypedTerm (M.Map Term Term))) :: TypedTerm (M.Map Term Term))) $
 
     cases _Term (var "term") Nothing [
       -- Annotated: recurse into body, preserve annotation
@@ -392,7 +393,7 @@ etaExpandTerm = define "etaExpandTerm" $
         var "rewriteWithArgs" @@ Lists.cons (var "rhs") (var "args") @@ var "tx" @@ Core.applicationFunction (var "app"),
 
       -- Either: recurse into left or right
-      _Term_either>>: "e" ~> var "afterRecursion" @@ Core.termEither (Eithers.either_
+      _Term_either>>: "e" ~> var "afterRecursion" @@ Core.termEither (Eithers.either
         ("l" ~> left $ var "recurse" @@ var "tx" @@ var "l")
         ("r" ~> right $ var "recurse" @@ var "tx" @@ var "r")
         (var "e")),
@@ -461,7 +462,7 @@ etaExpandTerm = define "etaExpandTerm" $
 
       -- Set: recurse into elements
       _Term_set>>: "st" ~> var "afterRecursion" @@
-        (Core.termSet $ Sets.fromList $ Lists.map ("el" ~> var "recurse" @@ var "tx" @@ var "el") $ Sets.toList (var "st")),
+        (Core.termSet $ Sets.fromList $ Lists.map ("el" ~> var "recurse" @@ var "tx" @@ var "el") $ Sets.toList (var "st" :: TypedTerm (S.Set Term))),
 
       -- TypeApplication: gather the surrounding TypeApp chain and recurse into body.
       -- If the body (after stripping annotations and TypeApps) is a case-statement,
@@ -519,7 +520,7 @@ etaExpandTerm = define "etaExpandTerm" $
       -- Variable: don't expand if bare; look up type for lambda domain annotations
       _Term_variable>>: "vn" ~>
         "arty" <~ var "termArityWithContext" @@ var "tx" @@ var "term" $
-        "varType" <~ Optionals.map (Scoping.typeSchemeToFType) (Maps.lookup (var "vn") (Graph.graphBoundTypes $ var "tx")) $
+        "varType" <~ Optionals.map (asTerm Scoping.typeSchemeToFType) (Maps.lookup (var "vn") (Graph.graphBoundTypes $ var "tx")) $
         var "expand" @@ false @@ var "args" @@ var "arty" @@ var "varType" @@ var "term",
 
       -- Wrap: recurse into body
@@ -591,7 +592,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
         _Term_typeLambda>>: "tl" ~>
           "txt" <~ Scoping.extendGraphForTypeLambda @@ var "tx" @@ var "tl" $
           var "arityOf" @@ var "txt" @@ Core.typeLambdaBody (var "tl"),
-        _Term_variable>>: "name" ~> optCases (Optionals.map (Scoping.typeSchemeToFType) $ Maps.lookup (var "name") (Graph.graphBoundTypes $ var "tx"))
+        _Term_variable>>: "name" ~> optCases (Optionals.map (asTerm Scoping.typeSchemeToFType) $ Maps.lookup (var "name") (Graph.graphBoundTypes $ var "tx"))
           -- Variable not in graphBoundTypes; use typeOf with CURRENT context and variable term as fallback
           -- This can happen with local let bindings that aren't yet in scope during eta expansion
           (Eithers.map ("_tc" ~> Arity.typeArity @@ Pairs.first (var "_tc"))
@@ -822,7 +823,7 @@ reduceTerm = define "reduceTerm" $
       "remainingArgs" <~ Lists.drop (var "arity") (var "args") $
       "reducedArgs" <<~ Eithers.mapList (var "reduceArg" @@ var "eager") (var "argList") $
       -- Strip annotations from reduced args so primitives can extract values properly
-      "strippedArgs" <~ Lists.map Strip.deannotateTerm (var "reducedArgs") $
+      "strippedArgs" <~ Lists.map (asTerm Strip.deannotateTerm) (var "reducedArgs") $
       "primResult" <<~ Eithers.bimap (var "mapErrorToString") ("x" ~> var "x") (Graph.primitiveImplementation (var "prim") @@ var "graph" @@ var "strippedArgs") $
       "reducedResult" <<~ var "reduce" @@ var "eager" @@ var "primResult" $
       var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs") $
@@ -922,9 +923,9 @@ termIsValue = define "termIsValue" $
     _Term_application>>: constant false,
     _Term_cases>>: "cs" ~>
       Logic.and (var "checkCaseAlternatives" @@ Core.caseStatementCases (var "cs"))
-        (Optionals.cases (Core.caseStatementDefault $ var "cs") true termIsValue),
+        (Optionals.cases (Core.caseStatementDefault $ var "cs") true (asTerm termIsValue)),
     _Term_either>>: "e" ~>
-      Eithers.either_
+      Eithers.either
         ("l" ~> termIsValue @@ var "l")
         ("r" ~> termIsValue @@ var "r")
         (var "e"),
@@ -938,11 +939,11 @@ termIsValue = define "termIsValue" $
         Logic.and (var "b") $ Logic.and
           (termIsValue @@ Pairs.first (var "kv"))
           (termIsValue @@ Pairs.second (var "kv")))
-        true $ Maps.toList (var "m"),
+        true $ Maps.toList (var "m" :: TypedTerm (M.Map Term Term)),
     _Term_optional>>: "m" ~>
-      Optionals.cases (var "m") true termIsValue,
+      Optionals.cases (var "m") true (asTerm termIsValue),
     _Term_record>>: "r" ~> var "checkFields" @@ Core.recordFields (var "r"),
-    _Term_set>>: "s" ~> var "forList" @@ Sets.toList (var "s"),
+    _Term_set>>: "s" ~> var "forList" @@ Sets.toList (var "s" :: TypedTerm (S.Set Term)),
     _Term_inject>>: "i" ~> var "checkField" @@ Core.injectionField (var "i"),
     _Term_unit>>: constant true,
     _Term_variable>>: constant false]

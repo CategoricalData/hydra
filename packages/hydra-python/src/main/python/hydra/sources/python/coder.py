@@ -7,16 +7,16 @@ from hydra.core import Name
 from hydra.dsl.python import Given, None_  # noqa: F401
 from hydra.packaging import EntityMetadata, Module, ModuleName
 
-import hydra.dsl.meta.lib.equality as Equality
-import hydra.dsl.meta.lib.lists as Lists
-import hydra.dsl.meta.lib.logic as Logic
-import hydra.dsl.meta.lib.maps as Maps
-import hydra.dsl.meta.lib.optionals as Optionals
-import hydra.dsl.meta.lib.pairs as Pairs
-import hydra.dsl.meta.lib.sets as Sets
-import hydra.dsl.meta.lib.strings as Strings
+import hydra.dsl.lib.equality as Equality
+import hydra.dsl.lib.lists as Lists
+import hydra.dsl.lib.logic as Logic
+import hydra.dsl.lib.maps as Maps
+import hydra.dsl.lib.optionals as Optionals
+import hydra.dsl.lib.pairs as Pairs
+import hydra.dsl.lib.sets as Sets
+import hydra.dsl.lib.strings as Strings
 from hydra.dsl.meta.phantoms import *  # noqa: F401,F403
-import hydra.dsl.meta.lib.eithers as Eithers
+import hydra.dsl.lib.eithers as Eithers
 import hydra.dsl.python.syntax as PySyn
 
 import hydra.dsl.coders as Coders_dsl
@@ -24,8 +24,8 @@ import hydra.dsl.core as Core
 import hydra.dsl.errors as Errors_dsl
 import hydra.dsl.graph as Graph_dsl
 import hydra.dsl.meta.core as MetaCore
-import hydra.dsl.meta.lib.literals as Literals
-import hydra.dsl.meta.lib.math as Math
+import hydra.dsl.lib.literals as Literals
+import hydra.dsl.lib.math as Math
 import hydra.dsl.packaging as Pkg
 import hydra.dsl.util as Util
 
@@ -951,7 +951,7 @@ def _encode_application():
                 ),
                 (
                     "arity",
-                    Math.max_(
+                    Math.max(
                         var("knownArity"), Lists.length(var("args"))
                     ),
                 ),
@@ -1133,7 +1133,7 @@ def _encode_application_inner():
                 ),
                 (
                     "consumeCount",
-                    Math.min_(
+                    Math.min(
                         var("elArity"), Lists.length(var("allArgs"))
                     ),
                 ),
@@ -2568,7 +2568,7 @@ def _encode_python_module():
         ),
     )
     inner_body = Eithers.bind(
-        Eithers.map_(
+        Eithers.map(
             lam("xs", Lists.concat(var("xs"))),
             Eithers.map_list(
                 lam(
@@ -2764,7 +2764,7 @@ def _none_default_field(env, field_type):
             _kref.utils_py_name_to_py_expression(_kref.utils_py_none)
         )]),
     )
-    return Eithers.map_(
+    return Eithers.map(
         lam(
             "pyType",
             _kref.utils_py_assignment_to_py_statement(PySyn.assignment_typed(
@@ -3336,7 +3336,7 @@ def _encode_term_inline():
                     ("tc", _env("graph", "env")),
                     (
                         "mtyp",
-                        Eithers.map_(
+                        Eithers.map(
                             lam("_r", Pairs.first(var("_r"))),
                             var("hydra.checking.typeOf")(var("cx"), var("tc"), list_([]), var("term")),
                         ),
@@ -4792,7 +4792,7 @@ def _encode_type_assignment_inner():
             field("record",
                         lam(
                             "rt",
-                            Eithers.map_(
+                            Eithers.map(
                                 lam(
                                     "s", list_([var("s")])
                                 ),
@@ -7914,7 +7914,7 @@ def _term_arity_with_primitives():
             field("application",
                     lam(
                         "app",
-                        Math.max_(
+                        Math.max(
                             int_(0),
                             Math.sub(
                                 _local("termArityWithPrimitives")(var("graph"), Core.application_function(var("app"))),

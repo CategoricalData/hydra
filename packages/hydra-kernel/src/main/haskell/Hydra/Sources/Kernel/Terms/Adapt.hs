@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Terms.Adapt where
 
@@ -21,18 +22,18 @@ import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Errors       as Error
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Lib.Math     as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -155,7 +156,7 @@ adaptDataGraph = define "adaptDataGraph" $
   "schemaTypes0" <~ Graph.graphSchemaTypes (var "graph0") $
   -- Adapt schema types
   "schemaBindings" <~ Environment.typesToDefinitions @@ Maps.map ("ts" ~> Scoping.typeSchemeToFType @@ var "ts") (var "schemaTypes0") $
-  "schemaResult" <<~ Logic.ifElse (Maps.null (var "schemaTypes0"))
+  "schemaResult" <<~ Logic.ifElse (Maps.null (var "schemaTypes0" :: TypedTerm (M.Map Name Type)))
     (right (Maps.empty :: TypedTerm (M.Map Name TypeScheme)))
     ("tmap0" <<~ Eithers.bimap formatDecodingError ("x" ~> var "x") (Environment.graphAsTypes @@ var "graph0" @@ var "schemaBindings") $
       "tmap1" <<~ adaptGraphSchema @@ var "constraints" @@ var "litmap" @@ var "tmap0" $
@@ -170,7 +171,7 @@ adaptDataGraph = define "adaptDataGraph" $
     "adapted" <<~ adaptTerm @@ var "constraints" @@ var "litmap" @@ var "cx" @@ var "graph0" @@ var "wrapped" $
     Rewriting.rewriteTermM @@ (adaptLambdaDomains @@ var "constraints" @@ var "litmap") @@ var "adapted") $
   "adaptedTerms" <<~ Eithers.mapList (var "adaptBinding") (var "els0") $
-  "els1Raw" <~ Lists.concat (Lists.map Environment.termAsBindings (var "adaptedTerms")) $
+  "els1Raw" <~ Lists.concat (Lists.map (asTerm Environment.termAsBindings) (var "adaptedTerms")) $
 
   -- Adapt nested let binding TypeSchemes within each top-level binding's term.
   -- Applied per-binding AFTER termAsBindings so that top-level binding TypeSchemes
@@ -192,8 +193,8 @@ adaptDataGraph = define "adaptDataGraph" $
   "els1" <<~ Eithers.mapList (var "processBinding") (var "els1Raw") $
   "primPairs" <<~ Eithers.mapList ("kv" ~>
     "prim1" <<~ adaptPrimitive @@ var "constraints" @@ var "litmap" @@ (Pairs.second $ var "kv") $
-    right $ pair (Pairs.first $ var "kv") (var "prim1")) (Maps.toList (var "prims0")) $
-  "prims1" <~ Maps.fromList (var "primPairs") $
+    right $ pair (Pairs.first $ var "kv") (var "prim1")) (Maps.toList (var "prims0" :: TypedTerm (M.Map Name Primitive))) $
+  "prims1" <~ (Maps.fromList (var "primPairs") :: TypedTerm (M.Map Name Primitive)) $
   "adaptedGraphRaw" <~ (Lexical.buildGraph @@ var "els1" @@ Maps.empty @@ var "prims1") $
   "adaptedGraph" <~ Graph.graphWithSchemaTypes (var "adaptedGraphRaw") (var "adaptedSchemaTypes") $
   right $ pair (var "adaptedGraph") (var "els1")
@@ -225,8 +226,8 @@ adaptGraphSchema = define "adaptGraphSchema" $
     "typ" <~ Pairs.second (var "pair") $
     "typ1" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ var "typ" $
     right $ pair (var "name") (var "typ1")) $
-  "pairs" <<~ Eithers.mapList (var "mapPair") (Maps.toList $ var "types0") $
-  right $ Maps.fromList (var "pairs")
+  "pairs" <<~ Eithers.mapList (var "mapPair") (Maps.toList (var "types0" :: TypedTerm (M.Map Name Type))) $
+  right (Maps.fromList (var "pairs") :: TypedTerm (M.Map Name Type))
 adaptIntegerType :: TypedTermDefinition (LanguageConstraints -> IntegerType -> Maybe IntegerType)
 adaptIntegerType = define "adaptIntegerType" $
   doc "Attempt to adapt an integer type using the given language constraints" $
@@ -335,12 +336,12 @@ adaptLiteralTypesMap = define "adaptLiteralTypesMap" $
   "tryType" <~ ("lt" ~> optCases (adaptLiteralType @@ var "constraints" @@ var "lt")
     nothing
     ("lt2" ~> just $ pair (var "lt") (var "lt2"))) $
-  Maps.fromList $ Optionals.cat $ Lists.map (var "tryType") (Reflect.literalTypes)
+  (Maps.fromList (Optionals.cat $ Lists.map (var "tryType") (asTerm Reflect.literalTypes)) :: TypedTerm (M.Map LiteralType LiteralType))
 
 adaptLiteralValue :: TypedTermDefinition (M.Map LiteralType LiteralType -> LiteralType -> Literal -> Literal)
 adaptLiteralValue = define "adaptLiteralValue" $
   doc "Adapt a literal value using the given language constraints" $
-  "litmap" ~> "lt" ~> "l" ~> optCases (Maps.lookup (var "lt") (var "litmap"))
+  "litmap" ~> "lt" ~> "l" ~> optCases (Maps.lookup (var "lt" :: TypedTerm LiteralType) (var "litmap"))
     (Core.literalString $ ShowCore.literal @@ var "l")
     ("lt2" ~> adaptLiteral @@ var "lt2" @@ var "l")
 
@@ -480,7 +481,7 @@ adaptType = define "adaptType" $
     (Just $ just $ var "typ") [
     _Type_literal>>: "lt" ~> Logic.ifElse (literalTypeSupported @@ var "constraints" @@ var "lt")
       (just $ var "typ")
-      (optCases (Maps.lookup (var "lt") (var "litmap"))
+      (optCases (Maps.lookup (var "lt" :: TypedTerm LiteralType) (var "litmap"))
         (just $ Core.typeLiteral Core.literalTypeString)
         ("lt2" ~> just $ Core.typeLiteral $ var "lt2"))]),
   "forUnsupported">: ("typ" ~>
@@ -551,11 +552,11 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
   "doInfer" ~> "doExpand" ~> "doHoistCaseStatements" ~> "doHoistPolymorphicLetBindings" ~>
   "originalBindings" ~> "graph0" ~> "namespaces" ~> "cx" ~>
 
-  "namespacesSet" <~ Sets.fromList (var "namespaces") $
+  "namespacesSet" <~ (Sets.fromList (var "namespaces") :: TypedTerm (S.Set ModuleName)) $
 
   "isParentBinding" <~ ("b" ~> optCases (Names.moduleNameOf @@ (Core.bindingName $ var "b"))
     false
-    ("ns" ~> Sets.member (var "ns") (var "namespacesSet"))) $
+    ("ns" ~> Sets.member (var "ns" :: TypedTerm ModuleName) (var "namespacesSet"))) $
 
   -- Steps 0a-2: Case statement hoisting pipeline (only for Python target, currently).
   -- 0a: Strip type lambdas so case expressions are visible to the hoister
@@ -595,19 +596,19 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
     "nm" <~ Core.unName (Core.bindingName $ var "b") $
     optCases (Names.moduleNameOf @@ (Core.bindingName $ var "b"))
       (Strings.cat2 (string "(no module) ") (var "nm"))
-      ("ns" ~> Strings.concat [Packaging.unModuleName (var "ns"), string " :: ", var "nm"])) $
+      ("ns" ~> Strings.cat (list [Packaging.unModuleName (var "ns"), string " :: ", var "nm"]))) $
   "checkBindingsTyped" <~ ("debugLabel" ~> "bindings" ~>
     "untypedBindings" <~ Lists.map (var "qualifyUntyped")
       (Lists.filter ("b" ~> Logic.not $ Optionals.isGiven (Core.bindingTypeScheme $ var "b")) (var "bindings")) $
     Logic.ifElse (Lists.null $ var "untypedBindings")
       (right $ var "bindings")
-      (left $ Error.errorOther $ Error.otherError $ Strings.concat [
+      (left $ Error.errorOther $ Error.otherError $ Strings.cat (list [
         string "Found ", Literals.showInt32 (Lists.length $ var "untypedBindings"),
         string " untyped binding(s) (", var "debugLabel",
         string "); each must carry a type scheme at this stage. ",
         string "This usually means stale dist/json field shapes after a kernel record rename ",
         string "(regenerate the affected package's JSON). Offending bindings (module :: name): ",
-        Strings.intercalate (string ", ") (var "untypedBindings")])) $
+        Strings.intercalate (string ", ") (var "untypedBindings")]))) $
 
   -- Normalize: push type applications inward past applications and lambdas.
   -- This corrects structures where TypeApp wraps App/Lambda after adaptation and eta expansion.
@@ -686,12 +687,12 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
           ("a" ~> just $ var "a"))
         ("a" ~> just $ var "a"))
       ("a" ~> just $ var "a")) $
-  "originalAnnotations" <~ Maps.fromList
+  "originalAnnotations" <~ (Maps.fromList
     (Optionals.cat (Lists.map
       ("b" ~> optCases (var "findAnn" @@ (Core.bindingTerm $ var "b"))
         nothing
         ("ann" ~> just $ pair (Core.bindingName $ var "b") (var "ann")))
-      (var "originalBindings"))) $
+      (var "originalBindings"))) :: TypedTerm (M.Map Name Term)) $
   "reattachAnnotation" <~ ("b" ~>
     optCases (Maps.lookup (Core.bindingName $ var "b") (var "originalAnnotations"))
       (var "b")
@@ -725,7 +726,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
   "selectedElements" <~ Lists.filter
     ("el" ~> optCases (Names.moduleNameOf @@ (Core.bindingName $ var "el"))
       false
-      ("ns" ~> Sets.member (var "ns") (var "namespacesSet")))
+      ("ns" ~> Sets.member (var "ns" :: TypedTerm ModuleName) (var "namespacesSet")))
     (var "bins5") $
   -- Group elements by namespace
   "elementsByNamespace" <~ Lists.foldl
@@ -733,14 +734,14 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
       optCases (Names.moduleNameOf @@ (Core.bindingName $ var "el"))
         (var "acc")
         ("ns" ~>
-          "existing" <~ Optionals.cases (Maps.lookup (var "ns") (var "acc")) (list ([] :: [TypedTerm Binding])) (reify Equality.identity) $
-          Maps.insert (var "ns") (Lists.concat2 (var "existing") (list [var "el"])) (var "acc")))
-    Maps.empty
+          "existing" <~ Optionals.cases (Maps.lookup (var "ns" :: TypedTerm ModuleName) (var "acc")) (list ([] :: [TypedTerm Binding])) (reify Equality.identity) $
+          Maps.insert (var "ns" :: TypedTerm ModuleName) (Lists.concat2 (var "existing") (list [var "el"])) (var "acc")))
+    (Maps.empty :: TypedTerm (M.Map ModuleName [Binding]))
     (var "selectedElements") $
   -- Produce definitions in the order of the input namespaces
   "defsGrouped" <~ Lists.map
     ("ns" ~>
-      "elsForNs" <~ Optionals.cases (Maps.lookup (var "ns") (var "elementsByNamespace")) (list ([] :: [TypedTerm Binding])) (reify Equality.identity) $
+      "elsForNs" <~ Optionals.cases (Maps.lookup (var "ns" :: TypedTerm ModuleName) (var "elementsByNamespace")) (list ([] :: [TypedTerm Binding])) (reify Equality.identity) $
       Optionals.cat (Lists.map (var "toDef") (var "elsForNs")))
     (var "namespaces") $
 
@@ -781,13 +782,13 @@ prepareFloatType = define "prepareFloatType" $
           Core.floatTypeFloat32
           ("v" ~> cases _FloatValue (var "v") (Just (var "v")) [
             _FloatValue_float32>>: ("f" ~> inject _FloatValue _FloatValue_float32 (var "f"))])
-          Sets.empty),
+          (Sets.empty :: TypedTerm (S.Set String))),
       _FloatType_float64>>: (constant $
         triple
           Core.floatTypeFloat64
           ("v" ~> cases _FloatValue (var "v") (Just (var "v")) [
             _FloatValue_float64>>: ("f" ~> inject _FloatValue _FloatValue_float64 (var "f"))])
-          Sets.empty)])
+          (Sets.empty :: TypedTerm (S.Set String)))])
 
 -- | Prepare an integer type, substituting unsupported types.
 
@@ -867,11 +868,11 @@ prepareLiteralType = define "prepareLiteralType" $
 -- | Prepare a float type, substituting unsupported types.
 
 -- | Return a value unchanged with identity transform and no messages.
-prepareSame :: TypedTermDefinition (a -> (a, b -> b, S.Set c))
+prepareSame :: TypedTermDefinition (a -> (a, b -> b, S.Set String))
 prepareSame = define "prepareSame" $
   doc "Return a value unchanged with identity transform and no messages" $
   lambda "x" $
-    triple (var "x") ("y" ~> var "y") (Sets.empty)
+    triple (var "x") ("y" ~> var "y") (Sets.empty :: TypedTerm (S.Set String))
 
 -- | Prepare a type, substituting unsupported literal types.
 prepareType :: TypedTermDefinition (Graph -> Type -> (Type, Term -> Term, S.Set String))
@@ -943,7 +944,7 @@ pushTypeAppsInward = define "pushTypeAppsInward" $
         (var "go" @@ (Core.letBody $ var "lt"))) $
     "forMap" <~ ("m" ~>
       "forPair" <~ ("p" ~> pair (var "go" @@ (Pairs.first $ var "p")) (var "go" @@ (Pairs.second $ var "p"))) $
-      Maps.fromList $ Lists.map (var "forPair") $ Maps.toList $ var "m") $
+      (Maps.fromList (Lists.map (var "forPair") (Maps.toList (var "m" :: TypedTerm (M.Map Term Term)))) :: TypedTerm (M.Map Term Term))) $
     cases _Term (var "t") Nothing [
       _Term_annotated>>: "at" ~> Core.termAnnotated $ Core.annotatedTerm
         (var "go" @@ (Core.annotatedTermBody $ var "at"))
@@ -955,7 +956,7 @@ pushTypeAppsInward = define "pushTypeAppsInward" $
         (Core.caseStatementTypeName $ var "cs")
         (Optionals.map (var "go") (Core.caseStatementDefault $ var "cs"))
         (Lists.map (var "forCaseAlternative") (Core.caseStatementCases $ var "cs")),
-      _Term_either>>: "e" ~> Core.termEither $ Eithers.either_
+      _Term_either>>: "e" ~> Core.termEither $ Eithers.either
         ("l" ~> left $ var "go" @@ var "l")
         ("r" ~> right $ var "go" @@ var "r")
         (var "e"),
@@ -975,7 +976,7 @@ pushTypeAppsInward = define "pushTypeAppsInward" $
       _Term_record>>: "r" ~> Core.termRecord $ Core.record
         (Core.recordTypeName $ var "r")
         (Lists.map (var "forField") (Core.recordFields $ var "r")),
-      _Term_set>>: "s" ~> Core.termSet $ Sets.fromList $ Lists.map (var "go") $ Sets.toList (var "s"),
+      _Term_set>>: "s" ~> Core.termSet $ Sets.fromList $ Lists.map (var "go") $ Sets.toList (var "s" :: TypedTerm (S.Set Term)),
       _Term_typeApplication>>: "tt" ~>
         "body1" <~ var "go" @@ (Core.typeApplicationTermBody $ var "tt") $
         var "push" @@ var "body1" @@ (Core.typeApplicationTermType $ var "tt"),
@@ -1010,7 +1011,7 @@ schemaGraphToDefinitions = define "schemaGraphToDefinitions" $
         -- pass only names that exist in the schema graph, so the filter is
         -- a no-op in practice.
         Optionals.mapOptional
-          ("n" ~> Optionals.map ("t" ~> pair (var "n") (var "t")) (Maps.lookup (var "n") (var "tmap1")))
+          ("n" ~> Optionals.map ("t" ~> pair (var "n") (var "t")) (Maps.lookup (var "n" :: TypedTerm Name) (var "tmap1")))
           (var "names"))
       (var "nameLists"))
 simpleLanguageAdapter :: TypedTermDefinition (Language -> InferenceContext -> Graph -> Type -> Prelude.Either Error (Adapter Type Type Term Term))

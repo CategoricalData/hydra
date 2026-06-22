@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 -- | Rust serializer: converts Rust AST to concrete syntax (source code).
 -- Serializes the Rust syntax model (Hydra.Rust.Syntax) into properly formatted Rust source code.
 
@@ -5,7 +7,7 @@ module Hydra.Sources.Rust.Serde where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -19,17 +21,17 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -207,7 +209,7 @@ arrayExprToExpr = define "arrayExprToExpr" $
   doc "Serialize an array expression" $
   lambda "a" $
     cases R._ArrayExpr (var "a") Nothing [
-      R._ArrayExpr_elements>>: lambda "es" $ Serialization.bracketList @@ Serialization.halfBlockStyle @@ (Lists.map (expressionToExpr) (var "es")),
+      R._ArrayExpr_elements>>: lambda "es" $ Serialization.bracketList @@ Serialization.halfBlockStyle @@ (Lists.map (asTerm expressionToExpr) (var "es")),
       R._ArrayExpr_repeat>>: lambda "r" $ lets [
         "elem">: project R._ArrayRepeat R._ArrayRepeat_element @@ var "r",
         "len">: project R._ArrayRepeat R._ArrayRepeat_length @@ var "r"] $
@@ -283,7 +285,7 @@ blockToExpr = define "blockToExpr" $
   lambda "b" $ lets [
     "stmts">: project R._Block R._Block_statements @@ var "b",
     "expr">: project R._Block R._Block_expression @@ var "b",
-    "stmtExprs">: Lists.map (statementToExpr) (var "stmts"),
+    "stmtExprs">: Lists.map (asTerm statementToExpr) (var "stmts"),
     "exprPart">: Optionals.cases (var "expr") (list ([] :: [TypedTerm Expr])) (lambda "e" $ list [expressionToExpr @@ var "e"]),
     "allParts">: Lists.concat2 (var "stmtExprs") (var "exprPart")] $
     Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@ var "allParts"
@@ -300,7 +302,7 @@ callExprToExpr = define "callExprToExpr" $
     "args">: project R._CallExpr R._CallExpr_args @@ var "c"] $
     Serialization.spaceSep @@ list [
       expressionToExpr @@ var "func",
-      Serialization.parenListAdaptive @@ (Lists.map (expressionToExpr) (var "args"))]
+      Serialization.parenListAdaptive @@ (Lists.map (asTerm expressionToExpr) (var "args"))]
 
 castExprToExpr :: TypedTermDefinition (R.CastExpr -> Expr)
 castExprToExpr = define "castExprToExpr" $
@@ -324,7 +326,7 @@ closureExprToExpr = define "closureExprToExpr" $
     "moveKw">: Logic.ifElse (var "move") (just $ Serialization.cst @@ string "move") nothing,
     "paramsStr">: Strings.cat (list [
       string "|",
-      Strings.intercalate (string ", ") (Lists.map (closureParamToStr) (var "params")),
+      Strings.intercalate (string ", ") (Lists.map (asTerm closureParamToStr) (var "params")),
       string "|"]),
     "retPart">: Optionals.cases (var "retType") nothing (lambda "t" $ just $ Serialization.spaceSep @@ list [
       Serialization.cst @@ string "->",
@@ -386,7 +388,7 @@ crateToExpr :: TypedTermDefinition (R.Crate -> Expr)
 crateToExpr = define "crateToExpr" $
   doc "Serialize a Rust crate to an AST expression" $
   lambda "crate" $
-    Serialization.doubleNewlineSep @@ (Lists.map (itemWithCommentsToExpr)
+    Serialization.doubleNewlineSep @@ (Lists.map (asTerm itemWithCommentsToExpr)
       (project R._Crate R._Crate_items @@ var "crate"))
 
 derivesToExpr :: TypedTermDefinition ([String] -> Maybe Expr)
@@ -422,7 +424,7 @@ enumDefToExpr = define "enumDefToExpr" $
       genericParamsToExpr @@ var "generics"]),
     "wherePart">: Optionals.cases (var "whereC") nothing (lambda "w" $ just $ whereClauseToExpr @@ var "w"),
     "body">: Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@
-      (Lists.map (enumVariantToExpr) (var "variants"))] $
+      (Lists.map (asTerm enumVariantToExpr) (var "variants"))] $
     Serialization.newlineSep @@ Lists.concat (list [
       var "docPart",
       Optionals.cases (var "derivesAttr") (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [var "d"]),
@@ -438,10 +440,10 @@ enumVariantBodyToExpr = define "enumVariantBodyToExpr" $
     cases R._EnumVariantBody (var "body") Nothing [
       R._EnumVariantBody_unit>>: constant $ Serialization.cst @@ string "",
       R._EnumVariantBody_tuple>>: lambda "types" $
-        Serialization.parenListAdaptive @@ (Lists.map (typeToExpr) (var "types")),
+        Serialization.parenListAdaptive @@ (Lists.map (asTerm typeToExpr) (var "types")),
       R._EnumVariantBody_struct>>: lambda "fields" $
         Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@
-          (Lists.map (structFieldToExpr) (var "fields"))]
+          (Lists.map (asTerm structFieldToExpr) (var "fields"))]
 
 -- =============================================================================
 -- Function definitions
@@ -494,7 +496,7 @@ expressionToExpr = define "expressionToExpr" $
       R._Expression_reference>>: lambda "r" $ refExprToExpr @@ var "r",
       R._Expression_dereference>>: lambda "d" $ Serialization.prefix @@ (string "*") @@ (expressionToExpr @@ var "d"),
       R._Expression_struct>>: lambda "s" $ structExprToExpr @@ var "s",
-      R._Expression_tuple>>: lambda "es" $ Serialization.parenListAdaptive @@ (Lists.map (expressionToExpr) (var "es")),
+      R._Expression_tuple>>: lambda "es" $ Serialization.parenListAdaptive @@ (Lists.map (asTerm expressionToExpr) (var "es")),
       R._Expression_array>>: lambda "a" $ arrayExprToExpr @@ var "a",
       R._Expression_index>>: lambda "i" $ indexExprToExpr @@ var "i",
       R._Expression_range>>: lambda "r" $ rangeExprToExpr @@ var "r",
@@ -576,7 +578,7 @@ fnDefToExpr = define "fnDefToExpr" $
     "fnKw">: Serialization.cst @@ string "fn",
     "nameExpr">: Serialization.cst @@ var "name",
     "genericsExpr">: genericParamsToExpr @@ var "generics",
-    "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (fnParamToExpr) (var "params")),
+    "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (asTerm fnParamToExpr) (var "params")),
     "retTypeExpr">: Optionals.cases (var "retType") nothing (lambda "t" $ just $ Serialization.spaceSep @@ list [
       Serialization.cst @@ string "->",
       typeToExpr @@ var "t"]),
@@ -641,11 +643,11 @@ genericArgumentsToExpr = define "genericArgumentsToExpr" $
       R._GenericArguments_none>>: constant nothing,
       R._GenericArguments_angleBracketed>>: lambda "ab" $ lets [
         "args">: project R._AngleBracketedArgs R._AngleBracketedArgs_args @@ var "ab"] $
-        just $ Serialization.angleBracesList @@ Serialization.inlineStyle @@ (Lists.map (genericArgToExpr) (var "args")),
+        just $ Serialization.angleBracesList @@ Serialization.inlineStyle @@ (Lists.map (asTerm genericArgToExpr) (var "args")),
       R._GenericArguments_parenthesized>>: lambda "pa" $ lets [
         "inputs">: project R._ParenthesizedArgs R._ParenthesizedArgs_inputs @@ var "pa",
         "output">: project R._ParenthesizedArgs R._ParenthesizedArgs_output @@ var "pa",
-        "inputPart">: Serialization.parenListAdaptive @@ (Lists.map (typeToExpr) (var "inputs")),
+        "inputPart">: Serialization.parenListAdaptive @@ (Lists.map (asTerm typeToExpr) (var "inputs")),
         "outputPart">: Optionals.cases (var "output") nothing (lambda "t" $ just $ Serialization.spaceSep @@ list [
           Serialization.cst @@ string "->",
           typeToExpr @@ var "t"])] $
@@ -669,7 +671,7 @@ genericParamsToExpr = define "genericParamsToExpr" $
   lambda "gps" $
     Logic.ifElse (Lists.null $ var "gps")
       nothing
-      (just $ Serialization.angleBracesList @@ Serialization.inlineStyle @@ (Lists.map (genericParamToExpr) (var "gps")))
+      (just $ Serialization.angleBracesList @@ Serialization.inlineStyle @@ (Lists.map (asTerm genericParamToExpr) (var "gps")))
 
 identifierPatternToExpr :: TypedTermDefinition (R.IdentifierPattern -> Expr)
 identifierPatternToExpr = define "identifierPatternToExpr" $
@@ -734,7 +736,7 @@ implBlockToExpr = define "implBlockToExpr" $
       just $ typeToExpr @@ var "selfType",
       var "wherePart"]),
     "body">: Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@
-      (Lists.map (implItemToExpr) (var "items"))] $
+      (Lists.map (asTerm implItemToExpr) (var "items"))] $
     Serialization.spaceSep @@ list [var "header", var "body"]
 
 implItemToExpr :: TypedTermDefinition (R.ImplItem -> Expr)
@@ -761,7 +763,7 @@ implMethodToExpr = define "implMethodToExpr" $
     "docPart">: Optionals.cases (var "docC") (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]),
     "pubKw">: Logic.ifElse (var "pub") (just $ Serialization.cst @@ string "pub") nothing,
     "genericsExpr">: genericParamsToExpr @@ var "generics",
-    "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (methodParamToExpr) (var "params")),
+    "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (asTerm methodParamToExpr) (var "params")),
     "retTypeExpr">: Optionals.cases (var "retType") nothing (lambda "t" $ just $ Serialization.spaceSep @@ list [
       Serialization.cst @@ string "->",
       typeToExpr @@ var "t"]),
@@ -936,7 +938,7 @@ matchExprToExpr = define "matchExprToExpr" $
       Serialization.cst @@ string "match",
       expressionToExpr @@ var "scrut",
       Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@
-        (Lists.map (matchArmToExpr) (var "arms"))]
+        (Lists.map (asTerm matchArmToExpr) (var "arms"))]
 
 methodCallExprToExpr :: TypedTermDefinition (R.MethodCallExpr -> Expr)
 methodCallExprToExpr = define "methodCallExprToExpr" $
@@ -990,7 +992,7 @@ modDefToExpr = define "modDefToExpr" $
         Serialization.cst @@ string "mod",
         Serialization.cst @@ var "name",
         Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@
-          (Lists.map (itemToExpr) (var "items"))])
+          (Lists.map (asTerm itemToExpr) (var "items"))])
 
 -- =============================================================================
 -- Impl blocks
@@ -1017,8 +1019,8 @@ patternToExpr = define "patternToExpr" $
       R._Pattern_reference>>: lambda "rp" $ refPatternToExpr @@ var "rp",
       R._Pattern_struct>>: lambda "sp" $ structPatternToExpr @@ var "sp",
       R._Pattern_tupleStruct>>: lambda "tsp" $ tupleStructPatternToExpr @@ var "tsp",
-      R._Pattern_tuple>>: lambda "ps" $ Serialization.parenListAdaptive @@ (Lists.map (patternToExpr) (var "ps")),
-      R._Pattern_slice>>: lambda "ps" $ Serialization.bracketList @@ Serialization.halfBlockStyle @@ (Lists.map (patternToExpr) (var "ps")),
+      R._Pattern_tuple>>: lambda "ps" $ Serialization.parenListAdaptive @@ (Lists.map (asTerm patternToExpr) (var "ps")),
+      R._Pattern_slice>>: lambda "ps" $ Serialization.bracketList @@ Serialization.halfBlockStyle @@ (Lists.map (asTerm patternToExpr) (var "ps")),
       R._Pattern_or>>: lambda "ps" $ Serialization.cst @@ (Strings.intercalate (string " | ") (Lists.map (lambda "p" $ Serialization.printExpr @@ (patternToExpr @@ var "p")) (var "ps"))),
       R._Pattern_path>>: lambda "ep" $ exprPathToExpr @@ var "ep",
       R._Pattern_range>>: lambda "rp" $ rangePatternToExpr @@ var "rp",
@@ -1125,7 +1127,7 @@ structBodyToExpr = define "structBodyToExpr" $
     cases R._StructBody (var "body") Nothing [
       R._StructBody_named>>: lambda "fields" $
         Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@
-          (Lists.map (structFieldToExpr) (var "fields")),
+          (Lists.map (asTerm structFieldToExpr) (var "fields")),
       R._StructBody_tuple>>: lambda "fields" $
         Serialization.spaceSep @@ list [
           Serialization.parenListAdaptive @@ (Lists.map (lambda "f" $ typeToExpr @@ (project R._TupleField R._TupleField_type @@ var "f")) (var "fields")),
@@ -1164,7 +1166,7 @@ structExprToExpr = define "structExprToExpr" $
     "path">: project R._StructExpr R._StructExpr_path @@ var "s",
     "fields">: project R._StructExpr R._StructExpr_fields @@ var "s",
     "rest">: project R._StructExpr R._StructExpr_rest @@ var "s",
-    "fieldExprs">: Lists.map (fieldValueToExpr) (var "fields"),
+    "fieldExprs">: Lists.map (asTerm fieldValueToExpr) (var "fields"),
     "restExpr">: Optionals.cases (var "rest") (list ([] :: [TypedTerm Expr])) (lambda "r" $ list [
       Serialization.spaceSep @@ list [
         Serialization.cst @@ string "..",
@@ -1202,7 +1204,7 @@ structPatternToExpr = define "structPatternToExpr" $
     "path">: project R._StructPattern R._StructPattern_path @@ var "sp",
     "fields">: project R._StructPattern R._StructPattern_fields @@ var "sp",
     "rest">: project R._StructPattern R._StructPattern_rest @@ var "sp",
-    "fieldExprs">: Lists.map (fieldPatternToExpr) (var "fields"),
+    "fieldExprs">: Lists.map (asTerm fieldPatternToExpr) (var "fields"),
     "restExpr">: Logic.ifElse (var "rest") (list [Serialization.cst @@ string ".."]) (list ([] :: [TypedTerm Expr])),
     "allFields">: Lists.concat2 (var "fieldExprs") (var "restExpr")] $
     Serialization.spaceSep @@ list [
@@ -1277,7 +1279,7 @@ traitDefToExpr = define "traitDefToExpr" $
       var "superPart",
       var "wherePart"]),
     "body">: Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@
-      (Lists.map (traitItemToExpr) (var "items"))] $
+      (Lists.map (asTerm traitItemToExpr) (var "items"))] $
     Serialization.newlineSep @@ Lists.concat (list [
       var "docPart",
       list [Serialization.spaceSep @@ list [var "header", var "body"]]])
@@ -1301,7 +1303,7 @@ traitMethodToExpr = define "traitMethodToExpr" $
     "retType">: project R._TraitMethod R._TraitMethod_returnType @@ var "m",
     "defBody">: project R._TraitMethod R._TraitMethod_defaultBody @@ var "m",
     "genericsExpr">: genericParamsToExpr @@ var "generics",
-    "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (methodParamToExpr) (var "params")),
+    "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (asTerm methodParamToExpr) (var "params")),
     "retTypeExpr">: Optionals.cases (var "retType") nothing (lambda "t" $ just $ Serialization.spaceSep @@ list [
       Serialization.cst @@ string "->",
       typeToExpr @@ var "t"]),
@@ -1353,7 +1355,7 @@ tupleStructPatternToExpr = define "tupleStructPatternToExpr" $
     "elems">: project R._TupleStructPattern R._TupleStructPattern_elements @@ var "tsp"] $
     Serialization.spaceSep @@ list [
       exprPathToExpr @@ var "path",
-      Serialization.parenListAdaptive @@ (Lists.map (patternToExpr) (var "elems"))]
+      Serialization.parenListAdaptive @@ (Lists.map (asTerm patternToExpr) (var "elems"))]
 
 typeAliasToExpr :: TypedTermDefinition (R.TypeAlias -> Expr)
 typeAliasToExpr = define "typeAliasToExpr" $
@@ -1425,13 +1427,13 @@ typeToExpr = define "typeToExpr" $
           string "; ",
           Serialization.printExpr @@ (expressionToExpr @@ var "len"),
           string "]"])),
-      R._Type_tuple>>: lambda "ts" $ Serialization.parenListAdaptive @@ (Lists.map (typeToExpr) (var "ts")),
+      R._Type_tuple>>: lambda "ts" $ Serialization.parenListAdaptive @@ (Lists.map (asTerm typeToExpr) (var "ts")),
       R._Type_fnPointer>>: lambda "fp" $ lets [
         "params">: project R._FnPointerType R._FnPointerType_params @@ var "fp",
         "ret">: project R._FnPointerType R._FnPointerType_returnType @@ var "fp"] $
         Serialization.spaceSep @@ list [
           Serialization.cst @@ string "fn",
-          Serialization.parenListAdaptive @@ (Lists.map (typeToExpr) (var "params")),
+          Serialization.parenListAdaptive @@ (Lists.map (asTerm typeToExpr) (var "params")),
           Serialization.cst @@ string "->",
           typeToExpr @@ var "ret"],
       R._Type_implTrait>>: lambda "bounds" $

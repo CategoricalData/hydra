@@ -8,17 +8,17 @@ import hydra.dsl.Packaging;
 import hydra.dsl.Types;
 import hydra.dsl.java.Environment;
 import hydra.dsl.java.Syntax;
-import hydra.dsl.meta.lib.Eithers;
-import hydra.dsl.meta.lib.Equality;
-import hydra.dsl.meta.lib.Lists;
-import hydra.dsl.meta.lib.Literals;
-import hydra.dsl.meta.lib.Logic;
-import hydra.dsl.meta.lib.Maps;
-import hydra.dsl.meta.lib.Math_;
-import hydra.dsl.meta.lib.Optionals;
-import hydra.dsl.meta.lib.Pairs;
-import hydra.dsl.meta.lib.Sets;
-import hydra.dsl.meta.lib.Strings;
+import hydra.dsl.lib.Eithers;
+import hydra.dsl.lib.Equality;
+import hydra.dsl.lib.Lists;
+import hydra.dsl.lib.Literals;
+import hydra.dsl.lib.Logic;
+import hydra.dsl.lib.Maps;
+import hydra.dsl.lib.Math_;
+import hydra.dsl.lib.Optionals;
+import hydra.dsl.lib.Pairs;
+import hydra.dsl.lib.Sets;
+import hydra.dsl.lib.Strings;
 import hydra.packaging.Definition;
 import hydra.packaging.EntityMetadata;
 import hydra.packaging.Module;
@@ -129,8 +129,14 @@ public class Language {
     private static TypedTerm<?> setsFromList(String elementTypeName, TypedTerm<?> listTerm) {
         return setsFromList(hydra.dsl.Types.variable(elementTypeName), listTerm);
     }
+    @SuppressWarnings("unchecked")
     private static TypedTerm<?> setsFromList(hydra.core.Type elementType, TypedTerm<?> listTerm) {
-        return Sets.fromList(listTerm);
+        // The generated hydra.dsl.lib.Sets.fromList is precisely typed
+        // (TypedTerm<List<X>> -> TypedTerm<Set<X>>), tighter than the old
+        // hand-written wrapper's TypedTerm<?>. The phantom type is erased in the
+        // emitted term, so this unchecked cast at the loosely-typed call boundary
+        // is sound. See #467.
+        return Sets.fromList((TypedTerm<java.util.List<Object>>) (TypedTerm<?>) listTerm);
     }
 
     private static Definition javaMaxTupleLength() {

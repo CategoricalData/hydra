@@ -1,8 +1,10 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hydra.Sources.Json.Schema.Serde where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -16,17 +18,17 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -186,7 +188,7 @@ fromObject = define "fromObject" $
   doc "Extract a name-keyed map from a JSON object value (field order is dropped)" $
   lambda "v" $
     cases J._Value (var "v") Nothing [
-      J._Value_object>>: lambda "mp" $ Maps.fromList (var "mp")]
+      J._Value_object>>: lambda "mp" $ (Maps.fromList (var "mp") :: TypedTerm (M.Map String J.Value))]
 
 integerToExpr :: TypedTermDefinition (Int -> J.Value)
 integerToExpr = define "integerToExpr" $
@@ -202,7 +204,7 @@ itemsToExpr = define "itemsToExpr" $
       (cases JS._Items (var "items") Nothing [
         JS._Items_sameItems>>: lambda "schema" $ schemaToExpr @@ var "schema",
         JS._Items_varItems>>: lambda "schemas" $
-          Json.valueArray (Lists.map schemaToExpr (var "schemas"))])
+          Json.valueArray (Lists.map (asTerm schemaToExpr) (var "schemas"))])
 
 jsonSchemaDocumentToJsonValue :: TypedTermDefinition (JS.Document -> J.Value)
 jsonSchemaDocumentToJsonValue = define "jsonSchemaDocumentToJsonValue" $
@@ -222,7 +224,7 @@ jsonSchemaDocumentToJsonValue = define "jsonSchemaDocumentToJsonValue" $
               "k">: Pairs.first (var "p"),
               "schema">: Pairs.second (var "p")] $
               pair (unwrap JS._Keyword @@ var "k") (schemaToExpr @@ var "schema"))
-            (Maps.toList (var "mp"))))
+            (Maps.toList (var "mp" :: TypedTerm (M.Map Term Term)))))
         (var "mdefs"))])] $
     Json.valueObject (Maps.toList (Maps.union (var "schemaMap") (var "restMap")))
 
@@ -385,11 +387,11 @@ multipleRestrictionToExpr = define "multipleRestrictionToExpr" $
   lambda "r" $
     cases JS._MultipleRestriction (var "r") Nothing [
       JS._MultipleRestriction_allOf>>: lambda "schemas" $
-        pair key_allOf (Json.valueArray (Lists.map schemaToExpr (var "schemas"))),
+        pair key_allOf (Json.valueArray (Lists.map (asTerm schemaToExpr) (var "schemas"))),
       JS._MultipleRestriction_anyOf>>: lambda "schemas" $
-        pair key_anyOf (Json.valueArray (Lists.map schemaToExpr (var "schemas"))),
+        pair key_anyOf (Json.valueArray (Lists.map (asTerm schemaToExpr) (var "schemas"))),
       JS._MultipleRestriction_oneOf>>: lambda "schemas" $
-        pair key_oneOf (Json.valueArray (Lists.map schemaToExpr (var "schemas"))),
+        pair key_oneOf (Json.valueArray (Lists.map (asTerm schemaToExpr) (var "schemas"))),
       JS._MultipleRestriction_not>>: lambda "schema" $
         pair key_not (schemaToExpr @@ var "schema"),
       JS._MultipleRestriction_enum>>: lambda "values" $
@@ -426,21 +428,21 @@ objectRestrictionToExpr = define "objectRestrictionToExpr" $
     cases JS._ObjectRestriction (var "r") Nothing [
       JS._ObjectRestriction_properties>>: lambda "props" $
         pair key_properties
-          (Json.valueObject (Lists.map propertyToExpr (Maps.toList (var "props")))),
+          (Json.valueObject (Lists.map (asTerm propertyToExpr) (Maps.toList (var "props")))),
       JS._ObjectRestriction_additionalProperties>>: lambda "ai" $
         pair key_additionalProperties (additionalItemsToExpr @@ var "ai"),
       JS._ObjectRestriction_required>>: lambda "keys" $
-        pair key_required (Json.valueArray (Lists.map keywordToExpr (var "keys"))),
+        pair key_required (Json.valueArray (Lists.map (asTerm keywordToExpr) (var "keys"))),
       JS._ObjectRestriction_minProperties>>: lambda "n" $
         pair key_minProperties (integerToExpr @@ var "n"),
       JS._ObjectRestriction_maxProperties>>: lambda "n" $
         pair key_maxProperties (integerToExpr @@ var "n"),
       JS._ObjectRestriction_dependencies>>: lambda "deps" $
         pair key_dependencies
-          (Json.valueObject (Lists.map keywordSchemaOrArrayToExpr (Maps.toList (var "deps")))),
+          (Json.valueObject (Lists.map (asTerm keywordSchemaOrArrayToExpr) (Maps.toList (var "deps")))),
       JS._ObjectRestriction_patternProperties>>: lambda "props" $
         pair key_patternProperties
-          (Json.valueObject (Lists.map patternPropertyToExpr (Maps.toList (var "props"))))]
+          (Json.valueObject (Lists.map (asTerm patternPropertyToExpr) (Maps.toList (var "props"))))]
 
 patternPropertyToExpr :: TypedTermDefinition ((JS.RegularExpression, JS.Schema) -> (String, J.Value))
 patternPropertyToExpr = define "patternPropertyToExpr" $
@@ -489,7 +491,7 @@ schemaOrArrayToExpr = define "schemaOrArrayToExpr" $
     cases JS._SchemaOrArray (var "soa") Nothing [
       JS._SchemaOrArray_schema>>: lambda "s" $ schemaToExpr @@ var "s",
       JS._SchemaOrArray_array>>: lambda "keys" $
-        Json.valueArray (Lists.map keywordToExpr (var "keys"))]
+        Json.valueArray (Lists.map (asTerm keywordToExpr) (var "keys"))]
 
 schemaReferenceToExpr :: TypedTermDefinition (JS.SchemaReference -> J.Value)
 schemaReferenceToExpr = define "schemaReferenceToExpr" $
@@ -501,7 +503,7 @@ schemaToExpr :: TypedTermDefinition (JS.Schema -> J.Value)
 schemaToExpr = define "schemaToExpr" $
   doc "Encode a schema as a JSON object value" $
   lambda "s" $
-    Json.valueObject (Lists.concat (Lists.map restrictionToExpr (unwrap JS._Schema @@ var "s")))
+    Json.valueObject (Lists.concat (Lists.map (asTerm restrictionToExpr) (unwrap JS._Schema @@ var "s")))
 
 stringRestrictionToExpr :: TypedTermDefinition (JS.StringRestriction -> (String, J.Value))
 stringRestrictionToExpr = define "stringRestrictionToExpr" $
@@ -535,7 +537,7 @@ typeToExpr = define "typeToExpr" $
     cases JS._Type (var "t") Nothing [
       JS._Type_single>>: lambda "name" $ typeNameToExpr @@ var "name",
       JS._Type_multiple>>: lambda "names" $
-        Json.valueArray (Lists.map typeNameToExpr (var "names"))]
+        Json.valueArray (Lists.map (asTerm typeNameToExpr) (var "names"))]
 
 -- Encoding functions
 

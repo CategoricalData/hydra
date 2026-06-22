@@ -1,8 +1,10 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hydra.Sources.Rdf.Utils where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -16,17 +18,17 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -132,13 +134,13 @@ emptyDescription = define "emptyDescription" $
 emptyLangStrings :: TypedTermDefinition Rdf.LangStrings
 emptyLangStrings = define "emptyLangStrings" $
   doc "An empty LangStrings value" $
-  wrap Rdf._LangStrings Maps.empty
+  wrap Rdf._LangStrings (Maps.empty :: TypedTerm (M.Map (Maybe Rdf.LanguageTag) String))
 
 -- | An empty RDF graph
 emptyRdfGraph :: TypedTermDefinition Rdf.Graph
 emptyRdfGraph = define "emptyRdfGraph" $
   doc "An empty RDF graph" $
-  wrap Rdf._Graph Sets.empty
+  wrap Rdf._Graph (Sets.empty :: TypedTerm (S.Set Rdf.Triple))
 
 -- | Encode a Hydra literal as an RDF literal
 encodeLiteral :: TypedTermDefinition (Literal -> Rdf.Literal)
@@ -253,7 +255,7 @@ mergeGraphs = define "mergeGraphs" $
   doc "Merge a list of RDF graphs into a single graph" $
   lambda "graphs" $
     wrap Rdf._Graph
-      (Sets.unions (Lists.map (unwrap Rdf._Graph) (var "graphs")))
+      ((Sets.unions (Lists.map (unwrap Rdf._Graph) (var "graphs"))) :: TypedTerm (S.Set Rdf.Triple))
 
 -- | Convert a Hydra name to an RDF IRI
 nameToIri :: TypedTermDefinition (Name -> Rdf.Iri)
@@ -317,7 +319,7 @@ triplesOf = define "triplesOf" $
   doc "Extract all triples from a list of descriptions" $
   lambda "descs" $
     Lists.concat (Lists.map
-      (lambda "d" $ Sets.toList (unwrap Rdf._Graph @@ (project Rdf._Description Rdf._Description_graph @@ var "d")))
+      (lambda "d" $ Sets.toList ((unwrap Rdf._Graph @@ (project Rdf._Description Rdf._Description_graph @@ var "d")) :: TypedTerm (S.Set Rdf.Triple)))
       (var "descs"))
 
 -- | Construct an XML Schema datatype IRI

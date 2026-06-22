@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 -- | Haskell-specific convenience layer over the generated Hydra.Dsl.Graph module.
 -- Re-exports all generated DSL functions and adds non-standard helpers.
 
@@ -10,8 +12,8 @@ import Hydra.Kernel
 import Hydra.Dsl.Meta.Phantoms
 import Hydra.Dsl.Graph
 
-import qualified Hydra.Dsl.Meta.Lib.Maps as Maps
-import qualified Hydra.Dsl.Meta.Lib.Sets as Sets
+import qualified Hydra.Dsl.Lib.Maps as Maps
+import qualified Hydra.Dsl.Lib.Sets as Sets
 
 
 -- | Non-standard helpers

@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hydra.Sources.Kernel.Terms.Hoisting where
 
 -- Standard imports for kernel terms modules
@@ -18,18 +20,18 @@ import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Lib.Math     as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -107,7 +109,7 @@ augmentBindingsWithNewFreeVars :: TypedTermDefinition (Graph -> S.Set Name -> [B
 augmentBindingsWithNewFreeVars = define "augmentBindingsWithNewFreeVars" $
   doc "Augment bindings with new free variables introduced by substitution, wrapping with lambdas after any type lambdas." $
   "cx" ~> "boundVars" ~> "bindings" ~>
-  "types" <~ Maps.map (Scoping.typeSchemeToFType) (Graph.graphBoundTypes (var "cx")) $
+  "types" <~ Maps.map (asTerm Scoping.typeSchemeToFType) (Graph.graphBoundTypes (var "cx")) $
   "wrapAfterTypeLambdas" <~ ("vars" ~> "term" ~>
     cases _Term (var "term")
       -- Default: wrap with lambdas (for any non-type-lambda term)
@@ -121,7 +123,7 @@ augmentBindingsWithNewFreeVars = define "augmentBindingsWithNewFreeVars" $
           (var "wrapAfterTypeLambdas" @@ var "vars" @@ (Core.typeLambdaBody $ var "tl"))]) $
   "augment" <~ ("b" ~>
     "freeVars" <~ Sets.toList (Sets.intersection (var "boundVars") (Variables.freeVariablesInTerm @@ (Core.bindingTerm $ var "b"))) $
-    "varTypePairs" <~ Lists.map ("v" ~> pair (var "v") (Maps.lookup (var "v") (var "types"))) (var "freeVars") $
+    "varTypePairs" <~ Lists.map ("v" ~> pair (var "v") (Maps.lookup (var "v" :: TypedTerm Name) (var "types"))) (var "freeVars") $
     "varTypes" <~ Optionals.cat (Lists.map (reify Pairs.second) (var "varTypePairs")) $
     Logic.ifElse (Logic.or (Lists.null $ var "freeVars")
                            (Logic.not $ Equality.equal (Lists.length $ var "varTypes") (Lists.length $ var "varTypePairs")))
@@ -171,7 +173,7 @@ bindingUsesContextTypeVars = define "bindingUsesContextTypeVars" $
     ("ts" ~>
       "freeInType" <~ Variables.freeVariablesInType @@ Core.typeSchemeBody (var "ts") $
       "contextTypeVars" <~ Graph.graphTypeVariables (var "cx") $
-      Logic.not $ Sets.null $ Sets.intersection (var "freeInType") (var "contextTypeVars"))
+      Logic.not $ Sets.null $ Sets.intersection (var "freeInType" :: TypedTerm (S.Set Name)) (var "contextTypeVars"))
 
 -- | Count the number of occurrences of a variable name in a term. Assumes no variable shadowing.
 countVarOccurrences :: TypedTermDefinition (Name -> Term -> Int)
@@ -261,9 +263,9 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
     "alreadyUsedNames" <~ Pairs.second (var "pair") $
     "b" <~ Pairs.first (var "bindingWithCapturedVars") $
     "capturedTermVars" <~ Pairs.second (var "bindingWithCapturedVars") $
-    "types" <~ Maps.map (Scoping.typeSchemeToFType) (Graph.graphBoundTypes (var "cx")) $
+    "types" <~ Maps.map (asTerm Scoping.typeSchemeToFType) (Graph.graphBoundTypes (var "cx")) $
     "capturedTermVarTypePairs" <~ Lists.map
-      ("v" ~> pair (var "v") (Maps.lookup (var "v") (var "types")))
+      ("v" ~> pair (var "v") (Maps.lookup (var "v" :: TypedTerm Name) (var "types")))
       (var "capturedTermVars") $
     -- We can only construct a new type scheme if all of the captured term variables have types
     -- If there are any captured term variables, we create a function type
@@ -272,16 +274,16 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
     -- The latter is needed because wrapping with lambdas for captured term vars introduces their types
     -- into the hoisted binding's type.
     "freeInBindingType" <~ optCases (Core.bindingTypeScheme $ var "b")
-      Sets.empty
+      (Sets.empty :: TypedTerm (S.Set Name))
       ("ts" ~> Variables.freeVariablesInType @@ (Core.typeSchemeBody $ var "ts")) $
-    "freeInCapturedVarTypes" <~ Sets.unions (Lists.map ("t" ~> Variables.freeVariablesInType @@ var "t") (var "capturedTermVarTypes")) $
+    "freeInCapturedVarTypes" <~ (Sets.unions (Lists.map ("t" ~> Variables.freeVariablesInType @@ var "t") (var "capturedTermVarTypes")) :: TypedTerm (S.Set Name)) $
     "capturedTypeVars" <~ Sets.toList (Sets.intersection
       (Graph.graphTypeVariables $ var "cx")
       (Sets.union (var "freeInBindingType") (var "freeInCapturedVarTypes"))) $
     "globalBindingName" <~ Lexical.chooseUniqueName
       @@ var "alreadyUsedNames"
       @@ (Core.name (Strings.cat2 (var "prefix") (Core.unName $ Core.bindingName $ var "b"))) $
-    "newUsedNames" <~ Sets.insert (var "globalBindingName") (var "alreadyUsedNames") $
+    "newUsedNames" <~ Sets.insert (var "globalBindingName" :: TypedTerm Name) (var "alreadyUsedNames") $
     "newTypeScheme" <~ Logic.ifElse
       (Equality.equal (Lists.length $ var "capturedTermVarTypes") (Lists.length $ var "capturedTermVarTypePairs"))
       (Optionals.map
@@ -365,7 +367,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
         -- We need to include them for argument propagation, but exclude them from the final list of arguments
         -- for each hoisted binding.
         "polyLetVariables" <~ (Sets.fromList $ Lists.filter
-          ("v" ~> optCases (Optionals.map (Scoping.typeSchemeToFType) $ Maps.lookup (var "v") (Graph.graphBoundTypes $ var "cx"))
+          ("v" ~> optCases (Optionals.map (asTerm Scoping.typeSchemeToFType) $ Maps.lookup (var "v") (Graph.graphBoundTypes $ var "cx"))
             false -- This function should not be applied to untyped terms, but we make a hopeful guess if it is
             Resolution.fTypeIsPolymorphic)
           (Sets.toList $ Sets.difference (Sets.fromList $ Maps.keys $ Graph.graphBoundTerms $ var "cx") (Graph.graphLambdaVariables $ var "cx"))) $
@@ -380,7 +382,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
           (var "hoistUs") $
         "bindingDependencies" <~ Lists.map
           ("vars" ~> Lists.partition
-            ("v" ~> Sets.member (var "v") (Sets.fromList $ var "hoistedBindingNames"))
+            ("v" ~> Sets.member (var "v" :: TypedTerm Name) (Sets.fromList $ var "hoistedBindingNames"))
             (var "vars"))
           (var "freeVariablesInEachBinding") $
         "bindingEdges" <~ Lists.zip
@@ -389,11 +391,11 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
         "bindingImmediateCapturedVars" <~ Lists.zip
           (var "hoistedBindingNames")
           (Lists.map (reify Pairs.second) (var "bindingDependencies")) $
-        "capturedVarsMap" <~ Maps.fromList (Sorting.propagateTags @@ var "bindingEdges" @@ var "bindingImmediateCapturedVars") $
+        "capturedVarsMap" <~ Maps.fromList ((Sorting.propagateTags @@ var "bindingEdges" @@ var "bindingImmediateCapturedVars") :: TypedTerm [(Name, S.Set Name)]) $
         "bindingsWithCapturedVars" <~ Lists.map
           ("b" ~> pair (var "b") $ optCases (Maps.lookup (Core.bindingName $ var "b") (var "capturedVarsMap"))
             (list ([] :: [TypedTerm Name]))
-            ("vars" ~> Sets.toList $ Sets.difference (var "vars") (var "polyLetVariables")))
+            ("vars" ~> Sets.toList $ Sets.difference (var "vars" :: TypedTerm (S.Set Name)) (var "polyLetVariables")))
           (var "hoistUs") $
 
         -- Now hoist each binding, keeping track of the names used so far. We get back a list of
@@ -413,16 +415,16 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
           (var "replacements") $
 
         -- Map from binding name to original binding (for checking polymorphism)
-        "hoistBindingMap" <~ Maps.fromList (Lists.map
+        "hoistBindingMap" <~ (Maps.fromList (Lists.map
           ("b" ~> pair (Core.bindingName $ var "b") (var "b"))
-          (var "hoistUs")) $
+          (var "hoistUs")) :: TypedTerm (M.Map Name Binding)) $
 
         -- A binding is cacheable if: (1) referenced >1 time in body, AND (2) not polymorphic.
         -- Polymorphic bindings (with non-empty typeSchemeVariables) can't be local Java variables.
         -- Non-polymorphic bindings (hoisted only because they use context type vars) are safe to cache.
         "isCacheable" <~ ("name" ~>
           "multiRef" <~ Equality.gte (countVarOccurrences @@ var "name" @@ var "body") (int32 2) $
-          "isPoly" <~ optCases (Maps.lookup (var "name") (var "hoistBindingMap"))
+          "isPoly" <~ optCases (Maps.lookup (var "name" :: TypedTerm Name) (var "hoistBindingMap"))
             false
             ("b" ~> bindingIsPolymorphic @@ var "b") $
           Logic.and (var "multiRef") (Logic.not $ var "isPoly")) $
@@ -448,7 +450,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
         -- Carry over the original binding's TypeScheme so that downstream code can use typeOf without inference.
         "cacheBindings" <~ Lists.map
           ("p" ~>
-            "origType" <~ optCases (Maps.lookup (Pairs.first $ var "p") (var "hoistBindingMap"))
+            "origType" <~ optCases (Maps.lookup (Pairs.first (var "p") :: TypedTerm Name) (var "hoistBindingMap"))
               nothing
               ("b" ~> Core.bindingTypeScheme $ var "b") $
             Core.binding (Pairs.first $ var "p") (Pairs.second $ var "p") (var "origType"))
@@ -580,23 +582,23 @@ hoistSubterms = define "hoistSubterms" $
             -- Use the namePrefix to create stable names: _hoist_<prefix>_<counter>
             -- Use chooseUniqueName to avoid collisions with names in the enclosing scope
             ("proposedName" <~ Core.name (Strings.cat (list [string "_hoist_", var "namePrefix", string "_", Literals.showInt32 (var "newCounter")])) $
-             "existingNames" <~ Sets.fromList (Lists.map (lambda "b" $ Core.bindingName (var "b")) (var "newBindings")) $
+             "existingNames" <~ (Sets.fromList (Lists.map (lambda "b" $ Core.bindingName (var "b")) (var "newBindings")) :: TypedTerm (S.Set Name)) $
              "freeVarsInSubterm" <~ Variables.freeVariablesInTerm @@ var "subterm" $
-             "allReserved" <~ Sets.union (var "existingNames") (var "freeVarsInSubterm") $
+             "allReserved" <~ Sets.union (var "existingNames" :: TypedTerm (S.Set Name)) (var "freeVarsInSubterm") $
              "bindingName" <~ Lexical.chooseUniqueName @@ var "allReserved" @@ var "proposedName" $
              -- Find lambda-bound variables that need to be captured
              -- Only capture variables that were added INSIDE this subterm (not at the let level)
              "allLambdaVars" <~ Graph.graphLambdaVariables (var "cxInner") $
              -- Get names that are new lambda vars (in current scope but not baseline)
-             "newLambdaVars" <~ Sets.difference (var "allLambdaVars") (var "baselineLambdaVars") $
+             "newLambdaVars" <~ Sets.difference (var "allLambdaVars" :: TypedTerm (S.Set Name)) (var "baselineLambdaVars") $
              "freeVars" <~ Variables.freeVariablesInTerm @@ var "processedTerm" $
-             "capturedVars" <~ Sets.toList (Sets.intersection (var "newLambdaVars") (var "freeVars")) $
+             "capturedVars" <~ Sets.toList (Sets.intersection (var "newLambdaVars" :: TypedTerm (S.Set Name)) (var "freeVars")) $
              -- Wrap the term in lambdas for each captured variable, looking up their types from the context
-             "typeMap" <~ Maps.map (Scoping.typeSchemeToFType) (Graph.graphBoundTypes (var "cxInner")) $
+             "typeMap" <~ Maps.map (asTerm Scoping.typeSchemeToFType) (Graph.graphBoundTypes (var "cxInner")) $
              "wrappedTerm" <~ Lists.foldl
                ("body" ~> "varName" ~>
                  Core.termLambda $ Core.lambda (var "varName")
-                   (Maps.lookup (var "varName") (var "typeMap"))
+                   (Maps.lookup (var "varName" :: TypedTerm Name) (var "typeMap"))
                    (var "body"))
                (var "processedTerm")
                (Lists.reverse $ var "capturedVars") $

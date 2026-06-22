@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Terms.Variables where
 
@@ -27,18 +28,18 @@ import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Lib.Math     as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -105,7 +106,7 @@ freeTypeVariablesInTerm = define "freeTypeVariablesInTerm" $
   doc ("Get the set of free type variables in a term (including schema names, where they appear in type annotations)."
     <> " In this context, only the type schemes of let bindings can bind type variables; type lambdas do not.") $
   "term0" ~>
-  "allOf" <~ ("sets" ~> Lists.foldl (reify2 Sets.union) Sets.empty $ var "sets") $
+  "allOf" <~ ("sets" ~> Lists.foldl (reify2 Sets.union) (Sets.empty :: TypedTerm (S.Set Name)) $ var "sets") $
   "tryType" <~ ("tvars" ~> "typ" ~> Sets.difference (freeVariablesInType @@ var "typ") (var "tvars")) $
   "getAll" <~ ("vars" ~> "term" ~>
     "recurse" <~ var "getAll" @@ var "vars" $
@@ -113,27 +114,27 @@ freeTypeVariablesInTerm = define "freeTypeVariablesInTerm" $
     cases _Term (var "term")
       (Just $ var "dflt") [
       _Term_lambda>>: "l" ~>
-        "domt" <~ optCases (Core.lambdaDomain $ var "l") (Sets.empty) (var "tryType" @@ var "vars") $
-        Sets.union (var "domt") (var "recurse" @@ (Core.lambdaBody $ var "l")),
+        "domt" <~ optCases (Core.lambdaDomain $ var "l") (Sets.empty :: TypedTerm (S.Set Name)) (var "tryType" @@ var "vars") $
+        (Sets.union (var "domt") (var "recurse" @@ (Core.lambdaBody $ var "l")) :: TypedTerm (S.Set Name)),
       _Term_let>>: "l" ~>
         "forBinding" <~ ("b" ~>
           "newVars" <~ optCases (Core.bindingTypeScheme $ var "b")
              (var "vars")
              ("ts" ~> Sets.union (var "vars") (Sets.fromList $ Core.typeSchemeVariables $ var "ts")) $
-          Sets.union
+          (Sets.union
             (var "getAll" @@ var "newVars" @@ (Core.bindingTerm $ var "b"))
             (optCases (Core.bindingTypeScheme $ var "b")
               Sets.empty
-              ("ts" ~> var "tryType" @@ var "newVars" @@ (Core.typeSchemeBody $ var "ts")))) $
-        Sets.union
+              ("ts" ~> var "tryType" @@ var "newVars" @@ (Core.typeSchemeBody $ var "ts"))) :: TypedTerm (S.Set Name))) $
+        (Sets.union
           (var "allOf" @@ Lists.map (var "forBinding") (Core.letBindings $ var "l"))
-          (var "recurse" @@ (Core.letBody $ var "l")),
+          (var "recurse" @@ (Core.letBody $ var "l")) :: TypedTerm (S.Set Name)),
       _Term_typeApplication>>: "tt" ~>
-        Sets.union
+        (Sets.union
           (var "tryType" @@ var "vars" @@ (Core.typeApplicationTermType $ var "tt"))
-          (var "recurse" @@ (Core.typeApplicationTermBody $ var "tt")),
+          (var "recurse" @@ (Core.typeApplicationTermBody $ var "tt")) :: TypedTerm (S.Set Name)),
       _Term_typeLambda>>: "tl" ~>
-        Sets.union
+        (Sets.union
           -- Type lambdas do bind type variables semantically, but this function only treats the surrounding let
           -- binding's type scheme as the binder of record. By convention the let-scheme variables and the type
           -- lambdas at the head of the bound term name exactly the same variables — and this function flags any
@@ -141,8 +142,8 @@ freeTypeVariablesInTerm = define "freeTypeVariablesInTerm" $
           -- not also named by the enclosing let's type scheme will have that parameter reported as a free type
           -- variable.
           (var "tryType" @@ var "vars" @@ (Core.typeVariable $ Core.typeLambdaParameter $ var "tl"))
-          (var "recurse" @@ (Core.typeLambdaBody $ var "tl"))]) $
-  var "getAll" @@ Sets.empty @@ var "term0"
+          (var "recurse" @@ (Core.typeLambdaBody $ var "tl")) :: TypedTerm (S.Set Name))]) $
+  var "getAll" @@ (Sets.empty :: TypedTerm (S.Set Name)) @@ var "term0"
 
 freeVariablesInTerm :: TypedTermDefinition (Term -> S.Set Name)
 freeVariablesInTerm = define "freeVariablesInTerm" $
@@ -152,7 +153,7 @@ freeVariablesInTerm = define "freeVariablesInTerm" $
   -- because in eager languages a let-bound default would be evaluated unconditionally, even for
   -- Variable/Lambda/Let cases where it is not needed. This avoids redundant traversal.
   "dfltVars" <~ ("_" ~> Lists.foldl ("s" ~> "t" ~> Sets.union (var "s") (freeVariablesInTerm @@ var "t"))
-    Sets.empty
+    (Sets.empty :: TypedTerm (S.Set Name))
     (Rewriting.subterms @@ var "term")) $
   cases _Term (var "term")
     (Just $ var "dfltVars" @@ unit) [
@@ -162,14 +163,14 @@ freeVariablesInTerm = define "freeVariablesInTerm" $
     _Term_let>>: "l" ~> Sets.difference
       (var "dfltVars" @@ unit)
       (Sets.fromList (Lists.map (reify Core.bindingName) (Core.letBindings $ var "l"))),
-    _Term_variable>>: "v" ~> Sets.singleton $ var "v"]
+    _Term_variable>>: "v" ~> Sets.singleton (var "v" :: TypedTerm Name)]
 
 freeVariablesInType :: TypedTermDefinition (Type -> S.Set Name)
 freeVariablesInType = define "freeVariablesInType" $
   doc "Find the free variables (i.e. variables not bound by a lambda or let) in a type" $
   "typ" ~>
   "dfltVars" <~ Phantoms.fold ("s" ~> "t" ~> Sets.union (var "s") (recurse @@ var "t"))
-    @@ Sets.empty
+    @@ (Sets.empty :: TypedTerm (S.Set Name))
     @@ (Rewriting.subtypes @@ var "typ") $
   cases _Type (var "typ")
     (Just $ var "dfltVars") [
@@ -177,7 +178,7 @@ freeVariablesInType = define "freeVariablesInType" $
         (Core.forallTypeParameter $ var "lt")
         (recurse @@ (Core.forallTypeBody $ var "lt")),
     -- TODO: let-types
-    _Type_variable>>: "v" ~> Sets.singleton $ var "v"]
+    _Type_variable>>: "v" ~> Sets.singleton (var "v" :: TypedTerm Name)]
   where
     recurse = freeVariablesInType
 
@@ -190,14 +191,14 @@ freeVariablesInTypeOrdered = define "freeVariablesInTypeOrdered" $
       (Just $ Lists.concat $ Lists.map (var "collectVars" @@ var "boundVars") $
               Rewriting.subtypes @@ var "t") [
       _Type_variable>>: "v" ~>
-        Logic.ifElse (Sets.member (var "v") (var "boundVars"))
+        Logic.ifElse (Sets.member (var "v" :: TypedTerm Name) (var "boundVars"))
           (list ([] :: [TypedTerm Name]))
           (list [var "v"]),
       _Type_forall>>: "ft" ~>
         var "collectVars" @@
           (Sets.insert (Core.forallTypeParameter $ var "ft") (var "boundVars")) @@
           (Core.forallTypeBody $ var "ft")]) $
-  (Lists.nub :: TypedTerm [Name] -> TypedTerm [Name]) $ var "collectVars" @@ Sets.empty @@ var "typ"
+  (Lists.nub :: TypedTerm [Name] -> TypedTerm [Name]) $ var "collectVars" @@ (Sets.empty :: TypedTerm (S.Set Name)) @@ var "typ"
 
 freeVariablesInTypeScheme :: TypedTermDefinition (TypeScheme -> S.Set Name)
 freeVariablesInTypeScheme = define "freeVariablesInTypeScheme" $
@@ -221,8 +222,8 @@ freeVariablesInTypeSimple = define "freeVariablesInTypeSimple" $
   "typ" ~>
   "helper" <~ ("types" ~> "typ" ~> cases _Type (var "typ")
     (Just $ var "types") [
-    _Type_variable>>: "v" ~> Sets.insert (var "v") (var "types")]) $
-  Rewriting.foldOverType @@ Coders.traversalOrderPre @@ var "helper" @@ Sets.empty @@ var "typ"
+    _Type_variable>>: "v" ~> Sets.insert (var "v" :: TypedTerm Name) (var "types")]) $
+  Rewriting.foldOverType @@ Coders.traversalOrderPre @@ var "helper" @@ (Sets.empty :: TypedTerm (S.Set Name)) @@ var "typ"
 
 isFreeVariableInTerm :: TypedTermDefinition (Name -> Term -> Bool)
 isFreeVariableInTerm = define "isFreeVariableInTerm" $
@@ -234,7 +235,7 @@ normalizeTypeVariablesInTerm :: TypedTermDefinition (Term -> Term)
 normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
   doc "Recursively replace the type variables of let bindings with the systematic type variables t0, t1, t2, ..." $
   "term" ~>
-  "replaceName" <~ ("subst" ~> "v" ~> Optionals.fromOptional (var "v") $ Maps.lookup (var "v") (var "subst")) $
+  "replaceName" <~ ("subst" ~> "v" ~> Optionals.fromOptional (var "v") $ Maps.lookup (var "v" :: TypedTerm Name) (var "subst" :: TypedTerm (M.Map Name Name))) $
   "substType" <~ ("subst" ~> "typ" ~>
     "rewrite" <~ ("recurse" ~> "typ" ~> cases _Type (var "typ")
       (Just $ var "recurse" @@ var "typ") [
@@ -282,19 +283,19 @@ normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
                   @@ (Math.sub (var "rem") (int32 1))
                   @@ (Lists.cons (var "ti") (var "acc2")))) $
             "newVars"  <~ var "gen" @@ (int32 0) @@ (var "k") @@ (list ([] :: [TypedTerm Name])) $
-            "newSubst" <~ Maps.union (Maps.fromList $ Lists.zip (var "vars") (var "newVars")) (var "subst") $
-            "newBound" <~ Sets.union (var "boundVars") (Sets.fromList (var "newVars")) $
+            "newSubst" <~ (Maps.union (Maps.fromList $ Lists.zip (var "vars") (var "newVars")) (var "subst") :: TypedTerm (M.Map Name Name)) $
+            "newBound" <~ (Sets.union (var "boundVars") (Sets.fromList (var "newVars")) :: TypedTerm (S.Set Name)) $
             "newVal"   <~ var "rewriteWithSubst" @@ (pair (pair (var "newSubst") (var "newBound")) (Math.add (var "next") (var "k"))) @@ (Core.bindingTerm $ var "b") $
             -- Rename constraint keys using newSubst (a Map Name Name)
             -- For each (varName, metadata), if varName is in newSubst, use the new name
             "renameConstraintKeys" <~ ("constraintMap" ~>
-              Maps.fromList $ Lists.map
+              (Maps.fromList $ Lists.map
                 ("p" ~>
                   "oldName" <~ Pairs.first (var "p") $
                   "meta" <~ Pairs.second (var "p") $
-                  "newName" <~ Optionals.fromOptional (var "oldName") (Maps.lookup (var "oldName") (var "newSubst")) $
+                  "newName" <~ Optionals.fromOptional (var "oldName") (Maps.lookup (var "oldName" :: TypedTerm Name) (var "newSubst")) $
                   pair (var "newName") (var "meta"))
-                (Maps.toList $ var "constraintMap")) $
+                (Maps.toList $ (var "constraintMap" :: TypedTerm (M.Map Name TypeVariableConstraints))) :: TypedTerm (M.Map Name TypeVariableConstraints))) $
             "oldConstraints" <~ Core.typeSchemeConstraints (var "ts") $
             "newConstraints" <~ Optionals.map (var "renameConstraintKeys") (var "oldConstraints") $
             "b1"       <~ Core.binding
@@ -326,7 +327,7 @@ normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
         (var "rewriteWithSubst" @@ (pair (pair (var "subst") (var "boundVars")) (var "next")) @@ (Core.typeLambdaBody $ var "ta"))]) $
     Rewriting.rewriteTerm @@ var "rewrite" @@ var "term0") $
   -- initial state: ((emptySubst, emptyBound), next=0)
-  var "rewriteWithSubst" @@ (pair (pair Maps.empty Sets.empty) (int32 0)) @@ var "term"
+  var "rewriteWithSubst" @@ (pair (pair (Maps.empty :: TypedTerm (M.Map Name Name)) (Sets.empty :: TypedTerm (S.Set Name))) (int32 0)) @@ var "term"
 
 replaceFreeTermVariable :: TypedTermDefinition (Name -> Term -> Term -> Term)
 replaceFreeTermVariable = define "replaceFreeTermVariable" $
@@ -370,7 +371,7 @@ substituteTypeVariables = define "substituteTypeVariables" $
   "replace" <~ ("recurse" ~> "typ" ~> cases _Type (var "typ")
     (Just $ var "recurse" @@ var "typ") [
     _Type_variable>>: "n" ~>
-      Core.typeVariable $ Optionals.fromOptional (var "n") $ Maps.lookup (var "n") (var "subst")]) $
+      Core.typeVariable $ Optionals.fromOptional (var "n") $ Maps.lookup (var "n" :: TypedTerm Name) (var "subst" :: TypedTerm (M.Map Name Name))]) $
   Rewriting.rewriteType @@ var "replace" @@ var "typ"
 
 substituteVariable :: TypedTermDefinition (Name -> Name -> Term -> Term)
@@ -396,9 +397,9 @@ substituteVariables = define "substituteVariables" $
     cases _Term (var "term")
       (Just $ var "recurse" @@ var "term") [
       _Term_variable>>: "n" ~>
-        Core.termVariable $ Optionals.fromOptional (var "n") $ Maps.lookup (var "n") (var "subst"),
+        Core.termVariable $ Optionals.fromOptional (var "n") $ Maps.lookup (var "n" :: TypedTerm Name) (var "subst" :: TypedTerm (M.Map Name Name)),
       _Term_lambda>>: "l" ~>
-        Optionals.cases (Maps.lookup (Core.lambdaParameter $ var "l") (var "subst")) (var "recurse" @@ var "term") (constant $ var "term")]) $
+        Optionals.cases (Maps.lookup (Core.lambdaParameter $ var "l") (var "subst" :: TypedTerm (M.Map Name Name))) (var "recurse" @@ var "term") (constant $ var "term")]) $
   Rewriting.rewriteTerm @@ var "replace" @@ var "term"
 
 unshadowVariables :: TypedTermDefinition (Term -> Term)
@@ -409,7 +410,7 @@ unshadowVariables = define "unshadowVariables" $
   -- Find a fresh name not in the key set of the map, trying base2, base3, etc.
   "freshName" <~ ("base" ~> "i" ~> "m" ~>
     "candidate" <~ Core.name (Strings.cat2 (Core.unName $ var "base") (Literals.showInt32 $ var "i")) $
-    Logic.ifElse (Maps.member (var "candidate") (var "m"))
+    Logic.ifElse (Maps.member (var "candidate") (var "m" :: TypedTerm (M.Map Name Name)))
       (var "freshName" @@ var "base" @@ Math.add (var "i") (int32 1) @@ var "m")
       (var "candidate")) $
   "f" <~ ("recurse" ~> "m" ~> "term" ~>
@@ -418,25 +419,25 @@ unshadowVariables = define "unshadowVariables" $
       "v" <~ Core.lambdaParameter (var "l") $
       "domain" <~ Core.lambdaDomain (var "l") $
       "body" <~ Core.lambdaBody (var "l") $
-      Logic.ifElse (Maps.member (var "v") (var "m"))
+      Logic.ifElse (Maps.member (var "v") (var "m" :: TypedTerm (M.Map Name Name)))
         -- Shadowed: find a fresh name, add v -> fresh to map, recurse into body
         ("v2" <~ var "freshName" @@ var "v" @@ int32 2 @@ var "m" $
-          "m2" <~ Maps.insert (var "v") (var "v2") (Maps.insert (var "v2") (var "v2") (var "m")) $
+          "m2" <~ Maps.insert (var "v") (var "v2") (Maps.insert (var "v2") (var "v2") (var "m" :: TypedTerm (M.Map Name Name))) $
           Core.termLambda $ Core.lambda (var "v2") (var "domain")
             (var "f" @@ var "recurse" @@ var "m2" @@ var "body"))
         -- First occurrence: register v -> v (identity), recurse into body
         (Core.termLambda $ Core.lambda (var "v") (var "domain")
-          (var "f" @@ var "recurse" @@ Maps.insert (var "v") (var "v") (var "m") @@ var "body")),
+          (var "f" @@ var "recurse" @@ Maps.insert (var "v") (var "v") (var "m" :: TypedTerm (M.Map Name Name)) @@ var "body")),
     _Term_let>>: "lt" ~>
       -- Register all let-bound names as in-scope (identity mapping) so inner lambdas know about them
       "m2" <~ Lists.foldl ("acc" ~> "b" ~>
         "bname" <~ Core.bindingName (var "b") $
-        Logic.ifElse (Maps.member (var "bname") (var "acc"))
+        Logic.ifElse (Maps.member (var "bname") (var "acc" :: TypedTerm (M.Map Name Name)))
           (var "acc")
-          (Maps.insert (var "bname") (var "bname") (var "acc")))
+          (Maps.insert (var "bname") (var "bname") (var "acc" :: TypedTerm (M.Map Name Name))))
         (var "m") (Core.letBindings $ var "lt") $
       var "recurse" @@ var "m2" @@ var "term",
-    _Term_variable>>: "v" ~> Core.termVariable $ optCases (Maps.lookup (var "v") (var "m"))
+    _Term_variable>>: "v" ~> Core.termVariable $ optCases (Maps.lookup (var "v") (var "m" :: TypedTerm (M.Map Name Name)))
       (var "v")
       ("renamed" ~> var "renamed")]) $
-  Rewriting.rewriteTermWithContext @@ var "f" @@ Maps.empty @@ var "term0"
+  Rewriting.rewriteTermWithContext @@ var "f" @@ (Maps.empty :: TypedTerm (M.Map Name Name)) @@ var "term0"

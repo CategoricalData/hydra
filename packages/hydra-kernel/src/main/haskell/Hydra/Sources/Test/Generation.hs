@@ -15,10 +15,10 @@ import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
 import           Hydra.Dsl.Meta.Phantoms      as Phantoms hiding ((++))
 import qualified Hydra.Dsl.Meta.Types         as T
-import qualified Hydra.Dsl.Meta.Lib.Eithers   as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Lists     as Lists
-import qualified Hydra.Dsl.Meta.Lib.Optionals    as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Strings   as Strings
+import qualified Hydra.Dsl.Lib.Eithers   as Eithers
+import qualified Hydra.Dsl.Lib.Lists     as Lists
+import qualified Hydra.Dsl.Lib.Optionals    as Optionals
+import qualified Hydra.Dsl.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Packaging          as Packaging
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Data.List                    as L
@@ -193,17 +193,17 @@ showDef :: TypedTerm Definition -> TypedTerm String
 showDef d = Phantoms.cases _Definition d Nothing [
     _Definition_type>>: "td" ~> Phantoms.string "",
     _Definition_term>>: "td" ~>
-      Strings.concat [
+      Strings.cat (list [
         Core.unName (Packaging.termDefinitionName (var "td")),
         Phantoms.string " :: ",
-        Optionals.cases (Optionals.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature (var "td"))) (Phantoms.string "<no scheme>") ("ts" ~> ShowCore.typeScheme # var "ts"),
+        Optionals.cases (Optionals.map (asTerm Scoping.termSignatureToTypeScheme) (Packaging.termDefinitionSignature (var "td"))) (Phantoms.string "<no scheme>") ("ts" ~> ShowCore.typeScheme # var "ts"),
         Phantoms.string " = ",
         ShowCore.term # (Packaging.termDefinitionBody (var "td")),
-        Phantoms.string "\n"],
+        Phantoms.string "\n"]),
     _Definition_primitive>>: "pd" ~>
-      Strings.concat [
+      Strings.cat (list [
         Core.unName (Packaging.primitiveDefinitionName (var "pd")),
-        Phantoms.string " :: <primitive>\n"]]
+        Phantoms.string " :: <primitive>\n"])]
 
 showModule :: TypedTerm Module -> TypedTerm String
 showModule m = Strings.cat (Lists.map ("d" ~> showDef (var "d")) (Packaging.moduleDefinitions m))
@@ -212,7 +212,7 @@ showModules :: TypedTerm [Module] -> TypedTerm String
 showModules ms = Strings.cat (Lists.map ("m" ~> showModule (var "m")) ms)
 
 showResult :: TypedTerm (Either Error [Module]) -> TypedTerm String
-showResult r = Eithers.either_
+showResult r = Eithers.either
   ("e" ~> Phantoms.string "<<inference error>>")
   ("ms" ~> showModules (var "ms"))
   r

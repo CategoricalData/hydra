@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Terms.Inference where
 
@@ -31,18 +32,18 @@ import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Lib.Math     as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -219,7 +220,7 @@ bindUnboundTypeVariables = define "bindUnboundTypeVariables" $
           (Core.binding (var "bname") (bindUnboundTypeVariables @@ var "cx" @@ var "bterm") nothing)
           ("ts" ~>
             "bvars" <~ Sets.fromList (Core.typeSchemeVariables $ var "ts") $
-            "excluded" <~ Sets.union (var "svars") (var "bvars") $
+            "excluded" <~ Sets.union (var "svars" :: TypedTerm (S.Set Name)) (var "bvars") $
             "inType" <~ Sets.difference
               (Variables.freeVariablesInType @@ (Core.typeSchemeBody $ var "ts"))
               (var "excluded") $
@@ -231,10 +232,10 @@ bindUnboundTypeVariables = define "bindUnboundTypeVariables" $
             -- external effect on the binding's type. Substitute them with Unit in the
             -- body so downstream stages see a closed monomorphic term.
             "phantomSubst" <~ Typing.typeSubst (Maps.fromList
-              (Lists.map ("v" ~> pair (var "v") Core.typeUnit) (Sets.toList (var "phantoms")))) $
+              (Lists.map ("v" ~> pair (var "v") Core.typeUnit) (Sets.toList (var "phantoms" :: TypedTerm (S.Set Name))))) $
             "bterm1" <~ Substitution.substTypesInTerm @@ var "phantomSubst" @@ var "bterm" $
             -- Generalize only over variables that appear in the declared type.
-            "unbound" <~ Sets.toList (var "inType") $
+            "unbound" <~ Sets.toList (var "inType" :: TypedTerm (S.Set Name)) $
             "ts2" <~ Core.typeScheme
               (Lists.concat2
                 (Core.typeSchemeVariables $ var "ts")
@@ -288,7 +289,7 @@ freeVariablesInContext = define "freeVariablesInContext" $
   doc "Get all free variables in a graph's bound types" $
   "cx" ~>
     Lists.foldl (reify2 Sets.union) Sets.empty $
-      Lists.map (Variables.freeVariablesInTypeSchemeSimple) $
+      Lists.map (asTerm Variables.freeVariablesInTypeSchemeSimple) $
         Maps.elems $ Graph.graphBoundTypes $ var "cx"
 
 freshVariableType :: TypedTermDefinition (InferenceContext -> (Type, InferenceContext))
@@ -314,11 +315,11 @@ generalize = define "generalize" $
      Variables.freeVariablesInTypeOrdered @@ var "typ") $
   -- Extract constraints for the generalized variables from the context
   "allConstraints" <~ Graph.graphClassConstraints (var "cx") $
-  "relevantConstraints" <~ Maps.fromList (Optionals.cat $ Lists.map
-    ("v" ~> Optionals.map ("meta" ~> pair (var "v") (var "meta")) $ Maps.lookup (var "v") (var "allConstraints"))
-    (var "vars")) $
+  "relevantConstraints" <~ (Maps.fromList (Optionals.cat $ Lists.map
+    ("v" ~> Optionals.map ("meta" ~> pair (var "v") (var "meta")) $ Maps.lookup (var "v" :: TypedTerm Name) (var "allConstraints"))
+    (var "vars")) :: TypedTerm (M.Map Name TypeVariableConstraints)) $
   -- Only include constraints if there are any
-  "constraintsMaybe" <~ Logic.ifElse (Maps.null $ var "relevantConstraints") Phantoms.nothing (just $ var "relevantConstraints") $
+  "constraintsMaybe" <~ Logic.ifElse (Maps.null $ (var "relevantConstraints" :: TypedTerm (M.Map Name TypeVariableConstraints))) Phantoms.nothing (just $ var "relevantConstraints") $
   Core.typeScheme (var "vars") (var "typ") (var "constraintsMaybe")
 
 -- | Extract the first element of a list, or fail with a descriptive error if
@@ -369,7 +370,7 @@ inferMany :: TypedTermDefinition (InferenceContext -> Graph -> [(Term, String)] 
 inferMany = define "inferMany" $
   doc "Infer types for multiple terms, propagating class constraints from sub-expressions" $
   "fcx" ~> "cx" ~> "pairs" ~>
-  "emptyResult" <~ (right $ pair (pair (list ([] :: [TypedTerm Term])) $ pair (list ([] :: [TypedTerm Type])) (pair Substitution.idTypeSubst Maps.empty)) (var "fcx")) $
+  "emptyResult" <~ (right $ pair (pair (list ([] :: [TypedTerm Term])) $ pair (list ([] :: [TypedTerm Type])) (pair Substitution.idTypeSubst (Maps.empty :: TypedTerm (M.Map Name TypeVariableConstraints)))) (var "fcx")) $
   Optionals.cases (Lists.uncons (var "pairs")) (var "emptyResult") ("pairsUc" ~>
     "headPair" <~ Pairs.first (var "pairsUc") $
     "tl" <~ Pairs.second (var "pairsUc") $
@@ -536,9 +537,9 @@ inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
   "codv" <~ Pairs.first (var "codvResult") $
   "fcx5" <~ Pairs.second (var "codvResult") $
   "cod" <~ Core.typeVariable (var "codv") $
-  "caseMap" <~ Maps.fromList (Lists.map
+  "caseMap" <~ (Maps.fromList (Lists.map
     ("ft" ~> pair (Core.fieldTypeName $ var "ft") (Core.fieldTypeType $ var "ft"))
-    (var "sfields")) $
+    (var "sfields")) :: TypedTerm (M.Map Name Type)) $
   "dfltConstraints" <~ Optionals.toList (Optionals.map
     ("r" ~> Typing.typeConstraint (var "cod")
       (Substitution.substInType @@ var "isubst" @@ (Typing.inferenceResultType $ var "r"))
@@ -550,7 +551,7 @@ inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
         (var "itype")
         (Core.typeFunction $ Core.functionType (var "ftype") (var "cod"))
         (string "case type"))
-      (Maps.lookup (var "fname") (var "caseMap")))
+      (Maps.lookup (var "fname" :: TypedTerm Name) (var "caseMap")))
     (var "fnames") (var "itypes")) $
   "dfltClassConstraints" <~ Optionals.fromOptional Maps.empty (Optionals.map (reify Typing.inferenceResultClassConstraints) (var "dfltResult")) $
   "allElemConstraints" <~ mergeClassConstraints @@ var "caseElemConstraints" @@ var "dfltClassConstraints" $
@@ -578,9 +579,9 @@ inferTypeOfCollection = define "inferTypeOfCollection" $
   "varResult" <~ Names.freshName @@ var "fcx" $
   "var" <~ Pairs.first (var "varResult") $
   "fcx2" <~ Pairs.second (var "varResult") $
-  "classConstraints" <~ Logic.ifElse (Sets.null $ var "classNames")
-    Maps.empty
-    (Maps.singleton (var "var") (Core.typeVariableConstraints $ Lists.map ("n" ~> Core.typeClassConstraintSimple (var "n")) $ Sets.toList $ var "classNames")) $
+  "classConstraints" <~ Logic.ifElse (Sets.null $ (var "classNames" :: TypedTerm (S.Set Name)))
+    (Maps.empty :: TypedTerm (M.Map Name TypeVariableConstraints))
+    (Maps.singleton (var "var") (Core.typeVariableConstraints $ Lists.map ("n" ~> Core.typeClassConstraintSimple (var "n")) $ Sets.toList $ (var "classNames" :: TypedTerm (S.Set Name)))) $
   Logic.ifElse (Lists.null $ var "els")
     (right (yieldWithConstraints
       @@ var "fcx2"
@@ -614,7 +615,7 @@ inferTypeOfEither :: TypedTermDefinition (InferenceContext -> Graph -> Prelude.E
 inferTypeOfEither = define "inferTypeOfEither" $
   doc "Infer the type of an either value (Either version)" $
   "fcx" ~> "cx" ~> "e" ~>
-  Eithers.either_
+  Eithers.either
     ("l" ~>
       "r1" <<~ inferTypeOfTerm @@ var "fcx" @@ var "cx" @@ var "l" @@ (string "either left value") $
       "fcx2" <~ Typing.inferenceResultContext (var "r1") $
@@ -720,17 +721,17 @@ inferTypeOfLet = define "inferTypeOfLet" $
   "bindings0" <~ Core.letBindings (var "let0") $
   "body0" <~ Core.letBody (var "let0") $
   "names" <~ Lists.map (reify Core.bindingName) (var "bindings0") $
-  "nameSet" <~ Sets.fromList (var "names") $
+  "nameSet" <~ Sets.fromList (var "names" :: TypedTerm [Name]) $
   "toPair" <~ ("binding" ~>
     "name" <~ Core.bindingName (var "binding") $
     "term" <~ Core.bindingTerm (var "binding") $
-    pair (var "name") $ Lists.filter ("n" ~> Sets.member (var "n") (var "nameSet")) $
+    pair (var "name") $ Lists.filter ("n" ~> Sets.member (var "n" :: TypedTerm Name) (var "nameSet")) $
       Sets.toList $ Variables.freeVariablesInTerm @@ var "term") $
   "adjList" <~ Lists.map (var "toPair") (var "bindings0") $
-  "groups" <~ Sorting.topologicalSortComponents @@ var "adjList" $
-  "bindingMap" <~ Maps.fromList (Lists.zip (var "names") (var "bindings0")) $
+  "groups" <~ (Sorting.topologicalSortComponents :: TypedTermDefinition ([(Name, [Name])] -> [[Name]])) @@ var "adjList" $
+  "bindingMap" <~ (Maps.fromList (Lists.zip (var "names") (var "bindings0")) :: TypedTerm (M.Map Name Binding)) $
   "createLet" <~ ("e" ~> "group" ~> Core.termLet $ Core.let_
-    (Optionals.cat $ Lists.map ("n" ~> Maps.lookup (var "n") (var "bindingMap")) (var "group"))
+    (Optionals.cat $ Lists.map ("n" ~> Maps.lookup (var "n" :: TypedTerm Name) (var "bindingMap")) (var "group"))
     (var "e")) $
   "rewrittenLet" <~ Lists.foldl (var "createLet") (var "body0") (Lists.reverse $ var "groups") $
   "restoreLet" <~ ("iterm" ~>
@@ -749,9 +750,9 @@ inferTypeOfLet = define "inferTypeOfLet" $
     "result" <~ var "helper" @@ (Lists.length $ var "groups") @@ list ([] :: [TypedTerm Binding]) @@ var "iterm" $
     "bindingList" <~ Pairs.first (var "result") $
     "e" <~ Pairs.second (var "result") $
-    "bindingMap2" <~ Maps.fromList (Lists.map ("b" ~> pair (Core.bindingName $ var "b") (var "b")) (var "bindingList")) $
+    "bindingMap2" <~ (Maps.fromList (Lists.map ("b" ~> pair (Core.bindingName $ var "b") (var "b")) (var "bindingList")) :: TypedTerm (M.Map Name Binding)) $
     Core.termLet $ Core.let_
-      (Optionals.cat $ Lists.map ("n" ~> Maps.lookup (var "n") (var "bindingMap2")) (var "names"))
+      (Optionals.cat $ Lists.map ("n" ~> Maps.lookup (var "n" :: TypedTerm Name) (var "bindingMap2")) (var "names"))
       (var "e")) $
   "rewriteResult" <~ ("iresult" ~>
     "fcxR" <~ Typing.inferenceResultContext (var "iresult") $
@@ -815,7 +816,7 @@ inferTypeOfLetNormalized = define "inferTypeOfLetNormalized" $
   "originalBindingConstraints" <~ Lists.foldl
     ("acc" ~> "b" ~>
       Optionals.cases (Core.bindingTypeScheme $ var "b") (var "acc") ("ts" ~> Optionals.cases (Core.typeSchemeConstraints $ var "ts") (var "acc") ("c" ~> mergeClassConstraints @@ var "acc" @@ var "c")))
-    Maps.empty
+    (Maps.empty :: TypedTerm (M.Map Name TypeVariableConstraints))
     (var "bins0") $
   "originalConstraintsSubst" <~ Substitution.substInClassConstraints @@ var "composedSubst" @@ var "originalBindingConstraints" $
 
@@ -919,8 +920,8 @@ inferTypeOfMap = define "inferTypeOfMap" $
   "vvarResult" <~ Names.freshName @@ var "fcx2" $
   "vvar" <~ Pairs.first (var "vvarResult") $
   "fcx3" <~ Pairs.second (var "vvarResult") $
-  "keyConstraints" <~ Maps.singleton (var "kvar") (Core.typeVariableConstraints $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]) $
-  Logic.ifElse (Maps.null $ var "m")
+  "keyConstraints" <~ (Maps.singleton (var "kvar") (Core.typeVariableConstraints $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]) :: TypedTerm (M.Map Name TypeVariableConstraints)) $
+  Logic.ifElse (Maps.null $ (var "m" :: TypedTerm (M.Map Term Term)))
     (right (yieldWithConstraints
       @@ var "fcx3"
       @@ (buildTypeApplicationTerm
@@ -930,7 +931,7 @@ inferTypeOfMap = define "inferTypeOfMap" $
       @@ Substitution.idTypeSubst
       @@ var "keyConstraints"))
     ("kRp" <<~ inferMany @@ var "fcx3" @@ var "cx" @@
-      (Lists.map ("k" ~> pair (var "k") (string "map key")) $ Maps.keys $ var "m") $
+      (Lists.map ("k" ~> pair (var "k") (string "map key")) $ Maps.keys $ (var "m" :: TypedTerm (M.Map Term Term))) $
     "kResults" <~ Pairs.first (var "kRp") $
     "fcx4" <~ Pairs.second (var "kRp") $
     "kterms" <~ Pairs.first (var "kResults") $
@@ -938,7 +939,7 @@ inferTypeOfMap = define "inferTypeOfMap" $
     "ksubst" <~ Pairs.first (Pairs.second $ Pairs.second $ var "kResults") $
     "kElemConstraints" <~ Pairs.second (Pairs.second $ Pairs.second $ var "kResults") $
     "vRp" <<~ inferMany @@ var "fcx4" @@ (Substitution.substInContext @@ var "ksubst" @@ var "cx") @@
-      (Lists.map ("v" ~> pair (var "v") (string "map value")) $ Maps.elems $ var "m") $
+      (Lists.map ("v" ~> pair (var "v") (string "map value")) $ Maps.elems $ (var "m" :: TypedTerm (M.Map Term Term))) $
     "vResults" <~ Pairs.first (var "vRp") $
     "fcx5" <~ Pairs.second (var "vRp") $
     "vterms" <~ Pairs.first (var "vResults") $
@@ -1252,7 +1253,7 @@ inferTypesOfTemporaryBindings :: TypedTermDefinition (InferenceContext -> Graph 
 inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
   doc "Infer types for temporary let bindings (Either version)" $
   "fcx" ~> "cx" ~> "bins" ~>
-  "emptyResult" <~ (right $ pair (pair (list ([] :: [TypedTerm Term])) (pair (list ([] :: [TypedTerm Type])) (pair (Substitution.idTypeSubst) Maps.empty))) (var "fcx")) $
+  "emptyResult" <~ (right $ pair (pair (list ([] :: [TypedTerm Term])) (pair (list ([] :: [TypedTerm Type])) (pair (Substitution.idTypeSubst) (Maps.empty :: TypedTerm (M.Map Name TypeVariableConstraints))))) (var "fcx")) $
   Optionals.cases (Lists.uncons (var "bins")) (var "emptyResult") ("binsUc" ~>
     "binding" <~ Pairs.first (var "binsUc") $
     "tl" <~ Pairs.second (var "binsUc") $
@@ -1273,7 +1274,7 @@ inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
     "c1Inferred" <~ Typing.inferenceResultClassConstraints (var "result1") $
 
     -- Extract constraints from the original binding's TypeScheme
-    "originalBindingConstraints" <<~ Optionals.cases (Core.bindingTypeScheme $ var "binding") (right Maps.empty) ("ts" ~>
+    "originalBindingConstraints" <<~ Optionals.cases (Core.bindingTypeScheme $ var "binding") (right (Maps.empty :: TypedTerm (M.Map Name TypeVariableConstraints))) ("ts" ~>
         "tsResult" <~ Resolution.instantiateTypeScheme @@ var "fcx2" @@ var "ts" $
         "instantiatedTs" <~ Pairs.first (var "tsResult") $
         "freshConstraints" <~ Optionals.fromOptional Maps.empty (Core.typeSchemeConstraints $ var "instantiatedTs") $
@@ -1336,11 +1337,11 @@ mergeClassConstraints = define "mergeClassConstraints" $
     ("acc" ~> "pair" ~>
       "k" <~ Pairs.first (var "pair") $
       "v" <~ Pairs.second (var "pair") $
-      Optionals.cases (Maps.lookup (var "k") (var "acc")) (Maps.insert (var "k") (var "v") (var "acc")) ("existing" ~>
+      Optionals.cases (Maps.lookup (var "k" :: TypedTerm Name) (var "acc")) (Maps.insert (var "k") (var "v") (var "acc" :: TypedTerm (M.Map Name TypeVariableConstraints))) ("existing" ~>
           "merged" <~ Core.typeVariableConstraints (Lists.nub $ Lists.concat2 (Core.typeVariableConstraintsClasses $ var "existing") (Core.typeVariableConstraintsClasses $ var "v")) $
-          Maps.insert (var "k") (var "merged") (var "acc")))
+          Maps.insert (var "k") (var "merged") (var "acc" :: TypedTerm (M.Map Name TypeVariableConstraints))))
     (var "m1")
-    (Maps.toList $ var "m2")
+    (Maps.toList $ (var "m2" :: TypedTerm (M.Map Name TypeVariableConstraints)))
 
 showInferenceResult :: TypedTermDefinition (InferenceResult -> String)
 showInferenceResult = define "showInferenceResult" $

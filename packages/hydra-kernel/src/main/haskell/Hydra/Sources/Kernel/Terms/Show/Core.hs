@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Terms.Show.Core where
 
@@ -12,18 +13,18 @@ import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Lib.Math     as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -80,12 +81,12 @@ module_ = Module {
      toDefinition list_,
      toDefinition literal,
      toDefinition literalType,
-     toDefinition map_,
+     toDefinition (map_ :: TypedTermDefinition ((Int -> String) -> (v -> String) -> M.Map Int v -> String)),
      toDefinition optional_,
      toDefinition pair_,
      toDefinition projection,
      toDefinition readTerm,
-     toDefinition set_,
+     toDefinition (set_ :: TypedTermDefinition ((Int -> String) -> S.Set Int -> String)),
      toDefinition term,
      toDefinition type_,
      toDefinition typeScheme]
@@ -99,7 +100,7 @@ binding = define "binding" $
   "el" ~>
   "name" <~ unwrap _Name @@ (Core.bindingName $ var "el") $
   "t" <~ Core.bindingTerm (var "el") $
-  "typeStr" <~ Optionals.cases (Core.bindingTypeScheme $ var "el") (string "") ("ts" ~> Strings.concat [string ":(", typeScheme @@ var "ts", string ")"]) $
+  "typeStr" <~ Optionals.cases (Core.bindingTypeScheme $ var "el") (string "") ("ts" ~> Strings.cat (list [string ":(", typeScheme @@ var "ts", string ")"])) $
   Strings.cat $ list [
     var "name",
     var "typeStr",
@@ -128,7 +129,7 @@ either_ :: TypedTermDefinition ((a -> String) -> (b -> String) -> Prelude.Either
 either_ = define "either" $
   doc "Show an Either value using given functions for left and right" $
   "showA" ~> "showB" ~> "e" ~>
-  Eithers.either_
+  Eithers.either
     ("a" ~> Strings.cat2 (string "left(") (Strings.cat2 (var "showA" @@ var "a") (string ")")))
     ("b" ~> Strings.cat2 (string "right(") (Strings.cat2 (var "showB" @@ var "b") (string ")")))
     (var "e")
@@ -156,7 +157,7 @@ fields :: TypedTermDefinition ([Field] -> String)
 fields = define "fields" $
   doc "Show a list of fields as a string" $
   "flds" ~>
-  "fieldStrs" <~ Lists.map field (var "flds") $
+  "fieldStrs" <~ Lists.map (asTerm field) (var "flds") $
   Strings.cat $ list [
     string "{",
     Strings.intercalate (string ", ") (var "fieldStrs"),
@@ -237,7 +238,7 @@ let_ = define "let" $
   "l" ~>
   "bindings" <~ Core.letBindings (var "l") $
   "env" <~ Core.letBody (var "l") $
-  "bindingStrs" <~ Lists.map binding (var "bindings") $
+  "bindingStrs" <~ Lists.map (asTerm binding) (var "bindings") $
   Strings.cat $ list [
     string "let ",
     Strings.intercalate (string ", ") (var "bindingStrs"),
@@ -276,14 +277,17 @@ literalType = define "literalType" $
     _LiteralType_integer>>: "it" ~> integerType @@ var "it",
     _LiteralType_string>>: constant $ string "string"]
 
-map_ :: TypedTermDefinition ((k -> String) -> (v -> String) -> M.Map k v -> String)
+-- map_/set_ carry an `Ord` constraint + `forall` because the generated `Hydra.Dsl.Lib.{Maps,Sets}`
+-- expose the primitive's `Ord` key/element constraint (the old hand-written `Meta.Lib.*` did not),
+-- which also forces a placeholder concrete type at registration in `definitions`. See #467.
+map_ :: forall k v. Ord k => TypedTermDefinition ((k -> String) -> (v -> String) -> M.Map k v -> String)
 map_ = define "map" $
   doc "Show a map using given functions to show keys and values" $
   "showK" ~> "showV" ~> "m" ~>
   "pairStrs" <~ Lists.map ("p" ~> Strings.cat $ list [
     var "showK" @@ (Pairs.first $ var "p"),
     string ": ",
-    var "showV" @@ (Pairs.second $ var "p")]) (Maps.toList $ var "m") $
+    var "showV" @@ (Pairs.second $ var "p")]) (Maps.toList (var "m" :: TypedTerm (M.Map k v))) $
   Strings.cat $ list [
     string "{",
     Strings.intercalate (string ", ") (var "pairStrs"),
@@ -324,11 +328,11 @@ readTerm = define "readTerm" $
   doc "A placeholder for reading terms from their serialized form. Not implemented." $
   "s" ~> just $ Core.termLiteral $ Core.literalString $ var "s"
 
-set_ :: TypedTermDefinition ((a -> String) -> S.Set a -> String)
+set_ :: forall a. Ord a => TypedTermDefinition ((a -> String) -> S.Set a -> String)
 set_ = define "set" $
   doc "Show a set using a given function to show each element" $
   "f" ~> "xs" ~>
-  "elementStrs" <~ Lists.map (var "f") (Sets.toList $ var "xs") $
+  "elementStrs" <~ Lists.map (var "f") (Sets.toList (var "xs" :: TypedTerm (S.Set a))) $
   Strings.cat $ list [
     string "{",
     Strings.intercalate (string ", ") (var "elementStrs"),
@@ -348,13 +352,13 @@ term = define "term" $
     _Term_annotated>>: "at" ~> term @@ (Core.annotatedTermBody $ var "at"),
     _Term_application>>: "app" ~>
       "terms" <~ var "gatherTerms" @@ (list ([] :: [TypedTerm Term])) @@ var "app" $
-      "termStrs" <~ Lists.map term (var "terms") $
+      "termStrs" <~ Lists.map (asTerm term) (var "terms") $
       Strings.cat $ list [
         string "(",
         Strings.intercalate (string " @ ") (var "termStrs"),
         string ")"],
     _Term_cases>>: caseStatement,
-    _Term_either>>: "e" ~> Eithers.either_
+    _Term_either>>: "e" ~> Eithers.either
       ("l" ~> Strings.cat $ list [
         string "left(",
         term @@ var "l",
@@ -367,7 +371,7 @@ term = define "term" $
     _Term_lambda>>: lambda,
     _Term_let>>: "l" ~> let_ @@ var "l",
     _Term_list>>: "els" ~>
-      "termStrs" <~ Lists.map term (var "els") $
+      "termStrs" <~ Lists.map (asTerm term) (var "els") $
       Strings.cat $ list [
         string "[",
         Strings.intercalate (string ", ") (var "termStrs"),
@@ -380,7 +384,7 @@ term = define "term" $
         term @@ (Pairs.second $ var "p")]) $
       Strings.cat $ list [
         string "{",
-        Strings.intercalate (string ", ") $ Lists.map (var "entry") $ Maps.toList $ var "m",
+        Strings.intercalate (string ", ") $ Lists.map (var "entry") $ Maps.toList (var "m" :: TypedTerm (M.Map Term Term)),
         string "}"],
     _Term_optional>>: "mt" ~> Optionals.cases (var "mt") (string "none") ("t" ~> Strings.cat $ list [
         string "given(",
@@ -404,7 +408,7 @@ term = define "term" $
     _Term_set>>: "s" ~>
       Strings.cat $ list [
         string "{",
-        Strings.intercalate (string ", ") (Lists.map term $ Sets.toList $ var "s"),
+        Strings.intercalate (string ", ") (Lists.map (asTerm term) $ Sets.toList $ var "s"),
         string "}"],
     _Term_typeLambda>>: "ta" ~>
       "param" <~ unwrap _Name @@ (Core.typeLambdaParameter $ var "ta") $
@@ -462,7 +466,7 @@ typeScheme = define "typeScheme" $
     Core.typeVariableConstraintsClasses $ Pairs.second $ var "p") $
   "tc" <~ optCases (Core.typeSchemeConstraints (var "ts"))
     (list ([] :: [TypedTerm String]))
-    ("m" ~> Lists.concat $ Lists.map (var "toConstraintPairs") $ Maps.toList $ var "m") $
+    ("m" ~> Lists.concat $ Lists.map (var "toConstraintPairs") $ Maps.toList (var "m" :: TypedTerm (M.Map Name TypeVariableConstraints))) $
   Strings.cat $ list [
     string "(",
     var "fa",
@@ -480,7 +484,7 @@ type_ = define "type" $
   doc "Show a type as a string" $
   "typ" ~>
   "showRowType" <~ ("flds" ~>
-    "fieldStrs" <~ Lists.map fieldType (var "flds") $
+    "fieldStrs" <~ Lists.map (asTerm fieldType) (var "flds") $
     Strings.cat $ list [
       string "{",
       Strings.intercalate (string ", ") (var "fieldStrs"),
@@ -502,7 +506,7 @@ type_ = define "type" $
     _Type_annotated>>: "at" ~> type_ @@ (Core.annotatedTypeBody $ var "at"),
     _Type_application>>: "app" ~>
       "types" <~ var "gatherTypes" @@ (list ([] :: [TypedTerm Type])) @@ var "app" $
-      "typeStrs" <~ Lists.map type_ (var "types") $
+      "typeStrs" <~ Lists.map (asTerm type_) (var "types") $
       Strings.cat $ list [
         string "(",
         Strings.intercalate (string " @ ") (var "typeStrs"),
@@ -531,7 +535,7 @@ type_ = define "type" $
         string ")"],
     _Type_function>>: "ft" ~>
       "types" <~ var "gatherFunctionTypes" @@ (list ([] :: [TypedTerm Type])) @@ var "typ" $
-      "typeStrs" <~ Lists.map type_ (var "types") $
+      "typeStrs" <~ Lists.map (asTerm type_) (var "types") $
       Strings.cat $ list [
         string "(",
         Strings.intercalate (string " → ") (var "typeStrs"),

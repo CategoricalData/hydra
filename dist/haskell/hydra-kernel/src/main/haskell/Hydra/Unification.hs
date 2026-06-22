@@ -62,7 +62,7 @@ joinTypes cx left right comment =
           joinList =
                   \lefts -> \rights -> Logic.ifElse (Equality.equal (Lists.length lefts) (Lists.length rights)) (Right (Lists.zipWith joinOne lefts rights)) cannotUnify
           joinRowTypes =
-                  \left2 -> \right2 -> Logic.ifElse (Logic.and (Equality.equal (Lists.length (Lists.map Core.fieldTypeName left2)) (Lists.length (Lists.map Core.fieldTypeName right2))) (Lists.foldl Logic.and True (Lists.zipWith (\left3 -> \right3 -> Equality.equal (Core.unName left3) (Core.unName right3)) (Lists.map Core.fieldTypeName left2) (Lists.map Core.fieldTypeName right2)))) (joinList (Lists.map Core.fieldTypeType left2) (Lists.map Core.fieldTypeType right2)) cannotUnify
+                  \left2 -> \right2 -> Logic.ifElse (Logic.and (Equality.equal (Lists.length (Lists.map Core.fieldTypeName left2)) (Lists.length (Lists.map Core.fieldTypeName right2))) (Lists.foldl (\acc -> \x -> Logic.and acc x) True (Lists.zipWith (\left3 -> \right3 -> Equality.equal (Core.unName left3) (Core.unName right3)) (Lists.map Core.fieldTypeName left2) (Lists.map Core.fieldTypeName right2)))) (joinList (Lists.map Core.fieldTypeType left2) (Lists.map Core.fieldTypeType right2)) cannotUnify
       in case sleft of
         Core.TypeApplication v0 -> case sright of
           Core.TypeApplication v1 -> Right [

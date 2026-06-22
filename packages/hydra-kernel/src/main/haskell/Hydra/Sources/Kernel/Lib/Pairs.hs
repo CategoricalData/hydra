@@ -1,10 +1,11 @@
 -- | Primitive declarations for the hydra.lib.pairs namespace.
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Lib.Pairs where
 
 import Hydra.Kernel
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All

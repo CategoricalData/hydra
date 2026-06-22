@@ -23,9 +23,9 @@ import Hydra.Testing
 
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Dependencies as Dependencies
-import qualified Hydra.Dsl.Meta.Lib.Maps as Maps
-import qualified Hydra.Dsl.Meta.Lib.Pairs as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
+import qualified Hydra.Dsl.Lib.Maps as Maps
+import qualified Hydra.Dsl.Lib.Pairs as Pairs
+import qualified Hydra.Dsl.Lib.Strings as Strings
 
 
 ns :: ModuleName

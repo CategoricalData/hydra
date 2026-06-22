@@ -1,12 +1,13 @@
 -- | Primitive declarations for the hydra.lib.sets namespace.
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Lib.Sets where
 
 import Hydra.Kernel
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Sets     as Sets
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
@@ -29,6 +30,11 @@ module_ = Module {
   where
     sx = Types.var "x"
     ssx = Types.set sx
+    -- The default-impl args below (difference_/intersection_/map_/union_/unions_) carry an `:: ...Int...`
+    -- placeholder instantiation. The generated `Hydra.Dsl.Lib.Sets` (unlike the old `Meta.Lib.Sets`)
+    -- exposes the primitive's `Ord` element constraint, so these polymorphic defs need a concrete `Ord`
+    -- type here to satisfy GHC. `Int` is arbitrary and carries no meaning — the emitted primitive is
+    -- type-agnostic and fully polymorphic; only the Haskell typechecker sees the `Int`. See #467.
     definitions = [
       primNoDef "delete"   "Remove an element from a set." (setOpSig (sx Types.~> ssx Types.~> ssx)) [
         "delete(x, s) returns s with x removed; if x is not in s, s is returned unchanged.",
@@ -37,7 +43,7 @@ module_ = Module {
       toPrimitive "Compute the difference of two sets: elements in the first that are not in the second." (setOpSig (ssx Types.~> ssx Types.~> ssx)) [
         "difference(s1, s2) returns the set of elements that are in s1 but not in s2.",
         "Requires an 'ordering' constraint on the element type.",
-        "Total. Corresponds to Haskell's Data.Set.difference :: Ord a => Set a -> Set a -> Set a."] difference_,
+        "Total. Corresponds to Haskell's Data.Set.difference :: Ord a => Set a -> Set a -> Set a."] (difference_ :: TypedTermDefinition (S.Set Int -> S.Set Int -> S.Set Int)),
       primNoDef "empty"    "The empty set." (setOpSig ssx) [
         "empty is the set with no elements.",
         "Requires an 'ordering' constraint on the element type.",
@@ -54,12 +60,12 @@ module_ = Module {
       toPrimitive "Compute the intersection of two sets: elements present in both." (setOpSig (ssx Types.~> ssx Types.~> ssx)) [
         "intersection(s1, s2) returns the set of elements present in both s1 and s2.",
         "Requires an 'ordering' constraint on the element type.",
-        "Total. Corresponds to Haskell's Data.Set.intersection :: Ord a => Set a -> Set a -> Set a."] intersection_,
+        "Total. Corresponds to Haskell's Data.Set.intersection :: Ord a => Set a -> Set a -> Set a."] (intersection_ :: TypedTermDefinition (S.Set Int -> S.Set Int -> S.Set Int)),
       toPrimitive "Map a function over a set." mapSig [
         "map(f, s) returns the set of f(x) for each x in s. Elements that f maps to the same image are\
         \ deduplicated by the result type's ordering.",
         "Requires 'ordering' constraints on both the input and output element types.",
-        "Total. Corresponds to Haskell's Data.Set.map :: (Ord a, Ord b) => (a -> b) -> Set a -> Set b."] map_,
+        "Total. Corresponds to Haskell's Data.Set.map :: (Ord a, Ord b) => (a -> b) -> Set a -> Set b."] (map_ :: TypedTermDefinition ((Int -> Int) -> S.Set Int -> S.Set Int)),
       primNoDef "member"   "Test whether an element is in a set." (setOpSig (sx Types.~> ssx Types.~> Types.boolean)) [
         "member(x, s) returns true iff x is an element of s.",
         "Requires an 'ordering' constraint on the element type.",
@@ -84,12 +90,12 @@ module_ = Module {
       toPrimitive "Compute the union of two sets: elements in either." (setOpSig (ssx Types.~> ssx Types.~> ssx)) [
         "union(s1, s2) returns the set of elements that are in s1 or in s2 (or both).",
         "Requires an 'ordering' constraint on the element type.",
-        "Total. Corresponds to Haskell's Data.Set.union :: Ord a => Set a -> Set a -> Set a."] union_,
+        "Total. Corresponds to Haskell's Data.Set.union :: Ord a => Set a -> Set a -> Set a."] (union_ :: TypedTermDefinition (S.Set Int -> S.Set Int -> S.Set Int)),
       toPrimitive "Compute the union of a list of sets." (setOpSig (Types.list ssx Types.~> ssx)) [
         "unions(ss) returns the union of every set in ss. Equivalent to folding union over ss starting\
         \ from empty.",
         "Requires an 'ordering' constraint on the element type.",
-        "Total. Corresponds to Haskell's Data.Set.unions :: Ord a => [Set a] -> Set a."] unions_]
+        "Total. Corresponds to Haskell's Data.Set.unions :: Ord a => [Set a] -> Set a."] (unions_ :: TypedTermDefinition ([S.Set Int] -> S.Set Int))]
 
 -- map needs two ord-constrained type vars: x and y
 mapSig :: TermSignature
@@ -112,50 +118,50 @@ sig = typeSchemeToTermSignature
 -- Default implementations.
 
 -- difference s1 s2 = foldl (\acc el -> ifElse (member el s2) acc (insert el acc)) empty (toList s1)
-difference_ :: TypedTermDefinition (S.Set a -> S.Set a -> S.Set a)
+difference_ :: forall a. Ord a => TypedTermDefinition (S.Set a -> S.Set a -> S.Set a)
 difference_ = define "difference" $
   doc "Set difference, defined in terms of member and insert." $
   "s1" ~> "s2" ~>
     Lists.foldl
-      ("acc" ~> "el" ~> Logic.ifElse (Sets.member (var "el") (var "s2"))
+      ("acc" ~> "el" ~> Logic.ifElse (Sets.member (var "el" :: TypedTerm a) (var "s2"))
         (var "acc" :: TypedTerm (S.Set a))
-        (Sets.insert (var "el") (var "acc")))
+        (Sets.insert (var "el" :: TypedTerm a) (var "acc")))
       (Sets.empty :: TypedTerm (S.Set a))
-      (Sets.toList (var "s1"))
+      (Sets.toList (var "s1" :: TypedTerm (S.Set a)))
 
 -- intersection s1 s2 = foldl (\acc el -> ifElse (member el s2) (insert el acc) acc) empty (toList s1)
-intersection_ :: TypedTermDefinition (S.Set a -> S.Set a -> S.Set a)
+intersection_ :: forall a. Ord a => TypedTermDefinition (S.Set a -> S.Set a -> S.Set a)
 intersection_ = define "intersection" $
   doc "Set intersection, defined in terms of member and insert." $
   "s1" ~> "s2" ~>
     Lists.foldl
-      ("acc" ~> "el" ~> Logic.ifElse (Sets.member (var "el") (var "s2"))
-        (Sets.insert (var "el") (var "acc"))
+      ("acc" ~> "el" ~> Logic.ifElse (Sets.member (var "el" :: TypedTerm a) (var "s2"))
+        (Sets.insert (var "el" :: TypedTerm a) (var "acc"))
         (var "acc" :: TypedTerm (S.Set a)))
       (Sets.empty :: TypedTerm (S.Set a))
-      (Sets.toList (var "s1"))
+      (Sets.toList (var "s1" :: TypedTerm (S.Set a)))
 
 -- map f s = fromList (Lists.map f (toList s))
-map_ :: TypedTermDefinition ((a -> b) -> S.Set a -> S.Set b)
+map_ :: forall a b. (Ord a, Ord b) => TypedTermDefinition ((a -> b) -> S.Set a -> S.Set b)
 map_ = define "map" $
   doc "Map a function over a set, defined in terms of toList, lists.map and fromList." $
-  "f" ~> "s" ~> Sets.fromList (Lists.map (var "f") (Sets.toList (var "s")))
+  "f" ~> "s" ~> (Sets.fromList (Lists.map (var "f") (Sets.toList (var "s" :: TypedTerm (S.Set a)))) :: TypedTerm (S.Set b))
 
 -- union s1 s2 = foldl (\acc el -> insert el acc) s2 (toList s1)
-union_ :: TypedTermDefinition (S.Set a -> S.Set a -> S.Set a)
+union_ :: forall a. Ord a => TypedTermDefinition (S.Set a -> S.Set a -> S.Set a)
 union_ = define "union" $
   doc "Set union, defined in terms of insert and toList." $
   "s1" ~> "s2" ~>
     Lists.foldl
-      ("acc" ~> "el" ~> Sets.insert (var "el") (var "acc"))
+      ("acc" ~> "el" ~> Sets.insert (var "el" :: TypedTerm a) (var "acc"))
       (var "s2" :: TypedTerm (S.Set a))
-      (Sets.toList (var "s1"))
+      (Sets.toList (var "s1" :: TypedTerm (S.Set a)))
 
 -- unions ss = foldl union empty ss
-unions_ :: TypedTermDefinition ([S.Set a] -> S.Set a)
+unions_ :: forall a. Ord a => TypedTermDefinition ([S.Set a] -> S.Set a)
 unions_ = define "unions" $
   doc "Union of a list of sets, defined in terms of foldl and union." $
   "ss" ~> Lists.foldl
-    ("acc" ~> "s" ~> Sets.union (var "acc") (var "s"))
+    ("acc" ~> "s" ~> Sets.union (var "acc" :: TypedTerm (S.Set a)) (var "s"))
     (Sets.empty :: TypedTerm (S.Set a))
     (var "ss")

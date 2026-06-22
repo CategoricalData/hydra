@@ -23,9 +23,9 @@ import Hydra.Testing
 
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
-import qualified Hydra.Dsl.Meta.Lib.Sets as Sets
-import qualified Hydra.Dsl.Meta.Lib.Lists as Lists
-import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
+import qualified Hydra.Dsl.Lib.Sets as Sets
+import qualified Hydra.Dsl.Lib.Lists as Lists
+import qualified Hydra.Dsl.Lib.Strings as Strings
 
 import qualified Data.Set                     as S
 

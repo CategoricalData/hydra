@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 -- | Serialization functions for TypeScript AST to abstract syntax expressions.
 --
 -- This module provides functions to convert TypeScript AST types to Hydra's
@@ -7,7 +9,7 @@ module Hydra.Sources.TypeScript.Serde where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -21,17 +23,17 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -224,7 +226,7 @@ arrayExpressionToExpr = define "arrayExpressionToExpr" $
   doc "Convert an array expression to an AST expression" $
   lambda "arr" $
     Serialization.bracketList @@ Serialization.inlineStyle @@
-      (Lists.map (arrayElementToExpr) (var "arr"))
+      (Lists.map (asTerm arrayElementToExpr) (var "arr"))
 
 arrayPatternToExpr :: TypedTermDefinition (TS.ArrayPattern -> Expr)
 arrayPatternToExpr = define "arrayPatternToExpr" $
@@ -232,7 +234,7 @@ arrayPatternToExpr = define "arrayPatternToExpr" $
   lambda "arr" $
     Serialization.bracketList @@ Serialization.inlineStyle @@
       (Lists.map
-        (lambda "maybeP" $ Optionals.cases (var "maybeP") (Serialization.cst @@ string "") (patternToExpr))
+        (lambda "maybeP" $ Optionals.cases (var "maybeP") (Serialization.cst @@ string "") (asTerm patternToExpr))
         (var "arr"))
 
 arrowFunctionExpressionToExpr :: TypedTermDefinition (TS.ArrowFunctionExpression -> Expr)
@@ -248,7 +250,7 @@ arrowFunctionExpressionToExpr = define "arrowFunctionExpressionToExpr" $
     -- Always parenthesize. A bare untyped identifier could appear without
     -- parens (`x => x`), but a typed pattern (`(x: T) => x`) requires them.
     -- Defaulting to parens keeps the emitter simple.
-    "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (patternToExpr) (var "params")),
+    "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (asTerm patternToExpr) (var "params")),
     "bodyExpr">: cases TS._ArrowFunctionBody (var "body") Nothing [
       -- An object-literal body needs explicit parens: `() => { ... }` would
       -- otherwise be parsed as an arrow with a block body. Same for sequence
@@ -370,7 +372,7 @@ blockStatementToExpr = define "blockStatementToExpr" $
   doc "Convert a block statement to an AST expression. Renders as `{ stmt1\\n stmt2\\n ... }` using curlyBlock + newlineSep: statements are separated by newlines, NOT by commas (which curlyBracesList's default would insert and which TypeScript rejects between block statements)." $
   lambda "block" $
     Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
-      (Serialization.newlineSep @@ (Lists.map (statementToExpr) (var "block")))
+      (Serialization.newlineSep @@ (Lists.map (asTerm statementToExpr) (var "block")))
 
 breakStatementToExpr :: TypedTermDefinition (TS.BreakStatement -> Expr)
 breakStatementToExpr = define "breakStatementToExpr" $
@@ -400,7 +402,7 @@ callExpressionToExpr = define "callExpressionToExpr" $
       TS._Expression_sequence>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "callee"),
       TS._Expression_object>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "callee"),
       TS._Expression_function>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "callee")],
-    "argsExpr">: Serialization.parenListAdaptive @@ (Lists.map (expressionToExpr) (var "args")),
+    "argsExpr">: Serialization.parenListAdaptive @@ (Lists.map (asTerm expressionToExpr) (var "args")),
     "optionalDot">: Logic.ifElse (var "optional") (string "?.") (string "")] $
     Serialization.spaceSep @@ list [
       var "calleeExpr",
@@ -427,7 +429,7 @@ classDeclarationToExpr = define "classDeclarationToExpr" $
     "body">: project TS._ClassDeclaration TS._ClassDeclaration_body @@ var "cls",
     "extendsClause">: Optionals.cases (var "superClass") (list ([] :: [TypedTerm Expr])) (lambda "s" $ list [Serialization.cst @@ string "extends", expressionToExpr @@ var "s"]),
     "bodyExpr">: Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
-      (Serialization.newlineSep @@ (Lists.map (methodDefinitionToExpr) (var "body")))] $
+      (Serialization.newlineSep @@ (Lists.map (asTerm methodDefinitionToExpr) (var "body")))] $
     Serialization.spaceSep @@ (Lists.concat $ list [
       list [Serialization.cst @@ string "class", identifierToExpr @@ var "id"],
       var "extendsClause",
@@ -604,7 +606,7 @@ expressionToExpr = define "expressionToExpr" $
       TS._Expression_unary>>: lambda "un" $ unaryExpressionToExpr @@ var "un",
       TS._Expression_assignment>>: lambda "assign" $ assignmentExpressionToExpr @@ var "assign",
       TS._Expression_sequence>>: lambda "exprs" $
-        Serialization.parenListAdaptive @@ (Lists.map (expressionToExpr) (var "exprs")),
+        Serialization.parenListAdaptive @@ (Lists.map (asTerm expressionToExpr) (var "exprs")),
       TS._Expression_this>>: constant $ Serialization.cst @@ string "this",
       TS._Expression_new>>: lambda "call" $
         Serialization.spaceSep @@ list [
@@ -684,8 +686,8 @@ forStatementToExpr = define "forStatementToExpr" $
     "initExpr">: Optionals.cases (var "init") (Serialization.cst @@ string "") (lambda "i" $ cases TS._ForInit (var "i") Nothing [
         TS._ForInit_variable>>: lambda "v" $ variableDeclarationToExpr @@ var "v",
         TS._ForInit_expression>>: lambda "e" $ expressionToExpr @@ var "e"]),
-    "testExpr">: Optionals.cases (var "test") (Serialization.cst @@ string "") (expressionToExpr),
-    "updateExpr">: Optionals.cases (var "update") (Serialization.cst @@ string "") (expressionToExpr)] $
+    "testExpr">: Optionals.cases (var "test") (Serialization.cst @@ string "") (asTerm expressionToExpr),
+    "updateExpr">: Optionals.cases (var "update") (Serialization.cst @@ string "") (asTerm expressionToExpr)] $
     Serialization.spaceSep @@ list [
       Serialization.cst @@ string "for",
       Serialization.parenListAdaptive @@ list [var "initExpr", var "testExpr", var "updateExpr"],
@@ -711,7 +713,7 @@ functionDeclarationToExpr = define "functionDeclarationToExpr" $
     "funcKw">: Logic.ifElse (var "generator")
       (Serialization.cst @@ string "function*")
       (Serialization.cst @@ string "function"),
-    "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (patternToExpr) (var "params")),
+    "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (asTerm patternToExpr) (var "params")),
     -- Inject `: any` between params and body so mutually-recursive nested
     -- functions don't trigger TS7024 ("function lacks return type and is
     -- referenced indirectly in its own return"). The AST has no
@@ -745,7 +747,7 @@ functionExpressionToExpr = define "functionExpressionToExpr" $
       (Serialization.cst @@ string "function*")
       (Serialization.cst @@ string "function"),
     "nameExpr">: Optionals.cases (var "mid") (list ([] :: [TypedTerm Expr])) (lambda "id" $ list [identifierToExpr @@ var "id"]),
-    "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (patternToExpr) (var "params"))] $
+    "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (asTerm patternToExpr) (var "params"))] $
     Serialization.spaceSep @@ (Lists.concat $ list [
       var "asyncKw",
       list [var "funcKw"],
@@ -780,7 +782,7 @@ importDeclarationToExpr = define "importDeclarationToExpr" $
     "specifiers">: project TS._ImportDeclaration TS._ImportDeclaration_specifiers @@ var "imp",
     "source">: project TS._ImportDeclaration TS._ImportDeclaration_source @@ var "imp",
     "sourceExpr">: stringLiteralToExpr @@ var "source",
-    "specExprs">: Lists.map (importSpecifierToExpr) (var "specifiers")] $
+    "specExprs">: Lists.map (asTerm importSpecifierToExpr) (var "specifiers")] $
     Logic.ifElse (Lists.null $ var "specifiers")
       -- import "module"
       (Serialization.suffix @@ string ";" @@
@@ -894,7 +896,7 @@ memberExpressionToExpr = define "memberExpressionToExpr" $
         Serialization.brackets @@ Serialization.squareBrackets @@ Serialization.inlineStyle @@ var "propExpr"])
       -- obj.prop or obj?.prop
       (Serialization.ifx @@
-        (Logic.ifElse (var "optional") TypeScriptOperators.optionalChainOp TypeScriptOperators.memberOp) @@
+        (Logic.ifElse (var "optional") (asTerm TypeScriptOperators.optionalChainOp) (asTerm TypeScriptOperators.memberOp)) @@
         var "objExpr" @@ var "propExpr")
 
 methodDefinitionToExpr :: TypedTermDefinition (TS.MethodDefinition -> Expr)
@@ -917,7 +919,7 @@ methodDefinitionToExpr = define "methodDefinitionToExpr" $
       (expressionToExpr @@ var "key"),
     "params">: project TS._FunctionExpression TS._FunctionExpression_params @@ var "value",
     "body">: project TS._FunctionExpression TS._FunctionExpression_body @@ var "value",
-    "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (patternToExpr) (var "params"))] $
+    "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (asTerm patternToExpr) (var "params"))] $
     Serialization.spaceSep @@ (Lists.concat $ list [
       var "staticKw",
       var "kindKw",
@@ -953,7 +955,7 @@ namedExportToExpr = define "namedExportToExpr" $
   lambda "n" $ lets [
     "specifiers">: project TS._NamedExport TS._NamedExport_specifiers @@ var "n",
     "source">: project TS._NamedExport TS._NamedExport_source @@ var "n",
-    "specExprs">: Lists.map (exportSpecifierToExpr) (var "specifiers"),
+    "specExprs">: Lists.map (asTerm exportSpecifierToExpr) (var "specifiers"),
     "fromClause">: Optionals.cases (var "source") (list ([] :: [TypedTerm Expr])) (lambda "s" $ list [Serialization.cst @@ string "from", stringLiteralToExpr @@ var "s"])] $
     Serialization.suffix @@ string ";" @@
       (Serialization.spaceSep @@ (Lists.concat $ list [
@@ -981,7 +983,7 @@ objectExpressionToExpr = define "objectExpressionToExpr" $
   doc "Convert an object expression to an AST expression" $
   lambda "obj" $
     Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@
-      (Lists.map (propertyToExpr) (var "obj"))
+      (Lists.map (asTerm propertyToExpr) (var "obj"))
 
 objectPatternPropertyToExpr :: TypedTermDefinition (TS.ObjectPatternProperty -> Expr)
 objectPatternPropertyToExpr = define "objectPatternPropertyToExpr" $
@@ -998,7 +1000,7 @@ objectPatternToExpr = define "objectPatternToExpr" $
   lambda "obj" $ lets [
     "props">: project TS._ObjectPattern TS._ObjectPattern_properties @@ var "obj"] $
     Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@
-      (Lists.map (objectPatternPropertyToExpr) (var "props"))
+      (Lists.map (asTerm objectPatternPropertyToExpr) (var "props"))
 
 patternToExpr :: TypedTermDefinition (TS.Pattern -> Expr)
 patternToExpr = define "patternToExpr" $
@@ -1037,7 +1039,7 @@ programToExpr = define "programToExpr" $
   lambda "prog" $ lets [
     "body">: project TS._Program TS._Program_body @@ var "prog",
     "warning">: list [Serialization.cst @@ (toLineComment @@ Constants.warningAutoGeneratedFile)],
-    "items">: Lists.map (moduleItemToExpr) (var "body")] $
+    "items">: Lists.map (asTerm moduleItemToExpr) (var "body")] $
     Serialization.doubleNewlineSep @@ (Lists.concat $ list [var "warning", var "items"])
 
 propertyToExpr :: TypedTermDefinition (TS.Property -> Expr)
@@ -1111,7 +1113,7 @@ switchCaseToExpr = define "switchCaseToExpr" $
         Serialization.cst @@ string "case",
         expressionToExpr @@ var "t",
         Serialization.cst @@ string ":"])] $
-    Serialization.newlineSep @@ (Lists.cons (var "caseLabel") (Lists.map (statementToExpr) (var "consequent")))
+    Serialization.newlineSep @@ (Lists.cons (var "caseLabel") (Lists.map (asTerm statementToExpr) (var "consequent")))
 
 switchStatementToExpr :: TypedTermDefinition (TS.SwitchStatement -> Expr)
 switchStatementToExpr = define "switchStatementToExpr" $
@@ -1123,7 +1125,7 @@ switchStatementToExpr = define "switchStatementToExpr" $
       Serialization.cst @@ string "switch",
       Serialization.parens @@ (expressionToExpr @@ var "discriminant"),
       Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
-        (Serialization.newlineSep @@ (Lists.map (switchCaseToExpr) (var "cases")))]
+        (Serialization.newlineSep @@ (Lists.map (asTerm switchCaseToExpr) (var "cases")))]
 
 templateLiteralToExpr :: TypedTermDefinition (TS.TemplateLiteral -> Expr)
 templateLiteralToExpr = define "templateLiteralToExpr" $
@@ -1174,7 +1176,7 @@ toTypeScriptComments = define "toTypeScriptComments" $
           (string " *")
           (Strings.cat2 (string " * ") (var "line")))
         (Strings.lines $ var "desc")),
-    "tagLines">: Lists.map (documentationTagToLine) (var "tags"),
+    "tagLines">: Lists.map (asTerm documentationTagToLine) (var "tags"),
     "allLines">: Lists.concat $ list [var "descLines", var "tagLines"]] $
     Logic.ifElse (Lists.null $ var "allLines")
       (string "")
@@ -1307,14 +1309,14 @@ typeExpressionToString = define "typeExpressionToString" $
           string ") => ",
           typeExpressionToString @@ var "rt"],
       TS._TypeExpression_object>>: constant $ string "Object",
-      TS._TypeExpression_union>>: lambda "u" $ Strings.intercalate (string "|") (Lists.map (typeExpressionToString) (var "u")),
+      TS._TypeExpression_union>>: lambda "u" $ Strings.intercalate (string "|") (Lists.map (asTerm typeExpressionToString) (var "u")),
       TS._TypeExpression_parameterized>>: lambda "p" $ lets [
         "base">: project TS._ParameterizedTypeExpression TS._ParameterizedTypeExpression_base @@ var "p",
         "args">: project TS._ParameterizedTypeExpression TS._ParameterizedTypeExpression_arguments @@ var "p"] $
         Strings.cat $ list [
           typeExpressionToString @@ var "base",
           string "<",
-          Strings.intercalate (string ", ") (Lists.map (typeExpressionToString) (var "args")),
+          Strings.intercalate (string ", ") (Lists.map (asTerm typeExpressionToString) (var "args")),
           string ">"],
       TS._TypeExpression_optional>>: lambda "o" $ Strings.cat2 (string "?") (typeExpressionToString @@ var "o")]
 
@@ -1365,7 +1367,7 @@ variableDeclarationToExpr = define "variableDeclarationToExpr" $
     Serialization.suffix @@ string ";" @@
       (Serialization.spaceSep @@ list [
         variableKindToExpr @@ var "kind",
-        Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map (variableDeclaratorToExpr) (var "declarations"))])
+        Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map (asTerm variableDeclaratorToExpr) (var "declarations"))])
 
 variableDeclaratorToExpr :: TypedTermDefinition (TS.VariableDeclarator -> Expr)
 variableDeclaratorToExpr = define "variableDeclaratorToExpr" $

@@ -22,7 +22,7 @@ import qualified Data.Map                     as M
 import Hydra.Testing
 import Hydra.Dsl.AsTerm
 import qualified Hydra.Dsl.Ast as Ast
-import qualified Hydra.Dsl.Meta.Lib.Math as Math
+import qualified Hydra.Dsl.Lib.Math as Math
 import qualified Hydra.Sources.Kernel.Terms.Serialization as Serialization
 
 import Hydra.Ast (Expr, Op, BlockStyle)

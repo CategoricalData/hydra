@@ -8,17 +8,17 @@ import hydra.dsl.Packaging;
 import hydra.dsl.Types;
 import hydra.dsl.java.Environment;
 import hydra.dsl.java.Syntax;
-import hydra.dsl.meta.lib.Eithers;
-import hydra.dsl.meta.lib.Equality;
-import hydra.dsl.meta.lib.Lists;
-import hydra.dsl.meta.lib.Literals;
-import hydra.dsl.meta.lib.Logic;
-import hydra.dsl.meta.lib.Maps;
-import hydra.dsl.meta.lib.Math_;
-import hydra.dsl.meta.lib.Optionals;
-import hydra.dsl.meta.lib.Pairs;
-import hydra.dsl.meta.lib.Sets;
-import hydra.dsl.meta.lib.Strings;
+import hydra.dsl.lib.Eithers;
+import hydra.dsl.lib.Equality;
+import hydra.dsl.lib.Lists;
+import hydra.dsl.lib.Literals;
+import hydra.dsl.lib.Logic;
+import hydra.dsl.lib.Maps;
+import hydra.dsl.lib.Math_;
+import hydra.dsl.lib.Optionals;
+import hydra.dsl.lib.Pairs;
+import hydra.dsl.lib.Sets;
+import hydra.dsl.lib.Strings;
 import hydra.packaging.Definition;
 import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
@@ -314,9 +314,9 @@ public class Coder {
                                                     Sets.member(var("v"), var("schemeTypeVars"))),
                                                 proj(TypeScheme.TYPE_, TypeScheme.VARIABLES, "ts"))),
                                         Logic.ifElse(
-                                            Logic.or_(
+                                            Logic.or(
                                                 Lists.null_(var("schemeVars")),
-                                                Logic.not_(
+                                                Logic.not(
                                                     Equality.equal(
                                                         Lists.length(var("schemeVars")),
                                                         Lists.length(var("tApps"))))),
@@ -369,14 +369,14 @@ public class Coder {
                         Sets.fromList(
                             Lists.filter(
                                 lambda("v",
-                                    Logic.or_(
+                                    Logic.or(
                                         Sets.member(var("v"), var("inScope")),
                                         apply(ref(Coder.isLambdaBoundVariable), var("v")))),
                                 Sets.toList(var("castVars"))))),
                     field("isSafe",
-                        Logic.or_(
+                        Logic.or(
                             Sets.null_(var("trusted")),
-                            Logic.or_(
+                            Logic.or(
                                 Sets.null_(var("javaTypeVars")),
                                 Sets.null_(Sets.difference(var("javaTypeVars"), var("trusted")))))),
                     Logic.ifElse(
@@ -463,7 +463,7 @@ public class Coder {
                                         Maps.lookup(var("hydra.constants.keyType"), var("ann")),
                                         var("ann"),
                                         lambda("typeTerm",
-                                            Eithers.either_(
+                                            Eithers.either(
                                                 constant(var("ann")),
                                                 lambda("t",
                                                     let("t'",
@@ -1150,22 +1150,22 @@ public class Coder {
                                         let("bname",
                                             proj(Binding.TYPE_, Binding.NAME, "b"),
                                             Logic.ifElse(
-                                                Logic.and_(
-                                                    Logic.not_(
+                                                Logic.and(
+                                                    Logic.not(
                                                         Sets.member(
                                                             var("bname"),
                                                             var("recursiveVars"))),
-                                                    Logic.and_(
-                                                        Logic.and_(
+                                                    Logic.and(
+                                                        Logic.and(
                                                             apply(
                                                                 var("hydra.predicates.isComplexBinding"),
                                                                 var("g"),
                                                                 var("b")),
-                                                            Logic.not_(
+                                                            Logic.not(
                                                                 apply(
                                                                     var("hydra.predicates.isTrivialTerm"),
                                                                     proj(Binding.TYPE_, Binding.TERM, "b")))),
-                                                        Logic.not_(
+                                                        Logic.not(
                                                             apply(
                                                                 ref(Coder.bindingIsFunctionType),
                                                                 var("b"))))),
@@ -1373,7 +1373,7 @@ public class Coder {
                                         Maps.lookup(var("hydra.constants.keyType"), var("anns")),
                                         var("hydra.lib.maps.empty"),
                                         lambda("typeTerm",
-                                            Eithers.either_(
+                                            Eithers.either(
                                                 constant(var("hydra.lib.maps.empty")),
                                                 lambda("annType",
                                                     casesWithDefault(Term.TYPE_,
@@ -1575,7 +1575,7 @@ public class Coder {
                     field(
                         Term.EITHER,
                         lambda("e",
-                            Eithers.either_(
+                            Eithers.either(
                                 lambda("t",
                                     apply(
                                         ref(Coder.buildSubstFromAnnotations_go),
@@ -1813,8 +1813,8 @@ public class Coder {
                                         Type.VARIABLE,
                                         lambda("cn",
                                             Logic.ifElse(
-                                                Logic.and_(
-                                                    Logic.not_(Equality.equal(var("fn"), var("cn"))),
+                                                Logic.and(
+                                                    Logic.not(Equality.equal(var("fn"), var("cn"))),
                                                     Sets.member(var("cn"), var("svs"))),
                                                 Maps.singleton(var("fn"), var("cn")),
                                                 var("hydra.lib.maps.empty"))))))),
@@ -2014,7 +2014,7 @@ public class Coder {
                                 JavaSymbolClass.UNARY_FUNCTION,
                                 unit()))),
                     let("hasTypeParams",
-                        Logic.not_(
+                        Logic.not(
                             Lists.null_(
                                 proj(TypeScheme.TYPE_, TypeScheme.VARIABLES, "ts"))),
                         Logic.ifElse(
@@ -2848,11 +2848,11 @@ public class Coder {
     field("keepFlags",
                                                 Lists.map(
                                                     lambda("v",
-                                                        Logic.and_(
+                                                        Logic.and(
                                                             Sets.member(
                                                                 var("v"),
                                                                 var("schemeTypeVars")),
-                                                            Logic.not_(
+                                                            Logic.not(
                                                                 Maps.member(
                                                                     var("v"),
                                                                     var("overgenSubst"))))),
@@ -2884,9 +2884,9 @@ public class Coder {
                                                                 var("t"))),
                                                         var("filteredFallback0"))))),
                                             Logic.ifElse(
-                                                Logic.or_(
+                                                Logic.or(
                                                     Lists.null_(var("schemeVars")),
-                                                    Logic.not_(
+                                                    Logic.not(
                                                         Equality.equal(
                                                             Lists.length(var("schemeVars")),
                                                             Lists.length(var("filteredFallback"))))),
@@ -2942,7 +2942,7 @@ public class Coder {
                             var("args")),
                         lambda("mArgTypes",
                             Logic.ifElse(
-                                Logic.not_(
+                                Logic.not(
                                     Lists.null_(
                                         Lists.filter(
                                             lambda("m", Optionals.isNone(var("m"))),
@@ -2969,7 +2969,7 @@ public class Coder {
                                         Lists.null_(
                                             Lists.filter(
                                                 lambda("p",
-                                                    Logic.not_(
+                                                    Logic.not(
                                                         apply(
                                                             ref(Coder.typesMatch),
                                                             apply(
@@ -3151,7 +3151,7 @@ public class Coder {
                                                                 field("nonEmptyParamLines",
                                                                     Lists.filter(
                                                                         lambda("l",
-                                                                            Logic.not_(
+                                                                            Logic.not(
                                                                                 Equality.equal(
                                                                                     var("l"),
                                                                                     string("")))),
@@ -3229,8 +3229,8 @@ public class Coder {
                                                                                 Optionals.cases(
                                                                                     var("parentName"),
                                                                                     Logic.ifElse(
-                                                                                        Logic.and_(
-                                                                                            Logic.not_(
+                                                                                        Logic.and(
+                                                                                            Logic.not(
                                                                                                 var("isInner")),
                                                                                             var("isSer")),
                                                                                         list(
@@ -4232,19 +4232,19 @@ public class Coder {
                                 var("outVars")))),
                     field("nonSelfVars",
                         Lists.filter(
-                            lambda("v", Logic.not_(Equality.equal(var("v"), var("inVar")))),
+                            lambda("v", Logic.not(Equality.equal(var("v"), var("inVar")))),
                             var("outVars"))),
                     field("safeNonSelfVars",
                         Lists.filter(
                             lambda("v",
-                                Logic.and_(
-                                    Logic.not_(Sets.member(var("v"), var("directInputVars"))),
-                                    Logic.not_(Equality.equal(just(var("v")), var("codVar"))))),
+                                Logic.and(
+                                    Logic.not(Sets.member(var("v"), var("directInputVars"))),
+                                    Logic.not(Equality.equal(just(var("v")), var("codVar"))))),
                             var("nonSelfVars"))),
                     Logic.ifElse(
-                        Logic.and_(
+                        Logic.and(
                             Equality.gte(var("selfRefCount"), int32(2)),
-                            Logic.not_(Lists.null_(var("safeNonSelfVars")))),
+                            Logic.not(Lists.null_(var("safeNonSelfVars")))),
                         Lists.foldl(
                             lambda("s", lambda("v", Maps.insert(var("v"), var("inVar"), var("s")))),
                             var("subst"),
@@ -4263,7 +4263,7 @@ public class Coder {
                         ref(Coder.extractTypeApplicationArgs),
                         apply(var("hydra.strip.deannotateType"), var("d"))),
                     Logic.ifElse(
-                        Logic.not_(Lists.null_(var("args"))),
+                        Logic.not(Lists.null_(var("args"))),
                         Eithers.mapList(
                             lambda("t",
                                 Eithers.bind(
@@ -4512,12 +4512,12 @@ public class Coder {
                                                                                 var("initialCall"),
                                                                                 var("rargs"))))),
                                                                 Logic.ifElse(
-                                                                    Logic.and_(
+                                                                    Logic.and(
                                                                         apply(
                                                                             ref(Coder.isRecursiveVariable),
                                                                             var("aliases"),
                                                                             var("name")),
-                                                                        Logic.not_(
+                                                                        Logic.not(
                                                                             apply(
                                                                                 ref(Coder.isLambdaBoundIn),
                                                                                 var("name"),
@@ -4565,7 +4565,7 @@ public class Coder {
                                                                                 field(
                                                                                     "filteredTypeApps",
                                                                                     Logic.ifElse(
-                                                                                        Logic.or_(
+                                                                                        Logic.or(
                                                                                             Sets.null_(
                                                                                                 var("trusted")),
                                                                                             Sets.null_(
@@ -4582,7 +4582,7 @@ public class Coder {
                                                                                                             var("t"))),
                                                                                                     var("typeApps"))),
                                                                                             Logic.ifElse(
-                                                                                                Logic.not_(
+                                                                                                Logic.not(
                                                                                                     Sets.null_(
                                                                                                         Sets.difference(
                                                                                                             var("allVars"),
@@ -4764,7 +4764,7 @@ public class Coder {
                                                         lambda("jarg",
                                                             Eithers.bind(
                                                                 Logic.ifElse(
-                                                                    Logic.not_(
+                                                                    Logic.not(
                                                                         Lists.null_(
                                                                             apply(
                                                                                 ref(Coder.javaTypeArgumentsForType),
@@ -4801,7 +4801,7 @@ public class Coder {
                                                                                     lambda("rt",
                                                                                         right(
                                                                                             Logic.ifElse(
-                                                                                                Logic.not_(
+                                                                                                Logic.not(
                                                                                                     Lists.null_(
                                                                                                         apply(
                                                                                                             ref(Coder.javaTypeArgumentsForType),
@@ -4811,7 +4811,7 @@ public class Coder {
                                                                                 lambda("rt",
                                                                                     right(
                                                                                         Logic.ifElse(
-                                                                                            Logic.not_(
+                                                                                            Logic.not(
                                                                                                 Lists.null_(
                                                                                                     apply(
                                                                                                         ref(Coder.javaTypeArgumentsForType),
@@ -5595,7 +5595,7 @@ public class Coder {
                                     lambda("i",
                                         wrap(Name.TYPE_,
                                             Strings.cat2(string("p"), Literals.showInt32(var("i"))))),
-                                    Math_.range_(int32(0), Math_.sub(var("arity"), int32(1))))),
+                                    Math_.range(int32(0), Math_.sub(var("arity"), int32(1))))),
                             field("paramExprs",
                                 Lists.map(
                                     lambda("p",
@@ -6567,7 +6567,7 @@ public class Coder {
                                                                 var("tparams"),
                                                                 Lists.filter(
                                                                     lambda("v",
-                                                                        Logic.not_(
+                                                                        Logic.not(
                                                                             Maps.member(
                                                                                 var("v"),
                                                                                 var("overgenSubst")))),
@@ -7071,7 +7071,7 @@ public class Coder {
                                                                                     var("methodName")),
                                                                                 var("targs"),
                                                                                 list(var("expr")))))))),
-                                                        Eithers.either_(
+                                                        Eithers.either(
                                                             lambda("term1",
                                                                 Eithers.bind(
                                                                     Optionals.cases(
@@ -7587,7 +7587,7 @@ public class Coder {
                                     field("recName",
                                         proj(Record.TYPE_, Record.TYPE_NAME, "rec")),
                                     field("mRecordType",
-                                        Eithers.either_(
+                                        Eithers.either(
                                             constant(nothing()),
                                             lambda("t", just(var("t"))),
                                             apply(
@@ -7667,10 +7667,10 @@ public class Coder {
                                                                                     var("hydra.strip.deannotateType"),
                                                                                     var("recTyp")))),
                                                                         Logic.ifElse(
-                                                                            Logic.or_(
+                                                                            Logic.or(
                                                                                 Lists.null_(
                                                                                     var("args")),
-                                                                                Logic.not_(
+                                                                                Logic.not(
                                                                                     Equality.equal(
                                                                                         Lists.length(
                                                                                             var("args")),
@@ -7742,7 +7742,7 @@ public class Coder {
                                                                 var("recName")),
                                                             Eithers.bind(
                                                                 Logic.ifElse(
-                                                                    Logic.not_(
+                                                                    Logic.not(
                                                                         Lists.null_(var("tyapps"))),
                                                                     Eithers.bind(
                                                                         Eithers.mapList(
@@ -8017,7 +8017,7 @@ public class Coder {
                                         lambda("fieldIsUnit",
                                             Eithers.bind(
                                                 Logic.ifElse(
-                                                    Logic.or_(
+                                                    Logic.or(
                                                         apply(
                                                             var("hydra.predicates.isUnitTerm"),
                                                             apply(
@@ -8338,7 +8338,7 @@ public class Coder {
                                                                                                                                 var("annotated"),
                                                                                                                                 var("cx"),
                                                                                                                                 var("g"))))),
-                                                                                                                Eithers.either_(
+                                                                                                                Eithers.either(
                                                                                                                     lambda(
                                                                                                                         "term1",
                                                                                                                         Eithers.bind(
@@ -8475,7 +8475,7 @@ public class Coder {
                                 Term.VARIABLE,
                                 lambda("n", Equality.equal(var("n"), var("funcName"))))))),
                     Logic.ifElse(
-                        Logic.and_(
+                        Logic.and(
                             var("isSelfCall"),
                             Equality.equal(
                                 Lists.length(var("gatherArgs")),
@@ -8484,7 +8484,7 @@ public class Coder {
                             field("changePairs",
                                 Lists.filter(
                                     lambda("pair",
-                                        Logic.not_(
+                                        Logic.not(
                                             casesWithDefault(Term.TYPE_,
                                                 apply(
                                                     var("hydra.strip.deannotateAndDetypeTerm"),
@@ -9328,7 +9328,7 @@ public class Coder {
                                                 var("resolved"),
                                                 right(
                                                     Logic.ifElse(
-                                                        Logic.or_(
+                                                        Logic.or(
                                                             Sets.member(
                                                                 var("name"),
                                                                 var("boundVars")),
@@ -9483,7 +9483,7 @@ public class Coder {
                 "cx",
                 "g",
                 Logic.ifElse(
-                    Logic.or_(
+                    Logic.or(
                         Sets.member(var("name"), var("boundVars")),
                         Sets.member(var("name"), var("inScopeTypeParams"))),
                     right(nothing()),
@@ -9497,7 +9497,7 @@ public class Coder {
                                 right(nothing()),
                                 lambda("ts",
                                     Logic.ifElse(
-                                        Logic.not_(
+                                        Logic.not(
                                             Lists.null_(
                                                 proj(TypeScheme.TYPE_, TypeScheme.VARIABLES, "ts"))),
                                         right(nothing()),
@@ -9556,7 +9556,7 @@ public class Coder {
                                             ref(Utils.javaIdentifier),
                                             ref(Names.valueFieldName)))))),
                         Logic.ifElse(
-                            Logic.and_(
+                            Logic.and(
                                 Equality.equal(
                                     var("name"),
                                     wrap(Name.TYPE_,
@@ -9590,12 +9590,12 @@ public class Coder {
                                                     ref(Utils.javaIdentifier),
                                                     ref(Names.valueFieldName))))))),
                             Logic.ifElse(
-                                Logic.and_(
+                                Logic.and(
                                     apply(
                                         ref(Coder.isRecursiveVariable),
                                         var("aliases"),
                                         var("name")),
-                                    Logic.not_(
+                                    Logic.not(
                                         apply(
                                             ref(Coder.isLambdaBoundIn),
                                             var("name"),
@@ -9618,11 +9618,11 @@ public class Coder {
                                                 ref(Names.getMethodName)),
                                             list()))),
                                 Logic.ifElse(
-                                    Logic.and_(
+                                    Logic.and(
                                         Sets.member(
                                             var("name"),
                                             proj(Aliases.TYPE_, Aliases.THUNKED_VARS, "aliases")),
-                                        Logic.not_(
+                                        Logic.not(
                                             apply(
                                                 ref(Coder.isLambdaBoundIn),
                                                 var("name"),
@@ -9785,7 +9785,7 @@ public class Coder {
                             lambda("i",
                                 wrap(Name.TYPE_,
                                     Strings.cat2(string("p"), Literals.showInt32(var("i"))))),
-                            Math_.range_(int32(0), Math_.sub(var("arity"), int32(1))))),
+                            Math_.range(int32(0), Math_.sub(var("arity"), int32(1))))),
                     field("paramExprs",
                         Lists.map(
                             lambda("pn",
@@ -10189,17 +10189,17 @@ public class Coder {
     field("keepFlags",
                                                 Lists.map(
                                                     lambda("v",
-                                                        Logic.and_(
+                                                        Logic.and(
                                                             Sets.member(
                                                                 var("v"),
                                                                 var("schemeTypeVars")),
-                                                            Logic.not_(
+                                                            Logic.not(
                                                                 Maps.member(
                                                                     var("v"),
                                                                     var("overgenSubst"))))),
                                                     var("schemeVars")))),
                                             Logic.ifElse(
-                                                Logic.not_(
+                                                Logic.not(
                                                     Equality.equal(
                                                         Lists.length(var("schemeVars")),
                                                         Lists.length(var("allTypeArgs")))),
@@ -10224,7 +10224,7 @@ public class Coder {
                             lambda("p", Pairs.second(var("p"))),
                             Lists.zip(var("allTypeArgs"), var("keepFlags")))),
                     Logic.ifElse(
-                        Logic.not_(Maps.null_(var("overgenSubst"))),
+                        Logic.not(Maps.null_(var("overgenSubst"))),
                         Lists.map(
                             lambda("t",
                                 apply(
@@ -10248,7 +10248,7 @@ public class Coder {
                             var("name"),
                             Lists.find(
                                 lambda("lv",
-                                    Logic.and_(
+                                    Logic.and(
                                         apply(ref(Coder.isLambdaBoundIn_isQualified), var("lv")),
                                         Equality.equal(
                                             apply(var("hydra.names.localNameOf"), var("lv")),
@@ -10427,7 +10427,7 @@ public class Coder {
                                 field("mMethodOverride",
                                     Pairs.second(var("wrapResult"))),
                                 Logic.ifElse(
-                                    Logic.or_(
+                                    Logic.or(
                                         apply(ref(Coder.isLocalVariable), var("name")),
                                         var("isLambdaBound")),
                                     Eithers.bind(
@@ -11041,22 +11041,22 @@ public class Coder {
         () -> lambda(
                 "name",
                 "lambdaVars",
-                Logic.or_(
+                Logic.or(
                     Sets.member(var("name"), var("lambdaVars")),
-                    Logic.or_(
-                        Logic.and_(
+                    Logic.or(
+                        Logic.and(
                             apply(ref(Coder.isLambdaBoundIn_isQualified), var("name")),
                             Optionals.isGiven(
                                 Lists.find(
                                     lambda("lv",
-                                        Logic.and_(
+                                        Logic.and(
                                             apply(ref(Coder.isLambdaBoundIn_isQualified), var("lv")),
                                             Equality.equal(
                                                 apply(var("hydra.names.localNameOf"), var("lv")),
                                                 apply(var("hydra.names.localNameOf"), var("name"))))),
                                     Sets.toList(var("lambdaVars"))))),
-                        Logic.and_(
-                            Logic.not_(apply(ref(Coder.isLambdaBoundIn_isQualified), var("name"))),
+                        Logic.and(
+                            Logic.not(apply(ref(Coder.isLambdaBoundIn_isQualified), var("name"))),
                             Sets.member(
                                 wrap(Name.TYPE_,
                                     apply(var("hydra.names.localNameOf"), var("name"))),
@@ -11146,14 +11146,14 @@ public class Coder {
                                     field("rest",
                                         Pairs.second(var("p"))),
                                     Logic.ifElse(
-                                        Logic.not_(Equality.equal(var("firstCh"), int32(116))),
+                                        Logic.not(Equality.equal(var("firstCh"), int32(116))),
                                         bool(false),
-                                        Logic.and_(
-                                            Logic.not_(Lists.null_(var("rest"))),
+                                        Logic.and(
+                                            Logic.not(Lists.null_(var("rest"))),
                                             Lists.null_(
                                                 Lists.filter(
                                                     lambda("c",
-                                                        Logic.not_(
+                                                        Logic.not(
                                                             apply(
                                                                 ref(Coder.isUnresolvedInferenceVar_isDigit),
                                                                 var("c")))),
@@ -11163,7 +11163,7 @@ public class Coder {
     public static final Def isUnresolvedInferenceVar_isDigit = def(
         "isUnresolvedInferenceVar_isDigit",
         () -> lambda("c",
-                Logic.and_(Equality.gte(var("c"), int32(48)), Equality.lte(var("c"), int32(57)))));
+                Logic.and(Equality.gte(var("c"), int32(48)), Equality.lte(var("c"), int32(57)))));
 
     public static final Def java11Features = def(
         "java11Features",
@@ -11740,7 +11740,7 @@ public class Coder {
                     field("nLambdaDoms",
                         Lists.length(var("lambdaDoms"))),
                     Logic.ifElse(
-                        Logic.and_(
+                        Logic.and(
                             Equality.gt(var("nLambdaDoms"), int32(0)),
                             Equality.gt(var("nArgs"), int32(0))),
                         let(
@@ -11912,7 +11912,7 @@ public class Coder {
                         ref(Utils.sanitizeJavaName),
                         apply(unwrap(Name.TYPE_), var("fname"))),
                     Logic.ifElse(
-                        Logic.or_(
+                        Logic.or(
                             Equality.equal(var("base"), string("build")),
                             Equality.equal(var("base"), string("builder"))),
                         Strings.cat2(var("base"), string("_")),
@@ -12574,13 +12574,13 @@ public class Coder {
                         Sets.fromList(Maps.keys(var("argSubst")))),
                     field("unresolvedVars",
                         Lists.filter(
-                            lambda("v", Logic.not_(Sets.member(var("v"), var("resolvedVars")))),
+                            lambda("v", Logic.not(Sets.member(var("v"), var("resolvedVars")))),
                             var("schemeVars"))),
                     field("usedTypes",
                         Sets.fromList(Maps.elems(var("argSubst")))),
                     field("unusedIrTypes",
                         Lists.filter(
-                            lambda("t", Logic.not_(Sets.member(var("t"), var("usedTypes")))),
+                            lambda("t", Logic.not(Sets.member(var("t"), var("usedTypes")))),
                             var("fallbackTypeApps"))),
                     field("remainingSubst",
                         Maps.fromList(Lists.zip(var("unresolvedVars"), var("unusedIrTypes")))),
@@ -13131,7 +13131,7 @@ public class Coder {
         () -> lambda(
                 java.util.Arrays.asList("label", "n", "aliases", "anns", "tyapps", "cx", "g"),
                 Logic.ifElse(
-                    Logic.not_(Lists.null_(var("tyapps"))),
+                    Logic.not(Lists.null_(var("tyapps"))),
                     apply(
                         ref(Coder.takeTypeArgs),
                         var("label"),
@@ -13887,7 +13887,7 @@ public class Coder {
                                                                                     string("p"),
                                                                                     Literals.showInt32(
                                                                                         var("i"))))),
-                                                                        Math_.range_(
+                                                                        Math_.range(
                                                                             int32(0),
                                                                             Math_.sub(
                                                                                 var("arity"),
@@ -14396,11 +14396,11 @@ public class Coder {
                         apply(ref(Coder.lazyFlagsForPrimitive), var("g"), var("name"))),
                     field("anyLazy",
                         Lists.foldl(
-                            lambda("b", "f", Logic.or_(var("b"), var("f"))),
+                            lambda("b", "f", Logic.or(var("b"), var("f"))),
                             bool(false),
                             var("lazyFlags"))),
                     Logic.ifElse(
-                        Logic.and_(
+                        Logic.and(
                             var("anyLazy"),
                             Equality.equal(Lists.length(var("args")), Lists.length(var("lazyFlags")))),
                         pair(

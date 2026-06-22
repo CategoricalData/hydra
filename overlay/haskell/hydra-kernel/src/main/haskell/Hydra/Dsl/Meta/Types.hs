@@ -2,6 +2,7 @@
 --   these functions enable you to build terms (programs) which build types.
 
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Dsl.Meta.Types (
   module Hydra.Dsl.Meta.Base,
@@ -11,7 +12,7 @@ module Hydra.Dsl.Meta.Types (
 import Hydra.Kernel
 import Hydra.Dsl.AsTerm
 import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
-import qualified Hydra.Dsl.Meta.Lib.Maps as Maps
+import qualified Hydra.Dsl.Lib.Maps as Maps
 import Hydra.Dsl.Meta.Core as Core hiding (name, unName)
 import Hydra.Dsl.Meta.Base
 

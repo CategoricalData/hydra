@@ -8,9 +8,9 @@ adds custom helpers for Comparison union constructors.
 """
 
 import hydra.dsl.meta.phantoms as Phantoms
-import hydra.dsl.meta.lib.lists as Lists
-import hydra.dsl.meta.lib.maps as Maps
-import hydra.dsl.meta.lib.sets as Sets
+import hydra.dsl.lib.lists as Lists
+import hydra.dsl.lib.maps as Maps
+import hydra.dsl.lib.sets as Sets
 from hydra.core import Name
 from hydra.typed import TypedTerm
 

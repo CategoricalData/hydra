@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 
 -- | The encoder half of Hydra's JSON coder. Every choice in this module is in
 -- service of byte-stable round-trip with 'Hydra.Sources.Json.Decode'. The
@@ -8,7 +9,7 @@ module Hydra.Sources.Json.Encode where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -22,17 +23,17 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -208,7 +209,7 @@ toJson = define "toJson" $
       cases _Term (var "strippedTerm")
         (Just $ left $ string "expected set term") [
         _Term_set>>: "vals" ~>
-          "terms" <~ (Sets.toList $ var "vals") $
+          "terms" <~ (Sets.toList (var "vals" :: TypedTerm (S.Set Term))) $
           "results" <~ (Eithers.mapList ("t" ~> toJson @@ var "types" @@ var "tname" @@ var "elemType" @@ var "t") (var "terms")) $
           Eithers.map ("vs" ~> Json.valueArray $ var "vs") (var "results")],
 
@@ -283,7 +284,7 @@ toJson = define "toJson" $
             Optionals.cases (Lists.find
                 ("ft" ~> Equality.equal (Core.unName $ Core.fieldTypeName $ var "ft") (var "fname"))
                 (var "rt")) (left $ Strings.cat $ list [string "unknown variant: ", var "fname"]) ("ft" ~> right $ Core.fieldTypeType $ var "ft")) $
-          Eithers.either_
+          Eithers.either
             ("err" ~> left $ var "err")
             ("ftype" ~>
               "encodedUnion" <~ (toJson @@ var "types" @@ var "tname" @@ var "ftype" @@ var "fterm") $
@@ -315,7 +316,7 @@ toJson = define "toJson" $
             "v" <~ (Pairs.second $ var "kv") $
             "encodedK" <~ (toJson @@ var "types" @@ var "tname" @@ var "keyType" @@ var "k") $
             "encodedV" <~ (toJson @@ var "types" @@ var "tname" @@ var "valType" @@ var "v") $
-            Eithers.either_
+            Eithers.either
               ("err" ~> left $ var "err")
               ("ek" ~> Eithers.map
                 ("ev" ~> Json.valueObject $ list [
@@ -323,7 +324,7 @@ toJson = define "toJson" $
                   pair (string "value") (var "ev")])
                 (var "encodedV"))
               (var "encodedK")) $
-          "entries" <~ (Eithers.mapList (var "encodeEntry") (Maps.toList $ var "m")) $
+          "entries" <~ (Eithers.mapList (var "encodeEntry") (Maps.toList (var "m" :: TypedTerm (M.Map Term Term)))) $
           Eithers.map ("es" ~> Json.valueArray $ var "es") (var "entries")],
 
     -- Pairs -> {\"first\": ..., \"second\": ...}
@@ -337,7 +338,7 @@ toJson = define "toJson" $
           "second" <~ (Pairs.second $ var "p") $
           "encodedFirst" <~ (toJson @@ var "types" @@ var "tname" @@ var "firstType" @@ var "first") $
           "encodedSecond" <~ (toJson @@ var "types" @@ var "tname" @@ var "secondType" @@ var "second") $
-          Eithers.either_
+          Eithers.either
             ("err" ~> left $ var "err")
             ("ef" ~> Eithers.map
               ("es" ~> Json.valueObject $ list [
@@ -353,7 +354,7 @@ toJson = define "toJson" $
       cases _Term (var "strippedTerm")
         (Just $ left $ string "expected either term") [
         _Term_either>>: "e" ~>
-          Eithers.either_
+          Eithers.either
             ("l" ~>
               "encodedL" <~ (toJson @@ var "types" @@ var "tname" @@ var "leftType" @@ var "l") $
               Eithers.map
@@ -368,7 +369,7 @@ toJson = define "toJson" $
 
     -- Type variables (look up in type table and recurse; fall back to untyped encoding)
     _Type_variable>>: "name" ~>
-      "lookedUp" <~ (Maps.lookup (var "name") (var "types")) $
+      "lookedUp" <~ (Maps.lookup (var "name") (var "types" :: TypedTerm (M.Map Name Type))) $
       Optionals.cases (var "lookedUp") (toJsonUntyped @@ var "term") ("resolvedType" ~> toJson @@ var "types" @@ var "name" @@ var "resolvedType" @@ var "term")]
 
 -- | Encode a Term to a JSON Value without type information.
@@ -400,7 +401,7 @@ toJsonUntyped = define "toJsonUntyped" $
 
     -- Sets (encode as arrays)
     _Term_set>>: "vals" ~>
-      "terms" <~ (Sets.toList $ var "vals") $
+      "terms" <~ (Sets.toList (var "vals" :: TypedTerm (S.Set Term))) $
       "results" <~ (Eithers.mapList ("t" ~> toJsonUntyped @@ var "t") (var "terms")) $
       Eithers.map ("vs" ~> Json.valueArray $ var "vs") (var "results"),
 
@@ -445,7 +446,7 @@ toJsonUntyped = define "toJsonUntyped" $
         "v" <~ (Pairs.second $ var "kv") $
         "encodedK" <~ (toJsonUntyped @@ var "k") $
         "encodedV" <~ (toJsonUntyped @@ var "v") $
-        Eithers.either_
+        Eithers.either
           ("err" ~> left $ var "err")
           ("ek" ~> Eithers.map
             ("ev" ~> Json.valueObject $ list [
@@ -453,7 +454,7 @@ toJsonUntyped = define "toJsonUntyped" $
               pair (string "value") (var "ev")])
             (var "encodedV"))
           (var "encodedK")) $
-      "entries" <~ (Eithers.mapList (var "encodeEntry") (Maps.toList $ var "m")) $
+      "entries" <~ (Eithers.mapList (var "encodeEntry") (Maps.toList (var "m" :: TypedTerm (M.Map Term Term)))) $
       Eithers.map ("es" ~> Json.valueArray $ var "es") (var "entries"),
 
     -- Pairs -> {\"first\": ..., \"second\": ...}
@@ -462,7 +463,7 @@ toJsonUntyped = define "toJsonUntyped" $
       "second" <~ (Pairs.second $ var "p") $
       "encodedFirst" <~ (toJsonUntyped @@ var "first") $
       "encodedSecond" <~ (toJsonUntyped @@ var "second") $
-      Eithers.either_
+      Eithers.either
         ("err" ~> left $ var "err")
         ("ef" ~> Eithers.map
           ("es" ~> Json.valueObject $ list [
@@ -473,7 +474,7 @@ toJsonUntyped = define "toJsonUntyped" $
 
     -- Either -> {\"left\": ...} or {\"right\": ...}
     _Term_either>>: "e" ~>
-      Eithers.either_
+      Eithers.either
         ("l" ~>
           "encodedL" <~ (toJsonUntyped @@ var "l") $
           Eithers.map

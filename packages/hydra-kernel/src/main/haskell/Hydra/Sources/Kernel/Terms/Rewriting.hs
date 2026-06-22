@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Terms.Rewriting where
 
@@ -32,18 +33,18 @@ import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Lib.Math     as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -236,7 +237,7 @@ rewriteAndFoldTerm = define "rewriteAndFoldTerm" $
             (Core.caseStatementTypeName $ var "cs")
             (Optionals.map (reify Pairs.second) (var "rmd"))
             (Pairs.second $ var "rcases")),
-      _Term_either>>: "e" ~> Eithers.either_
+      _Term_either>>: "e" ~> Eithers.either
         ("l" ~>
           "rl" <~ var "recurse" @@ var "val0" @@ var "l" $
           pair (Pairs.first $ var "rl") (Core.termEither $ left $ Pairs.second $ var "rl"))
@@ -259,7 +260,7 @@ rewriteAndFoldTerm = define "rewriteAndFoldTerm" $
           @@ Pairs.first (var "renv") @@ (Core.letBindings $ var "l"),
       _Term_list>>: "els" ~> var "forMany" @@ var "recurse" @@ (reify Core.termList) @@ var "val0" @@ var "els",
       _Term_map>>: "m" ~> var "forMany" @@ var "forPair"
-        @@ ("pairs" ~> Core.termMap $ Maps.fromList $ var "pairs") @@ var "val0" @@ Maps.toList (var "m"),
+        @@ ("pairs" ~> Core.termMap $ Maps.fromList $ var "pairs") @@ var "val0" @@ Maps.toList (var "m" :: TypedTerm (M.Map Term Term)),
       _Term_optional>>: "mt" ~> optCases (var "mt")
         (var "dflt")
         ("t" ~> var "forSingle"
@@ -281,7 +282,7 @@ rewriteAndFoldTerm = define "rewriteAndFoldTerm" $
         @@ var "recurse"
         @@ ("e" ~> Core.termSet $ Sets.fromList $ var "e")
         @@ var "val0"
-        @@ (Sets.toList $ var "els"),
+        @@ (Sets.toList (var "els" :: TypedTerm (S.Set Term))),
       _Term_typeApplication>>: "ta" ~> var "forSingle"
         @@ var "recurse"
         @@ ("t" ~> Core.termTypeApplication $ Core.typeApplicationTerm (var "t") (Core.typeApplicationTermType $ var "ta"))
@@ -469,7 +470,7 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
               (Lists.zip
                 (Lists.map (reify Core.caseAlternativeName) (Core.caseStatementCases $ var "cs"))
                 (Pairs.second $ var "rcases")))),
-      _Term_either>>: "e" ~> Eithers.either_
+      _Term_either>>: "e" ~> Eithers.either
         ("l" ~>
           "rl" <~ var "recurse"
             @@ Lists.concat2 (var "path") (list [Paths.subtermStepSumTerm])
@@ -540,7 +541,7 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
                 (Pairs.first $ var "rv")
                 (Lists.cons (pair (Pairs.second $ var "rk") (Pairs.second $ var "rv")) (Pairs.second $ Pairs.second $ var "r"))))
           (pair (var "idx") (pair (var "val0") (list ([] :: [TypedTerm (Term, Term)]))))
-          (Maps.toList $ var "m") $
+          (Maps.toList (var "m" :: TypedTerm (M.Map Term Term))) $
         pair (Pairs.first $ Pairs.second $ var "rr") (Core.termMap $ Maps.fromList $ Lists.reverse $ Pairs.second $ Pairs.second $ var "rr"),
       _Term_optional>>: "mt" ~> optCases (var "mt")
         (var "dflt")
@@ -592,7 +593,7 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
               (Math.add (Pairs.first $ var "r") (int32 1))
               (pair (Pairs.first $ var "r2") (Lists.cons (Pairs.second $ var "r2") (Pairs.second $ Pairs.second $ var "r"))))
           (pair (var "idx") (pair (var "val0") (list ([] :: [TypedTerm Term]))))
-          (Sets.toList $ var "els") $
+          (Sets.toList (var "els" :: TypedTerm (S.Set Term))) $
         pair (Pairs.first $ Pairs.second $ var "rr") (Core.termSet $ Sets.fromList $ Lists.reverse $ Pairs.second $ Pairs.second $ var "rr"),
       _Term_typeApplication>>: "ta" ~> var "forSingleWithAccessor"
         @@ var "recurse"
@@ -641,7 +642,7 @@ rewriteTerm = define "rewriteTerm" $
         (var "recurse" @@ (Core.letBody $ var "lt"))) $
     "forMap" <~ ("m" ~>
       "forPair" <~ ("p" ~> pair (var "recurse" @@ (Pairs.first $ var "p")) (var "recurse" @@ (Pairs.second $ var "p"))) $
-      Maps.fromList $ Lists.map (var "forPair") $ Maps.toList $ var "m") $
+      (Maps.fromList (Lists.map (var "forPair") (Maps.toList (var "m" :: TypedTerm (M.Map Term Term)))) :: TypedTerm (M.Map Term Term))) $
     cases _Term (var "term") Nothing [
       _Term_annotated>>: "at" ~> Core.termAnnotated $ Core.annotatedTerm
         (var "recurse" @@ (Core.annotatedTermBody $ var "at"))
@@ -653,7 +654,7 @@ rewriteTerm = define "rewriteTerm" $
         (Core.caseStatementTypeName $ var "cs")
         (Optionals.map (var "recurse") (Core.caseStatementDefault $ var "cs"))
         (Lists.map (var "forCaseAlternative") (Core.caseStatementCases $ var "cs")),
-      _Term_either>>: "e" ~> Core.termEither $ Eithers.either_
+      _Term_either>>: "e" ~> Core.termEither $ Eithers.either
         ("l" ~> left $ var "recurse" @@ var "l")
         ("r" ~> right $ var "recurse" @@ var "r")
         (var "e"),
@@ -673,7 +674,7 @@ rewriteTerm = define "rewriteTerm" $
       _Term_record>>: "r" ~> Core.termRecord $ Core.record
         (Core.recordTypeName $ var "r")
         (Lists.map (var "forField") (Core.recordFields $ var "r")),
-      _Term_set>>: "s" ~> Core.termSet $ Sets.fromList $ Lists.map (var "recurse") $ Sets.toList (var "s"),
+      _Term_set>>: "s" ~> Core.termSet $ Sets.fromList $ Lists.map (var "recurse") $ Sets.toList (var "s" :: TypedTerm (S.Set Term)),
       _Term_typeApplication>>: "tt" ~> Core.termTypeApplication $ Core.typeApplicationTerm
         (var "recurse" @@ (Core.typeApplicationTermBody $ var "tt"))
         (Core.typeApplicationTermType $ var "tt"),
@@ -729,7 +730,7 @@ rewriteTermM = define "rewriteTermM" $
             Core.caseStatement (var "n") (var "rdef") (var "rcases"))
           (Eithers.mapList (var "forCaseAlternative") (var "csCases")),
       _Term_either>>: "e" ~>
-        "re" <<~ Eithers.either_
+        "re" <<~ Eithers.either
           ("l" ~> Eithers.map (reify left) $ var "recurse" @@ var "l")
           ("r" ~> Eithers.map (reify right) $ var "recurse" @@ var "r")
           (var "e") $
@@ -751,7 +752,7 @@ rewriteTermM = define "rewriteTermM" $
         right $ Core.termList $ var "rels",
       _Term_literal>>: "v" ~> right $ Core.termLiteral $ var "v",
       _Term_map>>: "m" ~>
-        "pairs" <<~ Eithers.mapList (var "forPair") (Maps.toList $ var "m") $
+        "pairs" <<~ Eithers.mapList (var "forPair") (Maps.toList (var "m" :: TypedTerm (M.Map Term Term))) $
         right $ Core.termMap $ Maps.fromList $ var "pairs",
       _Term_optional>>: "m" ~>
         "rm" <<~ Eithers.mapOptional (var "recurse") (var "m") $
@@ -768,7 +769,7 @@ rewriteTermM = define "rewriteTermM" $
           ("rfields" ~> Core.termRecord $ Core.record (var "n") (var "rfields"))
           (Eithers.mapList (var "forField") (var "fields")),
       _Term_set>>: "s" ~>
-        "rlist" <<~ Eithers.mapList (var "recurse") (Sets.toList $ var "s") $
+        "rlist" <<~ Eithers.mapList (var "recurse") (Sets.toList (var "s" :: TypedTerm (S.Set Term))) $
         right $ Core.termSet $ Sets.fromList $ var "rlist",
       _Term_typeApplication>>: "tt" ~>
         "t" <<~ var "recurse" @@ Core.typeApplicationTermBody (var "tt") $
@@ -814,7 +815,7 @@ rewriteTermWithContext = define "rewriteTermWithContext" $
         (var "recurse" @@ (Core.letBody $ var "lt"))) $
     "forMap" <~ ("m" ~>
       "forPair" <~ ("p" ~> pair (var "recurse" @@ (Pairs.first $ var "p")) (var "recurse" @@ (Pairs.second $ var "p"))) $
-      Maps.fromList $ Lists.map (var "forPair") $ Maps.toList $ var "m") $
+      (Maps.fromList (Lists.map (var "forPair") (Maps.toList (var "m" :: TypedTerm (M.Map Term Term)))) :: TypedTerm (M.Map Term Term))) $
     cases _Term (var "term") Nothing [
       _Term_annotated>>: "at" ~> Core.termAnnotated $ Core.annotatedTerm
         (var "recurse" @@ (Core.annotatedTermBody $ var "at"))
@@ -826,7 +827,7 @@ rewriteTermWithContext = define "rewriteTermWithContext" $
         (Core.caseStatementTypeName $ var "cs")
         (Optionals.map (var "recurse") (Core.caseStatementDefault $ var "cs"))
         (Lists.map (var "forCaseAlternative") (Core.caseStatementCases $ var "cs")),
-      _Term_either>>: "e" ~> Core.termEither $ Eithers.either_
+      _Term_either>>: "e" ~> Core.termEither $ Eithers.either
         ("l" ~> left $ var "recurse" @@ var "l")
         ("r" ~> right $ var "recurse" @@ var "r")
         (var "e"),
@@ -846,7 +847,7 @@ rewriteTermWithContext = define "rewriteTermWithContext" $
       _Term_record>>: "r" ~> Core.termRecord $ Core.record
         (Core.recordTypeName $ var "r")
         (Lists.map (var "forField") (Core.recordFields $ var "r")),
-      _Term_set>>: "s" ~> Core.termSet $ Sets.fromList $ Lists.map (var "recurse") $ Sets.toList (var "s"),
+      _Term_set>>: "s" ~> Core.termSet $ Sets.fromList $ Lists.map (var "recurse") $ Sets.toList (var "s" :: TypedTerm (S.Set Term)),
       _Term_typeApplication>>: "tt" ~> Core.termTypeApplication $ Core.typeApplicationTerm
         (var "recurse" @@ (Core.typeApplicationTermBody $ var "tt"))
         (Core.typeApplicationTermType $ var "tt"),
@@ -903,7 +904,7 @@ rewriteTermWithContextM = define "rewriteTermWithContextM" $
             Core.caseStatement (var "n") (var "rdef") (var "rcases"))
           (Eithers.mapList (var "forCaseAlternative") (var "csCases")),
       _Term_either>>: "e" ~>
-        "re" <<~ Eithers.either_
+        "re" <<~ Eithers.either
           ("l" ~> Eithers.map (reify left) $ var "recurse" @@ var "l")
           ("r" ~> Eithers.map (reify right) $ var "recurse" @@ var "r")
           (var "e") $
@@ -925,7 +926,7 @@ rewriteTermWithContextM = define "rewriteTermWithContextM" $
         right $ Core.termList $ var "rels",
       _Term_literal>>: "v" ~> right $ Core.termLiteral $ var "v",
       _Term_map>>: "m" ~>
-        "pairs" <<~ Eithers.mapList (var "forPair") (Maps.toList $ var "m") $
+        "pairs" <<~ Eithers.mapList (var "forPair") (Maps.toList (var "m" :: TypedTerm (M.Map Term Term))) $
         right $ Core.termMap $ Maps.fromList $ var "pairs",
       _Term_optional>>: "m" ~>
         "rm" <<~ Eithers.mapOptional (var "recurse") (var "m") $
@@ -942,7 +943,7 @@ rewriteTermWithContextM = define "rewriteTermWithContextM" $
           ("rfields" ~> Core.termRecord $ Core.record (var "n") (var "rfields"))
           (Eithers.mapList (var "forField") (var "fields")),
       _Term_set>>: "s" ~>
-        "rlist" <<~ Eithers.mapList (var "recurse") (Sets.toList $ var "s") $
+        "rlist" <<~ Eithers.mapList (var "recurse") (Sets.toList (var "s" :: TypedTerm (S.Set Term))) $
         right $ Core.termSet $ Sets.fromList $ var "rlist",
       _Term_typeApplication>>: "tt" ~>
         "t" <<~ var "recurse" @@ Core.typeApplicationTermBody (var "tt") $
@@ -1114,7 +1115,7 @@ subterms = define "subterms" $
     _Term_cases>>: "cs" ~> Lists.concat2
       (Optionals.cases (Core.caseStatementDefault $ var "cs") (list ([] :: [TypedTerm Term])) ("t" ~> list [var "t"]))
       (Lists.map (reify Core.caseAlternativeHandler) (Core.caseStatementCases $ var "cs")),
-    _Term_either>>: "e" ~> Eithers.either_
+    _Term_either>>: "e" ~> Eithers.either
       ("l" ~> list [var "l"])
       ("r" ~> list [var "r"])
       (var "e"),
@@ -1126,12 +1127,12 @@ subterms = define "subterms" $
     _Term_literal>>: constant $ list ([] :: [TypedTerm Term]),
     _Term_map>>: "m" ~> Lists.concat $ Lists.map
       ("p" ~> list [Pairs.first $ var "p", Pairs.second $ var "p"])
-      (Maps.toList $ var "m"),
+      (Maps.toList (var "m" :: TypedTerm (M.Map Term Term))),
     _Term_optional>>: "m" ~> Optionals.cases (var "m") (list ([] :: [TypedTerm Term])) ("t" ~> list [var "t"]),
     _Term_pair>>: "p" ~> list [Pairs.first $ var "p", Pairs.second $ var "p"],
     _Term_project>>: constant $ list ([] :: [TypedTerm Term]),
     _Term_record>>: "rt" ~> Lists.map (reify Core.fieldTerm) (Core.recordFields $ var "rt"),
-    _Term_set>>: "l" ~> Sets.toList $ var "l",
+    _Term_set>>: "l" ~> Sets.toList (var "l" :: TypedTerm (S.Set Term)),
     _Term_typeApplication>>: "ta" ~> list [Core.typeApplicationTermBody $ var "ta"],
     _Term_typeLambda>>: "ta" ~> list [Core.typeLambdaBody $ var "ta"],
     _Term_inject>>: "ut" ~> list [Core.fieldTerm $ (Core.injectionField $ var "ut")],
@@ -1171,7 +1172,7 @@ subtermsWithSteps = define "subtermsWithSteps" $
           -- TODO: use a range of indexes from 0 to len(l)-1, rather than just 0
           result (Paths.subtermStepMapKey $ int32 0) $ Pairs.first $ var "p",
           result (Paths.subtermStepMapValue $ int32 0) $ Pairs.second $ var "p"])
-        (Maps.toList $ var "m")),
+        (Maps.toList (var "m" :: TypedTerm (M.Map Term Term)))),
     _Term_optional>>: "m" ~> Optionals.cases (var "m") none ("t" ~> single Paths.subtermStepOptionalTerm $ var "t"),
     _Term_pair>>: "p" ~> none, -- TODO: add steps when SubtermStep type is updated
     _Term_project>>: constant none,
@@ -1181,7 +1182,7 @@ subtermsWithSteps = define "subtermsWithSteps" $
     _Term_set>>: "s" ~> Lists.map
       -- TODO: use a range of indexes from 0 to len(l)-1, rather than just 0
       ("e" ~> result (Paths.subtermStepListElement $ int32 0) $ var "e")
-      (Sets.toList $ var "s"),
+      (Sets.toList (var "s" :: TypedTerm (S.Set Term))),
     _Term_typeApplication>>: "ta" ~>
       single Paths.subtermStepTypeApplicationTerm $
       Core.typeApplicationTermBody $ var "ta",

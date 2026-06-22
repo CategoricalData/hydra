@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Terms.Dsls where
 
@@ -7,17 +8,18 @@ import Hydra.Kernel
 import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Meta.Core         as Core
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Lib.Math     as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Packaging       as Packaging
+import qualified Hydra.Dsl.Typing          as Typing
 import qualified Hydra.Dsl.Meta.Phantoms     as Phantoms
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms hiding (
   elimination, field, fieldType, floatType, floatValue, function, injection, integerType, integerValue, lambda, literal,
@@ -59,12 +61,15 @@ module_ = Module {
       toDefinition dslDefinitionName,
       toDefinition dslModule,
       toDefinition dslModuleName,
+      toDefinition dslSignatureTypeScheme,
       toDefinition dslTypeScheme,
       toDefinition filterTypeBindings,
       toDefinition generateBindingsForType,
       toDefinition generateRecordAccessor,
       toDefinition generateRecordConstructor,
       toDefinition generateRecordWithUpdater,
+      toDefinition generateRefBindings,
+      toDefinition generateSignatureRef,
       toDefinition generateUnionInjector,
       toDefinition generateWrappedTypeAccessors,
       toDefinition isDslEligibleBinding,
@@ -96,7 +101,7 @@ deduplicateBindings = define "deduplicateBindings" $
   "bindings" ~>
   Lists.foldl
     ("acc" ~> "b" ~>
-      "usedNames" <~ Sets.fromList (Lists.map ("a" ~> Core.bindingName (var "a")) (var "acc")) $
+      "usedNames" <~ (Sets.fromList (Lists.map ("a" ~> Core.bindingName (var "a")) (var "acc")) :: TypedTerm (S.Set Name)) $
       "uniqueName" <~ (Lexical.chooseUniqueName @@ var "usedNames" @@ Core.bindingName (var "b")) $
       Lists.concat2 (var "acc") (list [
         Core.binding
@@ -154,6 +159,14 @@ deepUnwrap :: TypedTerm Name -> TypedTerm Term
 deepUnwrap typeName =
   injectTermUnwrap $
     deepName (Core.unName typeName)
+
+-- | Build a deep variable reference as a Term value: TermVariable name.
+-- A primitive reference lowers to the same construct (Terms.primitive = TermVariable),
+-- so this serves both term refs and primitive refs. The argument is the (already
+-- qualified) referenced name; it is embedded as a deep Name within a deep Term.variable.
+deepVariable :: TypedTerm Name -> TypedTerm Term
+deepVariable refName =
+  injectTermVariable $ deepName (Core.unName refName)
 
 -- | Build a deep WrappedTerm as a Term value (injected into Term.wrap)
 deepWrap :: TypedTerm Name -> TypedTerm Term -> TypedTerm Term
@@ -223,46 +236,84 @@ dslDefinitionName = define "dslDefinitionName" $
 --   \body -> \annotation -> TermRecord (Record "hydra.core.AnnotatedTerm" [Field "body" body, ...])
 -- When code-generated into Haskell, this becomes:
 --   annotatedTerm body annotation = Core.TermRecord (Core.Record { ... })
--- | Transform a type module into a DSL module.
--- Returns Nothing if the module has no eligible type definitions.
+-- | Transform a source module into a DSL module.
+-- Walks every definition and dispatches on its variant:
+--   - type definitions      -> record/union/wrap helpers (generateBindingsForType)
+--   - term definitions      -> a typed reference wrapper (generateSignatureRef)
+--   - primitive definitions -> a typed reference wrapper (generateSignatureRef)
+-- A module may mix all three; the DSL module unions whatever its definitions produce.
+-- Returns Nothing if the module yields no DSL bindings at all.
 dslModule :: TypedTermDefinition (InferenceContext -> Graph -> Module -> Either Error (Maybe Module))
 dslModule = define "dslModule" $
-  doc "Transform a type module into a DSL module" $
+  doc "Transform a source module into a DSL module" $
   "cx" ~> "graph" ~> "mod" ~>
+    -- Type path (unchanged): collect eligible type bindings, then generate helpers.
     "typeBindings" <<~ (filterTypeBindings @@ var "cx" @@ var "graph" @@
       (Optionals.cat $ Lists.map
         ("d" ~> cases _Definition (var "d") (Just nothing) [
           _Definition_type>>: "td" ~>
             just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td"))])
         (Packaging.moduleDefinitions (var "mod")))) $
-    Logic.ifElse (Lists.null (var "typeBindings"))
-      (right nothing)
-      ("dslBindings" <<~ Eithers.mapList ("b" ~>
+    "typeDslBindings" <<~ (Eithers.mapList ("b" ~>
         Eithers.bimap
           ("_e" ~> Error.errorDecoding $ var "_e")
           ("x" ~> var "x")
-          (generateBindingsForType @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
-        right (just (Packaging.module_
-          (dslModuleName @@ (Packaging.moduleName (var "mod")))
-          (just (Packaging.entityMetadata
-            (just (Strings.cat $ list [
-              string "DSL functions for ",
-              Packaging.unModuleName (Packaging.moduleName (var "mod"))]))
-            (list ([] :: [TypedTerm String])) (list ([] :: [TypedTerm EntityReference])) nothing))
-          -- DSL modules depend on:
-          -- (1) the original module + its source dependencies + hydra.typed (for TypedTerm), and
-          -- (2) DSL modules for the source's dependencies (to reference other types' DSL functions)
-          (Lists.map ("ns" ~> Packaging.moduleDependency (var "ns") nothing) (Lists.nub (Lists.concat2
-            (list [Packaging.moduleName (var "mod"), Packaging.moduleName2 (string "hydra.typed")])
-            (Lists.concat2
-              (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod")))
-              (primitive DefLists.map @@ dslModuleName @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))))))
-          (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
-            (Core.bindingName $ var "b")
-            nothing
-            (Optionals.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")
-            (Core.bindingTerm $ var "b")))
-            (deduplicateBindings @@ Lists.concat (var "dslBindings"))))))
+          (generateBindingsForType @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings")) $
+    -- Ref path (new): one typed reference wrapper per term/primitive definition.
+    "refDslBindings" <<~ (Eithers.mapList ("d" ~> generateRefBindings @@ var "d")
+        (Packaging.moduleDefinitions (var "mod"))) $
+    "allBindings" <~ (deduplicateBindings @@ Lists.concat2
+      (Lists.concat (var "typeDslBindings"))
+      (Lists.concat (var "refDslBindings"))) $
+    Logic.ifElse (Lists.null (var "allBindings"))
+      (right nothing)
+      (right (just (Packaging.module_
+        (dslModuleName @@ (Packaging.moduleName (var "mod")))
+        (just (Packaging.entityMetadata
+          (just (Strings.cat $ list [
+            string "DSL functions for ",
+            Packaging.unModuleName (Packaging.moduleName (var "mod"))]))
+          (list ([] :: [TypedTerm String])) (list ([] :: [TypedTerm EntityReference])) nothing))
+        -- DSL modules depend on:
+        -- (1) the original module + its source dependencies + hydra.typed (for TypedTerm), and
+        -- (2) DSL modules for the source's dependencies (to reference other types' DSL functions)
+        (Lists.map ("ns" ~> Packaging.moduleDependency (var "ns") nothing) (Lists.nub (Lists.concat2
+          (list [Packaging.moduleName (var "mod"), Packaging.moduleName2 (string "hydra.typed")])
+          (Lists.concat2
+            (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod")))
+            (primitive DefLists.map @@ dslModuleName @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))))))
+        (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
+          (Core.bindingName $ var "b")
+          nothing
+          (Optionals.map (asTerm Scoping.typeSchemeToTermSignature) $ Core.bindingTypeScheme $ var "b")
+          (Core.bindingTerm $ var "b")))
+          (var "allBindings")))))
+
+-- | Generate the DSL reference bindings for a single definition: a one-element list
+-- holding the typed reference wrapper for a primitive (or a signature-carrying term)
+-- definition, or the empty list otherwise.
+--
+-- Primitive definitions always carry an explicit signature on the definition, so the
+-- primitive path is unconditional and needs no inference (#467, primitives-first).
+--
+-- Term definitions only yield a ref when they already carry a signature. Inference is
+-- NEVER run on derived modules, and the raw in-memory term modules fed to this pass have
+-- termDefinitionSignature = Nothing; so a term definition without a signature is SKIPPED
+-- (empty list), not an error. Wiring term-level DSL refs (which need a signature source)
+-- is a later phase; until then the type path covers each module's type definitions and
+-- the primitive path covers each library's primitives.
+generateRefBindings :: TypedTermDefinition (Definition -> Either Error [Binding])
+generateRefBindings = define "generateRefBindings" $
+  doc "Generate typed reference DSL bindings for a primitive (or signature-carrying term) definition" $
+  "d" ~>
+  cases _Definition (var "d") (Just $ right (list ([] :: [TypedTerm Binding]))) [
+    _Definition_type>>: constant (right (list ([] :: [TypedTerm Binding]))),
+    _Definition_term>>: "td" ~>
+      Optionals.cases (Packaging.termDefinitionSignature (var "td"))
+        (right (list ([] :: [TypedTerm Binding])))
+        ("sig" ~> right (list [generateSignatureRef @@ (Packaging.termDefinitionName (var "td")) @@ var "sig"])),
+    _Definition_primitive>>: "pd" ~>
+      right (list [generateSignatureRef @@ (Packaging.primitiveDefinitionName (var "pd")) @@ (Packaging.primitiveDefinitionSignature (var "pd"))])]
 -- | Generate a DSL module name from a source module name
 -- For example, "hydra.core" -> "hydra.dsl.core"
 dslModuleName :: TypedTermDefinition (ModuleName -> ModuleName)
@@ -283,6 +334,26 @@ dslModuleName = define "dslModuleName" $
           string "hydra.dsl.",
           Strings.intercalate (string ".") (Pairs.second (var "ht"))]))
         (var "prefixFull"))
+
+-- | Build a "functions of phantom terms" TypeScheme from a TermSignature.
+-- Each value parameter type and the result type are wrapped in TypedTerm, then folded
+-- into a chain of function arrows; the signature's type parameters become the foralls.
+-- For a signature p1 .. pn -> r this yields:
+--   forall vars. TypedTerm p1 -> ... -> TypedTerm pn -> TypedTerm r
+-- (NOT TypedTerm (p1 -> ... -> r) — the wrapper is a function of phantom terms, #467.)
+dslSignatureTypeScheme :: TypedTermDefinition (TermSignature -> TypeScheme)
+dslSignatureTypeScheme = define "dslSignatureTypeScheme" $
+  doc "Build a TypedTerm-wrapped TypeScheme (functions of phantom terms) from a TermSignature" $
+  "sig" ~>
+  "typeVars" <~ (Lists.map ("tp" ~> Typing.typeParameterName (var "tp")) (Typing.termSignatureTypeParameters (var "sig"))) $
+  "paramTypes" <~ (Lists.map ("p" ~> Typing.parameterType (var "p")) (Typing.termSignatureParameters (var "sig"))) $
+  "resultType" <~ (Typing.resultType (Typing.termSignatureResult (var "sig"))) $
+  "wrappedResult" <~ (wrapInTypedTerm (var "resultType")) $
+  "funType" <~ (Lists.foldr
+    ("paramType" ~> "acc" ~> Core.typeFunction $ Core.functionType (wrapInTypedTerm (var "paramType")) (var "acc"))
+    (var "wrappedResult")
+    (var "paramTypes")) $
+  Core.typeScheme (var "typeVars") (var "funType") nothing
 
 -- | Generate a fully qualified binding name for a DSL function from a type name
 -- For example, "hydra.core.AnnotatedTerm" -> "hydra.dsl.core.annotatedTerm"
@@ -468,6 +539,50 @@ generateRecordWithUpdater = define "generateRecordWithUpdater" $
     (var "body")
     (just (var "ts"))
 
+-- | Generate a typed-reference wrapper for a term or primitive definition.
+-- Given the (already qualified) referenced name and its TermSignature, produces a
+-- "function of phantom terms" DSL binding. For a signature with value parameters p1..pn:
+--   <dslName> :: TypedTerm p1 -> ... -> TypedTerm pn -> TypedTerm r
+--   <dslName> a1 .. an = TypedTerm (ref @@ unTypedTerm a1 @@ ... @@ unTypedTerm an)
+-- where `ref` is the deep variable reference to the underlying definition/primitive
+-- (a primitive lowers to TermVariable, so the same construct serves both).
+-- For a nullary signature (no value parameters) the body is the bare wrapped reference,
+-- a constant TypedTerm with no lambda.
+generateSignatureRef :: TypedTermDefinition (Name -> TermSignature -> Binding)
+generateSignatureRef = define "generateSignatureRef" $
+  doc "Generate a typed-reference DSL wrapper from a term/primitive name and signature" $
+  "refName" ~> "sig" ~>
+  "params" <~ (Typing.termSignatureParameters (var "sig")) $
+  -- Parameter (name, TypedTerm<paramType>) pairs for the lambda chain. Names come straight
+  -- from the signature; they are already unique within the signature.
+  "paramPairs" <~ (Lists.map
+    ("p" ~> pair
+      (Core.unName (Typing.parameterName (var "p")))
+      (wrapInTypedTerm (Typing.parameterType (var "p"))))
+    (var "params")) $
+  -- Body: apply the deep reference to each unwrapped phantom argument, left to right.
+  "appBody" <~ (Lists.foldl
+    ("acc" ~> "pp" ~> deepApplication (var "acc")
+      (unwrapTypedTerm (Core.termVariable (Core.name (Pairs.first (var "pp"))))))
+    (deepVariable (var "refName"))
+    (var "paramPairs")) $
+  "refTerm" <~ (wrapTermInTypedTerm (var "appBody")) $
+  -- Wrap in typed lambdas for each parameter (right to left). Nullary -> no lambda.
+  "rawBody" <~ (Lists.foldl
+    ("acc" ~> "pp" ~>
+      Core.termLambda $ Core.lambda (Core.name (Pairs.first (var "pp"))) (just (Pairs.second (var "pp"))) (var "acc"))
+    (var "refTerm")
+    (Lists.reverse (var "paramPairs"))) $
+  "description" <~ (Strings.cat $ list [
+    string "DSL reference to ",
+    Core.unName (var "refName")]) $
+  "body" <~ (Annotations.setTermDescription @@ (just (var "description")) @@ var "rawBody") $
+  "ts" <~ (dslSignatureTypeScheme @@ var "sig") $
+  Core.binding
+    (dslDefinitionName @@ var "refName" @@ (Names.localNameOf @@ var "refName"))
+    (var "body")
+    (just (var "ts"))
+
 -- | Generate a union injection helper.
 -- For a variant "lambda" in union type "Function", produces:
 --   functionLambda :: Lambda -> Function
@@ -593,6 +708,10 @@ injectTermUnion t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core
 -- | Inject a term into the Term.unwrap variant
 injectTermUnwrap :: TypedTerm Term -> TypedTerm Term
 injectTermUnwrap t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_unwrap) t)
+
+-- | Inject a term into the Term.variable variant
+injectTermVariable :: TypedTerm Term -> TypedTerm Term
+injectTermVariable t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_variable) t)
 
 -- | Inject a term into the Term.wrap variant
 injectTermWrap :: TypedTerm Term -> TypedTerm Term

@@ -335,7 +335,18 @@
                                                                                                       "typeApplication": {
                                                                                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.foldl"}, "type": {"literal": {"boolean": {}}}}},
                                                                                                         "type": {"literal": {"boolean": {}}}}},
-                                                                                                    "argument": {"variable": "hydra.lib.logic.and"}}},
+                                                                                                    "argument": {
+                                                                                                      "lambda": {
+                                                                                                        "parameter": "acc",
+                                                                                                        "domain": {"literal": {"boolean": {}}},
+                                                                                                        "body": {
+                                                                                                          "lambda": {
+                                                                                                            "parameter": "x",
+                                                                                                            "domain": {"literal": {"boolean": {}}},
+                                                                                                            "body": {
+                                                                                                              "application": {
+                                                                                                                "function": {"application": {"function": {"variable": "hydra.lib.logic.and"}, "argument": {"variable": "acc"}}},
+                                                                                                                "argument": {"variable": "x"}}}}}}}}},
                                                                                                 "argument": {"literal": {"boolean": true}}}},
                                                                                             "argument": {
                                                                                               "application": {

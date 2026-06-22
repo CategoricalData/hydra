@@ -22,10 +22,10 @@ import qualified Data.Map                     as M
 import Hydra.Testing
 import qualified Hydra.Sources.Kernel.Terms.Sorting as SortingModule
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 
 import qualified Data.Int as I
 
@@ -69,7 +69,7 @@ sccs cs = list [list (int32 <$> c) | c <- cs]
 
 -- | Show Either [[Int]] [Int] as "left([[1, 2]])" or "right([1, 2, 3])"
 showEitherResult :: TypedTerm (Either [[Int]] [Int]) -> TypedTerm String
-showEitherResult = Eithers.either_
+showEitherResult = Eithers.either
   (lambda "cs" (Strings.cat2 (string "left(") (Strings.cat2 (showIntListList (var "cs")) (string ")"))))
   (lambda "xs" (Strings.cat2 (string "right(") (Strings.cat2 (showIntList (var "xs")) (string ")"))))
 

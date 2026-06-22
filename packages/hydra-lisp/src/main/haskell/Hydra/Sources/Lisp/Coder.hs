@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 -- | Lisp code generator in Hydra DSL.
 -- This module provides DSL versions of Lisp code generation functions.
 -- Type definitions are mapped to record/struct definitions and tagged unions;
@@ -11,17 +13,17 @@ module Hydra.Sources.Lisp.Coder where
 import Hydra.Kernel
 import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Libraries
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Coders                          as Coders
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Errors                           as Error
@@ -268,16 +270,16 @@ encodeLetAsNative = def "encodeLetAsNative" $
     -- the let as recursive: Clojure emits letfn, the other dialects emit letrec
     -- (which the loader transforms into the dialect's native rec form).
     "supportsLetrec" <~ (dialectSupportsLetrec @@ var "dialect") $
-    "allNames" <~ Sets.fromList (Lists.map (lambda "b" $ Core.bindingName (var "b")) (var "bindings")) $
-    "adjList" <~ Lists.map (lambda "b" $
+    "allNames" <~ (Sets.fromList (Lists.map (lambda "b" $ Core.bindingName (var "b")) (var "bindings")) :: TypedTerm (S.Set Name)) $
+    "adjList" <~ (Lists.map (lambda "b" $
       pair (Core.bindingName (var "b"))
-        (Sets.toList (Sets.intersection (var "allNames")
+        (Sets.toList (Sets.intersection (var "allNames" :: TypedTerm (S.Set Name))
           (Variables.freeVariablesInTerm @@ Core.bindingTerm (var "b")))))
-      (var "bindings") $
-    "sccs" <~ (Sorting.topologicalSortComponents @@ var "adjList") $
-    "nameToBinding" <~ Maps.fromList
-      (Lists.map (lambda "b" $ pair (Core.bindingName (var "b")) (var "b")) (var "bindings")) $
-    "sortedBindings" <~ Optionals.cat (Lists.map (lambda "name" $ Maps.lookup (var "name") (var "nameToBinding"))
+      (var "bindings") :: TypedTerm [(Name, [Name])]) $
+    "sccs" <~ ((Sorting.topologicalSortComponents :: TypedTermDefinition ([(Name, [Name])] -> [[Name]])) @@ var "adjList") $
+    "nameToBinding" <~ (Maps.fromList
+      (Lists.map (lambda "b" $ pair (Core.bindingName (var "b")) (var "b")) (var "bindings")) :: TypedTerm (M.Map Name Binding)) $
+    "sortedBindings" <~ Optionals.cat (Lists.map (lambda "name" $ Maps.lookup (var "name") (var "nameToBinding" :: TypedTerm (M.Map Name Binding)))
       (Lists.concat (var "sccs"))) $
     -- A cycle is any SCC of size greater than one.
     "hasCycle" <~ (Lists.foldl (lambda "acc" $ lambda "scc" $
@@ -500,7 +502,7 @@ encodeTerm = def "encodeTerm" $
        encodeApplication @@ var "dialect" @@ var "cx" @@ var "g" @@ var "rawFun" @@ var "rawArg",
 
      _Term_either>>: lambda "e" $
-       Eithers.either_
+       Eithers.either
          (lambda "l" $
            "sl" <<~ (encodeTerm @@ var "dialect" @@ var "cx" @@ var "g" @@ var "l") $
              -- Left v -> (list :left v)
@@ -544,7 +546,7 @@ encodeTerm = def "encodeTerm" $
              right (record L._MapEntry [
                L._MapEntry_key>>: var "k",
                L._MapEntry_value>>: var "v"]))
-         (Maps.toList (var "m"))) $
+         (Maps.toList (var "m" :: TypedTerm (M.Map Term Term)))) $
          right (inject L._Expression L._Expression_map $
            record L._MapLiteral [
              L._MapLiteral_entries>>: var "pairs"]),
@@ -736,7 +738,7 @@ encodeTypeBody = def "encodeTypeBody" $
        -- Strip forall and recurse on the body
        encodeTypeBody @@ var "lname" @@ var "origTyp" @@ Core.forallTypeBody (var "ft"),
      _Type_record>>: lambda "rt" $
-       "fields" <~ (Lists.map encodeFieldDef (var "rt")) $
+       "fields" <~ (Lists.map (asTerm encodeFieldDef) (var "rt")) $
          right (lispTopForm @@ (inject L._TopLevelForm L._TopLevelForm_recordType $
            record L._RecordTypeDefinition [
              L._RecordTypeDefinition_name>>: wrap L._Symbol (var "lname"),

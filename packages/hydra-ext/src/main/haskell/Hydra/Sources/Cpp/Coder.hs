@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 
 -- Note: this file was created with the help of a large language model. It requires further human review.
 
@@ -7,18 +8,18 @@ module Hydra.Sources.Cpp.Coder where
 import Hydra.Kernel
 import Hydra.File (_FileExtension)
 import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Errors                      as Error
@@ -1044,7 +1045,7 @@ findTypeDependencies = def "findTypeDependencies" $
         (lambda "acc" $ lambda "d" $
           Sets.union (var "acc") (Dependencies.typeDependencyNames @@ boolean True @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "d"))))
         (Sets.empty)
-        (var "defs")))
+        (var "defs")) :: TypedTerm [Name])
 
 -- | Construct the forward-declaration header name for a namespace
 fwdHeaderName :: TypedTermDefinition (ModuleName -> Name)
@@ -1148,7 +1149,7 @@ moduleToCpp = def "moduleToCpp" $
     "ns" <~ Packaging.moduleName (var "mod") $
     "typeDefs" <~ Pairs.first (Environment.partitionDefinitions @@ var "defs") $
     "typeFiles" <<~ (generateTypeFiles @@ var "ns" @@ var "typeDefs" @@ var "cx" @@ var "g") $
-      right (Maps.fromList (var "typeFiles"))
+      right (Maps.fromList (var "typeFiles") :: TypedTerm (M.Map FilePath String))
 
 -- | Create a namespace declaration wrapping declarations
 namespaceDecl :: TypedTermDefinition (ModuleName -> [Cpp.Declaration] -> Cpp.Declaration)

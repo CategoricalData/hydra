@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 -- | WebAssembly code generator in Hydra DSL.
 -- This module provides DSL versions of WAT code generation functions.
 -- Type definitions are mapped to memory layout conventions; term definitions are mapped to WASM functions.
@@ -9,18 +11,18 @@ import Hydra.Kernel
 import Hydra.File (_FileExtension)
 import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Dsl.Libraries
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Graph                            as DslGraph
@@ -144,7 +146,7 @@ buildFieldOffsets = def "buildFieldOffsets" $
           just (pair (var "tname") (var "namedOffsets")))) $
     "schemaTypesList" <~ (Maps.toList (DslGraph.graphSchemaTypes (var "g"))) $
     "entries" <~ (Optionals.cat (Lists.map (var "entryFor") (var "schemaTypesList"))) $
-    Maps.fromList (var "entries")
+    (Maps.fromList (var "entries") :: TypedTerm (M.Map Name [(Name, Int)]))
 
 -- | Build a universe-wide map from snake-cased function names to Wasm signatures.
 -- Walks three sources: (1) the graph's primitives (hydra.lib.*), (2) the graph's
@@ -167,7 +169,7 @@ buildFunctionSignatures = def "buildFunctionSignatures" $
       "ts" <~ Pairs.second (var "nameAndScheme") $
       "snakeName" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (var "nm")) $
       "sigEither" <~ (extractSignature @@ var "cx" @@ var "g" @@ Core.typeSchemeBody (var "ts")) $
-      Eithers.either_
+      Eithers.either
         (lambda "_err" $ nothing)
         (lambda "sig" $ just (pair (var "snakeName") (var "sig")))
         (var "sigEither")) $
@@ -182,10 +184,10 @@ buildFunctionSignatures = def "buildFunctionSignatures" $
     -- Current module's own term defs: use their optional TypeScheme field directly.
     "localEntries" <~ Optionals.cat (Lists.map
       (lambda "td" $
-        Optionals.bind (Optionals.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature (var "td"))
+        Optionals.bind (Optionals.map (asTerm Scoping.termSignatureToTypeScheme) $ Packaging.termDefinitionSignature (var "td"))
           (lambda "ts" $ var "toSigEntry" @@ pair (Packaging.termDefinitionName (var "td")) (var "ts")))
       (var "termDefs")) $
-    Maps.fromList (Lists.concat (list [var "primEntries", var "boundEntries", var "localEntries"]))
+    (Maps.fromList (Lists.concat (list [var "primEntries", var "boundEntries", var "localEntries"])) :: TypedTerm (M.Map String ([W.ValType], [W.ValType])))
 
 -- | Assign a byte offset to each distinct string. Offsets start at 1024 (reserving the
 -- low 1KB for a null-pointer region) and grow by 4 + UTF-8 byte count per entry, to
@@ -201,7 +203,7 @@ buildStringOffsets = def "buildStringOffsets" $
       "off" <~ Pairs.second (var "acc") $
       "len" <~ Strings.length (var "s") $
         pair
-          (Maps.insert (var "s") (var "off") (var "m"))
+          (Maps.insert (var "s") (var "off") (var "m" :: TypedTerm (M.Map String Int)))
           (Math.add (var "off") (Math.add (int32 4) (var "len")))) $
     "final" <~ (Lists.foldl (var "step")
       (pair (Maps.empty :: TypedTerm (M.Map String Int)) (int32 1024))
@@ -254,7 +256,7 @@ buildVariantIndexes = def "buildVariantIndexes" $
           just (pair (var "tname") (var "namedIndexes")))) $
     "schemaTypesList" <~ (Maps.toList (DslGraph.graphSchemaTypes (var "g"))) $
     "entries" <~ (Optionals.cat (Lists.map (var "entryFor") (var "schemaTypesList"))) $
-    Maps.fromList (var "entries")
+    (Maps.fromList (var "entries") :: TypedTerm (M.Map Name [(Name, Int)]))
 
 -- | Clamp a list of Wasm value types to all-i32. The coder's function bodies still
 -- assume the 1-i32-per-term stack invariant (sessions 8-15), so non-i32 types like
@@ -275,7 +277,7 @@ collectCallTargets = def "collectCallTargets" $
     Lists.foldl
       (lambda "acc" $ lambda "instr" $
         cases W._Instruction (var "instr") (Just $ var "acc") [
-          W._Instruction_call>>: lambda "v" $ Sets.insert (var "v") (var "acc"),
+          W._Instruction_call>>: lambda "v" $ Sets.insert (var "v") (var "acc" :: TypedTerm (S.Set String)),
           W._Instruction_block>>: lambda "b" $
             Sets.union (var "acc") (collectCallTargets @@ (project W._BlockInstruction W._BlockInstruction_body @@ var "b")),
           W._Instruction_loop>>: lambda "b" $
@@ -295,9 +297,9 @@ collectInstructionLocals = def "collectInstructionLocals" $
     Lists.foldl
       (lambda "acc" $ lambda "instr" $
         cases W._Instruction (var "instr") (Just $ var "acc") [
-          W._Instruction_localGet>>: lambda "v" $ Sets.insert (var "v") (var "acc"),
-          W._Instruction_localSet>>: lambda "v" $ Sets.insert (var "v") (var "acc"),
-          W._Instruction_localTee>>: lambda "v" $ Sets.insert (var "v") (var "acc"),
+          W._Instruction_localGet>>: lambda "v" $ Sets.insert (var "v") (var "acc" :: TypedTerm (S.Set String)),
+          W._Instruction_localSet>>: lambda "v" $ Sets.insert (var "v") (var "acc" :: TypedTerm (S.Set String)),
+          W._Instruction_localTee>>: lambda "v" $ Sets.insert (var "v") (var "acc" :: TypedTerm (S.Set String)),
           W._Instruction_block>>: lambda "b" $
             Sets.union (var "acc") (collectInstructionLocals @@ (project W._BlockInstruction W._BlockInstruction_body @@ var "b")),
           W._Instruction_loop>>: lambda "b" $
@@ -320,14 +322,14 @@ collectStrings = def "collectStrings" $
       cases _Term (var "t") (Just $ var "acc") [
         _Term_literal>>: lambda "lit" $
           cases _Literal (var "lit") (Just $ var "acc") [
-            _Literal_string>>: lambda "s" $ Sets.insert (var "s") (var "acc")]]) $
+            _Literal_string>>: lambda "s" $ Sets.insert (var "s") (var "acc" :: TypedTerm (S.Set String))]]) $
     "allStrings" <~ Lists.foldl
       (lambda "acc" $ lambda "td" $
         Rewriting.foldOverTerm @@ Coders.traversalOrderPre @@
           (var "collectOne") @@ (var "acc") @@ (Packaging.termDefinitionBody (var "td")))
       (Sets.empty :: TypedTerm (S.Set String))
       (var "termDefs") $
-    Sets.toList (var "allStrings")
+    Sets.toList (var "allStrings" :: TypedTerm (S.Set String))
 
 def :: String -> TypedTerm a -> TypedTermDefinition a
 def = definitionInModule module_
@@ -426,7 +428,7 @@ encodeApplication = def "encodeApplication" $
          -- Hydra arity derived from funcSigs. If the call-site provides fewer args
          -- (partial application), we'd need closures — for now, pad with i32.const 0
          -- to match the callee's param count.
-         ("mSig" <~ Maps.lookup (var "lname") (var "funcSigs") $
+         ("mSig" <~ Maps.lookup (var "lname") (var "funcSigs" :: TypedTerm (M.Map String ([W.ValType], [W.ValType]))) $
           "callerArgCount" <~ Lists.length (var "args") $
           "calleeParamCount" <~ Optionals.cases (var "mSig") (var "callerArgCount") (lambda "sig" $ Lists.length (Pairs.first (var "sig"))) $
           "padCount" <~ Math.sub (var "calleeParamCount") (var "callerArgCount") $
@@ -573,7 +575,7 @@ encodeCases = def "encodeCases" $
             (lambda "arm" $ Equality.equal (Pairs.first (var "arm")) (var "fname"))
             (var "explicitArms")))) $
     "typeName" <~ Core.caseStatementTypeName (var "cs") $
-    "mUnionVariants" <~ Maps.lookup (var "typeName") (var "variantIndexes") $
+    "mUnionVariants" <~ Maps.lookup (var "typeName") (var "variantIndexes" :: TypedTerm (M.Map Name [(Name, Int)])) $
     "brTableLabels" <~ Optionals.cases (var "mUnionVariants")
       -- Fallback: no variant info for this type. Use the explicit-arm labels
       -- at positions 0..len-1 (preserving pre-fix behavior); tags beyond the
@@ -725,7 +727,7 @@ encodeProjection = def "encodeProjection" $
   "cx" ~> "g" ~> "fieldOffsets" ~> lambda "proj" $ lambda "scrutineeInstrs" $
     "typeName" <~ Core.projectionTypeName (var "proj") $
     "fieldName" <~ Core.projectionFieldName (var "proj") $
-    "mFields" <~ Maps.lookup (var "typeName") (var "fieldOffsets") $
+    "mFields" <~ Maps.lookup (var "typeName") (var "fieldOffsets" :: TypedTerm (M.Map Name [(Name, Int)])) $
     -- Compute the offset if the type is known and the field exists in it. Returns
     -- Maybe Int — Nothing if the type is unknown or the field name doesn't match
     -- any entry in the type's field list.
@@ -789,11 +791,11 @@ encodeTerm = def "encodeTerm" $
        -- Real either construction. Layout: `[tag, payload_ptr]`, 8 bytes.
        -- Left → tag=0, Right → tag=1. Matches the inject layout (tag + payload)
        -- but uses a fixed {0, 1} tagging instead of a variant-index lookup.
-       "eitherTag" <~ Eithers.either_
+       "eitherTag" <~ Eithers.either
          (lambda "_lv" $ int32 0)
          (lambda "_rv" $ int32 1)
          (var "e") $
-       "innerTerm" <~ Eithers.either_
+       "innerTerm" <~ Eithers.either
          (lambda "lv" $ var "lv")
          (lambda "rv" $ var "rv")
          (var "e") $
@@ -844,7 +846,7 @@ encodeTerm = def "encodeTerm" $
          _Term_record>>: lambda "rt" $ Lists.null (Core.recordFields (var "rt"))]) $
        -- Look up the tag in the universe-wide variant table. Fall back to 0 when the
        -- type or variant is unknown (shouldn't happen for well-formed Hydra terms).
-       "mVariants" <~ Maps.lookup (var "typeName") (var "variantIndexes") $
+       "mVariants" <~ Maps.lookup (var "typeName") (var "variantIndexes" :: TypedTerm (M.Map Name [(Name, Int)])) $
        "tag" <~ Optionals.cases (var "mVariants")
          (int32 0)
          (lambda "pairs" $
@@ -982,7 +984,7 @@ encodeTerm = def "encodeTerm" $
          right (list [encodeLiteral @@ var "lit"])) [
          _Literal_string>>: lambda "s" $
            Optionals.cases
-             (Maps.lookup (var "s") (var "stringOffsets"))
+             (Maps.lookup (var "s") (var "stringOffsets" :: TypedTerm (M.Map String Int)))
              -- Unknown string (shouldn't happen if collectStrings was run first):
              -- fall back to the placeholder.
              (right (list [inject W._Instruction W._Instruction_const $
@@ -998,7 +1000,7 @@ encodeTerm = def "encodeTerm" $
        -- deterministic (sorted) order.
        -- We encode each (k,v) pair into a pair of Instruction lists, then flatten
        -- so the stack has [k_0, v_0, k_1, v_1, ..., k_{N-1}, v_{N-1}] in order.
-       "mapEntries" <~ Maps.toList (var "m") $
+       "mapEntries" <~ Maps.toList (var "m" :: TypedTerm (M.Map Term Term)) $
        "numMapEntries" <~ Lists.length (var "mapEntries") $
        "mapWordCount" <~ Math.add (Math.mul (var "numMapEntries") (int32 2)) (int32 1) $
        "mapSize" <~ Math.mul (var "mapWordCount") (int32 4) $
@@ -1172,7 +1174,7 @@ encodeTerm = def "encodeTerm" $
        -- Real set construction. Layout identical to list: length-prefixed array
        -- `[length, elem_0, ..., elem_{N-1}]`, `(N+1)*4` bytes. Sets.toList returns
        -- elements in deterministic (sorted) order, so the encoding is stable.
-       "setElems" <~ Sets.toList (var "s") $
+       "setElems" <~ Sets.toList (var "s" :: TypedTerm (S.Set Term)) $
        "numSetElems" <~ Lists.length (var "setElems") $
        "setSize" <~ Math.mul (Math.add (var "numSetElems") (int32 1)) (int32 4) $
        "encodedSetElems" <<~ (Eithers.mapList
@@ -1262,7 +1264,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "name" <~ Packaging.termDefinitionName (var "tdef") $
     "term" <~ Packaging.termDefinitionBody (var "tdef") $
     "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (var "name")) $
-    "typ" <~ Optionals.cases (Optionals.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature (var "tdef")) (Core.typeUnit) (reify Core.typeSchemeBody) $
+    "typ" <~ Optionals.cases (Optionals.map (asTerm Scoping.termSignatureToTypeScheme) $ Packaging.termDefinitionSignature (var "tdef")) (Core.typeUnit) (reify Core.typeSchemeBody) $
     -- Extract lambda parameters and inner body
     "extracted" <~ (extractLambdaParams @@ var "term") $
     "paramNames" <~ Pairs.first (var "extracted") $
@@ -1335,7 +1337,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     -- already declared in the function signature, not as locals).
     "allLocalNames" <~ Sets.toList (Sets.difference
       (var "referencedLocals")
-      (Sets.fromList (var "paramNameStrs"))) $
+      (Sets.fromList (var "paramNameStrs")) :: TypedTerm (S.Set String)) $
     "wasmLocals" <~ Lists.map
       (lambda "ln" $
         record W._FuncLocal [
@@ -1641,7 +1643,7 @@ moduleToWasm = def "moduleToWasm" $
         Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Packaging.termDefinitionName (var "td")))
       (var "termDefs"))) $
     -- External call targets = all calls minus local functions (including __alloc)
-    "externalCalls" <~ Sets.toList (Sets.difference (var "allCallTargets") (var "localFuncNames")) $
+    "externalCalls" <~ Sets.toList (Sets.difference (var "allCallTargets") (var "localFuncNames") :: TypedTerm (S.Set String)) $
     -- Generate import declarations for external functions, using the signature from
     -- funcSigs when available, falling back to the old (param i32) (result i32) shape.
     "defaultSig" <~ pair
@@ -1651,7 +1653,7 @@ moduleToWasm = def "moduleToWasm" $
       (lambda "fname" $
         "parts" <~ (Strings.splitOn (string ".") (var "fname")) $
         "modName" <~ Strings.intercalate (string ".") (Lists.reverse (Optionals.fromOptional (list ([] :: [TypedTerm String])) (Lists.maybeTail (Lists.reverse (var "parts"))))) $
-        "sig" <~ Optionals.fromOptional (var "defaultSig") (Maps.lookup (var "fname") (var "funcSigs")) $
+        "sig" <~ Optionals.fromOptional (var "defaultSig") (Maps.lookup (var "fname") (var "funcSigs" :: TypedTerm (M.Map String ([W.ValType], [W.ValType])))) $
         "sigParams" <~ Pairs.first (var "sig") $
         "sigResults" <~ Pairs.second (var "sig") $
         "wasmImportParams" <~ Lists.map
@@ -1682,7 +1684,7 @@ moduleToWasm = def "moduleToWasm" $
         var "allFields"])]) $
     "code" <~ (SerializationSource.printExpr @@ (SerializationSource.parenthesize @@ (WasmSerdeSource.moduleToExpr @@ var "wasmMod"))) $
     "filePath" <~ (Names.moduleNameToFilePath @@ Util.caseConventionLowerSnake @@ wrap _FileExtension (string "wat") @@ (Packaging.moduleName (var "mod"))) $
-      right (Maps.singleton (var "filePath") (var "code"))
+      right (Maps.singleton (var "filePath") (var "code") :: TypedTerm (M.Map FilePath String))
 
 -- | Peel up to N outer lambdas from `term`, where N = length of `args`. Returns
 -- (peeledParamNames, innerBody). If `term` has fewer nested lambdas than there
@@ -1717,7 +1719,7 @@ stringDataSegment :: TypedTermDefinition (M.Map String Int -> W.ModuleField)
 stringDataSegment = def "stringDataSegment" $
   lambda "offsets" $
     -- Sort (string, offset) pairs by offset so the data segment packs contiguously
-    "entries" <~ Lists.sortOn (reify Pairs.second) (Maps.toList (var "offsets")) $
+    "entries" <~ Lists.sortOn (reify Pairs.second) (Maps.toList (var "offsets" :: TypedTerm (M.Map String Int))) $
     -- For each string: emit 4 length-prefix bytes (little-endian) followed by content bytes,
     -- every byte as a hex escape.
     "bytesForEntry" <~ (lambda "entry" $

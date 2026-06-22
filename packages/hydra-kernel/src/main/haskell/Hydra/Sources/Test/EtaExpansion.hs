@@ -16,8 +16,8 @@ import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 
 import Hydra.Testing
 
@@ -428,7 +428,7 @@ noChange name term = testCase name term term
 noChangeDisabled :: String -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 noChangeDisabled name term = testCaseWithMetadata (Phantoms.string name)
   (testCaseUniversal $ universalTestCase
-    (retype $ Eithers.either_
+    (retype $ Eithers.either
       (Phantoms.lambda "e" (Strings.cat2 (Phantoms.string "ETA ERROR: ") (Phantoms.string "failed")))
       (Phantoms.lambda "result" (showTermRef Phantoms.@@ Phantoms.var "result"))
       (etaExpandRef Phantoms.@@ testContextRef Phantoms.@@ testGraphRef Phantoms.@@ term))
@@ -446,7 +446,7 @@ toLower = primitive $ DefStrings.toLower
 
 testCase :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 testCase name input output = universalCase name
-    (retype $ Eithers.either_
+    (retype $ Eithers.either
       (Phantoms.lambda "e" (Strings.cat2 (Phantoms.string "ETA ERROR: ") (Phantoms.string "failed")))
       (Phantoms.lambda "result" (showTermRef Phantoms.@@ Phantoms.var "result"))
       (etaExpandRef Phantoms.@@ testContextRef Phantoms.@@ testGraphRef Phantoms.@@ input))

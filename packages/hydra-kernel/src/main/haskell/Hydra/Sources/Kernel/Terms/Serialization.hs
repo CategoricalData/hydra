@@ -22,18 +22,18 @@ import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Lib.Math     as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -323,7 +323,7 @@ expressionLength = define "expressionLength" $
     Math.add (var "opLen") $ Math.add (var "leftLen") (var "rightLen")) $
   "seqExprLength" <~ ("se" ~>
     "sopLen" <~ var "opLength" @@ (Ast.seqExprOp $ var "se") $
-    "elementLens" <~ Lists.map (expressionLength) (Ast.seqExprElements $ var "se") $
+    "elementLens" <~ Lists.map (asTerm expressionLength) (Ast.seqExprElements $ var "se") $
     "totalElLen" <~ Lists.foldl (reify2 Math.add) (int32 0) (var "elementLens") $
     "numSeps" <~ Math.sub (Lists.length $ Ast.seqExprElements $ var "se") (int32 1) $
     Math.add (var "totalElLen") (Math.mul (var "sopLen") (Logic.ifElse (Equality.gt (var "numSeps") (int32 0)) (var "numSeps") (int32 0)))) $
@@ -455,8 +455,8 @@ parenList = define "parenList" $
   doc "Comma-separate the elements inside parentheses; switches to a half-block style when newlines are requested and there is more than one element. Renders as `()` when empty." $
   "newlines" ~> "els" ~>
     "style" <~ (Logic.ifElse (Logic.and (var "newlines") (Equality.gt (Lists.length $ var "els") (int32 1)))
-      (halfBlockStyle)
-      (inlineStyle)) $
+      (asTerm halfBlockStyle)
+      (asTerm inlineStyle)) $
     Logic.ifElse (Lists.null $ var "els")
       (cst @@ string "()")
       (brackets @@ parentheses @@ var "style" @@ (commaSep @@ var "style" @@ var "els"))
@@ -503,7 +503,7 @@ parenthesize = define "parenthesize" $
       _Expr_seq>>: "seqExpr" ~>
         Ast.exprSeq $ Ast.seqExpr
           (Ast.seqExprOp $ var "seqExpr")
-          (Lists.map (parenthesize) (Ast.seqExprElements $ var "seqExpr")),
+          (Lists.map (asTerm parenthesize) (Ast.seqExprElements $ var "seqExpr")),
       _Expr_op>>: "opExpr" ~>
         "op" <~ Ast.opExprOp (var "opExpr") $
         "prec" <~ Ast.unPrecedence (Ast.opPrecedence $ var "op") $

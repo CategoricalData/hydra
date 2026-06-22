@@ -1,14 +1,15 @@
 -- | Primitive declarations for the hydra.lib.eithers namespace.
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Lib.Eithers where
 
 import Hydra.Kernel
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Optionals as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
@@ -29,6 +30,10 @@ module_ = Module {
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.eithers module.")}
   where
+    -- The mapSet_ default-impl arg below carries an `:: ...Int...` placeholder instantiation: the
+    -- generated `Hydra.Dsl.Lib.Sets` (unlike the old `Meta.Lib.Sets`) exposes the primitive's `Ord`
+    -- constraint, so this polymorphic def needs a concrete type here to satisfy GHC. `Int` is arbitrary
+    -- and carries no meaning — the emitted primitive is type-agnostic and fully polymorphic. See #467.
     definitions = [
       toPrimitive "Map over both sides of an either value." bimapSig [
         "bimap(f, g, e) applies f to the contained value if e is a Left, or g if e is a Right; the result\
@@ -87,7 +92,7 @@ module_ = Module {
         "mapSet(f, s) applies f to each element of s in unspecified order. If every application returns\
         \ Right, the result is Right of the set of contained values (deduplicated by the result type's\
         \ ordering); the first application returning Left short-circuits the whole result to that Left.",
-        "Total. Corresponds to Haskell's traverse-style operation specialised to Set."] mapSet_,
+        "Total. Corresponds to Haskell's traverse-style operation specialised to Set."] (mapSet_ :: TypedTermDefinition ((Int -> Either Int Int) -> S.Set Int -> Either Int (S.Set Int))),
       toPrimitive "Partition a list of either values into lefts and rights." partitionEithersSig [
         "partitionEithers(xs) returns a pair (lefts, rights) where lefts contains every Left value from xs\
         \ in original order and rights contains every Right value from xs in original order.",
@@ -215,7 +220,7 @@ bimap_ :: TypedTermDefinition ((a -> c) -> (b -> d) -> Either a b -> Either c d)
 bimap_ = define "bimap" $
   doc "Map over both sides of an Either, defined in terms of either." $
   "f" ~> "g" ~> "e" ~>
-    Eithers.either_
+    Eithers.either
       ("x" ~> left (var "f" @@ var "x"))
       ("y" ~> right (var "g" @@ var "y"))
       (var "e")
@@ -225,7 +230,7 @@ bind_ :: TypedTermDefinition (Either a b -> (b -> Either a c) -> Either a c)
 bind_ = define "bind" $
   doc "Monadic bind for Either, defined in terms of either." $
   "e" ~> "f" ~>
-    Eithers.either_
+    Eithers.either
       ("x" ~> left (var "x"))
       (var "f")
       (var "e")
@@ -235,33 +240,33 @@ fromLeft_ :: TypedTermDefinition (a -> Either a b -> a)
 fromLeft_ = define "fromLeft" $
   doc "Extract the Left value or return a default, defined in terms of either." $
   "def" ~> "e" ~>
-    Eithers.either_ ("x" ~> var "x") ("_" ~> var "def") (var "e")
+    Eithers.either ("x" ~> var "x") ("_" ~> var "def") (var "e")
 
 -- fromRight def e = either (\_ -> def) (\x -> x) e
 fromRight_ :: TypedTermDefinition (b -> Either a b -> b)
 fromRight_ = define "fromRight" $
   doc "Extract the Right value or return a default, defined in terms of either." $
   "def" ~> "e" ~>
-    Eithers.either_ ("_" ~> var "def") ("x" ~> var "x") (var "e")
+    Eithers.either ("_" ~> var "def") ("x" ~> var "x") (var "e")
 
 -- isLeft e = either (\_ -> true) (\_ -> false) e
 isLeft_ :: TypedTermDefinition (Either a b -> Bool)
 isLeft_ = define "isLeft" $
   doc "Check whether an Either is a Left value, defined in terms of either." $
-  "e" ~> Eithers.either_ ("_" ~> true) ("_" ~> false) (var "e")
+  "e" ~> Eithers.either ("_" ~> true) ("_" ~> false) (var "e")
 
 -- isRight e = either (\_ -> false) (\_ -> true) e
 isRight_ :: TypedTermDefinition (Either a b -> Bool)
 isRight_ = define "isRight" $
   doc "Check whether an Either is a Right value, defined in terms of either." $
-  "e" ~> Eithers.either_ ("_" ~> false) ("_" ~> true) (var "e")
+  "e" ~> Eithers.either ("_" ~> false) ("_" ~> true) (var "e")
 
 -- map f e = either Left (\x -> Right (f x)) e
 map_ :: TypedTermDefinition ((a -> b) -> Either c a -> Either c b)
 map_ = define "map" $
   doc "Map a function over the Right side, defined in terms of either." $
   "f" ~> "e" ~>
-    Eithers.either_
+    Eithers.either
       ("x" ~> left (var "x"))
       ("y" ~> right (var "f" @@ var "y"))
       (var "e")
@@ -285,7 +290,7 @@ lefts_ = define "lefts" $
   "xs" ~>
     Lists.foldr
       ("e" ~> "acc" ~>
-        Eithers.either_
+        Eithers.either
           ("l" ~> Lists.cons (var "l") (var "acc" :: TypedTerm [a]))
           ("_" ~> (var "acc" :: TypedTerm [a]))
           (var "e"))
@@ -299,7 +304,7 @@ rights_ = define "rights" $
   "xs" ~>
     Lists.foldr
       ("e" ~> "acc" ~>
-        Eithers.either_
+        Eithers.either
           ("_" ~> (var "acc" :: TypedTerm [b]))
           ("r" ~> Lists.cons (var "r") (var "acc" :: TypedTerm [b]))
           (var "e"))
@@ -313,7 +318,7 @@ partitionEithers_ = define "partitionEithers" $
   "xs" ~>
     Lists.foldr
       ("e" ~> "acc" ~>
-        Eithers.either_
+        Eithers.either
           ("l" ~> pair (Lists.cons (var "l") (Pairs.first $ var "acc")) (Pairs.second $ var "acc"))
           ("r" ~> pair (Pairs.first $ var "acc") (Lists.cons (var "r") (Pairs.second $ var "acc")))
           (var "e"))
@@ -342,15 +347,15 @@ mapOptional_ = define "mapOptional" $
       ("x" ~> Eithers.map ("y" ~> just (var "y")) (var "f" @@ var "x"))
 
 -- mapSet f s = map fromList (mapList f (toList s))
-mapSet_ :: TypedTermDefinition ((a -> Either c b) -> S.Set a -> Either c (S.Set b))
+mapSet_ :: forall a b c. (Ord a, Ord b) => TypedTermDefinition ((a -> Either c b) -> S.Set a -> Either c (S.Set b))
 mapSet_ = define "mapSet" $
   doc "Traverse a Set with an Either-returning function, defined via list+set conversion." $
   "f" ~> "s" ~>
     Eithers.map
-      ("ys" ~> Sets.fromList (var "ys"))
+      ("ys" ~> (Sets.fromList (var "ys") :: TypedTerm (S.Set b)))
       (Lists.foldr
         ("x" ~> "acc" ~>
           Eithers.bind (var "f" @@ var "x") $
             "y" ~> Eithers.map ("ys" ~> Lists.cons (var "y") (var "ys")) (var "acc"))
         (right (list ([] :: [TypedTerm b])))
-        (Sets.toList (var "s")))
+        (Sets.toList (var "s" :: TypedTerm (S.Set a))))

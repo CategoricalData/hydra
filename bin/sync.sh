@@ -403,9 +403,9 @@ heal_java_python_native() {
     # invocation does. Phase 1.5's banner says "published hosts" because that is the
     # default seeding path, but when the user passes --local-host (e.g. the published
     # hydra-python wheel or hydra-java jar is incompatible with the current kernel —
-    # the #370/#472 migration-shim case, and the #494 FileExtension move for Java)
-    # this heal must also run local, or it hits the broken published artifact and
-    # aborts the whole sync.
+    # the #370/#472 migration-shim case, the #494 FileExtension move for Java, and
+    # the #467 hydra.dsl.lib.* additions) this heal must also run local, or it hits
+    # the broken published artifact and aborts the whole sync.
     #
     # In LOCAL mode the native driver's bootstrap shim compiles the host's DSL coder
     # against the generated dist/<host>/ source trees (the Java rollup's gradle source
@@ -745,7 +745,7 @@ if printf '%s\n' $HOSTS | grep -qx java; then
     # block does below. Without this, `sync.sh --local-host` would leave Phase 5's
     # Java re-export on the published host, defeating --local-host when the published
     # hydra-java jar is incompatible with the current kernel (the #494 FileExtension
-    # move is exactly this case).
+    # move and the #467 hydra.dsl.lib.* additions are exactly this case).
     JAVA_HOST_MODE_FLAG="--$(java_host_mode)-host"   # per-host: hostOverrides[java]=local OR global --local-host
     native_generate_and_report java \
         "$HYDRA_ROOT/bin/generate-hydra-java-from-java.sh" \

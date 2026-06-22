@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Terms.Substitution where
 
@@ -15,18 +16,18 @@ import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Lib.Math     as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -135,9 +136,9 @@ substInClassConstraints = define "substInClassConstraints" $
   "substMap" <~ Typing.unTypeSubst (var "subst") $
   -- Helper to insert a constraint, merging with existing if present
   "insertOrMerge" <~ ("varName" ~> "metadata" ~> "acc" ~>
-    Optionals.cases (Maps.lookup (var "varName") (var "acc")) (Maps.insert (var "varName") (var "metadata") (var "acc")) ("existing" ~>
+    Optionals.cases (Maps.lookup (var "varName" :: TypedTerm Name) (var "acc")) (Maps.insert (var "varName" :: TypedTerm Name) (var "metadata") (var "acc")) ("existing" ~>
         "merged" <~ Core.typeVariableConstraints (Lists.nub $ Lists.concat2 (Core.typeVariableConstraintsClasses $ var "existing") (Core.typeVariableConstraintsClasses $ var "metadata")) $
-        Maps.insert (var "varName") (var "merged") (var "acc"))) $
+        Maps.insert (var "varName" :: TypedTerm Name) (var "merged") (var "acc"))) $
   -- For each (varName, metadata) in constraints:
   -- 1. Look up varName in the substitution
   -- 2. If not found, keep (varName, metadata) in result
@@ -147,7 +148,7 @@ substInClassConstraints = define "substInClassConstraints" $
       "varName" <~ Pairs.first (var "pair") $
       "metadata" <~ Pairs.second (var "pair") $
       Optionals.cases
-        (Maps.lookup (var "varName") (var "substMap"))
+        (Maps.lookup (var "varName" :: TypedTerm Name) (var "substMap"))
         -- Not in substitution: keep original
         (var "insertOrMerge" @@ var "varName" @@ var "metadata" @@ var "acc")
         -- In substitution: propagate constraint to all free variables in the target type
@@ -157,8 +158,8 @@ substInClassConstraints = define "substInClassConstraints" $
             ("acc2" ~> "freeVar" ~> var "insertOrMerge" @@ var "freeVar" @@ var "metadata" @@ var "acc2")
             (var "acc")
             (var "freeVars")))
-    Maps.empty
-    (Maps.toList $ var "constraints")
+    (Maps.empty :: TypedTerm (M.Map Name TypeVariableConstraints))
+    (Maps.toList $ (var "constraints" :: TypedTerm (M.Map Name TypeVariableConstraints)))
 
 substInContext :: TypedTermDefinition (TypeSubst -> Graph -> Graph)
 substInContext = define "substInContext" $
@@ -206,7 +207,7 @@ substInTypeScheme = define "substInTypeScheme" $
     <> " `forall [t0]. t0 -> t0` would incorrectly replace the bound t0.") $
   lambdas ["subst", "ts"] $ lets [
     "scopedSubst">: Typing.typeSubst $ Lists.foldl
-      (lambdas ["m", "v"] $ Maps.delete (var "v") (var "m"))
+      (lambdas ["m", "v"] $ Maps.delete (var "v" :: TypedTerm Name) (var "m"))
       (Typing.unTypeSubst $ var "subst")
       (Core.typeSchemeVariables $ var "ts")] $
     Core.typeScheme
@@ -285,7 +286,7 @@ substituteInTerm = define "substituteInTerm" $
       "withLet">: lambda "lt" $ lets [
         "bindings">: Core.letBindings $ var "lt",
         "names">: Sets.fromList $ Lists.map (reify Core.bindingName) (var "bindings"),
-        "subst2">: Typing.termSubst $ Maps.filterWithKey (lambdas ["k", "v"] $ Logic.not $ Sets.member (var "k") (var "names")) (var "s"),
+        "subst2">: Typing.termSubst $ Maps.filterWithKey (lambdas ["k", "v"] $ Logic.not $ Sets.member (var "k" :: TypedTerm Name) (var "names")) (var "s"),
         "rewriteBinding">: lambda "b" $ Core.binding
           (Core.bindingName $ var "b")
           (substituteInTerm @@ var "subst2" @@ (Core.bindingTerm $ var "b"))
@@ -297,7 +298,7 @@ substituteInTerm = define "substituteInTerm" $
         (Just $ var "recurse" @@ var "term") [
         _Term_lambda>>: "l" ~> var "withLambda" @@ var "l",
         _Term_let>>: "l" ~> var "withLet" @@ var "l",
-        _Term_variable>>: lambda "name" $ Optionals.cases (Maps.lookup (var "name") (var "s")) (var "recurse" @@ var "term") (lambda "sterm" $ var "sterm")]] $
+        _Term_variable>>: lambda "name" $ Optionals.cases (Maps.lookup (var "name" :: TypedTerm Name) (var "s")) (var "recurse" @@ var "term") (lambda "sterm" $ var "sterm")]] $
     Rewriting.rewriteTerm @@ var "rewrite" @@ var "term0"
 
 -- W: subst'

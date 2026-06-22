@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Terms.Environment where
 
@@ -24,18 +25,18 @@ import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math     as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Dsl.Lib.Math     as Math
+import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -124,7 +125,7 @@ graphAsTypes = define "graphAsTypes" $
     Eithers.map
       ("typ" ~> pair (Core.bindingName $ var "el") (var "typ"))
       (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm $ var "el"))) $
-  Eithers.map (reify Maps.fromList) (Eithers.mapList (var "toPair") (var "els"))
+  Eithers.map (reify Maps.fromList :: TypedTerm ([(Name, Type)] -> M.Map Name Type)) (Eithers.mapList (var "toPair") (var "els"))
 
 partitionDefinitions :: TypedTermDefinition ([Definition] -> ([TypeDefinition], [TermDefinition]))
 partitionDefinitions = define "partitionDefinitions" $
@@ -169,9 +170,9 @@ reorderDefs = define "reorderDefs" $
     -- linearize in dependency order. The graph builder needs this: a definition cannot be installed
     -- before any definition it references, and mutual recursion has no flat ordering that satisfies
     -- the use-before-define rule.
-    "sortedTermDefs" <~ (Lists.concat $ Sorting.topologicalSortNodes @@
+    "sortedTermDefs" <~ (Lists.concat $ (Sorting.topologicalSortNodes :: TypedTermDefinition ((Definition -> Name) -> (Definition -> [Name]) -> [Definition] -> [[Definition]])) @@
       ("d" ~> cases _Definition (var "d") Nothing [
-        _Definition_term>>: "td" ~> project _TermDefinition _TermDefinition_name @@ var "td"])
+        _Definition_term>>: "td" ~> (project _TermDefinition _TermDefinition_name @@ var "td" :: TypedTerm Name)])
       @@
       ("d" ~> cases _Definition (var "d") (Just (list ([] :: [TypedTerm Name]))) [
         _Definition_term>>: "td" ~>
@@ -217,7 +218,7 @@ schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
           (Eithers.map ("decoded" ~> just (var "toTypeScheme" @@ list ([] :: [TypedTerm Name]) @@ var "decoded")) (var "decodeType" @@ Core.bindingTerm (var "el")))
           (var "forTerm" @@ (Strip.deannotateTerm @@ (Core.bindingTerm (var "el")))))) $
     right $ Optionals.map ("ts" ~> pair (Core.bindingName (var "el")) (var "ts")) (var "mts")) $
-  Eithers.map ("mpairs" ~> Maps.fromList (Optionals.cat (var "mpairs")))
+  Eithers.map ("mpairs" ~> (Maps.fromList (Optionals.cat (var "mpairs")) :: TypedTerm (M.Map Name TypeScheme)))
     (Eithers.mapList (var "toPair") (Lexical.graphToBindings @@ var "g"))
 
 -- Note: this is lossy, as it throws away the term body
@@ -238,7 +239,7 @@ typesToDefinitions = define "typesToDefinitions" $
       (var "name")
       (encoderFor _Type @@ (Pairs.second $ var "pair"))
       nothing) $
-  Lists.map (var "toElement") $ Maps.toList $ var "typeMap"
+  Lists.map (var "toElement") $ Maps.toList $ (var "typeMap" :: TypedTerm (M.Map Name Type))
 
 withLambdaContext :: TypedTermDefinition ((e -> Graph) -> (Graph -> e -> f) -> e -> Lambda -> (f -> a) -> a)
 withLambdaContext = define "withLambdaContext" $

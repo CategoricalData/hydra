@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 -- | A domain-specific language for constructing term-encoded Hydra terms in Haskell;
 --   these functions enable you to build terms (programs) which build terms.
@@ -13,7 +14,7 @@ import qualified Hydra.Dsl.Meta.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import Hydra.Dsl.Meta.Base
 import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
-import qualified Hydra.Dsl.Meta.Lib.Maps as Maps
+import qualified Hydra.Dsl.Lib.Maps as Maps
 
 import qualified Data.ByteString as B
 import qualified Data.List as L

@@ -21,9 +21,9 @@ import qualified Data.Set                     as S
 
 -- Additional imports specific to this file
 import Hydra.Testing
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Math as Math
-import qualified Hydra.Dsl.Meta.Lib.Sets as Sets
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Math as Math
+import qualified Hydra.Dsl.Lib.Sets as Sets
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
 ns :: ModuleName

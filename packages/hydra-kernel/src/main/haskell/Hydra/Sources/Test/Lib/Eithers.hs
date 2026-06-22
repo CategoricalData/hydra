@@ -20,13 +20,13 @@ import qualified Data.Map                     as M
 
 -- Additional imports specific to this file
 import Hydra.Testing
-import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic as Logic
-import qualified Hydra.Dsl.Meta.Lib.Math as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
+import qualified Hydra.Dsl.Lib.Eithers as Eithers
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Logic as Logic
+import qualified Hydra.Dsl.Lib.Math as Math
+import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Strings as Strings
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
 
@@ -141,7 +141,7 @@ eithersEither = subgroup "either" [
   test "apply right function" (rightStr "ab") 2]
   where
     test name x result = evalPair name showInt32
-      (Eithers.either_
+      (Eithers.either
         (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2))
         (Phantoms.lambda "s" $ Strings.length (Phantoms.var "s"))
         x)

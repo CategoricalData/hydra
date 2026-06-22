@@ -17,9 +17,9 @@ import qualified Data.Map                     as M
 
 -- Additional imports specific to this file
 import Hydra.Testing
-import qualified Hydra.Dsl.Meta.Lib.Lists as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
+import qualified Hydra.Dsl.Lib.Lists as Lists
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Strings as Strings
 import qualified Hydra.Dsl.Prims as Prims
 import qualified Hydra.Lib.Strings as DefStrings
 

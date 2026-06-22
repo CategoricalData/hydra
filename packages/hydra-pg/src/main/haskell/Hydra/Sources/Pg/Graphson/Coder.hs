@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hydra.Sources.Pg.Graphson.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
@@ -5,7 +7,7 @@ import Hydra.Kernel hiding (
   adjacentEdgeToJson, doubleValueToJson, edgeMapToJson, edgePropertyMapToJson,
   floatValueToJson, mapToJson, toJsonObject, typedValueToJson, valueToJson,
   vertexPropertyMapToJson, vertexPropertyValueToJson, vertexToJson)
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -19,17 +21,17 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -142,26 +144,26 @@ edgeMapToJson :: TypedTermDefinition (Bool -> M.Map G.EdgeLabel [G.AdjacentEdge]
 edgeMapToJson = define "edgeMapToJson" $
   doc "Convert a map of edges by label to an optional JSON Value" $
   "out" ~> "m" ~>
-    Logic.ifElse (Maps.null $ var "m")
+    Logic.ifElse (Maps.null (var "m" :: TypedTerm (M.Map G.EdgeLabel [G.AdjacentEdge])))
       nothing
       (just $ Json.valueObject $ Lists.map
         ("p" ~> pair
           (unwrap G._EdgeLabel @@ (Pairs.first $ var "p"))
           (Json.valueArray $ Lists.map (adjacentEdgeToJson @@ var "out") (Pairs.second $ var "p")))
-        (Maps.toList $ var "m"))
+        (Maps.toList (var "m" :: TypedTerm (M.Map G.EdgeLabel [G.AdjacentEdge]))))
 
 -- | Convert edge properties map to JSON
 edgePropertyMapToJson :: TypedTermDefinition (M.Map G.PropertyKey G.Value -> Maybe JM.Value)
 edgePropertyMapToJson = define "edgePropertyMapToJson" $
   doc "Convert a map of edge properties to an optional JSON Value" $
   "m" ~>
-    Logic.ifElse (Maps.null $ var "m")
+    Logic.ifElse (Maps.null (var "m" :: TypedTerm (M.Map G.PropertyKey G.Value)))
       nothing
       (just $ Json.valueObject $ Lists.map
         ("p" ~> pair
           (unwrap G._PropertyKey @@ (Pairs.first $ var "p"))
           (valueToJson @@ (Pairs.second $ var "p")))
-        (Maps.toList $ var "m"))
+        (Maps.toList (var "m" :: TypedTerm (M.Map G.PropertyKey G.Value))))
 
 -- | Convert a FloatValue to JSON
 floatValueToJson :: TypedTermDefinition (G.FloatValue -> JM.Value)
@@ -243,7 +245,7 @@ valueToJson = define "valueToJson" $
     G._Value_integer>>: "i" ~>
       typedValueToJson @@ string "g:Int32" @@ (Json.valueNumber $ Literals.bigintToDecimal $ Literals.int32ToBigint $ var "i"),
     G._Value_list>>: "vals" ~>
-      typedValueToJson @@ string "g:List" @@ (Json.valueArray $ Lists.map valueToJson $ var "vals"),
+      typedValueToJson @@ string "g:List" @@ (Json.valueArray $ Lists.map (asTerm valueToJson) $ var "vals"),
     G._Value_long>>: "l" ~>
       typedValueToJson @@ string "g:Long" @@ (Json.valueNumber $ Literals.bigintToDecimal $ Literals.int64ToBigint $ var "l"),
     G._Value_map>>: "m" ~>
@@ -252,7 +254,7 @@ valueToJson = define "valueToJson" $
     G._Value_primitive>>: "ptv" ~>
       typedValueToJson @@ string "g:PrimitivePdt" @@ (Json.valueString $ project G._PrimitiveTypedValue G._PrimitiveTypedValue_value @@ var "ptv"),
     G._Value_set>>: "vals" ~>
-      typedValueToJson @@ string "g:Set" @@ (Json.valueArray $ Lists.map valueToJson $ var "vals"),
+      typedValueToJson @@ string "g:Set" @@ (Json.valueArray $ Lists.map (asTerm valueToJson) $ var "vals"),
     G._Value_short>>: "i" ~>
       typedValueToJson @@ string "g:Int16" @@ (Json.valueNumber $ Literals.bigintToDecimal $ Literals.int16ToBigint $ var "i"),
     G._Value_string>>: "s" ~> Json.valueString (var "s"),
@@ -264,13 +266,13 @@ vertexPropertyMapToJson :: TypedTermDefinition (M.Map G.PropertyKey [G.VertexPro
 vertexPropertyMapToJson = define "vertexPropertyMapToJson" $
   doc "Convert a map of vertex properties to an optional JSON Value" $
   "m" ~>
-    Logic.ifElse (Maps.null $ var "m")
+    Logic.ifElse (Maps.null (var "m" :: TypedTerm (M.Map G.PropertyKey [G.VertexPropertyValue])))
       nothing
       (just $ Json.valueObject $ Lists.map
         ("p" ~> pair
           (unwrap G._PropertyKey @@ (Pairs.first $ var "p"))
-          (Json.valueArray $ Lists.map vertexPropertyValueToJson (Pairs.second $ var "p")))
-        (Maps.toList $ var "m"))
+          (Json.valueArray $ Lists.map (asTerm vertexPropertyValueToJson) (Pairs.second $ var "p")))
+        (Maps.toList (var "m" :: TypedTerm (M.Map G.PropertyKey [G.VertexPropertyValue]))))
 
 -- | Convert a VertexPropertyValue to JSON
 vertexPropertyValueToJson :: TypedTermDefinition (G.VertexPropertyValue -> JM.Value)
@@ -278,7 +280,7 @@ vertexPropertyValueToJson = define "vertexPropertyValueToJson" $
   doc "Convert a GraphSON VertexPropertyValue to a JSON Value" $
   "vpv" ~>
     toJsonObject @@ list [
-      pair (string "id") (Optionals.map valueToJson $ project G._VertexPropertyValue G._VertexPropertyValue_id @@ var "vpv"),
+      pair (string "id") (Optionals.map (asTerm valueToJson) $ project G._VertexPropertyValue G._VertexPropertyValue_id @@ var "vpv"),
       pair (string "value") (just $ valueToJson @@ (project G._VertexPropertyValue G._VertexPropertyValue_value @@ var "vpv"))]
 
 -- | Convert a GraphSON Vertex to JSON

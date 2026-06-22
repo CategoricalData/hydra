@@ -20,11 +20,11 @@ import qualified Data.Map                     as M
 
 -- Additional imports specific to this file
 import Hydra.Testing
-import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic as Logic
-import qualified Hydra.Dsl.Meta.Lib.Math as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Equality as Equality
+import qualified Hydra.Dsl.Lib.Literals as Literals
+import qualified Hydra.Dsl.Lib.Logic as Logic
+import qualified Hydra.Dsl.Lib.Math as Math
+import qualified Hydra.Dsl.Lib.Optionals as Optionals
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
 
@@ -138,10 +138,10 @@ optionalsCompose = subgroup "compose" [
         (Phantoms.just (Math.mul (Phantoms.var "y") (Phantoms.int32 2)))
         (Phantoms.nothing :: TypedTerm (Maybe Int))
     test name input expected = evalPair name showMaybeInt
-      (Optionals.compose funF funG @@ Phantoms.int32 input)
+      (Optionals.compose funF funG (Phantoms.int32 input))
       expected
     testFails name input = evalPair name showMaybeInt
-      (Optionals.compose funF funG @@ Phantoms.int32 input)
+      (Optionals.compose funF funG (Phantoms.int32 input))
       nothingInt
 
 optionalsFromOptional :: TypedTerm TestGroup

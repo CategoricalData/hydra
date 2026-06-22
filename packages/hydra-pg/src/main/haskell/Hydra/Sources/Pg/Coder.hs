@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hydra.Sources.Pg.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
@@ -10,7 +12,7 @@ import Hydra.Kernel hiding (
   findPropertySpecs, findSingleFieldWithAnnotationKey, hasVertexAdapters,
   projectionAdapter, propertyAdapter, propertyTypes, selectEdgeId,
   selectVertexId, traverseToSingleTerm, vertexCoder, vertexIdAdapter)
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -25,17 +27,17 @@ import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -119,7 +121,8 @@ module_ = Module {
       toDefinition elementTreeVertex,
       toDefinition elementTypeTreeEdge,
       toDefinition elementTypeTreeVertex,
-      toDefinition encodeProperties,
+      toDefinition (encodeProperties :: TypedTermDefinition (InferenceContext -> M.Map Name Term -> [Adapter FieldType (PG.PropertyType Type) Field (PG.Property String)]
+        -> Either Error (M.Map PG.PropertyKey String))),
       toDefinition encodeProperty,
       toDefinition extractString,
       toDefinition findAdjacenEdgeAdapters,
@@ -136,7 +139,11 @@ module_ = Module {
       toDefinition selectEdgeId,
       toDefinition selectVertexId,
       toDefinition traverseToSingleTerm,
-      toDefinition vertexCoder,
+      toDefinition (vertexCoder :: TypedTermDefinition (Graph -> PGM.Schema Graph Type String -> Type -> Type -> Name -> PG.VertexLabel
+        -> (Name, Adapter Type Type Term String)
+        -> [Adapter FieldType (PG.PropertyType Type) Field (PG.Property String)]
+        -> [(PG.Direction, FieldType, PG.EdgeLabel, Adapter Type (PG.ElementTypeTree Type) Term (PG.ElementTree String))]
+        -> Adapter Type (PG.ElementTypeTree Type) Term (PG.ElementTree String))),
       toDefinition vertexIdAdapter]
 
 -- | Check a condition, returning an error if false
@@ -257,7 +264,7 @@ edgeCoder = define "edgeCoder" $
                               ("va" ~> lets [
                                 "fname">: Pairs.first $ var "va",
                                 "ad">: Pairs.second $ var "va"] $
-                                Optionals.cases (Maps.lookup (var "fname") (var "fieldsm")) (right nothing) ("fterm" ~> Eithers.map (lambda "x" $ just (var "x"))
+                                Optionals.cases (Maps.lookup (var "fname") (var "fieldsm" :: TypedTerm (M.Map Name Term))) (right nothing) ("fterm" ~> Eithers.map (lambda "x" $ just (var "x"))
                                     (Coders.coderEncode (Coders.adapterCoder $ var "ad") @@ var "cx" @@ var "fterm")))
                               (var "vertexAdapters")))
                             ("deps" ~>
@@ -351,15 +358,18 @@ elementTypeTreeVertex = define "elementTypeTreeVertex" $
       PG._ElementTypeTree_dependencies>>: var "deps"]
 
 -- | Encode all properties from a field map using property adapters
-encodeProperties :: TypedTermDefinition (InferenceContext -> M.Map Name Term -> [Adapter FieldType (PG.PropertyType t) Field (PG.Property v)]
+-- This and vertexCoder use `forall t v.` (no constraint) only to bring the type vars into scope for
+-- in-body `:: TypedTerm (M.Map PG.PropertyKey v)` annotations, needed now that the generated
+-- `Hydra.Dsl.Lib.Maps` requires the map type to be pinned (the key here is concrete, so no `Ord`). See #467.
+encodeProperties :: forall t v. TypedTermDefinition (InferenceContext -> M.Map Name Term -> [Adapter FieldType (PG.PropertyType t) Field (PG.Property v)]
   -> Either Error (M.Map PG.PropertyKey v))
 encodeProperties = define "encodeProperties" $
   doc "Encode all properties from a field map using property adapters" $
   "cx" ~> "fields" ~> "adapters" ~>
     Eithers.map
-      ("props" ~> Maps.fromList (Lists.map
+      ("props" ~> ((Maps.fromList (Lists.map
         ("prop" ~> pair (project PG._Property PG._Property_key @@ var "prop") (project PG._Property PG._Property_value @@ var "prop"))
-        (var "props")))
+        (var "props"))) :: TypedTerm (M.Map PG.PropertyKey v)))
       (Eithers.map (lambda "xs" $ Optionals.cat (var "xs")) (Eithers.mapList (encodeProperty @@ var "cx" @@ var "fields") (var "adapters")))
 
 -- | Encode a single property from a field map using a property adapter
@@ -375,7 +385,7 @@ encodeProperty = define "encodeProperty" $
     "encodeValue">: "v" ~> Eithers.map (lambda "x" $ just (var "x"))
       (Coders.coderEncode (Coders.adapterCoder $ var "adapter") @@ var "cx" @@ (Core.field (var "fname") (var "v")))] $
     Optionals.cases
-      (Maps.lookup (var "fname") (var "fields"))
+      (Maps.lookup (var "fname") (var "fields" :: TypedTerm (M.Map Name Term)))
       -- Field not found in record
       (Logic.ifElse (var "isMaybe")
         (right nothing)
@@ -590,7 +600,7 @@ selectEdgeId = define "selectEdgeId" $
   "cx" ~> "fields" ~> "ad" ~> lets [
     "fname">: Pairs.first $ var "ad",
     "adapter">: Pairs.second $ var "ad"] $
-    Optionals.cases (Maps.lookup (var "fname") (var "fields")) (err (var "cx") (string "no " ++ (Core.unName $ var "fname") ++ string " in record")) ("t" ~> Coders.coderEncode (Coders.adapterCoder $ var "adapter") @@ var "cx" @@ var "t")
+    Optionals.cases (Maps.lookup (var "fname") (var "fields" :: TypedTerm (M.Map Name Term))) (err (var "cx") (string "no " ++ (Core.unName $ var "fname") ++ string " in record")) ("t" ~> Coders.coderEncode (Coders.adapterCoder $ var "adapter") @@ var "cx" @@ var "t")
 
 -- | Select a vertex id from record fields using an id adapter
 selectVertexId :: TypedTermDefinition (InferenceContext -> M.Map Name Term -> (Name, Adapter Type t Term v) -> Either Error v)
@@ -599,7 +609,7 @@ selectVertexId = define "selectVertexId" $
   "cx" ~> "fields" ~> "ad" ~> lets [
     "fname">: Pairs.first $ var "ad",
     "adapter">: Pairs.second $ var "ad"] $
-    Optionals.cases (Maps.lookup (var "fname") (var "fields")) (err (var "cx") (string "no " ++ (Core.unName $ var "fname") ++ string " in record")) ("t" ~> Coders.coderEncode (Coders.adapterCoder $ var "adapter") @@ var "cx" @@ var "t")
+    Optionals.cases (Maps.lookup (var "fname") (var "fields" :: TypedTerm (M.Map Name Term))) (err (var "cx") (string "no " ++ (Core.unName $ var "fname") ++ string " in record")) ("t" ~> Coders.coderEncode (Coders.adapterCoder $ var "adapter") @@ var "cx" @@ var "t")
 
 -- | Traverse to a single term, failing if zero or multiple terms are found
 traverseToSingleTerm :: TypedTermDefinition (InferenceContext -> String -> (Term -> Either Error [Term]) -> Term -> Either Error Term)
@@ -618,7 +628,7 @@ unexpectedE :: TypedTerm InferenceContext -> TypedTerm String -> TypedTerm Strin
 unexpectedE cx expected found = err cx (string "Expected " ++ expected ++ string ", found: " ++ found)
 
 -- | Create a vertex coder given all components
-vertexCoder :: TypedTermDefinition (Graph -> PGM.Schema Graph t v -> Type -> t -> Name -> PG.VertexLabel
+vertexCoder :: forall t v. TypedTermDefinition (Graph -> PGM.Schema Graph t v -> Type -> t -> Name -> PG.VertexLabel
   -> (Name, Adapter Type t Term v)
   -> [Adapter FieldType (PG.PropertyType t) Field (PG.Property v)]
   -> [(PG.Direction, FieldType, PG.EdgeLabel, Adapter Type (PG.ElementTypeTree t) Term (PG.ElementTree v))]
@@ -677,7 +687,7 @@ vertexCoder = define "vertexCoder" $
                                   PG._Edge_id>>: var "edgeid",
                                   PG._Edge_out>>: var "outId",
                                   PG._Edge_in>>: var "inId",
-                                  PG._Edge_properties>>: Maps.empty])] $
+                                  PG._Edge_properties>>: (Maps.empty :: TypedTerm (M.Map PG.PropertyKey v))])] $
                                 list [record PG._ElementTree [
                                   PG._ElementTree_self>>: var "edge",
                                   PG._ElementTree_dependencies>>: list [var "tree"]]],

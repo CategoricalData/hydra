@@ -1,8 +1,10 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hydra.Sources.Avro.SchemaJson where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel hiding (Result)
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -16,17 +18,17 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -200,7 +202,7 @@ avroSchemaStringCoder = define "avroSchemaStringCoder" $
         Phantoms.right (showJsonValue @@ (encodeSchema @@ var "schema")),
       _Coder_decode>>: lambda "cx2" $ lambda "s" $
         Eithers.bind
-          (Eithers.either_
+          (Eithers.either
             (lambda "e" $ err @@ var "cx2" @@ var "e")
             (lambda "v" $ Phantoms.right (var "v"))
             (stringToJsonValue @@ var "s"))
@@ -488,7 +490,7 @@ decodeSchema = define "decodeSchema" $
       -- Object: named type or container. The object payload is an ordered pair-list;
       -- decoding looks fields up by name, so convert to a map up front.
       JM._Value_object>>: lambda "mList" $ lets [
-        "m">: Maps.fromList (var "mList")] $
+        "m">: (Maps.fromList (var "mList") :: TypedTerm (M.Map String JM.Value))] $
         Eithers.bind (requireStringE @@ var "cx" @@ avro_type @@ var "m")
           (lambda "typeName" $ decodeObjectSchema @@ var "cx" @@ var "m" @@ var "typeName")]
 
@@ -500,7 +502,7 @@ encodeAnnotations = define "encodeAnnotations" $
       (lambda "entry" $ pair
         (Strings.cat2 (string "@") (Pairs.first (var "entry")))
         (Pairs.second (var "entry")))
-      (Maps.toList (var "m"))
+      (Maps.toList (var "m" :: TypedTerm (M.Map String JM.Value)))
 
 
 -- | Coder functions
@@ -607,7 +609,7 @@ encodeRecordE = define "encodeRecord" $
   lambda "r" $
     list [
       pair (string "type") (inject JM._Value JM._Value_string (string "record")),
-      pair (string "fields") (inject JM._Value JM._Value_array (Lists.map encodeFieldE (project Avro._Record Avro._Record_fields @@ var "r")))]
+      pair (string "fields") (inject JM._Value JM._Value_array (Lists.map (asTerm encodeFieldE) (project Avro._Record Avro._Record_fields @@ var "r")))]
 
 encodeSchema :: TypedTermDefinition (Avro.Schema -> JM.Value)
 encodeSchema = define "encodeSchema" $
@@ -626,7 +628,7 @@ encodeUnion = define "encodeUnion" $
   doc "Encode an Avro union as a JSON array of schemas" $
   lambda "u" $
     inject JM._Value JM._Value_array
-      (Lists.map encodeSchema (unwrap Avro._Union @@ var "u"))
+      (Lists.map (asTerm encodeSchema) (unwrap Avro._Union @@ var "u"))
 
 err :: TypedTermDefinition (InferenceContext -> String -> Result a)
 err = define "err" $
@@ -653,7 +655,7 @@ expectObjectE = define "expectObjectE" $
   doc "Extract a JSON object as a name-keyed map or return an error (field order is dropped)" $
   lambda "cx" $ lambda "value" $
     cases JM._Value (var "value") Nothing [
-      JM._Value_object>>: lambda "v" $ Phantoms.right (Maps.fromList (var "v"))]
+      JM._Value_object>>: lambda "v" $ Phantoms.right (Maps.fromList (var "v") :: TypedTerm (M.Map String JM.Value))]
 
 expectStringE :: TypedTermDefinition (InferenceContext -> JM.Value -> Result String)
 expectStringE = define "expectStringE" $
@@ -666,7 +668,7 @@ getAnnotations :: TypedTermDefinition (M.Map String JM.Value -> M.Map String JM.
 getAnnotations = define "getAnnotations" $
   doc "Extract annotation entries (keys starting with @) from a JSON object map" $
   lambda "m" $
-    Maps.fromList (Optionals.cat (Lists.map
+    (Maps.fromList (Optionals.cat (Lists.map
       (lambda "entry" $ lets [
         "k">: Pairs.first (var "entry"),
         "v">: Pairs.second (var "entry")] $
@@ -674,7 +676,7 @@ getAnnotations = define "getAnnotations" $
           (Equality.equal (Optionals.fromOptional (int32 0) (Strings.maybeCharAt (int32 0) (var "k"))) (int32 64))  -- 64 = '@'
           (Optionals.pure (pair (Strings.fromList (Lists.drop (int32 1) (Strings.toList (var "k")))) (var "v")))
           nothing)
-      (Maps.toList (var "m"))))
+      (Maps.toList (var "m" :: TypedTerm (M.Map String JM.Value))))) :: TypedTerm (M.Map String JM.Value))
 
 jsonModelNs :: ModuleName
 jsonModelNs = ModuleName "hydra.json.model"
@@ -689,19 +691,19 @@ optArrayE :: TypedTermDefinition (InferenceContext -> String -> M.Map String JM.
 optArrayE = define "optArrayE" $
   doc "Look up an optional array attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
-    Optionals.cases (Maps.lookup (var "fname") (var "m")) (Phantoms.right nothing) (lambda "v" $ Eithers.map (lambda "a" $ Optionals.pure (var "a")) (expectArrayE @@ var "cx" @@ var "v"))
+    Optionals.cases (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String JM.Value))) (Phantoms.right nothing) (lambda "v" $ Eithers.map (lambda "a" $ Optionals.pure (var "a")) (expectArrayE @@ var "cx" @@ var "v"))
 
 optE :: TypedTermDefinition (String -> M.Map String JM.Value -> Maybe JM.Value)
 optE = define "optE" $
   doc "Look up an optional attribute in a JSON object map" $
   lambda "k" $ lambda "m" $
-    Maps.lookup (var "k") (var "m")
+    Maps.lookup (var "k") (var "m" :: TypedTerm (M.Map String JM.Value))
 
 optStringE :: TypedTermDefinition (InferenceContext -> String -> M.Map String JM.Value -> Result (Maybe String))
 optStringE = define "optStringE" $
   doc "Look up an optional string attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
-    Optionals.cases (Maps.lookup (var "fname") (var "m")) (Phantoms.right nothing) (lambda "v" $ Eithers.map (lambda "s" $ Optionals.pure (var "s")) (expectStringE @@ var "cx" @@ var "v"))
+    Optionals.cases (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String JM.Value))) (Phantoms.right nothing) (lambda "v" $ Eithers.map (lambda "s" $ Optionals.pure (var "s")) (expectStringE @@ var "cx" @@ var "v"))
 
 requireArrayE :: TypedTermDefinition (InferenceContext -> String -> M.Map String JM.Value -> Result [JM.Value])
 requireArrayE = define "requireArrayE" $
@@ -714,7 +716,7 @@ requireE :: TypedTermDefinition (InferenceContext -> String -> M.Map String JM.V
 requireE = define "requireE" $
   doc "Look up a required attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
-    Optionals.cases (Maps.lookup (var "fname") (var "m")) (err @@ var "cx" @@ (Strings.cat $ list [string "required attribute ", Literals.showString (var "fname"), string " not found"])) (lambda "v" $ Phantoms.right (var "v"))
+    Optionals.cases (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String JM.Value))) (err @@ var "cx" @@ (Strings.cat $ list [string "required attribute ", Literals.showString (var "fname"), string " not found"])) (lambda "v" $ Phantoms.right (var "v"))
 
 requireNumberE :: TypedTermDefinition (InferenceContext -> String -> M.Map String JM.Value -> Result Sci.Scientific)
 requireNumberE = define "requireNumberE" $

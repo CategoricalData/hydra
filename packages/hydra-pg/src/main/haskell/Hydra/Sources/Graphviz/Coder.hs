@@ -1,9 +1,11 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Hydra.Sources.Graphviz.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Dsl.Libraries
-import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -17,17 +19,17 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
-import qualified Hydra.Dsl.Meta.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
+import qualified Hydra.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
 import qualified Hydra.Dsl.Meta.Testing                    as Testing
@@ -130,13 +132,13 @@ labelAttrs = define "labelAttrs" $
   doc "Create DOT label attributes with a node style" $
   "style" ~> "lab" ~> lets [
     "styleAttrs">:
-      Logic.ifElse (Equality.equal (var "style") nodeStyleSimple)
+      Logic.ifElse (Equality.equal (var "style") (asTerm nodeStyleSimple))
         (list ([] :: [TypedTerm Dot.EqualityPair]))
-        (Logic.ifElse (Equality.equal (var "style") nodeStyleElement)
+        (Logic.ifElse (Equality.equal (var "style") (asTerm nodeStyleElement))
           (list [
             record Dot._EqualityPair [Dot._EqualityPair_left>>: wrap Dot._Id (string "style"), Dot._EqualityPair_right>>: wrap Dot._Id (string "filled")],
             record Dot._EqualityPair [Dot._EqualityPair_left>>: wrap Dot._Id (string "fillcolor"), Dot._EqualityPair_right>>: wrap Dot._Id (string "lightyellow")]])
-          (Logic.ifElse (Equality.equal (var "style") nodeStyleVariable)
+          (Logic.ifElse (Equality.equal (var "style") (asTerm nodeStyleVariable))
             (list [
               record Dot._EqualityPair [Dot._EqualityPair_left>>: wrap Dot._Id (string "style"), Dot._EqualityPair_right>>: wrap Dot._Id (string "filled")],
               record Dot._EqualityPair [Dot._EqualityPair_left>>: wrap Dot._Id (string "fillcolor"), Dot._EqualityPair_right>>: wrap Dot._Id (string "lightcyan")]])
@@ -279,9 +281,9 @@ termToDotStmts = define "termToDotStmts" $
       "labstyle">: Optionals.cases (var "mlabstyle") (var "labelOf" @@ var "visited" @@ var "currentTerm") ("ls" ~> var "ls"),
       "label">: Pairs.first $ var "labstyle",
       "style">: Pairs.second $ var "labstyle",
-      "nodeStyle">: Logic.ifElse (var "isElement") nodeStyleElement (var "termNodeStyle"),
+      "nodeStyle">: Logic.ifElse (var "isElement") (asTerm nodeStyleElement) (var "termNodeStyle"),
       "selfId">: wrap Dot._Id (var "label"),
-      "selfVisited">: Sets.insert (var "label") (var "visited"),
+      "selfVisited">: (Sets.insert (var "label") (var "visited") :: TypedTerm (S.Set String)),
       -- Node statement for this term
       "nodeStmt">: inject Dot._Stmt Dot._Stmt_node (record Dot._NodeStmt [
         Dot._NodeStmt_id>>: toNodeId @@ var "selfId",
@@ -307,8 +309,8 @@ termToDotStmts = define "termToDotStmts" $
             "vstr">: Core.unName (var "v"),
             "varLabel">: Names.chooseUniqueLabel @@ var "selfVisited" @@ var "vstr",
             "varId">: wrap Dot._Id (var "varLabel"),
-            "visited1">: Sets.insert (var "varLabel") (var "selfVisited"),
-            "ids1">: Maps.insert (var "v") (var "varId") (var "ids"),
+            "visited1">: (Sets.insert (var "varLabel") (var "selfVisited") :: TypedTerm (S.Set String)),
+            "ids1">: (Maps.insert (var "v") (var "varId") (var "ids") :: TypedTerm (M.Map Name Dot.Id)),
             "varNodeStmt">: inject Dot._Stmt Dot._Stmt_node (record Dot._NodeStmt [
               Dot._NodeStmt_id>>: toNodeId @@ var "varId",
               Dot._NodeStmt_attributes>>: just $ labelAttrs @@ nodeStyleVariable @@ var "vstr"]),
@@ -330,15 +332,15 @@ termToDotStmts = define "termToDotStmts" $
               "bterm">: Core.bindingTerm $ var "binding",
               "bls">: var "labelOf" @@ var "curVis" @@ var "bterm",
               "blab">: Pairs.first $ var "bls"]
-              $ pair (Maps.insert (var "bname") (wrap Dot._Id (var "blab")) (var "curIds"))
-                     (Sets.insert (var "blab") (var "curVis")),
+              $ pair (Maps.insert (var "bname") (wrap Dot._Id (var "blab")) (var "curIds") :: TypedTerm (M.Map Name Dot.Id))
+                     (Sets.insert (var "blab") (var "curVis") :: TypedTerm (S.Set String)),
             "idsVis1">: Lists.foldl (var "addBindingIds") (pair (var "ids") (var "visited")) (var "bindings"),
             "ids1">: Pairs.first $ var "idsVis1",
             -- Second pass: encode each binding term
             "addBindingTerm">: lambdas ["stVis", "binding"] $ lets [
               "bname">: Core.bindingName $ var "binding",
               "bterm">: Core.bindingTerm $ var "binding",
-              "blab">: unwrap Dot._Id @@ (Optionals.fromOptional (wrap Dot._Id (string "?")) (Maps.lookup (var "bname") (var "ids1")))]
+              "blab">: unwrap Dot._Id @@ (Optionals.fromOptional (wrap Dot._Id (string "?")) (Maps.lookup (var "bname") (var "ids1" :: TypedTerm (M.Map Name Dot.Id))))]
               $ var "encode"
                   @@ just (pair (var "blab") nodeStyleElement) @@ true @@ var "ids1" @@ just (var "selfId")
                   @@ var "stVis"
@@ -349,13 +351,13 @@ termToDotStmts = define "termToDotStmts" $
                 @@ var "stmts1"
                 @@ pair Paths.subtermStepLetBody (var "env"),
           _Term_variable>>: "name" ~>
-            Optionals.cases (Maps.lookup (var "name") (var "ids")) (var "dflt") ("i" ~> pair
+            Optionals.cases (Maps.lookup (var "name") (var "ids" :: TypedTerm (M.Map Name Dot.Id))) (var "dflt") ("i" ~> pair
                 (Lists.concat2 (var "stmts") (list [var "toAccessorEdgeStmt" @@ var "accessor" @@ var "style" @@ (Optionals.fromOptional (var "selfId") (var "mparent")) @@ var "i"]))
                 (var "visited"))]
         @@ var "currentTerm"]
     $ Pairs.first $ var "encode"
-        @@ nothing @@ false @@ Maps.empty @@ nothing
-        @@ pair (list ([] :: [TypedTerm Dot.Stmt])) Sets.empty
+        @@ nothing @@ false @@ (Maps.empty :: TypedTerm (M.Map Name Dot.Id)) @@ nothing
+        @@ pair (list ([] :: [TypedTerm Dot.Stmt])) (Sets.empty :: TypedTerm (S.Set String))
         @@ pair Paths.subtermStepAnnotatedBody (var "term")
 
 -- | Convert a term to an subterm-style DOT graph
@@ -385,7 +387,7 @@ termToSubtermDotStmts = define "termToSubtermDotStmts" $
       "lab1">: project _SubtermNode _SubtermNode_id @@ (project _SubtermEdge _SubtermEdge_source @@ var "edge"),
       "lab2">: project _SubtermNode _SubtermNode_id @@ (project _SubtermEdge _SubtermEdge_target @@ var "edge"),
       "pathAccessors">: unwrap _SubtermPath @@ (project _SubtermEdge _SubtermEdge_path @@ var "edge"),
-      "showPath">: Strings.intercalate (string "/") (Optionals.cat (Lists.map ShowPaths.subtermStep (var "pathAccessors")))]
+      "showPath">: Strings.intercalate (string "/") (Optionals.cat (Lists.map (asTerm ShowPaths.subtermStep) (var "pathAccessors")))]
       $ toEdgeStmt @@ wrap Dot._Id (var "lab1") @@ wrap Dot._Id (var "lab2") @@
           (just $ wrap Dot._AttrList (list [list [labelAttr @@ var "showPath"]]))]
     $ Lists.concat2 (Lists.map (var "nodeStmt") (var "nodes")) (Lists.map (var "edgeStmt") (var "edges"))
