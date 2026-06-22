@@ -1,5 +1,11 @@
 # Lazy fix design: Coder.hs edits
 
+> **Historical note (pre-#346).** This is an archived design sketch. The
+> `Hydra/Sources/Python/Coder.hs` file it references no longer exists — the Haskell-DSL
+> Python coder copy was removed in 0.16 ([#346](https://github.com/CategoricalData/hydra/issues/346));
+> the Python coder is now authored natively in Python. The line numbers below are stale. For the
+> implemented `Lazy`-based approach, see [python-host-perf-investigation.md](python-host-perf-investigation.md).
+
 This document captures the line-level changes I plan to make to
 `packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Coder.hs`
 to replace the eager-walrus + `@lru_cache(1)` thunk patterns with a

@@ -15,6 +15,48 @@ they are documented here for completeness.
 
 ---
 
+## [0.17.0] - 2026-06-21
+
+Major themes: first-class support for effects and I/O in the kernel, TypeScript and
+Scala reaching publishable parity with the other hosts, and continued maturation of
+the published-host build model.
+
+### Highlights
+
+- **Effects and I/O** ([#286](https://github.com/CategoricalData/hydra/issues/286),
+  [#288](https://github.com/CategoricalData/hydra/issues/288),
+  [#494](https://github.com/CategoricalData/hydra/issues/494)): a new `effect` variant
+  on `hydra.core.Type` for representing effectful computations; new kernel modules
+  `hydra.file` (`FilePath`, `FileType`, `FileStatus`, `FileExtension`), `hydra.time`
+  (`Timespec`), and `hydra.error.file`; new primitive libraries `hydra.lib.effects`,
+  `hydra.lib.files`, and `hydra.lib.text` with byte-level I/O; and a new
+  `EffectfulTestCase` mechanism so the common test suite can exercise effectful
+  primitives across hosts.
+- **TypeScript is a complete implementation**
+  ([#462](https://github.com/CategoricalData/hydra/issues/462)): self-hosts and passes
+  the common test suite, with a per-package npm publish pipeline
+  ([#492](https://github.com/CategoricalData/hydra/issues/492)).
+- **Scala publishing**: per-package Maven Central publish infrastructure
+  ([#491](https://github.com/CategoricalData/hydra/issues/491)).
+- **Published-host build model**: published mode now compiles the kernel from the
+  co-generated `dist/haskell` rather than Hackage, removing the need for a
+  `haskell=local` shim ([#500](https://github.com/CategoricalData/hydra/issues/500));
+  the oil-and-water principle and cold-build workflow for `dist/haskell` are documented
+  ([#376](https://github.com/CategoricalData/hydra/issues/376)).
+- **Kernel hygiene**: `uniqueLabel` (apostrophe suffixes) replaced by `chooseUniqueLabel`
+  (numeric suffixes) in `hydra.names`
+  ([#436](https://github.com/CategoricalData/hydra/issues/436)).
+
+### Implementations
+
+Eight hosts self-host and pass the common test suite across five families: Haskell,
+Java, Python, Scala, and the four Lisp dialects (Clojure, Common Lisp, Scheme, Emacs
+Lisp), with TypeScript now joining as a complete host/target. Go remains a "head bud"
+(the coder still has emission bugs and the head's runtime is largely placeholder; it
+does not yet host the test suite).
+
+---
+
 ## [0.16.1] - 2026-06-16
 
 Major themes: the first release built by bootstrapping from previously published

@@ -22,7 +22,7 @@ There is no CLI to invoke; you are integrating Hydra into your own application.
 
 ## Java
 
-Hydra 0.16 publishes one Maven artifact per package. Pick the ones you need; coordinates are under group `net.fortytwo.hydra`, all at the same version.
+Hydra publishes one Maven artifact per package. Pick the ones you need; coordinates are under group `net.fortytwo.hydra`, all at the same version.
 
 | ArtifactId | Contains |
 |---|---|
@@ -38,9 +38,9 @@ Hydra 0.16 publishes one Maven artifact per package. Pick the ones you need; coo
 
 ```gradle
 dependencies {
-    implementation 'net.fortytwo.hydra:hydra-kernel:0.16.0'
-    implementation 'net.fortytwo.hydra:hydra-pg:0.16.0'
-    implementation 'net.fortytwo.hydra:hydra-pg-dsl:0.16.0'
+    implementation 'net.fortytwo.hydra:hydra-kernel:0.17.0'
+    implementation 'net.fortytwo.hydra:hydra-pg:0.17.0'
+    implementation 'net.fortytwo.hydra:hydra-pg-dsl:0.17.0'
 }
 ```
 
@@ -51,17 +51,17 @@ dependencies {
   <dependency>
     <groupId>net.fortytwo.hydra</groupId>
     <artifactId>hydra-kernel</artifactId>
-    <version>0.16.0</version>
+    <version>0.17.0</version>
   </dependency>
   <dependency>
     <groupId>net.fortytwo.hydra</groupId>
     <artifactId>hydra-pg</artifactId>
-    <version>0.16.0</version>
+    <version>0.17.0</version>
   </dependency>
   <dependency>
     <groupId>net.fortytwo.hydra</groupId>
     <artifactId>hydra-pg-dsl</artifactId>
-    <version>0.16.0</version>
+    <version>0.17.0</version>
   </dependency>
 </dependencies>
 ```
@@ -121,8 +121,8 @@ read [HydraPop's `Validate.java`](https://github.com/CategoricalData/HydraPop/bl
 
 ## Python
 
-Hydra 0.15+ publishes one conda-forge package per Hydra package: `hydra-kernel`, `hydra-pg`, `hydra-pg-dsl`, etc.
-PyPI publication is tracked by [#290](https://github.com/CategoricalData/hydra/issues/290).
+Hydra publishes one package per Hydra package (`hydra-kernel`, `hydra-pg`, `hydra-pg-dsl`, etc.) to both
+conda-forge and PyPI.
 
 ### conda
 
@@ -198,7 +198,7 @@ Hydra-Haskell is on Hackage as `hydra`. From a stack project:
 ```yaml
 # stack.yaml
 extra-deps:
-  - hydra-0.16.0
+  - hydra-0.17.0
 ```
 
 ```yaml

@@ -31,13 +31,12 @@ See the [GenPG README](../demos/genpg/README.md) for setup, usage, and code gene
 ## Bootstrapping (everything-to-everything code generation)
 
 The bootstrapping demo validates Hydra's self-hosting capability.
-All five complete implementations (Haskell, Java, Python, Scala, and Lisp) independently load
-Hydra modules from a language-independent JSON representation and regenerate code for any
-target language.
+All eight complete host implementations (Haskell, Java, Python, Scala, TypeScript, and the four Lisp
+dialects — Clojure, Common Lisp, Scheme, Emacs Lisp) independently load Hydra modules from a
+language-independent JSON representation and regenerate code for any target language.
 The default demo uses Haskell, Java, and Python as both hosts and targets,
 producing 9 bootstrapping paths.
-Scala and Lisp can also be included as hosts and targets;
-TypeScript is supported as both host and target (#126 has landed).
+Scala, TypeScript, and the Lisp dialects can also be included as hosts and targets.
 
 The pipeline works in four steps:
 
@@ -137,7 +136,7 @@ A small, self-contained demo of Hydra's instrumented evaluation mode.
 It constructs a module with two test bindings (a string concatenation expression and a type description),
 reduces the terms, and prints how many times each primitive function was called during evaluation.
 
-This demonstrates how the `Flow` monad's trace threading can be repurposed for instrumentation
+This demonstrates how Hydra's instrumented evaluation can be repurposed for instrumentation
 beyond error reporting -- for example, counting API calls that consume time or resources.
 
 Entry point: `demos/src/main/haskell/Hydra/Demos/MeteredEvaluation.hs`.
