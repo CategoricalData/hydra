@@ -62,10 +62,12 @@ EXTERNAL_DEPS: dict[str, list[str]] = {
         "base64-bytestring             >= 1.2.1 && < 1.3",     # Lib.Literals (Data.ByteString.Base64)
         "bytestring                    >= 0.11.5 && < 0.13",   # Data.ByteString
         "containers                    >= 0.6.7 && < 0.8",     # Data.Map, Data.Set
+        "directory                     >= 1.3.6 && < 1.4",     # Lib.Files (System.Directory, #494)
         "regex-tdfa                    >= 1.3.2 && < 1.4",     # Lib.Regex (Text.Regex.TDFA)
         "scientific                    >= 0.3.7 && < 0.4",     # Data.Scientific
         "split                         >= 0.2.3 && < 0.3",     # Lib.Lists (Data.List.Split)
         "text                          >= 2.0.2 && < 2.2",     # Lib.Strings (Data.Text)
+        "time                          >= 1.12.0 && < 1.13",   # Lib.Files (Data.Time.Clock[.POSIX], #494)
     ],
     "hydra-haskell": [
         "base                          >= 4.19.0 && < 4.22",
