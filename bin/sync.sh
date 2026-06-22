@@ -408,23 +408,32 @@ heal_java_python_native() {
     # aborts the whole sync.
     #
     # In LOCAL mode the native driver's bootstrap shim compiles the host's DSL coder
-    # against the generated dist/<host>/hydra-kernel (it needs hydra.typed.TypedTerm,
-    # the effect type, hydra.file.*, etc.). On a COLD tree that kernel does not exist
-    # yet — it is normally produced in Phase 3, which runs AFTER this heal — and the
-    # driver's own self-bootstrap is suppressed under HYDRA_IN_SYNC to avoid recursion.
-    # So pre-assemble the host kernel from the fresh JSON first (a cheap Layer-1
-    # JSON->target transform; no host compile). Published mode does not touch
-    # dist/<host>/ at all, so skip the pre-assemble there.
-    local jm pm
+    # against the generated dist/<host>/ source trees (the Java rollup's gradle source
+    # set in packages/hydra-java/build.gradle pulls in dist/java/hydra-{kernel,haskell,
+    # java,lisp,python,scala,typescript}; it needs hydra.typed.TypedTerm, the effect
+    # type, hydra.file.*, AND hydra.java.syntax.* etc.). On a COLD tree those trees do
+    # not exist yet — they are normally produced in Phase 3/4, which run AFTER this heal
+    # — and the driver's own self-bootstrap is suppressed under HYDRA_IN_SYNC to avoid
+    # recursion. So pre-assemble the host packages the rollup compiles against, from the
+    # fresh JSON first (cheap Layer-1 JSON->target transforms; no host compile). Warm
+    # trees digest-skip these. Published mode does not touch dist/<host>/, so skip there.
+    local jm pm pkg
     jm="$(java_host_mode)"
     pm="$(python_host_mode)"
     if [ "$jm" = "local" ]; then
-        "$HYDRA_ROOT/heads/java/bin/assemble-distribution.sh" hydra-kernel || return 1
+        # Mirror the srcDirs in packages/hydra-java/build.gradle so the local rollup
+        # compiles against a complete dist/java on a cold checkout.
+        for pkg in hydra-kernel hydra-haskell hydra-java hydra-lisp hydra-python hydra-scala hydra-typescript; do
+            "$HYDRA_ROOT/heads/java/bin/assemble-distribution.sh" "$pkg" || return 1
+        done
     fi
     HYDRA_IN_SYNC=1 "$HYDRA_ROOT/bin/generate-hydra-java-from-java.sh" \
         "--$jm-host" || return 1
     if [ "$pm" = "local" ]; then
-        "$HYDRA_ROOT/heads/python/bin/assemble-distribution.sh" hydra-kernel || return 1
+        # The Python local shim imports the coder runtime from dist/python/hydra-{kernel,python}.
+        for pkg in hydra-kernel hydra-python; do
+            "$HYDRA_ROOT/heads/python/bin/assemble-distribution.sh" "$pkg" || return 1
+        done
     fi
     HYDRA_IN_SYNC=1 "$HYDRA_ROOT/bin/generate-hydra-python-from-python.sh" \
         "--$pm-host" || return 1
