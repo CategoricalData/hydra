@@ -406,10 +406,28 @@ heal_java_python_native() {
     # the #370/#472 migration-shim case, and the #494 FileExtension move for Java)
     # this heal must also run local, or it hits the broken published artifact and
     # aborts the whole sync.
+    #
+    # In LOCAL mode the native driver's bootstrap shim compiles the host's DSL coder
+    # against the generated dist/<host>/hydra-kernel (it needs hydra.typed.TypedTerm,
+    # the effect type, hydra.file.*, etc.). On a COLD tree that kernel does not exist
+    # yet — it is normally produced in Phase 3, which runs AFTER this heal — and the
+    # driver's own self-bootstrap is suppressed under HYDRA_IN_SYNC to avoid recursion.
+    # So pre-assemble the host kernel from the fresh JSON first (a cheap Layer-1
+    # JSON->target transform; no host compile). Published mode does not touch
+    # dist/<host>/ at all, so skip the pre-assemble there.
+    local jm pm
+    jm="$(java_host_mode)"
+    pm="$(python_host_mode)"
+    if [ "$jm" = "local" ]; then
+        "$HYDRA_ROOT/heads/java/bin/assemble-distribution.sh" hydra-kernel || return 1
+    fi
     HYDRA_IN_SYNC=1 "$HYDRA_ROOT/bin/generate-hydra-java-from-java.sh" \
-        "--$(java_host_mode)-host" || return 1
+        "--$jm-host" || return 1
+    if [ "$pm" = "local" ]; then
+        "$HYDRA_ROOT/heads/python/bin/assemble-distribution.sh" hydra-kernel || return 1
+    fi
     HYDRA_IN_SYNC=1 "$HYDRA_ROOT/bin/generate-hydra-python-from-python.sh" \
-        "--$(python_host_mode)-host" || return 1
+        "--$pm-host" || return 1
 }
 if [ -x "$JP_FRESH_CHECK" ]; then
     if [ "${HYDRA_INCLUDE_JAVA_PYTHON:-0}" = "1" ]; then
