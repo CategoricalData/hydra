@@ -11,6 +11,7 @@ import qualified Hydra.Sources.Kernel.Types.Error.Checking as ErrorChecking
 import qualified Hydra.Sources.Kernel.Types.Error.Core     as ErrorCore
 import qualified Hydra.Sources.Kernel.Types.Error.File     as ErrorFile
 import qualified Hydra.Sources.Kernel.Types.Error.Packaging as ErrorPackaging
+import qualified Hydra.Sources.Kernel.Types.Error.System   as ErrorSystem
 import qualified Hydra.Sources.Kernel.Types.Errors     as Error
 import qualified Hydra.Sources.Kernel.Types.File        as File
 import qualified Hydra.Sources.Kernel.Types.Graph       as Graph
@@ -20,6 +21,7 @@ import qualified Hydra.Sources.Kernel.Types.Packaging   as Packaging
 import qualified Hydra.Sources.Kernel.Types.Parsing     as Parsing
 import qualified Hydra.Sources.Kernel.Types.Query       as Query
 import qualified Hydra.Sources.Kernel.Types.Relational  as Relational
+import qualified Hydra.Sources.Kernel.Types.System      as System
 import qualified Hydra.Sources.Kernel.Types.Tabular     as Tabular
 import qualified Hydra.Sources.Kernel.Types.Testing     as Testing
 import qualified Hydra.Sources.Kernel.Types.Time        as Time
@@ -40,6 +42,7 @@ kernelTypesModules = [
   ErrorCore.module_,
   ErrorFile.module_,
   ErrorPackaging.module_,
+  ErrorSystem.module_,
   Error.module_,
   File.module_,
   Graph.module_,
@@ -48,6 +51,7 @@ kernelTypesModules = [
   Parsing.module_,
   Query.module_,
   Relational.module_,
+  System.module_,
   Tabular.module_,
   Testing.module_,
   Time.module_,
