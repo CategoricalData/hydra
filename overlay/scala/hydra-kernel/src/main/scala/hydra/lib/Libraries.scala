@@ -254,6 +254,12 @@ object Libraries:
   private def tEffect(t: Type): Type = Type.effect(t)
   private val tFilePath: Type = Type.variable("hydra.file.FilePath")
   private val tFileError: Type = Type.variable("hydra.error.file.FileError")
+  private val tCommand: Type = Type.variable("hydra.system.Command")
+  private val tProcessResult: Type = Type.variable("hydra.system.ProcessResult")
+  private val tStatusCode: Type = Type.variable("hydra.system.StatusCode")
+  private val tEnvironmentVariable: Type = Type.variable("hydra.system.EnvironmentVariable")
+  private val tSystemError: Type = Type.variable("hydra.error.system.SystemError")
+  private val tTimespec: Type = Type.variable("hydra.time.Timespec")
   private val tString: Type = Type.literal(LiteralType.string)
   private val tBool: Type = Type.literal(LiteralType.boolean)
   private val tBinary: Type = Type.literal(LiteralType.binary)
@@ -1305,6 +1311,32 @@ object Libraries:
         tMono(tFun(tFilePath, tFun(tBinary, tEffect(tEither(tFileError, tUnit)))))),
     )
 
+  // ===== System primitives (#498) =====
+  // Effect type is transparent in Scala; these are registered for inference only, with a deferred-stub
+  // interpreter impl; real I/O happens in hydra.scala.lib.system.
+
+  private def systemPrimitives(): Map[String, Primitive] =
+    Map(
+      // execute: Command -> effect<either<SystemError, ProcessResult>>
+      hydra.lib.system.execute.name -> mkPrim(hydra.lib.system.execute.name,
+        tMono(tFun(tCommand, tEffect(tEither(tSystemError, tProcessResult))))),
+      // exit: StatusCode -> effect<unit>
+      hydra.lib.system.exit.name -> mkPrim(hydra.lib.system.exit.name,
+        tMono(tFun(tStatusCode, tEffect(tUnit)))),
+      // getEnvironment: effect<map<EnvironmentVariable, string>>
+      hydra.lib.system.getEnvironment.name -> mkPrim(hydra.lib.system.getEnvironment.name,
+        tMono(tEffect(tMap(tEnvironmentVariable, tString)))),
+      // getEnvironmentVariable: EnvironmentVariable -> effect<optional<string>>
+      hydra.lib.system.getEnvironmentVariable.name -> mkPrim(hydra.lib.system.getEnvironmentVariable.name,
+        tMono(tFun(tEnvironmentVariable, tEffect(tOpt(tString))))),
+      // getTime: effect<Timespec>
+      hydra.lib.system.getTime.name -> mkPrim(hydra.lib.system.getTime.name,
+        tMono(tEffect(tTimespec))),
+      // getWorkingDirectory: effect<either<SystemError, FilePath>>
+      hydra.lib.system.getWorkingDirectory.name -> mkPrim(hydra.lib.system.getWorkingDirectory.name,
+        tMono(tEffect(tEither(tSystemError, tFilePath)))),
+    )
+
   // ===== Text primitives (#494) =====
 
   private def textPrimitives(): Map[String, Primitive] =
@@ -1329,6 +1361,7 @@ object Libraries:
     logicPrimitives() ++
     mapsPrimitives() ++
     mathPrimitives() ++
+    systemPrimitives() ++
     optionalsPrimitives() ++
     pairsPrimitives() ++
     regexPrimitives() ++

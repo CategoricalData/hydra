@@ -53,6 +53,7 @@ public class Libraries {
                 regexPrimitives(),
                 setsPrimitives(),
                 stringsPrimitives(),
+                systemPrimitives(),
                 textPrimitives())) {
             for (PrimitiveFunction p : group) {
                 reversed = ConsList.cons(p, reversed);
@@ -125,6 +126,16 @@ public class Libraries {
                 new hydra.lib.files.RemoveFile(),
                 new hydra.lib.files.Rename(),
                 new hydra.lib.files.WriteFile());
+    }
+
+    private static List<PrimitiveFunction> systemPrimitives() {
+        return Arrays.asList(
+                new hydra.lib.system.Execute(),
+                new hydra.lib.system.Exit(),
+                new hydra.lib.system.GetEnvironment(),
+                new hydra.lib.system.GetEnvironmentVariable(),
+                new hydra.lib.system.GetTime(),
+                new hydra.lib.system.GetWorkingDirectory());
     }
 
     private static List<PrimitiveFunction> listsPrimitives() {

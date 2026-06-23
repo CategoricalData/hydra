@@ -160,6 +160,12 @@
 ;; Set function bindings again for generated kernel defvars
 (hydra-set-function-bindings)
 
+;; hydra.lib.system's native impl (#498) is loaded AFTER hydra-load-gen-main rather than with the other
+;; native libs above, because its nullary effects (get_time, get_working_directory) eagerly construct
+;; generated record types (make-hydra_time_timespec) at load time, so the type defstructs must already
+;; be defined.
+(load (hydra-dist-main-path "common_lisp/lib/system.lisp"))
+
 ;; ============================================================================
 ;; 4. Load primitive infrastructure and test runner
 ;; ============================================================================
@@ -227,7 +233,8 @@
              "lib/pairs.lisp"
              "lib/regex.lisp"
              "lib/sets.lisp"
-             "lib/strings.lisp"))
+             "lib/strings.lisp"
+             "lib/system.lisp"))
   (load-test-file f))
 
 ;; Annotation tests
