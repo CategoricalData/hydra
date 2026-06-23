@@ -68,6 +68,8 @@ import qualified Hydra.Sources.Kernel.Terms.Scoping      as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Sorting      as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Strip        as Strip
 import qualified Hydra.Sources.Kernel.Terms.Variables    as Variables
+import qualified Hydra.Decoding                          as Decoding
+import qualified Hydra.Encoding                          as Encoding
 
 
 
@@ -81,7 +83,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns, ModuleName "hydra.decode.core", ModuleName "hydra.encode.core", Scoping.ns, Sorting.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns, Decoding.decodeModuleName (ModuleName "hydra.core"), Encoding.encodeModuleName (ModuleName "hydra.core"), Scoping.ns, Sorting.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just ("Graph to type environment conversions"))}
   where
     definitions = [

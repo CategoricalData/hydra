@@ -69,6 +69,7 @@ import qualified Hydra.Lib.Maps as DefMaps
 import qualified Hydra.Lib.Optionals as DefOptionals
 import qualified Hydra.Lib.Pairs as DefPairs
 import qualified Hydra.Lib.Sets as DefSets
+import qualified Hydra.Decoding as Decoding
 
 
 ns :: ModuleName
@@ -78,7 +79,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, ModuleName "hydra.decode.core", Formatting.ns, Names.ns, Predicates.ns, Rewriting.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, Decoding.decodeModuleName (ModuleName "hydra.core"), Formatting.ns, Names.ns, Predicates.ns, Rewriting.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Functions for generating term encoders from type modules")}
   where
     definitions = [

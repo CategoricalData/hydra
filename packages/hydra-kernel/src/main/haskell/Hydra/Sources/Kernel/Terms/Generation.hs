@@ -77,6 +77,8 @@ import qualified Hydra.Sources.Kernel.Terms.Environment     as Environment
 import qualified Hydra.Sources.Kernel.Terms.Strip           as Strip
 import qualified Hydra.Sources.Kernel.Terms.Show.Core       as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors     as ShowError
+import qualified Hydra.Decoding                             as Decoding
+import qualified Hydra.Encoding                             as Encoding
 
 -- Dependencies on secondary generated modules (decode/encode)
 
@@ -92,7 +94,7 @@ module_ = Module {
      Environment.ns, ShowCore.ns, ShowError.ns, Strip.ns,
      ModuleName "hydra.decoding", ModuleName "hydra.encoding",
      ModuleName "hydra.json.decode", ModuleName "hydra.json.encode", ModuleName "hydra.json.writer",
-     ModuleName "hydra.decode.core", ModuleName "hydra.decode.packaging", ModuleName "hydra.encode.packaging"] L.++ kernelTypesModuleNames),
+     Decoding.decodeModuleName (ModuleName "hydra.core"), Decoding.decodeModuleName (ModuleName "hydra.packaging"), Encoding.encodeModuleName (ModuleName "hydra.packaging")] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Pure code generation pipeline for bootstrapping Hydra across languages.")}
   where
     definitions = [
