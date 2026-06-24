@@ -47,6 +47,7 @@ import qualified Hydra.Sources.Test.Generation as Generation
 import qualified Hydra.Sources.Test.Inference.All as InferenceAll
 import qualified Hydra.Sources.Test.Inference.AlgebraicTypes as InferenceAlgebraicTypes
 import qualified Hydra.Sources.Test.Inference.AlgorithmW as InferenceAlgorithmW
+import qualified Hydra.Sources.Test.Inference.Annotations as InferenceAnnotations
 import qualified Hydra.Sources.Test.Inference.Failures as InferenceFailures
 import qualified Hydra.Sources.Test.Inference.Fundamentals as InferenceFundamentals
 import qualified Hydra.Sources.Test.Inference.KernelExamples as InferenceKernelExamples
@@ -163,7 +164,8 @@ testSuiteModules =
    CheckingFailures.module_, CheckingFundamentals.module_, CheckingNominalTypes.module_,
    -- Inference tests (including sub-modules)
    InferenceAll.module_,
-   InferenceAlgebraicTypes.module_, InferenceAlgorithmW.module_, InferenceClasses.module_, InferenceFailures.module_,
+   InferenceAlgebraicTypes.module_, InferenceAlgorithmW.module_, InferenceAnnotations.module_,
+   InferenceClasses.module_, InferenceFailures.module_,
    InferenceFundamentals.module_, InferenceKernelExamples.module_, InferenceNominalTypes.module_,
    -- Substitution and unification tests
    Substitution.module_, Unification.module_,

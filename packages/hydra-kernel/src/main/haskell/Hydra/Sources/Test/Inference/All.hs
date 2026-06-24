@@ -16,6 +16,7 @@ import qualified Data.Map  as M
 
 import qualified Hydra.Sources.Test.Inference.AlgebraicTypes as AlgebraicTypes
 import qualified Hydra.Sources.Test.Inference.AlgorithmW as AlgorithmW
+import qualified Hydra.Sources.Test.Inference.Annotations as Annotations
 import qualified Hydra.Sources.Test.Inference.Classes as Classes
 import qualified Hydra.Sources.Test.Inference.Failures as Failures
 import qualified Hydra.Sources.Test.Inference.Fundamentals as Fundamentals
@@ -37,6 +38,7 @@ module_ = Module {
     namespaces = [
       AlgebraicTypes.ns,
       AlgorithmW.ns,
+      Annotations.ns,
       Classes.ns,
       Failures.ns,
       Fundamentals.ns,
@@ -51,6 +53,7 @@ allTests = definitionInModule module_ "allTests" $
     subgroups = [
       AlgebraicTypes.allTests,
       AlgorithmW.allTests,
+      Annotations.allTests,
       Classes.allTests,
       Failures.allTests,
       Fundamentals.allTests,
