@@ -265,6 +265,7 @@
              "inference/algebraic_types.lisp"
              "inference/nominal_types.lisp"
              "inference/algorithm_w.lisp"
+             "inference/annotations.lisp"
              "inference/classes.lisp"
              "inference/failures.lisp"
              "inference/kernel_examples.lisp"
