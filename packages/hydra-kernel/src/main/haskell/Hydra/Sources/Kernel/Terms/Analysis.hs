@@ -80,6 +80,7 @@ import qualified Hydra.Sources.Kernel.Terms.Strip        as Strip
 import qualified Hydra.Sources.Kernel.Terms.Variables    as Variables
 
 import qualified Hydra.Sources.Kernel.Terms.Predicates   as Predicates
+import qualified Hydra.Decoding                          as Decoding
 
 
 ns :: ModuleName
@@ -92,7 +93,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, Arity.ns, Checking.ns, Dependencies.ns, ModuleName "hydra.decode.core", Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, Scoping.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, Arity.ns, Checking.ns, Dependencies.ns, Decoding.decodeModuleName (ModuleName "hydra.core"), Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, Scoping.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just ("Module dependency module name analysis"))}
   where
     definitions = [

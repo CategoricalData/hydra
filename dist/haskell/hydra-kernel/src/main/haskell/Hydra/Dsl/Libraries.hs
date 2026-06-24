@@ -38,6 +38,7 @@ import qualified Hydra.Lib.Pairs as DefPairs
 import qualified Hydra.Lib.Regex as DefRegex
 import qualified Hydra.Lib.Sets as DefSets
 import qualified Hydra.Lib.Strings as DefStrings
+import qualified Hydra.Lib.System as DefSystem
 import qualified Hydra.Lib.Text as DefText
 
 import qualified Data.List as L
@@ -142,6 +143,15 @@ hydraLibFiles = standardLibrary [
     unsupportedEffectPrimitive DefFiles.rename,
     unsupportedEffectPrimitive DefFiles.status,
     unsupportedEffectPrimitive DefFiles.writeFile]
+
+hydraLibSystem :: Library
+hydraLibSystem = standardLibrary [
+    unsupportedEffectPrimitive DefSystem.execute,
+    unsupportedEffectPrimitive DefSystem.exit,
+    unsupportedEffectPrimitive DefSystem.getEnvironment,
+    unsupportedEffectPrimitive DefSystem.getEnvironmentVariable,
+    unsupportedEffectPrimitive DefSystem.getTime,
+    unsupportedEffectPrimitive DefSystem.getWorkingDirectory]
 
 hydraLibEithers :: Library
 hydraLibEithers = standardLibrary [
@@ -441,6 +451,7 @@ standardLibraries = [
   hydraLibRegex,
   hydraLibSets,
   hydraLibStrings,
+  hydraLibSystem,
   hydraLibText]
 
 -- | Assemble a library from its primitives. The library's module name (e.g. "hydra.lib.chars")

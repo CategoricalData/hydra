@@ -68,6 +68,8 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Strip        as Strip
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors  as ShowError
 import Hydra.Encoding (encodeBindingName)
+import qualified Hydra.Decoding as Decoding
+import qualified Hydra.Encoding as Encoding
 
 
 ns :: ModuleName
@@ -77,7 +79,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, ModuleName "hydra.decode.core", ModuleName "hydra.encode.core", ExtractCore.ns, Lexical.ns,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Decoding.decodeModuleName (ModuleName "hydra.core"), Encoding.encodeModuleName (ModuleName "hydra.core"), ExtractCore.ns, Lexical.ns,
       Strip.ns, ShowCore.ns, ShowError.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Utilities for reading and writing type and term annotations")}
   where
