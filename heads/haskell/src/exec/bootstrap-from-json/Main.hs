@@ -657,28 +657,28 @@ main = do
   -- is a member access (verified), so this textual redirect is safe. No-op for Haskell/Java
   -- (Java's impls don't collide; Haskell uses the registry).
   let libSubs = ["chars","eithers","equality","lists","literals","logic","maps","math","optionals","pairs","regex","sets","strings"]
-  -- The effectful lib sub-namespaces (#286) have native impls in Python only (hydra.python.lib.{effects,files,text});
-  -- other hosts lack hydra.<lang>.lib.{effects,files,text}, so redirecting their call sites would dangle. Restrict the
-  -- effectful redirect to Python by extending the sub-list only for the Python consumer transform.
-  let libSubsPython = libSubs ++ ["effects","files","text"]
-  -- Scala (#494) likewise provides native effectful impls at hydra.scala.lib.{effects,files,text},
-  -- so its consumer call sites are redirected for these sub-namespaces too.
-  let libSubsScala = libSubs ++ ["effects","files","text"]
-  -- Clojure (#494) provides native effectful impls at hydra.clojure.lib.{effects,files,text}
-  -- (overlay/clojure/.../hydra/clojure/lib/{effects,files,text}.clj), so its consumer call sites
+  -- The effectful lib sub-namespaces (#286/#498) have native impls only in hosts that ship
+  -- hydra.<lang>.lib.<sub>; redirecting a call site for a sub the host lacks would dangle. "system"
+  -- (#498) is added per-host as each host's overlay runtime lands: Python first; Scala and the Lisp
+  -- dialects gain it when their hydra.<lang>.lib.system overlays are added.
+  let libSubsPython = libSubs ++ ["effects","files","system","text"]
+  -- Scala (#494/#498) provides native effectful impls at hydra.scala.lib.{effects,files,system,text}.
+  let libSubsScala = libSubs ++ ["effects","files","system","text"]
+  -- Clojure (#494/#498) provides native effectful impls at hydra.clojure.lib.{effects,files,system,text}
+  -- (overlay/clojure/.../hydra/clojure/lib/{effects,files,system,text}.clj), so its consumer call sites
   -- are redirected for these sub-namespaces too. The other Lisp dialects (scheme/common-lisp/
   -- emacs-lisp) do not yet have these runtimes, so they keep the baseline libSubs.
-  let libSubsClojure = libSubs ++ ["effects","files","text"]
-  -- Scheme (#494) provides native effectful impls at (hydra scheme lib {effects,files,text})
-  -- (overlay/scheme/.../hydra/scheme/lib/{effects,files,text}.scm), so its consumer call sites
+  let libSubsClojure = libSubs ++ ["effects","files","system","text"]
+  -- Scheme (#494/#498) provides native effectful impls at (hydra scheme lib {effects,files,system,text})
+  -- (overlay/scheme/.../hydra/scheme/lib/{effects,files,system,text}.scm), so its consumer call sites
   -- are redirected for these sub-namespaces too. The other Lisp dialects (common-lisp/emacs-lisp)
   -- do not yet have these runtimes, so they keep the baseline libSubs.
-  let libSubsScheme = libSubs ++ ["effects","files","text"]
+  let libSubsScheme = libSubs ++ ["effects","files","system","text"]
   -- Common Lisp and Emacs Lisp share the flat-namespace redirect (redirectLispFlat "lisp"). Both
-  -- now ship native effectful impls at hydra/common_lisp/lib/{effects,files,text}.lisp and
-  -- hydra/emacs_lisp/lib/{effects,files,text}.el (the latter landed alongside this, #494), so the
+  -- now ship native effectful impls at hydra/common_lisp/lib/{effects,files,system,text}.lisp and
+  -- hydra/emacs_lisp/lib/{effects,files,system,text}.el (system added #498), so the
   -- shared flat redirect renames their effectful call sites too (and drops the def-module :use).
-  let libSubsLisp = libSubs ++ ["effects","files","text"]
+  let libSubsLisp = libSubs ++ ["effects","files","system","text"]
   -- For each lib sub-namespace, redirect the CODE-REFERENCE shapes the coders emit:
   --   1. member access / qualified prefix:  hydra.lib.<sub>.<fn>   (and bare prefix uses)
   --   2. bare module import (Python/Scala):  import hydra.lib.<sub>

@@ -15,6 +15,7 @@
             [hydra.clojure.lib.regex :as regex]
             [hydra.clojure.lib.sets :as sets]
             [hydra.clojure.lib.strings :as strings]
+            [hydra.clojure.lib.system :as system]
             [hydra.clojure.lib.text :as text]))
 
 (defn- prim-name
@@ -687,6 +688,44 @@
                                      [] fp bin (eff (p/tc-either ferr unit)))}))
 
 ;; ============================================================
+;; System (#498)
+;; ============================================================
+;;
+;; Process execution, environment, working directory, and clock. effect<t> is transparent, so the impls
+;; (hydra.clojure.lib.system, reached via the bootstrap redirect) run eagerly; these registrations carry
+;; the kernel type schemes for inference.
+
+(defn register-system []
+  (let [s (p/tc-string)
+        fp (p/tc-named "hydra.file.FilePath")
+        cmd (p/tc-named "hydra.system.Command")
+        pres (p/tc-named "hydra.system.ProcessResult")
+        sc (p/tc-named "hydra.system.StatusCode")
+        envvar (p/tc-named "hydra.system.EnvironmentVariable")
+        serr (p/tc-named "hydra.error.system.SystemError")
+        ts (p/tc-named "hydra.time.Timespec")
+        unit (p/tc-unit)
+        eff (fn [c] (p/tc-effect c))]
+    {(prim-name 'hydra.lib.system/hydra_lib_system_execute) (p/prim1 (prim-name 'hydra.lib.system/hydra_lib_system_execute)
+                                     system/hydra_lib_system_execute
+                                     [] cmd (eff (p/tc-either serr pres)))
+     (prim-name 'hydra.lib.system/hydra_lib_system_exit) (p/prim1 (prim-name 'hydra.lib.system/hydra_lib_system_exit)
+                                     system/hydra_lib_system_exit
+                                     [] sc (eff unit))
+     (prim-name 'hydra.lib.system/hydra_lib_system_get_environment) (p/prim0 (prim-name 'hydra.lib.system/hydra_lib_system_get_environment)
+                                     (fn [] system/hydra_lib_system_get_environment)
+                                     [] (eff (p/tc-map envvar s)))
+     (prim-name 'hydra.lib.system/hydra_lib_system_get_environment_variable) (p/prim1 (prim-name 'hydra.lib.system/hydra_lib_system_get_environment_variable)
+                                     system/hydra_lib_system_get_environment_variable
+                                     [] envvar (eff (p/tc-optional s)))
+     (prim-name 'hydra.lib.system/hydra_lib_system_get_time) (p/prim0 (prim-name 'hydra.lib.system/hydra_lib_system_get_time)
+                                     (fn [] system/hydra_lib_system_get_time)
+                                     [] (eff ts))
+     (prim-name 'hydra.lib.system/hydra_lib_system_get_working_directory) (p/prim0 (prim-name 'hydra.lib.system/hydra_lib_system_get_working_directory)
+                                     (fn [] system/hydra_lib_system_get_working_directory)
+                                     [] (eff (p/tc-either serr fp)))}))
+
+;; ============================================================
 ;; Text (#494)
 ;; ============================================================
 ;;
@@ -810,5 +849,6 @@
    (register-regex)
    (register-sets)
    (register-strings)
+   (register-system)
    (register-text)
    (register-annotations)))

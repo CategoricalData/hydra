@@ -33,6 +33,10 @@
 (hydra-load-gen-main)
 (hydra-set-function-bindings)
 
+;; hydra.lib.system native impl must load after gen-main (its nullary getTime constructs a
+;; generated record type at load time, #498).
+(hydra-load-system-lib)
+
 ;; Load prims and libraries
 (hydra-load-prims-and-libraries)
 

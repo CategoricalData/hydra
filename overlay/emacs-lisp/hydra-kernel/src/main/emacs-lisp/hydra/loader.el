@@ -620,6 +620,7 @@ bootstrap-demo-only).")
                   "test/lib/regex.el"
                   "test/lib/sets.el"
                   "test/lib/strings.el"
+                  "test/lib/system.el"
                   "test/annotations.el"
                   "test/checking/advanced.el"
                   "test/checking/algebraic_types.el"
@@ -687,6 +688,12 @@ bootstrap-demo-only).")
              "emacs_lisp/lib/regex.el" "emacs_lisp/lib/sets.el"
              "emacs_lisp/lib/strings.el" "emacs_lisp/lib/text.el"))
   (load (expand-file-name f hydra-loader-dir) nil t))
+;; hydra.lib.system (#498) is loaded separately AFTER (hydra-load-gen-main) (see run-tests.el / bootstrap),
+;; not in the dolist above: its nullary getTime eagerly constructs make-hydra_time_timespec at load, so the
+;; generated type defstructs must already be defined.
+(defun hydra-load-system-lib ()
+  "Load the hydra.lib.system native impl. Call AFTER (hydra-load-gen-main)."
+  (load (expand-file-name "emacs_lisp/lib/system.el" hydra-loader-dir) nil t))
 
 (defun hydra-load-prims-and-libraries ()
   "Load prims and libraries (must be called after gen-main)."

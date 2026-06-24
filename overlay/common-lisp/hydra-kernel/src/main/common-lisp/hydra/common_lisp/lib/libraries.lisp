@@ -20,7 +20,7 @@
 ;; skip the real def-module and leave the def vars unbound. hydra-load-file populating an existing
 ;; (empty) package is fine.
 (dolist (sub '("chars" "effects" "eithers" "equality" "files" "lists" "literals" "logic" "maps"
-               "math" "optionals" "pairs" "regex" "sets" "strings" "text"))
+               "math" "optionals" "pairs" "regex" "sets" "strings" "system" "text"))
   (hydra-load-file (merge-pathnames (concatenate 'string "lib/" sub ".lisp")
                                     *hydra-gen-main-dir*)))
 
@@ -206,6 +206,43 @@
         (cons (prim-name hydra_lib_files_write_file)      (prim2 (prim-name hydra_lib_files_write_file)
                                                    hydra_lisp_lib_files_write_file
                                                    nil fp bin (funcall eff (tc-either ferr unit))))))))
+
+;; ============================================================================
+;; System (#498)
+;; ============================================================================
+;; hydra.common_lisp.lib.system runtime (flat hydra_lisp_lib_system_*), reached via the redirect.
+
+(defun register-system ()
+  (let (
+        (s (tc-string))
+        (fp (tc-named "hydra.file.FilePath"))
+        (cmd (tc-named "hydra.system.Command"))
+        (pres (tc-named "hydra.system.ProcessResult"))
+        (sc (tc-named "hydra.system.StatusCode"))
+        (envvar (tc-named "hydra.system.EnvironmentVariable"))
+        (serr (tc-named "hydra.error.system.SystemError"))
+        (ts (tc-named "hydra.time.Timespec"))
+        (unit (tc-unit)))
+    (let ((eff (lambda (c) (tc-effect c))))
+      (list
+        (cons (prim-name hydra_lib_system_execute) (prim1 (prim-name hydra_lib_system_execute)
+                                                   hydra_lisp_lib_system_execute
+                                                   nil cmd (funcall eff (tc-either serr pres))))
+        (cons (prim-name hydra_lib_system_exit) (prim1 (prim-name hydra_lib_system_exit)
+                                                   hydra_lisp_lib_system_exit
+                                                   nil sc (funcall eff unit)))
+        (cons (prim-name hydra_lib_system_get_environment) (prim0 (prim-name hydra_lib_system_get_environment)
+                                                   (lambda () hydra_lisp_lib_system_get_environment)
+                                                   nil (funcall eff (tc-map envvar s))))
+        (cons (prim-name hydra_lib_system_get_environment_variable) (prim1 (prim-name hydra_lib_system_get_environment_variable)
+                                                   hydra_lisp_lib_system_get_environment_variable
+                                                   nil envvar (funcall eff (tc-optional s))))
+        (cons (prim-name hydra_lib_system_get_time) (prim0 (prim-name hydra_lib_system_get_time)
+                                                   (lambda () hydra_lisp_lib_system_get_time)
+                                                   nil (funcall eff ts)))
+        (cons (prim-name hydra_lib_system_get_working_directory) (prim0 (prim-name hydra_lib_system_get_working_directory)
+                                                   (lambda () hydra_lisp_lib_system_get_working_directory)
+                                                   nil (funcall eff (tc-either serr fp))))))))
 
 ;; ============================================================================
 ;; Lists
@@ -820,5 +857,6 @@
     (register-regex)
     (register-sets)
     (register-strings)
+    (register-system)
     (register-text)
     (register-annotations)))
