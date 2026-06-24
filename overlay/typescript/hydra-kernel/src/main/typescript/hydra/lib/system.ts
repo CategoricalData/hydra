@@ -93,15 +93,14 @@ export const getEnvironmentVariable = (name: any): Optional<string> => {
 
 // getTime : effect<Timespec>
 // The current wall-clock time as a Timespec (seconds and nanoseconds since the
-// Unix epoch).
+// Unix epoch). Both seconds and nanoseconds are bigint, matching the generated
+// Timespec type (int64 and uint32 both encode as bigint in TypeScript).
 export const getTime = (): any => {
-  const nanosTotal = process.hrtime.bigint === undefined
-    ? BigInt(Date.now()) * 1_000_000n
-    : BigInt(Math.round(Date.now())) * 1_000_000n;
+  const nanosTotal = BigInt(Math.round(Date.now())) * 1_000_000n;
   // Date.now() gives wall-clock ms since epoch; convert to seconds + nanoseconds.
   const seconds = nanosTotal / 1_000_000_000n;
   const nanoseconds = nanosTotal % 1_000_000_000n;
-  return { seconds: Number(seconds), nanoseconds: Number(nanoseconds) };
+  return { seconds, nanoseconds };
 };
 
 // getWorkingDirectory : effect<either<SystemError, FilePath>>

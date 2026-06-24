@@ -61,7 +61,6 @@ const toCanon = <K, V>(m: any | CanonMap<K, V>): CanonMap<K, V> => {
 
 // ===== Hydra-facing API. Inputs may be plain ReadonlyMap or CanonMap; outputs are always CanonMap. =====
 
-// Hydra exposes `empty` as a value, not a function.
 export const empty: any = mkCanon<never, never>(new Map()) as unknown as ReadonlyMap<never, never>;
 
 export const fromList = <K, V>(pairs: readonly (readonly [K, V])[]): any => {
