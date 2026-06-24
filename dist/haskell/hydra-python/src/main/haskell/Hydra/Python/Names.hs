@@ -13,13 +13,13 @@ import qualified Hydra.Errors as Errors
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
-import qualified Hydra.Haskell.Lib.Equality as Equality
-import qualified Hydra.Haskell.Lib.Lists as Lists
-import qualified Hydra.Haskell.Lib.Logic as Logic
-import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Optionals as Optionals
-import qualified Hydra.Haskell.Lib.Pairs as Pairs
-import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Overlay.Haskell.Lib.Equality as Equality
+import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
+import qualified Hydra.Overlay.Haskell.Lib.Logic as Logic
+import qualified Hydra.Overlay.Haskell.Lib.Maps as Maps
+import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
+import qualified Hydra.Overlay.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Overlay.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
@@ -40,6 +40,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+import qualified Data.Map as M
 -- | Generate a constant name for a field definition
 encodeConstantForFieldName :: t0 -> t1 -> Core.Name -> Syntax.Name
 encodeConstantForFieldName env tname fname =
@@ -65,8 +66,7 @@ encodeName isQualified conv env name =
           mns = Util.qualifiedNameModuleName qualName
           local = Util.qualifiedNameLocal qualName
           pyLocal = sanitizePythonName (Formatting.convertCase Util.CaseConventionCamel conv local)
-          pyNs =
-                  \nsVal -> Strings.intercalate "." (Lists.map (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake) (Strings.splitOn "." (Packaging.unModuleName nsVal)))
+          pyNs = \nsVal -> encodeNamespaceStringWithOverrides nsVal
       in (Logic.ifElse isQualified (Optionals.cases (Maps.lookup name boundVars) (Logic.ifElse (Equality.equal mns (Just focusNs)) (Syntax.Name (Logic.ifElse useFutureAnnotations pyLocal (Serde.escapePythonString True pyLocal))) (Optionals.cases mns (Syntax.Name pyLocal) (\nsVal -> Syntax.Name (Strings.cat2 (pyNs nsVal) (Strings.cat2 "." pyLocal))))) (\n -> n)) (Syntax.Name pyLocal))
 -- | Encode a name as a fully qualified Python name
 encodeNameQualified :: Environment.PythonEnvironment -> Core.Name -> Syntax.Name
@@ -79,16 +79,28 @@ encodeNameQualified env name =
           qualName = Names.qualifyName name
           mns = Util.qualifiedNameModuleName qualName
           local = Util.qualifiedNameLocal qualName
-          pyNs =
-                  \nsVal -> Strings.intercalate "." (Lists.map (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake) (Strings.splitOn "." (Packaging.unModuleName nsVal)))
+          pyNs = \nsVal -> encodeNamespaceStringWithOverrides nsVal
       in (Optionals.cases (Maps.lookup name boundVars) (Logic.ifElse (Equality.equal mns (Just focusNs)) (Syntax.Name (Logic.ifElse useFutureAnnotations local (Serde.escapePythonString True local))) (Optionals.cases mns (Syntax.Name (sanitizePythonName local)) (\nsVal -> Syntax.Name (Strings.cat2 (pyNs nsVal) (Strings.cat2 "." (sanitizePythonName local)))))) (\n -> n))
 -- | Encode a namespace as a Python dotted name
 encodeNamespace :: Packaging.ModuleName -> Syntax.DottedName
 encodeNamespace nsVal =
     Syntax.DottedName (Lists.map (\part -> Syntax.Name (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake part)) (Strings.splitOn "." (Packaging.unModuleName nsVal)))
+-- | Convert a ModuleName to its Python dotted import string, routing overlay modules to hydra.overlay.python.*
+encodeNamespaceStringWithOverrides :: Packaging.ModuleName -> String
+encodeNamespaceStringWithOverrides nsVal =
+    Optionals.fromOptional (Strings.intercalate "." (Lists.map (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake) (Strings.splitOn "." (Packaging.unModuleName nsVal)))) (Maps.lookup nsVal overlayPythonModuleAliases)
+-- | Encode a namespace as a Python dotted name, routing overlay modules to their hydra.overlay.python.* paths
+encodeNamespaceWithOverrides :: Packaging.ModuleName -> Syntax.DottedName
+encodeNamespaceWithOverrides nsVal =
+    Syntax.DottedName (Lists.map (\part -> Syntax.Name part) (Strings.splitOn "." (encodeNamespaceStringWithOverrides nsVal)))
 -- | Encode a type variable name (capitalized)
 encodeTypeVariable :: Core.Name -> Syntax.Name
 encodeTypeVariable name = Syntax.Name (Formatting.capitalize (Core.unName name))
+-- | Alias map routing DSL-declared module names to their hydra.overlay.python.* import strings
+overlayPythonModuleAliases :: M.Map Packaging.ModuleName String
+overlayPythonModuleAliases =
+    Maps.fromList [
+      (Packaging.ModuleName "hydra.test.testEnv", "hydra.overlay.python.test_env")]
 -- | Sanitize a string to be a valid Python name
 sanitizePythonName :: String -> String
 sanitizePythonName = Formatting.sanitizeWithUnderscores Language.pythonReservedWords

@@ -6472,7 +6472,8 @@
                                 "function": {
                                   "application": {
                                     "function": {"variable": "hydra.java.utils.methodInvocationStatic"},
-                                    "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.util.Comparing"}}}}}},
+                                    "argument": {
+                                      "wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.overlay.java.util.Comparing"}}}}}},
                                 "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "compare"}}}}}},
                             "argument": {"list": [{"variable": "thisField"}, {"variable": "otherField"}]}}}}}}}}}}}}},
     {
@@ -19979,7 +19980,8 @@
                                                                                                             "function": {
                                                                                                               "application": {
                                                                                                                 "function": {"variable": "hydra.java.utils.methodInvocationStatic"},
-                                                                                                                "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.util.Either"}}}}}},
+                                                                                                                "argument": {
+                                                                                                                  "wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.overlay.java.util.Either"}}}}}},
                                                                                                             "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"variable": "methodName"}}}}},
                                                                                                         "argument": {"list": [{"variable": "expr"}]}}}}}}},
                                                                                             "argument": {
@@ -19998,7 +20000,8 @@
                                                                                                                 "function": {
                                                                                                                   "application": {
                                                                                                                     "function": {"variable": "hydra.java.utils.methodInvocationStaticWithTypeArgs"},
-                                                                                                                    "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.util.Either"}}}}}},
+                                                                                                                    "argument": {
+                                                                                                                      "wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.overlay.java.util.Either"}}}}}},
                                                                                                                 "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"variable": "methodName"}}}}},
                                                                                                             "argument": {"variable": "targs"}}},
                                                                                                         "argument": {"list": [{"variable": "expr"}]}}}}}}}}}}}}},
@@ -20731,7 +20734,8 @@
                                                                                             "function": {
                                                                                               "application": {
                                                                                                 "function": {"variable": "hydra.java.utils.methodInvocationStatic"},
-                                                                                                "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.util.ConsList"}}}}}},
+                                                                                                "argument": {
+                                                                                                  "wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.overlay.java.util.ConsList"}}}}}},
                                                                                             "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "empty"}}}}}},
                                                                                         "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.java.syntax.Expression"}}}}}}}}},
                                                                             "type": {"variable": "hydra.errors.Error"}}},
@@ -20789,7 +20793,8 @@
                                                                                                     "function": {
                                                                                                       "application": {
                                                                                                         "function": {"variable": "hydra.java.utils.methodInvocationStaticWithTypeArgs"},
-                                                                                                        "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.util.ConsList"}}}}}},
+                                                                                                        "argument": {
+                                                                                                          "wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.overlay.java.util.ConsList"}}}}}},
                                                                                                     "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "empty"}}}}}},
                                                                                                 "argument": {"variable": "targs"}}},
                                                                                             "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.java.syntax.Expression"}}}}}}}}},
@@ -20879,7 +20884,8 @@
                                                                                                     "function": {
                                                                                                       "application": {
                                                                                                         "function": {"variable": "hydra.java.utils.methodInvocationStaticWithTypeArgs"},
-                                                                                                        "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.util.ConsList"}}}}}},
+                                                                                                        "argument": {
+                                                                                                          "wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.overlay.java.util.ConsList"}}}}}},
                                                                                                     "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "of"}}}}}},
                                                                                                 "argument": {"variable": "targs"}}},
                                                                                             "argument": {"variable": "jels"}}}}}}},
@@ -20952,7 +20958,8 @@
                                                                                             "function": {
                                                                                               "application": {
                                                                                                 "function": {"variable": "hydra.java.utils.methodInvocationStatic"},
-                                                                                                "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.util.PersistentMap"}}}}}},
+                                                                                                "argument": {
+                                                                                                  "wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.overlay.java.util.PersistentMap"}}}}}},
                                                                                             "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "empty"}}}}}},
                                                                                         "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.java.syntax.Expression"}}}}}}}}},
                                                                             "type": {"variable": "hydra.errors.Error"}}},
@@ -21010,7 +21017,8 @@
                                                                                                     "function": {
                                                                                                       "application": {
                                                                                                         "function": {"variable": "hydra.java.utils.methodInvocationStaticWithTypeArgs"},
-                                                                                                        "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.util.PersistentMap"}}}}}},
+                                                                                                        "argument": {
+                                                                                                          "wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.overlay.java.util.PersistentMap"}}}}}},
                                                                                                     "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "empty"}}}}}},
                                                                                                 "argument": {"variable": "targs"}}},
                                                                                             "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.java.syntax.Expression"}}}}}}}}},
@@ -21203,7 +21211,8 @@
                                                                                                                 "function": {
                                                                                                                   "application": {
                                                                                                                     "function": {"variable": "hydra.java.utils.methodInvocationStaticWithTypeArgs"},
-                                                                                                                    "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.util.PersistentMap"}}}}}},
+                                                                                                                    "argument": {
+                                                                                                                      "wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.overlay.java.util.PersistentMap"}}}}}},
                                                                                                                 "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "ofEntries"}}}}}},
                                                                                                             "argument": {"variable": "targs"}}},
                                                                                                         "argument": {"variable": "pairExprs"}}}}}}},
@@ -21256,7 +21265,8 @@
                                                                                             "function": {
                                                                                               "application": {
                                                                                                 "function": {"variable": "hydra.java.utils.methodInvocationStatic"},
-                                                                                                "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.util.Optional"}}}}}},
+                                                                                                "argument": {
+                                                                                                  "wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.overlay.java.util.Optional"}}}}}},
                                                                                             "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "none"}}}}}},
                                                                                         "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.java.syntax.Expression"}}}}}}}}},
                                                                             "type": {"variable": "hydra.errors.Error"}}},
@@ -21314,7 +21324,8 @@
                                                                                                     "function": {
                                                                                                       "application": {
                                                                                                         "function": {"variable": "hydra.java.utils.methodInvocationStaticWithTypeArgs"},
-                                                                                                        "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.util.Optional"}}}}}},
+                                                                                                        "argument": {
+                                                                                                          "wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.overlay.java.util.Optional"}}}}}},
                                                                                                     "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "none"}}}}}},
                                                                                                 "argument": {"variable": "targs"}}},
                                                                                             "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.java.syntax.Expression"}}}}}}}}},
@@ -21396,7 +21407,8 @@
                                                                                                         "function": {
                                                                                                           "application": {
                                                                                                             "function": {"variable": "hydra.java.utils.methodInvocationStaticWithTypeArgs"},
-                                                                                                            "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.util.Optional"}}}}}},
+                                                                                                            "argument": {
+                                                                                                              "wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.overlay.java.util.Optional"}}}}}},
                                                                                                         "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "given"}}}}}},
                                                                                                     "argument": {"variable": "targs"}}},
                                                                                                 "argument": {"list": [{"variable": "expr"}]}}}}}}},
@@ -21587,7 +21599,7 @@
                                                                                                         "function": {
                                                                                                           "application": {
                                                                                                             "function": {"variable": "hydra.java.utils.javaConstructorName"},
-                                                                                                            "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.util.Pair"}}}}}},
+                                                                                                            "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.overlay.java.util.Pair"}}}}}},
                                                                                                         "argument": {"variable": "mtargs"}}}}},
                                                                                                 "argument": {"list": [{"variable": "jterm1"}, {"variable": "jterm2"}]}}},
                                                                                             "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.java.syntax.ClassBody"}}}}}}},
@@ -22525,7 +22537,8 @@
                                                                                             "function": {
                                                                                               "application": {
                                                                                                 "function": {"variable": "hydra.java.utils.methodInvocationStatic"},
-                                                                                                "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.util.PersistentSet"}}}}}},
+                                                                                                "argument": {
+                                                                                                  "wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.overlay.java.util.PersistentSet"}}}}}},
                                                                                             "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "empty"}}}}}},
                                                                                         "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.java.syntax.Expression"}}}}}}}}},
                                                                             "type": {"variable": "hydra.errors.Error"}}},
@@ -22583,7 +22596,8 @@
                                                                                                     "function": {
                                                                                                       "application": {
                                                                                                         "function": {"variable": "hydra.java.utils.methodInvocationStaticWithTypeArgs"},
-                                                                                                        "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.util.PersistentSet"}}}}}},
+                                                                                                        "argument": {
+                                                                                                          "wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.overlay.java.util.PersistentSet"}}}}}},
                                                                                                     "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "empty"}}}}}},
                                                                                                 "argument": {"variable": "targs"}}},
                                                                                             "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.java.syntax.Expression"}}}}}}}}},
@@ -22683,7 +22697,8 @@
                                                                                                         "function": {
                                                                                                           "application": {
                                                                                                             "function": {"variable": "hydra.java.utils.methodInvocationStaticWithTypeArgs"},
-                                                                                                            "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.util.PersistentSet"}}}}}},
+                                                                                                            "argument": {
+                                                                                                              "wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.overlay.java.util.PersistentSet"}}}}}},
                                                                                                         "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "of"}}}}}},
                                                                                                     "argument": {"variable": "targs"}}},
                                                                                                 "argument": {"variable": "jels"}}}}}}},
@@ -24017,7 +24032,8 @@
                                                                                                                                                                                                 "function": {
                                                                                                                                                                                                   "application": {
                                                                                                                                                                                                     "function": {"variable": "hydra.java.utils.methodInvocationStaticWithTypeArgs"},
-                                                                                                                                                                                                    "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.util.Either"}}}}}},
+                                                                                                                                                                                                    "argument": {
+                                                                                                                                                                                                      "wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.overlay.java.util.Either"}}}}}},
                                                                                                                                                                                                 "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "left"}}}}}},
                                                                                                                                                                                             "argument": {"variable": "eitherTargs"}}},
                                                                                                                                                                                         "argument": {"list": [{"variable": "expr"}]}}}}}}},
@@ -24073,7 +24089,8 @@
                                                                                                                                                                                             "function": {
                                                                                                                                                                                               "application": {
                                                                                                                                                                                                 "function": {"variable": "hydra.java.utils.methodInvocationStaticWithTypeArgs"},
-                                                                                                                                                                                                "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.util.Either"}}}}}},
+                                                                                                                                                                                                "argument": {
+                                                                                                                                                                                                  "wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.overlay.java.util.Either"}}}}}},
                                                                                                                                                                                             "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "right"}}}}}},
                                                                                                                                                                                         "argument": {"variable": "eitherTargs"}}},
                                                                                                                                                                                     "argument": {"list": [{"variable": "expr"}]}}}}}}},
@@ -38173,7 +38190,7 @@
                                                                                                                         "function": {
                                                                                                                           "application": {
                                                                                                                             "function": {"variable": "hydra.java.utils.javaConstructorName"},
-                                                                                                                            "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.util.Lazy"}}}}}},
+                                                                                                                            "argument": {"wrap": {"typeName": "hydra.java.syntax.Identifier", "body": {"literal": {"string": "hydra.overlay.java.util.Lazy"}}}}}},
                                                                                                                         "argument": {"optional": {"variable": "targs"}}}}}},
                                                                                                                 "argument": {"list": [{"variable": "supplierLambda"}]}}},
                                                                                                             "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.java.syntax.ClassBody"}}}}},

@@ -126,7 +126,7 @@
                                     {"literal": {"string": "import org.junit.jupiter.api.Test;"}},
                                     {"literal": {"string": "import static org.junit.jupiter.api.Assertions.*;"}},
                                     {"literal": {"string": "import java.util.*;"}},
-                                    {"literal": {"string": "import hydra.util.*;"}}]},
+                                    {"literal": {"string": "import hydra.overlay.java.util.*;"}}]},
                                 "typeScheme": {"variables": [], "body": {"list": {"literal": {"string": {}}}}}},
                               {
                                 "name": "header",

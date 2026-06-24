@@ -9,7 +9,7 @@ import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
-import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Overlay.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Util as Util
 import qualified Hydra.Validation as Validation

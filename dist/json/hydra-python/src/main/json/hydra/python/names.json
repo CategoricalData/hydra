@@ -286,27 +286,7 @@
                                         "parameter": "nsVal",
                                         "domain": {"variable": "hydra.packaging.ModuleName"},
                                         "body": {
-                                          "application": {
-                                            "function": {"application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": "."}}}},
-                                            "argument": {
-                                              "application": {
-                                                "function": {
-                                                  "application": {
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"string": {}}}}},
-                                                        "type": {"literal": {"string": {}}}}},
-                                                    "argument": {
-                                                      "application": {
-                                                        "function": {
-                                                          "application": {
-                                                            "function": {"variable": "hydra.formatting.convertCase"},
-                                                            "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": {"unit": {}}}}}}},
-                                                        "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "lowerSnake", "term": {"unit": {}}}}}}}}},
-                                                "argument": {
-                                                  "application": {
-                                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "."}}}},
-                                                    "argument": {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "nsVal"}}}}}}}}}}},
+                                          "application": {"function": {"variable": "hydra.python.names.encodeNamespaceStringWithOverrides"}, "argument": {"variable": "nsVal"}}}}},
                                     "typeScheme": {
                                       "variables": [],
                                       "body": {"function": {"domain": {"variable": "hydra.packaging.ModuleName"}, "codomain": {"literal": {"string": {}}}}}}}],
@@ -500,27 +480,7 @@
                                 "parameter": "nsVal",
                                 "domain": {"variable": "hydra.packaging.ModuleName"},
                                 "body": {
-                                  "application": {
-                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": "."}}}},
-                                    "argument": {
-                                      "application": {
-                                        "function": {
-                                          "application": {
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"string": {}}}}},
-                                                "type": {"literal": {"string": {}}}}},
-                                            "argument": {
-                                              "application": {
-                                                "function": {
-                                                  "application": {
-                                                    "function": {"variable": "hydra.formatting.convertCase"},
-                                                    "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": {"unit": {}}}}}}},
-                                                "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "lowerSnake", "term": {"unit": {}}}}}}}}},
-                                        "argument": {
-                                          "application": {
-                                            "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "."}}}},
-                                            "argument": {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "nsVal"}}}}}}}}}}},
+                                  "application": {"function": {"variable": "hydra.python.names.encodeNamespaceStringWithOverrides"}, "argument": {"variable": "nsVal"}}}}},
                             "typeScheme": {
                               "variables": [],
                               "body": {"function": {"domain": {"variable": "hydra.packaging.ModuleName"}, "codomain": {"literal": {"string": {}}}}}}}],
@@ -661,6 +621,135 @@
                             "argument": {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "nsVal"}}}}}}}}}}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a namespace as a Python dotted name"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.python.names.encodeNamespaceStringWithOverrides",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.packaging.ModuleName"}, "isLazy": false}],
+          "result": {"type": {"literal": {"string": {}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "nsVal",
+                "domain": {"variable": "hydra.packaging.ModuleName"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"literal": {"string": {}}}}},
+                        "argument": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": "."}}}},
+                            "argument": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"string": {}}}}},
+                                        "type": {"literal": {"string": {}}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"variable": "hydra.formatting.convertCase"},
+                                            "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": {"unit": {}}}}}}},
+                                        "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "lowerSnake", "term": {"unit": {}}}}}}}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "."}}}},
+                                    "argument": {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "nsVal"}}}}}}}}}}},
+                    "argument": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                "type": {"literal": {"string": {}}}}},
+                            "argument": {"variable": "nsVal"}}},
+                        "argument": {"variable": "hydra.python.names.overlayPythonModuleAliases"}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Convert a ModuleName to its Python dotted import string, routing overlay modules to hydra.overlay.python.*"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.python.names.encodeNamespaceWithOverrides",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.packaging.ModuleName"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.python.syntax.DottedName"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "nsVal",
+                "domain": {"variable": "hydra.packaging.ModuleName"},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.python.syntax.DottedName",
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"string": {}}}}},
+                                "type": {"variable": "hydra.python.syntax.Name"}}},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "part",
+                                "domain": {"literal": {"string": {}}},
+                                "body": {"wrap": {"typeName": "hydra.python.syntax.Name", "body": {"variable": "part"}}}}}}},
+                        "argument": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "."}}}},
+                            "argument": {
+                              "application": {"function": {"variable": "hydra.python.names.encodeNamespaceStringWithOverrides"}, "argument": {"variable": "nsVal"}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Encode a namespace as a Python dotted name, routing overlay modules to their hydra.overlay.python.* paths"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.python.names.overlayPythonModuleAliases",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {"type": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "application": {
+                "function": {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                    "type": {"literal": {"string": {}}}}},
+                "argument": {
+                  "list": [
+                    {
+                      "typeApplication": {
+                        "body": {
+                          "typeApplication": {
+                            "body": {
+                              "pair": {
+                                "first": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.test.testEnv"}}}},
+                                "second": {"literal": {"string": "hydra.overlay.python.test_env"}}}},
+                            "type": {"variable": "hydra.packaging.ModuleName"}}},
+                        "type": {"literal": {"string": {}}}}}]}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Alias map routing DSL-declared module names to their hydra.overlay.python.* import strings"}}}]}}}}},
     {
       "term": {
         "name": "hydra.python.names.encodeTypeVariable",

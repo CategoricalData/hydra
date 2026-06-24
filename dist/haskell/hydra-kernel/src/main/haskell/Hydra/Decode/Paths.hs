@@ -8,10 +8,10 @@ import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
-import qualified Hydra.Haskell.Lib.Eithers as Eithers
-import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Optionals as Optionals
-import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Overlay.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Overlay.Haskell.Lib.Maps as Maps
+import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
+import qualified Hydra.Overlay.Haskell.Lib.Strings as Strings
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Util as Util
@@ -73,9 +73,6 @@ subtermStep cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (
-                        Core.Name "annotatedAnnotation",
-                        (\input -> Eithers.map (\t -> Paths.SubtermStepAnnotatedAnnotation) (ExtractCore.decodeUnit cx input))),
                       (
                         Core.Name "annotatedBody",
                         (\input -> Eithers.map (\t -> Paths.SubtermStepAnnotatedBody) (ExtractCore.decodeUnit cx input))),

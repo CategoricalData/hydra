@@ -9,21 +9,19 @@ import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Error.File as ErrorFile
 import qualified Hydra.Error.Packaging as ErrorPackaging
-import qualified Hydra.Error.System as ErrorSystem
 import qualified Hydra.Errors as Errors
 import qualified Hydra.File as File
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Json.Parser as Parser
 import qualified Hydra.Json.Writer as Writer
-import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Overlay.Haskell.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsers as Parsers
 import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Query as Query
 import qualified Hydra.Relational as Relational
-import qualified Hydra.System as System
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Time as Time
@@ -35,7 +33,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-import qualified Hydra.Haskell.Lib.Literals as Literals
+import qualified Hydra.Overlay.Haskell.Lib.Literals as Literals
 -- | Test cases for JSON parsing
 allTests :: Testing.TestGroup
 allTests =

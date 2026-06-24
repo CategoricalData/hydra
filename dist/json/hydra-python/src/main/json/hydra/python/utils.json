@@ -856,7 +856,7 @@
                                           "typeApplication": {
                                             "body": {"variable": "hydra.analysis.moduleNamesForDefinitions"},
                                             "type": {"variable": "hydra.python.syntax.DottedName"}}},
-                                        "argument": {"variable": "hydra.python.names.encodeNamespace"}}},
+                                        "argument": {"variable": "hydra.python.names.encodeNamespaceWithOverrides"}}},
                                     "argument": {"variable": "focusNs"}}},
                                 "argument": {"variable": "defs"}}},
                             "typeScheme": {

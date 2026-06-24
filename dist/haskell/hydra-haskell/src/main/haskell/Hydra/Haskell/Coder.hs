@@ -15,7 +15,6 @@ import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Error.File as ErrorFile
 import qualified Hydra.Error.Packaging as ErrorPackaging
-import qualified Hydra.Error.System as ErrorSystem
 import qualified Hydra.Errors as Errors
 import qualified Hydra.File as File
 import qualified Hydra.Formatting as Formatting
@@ -27,17 +26,17 @@ import qualified Hydra.Haskell.Syntax as Syntax
 import qualified Hydra.Haskell.Utils as Utils
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lexical as Lexical
-import qualified Hydra.Haskell.Lib.Eithers as Eithers
-import qualified Hydra.Haskell.Lib.Equality as Equality
-import qualified Hydra.Haskell.Lib.Lists as Lists
-import qualified Hydra.Haskell.Lib.Literals as Literals
-import qualified Hydra.Haskell.Lib.Logic as Logic
-import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Optionals as Optionals
-import qualified Hydra.Haskell.Lib.Pairs as Pairs
-import qualified Hydra.Haskell.Lib.Sets as Sets
-import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Overlay.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Overlay.Haskell.Lib.Equality as Equality
+import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
+import qualified Hydra.Overlay.Haskell.Lib.Literals as Literals
+import qualified Hydra.Overlay.Haskell.Lib.Logic as Logic
+import qualified Hydra.Overlay.Haskell.Lib.Maps as Maps
+import qualified Hydra.Overlay.Haskell.Lib.Math as Math
+import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
+import qualified Hydra.Overlay.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Overlay.Haskell.Lib.Sets as Sets
+import qualified Hydra.Overlay.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
@@ -52,7 +51,6 @@ import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Show.Errors as ShowErrors
 import qualified Hydra.Strip as Strip
-import qualified Hydra.System as System
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Time as Time
@@ -97,7 +95,7 @@ constructModule namespaces mod defs cx g =
                         parts = Strings.splitOn "." raw
                     in (Logic.ifElse (Logic.and (Equality.equal (Lists.length parts) 3) (Equality.equal (Lists.take 2 parts) [
                       "hydra",
-                      "lib"])) (Strings.cat2 "hydra.haskell.lib." (Strings.intercalate "." (Lists.drop 2 parts))) raw)
+                      "lib"])) (Strings.cat2 "hydra.overlay.haskell.lib." (Strings.intercalate "." (Lists.drop 2 parts))) raw)
           createDeclarations =
                   \def -> case def of
                     Packaging.DefinitionType v0 ->
@@ -162,7 +160,7 @@ constructModule namespaces mod defs cx g =
                       (condImport (Environment.haskellModuleMetadataUsesMap meta) (("Data.Map", (Just "M")), [])),
                       (condImport (Environment.haskellModuleMetadataUsesSet meta) (("Data.Set", (Just "S")), [])),
                       (Logic.ifElse (Logic.or (Analysis.moduleContainsBinaryLiterals mod) (Analysis.moduleContainsDecimalLiterals mod)) [
-                        (("Hydra.Haskell.Lib.Literals", (Just "Literals")), [])] [])]))
+                        (("Hydra.Overlay.Haskell.Lib.Literals", (Just "Literals")), [])] [])]))
       in (Eithers.bind (Eithers.mapList createDeclarations defs) (\declLists ->
         let decls = Lists.concat declLists
             mc = Optionals.bind (Packaging.moduleMetadata mod) (\em -> Packaging.entityMetadataDescription em)

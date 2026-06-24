@@ -85,8 +85,14 @@
               "optional": {
                 "application": {
                   "function": {"variable": "hydra.java.names.javaPackageName"},
-                  "argument": {"list": [{"literal": {"string": "hydra"}}, {"literal": {"string": "util"}}]}}}},
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The hydra.util package name"}}}]}}}}},
+                  "argument": {
+                    "list": [
+                      {"literal": {"string": "hydra"}},
+                      {"literal": {"string": "overlay"}},
+                      {"literal": {"string": "java"}},
+                      {"literal": {"string": "util"}}]}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The hydra.overlay.java.util package name"}}}]}}}}},
     {
       "term": {
         "name": "hydra.java.names.instanceName",

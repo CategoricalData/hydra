@@ -290,14 +290,6 @@ subtermPath x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.paths.SubtermPath"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
--- | DSL injection for the annotatedAnnotation variant of hydra.paths.SubtermStep
-subtermStepAnnotatedAnnotation :: Typed.TypedTerm Paths.SubtermStep
-subtermStepAnnotatedAnnotation =
-    Typed.TypedTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "annotatedAnnotation"),
-        Core.fieldTerm = Core.TermUnit}}))
 -- | DSL injection for the annotatedBody variant of hydra.paths.SubtermStep
 subtermStepAnnotatedBody :: Typed.TypedTerm Paths.SubtermStep
 subtermStepAnnotatedBody =

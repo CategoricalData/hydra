@@ -13,13 +13,13 @@ import qualified Hydra.Error.Packaging as ErrorPackaging
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
-import qualified Hydra.Haskell.Lib.Equality as Equality
-import qualified Hydra.Haskell.Lib.Lists as Lists
-import qualified Hydra.Haskell.Lib.Logic as Logic
-import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Optionals as Optionals
-import qualified Hydra.Haskell.Lib.Pairs as Pairs
-import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Overlay.Haskell.Lib.Equality as Equality
+import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
+import qualified Hydra.Overlay.Haskell.Lib.Logic as Logic
+import qualified Hydra.Overlay.Haskell.Lib.Maps as Maps
+import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
+import qualified Hydra.Overlay.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Overlay.Haskell.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Paths as Paths
@@ -142,7 +142,7 @@ findNamespaces :: Packaging.ModuleName -> [Packaging.Definition] -> Util.ModuleN
 findNamespaces focusNs defs =
 
       let coreNs = Packaging.ModuleName "hydra.core"
-          namespaces = Analysis.moduleNamesForDefinitions Names.encodeNamespace focusNs defs
+          namespaces = Analysis.moduleNamesForDefinitions Names.encodeNamespaceWithOverrides focusNs defs
       in (Logic.ifElse (Equality.equal (Packaging.unModuleName (Pairs.first (Util.moduleNamesFocus namespaces))) (Packaging.unModuleName coreNs)) namespaces (Util.ModuleNames {
         Util.moduleNamesFocus = (Util.moduleNamesFocus namespaces),
         Util.moduleNamesMapping = (Maps.insert coreNs (Names.encodeNamespace coreNs) (Util.moduleNamesMapping namespaces))}))

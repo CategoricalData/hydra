@@ -9,7 +9,6 @@ import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Error.File as ErrorFile
 import qualified Hydra.Error.Packaging as ErrorPackaging
-import qualified Hydra.Error.System as ErrorSystem
 import qualified Hydra.Errors as Errors
 import qualified Hydra.File as File
 import qualified Hydra.Graph as Graph
@@ -17,13 +16,12 @@ import qualified Hydra.Json.Model as JsonModel
 import qualified Hydra.Json.Writer as Writer
 import qualified Hydra.Json.Yaml.Decode as Decode
 import qualified Hydra.Json.Yaml.Encode as Encode
-import qualified Hydra.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Overlay.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Query as Query
 import qualified Hydra.Relational as Relational
-import qualified Hydra.System as System
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Time as Time
@@ -36,7 +34,7 @@ import qualified Hydra.Variants as Variants
 import qualified Hydra.Yaml.Model as YamlModel
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-import qualified Hydra.Haskell.Lib.Literals as Literals
+import qualified Hydra.Overlay.Haskell.Lib.Literals as Literals
 -- | Round-trip test cases for the JSON<->YAML decimal bridge
 allTests :: Testing.TestGroup
 allTests =
