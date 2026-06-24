@@ -117,6 +117,13 @@
               "body": {
                 "union": [
                   {
+                    "name": "annotatedAnnotation",
+                    "type": {
+                      "annotated": {
+                        "body": {"unit": {}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the annotation of an annotated term"}}}]}}}},
+                  {
                     "name": "annotatedBody",
                     "type": {
                       "annotated": {

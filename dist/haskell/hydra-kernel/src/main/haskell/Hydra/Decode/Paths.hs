@@ -74,6 +74,9 @@ subtermStep cx raw =
             variantMap =
                     Maps.fromList [
                       (
+                        Core.Name "annotatedAnnotation",
+                        (\input -> Eithers.map (\t -> Paths.SubtermStepAnnotatedAnnotation) (ExtractCore.decodeUnit cx input))),
+                      (
                         Core.Name "annotatedBody",
                         (\input -> Eithers.map (\t -> Paths.SubtermStepAnnotatedBody) (ExtractCore.decodeUnit cx input))),
                       (
