@@ -31,7 +31,6 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-import qualified Data.Map as M
 apply :: Packaging.PrimitiveDefinition
 apply =
     Packaging.PrimitiveDefinition {
@@ -70,34 +69,29 @@ apply =
           Typing.resultType = (Core.TypeOptional (Core.TypeVariable (Core.Name "y")))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "mf"),
+      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "mf"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
+          Core.lambdaParameter = (Core.Name "mx"),
           Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-            Core.lambdaParameter = (Core.Name "mx"),
-            Core.lambdaDomain = Nothing,
-            Core.lambdaBody = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.bind")),
-                Core.applicationArgument = (Core.TermVariable (Core.Name "mf"))})),
-              Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                Core.lambdaParameter = (Core.Name "f"),
-                Core.lambdaDomain = Nothing,
-                Core.lambdaBody = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.map")),
-                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "x"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name "mx"))}))}))}))}))})),
-        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (
-            Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "Applicative apply for optionals, defined in terms of bind and map.")))]))})))}
+          Core.lambdaBody = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.bind")),
+              Core.applicationArgument = (Core.TermVariable (Core.Name "mf"))})),
+            Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "f"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.map")),
+                  Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.Name "x"),
+                    Core.lambdaDomain = Nothing,
+                    Core.lambdaBody = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "mx"))}))}))}))}))})))}
 bind :: Packaging.PrimitiveDefinition
 bind =
     Packaging.PrimitiveDefinition {
@@ -136,24 +130,19 @@ bind =
           Typing.resultType = (Core.TypeOptional (Core.TypeVariable (Core.Name "y")))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "m"),
+      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "m"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
+          Core.lambdaParameter = (Core.Name "f"),
           Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-            Core.lambdaParameter = (Core.Name "f"),
-            Core.lambdaDomain = Nothing,
-            Core.lambdaBody = (Core.TermApplication (Core.Application {
+          Core.lambdaBody = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name "m"))})),
-                Core.applicationArgument = (Core.TermOptional Nothing)})),
-              Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))})),
-        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (
-            Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "Monadic bind for optionals, defined in terms of cases.")))]))})))}
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "m"))})),
+              Core.applicationArgument = (Core.TermOptional Nothing)})),
+            Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))})))}
 cases :: Packaging.PrimitiveDefinition
 cases =
     Packaging.PrimitiveDefinition {
@@ -225,40 +214,35 @@ cat =
           Typing.resultType = (Core.TypeList (Core.TypeVariable (Core.Name "x")))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "xs"),
-          Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermApplication (Core.Application {
+      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "xs"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermApplication (Core.Application {
+          Core.applicationFunction = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.foldr")),
-                Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                  Core.lambdaParameter = (Core.Name "m"),
+              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.foldr")),
+              Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "m"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "acc"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-                    Core.lambdaParameter = (Core.Name "acc"),
-                    Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermApplication (Core.Application {
+                  Core.lambdaBody = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "m"))})),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "acc"))})),
+                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "v"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "m"))})),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "acc"))})),
-                      Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                        Core.lambdaParameter = (Core.Name "v"),
-                        Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.cons")),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "v"))})),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "acc"))}))}))}))}))}))})),
-              Core.applicationArgument = (Core.TermList [])})),
-            Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))})),
-        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (
-            Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "Catenate a list of optionals, keeping only the present values.")))]))})))}
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.cons")),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "v"))})),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "acc"))}))}))}))}))}))})),
+            Core.applicationArgument = (Core.TermList [])})),
+          Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))})))}
 compose :: Packaging.PrimitiveDefinition
 compose =
     Packaging.PrimitiveDefinition {
@@ -307,27 +291,22 @@ compose =
           Typing.resultType = (Core.TypeOptional (Core.TypeVariable (Core.Name "z")))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "f"),
+      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "f"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
+          Core.lambdaParameter = (Core.Name "g"),
           Core.lambdaDomain = Nothing,
           Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-            Core.lambdaParameter = (Core.Name "g"),
+            Core.lambdaParameter = (Core.Name "x"),
             Core.lambdaDomain = Nothing,
-            Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-              Core.lambdaParameter = (Core.Name "x"),
-              Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.bind")),
-                  Core.applicationArgument = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})),
-                Core.applicationArgument = (Core.TermVariable (Core.Name "g"))}))}))}))})),
-        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (
-            Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "Kleisli composition for optionals, defined in terms of bind.")))]))})))}
+            Core.lambdaBody = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.bind")),
+                Core.applicationArgument = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})),
+              Core.applicationArgument = (Core.TermVariable (Core.Name "g"))}))}))}))})))}
 fromOptional :: Packaging.PrimitiveDefinition
 fromOptional =
     Packaging.PrimitiveDefinition {
@@ -360,27 +339,22 @@ fromOptional =
           Typing.resultType = (Core.TypeVariable (Core.Name "x"))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "def"),
+      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "def"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
+          Core.lambdaParameter = (Core.Name "m"),
           Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-            Core.lambdaParameter = (Core.Name "m"),
-            Core.lambdaDomain = Nothing,
-            Core.lambdaBody = (Core.TermApplication (Core.Application {
+          Core.lambdaBody = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name "m"))})),
-                Core.applicationArgument = (Core.TermVariable (Core.Name "def"))})),
-              Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                Core.lambdaParameter = (Core.Name "x"),
-                Core.lambdaDomain = Nothing,
-                Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))}))}))})),
-        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (
-            Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "Return the contained value or a default, defined in terms of cases.")))]))})))}
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "m"))})),
+              Core.applicationArgument = (Core.TermVariable (Core.Name "def"))})),
+            Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))}))}))})))}
 isGiven :: Packaging.PrimitiveDefinition
 isGiven =
     Packaging.PrimitiveDefinition {
@@ -408,24 +382,19 @@ isGiven =
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "m"),
-          Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermApplication (Core.Application {
+      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "m"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermApplication (Core.Application {
+          Core.applicationFunction = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")),
-                Core.applicationArgument = (Core.TermVariable (Core.Name "m"))})),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean False))})),
-            Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-              Core.lambdaParameter = (Core.Name "_"),
-              Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean True))}))}))})),
-        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (
-            Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "Test for presence, defined in terms of cases.")))]))})))}
+              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")),
+              Core.applicationArgument = (Core.TermVariable (Core.Name "m"))})),
+            Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean False))})),
+          Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+            Core.lambdaParameter = (Core.Name "_"),
+            Core.lambdaDomain = Nothing,
+            Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean True))}))}))})))}
 isNone :: Packaging.PrimitiveDefinition
 isNone =
     Packaging.PrimitiveDefinition {
@@ -453,24 +422,19 @@ isNone =
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "m"),
-          Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermApplication (Core.Application {
+      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "m"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermApplication (Core.Application {
+          Core.applicationFunction = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")),
-                Core.applicationArgument = (Core.TermVariable (Core.Name "m"))})),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))})),
-            Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-              Core.lambdaParameter = (Core.Name "_"),
-              Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean False))}))}))})),
-        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (
-            Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "Test for absence, defined in terms of cases.")))]))})))}
+              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")),
+              Core.applicationArgument = (Core.TermVariable (Core.Name "m"))})),
+            Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))})),
+          Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+            Core.lambdaParameter = (Core.Name "_"),
+            Core.lambdaDomain = Nothing,
+            Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean False))}))}))})))}
 map :: Packaging.PrimitiveDefinition
 map =
     Packaging.PrimitiveDefinition {
@@ -509,29 +473,24 @@ map =
           Typing.resultType = (Core.TypeOptional (Core.TypeVariable (Core.Name "y")))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "f"),
+      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "f"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
+          Core.lambdaParameter = (Core.Name "m"),
           Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-            Core.lambdaParameter = (Core.Name "m"),
-            Core.lambdaDomain = Nothing,
-            Core.lambdaBody = (Core.TermApplication (Core.Application {
+          Core.lambdaBody = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name "m"))})),
-                Core.applicationArgument = (Core.TermOptional Nothing)})),
-              Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                Core.lambdaParameter = (Core.Name "x"),
-                Core.lambdaDomain = Nothing,
-                Core.lambdaBody = (Core.TermOptional (Just (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))))}))}))}))})),
-        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (
-            Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "Map a function over an optional, defined in terms of cases.")))]))})))}
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "m"))})),
+              Core.applicationArgument = (Core.TermOptional Nothing)})),
+            Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermOptional (Just (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))))}))}))}))})))}
 mapOptional :: Packaging.PrimitiveDefinition
 mapOptional =
     Packaging.PrimitiveDefinition {
@@ -569,24 +528,19 @@ mapOptional =
           Typing.resultType = (Core.TypeList (Core.TypeVariable (Core.Name "y")))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "f"),
+      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "f"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
+          Core.lambdaParameter = (Core.Name "xs"),
           Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-            Core.lambdaParameter = (Core.Name "xs"),
-            Core.lambdaDomain = Nothing,
-            Core.lambdaBody = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cat")),
-              Core.applicationArgument = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.map")),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name "f"))})),
-                Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}))}))})),
-        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (
-            Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "Map a partial function and keep only the present results, defined in terms of lists.map and cat.")))]))})))}
+          Core.lambdaBody = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cat")),
+            Core.applicationArgument = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.map")),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "f"))})),
+              Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}))}))})))}
 pure :: Packaging.PrimitiveDefinition
 pure =
     Packaging.PrimitiveDefinition {
@@ -614,13 +568,10 @@ pure =
           Typing.resultType = (Core.TypeOptional (Core.TypeVariable (Core.Name "x")))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "x"),
-          Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermOptional (Just (Core.TermVariable (Core.Name "x"))))})),
-        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Wrap a value in given.")))]))})))}
+      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "x"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermOptional (Just (Core.TermVariable (Core.Name "x"))))})))}
 toList :: Packaging.PrimitiveDefinition
 toList =
     Packaging.PrimitiveDefinition {
@@ -648,22 +599,17 @@ toList =
           Typing.resultType = (Core.TypeList (Core.TypeVariable (Core.Name "x")))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "m"),
-          Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermApplication (Core.Application {
+      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "m"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermApplication (Core.Application {
+          Core.applicationFunction = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")),
-                Core.applicationArgument = (Core.TermVariable (Core.Name "m"))})),
-              Core.applicationArgument = (Core.TermList [])})),
-            Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-              Core.lambdaParameter = (Core.Name "x"),
-              Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermList [
-                Core.TermVariable (Core.Name "x")])}))}))})),
-        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (
-            Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "Convert an optional to a list, defined in terms of cases.")))]))})))}
+              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")),
+              Core.applicationArgument = (Core.TermVariable (Core.Name "m"))})),
+            Core.applicationArgument = (Core.TermList [])})),
+          Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+            Core.lambdaParameter = (Core.Name "x"),
+            Core.lambdaDomain = Nothing,
+            Core.lambdaBody = (Core.TermList [
+              Core.TermVariable (Core.Name "x")])}))}))})))}

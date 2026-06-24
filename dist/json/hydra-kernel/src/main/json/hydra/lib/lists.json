@@ -72,40 +72,33 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "xs",
             "body": {
               "lambda": {
-                "parameter": "xs",
+                "parameter": "f",
                 "body": {
-                  "lambda": {
-                    "parameter": "f",
-                    "body": {
+                  "application": {
+                    "function": {
                       "application": {
                         "function": {
                           "application": {
-                            "function": {
-                              "application": {
-                                "function": {"variable": "hydra.lib.lists.foldr"},
-                                "argument": {
+                            "function": {"variable": "hydra.lib.lists.foldr"},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "x",
+                                "body": {
                                   "lambda": {
-                                    "parameter": "x",
+                                    "parameter": "acc",
                                     "body": {
-                                      "lambda": {
-                                        "parameter": "acc",
-                                        "body": {
+                                      "application": {
+                                        "function": {
                                           "application": {
-                                            "function": {
-                                              "application": {
-                                                "function": {"variable": "hydra.lib.lists.concat2"},
-                                                "argument": {"application": {"function": {"variable": "f"}, "argument": {"variable": "x"}}}}},
-                                            "argument": {"variable": "acc"}}}}}}}}},
-                            "argument": {"list": []}}},
-                        "argument": {"variable": "xs"}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Monadic bind (concatMap) for lists, defined in terms of foldr and concat2."}}}]}}}}},
+                                            "function": {"variable": "hydra.lib.lists.concat2"},
+                                            "argument": {"application": {"function": {"variable": "f"}, "argument": {"variable": "x"}}}}},
+                                        "argument": {"variable": "acc"}}}}}}}}},
+                        "argument": {"list": []}}},
+                    "argument": {"variable": "xs"}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.lists.concat",
@@ -191,25 +184,18 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "p",
             "body": {
               "lambda": {
-                "parameter": "p",
+                "parameter": "xs",
                 "body": {
-                  "lambda": {
-                    "parameter": "xs",
-                    "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.pairs.second"},
+                    "argument": {
                       "application": {
-                        "function": {"variable": "hydra.lib.pairs.second"},
-                        "argument": {
-                          "application": {
-                            "function": {"application": {"function": {"variable": "hydra.lib.lists.span"}, "argument": {"variable": "p"}}},
-                            "argument": {"variable": "xs"}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Drop the leading run satisfying a predicate, defined as the suffix component of span."}}}]}}}}},
+                        "function": {"application": {"function": {"variable": "hydra.lib.lists.span"}, "argument": {"variable": "p"}}},
+                        "argument": {"variable": "xs"}}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.lists.elem",
@@ -249,46 +235,39 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "p",
             "body": {
               "lambda": {
-                "parameter": "p",
+                "parameter": "xs",
                 "body": {
-                  "lambda": {
-                    "parameter": "xs",
-                    "body": {
+                  "application": {
+                    "function": {
                       "application": {
                         "function": {
                           "application": {
-                            "function": {
-                              "application": {
-                                "function": {"variable": "hydra.lib.lists.foldr"},
-                                "argument": {
+                            "function": {"variable": "hydra.lib.lists.foldr"},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "x",
+                                "body": {
                                   "lambda": {
-                                    "parameter": "x",
+                                    "parameter": "acc",
                                     "body": {
-                                      "lambda": {
-                                        "parameter": "acc",
-                                        "body": {
+                                      "application": {
+                                        "function": {
                                           "application": {
                                             "function": {
                                               "application": {
-                                                "function": {
-                                                  "application": {
-                                                    "function": {"variable": "hydra.lib.logic.ifElse"},
-                                                    "argument": {"application": {"function": {"variable": "p"}, "argument": {"variable": "x"}}}}},
-                                                "argument": {
-                                                  "application": {
-                                                    "function": {"application": {"function": {"variable": "hydra.lib.lists.cons"}, "argument": {"variable": "x"}}},
-                                                    "argument": {"variable": "acc"}}}}},
-                                            "argument": {"variable": "acc"}}}}}}}}},
-                            "argument": {"list": []}}},
-                        "argument": {"variable": "xs"}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Filter a list by a predicate, defined in terms of foldr."}}}]}}}}},
+                                                "function": {"variable": "hydra.lib.logic.ifElse"},
+                                                "argument": {"application": {"function": {"variable": "p"}, "argument": {"variable": "x"}}}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {"application": {"function": {"variable": "hydra.lib.lists.cons"}, "argument": {"variable": "x"}}},
+                                                "argument": {"variable": "acc"}}}}},
+                                        "argument": {"variable": "acc"}}}}}}}}},
+                        "argument": {"list": []}}},
+                    "argument": {"variable": "xs"}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.lists.find",
@@ -310,43 +289,36 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "p",
             "body": {
               "lambda": {
-                "parameter": "p",
+                "parameter": "xs",
                 "body": {
-                  "lambda": {
-                    "parameter": "xs",
-                    "body": {
+                  "application": {
+                    "function": {
                       "application": {
                         "function": {
                           "application": {
-                            "function": {
-                              "application": {
-                                "function": {"variable": "hydra.lib.lists.foldr"},
-                                "argument": {
+                            "function": {"variable": "hydra.lib.lists.foldr"},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "x",
+                                "body": {
                                   "lambda": {
-                                    "parameter": "x",
+                                    "parameter": "acc",
                                     "body": {
-                                      "lambda": {
-                                        "parameter": "acc",
-                                        "body": {
+                                      "application": {
+                                        "function": {
                                           "application": {
                                             "function": {
                                               "application": {
-                                                "function": {
-                                                  "application": {
-                                                    "function": {"variable": "hydra.lib.logic.ifElse"},
-                                                    "argument": {"application": {"function": {"variable": "p"}, "argument": {"variable": "x"}}}}},
-                                                "argument": {"optional": {"variable": "x"}}}},
-                                            "argument": {"variable": "acc"}}}}}}}}},
-                            "argument": {"optional": null}}},
-                        "argument": {"variable": "xs"}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Find the first matching element, defined in terms of foldr."}}}]}}}}},
+                                                "function": {"variable": "hydra.lib.logic.ifElse"},
+                                                "argument": {"application": {"function": {"variable": "p"}, "argument": {"variable": "x"}}}}},
+                                            "argument": {"optional": {"variable": "x"}}}},
+                                        "argument": {"variable": "acc"}}}}}}}}},
+                        "argument": {"optional": null}}},
+                    "argument": {"variable": "xs"}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.lists.foldl",
@@ -603,55 +575,48 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "p",
             "body": {
               "lambda": {
-                "parameter": "p",
+                "parameter": "xs",
                 "body": {
-                  "lambda": {
-                    "parameter": "xs",
-                    "body": {
+                  "application": {
+                    "function": {
                       "application": {
                         "function": {
                           "application": {
-                            "function": {
-                              "application": {
-                                "function": {"variable": "hydra.lib.lists.foldr"},
-                                "argument": {
+                            "function": {"variable": "hydra.lib.lists.foldr"},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "x",
+                                "body": {
                                   "lambda": {
-                                    "parameter": "x",
+                                    "parameter": "acc",
                                     "body": {
-                                      "lambda": {
-                                        "parameter": "acc",
-                                        "body": {
+                                      "application": {
+                                        "function": {
                                           "application": {
                                             "function": {
                                               "application": {
-                                                "function": {
-                                                  "application": {
-                                                    "function": {"variable": "hydra.lib.logic.ifElse"},
-                                                    "argument": {"application": {"function": {"variable": "p"}, "argument": {"variable": "x"}}}}},
-                                                "argument": {
-                                                  "pair": {
-                                                    "first": {
-                                                      "application": {
-                                                        "function": {"application": {"function": {"variable": "hydra.lib.lists.cons"}, "argument": {"variable": "x"}}},
-                                                        "argument": {"application": {"function": {"variable": "hydra.lib.pairs.first"}, "argument": {"variable": "acc"}}}}},
-                                                    "second": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "acc"}}}}}}},
+                                                "function": {"variable": "hydra.lib.logic.ifElse"},
+                                                "argument": {"application": {"function": {"variable": "p"}, "argument": {"variable": "x"}}}}},
                                             "argument": {
                                               "pair": {
-                                                "first": {"application": {"function": {"variable": "hydra.lib.pairs.first"}, "argument": {"variable": "acc"}}},
-                                                "second": {
+                                                "first": {
                                                   "application": {
                                                     "function": {"application": {"function": {"variable": "hydra.lib.lists.cons"}, "argument": {"variable": "x"}}},
-                                                    "argument": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "acc"}}}}}}}}}}}}}}},
-                            "argument": {"pair": {"first": {"list": []}, "second": {"list": []}}}}},
-                        "argument": {"variable": "xs"}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Partition a list by a predicate, defined in terms of foldr over a pair of accumulators."}}}]}}}}},
+                                                    "argument": {"application": {"function": {"variable": "hydra.lib.pairs.first"}, "argument": {"variable": "acc"}}}}},
+                                                "second": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "acc"}}}}}}},
+                                        "argument": {
+                                          "pair": {
+                                            "first": {"application": {"function": {"variable": "hydra.lib.pairs.first"}, "argument": {"variable": "acc"}}},
+                                            "second": {
+                                              "application": {
+                                                "function": {"application": {"function": {"variable": "hydra.lib.lists.cons"}, "argument": {"variable": "x"}}},
+                                                "argument": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "acc"}}}}}}}}}}}}}}},
+                        "argument": {"pair": {"first": {"list": []}, "second": {"list": []}}}}},
+                    "argument": {"variable": "xs"}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.lists.pure",
@@ -763,64 +728,57 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "p",
             "body": {
               "lambda": {
-                "parameter": "p",
+                "parameter": "xs",
                 "body": {
-                  "lambda": {
-                    "parameter": "xs",
-                    "body": {
+                  "application": {
+                    "function": {
                       "application": {
                         "function": {
                           "application": {
-                            "function": {
-                              "application": {
-                                "function": {"variable": "hydra.lib.lists.foldr"},
-                                "argument": {
+                            "function": {"variable": "hydra.lib.lists.foldr"},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "x",
+                                "body": {
                                   "lambda": {
-                                    "parameter": "x",
+                                    "parameter": "acc",
                                     "body": {
-                                      "lambda": {
-                                        "parameter": "acc",
-                                        "body": {
+                                      "application": {
+                                        "function": {
                                           "application": {
                                             "function": {
                                               "application": {
-                                                "function": {
+                                                "function": {"variable": "hydra.lib.logic.ifElse"},
+                                                "argument": {
                                                   "application": {
-                                                    "function": {"variable": "hydra.lib.logic.ifElse"},
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {"variable": "hydra.lib.logic.and"},
+                                                        "argument": {"application": {"function": {"variable": "p"}, "argument": {"variable": "x"}}}}},
                                                     "argument": {
                                                       "application": {
-                                                        "function": {
-                                                          "application": {
-                                                            "function": {"variable": "hydra.lib.logic.and"},
-                                                            "argument": {"application": {"function": {"variable": "p"}, "argument": {"variable": "x"}}}}},
-                                                        "argument": {
-                                                          "application": {
-                                                            "function": {"variable": "hydra.lib.lists.null"},
-                                                            "argument": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "acc"}}}}}}}}},
-                                                "argument": {
-                                                  "pair": {
-                                                    "first": {
-                                                      "application": {
-                                                        "function": {"application": {"function": {"variable": "hydra.lib.lists.cons"}, "argument": {"variable": "x"}}},
-                                                        "argument": {"application": {"function": {"variable": "hydra.lib.pairs.first"}, "argument": {"variable": "acc"}}}}},
-                                                    "second": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "acc"}}}}}}},
+                                                        "function": {"variable": "hydra.lib.lists.null"},
+                                                        "argument": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "acc"}}}}}}}}},
                                             "argument": {
                                               "pair": {
-                                                "first": {"list": []},
-                                                "second": {
+                                                "first": {
                                                   "application": {
                                                     "function": {"application": {"function": {"variable": "hydra.lib.lists.cons"}, "argument": {"variable": "x"}}},
-                                                    "argument": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "acc"}}}}}}}}}}}}}}},
-                            "argument": {"pair": {"first": {"list": []}, "second": {"list": []}}}}},
-                        "argument": {"variable": "xs"}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Split a list at the first predicate failure, defined in terms of foldr over a pair."}}}]}}}}},
+                                                    "argument": {"application": {"function": {"variable": "hydra.lib.pairs.first"}, "argument": {"variable": "acc"}}}}},
+                                                "second": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "acc"}}}}}}},
+                                        "argument": {
+                                          "pair": {
+                                            "first": {"list": []},
+                                            "second": {
+                                              "application": {
+                                                "function": {"application": {"function": {"variable": "hydra.lib.lists.cons"}, "argument": {"variable": "x"}}},
+                                                "argument": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "acc"}}}}}}}}}}}}}}},
+                        "argument": {"pair": {"first": {"list": []}, "second": {"list": []}}}}},
+                    "argument": {"variable": "xs"}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.lists.take",

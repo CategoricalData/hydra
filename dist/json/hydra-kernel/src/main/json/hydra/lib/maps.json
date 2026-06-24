@@ -54,49 +54,42 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "f",
             "body": {
               "lambda": {
-                "parameter": "f",
+                "parameter": "k",
                 "body": {
                   "lambda": {
-                    "parameter": "k",
+                    "parameter": "m",
                     "body": {
-                      "lambda": {
-                        "parameter": "m",
-                        "body": {
+                      "application": {
+                        "function": {
                           "application": {
                             "function": {
                               "application": {
-                                "function": {
-                                  "application": {
-                                    "function": {"variable": "hydra.lib.optionals.cases"},
-                                    "argument": {
-                                      "application": {
-                                        "function": {"variable": "f"},
-                                        "argument": {
-                                          "application": {
-                                            "function": {"application": {"function": {"variable": "hydra.lib.maps.lookup"}, "argument": {"variable": "k"}}},
-                                            "argument": {"variable": "m"}}}}}}},
+                                "function": {"variable": "hydra.lib.optionals.cases"},
                                 "argument": {
                                   "application": {
-                                    "function": {"application": {"function": {"variable": "hydra.lib.maps.delete"}, "argument": {"variable": "k"}}},
-                                    "argument": {"variable": "m"}}}}},
-                            "argument": {
-                              "lambda": {
-                                "parameter": "vNew",
-                                "body": {
-                                  "application": {
-                                    "function": {
+                                    "function": {"variable": "f"},
+                                    "argument": {
                                       "application": {
-                                        "function": {"application": {"function": {"variable": "hydra.lib.maps.insert"}, "argument": {"variable": "k"}}},
-                                        "argument": {"variable": "vNew"}}},
-                                    "argument": {"variable": "m"}}}}}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "alter, defined in terms of lookup/insert/delete via optionals.cases."}}}]}}}}},
+                                        "function": {"application": {"function": {"variable": "hydra.lib.maps.lookup"}, "argument": {"variable": "k"}}},
+                                        "argument": {"variable": "m"}}}}}}},
+                            "argument": {
+                              "application": {
+                                "function": {"application": {"function": {"variable": "hydra.lib.maps.delete"}, "argument": {"variable": "k"}}},
+                                "argument": {"variable": "m"}}}}},
+                        "argument": {
+                          "lambda": {
+                            "parameter": "vNew",
+                            "body": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.lib.maps.insert"}, "argument": {"variable": "k"}}},
+                                    "argument": {"variable": "vNew"}}},
+                                "argument": {"variable": "m"}}}}}}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.maps.bimap",
@@ -122,40 +115,36 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "fk",
             "body": {
               "lambda": {
-                "parameter": "fk",
+                "parameter": "fv",
                 "body": {
                   "lambda": {
-                    "parameter": "fv",
+                    "parameter": "m",
                     "body": {
-                      "lambda": {
-                        "parameter": "m",
-                        "body": {
+                      "application": {
+                        "function": {"variable": "hydra.lib.maps.fromList"},
+                        "argument": {
                           "application": {
-                            "function": {"variable": "hydra.lib.maps.fromList"},
-                            "argument": {
+                            "function": {
                               "application": {
-                                "function": {
-                                  "application": {
-                                    "function": {"variable": "hydra.lib.lists.map"},
-                                    "argument": {
-                                      "lambda": {
-                                        "parameter": "p",
-                                        "body": {
-                                          "pair": {
-                                            "first": {
-                                              "application": {
-                                                "function": {"variable": "fk"},
-                                                "argument": {"application": {"function": {"variable": "hydra.lib.pairs.first"}, "argument": {"variable": "p"}}}}},
-                                            "second": {
-                                              "application": {
-                                                "function": {"variable": "fv"},
-                                                "argument": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "p"}}}}}}}}}}},
-                                "argument": {"application": {"function": {"variable": "hydra.lib.maps.toList"}, "argument": {"variable": "m"}}}}}}}}}}}}},
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "bimap on a map, defined via toList/fromList."}}}]}}}}},
+                                "function": {"variable": "hydra.lib.lists.map"},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "p",
+                                    "body": {
+                                      "pair": {
+                                        "first": {
+                                          "application": {
+                                            "function": {"variable": "fk"},
+                                            "argument": {"application": {"function": {"variable": "hydra.lib.pairs.first"}, "argument": {"variable": "p"}}}}},
+                                        "second": {
+                                          "application": {
+                                            "function": {"variable": "fv"},
+                                            "argument": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "p"}}}}}}}}}}},
+                            "argument": {"application": {"function": {"variable": "hydra.lib.maps.toList"}, "argument": {"variable": "m"}}}}}}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.maps.delete",
@@ -228,32 +217,27 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "p",
             "body": {
               "lambda": {
-                "parameter": "p",
+                "parameter": "m",
                 "body": {
-                  "lambda": {
-                    "parameter": "m",
-                    "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.maps.fromList"},
+                    "argument": {
                       "application": {
-                        "function": {"variable": "hydra.lib.maps.fromList"},
-                        "argument": {
+                        "function": {
                           "application": {
-                            "function": {
-                              "application": {
-                                "function": {"variable": "hydra.lib.lists.filter"},
-                                "argument": {
-                                  "lambda": {
-                                    "parameter": "pr",
-                                    "body": {
-                                      "application": {
-                                        "function": {"variable": "p"},
-                                        "argument": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "pr"}}}}}}}}},
-                            "argument": {"application": {"function": {"variable": "hydra.lib.maps.toList"}, "argument": {"variable": "m"}}}}}}}}}}},
-            "annotation": {
-              "map": [
-                {"key": {"variable": "description"}, "value": {"literal": {"string": "filter on a map, defined via toList/fromList."}}}]}}}}},
+                            "function": {"variable": "hydra.lib.lists.filter"},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "pr",
+                                "body": {
+                                  "application": {
+                                    "function": {"variable": "p"},
+                                    "argument": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "pr"}}}}}}}}},
+                        "argument": {"application": {"function": {"variable": "hydra.lib.maps.toList"}, "argument": {"variable": "m"}}}}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.maps.filterWithKey",
@@ -279,37 +263,30 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "p",
             "body": {
               "lambda": {
-                "parameter": "p",
+                "parameter": "m",
                 "body": {
-                  "lambda": {
-                    "parameter": "m",
-                    "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.maps.fromList"},
+                    "argument": {
                       "application": {
-                        "function": {"variable": "hydra.lib.maps.fromList"},
-                        "argument": {
+                        "function": {
                           "application": {
-                            "function": {
-                              "application": {
-                                "function": {"variable": "hydra.lib.lists.filter"},
-                                "argument": {
-                                  "lambda": {
-                                    "parameter": "pr",
-                                    "body": {
+                            "function": {"variable": "hydra.lib.lists.filter"},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "pr",
+                                "body": {
+                                  "application": {
+                                    "function": {
                                       "application": {
-                                        "function": {
-                                          "application": {
-                                            "function": {"variable": "p"},
-                                            "argument": {"application": {"function": {"variable": "hydra.lib.pairs.first"}, "argument": {"variable": "pr"}}}}},
-                                        "argument": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "pr"}}}}}}}}},
-                            "argument": {"application": {"function": {"variable": "hydra.lib.maps.toList"}, "argument": {"variable": "m"}}}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "filterWithKey on a map, defined via toList/fromList."}}}]}}}}},
+                                        "function": {"variable": "p"},
+                                        "argument": {"application": {"function": {"variable": "hydra.lib.pairs.first"}, "argument": {"variable": "pr"}}}}},
+                                    "argument": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "pr"}}}}}}}}},
+                        "argument": {"application": {"function": {"variable": "hydra.lib.maps.toList"}, "argument": {"variable": "m"}}}}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.maps.findWithDefault",
@@ -330,28 +307,21 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "def",
             "body": {
               "lambda": {
-                "parameter": "def",
+                "parameter": "k",
                 "body": {
                   "lambda": {
-                    "parameter": "k",
+                    "parameter": "m",
                     "body": {
-                      "lambda": {
-                        "parameter": "m",
-                        "body": {
+                      "application": {
+                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.fromOptional"}, "argument": {"variable": "def"}}},
+                        "argument": {
                           "application": {
-                            "function": {"application": {"function": {"variable": "hydra.lib.optionals.fromOptional"}, "argument": {"variable": "def"}}},
-                            "argument": {
-                              "application": {
-                                "function": {"application": {"function": {"variable": "hydra.lib.maps.lookup"}, "argument": {"variable": "k"}}},
-                                "argument": {"variable": "m"}}}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "findWithDefault, defined in terms of lookup + fromOptional."}}}]}}}}},
+                            "function": {"application": {"function": {"variable": "hydra.lib.maps.lookup"}, "argument": {"variable": "k"}}},
+                            "argument": {"variable": "m"}}}}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.maps.fromList",
@@ -444,35 +414,30 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "f",
             "body": {
               "lambda": {
-                "parameter": "f",
+                "parameter": "m",
                 "body": {
-                  "lambda": {
-                    "parameter": "m",
-                    "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.maps.fromList"},
+                    "argument": {
                       "application": {
-                        "function": {"variable": "hydra.lib.maps.fromList"},
-                        "argument": {
+                        "function": {
                           "application": {
-                            "function": {
-                              "application": {
-                                "function": {"variable": "hydra.lib.lists.map"},
-                                "argument": {
-                                  "lambda": {
-                                    "parameter": "p",
-                                    "body": {
-                                      "pair": {
-                                        "first": {"application": {"function": {"variable": "hydra.lib.pairs.first"}, "argument": {"variable": "p"}}},
-                                        "second": {
-                                          "application": {
-                                            "function": {"variable": "f"},
-                                            "argument": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "p"}}}}}}}}}}},
-                            "argument": {"application": {"function": {"variable": "hydra.lib.maps.toList"}, "argument": {"variable": "m"}}}}}}}}}}},
-            "annotation": {
-              "map": [
-                {"key": {"variable": "description"}, "value": {"literal": {"string": "map over values, defined via toList/fromList."}}}]}}}}},
+                            "function": {"variable": "hydra.lib.lists.map"},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "p",
+                                "body": {
+                                  "pair": {
+                                    "first": {"application": {"function": {"variable": "hydra.lib.pairs.first"}, "argument": {"variable": "p"}}},
+                                    "second": {
+                                      "application": {
+                                        "function": {"variable": "f"},
+                                        "argument": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "p"}}}}}}}}}}},
+                        "argument": {"application": {"function": {"variable": "hydra.lib.maps.toList"}, "argument": {"variable": "m"}}}}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.maps.mapKeys",
@@ -495,34 +460,30 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "f",
             "body": {
               "lambda": {
-                "parameter": "f",
+                "parameter": "m",
                 "body": {
-                  "lambda": {
-                    "parameter": "m",
-                    "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.maps.fromList"},
+                    "argument": {
                       "application": {
-                        "function": {"variable": "hydra.lib.maps.fromList"},
-                        "argument": {
+                        "function": {
                           "application": {
-                            "function": {
-                              "application": {
-                                "function": {"variable": "hydra.lib.lists.map"},
-                                "argument": {
-                                  "lambda": {
-                                    "parameter": "p",
-                                    "body": {
-                                      "pair": {
-                                        "first": {
-                                          "application": {
-                                            "function": {"variable": "f"},
-                                            "argument": {"application": {"function": {"variable": "hydra.lib.pairs.first"}, "argument": {"variable": "p"}}}}},
-                                        "second": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "p"}}}}}}}}},
-                            "argument": {"application": {"function": {"variable": "hydra.lib.maps.toList"}, "argument": {"variable": "m"}}}}}}}}}}},
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "map over keys, defined via toList/fromList."}}}]}}}}},
+                            "function": {"variable": "hydra.lib.lists.map"},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "p",
+                                "body": {
+                                  "pair": {
+                                    "first": {
+                                      "application": {
+                                        "function": {"variable": "f"},
+                                        "argument": {"application": {"function": {"variable": "hydra.lib.pairs.first"}, "argument": {"variable": "p"}}}}},
+                                    "second": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "p"}}}}}}}}},
+                        "argument": {"application": {"function": {"variable": "hydra.lib.maps.toList"}, "argument": {"variable": "m"}}}}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.maps.member",

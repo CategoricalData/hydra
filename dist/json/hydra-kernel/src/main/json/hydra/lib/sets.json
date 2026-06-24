@@ -67,49 +67,42 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "s1",
             "body": {
               "lambda": {
-                "parameter": "s1",
+                "parameter": "s2",
                 "body": {
-                  "lambda": {
-                    "parameter": "s2",
-                    "body": {
+                  "application": {
+                    "function": {
                       "application": {
                         "function": {
                           "application": {
-                            "function": {
-                              "application": {
-                                "function": {"variable": "hydra.lib.lists.foldl"},
-                                "argument": {
+                            "function": {"variable": "hydra.lib.lists.foldl"},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "acc",
+                                "body": {
                                   "lambda": {
-                                    "parameter": "acc",
+                                    "parameter": "el",
                                     "body": {
-                                      "lambda": {
-                                        "parameter": "el",
-                                        "body": {
+                                      "application": {
+                                        "function": {
                                           "application": {
                                             "function": {
                                               "application": {
-                                                "function": {
+                                                "function": {"variable": "hydra.lib.logic.ifElse"},
+                                                "argument": {
                                                   "application": {
-                                                    "function": {"variable": "hydra.lib.logic.ifElse"},
-                                                    "argument": {
-                                                      "application": {
-                                                        "function": {"application": {"function": {"variable": "hydra.lib.sets.member"}, "argument": {"variable": "el"}}},
-                                                        "argument": {"variable": "s2"}}}}},
-                                                "argument": {"variable": "acc"}}},
-                                            "argument": {
-                                              "application": {
-                                                "function": {"application": {"function": {"variable": "hydra.lib.sets.insert"}, "argument": {"variable": "el"}}},
-                                                "argument": {"variable": "acc"}}}}}}}}}}},
-                            "argument": {"variable": "hydra.lib.sets.empty"}}},
-                        "argument": {"application": {"function": {"variable": "hydra.lib.sets.toList"}, "argument": {"variable": "s1"}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Set difference, defined in terms of member and insert."}}}]}}}}},
+                                                    "function": {"application": {"function": {"variable": "hydra.lib.sets.member"}, "argument": {"variable": "el"}}},
+                                                    "argument": {"variable": "s2"}}}}},
+                                            "argument": {"variable": "acc"}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.lib.sets.insert"}, "argument": {"variable": "el"}}},
+                                            "argument": {"variable": "acc"}}}}}}}}}}},
+                        "argument": {"variable": "hydra.lib.sets.empty"}}},
+                    "argument": {"application": {"function": {"variable": "hydra.lib.sets.toList"}, "argument": {"variable": "s1"}}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.sets.empty",
@@ -179,49 +172,42 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "s1",
             "body": {
               "lambda": {
-                "parameter": "s1",
+                "parameter": "s2",
                 "body": {
-                  "lambda": {
-                    "parameter": "s2",
-                    "body": {
+                  "application": {
+                    "function": {
                       "application": {
                         "function": {
                           "application": {
-                            "function": {
-                              "application": {
-                                "function": {"variable": "hydra.lib.lists.foldl"},
-                                "argument": {
+                            "function": {"variable": "hydra.lib.lists.foldl"},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "acc",
+                                "body": {
                                   "lambda": {
-                                    "parameter": "acc",
+                                    "parameter": "el",
                                     "body": {
-                                      "lambda": {
-                                        "parameter": "el",
-                                        "body": {
+                                      "application": {
+                                        "function": {
                                           "application": {
                                             "function": {
                                               "application": {
-                                                "function": {
-                                                  "application": {
-                                                    "function": {"variable": "hydra.lib.logic.ifElse"},
-                                                    "argument": {
-                                                      "application": {
-                                                        "function": {"application": {"function": {"variable": "hydra.lib.sets.member"}, "argument": {"variable": "el"}}},
-                                                        "argument": {"variable": "s2"}}}}},
+                                                "function": {"variable": "hydra.lib.logic.ifElse"},
                                                 "argument": {
                                                   "application": {
-                                                    "function": {"application": {"function": {"variable": "hydra.lib.sets.insert"}, "argument": {"variable": "el"}}},
-                                                    "argument": {"variable": "acc"}}}}},
-                                            "argument": {"variable": "acc"}}}}}}}}},
-                            "argument": {"variable": "hydra.lib.sets.empty"}}},
-                        "argument": {"application": {"function": {"variable": "hydra.lib.sets.toList"}, "argument": {"variable": "s1"}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Set intersection, defined in terms of member and insert."}}}]}}}}},
+                                                    "function": {"application": {"function": {"variable": "hydra.lib.sets.member"}, "argument": {"variable": "el"}}},
+                                                    "argument": {"variable": "s2"}}}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {"application": {"function": {"variable": "hydra.lib.sets.insert"}, "argument": {"variable": "el"}}},
+                                                "argument": {"variable": "acc"}}}}},
+                                        "argument": {"variable": "acc"}}}}}}}}},
+                        "argument": {"variable": "hydra.lib.sets.empty"}}},
+                    "argument": {"application": {"function": {"variable": "hydra.lib.sets.toList"}, "argument": {"variable": "s1"}}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.sets.map",
@@ -241,25 +227,18 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "f",
             "body": {
               "lambda": {
-                "parameter": "f",
+                "parameter": "s",
                 "body": {
-                  "lambda": {
-                    "parameter": "s",
-                    "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.sets.fromList"},
+                    "argument": {
                       "application": {
-                        "function": {"variable": "hydra.lib.sets.fromList"},
-                        "argument": {
-                          "application": {
-                            "function": {"application": {"function": {"variable": "hydra.lib.lists.map"}, "argument": {"variable": "f"}}},
-                            "argument": {"application": {"function": {"variable": "hydra.lib.sets.toList"}, "argument": {"variable": "s"}}}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Map a function over a set, defined in terms of toList, lists.map and fromList."}}}]}}}}},
+                        "function": {"application": {"function": {"variable": "hydra.lib.lists.map"}, "argument": {"variable": "f"}}},
+                        "argument": {"application": {"function": {"variable": "hydra.lib.sets.toList"}, "argument": {"variable": "s"}}}}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.sets.member",
@@ -361,37 +340,30 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "s1",
             "body": {
               "lambda": {
-                "parameter": "s1",
+                "parameter": "s2",
                 "body": {
-                  "lambda": {
-                    "parameter": "s2",
-                    "body": {
+                  "application": {
+                    "function": {
                       "application": {
                         "function": {
                           "application": {
-                            "function": {
-                              "application": {
-                                "function": {"variable": "hydra.lib.lists.foldl"},
-                                "argument": {
+                            "function": {"variable": "hydra.lib.lists.foldl"},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "acc",
+                                "body": {
                                   "lambda": {
-                                    "parameter": "acc",
+                                    "parameter": "el",
                                     "body": {
-                                      "lambda": {
-                                        "parameter": "el",
-                                        "body": {
-                                          "application": {
-                                            "function": {"application": {"function": {"variable": "hydra.lib.sets.insert"}, "argument": {"variable": "el"}}},
-                                            "argument": {"variable": "acc"}}}}}}}}},
-                            "argument": {"variable": "s2"}}},
-                        "argument": {"application": {"function": {"variable": "hydra.lib.sets.toList"}, "argument": {"variable": "s1"}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Set union, defined in terms of insert and toList."}}}]}}}}},
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.lib.sets.insert"}, "argument": {"variable": "el"}}},
+                                        "argument": {"variable": "acc"}}}}}}}}},
+                        "argument": {"variable": "s2"}}},
+                    "argument": {"application": {"function": {"variable": "hydra.lib.sets.toList"}, "argument": {"variable": "s1"}}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.sets.unions",
@@ -409,31 +381,24 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "ss",
             "body": {
-              "lambda": {
-                "parameter": "ss",
-                "body": {
+              "application": {
+                "function": {
                   "application": {
                     "function": {
                       "application": {
-                        "function": {
-                          "application": {
-                            "function": {"variable": "hydra.lib.lists.foldl"},
-                            "argument": {
+                        "function": {"variable": "hydra.lib.lists.foldl"},
+                        "argument": {
+                          "lambda": {
+                            "parameter": "acc",
+                            "body": {
                               "lambda": {
-                                "parameter": "acc",
+                                "parameter": "s",
                                 "body": {
-                                  "lambda": {
-                                    "parameter": "s",
-                                    "body": {
-                                      "application": {
-                                        "function": {"application": {"function": {"variable": "hydra.lib.sets.union"}, "argument": {"variable": "acc"}}},
-                                        "argument": {"variable": "s"}}}}}}}}},
-                        "argument": {"variable": "hydra.lib.sets.empty"}}},
-                    "argument": {"variable": "ss"}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Union of a list of sets, defined in terms of foldl and union."}}}]}}}}}]}
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.lib.sets.union"}, "argument": {"variable": "acc"}}},
+                                    "argument": {"variable": "s"}}}}}}}}},
+                    "argument": {"variable": "hydra.lib.sets.empty"}}},
+                "argument": {"variable": "ss"}}}}}}}]}
