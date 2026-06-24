@@ -4,7 +4,7 @@ import hydra.core.Name;
 import hydra.core.Type;
 import hydra.dsl.Core;
 import hydra.dsl.Packaging;
-import hydra.dsl.Types;
+import hydra.overlay.java.dsl.Types;
 import hydra.dsl.java.Environment;
 import hydra.dsl.java.Syntax;
 import hydra.dsl.lib.Eithers;
@@ -24,7 +24,7 @@ import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
 import hydra.packaging.ModuleDependency;
 import hydra.typed.TypedTerm;
-import hydra.util.Optional;
+import hydra.overlay.java.util.Optional;
 
 import java.util.Arrays;
 import java.util.List;

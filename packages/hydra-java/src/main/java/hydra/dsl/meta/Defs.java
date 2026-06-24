@@ -10,7 +10,7 @@ import hydra.packaging.PackageName;
 import hydra.packaging.TermDefinition;
 import hydra.typed.TypedTerm;
 import hydra.typing.TermSignature;
-import hydra.util.Optional;
+import hydra.overlay.java.util.Optional;
 
 import java.util.ArrayList;
 import java.util.List;

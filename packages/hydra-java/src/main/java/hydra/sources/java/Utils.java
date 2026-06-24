@@ -5,7 +5,7 @@ import hydra.core.Type;
 import hydra.dsl.Core;
 import hydra.dsl.Errors;
 import hydra.dsl.Packaging;
-import hydra.dsl.Types;
+import hydra.overlay.java.dsl.Types;
 import hydra.dsl.java.Environment;
 import hydra.dsl.java.Syntax;
 import hydra.dsl.lib.Eithers;
@@ -25,7 +25,7 @@ import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
 import hydra.packaging.ModuleDependency;
 import hydra.typed.TypedTerm;
-import hydra.util.Optional;
+import hydra.overlay.java.util.Optional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -522,6 +522,33 @@ public class Utils {
                                                 VariableInitializer.EXPRESSION,
                                                 var("rhs")))))))))));
 
+    private static TypedTerm overlayLibPair(String sub) {
+        return pair(
+            wrap(new Name("hydra.packaging.ModuleName"), string("hydra.lib." + sub)),
+            apply(ref(Names.javaPackageName), list(
+                string("hydra"), string("overlay"), string("java"), string("lib"), string(sub))));
+    }
+
+    public static final Def overlayJavaLibPackageAliases = def(
+        "overlayJavaLibPackageAliases",
+        () -> Maps.fromList(list(
+            overlayLibPair("chars"),
+            overlayLibPair("effects"),
+            overlayLibPair("eithers"),
+            overlayLibPair("equality"),
+            overlayLibPair("files"),
+            overlayLibPair("lists"),
+            overlayLibPair("literals"),
+            overlayLibPair("logic"),
+            overlayLibPair("maps"),
+            overlayLibPair("math"),
+            overlayLibPair("optionals"),
+            overlayLibPair("pairs"),
+            overlayLibPair("regex"),
+            overlayLibPair("sets"),
+            overlayLibPair("strings"),
+            overlayLibPair("text"))));
+
     public static final Def importAliasesForModule = def(
         "importAliasesForModule",
         () -> lambda("mod",
@@ -529,7 +556,7 @@ public class Utils {
                     field(
                         Aliases.CURRENT_NAMESPACE,
                         proj(Module.TYPE_, Module.NAME, "mod")),
-                    field(Aliases.PACKAGES, var("hydra.lib.maps.empty")),
+                    field(Aliases.PACKAGES, ref(overlayJavaLibPackageAliases)),
                     field(Aliases.BRANCH_VARS, var("hydra.lib.sets.empty")),
                     field(
                         Aliases.RECURSIVE_VARS,
@@ -3365,6 +3392,7 @@ public class Utils {
             nameToJavaReferenceType,
             nameToJavaTypeIdentifier,
             nameToQualifiedJavaName,
+            overlayJavaLibPackageAliases,
             overrideAnnotation,
             referenceTypeToResult,
             sanitizeJavaName,

@@ -4,7 +4,7 @@ import hydra.core.Name;
 import hydra.core.Type;
 import hydra.dsl.Core;
 import hydra.dsl.Packaging;
-import hydra.dsl.Types;
+import hydra.overlay.java.dsl.Types;
 import hydra.dsl.java.Environment;
 import hydra.dsl.java.Syntax;
 import hydra.dsl.lib.Eithers;
@@ -24,7 +24,7 @@ import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
 import hydra.packaging.ModuleDependency;
 import hydra.typed.TypedTerm;
-import hydra.util.Optional;
+import hydra.overlay.java.util.Optional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -85,8 +85,8 @@ public class Names {
 
     public static final Def hydraUtilPackageName = def(
         "hydraUtilPackageName",
-        () -> doc("The hydra.util package name",
-                just(apply(ref(Names.javaPackageName), list(string("hydra"), string("util"))))));
+        () -> doc("The hydra.overlay.java.util package name",
+                just(apply(ref(Names.javaPackageName), list(string("hydra"), string("overlay"), string("java"), string("util"))))));
 
     public static final Def instanceName = def(
         "instanceName",
