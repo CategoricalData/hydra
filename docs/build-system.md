@@ -345,7 +345,7 @@ The caches form a hierarchy: a hit at a coarser layer skips a finer one.
 | Phase 1 input cache | `heads/haskell/.stack-work/phase1-input-cache.txt` | Universe-wide | Skips all of Phase 1 (no stack startup, no JSON regen) |
 | Universe digest | `dist/json/build/digest.json` | Per-module-name | Drives `check-dsl-fresh.py`; per-module skip inside `bootstrap-from-json` |
 | Per-package input digest | `dist/json/<pkg>/build/<set>/digest.json` | Per-module-name, scoped to one package | Source-of-truth for Layer 2 freshness comparison |
-| Per-package output digest | `dist/<lang>/<pkg>/build/<set>/digest.json` | Per-module-name + per-target generator stamp | Compared against input digest to skip Layer 1 + Layer 2 for one package |
+| Per-package output digest | `dist/<lang>/<pkg>/build/<set>/digest.json` | Per-module-name + `generation.generatorId` (generator stamp) | Compared against input digest to skip Layer 1 + Layer 2 for one package |
 | Step caches | `heads/haskell/.stack-work/{verify-json-kernel,bootstrap-from-json,haskell-test}-cache.txt` | Universe-wide hash of inputs + exec source | Skips `verify-json-kernel`, `bootstrap-from-json`, or `stack test` |
 | Per-target test cache | `dist/<lang>/test-cache.json` | Universe of generated sources + test infra + runner | Skips the target's `test-distribution.sh` |
 
@@ -422,10 +422,16 @@ the stamp, edits to the transform (the per-target coder, the kernel orchestrator
 the generation driver, the assembler script) would change downstream emission without
 changing any tracked input, and the cache would erroneously hit.
 
-The stamp is computed by `compute_generator_stamp <lang>` in `bin/lib/assemble-common.sh`
-and exported as `HYDRA_GENERATOR_STAMP` before each Layer 2 freshness check. `digest-check
-fresh` reads it and compares against the recorded stamp in the per-target output digest;
-mismatches force a cache miss.
+The stamp is computed by `setup_generator_env <lang>` in `bin/lib/assemble-common.sh`
+(via `eval "$(setup_generator_env <lang>)"`), which exports `HYDRA_GENERATOR_STAMP` (the
+gating key) plus informational env vars (`HYDRA_GENERATOR_HOST`, `HYDRA_GENERATOR_MODE`).
+`digest-check fresh` reads `HYDRA_GENERATOR_STAMP` and compares against `generation.generatorId`
+in the per-target output digest; mismatches force a cache miss.
+
+The output digest's `"generator"` flat field was replaced in [#413](https://github.com/CategoricalData/hydra/issues/413)
+with a structured `"generation"` block separating the gating key (`generatorId`) from
+informational provenance (`mode`, `host`, `revision`, `timestamp`).
+Only `generatorId` appears in `digestsMatch` — the other fields are never gated.
 
 The stamp is **compositional**, mirroring the actual structure of a host transform:
 
