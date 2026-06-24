@@ -9,6 +9,7 @@ import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Error.File as ErrorFile
 import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Error.System as ErrorSystem
 import qualified Hydra.Errors as Errors
 import qualified Hydra.File as File
 import qualified Hydra.Graph as Graph
@@ -18,6 +19,7 @@ import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Query as Query
 import qualified Hydra.Relational as Relational
+import qualified Hydra.System as System
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Test.Annotations as Annotations
 import qualified Hydra.Test.Checking.All as CheckingAll
@@ -47,6 +49,7 @@ import qualified Hydra.Test.Lib.Pairs as Pairs
 import qualified Hydra.Test.Lib.Regex as Regex
 import qualified Hydra.Test.Lib.Sets as Sets
 import qualified Hydra.Test.Lib.Strings as Strings
+import qualified Hydra.Test.Lib.System as LibSystem
 import qualified Hydra.Test.Ordering as Ordering
 import qualified Hydra.Test.Reduction as Reduction
 import qualified Hydra.Test.Rewriting as Rewriting
@@ -89,6 +92,7 @@ allTests =
         Regex.allTests,
         Sets.allTests,
         Strings.allTests,
+        LibSystem.allTests,
         Annotations.allTests,
         CheckingAll.allTests,
         Dependencies.allTests,

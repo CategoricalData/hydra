@@ -153,6 +153,22 @@ def register_files_primitives() -> dict[Name, Primitive]:
     return primitives
 
 
+def register_system_primitives() -> dict[Name, Primitive]:
+    """Register all system primitive functions. As effectful primitives, these have no term-level
+    interpreter implementation; they are registered for name resolution and inference only, and are
+    executed via the native (host) path. For #498."""
+    from hydra.lib import system as def_system
+
+    primitives: dict[Name, Primitive] = {}
+    primitives[def_system.execute.name] = unsupported_effect_primitive(def_system.execute)
+    primitives[def_system.exit.name] = unsupported_effect_primitive(def_system.exit)
+    primitives[def_system.get_environment.name] = unsupported_effect_primitive(def_system.get_environment)
+    primitives[def_system.get_environment_variable.name] = unsupported_effect_primitive(def_system.get_environment_variable)
+    primitives[def_system.get_time.name] = unsupported_effect_primitive(def_system.get_time)
+    primitives[def_system.get_working_directory.name] = unsupported_effect_primitive(def_system.get_working_directory)
+    return primitives
+
+
 def register_eithers_primitives() -> dict[Name, Primitive]:
     """Register all eithers primitive functions."""
     from hydra.python.lib import eithers
@@ -1291,5 +1307,6 @@ def standard_library() -> dict[Name, Primitive]:
     primitives.update(register_regex_primitives())
     primitives.update(register_sets_primitives())
     primitives.update(register_strings_primitives())
+    primitives.update(register_system_primitives())
     primitives.update(register_text_primitives())
     return primitives

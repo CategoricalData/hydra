@@ -42,6 +42,8 @@ import qualified Data.Set                    as S
 import qualified Hydra.Dsl.Prims as Prims
 import qualified Hydra.Lib.Lists as DefLists
 import qualified Hydra.Lib.Optionals as DefOptionals
+import qualified Hydra.Decoding as Decoding
+import qualified Hydra.Encoding as Encoding
 
 
 ns :: ModuleName
@@ -51,7 +53,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Annotations.ns, Formatting.ns, Lexical.ns, Names.ns, Strip.ns, ModuleName "hydra.constants", ModuleName "hydra.decode.core", ModuleName "hydra.encode.core"] L.++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([Annotations.ns, Formatting.ns, Lexical.ns, Names.ns, Strip.ns, ModuleName "hydra.constants", Decoding.decodeModuleName (ModuleName "hydra.core"), Encoding.encodeModuleName (ModuleName "hydra.core")] L.++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata (Just "Functions for generating domain-specific DSL modules from type modules")}
   where
     definitions = [
