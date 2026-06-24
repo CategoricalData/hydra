@@ -141,39 +141,44 @@ ns = ModuleName "hydra.lib.logic"
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = definitions,
+            moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleDescription = Just "Primitives in the hydra.lib.logic namespace."}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.logic module.")}
   where
-    definitions = [
-      toPrimitive "Compute the logical AND of two boolean values." andSig (Just
-        "and(p, q) returns true iff both p and q are true. ...") and_,
-      primNoDef "ifElse" "Compute a conditional expression." ifElseSig (Just
-        "ifElse(p, t, f) returns t if p is true, or f if p is false. ..."),
-      toPrimitive "Compute the logical NOT of a boolean value." notSig Nothing not_,
-      toPrimitive "Compute the logical OR of two boolean values." orSig Nothing or_]
+    definitions = [and, ifElse, not_, or_]
 
-andSig :: TermSignature
-andSig = sig $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) Nothing
+define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
+define = primitiveInModule module_
 
-and_ :: TypedTermDefinition (Bool -> Bool -> Bool)
-and_ = define "and" $
-  doc "Logical AND, defined in terms of ifElse." $
-  "a" ~> "b" ~> Logic.ifElse (var "a") (var "b" :: TypedTerm Bool) false
+defineWithDefault :: String -> String -> TermSignature -> [String] -> TypedTerm a -> PrimitiveDefinition
+defineWithDefault = primitiveWithDefaultInModule module_
+
+and :: PrimitiveDefinition
+and = defineWithDefault "and" "Compute the logical AND of two boolean values."
+  (sig $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) Nothing)
+  ["and(p, q) returns true iff both p and q are true. ..."]
+  ("a" ~> "b" ~> Logic.ifElse (var "a") (var "b" :: TypedTerm Bool) false)
+
+ifElse :: PrimitiveDefinition
+ifElse = define "ifElse" "Compute a conditional expression."
+  ifElseSig
+  ["ifElse(p, t, f) returns t if p is true, or f if p is false. ..."]
 ```
 
-The two helpers used here:
+Each primitive is a top-level `PrimitiveDefinition` value produced by one of two module-local helpers:
 
-- **`toPrimitive description signature comments defaultBody`** — declares a primitive
-  whose `defaultImplementation` is a pure Hydra-term expression (the `TypedTermDefinition`
-  body). Used when the primitive can be defined in terms of other primitives.
-- **`primNoDef localName description signature comments`** — declares a primitive
-  with no default implementation, for primitives that are fundamental (e.g.
-  `logic.ifElse`, `pairs.first`) or whose meaning is host-native (e.g. arithmetic,
-  char predicates, regex matching).
+- **`define localName description signature comments`** — declares a primitive with no default
+  implementation, for primitives that are fundamental (e.g. `logic.ifElse`, `pairs.first`)
+  or whose meaning is host-native (e.g. arithmetic, char predicates, regex matching).
+  `define = primitiveInModule module_` (or `impurePrimitiveInModule module_` for effectful
+  primitives; see [Impure primitives](#impure-primitives) below).
+- **`defineWithDefault localName description signature comments defaultBody`** — declares a
+  primitive whose `defaultImplementation` is a pure Hydra-term expression.
+  Used when the primitive can be defined in terms of other primitives.
+  `defineWithDefault = primitiveWithDefaultInModule module_`.
 
-The `comments` argument is `Maybe String`. Pass `Nothing` for primitives whose
-short `description` is self-explanatory, or `(Just "...")` to attach a longer,
+The `comments` argument is `[String]` (a list of paragraphs). Pass `[]` for primitives whose
+short `description` is self-explanatory, or a non-empty list to attach a longer,
 host-independent specification — typically a paragraph citing the authoritative
 external source (IEEE 754, Unicode, Haskell `Data.*`, etc.), characterizing
 edge cases, and noting when behavior is host-defined. The `comments` field flows
@@ -215,9 +220,10 @@ Conventions established across the 13 `hydra.lib.*` module names (#319):
   is intentional rather than skipped. Modeled on the all-primitives-covered
   pattern of `Math.hs` (45 primitives, all populated).
 
-Both helpers produce a `Definition.primitive PrimitiveDefinition` entry which is
-then enumerated alongside `Definition.term` and `Definition.type` in the module's
-`moduleDefinitions` list.
+The `definitions` list holds `PrimitiveDefinition` values directly; the module wraps them with
+`DefinitionPrimitive <$> definitions` so the `Module` record receives `[Definition]`.
+This is distinct from modules that mix `Definition.term` and `Definition.type` entries —
+primitive-only modules use `DefinitionPrimitive <$>` exclusively.
 
 The generated JSON in `dist/json/hydra-kernel/src/main/json/hydra/lib/<sub>.json`
 is the cross-host source of truth — every host language reads this to know what
@@ -289,16 +295,34 @@ primitives and term-level constructs. For example:
 
 ```haskell
 -- optionals.fromOptional def m = cases m def (\x -> x)
-fromOptional_ :: TypedTermDefinition (a -> Maybe a -> a)
-fromOptional_ = define "fromOptional" $
-  doc "Return the contained value or a default, defined in terms of cases." $
-  "def" ~> "m" ~> Optionals.cases (var "m") (var "def") ("x" ~> var "x")
+fromOptional :: PrimitiveDefinition
+fromOptional = defineWithDefault "fromOptional" "Return the contained value or a default."
+  fromOptionalSig
+  ["fromOptional(def, m) returns the value inside m if present, or def if m is none."]
+  ("def" ~> "m" ~> Optionals.cases (var "m") (var "def") ("x" ~> var "x"))
 ```
 
 Not every primitive has a meaningful default. Fundamental operations
 (`optionals.cases`, `pairs.first`, character predicates, arithmetic) cannot be
-expressed in terms of other primitives — those use `primNoDef` and rely on the
+expressed in terms of other primitives — those use `define` (no default) and rely on the
 host's native implementation.
+
+### Impure primitives
+
+Primitives whose result type is `effect<t>` — i.e. those in `hydra.lib.effects`,
+`hydra.lib.files`, and `hydra.lib.system` — are declared with `impurePrimitiveInModule`
+instead of `primitiveInModule`:
+
+```haskell
+define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
+define = impurePrimitiveInModule module_
+```
+
+The only difference is that `impurePrimitiveInModule` sets `primitiveDefinitionIsPure = False`
+on the resulting `PrimitiveDefinition`. Default implementations (`primitiveWithDefaultInModule`)
+are not meaningful for impure primitives and are not used in practice. The `comments` field
+convention follows the same rules as for pure primitives, but cites POSIX or platform docs
+(e.g. the Open Group Base Specifications) as the authoritative source rather than Haskell `Data.*`.
 
 ## Adding a primitive: end-to-end recipe
 
@@ -323,32 +347,32 @@ plus its signature, and (optionally) its default implementation.
 For a simple monomorphic primitive without a default:
 
 ```haskell
-    definitions = [
-      ...,
-      primNoDef "isAlphaNum" "Check whether a character is alphanumeric." intToBoolSig (Just
-        "True if the argument is a Unicode letter or digit, false otherwise. ..."),
-      ...]
+define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
+define = primitiveInModule module_
 
-intToBoolSig :: TermSignature
-intToBoolSig = sig $ TypeScheme [] (Types.int32 Types.~> Types.boolean) Nothing
+isAlphaNum :: PrimitiveDefinition
+isAlphaNum = define "isAlphaNum" "Check whether a character is alphanumeric."
+  (sig $ TypeScheme [] (Types.int32 Types.~> Types.boolean) Nothing)
+  ["True if the argument is a Unicode letter or digit, false otherwise. ..."]
 ```
 
 For a primitive with a default implementation expressed in terms of other primitives:
 
 ```haskell
-    definitions = [
-      ...,
-      toPrimitive "Map over both elements of a pair." bimapSig (Just
-        "bimap(f, g, p) returns a new pair (f(first(p)), g(second(p))). ...") bimap_,
-      ...]
+defineWithDefault :: String -> String -> TermSignature -> [String] -> TypedTerm a -> PrimitiveDefinition
+defineWithDefault = primitiveWithDefaultInModule module_
 
-bimapSig :: TermSignature
-bimapSig = sig $ TypeScheme [Name "a", Name "b", Name "c", Name "d"]
-  ((Types.var "a" Types.~> Types.var "c") Types.~>
-   (Types.var "b" Types.~> Types.var "d") Types.~>
-   Types.pair (Types.var "a") (Types.var "b") Types.~>
-   Types.pair (Types.var "c") (Types.var "d"))
-  Nothing
+bimap :: PrimitiveDefinition
+bimap = defineWithDefault "bimap" "Map over both elements of a pair."
+  (sig $ TypeScheme [Name "a", Name "b", Name "c", Name "d"]
+    ((Types.var "a" Types.~> Types.var "c") Types.~>
+     (Types.var "b" Types.~> Types.var "d") Types.~>
+     Types.pair (Types.var "a") (Types.var "b") Types.~>
+     Types.pair (Types.var "c") (Types.var "d"))
+    Nothing)
+  ["bimap(f, g, p) returns a new pair (f(first(p)), g(second(p))). ..."]
+  ("f" ~> "g" ~> "p" ~> pair (var "f" @@ Pairs.first (var "p"))
+                              (var "g" @@ Pairs.second (var "p")))
 ```
 
 The `TypeScheme`'s variable list must be in **declaration order** — the order
@@ -361,27 +385,14 @@ a → optional<a> → a` lists vars as `[a]`; a polymorphic primitive whose resu
 type variable appears before its argument's must list them in that body order, not
 alphabetically.
 
-```haskell
-
-bimap_ :: TypedTermDefinition ((a -> c) -> (b -> d) -> (a, b) -> (c, d))
-bimap_ = define "bimap" $
-  doc "Map over both elements of a pair, defined in terms of first and second." $
-  "f" ~> "g" ~> "p" ~> pair (var "f" @@ Pairs.first (var "p"))
-                            (var "g" @@ Pairs.second (var "p"))
-```
-
 For a constrained polymorphic primitive (e.g. requires `ordering`):
 
 ```haskell
-    definitions = [
-      ...,
-      primNoDef "compare" "Compare two values and return a Comparison." compareSig (Just
-        "compare(x, y) returns the hydra.util.Comparison value classifying the relationship between x and y. ..."),
-      ...]
-
-compareSig :: TermSignature
-compareSig = sig $ Types.polyConstrained [("x", [Name "ordering"])]
-  (Types.var "x" Types.~> Types.var "x" Types.~> Types.var "hydra.util.Comparison")
+compare :: PrimitiveDefinition
+compare = define "compare" "Compare two values and return a Comparison."
+  (sig $ Types.polyConstrained [("x", [Name "ordering"])]
+    (Types.var "x" Types.~> Types.var "x" Types.~> Types.var "hydra.util.Comparison"))
+  ["compare(x, y) returns the hydra.util.Comparison value classifying the relationship between x and y. ..."]
 ```
 
 **Definitions must be in alphabetical order by primitive name.** The kernel
@@ -441,8 +452,7 @@ parameter names, descriptions, and `isLazy`.
 
 The "default implementation" recorded on every `PrimitiveDefinition` is a
 pure Hydra-term reference — directly executable by any host with a term
-reducer, no native call required. It lives inline in the canonical
-`Kernel/Lib/<Sub>.hs` registry, attached via `toPrimitive ... name_`
+reducer, no native call required. It is the last argument to `defineWithDefault`
 (see Step 2 for an example).
 
 A default term must type-check at the primitive's public signature.
@@ -450,17 +460,6 @@ Express it using only other primitives and term-level constructs; do
 not reach for `InferenceContext`, `Graph`, or `ExtractCore.*` — the
 interpreter strips and reduces arguments before calling the primitive,
 so the default body sees ordinary terms of the declared type.
-
-> **Forward-looking note.** The `InferenceContext` and `Graph` parameters
-> on `Primitive.implementation` are slated for removal
-> ([#446](https://github.com/CategoricalData/hydra/issues/446)):
-> arguments are already stripped of annotations and reduced before the
-> implementation is invoked, so no primitive's compute logic genuinely
-> needs either parameter. The simplification is sequenced with the
-> `defaultImplementation` integration tracked in
-> [#437](https://github.com/CategoricalData/hydra/issues/437) and is
-> expected to land shortly after 0.16.0. Until then, the threaded shape
-> shown in this recipe is what the compiler and host adapters expect.
 
 Higher-order operations (`lists.foldl`, `eithers.bimap`, etc.) are
 typically expressible this way using `foldr`/`foldl`/`cases`/`cons`/etc.
@@ -484,9 +483,9 @@ lefts_ = define "lefts" $
 
 There is no separate "interpreter-shape" Defaults module any more
 (issue #437). Either a primitive has a portable default that fits its
-public signature — write it inline with `toPrimitive` — or it doesn't,
-and the registry entry uses `primNoDef`. `primNoDef` is the right
-choice for: fundamental eliminators (`optionals.cases`, `eithers.either`,
+public signature — write it inline with `defineWithDefault` — or it doesn't,
+and the registry entry uses `define`. `define` is the right choice for:
+fundamental eliminators (`optionals.cases`, `eithers.either`,
 `pairs.first`, `lists.foldl`, `logic.ifElse`), host-native operations
 (arithmetic, regex, literal parsing), and any primitive whose only
 sensible implementation would have to reference itself.
@@ -702,9 +701,10 @@ JSON wasn't regenerated.
 When adding a new primitive function:
 
 - [ ] **Kernel metadata** (required — this is where the name is declared, once)
-  - [ ] `toPrimitive` or `primNoDef` entry in `Hydra.Sources.Kernel.Lib.<Library>` (the `PrimitiveDefinition`)
-  - [ ] Signature definition (`TypeScheme` → `TermSignature` via `typeSchemeToTermSignature`)
-  - [ ] **(If applicable)** Default implementation as a `TypedTermDefinition`
+  - [ ] Top-level `PrimitiveDefinition` via `define` or `defineWithDefault` in `Hydra.Sources.Kernel.Lib.<Library>`
+  - [ ] Added to the module's `definitions` list (alphabetical order)
+  - [ ] Signature as a `TermSignature` (via `sig $ TypeScheme ...` or `lazySig [...] $ TypeScheme ...`)
+  - [ ] **(If applicable)** Default implementation inline as the last argument to `defineWithDefault`
 - [ ] **Haskell**
   - [ ] Native implementation in `Hydra.Haskell.Lib.<Library>`
   - [ ] Registration via `primN Def<Library>.<fn> ...` in `Hydra.Dsl.Libraries`
@@ -788,7 +788,7 @@ for the matching "untyped bindings" / stale-JSON failure mode see
 4. **Circular default implementations.** A primitive cannot use *itself* in its
    `defaultImplementation` body — there's no base case for reduction. If the
    primitive has no expression in terms of *other* primitives (e.g. `pairs.first`,
-   `logic.ifElse`), use `primNoDef`.
+   `logic.ifElse`), use `define` (no default) rather than `defineWithDefault`.
 
 5. **Type-variable naming.** The canonical type-variable names come from
    `Hydra.Sources.Libraries` (`_x`, `_xOrd`, `_xEq`, etc., resolving to `TypeVar`
