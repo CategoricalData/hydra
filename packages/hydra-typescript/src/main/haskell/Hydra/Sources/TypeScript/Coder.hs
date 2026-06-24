@@ -38,8 +38,10 @@ import qualified Hydra.Dsl.Typing                          as Typing
 import qualified Hydra.Dsl.Util                            as Util
 import qualified Hydra.Sources.Kernel.Terms.Analysis       as Analysis
 import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
+import qualified Hydra.Sources.Kernel.Terms.Arity          as Arity
 import qualified Hydra.Sources.Kernel.Terms.Environment    as Environment
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
+import qualified Hydra.Sources.Kernel.Terms.Lexical        as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Scoping        as Scoping
@@ -70,8 +72,8 @@ module_ = Module {
             moduleDependencies = unqualifiedDep <$> (
               [moduleName TypeScriptLanguageSource.module_,
                moduleName TypeScriptSerdeSource.module_,
-               Analysis.ns, Annotations.ns, Environment.ns, Formatting.ns, Names.ns, Rewriting.ns,
-               Serialization.ns, Sorting.ns, Strip.ns, Variables.ns]
+               Analysis.ns, Annotations.ns, Arity.ns, Environment.ns, Formatting.ns, Lexical.ns,
+               Names.ns, Rewriting.ns, Serialization.ns, Sorting.ns, Strip.ns, Variables.ns]
               L.++ (TypeScriptSyntax.ns : KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = descriptionMetadata (Just "TypeScript code generator: emits TypeScript type declarations from Hydra modules")}
   where
@@ -446,20 +448,38 @@ encodeTerm = def "encodeTerm" $
        -- just the local identifier. Different namespace: emit `alias.local`
        -- as a member expression, matching the namespace-style import in
        -- the file header.
-       Optionals.cases (Names.moduleNameOf @@ var "n")
-         (tsExprIdent @@ var "local")
-         (lambda "ns" $
-           Logic.ifElse
-             (Equality.equal
-               (unwrap _ModuleName @@ var "currentNs")
-               (unwrap _ModuleName @@ var "ns"))
-             (tsExprIdent @@ var "local")
-             ("nsSegs" <~ (Lists.drop (int32 1)
-                (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns"))) $
-              -- Must match the prefix used in importsToText.
-              "alias" <~ Strings.cat2 (string "$mod_")
-                (Strings.intercalate (string "_") (var "nsSegs")) $
-              tsMember @@ (tsExprIdent @@ var "alias") @@ var "local")),
+       "varExpr" <~
+         Optionals.cases (Names.moduleNameOf @@ var "n")
+           (tsExprIdent @@ var "local")
+           (lambda "ns" $
+             Logic.ifElse
+               (Equality.equal
+                 (unwrap _ModuleName @@ var "currentNs")
+                 (unwrap _ModuleName @@ var "ns"))
+               (tsExprIdent @@ var "local")
+               ("nsSegs" <~ (Lists.drop (int32 1)
+                  (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns"))) $
+                -- Must match the prefix used in importsToText.
+                "alias" <~ Strings.cat2 (string "$mod_")
+                  (Strings.intercalate (string "_") (var "nsSegs")) $
+                tsMember @@ (tsExprIdent @@ var "alias") @@ var "local")) $
+       -- Zero-arity effectful primitives (e.g. getEnvironment, getTime) are
+       -- IO-action values in Haskell but must be eagerly called in TypeScript
+       -- because effect<t> = t there. We emit name() only when (1) arity == 0
+       -- AND (2) the primitive is impure (isPure = False). Pure zero-arity
+       -- primitives like maps.empty / sets.empty keep their value form. We
+       -- cannot use TypeEffect matching because the TypeScript adapter strips
+       -- TypeEffect wrappers during type adaptation. Fixes #504.
+       Optionals.cases (Lexical.lookupPrimitive @@ var "g" @@ var "n")
+         (var "varExpr")
+         (lambda "prim" $
+           "isZeroArityEffect" <~
+             Logic.and
+               (Equality.equal (Arity.primitiveArity @@ var "prim") (int32 0))
+               (Logic.not (Packaging.primitiveDefinitionIsPure (Graph.primitiveDefinition (var "prim")))) $
+           Logic.ifElse (var "isZeroArityEffect")
+             (tsCall @@ var "varExpr" @@ list ([] :: [TypedTerm TS.Expression]))
+             (var "varExpr")),
      -- Lambda emission: peel through nested `λx.λy.λz.body` into a single
      -- `(x, y, z) => body` uncurried arrow, mirroring Python's
      -- `makeUncurriedLambda` driven by `analyzePythonFunction`. The kernel

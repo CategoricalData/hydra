@@ -4,6 +4,7 @@
 module Hydra.TypeScript.Coder where
 import qualified Hydra.Analysis as Analysis
 import qualified Hydra.Annotations as Annotations
+import qualified Hydra.Arity as Arity
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -18,6 +19,7 @@ import qualified Hydra.File as File
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
+import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Haskell.Lib.Equality as Equality
 import qualified Hydra.Haskell.Lib.Lists as Lists
@@ -195,10 +197,15 @@ encodeTerm cx g currentNs term =
       Core.TermLiteral v0 -> encodeLiteral v0
       Core.TermVariable v0 ->
         let local = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Names.localNameOf v0)
-        in (Optionals.cases (Names.moduleNameOf v0) (tsExprIdent local) (\ns -> Logic.ifElse (Equality.equal (Packaging.unModuleName currentNs) (Packaging.unModuleName ns)) (tsExprIdent local) (
-          let nsSegs = Lists.drop 1 (Strings.splitOn "." (Packaging.unModuleName ns))
-              alias = Strings.cat2 "$mod_" (Strings.intercalate "_" nsSegs)
-          in (tsMember (tsExprIdent alias) local))))
+            varExpr =
+                    Optionals.cases (Names.moduleNameOf v0) (tsExprIdent local) (\ns -> Logic.ifElse (Equality.equal (Packaging.unModuleName currentNs) (Packaging.unModuleName ns)) (tsExprIdent local) (
+                      let nsSegs = Lists.drop 1 (Strings.splitOn "." (Packaging.unModuleName ns))
+                          alias = Strings.cat2 "$mod_" (Strings.intercalate "_" nsSegs)
+                      in (tsMember (tsExprIdent alias) local)))
+        in (Optionals.cases (Lexical.lookupPrimitive g v0) varExpr (\prim ->
+          let isZeroArityEffect =
+                  Logic.and (Equality.equal (Arity.primitiveArity prim) 0) (Logic.not (Packaging.primitiveDefinitionIsPure (Graph.primitiveDefinition prim)))
+          in (Logic.ifElse isZeroArityEffect (tsCall varExpr []) varExpr)))
       Core.TermLambda v0 ->
         let lamTerm = Core.TermLambda v0
             fsLE = analyzeTypeScriptFunction cx g lamTerm
