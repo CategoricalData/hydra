@@ -31,7 +31,6 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-import qualified Data.Map as M
 abs :: Packaging.PrimitiveDefinition
 abs =
     Packaging.PrimitiveDefinition {
@@ -423,27 +422,22 @@ even =
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "x"),
-          Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.equal")),
+      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "x"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermApplication (Core.Application {
+          Core.applicationFunction = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.equal")),
+            Core.applicationArgument = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.fromOptional")),
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
               Core.applicationArgument = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.fromOptional")),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
-                Core.applicationArgument = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.maybeMod")),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))}))})),
-            Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})),
-        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (
-            Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "Test whether an integer is even, defined via maybeMod and equality.")))]))})))}
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.maybeMod")),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))}))})),
+          Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})))}
 exp :: Packaging.PrimitiveDefinition
 exp =
     Packaging.PrimitiveDefinition {
@@ -892,19 +886,14 @@ odd =
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "x"),
-          Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.not")),
-            Core.applicationArgument = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.even")),
-              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})),
-        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (
-            Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "Test whether an integer is odd, defined as the negation of even.")))]))})))}
+      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "x"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermApplication (Core.Application {
+          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.not")),
+          Core.applicationArgument = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.even")),
+            Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))}
 pi :: Packaging.PrimitiveDefinition
 pi =
     Packaging.PrimitiveDefinition {

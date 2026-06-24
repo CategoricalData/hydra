@@ -266,29 +266,22 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "x",
             "body": {
-              "lambda": {
-                "parameter": "x",
-                "body": {
+              "application": {
+                "function": {
                   "application": {
-                    "function": {
+                    "function": {"variable": "hydra.lib.equality.equal"},
+                    "argument": {
                       "application": {
-                        "function": {"variable": "hydra.lib.equality.equal"},
+                        "function": {
+                          "application": {"function": {"variable": "hydra.lib.optionals.fromOptional"}, "argument": {"literal": {"integer": {"int32": 0}}}}},
                         "argument": {
                           "application": {
-                            "function": {
-                              "application": {"function": {"variable": "hydra.lib.optionals.fromOptional"}, "argument": {"literal": {"integer": {"int32": 0}}}}},
-                            "argument": {
-                              "application": {
-                                "function": {"application": {"function": {"variable": "hydra.lib.math.maybeMod"}, "argument": {"variable": "x"}}},
-                                "argument": {"literal": {"integer": {"int32": 2}}}}}}}}},
-                    "argument": {"literal": {"integer": {"int32": 0}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Test whether an integer is even, defined via maybeMod and equality."}}}]}}}}},
+                            "function": {"application": {"function": {"variable": "hydra.lib.math.maybeMod"}, "argument": {"variable": "x"}}},
+                            "argument": {"literal": {"integer": {"int32": 2}}}}}}}}},
+                "argument": {"literal": {"integer": {"int32": 0}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.math.exp",
@@ -555,19 +548,12 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "x",
             "body": {
-              "lambda": {
-                "parameter": "x",
-                "body": {
-                  "application": {
-                    "function": {"variable": "hydra.lib.logic.not"},
-                    "argument": {"application": {"function": {"variable": "hydra.lib.math.even"}, "argument": {"variable": "x"}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Test whether an integer is odd, defined as the negation of even."}}}]}}}}},
+              "application": {
+                "function": {"variable": "hydra.lib.logic.not"},
+                "argument": {"application": {"function": {"variable": "hydra.lib.math.even"}, "argument": {"variable": "x"}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.math.pi",
