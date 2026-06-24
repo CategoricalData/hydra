@@ -5,7 +5,7 @@ mirroring the Haskell helper module of the same name. Add functions here as need
 by the Python source DSL files.
 """
 
-from hydra.dsl.meta.phantoms import *  # noqa: F401,F403
+from hydra.overlay.python.dsl.meta.phantoms import *  # noqa: F401,F403
 import hydra.dsl.python.syntax as PySyn
 
 

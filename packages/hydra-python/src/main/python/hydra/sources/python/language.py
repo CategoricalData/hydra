@@ -6,12 +6,12 @@ path produces JSON byte-equivalent to the Haskell-generated language.json.
 """
 
 from hydra.core import Name
-from hydra.dsl.python import Given
+from hydra.overlay.python.dsl.python import Given
 from hydra.packaging import EntityMetadata, Module, ModuleName
 
 import hydra.dsl.lib.lists as Lists
 import hydra.dsl.lib.sets as Sets
-from hydra.dsl.meta.phantoms import *  # noqa: F401,F403
+from hydra.overlay.python.dsl.meta.phantoms import *  # noqa: F401,F403
 import hydra.dsl.core as Core
 import hydra.dsl.variants as Variants
 import hydra.dsl.coders as Coders

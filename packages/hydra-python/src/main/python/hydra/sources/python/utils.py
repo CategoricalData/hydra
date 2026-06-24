@@ -4,7 +4,7 @@ Mirror of packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Utils.hs.
 """
 
 from hydra.core import Name
-from hydra.dsl.python import Given, None_
+from hydra.overlay.python.dsl.python import Given, None_
 from hydra.packaging import EntityMetadata, Module, ModuleName
 
 import hydra.dsl.lib.equality as Equality
@@ -14,7 +14,7 @@ import hydra.dsl.lib.maps as Maps
 import hydra.dsl.lib.optionals as Optionals
 import hydra.dsl.lib.pairs as Pairs
 import hydra.dsl.lib.strings as Strings
-from hydra.dsl.meta.phantoms import *  # noqa: F401,F403
+from hydra.overlay.python.dsl.meta.phantoms import *  # noqa: F401,F403
 import hydra.dsl.packaging as Packaging
 import hydra.dsl.util as Util
 import hydra.dsl.python.syntax as PySyn
@@ -76,6 +76,7 @@ _serialization_print_expr = var("hydra.serialization.printExpr")
 _analysis_module_names_for_definitions = var("hydra.analysis.moduleNamesForDefinitions")
 _pyserde_expression_to_expr = var("hydra.python.serde.expressionToExpr")
 _pynames_encode_namespace = var("hydra.python.names.encodeNamespace")
+_pynames_encode_namespace_with_overrides = var("hydra.python.names.encodeNamespaceWithOverrides")
 
 
 # ----------------------------------------------------------------------
@@ -402,7 +403,7 @@ def _find_namespaces():
                 Packaging.module_name2(string("hydra.core")),
             ),
             field("namespaces",
-                _analysis_module_names_for_definitions(_pynames_encode_namespace, var("focusNs"), var("defs")),
+                _analysis_module_names_for_definitions(_pynames_encode_namespace_with_overrides, var("focusNs"), var("defs")),
             ),
         ],
         Logic.if_else(

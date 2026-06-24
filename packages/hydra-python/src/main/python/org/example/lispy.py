@@ -5,10 +5,10 @@ demonstrating how to use the Hydra Types DSL in Python.
 """
 
 from hydra.core import Binding, Name, TypeScheme, Type
-from hydra.dsl.annotations import doc
-from hydra.dsl.python import Given, None_
+from hydra.overlay.python.dsl.annotations import doc
+from hydra.overlay.python.dsl.python import Given, None_
 from hydra.packaging import Module, ModuleName
-import hydra.dsl.types as T
+import hydra.overlay.python.dsl.types as T
 
 
 # Namespace for this module

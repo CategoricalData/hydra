@@ -4,7 +4,7 @@ Mirror of packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Names.hs.
 """
 
 from hydra.core import Name
-from hydra.dsl.python import Given
+from hydra.overlay.python.dsl.python import Given
 from hydra.packaging import EntityMetadata, Module, ModuleName
 
 import hydra.dsl.lib.equality as Equality
@@ -14,7 +14,7 @@ import hydra.dsl.lib.maps as Maps
 import hydra.dsl.lib.optionals as Optionals
 import hydra.dsl.lib.pairs as Pairs
 import hydra.dsl.lib.strings as Strings
-from hydra.dsl.meta.phantoms import *  # noqa: F401,F403
+from hydra.overlay.python.dsl.meta.phantoms import *  # noqa: F401,F403
 import hydra.dsl.core as Core
 
 from hydra.sources.python import _python_helpers as PyDsl
@@ -146,16 +146,7 @@ def _encode_name():
             field("pyNs",
                 lam(
                     "nsVal",
-                    Strings.intercalate(
-                        string("."),
-                        Lists.map(
-                            formatting_convert_case(util_case_convention_camel, util_case_convention_lower_snake),
-                            Strings.split_on(
-                                string("."),
-                                packaging_un_module_name(var("nsVal")),
-                            ),
-                        ),
-                    ),
+                    _local("encodeNamespaceStringWithOverrides")(var("nsVal")),
                 ),
             ),
         ],
@@ -235,16 +226,7 @@ def _encode_name_qualified():
             field("pyNs",
                 lam(
                     "nsVal",
-                    Strings.intercalate(
-                        string("."),
-                        Lists.map(
-                            formatting_convert_case(util_case_convention_camel, util_case_convention_lower_snake),
-                            Strings.split_on(
-                                string("."),
-                                packaging_un_module_name(var("nsVal")),
-                            ),
-                        ),
-                    ),
+                    _local("encodeNamespaceStringWithOverrides")(var("nsVal")),
                 ),
             ),
         ],
@@ -313,6 +295,73 @@ def _encode_namespace():
                         ),
                     ),
                 ),
+            ),
+        ),
+    )
+
+
+def _encode_namespace_string_with_overrides():
+    """Convert a ModuleName to its Python dotted import string, with overlay overrides."""
+    default_encoding = Strings.intercalate(
+        string("."),
+        Lists.map(
+            formatting_convert_case(util_case_convention_camel, util_case_convention_lower_snake),
+            Strings.split_on(string("."), packaging_un_module_name(var("nsVal"))),
+        ),
+    )
+    return _def(
+        "encodeNamespaceStringWithOverrides",
+        doc(
+            "Convert a ModuleName to its Python dotted import string, routing overlay modules to hydra.overlay.python.*",
+            lam(
+                "nsVal",
+                Optionals.from_optional(
+                    default_encoding,
+                    Maps.lookup(var("nsVal"), _local("overlayPythonModuleAliases")),
+                ),
+            ),
+        ),
+    )
+
+
+def _encode_namespace_with_overrides():
+    """Encode a namespace as DottedName, substituting overlay paths for known host-specific modules."""
+    return _def(
+        "encodeNamespaceWithOverrides",
+        doc(
+            "Encode a namespace as a Python dotted name, routing overlay modules to their hydra.overlay.python.* paths",
+            lam(
+                "nsVal",
+                wrap(
+                    _PY_DOTTED_NAME,
+                    Lists.map(
+                        lam("part", wrap(_PY_NAME, var("part"))),
+                        Strings.split_on(
+                            string("."),
+                            _local("encodeNamespaceStringWithOverrides")(var("nsVal")),
+                        ),
+                    ),
+                ),
+            ),
+        ),
+    )
+
+
+def _overlay_python_module_aliases():
+    """Map from DSL module names to their hydra.overlay.python.* import strings."""
+    def _module_name(s):
+        return wrap(Name("hydra.packaging.ModuleName"), string(s))
+    return _def(
+        "overlayPythonModuleAliases",
+        doc(
+            "Alias map routing DSL-declared module names to their hydra.overlay.python.* import strings",
+            Maps.from_list(
+                list_([
+                    pair(
+                        _module_name("hydra.test.testEnv"),
+                        string("hydra.overlay.python.test_env"),
+                    ),
+                ])
             ),
         ),
     )
@@ -492,6 +541,9 @@ def _build_module() -> Module:
         to_definition(_encode_name()),
         to_definition(_encode_name_qualified()),
         to_definition(_encode_namespace()),
+        to_definition(_encode_namespace_string_with_overrides()),
+        to_definition(_encode_namespace_with_overrides()),
+        to_definition(_overlay_python_module_aliases()),
         to_definition(_encode_type_variable()),
         to_definition(_sanitize_python_name()),
         to_definition(_term_variable_reference()),

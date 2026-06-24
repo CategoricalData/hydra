@@ -7,7 +7,7 @@ constants (var(...)) for use inside source-DSL code.
 Keep this list minimal — only add what's actually used.
 """
 
-from hydra.dsl.meta.phantoms import var
+from hydra.overlay.python.dsl.meta.phantoms import var
 
 
 # hydra.constants
@@ -115,6 +115,8 @@ names_encode_enum_value = var("hydra.python.names.encodeEnumValue")
 names_encode_field_name = var("hydra.python.names.encodeFieldName")
 names_encode_name = var("hydra.python.names.encodeName")
 names_encode_namespace = var("hydra.python.names.encodeNamespace")
+names_encode_namespace_string_with_overrides = var("hydra.python.names.encodeNamespaceStringWithOverrides")
+names_encode_namespace_with_overrides = var("hydra.python.names.encodeNamespaceWithOverrides")
 names_encode_type_variable = var("hydra.python.names.encodeTypeVariable")
 names_use_future_annotations = var("hydra.python.names.useFutureAnnotations")
 names_variant_name = var("hydra.python.names.variantName")
