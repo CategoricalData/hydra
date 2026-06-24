@@ -67,6 +67,65 @@ compute_generator_stamp() {
     } | shasum -a 256 | awk '{print substr($1,1,16)}'
 }
 
+# Set HYDRA_GENERATOR_STAMP, HYDRA_GENERATOR_HOST, and HYDRA_GENERATOR_MODE
+# in the caller's shell. Must be called via `eval` or `.` (sourced), not via
+# command substitution, because command substitution spawns a subshell and
+# exports made inside it are lost. Usage in an assembler:
+#
+#   eval "$(setup_generator_env <lang>)"
+#
+# This sets three exported variables:
+#   HYDRA_GENERATOR_STAMP — the gating cache key (16-char hex, host-independent)
+#   HYDRA_GENERATOR_HOST  — which host produced this artifact (informational)
+#   HYDRA_GENERATOR_MODE  — "published" or "shim" (informational; derived from
+#                           whether component_identity resolved to a version pin
+#                           or a content hash for the kernel package)
+#
+# For backward compatibility, the per-assembler
+#   `export HYDRA_GENERATOR_STAMP=$(compute_generator_stamp <lang>)`
+# pattern still works but only sets the gating stamp. Switch to
+# `eval "$(setup_generator_env <lang>)"` to also capture provenance.
+setup_generator_env() {
+    local lang="$1"
+    local coder_pkg
+    case "$lang" in
+        clojure|scheme|common-lisp|emacs-lisp|lisp) coder_pkg="hydra-lisp" ;;
+        *)                                          coder_pkg="hydra-$lang" ;;
+    esac
+
+    # Determine mode: published if hydra-kernel resolves to a version pin.
+    local kernel_id
+    kernel_id="$(component_identity hydra-kernel)"
+    local mode
+    case "$kernel_id" in
+        host:*) mode="published" ;;
+        *)      mode="shim" ;;
+    esac
+
+    # Also check the coder package — if either is a content hash, call it shim.
+    local coder_id
+    coder_id="$(component_identity "$coder_pkg")"
+    case "$coder_id" in
+        host:*) : ;;  # coder is published; mode already set by kernel check
+        *)      mode="shim" ;;
+    esac
+
+    local stamp
+    stamp=$(
+        {
+            printf 'kernel:%s\n'  "$kernel_id"
+            printf 'coder:%s\n'   "$coder_id"
+            printf 'runtime:%s\n' "$(runtime_identity "$lang")"
+            printf 'driver:%s\n'  "$(driver_identity)"
+        } | shasum -a 256 | awk '{print substr($1,1,16)}'
+    )
+
+    # Emit shell assignment statements for eval in the caller.
+    printf "export HYDRA_GENERATOR_STAMP=%s\n" "$stamp"
+    printf "export HYDRA_GENERATOR_HOST=%s\n"  "$lang"
+    printf "export HYDRA_GENERATOR_MODE=%s\n"  "$mode"
+}
+
 # Identity of the Haskell generation DRIVER — the bootstrap-from-json exec plus the
 # generation orchestrator modules it links against (Hydra.Generation, Hydra.ExtGeneration,
 # Hydra.PackageRouting). This single Haskell binary emits EVERY target language, so a change

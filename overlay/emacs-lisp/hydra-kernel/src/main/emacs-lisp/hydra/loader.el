@@ -639,6 +639,7 @@ bootstrap-demo-only).")
                   "test/hoisting/all.el"
                   "test/inference/algebraic_types.el"
                   "test/inference/algorithm_w.el"
+                  "test/inference/annotations.el"
                   "test/inference/classes.el"
                   "test/inference/failures.el"
                   "test/inference/fundamentals.el"

@@ -273,6 +273,7 @@
     "hydra.test.inference.algebraicTypes",
     "hydra.test.inference.algorithmW",
     "hydra.test.inference.all",
+    "hydra.test.inference.annotations",
     "hydra.test.inference.classes",
     "hydra.test.inference.failures",
     "hydra.test.inference.fundamentals",

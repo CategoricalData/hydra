@@ -23,6 +23,7 @@ import qualified Hydra.System as System
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Test.Inference.AlgebraicTypes as AlgebraicTypes
 import qualified Hydra.Test.Inference.AlgorithmW as AlgorithmW
+import qualified Hydra.Test.Inference.Annotations as Annotations
 import qualified Hydra.Test.Inference.Classes as Classes
 import qualified Hydra.Test.Inference.Failures as Failures
 import qualified Hydra.Test.Inference.Fundamentals as Fundamentals
@@ -47,6 +48,7 @@ allTests =
       Testing.testGroupSubgroups = [
         AlgebraicTypes.allTests,
         AlgorithmW.allTests,
+        Annotations.allTests,
         Classes.allTests,
         Failures.allTests,
         Fundamentals.allTests,

@@ -84,6 +84,9 @@ subtermStep :: TypeDefinition
 subtermStep = define "SubtermStep" $
   doc "A function which maps from a term to a particular immediate subterm" $
   T.union [
+    "annotatedAnnotation">:
+      doc "Access the annotation of an annotated term"
+      T.unit,
     "annotatedBody">:
       doc "Access the body of an annotated term"
       T.unit,

@@ -60,6 +60,11 @@ subtermPath x =
 subtermStep :: Paths.SubtermStep -> Core.Term
 subtermStep x =
     case x of
+      Paths.SubtermStepAnnotatedAnnotation -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "annotatedAnnotation"),
+          Core.fieldTerm = Core.TermUnit}})
       Paths.SubtermStepAnnotatedBody -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {

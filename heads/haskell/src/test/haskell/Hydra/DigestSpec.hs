@@ -26,6 +26,18 @@ import qualified Test.Hspec as H
 nameOnly :: String -> Module
 nameOnly ns = Module (ModuleName ns) Nothing [] []
 
+-- | Build a minimal Digest with the given generatorId and informational fields.
+mkDigest :: String -> Maybe Digest.GenerationMode -> Maybe String -> Digest.Digest
+mkDigest genId mode host = Digest.emptyDigest
+    { Digest.digestGeneration = Digest.emptyGenerationRecord
+        { Digest.generationId        = genId
+        , Digest.generationMode      = mode
+        , Digest.generationHost      = host
+        , Digest.generationRevision  = Just "abc1234"
+        , Digest.generationTimestamp = Just "2026-06-23T00:00:00Z"
+        }
+    }
+
 
 spec :: H.Spec
 spec = do
@@ -82,3 +94,61 @@ spec = do
     H.it "produces a hash entry for hydra.python.coder" $ do
       d <- Digest.hashUniverse nsFiles [nameOnly "hydra.python.coder"]
       M.member (ModuleName "hydra.python.coder") d `H.shouldBe` True
+
+  H.describe "digestsMatch gates only on generatorId, not informational fields (#413)" $ do
+
+    H.it "matches when generatorId is equal, ignoring mode" $
+      Digest.digestsMatch
+        (mkDigest "abc" (Just Digest.GenerationModePublished) (Just "haskell"))
+        (mkDigest "abc" (Just Digest.GenerationModeShim)      (Just "java"))
+        `H.shouldBe` True
+
+    H.it "matches when generatorId is equal, ignoring host" $
+      Digest.digestsMatch
+        (mkDigest "abc" Nothing (Just "haskell"))
+        (mkDigest "abc" Nothing (Just "java"))
+        `H.shouldBe` True
+
+    H.it "matches when generatorId is equal, ignoring revision and timestamp" $
+      let d1 = mkDigest "abc" Nothing Nothing
+          d2 = (mkDigest "abc" Nothing Nothing)
+                 { Digest.digestGeneration =
+                     (Digest.digestGeneration (mkDigest "abc" Nothing Nothing))
+                       { Digest.generationRevision  = Just "deadbeef-dirty"
+                       , Digest.generationTimestamp = Just "2099-01-01T00:00:00Z"
+                       }
+                 }
+      in Digest.digestsMatch d1 d2 `H.shouldBe` True
+
+    H.it "does not match when generatorId differs" $
+      Digest.digestsMatch
+        (mkDigest "abc" Nothing Nothing)
+        (mkDigest "xyz" Nothing Nothing)
+        `H.shouldBe` False
+
+  H.describe "GenerationRecord serialization round-trip (#413)" $ do
+
+    H.it "serializes and re-parses generatorId via the v2 digest format" $ do
+      let gr = Digest.emptyGenerationRecord
+                 { Digest.generationId       = "deadbeef12345678"
+                 , Digest.generationMode     = Just Digest.GenerationModeShim
+                 , Digest.generationHost     = Just "haskell"
+                 , Digest.generationRevision = Just "abc1234-dirty"
+                 , Digest.generationTimestamp = Just "2026-06-23T00:00:00Z"
+                 }
+          d  = Digest.emptyDigest { Digest.digestGeneration = gr }
+          s  = Digest.serializeDigestV2 d
+          d' = Digest.parseDigestV2 s
+          gr' = Digest.digestGeneration d'
+      Digest.generationId gr'           `H.shouldBe` "deadbeef12345678"
+      Digest.generationMode gr'         `H.shouldBe` Just Digest.GenerationModeShim
+      Digest.generationHost gr'         `H.shouldBe` Just "haskell"
+      Digest.generationRevision gr'     `H.shouldBe` Just "abc1234-dirty"
+      Digest.generationTimestamp gr'    `H.shouldBe` Just "2026-06-23T00:00:00Z"
+
+    H.it "parses legacy flat 'generator' field as generatorId (#413 backward compat)" $ do
+      let legacyDigest = "{ \"digestFormatVersion\": 1, \"moduleFormatVersion\": 1,\n"
+                      ++ "  \"generator\": \"oldstamp\",\n"
+                      ++ "  \"inputs\": {}, \"outputs\": {} }"
+          d = Digest.parseDigestV2 legacyDigest
+      Digest.generationId (Digest.digestGeneration d) `H.shouldBe` "oldstamp"

@@ -84,11 +84,16 @@ Each iteration:
    [Handling pulled WIP commits](#handling-pulled-wip-commits)). Do not `/sync`
    or push past unresolved `WIP:` commits.
 2. **`/sync`** — the default full host × target sync.
-3. **`/test`** — the default triad (haskell/java/python) target-language test
-   validation. `/sync` only runs Haskell `stack test`; `/test` closes the gap by
+3. **`/test all`** — target-language test validation across **all** targets
+   (haskell, java, python, scala, typescript, go, and the four Lisp dialects),
+   **not** `/test`'s own default triad. The staging tier is the last gate before
+   `origin/main`, so it must validate every target head's runtime, not just the
+   triad. `/sync` only runs Haskell `stack test`; `/test all` closes the gap by
    running each target head's own suite against the freshly-synced `dist/`,
    catching target-runtime breakage before it reaches CI.
 4. **`/bootstrap`** — the default triad (haskell/java/python) bootstrap demo.
+   (Bootstrap stays triad-only here — unlike `/test`, which the staging cycle
+   widens to all targets.)
 5. **On failure in step 2, 3, or 4:** attempt a fix. If the correct fix is clear,
    apply it and re-run the failing step and everything after it (per the
    shorthand-commands "resume from the failing step" rule in CLAUDE.md). If the

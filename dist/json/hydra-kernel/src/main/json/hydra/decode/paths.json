@@ -980,6 +980,56 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "pair": {
+                                                                            "first": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "annotatedAnnotation"}}}},
+                                                                            "second": {
+                                                                              "lambda": {
+                                                                                "parameter": "input",
+                                                                                "domain": {"variable": "hydra.core.Term"},
+                                                                                "body": {
+                                                                                  "application": {
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "function": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"unit": {}}}},
+                                                                                                "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                                                                            "type": {"variable": "hydra.errors.DecodingError"}}},
+                                                                                        "argument": {
+                                                                                          "lambda": {
+                                                                                            "parameter": "t",
+                                                                                            "domain": {"unit": {}},
+                                                                                            "body": {"inject": {"typeName": "hydra.paths.SubtermStep", "field": {"name": "annotatedAnnotation", "term": {"variable": "t"}}}}}}}},
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "function": {
+                                                                                              "lambda": {
+                                                                                                "parameter": "cx",
+                                                                                                "domain": {"variable": "hydra.graph.Graph"},
+                                                                                                "body": {
+                                                                                                  "lambda": {
+                                                                                                    "parameter": "t",
+                                                                                                    "domain": {"variable": "hydra.core.Term"},
+                                                                                                    "body": {
+                                                                                                      "application": {
+                                                                                                        "function": {"application": {"function": {"variable": "hydra.extract.core.decodeUnit"}, "argument": {"variable": "cx"}}},
+                                                                                                        "argument": {"variable": "t"}}}}}}},
+                                                                                            "argument": {"variable": "cx"}}},
+                                                                                        "argument": {"variable": "input"}}}}}}}}},
+                                                                        "type": {"variable": "hydra.core.Name"}}},
+                                                                    "type": {
+                                                                      "function": {
+                                                                        "domain": {"variable": "hydra.core.Term"},
+                                                                        "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.paths.SubtermStep"}}}}}}},
+                                                                {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "pair": {
                                                                             "first": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "annotatedBody"}}}},
                                                                             "second": {
                                                                               "lambda": {
