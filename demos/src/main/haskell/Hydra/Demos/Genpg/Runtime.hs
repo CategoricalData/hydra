@@ -4,10 +4,10 @@ import Hydra.Kernel hiding (Result)
 import qualified Hydra.Show.Errors as ShowError
 import qualified Hydra.Pg.Model as Pg
 import Hydra.Dsl.Pg.Mappings
-import Hydra.Haskell.Lib.Literals
+import Hydra.Overlay.Haskell.Lib.Literals
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Show.Core as ShowCore
-import qualified Hydra.Dsl.Terms as Terms
+import qualified Hydra.Overlay.Haskell.Dsl.Terms as Terms
 import Hydra.Sources.Kernel.Types.Core (hydraCoreGraph)
 
 import qualified Control.Monad as CM

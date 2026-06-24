@@ -16,7 +16,7 @@
 #
 #   hydra-kernel  : dist/haskell/hydra-kernel/src/main/haskell  — generated kernel +
 #                   the hand-written runtime sync merged in (Hydra.Settings,
-#                   Hydra.Kernel, Hydra.Haskell.Lib.*, Hydra.Dsl.{Terms,Literals,Meta.Common})
+#                   Hydra.Kernel, Hydra.Overlay.Haskell.Lib.*, Hydra.Overlay.Haskell.Dsl.{Terms,Literals,Typed.Common})
 #   hydra-haskell : dist/haskell/hydra-haskell/src/main/haskell — generated coder;
 #                   the kernel runtime resolves via the hydra-kernel dependency
 #   hydra         : dist/haskell/hydra/src/main/haskell — the umbrella Hydra.hs,
@@ -129,8 +129,8 @@ echo "Staging sources..."
 case "$PKG" in
     hydra-kernel)
         # Complete = generated kernel + the hand-written runtime sync merged in
-        # (Hydra.Settings, Hydra.Kernel, Hydra.Haskell.Lib.*, Hydra.Dsl.{Terms,
-        # Literals,Meta.Common}).
+        # (Hydra.Kernel, Hydra.Overlay.Haskell.Lib.*, Hydra.Overlay.Haskell.Dsl.{Terms,
+        # Literals,Typed.Common}).
         copy_tree "$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell"
         ;;
     hydra-haskell)

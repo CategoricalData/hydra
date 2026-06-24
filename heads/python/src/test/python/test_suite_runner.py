@@ -32,7 +32,7 @@ import hydra.graph
 import hydra.lexical
 import hydra.rewriting
 import hydra.testing
-from hydra.dsl.python import FrozenDict, None_
+from hydra.overlay.python.dsl.python import FrozenDict, None_
 import hydra.typing
 
 import hydra.test.test_types
@@ -112,7 +112,7 @@ def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
 
     from hydra.packaging import DefinitionTerm
     from hydra.core import Binding
-    import hydra.python.lib.optionals as Optionals
+    import hydra.overlay.python.lib.optionals as Optionals
     from hydra.scoping import term_signature_to_type_scheme
     bindings = {}
     for mod in term_mods:
@@ -196,7 +196,7 @@ def build_test_graph() -> hydra.graph.Graph:
     Returns:
         Graph: The test graph
     """
-    from hydra.dsl.python import FrozenDict, None_, Given
+    from hydra.overlay.python.dsl.python import FrozenDict, None_, Given
     import hydra.lexical
 
     from hydra.generation import bootstrap_graph

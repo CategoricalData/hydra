@@ -9,9 +9,9 @@
 module Hydra.Sources.Coq.Utils where
 
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
+import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
 import qualified Hydra.Dsl.Lib.Strings                as Strings
-import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
+import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Lib.Equality               as Equality
 import qualified Hydra.Dsl.Lib.Lists                  as Lists
@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Lib.Math                   as Math
 import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Meta.Core                       as Core
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core                       as Core
 import qualified Hydra.Dsl.Packaging                       as Packaging
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting

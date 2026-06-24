@@ -9,8 +9,8 @@ import hydra.packaging.Definition;
 import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
 import hydra.packaging.TermDefinition;
-import hydra.util.Either;
-import hydra.util.Optional;
+import hydra.overlay.java.util.Either;
+import hydra.overlay.java.util.Optional;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -85,7 +85,7 @@ public class ProfileJavaCoder {
                     if (d instanceof Definition.Term) {
                         TermDefinition td = ((Definition.Term) d).value;
                         stripped.add(new Definition.Term(
-                            new TermDefinition(td.name, hydra.util.Optional.none(), Optional.<hydra.typing.TermSignature>none(), td.body)));
+                            new TermDefinition(td.name, hydra.overlay.java.util.Optional.none(), Optional.<hydra.typing.TermSignature>none(), td.body)));
                     } else stripped.add(d);
                 }
                 strippedTarget = new Module(m.name, m.metadata, m.dependencies, stripped);

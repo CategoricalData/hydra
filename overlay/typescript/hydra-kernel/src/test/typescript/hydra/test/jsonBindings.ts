@@ -17,8 +17,8 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 // Name lives in both runtime and core; Term/TypeScheme are kernel-generated.
 import type { Name, Term, TypeScheme } from "../../../../main/typescript/hydra/core.js";
-import * as libMaps from "../../../../main/typescript/hydra/lib/maps.js";
-import * as libSets from "../../../../main/typescript/hydra/lib/sets.js";
+import * as libMaps from "../../../../main/typescript/hydra/overlay/typescript/lib/maps.js";
+import * as libSets from "../../../../main/typescript/hydra/overlay/typescript/lib/sets.js";
 
 // ESM equivalent of CommonJS __dirname.
 const HERE = dirname(fileURLToPath(import.meta.url));

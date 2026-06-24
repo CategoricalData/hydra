@@ -1,11 +1,11 @@
 package hydra.pg;
 
-import hydra.util.StatelessAdapter;
+import hydra.overlay.java.util.StatelessAdapter;
 import hydra.core.Literal;
 import hydra.core.LiteralType;
-import hydra.util.Either;
-import hydra.dsl.LiteralTypes;
-import hydra.dsl.Literals;
+import hydra.overlay.java.util.Either;
+import hydra.overlay.java.dsl.LiteralTypes;
+import hydra.overlay.java.dsl.Literals;
 import hydra.pg.model.Edge;
 import hydra.pg.model.EdgeType;
 import hydra.pg.model.PropertyKey;
@@ -321,7 +321,7 @@ public class MergingTest extends PropertyGraphTestBase {
     private static <A, B> Either<String, B> applyCoderEncode(
             hydra.coders.Coder<A, B> coder, A value) {
         hydra.typing.InferenceContext cx = new hydra.typing.InferenceContext(0, new java.util.ArrayList<>());
-        hydra.util.Either<hydra.errors.Error_, B> result = coder.encode.apply(cx).apply(value);
+        hydra.overlay.java.util.Either<hydra.errors.Error_, B> result = coder.encode.apply(cx).apply(value);
         if (result.isRight()) {
             return Either.right(((Either.Right<hydra.errors.Error_, B>) result).value);
         } else {

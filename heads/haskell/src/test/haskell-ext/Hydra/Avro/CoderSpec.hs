@@ -11,8 +11,8 @@ import qualified Hydra.Avro.Environment as AvroEnv
 import qualified Hydra.Util as Util
 import Hydra.Avro.TestRunner
 import qualified Hydra.Avro.Coder as AvroCoder
-import qualified Hydra.Dsl.Terms as Terms
-import qualified Hydra.Dsl.Types as Types
+import qualified Hydra.Overlay.Haskell.Dsl.Terms as Terms
+import qualified Hydra.Overlay.Haskell.Dsl.Types as Types
 
 import qualified Hydra.Json.Parser as JsonParser
 import Hydra.Parsing (ParseResult(..), ParseSuccess(..), ParseError(..))

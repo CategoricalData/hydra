@@ -8,7 +8,7 @@ module Hydra.TestSuiteSpec where
 
 import Hydra.Testing
 import Hydra.Test.TestSuite
-import qualified Hydra.Dsl.Meta.Testing as Testing
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing as Testing
 
 import qualified Control.Monad as CM
 import qualified Test.Hspec as H

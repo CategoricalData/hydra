@@ -7,7 +7,7 @@ import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.errors.OtherError;
 import hydra.json.model.Value;
-import hydra.util.Either;
+import hydra.overlay.java.util.Either;
 
 import java.util.HashMap;
 import java.util.Map;

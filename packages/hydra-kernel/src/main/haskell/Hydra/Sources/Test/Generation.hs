@@ -8,13 +8,13 @@
 module Hydra.Sources.Test.Generation where
 
 import Hydra.Kernel hiding (inferModules)
-import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Dsl.Meta.Testing                 as Testing
-import qualified Hydra.Dsl.Meta.Terms         as Terms
+import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Terms         as Terms
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Dsl.Meta.Core          as Core
-import           Hydra.Dsl.Meta.Phantoms      as Phantoms hiding ((++))
-import qualified Hydra.Dsl.Meta.Types         as T
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
+import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms hiding ((++))
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
 import qualified Hydra.Dsl.Lib.Eithers   as Eithers
 import qualified Hydra.Dsl.Lib.Lists     as Lists
 import qualified Hydra.Dsl.Lib.Optionals    as Optionals

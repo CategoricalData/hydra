@@ -4,7 +4,7 @@ from collections.abc import Set as AbstractSet
 
 import pytest
 
-from hydra.python.util import PersistentSet
+from hydra.overlay.python.util import PersistentSet
 
 
 def test_empty():

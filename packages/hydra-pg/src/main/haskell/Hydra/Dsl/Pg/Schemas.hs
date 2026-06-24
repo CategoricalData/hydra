@@ -3,8 +3,8 @@ module Hydra.Dsl.Pg.Schemas where
 
 import Hydra.Pg.Model
 import Hydra.Core
-import qualified Hydra.Dsl.Types as Types
-import qualified Hydra.Dsl.Terms as Terms
+import qualified Hydra.Overlay.Haskell.Dsl.Types as Types
+import qualified Hydra.Overlay.Haskell.Dsl.Terms as Terms
 
 import qualified Data.Map as M
 

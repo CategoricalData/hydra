@@ -4,12 +4,12 @@ module Hydra.Sources.Test.TestSuite where
 
 -- Standard imports for deep DSL tests (produces TypedTerm a with specific types)
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Dsl.Meta.Testing                 as Testing
-import Hydra.Dsl.Meta.Phantoms                as Phantoms hiding ((++))
+import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
+import Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                as Phantoms hiding ((++))
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Dsl.Meta.Core          as Core
-import qualified Hydra.Dsl.Meta.Types         as T
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
@@ -34,7 +34,6 @@ import qualified Hydra.Sources.Test.Lib.Pairs as Pairs
 import qualified Hydra.Sources.Test.Lib.Regex as Regex
 import qualified Hydra.Sources.Test.Lib.Sets as Sets
 import qualified Hydra.Sources.Test.Lib.Strings as Strings
-import qualified Hydra.Sources.Test.Lib.System as System
 import qualified Hydra.Sources.Test.Checking.All as CheckingAll
 import qualified Hydra.Sources.Test.Checking.Advanced as CheckingAdvanced
 import qualified Hydra.Sources.Test.Checking.AlgebraicTypes as CheckingAlgebraicTypes
@@ -48,7 +47,6 @@ import qualified Hydra.Sources.Test.Generation as Generation
 import qualified Hydra.Sources.Test.Inference.All as InferenceAll
 import qualified Hydra.Sources.Test.Inference.AlgebraicTypes as InferenceAlgebraicTypes
 import qualified Hydra.Sources.Test.Inference.AlgorithmW as InferenceAlgorithmW
-import qualified Hydra.Sources.Test.Inference.Annotations as InferenceAnnotations
 import qualified Hydra.Sources.Test.Inference.Failures as InferenceFailures
 import qualified Hydra.Sources.Test.Inference.Fundamentals as InferenceFundamentals
 import qualified Hydra.Sources.Test.Inference.KernelExamples as InferenceKernelExamples
@@ -113,8 +111,7 @@ libPairs = [
   (Pairs.ns, Pairs.allTests),
   (Regex.ns, Regex.allTests),
   (Sets.ns, Sets.allTests),
-  (Strings.ns, Strings.allTests),
-  (System.ns, System.allTests)]
+  (Strings.ns, Strings.allTests)]
 
 otherPairs :: [(ModuleName, TypedTermDefinition TestGroup)]
 otherPairs = [
@@ -152,7 +149,6 @@ testSuiteModules =
   [Chars.module_, Effects.module_, Eithers.module_, Equality.module_, Files.module_,
    Lists.module_, Literals.module_, Logic.module_, Maps.module_,
    Math.module_, Optionals.module_, Pairs.module_, Regex.module_, Sets.module_, Strings.module_,
-   System.module_,
    -- Hoisting tests (including sub-modules)
    HoistingAll.module_, HoistingCases.module_, HoistingLet.module_,
    -- Other tests
@@ -167,8 +163,7 @@ testSuiteModules =
    CheckingFailures.module_, CheckingFundamentals.module_, CheckingNominalTypes.module_,
    -- Inference tests (including sub-modules)
    InferenceAll.module_,
-   InferenceAlgebraicTypes.module_, InferenceAlgorithmW.module_, InferenceAnnotations.module_,
-   InferenceClasses.module_, InferenceFailures.module_,
+   InferenceAlgebraicTypes.module_, InferenceAlgorithmW.module_, InferenceClasses.module_, InferenceFailures.module_,
    InferenceFundamentals.module_, InferenceKernelExamples.module_, InferenceNominalTypes.module_,
    -- Substitution and unification tests
    Substitution.module_, Unification.module_,

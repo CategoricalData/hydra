@@ -25,9 +25,9 @@ import * as jsonDecode from "./json/decode.js";
 import * as jsonBootstrap from "./json/bootstrap.js";
 import * as decodePackaging from "./decode/packaging.js";
 import * as lexical from "./lexical.js";
-import * as maps from "./lib/maps.js";
+import * as maps from "./overlay/typescript/lib/maps.js";
 import * as codegen from "./codegen.js";
-import * as libraries from "./lib/libraries.js";
+import * as libraries from "./overlay/typescript/lib/libraries.js";
 
 // Imported via dynamic import below since these come from sibling
 // packages that only exist when the corresponding hydra-<lang>/ tree

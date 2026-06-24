@@ -151,7 +151,7 @@
         '("loader.lisp" "prelude.lisp" "prims.lisp" "lazy.lisp"
           "struct-compat.lisp" "json-reader.lisp")))
 
-;; Set function bindings for native library defvars (e.g. hydra_lisp_lib_maps_singleton)
+;; Set function bindings for native library defvars (e.g. hydra_overlay_common_lisp_lib_maps_singleton)
 ;; so they can be called in function position in generated code.
 (hydra-set-function-bindings)
 
@@ -159,12 +159,6 @@
 
 ;; Set function bindings again for generated kernel defvars
 (hydra-set-function-bindings)
-
-;; hydra.lib.system's native impl (#498) is loaded AFTER hydra-load-gen-main rather than with the other
-;; native libs above, because its nullary effects (get_time, get_working_directory) eagerly construct
-;; generated record types (make-hydra_time_timespec) at load time, so the type defstructs must already
-;; be defined.
-(load (hydra-dist-main-path "common_lisp/lib/system.lisp"))
 
 ;; ============================================================================
 ;; 4. Load primitive infrastructure and test runner
@@ -233,8 +227,7 @@
              "lib/pairs.lisp"
              "lib/regex.lisp"
              "lib/sets.lisp"
-             "lib/strings.lisp"
-             "lib/system.lisp"))
+             "lib/strings.lisp"))
   (load-test-file f))
 
 ;; Annotation tests
@@ -265,7 +258,6 @@
              "inference/algebraic_types.lisp"
              "inference/nominal_types.lisp"
              "inference/algorithm_w.lisp"
-             "inference/annotations.lisp"
              "inference/classes.lisp"
              "inference/failures.lisp"
              "inference/kernel_examples.lisp"

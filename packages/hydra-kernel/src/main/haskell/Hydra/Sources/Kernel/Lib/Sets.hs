@@ -4,12 +4,12 @@
 module Hydra.Sources.Kernel.Lib.Sets where
 
 import Hydra.Kernel
-import qualified Hydra.Dsl.Bootstrap         as Bootstrap
+import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Lib.Sets     as Sets
-import           Hydra.Dsl.Meta.Phantoms     as Phantoms
-import qualified Hydra.Dsl.Types             as Types
+import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
+import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Set                    as S

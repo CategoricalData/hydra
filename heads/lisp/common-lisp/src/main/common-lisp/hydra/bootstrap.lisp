@@ -304,10 +304,10 @@
 
 ;; #473 Step 0 — lib pass + redirect (mirrors the other host drivers + bootstrap-from-json/Main.hs).
 ;; Common Lisp is flat-namespace: native primitive IMPLEMENTATIONS were relocated to symbols
-;; hydra_lisp_lib_<sub>_<fn> (in :cl-user); the def-modules ship as real packages :hydra.lib.<sub>
+;; hydra_overlay_common_lisp_lib_<sub>_<fn> (in :cl-user); the def-modules ship as real packages :hydra.lib.<sub>
 ;; exporting the bare def symbols hydra_lib_<sub>_<fn> (PrimitiveDefinition values). The CL host must
 ;; (1) emit the :hydra.lib.<sub> def-modules from their LOWERED form (lib pass), and (2) in generated
-;; consumers, rename call sites hydra_lib_<sub>_ -> hydra_lisp_lib_<sub>_ (hit the relocated impls) and
+;; consumers, rename call sites hydra_lib_<sub>_ -> hydra_overlay_common_lisp_lib_<sub>_ (hit the relocated impls) and
 ;; DROP the ":hydra.lib.<sub>" token from defpackage (:use ...) clauses (so a consumer doesn't import the
 ;; def-module DATA over the impl). Primitive NAME strings are dotted "hydra.lib..." and untouched by the
 ;; underscore rename. See project_473_self_host_lib_pass_gap.
@@ -364,7 +364,7 @@
     (dolist (sub *lib-subs* out)
       (setf out (string-replace-all out
                                     (concatenate 'string "hydra_lib_" sub "_")
-                                    (concatenate 'string "hydra_lisp_lib_" sub "_")))
+                                    (concatenate 'string "hydra_overlay_common_lisp_lib_" sub "_")))
       ;; Drop the ":hydra.lib.<sub>" token from (:use ...) — appears on its own line.
       (setf out (string-replace-all out
                                     (concatenate 'string (string #\Newline) ":hydra.lib." sub)
@@ -493,7 +493,7 @@
                     (format t "  Time: ~,1Fs~%" test-secs))))
 
               ;; #473 redirect — run LAST over every generated dir (main + test) so consumer call sites
-              ;; hydra_lib_<sub>_ are renamed to hydra_lisp_lib_<sub>_ and the def-module :use token dropped.
+              ;; hydra_lib_<sub>_ are renamed to hydra_overlay_common_lisp_lib_<sub>_ and the def-module :use token dropped.
               (unless (string= *target* "haskell")
                 (redirect-lib-calls (format nil "~A/common-lisp-to-~A/src/main/~A"
                                             *output-base* *target* subdir))

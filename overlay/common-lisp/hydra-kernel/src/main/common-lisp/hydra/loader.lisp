@@ -44,24 +44,24 @@
                    fields field-keywords)))))
 
 ;; Load hand-written native library implementations (before gen-main).
-;; #434/#473: the hand-written runtime lives under hydra/common_lisp/lib/ (a
+;; #434/#473: the hand-written runtime lives under hydra/overlay/common_lisp/lib/ (a
 ;; dialect-tier sibling, mirroring scheme's hydra/scheme/lib/ and clojure's
 ;; hydra/clojure/lib/) so it does NOT collide with the generated hydra.lib.*
 ;; PrimitiveDefinition def-modules at hydra/lib/. The runtime is plain cl:load'd
 ;; here (no defstruct rewriting); the generated def-modules are loaded via
 ;; hydra-load-file (the rewriting loader) by hydra-load-gen-main.
-(dolist (f '("common_lisp/lib/chars.lisp" "common_lisp/lib/effects.lisp"
-             "common_lisp/lib/eithers.lisp"
-             "common_lisp/lib/equality.lisp" "common_lisp/lib/files.lisp"
-             "common_lisp/lib/lists.lisp"
-             "common_lisp/lib/literals.lisp" "common_lisp/lib/logic.lisp"
-             "common_lisp/lib/maps.lisp" "common_lisp/lib/math.lisp"
-             "common_lisp/lib/optionals.lisp" "common_lisp/lib/pairs.lisp"
-             "common_lisp/lib/regex.lisp" "common_lisp/lib/sets.lisp"
-             "common_lisp/lib/strings.lisp" "common_lisp/lib/text.lisp"))
+(dolist (f '("overlay/common_lisp/lib/chars.lisp" "overlay/common_lisp/lib/effects.lisp"
+             "overlay/common_lisp/lib/eithers.lisp"
+             "overlay/common_lisp/lib/equality.lisp" "overlay/common_lisp/lib/files.lisp"
+             "overlay/common_lisp/lib/lists.lisp"
+             "overlay/common_lisp/lib/literals.lisp" "overlay/common_lisp/lib/logic.lisp"
+             "overlay/common_lisp/lib/maps.lisp" "overlay/common_lisp/lib/math.lisp"
+             "overlay/common_lisp/lib/optionals.lisp" "overlay/common_lisp/lib/pairs.lisp"
+             "overlay/common_lisp/lib/regex.lisp" "overlay/common_lisp/lib/sets.lisp"
+             "overlay/common_lisp/lib/strings.lisp" "overlay/common_lisp/lib/text.lisp"))
   (load (merge-pathnames f *hydra-loader-dir*)))
 
-;; Note: prims.lisp and common_lisp/lib/libraries.lisp must be loaded AFTER
+;; Note: prims.lisp and overlay/common_lisp/lib/libraries.lisp must be loaded AFTER
 ;; gen-main because prims depends on extract/core and libraries depends on prims
 ;; AND on the generated hydra.lib.* def-modules (it derives primitive names from
 ;; their PrimitiveDefinitions, #473).
@@ -69,7 +69,7 @@
 (defun hydra-load-prims-and-libraries ()
   "Load prims and libraries (must be called after gen-main)."
   (load (merge-pathnames "prims.lisp" *hydra-loader-dir*))
-  (load (merge-pathnames "common_lisp/lib/libraries.lisp" *hydra-loader-dir*)))
+  (load (merge-pathnames "overlay/common_lisp/lib/libraries.lisp" *hydra-loader-dir*)))
 
 (defun hydra-set-function-bindings ()
   "For every HYDRA_* variable that holds a function and is not already fbound,
@@ -85,10 +85,10 @@
                  (not (fboundp sym)))
         (setf (symbol-function sym) (symbol-value sym)))))
   ;; For generated HYDRA_LIB_* symbols whose value is a PrimitiveDefinition (not a
-  ;; function), proxy to the native HYDRA_LISP_LIB_* implementation when available.
+  ;; function), proxy to the native HYDRA_COMMON_LISP_LIB_* implementation when available.
   ;; Bootstrap-generated test_graph.lisp calls e.g. (hydra_lib_maps_from_list ...)
   ;; in function position; the generated PrimitiveDefinition value won't satisfy
-  ;; functionp, but the corresponding native HYDRA_LISP_LIB_* lambda does.
+  ;; functionp, but the corresponding native HYDRA_COMMON_LISP_LIB_* lambda does.
   (do-symbols (sym (find-package :cl-user))
     (let ((name (symbol-name sym)))
       (when (and (> (length name) 10)
@@ -96,7 +96,7 @@
                  (boundp sym)
                  (not (functionp (symbol-value sym)))
                  (not (fboundp sym)))
-        (let* ((native-name (concatenate 'string "HYDRA_LISP_" (subseq name 6)))
+        (let* ((native-name (concatenate 'string "HYDRA_COMMON_LISP_" (subseq name 6)))
                (native-sym (find-symbol native-name (find-package :cl-user))))
           (when (and native-sym
                      (boundp native-sym)
@@ -403,7 +403,7 @@
           (consp (caar form))
           (let ((innermost (caaar form)))
             (and (symbolp innermost)
-                 (eq innermost 'hydra_lisp_lib_logic_if_else))))
+                 (eq innermost 'hydra_overlay_common_lisp_lib_logic_if_else))))
      (let ((cond-form (hydra-fix-curried-calls (cadar (car form)) lambda-vars))
            (then-form (hydra-fix-curried-calls (cadr (car form)) lambda-vars))
            (else-form (hydra-fix-curried-calls (cadr form) lambda-vars)))
@@ -683,7 +683,7 @@
          ;; Collect ALL .lisp files from gen-main.
          (all-files (collect-lisp-files base))
          ;; #434/#473: the hand-written runtime lives under the dialect tier
-         ;; hydra/common_lisp/lib/ (a sibling of the generated hydra/lib/
+         ;; hydra/overlay/common_lisp/lib/ (a sibling of the generated hydra/lib/
          ;; def-modules). It is plain cl:load'd before gen-main (see the dolist
          ;; near the top of this file) and must NOT be re-loaded here through the
          ;; rewriting hydra-load-file: its real defstructs (e.g. the rbnode
@@ -695,8 +695,8 @@
          (all-files (remove-if (lambda (f)
                                  (or (member f *hydra-handwritten-top-level-files*
                                              :test #'equal)
-                                     (and (>= (length f) 16)
-                                          (string= "common_lisp/lib/" (subseq f 0 16)))))
+                                     (and (>= (length f) 24)
+                                          (string= "overlay/common_lisp/lib/" (subseq f 0 24)))))
                                all-files))
          ;; Build ordered list: priority first, then remaining, then drop
          ;; anything in the caller-supplied skip set (see *hydra-skip-gen-main-files*).

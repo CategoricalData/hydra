@@ -147,11 +147,11 @@
 
 (defun map-term-to-alist (m)
   "Convert map contents to an alist of (key . value) pairs.
-   Accepts RB-tree map structs (from hydra_lisp_lib_maps_*), legacy alists, and
+   Accepts RB-tree map structs (from hydra_overlay_common_lisp_lib_maps_*), legacy alists, and
    lists of two-elt lists (the JSON-decoded shape)."
   (cond
     ((null m) nil)
-    ;; RB-tree (defstruct from hydra_lisp_lib_maps_*)
+    ;; RB-tree (defstruct from hydra_overlay_common_lisp_lib_maps_*)
     ((rbnode-p m) (rb-entries m))
     ;; Legacy alist of (k . v) cons cells
     ((and (listp m) (every #'consp m)) m)
@@ -609,22 +609,22 @@
              (list "hydra.annotations.getTermDescription"
                    (make-annotation-primitive "hydra.annotations.getTermDescription" 3
                      #'prim-get-term-description))))
-         (ann-prims-map (funcall hydra_lisp_lib_maps_from_list ann-prims-list))
-         (all-prims (funcall (funcall hydra_lisp_lib_maps_union ann-prims-map) std-prims))
-         (prim-entries (funcall hydra_lisp_lib_maps_to_list all-prims))
+         (ann-prims-map (funcall hydra_overlay_common_lisp_lib_maps_from_list ann-prims-list))
+         (all-prims (funcall (funcall hydra_overlay_common_lisp_lib_maps_union ann-prims-map) std-prims))
+         (prim-entries (funcall hydra_overlay_common_lisp_lib_maps_to_list all-prims))
          (bound-terms
-           (funcall hydra_lisp_lib_maps_from_list
+           (funcall hydra_overlay_common_lisp_lib_maps_from_list
                (list
                  (list "hydra.monads.emptyContext" (list :unit))
                  (list "hydra.lexical.emptyGraph" (list :unit))))))
     (list (cons :bound_terms bound-terms)
-          (cons :bound_types hydra_lisp_lib_maps_empty)
-          (cons :class_constraints hydra_lisp_lib_maps_empty)
-          (cons :lambda_variables hydra_lisp_lib_sets_empty)
-          (cons :metadata hydra_lisp_lib_maps_empty)
+          (cons :bound_types hydra_overlay_common_lisp_lib_maps_empty)
+          (cons :class_constraints hydra_overlay_common_lisp_lib_maps_empty)
+          (cons :lambda_variables hydra_overlay_common_lisp_lib_sets_empty)
+          (cons :metadata hydra_overlay_common_lisp_lib_maps_empty)
           (cons :primitives all-prims)
-          (cons :schema_types hydra_lisp_lib_maps_empty)
-          (cons :type_variables hydra_lisp_lib_sets_empty))))
+          (cons :schema_types hydra_overlay_common_lisp_lib_maps_empty)
+          (cons :type_variables hydra_overlay_common_lisp_lib_sets_empty))))
 
 (defvar *test-graph* nil)
 (defvar *annotation-cache-installed* nil)
@@ -652,27 +652,27 @@
                 (when (and bootstrap-types type-to-ts)
                   (mapcar (lambda (entry)
                             (list (first entry) (funcall type-to-ts (second entry))))
-                          (funcall hydra_lisp_lib_maps_to_list bootstrap-types))))
+                          (funcall hydra_overlay_common_lisp_lib_maps_to_list bootstrap-types))))
                ;; Build test schemas (test-types is a Hydra map, convert to list first)
                (test-entries
                 (when (and test-types type-to-ts)
                   (mapcar (lambda (entry)
                             (list (first entry) (funcall type-to-ts (second entry))))
-                          (funcall hydra_lisp_lib_maps_to_list test-types))))
+                          (funcall hydra_overlay_common_lisp_lib_maps_to_list test-types))))
                ;; Merge all schema types
                (all-entries (append (or kernel-entries nil) (or test-entries nil)))
-               (schema-types (funcall hydra_lisp_lib_maps_from_list all-entries))
+               (schema-types (funcall hydra_overlay_common_lisp_lib_maps_from_list all-entries))
                ;; Test terms (already a Hydra map)
                (test-terms-map (if (boundp 'hydra_test_test_graph_test_terms)
                                    hydra_test_test_graph_test_terms
-                                   hydra_lisp_lib_maps_empty))
+                                   hydra_overlay_common_lisp_lib_maps_empty))
                ;; Update graph
                (enhanced (copy-list base)))
           (setf (cdr (assoc :schema_types enhanced)) schema-types)
           (setf (cdr (assoc :bound_terms enhanced))
-                (funcall (funcall hydra_lisp_lib_maps_union test-terms-map)
+                (funcall (funcall hydra_overlay_common_lisp_lib_maps_union test-terms-map)
                          (cdr (assoc :bound_terms base))))
-          (let ((st-count (length (funcall hydra_lisp_lib_maps_to_list schema-types))))
+          (let ((st-count (length (funcall hydra_overlay_common_lisp_lib_maps_to_list schema-types))))
             (format t "DEBUG: schema types: ~A~%" st-count))
           (setf *test-graph* enhanced))
         (error (e)
@@ -705,7 +705,7 @@
               (unless close-pos (return result))
               (let* ((contents (subseq result (1+ open-pos) close-pos))
                      (elems (mapcar (lambda (e) (string-trim " " e))
-                                    (hydra_lisp_lib_strings_split_on "," contents)))
+                                    (hydra_overlay_common_lisp_lib_strings_split_on "," contents)))
                      (sorted (sort (copy-list elems) #'string<))
                      (joined (format nil "~{~A~^, ~}" sorted))
                      (new-block (format nil "{~A}" joined)))
@@ -1130,8 +1130,8 @@
         (if (eq (first result) :left)
             (progn (format t "FAIL: ~A~%  Inference ERROR: ~A~%" path (second result)) (list 0 1 0))
             (let* ((pair-val (second result))
-                   (inner-pair (funcall hydra_lisp_lib_pairs_first pair-val))
-                   (result-scheme (funcall hydra_lisp_lib_pairs_second inner-pair))
+                   (inner-pair (funcall hydra_overlay_common_lisp_lib_pairs_first pair-val))
+                   (result-scheme (funcall hydra_overlay_common_lisp_lib_pairs_second inner-pair))
                    (expected-str (show-type-scheme (a :output tc)))
                    (actual-str (show-type-scheme result-scheme)))
               (string-comparison-test path expected-str actual-str))))
@@ -1161,10 +1161,10 @@
             (progn (format t "FAIL: ~A~%  Inference failed: ~A~%" path (second infer-result))
                    (list 0 1 0))
             (let* ((pair-val (second infer-result))
-                   (inner-pair (funcall hydra_lisp_lib_pairs_first pair-val))
-                   (inferred-term (funcall hydra_lisp_lib_pairs_first inner-pair))
-                   (result-scheme (funcall hydra_lisp_lib_pairs_second inner-pair))
-                   (infer-cx (funcall hydra_lisp_lib_pairs_second pair-val))
+                   (inner-pair (funcall hydra_overlay_common_lisp_lib_pairs_first pair-val))
+                   (inferred-term (funcall hydra_overlay_common_lisp_lib_pairs_first inner-pair))
+                   (result-scheme (funcall hydra_overlay_common_lisp_lib_pairs_second inner-pair))
+                   (infer-cx (funcall hydra_overlay_common_lisp_lib_pairs_second pair-val))
                    (inferred-type (type-scheme-to-type result-scheme))
                    ;; Reconstruct via typeOf
                    (type-of-result (funcall (funcall (funcall (funcall hydra_checking_type_of infer-cx) graph)
@@ -1172,7 +1172,7 @@
               (if (eq (first type-of-result) :left)
                   (progn (format t "FAIL: ~A~%  Type reconstruction failed: ~A~%" path (second type-of-result))
                          (list 0 1 0))
-                  (let* ((reconstructed-type (funcall hydra_lisp_lib_pairs_first (second type-of-result)))
+                  (let* ((reconstructed-type (funcall hydra_overlay_common_lisp_lib_pairs_first (second type-of-result)))
                          ;; Compare using show strings
                          (show-ts (when (boundp 'hydra_show_core_type_scheme) hydra_show_core_type_scheme))
                          (show-tp (when (boundp 'hydra_show_core_type) hydra_show_core_type))
@@ -1211,14 +1211,14 @@
     (lambda () (funcall (funcall hydra_unification_variable_occurs_in_type (a :variable tc)) (a :type tc)))))
 
 (defun run-subst-in-type-test (path tc)
-  (let ((subst-alist (funcall hydra_lisp_lib_maps_from_list (a :substitution tc))))
+  (let ((subst-alist (funcall hydra_overlay_common_lisp_lib_maps_from_list (a :substitution tc))))
     (run-simple-test path (a :output tc)
       (lambda () (funcall (funcall hydra_substitution_subst_in_type subst-alist) (a :input tc))))))
 
 (defun run-unify-types-test (path tc)
   (let* ((cx (empty-context))
          (schema-entries (mapcar (lambda (n) (list n (make-type_scheme nil (list :variable n) nil))) (a :schema_types tc)))
-         (schema-types (funcall hydra_lisp_lib_maps_from_list schema-entries))
+         (schema-types (funcall hydra_overlay_common_lisp_lib_maps_from_list schema-entries))
          (result (funcall (funcall (funcall (funcall (funcall hydra_unification_unify_types cx) schema-types)
                                             (a :left tc)) (a :right tc)) "test"))
          (expected (a :expected tc)))
@@ -1260,7 +1260,7 @@
       (error (e) (format t "FAIL: ~A~%  EXCEPTION: ~A~%" path e) (list 0 1 0)))))
 
 (defun run-topological-sort-bindings-test (path tc)
-  (let* ((binding-map (funcall hydra_lisp_lib_maps_from_list (a :bindings tc)))
+  (let* ((binding-map (funcall hydra_overlay_common_lisp_lib_maps_from_list (a :bindings tc)))
          (result (funcall hydra_dependencies_topological_sort_binding_map binding-map))
          (expected (a :expected tc)))
     (if (equal expected result) (list 1 0 0)
@@ -1282,13 +1282,13 @@
     (cond
       ((eq pred-type :nothing) (lambda (pair) (declare (ignore pair)) nil))
       ((eq pred-type :lists) (lambda (pair)
-                               (let ((term (funcall hydra_lisp_lib_pairs_second pair)))
+                               (let ((term (funcall hydra_overlay_common_lisp_lib_pairs_second pair)))
                                  (and (consp term) (eq (first term) :list)))))
       ((eq pred-type :applications) (lambda (pair)
-                                      (let ((term (funcall hydra_lisp_lib_pairs_second pair)))
+                                      (let ((term (funcall hydra_overlay_common_lisp_lib_pairs_second pair)))
                                         (and (consp term) (eq (first term) :application)))))
       ((eq pred-type :case_statements) (lambda (pair)
-                                         (let ((term (funcall hydra_lisp_lib_pairs_second pair)))
+                                         (let ((term (funcall hydra_overlay_common_lisp_lib_pairs_second pair)))
                                            (and (consp term) (eq (first term) :function)
                                                 (let ((f (second term)))
                                                   (and (consp f) (eq (first f) :elimination)))))))
@@ -1379,7 +1379,7 @@
                 (let ((labels_ (funcall (funcall (funcall (funcall hydra_rewriting_fold_over_term order)
                                                            (lambda (acc) (lambda (term)
                                                              (if (and (consp term) (eq (first term) :pair))
-                                                                 (let* ((fst (funcall hydra_lisp_lib_pairs_first (second term))))
+                                                                 (let* ((fst (funcall hydra_overlay_common_lisp_lib_pairs_first (second term))))
                                                                    (if (and (consp fst) (eq (first fst) :literal)
                                                                             (consp (second fst)) (eq (first (second fst)) :string))
                                                                        (append acc (list (second fst))) acc))
@@ -1408,7 +1408,7 @@
 ;; ==========================================================================
 
 (defun run-json-coder-test (path tc)
-  (let ((empty-types hydra_lisp_lib_maps_empty))
+  (let ((empty-types hydra_overlay_common_lisp_lib_maps_empty))
     (handler-case
       (let ((encode-result (funcall hydra_json_encode_to_json (a :term tc))))
         (if (eq (first encode-result) :left)
@@ -1428,7 +1428,7 @@
       (error (e) (format t "FAIL: ~A~%  EXCEPTION: ~A~%" path e) (list 0 1 0)))))
 
 (defun run-json-roundtrip-test (path tc)
-  (let ((empty-types hydra_lisp_lib_maps_empty))
+  (let ((empty-types hydra_overlay_common_lisp_lib_maps_empty))
     (handler-case
       (let ((encode-result (funcall hydra_json_encode_to_json (a :term tc))))
         (if (eq (first encode-result) :left)
@@ -1446,7 +1446,7 @@
       (error (e) (format t "FAIL: ~A~%  EXCEPTION: ~A~%" path e) (list 0 1 0)))))
 
 (defun run-json-decode-test (path tc)
-  (let ((empty-types hydra_lisp_lib_maps_empty))
+  (let ((empty-types hydra_overlay_common_lisp_lib_maps_empty))
     (handler-case
       (let* ((decode-result (funcall (funcall (funcall (funcall hydra_json_decode_from_json empty-types)
                                                        (make-hydra_core_name :value "test"))

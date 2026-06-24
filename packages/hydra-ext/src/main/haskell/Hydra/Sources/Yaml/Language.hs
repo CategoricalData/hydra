@@ -4,16 +4,16 @@ module Hydra.Sources.Yaml.Language where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.File (_FileExtension)
-import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
+import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
 import qualified Hydra.Dsl.Lib.Strings                as Strings
-import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
+import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Coders                     as Coders
-import qualified Hydra.Dsl.Meta.Core                       as Core
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core                       as Core
 import qualified Hydra.Dsl.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Meta.Variants                   as Variants
-import qualified Hydra.Dsl.Terms                           as Terms
-import qualified Hydra.Dsl.Types                           as Types
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Variants                   as Variants
+import qualified Hydra.Overlay.Haskell.Dsl.Terms                           as Terms
+import qualified Hydra.Overlay.Haskell.Dsl.Types                           as Types
 import qualified Hydra.Dsl.Util                              as Util
 import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes

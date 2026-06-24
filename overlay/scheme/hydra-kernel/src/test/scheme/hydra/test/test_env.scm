@@ -23,7 +23,7 @@
           (hydra graph)
           (hydra typing)
           (hydra lib libraries)
-          (hydra scheme lib maps)
+          (hydra overlay scheme lib maps)
           (hydra json bootstrap)
           (hydra scoping))
   (export hydra_test_test_env_test_context

@@ -5,13 +5,13 @@ module Hydra.Sources.Test.Differentiation where
 
 -- Standard imports for shallow DSL tests
 import Hydra.Kernel
-import Hydra.Dsl.Terms (ToPrimName(..))
-import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Dsl.Meta.Testing                 as Testing
+import Hydra.Overlay.Haskell.Dsl.Terms (ToPrimName(..))
+import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Dsl.Meta.Core          as Core
-import           Hydra.Dsl.Meta.Phantoms      as Phantoms hiding ((++))
-import qualified Hydra.Dsl.Meta.Types         as T
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
+import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms hiding ((++))
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
@@ -25,9 +25,9 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Dsl.Lib.Eithers as Eithers
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Strings  as Strings
-import qualified Hydra.Dsl.Meta.Terms         as Terms
-import qualified Hydra.Haskell.Lib.Math              as Math
-import qualified Hydra.Dsl.Prims as Prims
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Terms         as Terms
+import qualified Hydra.Overlay.Haskell.Lib.Math              as Math
+import qualified Hydra.Overlay.Haskell.Dsl.Prims as Prims
 import qualified Hydra.Lib.Math as DefMath
 
 

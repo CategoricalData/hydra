@@ -5,7 +5,7 @@ import Hydra.Core
 import Hydra.Typed
 import Hydra.Rewriting
 import Hydra.Pg.Model
-import Hydra.Dsl.Meta.Phantoms
+import Hydra.Overlay.Haskell.Dsl.Typed.Phantoms
 
 import qualified Data.Map as M
 

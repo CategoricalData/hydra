@@ -6,9 +6,9 @@ import hydra.core.Term;
 import hydra.core.TypeScheme;
 import hydra.graph.Graph;
 import hydra.graph.Primitive;
-import hydra.lib.Libraries;
-import hydra.tools.PrimitiveFunction;
-import hydra.util.Either;
+import hydra.overlay.java.lib.Libraries;
+import hydra.overlay.java.tools.PrimitiveFunction;
+import hydra.overlay.java.util.Either;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import static hydra.Coders.roundTrip;
+import static hydra.overlay.java.Coders.roundTrip;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

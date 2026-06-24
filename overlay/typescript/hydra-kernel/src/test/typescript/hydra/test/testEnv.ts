@@ -28,10 +28,10 @@
 import type { InferenceContext } from "../../../../main/typescript/hydra/typing.js";
 import type { Graph, Primitive } from "../../../../main/typescript/hydra/graph.js";
 import type { Name, Term, Type, TypeScheme } from "../../../../main/typescript/hydra/core.js";
-import * as maps from "../../../../main/typescript/hydra/lib/maps.js";
-import * as sets from "../../../../main/typescript/hydra/lib/sets.js";
+import * as maps from "../../../../main/typescript/hydra/overlay/typescript/lib/maps.js";
+import * as sets from "../../../../main/typescript/hydra/overlay/typescript/lib/sets.js";
 
-import { standardPrimitives } from "../../../../main/typescript/hydra/lib/libraries.js";
+import { standardPrimitives } from "../../../../main/typescript/hydra/overlay/typescript/lib/libraries.js";
 import { loadAll } from "./jsonBindings.js";
 
 // An empty InferenceContext value. No side effects.

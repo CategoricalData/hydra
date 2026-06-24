@@ -4,7 +4,7 @@ from collections.abc import Mapping
 
 import pytest
 
-from hydra.python.util import PersistentMap
+from hydra.overlay.python.util import PersistentMap
 
 
 def test_empty():

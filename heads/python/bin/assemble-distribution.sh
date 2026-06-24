@@ -64,7 +64,7 @@ source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 source "$HYDRA_ROOT_DIR/bin/lib/assemble-common.sh"
 
 # Per-target generator stamp; see assemble-common.sh and #347.
-eval "$(setup_generator_env python)"
+export HYDRA_GENERATOR_STAMP=$(compute_generator_stamp python)
 
 # Step 0 (hydra-kernel only): drop hand-written runtime files BEFORE
 # generation, recording them in a keep-paths manifest so #357 prune in

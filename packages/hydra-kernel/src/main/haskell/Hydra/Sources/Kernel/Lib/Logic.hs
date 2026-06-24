@@ -4,10 +4,10 @@
 module Hydra.Sources.Kernel.Lib.Logic where
 
 import Hydra.Kernel
-import qualified Hydra.Dsl.Bootstrap         as Bootstrap
+import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Lib.Logic    as Logic
-import           Hydra.Dsl.Meta.Phantoms     as Phantoms
-import qualified Hydra.Dsl.Types             as Types
+import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
+import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
 import qualified Hydra.Sources.Kernel.Terms.Scoping as Scoping
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))

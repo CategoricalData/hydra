@@ -9,7 +9,7 @@ import Hydra.Demos.Genpg.Examples.Health.DatabaseSchema
 import Hydra.Demos.Genpg.Examples.Health.GraphSchema
 import Hydra.Demos.Genpg.Examples.Health.Mapping
 import Hydra.Dsl.Pg.Mappings
-import Hydra.Haskell.Lib.Literals
+import Hydra.Overlay.Haskell.Lib.Literals
 import Hydra.Pg.Graphson.Utils
 import qualified Hydra.Demos.Genpg.Transform as Transform
 import Hydra.Pg.Utils (lazyGraphToElements)

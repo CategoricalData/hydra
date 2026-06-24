@@ -1,7 +1,7 @@
 from typing import Any
 
 import pytest
-from hydra.dsl.python import FrozenDict, freeze
+from hydra.overlay.python.dsl.python import FrozenDict, freeze
 
 
 def test_basic_properties():

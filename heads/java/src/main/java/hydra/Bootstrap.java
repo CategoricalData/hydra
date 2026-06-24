@@ -233,7 +233,7 @@ public class Bootstrap {
         }
 
         // #473 Step 0 — lib pass + redirect. The hydra.lib.* primitive IMPLEMENTATIONS live at
-        // hydra.<lang>.lib.* (the analog of Haskell's Hydra.Haskell.Lib.*), so hydra.lib.* is free
+        // hydra.overlay.<lang>.lib.* (the analog of Haskell's Hydra.Overlay.Haskell.Lib.*), so hydra.lib.* is free
         // for the generated PrimitiveDefinition def-modules. This mirrors the Haskell driver's
         // twoPassLib logic in bootstrap-from-json/Main.hs: when the Java host generates a target
         // that consumes def-modules (everything except haskell, which uses the registry), it must
@@ -457,14 +457,13 @@ public class Bootstrap {
             "math", "optionals", "pairs", "regex", "sets", "strings");
 
     // The effectful lib sub-namespaces (#286) have native impls in Python only
-    // (hydra.python.lib.{effects,files,text}); other hosts lack hydra.<lang>.lib.{effects,files,text},
+    // (hydra.overlay.python.lib.{effects,files,text}); other hosts lack hydra.overlay.<lang>.lib.{effects,files,text},
     // so redirecting their call sites would dangle. Restrict the effectful redirect to Python.
     private static final List<String> LIB_SUBS_PYTHON;
     static {
         List<String> subs = new ArrayList<>(LIB_SUBS);
         subs.add("effects");
         subs.add("files");
-        subs.add("system");
         subs.add("text");
         LIB_SUBS_PYTHON = subs;
     }
@@ -521,9 +520,9 @@ public class Bootstrap {
     private static void redirectLibCalls(String target, String langDir) {
         String langSeg;
         switch (target) {
-            case "python":  langSeg = "python"; break;
-            case "scala":   langSeg = "scala"; break;
-            case "clojure": langSeg = "clojure"; break;
+            case "python":  langSeg = "overlay.python"; break;
+            case "scala":   langSeg = "overlay.scala"; break;
+            case "clojure": langSeg = "overlay.clojure"; break;
             default: return; // java + others: no dotted-path redirect needed here
         }
         final String sentinel = "@@HYDRA_LIB_NAME@@"; // improbable token; never appears in generated source

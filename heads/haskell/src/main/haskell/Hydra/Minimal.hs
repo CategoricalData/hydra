@@ -21,4 +21,4 @@ module Hydra.Minimal (
 
 import Hydra.Core
 import Hydra.Reflect
-import Hydra.Dsl.Literals
+import Hydra.Overlay.Haskell.Dsl.Literals

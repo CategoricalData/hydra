@@ -8,11 +8,11 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import Hydra.Packaging (primitiveDefinitionSignature)
 import Hydra.Scoping (termSignatureToTypeScheme)
-import qualified Hydra.Dsl.Literals as Literals
-import qualified Hydra.Dsl.LiteralTypes as LiteralTypes
-import qualified Hydra.Dsl.Terms as Terms
-import qualified Hydra.Dsl.Types as Types
-import Hydra.Dsl.Libraries
+import qualified Hydra.Overlay.Haskell.Dsl.Literals as Literals
+import qualified Hydra.Overlay.Haskell.Dsl.LiteralTypes as LiteralTypes
+import qualified Hydra.Overlay.Haskell.Dsl.Terms as Terms
+import qualified Hydra.Overlay.Haskell.Dsl.Types as Types
+import Hydra.Overlay.Haskell.Libraries
 import Hydra.Coders
 import Hydra.Rewriting
 import Hydra.Strip

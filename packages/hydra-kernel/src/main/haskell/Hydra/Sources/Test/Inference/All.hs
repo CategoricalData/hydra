@@ -2,12 +2,12 @@
 module Hydra.Sources.Test.Inference.All where
 
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Dsl.Meta.Testing as Testing
+import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Overlay.Haskell.Dsl.Typed.Testing as Testing
 import Hydra.Sources.Kernel.Types.All
-import Hydra.Dsl.Meta.Phantoms as Phantoms
-import qualified Hydra.Dsl.Meta.Core as Core
-import qualified Hydra.Dsl.Meta.Types as T
+import Hydra.Overlay.Haskell.Dsl.Typed.Phantoms as Phantoms
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core as Core
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
@@ -16,7 +16,6 @@ import qualified Data.Map  as M
 
 import qualified Hydra.Sources.Test.Inference.AlgebraicTypes as AlgebraicTypes
 import qualified Hydra.Sources.Test.Inference.AlgorithmW as AlgorithmW
-import qualified Hydra.Sources.Test.Inference.Annotations as Annotations
 import qualified Hydra.Sources.Test.Inference.Classes as Classes
 import qualified Hydra.Sources.Test.Inference.Failures as Failures
 import qualified Hydra.Sources.Test.Inference.Fundamentals as Fundamentals
@@ -38,7 +37,6 @@ module_ = Module {
     namespaces = [
       AlgebraicTypes.ns,
       AlgorithmW.ns,
-      Annotations.ns,
       Classes.ns,
       Failures.ns,
       Fundamentals.ns,
@@ -53,7 +51,6 @@ allTests = definitionInModule module_ "allTests" $
     subgroups = [
       AlgebraicTypes.allTests,
       AlgorithmW.allTests,
-      Annotations.allTests,
       Classes.allTests,
       Failures.allTests,
       Fundamentals.allTests,

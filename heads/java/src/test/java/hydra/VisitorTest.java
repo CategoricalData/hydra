@@ -6,7 +6,7 @@ import hydra.core.IntegerType;
 import hydra.core.LiteralType;
 import hydra.core.Name;
 import hydra.core.Type;
-import hydra.util.ConsList;
+import hydra.overlay.java.util.ConsList;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;

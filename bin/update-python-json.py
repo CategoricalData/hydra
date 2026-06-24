@@ -73,7 +73,7 @@ if not _PUBLISHED and "hydra" in sys.modules:
         sys.modules["hydra"].__path__, "hydra")
 
 import hydra.codegen as codegen
-from hydra.dsl.python import Left, Right
+from hydra.overlay.python.dsl.python import Left, Right
 from hydra.generation import (
     bootstrap_graph,
     infer_and_write_by_package,

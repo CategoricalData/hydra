@@ -39,13 +39,13 @@ for sub in (
 import hydra.codegen as codegen
 from hydra.typing import InferenceContext
 from hydra.core import Name
-from hydra.dsl.python import FrozenDict, Left, Right
+from hydra.overlay.python.dsl.python import FrozenDict, Left, Right
 from hydra.generation import (
     bootstrap_graph,
     load_modules_from_json,
     read_manifest_field,
 )
-from hydra.dsl.python import None_
+from hydra.overlay.python.dsl.python import None_
 from hydra.packaging import DefinitionTerm, Module, ModuleDependency, ModuleName, TermDefinition
 
 KERNEL_JSON = os.path.join(_ROOT, "dist/json/hydra-kernel/src/main/json")

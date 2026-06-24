@@ -3,10 +3,10 @@
 module Hydra.Sources.Kernel.Lib.Text where
 
 import Hydra.Kernel
-import qualified Hydra.Dsl.Bootstrap     as Bootstrap
-import           Hydra.Dsl.Meta.Phantoms as Phantoms
-import           Hydra.Dsl.Prims         (sig)
-import qualified Hydra.Dsl.Types         as Types
+import qualified Hydra.Overlay.Haskell.Bootstrap     as Bootstrap
+import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms as Phantoms
+import           Hydra.Overlay.Haskell.Dsl.Prims         (sig)
+import qualified Hydra.Overlay.Haskell.Dsl.Types         as Types
 import           Hydra.Sources.Kernel.Types.All
 
 

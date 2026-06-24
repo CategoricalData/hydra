@@ -3,10 +3,10 @@
 module Hydra.Sources.Cpp.Environment where
 
 import           Hydra.Kernel
-import           Hydra.Dsl.Annotations
-import           Hydra.Dsl.Bootstrap
-import           Hydra.Dsl.Types                 ((>:))
-import qualified Hydra.Dsl.Types                 as T
+import           Hydra.Overlay.Haskell.Dsl.Annotations
+import           Hydra.Overlay.Haskell.Bootstrap
+import           Hydra.Overlay.Haskell.Dsl.Types                 ((>:))
+import qualified Hydra.Overlay.Haskell.Dsl.Types                 as T
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
 import qualified Hydra.Sources.Kernel.Types.Packaging as ModuleTypes
 import qualified Hydra.Sources.Kernel.Types.Util as UtilTypes

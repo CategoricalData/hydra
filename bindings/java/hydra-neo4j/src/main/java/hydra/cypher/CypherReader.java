@@ -124,7 +124,7 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.function.Function;
 
-import hydra.util.ConsList;
+import hydra.overlay.java.util.ConsList;
 import hydra.util.Maybe;
 
 import org.antlr.v4.runtime.ParserRuleContext;

@@ -2,18 +2,18 @@ module Hydra.Sources.Test.TestTypes where
 
 -- Standard imports for kernel test fixtures
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Dsl.Meta.Testing                 as Testing
-import Hydra.Dsl.Meta.Phantoms                as Phantoms hiding ((++), (>:))
+import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
+import Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                as Phantoms hiding ((++), (>:))
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Dsl.Meta.Core          as Core
-import qualified Hydra.Dsl.Meta.Types         as T
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
-import Hydra.Dsl.Meta.Base (name, (>:))
+import Hydra.Overlay.Haskell.Dsl.Typed.Base (name, (>:))
 import qualified Hydra.Dsl.Packaging        as DPackaging
-import qualified Hydra.Dsl.Types              as Types
+import qualified Hydra.Overlay.Haskell.Dsl.Types              as Types
 import           Prelude hiding ((++))
 
 

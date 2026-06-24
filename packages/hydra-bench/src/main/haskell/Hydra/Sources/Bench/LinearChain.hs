@@ -26,11 +26,11 @@
 module Hydra.Sources.Bench.LinearChain where
 
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Dsl.Libraries
-import qualified Hydra.Dsl.Meta.Core         as Core
+import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Overlay.Haskell.Libraries
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core         as Core
 import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import           Hydra.Dsl.Meta.Phantoms     as Phantoms
+import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 

@@ -9,9 +9,9 @@ import Hydra.Kernel
 import Hydra.TestUtils
 import Hydra.TestData
 import qualified Hydra.Extract.Core as ExtractCore
-import Hydra.Dsl.Terms as Terms
-import qualified Hydra.Dsl.Annotations as Ann
-import qualified Hydra.Dsl.Types as Types
+import Hydra.Overlay.Haskell.Dsl.Terms as Terms
+import qualified Hydra.Overlay.Haskell.Dsl.Annotations as Ann
+import qualified Hydra.Overlay.Haskell.Dsl.Types as Types
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Reference.AlgorithmWBridge as W
 
@@ -19,7 +19,7 @@ import qualified Hydra.TestUtils as TU
 import Hydra.Testing
 import Hydra.TestSuiteSpec
 import Hydra.Test.TestSuite
-import qualified Hydra.Dsl.Meta.Testing as Testing
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing as Testing
 
 import qualified Test.Hspec as H
 import qualified Test.QuickCheck as QC

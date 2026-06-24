@@ -13,16 +13,16 @@ import hydra.typing.TermSignature;
 import hydra.graph.Graph;
 import hydra.graph.Primitive;
 import hydra.json.model.Value;
-import hydra.lib.Libraries;
+import hydra.overlay.java.lib.Libraries;
 import hydra.packaging.Definition;
 import hydra.packaging.Module;
 import hydra.packaging.TermDefinition;
 import hydra.packaging.ModuleName;
 import hydra.Rewriting;
-import hydra.tools.PrimitiveFunction;
-import hydra.util.Either;
-import hydra.util.Optional;
-import hydra.util.Pair;
+import hydra.overlay.java.tools.PrimitiveFunction;
+import hydra.overlay.java.util.Either;
+import hydra.overlay.java.util.Optional;
+import hydra.overlay.java.util.Pair;
 import java.util.HashSet;
 
 import java.io.File;
@@ -413,7 +413,7 @@ public class Generation {
                     TermDefinition t = td.value;
                     Term newTerm = Strip.removeTypesFromTerm(t.body);
                     Optional<TermSignature> newType = Optional.none();
-                    stripped.add(new Definition.Term(new TermDefinition(t.name, hydra.util.Optional.none(), newType, newTerm)));
+                    stripped.add(new Definition.Term(new TermDefinition(t.name, hydra.overlay.java.util.Optional.none(), newType, newTerm)));
                     return null;
                 }
                 @Override public Void visit(Definition.Type td) {

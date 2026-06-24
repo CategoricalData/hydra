@@ -52,13 +52,7 @@ for entry in sorted(os.listdir(dist_root)):
         current = in_d.get("hashes", in_d)
         if recorded != current:
             sys.exit(1)
-        # Read generatorId from the structured "generation" block (#413), with
-        # fallback to the legacy flat "generator" field for old on-disk digests.
-        gen_block = out_d.get("generation")
-        if isinstance(gen_block, dict):
-            recorded_gen = gen_block.get("generatorId", "v0-unstamped")
-        else:
-            recorded_gen = out_d.get("generator", "v0-unstamped")
+        recorded_gen = out_d.get("generator", "v0-unstamped")
         if recorded_gen != expected_gen:
             sys.exit(1)
         # #347 transitive invalidation: compare package selfHash and the

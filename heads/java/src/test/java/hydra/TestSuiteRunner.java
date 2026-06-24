@@ -6,10 +6,10 @@ import hydra.graph.Primitive;
 import hydra.test.TestSuite;
 import hydra.test.TestGraph;
 import hydra.testing.*;
-import hydra.lib.Libraries;
-import hydra.tools.PrimitiveFunction;
-import hydra.util.ConsList;
-import hydra.util.Optional;
+import hydra.overlay.java.lib.Libraries;
+import hydra.overlay.java.tools.PrimitiveFunction;
+import hydra.overlay.java.util.ConsList;
+import hydra.overlay.java.util.Optional;
 
 import org.junit.jupiter.api.DynamicContainer;
 import org.junit.jupiter.api.DynamicNode;
@@ -29,7 +29,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
-import static hydra.dsl.Terms.*;
+import static hydra.overlay.java.dsl.Terms.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -70,7 +70,7 @@ public class TestSuiteRunner {
      */
     public static Graph buildTestGraph() {
         // Build primitives map
-        hydra.util.PersistentMap<Name, Primitive> primitives = hydra.util.PersistentMap.empty();
+        hydra.overlay.java.util.PersistentMap<Name, Primitive> primitives = hydra.overlay.java.util.PersistentMap.empty();
         for (PrimitiveFunction prim : Libraries.standardPrimitives()) {
             primitives = primitives.insert(prim.name(), prim.toNative());
         }
@@ -80,7 +80,7 @@ public class TestSuiteRunner {
         Map<Name, Type> kernelTypes = buildKernelTypes();
         Map<Name, Type> allTypes = new HashMap<>(kernelTypes);
         allTypes.putAll(testTypes); // test types override kernel types if any overlap
-        hydra.util.PersistentMap<Name, TypeScheme> schemaTypes = hydra.util.PersistentMap.empty();
+        hydra.overlay.java.util.PersistentMap<Name, TypeScheme> schemaTypes = hydra.overlay.java.util.PersistentMap.empty();
         for (Map.Entry<Name, Type> entry : allTypes.entrySet()) {
             schemaTypes = schemaTypes.insert(entry.getKey(), hydra.Resolution.typeToTypeScheme(entry.getValue()));
         }
@@ -131,20 +131,20 @@ public class TestSuiteRunner {
             boundTerms.put(entry.getKey(), hydra.encode.Core.type(entry.getValue()));
         }
 
-        hydra.util.PersistentMap<Name, Term> persistentBoundTerms = hydra.util.PersistentMap.empty();
+        hydra.overlay.java.util.PersistentMap<Name, Term> persistentBoundTerms = hydra.overlay.java.util.PersistentMap.empty();
         for (Map.Entry<Name, Term> entry : boundTerms.entrySet()) {
             persistentBoundTerms = persistentBoundTerms.insert(entry.getKey(), entry.getValue());
         }
 
         return new Graph(
             persistentBoundTerms,
-            hydra.util.PersistentMap.empty(), // boundTypes (TypeSchemes for term bindings — not populated for test graph)
-            hydra.util.PersistentMap.empty(), // classConstraints
-            hydra.util.PersistentSet.empty(), // lambdaVariables
-            hydra.util.PersistentMap.empty(), // metadata
+            hydra.overlay.java.util.PersistentMap.empty(), // boundTypes (TypeSchemes for term bindings — not populated for test graph)
+            hydra.overlay.java.util.PersistentMap.empty(), // classConstraints
+            hydra.overlay.java.util.PersistentSet.empty(), // lambdaVariables
+            hydra.overlay.java.util.PersistentMap.empty(), // metadata
             primitives,
             schemaTypes,
-            hydra.util.PersistentSet.empty()  // typeVariables
+            hydra.overlay.java.util.PersistentSet.empty()  // typeVariables
         );
     }
 
@@ -159,14 +159,14 @@ public class TestSuiteRunner {
     private static void addConstantBindings(List<Binding> bindings) {
         addConstantBinding(bindings, "hydra.lexical.emptyGraph",
             record("hydra.graph.Graph",
-                field("boundTerms", new Term.Map(hydra.util.PersistentMap.empty())),
-                field("boundTypes", new Term.Map(hydra.util.PersistentMap.empty())),
-                field("classConstraints", new Term.Map(hydra.util.PersistentMap.empty())),
-                field("lambdaVariables", new Term.Set(hydra.util.PersistentSet.empty())),
-                field("metadata", new Term.Map(hydra.util.PersistentMap.empty())),
-                field("primitives", new Term.Map(hydra.util.PersistentMap.empty())),
-                field("schemaTypes", new Term.Map(hydra.util.PersistentMap.empty())),
-                field("typeVariables", new Term.Set(hydra.util.PersistentSet.empty()))));
+                field("boundTerms", new Term.Map(hydra.overlay.java.util.PersistentMap.empty())),
+                field("boundTypes", new Term.Map(hydra.overlay.java.util.PersistentMap.empty())),
+                field("classConstraints", new Term.Map(hydra.overlay.java.util.PersistentMap.empty())),
+                field("lambdaVariables", new Term.Set(hydra.overlay.java.util.PersistentSet.empty())),
+                field("metadata", new Term.Map(hydra.overlay.java.util.PersistentMap.empty())),
+                field("primitives", new Term.Map(hydra.overlay.java.util.PersistentMap.empty())),
+                field("schemaTypes", new Term.Map(hydra.overlay.java.util.PersistentMap.empty())),
+                field("typeVariables", new Term.Set(hydra.overlay.java.util.PersistentSet.empty()))));
     }
 
     /**

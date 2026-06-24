@@ -6,7 +6,7 @@ import Hydra.Core (Term)
 import Hydra.Pg.Model (Edge, LazyGraph, Vertex)
 import Hydra.Formatting (decapitalize)
 import Hydra.Typed (TypedTerm)
-import Hydra.Dsl.Meta.Phantoms ((@@), constant, just, lambda, list, nothing, string, var)
+import Hydra.Overlay.Haskell.Dsl.Typed.Phantoms ((@@), constant, just, lambda, list, nothing, string, var)
 import Hydra.Dsl.Pg.Mappings (column, edge, edgeNoId, graph, property, vertex)
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Optionals as Optionals

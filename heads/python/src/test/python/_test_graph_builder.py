@@ -7,7 +7,7 @@ from __future__ import annotations
 import hydra.core
 import hydra.graph
 import hydra.test.test_graph as test_graph
-from hydra.dsl.python import FrozenDict, None_
+from hydra.overlay.python.dsl.python import FrozenDict, None_
 
 
 def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:

@@ -2,22 +2,23 @@ package hydra.dsl;
 
 import hydra.core.Projection;
 import hydra.core.Term;
-import hydra.dsl.prims.Strings;
+import hydra.overlay.java.dsl.prims.Strings;
 import hydra.core.Name;
 import org.junit.jupiter.api.Test;
 
-import static hydra.dsl.Terms.name;
-import static hydra.dsl.Terms.annot;
-import static hydra.dsl.Terms.apply;
-import static hydra.dsl.Terms.field;
-import static hydra.dsl.Terms.float32;
-import static hydra.dsl.Terms.inject;
-import static hydra.dsl.Terms.lambda;
-import static hydra.dsl.Terms.list;
-import static hydra.dsl.Terms.primitive;
-import static hydra.dsl.Terms.project;
-import static hydra.dsl.Terms.record;
-import static hydra.dsl.Terms.variable;
+import hydra.overlay.java.dsl.Terms;
+import static hydra.overlay.java.dsl.Terms.name;
+import static hydra.overlay.java.dsl.Terms.annot;
+import static hydra.overlay.java.dsl.Terms.apply;
+import static hydra.overlay.java.dsl.Terms.field;
+import static hydra.overlay.java.dsl.Terms.float32;
+import static hydra.overlay.java.dsl.Terms.inject;
+import static hydra.overlay.java.dsl.Terms.lambda;
+import static hydra.overlay.java.dsl.Terms.list;
+import static hydra.overlay.java.dsl.Terms.primitive;
+import static hydra.overlay.java.dsl.Terms.project;
+import static hydra.overlay.java.dsl.Terms.record;
+import static hydra.overlay.java.dsl.Terms.variable;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -115,7 +116,7 @@ public class TermsTest {
             public String visit(Term.Annotated instance) {
                 // #386: annotation is now a Term (TermMap), not a Map<Name, Term>.
                 Term desc = hydra.Annotations.getAnnotationMap(instance.value.annotation).get(new Name("description"));
-                return ((hydra.util.Either.Right<?, String>) hydra.extract.Core.string(null, desc)).value;
+                return ((hydra.overlay.java.util.Either.Right<?, String>) hydra.extract.Core.string(null, desc)).value;
             }
 
             @Override

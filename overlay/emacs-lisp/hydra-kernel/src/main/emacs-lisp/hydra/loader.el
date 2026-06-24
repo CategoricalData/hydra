@@ -289,7 +289,7 @@
          (consp (caar form))
          (let ((innermost (caaar form)))
            (and (symbolp innermost)
-                (eq innermost 'hydra_lisp_lib_logic_if_else))))
+                (eq innermost 'hydra_overlay_emacs_lisp_lib_logic_if_else))))
     (let ((cond-form (hydra-fix-curried-calls (cadar (car form)) lambda-vars))
           (then-form (hydra-fix-curried-calls (cadr (car form)) lambda-vars))
           (else-form (hydra-fix-curried-calls (cadr form) lambda-vars)))
@@ -585,7 +585,7 @@ bootstrap-demo-only).")
                                                    ;; dialect tier and is plain-
                                                    ;; loaded; never feed it through
                                                    ;; the rewriting loader.
-                                                   (string-prefix-p "emacs_lisp/lib/" f)))
+                                                   (string-prefix-p "overlay/emacs_lisp/lib/" f)))
                                   all-files))
          (ordered (cl-remove-if
                    (lambda (f) (member f hydra-skip-gen-main-files))
@@ -620,7 +620,6 @@ bootstrap-demo-only).")
                   "test/lib/regex.el"
                   "test/lib/sets.el"
                   "test/lib/strings.el"
-                  "test/lib/system.el"
                   "test/annotations.el"
                   "test/checking/advanced.el"
                   "test/checking/algebraic_types.el"
@@ -639,7 +638,6 @@ bootstrap-demo-only).")
                   "test/hoisting/all.el"
                   "test/inference/algebraic_types.el"
                   "test/inference/algorithm_w.el"
-                  "test/inference/annotations.el"
                   "test/inference/classes.el"
                   "test/inference/failures.el"
                   "test/inference/fundamentals.el"
@@ -674,31 +672,25 @@ bootstrap-demo-only).")
 ;; ============================================================================
 
 ;; #434/#473: the hand-written runtime lives under the dialect tier
-;; hydra/emacs_lisp/lib/ (a sibling of the generated hydra/lib/ def-modules),
+;; hydra/overlay/emacs_lisp/lib/ (a sibling of the generated hydra/lib/ def-modules),
 ;; mirroring scheme's hydra/scheme/lib/ and clojure's hydra/clojure/lib/, so it
 ;; does NOT collide with the generated hydra.lib.* PrimitiveDefinition modules at
 ;; hydra/lib/. Plain-load it here; the generated def-modules are loaded via the
 ;; rewriting hydra-load-file by hydra-load-gen-main.
-(dolist (f '("emacs_lisp/lib/chars.el" "emacs_lisp/lib/effects.el"
-             "emacs_lisp/lib/eithers.el"
-             "emacs_lisp/lib/equality.el" "emacs_lisp/lib/files.el"
-             "emacs_lisp/lib/lists.el"
-             "emacs_lisp/lib/literals.el" "emacs_lisp/lib/logic.el"
-             "emacs_lisp/lib/maps.el" "emacs_lisp/lib/math.el"
-             "emacs_lisp/lib/optionals.el" "emacs_lisp/lib/pairs.el"
-             "emacs_lisp/lib/regex.el" "emacs_lisp/lib/sets.el"
-             "emacs_lisp/lib/strings.el" "emacs_lisp/lib/text.el"))
+(dolist (f '("overlay/emacs_lisp/lib/chars.el" "overlay/emacs_lisp/lib/effects.el"
+             "overlay/emacs_lisp/lib/eithers.el"
+             "overlay/emacs_lisp/lib/equality.el" "overlay/emacs_lisp/lib/files.el"
+             "overlay/emacs_lisp/lib/lists.el"
+             "overlay/emacs_lisp/lib/literals.el" "overlay/emacs_lisp/lib/logic.el"
+             "overlay/emacs_lisp/lib/maps.el" "overlay/emacs_lisp/lib/math.el"
+             "overlay/emacs_lisp/lib/optionals.el" "overlay/emacs_lisp/lib/pairs.el"
+             "overlay/emacs_lisp/lib/regex.el" "overlay/emacs_lisp/lib/sets.el"
+             "overlay/emacs_lisp/lib/strings.el" "overlay/emacs_lisp/lib/text.el"))
   (load (expand-file-name f hydra-loader-dir) nil t))
-;; hydra.lib.system (#498) is loaded separately AFTER (hydra-load-gen-main) (see run-tests.el / bootstrap),
-;; not in the dolist above: its nullary getTime eagerly constructs make-hydra_time_timespec at load, so the
-;; generated type defstructs must already be defined.
-(defun hydra-load-system-lib ()
-  "Load the hydra.lib.system native impl. Call AFTER (hydra-load-gen-main)."
-  (load (expand-file-name "emacs_lisp/lib/system.el" hydra-loader-dir) nil t))
 
 (defun hydra-load-prims-and-libraries ()
   "Load prims and libraries (must be called after gen-main)."
   (load (expand-file-name "prims.el" hydra-loader-dir) nil t)
-  (load (expand-file-name "emacs_lisp/lib/libraries.el" hydra-loader-dir) nil t))
+  (load (expand-file-name "overlay/emacs_lisp/lib/libraries.el" hydra-loader-dir) nil t))
 
 (provide 'hydra-loader)

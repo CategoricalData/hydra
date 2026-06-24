@@ -10,8 +10,8 @@ description:  >
   data model, which takes advantage of an isomorphism between labeled hypergraphs and typed lambda calculus:
   in Hydra, "graphs are programs, and programs are graphs".
   The Haskell head provides the hand-written Haskell runtime Hydra needs in order to build and
-  regenerate itself: primitive libraries (Hydra.Haskell.Lib.*), the embedded DSL infrastructure
-  (Hydra.Dsl.*), the generation driver (Hydra.Generation), the kernel entry point (Hydra.Kernel),
+  regenerate itself: primitive libraries (Hydra.Overlay.Haskell.Lib.*), the embedded DSL infrastructure
+  (Hydra.Overlay.Haskell.Dsl.*), the generation driver (Hydra.Generation), the kernel entry point (Hydra.Kernel),
   module support utilities, and the exec binaries that drive Hydra's Haskell code generation.
   It consumes the language-independent kernel DSL sources and generated kernel runtime from
   packages/hydra-kernel/, plus the Haskell coder DSL sources and generated output from
@@ -29,7 +29,6 @@ dependencies:
   - containers                    >= 0.6.7 && < 0.8
   - directory                     >= 1.3.6 && < 1.4
   - filepath                      >= 1.4.200 && < 1.6
-  - process                       >= 1.6.0 && < 1.7
   - regex-tdfa                    >= 1.3.2 && < 1.4
   - scientific                    >= 0.3.7 && < 0.4
   - SHA                           >= 1.6.4 && < 1.7
@@ -42,7 +41,7 @@ library:
   source-dirs:
     - src/main/haskell
     # NOTE: the hand-written kernel runtime (Hydra.Settings, Hydra.Kernel,
-    # Hydra.Haskell.Lib.*, Hydra.Dsl.{Terms,Literals,Meta.Common}) is deliberately
+    # Hydra.Overlay.Haskell.Lib.*, Hydra.Overlay.Haskell.Dsl.*) is deliberately
     # NOT on the head's compile path. Its canonical source lives, uncompiled, in
     # overlay/haskell/hydra-kernel/ (top-level overlay/ tree); sync-haskell.sh
     # overlays it INTO dist/haskell/hydra-kernel/, already a source-dir below — so the head

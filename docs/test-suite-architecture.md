@@ -144,9 +144,8 @@ A test case is one of two variants of the `TestCase` union:
 - **`UniversalTestCase`** — the pervasive variant: `actual` and `expected` are both
   unit-thunks producing **strings**, compared for equality.
 - **`EffectfulTestCase`** (#494) — for testing effectful primitives (`hydra.lib.effects`,
-  `hydra.lib.files`, `hydra.lib.system`): `actual` is a unit-thunk producing an **`effect<string>`**
-  that the runner *executes* (performing real host interactions, e.g. file I/O, process execution);
-  `expected` is a
+  `hydra.lib.files`): `actual` is a unit-thunk producing an **`effect<string>`** that the
+  runner *executes* (performing real host interactions, e.g. file I/O); `expected` is a
   unit-thunk producing a string. See [The field terms, and two ways the mapping translates
   them](#the-field-terms-and-two-ways-the-mapping-translates-them) below for how Hydra maps
   these field terms into each target (effectful cases use only the native mapping).

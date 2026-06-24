@@ -8,10 +8,10 @@ module Hydra.Sources.Haskell.Testing where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.File (_FileExtension)
-import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
+import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
 import qualified Hydra.Dsl.Lib.Strings                as Strings
-import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Meta.Core                       as Core
+import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core                       as Core
 import qualified Hydra.Dsl.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Lib.Equality               as Equality
 import qualified Hydra.Dsl.Lib.Lists                  as Lists

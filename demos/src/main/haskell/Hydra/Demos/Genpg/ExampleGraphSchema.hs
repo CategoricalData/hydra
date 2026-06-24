@@ -1,7 +1,7 @@
 module Hydra.Demos.Genpg.ExampleGraphSchema where
 
 import Hydra.Dsl.Pg.Schemas (propertyType, required, schema, simpleEdgeType, vertexType)
-import Hydra.Dsl.Types (binary, boolean, float32, float64, int32, int64, string)
+import Hydra.Overlay.Haskell.Dsl.Types (binary, boolean, float32, float64, int32, int64, string)
 
 dateType = string
 decimalType = float64

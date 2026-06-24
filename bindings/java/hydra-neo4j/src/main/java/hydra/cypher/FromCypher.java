@@ -64,7 +64,7 @@ import hydra.tools.MapperBase;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import hydra.util.ConsList;
+import hydra.overlay.java.util.ConsList;
 import hydra.util.Maybe;
 
 import static hydra.pg.dsl.Queries.apply;

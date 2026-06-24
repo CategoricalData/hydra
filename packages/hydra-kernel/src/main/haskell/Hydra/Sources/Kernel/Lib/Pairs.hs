@@ -4,10 +4,10 @@
 module Hydra.Sources.Kernel.Lib.Pairs where
 
 import Hydra.Kernel
-import qualified Hydra.Dsl.Bootstrap         as Bootstrap
+import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Lib.Pairs    as Pairs
-import           Hydra.Dsl.Meta.Phantoms     as Phantoms
-import qualified Hydra.Dsl.Types             as Types
+import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
+import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 
@@ -45,7 +45,7 @@ primNoDef localName description s comments =
 sig :: TypeScheme -> TermSignature
 sig = typeSchemeToTermSignature
 
--- Signatures (derived from Hydra.Dsl.Libraries primN declarations).
+-- Signatures (derived from Hydra.Overlay.Haskell.Libraries primN declarations).
 
 -- bimap : forall a b c d. (a -> c) -> (b -> d) -> (a, b) -> (c, d)
 bimapSig :: TermSignature

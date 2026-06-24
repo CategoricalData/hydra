@@ -279,27 +279,41 @@ object BootstrapHelpers:
     if !dir.isDirectory then return
     val files = allFilesUnder(dir)
     target match
-      case "scala" | "clojure" =>
-        val langSeg = target
+      case "scala" =>
         for f <- files if !isLibDefFile(f) do
           val s = readFile(f)
           if s.contains("hydra.lib.") then
-            val out = redirectDotted(s, langSeg)
+            val out = redirectDotted(s, "overlay.scala")
+            if out != s then writeFile(f, out)
+      case "clojure" =>
+        for f <- files if !isLibDefFile(f) do
+          val s = readFile(f)
+          if s.contains("hydra.lib.") then
+            val out = redirectDotted(s, "overlay.clojure")
             if out != s then writeFile(f, out)
       case "scheme" =>
         for f <- files do
           val s = readFile(f)
           if s.contains("(hydra lib ") then
             var out = s
-            for sub <- libSubs do out = out.replace(s"(hydra lib $sub)", s"(hydra scheme lib $sub)")
+            for sub <- libSubs do out = out.replace(s"(hydra lib $sub)", s"(hydra overlay scheme lib $sub)")
             if out != s then writeFile(f, out)
-      case "common-lisp" | "emacs-lisp" =>
+      case "common-lisp" =>
         for f <- files do
           val s = readFile(f)
           if s.contains("hydra_lib_") || s.contains(":hydra.lib.") then
             var out = s
             for sub <- libSubs do
-              out = out.replace(s"hydra_lib_${sub}_", s"hydra_lisp_lib_${sub}_")
+              out = out.replace(s"hydra_lib_${sub}_", s"hydra_overlay_common_lisp_lib_${sub}_")
+              out = out.replace(s" :hydra.lib.$sub", "")
+            if out != s then writeFile(f, out)
+      case "emacs-lisp" =>
+        for f <- files do
+          val s = readFile(f)
+          if s.contains("hydra_lib_") || s.contains(":hydra.lib.") then
+            var out = s
+            for sub <- libSubs do
+              out = out.replace(s"hydra_lib_${sub}_", s"hydra_overlay_emacs_lisp_lib_${sub}_")
               out = out.replace(s" :hydra.lib.$sub", "")
             if out != s then writeFile(f, out)
       case _ => () // java + haskell: no redirect
@@ -320,10 +334,9 @@ object BootstrapHelpers:
 
   /** Files under `hydra/lib/` must NOT be redirected: the lib pass emits the def-modules there and they
    *  must keep their canonical `package hydra.lib.*` (redirecting the package decl would relocate the
-   *  def-module on top of the hand-written impl at hydra.<lang>.lib.* and shadow its generic methods with
-   *  the def-module's `lazy val`s — "does not take type parameters"). The hand-written registry
-   *  (`hydra/lib/Libraries.scala`) also lives here and likewise imports the def-module for `.name`
-   *  derivation. The Haskell driver keeps these canonical by running the lib pass with NO redirect.
+   *  def-module on top of the hand-written impl at hydra.overlay.scala.lib.* and shadow its generic
+   *  methods with the def-module's `lazy val`s — "does not take type parameters"). The Haskell driver
+   *  keeps these canonical by running the lib pass with NO redirect.
    *  Consumers that need redirecting live everywhere EXCEPT hydra/lib/. */
   private def isLibDefFile(f: File): Boolean =
     f.getPath.replace(File.separatorChar, '/').contains("/hydra/lib/")

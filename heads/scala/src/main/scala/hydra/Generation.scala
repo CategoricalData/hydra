@@ -17,7 +17,7 @@ object Generation:
 
   /** Create an empty graph with standard primitives (the bootstrap graph). */
   def bootstrapGraph(): Graph =
-    val primitives: Map[String, Primitive] = hydra.lib.Libraries.standardPrimitives()
+    val primitives: Map[String, Primitive] = hydra.overlay.scala.Libraries.standardPrimitives()
     Graph(
       boundTerms = Map.empty,
       boundTypes = Map.empty,
@@ -59,7 +59,7 @@ object Generation:
     val d = depth - 1
     term match
       case Term.literal(Literal.binary(b)) =>
-        Term.literal(Literal.binary(hydra.scala.lib.literals.stringToBinary(b)))
+        Term.literal(Literal.binary(hydra.overlay.scala.lib.literals.stringToBinary(b)))
       case Term.application(app) =>
         Term.application(Application(decodeBinaryLiteralsDepth(app.function, d), decodeBinaryLiteralsDepth(app.argument, d)))
       case Term.lambda(lam) =>

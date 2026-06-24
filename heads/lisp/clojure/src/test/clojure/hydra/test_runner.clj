@@ -907,7 +907,7 @@
 
 (defn- run-subst-in-type-test [path tc]
   (let [f (resolve-fn 'hydra.substitution 'hydra_substitution_subst_in_type)
-        from-list (resolve-fn 'hydra.clojure.lib.maps 'hydra_lib_maps_from_list)
+        from-list (resolve-fn 'hydra.overlay.clojure.lib.maps 'hydra_lib_maps_from_list)
         ;; Build TypeSubst from list of (name, type) pairs as alist (Hydra map format)
         ;; Note: in generated code, TypeSubst is transparent (bare map, not a record)
         subst-alist (if from-list (from-list (:substitution tc)) ())]
@@ -919,7 +919,7 @@
   (let [f (resolve-fn 'hydra.unification 'hydra_unification_unify_types)
         cx (empty-context)
         ;; Build schema types as Hydra alist map from the list of names
-        from-list (resolve-fn 'hydra.clojure.lib.maps 'hydra_lib_maps_from_list)
+        from-list (resolve-fn 'hydra.overlay.clojure.lib.maps 'hydra_lib_maps_from_list)
         schema-entries (map (fn [n] (list n (->hydra_core_type_scheme () (list :variable n) nil)))
                             (:schema_types tc))
         schema-types (if from-list (from-list schema-entries) ())
@@ -1012,7 +1012,7 @@
 (defn- run-topological-sort-bindings-test [path tc]
   (let [f (resolve-fn 'hydra.dependencies 'hydra_dependencies_topological_sort_binding_map)
         ;; tc.bindings is a list of (Name, Term) pairs -- build a map
-        from-list-fn (resolve-fn 'hydra.clojure.lib.maps 'hydra_lib_maps_from_list)
+        from-list-fn (resolve-fn 'hydra.overlay.clojure.lib.maps 'hydra_lib_maps_from_list)
         binding-map (if from-list-fn
                       (from-list-fn (:bindings tc))
                       (into {} (map (fn [p] [(first p) (second p)]) (:bindings tc))))

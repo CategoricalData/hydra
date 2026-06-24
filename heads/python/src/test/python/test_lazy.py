@@ -1,6 +1,6 @@
 """Unit tests for hydra.python.util.Lazy."""
 
-from hydra.python.util import Lazy
+from hydra.overlay.python.util import Lazy
 
 
 def test_call_dispatches_to_get():

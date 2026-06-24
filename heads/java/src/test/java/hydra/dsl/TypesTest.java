@@ -5,19 +5,20 @@ import hydra.core.Term;
 import hydra.core.Type;
 import org.junit.jupiter.api.Test;
 
-import static hydra.dsl.Terms.name;
-import static hydra.dsl.Types.annot;
-import static hydra.dsl.Types.field;
-import static hydra.dsl.Types.float32;
-import static hydra.dsl.Types.float64;
-import static hydra.dsl.Types.function;
-import static hydra.dsl.Types.int32;
-import static hydra.dsl.Types.record;
-import static hydra.dsl.Types.recordWithName;
-import static hydra.dsl.Types.string;
-import static hydra.dsl.Types.union;
-import static hydra.dsl.Types.wrap;
-import static hydra.dsl.Types.wrapWithName;
+import hydra.overlay.java.dsl.Terms;
+import static hydra.overlay.java.dsl.Terms.name;
+import static hydra.overlay.java.dsl.Types.annot;
+import static hydra.overlay.java.dsl.Types.field;
+import static hydra.overlay.java.dsl.Types.float32;
+import static hydra.overlay.java.dsl.Types.float64;
+import static hydra.overlay.java.dsl.Types.function;
+import static hydra.overlay.java.dsl.Types.int32;
+import static hydra.overlay.java.dsl.Types.record;
+import static hydra.overlay.java.dsl.Types.recordWithName;
+import static hydra.overlay.java.dsl.Types.string;
+import static hydra.overlay.java.dsl.Types.union;
+import static hydra.overlay.java.dsl.Types.wrap;
+import static hydra.overlay.java.dsl.Types.wrapWithName;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -99,7 +100,7 @@ public class TypesTest {
             public String visit(Type.Annotated instance) {
                 // #386: annotation is now a Term (TermMap), not a Map<Name, Term>.
                 Term desc = hydra.Annotations.getAnnotationMap(instance.value.annotation).get(new Name("description"));
-                return ((hydra.util.Either.Right<?, String>) hydra.extract.Core.string(null, desc)).value;
+                return ((hydra.overlay.java.util.Either.Right<?, String>) hydra.extract.Core.string(null, desc)).value;
             }
 
             @Override

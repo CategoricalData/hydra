@@ -7,8 +7,8 @@ module Hydra.Demos.MeteredEvaluation (demoMeteredEvaluation) where
 
 import Hydra.Kernel
 import qualified Hydra.Show.Errors as ShowError
-import Hydra.Dsl.Meta.Phantoms
-import qualified Hydra.Dsl.Types as Types
+import Hydra.Overlay.Haskell.Dsl.Typed.Phantoms
+import qualified Hydra.Overlay.Haskell.Dsl.Types as Types
 import Hydra.Dsl.Lib.Lists as Lists
 import qualified Hydra.Dsl.Lib.Strings as Strings
 import qualified Hydra.Encode.Core as EncodeCore
