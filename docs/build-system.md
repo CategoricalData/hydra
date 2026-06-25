@@ -51,6 +51,44 @@ the overlay tree. Two invariants follow, and both are load-bearing:
    `Bootstrap.*`, `Generation.*`, coder drivers, and a head's own test-runner specs — are not
    shipped and legitimately stay under `heads/`, compiled by the head itself.)
 
+### What goes in `packages/` vs `overlay/`
+
+The boundary follows the translingual line:
+
+- **`packages/<pkg>/`** is for code that describes Hydra modules *independently of any target
+  language* — that is, code which, after transformation, becomes valid in every target.
+  DSL module definitions (kernel types, coders, test suites) go here.
+  So do DSL helper utilities that are authored in the host language but whose purpose is to
+  help write those translingual definitions (e.g., term builders, type constructors).
+- **`overlay/<lang>/<pkg>/`** is for host-native, language-specific source that must ship
+  in the distribution but cannot be expressed as translingual DSL — for example, primitive
+  implementations (the actual Python/Java/Haskell bodies behind `hydra.lib.*` functions),
+  runtime utilities (`cons_list.py`, `PersistentMap.java`), and test bridges (`test_env.py`).
+
+A useful heuristic: if the code *could* be expressed in the Hydra DSL and generated into
+every target, it belongs in `packages/`.
+If it is inherently host-specific — because it calls platform APIs, provides native
+implementations of primitives, or is a runtime data structure that every generated program
+leans on — it belongs in `overlay/`.
+
+### Namespace convention for overlay files
+
+After #501, overlay files use the `hydra.overlay.<lang>.*` namespace (e.g.
+`hydra.overlay.python.lib.chars`, `hydra.overlay.java.lib.Chars`,
+`Hydra.Overlay.Haskell.Lib.Chars`).
+This hard separation ensures:
+
+- **`hydra.*` (including `hydra.<lang>.*`, `hydra.dsl.*`, `hydra.lib.*`)** → exclusively
+  *translingual* — every name in this space is either generated or derived from generated code.
+- **`hydra.overlay.<lang>.*`** → exclusively *host-native* — everything here is hand-written
+  and lives under `overlay/`.
+
+The `bootstrap-from-json` redirect mechanism rewrites generated consumer call-sites from
+`hydra.lib.<sub>.<fn>` → `hydra.overlay.<lang>.lib.<sub>.<fn>` at assemble time, so generated
+code that calls a primitive ends up calling the native implementation, not a non-existent
+translingual module. Primitive *name strings* embedded in term data (the canonical graph
+registry keys, e.g. `"hydra.lib.chars.isAlphaNum"`) are protected from this rewrite.
+
 So one translingual source package fans out into one complete distribution package per
 selected target language, and each distribution stands on its own. "Complete" is the bar:
 if a `dist/<lang>/<pkg>/` would need a `../../` reference to build, it is not yet a proper
@@ -169,7 +207,7 @@ developer rollup, not copied.
 |----------|------------------------|-------------|--------------------|
 | Haskell | `overlay/haskell/hydra-kernel/` (+ `overlay/haskell/hydra/` umbrella): `Hydra.Settings`, `Hydra.Kernel`, 13 `Hydra.Haskell.Lib.*`, `Hydra.Dsl.{Terms,Literals,Meta.Common}` | `sync-haskell.sh` (head compiles from the dist copy, not the overlay; copies gitignored) | 18 |
 | Java | `overlay/java/hydra-kernel/`: `Adapters.java`, `Coders.java`, full `hydra/{util,lib,dsl,tools}/`, `hydra/json/{JsonEncoding,JsonDecoding}.java` | `copy-kernel-runtime.sh` (Step 0 of assemble) | ~282 |
-| Python | `overlay/python/hydra-kernel/`: `tools.py`, `py.typed`, `hydra/{lib,dsl,sources,python/util}/` (main, no `__init__.py` — PEP 420); `hydra/test/test_env.py` (test bridge) | `copy-kernel-runtime.sh` (Step 0 of assemble; copies overlay main + test) | ~54 |
+| Python | `overlay/python/hydra-kernel/`: `hydra/overlay/python/{lib,dsl,sources,util}/` + `tools.py`, `py.typed` (main, no `__init__.py` — PEP 420); `hydra/overlay/python/test_env.py` (test bridge). All overlay Python modules use the `hydra.overlay.python.*` namespace (#501). | `copy-kernel-runtime.sh` (Step 0 of assemble; copies overlay main + test) | ~41+3 |
 | TypeScript | `overlay/typescript/hydra-kernel/`: `hydra/{bootstrap,primitives,runtime}.ts`, `hydra/lib/*.ts` (main); `hydra/test/{testEnv,jsonBindings}.ts` (test) | `copy-kernel-runtime.sh` (Step 0 of assemble) | ~19 |
 | Go (head bud) | `overlay/go/hydra-kernel/`: `hydra/lib/*` primitive impls (only `lib/literals` implemented; rest are package stubs). Generated code imports these via the dist-local module path `hydra.dev/hydra/lib/...` | `copy-kernel-runtime.sh` (Step 3 of assemble, post-prune) | ~13 |
 | Lisp dialects (clojure, scheme, common-lisp, emacs-lisp) | `overlay/<dialect>/hydra-kernel/`: the loader/prims/lazy/prelude/json-reader runtime + `hydra/lib/*` registries + `hydra/<dialect>/lib/*` native impls (+ Scheme's `scheme/`/`srfi/` externals) + the test bridge. Copied by common.sh's `lisp_copy_overlay` (Step 3, kernel-only). Each dialect's test runner loads the runtime from `dist/`. Common Lisp's `struct-compat.lisp` is generated into dist by gen-compat.sh (not overlay). | ~17 (clojure) – ~42 (scheme) |

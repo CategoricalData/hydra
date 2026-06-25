@@ -538,7 +538,7 @@ public class Bootstrap {
                 // and the hand-written registry overlay (hydra/sources/libraries.*), which deliberately
                 // imports BOTH the relocated impl and the def-module (aliased, for `def_X.fn.name`). The
                 // Haskell driver keeps both canonical by never transforming them.
-                if (pSlash.contains("/hydra/lib/") || pSlash.contains("hydra/sources/libraries.")) continue;
+                if (pSlash.contains("/hydra/lib/") || pSlash.contains("sources/libraries.")) continue;
                 String s = new String(Files.readAllBytes(p), java.nio.charset.StandardCharsets.UTF_8);
                 if (!s.contains("hydra.lib.")) continue;
                 // protect quoted primitive-NAME strings

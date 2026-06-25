@@ -63,6 +63,9 @@ graphs with deep support for polymorphism.
   shipped and stay in `heads/`). Structure: `overlay/<lang>/<package>/src/...`. Populated for Haskell,
   Java, Python, TypeScript (`hydra-kernel` runtime + the Haskell `hydra` umbrella); Scala, the Lisp
   dialects, and Go are being migrated (#434). Authored, not generated; never compiled in place. (#418, #434)
+  Overlay files use the `hydra.overlay.<lang>.*` namespace (#501), keeping a hard boundary:
+  `hydra.*` is exclusively translingual (generated or derived from generated code);
+  `hydra.overlay.<lang>.*` is exclusively host-native.
 - **`dist/`** holds generated and copied artifacts. **Never manually edit**
   (unless doing a bootstrap patch, which must be overwritten by regeneration afterward).
 - **`bindings/`** holds host-specific third-party integrations — adapters that wire Hydra
@@ -77,6 +80,13 @@ Description goes in `packages/`; running goes in `heads/`.
 Hand-written source destined for a published distribution package (but not part of the head's own
 compile) goes in `overlay/`. Bindings sit outside all of these: hand-written adapters between Hydra and
 an external system.
+
+The test for `packages/` vs `overlay/`: could this code be expressed in the Hydra DSL and generated
+into every target language?
+If yes, it belongs in `packages/` (translingual).
+If it is inherently host-specific — primitive implementations, runtime data structures, platform
+API calls, test bridges — it belongs in `overlay/`.
+See [docs/build-system.md §What goes in packages/ vs overlay/](docs/build-system.md#what-goes-in-packages-vs-overlay).
 
 Generated files have a header: "Note: this is an automatically generated file. Do not edit."
 

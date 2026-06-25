@@ -114,7 +114,7 @@ def _redirect_lib_calls(target, lang_dir):
             # def_chars`, for `def_chars.X.name` derivation); redirecting its def-module import would
             # point def_chars at the impl module (no .name). The Haskell driver keeps both canonical by
             # never transforming them (lib pass runs with no redirect; registry is overlay-copied).
-            if "/hydra/lib/" in p_slash or p_slash.endswith("hydra/sources/libraries.py"):
+            if "/hydra/lib/" in p_slash or "sources/libraries.py" in p_slash:
                 continue
             with open(p, "r", encoding="utf-8") as fh:
                 s = fh.read()
