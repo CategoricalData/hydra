@@ -464,6 +464,7 @@ public class Bootstrap {
         List<String> subs = new ArrayList<>(LIB_SUBS);
         subs.add("effects");
         subs.add("files");
+        subs.add("system");
         subs.add("text");
         LIB_SUBS_PYTHON = subs;
     }

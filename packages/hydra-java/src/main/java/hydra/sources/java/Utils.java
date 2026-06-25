@@ -547,6 +547,7 @@ public class Utils {
             overlayLibPair("regex"),
             overlayLibPair("sets"),
             overlayLibPair("strings"),
+            overlayLibPair("system"),
             overlayLibPair("text"))));
 
     public static final Def importAliasesForModule = def(

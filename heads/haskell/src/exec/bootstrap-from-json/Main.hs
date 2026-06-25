@@ -660,24 +660,24 @@ main = do
   -- The effectful lib sub-namespaces (#286) have native impls in Python only (hydra.overlay.python.lib.{effects,files,text});
   -- other hosts lack hydra.overlay.<lang>.lib.{effects,files,text}, so redirecting their call sites would dangle. Restrict the
   -- effectful redirect to Python by extending the sub-list only for the Python consumer transform.
-  let libSubsPython = libSubs ++ ["effects","files","text"]
+  let libSubsPython = libSubs ++ ["effects","files","system","text"]
   -- Scala (#494) likewise provides native effectful impls at hydra.overlay.scala.lib.{effects,files,text},
   -- so its consumer call sites are redirected for these sub-namespaces too.
-  let libSubsScala = libSubs ++ ["effects","files","text"]
+  let libSubsScala = libSubs ++ ["effects","files","system","text"]
   -- Clojure (#494) provides native effectful impls at hydra.overlay.clojure.lib.{effects,files,text}
   -- (overlay/clojure/.../hydra/overlay/clojure/lib/{effects,files,text}.clj), so its consumer call sites
   -- are redirected for these sub-namespaces too. The other Lisp dialects (scheme/common-lisp/
   -- emacs-lisp) do not yet have these runtimes, so they keep the baseline libSubs.
-  let libSubsClojure = libSubs ++ ["effects","files","text"]
+  let libSubsClojure = libSubs ++ ["effects","files","system","text"]
   -- Scheme (#494) provides native effectful impls at (hydra overlay scheme lib {effects,files,text})
   -- (overlay/scheme/.../hydra/scheme/lib/{effects,files,text}.scm), so its consumer call sites
   -- are redirected for these sub-namespaces too. The other Lisp dialects (common-lisp/emacs-lisp)
   -- do not yet have these runtimes, so they keep the baseline libSubs.
-  let libSubsScheme = libSubs ++ ["effects","files","text"]
+  let libSubsScheme = libSubs ++ ["effects","files","system","text"]
   -- Common Lisp and Emacs Lisp each get their own per-dialect langSeg (#501). Both now ship
   -- native effectful impls at hydra/common_lisp/lib/{effects,files,text}.lisp and
   -- hydra/emacs_lisp/lib/{effects,files,text}.el, so the effectful subs are included.
-  let libSubsLisp = libSubs ++ ["effects","files","text"]
+  let libSubsLisp = libSubs ++ ["effects","files","system","text"]
   -- For each lib sub-namespace, redirect the CODE-REFERENCE shapes the coders emit:
   --   1. member access / qualified prefix:  hydra.lib.<sub>.<fn>   (and bare prefix uses)
   --   2. bare module import (Python/Scala):  import hydra.lib.<sub>
@@ -734,11 +734,26 @@ main = do
             -- drop the package token from `(:use ... :hydra.lib.<sub> ...)` (leading space form)
             dropUse acc sub = replaceAll (" :hydra.lib." ++ sub) "" acc
         in L.foldl' dropUse (L.foldl' renameCalls s libSubsLisp) libSubsLisp
+  -- The hand-written test environment hydra.test.testEnv is skip-emitted from
+  -- generated output and supplied by overlay/<lang>/ under the renamed namespace
+  -- hydra.overlay.<lang>.test.testEnv (#501). Generated test modules still
+  -- reference it by its canonical name, so redirect the code reference (NOT the
+  -- quoted primitive-name strings, which never contain "test.testEnv") to the
+  -- overlay namespace for the dialects whose tests resolve testEnv by module
+  -- reference. Clojure uses the dotted form `hydra.test.testEnv`; Scheme uses the
+  -- space-separated library form `(hydra test testEnv)`. Common Lisp / Emacs Lisp
+  -- load the hand-written test_env explicitly via their run-tests.lisp/loader, so
+  -- they need no code redirect here (their loader path is fixed separately).
+  let redirectClojureTestEnv langSeg s =
+        replaceAll "hydra.test.testEnv" ("hydra.overlay." ++ langSeg ++ ".test.testEnv") s
+  let redirectSchemeTestEnv langSeg s =
+        replaceAll "(hydra test testEnv)" ("(hydra overlay " ++ langSeg ++ " test testEnv)")
+          $ replaceAll "hydra.test.testEnv" ("hydra.overlay." ++ langSeg ++ ".test.testEnv") s
   let consumerTransform = case target of
         "python"      -> redirectForSubs libSubsPython "python"
         "scala"       -> wrapLongScalaText . redirectForSubs libSubsScala "scala"
-        "clojure"     -> redirectForSubs libSubsClojure "clojure"
-        "scheme"      -> redirectSchemeFor "scheme"
+        "clojure"     -> redirectClojureTestEnv "clojure" . redirectForSubs libSubsClojure "clojure"
+        "scheme"      -> redirectSchemeTestEnv "scheme" . redirectSchemeFor "scheme"
         "common-lisp" -> redirectLispFlat "common_lisp"
         "emacs-lisp"  -> redirectLispFlat "emacs_lisp"
         _             -> id

@@ -16,7 +16,7 @@
 ;; like the rest of the flat emacs-lisp runtime). The kernel they depend on is already loaded by the
 ;; time this registry loads (hydra-load-gen-main runs first).
 (dolist (sub '("chars" "effects" "eithers" "equality" "files" "lists" "literals" "logic" "maps"
-               "math" "optionals" "pairs" "regex" "sets" "strings" "text"))
+               "math" "optionals" "pairs" "regex" "sets" "strings" "system" "text"))
   (hydra-load-file (expand-file-name (concat "lib/" sub ".el") hydra-gen-main-dir)))
 
 ;; ============================================================================
@@ -200,6 +200,42 @@ The def var is loaded globally by the dolist above; callers pass the bare def va
         (cons (prim-name hydra_lib_files_write_file)      (prim2 (prim-name hydra_lib_files_write_file)
                                                    hydra_overlay_emacs_lisp_lib_files_write_file
                                                    nil fp bin (funcall eff (tc-either ferr unit))))))))
+
+;; ============================================================================
+;; System (#498)
+;; ============================================================================
+
+(defun register-system ()
+  (let (
+        (cmd (tc-named "hydra.system.Command"))
+        (serr (tc-named "hydra.error.system.SystemError"))
+        (pres (tc-named "hydra.system.ProcessResult"))
+        (scode (tc-named "hydra.system.StatusCode"))
+        (tspec (tc-named "hydra.time.Timespec"))
+        (envvar (tc-named "hydra.system.EnvironmentVariable"))
+        (fp (tc-named "hydra.file.FilePath"))
+        (str (tc-string))
+        (unit (tc-unit)))
+    (let ((eff (lambda (c) (tc-effect c))))
+      (list
+        (cons (prim-name hydra_lib_system_execute)        (prim1 (prim-name hydra_lib_system_execute)
+                                                   hydra_overlay_emacs_lisp_lib_system_execute
+                                                   nil cmd (funcall eff (tc-either serr pres))))
+        (cons (prim-name hydra_lib_system_exit)           (prim1 (prim-name hydra_lib_system_exit)
+                                                   hydra_overlay_emacs_lisp_lib_system_exit
+                                                   nil scode (funcall eff unit)))
+        (cons (prim-name hydra_lib_system_get_environment) (prim0 (prim-name hydra_lib_system_get_environment)
+                                                   (lambda () hydra_overlay_emacs_lisp_lib_system_get_environment)
+                                                   nil (funcall eff (tc-map envvar str))))
+        (cons (prim-name hydra_lib_system_get_environment_variable) (prim1 (prim-name hydra_lib_system_get_environment_variable)
+                                                   hydra_overlay_emacs_lisp_lib_system_get_environment_variable
+                                                   nil envvar (funcall eff (tc-optional str))))
+        (cons (prim-name hydra_lib_system_get_time)       (prim0 (prim-name hydra_lib_system_get_time)
+                                                   (lambda () hydra_overlay_emacs_lisp_lib_system_get_time)
+                                                   nil (funcall eff tspec)))
+        (cons (prim-name hydra_lib_system_get_working_directory) (prim0 (prim-name hydra_lib_system_get_working_directory)
+                                                   (lambda () hydra_overlay_emacs_lisp_lib_system_get_working_directory)
+                                                   nil (funcall eff (tc-either serr fp))))))))
 
 ;; ============================================================================
 ;; Lists
@@ -810,6 +846,7 @@ The def var is loaded globally by the dolist above; callers pass the bare def va
     (register-regex)
     (register-sets)
     (register-strings)
+    (register-system)
     (register-text)
     (register-annotations)))
 

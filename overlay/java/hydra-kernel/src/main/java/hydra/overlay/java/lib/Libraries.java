@@ -53,6 +53,7 @@ public class Libraries {
                 regexPrimitives(),
                 setsPrimitives(),
                 stringsPrimitives(),
+                systemPrimitives(),
                 textPrimitives())) {
             for (PrimitiveFunction p : group) {
                 reversed = ConsList.cons(p, reversed);
@@ -375,6 +376,16 @@ public class Libraries {
                 new hydra.overlay.java.lib.strings.ToLower(),
                 new hydra.overlay.java.lib.strings.ToUpper(),
                 new hydra.overlay.java.lib.strings.Unlines());
+    }
+
+    private static List<PrimitiveFunction> systemPrimitives() {
+        return Arrays.asList(
+                new hydra.overlay.java.lib.system.Execute(),
+                new hydra.overlay.java.lib.system.Exit(),
+                new hydra.overlay.java.lib.system.GetEnvironment(),
+                new hydra.overlay.java.lib.system.GetEnvironmentVariable(),
+                new hydra.overlay.java.lib.system.GetTime(),
+                new hydra.overlay.java.lib.system.GetWorkingDirectory());
     }
 
     private static List<PrimitiveFunction> textPrimitives() {

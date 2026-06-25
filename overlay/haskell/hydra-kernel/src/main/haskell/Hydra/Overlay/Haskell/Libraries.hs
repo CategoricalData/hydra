@@ -38,6 +38,7 @@ import qualified Hydra.Lib.Pairs as DefPairs
 import qualified Hydra.Lib.Regex as DefRegex
 import qualified Hydra.Lib.Sets as DefSets
 import qualified Hydra.Lib.Strings as DefStrings
+import qualified Hydra.Lib.System as DefSystem
 import qualified Hydra.Lib.Text as DefText
 
 import qualified Data.List as L
@@ -418,6 +419,15 @@ hydraLibStrings = standardLibrary [
   prim1 DefStrings.toUpper     Strings.toUpper     [] string string,
   prim1 DefStrings.unlines     Strings.unlines     [] (list string) string]
 
+hydraLibSystem :: Library
+hydraLibSystem = standardLibrary [
+    unsupportedEffectPrimitive DefSystem.execute,
+    unsupportedEffectPrimitive DefSystem.exit,
+    unsupportedEffectPrimitive DefSystem.getEnvironment,
+    unsupportedEffectPrimitive DefSystem.getEnvironmentVariable,
+    unsupportedEffectPrimitive DefSystem.getTime,
+    unsupportedEffectPrimitive DefSystem.getWorkingDirectory]
+
 hydraLibText :: Library
 hydraLibText = standardLibrary [
   prim1 DefText.decodeUtf8 Text.decodeUtf8 [] binary (Prims.either_ string string),
@@ -441,6 +451,7 @@ standardLibraries = [
   hydraLibRegex,
   hydraLibSets,
   hydraLibStrings,
+  hydraLibSystem,
   hydraLibText]
 
 -- | Assemble a library from its primitives. The library's module name (e.g. "hydra.lib.chars")
