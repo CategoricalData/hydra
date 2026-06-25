@@ -585,7 +585,13 @@ bootstrap-demo-only).")
                                                    ;; dialect tier and is plain-
                                                    ;; loaded; never feed it through
                                                    ;; the rewriting loader.
-                                                   (string-prefix-p "overlay/emacs_lisp/lib/" f)))
+                                                   (string-prefix-p "overlay/emacs_lisp/lib/" f)
+                                                   ;; #501: the hand-written test_env
+                                                   ;; (hydra.test.testEnv) lives at
+                                                   ;; overlay/emacs_lisp/test/ and is
+                                                   ;; loaded explicitly by run-tests.el;
+                                                   ;; exclude it from the gen-main walk.
+                                                   (string-prefix-p "overlay/emacs_lisp/test/" f)))
                                   all-files))
          (ordered (cl-remove-if
                    (lambda (f) (member f hydra-skip-gen-main-files))
@@ -620,6 +626,7 @@ bootstrap-demo-only).")
                   "test/lib/regex.el"
                   "test/lib/sets.el"
                   "test/lib/strings.el"
+                  "test/lib/system.el"
                   "test/annotations.el"
                   "test/checking/advanced.el"
                   "test/checking/algebraic_types.el"
@@ -638,6 +645,7 @@ bootstrap-demo-only).")
                   "test/hoisting/all.el"
                   "test/inference/algebraic_types.el"
                   "test/inference/algorithm_w.el"
+                  "test/inference/annotations.el"
                   "test/inference/classes.el"
                   "test/inference/failures.el"
                   "test/inference/fundamentals.el"
