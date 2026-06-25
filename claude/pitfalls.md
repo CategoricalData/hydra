@@ -1006,6 +1006,38 @@ a permanent patch. See [Extending Hydra core](../docs/recipes/extending-hydra-co
 for the general bootstrap pattern; the TS-specific wrinkle is just
 that the AST lives in `Syntax.hs`, not the kernel.
 
+### TS coder: `TypeEffect` is stripped by adaptation — use `isPure` to detect effectful primitives
+
+The TypeScript language adapter strips `TypeEffect` wrappers during type adaptation:
+`effect<map<K,V>>` becomes `map<K,V>`. Any attempt inside the TS coder to detect
+effectful primitives by pattern-matching on `TypeEffect` on the adapted type will always
+return `False`. The reliable signal is `primitiveDefinitionIsPure prim == False` (preserved
+through adaptation). This matters when deciding whether to emit `f()` vs `f` for zero-arity
+primitives: zero-arity pure primitives like `maps.empty` are values; zero-arity impure ones
+like `getEnvironment`/`getTime`/`getWorkingDirectory` are thunks and must be called. The
+check in `encodeTerm`'s `TermVariable` case is:
+`Logic.and (primitiveArity prim == 0) (not (primitiveDefinitionIsPure (primitiveDefinition prim)))`.
+
+### TS overlay: numeric type encoding — `uint32`/`int64` map to `bigint`
+
+In TypeScript, Hydra's integer types encode as: `int32` → `number`, but `uint32`, `int64`,
+`uint64` → `bigint`. When writing hand-coded overlay runtime files (e.g. `system.ts`),
+use BigInt arithmetic for fields typed as `uint32` or larger. The generated `Timespec` type
+has `nanoseconds: bigint` (uint32 in Hydra), so `getTime()` must return
+`nanoseconds = nanosTotal % 1_000_000_000n`, not `Number(nanosTotal % 1_000_000_000n)`.
+Mixing produces a `TypeError: Do not know how to serialize a BigInt` at comparison time in
+`equality.ts`'s `JSON.stringify` fallback.
+
+### TS `standardPrimitives()` must enumerate every primitive family
+
+`overlay/typescript/hydra-kernel/src/main/typescript/hydra/lib/libraries.ts`'s
+`standardPrimitives()` must include all primitive category functions (e.g.
+`effectsPrimitives()`, `filesPrimitives()`, `systemPrimitives()`). If a category is
+missing, the inference engine fails with "INFERENCE ERROR: failed" for any term that
+references one of those primitives, because `Lexical.lookupPrimitive` cannot find the
+name in the graph's primitive map. Symptom: 15+ common-suite inference failures for a new
+primitive family with no other code errors.
+
 ## Testing & benchmarks
 
 ### `run-benchmark-tests.sh` Python leg needs `.venv`

@@ -1742,6 +1742,134 @@ const mapsPrimitives = (): readonly Primitive[] => {
 // reference only through forwarded calls in registration helpers.
 void libLists; void libSets; void dInt64; void dFloat32; void tyUnit;
 
+// === lib.effects / lib.files / lib.system ===
+//
+// These effect-bearing primitives are registered for name resolution and type
+// inference only. Their term-level interpreter always fails loudly (effect
+// primitives are evaluated via the native/host path, not Hydra's pure reducer).
+// Mirrors Python's `unsupported_effect_primitive` and the Haskell
+// `unsupportedEffectPrimitive` helpers. For #504.
+
+// effect<t> is represented as { tag: "effect", value: t } in the TypeScript
+// discriminated-union encoding (matches the JSON wire format).
+const tyEffect = (t: Type): Type => ({ tag: "effect", value: t } as never);
+
+// Nominal type references: types whose name is the FQN of a generated record.
+// These resolve in the schema graph (kernel JSON); they don't need inline
+// definitions in this file.
+const tyNominal = (fqn: string): Type => tyVar(fqn);
+
+const effectFail = (name: string): Impl =>
+  (_g, _args) =>
+    left({ tag: "other", value: `effect primitive cannot be reduced by the pure reducer: ${name}` } as never);
+
+const effectPrim = (qname: string, ts: TypeScheme): Primitive =>
+  prim(qname, ts, effectFail(qname));
+
+const effectsPrimitives = (): readonly Primitive[] => {
+  const x = tyVar("x");
+  const y = tyVar("y");
+  const z = tyVar("z");
+  return [
+    // apply : forall x y. effect<(x -> y)> -> effect<x> -> effect<y>
+    effectPrim("hydra.lib.effects.apply",
+      scheme(tyFnCurried(tyEffect(tyFn(x, y)), tyEffect(x), tyEffect(y)), ["x", "y"])),
+    // bind : forall x y. effect<x> -> (x -> effect<y>) -> effect<y>
+    effectPrim("hydra.lib.effects.bind",
+      scheme(tyFnCurried(tyEffect(x), tyFn(x, tyEffect(y)), tyEffect(y)), ["x", "y"])),
+    // compose : forall x y z. (x -> effect<y>) -> (y -> effect<z>) -> x -> effect<z>
+    effectPrim("hydra.lib.effects.compose",
+      scheme(tyFnCurried(tyFn(x, tyEffect(y)), tyFn(y, tyEffect(z)), x, tyEffect(z)), ["x", "y", "z"])),
+    // foldl : forall x y. (x -> y -> effect<x>) -> x -> list<y> -> effect<x>
+    effectPrim("hydra.lib.effects.foldl",
+      scheme(tyFnCurried(tyFnCurried(x, y, tyEffect(x)), x, tyList(y), tyEffect(x)), ["x", "y"])),
+    // map : forall x y. (x -> y) -> effect<x> -> effect<y>
+    effectPrim("hydra.lib.effects.map",
+      scheme(tyFnCurried(tyFn(x, y), tyEffect(x), tyEffect(y)), ["x", "y"])),
+    // mapList : forall x y. (x -> effect<y>) -> list<x> -> effect<list<y>>
+    effectPrim("hydra.lib.effects.mapList",
+      scheme(tyFnCurried(tyFn(x, tyEffect(y)), tyList(x), tyEffect(tyList(y))), ["x", "y"])),
+    // mapOptional : forall x y. (x -> effect<y>) -> optional<x> -> effect<optional<y>>
+    effectPrim("hydra.lib.effects.mapOptional",
+      scheme(tyFnCurried(tyFn(x, tyEffect(y)), tyOptional(x), tyEffect(tyOptional(y))), ["x", "y"])),
+    // pure : forall x. x -> effect<x>
+    effectPrim("hydra.lib.effects.pure",
+      scheme(tyFn(x, tyEffect(x)), ["x"])),
+  ];
+};
+
+const filesPrimitives = (): readonly Primitive[] => {
+  const fileError = tyNominal("hydra.error.file.FileError");
+  const filePath = tyNominal("hydra.file.FilePath");
+  const fileStatus = tyNominal("hydra.file.FileStatus");
+  const effEitherErr = (t: Type): Type => tyEffect(tyEither(fileError, t));
+  return [
+    // appendFile : FilePath -> binary -> effect<either<FileError, unit>>
+    effectPrim("hydra.lib.files.appendFile",
+      scheme(tyFnCurried(filePath, tyBinary, effEitherErr(tyUnit)))),
+    // copy : boolean -> FilePath -> FilePath -> effect<either<FileError, unit>>
+    effectPrim("hydra.lib.files.copy",
+      scheme(tyFnCurried(tyBool, filePath, filePath, effEitherErr(tyUnit)))),
+    // createDirectory : boolean -> FilePath -> effect<either<FileError, unit>>
+    effectPrim("hydra.lib.files.createDirectory",
+      scheme(tyFnCurried(tyBool, filePath, effEitherErr(tyUnit)))),
+    // exists : FilePath -> effect<either<FileError, boolean>>
+    effectPrim("hydra.lib.files.exists",
+      scheme(tyFn(filePath, effEitherErr(tyBool)))),
+    // listDirectory : FilePath -> effect<either<FileError, list<FilePath>>>
+    effectPrim("hydra.lib.files.listDirectory",
+      scheme(tyFn(filePath, effEitherErr(tyList(filePath))))),
+    // readFile : FilePath -> effect<either<FileError, binary>>
+    effectPrim("hydra.lib.files.readFile",
+      scheme(tyFn(filePath, effEitherErr(tyBinary)))),
+    // removeDirectory : boolean -> FilePath -> effect<either<FileError, unit>>
+    effectPrim("hydra.lib.files.removeDirectory",
+      scheme(tyFnCurried(tyBool, filePath, effEitherErr(tyUnit)))),
+    // removeFile : FilePath -> effect<either<FileError, unit>>
+    effectPrim("hydra.lib.files.removeFile",
+      scheme(tyFn(filePath, effEitherErr(tyUnit)))),
+    // rename : FilePath -> FilePath -> effect<either<FileError, unit>>
+    effectPrim("hydra.lib.files.rename",
+      scheme(tyFnCurried(filePath, filePath, effEitherErr(tyUnit)))),
+    // status : FilePath -> effect<either<FileError, FileStatus>>
+    effectPrim("hydra.lib.files.status",
+      scheme(tyFn(filePath, effEitherErr(fileStatus)))),
+    // writeFile : FilePath -> binary -> effect<either<FileError, unit>>
+    effectPrim("hydra.lib.files.writeFile",
+      scheme(tyFnCurried(filePath, tyBinary, effEitherErr(tyUnit)))),
+  ];
+};
+
+const systemPrimitives = (): readonly Primitive[] => {
+  const command = tyNominal("hydra.system.Command");
+  const environmentVariable = tyNominal("hydra.system.EnvironmentVariable");
+  const filePath = tyNominal("hydra.file.FilePath");
+  const processResult = tyNominal("hydra.system.ProcessResult");
+  const statusCode = tyNominal("hydra.system.StatusCode");
+  const systemError = tyNominal("hydra.error.system.SystemError");
+  const timespec = tyNominal("hydra.time.Timespec");
+  return [
+    // execute : Command -> effect<either<SystemError, ProcessResult>>
+    effectPrim("hydra.lib.system.execute",
+      scheme(tyFn(command, tyEffect(tyEither(systemError, processResult))))),
+    // exit : StatusCode -> effect<unit>
+    effectPrim("hydra.lib.system.exit",
+      scheme(tyFn(statusCode, tyEffect(tyUnit)))),
+    // getEnvironment : effect<map<EnvironmentVariable, string>>
+    effectPrim("hydra.lib.system.getEnvironment",
+      scheme(tyEffect(tyMap(environmentVariable, tyString)))),
+    // getEnvironmentVariable : EnvironmentVariable -> effect<optional<string>>
+    effectPrim("hydra.lib.system.getEnvironmentVariable",
+      scheme(tyFn(environmentVariable, tyEffect(tyOptional(tyString))))),
+    // getTime : effect<Timespec>
+    effectPrim("hydra.lib.system.getTime",
+      scheme(tyEffect(timespec))),
+    // getWorkingDirectory : effect<either<SystemError, FilePath>>
+    effectPrim("hydra.lib.system.getWorkingDirectory",
+      scheme(tyEffect(tyEither(systemError, filePath)))),
+  ];
+};
+
 // === lib.optionals ===
 
 const optionalsPrimitives = (): readonly Primitive[] => {
@@ -1997,8 +2125,10 @@ const eithersPrimitives = (): readonly Primitive[] => {
 
 export const standardPrimitives = (): readonly Primitive[] => [
   ...charsPrimitives(),
+  ...effectsPrimitives(),
   ...eithersPrimitives(),
   ...equalityPrimitives(),
+  ...filesPrimitives(),
   ...listsPrimitives(),
   ...literalsPrimitives(),
   ...logicPrimitives(),
@@ -2009,6 +2139,7 @@ export const standardPrimitives = (): readonly Primitive[] => [
   ...regexPrimitives(),
   ...setsPrimitives(),
   ...stringsPrimitives(),
+  ...systemPrimitives(),
 ];
 
 function pairsPrimitivesList(): readonly Primitive[] {

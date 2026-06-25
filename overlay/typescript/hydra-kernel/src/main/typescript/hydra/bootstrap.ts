@@ -475,7 +475,18 @@ const main = async (): Promise<void> => {
   const emitPkgs = new Set<string>(["hydra-kernel"]);
   if (opts.target === "haskell") emitPkgs.add("hydra-haskell");
   const mainMods = modulesByPath.filter((m) => !m.isTest && emitPkgs.has(m.pkg)).map((m) => m.module);
-  const testMods = modulesByPath.filter((m) => m.isTest && emitPkgs.has(m.pkg)).map((m) => m.module);
+  // Skip-emit: hydra.test.testEnv is hand-written (it builds the primitives map
+  // with implementations via standardPrimitives() — see overlay test/.../testEnv.ts).
+  // Generating it would emit a stub returning emptyGraph, leaving reduceTerm with
+  // no primitives so all reduction tests fail (the TS self-host bug). Mirrors
+  // testSkipEmitModuleNames / notSkipEmit in bootstrap-from-json/Main.hs.
+  const testSkipEmitModuleNames = new Set<string>(["hydra.test.testEnv"]);
+  const moduleNameOf = (mod: unknown): string =>
+    (mod as { name?: { value?: string } } | null)?.name?.value ?? "";
+  const testMods = modulesByPath
+    .filter((m) => m.isTest && emitPkgs.has(m.pkg))
+    .map((m) => m.module)
+    .filter((mod) => !testSkipEmitModuleNames.has(moduleNameOf(mod)));
   const mainFileCount = writeOne(false, mainMods, allModules);
   let testFileCount = writeOne(true, testMods, allModules);
 

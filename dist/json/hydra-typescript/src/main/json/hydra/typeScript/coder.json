@@ -9,8 +9,10 @@
     {"module": "hydra.typeScript.serde"},
     {"module": "hydra.analysis"},
     {"module": "hydra.annotations"},
+    {"module": "hydra.arity"},
     {"module": "hydra.environment"},
     {"module": "hydra.formatting"},
+    {"module": "hydra.lexical"},
     {"module": "hydra.names"},
     {"module": "hydra.rewriting"},
     {"module": "hydra.serialization"},
@@ -1333,74 +1335,141 @@
                                                     "argument": {"application": {"function": {"variable": "hydra.names.localNameOf"}, "argument": {"variable": "n"}}}}},
                                                 "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
                                             "body": {
-                                              "application": {
-                                                "function": {
-                                                  "application": {
-                                                    "function": {
-                                                      "application": {
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {
-                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
-                                                            "type": {"variable": "hydra.typeScript.syntax.Expression"}}},
-                                                        "argument": {"application": {"function": {"variable": "hydra.names.moduleNameOf"}, "argument": {"variable": "n"}}}}},
-                                                    "argument": {"application": {"function": {"variable": "hydra.typeScript.coder.tsExprIdent"}, "argument": {"variable": "local"}}}}},
-                                                "argument": {
-                                                  "lambda": {
-                                                    "parameter": "ns",
-                                                    "domain": {"variable": "hydra.packaging.ModuleName"},
-                                                    "body": {
+                                              "let": {
+                                                "bindings": [
+                                                  {
+                                                    "name": "varExpr",
+                                                    "term": {
                                                       "application": {
                                                         "function": {
                                                           "application": {
                                                             "function": {
                                                               "application": {
                                                                 "function": {
-                                                                  "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.typeScript.syntax.Expression"}}},
-                                                                "argument": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                                                    "type": {"variable": "hydra.typeScript.syntax.Expression"}}},
+                                                                "argument": {"application": {"function": {"variable": "hydra.names.moduleNameOf"}, "argument": {"variable": "n"}}}}},
+                                                            "argument": {"application": {"function": {"variable": "hydra.typeScript.coder.tsExprIdent"}, "argument": {"variable": "local"}}}}},
+                                                        "argument": {
+                                                          "lambda": {
+                                                            "parameter": "ns",
+                                                            "domain": {"variable": "hydra.packaging.ModuleName"},
+                                                            "body": {
+                                                              "application": {
+                                                                "function": {
                                                                   "application": {
                                                                     "function": {
                                                                       "application": {
-                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}},
-                                                                        "argument": {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "currentNs"}}}}},
-                                                                    "argument": {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "ns"}}}}}}},
-                                                            "argument": {"application": {"function": {"variable": "hydra.typeScript.coder.tsExprIdent"}, "argument": {"variable": "local"}}}}},
-                                                        "argument": {
+                                                                        "function": {
+                                                                          "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.typeScript.syntax.Expression"}}},
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}},
+                                                                                "argument": {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "currentNs"}}}}},
+                                                                            "argument": {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "ns"}}}}}}},
+                                                                    "argument": {"application": {"function": {"variable": "hydra.typeScript.coder.tsExprIdent"}, "argument": {"variable": "local"}}}}},
+                                                                "argument": {
+                                                                  "let": {
+                                                                    "bindings": [
+                                                                      {
+                                                                        "name": "nsSegs",
+                                                                        "term": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.drop"}, "type": {"literal": {"string": {}}}}},
+                                                                                "argument": {"literal": {"integer": {"int32": 1}}}}},
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "."}}}},
+                                                                                "argument": {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "ns"}}}}}}},
+                                                                        "typeScheme": {"variables": [], "body": {"list": {"literal": {"string": {}}}}}}],
+                                                                    "body": {
+                                                                      "let": {
+                                                                        "bindings": [
+                                                                          {
+                                                                            "name": "alias",
+                                                                            "term": {
+                                                                              "application": {
+                                                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "$mod_"}}}},
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": "_"}}}},
+                                                                                    "argument": {"variable": "nsSegs"}}}}},
+                                                                            "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
+                                                                        "body": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "function": {"variable": "hydra.typeScript.coder.tsMember"},
+                                                                                "argument": {"application": {"function": {"variable": "hydra.typeScript.coder.tsExprIdent"}, "argument": {"variable": "alias"}}}}},
+                                                                            "argument": {"variable": "local"}}}}}}}}}}}}},
+                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}}}],
+                                                "body": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.graph.Primitive"}}},
+                                                                "type": {"variable": "hydra.typeScript.syntax.Expression"}}},
+                                                            "argument": {
+                                                              "application": {
+                                                                "function": {"application": {"function": {"variable": "hydra.lexical.lookupPrimitive"}, "argument": {"variable": "g"}}},
+                                                                "argument": {"variable": "n"}}}}},
+                                                        "argument": {"variable": "varExpr"}}},
+                                                    "argument": {
+                                                      "lambda": {
+                                                        "parameter": "prim",
+                                                        "domain": {"variable": "hydra.graph.Primitive"},
+                                                        "body": {
                                                           "let": {
                                                             "bindings": [
                                                               {
-                                                                "name": "nsSegs",
+                                                                "name": "isZeroArityEffect",
                                                                 "term": {
                                                                   "application": {
                                                                     "function": {
                                                                       "application": {
-                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.drop"}, "type": {"literal": {"string": {}}}}},
-                                                                        "argument": {"literal": {"integer": {"int32": 1}}}}},
-                                                                    "argument": {
-                                                                      "application": {
-                                                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "."}}}},
-                                                                        "argument": {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "ns"}}}}}}},
-                                                                "typeScheme": {"variables": [], "body": {"list": {"literal": {"string": {}}}}}}],
-                                                            "body": {
-                                                              "let": {
-                                                                "bindings": [
-                                                                  {
-                                                                    "name": "alias",
-                                                                    "term": {
-                                                                      "application": {
-                                                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "$mod_"}}}},
+                                                                        "function": {"variable": "hydra.lib.logic.and"},
                                                                         "argument": {
                                                                           "application": {
-                                                                            "function": {"application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": "_"}}}},
-                                                                            "argument": {"variable": "nsSegs"}}}}},
-                                                                    "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
-                                                                "body": {
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                "argument": {"application": {"function": {"variable": "hydra.arity.primitiveArity"}, "argument": {"variable": "prim"}}}}},
+                                                                            "argument": {"literal": {"integer": {"int32": 0}}}}}}},
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "function": {"variable": "hydra.lib.logic.not"},
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "function": {"project": {"typeName": "hydra.packaging.PrimitiveDefinition", "fieldName": "isPure"}},
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "function": {"project": {"typeName": "hydra.graph.Primitive", "fieldName": "definition"}},
+                                                                                "argument": {"variable": "prim"}}}}}}}}},
+                                                                "typeScheme": {"variables": [], "body": {"literal": {"boolean": {}}}}}],
+                                                            "body": {
+                                                              "application": {
+                                                                "function": {
                                                                   "application": {
                                                                     "function": {
                                                                       "application": {
-                                                                        "function": {"variable": "hydra.typeScript.coder.tsMember"},
-                                                                        "argument": {"application": {"function": {"variable": "hydra.typeScript.coder.tsExprIdent"}, "argument": {"variable": "alias"}}}}},
-                                                                    "argument": {"variable": "local"}}}}}}}}}}}}}}}}}},
+                                                                        "function": {
+                                                                          "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.typeScript.syntax.Expression"}}},
+                                                                        "argument": {"variable": "isZeroArityEffect"}}},
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "function": {"application": {"function": {"variable": "hydra.typeScript.coder.tsCall"}, "argument": {"variable": "varExpr"}}},
+                                                                        "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.typeScript.syntax.Expression"}}}}}}},
+                                                                "argument": {"variable": "varExpr"}}}}}}}}}}}}}}}},
                                   {
                                     "name": "lambda",
                                     "handler": {

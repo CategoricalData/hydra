@@ -4,10 +4,16 @@
 // For objects we use JSON.stringify as a pragmatic fallback; this matches the
 // behavior of Hydra's encode-and-compare semantics for serializable data.
 
+// Structural stringify that tolerates bigint (plain JSON.stringify throws on
+// bigint). Records like Timespec carry nested bigint fields (int64/uint32 encode
+// as bigint in TS), so any structural compare over them must be bigint-safe.
+const stableStringify = (x: unknown): string =>
+  JSON.stringify(x, (_k, v) => (typeof v === "bigint" ? `${v}n` : v));
+
 export const equal = <A>(a: A, b: A): boolean => {
   if (Object.is(a, b)) return true;
   if (typeof a !== "object" || typeof b !== "object" || a === null || b === null) return false;
-  return JSON.stringify(a) === JSON.stringify(b);
+  return stableStringify(a) === stableStringify(b);
 };
 
 // Unwrap a Hydra Term value to its underlying scalar for ordered
@@ -40,8 +46,8 @@ export const lt = <A>(a: A, b: A): boolean => {
   if (typeof ua === "number" && typeof ub === "number") return ua < ub;
   if (typeof ua === "string" && typeof ub === "string") return ua < ub;
   if (typeof ua === "bigint" && typeof ub === "bigint") return ua < ub;
-  // Fallback: original structural comparison.
-  return JSON.stringify(a) < JSON.stringify(b);
+  // Fallback: structural comparison (bigint-safe).
+  return stableStringify(a) < stableStringify(b);
 };
 
 export const lte = <A>(a: A, b: A): boolean => equal(a, b) || lt(a, b);
