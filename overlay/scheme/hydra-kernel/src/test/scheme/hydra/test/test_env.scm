@@ -22,7 +22,7 @@
           (hydra core)
           (hydra graph)
           (hydra typing)
-          (hydra lib libraries)
+          (hydra overlay scheme libraries)
           (hydra overlay scheme lib maps)
           (hydra json bootstrap)
           (hydra scoping))

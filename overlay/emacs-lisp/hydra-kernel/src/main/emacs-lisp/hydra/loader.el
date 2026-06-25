@@ -671,6 +671,17 @@ bootstrap-demo-only).")
 ;; Load hand-written native libraries
 ;; ============================================================================
 
+;; #498: the system overlay impl (overlay/emacs_lisp/lib/system.el) evaluates its
+;; effect values at load time (each effectful primitive is a defvar holding the
+;; computed value), so the generated type modules it constructs — Timespec
+;; (hydra/time.el), and the hydra.system / hydra.error.system types — must be
+;; loaded BEFORE the overlay lib dolist below. They normally load later via
+;; (hydra-load-gen-main); preload them here so make-hydra_time_timespec et al.
+;; are defined when system.el's get_time defvar runs.
+(dolist (tf '("time.el" "system.el" "error/system.el"))
+  (let ((tp (expand-file-name tf hydra-loader-dir)))
+    (when (file-exists-p tp) (hydra-load-file tp))))
+
 ;; #434/#473: the hand-written runtime lives under the dialect tier
 ;; hydra/overlay/emacs_lisp/lib/ (a sibling of the generated hydra/lib/ def-modules),
 ;; mirroring scheme's hydra/scheme/lib/ and clojure's hydra/clojure/lib/, so it
@@ -685,7 +696,8 @@ bootstrap-demo-only).")
              "overlay/emacs_lisp/lib/maps.el" "overlay/emacs_lisp/lib/math.el"
              "overlay/emacs_lisp/lib/optionals.el" "overlay/emacs_lisp/lib/pairs.el"
              "overlay/emacs_lisp/lib/regex.el" "overlay/emacs_lisp/lib/sets.el"
-             "overlay/emacs_lisp/lib/strings.el" "overlay/emacs_lisp/lib/text.el"))
+             "overlay/emacs_lisp/lib/strings.el" "overlay/emacs_lisp/lib/system.el"
+             "overlay/emacs_lisp/lib/text.el"))
   (load (expand-file-name f hydra-loader-dir) nil t))
 
 (defun hydra-load-prims-and-libraries ()

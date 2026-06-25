@@ -1,4 +1,4 @@
-(define-library (hydra lib libraries)
+(define-library (hydra overlay scheme libraries)
   (import (scheme base)
           (hydra core)
           (hydra graph)
@@ -20,6 +20,7 @@
           (hydra overlay scheme lib regex)
           (hydra overlay scheme lib sets)
           (hydra overlay scheme lib strings)
+          (hydra overlay scheme lib system)
           (hydra overlay scheme lib text)
           ;; #473: import the generated hydra.lib.* PrimitiveDefinition def-modules under a `def:`
           ;; prefix (their exported names collide with the impl libs above) so the registry can derive
@@ -39,6 +40,7 @@
           (prefix (hydra lib regex) def:)
           (prefix (hydra lib sets) def:)
           (prefix (hydra lib strings) def:)
+          (prefix (hydra lib system) def:)
           (prefix (hydra lib text) def:))
   (export standard-library)
   (begin
@@ -227,6 +229,42 @@
             (cons (prim-name def:hydra_lib_files_write_file) (prim2 (prim-name def:hydra_lib_files_write_file)
                                                (lambda (path) (lambda (contents) ((hydra_lib_files_write_file path) contents)))
                                                #f fp bin (eff (tc-either ferr unit))))))))
+
+    ;; ============================================================================
+    ;; System (#498)
+    ;; ============================================================================
+
+    (define (register-system)
+      (let (
+            (cmd (tc-named "hydra.system.Command"))
+            (serr (tc-named "hydra.error.system.SystemError"))
+            (pres (tc-named "hydra.system.ProcessResult"))
+            (scode (tc-named "hydra.system.StatusCode"))
+            (tspec (tc-named "hydra.time.Timespec"))
+            (envvar (tc-named "hydra.system.EnvironmentVariable"))
+            (fp (tc-named "hydra.file.FilePath"))
+            (str (tc-string))
+            (unit (tc-unit)))
+        (let ((eff (lambda (c) (tc-effect c))))
+          (list
+            (cons (prim-name def:hydra_lib_system_execute) (prim1 (prim-name def:hydra_lib_system_execute)
+                                               hydra_lib_system_execute
+                                               #f cmd (eff (tc-either serr pres))))
+            (cons (prim-name def:hydra_lib_system_exit) (prim1 (prim-name def:hydra_lib_system_exit)
+                                               hydra_lib_system_exit
+                                               #f scode (eff unit)))
+            (cons (prim-name def:hydra_lib_system_get_environment) (prim0 (prim-name def:hydra_lib_system_get_environment)
+                                               (lambda () hydra_lib_system_get_environment)
+                                               #f (eff (tc-map envvar str))))
+            (cons (prim-name def:hydra_lib_system_get_environment_variable) (prim1 (prim-name def:hydra_lib_system_get_environment_variable)
+                                               hydra_lib_system_get_environment_variable
+                                               #f envvar (eff (tc-optional str))))
+            (cons (prim-name def:hydra_lib_system_get_time) (prim0 (prim-name def:hydra_lib_system_get_time)
+                                               (lambda () hydra_lib_system_get_time)
+                                               #f (eff tspec)))
+            (cons (prim-name def:hydra_lib_system_get_working_directory) (prim0 (prim-name def:hydra_lib_system_get_working_directory)
+                                               (lambda () hydra_lib_system_get_working_directory)
+                                               #f (eff (tc-either serr fp))))))))
 
     ;; ============================================================================
     ;; Lists
@@ -753,6 +791,7 @@
         (register-regex)
         (register-sets)
         (register-strings)
+        (register-system)
         (register-text)))
 
 )

@@ -52,9 +52,19 @@
 ;; hydra.test.testEnv stub (filtered from emitted output via
 ;; testSkipEmitModuleNames); it must load before test_graph.el so the
 ;; generated (require 'hydra.test.testEnv) resolves.
+;; #501: test_env.el now lives in overlay/emacs-lisp/ under the renamed
+;; hydra.overlay.emacs_lisp.test namespace and is copied into the dist MAIN tree
+;; at overlay/emacs_lisp/test/test_env.el, so it loads from hydra-gen-main-dir
+;; rather than the generated test tree. test_types/test_terms/test_graph remain
+;; generated test modules in hydra-gen-test-dir.
 (let ((base hydra-gen-test-dir))
-  (dolist (f '("test/test_types.el" "test/test_terms.el"
-               "test/test_env.el" "test/test_graph.el"))
+  (dolist (f '("test/test_types.el" "test/test_terms.el"))
+    (let ((path (expand-file-name f base)))
+      (when (file-exists-p path) (hydra-load-file path)))))
+(let ((env-path (expand-file-name "overlay/emacs_lisp/test/test_env.el" hydra-gen-main-dir)))
+  (when (file-exists-p env-path) (hydra-load-file env-path)))
+(let ((base hydra-gen-test-dir))
+  (dolist (f '("test/test_graph.el"))
     (let ((path (expand-file-name f base)))
       (when (file-exists-p path) (hydra-load-file path)))))
 (hydra-set-function-bindings)

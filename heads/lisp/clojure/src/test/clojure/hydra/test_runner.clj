@@ -1,6 +1,6 @@
 (ns hydra.test-runner
-  (:require [hydra.lib.libraries :as libraries]
-            [hydra.lib.preload :as preload]
+  (:require [hydra.overlay.clojure.libraries :as libraries]
+            [hydra.overlay.clojure.preload :as preload]
             [hydra.core :refer :all]
             [hydra.errors :refer :all]
             [hydra.graph :refer :all]
