@@ -1,0 +1,119 @@
+{
+  "name": "hydra.lib.system",
+  "metadata": {"description": "Primitives in the hydra.lib.system module.", "comments": [], "seeAlso": []},
+  "dependencies": [
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.error.system"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.file"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.system"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.time"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "definitions": [
+    {
+      "primitive": {
+        "name": "hydra.lib.system.execute",
+        "metadata": {
+          "description": "Run a program to completion and capture its result.",
+          "comments": [
+            "execute(command) describes an effectful computation which runs the program described by command to completion and returns its result. This is the POSIX \"execute a command\" operation at the posix_spawn / system() altitude (https://pubs.opengroup.org/onlinepubs/9799919799/functions/posix_spawn.html, https://pubs.opengroup.org/onlinepubs/9799919799/functions/system.html): the child is spawned, Hydra waits for it (POSIX waitpid), and standard output and standard error are captured as raw bytes. Output is byte-oriented, with no character decoding or newline translation; decode it to text via hydra.lib.text.decodeUtf8. A child that runs and exits with a non-zero status (POSIX WEXITSTATUS) is returned as right(result) with that StatusCode, following the XCU section 2.8.2 exit-status convention. Only a failure to launch -- for example POSIX ENOENT, EACCES, or a bad working directory -- is returned as left(error). Unlike the shell system(), no intermediate shell is invoked; command.program is executed directly (as the execvp family does), so shell syntax in arguments is not interpreted."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.system.Command"}, "isLazy": false}],
+          "result": {
+            "type": {
+              "effect": {
+                "either": {"left": {"variable": "hydra.error.system.SystemError"}, "right": {"variable": "hydra.system.ProcessResult"}}}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.system.exit",
+        "metadata": {
+          "description": "Terminate the current process with a status code.",
+          "comments": [
+            "exit(code) describes an effectful computation which terminates the current process immediately with the given status, exactly as the POSIX exit() function (XSH, https://pubs.opengroup.org/onlinepubs/9799919799/functions/exit.html). The status is reported to the parent through wait(); by the XCU section 2.8.2 convention, 0 denotes success and non-zero denotes failure. This computation does not return, so subsequent effects in a sequence are not performed."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.system.StatusCode"}, "isLazy": false}],
+          "result": {"type": {"effect": {"unit": {}}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.system.getEnvironment",
+        "metadata": {
+          "description": "Get the full set of environment variables.",
+          "comments": [
+            "getEnvironment describes an effectful computation which returns the entire environment of the current process -- the POSIX environment list environ (XBD section 8, Environment Variables, https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap08.html) -- as a map from variable name to value. POSIX represents each entry as a \"name=value\" string; this primitive splits each at the first '=' into an EnvironmentVariable key and a string value. This computation does not fail; an empty environment yields an empty map."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"effect": {"map": {"keys": {"variable": "hydra.system.EnvironmentVariable"}, "values": {"literal": {"string": {}}}}}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.system.getEnvironmentVariable",
+        "metadata": {
+          "description": "Look up a single environment variable by name.",
+          "comments": [
+            "getEnvironmentVariable(name) describes an effectful computation which returns the value of the environment variable name, or none if it is not present -- the POSIX getenv() function (XSH, https://pubs.opengroup.org/onlinepubs/9799919799/functions/getenv.html). A variable that is present but set to the empty string is returned as given(\"\"), distinct from the none that POSIX getenv signals with a null pointer. This computation does not fail."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.system.EnvironmentVariable"}, "isLazy": false}],
+          "result": {"type": {"effect": {"optional": {"literal": {"string": {}}}}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.system.getTime",
+        "metadata": {
+          "description": "Get the current wall-clock time.",
+          "comments": [
+            "getTime describes an effectful computation which returns the current wall-clock time as a Timespec (seconds and nanoseconds since the Unix Epoch) -- the POSIX clock_gettime() function with the CLOCK_REALTIME clock (XSH, https://pubs.opengroup.org/onlinepubs/9799919799/functions/clock_gettime.html). The actual resolution is implementation- and platform-defined and may be coarser than nanoseconds. As with CLOCK_REALTIME, the clock is not monotonic: it can jump or move backwards when the host's wall clock is adjusted. This computation does not fail."],
+          "seeAlso": []},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"effect": {"variable": "hydra.time.Timespec"}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.system.getWorkingDirectory",
+        "metadata": {
+          "description": "Get the current working directory.",
+          "comments": [
+            "getWorkingDirectory describes an effectful computation which returns the absolute pathname of the current working directory -- the POSIX getcwd() function (XSH, https://pubs.opengroup.org/onlinepubs/9799919799/functions/getcwd.html) -- as a FilePath. A recoverable failure (for example POSIX EACCES, or the working directory having been removed) is returned as left(error); success is returned as right(path)."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "effect": {"either": {"left": {"variable": "hydra.error.system.SystemError"}, "right": {"variable": "hydra.file.FilePath"}}}}}},
+        "isPure": false,
+        "isTotal": true}}]}
