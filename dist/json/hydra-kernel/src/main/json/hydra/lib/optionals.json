@@ -50,31 +50,24 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "mf",
             "body": {
               "lambda": {
-                "parameter": "mf",
+                "parameter": "mx",
                 "body": {
-                  "lambda": {
-                    "parameter": "mx",
-                    "body": {
-                      "application": {
-                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.bind"}, "argument": {"variable": "mf"}}},
-                        "argument": {
-                          "lambda": {
-                            "parameter": "f",
-                            "body": {
+                  "application": {
+                    "function": {"application": {"function": {"variable": "hydra.lib.optionals.bind"}, "argument": {"variable": "mf"}}},
+                    "argument": {
+                      "lambda": {
+                        "parameter": "f",
+                        "body": {
+                          "application": {
+                            "function": {
                               "application": {
-                                "function": {
-                                  "application": {
-                                    "function": {"variable": "hydra.lib.optionals.map"},
-                                    "argument": {"lambda": {"parameter": "x", "body": {"application": {"function": {"variable": "f"}, "argument": {"variable": "x"}}}}}}},
-                                "argument": {"variable": "mx"}}}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Applicative apply for optionals, defined in terms of bind and map."}}}]}}}}},
+                                "function": {"variable": "hydra.lib.optionals.map"},
+                                "argument": {"lambda": {"parameter": "x", "body": {"application": {"function": {"variable": "f"}, "argument": {"variable": "x"}}}}}}},
+                            "argument": {"variable": "mx"}}}}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.optionals.bind",
@@ -97,25 +90,18 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "m",
             "body": {
               "lambda": {
-                "parameter": "m",
+                "parameter": "f",
                 "body": {
-                  "lambda": {
-                    "parameter": "f",
-                    "body": {
+                  "application": {
+                    "function": {
                       "application": {
-                        "function": {
-                          "application": {
-                            "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
-                            "argument": {"optional": null}}},
-                        "argument": {"variable": "f"}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Monadic bind for optionals, defined in terms of cases."}}}]}}}}},
+                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
+                        "argument": {"optional": null}}},
+                    "argument": {"variable": "f"}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.optionals.cases",
@@ -151,43 +137,36 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "xs",
             "body": {
-              "lambda": {
-                "parameter": "xs",
-                "body": {
+              "application": {
+                "function": {
                   "application": {
                     "function": {
                       "application": {
-                        "function": {
-                          "application": {
-                            "function": {"variable": "hydra.lib.lists.foldr"},
-                            "argument": {
+                        "function": {"variable": "hydra.lib.lists.foldr"},
+                        "argument": {
+                          "lambda": {
+                            "parameter": "m",
+                            "body": {
                               "lambda": {
-                                "parameter": "m",
+                                "parameter": "acc",
                                 "body": {
-                                  "lambda": {
-                                    "parameter": "acc",
-                                    "body": {
+                                  "application": {
+                                    "function": {
                                       "application": {
-                                        "function": {
+                                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
+                                        "argument": {"variable": "acc"}}},
+                                    "argument": {
+                                      "lambda": {
+                                        "parameter": "v",
+                                        "body": {
                                           "application": {
-                                            "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
-                                            "argument": {"variable": "acc"}}},
-                                        "argument": {
-                                          "lambda": {
-                                            "parameter": "v",
-                                            "body": {
-                                              "application": {
-                                                "function": {"application": {"function": {"variable": "hydra.lib.lists.cons"}, "argument": {"variable": "v"}}},
-                                                "argument": {"variable": "acc"}}}}}}}}}}}}},
-                        "argument": {"list": []}}},
-                    "argument": {"variable": "xs"}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Catenate a list of optionals, keeping only the present values."}}}]}}}}},
+                                            "function": {"application": {"function": {"variable": "hydra.lib.lists.cons"}, "argument": {"variable": "v"}}},
+                                            "argument": {"variable": "acc"}}}}}}}}}}}}},
+                    "argument": {"list": []}}},
+                "argument": {"variable": "xs"}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.optionals.compose",
@@ -214,28 +193,21 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "f",
             "body": {
               "lambda": {
-                "parameter": "f",
+                "parameter": "g",
                 "body": {
                   "lambda": {
-                    "parameter": "g",
+                    "parameter": "x",
                     "body": {
-                      "lambda": {
-                        "parameter": "x",
-                        "body": {
+                      "application": {
+                        "function": {
                           "application": {
-                            "function": {
-                              "application": {
-                                "function": {"variable": "hydra.lib.optionals.bind"},
-                                "argument": {"application": {"function": {"variable": "f"}, "argument": {"variable": "x"}}}}},
-                            "argument": {"variable": "g"}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Kleisli composition for optionals, defined in terms of bind."}}}]}}}}},
+                            "function": {"variable": "hydra.lib.optionals.bind"},
+                            "argument": {"application": {"function": {"variable": "f"}, "argument": {"variable": "x"}}}}},
+                        "argument": {"variable": "g"}}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.optionals.fromOptional",
@@ -254,25 +226,18 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "def",
             "body": {
               "lambda": {
-                "parameter": "def",
+                "parameter": "m",
                 "body": {
-                  "lambda": {
-                    "parameter": "m",
-                    "body": {
+                  "application": {
+                    "function": {
                       "application": {
-                        "function": {
-                          "application": {
-                            "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
-                            "argument": {"variable": "def"}}},
-                        "argument": {"lambda": {"parameter": "x", "body": {"variable": "x"}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Return the contained value or a default, defined in terms of cases."}}}]}}}}},
+                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
+                        "argument": {"variable": "def"}}},
+                    "argument": {"lambda": {"parameter": "x", "body": {"variable": "x"}}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.optionals.isGiven",
@@ -289,20 +254,15 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "m",
             "body": {
-              "lambda": {
-                "parameter": "m",
-                "body": {
+              "application": {
+                "function": {
                   "application": {
-                    "function": {
-                      "application": {
-                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
-                        "argument": {"literal": {"boolean": false}}}},
-                    "argument": {"lambda": {"parameter": "_", "body": {"literal": {"boolean": true}}}}}}}},
-            "annotation": {
-              "map": [
-                {"key": {"variable": "description"}, "value": {"literal": {"string": "Test for presence, defined in terms of cases."}}}]}}}}},
+                    "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
+                    "argument": {"literal": {"boolean": false}}}},
+                "argument": {"lambda": {"parameter": "_", "body": {"literal": {"boolean": true}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.optionals.isNone",
@@ -319,19 +279,15 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "m",
             "body": {
-              "lambda": {
-                "parameter": "m",
-                "body": {
+              "application": {
+                "function": {
                   "application": {
-                    "function": {
-                      "application": {
-                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
-                        "argument": {"literal": {"boolean": true}}}},
-                    "argument": {"lambda": {"parameter": "_", "body": {"literal": {"boolean": false}}}}}}}},
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Test for absence, defined in terms of cases."}}}]}}}}},
+                    "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
+                    "argument": {"literal": {"boolean": true}}}},
+                "argument": {"lambda": {"parameter": "_", "body": {"literal": {"boolean": false}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.optionals.map",
@@ -351,28 +307,21 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "f",
             "body": {
               "lambda": {
-                "parameter": "f",
+                "parameter": "m",
                 "body": {
-                  "lambda": {
-                    "parameter": "m",
-                    "body": {
+                  "application": {
+                    "function": {
                       "application": {
-                        "function": {
-                          "application": {
-                            "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
-                            "argument": {"optional": null}}},
-                        "argument": {
-                          "lambda": {
-                            "parameter": "x",
-                            "body": {"optional": {"application": {"function": {"variable": "f"}, "argument": {"variable": "x"}}}}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Map a function over an optional, defined in terms of cases."}}}]}}}}},
+                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
+                        "argument": {"optional": null}}},
+                    "argument": {
+                      "lambda": {
+                        "parameter": "x",
+                        "body": {"optional": {"application": {"function": {"variable": "f"}, "argument": {"variable": "x"}}}}}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.optionals.mapOptional",
@@ -394,26 +343,18 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "f",
             "body": {
               "lambda": {
-                "parameter": "f",
+                "parameter": "xs",
                 "body": {
-                  "lambda": {
-                    "parameter": "xs",
-                    "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.optionals.cat"},
+                    "argument": {
                       "application": {
-                        "function": {"variable": "hydra.lib.optionals.cat"},
-                        "argument": {
-                          "application": {
-                            "function": {"application": {"function": {"variable": "hydra.lib.lists.map"}, "argument": {"variable": "f"}}},
-                            "argument": {"variable": "xs"}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {
-                    "literal": {"string": "Map a partial function and keep only the present results, defined in terms of lists.map and cat."}}}]}}}}},
+                        "function": {"application": {"function": {"variable": "hydra.lib.lists.map"}, "argument": {"variable": "f"}}},
+                        "argument": {"variable": "xs"}}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.optionals.pure",
@@ -429,10 +370,7 @@
           "result": {"type": {"optional": {"variable": "x"}}}},
         "isPure": true,
         "isTotal": true,
-        "defaultImplementation": {
-          "annotated": {
-            "body": {"lambda": {"parameter": "x", "body": {"optional": {"variable": "x"}}}},
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Wrap a value in given."}}}]}}}}},
+        "defaultImplementation": {"lambda": {"parameter": "x", "body": {"optional": {"variable": "x"}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.optionals.toList",
@@ -449,19 +387,12 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "m",
             "body": {
-              "lambda": {
-                "parameter": "m",
-                "body": {
+              "application": {
+                "function": {
                   "application": {
-                    "function": {
-                      "application": {
-                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
-                        "argument": {"list": []}}},
-                    "argument": {"lambda": {"parameter": "x", "body": {"list": [{"variable": "x"}]}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Convert an optional to a list, defined in terms of cases."}}}]}}}}}]}
+                    "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
+                    "argument": {"list": []}}},
+                "argument": {"lambda": {"parameter": "x", "body": {"list": [{"variable": "x"}]}}}}}}}}}]}

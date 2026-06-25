@@ -51,31 +51,24 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "f",
             "body": {
               "lambda": {
-                "parameter": "f",
+                "parameter": "g",
                 "body": {
                   "lambda": {
-                    "parameter": "g",
+                    "parameter": "p",
                     "body": {
-                      "lambda": {
-                        "parameter": "p",
-                        "body": {
-                          "pair": {
-                            "first": {
-                              "application": {
-                                "function": {"variable": "f"},
-                                "argument": {"application": {"function": {"variable": "hydra.lib.pairs.first"}, "argument": {"variable": "p"}}}}},
-                            "second": {
-                              "application": {
-                                "function": {"variable": "g"},
-                                "argument": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "p"}}}}}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Map over both elements of a pair, defined in terms of first and second."}}}]}}}}},
+                      "pair": {
+                        "first": {
+                          "application": {
+                            "function": {"variable": "f"},
+                            "argument": {"application": {"function": {"variable": "hydra.lib.pairs.first"}, "argument": {"variable": "p"}}}}},
+                        "second": {
+                          "application": {
+                            "function": {"variable": "g"},
+                            "argument": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "p"}}}}}}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.pairs.first",

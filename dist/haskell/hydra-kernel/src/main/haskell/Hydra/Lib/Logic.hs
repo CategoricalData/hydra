@@ -29,7 +29,6 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-import qualified Data.Map as M
 and :: Packaging.PrimitiveDefinition
 and =
     Packaging.PrimitiveDefinition {
@@ -60,24 +59,19 @@ and =
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "a"),
+      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "a"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
+          Core.lambdaParameter = (Core.Name "b"),
           Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-            Core.lambdaParameter = (Core.Name "b"),
-            Core.lambdaDomain = Nothing,
-            Core.lambdaBody = (Core.TermApplication (Core.Application {
+          Core.lambdaBody = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
-                Core.applicationArgument = (Core.TermVariable (Core.Name "b"))})),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean False))}))}))})),
-        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (
-            Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "Logical AND, defined in terms of ifElse.")))]))})))}
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
+              Core.applicationArgument = (Core.TermVariable (Core.Name "b"))})),
+            Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean False))}))}))})))}
 ifElse :: Packaging.PrimitiveDefinition
 ifElse =
     Packaging.PrimitiveDefinition {
@@ -141,21 +135,16 @@ not =
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "a"),
-          Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermApplication (Core.Application {
+      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "a"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermApplication (Core.Application {
+          Core.applicationFunction = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
-                Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean False))})),
-            Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))}))})),
-        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (
-            Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "Logical NOT, defined in terms of ifElse.")))]))})))}
+              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
+              Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
+            Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean False))})),
+          Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))}))})))}
 or :: Packaging.PrimitiveDefinition
 or =
     Packaging.PrimitiveDefinition {
@@ -186,21 +175,16 @@ or =
           Typing.resultType = (Core.TypeLiteral Core.LiteralTypeBoolean)}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "a"),
+      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "a"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
+          Core.lambdaParameter = (Core.Name "b"),
           Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-            Core.lambdaParameter = (Core.Name "b"),
-            Core.lambdaDomain = Nothing,
-            Core.lambdaBody = (Core.TermApplication (Core.Application {
+          Core.lambdaBody = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
-                Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))})),
-              Core.applicationArgument = (Core.TermVariable (Core.Name "b"))}))}))})),
-        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (
-            Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "Logical OR, defined in terms of ifElse.")))]))})))}
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
+              Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))})),
+            Core.applicationArgument = (Core.TermVariable (Core.Name "b"))}))}))})))}

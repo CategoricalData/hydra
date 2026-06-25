@@ -418,46 +418,69 @@ toBinding (TypedBinding name (TypedTerm term)) = Binding name term Nothing
 toDefinition :: TypedTermDefinition a -> Definition
 toDefinition (TypedTermDefinition name (TypedTerm term)) = DefinitionTerm $ TermDefinition name Nothing Nothing term
 
--- | Convert a phantom-typed term definition to a primitive Definition, using the term body as the
--- declarative default implementation. The TermSignature describes the primitive's logical type.
--- isPure / isTotal default to True; use withImpurity / withPartiality to flag exceptions.
--- The 'comments' argument (second-to-last) is a list of long-form prose notes elaborating the one-line
--- description, one element per logical observation (e.g. semantics, edge cases, totality, host correspondence);
--- the default-implementation argument stays last because its value is typically large.
--- Example: toPrimitive "logical AND" andSig [] and_
-toPrimitive :: String -> TermSignature -> [String] -> TypedTermDefinition a -> Definition
-toPrimitive description sig comments (TypedTermDefinition name (TypedTerm term)) =
-  DefinitionPrimitive $ PrimitiveDefinition name (primitiveMetadata description comments) sig True True (Just term)
+-- | Define a primitive (no default implementation) within a module.
+-- Analogous to 'definitionInModule' for term definitions.
+-- Example: define = primitiveInModule module_
+primitiveInModule :: Module -> String -> String -> TermSignature -> [String] -> PrimitiveDefinition
+primitiveInModule mod localName description sig comments =
+  PrimitiveDefinition
+    (unqualifyName (QualifiedName (Just (moduleName mod)) localName))
+    (primitiveMetadata description comments)
+    sig True True Nothing
 
--- | Convert a Name to a primitive Definition with no default implementation. Used for primitives
--- whose meaning is host-native and not expressible as a Hydra term (e.g. currentUnixTimeSeconds).
--- The trailing 'comments' argument is a list of long-form prose notes, one element per logical observation.
--- Example: toPrimitiveNoDefault "Current UNIX time, in seconds" sig (Name "hydra.lib.math.currentUnixTimeSeconds") []
-toPrimitiveNoDefault :: String -> TermSignature -> Name -> [String] -> Definition
-toPrimitiveNoDefault description sig name comments =
-  DefinitionPrimitive $ PrimitiveDefinition name (primitiveMetadata description comments) sig True True Nothing
+-- | Define a primitive with a default implementation within a module.
+-- Example: defineWithDefault = primitiveWithDefaultInModule module_
+primitiveWithDefaultInModule :: Module -> String -> String -> TermSignature -> [String] -> TypedTerm a -> PrimitiveDefinition
+primitiveWithDefaultInModule mod localName description sig comments (TypedTerm impl) =
+  (primitiveInModule mod localName description sig comments) { primitiveDefinitionDefaultImplementation = Just impl }
 
--- | Convert a Name to an impure primitive Definition. Impure primitives are
--- host-native and do not have Hydra default implementations.
-toImpurePrimitive :: String -> TermSignature -> Name -> [String] -> Definition
-toImpurePrimitive description sig name comments =
-  DefinitionPrimitive $ PrimitiveDefinition name (primitiveMetadata description comments) sig False True Nothing
+-- | Define an impure primitive (no default implementation) within a module.
+-- Example: defineImpure = impurePrimitiveInModule module_
+impurePrimitiveInModule :: Module -> String -> String -> TermSignature -> [String] -> PrimitiveDefinition
+impurePrimitiveInModule mod localName description sig comments =
+  (primitiveInModule mod localName description sig comments) { primitiveDefinitionIsPure = False }
 
--- | Declare an impure primitive within a module namespace, given its local name.
--- A convenience over toImpurePrimitive which qualifies the local name with the namespace.
-impurePrimitiveInModule :: ModuleName -> String -> String -> TermSignature -> [String] -> Definition
-impurePrimitiveInModule ns localName description sig comments =
-  toImpurePrimitive description sig (unqualifyName (QualifiedName (Just ns) localName)) comments
+-- | Convert a TypeScheme to a TermSignature. Exported for use in primitive modules.
+-- Example: sig $ TypeScheme [] (Types.boolean Types.~> Types.boolean) Nothing
+sig :: TypeScheme -> TermSignature
+sig = typeSchemeToTermSignature
+
+-- | Convert a TypeScheme to a TermSignature with lazy parameters at the given (0-based) positions.
+-- Coders that distinguish strict from lazy evaluation thunk exactly these arguments.
+-- Example: lazySig [1, 2] $ TypeScheme [Name "x"] (Types.boolean Types.~> ...) Nothing
+lazySig :: [Int] -> TypeScheme -> TermSignature
+lazySig idxs ts = markLazyParams idxs (sig ts)
+
+-- | Mark parameters at the given (0-based) positions as lazy in a TermSignature.
+markLazyParams :: [Int] -> TermSignature -> TermSignature
+markLazyParams idxs ts = ts {
+  termSignatureParameters =
+    zipWith (\i p -> if i `elem` idxs then p {parameterIsLazy = True} else p)
+      [0..] (termSignatureParameters ts)}
 
 -- | Build the entity metadata for a primitive from its (always-present) one-line description and
--- long-form comments. Folds the former PrimitiveDefinition.description/comments fields into
--- EntityMetadata without data loss: description -> metadata.description, comments -> metadata.comments.
--- Each comments element is one logical observation, kept distinct rather than concatenated.
+-- long-form comments. Each comments element is one logical observation, kept distinct rather than concatenated.
 primitiveMetadata :: String -> [String] -> Maybe EntityMetadata
 primitiveMetadata description comments =
   Just (EntityMetadata (Just description) comments [] Nothing)
 
+-- | Convert a phantom-typed term definition to a primitive Definition, using the term body as the
+-- declarative default implementation.
+-- Example: toPrimitive "logical AND" andSig [] and_
+toPrimitive :: String -> TermSignature -> [String] -> TypedTermDefinition a -> Definition
+toPrimitive description s comments (TypedTermDefinition name (TypedTerm term)) =
+  DefinitionPrimitive $ PrimitiveDefinition name (primitiveMetadata description comments) s True True (Just term)
 
+-- | Convert a Name to a primitive Definition with no default implementation.
+-- Example: toPrimitiveNoDefault "Current UNIX time, in seconds" sig (Name "hydra.lib.math.currentUnixTimeSeconds") []
+toPrimitiveNoDefault :: String -> TermSignature -> Name -> [String] -> Definition
+toPrimitiveNoDefault description s name comments =
+  DefinitionPrimitive $ PrimitiveDefinition name (primitiveMetadata description comments) s True True Nothing
+
+-- | Convert a Name to an impure primitive Definition.
+toImpurePrimitive :: String -> TermSignature -> Name -> [String] -> Definition
+toImpurePrimitive description s name comments =
+  DefinitionPrimitive $ PrimitiveDefinition name (primitiveMetadata description comments) s False True Nothing
 
 -- | Convert a typed binding to a term Definition for use in module definition lists
 -- Example: toTermDefinition functionArity

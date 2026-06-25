@@ -115,10 +115,7 @@
           "result": {"type": {"variable": "x"}}},
         "isPure": true,
         "isTotal": true,
-        "defaultImplementation": {
-          "annotated": {
-            "body": {"lambda": {"parameter": "x", "body": {"variable": "x"}}},
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Return a value unchanged."}}}]}}}}},
+        "defaultImplementation": {"lambda": {"parameter": "x", "body": {"variable": "x"}}}}},
     {
       "primitive": {
         "name": "hydra.lib.equality.lt",
@@ -174,31 +171,24 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "x",
             "body": {
               "lambda": {
-                "parameter": "x",
+                "parameter": "y",
                 "body": {
-                  "lambda": {
-                    "parameter": "y",
-                    "body": {
+                  "application": {
+                    "function": {
                       "application": {
                         "function": {
                           "application": {
-                            "function": {
+                            "function": {"variable": "hydra.lib.logic.ifElse"},
+                            "argument": {
                               "application": {
-                                "function": {"variable": "hydra.lib.logic.ifElse"},
-                                "argument": {
-                                  "application": {
-                                    "function": {"application": {"function": {"variable": "hydra.lib.equality.gte"}, "argument": {"variable": "x"}}},
-                                    "argument": {"variable": "y"}}}}},
-                            "argument": {"variable": "x"}}},
-                        "argument": {"variable": "y"}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Return the maximum of two values, defined in terms of gte and ifElse."}}}]}}}}},
+                                "function": {"application": {"function": {"variable": "hydra.lib.equality.gte"}, "argument": {"variable": "x"}}},
+                                "argument": {"variable": "y"}}}}},
+                        "argument": {"variable": "x"}}},
+                    "argument": {"variable": "y"}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.equality.min",
@@ -218,28 +208,21 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "x",
             "body": {
               "lambda": {
-                "parameter": "x",
+                "parameter": "y",
                 "body": {
-                  "lambda": {
-                    "parameter": "y",
-                    "body": {
+                  "application": {
+                    "function": {
                       "application": {
                         "function": {
                           "application": {
-                            "function": {
+                            "function": {"variable": "hydra.lib.logic.ifElse"},
+                            "argument": {
                               "application": {
-                                "function": {"variable": "hydra.lib.logic.ifElse"},
-                                "argument": {
-                                  "application": {
-                                    "function": {"application": {"function": {"variable": "hydra.lib.equality.lte"}, "argument": {"variable": "x"}}},
-                                    "argument": {"variable": "y"}}}}},
-                            "argument": {"variable": "x"}}},
-                        "argument": {"variable": "y"}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Return the minimum of two values, defined in terms of lte and ifElse."}}}]}}}}}]}
+                                "function": {"application": {"function": {"variable": "hydra.lib.equality.lte"}, "argument": {"variable": "x"}}},
+                                "argument": {"variable": "y"}}}}},
+                        "argument": {"variable": "x"}}},
+                    "argument": {"variable": "y"}}}}}}}}}]}

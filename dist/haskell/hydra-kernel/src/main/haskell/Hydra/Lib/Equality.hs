@@ -29,7 +29,6 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-import qualified Data.Map as M
 compare :: Packaging.PrimitiveDefinition
 compare =
     Packaging.PrimitiveDefinition {
@@ -199,13 +198,10 @@ identity =
           Typing.resultType = (Core.TypeVariable (Core.Name "x"))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "x"),
-          Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
-        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Return a value unchanged.")))]))})))}
+      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "x"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}
 lt :: Packaging.PrimitiveDefinition
 lt =
     Packaging.PrimitiveDefinition {
@@ -310,28 +306,23 @@ max =
           Typing.resultType = (Core.TypeVariable (Core.Name "x"))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "x"),
+      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "x"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
+          Core.lambdaParameter = (Core.Name "y"),
           Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-            Core.lambdaParameter = (Core.Name "y"),
-            Core.lambdaDomain = Nothing,
-            Core.lambdaBody = (Core.TermApplication (Core.Application {
+          Core.lambdaBody = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
-                  Core.applicationArgument = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.gte")),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))})),
-                Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-              Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))})),
-        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (
-            Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "Return the maximum of two values, defined in terms of gte and ifElse.")))]))})))}
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
+                Core.applicationArgument = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.gte")),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))})),
+              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+            Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))})))}
 min :: Packaging.PrimitiveDefinition
 min =
     Packaging.PrimitiveDefinition {
@@ -366,25 +357,20 @@ min =
           Typing.resultType = (Core.TypeVariable (Core.Name "x"))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "x"),
+      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "x"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
+          Core.lambdaParameter = (Core.Name "y"),
           Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-            Core.lambdaParameter = (Core.Name "y"),
-            Core.lambdaDomain = Nothing,
-            Core.lambdaBody = (Core.TermApplication (Core.Application {
+          Core.lambdaBody = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
-                  Core.applicationArgument = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.lte")),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))})),
-                Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-              Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))})),
-        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (
-            Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "Return the minimum of two values, defined in terms of lte and ifElse.")))]))})))}
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.ifElse")),
+                Core.applicationArgument = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.lte")),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))})),
+              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+            Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))})))}

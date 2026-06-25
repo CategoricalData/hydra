@@ -29,7 +29,6 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-import qualified Data.Map as M
 alter :: Packaging.PrimitiveDefinition
 alter =
     Packaging.PrimitiveDefinition {
@@ -79,46 +78,41 @@ alter =
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "f"),
+      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "f"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
+          Core.lambdaParameter = (Core.Name "k"),
           Core.lambdaDomain = Nothing,
           Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-            Core.lambdaParameter = (Core.Name "k"),
+            Core.lambdaParameter = (Core.Name "m"),
             Core.lambdaDomain = Nothing,
-            Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-              Core.lambdaParameter = (Core.Name "m"),
-              Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermApplication (Core.Application {
+            Core.lambdaBody = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")),
-                    Core.applicationArgument = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                      Core.applicationArgument = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.lookup")),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "k"))})),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))})),
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cases")),
                   Core.applicationArgument = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.delete")),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "k"))})),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))})),
-                Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                  Core.lambdaParameter = (Core.Name "vNew"),
-                  Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                    Core.applicationArgument = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.insert")),
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.lookup")),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "k"))})),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "vNew"))})),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))}))}))}))})),
-        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (
-            Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "alter, defined in terms of lookup/insert/delete via optionals.cases.")))]))})))}
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))})),
+                Core.applicationArgument = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.delete")),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "k"))})),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))})),
+              Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "vNew"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.insert")),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "k"))})),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "vNew"))})),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))}))}))}))})))}
 bimap :: Packaging.PrimitiveDefinition
 bimap =
     Packaging.PrimitiveDefinition {
@@ -177,42 +171,37 @@ bimap =
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v2"))}))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "fk"),
+      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "fk"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
+          Core.lambdaParameter = (Core.Name "fv"),
           Core.lambdaDomain = Nothing,
           Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-            Core.lambdaParameter = (Core.Name "fv"),
+            Core.lambdaParameter = (Core.Name "m"),
             Core.lambdaDomain = Nothing,
-            Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-              Core.lambdaParameter = (Core.Name "m"),
-              Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.fromList")),
+            Core.lambdaBody = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.fromList")),
+              Core.applicationArgument = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.map")),
+                  Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.Name "p"),
+                    Core.lambdaDomain = Nothing,
+                    Core.lambdaBody = (Core.TermPair (
+                      Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "fk")),
+                        Core.applicationArgument = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))}),
+                      (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "fv")),
+                        Core.applicationArgument = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))}))))}))})),
                 Core.applicationArgument = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.map")),
-                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "p"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermPair (
-                        Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermVariable (Core.Name "fk")),
-                          Core.applicationArgument = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))}),
-                        (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermVariable (Core.Name "fv")),
-                          Core.applicationArgument = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))}))))}))})),
-                  Core.applicationArgument = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.toList")),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))}))}))}))})),
-        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (
-            Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "bimap on a map, defined via toList/fromList.")))]))})))}
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.toList")),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))}))}))}))})))}
 delete :: Packaging.PrimitiveDefinition
 delete =
     Packaging.PrimitiveDefinition {
@@ -363,33 +352,28 @@ filter =
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "p"),
+      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "p"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
+          Core.lambdaParameter = (Core.Name "m"),
           Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-            Core.lambdaParameter = (Core.Name "m"),
-            Core.lambdaDomain = Nothing,
-            Core.lambdaBody = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.fromList")),
+          Core.lambdaBody = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.fromList")),
+            Core.applicationArgument = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.filter")),
+                Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "pr"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermVariable (Core.Name "p")),
+                    Core.applicationArgument = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "pr"))}))}))}))})),
               Core.applicationArgument = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.filter")),
-                  Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                    Core.lambdaParameter = (Core.Name "pr"),
-                    Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermVariable (Core.Name "p")),
-                      Core.applicationArgument = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "pr"))}))}))}))})),
-                Core.applicationArgument = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.toList")),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))}))}))})),
-        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (
-            Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "filter on a map, defined via toList/fromList.")))]))})))}
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.toList")),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))}))}))})))}
 filterWithKey :: Packaging.PrimitiveDefinition
 filterWithKey =
     Packaging.PrimitiveDefinition {
@@ -435,37 +419,32 @@ filterWithKey =
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "p"),
+      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "p"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
+          Core.lambdaParameter = (Core.Name "m"),
           Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-            Core.lambdaParameter = (Core.Name "m"),
-            Core.lambdaDomain = Nothing,
-            Core.lambdaBody = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.fromList")),
-              Core.applicationArgument = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.filter")),
-                  Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                    Core.lambdaParameter = (Core.Name "pr"),
-                    Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermVariable (Core.Name "p")),
-                        Core.applicationArgument = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "pr"))}))})),
+          Core.lambdaBody = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.fromList")),
+            Core.applicationArgument = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.filter")),
+                Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "pr"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "p")),
                       Core.applicationArgument = (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "pr"))}))}))}))})),
-                Core.applicationArgument = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.toList")),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))}))}))})),
-        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (
-            Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "filterWithKey on a map, defined via toList/fromList.")))]))})))}
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "pr"))}))})),
+                    Core.applicationArgument = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "pr"))}))}))}))})),
+              Core.applicationArgument = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.toList")),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))}))}))})))}
 findWithDefault :: Packaging.PrimitiveDefinition
 findWithDefault =
     Packaging.PrimitiveDefinition {
@@ -510,29 +489,24 @@ findWithDefault =
           Typing.resultType = (Core.TypeVariable (Core.Name "v"))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "def"),
+      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "def"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
+          Core.lambdaParameter = (Core.Name "k"),
           Core.lambdaDomain = Nothing,
           Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-            Core.lambdaParameter = (Core.Name "k"),
+            Core.lambdaParameter = (Core.Name "m"),
             Core.lambdaDomain = Nothing,
-            Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-              Core.lambdaParameter = (Core.Name "m"),
-              Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermApplication (Core.Application {
+            Core.lambdaBody = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.fromOptional")),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "def"))})),
+              Core.applicationArgument = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.fromOptional")),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name "def"))})),
-                Core.applicationArgument = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.lookup")),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "k"))})),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))}))}))})),
-        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (
-            Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "findWithDefault, defined in terms of lookup + fromOptional.")))]))})))}
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.lookup")),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "k"))})),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))}))}))})))}
 fromList :: Packaging.PrimitiveDefinition
 fromList =
     Packaging.PrimitiveDefinition {
@@ -738,37 +712,32 @@ map =
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v2"))}))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "f"),
+      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "f"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
+          Core.lambdaParameter = (Core.Name "m"),
           Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-            Core.lambdaParameter = (Core.Name "m"),
-            Core.lambdaDomain = Nothing,
-            Core.lambdaBody = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.fromList")),
+          Core.lambdaBody = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.fromList")),
+            Core.applicationArgument = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.map")),
+                Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "p"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermPair (
+                    Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}),
+                    (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                      Core.applicationArgument = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))}))))}))})),
               Core.applicationArgument = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.map")),
-                  Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                    Core.lambdaParameter = (Core.Name "p"),
-                    Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermPair (
-                      Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}),
-                      (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                        Core.applicationArgument = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))}))))}))})),
-                Core.applicationArgument = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.toList")),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))}))}))})),
-        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (
-            Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "map over values, defined via toList/fromList.")))]))})))}
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.toList")),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))}))}))})))}
 mapKeys :: Packaging.PrimitiveDefinition
 mapKeys =
     Packaging.PrimitiveDefinition {
@@ -816,37 +785,32 @@ mapKeys =
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))}))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "f"),
+      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "f"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
+          Core.lambdaParameter = (Core.Name "m"),
           Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-            Core.lambdaParameter = (Core.Name "m"),
-            Core.lambdaDomain = Nothing,
-            Core.lambdaBody = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.fromList")),
+          Core.lambdaBody = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.fromList")),
+            Core.applicationArgument = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.map")),
+                Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "p"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermPair (
+                    Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                      Core.applicationArgument = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))}),
+                    (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))))}))})),
               Core.applicationArgument = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.map")),
-                  Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                    Core.lambdaParameter = (Core.Name "p"),
-                    Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermPair (
-                      Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                        Core.applicationArgument = (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
-                          Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))}),
-                      (Core.TermApplication (Core.Application {
-                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
-                        Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))))}))})),
-                Core.applicationArgument = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.toList")),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))}))}))})),
-        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (
-            Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "map over keys, defined via toList/fromList.")))]))})))}
+                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.toList")),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))}))}))})))}
 member :: Packaging.PrimitiveDefinition
 member =
     Packaging.PrimitiveDefinition {

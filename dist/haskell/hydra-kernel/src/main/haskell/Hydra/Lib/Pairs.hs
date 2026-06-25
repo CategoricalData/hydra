@@ -29,7 +29,6 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-import qualified Data.Map as M
 bimap :: Packaging.PrimitiveDefinition
 bimap =
     Packaging.PrimitiveDefinition {
@@ -84,31 +83,26 @@ bimap =
             Core.pairTypeSecond = (Core.TypeVariable (Core.Name "d"))}))}},
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
-      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermAnnotated (Core.AnnotatedTerm {
-        Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "f"),
+      Packaging.primitiveDefinitionDefaultImplementation = (Just (Core.TermLambda (Core.Lambda {
+        Core.lambdaParameter = (Core.Name "f"),
+        Core.lambdaDomain = Nothing,
+        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
+          Core.lambdaParameter = (Core.Name "g"),
           Core.lambdaDomain = Nothing,
           Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-            Core.lambdaParameter = (Core.Name "g"),
+            Core.lambdaParameter = (Core.Name "p"),
             Core.lambdaDomain = Nothing,
-            Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-              Core.lambdaParameter = (Core.Name "p"),
-              Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermPair (
-                Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                  Core.applicationArgument = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))}),
-                (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
-                  Core.applicationArgument = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))}))))}))}))})),
-        Core.annotatedTermAnnotation = (Core.TermMap (M.fromList [
-          (
-            Core.TermVariable (Core.Name "description"),
-            (Core.TermLiteral (Core.LiteralString "Map over both elements of a pair, defined in terms of first and second.")))]))})))}
+            Core.lambdaBody = (Core.TermPair (
+              Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                Core.applicationArgument = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))}),
+              (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
+                Core.applicationArgument = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))}))))}))}))})))}
 first :: Packaging.PrimitiveDefinition
 first =
     Packaging.PrimitiveDefinition {

@@ -47,22 +47,18 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "a",
             "body": {
               "lambda": {
-                "parameter": "a",
+                "parameter": "b",
                 "body": {
-                  "lambda": {
-                    "parameter": "b",
-                    "body": {
+                  "application": {
+                    "function": {
                       "application": {
-                        "function": {
-                          "application": {
-                            "function": {"application": {"function": {"variable": "hydra.lib.logic.ifElse"}, "argument": {"variable": "a"}}},
-                            "argument": {"variable": "b"}}},
-                        "argument": {"literal": {"boolean": false}}}}}}}},
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Logical AND, defined in terms of ifElse."}}}]}}}}},
+                        "function": {"application": {"function": {"variable": "hydra.lib.logic.ifElse"}, "argument": {"variable": "a"}}},
+                        "argument": {"variable": "b"}}},
+                    "argument": {"literal": {"boolean": false}}}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.logic.ifElse",
@@ -96,19 +92,15 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "a",
             "body": {
-              "lambda": {
-                "parameter": "a",
-                "body": {
+              "application": {
+                "function": {
                   "application": {
-                    "function": {
-                      "application": {
-                        "function": {"application": {"function": {"variable": "hydra.lib.logic.ifElse"}, "argument": {"variable": "a"}}},
-                        "argument": {"literal": {"boolean": false}}}},
-                    "argument": {"literal": {"boolean": true}}}}}},
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Logical NOT, defined in terms of ifElse."}}}]}}}}},
+                    "function": {"application": {"function": {"variable": "hydra.lib.logic.ifElse"}, "argument": {"variable": "a"}}},
+                    "argument": {"literal": {"boolean": false}}}},
+                "argument": {"literal": {"boolean": true}}}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.logic.or",
@@ -128,19 +120,15 @@
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
-          "annotated": {
+          "lambda": {
+            "parameter": "a",
             "body": {
               "lambda": {
-                "parameter": "a",
+                "parameter": "b",
                 "body": {
-                  "lambda": {
-                    "parameter": "b",
-                    "body": {
+                  "application": {
+                    "function": {
                       "application": {
-                        "function": {
-                          "application": {
-                            "function": {"application": {"function": {"variable": "hydra.lib.logic.ifElse"}, "argument": {"variable": "a"}}},
-                            "argument": {"literal": {"boolean": true}}}},
-                        "argument": {"variable": "b"}}}}}}},
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Logical OR, defined in terms of ifElse."}}}]}}}}}]}
+                        "function": {"application": {"function": {"variable": "hydra.lib.logic.ifElse"}, "argument": {"variable": "a"}}},
+                        "argument": {"literal": {"boolean": true}}}},
+                    "argument": {"variable": "b"}}}}}}}}}]}

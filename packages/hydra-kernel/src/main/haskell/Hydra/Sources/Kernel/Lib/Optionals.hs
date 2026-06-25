@@ -7,253 +7,152 @@ import Hydra.Kernel
 import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Optionals as Optionals
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
+import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (apply, cases, compose, map)
 import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
-import           Prelude hiding ((++))
+import           Prelude hiding ((++), map, pure)
 
 
 ns :: ModuleName
 ns = ModuleName "hydra.lib.optionals"
 
-define :: String -> TypedTerm a -> TypedTermDefinition a
-define = definitionInModuleName ns
-
 module_ :: Module
 module_ = Module {
             moduleName = ns,
-            moduleDefinitions = definitions,
+            moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.optionals module.")}
   where
-    definitions = [
-      toPrimitive "Applicative apply for optionals: combine an optional function and an optional argument." applySig [
-        "apply(mf, mx) returns given(f x) when mf is given(f) and mx is given(x), and none if either is\
-        \ none.",
-        "The applicative apply for optionals; threads a function-in-context with a value-in-context.",
-        "Total. Corresponds to Haskell's (<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b."] apply_,
-      toPrimitive "Monadic bind for optionals." bindSig [
-        "bind(m, f) returns f(x) when m is given(x), and none when m is none.",
-        "The monadic bind for optionals; used to chain computations that may be absent.",
-        "Total. Corresponds to Haskell's (>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b."] bind_,
-      primNoDef "cases" "Case analysis on an optional, with cases-style argument order." casesSig [
-        "cases(m, def, f) returns f(x) when m is given(x), and def when m is none.",
-        "The fundamental eliminator for the optional type; every other primitive in this namespace can be\
-        \ derived from it. The optional value is the first argument, matching the convention for\
-        \ case-statement-like elimination.",
-        "Total. Argument order is (m, def, f) rather than Haskell's maybe :: (def, f, m)."],
-      toPrimitive "Concatenate optionals, keeping only the present values." catSig [
-        "cat(xs) returns the list of contained values from given elements of xs, in original order; none\
-        \ elements are discarded.",
-        "Total. Corresponds to Haskell's Data.Maybe.catMaybes :: [Maybe a] -> [a]."] cat_,
-      toPrimitive "Kleisli composition for optionals." composeSig [
-        "compose(f, g, x) returns the Kleisli composition of f and g applied to x: bind(f(x), g).",
-        "If either f or the second stage produces none, the result is none.",
-        "Total. Corresponds to Haskell's Kleisli composition for Maybe, (>=>) :: (a -> Maybe b) -> (b ->\
-        \ Maybe c) -> a -> Maybe c."] compose_,
-      toPrimitive "Return the value contained in an optional, falling back to a default if absent." fromOptionalSig [
-        "fromOptional(def, m) returns x when m is given(x), and def when m is none.",
-        "Total. Corresponds to Haskell's Data.Maybe.fromMaybe :: a -> Maybe a -> a."] fromOptional_,
-      toPrimitive "Test whether an optional is present (given)." isGivenSig [
-        "isGiven(m) returns true iff m is a given variant.",
-        "Total. Corresponds to Haskell's Data.Maybe.isJust :: Maybe a -> Bool."] isGiven_,
-      toPrimitive "Test whether an optional is absent (none)." isNoneSig [
-        "isNone(m) returns true iff m is the none variant.",
-        "Total. Corresponds to Haskell's Data.Maybe.isNothing :: Maybe a -> Bool."] isNone_,
-      toPrimitive "Map a function over an optional." mapSig [
-        "map(f, m) returns given(f x) when m is given(x), and none when m is none.",
-        "The functor instance for optionals.",
-        "Total. Corresponds to Haskell's fmap :: (a -> b) -> Maybe a -> Maybe b."] map_,
-      toPrimitive "Map a partial function over a list, keeping only the present results." mapOptionalSig [
-        "mapOptional(f, xs) applies f to each element of xs and returns the list of contained values from given\
-        \ results in original order; none results are discarded.",
-        "Total. Corresponds to Haskell's Data.Maybe.mapMaybe :: (a -> Maybe b) -> [a] -> [b]."] mapOptional_,
-      toPrimitive "Wrap a value in given." pureSig [
-        "pure(x) = given(x). The applicative pure for optionals.",
-        "Total. Corresponds to Haskell's pure :: a -> Maybe a / Just."] pure_,
-      toPrimitive "Convert an optional to a list: given x maps to [x], none to []." toListSig [
-        "toList(m) returns [x] when m is given(x), and the empty list when m is none.",
-        "Total. Corresponds to Haskell's Data.Maybe.maybeToList :: Maybe a -> [a]."] toList_]
-primNoDef :: String -> String -> TermSignature -> [String] -> Definition
-primNoDef localName description s comments =
-  toPrimitiveNoDefault description s (unqualifyName (QualifiedName (Just ns) localName)) comments
+    definitions = [apply, bind, cases, cat, compose, fromOptional, isGiven, isNone, map, mapOptional, pure, toList]
 
-sig :: TypeScheme -> TermSignature
-sig = typeSchemeToTermSignature
+define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
+define = primitiveInModule module_
 
--- Build a TermSignature, marking the value parameters at the given (0-based)
--- positions as lazy (thunked by coders that distinguish strict from lazy
--- evaluation).
-lazySig :: [Int] -> TypeScheme -> TermSignature
-lazySig idxs ts = markLazyParams idxs (sig ts)
+defineWithDefault :: String -> String -> TermSignature -> [String] -> TypedTerm a -> PrimitiveDefinition
+defineWithDefault = primitiveWithDefaultInModule module_
 
-markLazyParams :: [Int] -> TermSignature -> TermSignature
-markLazyParams idxs ts = ts {
-  termSignatureParameters =
-    zipWith (\i p -> if i `elem` idxs then p {parameterIsLazy = True} else p)
-      [0..] (termSignatureParameters ts)}
+-- Shared type variables
+tx, ty, tz :: Type
+tx = Types.var "x"
+ty = Types.var "y"
+tz = Types.var "z"
 
--- Signatures.
+apply :: PrimitiveDefinition
+apply = defineWithDefault "apply" "Applicative apply for optionals: combine an optional function and an optional argument."
+  (sig $ TypeScheme [Name "x", Name "y"]
+    (Types.optional (tx Types.~> ty) Types.~> Types.optional tx Types.~> Types.optional ty)
+    Nothing)
+  ["apply(mf, mx) returns given(f x) when mf is given(f) and mx is given(x), and none if either is\
+  \ none.",
+   "The applicative apply for optionals; threads a function-in-context with a value-in-context.",
+   "Total. Corresponds to Haskell's (<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b."]
+  ("mf" ~> "mx" ~> Optionals.bind (var "mf")
+    ("f" ~> Optionals.map ("x" ~> var "f" @@ var "x") (var "mx")))
 
--- apply : forall a b. Maybe (a -> b) -> Maybe a -> Maybe b
-applySig :: TermSignature
-applySig = sig $ TypeScheme [Name "x", Name "y"]
-  (Types.optional (Types.var "x" Types.~> Types.var "y") Types.~>
-   Types.optional (Types.var "x") Types.~>
-   Types.optional (Types.var "y"))
-  Nothing
+bind :: PrimitiveDefinition
+bind = defineWithDefault "bind" "Monadic bind for optionals."
+  (sig $ TypeScheme [Name "x", Name "y"]
+    (Types.optional tx Types.~> (tx Types.~> Types.optional ty) Types.~> Types.optional ty)
+    Nothing)
+  ["bind(m, f) returns f(x) when m is given(x), and none when m is none.",
+   "The monadic bind for optionals; used to chain computations that may be absent.",
+   "Total. Corresponds to Haskell's (>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b."]
+  ("m" ~> "f" ~> Optionals.cases (var "m") nothing (var "f"))
 
--- bind : forall a b. Maybe a -> (a -> Maybe b) -> Maybe b
-bindSig :: TermSignature
-bindSig = sig $ TypeScheme [Name "x", Name "y"]
-  (Types.optional (Types.var "x") Types.~>
-   (Types.var "x" Types.~> Types.optional (Types.var "y")) Types.~>
-   Types.optional (Types.var "y"))
-  Nothing
+-- The nothing-case value (position 1) is lazy: it is only evaluated when the optional is empty.
+cases :: PrimitiveDefinition
+cases = define "cases" "Case analysis on an optional, with cases-style argument order."
+  (lazySig [1] $ TypeScheme [Name "x", Name "y"]
+    (Types.optional tx Types.~> ty Types.~> (tx Types.~> ty) Types.~> ty)
+    Nothing)
+  ["cases(m, def, f) returns f(x) when m is given(x), and def when m is none.",
+   "The fundamental eliminator for the optional type; every other primitive in this namespace can be\
+   \ derived from it. The optional value is the first argument, matching the convention for\
+   \ case-statement-like elimination.",
+   "Total. Argument order is (m, def, f) rather than Haskell's maybe :: (def, f, m)."]
 
--- cases : forall a b. Maybe a -> b -> (a -> b) -> b
--- The nothing-case value (position 1) is lazy: it is only evaluated when the
--- optional is empty.
-casesSig :: TermSignature
-casesSig = lazySig [1] $ TypeScheme [Name "x", Name "y"]
-  (Types.optional (Types.var "x") Types.~>
-   Types.var "y" Types.~>
-   (Types.var "x" Types.~> Types.var "y") Types.~>
-   Types.var "y")
-  Nothing
-
--- cat : forall a. [Maybe a] -> [a]
-catSig :: TermSignature
-catSig = sig $ TypeScheme [Name "x"]
-  (Types.list (Types.optional (Types.var "x")) Types.~> Types.list (Types.var "x"))
-  Nothing
-
--- compose : forall a b c. (a -> Maybe b) -> (b -> Maybe c) -> a -> Maybe c
-composeSig :: TermSignature
-composeSig = sig $ TypeScheme [Name "x", Name "y", Name "z"]
-  ((Types.var "x" Types.~> Types.optional (Types.var "y")) Types.~>
-   (Types.var "y" Types.~> Types.optional (Types.var "z")) Types.~>
-   Types.var "x" Types.~>
-   Types.optional (Types.var "z"))
-  Nothing
-
--- fromOptional : forall a. a -> Maybe a -> a
--- The default value (position 0) is lazy: it is only evaluated when the
--- optional is empty.
-fromOptionalSig :: TermSignature
-fromOptionalSig = lazySig [0] $ TypeScheme [Name "x"]
-  (Types.var "x" Types.~> Types.optional (Types.var "x") Types.~> Types.var "x")
-  Nothing
-
--- isGiven / isNone : forall a. Maybe a -> Boolean
-isGivenSig :: TermSignature
-isGivenSig = sig $ TypeScheme [Name "x"]
-  (Types.optional (Types.var "x") Types.~> Types.boolean)
-  Nothing
-
-isNoneSig :: TermSignature
-isNoneSig = isGivenSig
-
--- mapOptional : forall a b. (a -> Maybe b) -> [a] -> [b]
-mapOptionalSig :: TermSignature
-mapOptionalSig = sig $ TypeScheme [Name "x", Name "y"]
-  ((Types.var "x" Types.~> Types.optional (Types.var "y")) Types.~>
-   Types.list (Types.var "x") Types.~>
-   Types.list (Types.var "y"))
-  Nothing
-
--- map : forall a b. (a -> b) -> Maybe a -> Maybe b
-mapSig :: TermSignature
-mapSig = sig $ TypeScheme [Name "x", Name "y"]
-  ((Types.var "x" Types.~> Types.var "y") Types.~>
-   Types.optional (Types.var "x") Types.~>
-   Types.optional (Types.var "y"))
-  Nothing
-
--- pure : forall a. a -> Maybe a
-pureSig :: TermSignature
-pureSig = sig $ TypeScheme [Name "x"]
-  (Types.var "x" Types.~> Types.optional (Types.var "x"))
-  Nothing
-
--- toList : forall a. Maybe a -> [a]
-toListSig :: TermSignature
-toListSig = sig $ TypeScheme [Name "x"]
-  (Types.optional (Types.var "x") Types.~> Types.list (Types.var "x"))
-  Nothing
-
--- Default implementations.
-
--- apply mf mx = bind mf (\f -> map (\x -> f x) mx)
-apply_ :: TypedTermDefinition (Maybe (a -> b) -> Maybe a -> Maybe b)
-apply_ = define "apply" $
-  doc "Applicative apply for optionals, defined in terms of bind and map." $
-  "mf" ~> "mx" ~> Optionals.bind (var "mf")
-    ("f" ~> Optionals.map ("x" ~> var "f" @@ var "x") (var "mx"))
-
--- bind m f = cases m Nothing f
-bind_ :: TypedTermDefinition (Maybe a -> (a -> Maybe b) -> Maybe b)
-bind_ = define "bind" $
-  doc "Monadic bind for optionals, defined in terms of cases." $
-  "m" ~> "f" ~> Optionals.cases (var "m") nothing (var "f")
-
--- cat xs = foldr (\m acc -> cases m acc (\v -> v : acc)) [] xs
-cat_ :: TypedTermDefinition ([Maybe a] -> [a])
-cat_ = define "cat" $
-  doc "Catenate a list of optionals, keeping only the present values." $
-  "xs" ~> Lists.foldr
+cat :: PrimitiveDefinition
+cat = defineWithDefault "cat" "Concatenate optionals, keeping only the present values."
+  (sig $ TypeScheme [Name "x"]
+    (Types.list (Types.optional tx) Types.~> Types.list tx)
+    Nothing)
+  ["cat(xs) returns the list of contained values from given elements of xs, in original order; none\
+  \ elements are discarded.",
+   "Total. Corresponds to Haskell's Data.Maybe.catMaybes :: [Maybe a] -> [a]."]
+  ("xs" ~> Lists.foldr
     ("m" ~> "acc" ~> Optionals.cases (var "m")
       (var "acc" :: TypedTerm [a])
       ("v" ~> Lists.cons (var "v") (var "acc")))
     (list ([] :: [TypedTerm a]))
-    (var "xs")
+    (var "xs"))
 
--- compose f g x = bind (f x) g
-compose_ :: TypedTermDefinition ((a -> Maybe b) -> (b -> Maybe c) -> a -> Maybe c)
-compose_ = define "compose" $
-  doc "Kleisli composition for optionals, defined in terms of bind." $
-  "f" ~> "g" ~> "x" ~> Optionals.bind (var "f" @@ var "x") (var "g")
+compose :: PrimitiveDefinition
+compose = defineWithDefault "compose" "Kleisli composition for optionals."
+  (sig $ TypeScheme [Name "x", Name "y", Name "z"]
+    ((tx Types.~> Types.optional ty) Types.~> (ty Types.~> Types.optional tz) Types.~> tx Types.~> Types.optional tz)
+    Nothing)
+  ["compose(f, g, x) returns the Kleisli composition of f and g applied to x: bind(f(x), g).",
+   "If either f or the second stage produces none, the result is none.",
+   "Total. Corresponds to Haskell's Kleisli composition for Maybe, (>=>) :: (a -> Maybe b) -> (b ->\
+   \ Maybe c) -> a -> Maybe c."]
+  ("f" ~> "g" ~> "x" ~> Optionals.bind (var "f" @@ var "x") (var "g"))
 
--- fromOptional def m = cases m def (\x -> x)
-fromOptional_ :: TypedTermDefinition (a -> Maybe a -> a)
-fromOptional_ = define "fromOptional" $
-  doc "Return the contained value or a default, defined in terms of cases." $
-  "def" ~> "m" ~> Optionals.cases (var "m") (var "def" :: TypedTerm a) ("x" ~> var "x")
+-- The default value (position 0) is lazy: it is only evaluated when the optional is empty.
+fromOptional :: PrimitiveDefinition
+fromOptional = defineWithDefault "fromOptional" "Return the value contained in an optional, falling back to a default if absent."
+  (lazySig [0] $ TypeScheme [Name "x"]
+    (tx Types.~> Types.optional tx Types.~> tx)
+    Nothing)
+  ["fromOptional(def, m) returns x when m is given(x), and def when m is none.",
+   "Total. Corresponds to Haskell's Data.Maybe.fromMaybe :: a -> Maybe a -> a."]
+  ("def" ~> "m" ~> Optionals.cases (var "m") (var "def" :: TypedTerm a) ("x" ~> var "x"))
 
--- isGiven m = cases m false (\_ -> true)
-isGiven_ :: TypedTermDefinition (Maybe a -> Bool)
-isGiven_ = define "isGiven" $
-  doc "Test for presence, defined in terms of cases." $
-  "m" ~> Optionals.cases (var "m") false ("_" ~> true)
+isGiven :: PrimitiveDefinition
+isGiven = defineWithDefault "isGiven" "Test whether an optional is present (given)."
+  (sig $ TypeScheme [Name "x"] (Types.optional tx Types.~> Types.boolean) Nothing)
+  ["isGiven(m) returns true iff m is a given variant.",
+   "Total. Corresponds to Haskell's Data.Maybe.isJust :: Maybe a -> Bool."]
+  ("m" ~> Optionals.cases (var "m") false ("_" ~> true))
 
--- isNone m = cases m true (\_ -> false)
-isNone_ :: TypedTermDefinition (Maybe a -> Bool)
-isNone_ = define "isNone" $
-  doc "Test for absence, defined in terms of cases." $
-  "m" ~> Optionals.cases (var "m") true ("_" ~> false)
+isNone :: PrimitiveDefinition
+isNone = defineWithDefault "isNone" "Test whether an optional is absent (none)."
+  (sig $ TypeScheme [Name "x"] (Types.optional tx Types.~> Types.boolean) Nothing)
+  ["isNone(m) returns true iff m is the none variant.",
+   "Total. Corresponds to Haskell's Data.Maybe.isNothing :: Maybe a -> Bool."]
+  ("m" ~> Optionals.cases (var "m") true ("_" ~> false))
 
--- mapOptional f xs = cat (Lists.map f xs)
-mapOptional_ :: TypedTermDefinition ((a -> Maybe b) -> [a] -> [b])
-mapOptional_ = define "mapOptional" $
-  doc "Map a partial function and keep only the present results, defined in terms of lists.map and cat." $
-  "f" ~> "xs" ~> Optionals.cat (Lists.map (var "f") (var "xs"))
+map :: PrimitiveDefinition
+map = defineWithDefault "map" "Map a function over an optional."
+  (sig $ TypeScheme [Name "x", Name "y"]
+    ((tx Types.~> ty) Types.~> Types.optional tx Types.~> Types.optional ty)
+    Nothing)
+  ["map(f, m) returns given(f x) when m is given(x), and none when m is none.",
+   "The functor instance for optionals.",
+   "Total. Corresponds to Haskell's fmap :: (a -> b) -> Maybe a -> Maybe b."]
+  ("f" ~> "m" ~> Optionals.cases (var "m") nothing ("x" ~> just (var "f" @@ var "x")))
 
--- map f m = cases m Nothing (\x -> Just (f x))
-map_ :: TypedTermDefinition ((a -> b) -> Maybe a -> Maybe b)
-map_ = define "map" $
-  doc "Map a function over an optional, defined in terms of cases." $
-  "f" ~> "m" ~> Optionals.cases (var "m") nothing ("x" ~> just (var "f" @@ var "x"))
+mapOptional :: PrimitiveDefinition
+mapOptional = defineWithDefault "mapOptional" "Map a partial function over a list, keeping only the present results."
+  (sig $ TypeScheme [Name "x", Name "y"]
+    ((tx Types.~> Types.optional ty) Types.~> Types.list tx Types.~> Types.list ty)
+    Nothing)
+  ["mapOptional(f, xs) applies f to each element of xs and returns the list of contained values from given\
+  \ results in original order; none results are discarded.",
+   "Total. Corresponds to Haskell's Data.Maybe.mapMaybe :: (a -> Maybe b) -> [a] -> [b]."]
+  ("f" ~> "xs" ~> Optionals.cat (Lists.map (var "f") (var "xs")))
 
--- pure x = Just x
-pure_ :: TypedTermDefinition (a -> Maybe a)
-pure_ = define "pure" $
-  doc "Wrap a value in given." $
-  "x" ~> just (var "x")
+pure :: PrimitiveDefinition
+pure = defineWithDefault "pure" "Wrap a value in given."
+  (sig $ TypeScheme [Name "x"] (tx Types.~> Types.optional tx) Nothing)
+  ["pure(x) = given(x). The applicative pure for optionals.",
+   "Total. Corresponds to Haskell's pure :: a -> Maybe a / Just."]
+  ("x" ~> just (var "x"))
 
--- toList m = cases m [] (\x -> [x])
-toList_ :: TypedTermDefinition (Maybe a -> [a])
-toList_ = define "toList" $
-  doc "Convert an optional to a list, defined in terms of cases." $
-  "m" ~> Optionals.cases (var "m")
+toList :: PrimitiveDefinition
+toList = defineWithDefault "toList" "Convert an optional to a list: given x maps to [x], none to []."
+  (sig $ TypeScheme [Name "x"] (Types.optional tx Types.~> Types.list tx) Nothing)
+  ["toList(m) returns [x] when m is given(x), and the empty list when m is none.",
+   "Total. Corresponds to Haskell's Data.Maybe.maybeToList :: Maybe a -> [a]."]
+  ("m" ~> Optionals.cases (var "m")
     (list ([] :: [TypedTerm a]))
-    ("x" ~> list [var "x"])
+    ("x" ~> list [var "x"]))
