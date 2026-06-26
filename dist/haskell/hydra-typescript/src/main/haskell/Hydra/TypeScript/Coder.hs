@@ -619,7 +619,11 @@ importsToText kind currentNs names =
                         targetSegs = Lists.drop 1 (Strings.splitOn "." (Packaging.unModuleName ns))
                         targetIsTest =
                                 Logic.and (Logic.not (Lists.null targetSegs)) (Equality.equal (Optionals.fromOptional "" (Lists.maybeHead targetSegs)) "test")
-                        targetPath = Strings.intercalate "/" targetSegs
+                        targetPathSegs =
+                                Logic.ifElse (Equality.equal (Optionals.fromOptional "" (Lists.maybeHead targetSegs)) "lib") (Lists.concat2 [
+                                  "overlay",
+                                  "typescript"] targetSegs) targetSegs
+                        targetPath = Strings.intercalate "/" targetPathSegs
                         upPrefix =
                                 Logic.ifElse (Logic.and currentIsTest (Logic.not targetIsTest)) (Strings.cat2 baseUpPrefix "../../../main/typescript/hydra/") baseUpPrefix
                         nsSlug = Strings.intercalate "_" targetSegs

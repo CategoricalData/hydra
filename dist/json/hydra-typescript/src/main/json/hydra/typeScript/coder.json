@@ -7009,84 +7009,121 @@
                                                                                           "let": {
                                                                                             "bindings": [
                                                                                               {
-                                                                                                "name": "targetPath",
+                                                                                                "name": "targetPathSegs",
                                                                                                 "term": {
                                                                                                   "application": {
-                                                                                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": "/"}}}},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"list": {"literal": {"string": {}}}}}},
+                                                                                                            "argument": {
+                                                                                                              "application": {
+                                                                                                                "function": {
+                                                                                                                  "application": {
+                                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}},
+                                                                                                                    "argument": {
+                                                                                                                      "application": {
+                                                                                                                        "function": {
+                                                                                                                          "application": {
+                                                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"literal": {"string": {}}}}},
+                                                                                                                            "argument": {"literal": {"string": ""}}}},
+                                                                                                                        "argument": {
+                                                                                                                          "application": {
+                                                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"literal": {"string": {}}}}},
+                                                                                                                            "argument": {"variable": "targetSegs"}}}}}}},
+                                                                                                                "argument": {"literal": {"string": "lib"}}}}}},
+                                                                                                        "argument": {
+                                                                                                          "application": {
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"literal": {"string": {}}}}},
+                                                                                                                "argument": {"list": [{"literal": {"string": "overlay"}}, {"literal": {"string": "typescript"}}]}}},
+                                                                                                            "argument": {"variable": "targetSegs"}}}}},
                                                                                                     "argument": {"variable": "targetSegs"}}},
-                                                                                                "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
+                                                                                                "typeScheme": {"variables": [], "body": {"list": {"literal": {"string": {}}}}}}],
                                                                                             "body": {
                                                                                               "let": {
                                                                                                 "bindings": [
                                                                                                   {
-                                                                                                    "name": "upPrefix",
+                                                                                                    "name": "targetPath",
                                                                                                     "term": {
                                                                                                       "application": {
-                                                                                                        "function": {
-                                                                                                          "application": {
-                                                                                                            "function": {
-                                                                                                              "application": {
-                                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}},
-                                                                                                                "argument": {
-                                                                                                                  "application": {
-                                                                                                                    "function": {"application": {"function": {"variable": "hydra.lib.logic.and"}, "argument": {"variable": "currentIsTest"}}},
-                                                                                                                    "argument": {"application": {"function": {"variable": "hydra.lib.logic.not"}, "argument": {"variable": "targetIsTest"}}}}}}},
-                                                                                                            "argument": {
-                                                                                                              "application": {
-                                                                                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "baseUpPrefix"}}},
-                                                                                                                "argument": {"literal": {"string": "../../../main/typescript/hydra/"}}}}}},
-                                                                                                        "argument": {"variable": "baseUpPrefix"}}},
+                                                                                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": "/"}}}},
+                                                                                                        "argument": {"variable": "targetPathSegs"}}},
                                                                                                     "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
                                                                                                 "body": {
                                                                                                   "let": {
                                                                                                     "bindings": [
                                                                                                       {
-                                                                                                        "name": "nsSlug",
+                                                                                                        "name": "upPrefix",
                                                                                                         "term": {
                                                                                                           "application": {
-                                                                                                            "function": {"application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": "_"}}}},
-                                                                                                            "argument": {"variable": "targetSegs"}}},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "function": {
+                                                                                                                  "application": {
+                                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}},
+                                                                                                                    "argument": {
+                                                                                                                      "application": {
+                                                                                                                        "function": {"application": {"function": {"variable": "hydra.lib.logic.and"}, "argument": {"variable": "currentIsTest"}}},
+                                                                                                                        "argument": {"application": {"function": {"variable": "hydra.lib.logic.not"}, "argument": {"variable": "targetIsTest"}}}}}}},
+                                                                                                                "argument": {
+                                                                                                                  "application": {
+                                                                                                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "baseUpPrefix"}}},
+                                                                                                                    "argument": {"literal": {"string": "../../../main/typescript/hydra/"}}}}}},
+                                                                                                            "argument": {"variable": "baseUpPrefix"}}},
                                                                                                         "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
                                                                                                     "body": {
                                                                                                       "let": {
                                                                                                         "bindings": [
                                                                                                           {
-                                                                                                            "name": "moduleAlias",
+                                                                                                            "name": "nsSlug",
                                                                                                             "term": {
                                                                                                               "application": {
-                                                                                                                "function": {
+                                                                                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": "_"}}}},
+                                                                                                                "argument": {"variable": "targetSegs"}}},
+                                                                                                            "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
+                                                                                                        "body": {
+                                                                                                          "let": {
+                                                                                                            "bindings": [
+                                                                                                              {
+                                                                                                                "name": "moduleAlias",
+                                                                                                                "term": {
                                                                                                                   "application": {
                                                                                                                     "function": {
                                                                                                                       "application": {
-                                                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}},
+                                                                                                                        "function": {
+                                                                                                                          "application": {
+                                                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}},
+                                                                                                                            "argument": {
+                                                                                                                              "application": {
+                                                                                                                                "function": {
+                                                                                                                                  "application": {
+                                                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}},
+                                                                                                                                    "argument": {"variable": "kind"}}},
+                                                                                                                                "argument": {"literal": {"string": "type"}}}}}},
                                                                                                                         "argument": {
                                                                                                                           "application": {
-                                                                                                                            "function": {
-                                                                                                                              "application": {
-                                                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}},
-                                                                                                                                "argument": {"variable": "kind"}}},
-                                                                                                                            "argument": {"literal": {"string": "type"}}}}}},
+                                                                                                                            "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "$type_"}}}},
+                                                                                                                            "argument": {"variable": "nsSlug"}}}}},
                                                                                                                     "argument": {
                                                                                                                       "application": {
-                                                                                                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "$type_"}}}},
+                                                                                                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "$mod_"}}}},
                                                                                                                         "argument": {"variable": "nsSlug"}}}}},
+                                                                                                                "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
+                                                                                                            "body": {
+                                                                                                              "application": {
+                                                                                                                "function": {"variable": "hydra.lib.strings.cat"},
                                                                                                                 "argument": {
-                                                                                                                  "application": {
-                                                                                                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "$mod_"}}}},
-                                                                                                                    "argument": {"variable": "nsSlug"}}}}},
-                                                                                                            "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
-                                                                                                        "body": {
-                                                                                                          "application": {
-                                                                                                            "function": {"variable": "hydra.lib.strings.cat"},
-                                                                                                            "argument": {
-                                                                                                              "list": [
-                                                                                                                {"variable": "importKeyword"},
-                                                                                                                {"literal": {"string": " * as "}},
-                                                                                                                {"variable": "moduleAlias"},
-                                                                                                                {"literal": {"string": " from \""}},
-                                                                                                                {"variable": "upPrefix"},
-                                                                                                                {"variable": "targetPath"},
-                                                                                                                {"literal": {"string": ".js\";\n"}}]}}}}}}}}}}}}}}}}}}}}}}},
+                                                                                                                  "list": [
+                                                                                                                    {"variable": "importKeyword"},
+                                                                                                                    {"literal": {"string": " * as "}},
+                                                                                                                    {"variable": "moduleAlias"},
+                                                                                                                    {"literal": {"string": " from \""}},
+                                                                                                                    {"variable": "upPrefix"},
+                                                                                                                    {"variable": "targetPath"},
+                                                                                                                    {"literal": {"string": ".js\";\n"}}]}}}}}}}}}}}}}}}}}}}}}}}}},
                                                                 "argument": {
                                                                   "application": {
                                                                     "function": {
