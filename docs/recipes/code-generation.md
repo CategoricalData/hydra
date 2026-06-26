@@ -37,20 +37,24 @@ The authoring host language varies per package:
 |---------|---------------------------|------------------|
 | hydra-kernel | Haskell (`src/main/haskell/Hydra/Sources/Kernel/`) | `heads/haskell/bin/sync-haskell.sh` (Phase 1 of) |
 | hydra-haskell | Haskell (`src/main/haskell/Hydra/Sources/Haskell/`) | (same as above) |
+| **hydra-jvm** | **Java (`src/main/java/hydra/sources/jvm/`)** | (Phase 5 via `bin/generate-hydra-java-from-java.sh`) |
 | **hydra-java** | **Java (`src/main/java/hydra/sources/java/`)** | `bin/generate-hydra-java-from-java.sh` |
 | **hydra-python** | **Python (`src/main/python/hydra/sources/python/`)** | `bin/generate-hydra-python-from-python.sh` |
 | hydra-scala, hydra-lisp, hydra-pg, hydra-rdf, hydra-ext, ... | Haskell (`src/main/haskell/...`) | (Haskell Phase 1) |
 
-> **hydra-java and hydra-python are host-native, sole source of truth (#346/#370):**
+> **hydra-jvm, hydra-java, and hydra-python are host-native, sole source of truth (#346/#370/#505):**
 > their coder sources are authored in Java and Python under
-> `packages/hydra-{java,python}/src/main/{java,python}/hydra/sources/`. The legacy
+> `packages/hydra-{jvm,java,python}/src/main/{java,python}/hydra/sources/`. The legacy
 > Haskell DSL copies have been **deleted** — there is no fallback. The native
 > drivers (`bin/generate-hydra-{java,python}-from-{java,python}.sh`, run by `bin/sync.sh`
-> Phase 5) are the sole writers of `dist/json/hydra-{java,python}/`, and they
-> default to the **published host** (Maven `hydra-java` / PyPI `hydra-python`, version
-> from `hydra.json` `hostVersion`). `update-json-main` still *loads* the resulting
-> `hydra.{java,python}.*` JSON into its inference universe so cross-package references
-> resolve (e.g. `hydra-scala` → `hydra.java.serde`), but no longer *generates* it. See
+> Phase 5) are the sole writers of `dist/json/hydra-{jvm,java,python}/`. `hydra-jvm` is
+> generated in the same Phase 5 pass as `hydra-java` (it contains shared JVM helpers
+> depended on by both `hydra-java` and `hydra-scala`). All three packages default to
+> the **published host** (Maven `hydra-java` / PyPI `hydra-python`, version from
+> `hydra.json` `hostVersion`). `update-json-main` still *loads* the resulting
+> `hydra.{jvm,java,python}.*` JSON into its inference universe so cross-package
+> references resolve (e.g. `hydra-scala` → `hydra.jvm.serde`), but no longer
+> *generates* it. See
 > [The build system § Consuming published hosts](../build-system.md#consuming-published-hosts)
 > and [Migration shims](migration-shims.md).
 
@@ -58,7 +62,7 @@ The authoring host language varies per package:
 
 Generated code is partitioned across per-package `dist/<lang>/<pkg>/`
 trees rather than a single flat `dist/<lang>/` directory. Each package
-(hydra-kernel, hydra-haskell, hydra-java, hydra-python, hydra-scala,
+(hydra-kernel, hydra-haskell, hydra-jvm, hydra-java, hydra-python, hydra-scala,
 hydra-lisp, hydra-pg, hydra-rdf, hydra-coq, hydra-typescript, hydra-wasm,
 hydra-ext) owns a range of module names, and the generated output for
 those module names lands under that package's directory.
@@ -360,7 +364,7 @@ change them for the worse:
 
 `writeDerivedJsonPackageSplit` (`Hydra.Generation`) writes all three categories without inference.
 Relatedly, the per-package main write pass (`inferAndWriteByPackage`) **skips the native-owned
-packages** `hydra-java`/`hydra-python` entirely (`inferTargets = []`): their already-derived
+packages** `hydra-jvm`/`hydra-java`/`hydra-python` entirely (`inferTargets = []`): their already-derived
 `hydra.dsl.{java,python}.*` wrappers must not be re-inferred (it recorrupts them, as in #466), and
 inferring their whole native universe fails on by-name kernel refs; their schemes are harvested
 from the JSON signatures for free.
