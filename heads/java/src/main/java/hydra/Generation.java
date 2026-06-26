@@ -481,6 +481,7 @@ public class Generation {
     private static final List<Pair<String, String>> PACKAGE_PREFIXES = java.util.Arrays.asList(
         // Coder packages (main runtime modules)
         new Pair<>("hydra.haskell.",              "hydra-haskell"),
+        new Pair<>("hydra.jvm.",                  "hydra-jvm"),
         new Pair<>("hydra.java.",                 "hydra-java"),
         new Pair<>("hydra.python.",               "hydra-python"),
         new Pair<>("hydra.scala.",                "hydra-scala"),

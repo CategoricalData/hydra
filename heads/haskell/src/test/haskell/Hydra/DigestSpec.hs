@@ -33,10 +33,14 @@ spec = do
 
   H.describe "discoverModuleNameFiles covers native (.java/.py) coder sources (#400)" $ do
 
-    -- The eight native-owned Java coder modules. All must be discovered, or
-    -- a change to that module's .java source would not invalidate the
-    -- hydra-java per-package digest.
-    let javaModules =
+    -- The one native-owned JVM common module (#505). Must be discovered so
+    -- edits to Serde.java invalidate the hydra-jvm per-package digest.
+    let jvmModules =
+          [ "hydra.jvm.serde" ]
+        -- The eight native-owned Java coder modules. All must be discovered, or
+        -- a change to that module's .java source would not invalidate the
+        -- hydra-java per-package digest.
+        javaModules =
           [ "hydra.java.coder", "hydra.java.environment", "hydra.java.language"
           , "hydra.java.names", "hydra.java.serde", "hydra.java.syntax"
           , "hydra.java.testing", "hydra.java.utils" ]
@@ -45,6 +49,9 @@ spec = do
           [ "hydra.python.coder", "hydra.python.environment", "hydra.python.language"
           , "hydra.python.names", "hydra.python.serde", "hydra.python.syntax"
           , "hydra.python.testing", "hydra.python.utils" ]
+
+    H.it "finds every hydra.jvm.* native module" $
+      mapM_ (\ns -> M.member (ModuleName ns) nsFiles `H.shouldBe` True) jvmModules
 
     H.it "finds every hydra.java.* native module" $
       mapM_ (\ns -> M.member (ModuleName ns) nsFiles `H.shouldBe` True) javaModules

@@ -16,7 +16,7 @@
 ;; like the rest of the flat emacs-lisp runtime). The kernel they depend on is already loaded by the
 ;; time this registry loads (hydra-load-gen-main runs first).
 (dolist (sub '("chars" "effects" "eithers" "equality" "files" "lists" "literals" "logic" "maps"
-               "math" "optionals" "pairs" "regex" "sets" "strings" "system" "text"))
+               "math" "optionals" "pairs" "regex" "sets" "strings" "text"))
   (hydra-load-file (expand-file-name (concat "lib/" sub ".el") hydra-gen-main-dir)))
 
 ;; ============================================================================
@@ -846,7 +846,6 @@ The def var is loaded globally by the dolist above; callers pass the bare def va
     (register-regex)
     (register-sets)
     (register-strings)
-    (register-system)
     (register-text)
     (register-annotations)))
 

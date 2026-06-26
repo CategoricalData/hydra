@@ -40,7 +40,6 @@
           (prefix (hydra lib regex) def:)
           (prefix (hydra lib sets) def:)
           (prefix (hydra lib strings) def:)
-          (prefix (hydra lib system) def:)
           (prefix (hydra lib text) def:))
   (export standard-library)
   (begin
@@ -791,7 +790,6 @@
         (register-regex)
         (register-sets)
         (register-strings)
-        (register-system)
         (register-text)))
 
 )

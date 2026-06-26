@@ -41,7 +41,6 @@ import qualified Hydra.Sources.Kernel.Lib.Pairs             as LibPairs
 import qualified Hydra.Sources.Kernel.Lib.Regex             as LibRegex
 import qualified Hydra.Sources.Kernel.Lib.Sets              as LibSets
 import qualified Hydra.Sources.Kernel.Lib.Strings           as LibStrings
-import qualified Hydra.Sources.Kernel.Lib.System            as LibSystem
 import qualified Hydra.Sources.Kernel.Lib.Text              as LibText
 import qualified Hydra.Sources.Kernel.Terms.Names           as Names
 import qualified Hydra.Sources.Kernel.Terms.Parsers         as Parsers
@@ -112,7 +111,6 @@ kernelPrimaryTermsModules = [
   LibRegex.module_,
   LibSets.module_,
   LibStrings.module_,
-  LibSystem.module_,
   LibText.module_,
   Literals.module_,
 

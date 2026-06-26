@@ -151,9 +151,25 @@ fi
 # case the canonical dist/json is untouched.
 if [ "$ACTUAL_OUT_ROOT" = "$CANON_ROOT" ]; then
     echo ""
-    echo "=== Refreshing per-package input digest for hydra-java (#469) ==="
+    echo "=== Writing manifest.json for hydra-jvm (#505) ==="
+    JVM_MANIFEST_DIR="$HYDRA_ROOT/dist/json/hydra-jvm/src/main/json"
+    mkdir -p "$JVM_MANIFEST_DIR"
+    cat > "$JVM_MANIFEST_DIR/manifest.json" <<'JSON'
+{
+  "dslModules": [],
+  "mainModules": ["hydra.jvm.serde"],
+  "manifestFormatVersion": 1,
+  "package": "hydra-jvm",
+  "testModules": []}
+JSON
+
+    echo ""
+    echo "=== Refreshing per-package input digests for hydra-jvm and hydra-java (#469/#505) ==="
     (cd "$HYDRA_ROOT/heads/haskell" && \
      stack build hydra:exe:digest-check >/dev/null && \
+     stack exec digest-check -- refresh-input \
+       --package hydra-jvm \
+       --dist-json-root "$HYDRA_ROOT/dist/json" && \
      stack exec digest-check -- refresh-input \
        --package hydra-java \
        --dist-json-root "$HYDRA_ROOT/dist/json")

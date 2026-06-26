@@ -20,17 +20,17 @@ sourceSets {
         java {
             srcDirs += file("$projectDir/../../dist/java/hydra-kernel/src/main/java")
             srcDirs += file("$projectDir/../../dist/java/hydra-haskell/src/main/java")
+            srcDirs += file("$projectDir/../../dist/java/hydra-jvm/src/main/java")
             srcDirs += file("$projectDir/../../dist/java/hydra-java/src/main/java")
             srcDirs += file("$projectDir/../../dist/java/hydra-python/src/main/java")
             srcDirs += file("$projectDir/../../dist/java/hydra-scala/src/main/java")
             srcDirs += file("$projectDir/../../dist/java/hydra-lisp/src/main/java")
             srcDirs += file("$projectDir/../../dist/java/hydra-typescript/src/main/java")
-            // Java-language DSL sources for the hydra-java coder
-            // (originally issue #344 self-hosting): packages/hydra-java/
-            // src/main/java/ mirrors packages/hydra-python/src/main/python/
-            // for the Python path. Each class under hydra/sources/java/*
-            // exposes a static module_ : Module field; the UpdateJavaJson
-            // driver discovers them via reflection.
+            // Java-language DSL sources for hydra-jvm and hydra-java (#505, #344).
+            // Each class under hydra/sources/{jvm,java}/* exposes a static
+            // module_ : Module field; the UpdateJavaJson driver discovers them via
+            // reflection. hydra-jvm must precede hydra-java (dependency order).
+            srcDirs += file("$projectDir/../hydra-jvm/src/main/java")
             srcDirs += file("$projectDir/src/main/java")
             // hydra-pg, hydra-rdf, hydra-ext are NOT included here — they're
             // independent Maven artifacts (published per-package from their

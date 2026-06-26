@@ -86,6 +86,11 @@ hydraExtPackageModules = ExtManifest.mainModules
 hydraGoModules :: [Module]
 hydraGoModules = GoManifest.mainModules
 
+-- | hydra-jvm is native-owned (#505): its canonical hydra.jvm.* JSON is produced
+-- by the Java driver (UpdateJavaJson) alongside hydra-java. No Haskell DSL sources.
+hydraJvmModules :: [Module]
+hydraJvmModules = []
+
 -- | hydra-java is no longer sourced from a Haskell DSL (#346/#370), exactly like
 -- hydra-python. Its canonical hydra.java.* and hydra.dsl.java.* JSON is produced
 -- solely by the native Java driver (hydra.UpdateJavaJson via
@@ -194,6 +199,7 @@ extRoutingInput =
   , ("hydra-coq",        map moduleName hydraCoqModules)
   , ("hydra-ext",        map moduleName hydraExtPackageModules)
   , ("hydra-go",         map moduleName hydraGoModules)
+  , ("hydra-jvm",        map moduleName hydraJvmModules)
   , ("hydra-java",       map moduleName hydraJavaModules)
   , ("hydra-typescript", map moduleName hydraTypeScriptModules)
   , ("hydra-lisp",       map moduleName hydraLispModules)
@@ -261,14 +267,14 @@ graphsonLegacyModules = [
 -- ----------------------------------------------------------------------
 
 -- | Coder modules for the bootstrap-relevant languages: Haskell, Java, Python,
---   Scala, and Lisp.
+--   Scala, and Lisp. JVM common modules (#505) are included alongside Java.
 hydraBootstrapCoderModules :: [Module]
 hydraBootstrapCoderModules =
-  haskellModules ++ hydraJavaModules ++ hydraPythonModules ++ hydraScalaModules ++ hydraLispModules
+  haskellModules ++ hydraJvmModules ++ hydraJavaModules ++ hydraPythonModules ++ hydraScalaModules ++ hydraLispModules
 
--- | Essential hydra-ext modules: the Java and Python coder families.
+-- | Essential hydra-ext modules: the JVM-common, Java, and Python coder families.
 hydraExtEssentialModules :: [Module]
-hydraExtEssentialModules = hydraJavaModules ++ hydraPythonModules
+hydraExtEssentialModules = hydraJvmModules ++ hydraJavaModules ++ hydraPythonModules
 
 -- | The full union of modules in the ext universe, as today.
 --
@@ -281,6 +287,7 @@ hydraExtModules =
      hydraCoqModules
   ++ hydraExtPackageModules
   ++ hydraGoModules
+  ++ hydraJvmModules
   ++ hydraJavaModules
   ++ hydraTypeScriptModules
   ++ hydraLispModules

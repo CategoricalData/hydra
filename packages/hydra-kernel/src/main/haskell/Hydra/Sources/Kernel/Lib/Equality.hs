@@ -31,6 +31,8 @@ define = primitiveInModule module_
 defineWithDefault :: String -> String -> TermSignature -> [String] -> TypedTerm a -> PrimitiveDefinition
 defineWithDefault = primitiveWithDefaultInModule module_
 
+-- Signatures (derived from Hydra.Overlay.Haskell.Libraries primN declarations).
+
 -- Shared type variable
 tx :: Type
 tx = Types.var "x"
