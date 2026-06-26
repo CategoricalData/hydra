@@ -19,7 +19,6 @@ import qualified Hydra.Overlay.Haskell.Lib.Equality as Equality
 import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
 import qualified Hydra.Overlay.Haskell.Lib.Literals as Literals
 import qualified Hydra.Overlay.Haskell.Lib.Logic as Logic
-import qualified Hydra.Overlay.Haskell.Lib.Math as Math
 import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Overlay.Haskell.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging

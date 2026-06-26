@@ -14,6 +14,7 @@
     {"module": "hydra.error.core"},
     {"module": "hydra.error.file"},
     {"module": "hydra.error.packaging"},
+    {"module": "hydra.error.system"},
     {"module": "hydra.errors"},
     {"module": "hydra.file"},
     {"module": "hydra.graph"},
@@ -22,6 +23,7 @@
     {"module": "hydra.parsing"},
     {"module": "hydra.query"},
     {"module": "hydra.relational"},
+    {"module": "hydra.system"},
     {"module": "hydra.tabular"},
     {"module": "hydra.testing"},
     {"module": "hydra.time"},
@@ -272,6 +274,9 @@
                 {
                   "key": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.lib.strings"}}}},
                   "value": {"literal": {"string": "strings"}}},
+                {
+                  "key": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.lib.system"}}}},
+                  "value": {"literal": {"string": "system"}}},
                 {
                   "key": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.lib.text"}}}},
                   "value": {"literal": {"string": "text"}}}]},
