@@ -6,7 +6,7 @@
     "seeAlso": []},
   "dependencies": [
     {"module": "hydra.serialization"},
-    {"module": "hydra.java.serde"},
+    {"module": "hydra.jvm.serde"},
     {"module": "hydra.scala.syntax"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -16,7 +16,6 @@
     {"module": "hydra.error.core"},
     {"module": "hydra.error.file"},
     {"module": "hydra.error.packaging"},
-    {"module": "hydra.error.system"},
     {"module": "hydra.errors"},
     {"module": "hydra.file"},
     {"module": "hydra.graph"},
@@ -25,7 +24,6 @@
     {"module": "hydra.parsing"},
     {"module": "hydra.query"},
     {"module": "hydra.relational"},
-    {"module": "hydra.system"},
     {"module": "hydra.tabular"},
     {"module": "hydra.testing"},
     {"module": "hydra.time"},
@@ -1840,7 +1838,7 @@
                                             "function": {
                                               "application": {
                                                 "function": {"variable": "hydra.lib.strings.cat2"},
-                                                "argument": {"application": {"function": {"variable": "hydra.java.serde.escapeJavaString"}, "argument": {"variable": "s"}}}}},
+                                                "argument": {"application": {"function": {"variable": "hydra.jvm.serde.escapeJavaString"}, "argument": {"variable": "s"}}}}},
                                             "argument": {"literal": {"string": "\""}}}}}}}}}}},
                           {
                             "name": "bytes",

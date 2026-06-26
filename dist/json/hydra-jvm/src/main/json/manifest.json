@@ -1,0 +1,6 @@
+{
+  "dslModules": [],
+  "mainModules": ["hydra.jvm.serde"],
+  "manifestFormatVersion": 1,
+  "package": "hydra-jvm",
+  "testModules": []}

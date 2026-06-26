@@ -4,7 +4,6 @@
   "dependencies": [
     {"module": "hydra.test.inference.algebraicTypes"},
     {"module": "hydra.test.inference.algorithmW"},
-    {"module": "hydra.test.inference.annotations"},
     {"module": "hydra.test.inference.classes"},
     {"module": "hydra.test.inference.failures"},
     {"module": "hydra.test.inference.fundamentals"},
@@ -18,7 +17,6 @@
     {"module": "hydra.error.core"},
     {"module": "hydra.error.file"},
     {"module": "hydra.error.packaging"},
-    {"module": "hydra.error.system"},
     {"module": "hydra.errors"},
     {"module": "hydra.file"},
     {"module": "hydra.graph"},
@@ -27,7 +25,6 @@
     {"module": "hydra.parsing"},
     {"module": "hydra.query"},
     {"module": "hydra.relational"},
-    {"module": "hydra.system"},
     {"module": "hydra.tabular"},
     {"module": "hydra.testing"},
     {"module": "hydra.time"},
@@ -56,7 +53,6 @@
                       "list": [
                         {"variable": "hydra.test.inference.algebraicTypes.allTests"},
                         {"variable": "hydra.test.inference.algorithmW.allTests"},
-                        {"variable": "hydra.test.inference.annotations.allTests"},
                         {"variable": "hydra.test.inference.classes.allTests"},
                         {"variable": "hydra.test.inference.failures.allTests"},
                         {"variable": "hydra.test.inference.fundamentals.allTests"},

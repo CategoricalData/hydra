@@ -12,7 +12,6 @@ import qualified Hydra.Dsl.Error.Checking as ErrorChecking
 import qualified Hydra.Dsl.Error.Core as DslErrorCore
 import qualified Hydra.Dsl.Error.File as DslErrorFile
 import qualified Hydra.Dsl.Error.Packaging as DslErrorPackaging
-import qualified Hydra.Dsl.Error.System as DslErrorSystem
 import qualified Hydra.Dsl.Errors as DslErrors
 import qualified Hydra.Dsl.File as DslFile
 import qualified Hydra.Dsl.Graph as DslGraph
@@ -22,7 +21,6 @@ import qualified Hydra.Dsl.Parsing as DslParsing
 import qualified Hydra.Dsl.Paths as DslPaths
 import qualified Hydra.Dsl.Query as DslQuery
 import qualified Hydra.Dsl.Relational as DslRelational
-import qualified Hydra.Dsl.System as DslSystem
 import qualified Hydra.Dsl.Tabular as DslTabular
 import qualified Hydra.Dsl.Testing as DslTesting
 import qualified Hydra.Dsl.Time as DslTime
@@ -35,7 +33,6 @@ import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Error.File as ErrorFile
 import qualified Hydra.Error.Packaging as ErrorPackaging
-import qualified Hydra.Error.System as ErrorSystem
 import qualified Hydra.Errors as Errors
 import qualified Hydra.File as File
 import qualified Hydra.Graph as Graph
@@ -45,7 +42,6 @@ import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Query as Query
 import qualified Hydra.Relational as Relational
-import qualified Hydra.System as System
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Time as Time
