@@ -101,7 +101,7 @@ done
 
 # Expand "all" for hosts and targets
 case "$HOSTS" in
-    all) HOSTS="haskell,java,scala,python" ;;  # typescript not a host yet (no DSL builders; see #126 follow-ups)
+    all) HOSTS="haskell,java,scala,python,typescript" ;;
 esac
 case "$TARGETS" in
     all) TARGETS="haskell,java,scala,python,typescript,clojure,scheme,common-lisp,emacs-lisp" ;;
