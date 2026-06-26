@@ -678,6 +678,14 @@ main = do
   -- native effectful impls at hydra/common_lisp/lib/{effects,files,text}.lisp and
   -- hydra/emacs_lisp/lib/{effects,files,text}.el, so the effectful subs are included.
   let libSubsLisp = libSubs ++ ["effects","files","system","text"]
+  -- Java routes most hydra.lib.* references to hydra.overlay.java.lib.* via the coder's
+  -- overlayJavaLibPackageAliases (so it normally needs no string redirect). But that alias is
+  -- applied only on the registered-primitive emission path; the effectful hydra.lib.system prims
+  -- (unsupportedEffectPrimitive) fall to the plain-variable path and emit the raw hydra.lib.system
+  -- package, which has no Java home (the impls live only at hydra.overlay.java.lib.system). Redirect
+  -- just those call sites for Java. Scoped to "system" so the alias-routed libs are left untouched
+  -- (their refs are already hydra.overlay.java.lib.* and never match the hydra.lib. prefix). For #501.
+  let libSubsJava = ["system"]
   -- For each lib sub-namespace, redirect the CODE-REFERENCE shapes the coders emit:
   --   1. member access / qualified prefix:  hydra.lib.<sub>.<fn>   (and bare prefix uses)
   --   2. bare module import (Python/Scala):  import hydra.lib.<sub>
@@ -750,6 +758,7 @@ main = do
         replaceAll "(hydra test testEnv)" ("(hydra overlay " ++ langSeg ++ " test testEnv)")
           $ replaceAll "hydra.test.testEnv" ("hydra.overlay." ++ langSeg ++ ".test.testEnv") s
   let consumerTransform = case target of
+        "java"        -> redirectForSubs libSubsJava "java"
         "python"      -> redirectForSubs libSubsPython "python"
         "scala"       -> wrapLongScalaText . redirectForSubs libSubsScala "scala"
         "clojure"     -> redirectClojureTestEnv "clojure" . redirectForSubs libSubsClojure "clojure"
@@ -771,7 +780,8 @@ main = do
           putStrLn $ "Unknown target: " ++ target
           exitFailure
   -- The consumer pass uses the standard (un-lowered, for non-Haskell) universe.
-  -- Consumer pass: standard universe + the lib-call redirect transform (no-op for haskell/java).
+  -- Consumer pass: standard universe + the lib-call redirect transform (no-op for haskell;
+  -- Java redirects only hydra.lib.system, the rest via the coder's package aliases).
   let genForDir :: FilePath -> [Module] -> IO [FilePath]
       genForDir = genForDirT consumerTransform allModsFinal'
   -- Lib pass: isolated lowered universe + NO redirect (def-modules keep their hydra.lib.* names).
