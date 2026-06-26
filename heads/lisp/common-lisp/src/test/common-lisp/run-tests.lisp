@@ -169,7 +169,6 @@
 ;; system.lisp must load AFTER it (not in the early overlay lib dolist).
 (load (hydra-dist-main-path "overlay/common_lisp/lib/system.lisp"))
 
-
 ;; ============================================================================
 ;; 4. Load primitive infrastructure and test runner
 ;; ============================================================================
@@ -239,7 +238,8 @@
              "lib/pairs.lisp"
              "lib/regex.lisp"
              "lib/sets.lisp"
-             "lib/strings.lisp"))
+             "lib/strings.lisp"
+             "lib/system.lisp"))
   (load-test-file f))
 
 ;; Annotation tests
@@ -270,6 +270,7 @@
              "inference/algebraic_types.lisp"
              "inference/nominal_types.lisp"
              "inference/algorithm_w.lisp"
+             "inference/annotations.lisp"
              "inference/classes.lisp"
              "inference/failures.lisp"
              "inference/kernel_examples.lisp"
