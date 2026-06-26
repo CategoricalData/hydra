@@ -92,22 +92,24 @@
 ;; (which own hydra/lib/) are loaded later by hydra-load-gen-main via the
 ;; rewriting loader.
 (format t "Loading native libraries...~%")
-(dolist (f '("common_lisp/lib/equality.lisp"
-             "common_lisp/lib/maps.lisp"
-             "common_lisp/lib/sets.lisp"
-             "common_lisp/lib/lists.lisp"
-             "common_lisp/lib/strings.lisp"
-             "common_lisp/lib/logic.lisp"
-             "common_lisp/lib/math.lisp"
-             "common_lisp/lib/chars.lisp"
-             "common_lisp/lib/eithers.lisp"
-             "common_lisp/lib/literals.lisp"
-             "common_lisp/lib/optionals.lisp"
-             "common_lisp/lib/pairs.lisp"
-             "common_lisp/lib/regex.lisp"
-             "common_lisp/lib/effects.lisp"
-             "common_lisp/lib/files.lisp"
-             "common_lisp/lib/text.lisp"))
+;; #501: the native CL runtime lib impls moved from hydra/common_lisp/lib/ to the
+;; renamed overlay namespace hydra/overlay/common_lisp/lib/. Load from there.
+(dolist (f '("overlay/common_lisp/lib/equality.lisp"
+             "overlay/common_lisp/lib/maps.lisp"
+             "overlay/common_lisp/lib/sets.lisp"
+             "overlay/common_lisp/lib/lists.lisp"
+             "overlay/common_lisp/lib/strings.lisp"
+             "overlay/common_lisp/lib/logic.lisp"
+             "overlay/common_lisp/lib/math.lisp"
+             "overlay/common_lisp/lib/chars.lisp"
+             "overlay/common_lisp/lib/eithers.lisp"
+             "overlay/common_lisp/lib/literals.lisp"
+             "overlay/common_lisp/lib/optionals.lisp"
+             "overlay/common_lisp/lib/pairs.lisp"
+             "overlay/common_lisp/lib/regex.lisp"
+             "overlay/common_lisp/lib/effects.lisp"
+             "overlay/common_lisp/lib/files.lisp"
+             "overlay/common_lisp/lib/text.lisp"))
   (load (hydra-dist-main-path f)))
 
 ;; ============================================================================
@@ -151,7 +153,7 @@
         '("loader.lisp" "prelude.lisp" "prims.lisp" "lazy.lisp"
           "struct-compat.lisp" "json-reader.lisp")))
 
-;; Set function bindings for native library defvars (e.g. hydra_lisp_lib_maps_singleton)
+;; Set function bindings for native library defvars (e.g. hydra_overlay_common_lisp_lib_maps_singleton)
 ;; so they can be called in function position in generated code.
 (hydra-set-function-bindings)
 
@@ -160,18 +162,19 @@
 ;; Set function bindings again for generated kernel defvars
 (hydra-set-function-bindings)
 
-;; hydra.lib.system's native impl (#498) is loaded AFTER hydra-load-gen-main rather than with the other
-;; native libs above, because its nullary effects (get_time, get_working_directory) eagerly construct
-;; generated record types (make-hydra_time_timespec) at load time, so the type defstructs must already
-;; be defined.
-(load (hydra-dist-main-path "common_lisp/lib/system.lisp"))
+;; #498: the system overlay impl evaluates its effect values at load time (each
+;; effectful primitive is a defvar holding the computed value), and get_time
+;; constructs a Timespec via make-hydra_time_timespec. That defstruct is defined
+;; by the generated hydra/time.lisp loaded in (hydra-load-gen-main) above, so
+;; system.lisp must load AFTER it (not in the early overlay lib dolist).
+(load (hydra-dist-main-path "overlay/common_lisp/lib/system.lisp"))
 
 ;; ============================================================================
 ;; 4. Load primitive infrastructure and test runner
 ;; ============================================================================
 (format t "Loading primitive infrastructure...~%")
 (load (hydra-dist-main-path "prims.lisp"))
-(load (hydra-dist-main-path "common_lisp/lib/libraries.lisp"))
+(load (hydra-dist-main-path "overlay/common_lisp/lib/libraries.lisp"))
 
 (format t "Loading test runner...~%")
 (load (hydra-head-path "src/test/common-lisp/hydra/test_runner.lisp"))
@@ -206,13 +209,15 @@
 ;; testSkipEmit set in each host bootstrap), so we provide
 ;; hydra_test_test_env_test_context and hydra_test_test_env_test_graph
 ;; here. test_graph.lisp's defpackage references :hydra.test.testEnv.
-;; #434: test_env.lisp now lives in overlay/common-lisp/ and is copied into the
-;; dist test tree (*test-data-base*), so it loads from dist like the other test data.
+;; #434/#501: test_env.lisp now lives in overlay/common-lisp/ under the renamed
+;; hydra.overlay.common_lisp.test namespace and is copied into the dist MAIN tree
+;; at overlay/common_lisp/test/test_env.lisp, so it loads from the dist main hydra
+;; dir (hydra-dist-main-path) rather than the generated test tree (*test-data-base*).
 ;; It is HAND-WRITTEN (uses cl:defpackage :hydra.test.testEnv + cl:import), so it
 ;; must be plain cl:load'd — hydra-load-file skips defpackage forms (see
 ;; hydra-skip-form-p), which would leave the package uncreated and the import
 ;; failing.
-(load (merge-pathnames "test_env.lisp" *test-data-base*))
+(load (hydra-dist-main-path "overlay/common_lisp/test/test_env.lisp"))
 ;; Ensure the lambda value bound to hydra_test_test_env_test_graph
 ;; gets a symbol-function cell so it's callable in function position.
 (hydra-set-function-bindings)

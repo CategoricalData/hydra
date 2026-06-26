@@ -13,9 +13,9 @@
         (hydra json encode) (hydra json decode)
         (hydra json yaml encode) (hydra json yaml decode)
         (hydra encode core)
-        (hydra lib libraries) (hydra scheme lib equality) (hydra scheme lib maps)
-        (hydra scheme lib optionals) (hydra scheme lib pairs) (hydra scheme lib sets) (hydra scheme lib lists)
-        (hydra scheme lib literals)
+        (hydra overlay scheme libraries) (hydra overlay scheme lib equality) (hydra overlay scheme lib maps)
+        (hydra overlay scheme lib optionals) (hydra overlay scheme lib pairs) (hydra overlay scheme lib sets) (hydra overlay scheme lib lists)
+        (hydra overlay scheme lib literals)
         (hydra test test_graph) (hydra test test_suite))
 
 (include "src/test/scheme/hydra/test_runner_body.scm")

@@ -51,6 +51,44 @@ the overlay tree. Two invariants follow, and both are load-bearing:
    `Bootstrap.*`, `Generation.*`, coder drivers, and a head's own test-runner specs — are not
    shipped and legitimately stay under `heads/`, compiled by the head itself.)
 
+### What goes in `packages/` vs `overlay/`
+
+The boundary follows the translingual line:
+
+- **`packages/<pkg>/`** is for code that describes Hydra modules *independently of any target
+  language* — that is, code which, after transformation, becomes valid in every target.
+  DSL module definitions (kernel types, coders, test suites) go here.
+  So do DSL helper utilities that are authored in the host language but whose purpose is to
+  help write those translingual definitions (e.g., term builders, type constructors).
+- **`overlay/<lang>/<pkg>/`** is for host-native, language-specific source that must ship
+  in the distribution but cannot be expressed as translingual DSL — for example, primitive
+  implementations (the actual Python/Java/Haskell bodies behind `hydra.lib.*` functions),
+  runtime utilities (`cons_list.py`, `PersistentMap.java`), and test bridges (`test_env.py`).
+
+A useful heuristic: if the code *could* be expressed in the Hydra DSL and generated into
+every target, it belongs in `packages/`.
+If it is inherently host-specific — because it calls platform APIs, provides native
+implementations of primitives, or is a runtime data structure that every generated program
+leans on — it belongs in `overlay/`.
+
+### Namespace convention for overlay files
+
+After #501, overlay files use the `hydra.overlay.<lang>.*` namespace (e.g.
+`hydra.overlay.python.lib.chars`, `hydra.overlay.java.lib.Chars`,
+`Hydra.Overlay.Haskell.Lib.Chars`).
+This hard separation ensures:
+
+- **`hydra.*` (including `hydra.<lang>.*`, `hydra.dsl.*`, `hydra.lib.*`)** → exclusively
+  *translingual* — every name in this space is either generated or derived from generated code.
+- **`hydra.overlay.<lang>.*`** → exclusively *host-native* — everything here is hand-written
+  and lives under `overlay/`.
+
+The `bootstrap-from-json` redirect mechanism rewrites generated consumer call-sites from
+`hydra.lib.<sub>.<fn>` → `hydra.overlay.<lang>.lib.<sub>.<fn>` at assemble time, so generated
+code that calls a primitive ends up calling the native implementation, not a non-existent
+translingual module. Primitive *name strings* embedded in term data (the canonical graph
+registry keys, e.g. `"hydra.lib.chars.isAlphaNum"`) are protected from this rewrite.
+
 So one translingual source package fans out into one complete distribution package per
 selected target language, and each distribution stands on its own. "Complete" is the bar:
 if a `dist/<lang>/<pkg>/` would need a `../../` reference to build, it is not yet a proper
@@ -169,7 +207,7 @@ developer rollup, not copied.
 |----------|------------------------|-------------|--------------------|
 | Haskell | `overlay/haskell/hydra-kernel/` (+ `overlay/haskell/hydra/` umbrella): `Hydra.Settings`, `Hydra.Kernel`, 13 `Hydra.Haskell.Lib.*`, `Hydra.Dsl.{Terms,Literals,Meta.Common}` | `sync-haskell.sh` (head compiles from the dist copy, not the overlay; copies gitignored) | 18 |
 | Java | `overlay/java/hydra-kernel/`: `Adapters.java`, `Coders.java`, full `hydra/{util,lib,dsl,tools}/`, `hydra/json/{JsonEncoding,JsonDecoding}.java` | `copy-kernel-runtime.sh` (Step 0 of assemble) | ~282 |
-| Python | `overlay/python/hydra-kernel/`: `tools.py`, `py.typed`, `hydra/{lib,dsl,sources,python/util}/` (main, no `__init__.py` — PEP 420); `hydra/test/test_env.py` (test bridge) | `copy-kernel-runtime.sh` (Step 0 of assemble; copies overlay main + test) | ~54 |
+| Python | `overlay/python/hydra-kernel/`: `hydra/overlay/python/{lib,dsl,sources,util}/` + `tools.py`, `py.typed` (main, no `__init__.py` — PEP 420); `hydra/overlay/python/test_env.py` (test bridge). All overlay Python modules use the `hydra.overlay.python.*` namespace (#501). | `copy-kernel-runtime.sh` (Step 0 of assemble; copies overlay main + test) | ~41+3 |
 | TypeScript | `overlay/typescript/hydra-kernel/`: `hydra/{bootstrap,primitives,runtime}.ts`, `hydra/lib/*.ts` (main); `hydra/test/{testEnv,jsonBindings}.ts` (test) | `copy-kernel-runtime.sh` (Step 0 of assemble) | ~19 |
 | Go (head bud) | `overlay/go/hydra-kernel/`: `hydra/lib/*` primitive impls (only `lib/literals` implemented; rest are package stubs). Generated code imports these via the dist-local module path `hydra.dev/hydra/lib/...` | `copy-kernel-runtime.sh` (Step 3 of assemble, post-prune) | ~13 |
 | Lisp dialects (clojure, scheme, common-lisp, emacs-lisp) | `overlay/<dialect>/hydra-kernel/`: the loader/prims/lazy/prelude/json-reader runtime + `hydra/lib/*` registries + `hydra/<dialect>/lib/*` native impls (+ Scheme's `scheme/`/`srfi/` externals) + the test bridge. Copied by common.sh's `lisp_copy_overlay` (Step 3, kernel-only). Each dialect's test runner loads the runtime from `dist/`. Common Lisp's `struct-compat.lisp` is generated into dist by gen-compat.sh (not overlay). | ~17 (clojure) – ~42 (scheme) |
@@ -345,7 +383,7 @@ The caches form a hierarchy: a hit at a coarser layer skips a finer one.
 | Phase 1 input cache | `heads/haskell/.stack-work/phase1-input-cache.txt` | Universe-wide | Skips all of Phase 1 (no stack startup, no JSON regen) |
 | Universe digest | `dist/json/build/digest.json` | Per-module-name | Drives `check-dsl-fresh.py`; per-module skip inside `bootstrap-from-json` |
 | Per-package input digest | `dist/json/<pkg>/build/<set>/digest.json` | Per-module-name, scoped to one package | Source-of-truth for Layer 2 freshness comparison |
-| Per-package output digest | `dist/<lang>/<pkg>/build/<set>/digest.json` | Per-module-name + `generation.generatorId` (generator stamp) | Compared against input digest to skip Layer 1 + Layer 2 for one package |
+| Per-package output digest | `dist/<lang>/<pkg>/build/<set>/digest.json` | Per-module-name + per-target generator stamp | Compared against input digest to skip Layer 1 + Layer 2 for one package |
 | Step caches | `heads/haskell/.stack-work/{verify-json-kernel,bootstrap-from-json,haskell-test}-cache.txt` | Universe-wide hash of inputs + exec source | Skips `verify-json-kernel`, `bootstrap-from-json`, or `stack test` |
 | Per-target test cache | `dist/<lang>/test-cache.json` | Universe of generated sources + test infra + runner | Skips the target's `test-distribution.sh` |
 
@@ -422,16 +460,10 @@ the stamp, edits to the transform (the per-target coder, the kernel orchestrator
 the generation driver, the assembler script) would change downstream emission without
 changing any tracked input, and the cache would erroneously hit.
 
-The stamp is computed by `setup_generator_env <lang>` in `bin/lib/assemble-common.sh`
-(via `eval "$(setup_generator_env <lang>)"`), which exports `HYDRA_GENERATOR_STAMP` (the
-gating key) plus informational env vars (`HYDRA_GENERATOR_HOST`, `HYDRA_GENERATOR_MODE`).
-`digest-check fresh` reads `HYDRA_GENERATOR_STAMP` and compares against `generation.generatorId`
-in the per-target output digest; mismatches force a cache miss.
-
-The output digest's `"generator"` flat field was replaced in [#413](https://github.com/CategoricalData/hydra/issues/413)
-with a structured `"generation"` block separating the gating key (`generatorId`) from
-informational provenance (`mode`, `host`, `revision`, `timestamp`).
-Only `generatorId` appears in `digestsMatch` — the other fields are never gated.
+The stamp is computed by `compute_generator_stamp <lang>` in `bin/lib/assemble-common.sh`
+and exported as `HYDRA_GENERATOR_STAMP` before each Layer 2 freshness check. `digest-check
+fresh` reads it and compares against the recorded stamp in the per-target output digest;
+mismatches force a cache miss.
 
 The stamp is **compositional**, mirroring the actual structure of a host transform:
 

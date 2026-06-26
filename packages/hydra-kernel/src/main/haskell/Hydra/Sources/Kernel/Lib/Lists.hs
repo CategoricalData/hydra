@@ -4,12 +4,12 @@
 module Hydra.Sources.Kernel.Lib.Lists where
 
 import Hydra.Kernel
-import qualified Hydra.Dsl.Bootstrap         as Bootstrap
+import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Lib.Pairs    as Pairs
-import           Hydra.Dsl.Meta.Phantoms     as Phantoms hiding (apply, map)
-import qualified Hydra.Dsl.Types             as Types
+import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (apply, map)
+import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++), concat, drop, dropWhile, elem, filter, foldl, foldr,
                                length, map, null, pure, replicate, reverse, span, take,

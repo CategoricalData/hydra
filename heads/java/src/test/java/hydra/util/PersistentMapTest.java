@@ -1,5 +1,8 @@
 package hydra.util;
 
+import hydra.overlay.java.util.Optional;
+import hydra.overlay.java.util.Pair;
+import hydra.overlay.java.util.PersistentMap;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

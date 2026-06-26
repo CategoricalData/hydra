@@ -3,12 +3,12 @@
 
 module Hydra.Encode.Core where
 import qualified Hydra.Core as Core
-import qualified Hydra.Haskell.Lib.Eithers as Eithers
-import qualified Hydra.Haskell.Lib.Lists as Lists
-import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Optionals as Optionals
-import qualified Hydra.Haskell.Lib.Pairs as Pairs
-import qualified Hydra.Haskell.Lib.Sets as Sets
+import qualified Hydra.Overlay.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
+import qualified Hydra.Overlay.Haskell.Lib.Maps as Maps
+import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
+import qualified Hydra.Overlay.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Overlay.Haskell.Lib.Sets as Sets
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Encoder for hydra.core.AnnotatedTerm

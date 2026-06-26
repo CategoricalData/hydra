@@ -2,10 +2,10 @@ module Hydra.Sources.Sql.Ansi where
 
 -- Standard imports for type-level sources outside of the kernel
 import           Hydra.Kernel
-import           Hydra.Dsl.Annotations
-import           Hydra.Dsl.Bootstrap
-import           Hydra.Dsl.Types                 ((>:))
-import qualified Hydra.Dsl.Types                 as T
+import           Hydra.Overlay.Haskell.Dsl.Annotations
+import           Hydra.Overlay.Haskell.Bootstrap
+import           Hydra.Overlay.Haskell.Dsl.Types                 ((>:))
+import qualified Hydra.Overlay.Haskell.Dsl.Types                 as T
 
 
 ns :: ModuleName

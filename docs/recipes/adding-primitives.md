@@ -124,7 +124,6 @@ intent clearer than bare core types would.
 `hydra.lib.files` is the standard example: its operations take a `FilePath` and return a
 `FileError` or `FileStatus` rather than passing raw `string`s and integers around, because
 a small, self-describing POSIX vocabulary is worth the named-type dependency.
-`hydra.lib.system` follows the same pattern with `Command`, `ProcessResult`, and `SystemError`.
 The judgement to make is whether the named type earns its keep, not whether named types
 are forbidden.
 

@@ -2,10 +2,10 @@ module Hydra.Sources.Kernel.Types.Core where
 
 -- Special "bootstrapping" imports for hydra.core
 import Hydra.Kernel hiding (literalType)
-import Hydra.Dsl.Annotations (doc)
-import Hydra.Dsl.Bootstrap
-import Hydra.Dsl.Types ((>:))
-import qualified Hydra.Dsl.Types as T
+import Hydra.Overlay.Haskell.Dsl.Annotations (doc)
+import Hydra.Overlay.Haskell.Bootstrap
+import Hydra.Overlay.Haskell.Dsl.Types ((>:))
+import qualified Hydra.Overlay.Haskell.Dsl.Types as T
 import qualified Hydra.Encode.Core as EncodeCore
 
 import qualified Data.Map as M

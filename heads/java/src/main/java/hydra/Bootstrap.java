@@ -233,7 +233,7 @@ public class Bootstrap {
         }
 
         // #473 Step 0 — lib pass + redirect. The hydra.lib.* primitive IMPLEMENTATIONS live at
-        // hydra.<lang>.lib.* (the analog of Haskell's Hydra.Haskell.Lib.*), so hydra.lib.* is free
+        // hydra.overlay.<lang>.lib.* (the analog of Haskell's Hydra.Overlay.Haskell.Lib.*), so hydra.lib.* is free
         // for the generated PrimitiveDefinition def-modules. This mirrors the Haskell driver's
         // twoPassLib logic in bootstrap-from-json/Main.hs: when the Java host generates a target
         // that consumes def-modules (everything except haskell, which uses the registry), it must
@@ -457,7 +457,7 @@ public class Bootstrap {
             "math", "optionals", "pairs", "regex", "sets", "strings");
 
     // The effectful lib sub-namespaces (#286) have native impls in Python only
-    // (hydra.python.lib.{effects,files,text}); other hosts lack hydra.<lang>.lib.{effects,files,text},
+    // (hydra.overlay.python.lib.{effects,files,text}); other hosts lack hydra.overlay.<lang>.lib.{effects,files,text},
     // so redirecting their call sites would dangle. Restrict the effectful redirect to Python.
     private static final List<String> LIB_SUBS_PYTHON;
     static {
@@ -521,9 +521,9 @@ public class Bootstrap {
     private static void redirectLibCalls(String target, String langDir) {
         String langSeg;
         switch (target) {
-            case "python":  langSeg = "python"; break;
-            case "scala":   langSeg = "scala"; break;
-            case "clojure": langSeg = "clojure"; break;
+            case "python":  langSeg = "overlay.python"; break;
+            case "scala":   langSeg = "overlay.scala"; break;
+            case "clojure": langSeg = "overlay.clojure"; break;
             default: return; // java + others: no dotted-path redirect needed here
         }
         final String sentinel = "@@HYDRA_LIB_NAME@@"; // improbable token; never appears in generated source
@@ -539,7 +539,7 @@ public class Bootstrap {
                 // and the hand-written registry overlay (hydra/sources/libraries.*), which deliberately
                 // imports BOTH the relocated impl and the def-module (aliased, for `def_X.fn.name`). The
                 // Haskell driver keeps both canonical by never transforming them.
-                if (pSlash.contains("/hydra/lib/") || pSlash.contains("hydra/sources/libraries.")) continue;
+                if (pSlash.contains("/hydra/lib/") || pSlash.contains("sources/libraries.")) continue;
                 String s = new String(Files.readAllBytes(p), java.nio.charset.StandardCharsets.UTF_8);
                 if (!s.contains("hydra.lib.")) continue;
                 // protect quoted primitive-NAME strings

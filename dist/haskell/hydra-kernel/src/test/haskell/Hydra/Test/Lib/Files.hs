@@ -4,16 +4,16 @@
 module Hydra.Test.Lib.Files where
 import qualified Hydra.Core as Core
 import qualified Hydra.File as File
-import qualified Hydra.Haskell.Lib.Effects as Effects
-import qualified Hydra.Haskell.Lib.Eithers as Eithers
-import qualified Hydra.Haskell.Lib.Files as Files
-import qualified Hydra.Haskell.Lib.Lists as Lists
-import qualified Hydra.Haskell.Lib.Literals as Literals
-import qualified Hydra.Haskell.Lib.Text as Text
+import qualified Hydra.Overlay.Haskell.Lib.Effects as Effects
+import qualified Hydra.Overlay.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Overlay.Haskell.Lib.Files as Files
+import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
+import qualified Hydra.Overlay.Haskell.Lib.Literals as Literals
+import qualified Hydra.Overlay.Haskell.Lib.Text as Text
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-import qualified Hydra.Haskell.Lib.Literals as Literals
+import qualified Hydra.Overlay.Haskell.Lib.Literals as Literals
 -- | Effectful test cases for hydra.lib.files primitives
 allTests :: Testing.TestGroup
 allTests =

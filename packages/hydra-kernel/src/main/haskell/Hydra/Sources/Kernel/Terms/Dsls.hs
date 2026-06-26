@@ -5,9 +5,9 @@ module Hydra.Sources.Kernel.Terms.Dsls where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
-import qualified Hydra.Dsl.Annotations       as Annotations
-import qualified Hydra.Dsl.Meta.Core         as Core
+import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import qualified Hydra.Overlay.Haskell.Dsl.Annotations       as Annotations
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core         as Core
 import qualified Hydra.Dsl.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Lib.Equality as Equality
 import qualified Hydra.Dsl.Lib.Lists    as Lists
@@ -20,11 +20,11 @@ import qualified Hydra.Dsl.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Packaging       as Packaging
 import qualified Hydra.Dsl.Typing          as Typing
-import qualified Hydra.Dsl.Meta.Phantoms     as Phantoms
-import           Hydra.Dsl.Meta.Phantoms     as Phantoms hiding (
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
+import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (
   elimination, field, fieldType, floatType, floatValue, function, injection, integerType, integerValue, lambda, literal,
   literalType, record, term, type_, typeScheme, wrap)
-import qualified Hydra.Dsl.Terms             as Terms
+import qualified Hydra.Overlay.Haskell.Dsl.Terms             as Terms
 import qualified Hydra.Dsl.Errors       as Error
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
@@ -33,17 +33,15 @@ import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Scoping as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
-import qualified Hydra.Dsl.Meta.DeepCore as DeepCore
-import           Hydra.Dsl.Meta.DeepCore ((@@@))
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.DeepCore as DeepCore
+import           Hydra.Overlay.Haskell.Dsl.Typed.DeepCore ((@@@))
 import           Prelude hiding ((++))
 import qualified Data.List                   as L
 import qualified Data.Map                    as M
 import qualified Data.Set                    as S
-import qualified Hydra.Dsl.Prims as Prims
+import qualified Hydra.Overlay.Haskell.Dsl.Prims as Prims
 import qualified Hydra.Lib.Lists as DefLists
 import qualified Hydra.Lib.Optionals as DefOptionals
-import qualified Hydra.Decoding as Decoding
-import qualified Hydra.Encoding as Encoding
 
 
 ns :: ModuleName
@@ -53,7 +51,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Annotations.ns, Formatting.ns, Lexical.ns, Names.ns, Strip.ns, ModuleName "hydra.constants", Decoding.decodeModuleName (ModuleName "hydra.core"), Encoding.encodeModuleName (ModuleName "hydra.core")] L.++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([Annotations.ns, Formatting.ns, Lexical.ns, Names.ns, Strip.ns, ModuleName "hydra.constants", ModuleName "hydra.decode.core", ModuleName "hydra.encode.core"] L.++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata (Just "Functions for generating domain-specific DSL modules from type modules")}
   where
     definitions = [

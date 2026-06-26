@@ -2,12 +2,12 @@
 module Hydra.Sources.Test.Checking.All where
 
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Dsl.Meta.Testing as Testing
+import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Overlay.Haskell.Dsl.Typed.Testing as Testing
 import Hydra.Sources.Kernel.Types.All
-import Hydra.Dsl.Meta.Phantoms as Phantoms
-import qualified Hydra.Dsl.Meta.Core as Core
-import qualified Hydra.Dsl.Meta.Types as T
+import Hydra.Overlay.Haskell.Dsl.Typed.Phantoms as Phantoms
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core as Core
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes

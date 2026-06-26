@@ -117,13 +117,14 @@ if [ ! -e "$OUTPUT_DIR/../hydra-kernel" ]; then
     echo "    Symlinked ../hydra-kernel -> $HYDRA_ROOT/packages/hydra-kernel"
 fi
 
-# Copy test_env.py (provides real test graph with primitives) from dist baseline
-echo "  Copying test_env.py..."
-PY_TEST_ENV="$HYDRA_ROOT/dist/python/hydra-kernel/src/test/python/hydra/test/test_env.py"
-PY_TEST_DST="$OUTPUT_DIR/src/test/python/hydra/test"
-if [ -f "$PY_TEST_ENV" ]; then
-    mkdir -p "$PY_TEST_DST"
-    cp "$PY_TEST_ENV" "$PY_TEST_DST/"
+# Copy overlay test files (provides test_env.py and related overlay modules) from overlay tree.
+# After #501, test_env lives at hydra.overlay.python.test_env, so we copy the entire
+# overlay test tree rather than a single hardcoded file.
+echo "  Copying overlay test modules..."
+PY_OVERLAY_TEST="$HYDRA_ROOT/overlay/python/hydra-kernel/src/test/python"
+if [ -d "$PY_OVERLAY_TEST" ]; then
+    cp -r "$PY_OVERLAY_TEST/." "$OUTPUT_DIR/src/test/python/"
+    find "$OUTPUT_DIR/src/test/python" -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
 fi
 
 # Summary

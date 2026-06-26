@@ -22,7 +22,7 @@ import qualified Hydra.Sources.All as All
 import qualified Hydra.Sources.Ext as Ext
 import qualified Hydra.Show.Errors as ShowError
 import qualified Hydra.Json.Model as JsonModel
-import Hydra.Dsl.Bootstrap (bootstrapGraph, unqualifiedDep, descriptionMetadata)
+import Hydra.Overlay.Haskell.Bootstrap (bootstrapGraph, unqualifiedDep, descriptionMetadata)
 import qualified Hydra.PackageRouting as PackageRouting
 
 import qualified Data.Aeson as A

@@ -5,15 +5,15 @@ import hydra.core.Term;
 import hydra.core.Type;
 import hydra.core.TypeScheme;
 import hydra.core.TypeVariableConstraints;
-import hydra.dsl.Terms;
-import hydra.dsl.Types;
+import hydra.overlay.java.dsl.Terms;
+import hydra.overlay.java.dsl.Types;
 import hydra.packaging.EntityMetadata;
 import hydra.packaging.Definition;
 import hydra.packaging.ModuleName;
 import hydra.packaging.TermDefinition;
 import hydra.packaging.TypeDefinition;
 import hydra.typing.TermSignature;
-import hydra.util.Optional;
+import hydra.overlay.java.util.Optional;
 
 import java.util.Collections;
 import java.util.Map;

@@ -308,43 +308,6 @@
                 "typeName": "hydra.paths.SubtermStep",
                 "cases": [
                   {
-                    "name": "annotatedAnnotation",
-                    "handler": {
-                      "lambda": {
-                        "parameter": "y",
-                        "domain": {"unit": {}},
-                        "body": {
-                          "inject": {
-                            "typeName": "hydra.core.Term",
-                            "field": {
-                              "name": "inject",
-                              "term": {
-                                "record": {
-                                  "typeName": "hydra.core.Injection",
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.paths.SubtermStep"}}}}},
-                                    {
-                                      "name": "field",
-                                      "term": {
-                                        "record": {
-                                          "typeName": "hydra.core.Field",
-                                          "fields": [
-                                            {
-                                              "name": "name",
-                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "annotatedAnnotation"}}}}},
-                                            {
-                                              "name": "term",
-                                              "term": {
-                                                "application": {
-                                                  "function": {
-                                                    "lambda": {
-                                                      "parameter": "_",
-                                                      "domain": {"unit": {}},
-                                                      "body": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}},
-                                                  "argument": {"variable": "y"}}}}]}}}]}}}}}}}},
-                  {
                     "name": "annotatedBody",
                     "handler": {
                       "lambda": {

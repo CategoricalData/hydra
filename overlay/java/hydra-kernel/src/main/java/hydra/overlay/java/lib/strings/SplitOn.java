@@ -1,0 +1,96 @@
+package hydra.overlay.java.lib.strings;
+
+import hydra.core.Name;
+import hydra.core.Term;
+import hydra.core.TypeScheme;
+import hydra.overlay.java.dsl.Terms;
+import hydra.graph.Graph;
+import hydra.overlay.java.tools.PrimitiveFunction;
+
+import java.util.List;
+import java.util.function.Function;
+
+import static hydra.overlay.java.dsl.Types.function;
+import static hydra.overlay.java.dsl.Types.list;
+import static hydra.overlay.java.dsl.Types.scheme;
+import static hydra.overlay.java.dsl.Types.string;
+import hydra.errors.Error_;
+import hydra.overlay.java.util.ConsList;
+import hydra.overlay.java.util.Either;
+
+/**
+ * Splits a string on a given delimiter.
+ */
+public class SplitOn extends PrimitiveFunction {
+    /**
+     * Returns the name of this primitive function.
+     * @return the name "hydra.lib.strings.splitOn"
+     */
+    public Name name() {
+        return hydra.lib.Strings.splitOn().name;
+    }
+
+    /**
+     * Returns the type scheme of this function.
+     * @return the type scheme for a function that splits a string on a delimiter
+     */
+    @Override
+    public TypeScheme type() {
+        return scheme(function(string(), string(), list(string())));
+    }
+
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that transforms terms to a flow of graph and term
+     */
+    @Override
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.overlay.java.lib.eithers.Bind.apply(hydra.extract.Core.string(graph, args.get(0)), s -> hydra.overlay.java.lib.eithers.Map.apply(s2 -> Terms.listOfStrings(apply(s, s2)), hydra.extract.Core.string(graph, args.get(1))));
+    }
+
+    /**
+     * Returns a function that splits strings on the given delimiter.
+     * @param delim the delimiter string
+     * @return a function that takes a string and returns the split result
+     */
+    public static Function<String, List<String>> apply(String delim) {
+        return (string) -> apply(delim, string);
+    }
+
+    /**
+     * Splits a string on a delimiter.
+     * Note: the delimiter is not interpreted as a regular expression;
+     * it is simply a literal string. See Haskell's Data.List.Split.
+     * @param delim the delimiter string
+     * @param string the string to split
+     * @return the list of substrings
+     */
+    public static List<String> apply(String delim, String string) {
+        ConsList<String> reversed = ConsList.empty();
+
+        if (delim.isEmpty()) {
+            reversed = ConsList.cons("", reversed);
+            int i = 0;
+            while (i < string.length()) {
+                int cp = string.codePointAt(i);
+                int charCount = Character.charCount(cp);
+                reversed = ConsList.cons(string.substring(i, i + charCount), reversed);
+                i += charCount;
+            }
+        } else {
+            int k = 0;
+            int delimLen = delim.length();
+            while (true) {
+                int idx = string.indexOf(delim, k);
+                if (idx < 0) {
+                    break;
+                }
+                reversed = ConsList.cons(string.substring(k, idx), reversed);
+                k = idx + delimLen;
+            }
+            reversed = ConsList.cons(string.substring(k), reversed);
+        }
+
+        return reversed.reverse();
+    }
+}

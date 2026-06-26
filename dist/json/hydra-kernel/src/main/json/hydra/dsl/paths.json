@@ -1971,47 +1971,6 @@
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.paths.SubtermPath"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.paths.subtermStepAnnotatedAnnotation",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [],
-          "result": {
-            "type": {
-              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.paths.SubtermStep"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "wrap": {
-                "typeName": "hydra.typed.TypedTerm",
-                "body": {
-                  "inject": {
-                    "typeName": "hydra.core.Term",
-                    "field": {
-                      "name": "inject",
-                      "term": {
-                        "record": {
-                          "typeName": "hydra.core.Injection",
-                          "fields": [
-                            {
-                              "name": "typeName",
-                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.paths.SubtermStep"}}}}},
-                            {
-                              "name": "field",
-                              "term": {
-                                "record": {
-                                  "typeName": "hydra.core.Field",
-                                  "fields": [
-                                    {
-                                      "name": "name",
-                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "annotatedAnnotation"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the annotatedAnnotation variant of hydra.paths.SubtermStep"}}}]}}}}},
-    {
-      "term": {
         "name": "hydra.dsl.paths.subtermStepAnnotatedBody",
         "signature": {
           "typeParameters": [],

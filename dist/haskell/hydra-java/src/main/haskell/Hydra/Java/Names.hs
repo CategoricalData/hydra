@@ -13,7 +13,7 @@ import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Java.Syntax as Syntax
 import qualified Hydra.Json.Model as Model
-import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Paths as Paths
@@ -47,11 +47,13 @@ hydraCorePackageName =
     Just (javaPackageName [
       "hydra",
       "core"])
--- | The hydra.util package name
+-- | The hydra.overlay.java.util package name
 hydraUtilPackageName :: Maybe Syntax.PackageName
 hydraUtilPackageName =
     Just (javaPackageName [
       "hydra",
+      "overlay",
+      "java",
       "util"])
 instanceName :: String
 instanceName = "instance"

@@ -3,8 +3,8 @@
 module Hydra.ArbitraryCore where
 
 import Hydra.Kernel
-import Hydra.Dsl.Terms
-import qualified Hydra.Dsl.Types as Types
+import Hydra.Overlay.Haskell.Dsl.Terms
+import qualified Hydra.Overlay.Haskell.Dsl.Types as Types
 
 import qualified Control.Monad as CM
 import qualified Data.ByteString as B

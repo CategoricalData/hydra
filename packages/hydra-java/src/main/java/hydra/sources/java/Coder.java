@@ -5,7 +5,7 @@ import hydra.core.Type;
 import hydra.core.TypeScheme;
 import hydra.dsl.Core;
 import hydra.dsl.Packaging;
-import hydra.dsl.Types;
+import hydra.overlay.java.dsl.Types;
 import hydra.dsl.java.Environment;
 import hydra.dsl.java.Syntax;
 import hydra.dsl.lib.Eithers;
@@ -24,7 +24,7 @@ import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
 import hydra.packaging.ModuleDependency;
 import hydra.typed.TypedTerm;
-import hydra.util.Optional;
+import hydra.overlay.java.util.Optional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -2327,7 +2327,7 @@ public class Coder {
                         ref(Utils.javaMethodInvocationToJavaExpression),
                         apply(
                             ref(Utils.methodInvocationStatic),
-                            wrap(Identifier.TYPE_, string("hydra.util.Comparing")),
+                            wrap(Identifier.TYPE_, string("hydra.overlay.java.util.Comparing")),
                             wrap(Identifier.TYPE_, string("compare")),
                             list(var("thisField"), var("otherField")))))));
 
@@ -7053,7 +7053,7 @@ public class Coder {
                                                                             ref(Utils.methodInvocationStatic),
                                                                             wrap(
                                                                                 Identifier.TYPE_,
-                                                                                string("hydra.util.Either")),
+                                                                                string("hydra.overlay.java.util.Either")),
                                                                             wrap(
                                                                                 Identifier.TYPE_,
                                                                                 var("methodName")),
@@ -7065,7 +7065,7 @@ public class Coder {
                                                                                 ref(Utils.methodInvocationStaticWithTypeArgs),
                                                                                 wrap(
                                                                                     Identifier.TYPE_,
-                                                                                    string("hydra.util.Either")),
+                                                                                    string("hydra.overlay.java.util.Either")),
                                                                                 wrap(
                                                                                     Identifier.TYPE_,
                                                                                     var("methodName")),
@@ -7335,7 +7335,7 @@ public class Coder {
                                                 apply(
                                                     ref(Utils.methodInvocationStatic),
                                                     wrap(Identifier.TYPE_,
-                                                        string("hydra.util.ConsList")),
+                                                        string("hydra.overlay.java.util.ConsList")),
                                                     wrap(Identifier.TYPE_,
                                                         string("empty")),
                                                     list()))),
@@ -7354,7 +7354,7 @@ public class Coder {
                                                         apply(
                                                             ref(Utils.methodInvocationStaticWithTypeArgs),
                                                             wrap(Identifier.TYPE_,
-                                                                string("hydra.util.ConsList")),
+                                                                string("hydra.overlay.java.util.ConsList")),
                                                             wrap(Identifier.TYPE_,
                                                                 string("empty")),
                                                             var("targs"),
@@ -7379,7 +7379,7 @@ public class Coder {
                                                             apply(
                                                                 ref(Utils.methodInvocationStaticWithTypeArgs),
                                                                 wrap(Identifier.TYPE_,
-                                                                    string("hydra.util.ConsList")),
+                                                                    string("hydra.overlay.java.util.ConsList")),
                                                                 wrap(Identifier.TYPE_,
                                                                     string("of")),
                                                                 var("targs"),
@@ -7400,7 +7400,7 @@ public class Coder {
                                                 apply(
                                                     ref(Utils.methodInvocationStatic),
                                                     wrap(Identifier.TYPE_,
-                                                        string("hydra.util.PersistentMap")),
+                                                        string("hydra.overlay.java.util.PersistentMap")),
                                                     wrap(Identifier.TYPE_,
                                                         string("empty")),
                                                     list()))),
@@ -7419,7 +7419,7 @@ public class Coder {
                                                         apply(
                                                             ref(Utils.methodInvocationStaticWithTypeArgs),
                                                             wrap(Identifier.TYPE_,
-                                                                string("hydra.util.PersistentMap")),
+                                                                string("hydra.overlay.java.util.PersistentMap")),
                                                             wrap(Identifier.TYPE_,
                                                                 string("empty")),
                                                             var("targs"),
@@ -7465,7 +7465,7 @@ public class Coder {
                                                                             ref(Utils.methodInvocationStaticWithTypeArgs),
                                                                             wrap(
                                                                                 Identifier.TYPE_,
-                                                                                string("hydra.util.PersistentMap")),
+                                                                                string("hydra.overlay.java.util.PersistentMap")),
                                                                             wrap(
                                                                                 Identifier.TYPE_,
                                                                                 string("ofEntries")),
@@ -7484,7 +7484,7 @@ public class Coder {
                                                 apply(
                                                     ref(Utils.methodInvocationStatic),
                                                     wrap(Identifier.TYPE_,
-                                                        string("hydra.util.Optional")),
+                                                        string("hydra.overlay.java.util.Optional")),
                                                     wrap(Identifier.TYPE_,
                                                         string("none")),
                                                     list()))),
@@ -7503,7 +7503,7 @@ public class Coder {
                                                         apply(
                                                             ref(Utils.methodInvocationStaticWithTypeArgs),
                                                             wrap(Identifier.TYPE_,
-                                                                string("hydra.util.Optional")),
+                                                                string("hydra.overlay.java.util.Optional")),
                                                             wrap(Identifier.TYPE_,
                                                                 string("none")),
                                                             var("targs"),
@@ -7529,7 +7529,7 @@ public class Coder {
                                                                 apply(
                                                                     ref(Utils.methodInvocationStaticWithTypeArgs),
                                                                     wrap(Identifier.TYPE_,
-                                                                        string("hydra.util.Optional")),
+                                                                        string("hydra.overlay.java.util.Optional")),
                                                                     wrap(Identifier.TYPE_,
                                                                         string("given")),
                                                                     var("targs"),
@@ -7576,7 +7576,7 @@ public class Coder {
                                                                     ref(Utils.javaConstructorName),
                                                                     wrap(
                                                                         Identifier.TYPE_,
-                                                                        string("hydra.util.Pair")),
+                                                                        string("hydra.overlay.java.util.Pair")),
                                                                     var("mtargs")),
                                                                 list(var("jterm1"), var("jterm2")),
                                                                 nothing())))))))))),
@@ -7867,7 +7867,7 @@ public class Coder {
                                                 apply(
                                                     ref(Utils.methodInvocationStatic),
                                                     wrap(Identifier.TYPE_,
-                                                        string("hydra.util.PersistentSet")),
+                                                        string("hydra.overlay.java.util.PersistentSet")),
                                                     wrap(Identifier.TYPE_,
                                                         string("empty")),
                                                     list()))),
@@ -7886,7 +7886,7 @@ public class Coder {
                                                         apply(
                                                             ref(Utils.methodInvocationStaticWithTypeArgs),
                                                             wrap(Identifier.TYPE_,
-                                                                string("hydra.util.PersistentSet")),
+                                                                string("hydra.overlay.java.util.PersistentSet")),
                                                             wrap(Identifier.TYPE_,
                                                                 string("empty")),
                                                             var("targs"),
@@ -7913,7 +7913,7 @@ public class Coder {
                                                                 apply(
                                                                     ref(Utils.methodInvocationStaticWithTypeArgs),
                                                                     wrap(Identifier.TYPE_,
-                                                                        string("hydra.util.PersistentSet")),
+                                                                        string("hydra.overlay.java.util.PersistentSet")),
                                                                     wrap(Identifier.TYPE_,
                                                                         string("of")),
                                                                     var("targs"),
@@ -8356,7 +8356,7 @@ public class Coder {
                                                                                                                                             ref(Utils.methodInvocationStaticWithTypeArgs),
                                                                                                                                             wrap(
                                                                                                                                                 Identifier.TYPE_,
-                                                                                                                                                string("hydra.util.Either")),
+                                                                                                                                                string("hydra.overlay.java.util.Either")),
                                                                                                                                             wrap(
                                                                                                                                                 Identifier.TYPE_,
                                                                                                                                                 string("left")),
@@ -8380,7 +8380,7 @@ public class Coder {
                                                                                                                                             ref(Utils.methodInvocationStaticWithTypeArgs),
                                                                                                                                             wrap(
                                                                                                                                                 Identifier.TYPE_,
-                                                                                                                                                string("hydra.util.Either")),
+                                                                                                                                                string("hydra.overlay.java.util.Either")),
                                                                                                                                             wrap(
                                                                                                                                                 Identifier.TYPE_,
                                                                                                                                                 string("right")),
@@ -13605,7 +13605,7 @@ public class Coder {
                                                                                 ref(Utils.javaConstructorName),
                                                                                 wrap(
                                                                                     Identifier.TYPE_,
-                                                                                    string("hydra.util.Lazy")),
+                                                                                    string("hydra.overlay.java.util.Lazy")),
                                                                                 just(var("targs"))),
                                                                             list(
                                                                                 var("supplierLambda")),

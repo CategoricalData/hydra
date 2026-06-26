@@ -7,8 +7,8 @@ module Hydra.Generation (
 ) where
 
 import Hydra.Kernel
-import Hydra.Dsl.Annotations
-import Hydra.Dsl.Bootstrap
+import Hydra.Overlay.Haskell.Dsl.Annotations
+import Hydra.Overlay.Haskell.Bootstrap
 import Hydra.PackageRouting (RoutingMap, groupByPackageIn, namespaceToPackageIn)
 import Hydra.Packaging (_Module)
 import Hydra.Testing (TestGroup(..))
@@ -162,18 +162,9 @@ moduleAsBindings = map definitionAsBinding . moduleDefinitions
 
 
 -- | Generate and write the lexicon file (IO wrapper).
---
--- No type inference is performed: every kernel term definition already carries a fully
--- resolved type signature (termDefinitionSignature) in dist/json, and 'modulesToGraph'
--- copies those into the graph's bound types. 'generateLexicon' reads them directly. The
--- previous inference pass (inferAndGenerateLexicon) was redundant and actively harmful: it
--- required the synthesized hydra.{decode,encode}.core modules in the universe (#448, which
--- broke regeneration with "no such binding: hydra.decode.core.type") and dropped the schema
--- (Types-section) bindings from its reconstructed graph.
 writeLexicon :: FilePath -> [Module] -> IO ()
 writeLexicon path kernelModules = do
-  let graph = CodeGeneration.modulesToGraph bootstrapGraph kernelModules kernelModules
-  case CodeGeneration.generateLexicon graph of
+  case CodeGeneration.inferAndGenerateLexicon emptyInferenceContext bootstrapGraph kernelModules of
     Left err -> fail $ "Lexicon generation failed: " ++ showError err
     Right content -> do
       writeFile path content

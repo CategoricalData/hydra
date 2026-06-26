@@ -22,17 +22,17 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Inference as Inference
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lexical as Lexical
-import qualified Hydra.Haskell.Lib.Eithers as Eithers
-import qualified Hydra.Haskell.Lib.Equality as Equality
-import qualified Hydra.Haskell.Lib.Lists as Lists
-import qualified Hydra.Haskell.Lib.Literals as Literals
-import qualified Hydra.Haskell.Lib.Logic as Logic
-import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Optionals as Optionals
-import qualified Hydra.Haskell.Lib.Pairs as Pairs
-import qualified Hydra.Haskell.Lib.Sets as Sets
-import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Overlay.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Overlay.Haskell.Lib.Equality as Equality
+import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
+import qualified Hydra.Overlay.Haskell.Lib.Literals as Literals
+import qualified Hydra.Overlay.Haskell.Lib.Logic as Logic
+import qualified Hydra.Overlay.Haskell.Lib.Maps as Maps
+import qualified Hydra.Overlay.Haskell.Lib.Math as Math
+import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
+import qualified Hydra.Overlay.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Overlay.Haskell.Lib.Sets as Sets
+import qualified Hydra.Overlay.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
@@ -1520,7 +1520,7 @@ extendMetaForTypes types meta =
 
       let names = Sets.unions (Lists.map (\t -> Dependencies.typeDependencyNames False t) types)
           currentNs = PythonEnvironment.pythonModuleMetadataNamespaces meta
-          updatedNs = Analysis.addNamesToModuleNames PythonNames.encodeNamespace names currentNs
+          updatedNs = Analysis.addNamesToModuleNames PythonNames.encodeNamespaceWithOverrides names currentNs
           meta1 = setMetaNamespaces updatedNs meta
       in (Lists.foldl (\m -> \t -> extendMetaForType True False t m) meta1 types)
 -- | Extract CaseStatement from a case elimination term
@@ -1846,7 +1846,7 @@ moduleStandardImports meta =
                 ("functools", [
                   condImportSymbol "lru_cache" (PythonEnvironment.pythonModuleMetadataUsesLruCache meta)]),
                 (
-                  "hydra.dsl.python",
+                  "hydra.overlay.python.dsl.python",
                   [
                     condImportSymbol "Either" (PythonEnvironment.pythonModuleMetadataUsesEither meta),
                     (condImportSymbol "Given" (PythonEnvironment.pythonModuleMetadataUsesJust meta)),
@@ -1856,7 +1856,7 @@ moduleStandardImports meta =
                     (condImportSymbol "Optional" (PythonEnvironment.pythonModuleMetadataUsesMaybe meta)),
                     (condImportSymbol "Right" (PythonEnvironment.pythonModuleMetadataUsesRight meta))]),
                 (
-                  "hydra.python.util",
+                  "hydra.overlay.python.util",
                   [
                     condImportSymbol "ConsList" (PythonEnvironment.pythonModuleMetadataUsesFrozenList meta),
                     (condImportSymbol "Lazy" True),
@@ -2713,10 +2713,10 @@ unionTypeStatementsFor :: PythonEnvironment.PythonEnvironment -> Syntax.Name -> 
 unionTypeStatementsFor env name tparams mcomment tyexpr extraStmts =
     Logic.ifElse (useInlineTypeParamsFor (PythonEnvironment.pythonEnvironmentVersion env)) (Lists.concat2 [
       Utils.typeAliasStatement name tparams mcomment tyexpr] extraStmts) (Utils.unionTypeClassStatements310 name mcomment tyexpr extraStmts)
--- | Create an expression that calls hydra.dsl.python.unsupported(message) at runtime
+-- | Create an expression that calls hydra.overlay.python.dsl.python.unsupported(message) at runtime
 unsupportedExpression :: String -> Syntax.Expression
 unsupportedExpression msg =
-    Utils.functionCall (Utils.pyExpressionToPyPrimary (Utils.projectFromExpression (Utils.projectFromExpression (Utils.projectFromExpression (Syntax.ExpressionSimple (Syntax.Disjunction [
+    Utils.functionCall (Utils.pyExpressionToPyPrimary (Utils.projectFromExpression (Utils.projectFromExpression (Utils.projectFromExpression (Utils.projectFromExpression (Utils.projectFromExpression (Syntax.ExpressionSimple (Syntax.Disjunction [
       Syntax.Conjunction [
         Syntax.InversionSimple (Syntax.Comparison {
           Syntax.comparisonLhs = Syntax.BitwiseOr {
@@ -2736,7 +2736,7 @@ unsupportedExpression msg =
                           Syntax.awaitPrimaryAwait = False,
                           Syntax.awaitPrimaryPrimary = (Syntax.PrimarySimple (Syntax.AtomName (Syntax.Name "hydra")))},
                         Syntax.powerRhs = Nothing}))}}}}}},
-          Syntax.comparisonRhs = []})]])) (Syntax.Name "dsl")) (Syntax.Name "python")) (Syntax.Name "unsupported"))) [
+          Syntax.comparisonRhs = []})]])) (Syntax.Name "overlay")) (Syntax.Name "python")) (Syntax.Name "dsl")) (Syntax.Name "python")) (Syntax.Name "unsupported"))) [
       Utils.stringToPyExpression Syntax.QuoteStyleDouble msg]
 -- | Legacy constant for backward compatibility; use useInlineTypeParamsFor in new code
 useInlineTypeParams :: Bool

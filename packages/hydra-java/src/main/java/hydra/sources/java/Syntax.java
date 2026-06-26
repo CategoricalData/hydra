@@ -1,13 +1,13 @@
 package hydra.sources.java;
 import hydra.core.Type;
 import static hydra.dsl.meta.Defs.unqualifiedDeps;
-import hydra.dsl.Types;
+import hydra.overlay.java.dsl.Types;
 import hydra.packaging.Definition;
 import hydra.packaging.EntityMetadata;
 import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
 import hydra.packaging.ModuleDependency;
-import hydra.util.Optional;
+import hydra.overlay.java.util.Optional;
 
 import java.util.Arrays;
 import java.util.List;

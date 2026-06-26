@@ -5,20 +5,20 @@ module Hydra.Sources.Haskell.Coder where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.File (_FileExtension)
-import Hydra.Dsl.Libraries
+import Hydra.Overlay.Haskell.Libraries
 import qualified Hydra.Dsl.Lib.Strings                as Strings
-import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Annotations                     as Annotations
-import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
-import qualified Hydra.Dsl.LiteralTypes                    as LiteralTypes
-import qualified Hydra.Dsl.Literals                        as Literals
+import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
+import qualified Hydra.Overlay.Haskell.Dsl.Annotations                     as Annotations
+import qualified Hydra.Overlay.Haskell.Bootstrap                       as Bootstrap
+import qualified Hydra.Overlay.Haskell.Dsl.LiteralTypes                    as LiteralTypes
+import qualified Hydra.Overlay.Haskell.Dsl.Literals                        as Literals
 import qualified Hydra.Dsl.Paths                  as Paths
 import qualified Hydra.Dsl.Ast                        as Ast
-import qualified Hydra.Dsl.Meta.Base                       as MetaBase
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Base                       as MetaBase
 import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Util                    as Util
-import qualified Hydra.Dsl.Meta.Core                       as Core
-import qualified Hydra.Dsl.Meta.Graph                      as Graph
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core                       as Core
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
 import qualified Hydra.Dsl.Lib.Chars                  as Chars
 import qualified Hydra.Dsl.Lib.Eithers                as Eithers
@@ -32,19 +32,19 @@ import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Packaging                     as Packaging
-import qualified Hydra.Dsl.Meta.Terms                      as MetaTerms
-import qualified Hydra.Dsl.Meta.Testing                    as Testing
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Terms                      as MetaTerms
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing                    as Testing
 import qualified Hydra.Dsl.Topology                   as Topology
-import qualified Hydra.Dsl.Meta.Types                      as MetaTypes
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types                      as MetaTypes
 import qualified Hydra.Dsl.Typing                     as Typing
 import qualified Hydra.Dsl.Util                       as Util
-import qualified Hydra.Dsl.Meta.Variants                   as Variants
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Variants                   as Variants
 import qualified Hydra.Dsl.Errors                     as Error
-import qualified Hydra.Dsl.Prims                           as Prims
-import qualified Hydra.Dsl.Meta.Tabular                         as Tabular
-import qualified Hydra.Dsl.Terms                           as Terms
-import qualified Hydra.Dsl.Tests                           as Tests
-import qualified Hydra.Dsl.Types                           as Types
+import qualified Hydra.Overlay.Haskell.Dsl.Prims                           as Prims
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Tabular                         as Tabular
+import qualified Hydra.Overlay.Haskell.Dsl.Terms                           as Terms
+import qualified Hydra.Overlay.Haskell.Dsl.Tests                           as Tests
+import qualified Hydra.Overlay.Haskell.Dsl.Types                           as Types
 import qualified Hydra.Sources.Kernel.Terms.Adapt           as Adapt
 import qualified Hydra.Sources.Kernel.Terms.All            as KernelTerms
 import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
@@ -194,7 +194,7 @@ constructModule = haskellCoderDefinition "constructModule" $
         (Equality.equal
           (Lists.take (int32 2) (var "parts"))
           (list [string "hydra", string "lib"])))
-      (Strings.cat2 (string "hydra.haskell.lib.")
+      (Strings.cat2 (string "hydra.overlay.haskell.lib.")
         (Strings.intercalate (string ".") (Lists.drop (int32 2) (var "parts"))))
       (var "raw"),
   "createDeclarations">: "def" ~>
@@ -262,12 +262,12 @@ constructModule = haskellCoderDefinition "constructModule" $
         var "condImport"
           @@ (project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesSet @@ var "meta")
           @@ pair (pair (string "Data.Set") (just $ string "S")) (list ([] :: [TypedTerm String])),
-        -- Conditionally add Hydra.Haskell.Lib.Literals import (the native runtime
+        -- Conditionally add Hydra.Overlay.Haskell.Lib.Literals import (the native runtime
         -- for hydra.lib.literals) if binary or decimal literals are present.
         Logic.ifElse (Logic.or
             (Analysis.moduleContainsBinaryLiterals @@ var "mod")
             (Analysis.moduleContainsDecimalLiterals @@ var "mod"))
-          (list [pair (pair (string "Hydra.Haskell.Lib.Literals") (just $ string "Literals")) (list ([] :: [TypedTerm String]))])
+          (list [pair (pair (string "Hydra.Overlay.Haskell.Lib.Literals") (just $ string "Literals")) (list ([] :: [TypedTerm String]))])
           (list ([] :: [TypedTerm ((String, Maybe String), [String])]))]] $
     "declLists" <<~ Eithers.mapList (var "createDeclarations") (var "defs") $ lets [
     "decls">: Lists.concat $ var "declLists",

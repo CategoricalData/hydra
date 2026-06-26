@@ -6,8 +6,8 @@ import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Lexical as Lexical
-import qualified Hydra.Haskell.Lib.Eithers as Eithers
-import qualified Hydra.Haskell.Lib.Maps as Maps
+import qualified Hydra.Overlay.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Overlay.Haskell.Lib.Maps as Maps
 import qualified Hydra.Reduction as Reduction
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Test.TestGraph as TestGraph

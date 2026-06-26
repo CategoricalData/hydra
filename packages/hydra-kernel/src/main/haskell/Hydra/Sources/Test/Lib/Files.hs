@@ -2,17 +2,17 @@ module Hydra.Sources.Test.Lib.Files where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Dsl.Meta.Testing                 as Testing
+import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
 -- Effectful test cases use HONESTLY-TYPED builders (Phantoms + Literals), NOT the reified-Term
--- builders in Hydra.Dsl.Meta.Terms: effectful cases compile directly to raw target effectful code,
+-- builders in Hydra.Overlay.Haskell.Dsl.Typed.Terms: effectful cases compile directly to raw target effectful code,
 -- so their terms must infer at their true types (effect<...>, string, binary). For #494.
-import Hydra.Dsl.Meta.Phantoms hiding ((++))  -- (@@), primitive, lambda, var, wrap, just, nothing
-import Hydra.Dsl.Meta.Literals               (string, binary)
+import Hydra.Overlay.Haskell.Dsl.Typed.Phantoms hiding ((++))  -- (@@), primitive, lambda, var, wrap, just, nothing
+import Hydra.Overlay.Haskell.Dsl.Typed.Literals               (string, binary)
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Dsl.Meta.Core          as Core
-import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
-import qualified Hydra.Dsl.Meta.Types         as T
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
 import qualified Data.ByteString.Char8        as BC
 import qualified Data.List                    as L
 import qualified Data.Map                     as M

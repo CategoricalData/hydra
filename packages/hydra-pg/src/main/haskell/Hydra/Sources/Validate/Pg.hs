@@ -3,10 +3,10 @@ module Hydra.Sources.Validate.Pg where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel hiding (Edge(..), _Edge, _Edge_in, _Edge_out, Element(..), _Element, Graph(..), _Graph)
-import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
+import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
 import qualified Hydra.Dsl.Lib.Strings                as Strings
-import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Meta.Core                       as Core
+import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core                       as Core
 import qualified Hydra.Dsl.Lib.Equality               as Equality
 import qualified Hydra.Dsl.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Lib.Logic                  as Logic

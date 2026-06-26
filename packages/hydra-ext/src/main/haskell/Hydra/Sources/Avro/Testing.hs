@@ -3,10 +3,10 @@
 module Hydra.Sources.Avro.Testing where
 
 import           Hydra.Kernel
-import           Hydra.Dsl.Annotations (doc)
-import           Hydra.Dsl.Bootstrap
-import           Hydra.Dsl.Types                 ((>:))
-import qualified Hydra.Dsl.Types                 as T
+import           Hydra.Overlay.Haskell.Dsl.Annotations (doc)
+import           Hydra.Overlay.Haskell.Bootstrap
+import           Hydra.Overlay.Haskell.Dsl.Types                 ((>:))
+import qualified Hydra.Overlay.Haskell.Dsl.Types                 as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Json.Model        as JsonModel
 import qualified Hydra.Sources.Avro.Schema   as AvroSchema

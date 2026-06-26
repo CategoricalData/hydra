@@ -1,0 +1,100 @@
+package hydra.overlay.java.tools;
+
+import java.util.List;
+
+import hydra.overlay.java.util.ConsList;
+
+
+/**
+ * A simple tail-sharing linked list.
+ * @param <X> the element type
+ */
+public class LList<X> {
+    /**
+     * The first element of the list.
+     */
+    public final X first;
+    /**
+     * The rest of the list, or null if this is the last element.
+     */
+    public final LList<X> rest;
+
+    /**
+     * Construct a list using a given head and tail (where the tail may be null).
+     * @param first the first element
+     * @param rest the rest of the list
+     */
+    public LList(X first, LList<X> rest) {
+        this.first = first;
+        this.rest = rest;
+    }
+
+    /**
+     * Find the length of a list (which may be null).
+     * @param <X> the element type
+     * @param list the list
+     * @return the length
+     */
+    public static <X> int length(LList<X> list) {
+        LList<X> cur = list;
+        int len = 0;
+        while (cur != null) {
+            len++;
+            cur = cur.rest;
+        }
+        return len;
+    }
+
+    /**
+     * Check whether a list is empty (null).
+     * @param <X> the element type
+     * @param list the list
+     * @return true if the list is null
+     */
+    public static <X> boolean isEmpty(LList<X> list) {
+        return list == null;
+    }
+
+    /**
+     * Construct a list by logically pushing a value to the head of another list (which is not modified).
+     * @param <X> the element type
+     * @param value the value to push
+     * @param list the original list
+     * @return the new list
+     */
+    public static <X> LList<X> push(X value, LList<X> list) {
+        return new LList<>(value, list);
+    }
+
+    /**
+     * Construct a list by logically dropping n values from the head of another list (which is not modified).
+     * @param <X> the element type
+     * @param n the number of elements to drop
+     * @param list the original list
+     * @return the new list
+     */
+    public static <X> LList<X> drop(int n, LList<X> list) {
+        LList<X> cur = list;
+        for (int i = 0; i < n; i++) {
+            cur = cur.rest;
+        }
+        return cur;
+    }
+
+    /**
+     * Construct a list by logically taking the first n values from the head of another list (which is not modified).
+     * @param <X> the element type
+     * @param n the number of elements to take
+     * @param list the original list
+     * @return the new list
+     */
+    public static <X> List<X> take(int n, LList<X> list) {
+        ConsList<X> reversed = ConsList.empty();
+        LList<X> cur = list;
+        for (int i = 0; i < n; i++) {
+            reversed = ConsList.cons(cur.first, reversed);
+            cur = cur.rest;
+        }
+        return reversed.reverse();
+    }
+}

@@ -19,7 +19,7 @@ module Hydra.Tools.AvroWorkflows (
 import Hydra.Kernel hiding (Result)
 import Hydra.Workflow
 import qualified Hydra.Show.Errors as ShowError
-import Hydra.Dsl.Annotations
+import Hydra.Overlay.Haskell.Dsl.Annotations
 import qualified Hydra.Avro.Schema as Avro
 import qualified Hydra.Json.Model as Json
 import Hydra.Extract.Json

@@ -196,14 +196,12 @@ doFresh opts = do
       exitFailure
     else return ()
 
-  -- Generator id must match (the sole gating field from the generation record;
-  -- see GenerationRecord in Hydra.Digest for the gating vs informational split).
+  -- Generator stamp must match.
   currentGen <- generatorStamp
-  let recordedGenId = generationId (digestGeneration outputDigest)
-  if currentGen /= recordedGenId
+  if currentGen /= digestGenerator outputDigest
     then do
-      putStrLn $ "  digest-check: generatorId mismatch ("
-        ++ recordedGenId ++ " vs " ++ currentGen
+      putStrLn $ "  digest-check: generator stamp mismatch ("
+        ++ digestGenerator outputDigest ++ " vs " ++ currentGen
         ++ "); cache miss"
       exitFailure
     else return ()
@@ -310,12 +308,12 @@ doRefresh opts = do
     let rel = Hydra.Digest.makeRelativeTo outputDir fp
     return (rel, DigestEntry KindTargetFile h)
 
-  gen <- generationRecord
+  gen <- generatorStamp
 
   let d = Digest
         { digestInputs           = inputsAsMap
         , digestOutputs          = outputs
-        , digestGeneration       = gen
+        , digestGenerator        = gen
         , digestRecordedSelfHash = Hydra.Digest.ppSelfHash inputPpd
         , digestRecordedDeps     = Hydra.Digest.ppDeps inputPpd
         }

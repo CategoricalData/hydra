@@ -2,19 +2,19 @@ module Hydra.Sources.Test.TestGraph where
 
 -- Standard imports for kernel test fixtures
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Dsl.Meta.Testing                 as Testing
-import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
+import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
+import Hydra.Overlay.Haskell.Dsl.Typed.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Dsl.Meta.Core          as Core
-import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
-import           Hydra.Dsl.Meta.Phantoms                ((@@))
-import qualified Hydra.Dsl.Meta.Types         as T
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
+import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                ((@@))
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Test.TestEnv as TestEnv
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
-import qualified Hydra.Dsl.Meta.Graph         as Graph
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Graph         as Graph
 import qualified Hydra.Dsl.Packaging        as DPackaging
 import qualified Hydra.Dsl.Lib.Chars     as Chars
 import qualified Hydra.Dsl.Lib.Equality  as Equality
@@ -26,15 +26,15 @@ import qualified Hydra.Dsl.Lib.Math      as Math
 import qualified Hydra.Dsl.Lib.Optionals    as Optionals
 import qualified Hydra.Dsl.Lib.Sets      as Sets
 import qualified Hydra.Dsl.Lib.Strings   as Strings
-import qualified Hydra.Dsl.Terms              as DslTerms
-import qualified Hydra.Dsl.Types              as Types
+import qualified Hydra.Overlay.Haskell.Dsl.Terms              as DslTerms
+import qualified Hydra.Overlay.Haskell.Dsl.Types              as Types
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
 import           Prelude hiding ((++))
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 import qualified Data.Set                     as S
 import qualified Data.Maybe                   as Y
-import           Hydra.Dsl.Meta.Base          ((>:))
+import           Hydra.Overlay.Haskell.Dsl.Typed.Base          ((>:))
 import qualified Hydra.Error.File             as FileError
 import qualified Hydra.File                   as File
 

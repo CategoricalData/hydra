@@ -17,9 +17,9 @@ module Hydra.Sources.Test.TestEnv where
 
 -- Standard imports for kernel test fixtures
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Dsl.Meta.Phantoms
-import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
+import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Overlay.Haskell.Dsl.Typed.Phantoms
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms as Phantoms
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import Hydra.Sources.Kernel.Types.All
 import qualified Data.Map as M

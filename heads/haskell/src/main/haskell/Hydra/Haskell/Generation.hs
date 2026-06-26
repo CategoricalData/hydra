@@ -9,7 +9,7 @@ module Hydra.Haskell.Generation (
 ) where
 
 import Hydra.Kernel
-import Hydra.Dsl.Bootstrap (unqualifiedDep)
+import Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep)
 import Hydra.Haskell.Coder
 import Hydra.Haskell.Language
 import Hydra.Generation
@@ -95,19 +95,7 @@ writeDslHaskell basePath universeModules typeModules = do
 -- Lexicon
 ----------------------------------------
 
--- | Generate the lexicon to the standard location. Paths are relative to heads/haskell/
--- (where the sync script runs stack ghci).
---
--- The lexicon is built from the *generated* kernel modules under dist/json, NOT from the
--- in-memory DSL source modules (Sources.kernelModules). The DSL sources carry types only as
--- Haskell phantom types, so their termDefinitionSignature is Nothing — rendering them would
--- require type inference (the old, fragile path: it broke on the synthesized
--- hydra.{decode,encode}.core dependency since #448, and emitted "?" for un-inferred bindings).
--- The dist/json modules instead carry a fully resolved signature for every definition, so the
--- lexicon is produced with no inference.
+-- | Generate the lexicon to the standard location, using the Haskell-host kernel modules.
+-- Path is relative to heads/haskell/ (where the sync script runs stack ghci).
 writeLexiconToStandardPath :: IO ()
-writeLexiconToStandardPath = do
-  let kernelJsonDir = "../../dist/json/hydra-kernel/src/main/json"
-      kernelNamespaces = map moduleName Sources.kernelModules
-  loadedModules <- loadModulesFromJson kernelJsonDir Sources.kernelModules kernelNamespaces
-  writeLexicon "../../docs/hydra-lexicon.txt" loadedModules
+writeLexiconToStandardPath = writeLexicon "../../docs/hydra-lexicon.txt" Sources.kernelModules

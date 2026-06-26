@@ -3,7 +3,7 @@ package hydra
 import hydra.core.*
 import hydra.graph.{Graph, Primitive}
 import hydra.testing.*
-import hydra.lib.Libraries
+import hydra.overlay.scala.Libraries
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.funsuite.AnyFunSuite
 

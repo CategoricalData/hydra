@@ -4,12 +4,12 @@ module Hydra.Sources.Test.TestSuite where
 
 -- Standard imports for deep DSL tests (produces TypedTerm a with specific types)
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Dsl.Meta.Testing                 as Testing
-import Hydra.Dsl.Meta.Phantoms                as Phantoms hiding ((++))
+import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
+import Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                as Phantoms hiding ((++))
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Dsl.Meta.Core          as Core
-import qualified Hydra.Dsl.Meta.Types         as T
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
@@ -167,8 +167,7 @@ testSuiteModules =
    CheckingFailures.module_, CheckingFundamentals.module_, CheckingNominalTypes.module_,
    -- Inference tests (including sub-modules)
    InferenceAll.module_,
-   InferenceAlgebraicTypes.module_, InferenceAlgorithmW.module_, InferenceAnnotations.module_,
-   InferenceClasses.module_, InferenceFailures.module_,
+   InferenceAlgebraicTypes.module_, InferenceAlgorithmW.module_, InferenceAnnotations.module_, InferenceClasses.module_, InferenceFailures.module_,
    InferenceFundamentals.module_, InferenceKernelExamples.module_, InferenceNominalTypes.module_,
    -- Substitution and unification tests
    Substitution.module_, Unification.module_,

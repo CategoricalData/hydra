@@ -598,7 +598,7 @@ main = do
   --     (hydra/lib/chars/*.java) + Libraries.java/PrimitiveType.java; no filename clash.
   --   * python / scala / lisp dialects: the generated def path (hydra/lib/math.<ext>)
   --     collides with the native impl at the same path; those hosts need their impls
-  --     relocated to hydra.<lang>.lib.* first (mirroring Haskell's Hydra.Haskell.Lib.*).
+  --     relocated to hydra.<lang>.lib.* first (mirroring Haskell's Hydra.Overlay.Haskell.Lib.*).
   --     Enabled here incrementally as each host's impls are relocated.
   let twoPassLib = target `elem` ["java", "python", "scala", "clojure", "scheme", "common-lisp", "emacs-lisp"]
   let applyLowering = if target == "haskell"
@@ -647,37 +647,36 @@ main = do
   -- emits files only for the modsToGenerate argument (per the existing
   -- typeModulesToGenerate / termModulesToGenerate filters in
   -- Hydra.Codegen). No expansion, no prune.
-  -- #473 Step 0 — consumer-pass redirect transform. The hydra.lib.* primitive
-  -- IMPLEMENTATIONS live at hydra.<lang>.lib.* (the analog of Haskell's
-  -- Hydra.Haskell.Lib.*), so hydra.lib.* is free for the generated PrimitiveDefinition
+  -- #473 Step 0 / #501 — consumer-pass redirect transform. The hydra.lib.* primitive
+  -- IMPLEMENTATIONS live at hydra.overlay.<lang>.lib.* (the analog of Haskell's
+  -- Hydra.Overlay.Haskell.Lib.*), so hydra.lib.* is free for the generated PrimitiveDefinition
   -- def-modules (emitted by the lib pass). Generated CONSUMER code calls primitives as
-  -- hydra.lib.<sub>.<fn>; rewrite those references to hydra.<lang>.lib.<sub>.<fn> so they
-  -- resolve to the relocated impls. Applied ONLY to the consumer pass (the lib pass keeps
+  -- hydra.lib.<sub>.<fn>; rewrite those references to hydra.overlay.<lang>.lib.<sub>.<fn> so
+  -- they resolve to the relocated impls. Applied ONLY to the consumer pass (the lib pass keeps
   -- its hydra.lib.* def-module names). Every hydra.lib.<sub> occurrence in generated source
   -- is a member access (verified), so this textual redirect is safe. No-op for Haskell/Java
   -- (Java's impls don't collide; Haskell uses the registry).
   let libSubs = ["chars","eithers","equality","lists","literals","logic","maps","math","optionals","pairs","regex","sets","strings"]
-  -- The effectful lib sub-namespaces (#286/#498) have native impls only in hosts that ship
-  -- hydra.<lang>.lib.<sub>; redirecting a call site for a sub the host lacks would dangle. "system"
-  -- (#498) is added per-host as each host's overlay runtime lands: Python first; Scala and the Lisp
-  -- dialects gain it when their hydra.<lang>.lib.system overlays are added.
+  -- The effectful lib sub-namespaces (#286) have native impls in Python only (hydra.overlay.python.lib.{effects,files,text});
+  -- other hosts lack hydra.overlay.<lang>.lib.{effects,files,text}, so redirecting their call sites would dangle. Restrict the
+  -- effectful redirect to Python by extending the sub-list only for the Python consumer transform.
   let libSubsPython = libSubs ++ ["effects","files","system","text"]
-  -- Scala (#494/#498) provides native effectful impls at hydra.scala.lib.{effects,files,system,text}.
+  -- Scala (#494) likewise provides native effectful impls at hydra.overlay.scala.lib.{effects,files,text},
+  -- so its consumer call sites are redirected for these sub-namespaces too.
   let libSubsScala = libSubs ++ ["effects","files","system","text"]
-  -- Clojure (#494/#498) provides native effectful impls at hydra.clojure.lib.{effects,files,system,text}
-  -- (overlay/clojure/.../hydra/clojure/lib/{effects,files,system,text}.clj), so its consumer call sites
+  -- Clojure (#494) provides native effectful impls at hydra.overlay.clojure.lib.{effects,files,text}
+  -- (overlay/clojure/.../hydra/overlay/clojure/lib/{effects,files,text}.clj), so its consumer call sites
   -- are redirected for these sub-namespaces too. The other Lisp dialects (scheme/common-lisp/
   -- emacs-lisp) do not yet have these runtimes, so they keep the baseline libSubs.
   let libSubsClojure = libSubs ++ ["effects","files","system","text"]
-  -- Scheme (#494/#498) provides native effectful impls at (hydra scheme lib {effects,files,system,text})
-  -- (overlay/scheme/.../hydra/scheme/lib/{effects,files,system,text}.scm), so its consumer call sites
+  -- Scheme (#494) provides native effectful impls at (hydra overlay scheme lib {effects,files,text})
+  -- (overlay/scheme/.../hydra/scheme/lib/{effects,files,text}.scm), so its consumer call sites
   -- are redirected for these sub-namespaces too. The other Lisp dialects (common-lisp/emacs-lisp)
   -- do not yet have these runtimes, so they keep the baseline libSubs.
   let libSubsScheme = libSubs ++ ["effects","files","system","text"]
-  -- Common Lisp and Emacs Lisp share the flat-namespace redirect (redirectLispFlat "lisp"). Both
-  -- now ship native effectful impls at hydra/common_lisp/lib/{effects,files,system,text}.lisp and
-  -- hydra/emacs_lisp/lib/{effects,files,system,text}.el (system added #498), so the
-  -- shared flat redirect renames their effectful call sites too (and drops the def-module :use).
+  -- Common Lisp and Emacs Lisp each get their own per-dialect langSeg (#501). Both now ship
+  -- native effectful impls at hydra/common_lisp/lib/{effects,files,text}.lisp and
+  -- hydra/emacs_lisp/lib/{effects,files,text}.el, so the effectful subs are included.
   let libSubsLisp = libSubs ++ ["effects","files","system","text"]
   -- For each lib sub-namespace, redirect the CODE-REFERENCE shapes the coders emit:
   --   1. member access / qualified prefix:  hydra.lib.<sub>.<fn>   (and bare prefix uses)
@@ -694,7 +693,7 @@ main = do
   -- ('.', ';', newline, space) so e.g. "lists" never clobbers "listsX".
   let redirectForSubs subs langSeg s =
         let old = "hydra.lib."
-            new = "hydra." ++ langSeg ++ ".lib."
+            new = "hydra.overlay." ++ langSeg ++ ".lib."
             sentinel = "\0HYDRALIBNAME\0"  -- cannot occur in generated source
             protect   = replaceAll "\"hydra.lib." ("\"" ++ sentinel)
             restore   = replaceAll sentinel "hydra.lib."
@@ -702,7 +701,7 @@ main = do
                          $ replaceAll (old ++ sub ++ ";")  (new ++ sub ++ ";")    -- import hydra.lib.X; (java/scala)
                          $ replaceAll (old ++ sub ++ "\n") (new ++ sub ++ "\n")   -- import hydra.lib.X<newline> (python)
                          $ replaceAll (old ++ sub ++ " ")  (new ++ sub ++ " ")    -- "hydra.lib.X as Y" etc.
-                         $ replaceAll ("hydra.lib import " ++ sub) ("hydra." ++ langSeg ++ ".lib import " ++ sub) acc
+                         $ replaceAll ("hydra.lib import " ++ sub) ("hydra.overlay." ++ langSeg ++ ".lib import " ++ sub) acc
         in restore (L.foldl' repl (protect s) subs)
   let redirectFor = redirectForSubs libSubs
   -- Scheme (R7RS) names library modules with the space-separated form `(hydra lib <sub>)`
@@ -712,34 +711,51 @@ main = do
   -- (untouched by this space-form rewrite). Idempotent and unambiguous: "(hydra lib X" only
   -- occurs as a library/import reference.
   let redirectSchemeForSubs subs langSeg s =
-        let repl acc sub = replaceAll ("(hydra lib " ++ sub ++ ")") ("(hydra " ++ langSeg ++ " lib " ++ sub ++ ")") acc
+        let repl acc sub = replaceAll ("(hydra lib " ++ sub ++ ")") ("(hydra overlay " ++ langSeg ++ " lib " ++ sub ++ ")") acc
         in L.foldl' repl s subs
   let redirectSchemeFor = redirectSchemeForSubs libSubsScheme
-  -- Common Lisp is a flat-namespace dialect: native primitive impls are plain `defvar hydra_lib_<sub>_<fn>`
-  -- in :cl-user (no per-module package). The generated consumer modules, however, emit a defpackage
-  -- `(:use ... :hydra.lib.<sub> ...)` clause for each lib they reference. In baseline `:hydra.lib.<sub>` is
-  -- an EMPTY placeholder package (the loader auto-creates it), so the `:use` is a no-op and the bare
-  -- `hydra_lib_<sub>_<fn>` symbol resolves to the flat :cl-user impl. After Step 0 the lib pass emits a REAL
-  -- `(defpackage :hydra.lib.<sub> (:export :hydra_lib_<sub>_<fn> ...))` whose symbol is a PrimitiveDefinition
-  -- value — so a consumer that `:use`s it imports DATA over the impl. The fix has two parts:
-  --   (1) rename consumer CALL sites hydra_lib_<sub>_ -> hydra_lisp_lib_<sub>_ (impl defvars + registry are
-  --       renamed to match, by hand), so calls hit the relocated impls; and
-  --   (2) DROP the `:hydra.lib.<sub>` token from consumer defpackage (:use ...) clauses, so consumers no
-  --       longer import the real def-module package (they never needed its symbols — they call the flat
-  --       :cl-user impls). The def-modules still ship as standalone packages; nothing :use-imports them.
+  -- Common Lisp and Emacs Lisp are flat-namespace dialects: native primitive impls are plain
+  -- `defvar hydra_overlay_<lang>_lib_<sub>_<fn>` in :cl-user (no per-module package). The
+  -- generated consumer modules emit a defpackage `(:use ... :hydra.lib.<sub> ...)` clause for
+  -- each lib they reference. In baseline `:hydra.lib.<sub>` is an EMPTY placeholder package
+  -- (the loader auto-creates it), so the `:use` is a no-op and the bare symbol resolves to the
+  -- flat :cl-user impl. After Step 0 the lib pass emits a REAL
+  -- `(defpackage :hydra.lib.<sub> (:export :hydra_lib_<sub>_<fn> ...))` whose symbol is a
+  -- PrimitiveDefinition value — so a consumer that `:use`s it imports DATA over the impl.
+  -- The fix has two parts:
+  --   (1) rename consumer CALL sites hydra_lib_<sub>_ -> hydra_overlay_<lang>_lib_<sub>_ (impl
+  --       defvars + registry are renamed to match, by hand), so calls hit the relocated impls; and
+  --   (2) DROP the `:hydra.lib.<sub>` token from consumer defpackage (:use ...) clauses, so
+  --       consumers no longer import the real def-module package.
   -- Primitive NAME strings are dotted "hydra.lib..." and untouched by the underscore rewrite.
+  -- langSeg is "common_lisp" or "emacs_lisp" per #501 (each dialect gets its own namespace).
   let redirectLispFlat langSeg s =
-        let renameCalls acc sub = replaceAll ("hydra_lib_" ++ sub ++ "_") ("hydra_" ++ langSeg ++ "_lib_" ++ sub ++ "_") acc
+        let renameCalls acc sub = replaceAll ("hydra_lib_" ++ sub ++ "_") ("hydra_overlay_" ++ langSeg ++ "_lib_" ++ sub ++ "_") acc
             -- drop the package token from `(:use ... :hydra.lib.<sub> ...)` (leading space form)
             dropUse acc sub = replaceAll (" :hydra.lib." ++ sub) "" acc
         in L.foldl' dropUse (L.foldl' renameCalls s libSubsLisp) libSubsLisp
+  -- The hand-written test environment hydra.test.testEnv is skip-emitted from
+  -- generated output and supplied by overlay/<lang>/ under the renamed namespace
+  -- hydra.overlay.<lang>.test.testEnv (#501). Generated test modules still
+  -- reference it by its canonical name, so redirect the code reference (NOT the
+  -- quoted primitive-name strings, which never contain "test.testEnv") to the
+  -- overlay namespace for the dialects whose tests resolve testEnv by module
+  -- reference. Clojure uses the dotted form `hydra.test.testEnv`; Scheme uses the
+  -- space-separated library form `(hydra test testEnv)`. Common Lisp / Emacs Lisp
+  -- load the hand-written test_env explicitly via their run-tests.lisp/loader, so
+  -- they need no code redirect here (their loader path is fixed separately).
+  let redirectClojureTestEnv langSeg s =
+        replaceAll "hydra.test.testEnv" ("hydra.overlay." ++ langSeg ++ ".test.testEnv") s
+  let redirectSchemeTestEnv langSeg s =
+        replaceAll "(hydra test testEnv)" ("(hydra overlay " ++ langSeg ++ " test testEnv)")
+          $ replaceAll "hydra.test.testEnv" ("hydra.overlay." ++ langSeg ++ ".test.testEnv") s
   let consumerTransform = case target of
         "python"      -> redirectForSubs libSubsPython "python"
         "scala"       -> wrapLongScalaText . redirectForSubs libSubsScala "scala"
-        "clojure"     -> redirectForSubs libSubsClojure "clojure"
-        "scheme"      -> redirectSchemeFor "scheme"
-        "common-lisp" -> redirectLispFlat "lisp"
-        "emacs-lisp"  -> redirectLispFlat "lisp"
+        "clojure"     -> redirectClojureTestEnv "clojure" . redirectForSubs libSubsClojure "clojure"
+        "scheme"      -> redirectSchemeTestEnv "scheme" . redirectSchemeFor "scheme"
+        "common-lisp" -> redirectLispFlat "common_lisp"
+        "emacs-lisp"  -> redirectLispFlat "emacs_lisp"
         _             -> id
   let genForDirT :: (String -> String) -> [Module] -> FilePath -> [Module] -> IO [FilePath]
       genForDirT xform universe dir mods = case target of

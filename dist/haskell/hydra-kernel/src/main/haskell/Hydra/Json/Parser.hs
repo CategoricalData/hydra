@@ -14,12 +14,12 @@ import qualified Hydra.Errors as Errors
 import qualified Hydra.File as File
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
-import qualified Hydra.Haskell.Lib.Equality as Equality
-import qualified Hydra.Haskell.Lib.Lists as Lists
-import qualified Hydra.Haskell.Lib.Literals as Literals
-import qualified Hydra.Haskell.Lib.Logic as Logic
-import qualified Hydra.Haskell.Lib.Optionals as Optionals
-import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Overlay.Haskell.Lib.Equality as Equality
+import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
+import qualified Hydra.Overlay.Haskell.Lib.Literals as Literals
+import qualified Hydra.Overlay.Haskell.Lib.Logic as Logic
+import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
+import qualified Hydra.Overlay.Haskell.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsers as Parsers
 import qualified Hydra.Parsing as Parsing
@@ -38,7 +38,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-import qualified Hydra.Haskell.Lib.Literals as Literals
+import qualified Hydra.Overlay.Haskell.Lib.Literals as Literals
 -- | Parse a single digit (0-9)
 digit :: Parsing.Parser Int
 digit = Parsers.satisfy (\c -> Logic.and (Equality.gte c 48) (Equality.lte c 57))

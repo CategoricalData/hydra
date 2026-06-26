@@ -3,9 +3,9 @@
 
 module Hydra.Test.Lib.Effects where
 import qualified Hydra.Core as Core
-import qualified Hydra.Haskell.Lib.Effects as Effects
-import qualified Hydra.Haskell.Lib.Optionals as Optionals
-import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Overlay.Haskell.Lib.Effects as Effects
+import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
+import qualified Hydra.Overlay.Haskell.Lib.Strings as Strings
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci

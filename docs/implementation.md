@@ -560,10 +560,8 @@ and is **the** canonical registry for its module name:
 | Library | Count | Examples |
 |---------|-------|----------|
 | **hydra.lib.chars** | 6 | `isAlphaNum`, `isLower`, `toUpper` |
-| **hydra.lib.effects** | 8 | `bind`, `pure`, `map`, `compose`, `fail` (effectful) |
 | **hydra.lib.eithers** | 15 | `either`, `isLeft`, `rights`, `bimap`, `bind` |
 | **hydra.lib.equality** | 9 | `equal`, `compare`, `gt`, `lt`, `max` |
-| **hydra.lib.files** | 11 | `readFile`, `writeFile`, `status`, `listDirectory` (effectful) |
 | **hydra.lib.lists** | 37 | `map`, `filter`, `foldl`, `concat`, `sort` |
 | **hydra.lib.literals** | 55 | Type conversions, parsing, showing |
 | **hydra.lib.logic** | 4 | `and`, `or`, `not`, `ifElse` |
@@ -574,10 +572,8 @@ and is **the** canonical registry for its module name:
 | **hydra.lib.regex** | 6 | `matches`, `find`, `findAll`, `replace`, `replaceAll`, `split` |
 | **hydra.lib.sets** | 14 | `union`, `intersection`, `member` |
 | **hydra.lib.strings** | 13 | `cat`, `splitOn`, `length`, `lines` |
-| **hydra.lib.system** | 6 | `execute`, `exit`, `getEnvironment`, `getTime`, `getWorkingDirectory` (effectful) |
-| **hydra.lib.text** | 2 | `encodeUtf8`, `decodeUtf8` |
 
-**Total: 268 primitive functions** (the effectful `effects`/`files`/`system` libraries arrived with 0.17).
+**Total: 241 primitive functions** (post-#156).
 
 ### Three-level definition structure
 

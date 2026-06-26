@@ -79,7 +79,7 @@ lisp_assemble_main() {
     # All four Lisp dialects share dist/json/hydra-lisp/ (the dialect is a
     # runtime parameter, not a separate coder package), so the stamp scope
     # is "lisp" regardless of LISP_DIALECT.
-    eval "$(setup_generator_env lisp)"
+    export HYDRA_GENERATOR_STAMP=$(compute_generator_stamp lisp)
 
     # #357: optional --keep-paths-from forwarded from the dialect wrapper.
     # The Scheme wrapper builds a manifest (via scheme_keep_paths) listing

@@ -8,9 +8,9 @@ module Hydra.Sources.Protobuf.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
+import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
 import qualified Hydra.Dsl.Lib.Strings                as Strings
-import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
+import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Lib.Equality               as Equality
 import qualified Hydra.Dsl.Lib.Lists                  as Lists
@@ -22,7 +22,7 @@ import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Coders                     as Coders
-import qualified Hydra.Dsl.Meta.Core                       as Core
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core                       as Core
 import qualified Hydra.Dsl.Errors                      as Error
 import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Util                       as Util

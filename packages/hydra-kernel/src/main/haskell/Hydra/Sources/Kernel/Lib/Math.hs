@@ -4,13 +4,13 @@
 module Hydra.Sources.Kernel.Lib.Math where
 
 import Hydra.Kernel
-import qualified Hydra.Dsl.Bootstrap         as Bootstrap
+import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Lib.Equality as Equality
 import qualified Hydra.Dsl.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Lib.Math     as Math
 import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import           Hydra.Dsl.Meta.Phantoms     as Phantoms
-import qualified Hydra.Dsl.Types             as Types
+import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
+import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++), abs, acos, acosh, asin, asinh, atan, atan2, atanh,
                                ceiling, cos, cosh, even, exp, floor, log, logBase,

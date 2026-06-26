@@ -4,11 +4,11 @@
 module Hydra.Sources.Kernel.Lib.Optionals where
 
 import Hydra.Kernel
-import qualified Hydra.Dsl.Bootstrap         as Bootstrap
+import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Optionals as Optionals
-import           Hydra.Dsl.Meta.Phantoms     as Phantoms hiding (apply, cases, compose, map)
-import qualified Hydra.Dsl.Types             as Types
+import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (apply, cases, compose, map)
+import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++), map, pure)
 

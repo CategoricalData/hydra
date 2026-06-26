@@ -5,8 +5,8 @@ import hydra.errors.Error_;
 import hydra.graph.Graph;
 import hydra.packaging.Definition;
 import hydra.packaging.Module;
-import hydra.util.Either;
-import hydra.util.Pair;
+import hydra.overlay.java.util.Either;
+import hydra.overlay.java.util.Pair;
 
 import java.io.File;
 import java.io.IOException;
@@ -164,11 +164,11 @@ public class GenerationTargets {
         final hydra.util.CaseConvention cc = caseConv;
         generateSources(
                 mod -> defs -> cx -> g -> {
-                    hydra.util.Either result = hydra.lisp.Coder.moduleToLisp(d, mod, defs, cx, g);
-                    if (result instanceof hydra.util.Either.Left) {
+                    hydra.overlay.java.util.Either result = hydra.lisp.Coder.moduleToLisp(d, mod, defs, cx, g);
+                    if (result instanceof hydra.overlay.java.util.Either.Left) {
                         return result;
                     }
-                    hydra.lisp.syntax.Program program = (hydra.lisp.syntax.Program) ((hydra.util.Either.Right) result).value;
+                    hydra.lisp.syntax.Program program = (hydra.lisp.syntax.Program) ((hydra.overlay.java.util.Either.Right) result).value;
                     String code = hydra.Serialization.printExpr(
                             hydra.Serialization.parenthesize(
                                     hydra.lisp.Serde.programToExpr(program)));
@@ -176,7 +176,7 @@ public class GenerationTargets {
                             cc, new hydra.file.FileExtension(fileExt), mod.name);
                     Map<String, String> fileMap = new java.util.TreeMap<>();
                     fileMap.put(filePath, code);
-                    return new hydra.util.Either.Right(fileMap);
+                    return new hydra.overlay.java.util.Either.Right(fileMap);
                 },
                 hydra.lisp.Language.lispLanguage(),
                 false,

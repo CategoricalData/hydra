@@ -1,8 +1,8 @@
 module Hydra.Demos.Genpg.Examples.Health.DatabaseSchema where
 
 import Hydra.Tabular
-import Hydra.Dsl.Meta.Tabular (tableType, columnType)
-import Hydra.Dsl.Types (string, int32, float64, boolean)
+import Hydra.Overlay.Haskell.Dsl.Typed.Tabular (tableType, columnType)
+import Hydra.Overlay.Haskell.Dsl.Types (string, int32, float64, boolean)
 
 appointmentsTable :: TableType
 appointmentsTable = tableType "appointments.csv" [

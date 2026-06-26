@@ -3,8 +3,8 @@ package hydra.pg;
 import hydra.HydraTestBase;
 import hydra.core.Literal;
 import hydra.core.LiteralType;
-import hydra.dsl.LiteralTypes;
-import hydra.dsl.Literals;
+import hydra.overlay.java.dsl.LiteralTypes;
+import hydra.overlay.java.dsl.Literals;
 import hydra.pg.dsl.Graphs;
 import hydra.pg.model.Edge;
 import hydra.pg.model.EdgeType;
@@ -28,7 +28,7 @@ public abstract class PropertyGraphTestBase extends HydraTestBase {
     protected static final VertexType<LiteralType> VERTEX_TYPE_PERSON_B
             = VERTEX_TYPE_PERSON_A.withId(LiteralTypes.int32());
     protected static final VertexType<LiteralType> VERTEX_TYPE_PERSON_C
-            = VERTEX_TYPE_PERSON_A.withProperties(hydra.util.ConsList.empty());
+            = VERTEX_TYPE_PERSON_A.withProperties(hydra.overlay.java.util.ConsList.empty());
 
     protected static final VertexType<LiteralType> VERTEX_TYPE_ORGANIZATION = Graphs.vertexType(
             "Organization", ID_TYPE)
@@ -50,7 +50,7 @@ public abstract class PropertyGraphTestBase extends HydraTestBase {
     protected static final EdgeType<LiteralType> EDGE_TYPE_WORKSAT_B
             = EDGE_TYPE_WORKSAT_A.withId(LiteralTypes.int32());
     protected static final EdgeType<LiteralType> EDGE_TYPE_WORKSAT_C
-            = EDGE_TYPE_WORKSAT_A.withProperties(hydra.util.ConsList.empty());
+            = EDGE_TYPE_WORKSAT_A.withProperties(hydra.overlay.java.util.ConsList.empty());
 
     protected static final EdgeType<LiteralType> EDGE_TYPE_FOUNDED = Graphs.edgeType(
             "founded", ID_TYPE, "Person", "Organization")

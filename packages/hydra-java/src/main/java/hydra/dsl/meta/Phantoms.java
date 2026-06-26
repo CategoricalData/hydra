@@ -6,8 +6,8 @@ import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.Type;
 import hydra.core.TypeScheme;
-import hydra.dsl.Terms;
-import hydra.dsl.Types;
+import hydra.overlay.java.dsl.Terms;
+import hydra.overlay.java.dsl.Types;
 import hydra.packaging.EntityMetadata;
 import hydra.packaging.Definition;
 import hydra.packaging.Module;
@@ -16,7 +16,7 @@ import hydra.packaging.TermDefinition;
 import hydra.typed.TypedBinding;
 import hydra.typed.TypedTerm;
 import hydra.typing.TermSignature;
-import hydra.util.Optional;
+import hydra.overlay.java.util.Optional;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -262,7 +262,7 @@ public final class Phantoms {
     }
 
     /** {@code pair a b}. */
-    public static <A, B> TypedTerm<hydra.util.Pair<A, B>> pair(TypedTerm<A> a, TypedTerm<B> b) {
+    public static <A, B> TypedTerm<hydra.overlay.java.util.Pair<A, B>> pair(TypedTerm<A> a, TypedTerm<B> b) {
         return tterm(Terms.pair(a.value, b.value));
     }
 

@@ -16,7 +16,7 @@ module Hydra.Demos.GraphqlJson (
 import Hydra.Kernel
 import Hydra.ExtGeneration
 import Hydra.Generation (moduleAsBindings)
-import Hydra.Dsl.Bootstrap (bootstrapGraph)
+import Hydra.Overlay.Haskell.Bootstrap (bootstrapGraph)
 
 import qualified Hydra.Graphql.Coder as GraphqlCoder
 import qualified Hydra.Lexical as Lexical

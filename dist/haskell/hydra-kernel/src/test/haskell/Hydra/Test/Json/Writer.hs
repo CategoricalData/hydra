@@ -32,7 +32,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-import qualified Hydra.Haskell.Lib.Literals as Literals
+import qualified Hydra.Overlay.Haskell.Lib.Literals as Literals
 -- | Test cases for JSON serialization (writer)
 allTests :: Testing.TestGroup
 allTests =

@@ -4,13 +4,13 @@
 module Hydra.Sources.Kernel.Lib.Maps where
 
 import Hydra.Kernel
-import qualified Hydra.Dsl.Bootstrap         as Bootstrap
+import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Lib.Optionals as Optionals
 import qualified Hydra.Dsl.Lib.Pairs    as Pairs
-import           Hydra.Dsl.Meta.Phantoms     as Phantoms hiding (map)
-import qualified Hydra.Dsl.Types             as Types
+import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (map)
+import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++), filter, lookup, map, null)
 import qualified Data.Map                    as M

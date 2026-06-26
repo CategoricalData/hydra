@@ -4,7 +4,7 @@ Mirror of packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Environmen
 """
 
 from hydra.core import Name, Type, TypeScheme
-from hydra.dsl.python import Given, None_
+from hydra.overlay.python.dsl.python import Given, None_
 from hydra.packaging import (EntityMetadata, 
     DefinitionType,
     Module,
@@ -13,8 +13,8 @@ from hydra.packaging import (EntityMetadata,
 )
 
 from hydra.sources.python._source_dsl import unqualified_dep
-import hydra.dsl.annotations as Annotations
-import hydra.dsl.types as T
+import hydra.overlay.python.dsl.annotations as Annotations
+import hydra.overlay.python.dsl.types as T
 
 
 NS = ModuleName("hydra.python.environment")

@@ -31,17 +31,17 @@ import qualified Hydra.Java.Syntax as Syntax
 import qualified Hydra.Java.Utils as Utils
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lexical as Lexical
-import qualified Hydra.Haskell.Lib.Eithers as Eithers
-import qualified Hydra.Haskell.Lib.Equality as Equality
-import qualified Hydra.Haskell.Lib.Lists as Lists
-import qualified Hydra.Haskell.Lib.Literals as Literals
-import qualified Hydra.Haskell.Lib.Logic as Logic
-import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Optionals as Optionals
-import qualified Hydra.Haskell.Lib.Pairs as Pairs
-import qualified Hydra.Haskell.Lib.Sets as Sets
-import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Overlay.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Overlay.Haskell.Lib.Equality as Equality
+import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
+import qualified Hydra.Overlay.Haskell.Lib.Literals as Literals
+import qualified Hydra.Overlay.Haskell.Lib.Logic as Logic
+import qualified Hydra.Overlay.Haskell.Lib.Maps as Maps
+import qualified Hydra.Overlay.Haskell.Lib.Math as Math
+import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
+import qualified Hydra.Overlay.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Overlay.Haskell.Lib.Sets as Sets
+import qualified Hydra.Overlay.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
@@ -562,7 +562,7 @@ comparableCompareExpr otherVar fname =
       let thisField = Utils.javaIdentifierToJavaExpression (Syntax.Identifier (Utils.sanitizeJavaName fname))
           otherField =
                   Utils.javaExpressionNameToJavaExpression (Utils.fieldExpression (Utils.javaIdentifier otherVar) (Utils.javaIdentifier fname))
-      in (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "hydra.util.Comparing") (Syntax.Identifier "compare") [
+      in (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "hydra.overlay.java.util.Comparing") (Syntax.Identifier "compare") [
         thisField,
         otherField]))
 compareAndReturnStmts :: String -> Core.FieldType -> [Syntax.BlockStatement]
@@ -1488,8 +1488,8 @@ encodeTermInternal env anns tyapps term cx g0 =
                           let annotated = Annotations.setTermAnnotation Constants.keyType (Just (EncodeCore.type_ branchType)) t1
                           in (encodeTermInternal env anns [] annotated cx g)
                 eitherCall =
-                        \methodName -> \expr -> Optionals.cases mtargs (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "hydra.util.Either") (Syntax.Identifier methodName) [
-                          expr])) (\targs -> Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.Either") (Syntax.Identifier methodName) targs [
+                        \methodName -> \expr -> Optionals.cases mtargs (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "hydra.overlay.java.util.Either") (Syntax.Identifier methodName) [
+                          expr])) (\targs -> Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.overlay.java.util.Either") (Syntax.Identifier methodName) targs [
                           expr]))
             in (Eithers.either (\term1 -> Eithers.bind (Optionals.cases branchTypes (encode term1) (\bt -> encodeWithType (Pairs.first bt) term1)) (\expr -> Right (eitherCall "left" expr))) (\term1 -> Eithers.bind (Optionals.cases branchTypes (encode term1) (\bt -> encodeWithType (Pairs.second bt) term1)) (\expr -> Right (eitherCall "right" expr))) v0))))
         Core.TermLambda _ -> encodeFunctionFormTerm env anns term cx g
@@ -1520,17 +1520,17 @@ encodeTermInternal env anns tyapps term cx g0 =
                     castExpr =
                             Utils.javaCastExpressionToJavaExpression (Utils.javaCastExpression supplierRt (Utils.javaExpressionToJavaUnaryExpression nullaryLambda))
                 in (Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocation (Just (Right (Utils.javaExpressionToJavaPrimary castExpr))) (Syntax.Identifier "get") [])))))))))))))
-        Core.TermList v0 -> Logic.ifElse (Lists.null v0) (Logic.ifElse (Lists.null tyapps) (Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "hydra.util.ConsList") (Syntax.Identifier "empty") []))) (Eithers.bind (takeTypeArgs "list" 1 tyapps cx g) (\targs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.ConsList") (Syntax.Identifier "empty") targs []))))) (Eithers.bind (Eithers.mapList encode v0) (\jels -> Eithers.bind (collectionTypeArgs "list" 1 aliases anns tyapps cx g) (\targs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.ConsList") (Syntax.Identifier "of") targs jels)))))
+        Core.TermList v0 -> Logic.ifElse (Lists.null v0) (Logic.ifElse (Lists.null tyapps) (Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "hydra.overlay.java.util.ConsList") (Syntax.Identifier "empty") []))) (Eithers.bind (takeTypeArgs "list" 1 tyapps cx g) (\targs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.overlay.java.util.ConsList") (Syntax.Identifier "empty") targs []))))) (Eithers.bind (Eithers.mapList encode v0) (\jels -> Eithers.bind (collectionTypeArgs "list" 1 aliases anns tyapps cx g) (\targs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.overlay.java.util.ConsList") (Syntax.Identifier "of") targs jels)))))
         Core.TermLiteral v0 -> Right (encodeLiteral v0)
-        Core.TermMap v0 -> Logic.ifElse (Maps.null v0) (Logic.ifElse (Lists.null tyapps) (Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "hydra.util.PersistentMap") (Syntax.Identifier "empty") []))) (Eithers.bind (takeTypeArgs "map" 2 tyapps cx g) (\targs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.PersistentMap") (Syntax.Identifier "empty") targs []))))) (Eithers.bind (Eithers.mapList encode (Maps.keys v0)) (\jkeys -> Eithers.bind (Eithers.mapList encode (Maps.elems v0)) (\jvals ->
+        Core.TermMap v0 -> Logic.ifElse (Maps.null v0) (Logic.ifElse (Lists.null tyapps) (Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "hydra.overlay.java.util.PersistentMap") (Syntax.Identifier "empty") []))) (Eithers.bind (takeTypeArgs "map" 2 tyapps cx g) (\targs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.overlay.java.util.PersistentMap") (Syntax.Identifier "empty") targs []))))) (Eithers.bind (Eithers.mapList encode (Maps.keys v0)) (\jkeys -> Eithers.bind (Eithers.mapList encode (Maps.elems v0)) (\jvals ->
           let pairExprs =
                   Lists.map (\kv -> Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "java.util.Map") (Syntax.Identifier "entry") [
                     Pairs.first kv,
                     (Pairs.second kv)])) (Lists.zip jkeys jvals)
-          in (Eithers.bind (collectionTypeArgs "map" 2 aliases anns tyapps cx g) (\targs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.PersistentMap") (Syntax.Identifier "ofEntries") targs pairExprs)))))))
-        Core.TermOptional v0 -> Optionals.cases v0 (Logic.ifElse (Lists.null tyapps) (Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "hydra.util.Optional") (Syntax.Identifier "none") []))) (Eithers.bind (takeTypeArgs "optional" 1 tyapps cx g) (\targs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.Optional") (Syntax.Identifier "none") targs []))))) (\term1 -> Eithers.bind (encode term1) (\expr -> Eithers.bind (collectionTypeArgs "optional" 1 aliases anns tyapps cx g) (\targs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.Optional") (Syntax.Identifier "given") targs [
+          in (Eithers.bind (collectionTypeArgs "map" 2 aliases anns tyapps cx g) (\targs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.overlay.java.util.PersistentMap") (Syntax.Identifier "ofEntries") targs pairExprs)))))))
+        Core.TermOptional v0 -> Optionals.cases v0 (Logic.ifElse (Lists.null tyapps) (Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "hydra.overlay.java.util.Optional") (Syntax.Identifier "none") []))) (Eithers.bind (takeTypeArgs "optional" 1 tyapps cx g) (\targs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.overlay.java.util.Optional") (Syntax.Identifier "none") targs []))))) (\term1 -> Eithers.bind (encode term1) (\expr -> Eithers.bind (collectionTypeArgs "optional" 1 aliases anns tyapps cx g) (\targs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.overlay.java.util.Optional") (Syntax.Identifier "given") targs [
           expr])))))
-        Core.TermPair v0 -> Eithers.bind (encode (Pairs.first v0)) (\jterm1 -> Eithers.bind (encode (Pairs.second v0)) (\jterm2 -> Eithers.bind (Logic.ifElse (Lists.null tyapps) (Right Nothing) (Eithers.bind (Eithers.mapList (\jt -> Utils.javaTypeToJavaReferenceType jt cx) tyapps) (\rts -> Right (Just (Syntax.TypeArgumentsOrDiamondArguments (Lists.map (\rt -> Syntax.TypeArgumentReference rt) rts)))))) (\mtargs -> Right (Utils.javaConstructorCall (Utils.javaConstructorName (Syntax.Identifier "hydra.util.Pair") mtargs) [
+        Core.TermPair v0 -> Eithers.bind (encode (Pairs.first v0)) (\jterm1 -> Eithers.bind (encode (Pairs.second v0)) (\jterm2 -> Eithers.bind (Logic.ifElse (Lists.null tyapps) (Right Nothing) (Eithers.bind (Eithers.mapList (\jt -> Utils.javaTypeToJavaReferenceType jt cx) tyapps) (\rts -> Right (Just (Syntax.TypeArgumentsOrDiamondArguments (Lists.map (\rt -> Syntax.TypeArgumentReference rt) rts)))))) (\mtargs -> Right (Utils.javaConstructorCall (Utils.javaConstructorName (Syntax.Identifier "hydra.overlay.java.util.Pair") mtargs) [
           jterm1,
           jterm2] Nothing))))
         Core.TermRecord v0 ->
@@ -1563,9 +1563,9 @@ encodeTermInternal env anns tyapps term cx g0 =
                 in (Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_a -> _a) (Annotations.getType g combinedAnns)) (\mtyp -> Optionals.cases mtyp (Right Nothing) (\annTyp ->
                   let typeArgs = extractTypeApplicationArgs (Strip.deannotateType annTyp)
                   in (Logic.ifElse (Lists.null typeArgs) (Right Nothing) (Eithers.bind (Eithers.mapList (\t -> Eithers.bind (encodeType aliases Sets.empty t cx g) (\jt -> Utils.javaTypeToJavaReferenceType jt cx)) typeArgs) (\jTypeArgs -> Right (Just (Syntax.TypeArgumentsOrDiamondArguments (Lists.map (\rt -> Syntax.TypeArgumentReference rt) jTypeArgs))))))))))) (\mtargs -> Right (Utils.javaConstructorCall (Utils.javaConstructorName consId mtargs) fieldExprs Nothing)))))))
-        Core.TermSet v0 -> Logic.ifElse (Sets.null v0) (Logic.ifElse (Lists.null tyapps) (Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "hydra.util.PersistentSet") (Syntax.Identifier "empty") []))) (Eithers.bind (takeTypeArgs "set" 1 tyapps cx g) (\targs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.PersistentSet") (Syntax.Identifier "empty") targs []))))) (
+        Core.TermSet v0 -> Logic.ifElse (Sets.null v0) (Logic.ifElse (Lists.null tyapps) (Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStatic (Syntax.Identifier "hydra.overlay.java.util.PersistentSet") (Syntax.Identifier "empty") []))) (Eithers.bind (takeTypeArgs "set" 1 tyapps cx g) (\targs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.overlay.java.util.PersistentSet") (Syntax.Identifier "empty") targs []))))) (
           let slist = Sets.toList v0
-          in (Eithers.bind (Eithers.mapList encode slist) (\jels -> Eithers.bind (collectionTypeArgs "set" 1 aliases anns tyapps cx g) (\targs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.PersistentSet") (Syntax.Identifier "of") targs jels))))))
+          in (Eithers.bind (Eithers.mapList encode slist) (\jels -> Eithers.bind (collectionTypeArgs "set" 1 aliases anns tyapps cx g) (\targs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.overlay.java.util.PersistentSet") (Syntax.Identifier "of") targs jels))))))
         Core.TermTypeLambda v0 -> withTypeLambda env v0 (\env2 ->
           let combinedAnns = Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns
           in (Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_a -> _a) (Annotations.getType g combinedAnns)) (\mtyp ->
@@ -1623,8 +1623,8 @@ encodeTermInternal env anns tyapps term cx g0 =
                                   \branchType -> \t1 ->
                                     let annotated = Annotations.setTermAnnotation Constants.keyType (Just (EncodeCore.type_ branchType)) t1
                                     in (encodeTermInternal env anns [] annotated cx g)
-                      in (Eithers.either (\term1 -> Eithers.bind (encodeEitherBranch (Pairs.first eitherBranchTypes) term1) (\expr -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.Either") (Syntax.Identifier "left") eitherTargs [
-                        expr])))) (\term1 -> Eithers.bind (encodeEitherBranch (Pairs.second eitherBranchTypes) term1) (\expr -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.Either") (Syntax.Identifier "right") eitherTargs [
+                      in (Eithers.either (\term1 -> Eithers.bind (encodeEitherBranch (Pairs.first eitherBranchTypes) term1) (\expr -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.overlay.java.util.Either") (Syntax.Identifier "left") eitherTargs [
+                        expr])))) (\term1 -> Eithers.bind (encodeEitherBranch (Pairs.second eitherBranchTypes) term1) (\expr -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.overlay.java.util.Either") (Syntax.Identifier "right") eitherTargs [
                         expr])))) v1)))) (typeAppFallbackCast env aliases anns tyapps jatyp body correctedTyp cx g)
                   _ -> typeAppFallbackCast env aliases anns tyapps jatyp body correctedTyp cx g)))))))
         _ -> Right (encodeLiteral (Core.LiteralString "Unimplemented term variant"))
@@ -2820,7 +2820,7 @@ toDeclStatement envExt aliasesExt gExt recursiveVars thunkedVars flatBindings na
               targs = typeArgsOrDiamond [
                     Syntax.TypeArgumentReference rt]
               lazyExpr =
-                      Utils.javaConstructorCall (Utils.javaConstructorName (Syntax.Identifier "hydra.util.Lazy") (Just targs)) [
+                      Utils.javaConstructorCall (Utils.javaConstructorName (Syntax.Identifier "hydra.overlay.java.util.Lazy") (Just targs)) [
                         supplierLambda] Nothing
           in (Right (Utils.variableDeclarationStatement aliasesExt lazyType id lazyExpr)))) (Right (Utils.variableDeclarationStatement aliasesExt jtype id rhs))))))))
 tryInferFunctionType :: Core.Term -> Maybe Core.Type

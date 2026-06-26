@@ -89,7 +89,7 @@
          ;; After #156, TypeVariableConstraints.classes is Seq[TypeClassConstraint].
          (constraint-map
           (when constraints
-            (funcall hydra_lisp_lib_maps_from_list
+            (funcall hydra_overlay_emacs_lisp_lib_maps_from_list
                      (mapcar (lambda (entry)
                                (list (car entry)
                                      (make-hydra_core_type_variable_constraints
@@ -220,11 +220,11 @@
     (lambda (cx) (lambda (s)
       (let ((result nil))
         (catch 'fail
-          (dolist (item (funcall hydra_lisp_lib_sets_to_list s))
+          (dolist (item (funcall hydra_overlay_emacs_lisp_lib_sets_to_list s))
             (let ((r (funcall (funcall (hydra_graph_term_coder-decode el-coder) cx) item)))
               (if (eq (car r) :left) (throw 'fail r)
                 (push (cadr r) result))))
-          (list :right (list :set (funcall hydra_lisp_lib_sets_from_list (nreverse result))))))))))
+          (list :right (list :set (funcall hydra_overlay_emacs_lisp_lib_sets_from_list (nreverse result))))))))))
 
 (defun tc-map (key-coder val-coder)
   (make-hydra_graph_term_coder (list :map (make-hydra_core_map_type (hydra_graph_term_coder-type key-coder) (hydra_graph_term_coder-type val-coder)))
@@ -236,13 +236,13 @@
     (lambda (cx) (lambda (m)
       (let ((result nil))
         (catch 'fail
-          (dolist (pair (funcall hydra_lisp_lib_maps_to_list m))
-            (let ((kr (funcall (funcall (hydra_graph_term_coder-decode key-coder) cx) (funcall hydra_lisp_lib_pairs_first pair))))
+          (dolist (pair (funcall hydra_overlay_emacs_lisp_lib_maps_to_list m))
+            (let ((kr (funcall (funcall (hydra_graph_term_coder-decode key-coder) cx) (funcall hydra_overlay_emacs_lisp_lib_pairs_first pair))))
               (if (eq (car kr) :left) (throw 'fail kr)
-                (let ((vr (funcall (funcall (hydra_graph_term_coder-decode val-coder) cx) (funcall hydra_lisp_lib_pairs_second pair))))
+                (let ((vr (funcall (funcall (hydra_graph_term_coder-decode val-coder) cx) (funcall hydra_overlay_emacs_lisp_lib_pairs_second pair))))
                   (if (eq (car vr) :left) (throw 'fail vr)
                     (push (list (cadr kr) (cadr vr)) result))))))
-          (list :right (list :map (funcall hydra_lisp_lib_maps_from_list (nreverse result))))))))))
+          (list :right (list :map (funcall hydra_overlay_emacs_lisp_lib_maps_from_list (nreverse result))))))))))
 
 (defun tc-optional (el-coder)
   (make-hydra_graph_term_coder (list :optional (hydra_graph_term_coder-type el-coder))
@@ -282,9 +282,9 @@
                                  (lambda (term) (funcall (funcall (funcall (hydra_graph_term_coder-encode second-coder) cx) g) term)))
                         g) t_))))
     (lambda (cx) (lambda (p)
-      (let ((fr (funcall (funcall (hydra_graph_term_coder-decode first-coder) cx) (funcall hydra_lisp_lib_pairs_first p))))
+      (let ((fr (funcall (funcall (hydra_graph_term_coder-decode first-coder) cx) (funcall hydra_overlay_emacs_lisp_lib_pairs_first p))))
         (if (eq (car fr) :left) fr
-          (let ((sr (funcall (funcall (hydra_graph_term_coder-decode second-coder) cx) (funcall hydra_lisp_lib_pairs_second p))))
+          (let ((sr (funcall (funcall (hydra_graph_term_coder-decode second-coder) cx) (funcall hydra_overlay_emacs_lisp_lib_pairs_second p))))
             (if (eq (car sr) :left) sr
               (list :right (list :pair (list (cadr fr) (cadr sr))))))))))))
 

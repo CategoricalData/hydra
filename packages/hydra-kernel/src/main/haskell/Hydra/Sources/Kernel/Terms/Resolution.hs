@@ -24,13 +24,13 @@ import Hydra.Kernel hiding (
   resolveType,
   typeToTypeScheme)
 import qualified Hydra.Dsl.Paths    as Paths
-import qualified Hydra.Dsl.Annotations       as Annotations
+import qualified Hydra.Overlay.Haskell.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast
-import qualified Hydra.Dsl.Bootstrap         as Bootstrap
+import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Coders       as Coders
 import qualified Hydra.Dsl.Util      as Util
-import qualified Hydra.Dsl.Meta.Core         as Core
-import qualified Hydra.Dsl.Meta.Graph        as Graph
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core         as Core
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Graph        as Graph
 import qualified Hydra.Dsl.Json.Model         as Json
 import qualified Hydra.Dsl.Lib.Chars    as Chars
 import qualified Hydra.Dsl.Lib.Eithers  as Eithers
@@ -44,24 +44,24 @@ import qualified Hydra.Dsl.Lib.Optionals   as Optionals
 import qualified Hydra.Dsl.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Lib.Strings  as Strings
-import qualified Hydra.Dsl.Literals          as Literals
-import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
-import qualified Hydra.Dsl.Meta.Base         as MetaBase
-import qualified Hydra.Dsl.Meta.Terms        as MetaTerms
-import qualified Hydra.Dsl.Meta.Types        as MetaTypes
+import qualified Hydra.Overlay.Haskell.Dsl.Literals          as Literals
+import qualified Hydra.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Base         as MetaBase
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Terms        as MetaTerms
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types        as MetaTypes
 import qualified Hydra.Dsl.Packaging       as Packaging
 import qualified Hydra.Dsl.Parsing      as Parsing
-import           Hydra.Dsl.Meta.Phantoms     as Phantoms
-import qualified Hydra.Dsl.Prims             as Prims
-import qualified Hydra.Dsl.Meta.Tabular           as Tabular
-import qualified Hydra.Dsl.Meta.Testing      as Testing
-import qualified Hydra.Dsl.Terms             as Terms
-import qualified Hydra.Dsl.Tests             as Tests
+import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
+import qualified Hydra.Overlay.Haskell.Dsl.Prims             as Prims
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Tabular           as Tabular
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing      as Testing
+import qualified Hydra.Overlay.Haskell.Dsl.Terms             as Terms
+import qualified Hydra.Overlay.Haskell.Dsl.Tests             as Tests
 import qualified Hydra.Dsl.Topology     as Topology
-import qualified Hydra.Dsl.Types             as Types
+import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
 import qualified Hydra.Dsl.Typing       as Typing
 import qualified Hydra.Dsl.Errors       as Error
-import qualified Hydra.Dsl.Meta.Variants     as Variants
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                    as I

@@ -4,7 +4,7 @@ Mirror of packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Testing.hs
 """
 
 from hydra.core import Name
-from hydra.dsl.python import Given, None_
+from hydra.overlay.python.dsl.python import Given, None_
 from hydra.packaging import EntityMetadata, Module, ModuleName
 
 import hydra.dsl.lib.chars as Chars
@@ -14,7 +14,7 @@ import hydra.dsl.lib.lists as Lists
 import hydra.dsl.lib.logic as Logic
 import hydra.dsl.lib.optionals as Optionals
 import hydra.dsl.lib.strings as Strings
-from hydra.dsl.meta.phantoms import *  # noqa: F401,F403
+from hydra.overlay.python.dsl.meta.phantoms import *  # noqa: F401,F403
 import hydra.dsl.core as Core
 import hydra.dsl.packaging as Packaging
 

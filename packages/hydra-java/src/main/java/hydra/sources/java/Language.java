@@ -5,7 +5,7 @@ import hydra.core.Name;
 import hydra.core.Type;
 import hydra.dsl.Core;
 import hydra.dsl.Packaging;
-import hydra.dsl.Types;
+import hydra.overlay.java.dsl.Types;
 import hydra.dsl.java.Environment;
 import hydra.dsl.java.Syntax;
 import hydra.dsl.lib.Eithers;
@@ -25,7 +25,7 @@ import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
 import hydra.packaging.ModuleDependency;
 import hydra.typed.TypedTerm;
-import hydra.util.Optional;
+import hydra.overlay.java.util.Optional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -127,7 +127,7 @@ public class Language {
      * (so the element type is recorded), then applied to xs. Matches the
      * canonical encoding produced by the Haskell DSL. */
     private static TypedTerm<?> setsFromList(String elementTypeName, TypedTerm<?> listTerm) {
-        return setsFromList(hydra.dsl.Types.variable(elementTypeName), listTerm);
+        return setsFromList(hydra.overlay.java.dsl.Types.variable(elementTypeName), listTerm);
     }
     @SuppressWarnings("unchecked")
     private static TypedTerm<?> setsFromList(hydra.core.Type elementType, TypedTerm<?> listTerm) {
@@ -296,7 +296,7 @@ public class Language {
                     field("classNames", classNames),
                     field("keywords", keywords),
                     field("literals", literals)),
-                setsFromList(hydra.dsl.Types.string(), Lists.concat(list(
+                setsFromList(hydra.overlay.java.dsl.Types.string(), Lists.concat(list(
                         var("specialNames"),
                         var("classNames"),
                         var("keywords"),

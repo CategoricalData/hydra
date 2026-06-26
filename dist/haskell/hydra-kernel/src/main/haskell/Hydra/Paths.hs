@@ -52,8 +52,6 @@ newtype SubtermPath =
 _SubtermPath = Core.Name "hydra.paths.SubtermPath"
 -- | A function which maps from a term to a particular immediate subterm
 data SubtermStep =
-  -- | Access the annotation of an annotated term
-  SubtermStepAnnotatedAnnotation |
   -- | Access the body of an annotated term
   SubtermStepAnnotatedBody |
   -- | Access the function of an application term
@@ -96,7 +94,6 @@ data SubtermStep =
   SubtermStepWrappedTerm
   deriving (Eq, Ord, Read, Show)
 _SubtermStep = Core.Name "hydra.paths.SubtermStep"
-_SubtermStep_annotatedAnnotation = Core.Name "annotatedAnnotation"
 _SubtermStep_annotatedBody = Core.Name "annotatedBody"
 _SubtermStep_applicationFunction = Core.Name "applicationFunction"
 _SubtermStep_applicationArgument = Core.Name "applicationArgument"

@@ -1,0 +1,179 @@
+"""Python implementations of hydra.lib.eithers primitives."""
+
+from __future__ import annotations
+from collections.abc import Callable
+from typing import TypeVar
+from hydra.overlay.python.dsl.python import Either, Left, Right, Optional, Given, NONE_, frozenlist
+
+A = TypeVar("A")
+B = TypeVar("B")
+C = TypeVar("C")
+D = TypeVar("D")
+
+
+def bimap(f: Callable[[A], C], g: Callable[[B], D], e: Either[A, B]) -> Either[C, D]:
+    """Map over both sides of an Either value."""
+    match e:
+        case Left(val):
+            return Left(f(val))
+        case Right(val):
+            return Right(g(val))
+
+
+def bind(e: Either[A, B], f: Callable[[B], Either[A, C]]) -> Either[A, C]:
+    """Bind (flatMap) for Either: if Right, apply the function; if Left, return unchanged."""
+    match e:
+        case Left(val):
+            return Left(val)
+        case Right(val):
+            return f(val)
+
+
+def either(f: Callable[[A], C], g: Callable[[B], C], e: Either[A, B]) -> C:
+    """Eliminate an Either value by applying one of two functions."""
+    match e:
+        case Left(val):
+            return f(val)
+        case Right(val):
+            return g(val)
+
+
+def foldl(f: Callable[[A], Callable[[B], Either[C, A]]], acc: A, xs: frozenlist[B]) -> Either[C, A]:
+    """Left-fold over a list with an Either-returning function, short-circuiting on Left."""
+    result = acc
+    for x in xs:
+        match f(result)(x):
+            case Left(err):
+                return Left(err)
+            case Right(val):
+                result = val
+    return Right(result)
+
+
+def from_left(default: A | Callable[[], A], e: Either[A, B]) -> A:
+    """Extract the Left value, or return a default. The default is lazy (#391)."""
+    match e:
+        case Left(val):
+            return val
+        case Right(_):
+            return default() if callable(default) else default  # type: ignore[return-value]
+
+
+def from_right(default: B | Callable[[], B], e: Either[A, B]) -> B:
+    """Extract the Right value, or return a default. The default is lazy (#391)."""
+    match e:
+        case Left(_):
+            return default() if callable(default) else default  # type: ignore[return-value]
+        case Right(val):
+            return val
+
+
+def is_left(e: Either[A, B]) -> bool:
+    """Check if an Either is a Left value."""
+    return isinstance(e, Left)
+
+
+def is_right(e: Either[A, B]) -> bool:
+    """Check if an Either is a Right value."""
+    return isinstance(e, Right)
+
+
+def lefts(eithers: frozenlist[Either[A, B]]) -> frozenlist[A]:
+    """Extract all Left values from a list of Eithers."""
+    result: list[A] = []
+    for e in eithers:
+        match e:
+            case Left(val):
+                result.append(val)
+            case Right(_):
+                pass
+    return tuple(result)
+
+
+def map(f: Callable[[A], B], e: Either[C, A]) -> Either[C, B]:
+    """Map a function over the Right side of an Either (standard functor map)."""
+    match e:
+        case Left(val):
+            return Left(val)
+        case Right(val):
+            return Right(f(val))
+
+
+def map_left(f: Callable[[A], C], e: Either[A, B]) -> Either[C, B]:
+    """Map a function over the Left side of an Either."""
+    match e:
+        case Left(val):
+            return Left(f(val))
+        case Right(val):
+            return Right(val)
+
+
+def map_list(f: Callable[[A], Either[C, B]], xs: frozenlist[A]) -> Either[C, frozenlist[B]]:
+    """Map a function returning Either over a list, collecting results or short-circuiting on Left."""
+    results: list[B] = []
+    for x in xs:
+        match f(x):
+            case Left(err):
+                return Left(err)
+            case Right(val):
+                results.append(val)
+    return Right(tuple(results))
+
+
+def map_optional(f: Callable[[A], Either[C, B]], mx: Optional[A]) -> Either[C, Optional[B]]:
+    """Map a function returning Either over an optional, or return Right(none) if none."""
+    match mx:
+        case Given(val):
+            match f(val):
+                case Left(err):
+                    return Left(err)
+                case Right(result):
+                    return Right(Given(result))
+        case _:
+            return Right(NONE_)
+
+
+def map_right(f: Callable[[B], C], e: Either[A, B]) -> Either[A, C]:
+    """Map a function over the Right side of an Either."""
+    match e:
+        case Left(val):
+            return Left(val)
+        case Right(val):
+            return Right(f(val))
+
+
+def map_set(f: Callable[[A], Either[C, B]], xs: frozenset[A]) -> Either[C, frozenset[B]]:
+    """Map a function returning Either over a set, collecting results or short-circuiting on Left."""
+    results: list[B] = []
+    for x in xs:
+        match f(x):
+            case Left(err):
+                return Left(err)
+            case Right(val):
+                results.append(val)
+    return Right(frozenset(results))
+
+
+def partition_eithers(eithers: frozenlist[Either[A, B]]) -> tuple[frozenlist[A], frozenlist[B]]:
+    """Partition a list of Eithers into lefts and rights."""
+    left_vals: list[A] = []
+    right_vals: list[B] = []
+    for e in eithers:
+        match e:
+            case Left(val):
+                left_vals.append(val)
+            case Right(val):
+                right_vals.append(val)
+    return (tuple(left_vals), tuple(right_vals))
+
+
+def rights(eithers: frozenlist[Either[A, B]]) -> frozenlist[B]:
+    """Extract all Right values from a list of Eithers."""
+    result: list[B] = []
+    for e in eithers:
+        match e:
+            case Left(_):
+                pass
+            case Right(val):
+                result.append(val)
+    return tuple(result)

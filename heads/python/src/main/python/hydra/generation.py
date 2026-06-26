@@ -21,13 +21,13 @@ from hydra.codegen import (
 )
 from hydra.typing import InferenceContext
 from hydra.core import Binding
-from hydra.dsl.python import FrozenDict, Given, Left, None_, Right
+from hydra.overlay.python.dsl.python import FrozenDict, Given, Left, None_, Right
 from hydra.graph import Graph
 from hydra.json import model as JsonModel
 from hydra.packaging import Module, ModuleName
 from hydra.strip import deannotate_type_recursive, remove_types_from_term
 from hydra.scoping import f_type_to_type_scheme
-from hydra.sources.libraries import standard_library
+from hydra.overlay.python.sources.libraries import standard_library
 
 
 @lru_cache(1)
@@ -534,7 +534,7 @@ def infer_and_write_by_package(
     """
     from hydra import codegen
     from hydra import sorting as Sorting
-    from hydra.dsl.python import FrozenDict, Left, Right
+    from hydra.overlay.python.dsl.python import FrozenDict, Left, Right
 
     seed_ns = {m.name.value for m in seed_acc}
     grouping_universe = [m for m in universe_mods if m.name.value not in seed_ns]
@@ -707,7 +707,7 @@ def generate_dsl_modules(universe_mods, type_mods):
     """
     from hydra import codegen
     from hydra import dsls
-    from hydra.dsl.python import Left, Right
+    from hydra.overlay.python.dsl.python import Left, Right
 
     cx = empty_context()
     result = codegen.generate_coder_modules(

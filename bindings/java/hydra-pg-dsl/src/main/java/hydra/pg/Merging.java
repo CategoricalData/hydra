@@ -1,13 +1,13 @@
 package hydra.pg;
 
-import hydra.util.StatelessAdapter;
-import hydra.util.StatelessCoder;
+import hydra.overlay.java.util.StatelessAdapter;
+import hydra.overlay.java.util.StatelessCoder;
 import hydra.core.Literal;
 import hydra.core.LiteralType;
-import hydra.util.Either;
-import hydra.util.Maybe;
-import hydra.dsl.LiteralTypes;
-import hydra.dsl.Literals;
+import hydra.overlay.java.util.Either;
+import hydra.overlay.java.util.Optional;
+import hydra.overlay.java.dsl.LiteralTypes;
+import hydra.overlay.java.dsl.Literals;
 import hydra.pg.model.Edge;
 import hydra.pg.model.EdgeLabel;
 import hydra.pg.model.EdgeType;
@@ -70,9 +70,9 @@ public class Merging {
     createVertexAdapter(List<VertexType<T>> types,
         IdAdapters<T, V> idAdapters,
         boolean unifyIdenticalTypes) {
-        Maybe<String> err1 = checkNontrivial(types);
+        Optional<String> err1 = checkNontrivial(types);
         if (err1.isJust()) return Either.left(err1.fromJust());
-        Maybe<String> err2 = checkNoDuplicatedVertexLabels(types);
+        Optional<String> err2 = checkNoDuplicatedVertexLabels(types);
         if (err2.isJust()) return Either.left(err2.fromJust());
 
         MergedEntity<VertexType<T>> mergedType = mergeVertexTypes(types, idAdapters, unifyIdenticalTypes);
@@ -95,9 +95,9 @@ public class Merging {
     createEdgeAdapter(List<EdgeType<T>> types,
         IdAdapters<T, V> idAdapters,
         boolean unifyIdenticalTypes) {
-        Maybe<String> err1 = checkNontrivial(types);
+        Optional<String> err1 = checkNontrivial(types);
         if (err1.isJust()) return Either.left(err1.fromJust());
-        Maybe<String> err2 = checkNoDuplicatedEdgeLabels(types);
+        Optional<String> err2 = checkNoDuplicatedEdgeLabels(types);
         if (err2.isJust()) return Either.left(err2.fromJust());
 
         MergedEntity<EdgeType<T>> mergedType = mergeEdgeTypes(types, idAdapters, unifyIdenticalTypes);
@@ -106,30 +106,30 @@ public class Merging {
             constructMergedEdgeCoder(types, idAdapters, mergedType.unifiedProperties)));
     }
 
-    private static <A> Maybe<String> checkNontrivial(List<A> types) {
+    private static <A> Optional<String> checkNontrivial(List<A> types) {
         return types.isEmpty()
-            ? Maybe.just("No types provided")
-            : Maybe.nothing();
+            ? Optional.given("No types provided")
+            : Optional.none();
     }
 
-    private static <T> Maybe<String> checkNoDuplicatedVertexLabels(List<VertexType<T>> types) {
+    private static <T> Optional<String> checkNoDuplicatedVertexLabels(List<VertexType<T>> types) {
         Set<VertexLabel> labels = new HashSet<>();
         for (VertexType<T> type : types) {
             if (!labels.add(type.label)) {
-                return Maybe.just("Duplicate vertex label: " + type.label);
+                return Optional.given("Duplicate vertex label: " + type.label);
             }
         }
-        return Maybe.nothing();
+        return Optional.none();
     }
 
-    private static <T> Maybe<String> checkNoDuplicatedEdgeLabels(List<EdgeType<T>> types) {
+    private static <T> Optional<String> checkNoDuplicatedEdgeLabels(List<EdgeType<T>> types) {
         Set<EdgeLabel> labels = new HashSet<>();
         for (EdgeType<T> type : types) {
             if (!labels.add(type.label)) {
-                return Maybe.just("Duplicate edge label: " + type.label);
+                return Optional.given("Duplicate edge label: " + type.label);
             }
         }
-        return Maybe.nothing();
+        return Optional.none();
     }
 
     private static <T, V> StatelessCoder<Vertex<V>, Vertex<V>> constructMergedVertexCoder(
@@ -180,7 +180,7 @@ public class Merging {
     private static <V> Either<String, V> applyCoderEncode(StatelessCoder<V, V> coder, V value) {
         hydra.typing.InferenceContext cx = new hydra.typing.InferenceContext(
             0, new ArrayList<>());
-        hydra.util.Either<hydra.errors.Error_, V> result = coder.encode.apply(cx).apply(value);
+        hydra.overlay.java.util.Either<hydra.errors.Error_, V> result = coder.encode.apply(cx).apply(value);
         if (result.isRight()) {
             return Either.right(((Either.Right<hydra.errors.Error_, V>) result).value);
         } else {
@@ -194,7 +194,7 @@ public class Merging {
     private static <V> Either<String, V> applyCoderDecode(StatelessCoder<V, V> coder, V value) {
         hydra.typing.InferenceContext cx = new hydra.typing.InferenceContext(
             0, new ArrayList<>());
-        hydra.util.Either<hydra.errors.Error_, V> result = coder.decode.apply(cx).apply(value);
+        hydra.overlay.java.util.Either<hydra.errors.Error_, V> result = coder.decode.apply(cx).apply(value);
         if (result.isRight()) {
             return Either.right(((Either.Right<hydra.errors.Error_, V>) result).value);
         } else {

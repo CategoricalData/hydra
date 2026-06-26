@@ -7,7 +7,7 @@ from collections.abc import Sequence
 
 import pytest
 
-from hydra.python.util import ConsList
+from hydra.overlay.python.util import ConsList
 
 
 def test_empty():

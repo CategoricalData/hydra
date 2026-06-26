@@ -1,6 +1,6 @@
 module Hydra.TestUtils (
   module Hydra.TestUtils,
-  module Hydra.Dsl.Libraries,
+  module Hydra.Overlay.Haskell.Libraries,
   module Hydra.Test.TestGraph,
   module Hydra.Test.TestTypes,
   module Hydra.Test.TestTerms,
@@ -9,8 +9,8 @@ module Hydra.TestUtils (
 import Hydra.Kernel
 import Hydra.Generation (moduleAsBindings, showError, generateDecoderModulesPure, generateEncoderModulesPure)
 import Hydra.ArbitraryCore()
-import Hydra.Dsl.Bootstrap
-import Hydra.Dsl.Terms
+import Hydra.Overlay.Haskell.Bootstrap
+import Hydra.Overlay.Haskell.Dsl.Terms
 import qualified Hydra.Sources.Kernel.Types.All as KernelTypesAll
 import qualified Hydra.Sources.Kernel.Types.Coders as TypeCoders
 import qualified Hydra.Sources.Kernel.Types.Core as TypeCore
@@ -27,12 +27,12 @@ import qualified Hydra.Sources.Kernel.Terms.Strip as TermStrip
 import qualified Hydra.Sources.Kernel.Terms.Variables as TermVariables
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as TermShowCore
 import Hydra.Sources.Kernel.Types.Core
-import Hydra.Dsl.Libraries
+import Hydra.Overlay.Haskell.Libraries
 import Hydra.Test.TestGraph hiding (testGraph, testContext)
 import Hydra.Test.TestTypes
 import Hydra.Test.TestTerms
-import qualified Hydra.Dsl.Terms as Terms
-import qualified Hydra.Dsl.Types as Types
+import qualified Hydra.Overlay.Haskell.Dsl.Terms as Terms
+import qualified Hydra.Overlay.Haskell.Dsl.Types as Types
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Show.Core as ShowCore
 

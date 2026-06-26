@@ -4,7 +4,7 @@ Mirror of packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Coder.hs.
 """
 
 from hydra.core import Name
-from hydra.dsl.python import Given, None_  # noqa: F401
+from hydra.overlay.python.dsl.python import Given, None_  # noqa: F401
 from hydra.packaging import EntityMetadata, Module, ModuleName
 
 import hydra.dsl.lib.equality as Equality
@@ -15,7 +15,7 @@ import hydra.dsl.lib.optionals as Optionals
 import hydra.dsl.lib.pairs as Pairs
 import hydra.dsl.lib.sets as Sets
 import hydra.dsl.lib.strings as Strings
-from hydra.dsl.meta.phantoms import *  # noqa: F401,F403
+from hydra.overlay.python.dsl.meta.phantoms import *  # noqa: F401,F403
 import hydra.dsl.lib.eithers as Eithers
 import hydra.dsl.python.syntax as PySyn
 
@@ -23,7 +23,7 @@ import hydra.dsl.coders as Coders_dsl
 import hydra.dsl.core as Core
 import hydra.dsl.errors as Errors_dsl
 import hydra.dsl.graph as Graph_dsl
-import hydra.dsl.meta.core as MetaCore
+import hydra.overlay.python.dsl.meta.core as MetaCore
 import hydra.dsl.lib.literals as Literals
 import hydra.dsl.lib.math as Math
 import hydra.dsl.packaging as Pkg
@@ -6515,7 +6515,7 @@ def _extend_meta_for_types():
                 ("currentNs", _meta_proj("namespaces", "meta")),
                 (
                     "updatedNs",
-                    _kref.analysis_add_names_to_module_names(_kref.names_encode_namespace, var("names"), var("currentNs")),
+                    _kref.analysis_add_names_to_module_names(_kref.names_encode_namespace_with_overrides, var("names"), var("currentNs")),
                 ),
                 (
                     "meta1",
@@ -7430,7 +7430,7 @@ def _module_standard_imports():
             list_([cond("lru_cache", "usesLruCache")]),
         ),
         pair(
-            string("hydra.dsl.python"),
+            string("hydra.overlay.python.dsl.python"),
             list_(
                 [
                     cond("Either", "usesEither"),
@@ -7444,7 +7444,7 @@ def _module_standard_imports():
             ),
         ),
         pair(
-            string("hydra.python.util"),
+            string("hydra.overlay.python.util"),
             list_(
                 [
                     cond("ConsList", "usesFrozenList"),
@@ -8014,7 +8014,7 @@ def _union_type_statements_for():
 def _unsupported_expression():
     body = lambdas(
         ["msg"],
-        _kref.utils_function_call(_kref.utils_py_expression_to_py_primary(_kref.utils_project_from_expression(_kref.utils_project_from_expression(_kref.utils_project_from_expression(PyDsl.py_name_to_py_expression(_py_name("hydra")), _py_name("dsl")), _py_name("python")), _py_name("unsupported"))), list_(
+        _kref.utils_function_call(_kref.utils_py_expression_to_py_primary(_kref.utils_project_from_expression(_kref.utils_project_from_expression(_kref.utils_project_from_expression(_kref.utils_project_from_expression(_kref.utils_project_from_expression(PyDsl.py_name_to_py_expression(_py_name("hydra")), _py_name("overlay")), _py_name("python")), _py_name("dsl")), _py_name("python")), _py_name("unsupported"))), list_(
                 [
                     _kref.utils_string_to_py_expression(PySyn.quote_style_double, var("msg"))
                 ]
@@ -8023,7 +8023,7 @@ def _unsupported_expression():
     return _def(
         "unsupportedExpression",
         doc(
-            "Create an expression that calls hydra.dsl.python.unsupported(message) at runtime",
+            "Create an expression that calls hydra.overlay.python.dsl.python.unsupported(message) at runtime",
             body,
         ),
     )

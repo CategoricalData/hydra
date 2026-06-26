@@ -1,8 +1,8 @@
 module Hydra.Demos.Genpg.ExampleDatabaseSchema where
 
 import Hydra.Tabular (TableType)
-import Hydra.Dsl.Meta.Tabular (tableType, columnType)
-import Hydra.Dsl.Types (binary, boolean, float32, float64, int32, int64, string)
+import Hydra.Overlay.Haskell.Dsl.Typed.Tabular (tableType, columnType)
+import Hydra.Overlay.Haskell.Dsl.Types (binary, boolean, float32, float64, int32, int64, string)
 
 employeesTableType :: TableType
 employeesTableType = tableType "employees.csv" [

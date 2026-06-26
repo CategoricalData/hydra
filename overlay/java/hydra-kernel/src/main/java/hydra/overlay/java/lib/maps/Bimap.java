@@ -1,0 +1,101 @@
+package hydra.overlay.java.lib.maps;
+
+import hydra.core.Name;
+import hydra.core.Term;
+import hydra.core.TypeScheme;
+import hydra.overlay.java.dsl.Terms;
+import hydra.overlay.java.dsl.Types;
+import hydra.graph.Graph;
+import hydra.overlay.java.tools.PrimitiveFunction;
+import hydra.overlay.java.util.Optional;
+
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+
+import static hydra.overlay.java.dsl.Types.function;
+import static hydra.overlay.java.dsl.Types.map;
+import hydra.errors.Error_;
+import hydra.overlay.java.util.Either;
+import hydra.overlay.java.util.PersistentMap;
+
+
+/**
+ * Transforms both keys and values.
+ */
+public class Bimap extends PrimitiveFunction {
+    /**
+     * Get the name of this primitive function.
+     * @return the name
+     */
+    public Name name() {
+        return hydra.lib.Maps.bimap().name;
+    }
+
+    /**
+     * Get the type scheme of this primitive function.
+     * @return the type scheme
+     */
+    @Override
+    public TypeScheme type() {
+        return Types.constrained4("k1", Types.ORD, "k2", Types.ORD, "v1", Types.NONE, "v2", Types.NONE,
+                function(function("k1", "k2"), function("v1", "v2"), map("k1", "v1"), map("k2", "v2")));
+    }
+
+    /**
+     * Get the implementation of this primitive function.
+     * @return the implementation function
+     */
+    @Override
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph ->
+            hydra.overlay.java.lib.eithers.Bind.apply(hydra.extract.Core.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(2)), mp -> {
+                PersistentMap<Term, Term> result = PersistentMap.<Term, Term>empty();
+                for (Map.Entry<Term, Term> entry : mp.entrySet()) {
+                    Either<Error_, Term> kr = hydra.Reduction.reduceTerm(
+                        hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(0), entry.getKey()));
+                    if (kr.isLeft()) return (Either) kr;
+                    Either<Error_, Term> vr = hydra.Reduction.reduceTerm(
+                        hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(1), entry.getValue()));
+                    if (vr.isLeft()) return (Either) vr;
+                    result = result.insert(((Either.Right<Error_, Term>) kr).value,
+                                            ((Either.Right<Error_, Term>) vr).value);
+                }
+                return Either.right(Terms.map(result));
+            });
+    }
+
+    /**
+     * Maps functions over keys and values.
+     * @param <K1> the input key type
+     * @param <K2> the output key type
+     * @param <V1> the input value type
+     * @param <V2> the output value type
+     * @param kf the key transformation function
+     * @return a curried function that takes a value function, a map, and returns the transformed map
+     */
+    public static <K1, K2, V1, V2> Function<Function<V1, V2>, Function<Map<K1, V1>, Map<K2, V2>>> apply(
+            Function<K1, K2> kf) {
+        return vf -> mp -> apply(kf, vf, mp);
+    }
+
+    /**
+     * Maps functions over keys and values.
+     * @param <K1> the input key type
+     * @param <K2> the output key type
+     * @param <V1> the input value type
+     * @param <V2> the output value type
+     * @param kf the key transformation function
+     * @param vf the value transformation function
+     * @param mp the input map
+     * @return the transformed map
+     */
+    public static <K1, K2, V1, V2> Map<K2, V2> apply(
+            Function<K1, K2> kf, Function<V1, V2> vf, Map<K1, V1> mp) {
+        PersistentMap<K2, V2> result = PersistentMap.<K2, V2>empty();
+        for (Map.Entry<K1, V1> e : mp.entrySet()) {
+            result = result.insert(kf.apply(e.getKey()), vf.apply(e.getValue()));
+        }
+        return result;
+    }
+}

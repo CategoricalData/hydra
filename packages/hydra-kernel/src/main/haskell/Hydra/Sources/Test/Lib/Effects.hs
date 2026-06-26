@@ -2,19 +2,19 @@ module Hydra.Sources.Test.Lib.Effects where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Dsl.Meta.Testing                 as Testing
+import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
 -- Effectful test cases are authored with HONESTLY-TYPED builders (Phantoms + Literals), NOT the
--- reified-Term builders in Hydra.Dsl.Meta.Terms. The reified builders (e.g. Terms.string,
+-- reified-Term builders in Hydra.Overlay.Haskell.Dsl.Typed.Terms. The reified builders (e.g. Terms.string,
 -- Terms.primitive) construct hydra.core.Term *data* for the reduce/interpret path used by universal
 -- tests; effectful cases instead compile directly to raw target effectful code, so their terms must
 -- infer at their true types (effect<string>, string). For #494.
-import Hydra.Dsl.Meta.Phantoms               -- (@@), primitive, lambda, var, just, nothing, optional, wrap
-import Hydra.Dsl.Meta.Literals               (string)
+import Hydra.Overlay.Haskell.Dsl.Typed.Phantoms               -- (@@), primitive, lambda, var, just, nothing, optional, wrap
+import Hydra.Overlay.Haskell.Dsl.Typed.Literals               (string)
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Dsl.Meta.Core          as Core
-import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
-import qualified Hydra.Dsl.Meta.Types         as T
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 

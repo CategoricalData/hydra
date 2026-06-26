@@ -4,7 +4,7 @@ module Hydra.Sources.Kernel.Terms.Validate.Packaging where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
-import           Hydra.Dsl.Bootstrap (unqualifiedDep, descriptionMetadata)
+import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
 import Hydra.Error.Packaging (
   InvalidModuleError, InvalidPackageError,
   _InvalidModuleError,
@@ -21,7 +21,7 @@ import Hydra.Error.Packaging (
   _InvalidPackageError_invalidPackageName)
 import Hydra.Packaging (Package)
 import qualified Hydra.Dsl.Error.Packaging       as ErrorPackaging
-import qualified Hydra.Dsl.Meta.Core             as Core
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core             as Core
 import qualified Hydra.Dsl.Lib.Equality     as Equality
 import qualified Hydra.Dsl.Lib.Lists        as Lists
 import qualified Hydra.Dsl.Lib.Logic        as Logic
@@ -35,7 +35,7 @@ import qualified Hydra.Dsl.Packaging                as Packaging
 import qualified Hydra.Dsl.Packaging             as Packaging
 import qualified Hydra.Dsl.Util                  as Util
 import qualified Hydra.Dsl.Validation            as Validation
-import           Hydra.Dsl.Meta.Phantoms         as Phantoms
+import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms         as Phantoms
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Constants  as Constants

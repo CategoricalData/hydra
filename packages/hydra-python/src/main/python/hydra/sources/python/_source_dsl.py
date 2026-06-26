@@ -11,8 +11,8 @@ Conventions:
   that the caller constructs once at module load.
 """
 
-from hydra.dsl.meta.phantoms import *  # noqa: F401,F403
-from hydra.dsl.python import None_
+from hydra.overlay.python.dsl.meta.phantoms import *  # noqa: F401,F403
+from hydra.overlay.python.dsl.python import None_
 from hydra.core import Name
 from hydra.packaging import ModuleDependency, ModuleName
 import hydra.dsl.python.syntax as PySyn

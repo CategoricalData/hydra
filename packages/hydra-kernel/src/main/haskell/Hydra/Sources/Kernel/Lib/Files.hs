@@ -3,10 +3,10 @@
 module Hydra.Sources.Kernel.Lib.Files where
 
 import Hydra.Kernel
-import qualified Hydra.Dsl.Bootstrap     as Bootstrap
-import           Hydra.Dsl.Meta.Phantoms as Phantoms
-import qualified Hydra.Dsl.Types         as Types
-import           Hydra.Dsl.Types         (effect)
+import qualified Hydra.Overlay.Haskell.Bootstrap     as Bootstrap
+import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms as Phantoms
+import qualified Hydra.Overlay.Haskell.Dsl.Types         as Types
+import           Hydra.Overlay.Haskell.Dsl.Types         (effect)
 import qualified Hydra.Error.File        as FileError
 import qualified Hydra.File              as File
 import           Hydra.Sources.Kernel.Types.All

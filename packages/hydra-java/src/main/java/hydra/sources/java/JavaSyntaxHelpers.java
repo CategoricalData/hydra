@@ -76,7 +76,7 @@ import hydra.java.syntax.VariableDeclaratorId;
 import hydra.java.syntax.VariableInitializer;
 import hydra.java.syntax.VariableModifier;
 import hydra.typed.TypedTerm;
-import hydra.util.Optional;
+import hydra.overlay.java.util.Optional;
 
 import java.util.List;
 

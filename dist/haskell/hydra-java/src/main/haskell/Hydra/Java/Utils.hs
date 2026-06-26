@@ -18,17 +18,17 @@ import qualified Hydra.Java.Names as JavaNames
 import qualified Hydra.Java.Serde as Serde
 import qualified Hydra.Java.Syntax as Syntax
 import qualified Hydra.Json.Model as Model
-import qualified Hydra.Haskell.Lib.Eithers as Eithers
-import qualified Hydra.Haskell.Lib.Equality as Equality
-import qualified Hydra.Haskell.Lib.Lists as Lists
-import qualified Hydra.Haskell.Lib.Literals as Literals
-import qualified Hydra.Haskell.Lib.Logic as Logic
-import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Optionals as Optionals
-import qualified Hydra.Haskell.Lib.Pairs as Pairs
-import qualified Hydra.Haskell.Lib.Sets as Sets
-import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Overlay.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Overlay.Haskell.Lib.Equality as Equality
+import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
+import qualified Hydra.Overlay.Haskell.Lib.Literals as Literals
+import qualified Hydra.Overlay.Haskell.Lib.Logic as Logic
+import qualified Hydra.Overlay.Haskell.Lib.Maps as Maps
+import qualified Hydra.Overlay.Haskell.Lib.Math as Math
+import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
+import qualified Hydra.Overlay.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Overlay.Haskell.Lib.Sets as Sets
+import qualified Hydra.Overlay.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
@@ -46,6 +46,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+import qualified Data.Map as M
 addExpressions :: [Syntax.MultiplicativeExpression] -> Syntax.AdditiveExpression
 addExpressions exprs =
 
@@ -140,7 +141,7 @@ importAliasesForModule :: Packaging.Module -> Environment.Aliases
 importAliasesForModule mod =
     Environment.Aliases {
       Environment.aliasesCurrentNamespace = (Packaging.moduleName mod),
-      Environment.aliasesPackages = Maps.empty,
+      Environment.aliasesPackages = overlayJavaLibPackageAliases,
       Environment.aliasesBranchVars = Sets.empty,
       Environment.aliasesRecursiveVars = Sets.empty,
       Environment.aliasesInScopeTypeParams = Sets.empty,
@@ -746,6 +747,137 @@ nameToQualifiedJavaName aliases qualify name mlocal =
           jid =
                   javaTypeIdentifier (Optionals.cases mlocal (sanitizeJavaName local) (\l -> Strings.cat2 (Strings.cat2 (sanitizeJavaName local) ".") (sanitizeJavaName l)))
       in (jid, pkg)
+overlayJavaLibPackageAliases :: M.Map Packaging.ModuleName Syntax.PackageName
+overlayJavaLibPackageAliases =
+    Maps.fromList [
+      (
+        Packaging.ModuleName "hydra.lib.chars",
+        (JavaNames.javaPackageName [
+          "hydra",
+          "overlay",
+          "java",
+          "lib",
+          "chars"])),
+      (
+        Packaging.ModuleName "hydra.lib.effects",
+        (JavaNames.javaPackageName [
+          "hydra",
+          "overlay",
+          "java",
+          "lib",
+          "effects"])),
+      (
+        Packaging.ModuleName "hydra.lib.eithers",
+        (JavaNames.javaPackageName [
+          "hydra",
+          "overlay",
+          "java",
+          "lib",
+          "eithers"])),
+      (
+        Packaging.ModuleName "hydra.lib.equality",
+        (JavaNames.javaPackageName [
+          "hydra",
+          "overlay",
+          "java",
+          "lib",
+          "equality"])),
+      (
+        Packaging.ModuleName "hydra.lib.files",
+        (JavaNames.javaPackageName [
+          "hydra",
+          "overlay",
+          "java",
+          "lib",
+          "files"])),
+      (
+        Packaging.ModuleName "hydra.lib.lists",
+        (JavaNames.javaPackageName [
+          "hydra",
+          "overlay",
+          "java",
+          "lib",
+          "lists"])),
+      (
+        Packaging.ModuleName "hydra.lib.literals",
+        (JavaNames.javaPackageName [
+          "hydra",
+          "overlay",
+          "java",
+          "lib",
+          "literals"])),
+      (
+        Packaging.ModuleName "hydra.lib.logic",
+        (JavaNames.javaPackageName [
+          "hydra",
+          "overlay",
+          "java",
+          "lib",
+          "logic"])),
+      (
+        Packaging.ModuleName "hydra.lib.maps",
+        (JavaNames.javaPackageName [
+          "hydra",
+          "overlay",
+          "java",
+          "lib",
+          "maps"])),
+      (
+        Packaging.ModuleName "hydra.lib.math",
+        (JavaNames.javaPackageName [
+          "hydra",
+          "overlay",
+          "java",
+          "lib",
+          "math"])),
+      (
+        Packaging.ModuleName "hydra.lib.optionals",
+        (JavaNames.javaPackageName [
+          "hydra",
+          "overlay",
+          "java",
+          "lib",
+          "optionals"])),
+      (
+        Packaging.ModuleName "hydra.lib.pairs",
+        (JavaNames.javaPackageName [
+          "hydra",
+          "overlay",
+          "java",
+          "lib",
+          "pairs"])),
+      (
+        Packaging.ModuleName "hydra.lib.regex",
+        (JavaNames.javaPackageName [
+          "hydra",
+          "overlay",
+          "java",
+          "lib",
+          "regex"])),
+      (
+        Packaging.ModuleName "hydra.lib.sets",
+        (JavaNames.javaPackageName [
+          "hydra",
+          "overlay",
+          "java",
+          "lib",
+          "sets"])),
+      (
+        Packaging.ModuleName "hydra.lib.strings",
+        (JavaNames.javaPackageName [
+          "hydra",
+          "overlay",
+          "java",
+          "lib",
+          "strings"])),
+      (
+        Packaging.ModuleName "hydra.lib.text",
+        (JavaNames.javaPackageName [
+          "hydra",
+          "overlay",
+          "java",
+          "lib",
+          "text"]))]
 overrideAnnotation :: Syntax.Annotation
 overrideAnnotation = Syntax.AnnotationMarker (Syntax.MarkerAnnotation (javaTypeName (Syntax.Identifier "Override")))
 referenceTypeToResult :: Syntax.ReferenceType -> Syntax.Result

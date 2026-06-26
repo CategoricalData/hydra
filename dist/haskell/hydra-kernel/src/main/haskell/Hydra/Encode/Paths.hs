@@ -4,7 +4,7 @@
 module Hydra.Encode.Paths where
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
-import qualified Hydra.Haskell.Lib.Lists as Lists
+import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
 import qualified Hydra.Paths as Paths
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
@@ -60,11 +60,6 @@ subtermPath x =
 subtermStep :: Paths.SubtermStep -> Core.Term
 subtermStep x =
     case x of
-      Paths.SubtermStepAnnotatedAnnotation -> Core.TermInject (Core.Injection {
-        Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
-        Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "annotatedAnnotation"),
-          Core.fieldTerm = Core.TermUnit}})
       Paths.SubtermStepAnnotatedBody -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.paths.SubtermStep"),
         Core.injectionField = Core.Field {

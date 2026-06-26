@@ -96,7 +96,7 @@ def _redirect_lib_calls(target, lang_dir):
     collide with lowercase impl subpackages). Mirrors redirectFor in bootstrap-from-json/Main.hs for
     the dotted languages (Python/Scala/Clojure).
     """
-    lang_seg = {"python": "python", "scala": "scala", "clojure": "clojure"}.get(target)
+    lang_seg = {"python": "overlay.python", "scala": "overlay.scala", "clojure": "overlay.clojure"}.get(target)
     if lang_seg is None:
         return  # java + others: no dotted-path redirect needed here
     sentinel = "@@HYDRA_LIB_NAME@@"  # improbable token; never appears in generated source
@@ -114,7 +114,7 @@ def _redirect_lib_calls(target, lang_dir):
             # def_chars`, for `def_chars.X.name` derivation); redirecting its def-module import would
             # point def_chars at the impl module (no .name). The Haskell driver keeps both canonical by
             # never transforming them (lib pass runs with no redirect; registry is overlay-copied).
-            if "/hydra/lib/" in p_slash or p_slash.endswith("hydra/sources/libraries.py"):
+            if "/hydra/lib/" in p_slash or "sources/libraries.py" in p_slash:
                 continue
             with open(p, "r", encoding="utf-8") as fh:
                 s = fh.read()
@@ -331,7 +331,7 @@ def main():
                            all_main_mods, mods_to_generate)
 
     # #473 Step 0 — lib pass + redirect. The hydra.lib.* primitive IMPLEMENTATIONS live at
-    # hydra.<lang>.lib.* (the analog of Haskell's Hydra.Haskell.Lib.*), so hydra.lib.* is free for
+    # hydra.overlay.<lang>.lib.* (the analog of Haskell's Hydra.Overlay.Haskell.Lib.*), so hydra.lib.* is free for
     # the generated PrimitiveDefinition def-modules. Mirrors the Haskell driver's twoPassLib logic in
     # bootstrap-from-json/Main.hs: when the Python host generates a target that consumes def-modules
     # (everything except haskell, which uses the registry), it must (1) emit the hydra.lib.* def-modules

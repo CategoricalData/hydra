@@ -16,7 +16,7 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Json.Parser as Parser
 import qualified Hydra.Json.Writer as Writer
-import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Overlay.Haskell.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsers as Parsers
 import qualified Hydra.Parsing as Parsing
@@ -35,7 +35,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-import qualified Hydra.Haskell.Lib.Literals as Literals
+import qualified Hydra.Overlay.Haskell.Lib.Literals as Literals
 -- | Test cases for JSON parsing
 allTests :: Testing.TestGroup
 allTests =

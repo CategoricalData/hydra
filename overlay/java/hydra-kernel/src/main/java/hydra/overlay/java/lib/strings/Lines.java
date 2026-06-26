@@ -1,0 +1,76 @@
+package hydra.overlay.java.lib.strings;
+
+import hydra.core.Name;
+import hydra.core.Term;
+import hydra.core.TypeScheme;
+import hydra.overlay.java.dsl.Terms;
+import hydra.graph.Graph;
+import hydra.overlay.java.tools.PrimitiveFunction;
+
+import java.util.List;
+import java.util.function.Function;
+
+import static hydra.overlay.java.dsl.Types.function;
+import static hydra.overlay.java.dsl.Types.list;
+import static hydra.overlay.java.dsl.Types.scheme;
+import static hydra.overlay.java.dsl.Types.string;
+import hydra.errors.Error_;
+import hydra.overlay.java.util.ConsList;
+import hydra.overlay.java.util.Either;
+
+/**
+ * Splits a string into lines by breaking at newline characters.
+ */
+public class Lines extends PrimitiveFunction {
+    /**
+     * Returns the name of this primitive function.
+     * @return the name "hydra.lib.strings.lines"
+     */
+    public Name name() {
+        return hydra.lib.Strings.lines().name;
+    }
+
+    /**
+     * Returns the type scheme of this function.
+     * @return the type scheme for a function that splits a string into lines
+     */
+    @Override
+    public TypeScheme type() {
+        return scheme(function(string(), list(string())));
+    }
+
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that transforms terms to a flow of graph and term
+     */
+    @Override
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.overlay.java.lib.eithers.Map.apply(s -> {
+                ConsList<Term> reversed = ConsList.empty();
+                for (String line : apply(s)) {
+                    reversed = ConsList.cons(Terms.string(line), reversed);
+                }
+                return Terms.list(reversed.reverse());
+            }, hydra.extract.Core.string(graph, args.get(0)));
+    }
+
+    /**
+     * Splits a string into lines by breaking at newline characters.
+     * @param s the string to split
+     * @return the list of lines
+     */
+    public static List<String> apply(String s) {
+        if (s.isEmpty()) {
+            return ConsList.empty();
+        }
+        String[] parts = s.split("\\n", -1);
+        // Remove trailing empty string if the string ends with newline
+        int end = (parts.length > 0 && parts[parts.length - 1].isEmpty())
+            ? parts.length - 1 : parts.length;
+        ConsList<String> result = ConsList.empty();
+        for (int i = end - 1; i >= 0; i--) {
+            result = ConsList.cons(parts[i], result);
+        }
+        return result;
+    }
+}

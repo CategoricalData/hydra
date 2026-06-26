@@ -1,0 +1,403 @@
+{-# LANGUAGE FlexibleInstances #-}
+
+-- | A domain-specific language for constructing Hydra terms in Haskell.
+module Hydra.Overlay.Haskell.Dsl.Terms where
+
+import Hydra.Constants
+import Hydra.Core
+import Hydra.Graph
+import Hydra.Packaging (PrimitiveDefinition, primitiveDefinitionName)
+import Hydra.Util
+import Hydra.Overlay.Haskell.Dsl.Typed.Common
+import qualified Hydra.Overlay.Haskell.Dsl.Literals as Literals
+
+import Prelude hiding (map, product)
+import Data.Int
+import qualified Data.ByteString as B
+import qualified Data.Char as C
+import qualified Data.List as L
+import qualified Data.Map as M
+import qualified Data.Scientific as Sci
+import qualified Data.Set as S
+
+
+-- | Function composition operator: f <.> g creates a function that applies g then f
+-- Example: var "stringLength" <.> var "toString"
+(<.>) :: Term -> Term -> Term
+f <.> g = compose f g
+
+-- | Term application operator: function @@ argument
+-- Example: var "add" @@ int32 1
+(@@) :: Term -> Term -> Term
+fun @@ arg = apply fun arg
+
+-- | Field definition operator: name>: value
+-- Example: "name">: string "John"
+infixr 0 >:
+(>:) :: String -> Term -> Field
+name>: term = field name term
+
+-- | Attach an annotation map to a term, wrapping the map as a TermMap per
+-- Hydra's convention (#386 — annotation is now a Term, not a Map<Name, Term>).
+-- Each Name key is lifted to a TermVariable.
+-- Example: annot (M.fromList [(Name "comment", string "A User ID")]) (var "userId")
+annot :: M.Map Name Term -> Term -> Term
+annot ann term = TermAnnotated $ AnnotatedTerm term (annotationMapAsTerm ann)
+
+-- | Attach an annotation map to a term (alternative argument order).
+-- Example: annotated (var "userId") (M.fromList [(Name "comment", string "A User ID")])
+annotated :: Term -> M.Map Name Term -> Term
+annotated term ann = TermAnnotated $ AnnotatedTerm term (annotationMapAsTerm ann)
+
+-- | Wrap a Map<Name, Term> as a TermMap annotation. Each Name key becomes a
+-- TermVariable key. The canonical encoding for Hydra's annotation map
+-- convention (#386).
+annotationMapAsTerm :: M.Map Name Term -> Term
+annotationMapAsTerm = TermMap . M.mapKeys TermVariable
+
+-- | Apply a function term to an argument
+-- Example: apply (var "capitalize") (string "arthur")
+apply :: Term -> Term -> Term
+apply fun arg = TermApplication $ Application fun arg
+
+-- | Create a bigint literal
+-- Example: bigint 9223372036854775808
+bigint :: Integer -> Term
+bigint = literal . Literals.bigint
+
+-- | Create a binary data literal from a ByteString.
+-- Example: binary (B.pack [0x48, 0x65, 0x00, 0xff, 0x20, 0x7a, 0x1b, 0x80])
+binary :: B.ByteString -> Term
+binary = literal . Literals.binary
+
+-- | Create a boolean literal
+-- Example: boolean True
+boolean :: Bool -> Term
+boolean = literal . Literals.boolean
+
+char :: Char -> Term
+char = int32 . C.ord
+
+comparison :: Comparison -> Term
+comparison t = case t of
+  ComparisonEqualTo -> injectUnit _Comparison _Comparison_equalTo
+  ComparisonLessThan -> injectUnit _Comparison _Comparison_lessThan
+  ComparisonGreaterThan -> injectUnit _Comparison _Comparison_greaterThan
+
+-- | Compose two functions (apply g then f) to create a new function
+-- Example: compose (var "stringLength") (var "toString")
+-- This creates a function equivalent to \x -> stringLength(toString(x))
+-- Function composition applies right-to-left: (f ∘ g)(x) = f(g(x))
+compose :: Term -> Term -> Term
+compose f g = lambda "arg_" $ apply f (apply g $ var "arg_")
+
+-- | Create a constant function that always returns the same value
+-- Example: constant true
+constant :: Term -> Term
+constant = lambda ignoredVariable
+
+-- | Create an arbitrary-precision decimal literal.
+-- Example: decimal (Sci.scientific 314159265359 (-11))
+decimal :: Sci.Scientific -> Term
+decimal = literal . Literals.decimal
+
+-- | Boolean false literal
+false :: Term
+false = boolean False
+
+-- | Create a field with the given name and value
+-- Example: field "age" (int32 30)
+field :: String -> Term -> Field
+field n = Field (Name n)
+
+-- | First element projection function for pairs
+first :: Term
+first = primitive $ Name "hydra.lib.pairs.first"
+
+-- | Create a floating-point literal with specified precision
+-- Example: float (FloatValueFloat32 3.14)
+float :: FloatValue -> Term
+float = literal . Literals.float
+
+-- | Create a float32 literal
+-- Example: float32 3.14
+float32 :: Float -> Term
+float32 = literal . Literals.float32
+
+-- | Create a float64 literal
+-- Example: float64 3.14159265359
+float64 :: Double -> Term
+float64 = literal . Literals.float64
+
+-- | Identity function
+identity :: Term
+identity = lambda "x_" $ var "x_"
+
+-- | Create a union value by injecting a value into a specific variant
+-- Example: inject (Name "Result") (Name "success") (int32 42)
+-- This creates a "Result" union with the "success" variant containing value 42
+-- Use this to construct values of union types at runtime
+inject :: Name -> Name -> Term -> Term
+inject tname fname term = TermInject $ Injection tname $ Field fname term
+
+-- | Create a unit variant of a union (convenience function)
+-- Example: injectUnit (Name "Result") (Name "success")
+-- Equivalent to inject but automatically uses unit as the value
+injectUnit :: Name -> Name -> Term
+injectUnit tname fname = inject tname fname unit
+
+-- | Create an int16 literal
+-- Example: int16 32767
+int16 :: Int16 -> Term
+int16 = literal . Literals.int16
+
+-- | Create an int32 literal
+-- Example: int32 42
+int32 :: Int -> Term
+int32 = literal . Literals.int32
+
+-- | Create an int64 literal
+-- Example: int64 9223372036854775807
+int64 :: Int64 -> Term
+int64 = literal . Literals.int64
+
+-- | Create an int8 literal
+-- Example: int8 127
+int8 :: Int8 -> Term
+int8 = literal . Literals.int8
+
+-- | Create an integer literal with specified bit width
+-- Example: integer (IntegerValueInt32 42)
+integer :: IntegerValue -> Term
+integer = literal . Literals.integer
+
+-- | Create a 'Just' optional value
+-- Example: just (string "found")
+just :: Term -> Term
+just = optional . Just
+
+-- | Create a lambda function with one parameter
+-- Example: lambda "x" (var "x" @@ int32 1)
+lambda :: String -> Term -> Term
+lambda param body = TermLambda $ Lambda (Name param) Nothing body
+
+-- | Create a lambda function with a given domain
+-- Example: lambdaTyped "x" Types.int32 (list [var "x"])
+lambdaTyped :: String -> Type -> Term -> Term
+lambdaTyped param dom body = TermLambda $ Lambda (Name param) (Just dom) body
+
+-- | Create a multi-parameter lambda function (curried)
+-- Example: lambdas ["x", "y"] (var "add" @@ var "x" @@ var "y")
+-- This creates the function \x.\y.add x y
+lambdas :: [String] -> Term -> Term
+lambdas params body = case params of
+  [] -> body
+  (h:r) -> lambda h $ lambdas r body
+
+-- | Create a 'Left' either value
+-- Example: left (string "error")
+left :: Term -> Term
+left term = TermEither (Left term)
+
+-- | Create a let term with any number of bindings
+-- Example: lets ["x">: int32 1, "y">: int32 2] (pair (var "x") (var "y"))
+lets :: [Field] -> Term -> Term
+lets bindings env = TermLet $ Let (toBinding <$> bindings) env
+  where
+    toBinding (Field name value) = Binding name value Nothing
+
+letsTyped :: [(String, Term, TypeScheme)] -> Term -> Term
+letsTyped bindings env = TermLet $ Let (toBinding <$> bindings) env
+  where
+    toBinding (name, value, ts) = Binding (Name name) value (Just ts)
+
+-- | Create a list of terms
+-- Example: list [int32 1, int32 2, int32 3]
+list :: [Term] -> Term
+list = TermList
+
+-- | Create a term from a literal value
+-- Example: literal (LiteralString "hello")
+literal :: Literal -> Term
+literal = TermLiteral
+
+-- | Create a map/dictionary term
+-- Example: map (M.fromList [(string "January", int32 31), (string "February", int32 28)])
+map :: M.Map Term Term -> Term
+map = TermMap
+
+-- | Create a pattern match on a union type
+-- Example: match (Name "Result") (Just (string "unknown"))
+--               ["success">: lambda "s" (var "processSuccess" @@ var "s"),
+--                "error">: lambda "e" (var "handleError" @@ var "e")]
+-- This allows handling different cases of a union type with specific logic for each variant.
+-- The optional second parameter provides a default case for any unmatched variants.
+match :: Name -> Maybe Term -> [Field] -> Term
+match tname def fields = TermCases $ CaseStatement tname def (fieldToCaseAlternative <$> fields)
+  where
+    -- The DSL builds case alternatives via the same >>: operator used for record/union
+    -- fields, so call sites still pass [Field]; convert each to a CaseAlternative here.
+    fieldToCaseAlternative (Field fname fterm) = CaseAlternative fname fterm
+
+-- | Create a 'Nothing' optional value
+nothing :: Term
+nothing = optional Nothing
+
+-- | Create a Maybe (nullable) term
+-- Example: optional (Just (string "found"))
+optional :: Maybe Term -> Term
+optional = TermOptional
+
+-- | Create a pair
+-- Example: pair (string "name") (int32 42)
+pair :: Term -> Term -> Term
+pair a b = TermPair (a, b)
+
+-- | Create a reference to a primitive function.
+-- | Things that name a primitive. Lets the term/DSL helpers take a generated
+-- 'PrimitiveDefinition' directly (@primitive DefStrings.toUpper@) — keeping the def-modules the
+-- single source of truth for primitive names (#473) — while still accepting a raw 'Name'.
+-- Defined here (the lowest DSL module) so 'Hydra.Overlay.Haskell.Dsl.Prims', 'Hydra.Overlay.Haskell.Dsl.Typed.Terms', and
+-- 'Hydra.Overlay.Haskell.Dsl.Typed.Phantoms' can all share one class without an import cycle.
+class ToPrimName a where
+  toPrimName :: a -> Name
+
+instance ToPrimName Name where
+  toPrimName = id
+
+instance ToPrimName PrimitiveDefinition where
+  toPrimName = primitiveDefinitionName
+
+-- Uses TermVariable; the name resolves via graphPrimitives fallthrough.
+-- Example: primitive DefStrings.length
+primitive :: ToPrimName n => n -> Term
+primitive = TermVariable . toPrimName
+
+-- | Create a field projection function
+-- Example: project (Name "Person") (Name "firstName")
+project :: Name -> Name -> Term
+project tname fname = TermProject $ Projection tname fname
+
+-- | Create a record with named fields of the specified type
+-- Example: record (Name "Person") [
+--            "name">: string "John",
+--            "age">: int32 30,
+--            "email">: string "john@example.com"]
+-- Records are products of named fields with values that can be accessed by field name
+record :: Name -> [Field] -> Term
+record tname fields = TermRecord $ Record tname fields
+
+-- | Create a 'Right' either value
+-- Example: right (int32 42)
+right :: Term -> Term
+right term = TermEither (Right term)
+
+-- | Second element projection function for pairs
+second :: Term
+second = primitive $ Name "hydra.lib.pairs.second"
+
+-- | Create a set of terms
+-- Example: set (S.fromList [string "a", string "b", string "c"])
+set :: S.Set Term -> Term
+set = TermSet
+
+-- | Create a string literal
+-- Example: string "hello world"
+string :: String -> Term
+string = TermLiteral . LiteralString
+
+triple :: Term -> Term -> Term -> Term
+triple a b c = pair a (pair b c)
+
+-- | Boolean true literal
+true :: Term
+true = boolean True
+
+-- | Create a tuple using nested pairs (deprecated: use pair directly)
+-- Example: tuple2 a b creates pair a b
+-- Example: tuple3 a b c creates pair a (pair b c)
+tuple :: [Term] -> Term
+tuple [] = unit
+tuple [a] = a
+tuple [a, b] = pair a b
+tuple (a:rest) = pair a (tuple rest)
+
+-- | Create a 2-tuple (same as pair)
+tuple2 :: Term -> Term -> Term
+tuple2 = pair
+
+tuple3 :: Term -> Term -> Term -> Term
+tuple3 a b c = pair a (pair b c)
+
+tuple4 :: Term -> Term -> Term -> Term -> Term
+tuple4 a b c d = pair a (pair b (pair c d))
+
+tuple5 :: Term -> Term -> Term -> Term -> Term -> Term
+tuple5 a b c d e = pair a (pair b (pair c (pair d e)))
+
+tyapp :: Term -> Type -> Term
+tyapp term typ = TermTypeApplication $ TypeApplicationTerm term typ
+
+tyapps = typeApplication
+
+tylam :: String -> Term -> Term
+tylam var body = TermTypeLambda $ TypeLambda (Name var) body
+
+tylams :: [String] -> Term -> Term
+tylams vars body = L.foldl (\b v -> TermTypeLambda $ TypeLambda (Name v) b) body $ L.reverse vars
+
+-- | Apply type arguments to a polymorphic term
+-- Example: typeApplication (var "map") [Types.int32, Types.string]
+-- This instantiates a polymorphic function with concrete types.
+-- For instance, if 'map' has type 'forall a b. (a -> b) -> list a -> list b',
+-- the example would instantiate it to '(int32 -> string) -> list int32 -> list string'.
+typeApplication :: Term -> [Type] -> Term
+typeApplication term types = L.foldl (\t ty -> TermTypeApplication $ TypeApplicationTerm t ty) term types
+
+-- | Create a type abstraction (universal quantification)
+-- Example: typeLambda [Name "a", Name "b"] (lambdaTyped "f" (Types.function (Types.var "a") (Types.var "b"))
+--                                               (lambdaTyped "x" (Types.var "a") (var "f" @@ var "x")))
+-- This creates a polymorphic term with type variables.
+-- The example creates a higher-order function with type 'forall a b. (a -> b) -> a -> b',
+-- which is the polymorphic apply function that works for any types a and b.
+typeLambda :: [Name] -> Term -> Term
+typeLambda vars body = L.foldl (\b v -> TermTypeLambda $ TypeLambda v b) body vars
+
+-- | Create a uint16 literal
+-- Example: uint16 65535
+uint16 :: Int -> Term
+uint16 = literal . Literals.uint16
+
+-- | Create a uint32 literal
+-- Example: uint32 4294967295
+uint32 :: Int64 -> Term
+uint32 = literal . Literals.uint32
+
+-- | Create a uint64 literal
+-- Example: uint64 18446744073709551615
+uint64 :: Integer -> Term
+uint64 = literal . Literals.uint64
+
+-- | Create a uint8 literal
+-- Example: uint8 255
+uint8 :: Int16 -> Term
+uint8 = literal . Literals.uint8
+
+-- | Unit value (empty record)
+unit :: Term
+unit = TermUnit
+
+-- | Create an unwrap function for a wrapped type
+-- Example: unwrap (Name "Email")
+unwrap :: Name -> Term
+unwrap = TermUnwrap
+
+-- | Create a variable reference
+-- Example: var "x"
+var :: String -> Term
+var = TermVariable . Name
+
+-- | Create a wrapped term
+-- Example: wrap (Name "Email") (string "user@example.com")
+wrap :: Name -> Term -> Term
+wrap name term = TermWrap $ WrappedTerm name term

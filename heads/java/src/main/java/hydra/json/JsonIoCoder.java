@@ -6,7 +6,7 @@ import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
 import hydra.errors.OtherError;
 import hydra.json.model.Value;
-import hydra.util.Either;
+import hydra.overlay.java.util.Either;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -15,8 +15,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import hydra.util.ConsList;
-import hydra.util.Pair;
+import hydra.overlay.java.util.ConsList;
+import hydra.overlay.java.util.Pair;
 
 /**
  * A bidirectional coder between Hydra's native JSON values and the JSON objects supported by json-io.

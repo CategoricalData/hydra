@@ -50,7 +50,7 @@
 
 ;; The Clojure coder emits consumer `(:require [hydra.lib.<sub> :refer :all])` and flat call sites
 ;; `hydra_lib_<sub>_<fn>` (resolved via that :refer). The relocation is driver-side: rewrite the require
-;; namespace hydra.lib.<sub> -> hydra.clojure.lib.<sub> (the relocated impls). The flat call identifiers
+;; namespace hydra.lib.<sub> -> hydra.overlay.clojure.lib.<sub> (the relocated impls). The flat call identifiers
 ;; stay (resolved via the relocated :refer :all). Def-modules at hydra/lib/ keep canonical hydra.lib.*.
 (defn- all-files-under [^java.io.File dir]
   (if (.isDirectory dir)
@@ -64,13 +64,13 @@
   (.contains (.replace (.getPath f) java.io.File/separatorChar \/) "/hydra/lib/"))
 
 (defn- redirect-dotted
-  "Rewrite consumer require namespaces hydra.lib.<sub> -> hydra.clojure.lib.<sub>, protecting quoted
+  "Rewrite consumer require namespaces hydra.lib.<sub> -> hydra.overlay.clojure.lib.<sub>, protecting quoted
    primitive-NAME strings (\"hydra.lib...\")."
   [^String s]
   (let [sentinel "@@HYDRA_LIB_NAME@@"
         protected (.replace s "\"hydra.lib." (str "\"" sentinel))
         rewritten (reduce (fn [^String acc sub]
-                            (.replace acc (str "hydra.lib." sub) (str "hydra.clojure.lib." sub)))
+                            (.replace acc (str "hydra.lib." sub) (str "hydra.overlay.clojure.lib." sub)))
                           protected
                           lib-subs)]
     (.replace rewritten sentinel "hydra.lib.")))
@@ -397,7 +397,7 @@
                             count))
                         0)
                       ;; #473 redirect — run LAST over every generated dir (main + test) so consumer
-                      ;; require namespaces hydra.lib.* are rewritten to hydra.clojure.lib.*.
+                      ;; require namespaces hydra.lib.* are rewritten to hydra.overlay.clojure.lib.*.
                       _ (when (= target "clojure")
                           (redirect-lib-calls (str out-dir "/src/main/" (:subdir coder-info)))
                           (when (:include-tests opts)

@@ -27,17 +27,17 @@ import qualified Hydra.Haskell.Syntax as Syntax
 import qualified Hydra.Haskell.Utils as Utils
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Lexical as Lexical
-import qualified Hydra.Haskell.Lib.Eithers as Eithers
-import qualified Hydra.Haskell.Lib.Equality as Equality
-import qualified Hydra.Haskell.Lib.Lists as Lists
-import qualified Hydra.Haskell.Lib.Literals as Literals
-import qualified Hydra.Haskell.Lib.Logic as Logic
-import qualified Hydra.Haskell.Lib.Maps as Maps
-import qualified Hydra.Haskell.Lib.Math as Math
-import qualified Hydra.Haskell.Lib.Optionals as Optionals
-import qualified Hydra.Haskell.Lib.Pairs as Pairs
-import qualified Hydra.Haskell.Lib.Sets as Sets
-import qualified Hydra.Haskell.Lib.Strings as Strings
+import qualified Hydra.Overlay.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Overlay.Haskell.Lib.Equality as Equality
+import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
+import qualified Hydra.Overlay.Haskell.Lib.Literals as Literals
+import qualified Hydra.Overlay.Haskell.Lib.Logic as Logic
+import qualified Hydra.Overlay.Haskell.Lib.Maps as Maps
+import qualified Hydra.Overlay.Haskell.Lib.Math as Math
+import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
+import qualified Hydra.Overlay.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Overlay.Haskell.Lib.Sets as Sets
+import qualified Hydra.Overlay.Haskell.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
@@ -97,7 +97,7 @@ constructModule namespaces mod defs cx g =
                         parts = Strings.splitOn "." raw
                     in (Logic.ifElse (Logic.and (Equality.equal (Lists.length parts) 3) (Equality.equal (Lists.take 2 parts) [
                       "hydra",
-                      "lib"])) (Strings.cat2 "hydra.haskell.lib." (Strings.intercalate "." (Lists.drop 2 parts))) raw)
+                      "lib"])) (Strings.cat2 "hydra.overlay.haskell.lib." (Strings.intercalate "." (Lists.drop 2 parts))) raw)
           createDeclarations =
                   \def -> case def of
                     Packaging.DefinitionType v0 ->
@@ -162,7 +162,7 @@ constructModule namespaces mod defs cx g =
                       (condImport (Environment.haskellModuleMetadataUsesMap meta) (("Data.Map", (Just "M")), [])),
                       (condImport (Environment.haskellModuleMetadataUsesSet meta) (("Data.Set", (Just "S")), [])),
                       (Logic.ifElse (Logic.or (Analysis.moduleContainsBinaryLiterals mod) (Analysis.moduleContainsDecimalLiterals mod)) [
-                        (("Hydra.Haskell.Lib.Literals", (Just "Literals")), [])] [])]))
+                        (("Hydra.Overlay.Haskell.Lib.Literals", (Just "Literals")), [])] [])]))
       in (Eithers.bind (Eithers.mapList createDeclarations defs) (\declLists ->
         let decls = Lists.concat declLists
             mc = Optionals.bind (Packaging.moduleMetadata mod) (\em -> Packaging.entityMetadataDescription em)

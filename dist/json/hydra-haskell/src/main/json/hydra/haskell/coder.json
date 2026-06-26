@@ -364,7 +364,7 @@
                                                                 "argument": {
                                                                   "application": {
                                                                     "function": {
-                                                                      "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "hydra.haskell.lib."}}}},
+                                                                      "application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "hydra.overlay.haskell.lib."}}}},
                                                                     "argument": {
                                                                       "application": {
                                                                         "function": {"application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": "."}}}},
@@ -1024,7 +1024,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "pair": {
-                                                                                                "first": {"literal": {"string": "Hydra.Haskell.Lib.Literals"}},
+                                                                                                "first": {"literal": {"string": "Hydra.Overlay.Haskell.Lib.Literals"}},
                                                                                                 "second": {"optional": {"literal": {"string": "Literals"}}}}},
                                                                                             "type": {"literal": {"string": {}}}}},
                                                                                         "type": {"optional": {"literal": {"string": {}}}}}},
