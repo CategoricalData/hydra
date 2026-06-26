@@ -7,8 +7,11 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.File as ErrorFile
 import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Error.System as ErrorSystem
 import qualified Hydra.Errors as Errors
+import qualified Hydra.File as File
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Graphviz.Dot as Dot
 import qualified Hydra.Json.Model as Model
@@ -29,8 +32,10 @@ import qualified Hydra.Query as Query
 import qualified Hydra.Relational as Relational
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Paths as ShowPaths
+import qualified Hydra.System as System
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing
+import qualified Hydra.Time as Time
 import qualified Hydra.Topology as Topology
 import qualified Hydra.Typed as Typed
 import qualified Hydra.Typing as Typing
@@ -90,8 +95,10 @@ standardNamespaces :: M.Map Packaging.ModuleName String
 standardNamespaces =
     M.fromList [
       (Packaging.ModuleName "hydra.lib.chars", "chars"),
+      (Packaging.ModuleName "hydra.lib.effects", "effects"),
       (Packaging.ModuleName "hydra.lib.eithers", "eithers"),
       (Packaging.ModuleName "hydra.lib.equality", "equality"),
+      (Packaging.ModuleName "hydra.lib.files", "files"),
       (Packaging.ModuleName "hydra.lib.lists", "lists"),
       (Packaging.ModuleName "hydra.lib.literals", "literals"),
       (Packaging.ModuleName "hydra.lib.logic", "logic"),
@@ -101,7 +108,9 @@ standardNamespaces =
       (Packaging.ModuleName "hydra.lib.pairs", "pairs"),
       (Packaging.ModuleName "hydra.lib.regex", "regex"),
       (Packaging.ModuleName "hydra.lib.sets", "sets"),
-      (Packaging.ModuleName "hydra.lib.strings", "strings")]
+      (Packaging.ModuleName "hydra.lib.strings", "strings"),
+      (Packaging.ModuleName "hydra.lib.system", "system"),
+      (Packaging.ModuleName "hydra.lib.text", "text")]
 -- | Compute a label and node style for a term
 termLabel :: Bool -> M.Map Packaging.ModuleName String -> Core.Term -> (String, String)
 termLabel compact namespaces term =
