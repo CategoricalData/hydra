@@ -119,7 +119,7 @@ packages/<pkg>/src/main/<lang>/  → dist/json/<pkg>/src/<set>/json/  →  dist/
 ```
 
 - **DSL sources** are human-authored modules in a host language (Haskell for most
-  packages; Java for `hydra-java`; Python for `hydra-python`).
+  packages; Java for `hydra-java` and `hydra-jvm`; Python for `hydra-python`).
 - **JSON modules** are the language-neutral interchange representation. `dist/json/` is
   tracked in git as the source of truth for non-Haskell hosts.
 - **Target distributions** are generated source trees, one per (target language × package).
@@ -131,8 +131,8 @@ This factoring serves Hydra's core premise: there is a single language for
 representing data, schemas, and code, with encodings in many other languages.
 JSON provides a neutral encoding which every host can read. DSL sources
 express the same language in the host of their choice — Haskell today for
-`hydra-kernel`, Java for `hydra-java`, Python for `hydra-python`, with more
-diversification expected over time.
+`hydra-kernel`, Java for `hydra-java` and `hydra-jvm`, Python for `hydra-python`,
+with more diversification expected over time.
 
 A complete sync of the matrix walks these in five phases (see
 [Phases](#phases-of-binsyncsh) below).

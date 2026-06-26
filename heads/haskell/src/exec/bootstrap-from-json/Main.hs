@@ -270,7 +270,7 @@ main = do
   -- --include-coders. Ext demo packages are loaded with --ext-only. Other
   -- non-baseline non-coder packages (extPackages and extDemoPackages) are
   -- auto-loaded based on --package or --all-packages — see Step 2c.
-  let coderPackages   = ["hydra-java", "hydra-python", "hydra-scala", "hydra-lisp", "hydra-typescript", "hydra-go"]
+  let coderPackages   = ["hydra-jvm", "hydra-java", "hydra-python", "hydra-scala", "hydra-lisp", "hydra-typescript", "hydra-go"]
   let extDemoPackages = ["hydra-pg", "hydra-rdf"]
   let extPackages     = ["hydra-coq", "hydra-ext", "hydra-wasm", "hydra-bench"]
 

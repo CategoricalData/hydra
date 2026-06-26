@@ -238,8 +238,7 @@
              "lib/pairs.lisp"
              "lib/regex.lisp"
              "lib/sets.lisp"
-             "lib/strings.lisp"
-             "lib/system.lisp"))
+             "lib/strings.lisp"))
   (load-test-file f))
 
 ;; Annotation tests
@@ -270,7 +269,6 @@
              "inference/algebraic_types.lisp"
              "inference/nominal_types.lisp"
              "inference/algorithm_w.lisp"
-             "inference/annotations.lisp"
              "inference/classes.lisp"
              "inference/failures.lisp"
              "inference/kernel_examples.lisp"

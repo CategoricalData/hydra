@@ -6,7 +6,7 @@
     "seeAlso": []},
   "dependencies": [
     {"module": "hydra.serialization"},
-    {"module": "hydra.java.serde"},
+    {"module": "hydra.jvm.serde"},
     {"module": "hydra.scala.syntax"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -1840,7 +1840,7 @@
                                             "function": {
                                               "application": {
                                                 "function": {"variable": "hydra.lib.strings.cat2"},
-                                                "argument": {"application": {"function": {"variable": "hydra.java.serde.escapeJavaString"}, "argument": {"variable": "s"}}}}},
+                                                "argument": {"application": {"function": {"variable": "hydra.jvm.serde.escapeJavaString"}, "argument": {"variable": "s"}}}}},
                                             "argument": {"literal": {"string": "\""}}}}}}}}}}},
                           {
                             "name": "bytes",

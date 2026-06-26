@@ -204,7 +204,7 @@ import hydra.java.syntax.WildcardBounds;  // AUTO-IMPORT (hydra-java DSL)
  * so the stubs are not reachable in practice (the Java self-host bootstrap is green, and no
  * {@code STUB:} string appears in any generated kernel/test output). They remain for
  * completeness of the Java serializer as a general tool. The cross-coder dependency the Scala
- * coder relies on, {@code escapeJavaString}, IS fully implemented here (not a stub).</p>
+ * coder relies on, {@code escapeJavaString}, is implemented in {@code hydra.jvm.serde} (hydra-jvm) and referenced here.</p>
  */
 public class Serde {
     public static final ModuleName NS = new ModuleName("hydra.java.serde");
@@ -1178,45 +1178,6 @@ public class Serde {
                                     ref(Serde.relationalExpressionToExpr),
                                     proj(EqualityExpression_Binary.TYPE_, EqualityExpression_Binary.RHS, "b"))))))));
 
-    public static final Def escapeJavaChar = def(
-        "escapeJavaChar",
-        () -> lambda("c",
-                Logic.ifElse(
-                    Equality.equal(var("c"), int32(34)),
-                    string("\\\""),
-                    Logic.ifElse(
-                        Equality.equal(var("c"), int32(92)),
-                        string("\\\\"),
-                        Logic.ifElse(
-                            Equality.equal(var("c"), int32(10)),
-                            string("\\n"),
-                            Logic.ifElse(
-                                Equality.equal(var("c"), int32(13)),
-                                string("\\r"),
-                                Logic.ifElse(
-                                    Equality.equal(var("c"), int32(9)),
-                                    string("\\t"),
-                                    Logic.ifElse(
-                                        Equality.equal(var("c"), int32(8)),
-                                        string("\\b"),
-                                        Logic.ifElse(
-                                            Equality.equal(var("c"), int32(12)),
-                                            string("\\f"),
-                                            Logic.ifElse(
-                                                Logic.and(
-                                                    Equality.gte(var("c"), int32(32)),
-                                                    Equality.lt(var("c"), int32(127))),
-                                                Strings.fromList(list(var("c"))),
-                                                apply(ref(Serde.javaUnicodeEscape), var("c"))))))))))));
-
-    public static final Def escapeJavaString = def(
-        "escapeJavaString",
-        () -> lambda("s",
-                Strings.cat(
-                    Lists.map(
-                        lambda("c", apply(ref(Serde.escapeJavaChar), var("c"))),
-                        Strings.toList(var("s"))))));
-
     public static final Def exclusiveOrExpressionToExpr = def(
         "exclusiveOrExpressionToExpr",
         () -> lambda("eoe",
@@ -1431,14 +1392,6 @@ public class Serde {
                     field(
                         FormalParameter.VARIABLE_ARITY,
                         lambda("v", apply(ref(Serde.variableArityParameterToExpr), var("v")))))));
-
-    public static final Def hexDigit = def(
-        "hexDigit",
-        () -> lambda("n",
-                Logic.ifElse(
-                    Equality.lt(var("n"), int32(10)),
-                    Math_.add(var("n"), int32(48)),
-                    Math_.add(Math_.sub(var("n"), int32(10)), int32(65)))));
 
     public static final Def identifierToExpr = def(
         "identifierToExpr",
@@ -1722,27 +1675,6 @@ public class Serde {
                             string("Double.NEGATIVE_INFINITY"),
                             var("s"))))));
 
-    public static final Def javaUnicodeEscape = def(
-        "javaUnicodeEscape",
-        () -> lambda("n",
-                Logic.ifElse(
-                    Equality.gt(var("n"), int32(65535)),
-                    let(
-                        field("n'",
-                            Math_.sub(var("n"), int32(65536))),
-                        field("hi",
-                            Math_.add(
-                                int32(55296),
-                                Optionals.fromOptional(int32(0), Math_.maybeDiv(var("n'"), int32(1024))))),
-                        field("lo",
-                            Math_.add(
-                                int32(56320),
-                                Optionals.fromOptional(int32(0), Math_.maybeMod(var("n'"), int32(1024))))),
-                        Strings.cat2(
-                            Strings.cat2(string("\\u"), apply(ref(Serde.padHex4), var("hi"))),
-                            Strings.cat2(string("\\u"), apply(ref(Serde.padHex4), var("lo"))))),
-                    Strings.cat2(string("\\u"), apply(ref(Serde.padHex4), var("n"))))));
-
     public static final Def labeledStatementToExpr = def(
         "labeledStatementToExpr",
         () -> constant(apply(var("hydra.serialization.cst"), string("STUB:LabeledStatement"))));
@@ -1860,7 +1792,7 @@ public class Serde {
                                                                     Strings.fromList(
                                                                         list(var("ci"))),
                                                                     apply(
-                                                                        ref(Serde.javaUnicodeEscape),
+                                                                        var("hydra.jvm.serde.javaUnicodeEscape"),
                                                                         var("ci")))))))),
                                             string("'"))))))),
                     field(
@@ -2461,29 +2393,6 @@ public class Serde {
                         ref(Serde.identifierToExpr),
                         apply(unwrap(PackageOrTypeName.TYPE_), var("potn"))))));
 
-    public static final Def padHex4 = def(
-        "padHex4",
-        () -> lambda("n",
-                let(
-                    field("d3",
-                        Optionals.fromOptional(int32(0), Math_.maybeDiv(var("n"), int32(4096)))),
-                    field("r3",
-                        Optionals.fromOptional(int32(0), Math_.maybeMod(var("n"), int32(4096)))),
-                    field("d2",
-                        Optionals.fromOptional(int32(0), Math_.maybeDiv(var("r3"), int32(256)))),
-                    field("r2",
-                        Optionals.fromOptional(int32(0), Math_.maybeMod(var("r3"), int32(256)))),
-                    field("d1",
-                        Optionals.fromOptional(int32(0), Math_.maybeDiv(var("r2"), int32(16)))),
-                    field("d0",
-                        Optionals.fromOptional(int32(0), Math_.maybeMod(var("r2"), int32(16)))),
-                    Strings.fromList(
-                        list(
-                            apply(ref(Serde.hexDigit), var("d3")),
-                            apply(ref(Serde.hexDigit), var("d2")),
-                            apply(ref(Serde.hexDigit), var("d1")),
-                            apply(ref(Serde.hexDigit), var("d0")))))));
-
     public static final Def postDecrementExpressionToExpr = def(
         "postDecrementExpressionToExpr",
         () -> constant(apply(var("hydra.serialization.cst"), string("STUB:PostDecrementExpression"))));
@@ -2971,7 +2880,7 @@ public class Serde {
                             Strings.cat2(
                                 string("\""),
                                 Strings.cat2(
-                                    apply(ref(Serde.escapeJavaString), var("s")),
+                                    apply(var("hydra.jvm.serde.escapeJavaString"), var("s")),
                                     string("\""))))))));
 
     public static final Def switchStatementToExpr = def(
@@ -3511,8 +3420,6 @@ public class Serde {
             elementValueToExpr,
             enumDeclarationToExpr,
             equalityExpressionToExpr,
-            escapeJavaChar,
-            escapeJavaString,
             exclusiveOrExpressionToExpr,
             explicitConstructorInvocationToExpr,
             expressionNameToExpr,
@@ -3526,7 +3433,6 @@ public class Serde {
             forStatementToExpr,
             formalParameterSimpleToExpr,
             formalParameterToExpr,
-            hexDigit,
             identifierToExpr,
             ifThenElseStatementToExpr,
             ifThenStatementToExpr,
@@ -3544,7 +3450,6 @@ public class Serde {
             interfaceModifierToExpr,
             interfaceTypeToExpr,
             javaFloatLiteralText,
-            javaUnicodeEscape,
             labeledStatementToExpr,
             lambdaBodyToExpr,
             lambdaExpressionToExpr,
@@ -3572,7 +3477,6 @@ public class Serde {
             packageModifierToExpr,
             packageNameToExpr,
             packageOrTypeNameToExpr,
-            padHex4,
             postDecrementExpressionToExpr,
             postIncrementExpressionToExpr,
             postfixExpressionToExpr,
@@ -3634,6 +3538,7 @@ public class Serde {
 
 
     private static final List<ModuleDependency> DEPENDENCIES = unqualifiedDeps(
+        new ModuleName("hydra.jvm.serde"),
         new ModuleName("hydra.constants"),
         new ModuleName("hydra.serialization"),
         new ModuleName("hydra.java.syntax"),

@@ -25,7 +25,7 @@ import Hydra.PackageRouting (defaultDistJsonRoot, buildRoutingMap)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules, kernelModules, haskellModules, jsonModules, otherModules,
   hydraBenchModules,
-  hydraCoqModules, hydraGoModules, hydraJavaModules, hydraTypeScriptModules,
+  hydraCoqModules, hydraGoModules, hydraJvmModules, hydraJavaModules, hydraTypeScriptModules,
   hydraPythonModules, hydraScalaModules, hydraLispModules,
   hydraPgModules, hydraRdfModules, hydraWasmModules,
   hydraExtPackageModules,
@@ -76,11 +76,10 @@ main = do
   -- (bin/sync.sh) omits them so they don't balloon every host's codegen step.
   let extraBench = if includeBench then hydraBenchModules else []
 
-  -- #346/#370: hydra-java and hydra-python have NO Haskell DSL sources
-  -- (hydraJavaModules / hydraPythonModules are []), so their hydra.{java,python}.*
-  -- and hydra.dsl.{java,python}.* modules are absent from the compiled universe.
-  -- But other packages may REFERENCE them at inference time — notably hydra-scala's
-  -- serde calls hydra.java.serde.escapeJavaString. Load those modules from their
+  -- #346/#370/#505: hydra-jvm, hydra-java, and hydra-python have NO Haskell DSL
+  -- sources, so their modules are absent from the compiled universe. But other
+  -- packages may REFERENCE them at inference time — notably hydra-scala's serde
+  -- calls hydra.jvm.serde.escapeJavaString. Load those modules from their
   -- already-generated dist/json (written by the native drivers) so cross-package
   -- references resolve. These are excluded from the write pass below by
   -- isNativeOwned, so loading them only seeds the inference universe.
@@ -90,6 +89,7 @@ main = do
         , extraBench
         , hydraCoqModules
         , hydraGoModules
+        , hydraJvmModules
         , hydraJavaModules
         , hydraTypeScriptModules
         , hydraPythonModules
@@ -116,11 +116,13 @@ main = do
   let universe = dedupByNamespace (baseUniverse ++ synthesizedEncodeDecode ++ nativeModules)
 
   -- Routing map (#474), derived from each package's compiled mainModules plus
-  -- the native (hydra-java / hydra-python) modules loaded from dist/json.
+  -- the native (hydra-jvm / hydra-java / hydra-python) modules loaded from dist/json.
   -- Native modules are tagged by namespace prefix; everything else comes from
   -- extRoutingInput.
   let nativeRoutingInput =
-        [ ("hydra-java",   [ Kernel.moduleName m | m <- nativeModules
+        [ ("hydra-jvm",    [ Kernel.moduleName m | m <- nativeModules
+                           , L.isPrefixOf "hydra.jvm." (Packaging.unModuleName (Kernel.moduleName m)) ])
+        , ("hydra-java",   [ Kernel.moduleName m | m <- nativeModules
                            , L.isPrefixOf "hydra.java." (Packaging.unModuleName (Kernel.moduleName m))
                              || L.isPrefixOf "hydra.dsl.java." (Packaging.unModuleName (Kernel.moduleName m)) ])
         , ("hydra-python", [ Kernel.moduleName m | m <- nativeModules
@@ -140,19 +142,14 @@ main = do
   -- graph construction is required beyond what inference already does.
   -- validateKernelModulesOrExit kernelModules -- temporarily disabled for #368 bootstrap recovery
 
-  -- Native hosts own the DSL→JSON path for hydra-java and hydra-python (#344).
-  -- Their canonical hydra.java.* / hydra.python.* JSON is produced by
-  -- bin/generate-hydra-{java,python}-from-{java,python}.sh (Phase 0 of sync.sh).
-  -- We still pull in hydraJavaModules / hydraPythonModules above so they
-  -- participate in the inference universe and in DSL-wrapper synthesis below,
-  -- but we exclude their term-level modules from this write pass.
-  --
-  -- Legacy: the Haskell DSL copies at packages/hydra-{java,python}/src/main/haskell/
-  -- remain as a historical reference through 0.15 but no longer drive
-  -- dist/json/hydra-{java,python}/. To be deleted before 0.16.
+  -- Native hosts own the DSL→JSON path for hydra-jvm, hydra-java, and hydra-python
+  -- (#344, #505). Their canonical JSON is produced by the Java driver
+  -- (bin/generate-hydra-java-from-java.sh, Phase 5 of sync.sh). We still load their
+  -- modules so they participate in the inference universe and DSL-wrapper synthesis
+  -- below, but we exclude their term-level modules from this write pass.
   let isNativeOwned m =
         let ns = Packaging.unModuleName (Kernel.moduleName m)
-        in L.isPrefixOf "hydra.java." ns || L.isPrefixOf "hydra.python." ns
+        in L.isPrefixOf "hydra.jvm." ns || L.isPrefixOf "hydra.java." ns || L.isPrefixOf "hydra.python." ns
       -- The native packages (#344) are loaded into the universe together with
       -- their ALREADY-DERIVED DSL wrapper modules (hydra.dsl.{java,python}.*),
       -- via loadNativePackageModules reading both mainModules and dslModules
@@ -191,7 +188,7 @@ main = do
   putStrLn $ "Generating " ++ show (length writeUniverse) ++ " modules to JSON, routed per package..."
   when (excluded > 0) $
     putStrLn $ "  (excluded " ++ show excluded
-      ++ " hydra.java.*/hydra.python.* modules — owned by native generators; see #344)"
+      ++ " native-owned (hydra.jvm.*/java.*/python.*) modules; see #344/#505)"
   putStrLn $ "dist-json root: " ++ distRoot
   putStrLn ""
 

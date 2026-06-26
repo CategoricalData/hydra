@@ -43,11 +43,15 @@ java {
 sourceSets {
     main {
         java {
+            // hydra-jvm DSL authoring sources (shared JVM helpers; #505).
+            // Must precede hydra-java (dependency order).
+            srcDir file("$hydraRoot/packages/hydra-jvm/src/main/java")
             // All hand-written hydra-java DSL authoring sources + DSL modules.
             srcDir file("$hydraRoot/packages/hydra-java/src/main/java")
             // Just the two driver files from heads/java (everything else there
             // needs the local dist or the cross-target coders).
             srcDir file("$hydraRoot/heads/java/src/main/java")
+            include 'hydra/sources/jvm/**'
             include 'hydra/sources/java/**'
             include 'hydra/dsl/**'
             include 'hydra/Generation.java'

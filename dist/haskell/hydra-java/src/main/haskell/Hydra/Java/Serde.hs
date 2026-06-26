@@ -14,11 +14,11 @@ import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Java.Syntax as Syntax
 import qualified Hydra.Json.Model as Model
+import qualified Hydra.Jvm.Serde as Serde
 import qualified Hydra.Overlay.Haskell.Lib.Equality as Equality
 import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
 import qualified Hydra.Overlay.Haskell.Lib.Literals as Literals
 import qualified Hydra.Overlay.Haskell.Lib.Logic as Logic
-import qualified Hydra.Overlay.Haskell.Lib.Math as Math
 import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Overlay.Haskell.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
@@ -383,12 +383,6 @@ equalityExpressionToExpr e =
       Syntax.EqualityExpressionUnary v0 -> relationalExpressionToExpr v0
       Syntax.EqualityExpressionEqual v0 -> Serialization.infixWs "==" (equalityExpressionToExpr (Syntax.equalityExpression_BinaryLhs v0)) (relationalExpressionToExpr (Syntax.equalityExpression_BinaryRhs v0))
       Syntax.EqualityExpressionNotEqual v0 -> Serialization.infixWs "!=" (equalityExpressionToExpr (Syntax.equalityExpression_BinaryLhs v0)) (relationalExpressionToExpr (Syntax.equalityExpression_BinaryRhs v0))
-escapeJavaChar :: Int -> String
-escapeJavaChar c =
-    Logic.ifElse (Equality.equal c 34) "\\\"" (Logic.ifElse (Equality.equal c 92) "\\\\" (Logic.ifElse (Equality.equal c 10) "\\n" (Logic.ifElse (Equality.equal c 13) "\\r" (Logic.ifElse (Equality.equal c 9) "\\t" (Logic.ifElse (Equality.equal c 8) "\\b" (Logic.ifElse (Equality.equal c 12) "\\f" (Logic.ifElse (Logic.and (Equality.gte c 32) (Equality.lt c 127)) (Strings.fromList [
-      c]) (javaUnicodeEscape c))))))))
-escapeJavaString :: String -> String
-escapeJavaString s = Strings.cat (Lists.map (\c -> escapeJavaChar c) (Strings.toList s))
 exclusiveOrExpressionToExpr :: Syntax.ExclusiveOrExpression -> Ast.Expr
 exclusiveOrExpressionToExpr eoe =
     Serialization.infixWsList "^" (Lists.map andExpressionToExpr (Syntax.unExclusiveOrExpression eoe))
@@ -471,8 +465,6 @@ formalParameterToExpr p =
     case p of
       Syntax.FormalParameterSimple v0 -> formalParameterSimpleToExpr v0
       Syntax.FormalParameterVariableArity v0 -> variableArityParameterToExpr v0
-hexDigit :: Int -> Int
-hexDigit n = Logic.ifElse (Equality.lt n 10) (Math.add n 48) (Math.add (Math.sub n 10) 65)
 identifierToExpr :: Syntax.Identifier -> Ast.Expr
 identifierToExpr id = Serialization.cst (Syntax.unIdentifier id)
 ifThenElseStatementToExpr :: t0 -> Ast.Expr
@@ -571,13 +563,6 @@ interfaceTypeToExpr it = classTypeToExpr (Syntax.unInterfaceType it)
 javaFloatLiteralText :: String -> String
 javaFloatLiteralText s =
     Logic.ifElse (Equality.equal s "NaN") "Double.NaN" (Logic.ifElse (Equality.equal s "Infinity") "Double.POSITIVE_INFINITY" (Logic.ifElse (Equality.equal s "-Infinity") "Double.NEGATIVE_INFINITY" s))
-javaUnicodeEscape :: Int -> String
-javaUnicodeEscape n =
-    Logic.ifElse (Equality.gt n 65535) (
-      let n_ = Math.sub n 65536
-          hi = Math.add 55296 (Optionals.fromOptional 0 (Math.maybeDiv n_ 1024))
-          lo = Math.add 56320 (Optionals.fromOptional 0 (Math.maybeMod n_ 1024))
-      in (Strings.cat2 (Strings.cat2 "\\u" (padHex4 hi)) (Strings.cat2 "\\u" (padHex4 lo)))) (Strings.cat2 "\\u" (padHex4 n))
 labeledStatementToExpr :: t0 -> Ast.Expr
 labeledStatementToExpr _ = Serialization.cst "STUB:LabeledStatement"
 lambdaBodyToExpr :: Syntax.LambdaBody -> Ast.Expr
@@ -612,7 +597,7 @@ literalToExpr l =
       Syntax.LiteralCharacter v0 ->
         let ci = Literals.bigintToInt32 (Literals.uint16ToBigint v0)
         in (Serialization.cst (Strings.cat2 "'" (Strings.cat2 (Logic.ifElse (Equality.equal ci 39) "\\'" (Logic.ifElse (Equality.equal ci 92) "\\\\" (Logic.ifElse (Equality.equal ci 10) "\\n" (Logic.ifElse (Equality.equal ci 13) "\\r" (Logic.ifElse (Equality.equal ci 9) "\\t" (Logic.ifElse (Logic.and (Equality.gte ci 32) (Equality.lt ci 127)) (Strings.fromList [
-          ci]) (javaUnicodeEscape ci))))))) "'")))
+          ci]) (Serde.javaUnicodeEscape ci))))))) "'")))
       Syntax.LiteralString v0 -> stringLiteralToExpr v0
 localNameToExpr :: Syntax.LocalVariableType -> Ast.Expr
 localNameToExpr t =
@@ -804,20 +789,6 @@ packageNameToExpr :: Syntax.PackageName -> Ast.Expr
 packageNameToExpr pn = Serialization.dotSep (Lists.map identifierToExpr (Syntax.unPackageName pn))
 packageOrTypeNameToExpr :: Syntax.PackageOrTypeName -> Ast.Expr
 packageOrTypeNameToExpr potn = Serialization.dotSep (Lists.map identifierToExpr (Syntax.unPackageOrTypeName potn))
-padHex4 :: Int -> String
-padHex4 n =
-
-      let d3 = Optionals.fromOptional 0 (Math.maybeDiv n 4096)
-          r3 = Optionals.fromOptional 0 (Math.maybeMod n 4096)
-          d2 = Optionals.fromOptional 0 (Math.maybeDiv r3 256)
-          r2 = Optionals.fromOptional 0 (Math.maybeMod r3 256)
-          d1 = Optionals.fromOptional 0 (Math.maybeDiv r2 16)
-          d0 = Optionals.fromOptional 0 (Math.maybeMod r2 16)
-      in (Strings.fromList [
-        hexDigit d3,
-        (hexDigit d2),
-        (hexDigit d1),
-        (hexDigit d0)])
 postDecrementExpressionToExpr :: t0 -> Ast.Expr
 postDecrementExpressionToExpr _ = Serialization.cst "STUB:PostDecrementExpression"
 postIncrementExpressionToExpr :: t0 -> Ast.Expr
@@ -985,7 +956,7 @@ stringLiteralToExpr :: Syntax.StringLiteral -> Ast.Expr
 stringLiteralToExpr sl =
 
       let s = Syntax.unStringLiteral sl
-      in (Serialization.cst (Strings.cat2 "\"" (Strings.cat2 (escapeJavaString s) "\"")))
+      in (Serialization.cst (Strings.cat2 "\"" (Strings.cat2 (Serde.escapeJavaString s) "\"")))
 switchStatementToExpr :: t0 -> Ast.Expr
 switchStatementToExpr _ = Serialization.cst "STUB:SwitchStatement"
 synchronizedStatementToExpr :: t0 -> Ast.Expr

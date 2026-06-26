@@ -81,20 +81,17 @@ import Hydra.Ast
 import qualified Hydra.Scala.Syntax as Scala
 import qualified Hydra.Sources.Scala.Syntax as ScalaSyntax
 
--- #346/#370: the Scala serde reuses hydra.java.serde.escapeJavaString at RUNTIME
--- (Scala string-literal escaping happens to match Java's today). That runtime
--- dependency on the hydra.java.serde JSON module is fine — it is generated before
--- hydra-scala. But we must NOT import the Java coder's Haskell DSL source module
--- (Hydra.Sources.Java.Serde), because that source is deleted along with the rest
--- of hydra-java's Haskell DSL. A reference to a definition needs only its Name
--- (asTerm (TypedTermDefinition name _) = TermVariable name — the body is
--- discarded), so we construct a by-name handle locally instead of importing the
--- module. Emitted output is byte-identical.
-javaSerdeNs :: ModuleName
-javaSerdeNs = ModuleName "hydra.java.serde"
+-- #346/#370/#505: the Scala serde reuses hydra.jvm.serde.escapeJavaString at RUNTIME
+-- (Scala string-literal escaping happens to match Java's). That runtime
+-- dependency on the hydra.jvm.serde JSON module is fine — it is generated before
+-- hydra-scala. We construct a by-name handle to avoid importing the Java coder's
+-- Haskell DSL source (deleted in #346). escapeJavaString moved from hydra.java.serde
+-- to hydra.jvm.serde in #505.
+jvmSerdeNs :: ModuleName
+jvmSerdeNs = ModuleName "hydra.jvm.serde"
 
 escapeJavaStringRef :: TypedTermDefinition (String -> String)
-escapeJavaStringRef = definitionInModuleName javaSerdeNs "escapeJavaString" unit
+escapeJavaStringRef = definitionInModuleName jvmSerdeNs "escapeJavaString" unit
 
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
@@ -107,7 +104,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Serialization.ns, javaSerdeNs] L.++ (ScalaSyntax.ns:KernelTypes.kernelTypesModuleNames)),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Serialization.ns, jvmSerdeNs] L.++ (ScalaSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Serialization functions for converting Scala AST to abstract expressions")}
   where
     definitions = [

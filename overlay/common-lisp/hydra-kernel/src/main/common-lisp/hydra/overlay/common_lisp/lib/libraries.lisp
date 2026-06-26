@@ -20,7 +20,7 @@
 ;; skip the real def-module and leave the def vars unbound. hydra-load-file populating an existing
 ;; (empty) package is fine.
 (dolist (sub '("chars" "effects" "eithers" "equality" "files" "lists" "literals" "logic" "maps"
-               "math" "optionals" "pairs" "regex" "sets" "strings" "system" "text"))
+               "math" "optionals" "pairs" "regex" "sets" "strings" "text"))
   (hydra-load-file (merge-pathnames (concatenate 'string "lib/" sub ".lisp")
                                     *hydra-gen-main-dir*)))
 
@@ -856,6 +856,5 @@
     (register-regex)
     (register-sets)
     (register-strings)
-    (register-system)
     (register-text)
     (register-annotations)))

@@ -1,0 +1,7 @@
+{
+  "packageFormatVersion": 1,
+  "name": "hydra-jvm",
+  "description": "Common JVM support for Hydra (shared by hydra-java, hydra-scala, hydra-clojure)",
+  "sourceLanguage": "java",
+  "dependencies": ["hydra-kernel"]
+}
