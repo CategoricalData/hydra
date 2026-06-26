@@ -66,6 +66,7 @@ VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 PUBLISH_SET=(
     hydra-kernel
     hydra-haskell
+    hydra-jvm
     hydra-java
     hydra-python
     hydra-scala

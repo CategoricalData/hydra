@@ -871,6 +871,14 @@ overlayJavaLibPackageAliases =
           "lib",
           "strings"])),
       (
+        Packaging.ModuleName "hydra.lib.system",
+        (JavaNames.javaPackageName [
+          "hydra",
+          "overlay",
+          "java",
+          "lib",
+          "system"])),
+      (
         Packaging.ModuleName "hydra.lib.text",
         (JavaNames.javaPackageName [
           "hydra",

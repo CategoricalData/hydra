@@ -112,7 +112,7 @@ KERNEL_IMPORTS=(
     hydra.predicates
     hydra.validate.core
     hydra.validate.packaging
-    hydra.python.util
+    hydra.overlay.python.util
 )
 
 # Pick a Python interpreter that satisfies the wheels' requires-python (>=3.12).
