@@ -54,6 +54,9 @@ mkdir -p "$OUTPUT_DIR/src/main/typescript/hydra/lib"
 cp "$HYDRA_TS_DIST/hydra/runtime.ts" "$OUTPUT_DIR/src/main/typescript/hydra/"
 cp "$HYDRA_TS_DIST/hydra/primitives.ts" "$OUTPUT_DIR/src/main/typescript/hydra/"
 cp -r "$HYDRA_TS_DIST/hydra/lib/." "$OUTPUT_DIR/src/main/typescript/hydra/lib/"
+if [ -d "$HYDRA_TS_DIST/hydra/overlay" ]; then
+    cp -r "$HYDRA_TS_DIST/hydra/overlay/." "$OUTPUT_DIR/src/main/typescript/hydra/overlay/"
+fi
 
 # Mark the bootstrap target tree as ESM so `import.meta` works under
 # NodeNext (same as dist/typescript/hydra-kernel/package.json written by

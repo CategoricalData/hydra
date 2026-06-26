@@ -70,9 +70,10 @@ for f in runtime.ts primitives.ts bootstrap.ts; do
     fi
 done
 
-# Subpackages: lib (primitive impls). Merge into existing tree (which
-# already contains generated kernel modules), preserving generated children.
-for sub in lib; do
+# Subpackages: lib (primitive impls) + overlay (renamed namespace, #501).
+# Merge into existing tree (which already contains generated kernel modules),
+# preserving generated children.
+for sub in lib overlay; do
     if [ -d "$SRC_DIR/hydra/$sub" ]; then
         mkdir -p "$OUT_DIR/hydra/$sub"
         cp -R "$SRC_DIR/hydra/$sub/." "$OUT_DIR/hydra/$sub/"

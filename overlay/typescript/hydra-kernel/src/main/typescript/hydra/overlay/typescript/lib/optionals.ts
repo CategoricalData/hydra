@@ -11,8 +11,8 @@
 // (continuation args, anonymous reducer accumulators). The runtime checks
 // `tag` directly so this loosening is safe and silences TS2345 churn.
 
-import type { Optional } from "../runtime.js";
-import { Given, None } from "../runtime.js";
+import type { Optional } from "../../../runtime.js";
+import { Given, None } from "../../../runtime.js";
 
 // `force` is inlined into each consumer (`cases`, `fromOptional`)
 // to save one JS frame per call. See lib/logic.ts ifElse for the same
