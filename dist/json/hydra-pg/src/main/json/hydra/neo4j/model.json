@@ -1,0 +1,1071 @@
+{
+  "name": "hydra.neo4j.model",
+  "metadata": {
+    "description": "A data model for Neo4j-flavored property graphs, aligned with the types of the Neo4j Java driver (org.neo4j.driver) at the instance level and with Neo4j's constraints and graph types at the schema level.",
+    "comments": [],
+    "seeAlso": []},
+  "dependencies": [{"module": "hydra.core"}],
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.neo4j.model.Constraint",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "key",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.KeyConstraint"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A key constraint"}}}]}}}},
+                  {
+                    "name": "propertyExistence",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.PropertyExistenceConstraint"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A property existence constraint"}}}]}}}},
+                  {
+                    "name": "propertyType",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.PropertyTypeConstraint"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A property type constraint"}}}]}}}},
+                  {
+                    "name": "propertyUniqueness",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.PropertyUniquenessConstraint"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A property uniqueness constraint"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A Neo4j schema constraint, as one of the four constraint types Neo4j supports. The node-vs-relationship flavor is determined by the element type the constraint is attached to, not by the constraint itself."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.ConstraintDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"literal": {"string": {}}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An optional name for the constraint"}}}]}}}},
+                  {
+                    "name": "body",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.Constraint"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The constraint itself"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A named constraint. The name is optional at authoring time; Neo4j auto-generates one if it is not supplied. The name is operational metadata (used to reference the constraint for dropping, idempotent creation, and reporting) and has no effect on what the constraint enforces."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.Element",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "node",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.Node"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The element is a node"}}}]}}}},
+                  {
+                    "name": "relationship",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.Relationship"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The element is a relationship"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "Either a node or a relationship; the common supertype of the two kinds of graph element. A bare union with no fields of its own: the id and properties live on each variant. Named Element (not Entity, the driver's interface name) to avoid the Neo4j docs' use of \"entity\" for a node's real-world referent, and to match hydra.pg.model and the root of elementId."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.ElementId",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"string": {}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The element id of a node or relationship (the driver's String-valued elementId())"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.GraphType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "nodes",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.neo4j.model.NodeElementType"}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The node element types of the graph type"}}}]}}}},
+                  {
+                    "name": "relationships",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.neo4j.model.RelationshipElementType"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The relationship element types of the graph type"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A Neo4j graph type: a holistic schema for a graph, made up of node element types and relationship element types (Neo4j's GRAPH TYPE feature)."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.IsoDuration",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "months",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": {"int64": {}}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A number of months"}}}]}}}},
+                  {
+                    "name": "days",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": {"int64": {}}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A number of days"}}}]}}}},
+                  {
+                    "name": "seconds",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": {"int64": {}}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A number of seconds"}}}]}}}},
+                  {
+                    "name": "nanoseconds",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A number of nanoseconds of the second"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A temporal amount, following the Neo4j driver's IsoDuration. The four components are kept separate and non-normalized, since a month is not a fixed number of days."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.Key",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"string": {}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A key in a property map or value map. Used for all maps, following the driver's single key notion (MapAccessor.keys()/get(String key)); there is no distinct \"property key\" type."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.KeyConstraint",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "properties",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.neo4j.model.Key"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The properties whose combination must exist and be unique"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A key constraint: the listed properties must all exist and their combined values must be unique. Neo4j's primary-key analog, combining existence and uniqueness over a set of properties. Applies to a node label or a relationship type depending on where it is attached."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.LocalDate",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "year",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The year"}}}]}}}},
+                  {
+                    "name": "month",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The month of the year"}}}]}}}},
+                  {
+                    "name": "day",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The day of the month"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A date without a time or time zone, following java.time.LocalDate (the driver's asLocalDate())"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.LocalDateTime",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "date",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.LocalDate"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The date part"}}}]}}}},
+                  {
+                    "name": "time",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.LocalTime"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The time part"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A date and time without a time zone, following java.time.LocalDateTime (the driver's asLocalDateTime())"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.LocalTime",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "hour",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The hour of the day"}}}]}}}},
+                  {
+                    "name": "minute",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The minute of the hour"}}}]}}}},
+                  {
+                    "name": "second",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The second of the minute"}}}]}}}},
+                  {
+                    "name": "nanosecond",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The nanosecond of the second"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A time of day without a time zone, following java.time.LocalTime (the driver's asLocalTime())"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.Node",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "id",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.ElementId"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The element id of the node"}}}]}}}},
+                  {
+                    "name": "labels",
+                    "type": {
+                      "annotated": {
+                        "body": {"set": {"variable": "hydra.neo4j.model.NodeLabel"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The set of labels of the node (a node may have zero or more labels)"}}}]}}}},
+                  {
+                    "name": "properties",
+                    "type": {
+                      "annotated": {
+                        "body": {"map": {"keys": {"variable": "hydra.neo4j.model.Key"}, "values": {"variable": "hydra.neo4j.model.Value"}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The properties of the node"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A node; a graph element with a set of labels and a map of properties"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.NodeElementType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "identifyingLabel",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.NodeLabel"},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The identifying label of the node element type"}}}]}}}},
+                  {
+                    "name": "impliedLabels",
+                    "type": {
+                      "annotated": {
+                        "body": {"set": {"variable": "hydra.neo4j.model.NodeLabel"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Labels that a node of this type must also have (label implication)"}}}]}}}},
+                  {
+                    "name": "constraints",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.neo4j.model.ConstraintDefinition"}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The constraints on nodes of this type"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A node element type within a graph type: an identifying label, any implied labels it entails, and the constraints on its properties. A node's typed properties are expressed as property type constraints (and existence constraints for non-null ones), since Neo4j has no untyped property declaration."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.NodeLabel",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"string": {}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A label applied to a node. Nodes carry a set of labels; relationships have a single type (see RelationshipType), so there is no relationship-label concept."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.OffsetTime",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "time",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.LocalTime"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The local time"}}}]}}}},
+                  {
+                    "name": "offset",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.ZoneOffset"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The offset from UTC"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A time of day with a UTC offset, following java.time.OffsetTime (the driver's asOffsetTime()). Distinct from LocalTime by virtue of the offset."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.Path",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "start",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.Node"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The first node of the path"}}}]}}}},
+                  {
+                    "name": "segments",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.neo4j.model.Segment"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The segments of the path, in order (empty for a zero-length path)"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A path through the graph: a start node followed by a sequence of segments. The node sequence is the start node followed by each segment's end node; a zero-length path has an empty segment list. Each segment carries full node and relationship objects, so a path is self-contained."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.Point",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "srid",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.SpatialReferenceIdentifier"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The identifier of the coordinate reference system for this point"}}}]}}}},
+                  {
+                    "name": "x",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"float": {"float64": {}}}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The x coordinate (longitude under WGS-84)"}}}]}}}},
+                  {
+                    "name": "y",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"float": {"float64": {}}}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The y coordinate (latitude under WGS-84)"}}}]}}}},
+                  {
+                    "name": "z",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"literal": {"float": {"float64": {}}}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The z coordinate (height under WGS-84); absent for a two-dimensional point"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A spatial point, following the Neo4j driver's Point. The coordinate reference system is given by the srid, which also determines the units and dimensionality: under WGS-84 (srid 4326/4979), x is longitude and y is latitude in decimal degrees and z is height in meters; under Cartesian (srid 7203/9157), the units are unspecified. A two-dimensional point omits z."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.PropertyExistenceConstraint",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "property",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.Key"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The property that must exist"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A property existence constraint: the given property must exist (be non-null)."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.PropertyTypeConstraint",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "property",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.Key"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The property that is constrained"}}}]}}}},
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.ValueType"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type the property's value must have"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A property type constraint: the given property must have the given value type."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.PropertyUniquenessConstraint",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "properties",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.neo4j.model.Key"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The properties whose combined values must be unique"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A property uniqueness constraint: the combined values of the listed properties must be unique. Unlike a key constraint, it does not require the properties to exist."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.Relationship",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "id",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.ElementId"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The element id of the relationship"}}}]}}}},
+                  {
+                    "name": "properties",
+                    "type": {
+                      "annotated": {
+                        "body": {"map": {"keys": {"variable": "hydra.neo4j.model.Key"}, "values": {"variable": "hydra.neo4j.model.Value"}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The properties of the relationship"}}}]}}}},
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.RelationshipType"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of the relationship"}}}]}}}},
+                  {
+                    "name": "start",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.ElementId"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The element id of the start node"}}}]}}}},
+                  {
+                    "name": "end",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.ElementId"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The element id of the end node"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A relationship; a directed graph element with a single type, connecting a start node to an end node. Relationships are always stored directed; undirected traversal is a query-level concern."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.RelationshipElementType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.RelationshipType"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The relationship type"}}}]}}}},
+                  {
+                    "name": "startLabel",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.NodeLabel"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of the start node"}}}]}}}},
+                  {
+                    "name": "endLabel",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.NodeLabel"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of the end node"}}}]}}}},
+                  {
+                    "name": "constraints",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.neo4j.model.ConstraintDefinition"}},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The constraints on relationships of this type"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A relationship element type within a graph type: a relationship type, the node labels it may connect, and the constraints on its properties."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.RelationshipType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"string": {}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The type of a relationship. A relationship has exactly one type."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.Segment",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "relationship",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.Relationship"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The relationship traversed in this segment"}}}]}}}},
+                  {
+                    "name": "end",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.Node"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The node this segment arrives at"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "One step of a path: a relationship and the node it arrives at. The segment's implicit start is the previous segment's end node, or the path's start node for the first segment, so it is not stored here."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.SpatialReferenceIdentifier",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"integer": {"int32": {}}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A spatial reference identifier (SRID): an integer naming the coordinate reference system in which a point's coordinates are expressed. Neo4j supports four: WGS-84 (4326), WGS-84 3D (4979), Cartesian (7203), and Cartesian 3D (9157)."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.Value",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "boolean",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"boolean": {}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A boolean value"}}}]}}}},
+                  {
+                    "name": "bytes",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"binary": {}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A byte array"}}}]}}}},
+                  {
+                    "name": "date",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.LocalDate"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A date"}}}]}}}},
+                  {
+                    "name": "dateTime",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.ZonedDateTime"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A date and time with a zone"}}}]}}}},
+                  {
+                    "name": "duration",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.IsoDuration"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A temporal amount"}}}]}}}},
+                  {
+                    "name": "float",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"float": {"float64": {}}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 64-bit floating-point number"}}}]}}}},
+                  {
+                    "name": "integer",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": {"int64": {}}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 64-bit integer"}}}]}}}},
+                  {
+                    "name": "list",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.neo4j.model.Value"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A list of values"}}}]}}}},
+                  {
+                    "name": "localDateTime",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.LocalDateTime"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A date and time without a zone"}}}]}}}},
+                  {
+                    "name": "localTime",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.LocalTime"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A time of day without a zone"}}}]}}}},
+                  {
+                    "name": "map",
+                    "type": {
+                      "annotated": {
+                        "body": {"map": {"keys": {"variable": "hydra.neo4j.model.Key"}, "values": {"variable": "hydra.neo4j.model.Value"}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A map from keys to values"}}}]}}}},
+                  {
+                    "name": "node",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.Node"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A node"}}}]}}}},
+                  {
+                    "name": "null",
+                    "type": {
+                      "annotated": {
+                        "body": {"unit": {}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A null value"}}}]}}}},
+                  {
+                    "name": "path",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.Path"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A path"}}}]}}}},
+                  {
+                    "name": "point",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.Point"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A spatial point"}}}]}}}},
+                  {
+                    "name": "relationship",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.Relationship"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A relationship"}}}]}}}},
+                  {
+                    "name": "string",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"string": {}}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A string value"}}}]}}}},
+                  {
+                    "name": "time",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.OffsetTime"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A time of day with a UTC offset"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A Neo4j value: the general container for instance data, analogous to Hydra's Term. It can represent anything the driver's Value can be (the full TypeSystem), including structural and result-shaped values such as maps, nodes, relationships, paths, and null. Which values are valid as a stored property is a schema/validation concern, not a restriction on Value itself."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.ValueType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "boolean",
+                    "type": {
+                      "annotated": {
+                        "body": {"unit": {}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The BOOLEAN type"}}}]}}}},
+                  {
+                    "name": "string",
+                    "type": {
+                      "annotated": {
+                        "body": {"unit": {}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The STRING type"}}}]}}}},
+                  {
+                    "name": "integer",
+                    "type": {
+                      "annotated": {
+                        "body": {"unit": {}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The INTEGER type"}}}]}}}},
+                  {
+                    "name": "float",
+                    "type": {
+                      "annotated": {
+                        "body": {"unit": {}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The FLOAT type"}}}]}}}},
+                  {
+                    "name": "date",
+                    "type": {
+                      "annotated": {
+                        "body": {"unit": {}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The DATE type"}}}]}}}},
+                  {
+                    "name": "localTime",
+                    "type": {
+                      "annotated": {
+                        "body": {"unit": {}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The LOCAL TIME type"}}}]}}}},
+                  {
+                    "name": "zonedTime",
+                    "type": {
+                      "annotated": {
+                        "body": {"unit": {}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The ZONED TIME type"}}}]}}}},
+                  {
+                    "name": "localDateTime",
+                    "type": {
+                      "annotated": {
+                        "body": {"unit": {}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The LOCAL DATETIME type"}}}]}}}},
+                  {
+                    "name": "zonedDateTime",
+                    "type": {
+                      "annotated": {
+                        "body": {"unit": {}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The ZONED DATETIME type"}}}]}}}},
+                  {
+                    "name": "duration",
+                    "type": {
+                      "annotated": {
+                        "body": {"unit": {}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The DURATION type"}}}]}}}},
+                  {
+                    "name": "point",
+                    "type": {
+                      "annotated": {
+                        "body": {"unit": {}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The POINT type"}}}]}}}},
+                  {
+                    "name": "list",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.ValueType"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A LIST type, with the given element type"}}}]}}}},
+                  {
+                    "name": "vector",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.VectorType"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A VECTOR type, with an element type and a dimension"}}}]}}}},
+                  {
+                    "name": "union",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.neo4j.model.ValueType"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A closed union of the given types"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A Neo4j property type, as used in property type constraints and graph type property declarations (the IS :: <TYPE> expression language). Atoms mirror the scalar, temporal, and spatial kinds of Value; lists, vectors, and closed unions compose them."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.VectorType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "element",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.ValueType"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The element type of the vector"}}}]}}}},
+                  {
+                    "name": "dimension",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The dimension (length) of the vector"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A Neo4j VECTOR type: an element type and a fixed dimension."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.ZoneId",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"string": {}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A time-zone identifier, following java.time.ZoneId: an IANA region id such as \"Europe/Paris\" (it may also be a fixed-offset string)."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.ZoneOffset",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"integer": {"int32": {}}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "An offset from UTC, following java.time.ZoneOffset, expressed as a total number of seconds (for example, +01:00 is 3600)."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.neo4j.model.ZonedDateTime",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "dateTime",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.LocalDateTime"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The local date and time"}}}]}}}},
+                  {
+                    "name": "offset",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.ZoneOffset"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The resolved offset from UTC at this instant"}}}]}}}},
+                  {
+                    "name": "zone",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.ZoneId"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The time zone"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A date and time with a time zone, following java.time.ZonedDateTime (the driver's asZonedDateTime()). It keeps both the resolved offset and the zone: the zone determines the offset rules, while the offset is the concrete UTC delta at this instant."}}}]}}}}}}]}
