@@ -32,6 +32,22 @@ _DefinitionReference = Core.Name "hydra.packaging.DefinitionReference"
 _DefinitionReference_type = Core.Name "type"
 _DefinitionReference_term = Core.Name "term"
 _DefinitionReference_primitive = Core.Name "primitive"
+-- | The scope in which a package dependency is required. Relevant mainly to dependencies on third-party (non-Hydra) artifacts, where build systems distinguish compile-time, runtime, test-only, and build-tool-only dependencies. Hydra inter-package dependencies normally leave the scope unspecified.
+data DependencyScope =
+  -- | A dependency exported transitively to consumers of this package (e.g. Gradle `api`, Cabal `build-depends`): present at both compile time and runtime, and visible downstream
+  DependencyScopeApi |
+  -- | A dependency required at runtime but not at compile time
+  DependencyScopeRuntime |
+  -- | A dependency required only to compile and run the package's tests
+  DependencyScopeTest |
+  -- | A build-tool-only dependency, used to generate or process sources at build time but not present in the compiled artifact (e.g. an ANTLR tool jar or an annotation processor)
+  DependencyScopeTool
+  deriving (Eq, Ord, Read, Show)
+_DependencyScope = Core.Name "hydra.packaging.DependencyScope"
+_DependencyScope_api = Core.Name "api"
+_DependencyScope_runtime = Core.Name "runtime"
+_DependencyScope_test = Core.Name "test"
+_DependencyScope_tool = Core.Name "tool"
 -- | Documentation and lifecycle metadata attachable to a packaging entity (package, module, or definition). Bundling these fields in one type lets future metadata be added without changing the field shape of the entities that carry it.
 data EntityMetadata =
   EntityMetadata {
@@ -130,12 +146,15 @@ data PackageDependency =
     -- | The name of the depended-on package
     packageDependencyName :: PackageName,
     -- | The version-range constraint on the depended-on package
-    packageDependencyVersion :: VersionSpecifier}
+    packageDependencyVersion :: VersionSpecifier,
+    -- | The scope in which the dependency is required, if specified. Normally absent for Hydra inter-package dependencies; specified for third-party dependencies whose build scope (compile/runtime/test/tool) is significant.
+    packageDependencyScope :: (Maybe DependencyScope)}
   deriving (Eq, Ord, Read, Show)
 _PackageDependency = Core.Name "hydra.packaging.PackageDependency"
 _PackageDependency_name = Core.Name "name"
 _PackageDependency_version = Core.Name "version"
--- | The unique name of a package, e.g. "hydra-kernel" or "hydra-python"
+_PackageDependency_scope = Core.Name "scope"
+-- | The unique name of a package, e.g. "hydra-kernel" or "hydra-python". For dependencies on third-party artifacts in ecosystems with a group/namespace component (notably Maven), the group and artifact are carried in a single name separated by a colon, e.g. "org.eclipse.rdf4j:rdf4j-rio-ntriples"; the consuming host splits on the colon to recover the group when emitting build configuration. Hydra package names contain no colon.
 newtype PackageName =
   PackageName {
     unPackageName :: String}
@@ -201,10 +220,13 @@ newtype Version =
     unVersion :: String}
   deriving (Eq, Ord, Read, Show)
 _Version = Core.Name "hydra.packaging.Version"
--- | A specifier constraining acceptable versions of a dependency. Currently only the `any` (unit) specifier is defined; future variants such as `exact`, `caret`, and `range` may be added without breaking consumers of the `any` form.
+-- | A specifier constraining acceptable versions of a dependency. The `any` and `exact` variants are defined; future variants such as `caret` and `range` may be added without breaking consumers of the existing forms.
 data VersionSpecifier =
   -- | Any version satisfies the dependency
-  VersionSpecifierAny
+  VersionSpecifierAny |
+  -- | Exactly the given version satisfies the dependency; used to pin a specific release
+  VersionSpecifierExact Version
   deriving (Eq, Ord, Read, Show)
 _VersionSpecifier = Core.Name "hydra.packaging.VersionSpecifier"
 _VersionSpecifier_any = Core.Name "any"
+_VersionSpecifier_exact = Core.Name "exact"

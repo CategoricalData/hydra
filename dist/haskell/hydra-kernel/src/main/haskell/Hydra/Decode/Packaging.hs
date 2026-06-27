@@ -56,6 +56,25 @@ definitionReference cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.packaging.DependencyScope
+dependencyScope :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.DependencyScope
+dependencyScope cx raw =
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermInject v0 ->
+        let field = Core.injectionField v0
+            fname = Core.fieldName field
+            fterm = Core.fieldTerm field
+            variantMap =
+                    Maps.fromList [
+                      (Core.Name "api", (\input -> Eithers.map (\t -> Packaging.DependencyScopeApi) (ExtractCore.decodeUnit cx input))),
+                      (Core.Name "runtime", (\input -> Eithers.map (\t -> Packaging.DependencyScopeRuntime) (ExtractCore.decodeUnit cx input))),
+                      (Core.Name "test", (\input -> Eithers.map (\t -> Packaging.DependencyScopeTest) (ExtractCore.decodeUnit cx input))),
+                      (Core.Name "tool", (\input -> Eithers.map (\t -> Packaging.DependencyScopeTool) (ExtractCore.decodeUnit cx input)))]
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
+          "no such field ",
+          (Core.unName fname),
+          " in union"]))) (\f -> f fterm))
+      _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.packaging.EntityMetadata
 entityMetadata :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.EntityMetadata
 entityMetadata cx raw =
@@ -156,9 +175,10 @@ packageDependency cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = ExtractCore.toFieldMap v0
-        in (Eithers.bind (ExtractCore.requireField "name" packageName fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "version" versionSpecifier fieldMap cx) (\field_version -> Right (Packaging.PackageDependency {
+        in (Eithers.bind (ExtractCore.requireField "name" packageName fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "version" versionSpecifier fieldMap cx) (\field_version -> Eithers.bind (ExtractCore.requireField "scope" (ExtractCore.decodeMaybe dependencyScope) fieldMap cx) (\field_scope -> Right (Packaging.PackageDependency {
           Packaging.packageDependencyName = field_name,
-          Packaging.packageDependencyVersion = field_version}))))
+          Packaging.packageDependencyVersion = field_version,
+          Packaging.packageDependencyScope = field_scope})))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.packaging.PackageDependency")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.packaging.PackageName
 packageName :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.PackageName
@@ -235,7 +255,8 @@ versionSpecifier cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "any", (\input -> Eithers.map (\t -> Packaging.VersionSpecifierAny) (ExtractCore.decodeUnit cx input)))]
+                      (Core.Name "any", (\input -> Eithers.map (\t -> Packaging.VersionSpecifierAny) (ExtractCore.decodeUnit cx input))),
+                      (Core.Name "exact", (\input -> Eithers.map (\t -> Packaging.VersionSpecifierExact t) (version cx input)))]
         in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),

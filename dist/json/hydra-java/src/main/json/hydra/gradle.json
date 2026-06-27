@@ -1,0 +1,76 @@
+{
+  "name": "hydra.gradle",
+  "metadata": {"description": "Build configuration for Gradle-built distribution packages.", "comments": [], "seeAlso": []},
+  "dependencies": [{"module": "hydra.packaging"}, {"module": "hydra.file"}],
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.gradle.GradleBuildConfiguration",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "dependencies",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.packaging.PackageDependency"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "Third-party (non-project) dependencies required by the package. Inter-package dependencies within the project are derived separately and are not listed here. Each dependency's scope (api/runtime/test/tool) is significant; its name carries the Maven group and artifact separated by a colon."}}}]}}}},
+                  {
+                    "name": "excludes",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"literal": {"string": {}}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Source paths or patterns to exclude from compilation, relative to the package root."}}}]}}}},
+                  {
+                    "name": "extraSourceDirs",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.file.FilePath"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "Additional source directories to fold into the package's main source set, beyond the generated and overlaid sources (e.g. a directory of build-tool-generated sources)."}}}]}}}},
+                  {
+                    "name": "plugins",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"literal": {"string": {}}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Gradle plugin identifiers to apply to the build, e.g. \"antlr\". Applied in the given order."}}}]}}}},
+                  {
+                    "name": "raw",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"literal": {"string": {}}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "An optional fragment of host-native build configuration (Groovy) spliced verbatim into the generated build script, for imperative needs that the structured fields above cannot express (e.g. configuring a code-generation task). Opaque to Hydra; preferred only when no structured field applies."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "The build configuration for a single Gradle-built distribution package, beyond its generated sources."}}}]}}}}}}]}

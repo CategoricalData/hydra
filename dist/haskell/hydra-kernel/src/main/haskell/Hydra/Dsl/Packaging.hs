@@ -58,6 +58,38 @@ definitionType x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "type"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+-- | DSL injection for the api variant of hydra.packaging.DependencyScope
+dependencyScopeApi :: Typed.TypedTerm Packaging.DependencyScope
+dependencyScopeApi =
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.packaging.DependencyScope"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "api"),
+        Core.fieldTerm = Core.TermUnit}}))
+-- | DSL injection for the runtime variant of hydra.packaging.DependencyScope
+dependencyScopeRuntime :: Typed.TypedTerm Packaging.DependencyScope
+dependencyScopeRuntime =
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.packaging.DependencyScope"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "runtime"),
+        Core.fieldTerm = Core.TermUnit}}))
+-- | DSL injection for the test variant of hydra.packaging.DependencyScope
+dependencyScopeTest :: Typed.TypedTerm Packaging.DependencyScope
+dependencyScopeTest =
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.packaging.DependencyScope"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "test"),
+        Core.fieldTerm = Core.TermUnit}}))
+-- | DSL injection for the tool variant of hydra.packaging.DependencyScope
+dependencyScopeTool :: Typed.TypedTerm Packaging.DependencyScope
+dependencyScopeTool =
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.packaging.DependencyScope"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "tool"),
+        Core.fieldTerm = Core.TermUnit}}))
 -- | DSL constructor for hydra.packaging.EntityMetadata
 entityMetadata :: Typed.TypedTerm (Maybe String) -> Typed.TypedTerm [String] -> Typed.TypedTerm [Packaging.EntityReference] -> Typed.TypedTerm (Maybe Packaging.LifecycleInfo) -> Typed.TypedTerm Packaging.EntityMetadata
 entityMetadata description comments seeAlso lifecycle =
@@ -575,8 +607,8 @@ packageDependencies x =
         Core.projectionFieldName = (Core.Name "dependencies")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL constructor for hydra.packaging.PackageDependency
-packageDependency :: Typed.TypedTerm Packaging.PackageName -> Typed.TypedTerm Packaging.VersionSpecifier -> Typed.TypedTerm Packaging.PackageDependency
-packageDependency name version =
+packageDependency :: Typed.TypedTerm Packaging.PackageName -> Typed.TypedTerm Packaging.VersionSpecifier -> Typed.TypedTerm (Maybe Packaging.DependencyScope) -> Typed.TypedTerm Packaging.PackageDependency
+packageDependency name version scope =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.packaging.PackageDependency"),
       Core.recordFields = [
@@ -585,7 +617,10 @@ packageDependency name version =
           Core.fieldTerm = (Typed.unTypedTerm name)},
         Core.Field {
           Core.fieldName = (Core.Name "version"),
-          Core.fieldTerm = (Typed.unTypedTerm version)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm version)},
+        Core.Field {
+          Core.fieldName = (Core.Name "scope"),
+          Core.fieldTerm = (Typed.unTypedTerm scope)}]}))
 -- | DSL accessor for the name field of hydra.packaging.PackageDependency
 packageDependencyName :: Typed.TypedTerm Packaging.PackageDependency -> Typed.TypedTerm Packaging.PackageName
 packageDependencyName x =
@@ -593,6 +628,14 @@ packageDependencyName x =
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.packaging.PackageDependency"),
         Core.projectionFieldName = (Core.Name "name")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL accessor for the scope field of hydra.packaging.PackageDependency
+packageDependencyScope :: Typed.TypedTerm Packaging.PackageDependency -> Typed.TypedTerm (Maybe Packaging.DependencyScope)
+packageDependencyScope x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.packaging.PackageDependency"),
+        Core.projectionFieldName = (Core.Name "scope")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 -- | DSL accessor for the version field of hydra.packaging.PackageDependency
 packageDependencyVersion :: Typed.TypedTerm Packaging.PackageDependency -> Typed.TypedTerm Packaging.VersionSpecifier
@@ -617,7 +660,37 @@ packageDependencyWithName original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.packaging.PackageDependency"),
               Core.projectionFieldName = (Core.Name "version")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "scope"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PackageDependency"),
+              Core.projectionFieldName = (Core.Name "scope")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+-- | DSL updater for the scope field of hydra.packaging.PackageDependency
+packageDependencyWithScope :: Typed.TypedTerm Packaging.PackageDependency -> Typed.TypedTerm (Maybe Packaging.DependencyScope) -> Typed.TypedTerm Packaging.PackageDependency
+packageDependencyWithScope original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.PackageDependency"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PackageDependency"),
+              Core.projectionFieldName = (Core.Name "name")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "version"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PackageDependency"),
+              Core.projectionFieldName = (Core.Name "version")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "scope"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL updater for the version field of hydra.packaging.PackageDependency
 packageDependencyWithVersion :: Typed.TypedTerm Packaging.PackageDependency -> Typed.TypedTerm Packaging.VersionSpecifier -> Typed.TypedTerm Packaging.PackageDependency
 packageDependencyWithVersion original newVal =
@@ -633,7 +706,14 @@ packageDependencyWithVersion original newVal =
             Core.applicationArgument = (Typed.unTypedTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "version"),
-          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "scope"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PackageDependency"),
+              Core.projectionFieldName = (Core.Name "scope")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 -- | DSL accessor for the metadata field of hydra.packaging.Package
 packageMetadata :: Typed.TypedTerm Packaging.Package -> Typed.TypedTerm (Maybe Packaging.EntityMetadata)
 packageMetadata x =
@@ -1430,3 +1510,11 @@ versionSpecifierAny =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "any"),
         Core.fieldTerm = Core.TermUnit}}))
+-- | DSL injection for the exact variant of hydra.packaging.VersionSpecifier
+versionSpecifierExact :: Typed.TypedTerm Packaging.Version -> Typed.TypedTerm Packaging.VersionSpecifier
+versionSpecifierExact x =
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.packaging.VersionSpecifier"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "exact"),
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))

@@ -1,0 +1,227 @@
+{
+  "name": "hydra.encode.gradle",
+  "metadata": {"description": "Term encoders for hydra.gradle", "comments": [], "seeAlso": []},
+  "dependencies": [{"module": "hydra.encode.packaging"}, {"module": "hydra.encode.file"}, {"module": "hydra.gradle"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.encode.gradle.gradleBuildConfiguration",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.gradle.GradleBuildConfiguration"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.Term"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {"variable": "hydra.gradle.GradleBuildConfiguration"},
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "record",
+                      "term": {
+                        "record": {
+                          "typeName": "hydra.core.Record",
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.gradle.GradleBuildConfiguration"}}}}},
+                            {
+                              "name": "fields",
+                              "term": {
+                                "list": [
+                                  {
+                                    "record": {
+                                      "typeName": "hydra.core.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "dependencies"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {
+                                            "application": {
+                                              "function": {
+                                                "lambda": {
+                                                  "parameter": "xs",
+                                                  "domain": {"list": {"variable": "hydra.packaging.PackageDependency"}},
+                                                  "body": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.Term",
+                                                      "field": {
+                                                        "name": "list",
+                                                        "term": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.packaging.PackageDependency"}}},
+                                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                                "argument": {"variable": "hydra.encode.packaging.packageDependency"}}},
+                                                            "argument": {"variable": "xs"}}}}}}}},
+                                              "argument": {
+                                                "application": {
+                                                  "function": {"project": {"typeName": "hydra.gradle.GradleBuildConfiguration", "fieldName": "dependencies"}},
+                                                  "argument": {"variable": "x"}}}}}}]}},
+                                  {
+                                    "record": {
+                                      "typeName": "hydra.core.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "excludes"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {
+                                            "application": {
+                                              "function": {
+                                                "lambda": {
+                                                  "parameter": "xs",
+                                                  "domain": {"list": {"literal": {"string": {}}}},
+                                                  "body": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.Term",
+                                                      "field": {
+                                                        "name": "list",
+                                                        "term": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"string": {}}}}},
+                                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                                "argument": {
+                                                                  "lambda": {
+                                                                    "parameter": "x",
+                                                                    "domain": {"literal": {"string": {}}},
+                                                                    "body": {
+                                                                      "inject": {
+                                                                        "typeName": "hydra.core.Term",
+                                                                        "field": {
+                                                                          "name": "literal",
+                                                                          "term": {"inject": {"typeName": "hydra.core.Literal", "field": {"name": "string", "term": {"variable": "x"}}}}}}}}}}},
+                                                            "argument": {"variable": "xs"}}}}}}}},
+                                              "argument": {
+                                                "application": {
+                                                  "function": {"project": {"typeName": "hydra.gradle.GradleBuildConfiguration", "fieldName": "excludes"}},
+                                                  "argument": {"variable": "x"}}}}}}]}},
+                                  {
+                                    "record": {
+                                      "typeName": "hydra.core.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "extraSourceDirs"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {
+                                            "application": {
+                                              "function": {
+                                                "lambda": {
+                                                  "parameter": "xs",
+                                                  "domain": {"list": {"variable": "hydra.file.FilePath"}},
+                                                  "body": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.Term",
+                                                      "field": {
+                                                        "name": "list",
+                                                        "term": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.file.FilePath"}}},
+                                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                                "argument": {"variable": "hydra.encode.file.filePath"}}},
+                                                            "argument": {"variable": "xs"}}}}}}}},
+                                              "argument": {
+                                                "application": {
+                                                  "function": {"project": {"typeName": "hydra.gradle.GradleBuildConfiguration", "fieldName": "extraSourceDirs"}},
+                                                  "argument": {"variable": "x"}}}}}}]}},
+                                  {
+                                    "record": {
+                                      "typeName": "hydra.core.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "plugins"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {
+                                            "application": {
+                                              "function": {
+                                                "lambda": {
+                                                  "parameter": "xs",
+                                                  "domain": {"list": {"literal": {"string": {}}}},
+                                                  "body": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.Term",
+                                                      "field": {
+                                                        "name": "list",
+                                                        "term": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"string": {}}}}},
+                                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                                "argument": {
+                                                                  "lambda": {
+                                                                    "parameter": "x",
+                                                                    "domain": {"literal": {"string": {}}},
+                                                                    "body": {
+                                                                      "inject": {
+                                                                        "typeName": "hydra.core.Term",
+                                                                        "field": {
+                                                                          "name": "literal",
+                                                                          "term": {"inject": {"typeName": "hydra.core.Literal", "field": {"name": "string", "term": {"variable": "x"}}}}}}}}}}},
+                                                            "argument": {"variable": "xs"}}}}}}}},
+                                              "argument": {
+                                                "application": {
+                                                  "function": {"project": {"typeName": "hydra.gradle.GradleBuildConfiguration", "fieldName": "plugins"}},
+                                                  "argument": {"variable": "x"}}}}}}]}},
+                                  {
+                                    "record": {
+                                      "typeName": "hydra.core.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "raw"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {
+                                            "application": {
+                                              "function": {
+                                                "lambda": {
+                                                  "parameter": "opt",
+                                                  "domain": {"optional": {"literal": {"string": {}}}},
+                                                  "body": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.Term",
+                                                      "field": {
+                                                        "name": "optional",
+                                                        "term": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"literal": {"string": {}}}}},
+                                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                                "argument": {
+                                                                  "lambda": {
+                                                                    "parameter": "x",
+                                                                    "domain": {"literal": {"string": {}}},
+                                                                    "body": {
+                                                                      "inject": {
+                                                                        "typeName": "hydra.core.Term",
+                                                                        "field": {
+                                                                          "name": "literal",
+                                                                          "term": {"inject": {"typeName": "hydra.core.Literal", "field": {"name": "string", "term": {"variable": "x"}}}}}}}}}}},
+                                                            "argument": {"variable": "opt"}}}}}}}},
+                                              "argument": {
+                                                "application": {
+                                                  "function": {"project": {"typeName": "hydra.gradle.GradleBuildConfiguration", "fieldName": "raw"}},
+                                                  "argument": {"variable": "x"}}}}}}]}}]}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.gradle.GradleBuildConfiguration"}}}]}}}}}]}

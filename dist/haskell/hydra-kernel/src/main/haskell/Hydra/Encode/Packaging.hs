@@ -48,6 +48,30 @@ definitionReference x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "primitive"),
           Core.fieldTerm = (EncodeCore.name v0)}})
+-- | Encoder for hydra.packaging.DependencyScope
+dependencyScope :: Packaging.DependencyScope -> Core.Term
+dependencyScope x =
+    case x of
+      Packaging.DependencyScopeApi -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.packaging.DependencyScope"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "api"),
+          Core.fieldTerm = Core.TermUnit}})
+      Packaging.DependencyScopeRuntime -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.packaging.DependencyScope"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "runtime"),
+          Core.fieldTerm = Core.TermUnit}})
+      Packaging.DependencyScopeTest -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.packaging.DependencyScope"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "test"),
+          Core.fieldTerm = Core.TermUnit}})
+      Packaging.DependencyScopeTool -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.packaging.DependencyScope"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "tool"),
+          Core.fieldTerm = Core.TermUnit}})
 -- | Encoder for hydra.packaging.EntityMetadata
 entityMetadata :: Packaging.EntityMetadata -> Core.Term
 entityMetadata x =
@@ -162,7 +186,10 @@ packageDependency x =
           Core.fieldTerm = (packageName (Packaging.packageDependencyName x))},
         Core.Field {
           Core.fieldName = (Core.Name "version"),
-          Core.fieldTerm = (versionSpecifier (Packaging.packageDependencyVersion x))}]})
+          Core.fieldTerm = (versionSpecifier (Packaging.packageDependencyVersion x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "scope"),
+          Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map dependencyScope opt)) (Packaging.packageDependencyScope x))}]})
 -- | Encoder for hydra.packaging.PackageName
 packageName :: Packaging.PackageName -> Core.Term
 packageName x =
@@ -241,3 +268,8 @@ versionSpecifier x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "any"),
           Core.fieldTerm = Core.TermUnit}})
+      Packaging.VersionSpecifierExact v0 -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.packaging.VersionSpecifier"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "exact"),
+          Core.fieldTerm = (version v0)}})

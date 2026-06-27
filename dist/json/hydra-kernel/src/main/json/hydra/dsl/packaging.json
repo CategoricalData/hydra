@@ -385,6 +385,162 @@
                   "value": {"literal": {"string": "DSL injection for the primitive variant of hydra.packaging.DefinitionReference"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.packaging.dependencyScopeApi",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.packaging.DependencyScope"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "typeName": "hydra.core.Injection",
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.DependencyScope"}}}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.Field",
+                                  "fields": [
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "api"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the api variant of hydra.packaging.DependencyScope"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.packaging.dependencyScopeRuntime",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.packaging.DependencyScope"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "typeName": "hydra.core.Injection",
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.DependencyScope"}}}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.Field",
+                                  "fields": [
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "runtime"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the runtime variant of hydra.packaging.DependencyScope"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.packaging.dependencyScopeTest",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.packaging.DependencyScope"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "typeName": "hydra.core.Injection",
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.DependencyScope"}}}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.Field",
+                                  "fields": [
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "test"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the test variant of hydra.packaging.DependencyScope"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.packaging.dependencyScopeTool",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.packaging.DependencyScope"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "typeName": "hydra.core.Injection",
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.DependencyScope"}}}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.Field",
+                                  "fields": [
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "tool"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the tool variant of hydra.packaging.DependencyScope"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.packaging.entityMetadata",
         "signature": {
           "typeParameters": [],
@@ -5051,6 +5207,22 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "The version-range constraint on the depended-on package"}}}]}}}}},
+              "isLazy": false},
+            {
+              "name": "arg2",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"optional": {"variable": "hydra.packaging.DependencyScope"}},
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "The scope in which the dependency is required, if specified. Normally absent for Hydra inter-package dependencies; specified for third-party dependencies whose build scope (compile/runtime/test/tool) is significant."}}}]}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -5082,40 +5254,64 @@
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "The version-range constraint on the depended-on package"}}}]}}}}},
                     "body": {
-                      "wrap": {
-                        "typeName": "hydra.typed.TypedTerm",
+                      "lambda": {
+                        "parameter": "scope",
+                        "domain": {
+                          "application": {
+                            "function": {"variable": "hydra.typed.TypedTerm"},
+                            "argument": {
+                              "annotated": {
+                                "body": {"optional": {"variable": "hydra.packaging.DependencyScope"}},
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {
+                                        "literal": {
+                                          "string": "The scope in which the dependency is required, if specified. Normally absent for Hydra inter-package dependencies; specified for third-party dependencies whose build scope (compile/runtime/test/tool) is significant."}}}]}}}}},
                         "body": {
-                          "inject": {
-                            "typeName": "hydra.core.Term",
-                            "field": {
-                              "name": "record",
-                              "term": {
-                                "record": {
-                                  "typeName": "hydra.core.Record",
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.PackageDependency"}}}}},
-                                    {
-                                      "name": "fields",
-                                      "term": {
-                                        "list": [
-                                          {
-                                            "record": {
-                                              "typeName": "hydra.core.Field",
-                                              "fields": [
-                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "name"}}}}},
-                                                {
-                                                  "name": "term",
-                                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "name"}}}}]}},
-                                          {
-                                            "record": {
-                                              "typeName": "hydra.core.Field",
-                                              "fields": [
-                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "version"}}}}},
-                                                {
-                                                  "name": "term",
-                                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "version"}}}}]}}]}}]}}}}}}}}}}},
+                          "wrap": {
+                            "typeName": "hydra.typed.TypedTerm",
+                            "body": {
+                              "inject": {
+                                "typeName": "hydra.core.Term",
+                                "field": {
+                                  "name": "record",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.core.Record",
+                                      "fields": [
+                                        {
+                                          "name": "typeName",
+                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.PackageDependency"}}}}},
+                                        {
+                                          "name": "fields",
+                                          "term": {
+                                            "list": [
+                                              {
+                                                "record": {
+                                                  "typeName": "hydra.core.Field",
+                                                  "fields": [
+                                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "name"}}}}},
+                                                    {
+                                                      "name": "term",
+                                                      "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "name"}}}}]}},
+                                              {
+                                                "record": {
+                                                  "typeName": "hydra.core.Field",
+                                                  "fields": [
+                                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "version"}}}}},
+                                                    {
+                                                      "name": "term",
+                                                      "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "version"}}}}]}},
+                                              {
+                                                "record": {
+                                                  "typeName": "hydra.core.Field",
+                                                  "fields": [
+                                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "scope"}}}}},
+                                                    {
+                                                      "name": "term",
+                                                      "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "scope"}}}}]}}]}}]}}}}}}}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -5249,6 +5445,73 @@
                   "value": {"literal": {"string": "DSL accessor for the version field of hydra.packaging.PackageDependency"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.packaging.packageDependencyScope",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.packaging.PackageDependency"}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {
+                  "annotated": {
+                    "body": {"optional": {"variable": "hydra.packaging.DependencyScope"}},
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "The scope in which the dependency is required, if specified. Normally absent for Hydra inter-package dependencies; specified for third-party dependencies whose build scope (compile/runtime/test/tool) is significant."}}}]}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.packaging.PackageDependency"}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.Term",
+                                      "field": {
+                                        "name": "project",
+                                        "term": {
+                                          "record": {
+                                            "typeName": "hydra.core.Projection",
+                                            "fields": [
+                                              {
+                                                "name": "typeName",
+                                                "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.PackageDependency"}}}}},
+                                              {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "scope"}}}}}]}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the scope field of hydra.packaging.PackageDependency"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.packaging.packageDependencyWithName",
         "signature": {
           "typeParameters": [],
@@ -5346,6 +5609,40 @@
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.PackageDependency"}}}}},
                                                                             {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "version"}}}}}]}}}}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "original"}}}}]}}}}}}]}},
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "scope"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.Term",
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "typeName": "hydra.core.Application",
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "typeName": "hydra.core.Term",
+                                                                    "field": {
+                                                                      "name": "project",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "typeName": "hydra.core.Projection",
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.PackageDependency"}}}}},
+                                                                            {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "scope"}}}}}]}}}}}},
                                                               {
                                                                 "name": "argument",
                                                                 "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "original"}}}}]}}}}}}]}}]}}]}}}}}}}}}}},
@@ -5463,12 +5760,199 @@
                                                 {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "version"}}}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "newVal"}}}}]}}]}}]}}}}}}}}}}},
+                                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "newVal"}}}}]}},
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "scope"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.Term",
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "typeName": "hydra.core.Application",
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "typeName": "hydra.core.Term",
+                                                                    "field": {
+                                                                      "name": "project",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "typeName": "hydra.core.Projection",
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.PackageDependency"}}}}},
+                                                                            {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "scope"}}}}}]}}}}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "original"}}}}]}}}}}}]}}]}}]}}}}}}}}}}},
             "annotation": {
               "map": [
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the version field of hydra.packaging.PackageDependency"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.packaging.packageDependencyWithScope",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.packaging.PackageDependency"}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"optional": {"variable": "hydra.packaging.DependencyScope"}},
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "The scope in which the dependency is required, if specified. Normally absent for Hydra inter-package dependencies; specified for third-party dependencies whose build scope (compile/runtime/test/tool) is significant."}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.packaging.PackageDependency"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "original",
+                "domain": {
+                  "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.packaging.PackageDependency"}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "newVal",
+                    "domain": {
+                      "application": {
+                        "function": {"variable": "hydra.typed.TypedTerm"},
+                        "argument": {
+                          "annotated": {
+                            "body": {"optional": {"variable": "hydra.packaging.DependencyScope"}},
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {
+                                      "string": "The scope in which the dependency is required, if specified. Normally absent for Hydra inter-package dependencies; specified for third-party dependencies whose build scope (compile/runtime/test/tool) is significant."}}}]}}}}},
+                    "body": {
+                      "wrap": {
+                        "typeName": "hydra.typed.TypedTerm",
+                        "body": {
+                          "inject": {
+                            "typeName": "hydra.core.Term",
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.Record",
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.PackageDependency"}}}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "name"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.Term",
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "typeName": "hydra.core.Application",
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "typeName": "hydra.core.Term",
+                                                                    "field": {
+                                                                      "name": "project",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "typeName": "hydra.core.Projection",
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.PackageDependency"}}}}},
+                                                                            {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "name"}}}}}]}}}}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "original"}}}}]}}}}}}]}},
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "version"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.Term",
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "typeName": "hydra.core.Application",
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "typeName": "hydra.core.Term",
+                                                                    "field": {
+                                                                      "name": "project",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "typeName": "hydra.core.Projection",
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.PackageDependency"}}}}},
+                                                                            {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "version"}}}}}]}}}}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "original"}}}}]}}}}}}]}},
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "scope"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "newVal"}}}}]}}]}}]}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the scope field of hydra.packaging.PackageDependency"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.packaging.packageName2",
@@ -9734,4 +10218,73 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the any variant of hydra.packaging.VersionSpecifier"}}}]}}}}}]}
+                  "value": {"literal": {"string": "DSL injection for the any variant of hydra.packaging.VersionSpecifier"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.packaging.versionSpecifierExact",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"variable": "hydra.packaging.Version"},
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Exactly the given version satisfies the dependency; used to pin a specific release"}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.packaging.VersionSpecifier"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {
+                      "annotated": {
+                        "body": {"variable": "hydra.packaging.Version"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Exactly the given version satisfies the dependency; used to pin a specific release"}}}]}}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "inject",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Injection",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.VersionSpecifier"}}}}},
+                                {
+                                  "name": "field",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.core.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "exact"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the exact variant of hydra.packaging.VersionSpecifier"}}}]}}}}}]}
