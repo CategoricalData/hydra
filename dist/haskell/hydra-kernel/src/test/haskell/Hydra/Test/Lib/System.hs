@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Effectful test cases for hydra.lib.system primitives
 
 module Hydra.Test.Lib.System where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.System as ErrorSystem
 import qualified Hydra.File as File
@@ -21,6 +23,7 @@ import qualified Hydra.Time as Time
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
+
 -- | Effectful test cases for hydra.lib.system primitives
 allTests :: Testing.TestGroup
 allTests =

@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Test cases for core term and type validation
 
 module Hydra.Test.Validate.Core where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -38,6 +40,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Test cases for core term and type validation
 allTests :: Testing.TestGroup
 allTests =
@@ -52,6 +55,7 @@ allTests =
         profileBehaviourTests,
         variableShadowingTests],
       Testing.testGroupCases = []}
+
 duplicateBindingsTests :: Testing.TestGroup
 duplicateBindingsTests =
     Testing.TestGroup {
@@ -209,6 +213,7 @@ duplicateBindingsTests =
             Testing.universalTestCaseExpected = (\_ -> Optionals.cases Nothing "valid" (\e -> ShowErrorCore.invalidTermError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 duplicateFieldsTests :: Testing.TestGroup
 duplicateFieldsTests =
     Testing.TestGroup {
@@ -300,6 +305,7 @@ duplicateFieldsTests =
               ErrorCore.duplicateFieldErrorName = (Core.Name "x")}))) "valid" (\e -> ShowErrorCore.invalidTermError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 emptyLetBindingsTests :: Testing.TestGroup
 emptyLetBindingsTests =
     Testing.TestGroup {
@@ -330,6 +336,7 @@ emptyLetBindingsTests =
               ErrorCore.emptyLetBindingsErrorLocation = (Paths.SubtermPath [])}))) "valid" (\e -> ShowErrorCore.invalidTermError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 identityApplicationTests :: Testing.TestGroup
 identityApplicationTests =
     Testing.TestGroup {
@@ -362,6 +369,7 @@ identityApplicationTests =
               ErrorCore.unnecessaryIdentityApplicationErrorLocation = (Paths.SubtermPath [])}))) "valid" (\e -> ShowErrorCore.invalidTermError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 profileBehaviourTests :: Testing.TestGroup
 profileBehaviourTests =
     Testing.TestGroup {
@@ -503,6 +511,7 @@ profileBehaviourTests =
               Validation.validationResultWarnings = []})))) "]")))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 variableShadowingTests :: Testing.TestGroup
 variableShadowingTests =
     Testing.TestGroup {

@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term decoders for hydra.error.packaging
 
 module Hydra.Decode.Error.Packaging where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Decode.Packaging as DecodePackaging
@@ -19,6 +21,7 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Decoder for hydra.error.packaging.ConflictingModuleNameError
 conflictingModuleNameError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorPackaging.ConflictingModuleNameError
 conflictingModuleNameError cx raw =
@@ -29,6 +32,7 @@ conflictingModuleNameError cx raw =
           ErrorPackaging.conflictingModuleNameErrorFirst = field_first,
           ErrorPackaging.conflictingModuleNameErrorSecond = field_second}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.error.packaging.ConflictingModuleNameError")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.error.packaging.ConflictingVariantNameError
 conflictingVariantNameError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorPackaging.ConflictingVariantNameError
 conflictingVariantNameError cx raw =
@@ -41,6 +45,7 @@ conflictingVariantNameError cx raw =
           ErrorPackaging.conflictingVariantNameErrorVariantName = field_variantName,
           ErrorPackaging.conflictingVariantNameErrorConflictingName = field_conflictingName}))))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.error.packaging.ConflictingVariantNameError")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.error.packaging.DefinitionNotInModuleNameError
 definitionNotInModuleNameError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorPackaging.DefinitionNotInModuleNameError
 definitionNotInModuleNameError cx raw =
@@ -51,6 +56,7 @@ definitionNotInModuleNameError cx raw =
           ErrorPackaging.definitionNotInModuleNameErrorModuleName = field_moduleName,
           ErrorPackaging.definitionNotInModuleNameErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.error.packaging.DefinitionNotInModuleNameError")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.error.packaging.DefinitionsOutOfOrderError
 definitionsOutOfOrderError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorPackaging.DefinitionsOutOfOrderError
 definitionsOutOfOrderError cx raw =
@@ -62,6 +68,7 @@ definitionsOutOfOrderError cx raw =
           ErrorPackaging.definitionsOutOfOrderErrorPrecedingName = field_precedingName,
           ErrorPackaging.definitionsOutOfOrderErrorFollowingName = field_followingName})))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.error.packaging.DefinitionsOutOfOrderError")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.error.packaging.DuplicateDefinitionNameError
 duplicateDefinitionNameError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorPackaging.DuplicateDefinitionNameError
 duplicateDefinitionNameError cx raw =
@@ -72,6 +79,7 @@ duplicateDefinitionNameError cx raw =
           ErrorPackaging.duplicateDefinitionNameErrorModuleName = field_moduleName,
           ErrorPackaging.duplicateDefinitionNameErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.error.packaging.DuplicateDefinitionNameError")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.error.packaging.DuplicateModuleNameError
 duplicateModuleNameError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorPackaging.DuplicateModuleNameError
 duplicateModuleNameError cx raw =
@@ -81,6 +89,7 @@ duplicateModuleNameError cx raw =
         in (Eithers.bind (ExtractCore.requireField "moduleName" DecodePackaging.moduleName fieldMap cx) (\field_moduleName -> Right (ErrorPackaging.DuplicateModuleNameError {
           ErrorPackaging.duplicateModuleNameErrorModuleName = field_moduleName})))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.error.packaging.DuplicateModuleNameError")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.error.packaging.InvalidDefinitionNameError
 invalidDefinitionNameError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorPackaging.InvalidDefinitionNameError
 invalidDefinitionNameError cx raw =
@@ -92,6 +101,7 @@ invalidDefinitionNameError cx raw =
           ErrorPackaging.invalidDefinitionNameErrorName = field_name,
           ErrorPackaging.invalidDefinitionNameErrorExpectedConvention = field_expectedConvention})))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.error.packaging.InvalidDefinitionNameError")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.error.packaging.InvalidModuleError
 invalidModuleError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorPackaging.InvalidModuleError
 invalidModuleError cx raw =
@@ -128,6 +138,7 @@ invalidModuleError cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.error.packaging.InvalidModuleNameConventionError
 invalidModuleNameConventionError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorPackaging.InvalidModuleNameConventionError
 invalidModuleNameConventionError cx raw =
@@ -137,6 +148,7 @@ invalidModuleNameConventionError cx raw =
         in (Eithers.bind (ExtractCore.requireField "moduleName" DecodePackaging.moduleName fieldMap cx) (\field_moduleName -> Right (ErrorPackaging.InvalidModuleNameConventionError {
           ErrorPackaging.invalidModuleNameConventionErrorModuleName = field_moduleName})))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.error.packaging.InvalidModuleNameConventionError")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.error.packaging.InvalidPackageError
 invalidPackageError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorPackaging.InvalidPackageError
 invalidPackageError cx raw =
@@ -164,6 +176,7 @@ invalidPackageError cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.error.packaging.InvalidPackageNameError
 invalidPackageNameError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorPackaging.InvalidPackageNameError
 invalidPackageNameError cx raw =
@@ -173,6 +186,7 @@ invalidPackageNameError cx raw =
         in (Eithers.bind (ExtractCore.requireField "packageName" DecodePackaging.packageName fieldMap cx) (\field_packageName -> Right (ErrorPackaging.InvalidPackageNameError {
           ErrorPackaging.invalidPackageNameErrorPackageName = field_packageName})))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.error.packaging.InvalidPackageNameError")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.error.packaging.MissingDocumentationError
 missingDocumentationError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorPackaging.MissingDocumentationError
 missingDocumentationError cx raw =

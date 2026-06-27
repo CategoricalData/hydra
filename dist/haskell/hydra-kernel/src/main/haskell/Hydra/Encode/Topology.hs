@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term encoders for hydra.topology
 
 module Hydra.Encode.Topology where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
@@ -11,9 +13,11 @@ import qualified Hydra.Topology as Topology
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
+
 -- | Encoder for hydra.topology.Graph
 graph :: M.Map Topology.Vertex [Topology.Vertex] -> Core.Term
 graph m = Core.TermMap (Maps.bimap vertex (\xs -> Core.TermList (Lists.map vertex xs)) m)
+
 -- | Encoder for hydra.topology.TarjanState
 tarjanState :: Topology.TarjanState -> Core.Term
 tarjanState x =
@@ -38,6 +42,7 @@ tarjanState x =
         Core.Field {
           Core.fieldName = (Core.Name "sccs"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (\xs2 -> Core.TermList (Lists.map vertex xs2)) xs)) (Topology.tarjanStateSccs x))}]})
+
 -- | Encoder for hydra.topology.Vertex
 vertex :: Int -> Core.Term
 vertex x = Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x))

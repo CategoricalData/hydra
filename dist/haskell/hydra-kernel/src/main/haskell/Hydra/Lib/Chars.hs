@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Primitives in the hydra.lib.chars module.
 
 module Hydra.Lib.Chars where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -31,6 +33,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 isAlphaNum :: Packaging.PrimitiveDefinition
 isAlphaNum =
     Packaging.PrimitiveDefinition {
@@ -58,6 +61,7 @@ isAlphaNum =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 isLower :: Packaging.PrimitiveDefinition
 isLower =
     Packaging.PrimitiveDefinition {
@@ -85,6 +89,7 @@ isLower =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 isSpace :: Packaging.PrimitiveDefinition
 isSpace =
     Packaging.PrimitiveDefinition {
@@ -111,6 +116,7 @@ isSpace =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 isUpper :: Packaging.PrimitiveDefinition
 isUpper =
     Packaging.PrimitiveDefinition {
@@ -138,6 +144,7 @@ isUpper =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 toLower :: Packaging.PrimitiveDefinition
 toLower =
     Packaging.PrimitiveDefinition {
@@ -165,6 +172,7 @@ toLower =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 toUpper :: Packaging.PrimitiveDefinition
 toUpper =
     Packaging.PrimitiveDefinition {

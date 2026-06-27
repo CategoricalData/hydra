@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Round-trip test cases for JSON encoding and decoding
 
 module Hydra.Test.Json.Roundtrip where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -39,6 +41,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
 import qualified Hydra.Overlay.Haskell.Lib.Literals as Literals
+
 -- | Round-trip test cases for JSON encoding and decoding
 allTests :: Testing.TestGroup
 allTests =

@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Utilities for working with subterm steps and paths.
 
 module Hydra.Show.Paths where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -40,6 +42,7 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
+
 -- | Convert a subterm step to a string representation
 subtermStep :: Paths.SubtermStep -> Maybe String
 subtermStep step =
@@ -67,6 +70,7 @@ subtermStep step =
         Paths.SubtermStepTypeApplicationTerm -> Nothing
         Paths.SubtermStepInjectionTerm -> Nothing
         Paths.SubtermStepWrappedTerm -> Nothing
+
 -- | Build a subterm graph from a term
 termToSubtermGraph :: M.Map Packaging.ModuleName String -> Core.Term -> Paths.SubtermGraph
 termToSubtermGraph namespaces term =

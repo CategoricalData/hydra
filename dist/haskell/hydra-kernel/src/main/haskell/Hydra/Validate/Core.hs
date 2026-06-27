@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Validation functions for core terms and types
 
 module Hydra.Validate.Core where
+
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
@@ -43,6 +45,7 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
+
 -- | Append a rule-tagged InvalidTermError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds.
 appendFinding :: Validation.ValidationProfile -> Validation.ValidationResult t0 -> Maybe (Core.Name, t0) -> Validation.ValidationResult t0
 appendFinding p acc finding =
@@ -56,6 +59,7 @@ appendFinding p acc finding =
         Validation.validationResultWarnings = wrns}) acc) (Logic.ifElse (Sets.member ruleName (Validation.validationProfileWarningRules p)) (Logic.ifElse (Equality.lt (Lists.length wrns) (Validation.validationProfileMaxWarnings p)) (Validation.ValidationResult {
         Validation.validationResultErrors = errs,
         Validation.validationResultWarnings = (Lists.concat2 wrns (Lists.singleton payload))}) acc) acc)))
+
 -- | Append a rule-tagged InvalidTypeError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds.
 appendFindingType :: Validation.ValidationProfile -> Validation.ValidationResult t0 -> Maybe (Core.Name, t0) -> Validation.ValidationResult t0
 appendFindingType p acc finding =
@@ -69,6 +73,7 @@ appendFindingType p acc finding =
         Validation.validationResultWarnings = wrns}) acc) (Logic.ifElse (Sets.member ruleName (Validation.validationProfileWarningRules p)) (Logic.ifElse (Equality.lt (Lists.length wrns) (Validation.validationProfileMaxWarnings p)) (Validation.ValidationResult {
         Validation.validationResultErrors = errs,
         Validation.validationResultWarnings = (Lists.concat2 wrns (Lists.singleton payload))}) acc) acc)))
+
 -- | Check for duplicate binding names in a list of bindings
 checkDuplicateBindings :: Paths.SubtermPath -> [Core.Binding] -> Maybe ErrorCore.InvalidTermError
 checkDuplicateBindings path bindings =
@@ -78,6 +83,7 @@ checkDuplicateBindings path bindings =
       in (Optionals.map (\name -> ErrorCore.InvalidTermErrorDuplicateBinding (ErrorCore.DuplicateBindingError {
         ErrorCore.duplicateBindingErrorLocation = path,
         ErrorCore.duplicateBindingErrorName = name})) dup)
+
 -- | Check for duplicate field names in a list of field types
 checkDuplicateFieldTypes :: [Core.FieldType] -> (Core.Name -> Maybe t0) -> Maybe t0
 checkDuplicateFieldTypes fields mkError =
@@ -85,6 +91,7 @@ checkDuplicateFieldTypes fields mkError =
       let names = Lists.map Core.fieldTypeName fields
           dup = findDuplicateFieldType names
       in (Optionals.cases dup Nothing (\name -> mkError name))
+
 -- | Check for duplicate field names in a list of fields
 checkDuplicateFields :: Paths.SubtermPath -> [Core.Name] -> Maybe ErrorCore.InvalidTermError
 checkDuplicateFields path names =
@@ -93,6 +100,7 @@ checkDuplicateFields path names =
       in (Optionals.map (\name -> ErrorCore.InvalidTermErrorDuplicateField (ErrorCore.DuplicateFieldError {
         ErrorCore.duplicateFieldErrorLocation = path,
         ErrorCore.duplicateFieldErrorName = name})) dup)
+
 -- | Check that a literal value's type matches an expected literal type
 checkLiteral :: Core.LiteralType -> Core.Literal -> Maybe ErrorCore.InvalidLiteralError
 checkLiteral expected value =
@@ -101,6 +109,7 @@ checkLiteral expected value =
       in (Logic.ifElse (Equality.equal expected actual) Nothing (Just (ErrorCore.InvalidLiteralErrorTypeMismatch (ErrorCore.LiteralTypeMismatchError {
         ErrorCore.literalTypeMismatchErrorExpectedType = expected,
         ErrorCore.literalTypeMismatchErrorActualType = actual}))))
+
 -- | Check if any name in a list shadows a variable already in scope
 checkShadowing :: Paths.SubtermPath -> Graph.Graph -> [Core.Name] -> Maybe ErrorCore.InvalidTermError
 checkShadowing path cx names =
@@ -110,6 +119,7 @@ checkShadowing path cx names =
                 ErrorCore.termVariableShadowingErrorLocation = path,
                 ErrorCore.termVariableShadowingErrorName = name}))) Nothing) (\_ -> acc)) Nothing names
       in result
+
 -- | Check a single term node for validation errors. Rules disabled by the profile are not evaluated.
 checkTerm :: Validation.ValidationProfile -> Bool -> Paths.SubtermPath -> Graph.Graph -> Core.Term -> Maybe (Core.Name, ErrorCore.InvalidTermError)
 checkTerm p typed path cx term =
@@ -234,6 +244,7 @@ checkTerm p typed path cx term =
         in (Logic.ifElse (enabled p (Core.Name "hydra.error.core.InvalidTermError.emptyTypeNameInTerm")) (Optionals.map (\f -> (Core.Name "hydra.error.core.InvalidTermError.emptyTypeNameInTerm", f)) (Logic.ifElse (Equality.equal (Core.unName tname) "") (Just (ErrorCore.InvalidTermErrorEmptyTypeNameInTerm (ErrorCore.EmptyTypeNameInTermError {
           ErrorCore.emptyTypeNameInTermErrorLocation = path}))) Nothing)) Nothing)
       _ -> Nothing
+
 -- | Check a type for type variables not bound in the current scope
 checkUndefinedTypeVariablesInType :: t0 -> Graph.Graph -> Core.Type -> (Core.Name -> Maybe t1) -> Maybe t1
 checkUndefinedTypeVariablesInType path cx typ mkError =
@@ -241,6 +252,7 @@ checkUndefinedTypeVariablesInType path cx typ mkError =
       let freeVars = Variables.freeVariablesInType typ
           undefined = Sets.difference freeVars (Graph.graphTypeVariables cx)
       in (Optionals.cases (Lists.maybeHead (Sets.toList undefined)) Nothing (\firstUndefined -> mkError firstUndefined))
+
 -- | Check a type scheme for type variables not bound by the scheme or the current scope
 checkUndefinedTypeVariablesInTypeScheme :: t0 -> Graph.Graph -> Core.TypeScheme -> (Core.Name -> Maybe t1) -> Maybe t1
 checkUndefinedTypeVariablesInTypeScheme path cx ts mkError =
@@ -248,6 +260,7 @@ checkUndefinedTypeVariablesInTypeScheme path cx ts mkError =
       let freeVars = Variables.freeVariablesInTypeScheme ts
           undefined = Sets.difference freeVars (Graph.graphTypeVariables cx)
       in (Optionals.cases (Lists.maybeHead (Sets.toList undefined)) Nothing (\firstUndefined -> mkError firstUndefined))
+
 -- | Return an error if the given type is TypeVoid
 checkVoid :: Core.Type -> Maybe ErrorCore.InvalidTypeError
 checkVoid typ =
@@ -255,10 +268,12 @@ checkVoid typ =
       Core.TypeVoid -> Just (ErrorCore.InvalidTypeErrorVoidInNonBottomPosition (ErrorCore.VoidInNonBottomPositionError {
         ErrorCore.voidInNonBottomPositionErrorLocation = (Paths.SubtermPath [])}))
       _ -> Nothing
+
 -- | True iff the given rule name appears in the profile's errorRules or warningRules.
 enabled :: Validation.ValidationProfile -> Core.Name -> Bool
 enabled p ruleName =
     Logic.or (Sets.member ruleName (Validation.validationProfileErrorRules p)) (Sets.member ruleName (Validation.validationProfileWarningRules p))
+
 -- | Find the first duplicate name in a list
 findDuplicate :: Ord t0 => ([t0] -> Maybe t0)
 findDuplicate names =
@@ -269,6 +284,7 @@ findDuplicate names =
                     dup = Pairs.second acc
                 in (Optionals.cases dup (Logic.ifElse (Sets.member name seen) (seen, (Just name)) (Sets.insert name seen, Nothing)) (\_ -> acc))) (Sets.empty, Nothing) names
       in (Pairs.second result)
+
 -- | Find the first duplicate name in a list (for field type validation)
 findDuplicateFieldType :: Ord t0 => ([t0] -> Maybe t0)
 findDuplicateFieldType names =
@@ -279,21 +295,27 @@ findDuplicateFieldType names =
                     dup = Pairs.second acc
                 in (Optionals.cases dup (Logic.ifElse (Sets.member name seen) (seen, (Just name)) (Sets.insert name seen, Nothing)) (\_ -> acc))) (Sets.empty, Nothing) names
       in (Pairs.second result)
+
 -- | Return the first error from a list of optional errors, or nothing if all are valid
 firstError :: [Maybe t0] -> Maybe t0
 firstError checks = Lists.foldl (\acc -> \check -> Optionals.cases acc check (\_ -> acc)) Nothing checks
+
 -- | Return the first rule-tagged finding from a list, or nothing if all are valid
 firstFinding :: [Maybe t0] -> Maybe t0
 firstFinding checks = Lists.foldl (\acc -> \check -> Optionals.cases acc check (\_ -> acc)) Nothing checks
+
 -- | Return the first rule-tagged type finding from a list, or nothing if all are valid
 firstFindingType :: [Maybe t0] -> Maybe t0
 firstFindingType checks = Lists.foldl (\acc -> \check -> Optionals.cases acc check (\_ -> acc)) Nothing checks
+
 -- | Return the first type error from a list of optional errors, or nothing if all are valid
 firstTypeError :: [Maybe t0] -> Maybe t0
 firstTypeError checks = Lists.foldl (\acc -> \check -> Optionals.cases acc check (\_ -> acc)) Nothing checks
+
 -- | Check whether a name is valid at an introduction site. Currently rejects empty strings.
 isValidName :: Core.Name -> Bool
 isValidName name = Logic.not (Equality.equal (Core.unName name) "")
+
 -- | The default validation profile for term and type validation, with every check classified as an error except InvalidTypeError.singleVariantUnion (warning); maxErrors=1, maxWarnings=20.
 kernelDefaultCoreProfile :: Validation.ValidationProfile
 kernelDefaultCoreProfile =
@@ -338,6 +360,7 @@ kernelDefaultCoreProfile =
         Core.Name "hydra.error.core.InvalidTypeError.singleVariantUnion"]),
       Validation.validationProfileMaxErrors = 1,
       Validation.validationProfileMaxWarnings = 20}
+
 -- | Validate a term against the given ValidationProfile, returning a ValidationResult. Errors hard-stop traversal once maxErrors is reached; warnings are bounded by maxWarnings without causing termination.
 term :: Validation.ValidationProfile -> Bool -> Graph.Graph -> Core.Term -> Validation.ValidationResult ErrorCore.InvalidTermError
 term p typed g t =
@@ -346,6 +369,7 @@ term p typed g t =
       in (Logic.ifElse (Equality.gte (Lists.length (Validation.validationResultErrors acc1)) (Validation.validationProfileMaxErrors p)) acc1 (recurse acc1 trm)))) g (Validation.ValidationResult {
       Validation.validationResultErrors = [],
       Validation.validationResultWarnings = []}) t
+
 -- | Validate a type against the given ValidationProfile, threading a ValidationResult accumulator through subtypes. Errors hard-stop traversal once maxErrors is reached.
 type_ :: Validation.ValidationProfile -> Validation.ValidationResult ErrorCore.InvalidTypeError -> S.Set Core.Name -> Core.Type -> Validation.ValidationResult ErrorCore.InvalidTypeError
 type_ p acc boundVars typ =
@@ -379,6 +403,7 @@ type_ p acc boundVars typ =
         Core.TypeUnion v0 -> Lists.foldl (\a -> \f -> type_ p a boundVars (Core.fieldTypeType f)) acc1 v0
         Core.TypeWrap v0 -> type_ p acc1 boundVars v0
         _ -> acc1)))
+
 -- | Check a single type node for validation errors. Rules disabled by the profile are not evaluated.
 validateTypeNode :: Validation.ValidationProfile -> S.Set Core.Name -> Core.Type -> Maybe (Core.Name, ErrorCore.InvalidTypeError)
 validateTypeNode p boundVars typ =

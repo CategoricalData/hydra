@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term encoders for hydra.error.core
 
 module Hydra.Encode.Error.Core where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.Paths as Paths
@@ -9,6 +11,7 @@ import qualified Hydra.Encode.Variants as Variants
 import qualified Hydra.Error.Core as ErrorCore
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Encoder for hydra.error.core.ConstantConditionError
 constantConditionError :: ErrorCore.ConstantConditionError -> Core.Term
 constantConditionError x =
@@ -21,6 +24,7 @@ constantConditionError x =
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralBoolean x2)) (ErrorCore.constantConditionErrorValue x))}]})
+
 -- | Encoder for hydra.error.core.DuplicateBindingError
 duplicateBindingError :: ErrorCore.DuplicateBindingError -> Core.Term
 duplicateBindingError x =
@@ -33,6 +37,7 @@ duplicateBindingError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.duplicateBindingErrorName x))}]})
+
 -- | Encoder for hydra.error.core.DuplicateFieldError
 duplicateFieldError :: ErrorCore.DuplicateFieldError -> Core.Term
 duplicateFieldError x =
@@ -45,6 +50,7 @@ duplicateFieldError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.duplicateFieldErrorName x))}]})
+
 -- | Encoder for hydra.error.core.DuplicateRecordTypeFieldNamesError
 duplicateRecordTypeFieldNamesError :: ErrorCore.DuplicateRecordTypeFieldNamesError -> Core.Term
 duplicateRecordTypeFieldNamesError x =
@@ -57,6 +63,7 @@ duplicateRecordTypeFieldNamesError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.duplicateRecordTypeFieldNamesErrorName x))}]})
+
 -- | Encoder for hydra.error.core.DuplicateUnionTypeFieldNamesError
 duplicateUnionTypeFieldNamesError :: ErrorCore.DuplicateUnionTypeFieldNamesError -> Core.Term
 duplicateUnionTypeFieldNamesError x =
@@ -69,6 +76,7 @@ duplicateUnionTypeFieldNamesError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.duplicateUnionTypeFieldNamesErrorName x))}]})
+
 -- | Encoder for hydra.error.core.EmptyCaseStatementError
 emptyCaseStatementError :: ErrorCore.EmptyCaseStatementError -> Core.Term
 emptyCaseStatementError x =
@@ -81,6 +89,7 @@ emptyCaseStatementError x =
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.emptyCaseStatementErrorTypeName x))}]})
+
 -- | Encoder for hydra.error.core.EmptyLetBindingsError
 emptyLetBindingsError :: ErrorCore.EmptyLetBindingsError -> Core.Term
 emptyLetBindingsError x =
@@ -90,6 +99,7 @@ emptyLetBindingsError x =
         Core.Field {
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Paths.subtermPath (ErrorCore.emptyLetBindingsErrorLocation x))}]})
+
 -- | Encoder for hydra.error.core.EmptyRecordTypeError
 emptyRecordTypeError :: ErrorCore.EmptyRecordTypeError -> Core.Term
 emptyRecordTypeError x =
@@ -99,6 +109,7 @@ emptyRecordTypeError x =
         Core.Field {
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Paths.subtermPath (ErrorCore.emptyRecordTypeErrorLocation x))}]})
+
 -- | Encoder for hydra.error.core.EmptyTermAnnotationError
 emptyTermAnnotationError :: ErrorCore.EmptyTermAnnotationError -> Core.Term
 emptyTermAnnotationError x =
@@ -108,6 +119,7 @@ emptyTermAnnotationError x =
         Core.Field {
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Paths.subtermPath (ErrorCore.emptyTermAnnotationErrorLocation x))}]})
+
 -- | Encoder for hydra.error.core.EmptyTypeAnnotationError
 emptyTypeAnnotationError :: ErrorCore.EmptyTypeAnnotationError -> Core.Term
 emptyTypeAnnotationError x =
@@ -117,6 +129,7 @@ emptyTypeAnnotationError x =
         Core.Field {
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Paths.subtermPath (ErrorCore.emptyTypeAnnotationErrorLocation x))}]})
+
 -- | Encoder for hydra.error.core.EmptyTypeNameInTermError
 emptyTypeNameInTermError :: ErrorCore.EmptyTypeNameInTermError -> Core.Term
 emptyTypeNameInTermError x =
@@ -126,6 +139,7 @@ emptyTypeNameInTermError x =
         Core.Field {
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Paths.subtermPath (ErrorCore.emptyTypeNameInTermErrorLocation x))}]})
+
 -- | Encoder for hydra.error.core.EmptyUnionTypeError
 emptyUnionTypeError :: ErrorCore.EmptyUnionTypeError -> Core.Term
 emptyUnionTypeError x =
@@ -135,6 +149,7 @@ emptyUnionTypeError x =
         Core.Field {
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Paths.subtermPath (ErrorCore.emptyUnionTypeErrorLocation x))}]})
+
 -- | Encoder for hydra.error.core.InvalidForallParameterNameError
 invalidForallParameterNameError :: ErrorCore.InvalidForallParameterNameError -> Core.Term
 invalidForallParameterNameError x =
@@ -147,6 +162,7 @@ invalidForallParameterNameError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.invalidForallParameterNameErrorName x))}]})
+
 -- | Encoder for hydra.error.core.InvalidLambdaParameterNameError
 invalidLambdaParameterNameError :: ErrorCore.InvalidLambdaParameterNameError -> Core.Term
 invalidLambdaParameterNameError x =
@@ -159,6 +175,7 @@ invalidLambdaParameterNameError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.invalidLambdaParameterNameErrorName x))}]})
+
 -- | Encoder for hydra.error.core.InvalidLetBindingNameError
 invalidLetBindingNameError :: ErrorCore.InvalidLetBindingNameError -> Core.Term
 invalidLetBindingNameError x =
@@ -171,6 +188,7 @@ invalidLetBindingNameError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.invalidLetBindingNameErrorName x))}]})
+
 -- | Encoder for hydra.error.core.InvalidLiteralError
 invalidLiteralError :: ErrorCore.InvalidLiteralError -> Core.Term
 invalidLiteralError x =
@@ -180,6 +198,7 @@ invalidLiteralError x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "typeMismatch"),
           Core.fieldTerm = (literalTypeMismatchError v0)}})
+
 -- | Encoder for hydra.error.core.InvalidTermError
 invalidTermError :: ErrorCore.InvalidTermError -> Core.Term
 invalidTermError x =
@@ -294,6 +313,7 @@ invalidTermError x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "untypedTermVariable"),
           Core.fieldTerm = (untypedTermVariableError v0)}})
+
 -- | Encoder for hydra.error.core.InvalidTypeError
 invalidTypeError :: ErrorCore.InvalidTypeError -> Core.Term
 invalidTypeError x =
@@ -368,6 +388,7 @@ invalidTypeError x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "voidInNonBottomPosition"),
           Core.fieldTerm = (voidInNonBottomPositionError v0)}})
+
 -- | Encoder for hydra.error.core.InvalidTypeLambdaParameterNameError
 invalidTypeLambdaParameterNameError :: ErrorCore.InvalidTypeLambdaParameterNameError -> Core.Term
 invalidTypeLambdaParameterNameError x =
@@ -380,6 +401,7 @@ invalidTypeLambdaParameterNameError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.invalidTypeLambdaParameterNameErrorName x))}]})
+
 -- | Encoder for hydra.error.core.InvalidTypeSchemeVariableNameError
 invalidTypeSchemeVariableNameError :: ErrorCore.InvalidTypeSchemeVariableNameError -> Core.Term
 invalidTypeSchemeVariableNameError x =
@@ -392,6 +414,7 @@ invalidTypeSchemeVariableNameError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.invalidTypeSchemeVariableNameErrorName x))}]})
+
 -- | Encoder for hydra.error.core.LiteralTypeMismatchError
 literalTypeMismatchError :: ErrorCore.LiteralTypeMismatchError -> Core.Term
 literalTypeMismatchError x =
@@ -404,6 +427,7 @@ literalTypeMismatchError x =
         Core.Field {
           Core.fieldName = (Core.Name "actualType"),
           Core.fieldTerm = (EncodeCore.literalType (ErrorCore.literalTypeMismatchErrorActualType x))}]})
+
 -- | Encoder for hydra.error.core.NestedTermAnnotationError
 nestedTermAnnotationError :: ErrorCore.NestedTermAnnotationError -> Core.Term
 nestedTermAnnotationError x =
@@ -413,6 +437,7 @@ nestedTermAnnotationError x =
         Core.Field {
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Paths.subtermPath (ErrorCore.nestedTermAnnotationErrorLocation x))}]})
+
 -- | Encoder for hydra.error.core.NestedTypeAnnotationError
 nestedTypeAnnotationError :: ErrorCore.NestedTypeAnnotationError -> Core.Term
 nestedTypeAnnotationError x =
@@ -422,6 +447,7 @@ nestedTypeAnnotationError x =
         Core.Field {
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Paths.subtermPath (ErrorCore.nestedTypeAnnotationErrorLocation x))}]})
+
 -- | Encoder for hydra.error.core.NonComparableMapKeyTypeError
 nonComparableMapKeyTypeError :: ErrorCore.NonComparableMapKeyTypeError -> Core.Term
 nonComparableMapKeyTypeError x =
@@ -434,6 +460,7 @@ nonComparableMapKeyTypeError x =
         Core.Field {
           Core.fieldName = (Core.Name "keyType"),
           Core.fieldTerm = (EncodeCore.type_ (ErrorCore.nonComparableMapKeyTypeErrorKeyType x))}]})
+
 -- | Encoder for hydra.error.core.NonComparableSetElementTypeError
 nonComparableSetElementTypeError :: ErrorCore.NonComparableSetElementTypeError -> Core.Term
 nonComparableSetElementTypeError x =
@@ -446,6 +473,7 @@ nonComparableSetElementTypeError x =
         Core.Field {
           Core.fieldName = (Core.Name "elementType"),
           Core.fieldTerm = (EncodeCore.type_ (ErrorCore.nonComparableSetElementTypeErrorElementType x))}]})
+
 -- | Encoder for hydra.error.core.RedundantWrapUnwrapError
 redundantWrapUnwrapError :: ErrorCore.RedundantWrapUnwrapError -> Core.Term
 redundantWrapUnwrapError x =
@@ -458,6 +486,7 @@ redundantWrapUnwrapError x =
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.redundantWrapUnwrapErrorTypeName x))}]})
+
 -- | Encoder for hydra.error.core.SelfApplicationError
 selfApplicationError :: ErrorCore.SelfApplicationError -> Core.Term
 selfApplicationError x =
@@ -470,6 +499,7 @@ selfApplicationError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.selfApplicationErrorName x))}]})
+
 -- | Encoder for hydra.error.core.SingleVariantUnionError
 singleVariantUnionError :: ErrorCore.SingleVariantUnionError -> Core.Term
 singleVariantUnionError x =
@@ -482,6 +512,7 @@ singleVariantUnionError x =
         Core.Field {
           Core.fieldName = (Core.Name "fieldName"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.singleVariantUnionErrorFieldName x))}]})
+
 -- | Encoder for hydra.error.core.TermVariableShadowingError
 termVariableShadowingError :: ErrorCore.TermVariableShadowingError -> Core.Term
 termVariableShadowingError x =
@@ -494,6 +525,7 @@ termVariableShadowingError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.termVariableShadowingErrorName x))}]})
+
 -- | Encoder for hydra.error.core.TypeVariableShadowingInForallError
 typeVariableShadowingInForallError :: ErrorCore.TypeVariableShadowingInForallError -> Core.Term
 typeVariableShadowingInForallError x =
@@ -506,6 +538,7 @@ typeVariableShadowingInForallError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.typeVariableShadowingInForallErrorName x))}]})
+
 -- | Encoder for hydra.error.core.TypeVariableShadowingInTypeLambdaError
 typeVariableShadowingInTypeLambdaError :: ErrorCore.TypeVariableShadowingInTypeLambdaError -> Core.Term
 typeVariableShadowingInTypeLambdaError x =
@@ -518,6 +551,7 @@ typeVariableShadowingInTypeLambdaError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.typeVariableShadowingInTypeLambdaErrorName x))}]})
+
 -- | Encoder for hydra.error.core.UndefinedFieldError
 undefinedFieldError :: ErrorCore.UndefinedFieldError -> Core.Term
 undefinedFieldError x =
@@ -530,6 +564,7 @@ undefinedFieldError x =
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.undefinedFieldErrorTypeName x))}]})
+
 -- | Encoder for hydra.error.core.UndefinedTermVariableError
 undefinedTermVariableError :: ErrorCore.UndefinedTermVariableError -> Core.Term
 undefinedTermVariableError x =
@@ -542,6 +577,7 @@ undefinedTermVariableError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.undefinedTermVariableErrorName x))}]})
+
 -- | Encoder for hydra.error.core.UndefinedTypeVariableError
 undefinedTypeVariableError :: ErrorCore.UndefinedTypeVariableError -> Core.Term
 undefinedTypeVariableError x =
@@ -554,6 +590,7 @@ undefinedTypeVariableError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.undefinedTypeVariableErrorName x))}]})
+
 -- | Encoder for hydra.error.core.UndefinedTypeVariableInBindingTypeError
 undefinedTypeVariableInBindingTypeError :: ErrorCore.UndefinedTypeVariableInBindingTypeError -> Core.Term
 undefinedTypeVariableInBindingTypeError x =
@@ -566,6 +603,7 @@ undefinedTypeVariableInBindingTypeError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.undefinedTypeVariableInBindingTypeErrorName x))}]})
+
 -- | Encoder for hydra.error.core.UndefinedTypeVariableInLambdaDomainError
 undefinedTypeVariableInLambdaDomainError :: ErrorCore.UndefinedTypeVariableInLambdaDomainError -> Core.Term
 undefinedTypeVariableInLambdaDomainError x =
@@ -578,6 +616,7 @@ undefinedTypeVariableInLambdaDomainError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.undefinedTypeVariableInLambdaDomainErrorName x))}]})
+
 -- | Encoder for hydra.error.core.UndefinedTypeVariableInTypeApplicationError
 undefinedTypeVariableInTypeApplicationError :: ErrorCore.UndefinedTypeVariableInTypeApplicationError -> Core.Term
 undefinedTypeVariableInTypeApplicationError x =
@@ -590,6 +629,7 @@ undefinedTypeVariableInTypeApplicationError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.undefinedTypeVariableInTypeApplicationErrorName x))}]})
+
 -- | Encoder for hydra.error.core.UnexpectedTermVariantError
 unexpectedTermVariantError :: ErrorCore.UnexpectedTermVariantError -> Core.Term
 unexpectedTermVariantError x =
@@ -602,6 +642,7 @@ unexpectedTermVariantError x =
         Core.Field {
           Core.fieldName = (Core.Name "actualTerm"),
           Core.fieldTerm = (EncodeCore.term (ErrorCore.unexpectedTermVariantErrorActualTerm x))}]})
+
 -- | Encoder for hydra.error.core.UnexpectedTypeVariantError
 unexpectedTypeVariantError :: ErrorCore.UnexpectedTypeVariantError -> Core.Term
 unexpectedTypeVariantError x =
@@ -614,6 +655,7 @@ unexpectedTypeVariantError x =
         Core.Field {
           Core.fieldName = (Core.Name "actualType"),
           Core.fieldTerm = (EncodeCore.type_ (ErrorCore.unexpectedTypeVariantErrorActualType x))}]})
+
 -- | Encoder for hydra.error.core.UnknownPrimitiveNameError
 unknownPrimitiveNameError :: ErrorCore.UnknownPrimitiveNameError -> Core.Term
 unknownPrimitiveNameError x =
@@ -626,6 +668,7 @@ unknownPrimitiveNameError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.unknownPrimitiveNameErrorName x))}]})
+
 -- | Encoder for hydra.error.core.UnnecessaryIdentityApplicationError
 unnecessaryIdentityApplicationError :: ErrorCore.UnnecessaryIdentityApplicationError -> Core.Term
 unnecessaryIdentityApplicationError x =
@@ -635,6 +678,7 @@ unnecessaryIdentityApplicationError x =
         Core.Field {
           Core.fieldName = (Core.Name "location"),
           Core.fieldTerm = (Paths.subtermPath (ErrorCore.unnecessaryIdentityApplicationErrorLocation x))}]})
+
 -- | Encoder for hydra.error.core.UntypedTermVariableError
 untypedTermVariableError :: ErrorCore.UntypedTermVariableError -> Core.Term
 untypedTermVariableError x =
@@ -647,6 +691,7 @@ untypedTermVariableError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.untypedTermVariableErrorName x))}]})
+
 -- | Encoder for hydra.error.core.VoidInNonBottomPositionError
 voidInNonBottomPositionError :: ErrorCore.VoidInNonBottomPositionError -> Core.Term
 voidInNonBottomPositionError x =

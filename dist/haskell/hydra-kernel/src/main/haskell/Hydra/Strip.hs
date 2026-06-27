@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Annotation and type stripping and normalization
 
 module Hydra.Strip where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -33,6 +35,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Strip type annotations from the top levels of a term
 deannotateAndDetypeTerm :: Core.Term -> Core.Term
 deannotateAndDetypeTerm t =
@@ -41,24 +44,28 @@ deannotateAndDetypeTerm t =
       Core.TermTypeApplication v0 -> deannotateAndDetypeTerm (Core.typeApplicationTermBody v0)
       Core.TermTypeLambda v0 -> deannotateAndDetypeTerm (Core.typeLambdaBody v0)
       _ -> t
+
 -- | Strip all annotations (including System F type annotations) from the top levels of a term
 deannotateTerm :: Core.Term -> Core.Term
 deannotateTerm t =
     case t of
       Core.TermAnnotated v0 -> deannotateTerm (Core.annotatedTermBody v0)
       _ -> t
+
 -- | Strip all annotations from a term
 deannotateType :: Core.Type -> Core.Type
 deannotateType t =
     case t of
       Core.TypeAnnotated v0 -> deannotateType (Core.annotatedTypeBody v0)
       _ -> t
+
 -- | Strip any top-level type lambdas from a type, extracting the (possibly nested) type body
 deannotateTypeParameters :: Core.Type -> Core.Type
 deannotateTypeParameters t =
     case (deannotateType t) of
       Core.TypeForall v0 -> deannotateTypeParameters (Core.forallTypeBody v0)
       _ -> t
+
 -- | Recursively strip all annotations from a type
 deannotateTypeRecursive :: Core.Type -> Core.Type
 deannotateTypeRecursive typ =
@@ -70,6 +77,7 @@ deannotateTypeRecursive typ =
                   Core.TypeAnnotated v0 -> Core.annotatedTypeBody v0
                   _ -> rewritten
       in (Rewriting.rewriteType strip typ)
+
 -- | Recursively strip all annotations from a type scheme
 deannotateTypeSchemeRecursive :: Core.TypeScheme -> Core.TypeScheme
 deannotateTypeSchemeRecursive ts =
@@ -81,6 +89,7 @@ deannotateTypeSchemeRecursive ts =
         Core.typeSchemeVariables = vars,
         Core.typeSchemeBody = (deannotateTypeRecursive typ),
         Core.typeSchemeConstraints = constraints}
+
 -- | Strip System F type annotations from the top levels of a term, but leave application-specific annotations intact
 detypeTerm :: Core.Term -> Core.Term
 detypeTerm t =
@@ -94,6 +103,7 @@ detypeTerm t =
       Core.TermTypeApplication v0 -> deannotateAndDetypeTerm (Core.typeApplicationTermBody v0)
       Core.TermTypeLambda v0 -> deannotateAndDetypeTerm (Core.typeLambdaBody v0)
       _ -> t
+
 -- | Recursively remove term annotations, including within subterms
 removeTermAnnotations :: Core.Term -> Core.Term
 removeTermAnnotations term =
@@ -105,6 +115,7 @@ removeTermAnnotations term =
                   Core.TermAnnotated v0 -> Core.annotatedTermBody v0
                   _ -> rewritten
       in (Rewriting.rewriteTerm remove term)
+
 -- | Recursively remove type annotations, including within subtypes
 removeTypeAnnotations :: Core.Type -> Core.Type
 removeTypeAnnotations typ =
@@ -116,6 +127,7 @@ removeTypeAnnotations typ =
                   Core.TypeAnnotated v0 -> Core.annotatedTypeBody v0
                   _ -> rewritten
       in (Rewriting.rewriteType remove typ)
+
 -- | Strip type annotations (TypeLambda, TypeApplication, binding type schemes) from terms while preserving lambda domain types and other annotations
 removeTypeAnnotationsFromTerm :: Core.Term -> Core.Term
 removeTypeAnnotationsFromTerm term =
@@ -136,6 +148,7 @@ removeTypeAnnotationsFromTerm term =
                   Core.TermTypeLambda v0 -> Core.typeLambdaBody v0
                   _ -> rewritten
       in (Rewriting.rewriteTerm strip term)
+
 -- | Strip type annotations from terms while preserving other annotations
 removeTypesFromTerm :: Core.Term -> Core.Term
 removeTypesFromTerm term =
@@ -160,6 +173,7 @@ removeTypesFromTerm term =
                   Core.TermTypeLambda v0 -> Core.typeLambdaBody v0
                   _ -> rewritten
       in (Rewriting.rewriteTerm strip term)
+
 -- | Strip outer type lambda wrappers from a term, preserving type application wrappers and annotations
 stripTypeLambdas :: Core.Term -> Core.Term
 stripTypeLambdas t =

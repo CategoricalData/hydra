@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Free variable analysis, term-level substitution, and unshadowing
 
 module Hydra.Variables where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -45,6 +47,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
+
 -- | Get the set of free type variables in a term (including schema names, where they appear in type annotations). In this context, only the type schemes of let bindings can bind type variables; type lambdas do not.
 freeTypeVariablesInTerm :: Core.Term -> S.Set Core.Name
 freeTypeVariablesInTerm term0 =
@@ -70,6 +73,7 @@ freeTypeVariablesInTerm term0 =
                       Core.TermTypeLambda v0 -> Sets.union (tryType vars (Core.TypeVariable (Core.typeLambdaParameter v0))) (recurse (Core.typeLambdaBody v0))
                       _ -> dflt
       in (getAll Sets.empty term0)
+
 -- | Find the free variables (i.e. variables not bound by a lambda or let) in a term
 freeVariablesInTerm :: Core.Term -> S.Set Core.Name
 freeVariablesInTerm term =
@@ -80,6 +84,7 @@ freeVariablesInTerm term =
         Core.TermLet v0 -> Sets.difference (dfltVars ()) (Sets.fromList (Lists.map Core.bindingName (Core.letBindings v0)))
         Core.TermVariable v0 -> Sets.singleton v0
         _ -> dfltVars ()
+
 -- | Find the free variables (i.e. variables not bound by a lambda or let) in a type
 freeVariablesInType :: Core.Type -> S.Set Core.Name
 freeVariablesInType typ =
@@ -89,6 +94,7 @@ freeVariablesInType typ =
         Core.TypeForall v0 -> Sets.delete (Core.forallTypeParameter v0) (freeVariablesInType (Core.forallTypeBody v0))
         Core.TypeVariable v0 -> Sets.singleton v0
         _ -> dfltVars
+
 -- | Find the free variables in a type in deterministic left-to-right order
 freeVariablesInTypeOrdered :: Core.Type -> [Core.Name]
 freeVariablesInTypeOrdered typ =
@@ -100,6 +106,7 @@ freeVariablesInTypeOrdered typ =
                 Core.TypeForall v0 -> collectVars (Sets.insert (Core.forallTypeParameter v0) boundVars) (Core.forallTypeBody v0)
                 _ -> Lists.concat (Lists.map (collectVars boundVars) (Rewriting.subtypes t))
       in (Lists.nub (collectVars Sets.empty typ))
+
 -- | Find free variables in a type scheme
 freeVariablesInTypeScheme :: Core.TypeScheme -> S.Set Core.Name
 freeVariablesInTypeScheme ts =
@@ -107,6 +114,7 @@ freeVariablesInTypeScheme ts =
       let vars = Core.typeSchemeVariables ts
           t = Core.typeSchemeBody ts
       in (Sets.difference (freeVariablesInType t) (Sets.fromList vars))
+
 -- | Find free variables in a type scheme (simple version)
 freeVariablesInTypeSchemeSimple :: Core.TypeScheme -> S.Set Core.Name
 freeVariablesInTypeSchemeSimple ts =
@@ -114,6 +122,7 @@ freeVariablesInTypeSchemeSimple ts =
       let vars = Core.typeSchemeVariables ts
           t = Core.typeSchemeBody ts
       in (Sets.difference (freeVariablesInTypeSimple t) (Sets.fromList vars))
+
 -- | Same as freeVariablesInType, but ignores the binding action of lambda types
 freeVariablesInTypeSimple :: Core.Type -> S.Set Core.Name
 freeVariablesInTypeSimple typ =
@@ -123,9 +132,11 @@ freeVariablesInTypeSimple typ =
                 Core.TypeVariable v0 -> Sets.insert v0 types
                 _ -> types
       in (Rewriting.foldOverType Coders.TraversalOrderPre helper Sets.empty typ)
+
 -- | Check whether a variable is free (not bound) in a term
 isFreeVariableInTerm :: Core.Name -> Core.Term -> Bool
 isFreeVariableInTerm v term = Logic.not (Sets.member v (freeVariablesInTerm term))
+
 -- | Recursively replace the type variables of let bindings with the systematic type variables t0, t1, t2, ...
 normalizeTypeVariablesInTerm :: Core.Term -> Core.Term
 normalizeTypeVariablesInTerm term =
@@ -212,6 +223,7 @@ normalizeTypeVariablesInTerm term =
                                   _ -> recurse term2
                     in (Rewriting.rewriteTerm rewrite term0)
       in (rewriteWithSubst ((Maps.empty, Sets.empty), 0) term)
+
 -- | Replace a free variable in a term
 replaceFreeTermVariable :: Core.Name -> Core.Term -> Core.Term -> Core.Term
 replaceFreeTermVariable vold tnew term =
@@ -224,6 +236,7 @@ replaceFreeTermVariable vold tnew term =
                 Core.TermVariable v0 -> Logic.ifElse (Equality.equal v0 vold) tnew (Core.TermVariable v0)
                 _ -> recurse t
       in (Rewriting.rewriteTerm rewrite term)
+
 -- | Replace free occurrences of a name in a type
 replaceFreeTypeVariable :: Core.Name -> Core.Type -> Core.Type -> Core.Type
 replaceFreeTypeVariable v rep typ =
@@ -236,6 +249,7 @@ replaceFreeTypeVariable v rep typ =
                 Core.TypeVariable v0 -> Logic.ifElse (Equality.equal v v0) rep t
                 _ -> recurse t
       in (Rewriting.rewriteType mapExpr typ)
+
 -- | Substitute type variables in a type
 substituteTypeVariables :: M.Map Core.Name Core.Name -> Core.Type -> Core.Type
 substituteTypeVariables subst typ =
@@ -245,6 +259,7 @@ substituteTypeVariables subst typ =
                 Core.TypeVariable v0 -> Core.TypeVariable (Optionals.fromOptional v0 (Maps.lookup v0 subst))
                 _ -> recurse typ2
       in (Rewriting.rewriteType replace typ)
+
 -- | Substitute one variable for another in a term
 substituteVariable :: Core.Name -> Core.Name -> Core.Term -> Core.Term
 substituteVariable from to term =
@@ -255,6 +270,7 @@ substituteVariable from to term =
                 Core.TermLambda v0 -> Logic.ifElse (Equality.equal (Core.lambdaParameter v0) from) term2 (recurse term2)
                 _ -> recurse term2
       in (Rewriting.rewriteTerm replace term)
+
 -- | Substitute multiple variables in a term
 substituteVariables :: M.Map Core.Name Core.Name -> Core.Term -> Core.Term
 substituteVariables subst term =
@@ -265,6 +281,7 @@ substituteVariables subst term =
                 Core.TermLambda v0 -> Optionals.cases (Maps.lookup (Core.lambdaParameter v0) subst) (recurse term2) (\_ -> term2)
                 _ -> recurse term2
       in (Rewriting.rewriteTerm replace term)
+
 -- | Rename all shadowed variables (both lambda parameters and let-bound variables that shadow lambda parameters) in a term.
 unshadowVariables :: Core.Term -> Core.Term
 unshadowVariables term0 =

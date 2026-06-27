@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term decoders for hydra.tabular
 
 module Hydra.Decode.Tabular where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Decode.Relational as Relational
@@ -15,6 +17,7 @@ import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Decoder for hydra.tabular.ColumnType
 columnType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Tabular.ColumnType
 columnType cx raw =
@@ -25,12 +28,14 @@ columnType cx raw =
           Tabular.columnTypeName = field_name,
           Tabular.columnTypeType = field_type}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.tabular.ColumnType")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.tabular.DataRow
 dataRow :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError v) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Tabular.DataRow v)
 dataRow v cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermWrap v0 -> Eithers.map (\b -> Tabular.DataRow b) (ExtractCore.decodeList (ExtractCore.decodeMaybe v) cx (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.tabular.HeaderRow
 headerRow :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Tabular.HeaderRow
 headerRow cx raw =
@@ -41,6 +46,7 @@ headerRow cx raw =
           _ -> Left (Errors.DecodingError "expected string literal")
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) cx (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.tabular.Table
 table :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError v) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Tabular.Table v)
 table v cx raw =
@@ -51,6 +57,7 @@ table v cx raw =
           Tabular.tableHeader = field_header,
           Tabular.tableData = field_data}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.tabular.Table")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.tabular.TableType
 tableType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Tabular.TableType
 tableType cx raw =

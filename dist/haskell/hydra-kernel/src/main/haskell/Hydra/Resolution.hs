@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Type dereference, lookup, requirements, and instantiation
 
 module Hydra.Resolution where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -50,6 +52,7 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
+
 -- | Dereference a type name to get the actual type (Either version)
 dereferenceType :: t0 -> Graph.Graph -> Core.Name -> Either Errors.Error (Maybe Core.Type)
 dereferenceType cx graph name =
@@ -58,6 +61,7 @@ dereferenceType cx graph name =
       in (Optionals.cases mel (Right Nothing) (\el -> Eithers.map Optionals.pure (Eithers.bimap (\_e -> Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "type",
         Errors.unexpectedShapeErrorActual = (Errors.unDecodingError _e)}))) (\_a -> _a) (DecodeCore.type_ graph (Core.bindingTerm el)))))
+
 -- | Test whether a given System F type is polymorphic (i.e., a forall type)
 fTypeIsPolymorphic :: Core.Type -> Bool
 fTypeIsPolymorphic typ =
@@ -65,18 +69,21 @@ fTypeIsPolymorphic typ =
       Core.TypeAnnotated v0 -> fTypeIsPolymorphic (Core.annotatedTypeBody v0)
       Core.TypeForall _ -> True
       _ -> False
+
 -- | Build a map from field name to field term, given a list of fields
 fieldMap :: [Core.Field] -> M.Map Core.Name Core.Term
 fieldMap fields =
 
       let toPair = \f -> (Core.fieldName f, (Core.fieldTerm f))
       in (Maps.fromList (Lists.map toPair fields))
+
 -- | Build a map from field name to field type, given a list of field types
 fieldTypeMap :: [Core.FieldType] -> M.Map Core.Name Core.Type
 fieldTypeMap fields =
 
       let toPair = \f -> (Core.fieldTypeName f, (Core.fieldTypeType f))
       in (Maps.fromList (Lists.map toPair fields))
+
 -- | Get field types from a record or union type (Either version)
 fieldTypes :: t0 -> Graph.Graph -> Core.Type -> Either Errors.Error (M.Map Core.Name Core.Type)
 fieldTypes cx graph t =
@@ -92,6 +99,7 @@ fieldTypes cx graph t =
         _ -> Left (Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
           Errors.unexpectedShapeErrorExpected = "record or union type",
           Errors.unexpectedShapeErrorActual = (ShowCore.type_ t)})))
+
 -- | Find a field type by name in a list of field types
 findFieldType :: t0 -> Core.Name -> [Core.FieldType] -> Either Errors.Error Core.Type
 findFieldType cx fname fields =
@@ -102,6 +110,7 @@ findFieldType cx fname fields =
                     Errors.noMatchingFieldErrorFieldName = fname})))
       in (Logic.ifElse (Lists.null matchingFields) noMatch (Logic.ifElse (Equality.equal (Lists.length matchingFields) 1) (Optionals.cases (Lists.maybeHead matchingFields) noMatch (\ft -> Right (Core.fieldTypeType ft))) (Left (Errors.ErrorExtraction (Errors.ExtractionErrorMultipleFields (Errors.MultipleFieldsError {
         Errors.multipleFieldsErrorFieldName = fname}))))))
+
 -- | Fully strip a type of forall quantifiers, normalizing bound variable names for alpha-equivalence comparison
 fullyStripAndNormalizeType :: Core.Type -> Core.Type
 fullyStripAndNormalizeType typ =
@@ -117,18 +126,21 @@ fullyStripAndNormalizeType typ =
           subst = Pairs.first result
           body = Pairs.second result
       in (Variables.substituteTypeVariables subst body)
+
 -- | Fully strip a type of forall quantifiers
 fullyStripType :: Core.Type -> Core.Type
 fullyStripType typ =
     case (Strip.deannotateType typ) of
       Core.TypeForall v0 -> fullyStripType (Core.forallTypeBody v0)
       _ -> typ
+
 -- | Instantiate a type by replacing all forall-bound type variables with fresh variables, threading InferenceContext
 instantiateType :: Typing.InferenceContext -> Core.Type -> (Core.Type, Typing.InferenceContext)
 instantiateType cx typ =
 
       let result = instantiateTypeScheme cx (typeToTypeScheme typ)
       in (Scoping.typeSchemeToFType (Pairs.first result), (Pairs.second result))
+
 -- | Instantiate a type scheme with fresh variables, threading InferenceContext
 instantiateTypeScheme :: Typing.InferenceContext -> Core.TypeScheme -> (Core.TypeScheme, Typing.InferenceContext)
 instantiateTypeScheme cx scheme =
@@ -147,12 +159,14 @@ instantiateTypeScheme cx scheme =
           Core.typeSchemeBody = (Substitution.substInType subst (Core.typeSchemeBody scheme)),
           Core.typeSchemeConstraints = renamedConstraints},
         cx2)
+
 -- | Apply type arguments to a nominal type
 nominalApplication :: Core.Name -> [Core.Type] -> Core.Type
 nominalApplication tname args =
     Lists.foldl (\t -> \a -> Core.TypeApplication (Core.ApplicationType {
       Core.applicationTypeFunction = t,
       Core.applicationTypeArgument = a})) (Core.TypeVariable tname) args
+
 -- | Require a name to resolve to a record type
 requireRecordType :: t0 -> Graph.Graph -> Core.Name -> Either Errors.Error [Core.FieldType]
 requireRecordType cx graph name =
@@ -162,6 +176,7 @@ requireRecordType cx graph name =
                 Core.TypeRecord v0 -> Just v0
                 _ -> Nothing
       in (requireRowType cx "record type" toRecord graph name)
+
 -- | Require a name to resolve to a row type
 requireRowType :: t0 -> String -> (Core.Type -> Maybe t1) -> Graph.Graph -> Core.Name -> Either Errors.Error t1
 requireRowType cx label getter graph name =
@@ -174,16 +189,19 @@ requireRowType cx label getter graph name =
       in (Eithers.bind (requireType cx graph name) (\t -> Optionals.cases (getter (rawType t)) (Left (Errors.ErrorResolution (Errors.ResolutionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = (Strings.cat2 label " type"),
         Errors.unexpectedShapeErrorActual = (Strings.cat2 (Core.unName name) (Strings.cat2 ": " (ShowCore.type_ t)))})))) (\x -> Right x)))
+
 -- | Look up a schema type and instantiate it, threading InferenceContext
 requireSchemaType :: Typing.InferenceContext -> M.Map Core.Name Core.TypeScheme -> Core.Name -> Either Errors.Error (Core.TypeScheme, Typing.InferenceContext)
 requireSchemaType cx types tname =
     Optionals.cases (Maps.lookup tname types) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchBinding (Errors.NoSuchBindingError {
       Errors.noSuchBindingErrorName = tname})))) (\ts -> Right (instantiateTypeScheme cx (Strip.deannotateTypeSchemeRecursive ts)))
+
 -- | Require a type by name
 requireType :: t0 -> Graph.Graph -> Core.Name -> Either Errors.Error Core.Type
 requireType cx graph name =
     Optionals.cases (Maps.lookup name (Graph.graphSchemaTypes graph)) (Optionals.cases (Maps.lookup name (Graph.graphBoundTypes graph)) (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoSuchBinding (Errors.NoSuchBindingError {
       Errors.noSuchBindingErrorName = name})))) (\ts -> Right (Scoping.typeSchemeToFType ts))) (\ts -> Right (Scoping.typeSchemeToFType ts))
+
 -- | Require a field type from a union type
 requireUnionField :: t0 -> Graph.Graph -> Core.Name -> Core.Name -> Either Errors.Error Core.Type
 requireUnionField cx graph tname fname =
@@ -195,6 +213,7 @@ requireUnionField cx graph tname fname =
                           Errors.noMatchingFieldErrorFieldName = fname})))
                 in (Optionals.cases (Lists.find (\ft -> Equality.equal (Core.fieldTypeName ft) fname) rt) noMatchErr (\ft -> Right (Core.fieldTypeType ft)))
       in (Eithers.bind (requireUnionType cx graph tname) withRowType)
+
 -- | Require a name to resolve to a union type
 requireUnionType :: t0 -> Graph.Graph -> Core.Name -> Either Errors.Error [Core.FieldType]
 requireUnionType cx graph name =
@@ -204,12 +223,14 @@ requireUnionType cx graph name =
                 Core.TypeUnion v0 -> Just v0
                 _ -> Nothing
       in (requireRowType cx "union" toUnion graph name)
+
 -- | Resolve a type, dereferencing type variables
 resolveType :: Graph.Graph -> Core.Type -> Maybe Core.Type
 resolveType graph typ =
     case (Strip.deannotateType typ) of
       Core.TypeVariable v0 -> Optionals.cases (Maps.lookup v0 (Graph.graphSchemaTypes graph)) (Optionals.map (\ts -> Scoping.typeSchemeToFType ts) (Maps.lookup v0 (Graph.graphBoundTypes graph))) (\ts -> Just (Scoping.typeSchemeToFType ts))
       _ -> Just typ
+
 -- | Convert a (System F -style) type to a type scheme
 typeToTypeScheme :: Core.Type -> Core.TypeScheme
 typeToTypeScheme t0 =

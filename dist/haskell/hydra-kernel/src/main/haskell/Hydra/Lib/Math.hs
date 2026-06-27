@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Primitives in the hydra.lib.math module.
 
 module Hydra.Lib.Math where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -31,6 +33,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 abs :: Packaging.PrimitiveDefinition
 abs =
     Packaging.PrimitiveDefinition {
@@ -57,6 +60,7 @@ abs =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 acos :: Packaging.PrimitiveDefinition
 acos =
     Packaging.PrimitiveDefinition {
@@ -83,6 +87,7 @@ acos =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 acosh :: Packaging.PrimitiveDefinition
 acosh =
     Packaging.PrimitiveDefinition {
@@ -109,6 +114,7 @@ acosh =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 add :: Packaging.PrimitiveDefinition
 add =
     Packaging.PrimitiveDefinition {
@@ -139,6 +145,7 @@ add =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 addFloat64 :: Packaging.PrimitiveDefinition
 addFloat64 =
     Packaging.PrimitiveDefinition {
@@ -170,6 +177,7 @@ addFloat64 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 asin :: Packaging.PrimitiveDefinition
 asin =
     Packaging.PrimitiveDefinition {
@@ -196,6 +204,7 @@ asin =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 asinh :: Packaging.PrimitiveDefinition
 asinh =
     Packaging.PrimitiveDefinition {
@@ -221,6 +230,7 @@ asinh =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 atan :: Packaging.PrimitiveDefinition
 atan =
     Packaging.PrimitiveDefinition {
@@ -246,6 +256,7 @@ atan =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 atan2 :: Packaging.PrimitiveDefinition
 atan2 =
     Packaging.PrimitiveDefinition {
@@ -277,6 +288,7 @@ atan2 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 atanh :: Packaging.PrimitiveDefinition
 atanh =
     Packaging.PrimitiveDefinition {
@@ -302,6 +314,7 @@ atanh =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 ceiling :: Packaging.PrimitiveDefinition
 ceiling =
     Packaging.PrimitiveDefinition {
@@ -328,6 +341,7 @@ ceiling =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 cos :: Packaging.PrimitiveDefinition
 cos =
     Packaging.PrimitiveDefinition {
@@ -353,6 +367,7 @@ cos =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 cosh :: Packaging.PrimitiveDefinition
 cosh =
     Packaging.PrimitiveDefinition {
@@ -378,6 +393,7 @@ cosh =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 e :: Packaging.PrimitiveDefinition
 e =
     Packaging.PrimitiveDefinition {
@@ -398,6 +414,7 @@ e =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 even :: Packaging.PrimitiveDefinition
 even =
     Packaging.PrimitiveDefinition {
@@ -438,6 +455,7 @@ even =
                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))}))})),
           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))})))}
+
 exp :: Packaging.PrimitiveDefinition
 exp =
     Packaging.PrimitiveDefinition {
@@ -463,6 +481,7 @@ exp =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 floor :: Packaging.PrimitiveDefinition
 floor =
     Packaging.PrimitiveDefinition {
@@ -489,6 +508,7 @@ floor =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 log :: Packaging.PrimitiveDefinition
 log =
     Packaging.PrimitiveDefinition {
@@ -514,6 +534,7 @@ log =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 logBase :: Packaging.PrimitiveDefinition
 logBase =
     Packaging.PrimitiveDefinition {
@@ -545,6 +566,7 @@ logBase =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 max :: Packaging.PrimitiveDefinition
 max =
     Packaging.PrimitiveDefinition {
@@ -575,6 +597,7 @@ max =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 maybeDiv :: Packaging.PrimitiveDefinition
 maybeDiv =
     Packaging.PrimitiveDefinition {
@@ -607,6 +630,7 @@ maybeDiv =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 maybeMod :: Packaging.PrimitiveDefinition
 maybeMod =
     Packaging.PrimitiveDefinition {
@@ -638,6 +662,7 @@ maybeMod =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 maybePred :: Packaging.PrimitiveDefinition
 maybePred =
     Packaging.PrimitiveDefinition {
@@ -663,6 +688,7 @@ maybePred =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 maybeRem :: Packaging.PrimitiveDefinition
 maybeRem =
     Packaging.PrimitiveDefinition {
@@ -695,6 +721,7 @@ maybeRem =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 maybeSucc :: Packaging.PrimitiveDefinition
 maybeSucc =
     Packaging.PrimitiveDefinition {
@@ -720,6 +747,7 @@ maybeSucc =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 min :: Packaging.PrimitiveDefinition
 min =
     Packaging.PrimitiveDefinition {
@@ -750,6 +778,7 @@ min =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 mul :: Packaging.PrimitiveDefinition
 mul =
     Packaging.PrimitiveDefinition {
@@ -780,6 +809,7 @@ mul =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 mulFloat64 :: Packaging.PrimitiveDefinition
 mulFloat64 =
     Packaging.PrimitiveDefinition {
@@ -811,6 +841,7 @@ mulFloat64 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 negate :: Packaging.PrimitiveDefinition
 negate =
     Packaging.PrimitiveDefinition {
@@ -837,6 +868,7 @@ negate =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 negateFloat64 :: Packaging.PrimitiveDefinition
 negateFloat64 =
     Packaging.PrimitiveDefinition {
@@ -862,6 +894,7 @@ negateFloat64 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 odd :: Packaging.PrimitiveDefinition
 odd =
     Packaging.PrimitiveDefinition {
@@ -894,6 +927,7 @@ odd =
           Core.applicationArgument = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.math.even")),
             Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))}
+
 pi :: Packaging.PrimitiveDefinition
 pi =
     Packaging.PrimitiveDefinition {
@@ -914,6 +948,7 @@ pi =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 pow :: Packaging.PrimitiveDefinition
 pow =
     Packaging.PrimitiveDefinition {
@@ -945,6 +980,7 @@ pow =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 range :: Packaging.PrimitiveDefinition
 range =
     Packaging.PrimitiveDefinition {
@@ -975,6 +1011,7 @@ range =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 round :: Packaging.PrimitiveDefinition
 round =
     Packaging.PrimitiveDefinition {
@@ -1001,6 +1038,7 @@ round =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 roundFloat32 :: Packaging.PrimitiveDefinition
 roundFloat32 =
     Packaging.PrimitiveDefinition {
@@ -1032,6 +1070,7 @@ roundFloat32 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 roundFloat64 :: Packaging.PrimitiveDefinition
 roundFloat64 =
     Packaging.PrimitiveDefinition {
@@ -1063,6 +1102,7 @@ roundFloat64 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 signum :: Packaging.PrimitiveDefinition
 signum =
     Packaging.PrimitiveDefinition {
@@ -1089,6 +1129,7 @@ signum =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 sin :: Packaging.PrimitiveDefinition
 sin =
     Packaging.PrimitiveDefinition {
@@ -1114,6 +1155,7 @@ sin =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 sinh :: Packaging.PrimitiveDefinition
 sinh =
     Packaging.PrimitiveDefinition {
@@ -1139,6 +1181,7 @@ sinh =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 sqrt :: Packaging.PrimitiveDefinition
 sqrt =
     Packaging.PrimitiveDefinition {
@@ -1165,6 +1208,7 @@ sqrt =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 sub :: Packaging.PrimitiveDefinition
 sub =
     Packaging.PrimitiveDefinition {
@@ -1195,6 +1239,7 @@ sub =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 subFloat64 :: Packaging.PrimitiveDefinition
 subFloat64 =
     Packaging.PrimitiveDefinition {
@@ -1226,6 +1271,7 @@ subFloat64 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 tan :: Packaging.PrimitiveDefinition
 tan =
     Packaging.PrimitiveDefinition {
@@ -1251,6 +1297,7 @@ tan =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 tanh :: Packaging.PrimitiveDefinition
 tanh =
     Packaging.PrimitiveDefinition {
@@ -1276,6 +1323,7 @@ tanh =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 truncate :: Packaging.PrimitiveDefinition
 truncate =
     Packaging.PrimitiveDefinition {

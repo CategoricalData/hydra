@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term decoders for hydra.query
 
 module Hydra.Decode.Query where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Errors as Errors
@@ -17,6 +19,7 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Decoder for hydra.query.ComparisonConstraint
 comparisonConstraint :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.ComparisonConstraint
 comparisonConstraint cx raw =
@@ -48,6 +51,7 @@ comparisonConstraint cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.query.Edge
 edge :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Edge
 edge cx raw =
@@ -59,6 +63,7 @@ edge cx raw =
           Query.edgeOut = field_out,
           Query.edgeIn = field_in})))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.query.Edge")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.query.GraphPattern
 graphPattern :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.GraphPattern
 graphPattern cx raw =
@@ -69,6 +74,7 @@ graphPattern cx raw =
           Query.graphPatternGraph = field_graph,
           Query.graphPatternPatterns = field_patterns}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.query.GraphPattern")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.query.Node
 node :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Node
 node cx raw =
@@ -87,6 +93,7 @@ node cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.query.Path
 path :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Path
 path cx raw =
@@ -105,6 +112,7 @@ path cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.query.PathEquation
 pathEquation :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.PathEquation
 pathEquation cx raw =
@@ -115,6 +123,7 @@ pathEquation cx raw =
           Query.pathEquationLeft = field_left,
           Query.pathEquationRight = field_right}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.query.PathEquation")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.query.Pattern
 pattern :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Pattern
 pattern cx raw =
@@ -139,6 +148,7 @@ pattern cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.query.PatternImplication
 patternImplication :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.PatternImplication
 patternImplication cx raw =
@@ -149,6 +159,7 @@ patternImplication cx raw =
           Query.patternImplicationAntecedent = field_antecedent,
           Query.patternImplicationConsequent = field_consequent}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.query.PatternImplication")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.query.Query
 query :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Query
 query cx raw =
@@ -159,6 +170,7 @@ query cx raw =
           Query.queryVariables = field_variables,
           Query.queryPatterns = field_patterns}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.query.Query")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.query.Range
 range :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Range
 range cx raw =
@@ -181,6 +193,7 @@ range cx raw =
           Query.rangeMin = field_min,
           Query.rangeMax = field_max}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.query.Range")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.query.RegexQuantifier
 regexQuantifier :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.RegexQuantifier
 regexQuantifier cx raw =
@@ -221,6 +234,7 @@ regexQuantifier cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.query.RegexSequence
 regexSequence :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.RegexSequence
 regexSequence cx raw =
@@ -231,6 +245,7 @@ regexSequence cx raw =
           Query.regexSequencePath = field_path,
           Query.regexSequenceQuantifier = field_quantifier}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.query.RegexSequence")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.query.Step
 step :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Step
 step cx raw =
@@ -249,6 +264,7 @@ step cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.query.TriplePattern
 triplePattern :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.TriplePattern
 triplePattern cx raw =
@@ -260,6 +276,7 @@ triplePattern cx raw =
           Query.triplePatternPredicate = field_predicate,
           Query.triplePatternObject = field_object})))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.query.TriplePattern")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.query.Variable
 variable :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Query.Variable
 variable cx raw =

@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Inference tests for algebraic data types
 
 module Hydra.Test.Inference.AlgebraicTypes where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -39,6 +41,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
+
 -- | Algebraic data type tests
 allTests :: Testing.TestGroup
 allTests =
@@ -55,6 +58,7 @@ allTests =
         testGroupForPairs,
         testGroupForSets],
       Testing.testGroupCases = []}
+
 testGroupForCollectionPrimitives :: Testing.TestGroup
 testGroupForCollectionPrimitives =
     Testing.TestGroup {
@@ -410,6 +414,7 @@ testGroupForCollectionPrimitives =
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]}]}],
       Testing.testGroupCases = []}
+
 testGroupForEithers :: Testing.TestGroup
 testGroupForEithers =
     Testing.TestGroup {
@@ -634,6 +639,7 @@ testGroupForEithers =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
+
 testGroupForFolds :: Testing.TestGroup
 testGroupForFolds =
     Testing.TestGroup {
@@ -813,6 +819,7 @@ testGroupForFolds =
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]}]}],
       Testing.testGroupCases = []}
+
 testGroupForLists :: Testing.TestGroup
 testGroupForLists =
     Testing.TestGroup {
@@ -955,6 +962,7 @@ testGroupForLists =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
+
 testGroupForMaps :: Testing.TestGroup
 testGroupForMaps =
     Testing.TestGroup {
@@ -1028,6 +1036,7 @@ testGroupForMaps =
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]}
+
 testGroupForOptionals :: Testing.TestGroup
 testGroupForOptionals =
     Testing.TestGroup {
@@ -1058,6 +1067,7 @@ testGroupForOptionals =
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabledForMinimalInference"]}]}
+
 testGroupForPairs :: Testing.TestGroup
 testGroupForPairs =
     Testing.TestGroup {
@@ -1301,6 +1311,7 @@ testGroupForPairs =
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]}]}],
       Testing.testGroupCases = []}
+
 testGroupForSets :: Testing.TestGroup
 testGroupForSets =
     Testing.TestGroup {

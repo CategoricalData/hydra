@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term decoders for hydra.error.file
 
 module Hydra.Decode.Error.File where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.File as DecodeFile
 import qualified Hydra.Error.File as ErrorFile
@@ -17,6 +19,7 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Decoder for hydra.error.file.FileError
 fileError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorFile.FileError
 fileError cx raw =

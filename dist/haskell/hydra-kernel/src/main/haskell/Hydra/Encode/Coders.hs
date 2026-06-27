@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term encoders for hydra.coders
 
 module Hydra.Encode.Coders where
+
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
@@ -12,6 +14,7 @@ import qualified Hydra.Encode.Util as Util
 import qualified Hydra.Encode.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Encoder for hydra.coders.CaseConventions
 caseConventions :: Coders.CaseConventions -> Core.Term
 caseConventions x =
@@ -48,6 +51,7 @@ caseConventions x =
         Core.Field {
           Core.fieldName = (Core.Name "typeVariable"),
           Core.fieldTerm = (Util.caseConvention (Coders.caseConventionsTypeVariable x))}]})
+
 -- | Encoder for hydra.coders.CoderDirection
 coderDirection :: Coders.CoderDirection -> Core.Term
 coderDirection x =
@@ -62,6 +66,7 @@ coderDirection x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "decode"),
           Core.fieldTerm = Core.TermUnit}})
+
 -- | Encoder for hydra.coders.LanguageFeature
 languageFeature :: Coders.LanguageFeature -> Core.Term
 languageFeature x =
@@ -81,12 +86,14 @@ languageFeature x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "nestedPolymorphicLetBindings"),
           Core.fieldTerm = Core.TermUnit}})
+
 -- | Encoder for hydra.coders.LanguageName
 languageName :: Coders.LanguageName -> Core.Term
 languageName x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.coders.LanguageName"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Coders.unLanguageName x))})
+
 -- | Encoder for hydra.coders.TraversalOrder
 traversalOrder :: Coders.TraversalOrder -> Core.Term
 traversalOrder x =

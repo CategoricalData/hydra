@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Graph to type environment conversions
 
 module Hydra.Environment where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -47,6 +49,7 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
+
 -- | Convert a definition to a typed term
 definitionAsTypeApplicationTerm :: Core.Binding -> Either Errors.Error Core.TypeApplicationTerm
 definitionAsTypeApplicationTerm el =
@@ -55,21 +58,25 @@ definitionAsTypeApplicationTerm el =
       Errors.unexpectedShapeErrorActual = "untyped binding"})))) (\ts -> Right (Core.TypeApplicationTerm {
       Core.typeApplicationTermBody = (Core.bindingTerm el),
       Core.typeApplicationTermType = (Core.typeSchemeBody ts)}))
+
 -- | Convert bindings and a body to a let expression
 graphAsLet :: [Core.Binding] -> Core.Term -> Core.Let
 graphAsLet bindings body =
     Core.Let {
       Core.letBindings = bindings,
       Core.letBody = body}
+
 -- | Convert bindings and a body to a term, using let-term duality
 graphAsTerm :: [Core.Binding] -> Core.Term -> Core.Term
 graphAsTerm bindings body = Core.TermLet (graphAsLet bindings body)
+
 -- | Decode a list of type-encoding bindings into a map of named types
 graphAsTypes :: Graph.Graph -> [Core.Binding] -> Either Errors.DecodingError (M.Map Core.Name Core.Type)
 graphAsTypes graph els =
 
       let toPair = \el -> Eithers.map (\typ -> (Core.bindingName el, typ)) (DecodeCore.type_ graph (Core.bindingTerm el))
       in (Eithers.map Maps.fromList (Eithers.mapList toPair els))
+
 -- | Partition a list of definitions into type definitions and term definitions
 partitionDefinitions :: [Packaging.Definition] -> ([Packaging.TypeDefinition], [Packaging.TermDefinition])
 partitionDefinitions defs =
@@ -85,6 +92,7 @@ partitionDefinitions defs =
                     Packaging.DefinitionTerm v0 -> Just v0
                     Packaging.DefinitionPrimitive _ -> Nothing
       in (Optionals.cat (Lists.map getType defs), (Optionals.cat (Lists.map getTerm defs)))
+
 -- | Reorder definitions: types first (with hydra.core.Name first among types), then topologically sorted terms
 reorderDefs :: [Packaging.Definition] -> [Packaging.Definition]
 reorderDefs defs =
@@ -108,6 +116,7 @@ reorderDefs defs =
       in (Lists.concat [
         typeDefs,
         sortedTermDefs])
+
 -- | Convert a schema graph to a typing environment (Either version)
 schemaGraphToTypingEnvironment :: Graph.Graph -> Either Errors.Error (M.Map Core.Name Core.TypeScheme)
 schemaGraphToTypingEnvironment g =
@@ -136,12 +145,14 @@ schemaGraphToTypingEnvironment g =
                       Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
                       Core.typeSchemeConstraints = Nothing})) (Eithers.map (\decoded -> Just (toTypeScheme [] decoded)) (decodeType (Core.bindingTerm el))) (forTerm (Strip.deannotateTerm (Core.bindingTerm el)))))) (\mts -> Right (Optionals.map (\ts -> (Core.bindingName el, ts)) mts)))
       in (Eithers.map (\mpairs -> Maps.fromList (Optionals.cat mpairs)) (Eithers.mapList toPair (Lexical.graphToBindings g)))
+
 -- | Extract the bindings from a let term, or return an empty list for other terms
 termAsBindings :: Core.Term -> [Core.Binding]
 termAsBindings term =
     case (Strip.deannotateTerm term) of
       Core.TermLet v0 -> Core.letBindings v0
       _ -> []
+
 -- | Encode a map of named types to a list of bindings
 typesToDefinitions :: M.Map Core.Name Core.Type -> [Core.Binding]
 typesToDefinitions typeMap =
@@ -154,18 +165,21 @@ typesToDefinitions typeMap =
                   Core.bindingTerm = (EncodeCore.type_ (Pairs.second pair)),
                   Core.bindingTypeScheme = Nothing}
       in (Lists.map toElement (Maps.toList typeMap))
+
 -- | Execute a computation in the context of a lambda body, extending the type context with the lambda parameter
 withLambdaContext :: (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t1) -> t0 -> Core.Lambda -> (t1 -> t2) -> t2
 withLambdaContext getContext setContext env lam body =
 
       let newContext = Scoping.extendGraphForLambda (getContext env) lam
       in (body (setContext newContext env))
+
 -- | Execute a computation in the context of a let body, extending the type context with the let bindings
 withLetContext :: (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t1) -> (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> t0 -> Core.Let -> (t1 -> t2) -> t2
 withLetContext getContext setContext forBinding env letrec body =
 
       let newContext = Scoping.extendGraphForLet forBinding (getContext env) letrec
       in (body (setContext newContext env))
+
 -- | Execute a computation in the context of a type lambda body, extending the type context with the type parameter
 withTypeLambdaContext :: (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t1) -> t0 -> Core.TypeLambda -> (t1 -> t2) -> t2
 withTypeLambdaContext getContext setContext env tlam body =

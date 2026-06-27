@@ -3279,121 +3279,147 @@
                                                                                   "let": {
                                                                                     "bindings": [
                                                                                       {
-                                                                                        "name": "padlEffective",
+                                                                                        "name": "padlIsNewline",
                                                                                         "term": {
                                                                                           "application": {
                                                                                             "function": {
-                                                                                              "application": {
-                                                                                                "function": {
-                                                                                                  "application": {
-                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}},
-                                                                                                    "argument": {
-                                                                                                      "application": {
-                                                                                                        "function": {
-                                                                                                          "application": {
-                                                                                                            "function": {"variable": "hydra.lib.logic.and"},
-                                                                                                            "argument": {
-                                                                                                              "application": {
-                                                                                                                "function": {
-                                                                                                                  "application": {
-                                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}},
-                                                                                                                    "argument": {"variable": "sym"}}},
-                                                                                                                "argument": {"literal": {"string": ""}}}}}},
-                                                                                                        "argument": {
-                                                                                                          "application": {
-                                                                                                            "function": {"application": {"function": {"variable": "hydra.lib.logic.or"}, "argument": {"variable": "padrIsNewline"}}},
-                                                                                                            "argument": {
-                                                                                                              "application": {
-                                                                                                                "function": {
-                                                                                                                  "application": {
-                                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}},
-                                                                                                                    "argument": {"variable": "rhs"}}},
-                                                                                                                "argument": {"literal": {"string": ""}}}}}}}}}},
-                                                                                                "argument": {"literal": {"string": ""}}}},
-                                                                                            "argument": {"application": {"function": {"variable": "pad"}, "argument": {"variable": "padl"}}}}},
-                                                                                        "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
+                                                                                              "cases": {
+                                                                                                "typeName": "hydra.ast.Ws",
+                                                                                                "default": {"literal": {"boolean": false}},
+                                                                                                "cases": [
+                                                                                                  {
+                                                                                                    "name": "break",
+                                                                                                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"boolean": true}}}}},
+                                                                                                  {
+                                                                                                    "name": "doubleBreak",
+                                                                                                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"boolean": true}}}}}]}},
+                                                                                            "argument": {"variable": "padl"}}},
+                                                                                        "typeScheme": {"variables": [], "body": {"literal": {"boolean": {}}}}}],
                                                                                     "body": {
                                                                                       "let": {
                                                                                         "bindings": [
                                                                                           {
-                                                                                            "name": "padrPad",
-                                                                                            "term": {"application": {"function": {"variable": "pad"}, "argument": {"variable": "padr"}}},
+                                                                                            "name": "padlEffective",
+                                                                                            "term": {
+                                                                                              "application": {
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}},
+                                                                                                        "argument": {
+                                                                                                          "application": {
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "function": {"variable": "hydra.lib.logic.and"},
+                                                                                                                "argument": {"application": {"function": {"variable": "hydra.lib.logic.not"}, "argument": {"variable": "padlIsNewline"}}}}},
+                                                                                                            "argument": {
+                                                                                                              "application": {
+                                                                                                                "function": {
+                                                                                                                  "application": {
+                                                                                                                    "function": {"variable": "hydra.lib.logic.and"},
+                                                                                                                    "argument": {
+                                                                                                                      "application": {
+                                                                                                                        "function": {
+                                                                                                                          "application": {
+                                                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}},
+                                                                                                                            "argument": {"variable": "sym"}}},
+                                                                                                                        "argument": {"literal": {"string": ""}}}}}},
+                                                                                                                "argument": {
+                                                                                                                  "application": {
+                                                                                                                    "function": {"application": {"function": {"variable": "hydra.lib.logic.or"}, "argument": {"variable": "padrIsNewline"}}},
+                                                                                                                    "argument": {
+                                                                                                                      "application": {
+                                                                                                                        "function": {
+                                                                                                                          "application": {
+                                                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}},
+                                                                                                                            "argument": {"variable": "rhs"}}},
+                                                                                                                        "argument": {"literal": {"string": ""}}}}}}}}}}}},
+                                                                                                    "argument": {"literal": {"string": ""}}}},
+                                                                                                "argument": {"application": {"function": {"variable": "pad"}, "argument": {"variable": "padl"}}}}},
                                                                                             "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
                                                                                         "body": {
                                                                                           "let": {
                                                                                             "bindings": [
                                                                                               {
-                                                                                                "name": "rhsStartsWithNewline",
-                                                                                                "term": {
-                                                                                                  "application": {
-                                                                                                    "function": {
-                                                                                                      "application": {
-                                                                                                        "function": {
-                                                                                                          "application": {
-                                                                                                            "function": {
-                                                                                                              "typeApplication": {
-                                                                                                                "body": {
-                                                                                                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                                                "type": {"literal": {"boolean": {}}}}},
-                                                                                                            "argument": {
-                                                                                                              "application": {
-                                                                                                                "function": {
-                                                                                                                  "application": {"function": {"variable": "hydra.lib.strings.maybeCharAt"}, "argument": {"literal": {"integer": {"int32": 0}}}}},
-                                                                                                                "argument": {"variable": "rhs"}}}}},
-                                                                                                        "argument": {"literal": {"boolean": false}}}},
-                                                                                                    "argument": {
-                                                                                                      "lambda": {
-                                                                                                        "parameter": "c",
-                                                                                                        "domain": {"literal": {"integer": {"int32": {}}}},
-                                                                                                        "body": {
-                                                                                                          "application": {
-                                                                                                            "function": {
-                                                                                                              "application": {
-                                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                                                "argument": {"variable": "c"}}},
-                                                                                                            "argument": {"literal": {"integer": {"int32": 10}}}}}}}}},
-                                                                                                "typeScheme": {"variables": [], "body": {"literal": {"boolean": {}}}}}],
+                                                                                                "name": "padrPad",
+                                                                                                "term": {"application": {"function": {"variable": "pad"}, "argument": {"variable": "padr"}}},
+                                                                                                "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
                                                                                             "body": {
                                                                                               "let": {
                                                                                                 "bindings": [
                                                                                                   {
-                                                                                                    "name": "padrEffective",
+                                                                                                    "name": "rhsStartsWithNewline",
                                                                                                     "term": {
                                                                                                       "application": {
                                                                                                         "function": {
                                                                                                           "application": {
                                                                                                             "function": {
                                                                                                               "application": {
-                                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}},
-                                                                                                                "argument": {
-                                                                                                                  "application": {
-                                                                                                                    "function": {"application": {"function": {"variable": "hydra.lib.logic.and"}, "argument": {"variable": "rhsStartsWithNewline"}}},
-                                                                                                                    "argument": {"application": {"function": {"variable": "hydra.lib.logic.not"}, "argument": {"variable": "padrIsNewline"}}}}}}},
-                                                                                                            "argument": {"literal": {"string": ""}}}},
-                                                                                                        "argument": {"variable": "padrPad"}}},
-                                                                                                    "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
-                                                                                                "body": {
-                                                                                                  "application": {
-                                                                                                    "function": {
-                                                                                                      "application": {
-                                                                                                        "function": {"variable": "hydra.lib.strings.cat2"},
-                                                                                                        "argument": {
-                                                                                                          "application": {
-                                                                                                            "function": {
-                                                                                                              "application": {
-                                                                                                                "function": {"variable": "hydra.lib.strings.cat2"},
+                                                                                                                "function": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {
+                                                                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                                                    "type": {"literal": {"boolean": {}}}}},
                                                                                                                 "argument": {
                                                                                                                   "application": {
                                                                                                                     "function": {
+                                                                                                                      "application": {"function": {"variable": "hydra.lib.strings.maybeCharAt"}, "argument": {"literal": {"integer": {"int32": 0}}}}},
+                                                                                                                    "argument": {"variable": "rhs"}}}}},
+                                                                                                            "argument": {"literal": {"boolean": false}}}},
+                                                                                                        "argument": {
+                                                                                                          "lambda": {
+                                                                                                            "parameter": "c",
+                                                                                                            "domain": {"literal": {"integer": {"int32": {}}}},
+                                                                                                            "body": {
+                                                                                                              "application": {
+                                                                                                                "function": {
+                                                                                                                  "application": {
+                                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                                                    "argument": {"variable": "c"}}},
+                                                                                                                "argument": {"literal": {"integer": {"int32": 10}}}}}}}}},
+                                                                                                    "typeScheme": {"variables": [], "body": {"literal": {"boolean": {}}}}}],
+                                                                                                "body": {
+                                                                                                  "let": {
+                                                                                                    "bindings": [
+                                                                                                      {
+                                                                                                        "name": "padrEffective",
+                                                                                                        "term": {
+                                                                                                          "application": {
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "function": {
+                                                                                                                  "application": {
+                                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}},
+                                                                                                                    "argument": {
                                                                                                                       "application": {
-                                                                                                                        "function": {"variable": "hydra.lib.strings.cat2"},
-                                                                                                                        "argument": {
+                                                                                                                        "function": {"application": {"function": {"variable": "hydra.lib.logic.and"}, "argument": {"variable": "rhsStartsWithNewline"}}},
+                                                                                                                        "argument": {"application": {"function": {"variable": "hydra.lib.logic.not"}, "argument": {"variable": "padrIsNewline"}}}}}}},
+                                                                                                                "argument": {"literal": {"string": ""}}}},
+                                                                                                            "argument": {"variable": "padrPad"}}},
+                                                                                                        "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
+                                                                                                    "body": {
+                                                                                                      "application": {
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "function": {"variable": "hydra.lib.strings.cat2"},
+                                                                                                            "argument": {
+                                                                                                              "application": {
+                                                                                                                "function": {
+                                                                                                                  "application": {
+                                                                                                                    "function": {"variable": "hydra.lib.strings.cat2"},
+                                                                                                                    "argument": {
+                                                                                                                      "application": {
+                                                                                                                        "function": {
                                                                                                                           "application": {
-                                                                                                                            "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "lhs"}}},
-                                                                                                                            "argument": {"variable": "padlEffective"}}}}},
-                                                                                                                    "argument": {"variable": "sym"}}}}},
-                                                                                                            "argument": {"variable": "padrEffective"}}}}},
-                                                                                                    "argument": {"variable": "rhs"}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
+                                                                                                                            "function": {"variable": "hydra.lib.strings.cat2"},
+                                                                                                                            "argument": {
+                                                                                                                              "application": {
+                                                                                                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "lhs"}}},
+                                                                                                                                "argument": {"variable": "padlEffective"}}}}},
+                                                                                                                        "argument": {"variable": "sym"}}}}},
+                                                                                                                "argument": {"variable": "padrEffective"}}}}},
+                                                                                                        "argument": {"variable": "rhs"}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
                                   {
                                     "name": "brackets",
                                     "handler": {

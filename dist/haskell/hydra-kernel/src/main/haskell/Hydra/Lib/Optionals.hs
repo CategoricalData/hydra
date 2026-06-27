@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Primitives in the hydra.lib.optionals module.
 
 module Hydra.Lib.Optionals where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -31,6 +33,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 apply :: Packaging.PrimitiveDefinition
 apply =
     Packaging.PrimitiveDefinition {
@@ -92,6 +95,7 @@ apply =
                       Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "mx"))}))}))}))}))})))}
+
 bind :: Packaging.PrimitiveDefinition
 bind =
     Packaging.PrimitiveDefinition {
@@ -143,6 +147,7 @@ bind =
                 Core.applicationArgument = (Core.TermVariable (Core.Name "m"))})),
               Core.applicationArgument = (Core.TermOptional Nothing)})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))})))}
+
 cases :: Packaging.PrimitiveDefinition
 cases =
     Packaging.PrimitiveDefinition {
@@ -187,6 +192,7 @@ cases =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 cat :: Packaging.PrimitiveDefinition
 cat =
     Packaging.PrimitiveDefinition {
@@ -243,6 +249,7 @@ cat =
                         Core.applicationArgument = (Core.TermVariable (Core.Name "acc"))}))}))}))}))}))})),
             Core.applicationArgument = (Core.TermList [])})),
           Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))})))}
+
 compose :: Packaging.PrimitiveDefinition
 compose =
     Packaging.PrimitiveDefinition {
@@ -307,6 +314,7 @@ compose =
                   Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "g"))}))}))}))})))}
+
 fromOptional :: Packaging.PrimitiveDefinition
 fromOptional =
     Packaging.PrimitiveDefinition {
@@ -355,6 +363,7 @@ fromOptional =
               Core.lambdaParameter = (Core.Name "x"),
               Core.lambdaDomain = Nothing,
               Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))}))}))})))}
+
 isGiven :: Packaging.PrimitiveDefinition
 isGiven =
     Packaging.PrimitiveDefinition {
@@ -395,6 +404,7 @@ isGiven =
             Core.lambdaParameter = (Core.Name "_"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean True))}))}))})))}
+
 isNone :: Packaging.PrimitiveDefinition
 isNone =
     Packaging.PrimitiveDefinition {
@@ -435,6 +445,7 @@ isNone =
             Core.lambdaParameter = (Core.Name "_"),
             Core.lambdaDomain = Nothing,
             Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean False))}))}))})))}
+
 map :: Packaging.PrimitiveDefinition
 map =
     Packaging.PrimitiveDefinition {
@@ -491,6 +502,7 @@ map =
               Core.lambdaBody = (Core.TermOptional (Just (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))))}))}))}))})))}
+
 mapOptional :: Packaging.PrimitiveDefinition
 mapOptional =
     Packaging.PrimitiveDefinition {
@@ -541,6 +553,7 @@ mapOptional =
                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.map")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "f"))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}))}))})))}
+
 pure :: Packaging.PrimitiveDefinition
 pure =
     Packaging.PrimitiveDefinition {
@@ -572,6 +585,7 @@ pure =
         Core.lambdaParameter = (Core.Name "x"),
         Core.lambdaDomain = Nothing,
         Core.lambdaBody = (Core.TermOptional (Just (Core.TermVariable (Core.Name "x"))))})))}
+
 toList :: Packaging.PrimitiveDefinition
 toList =
     Packaging.PrimitiveDefinition {

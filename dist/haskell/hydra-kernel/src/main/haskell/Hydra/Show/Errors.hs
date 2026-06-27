@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | String representations of hydra.error types
 
 module Hydra.Show.Errors where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -40,6 +42,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Show a checking error as a string
 checkingError :: Checking.CheckingError -> String
 checkingError ce =
@@ -54,9 +57,11 @@ checkingError ce =
       Checking.CheckingErrorUnsupportedTermVariant v0 -> unsupportedTermVariantError v0
       Checking.CheckingErrorUntypedLambda v0 -> untypedLambdaError v0
       Checking.CheckingErrorUntypedLetBinding v0 -> untypedLetBindingError v0
+
 -- | Show a decoding error as a string
 decodingError :: Errors.DecodingError -> String
 decodingError de = Strings.cat2 "decoding error: " (Errors.unDecodingError de)
+
 -- | Show an error as a string
 error :: Errors.Error -> String
 error e =
@@ -75,12 +80,14 @@ error e =
       Errors.ErrorUnexpectedTermVariant v0 -> ShowErrorCore.unexpectedTermVariantError v0
       Errors.ErrorUnexpectedTypeVariant v0 -> ShowErrorCore.unexpectedTypeVariantError v0
       Errors.ErrorUnification v0 -> unificationError v0
+
 -- | Show an incorrect unification error as a string
 incorrectUnificationError :: Checking.IncorrectUnificationError -> String
 incorrectUnificationError e =
 
       let subst = Checking.incorrectUnificationErrorSubstitution e
       in (Strings.cat2 "incorrect unification: " (ShowTyping.typeSubst subst))
+
 -- | Show a not-a-forall-type error as a string
 notAForallTypeError :: Checking.NotAForallTypeError -> String
 notAForallTypeError e =
@@ -94,15 +101,18 @@ notAForallTypeError e =
         (Literals.showInt32 (Lists.length args)),
         " type argument(s): ",
         (Formatting.showList ShowCore.type_ args)])
+
 -- | Show a not-a-function-type error as a string
 notAFunctionTypeError :: Checking.NotAFunctionTypeError -> String
 notAFunctionTypeError e =
 
       let typ = Checking.notAFunctionTypeErrorType e
       in (Strings.cat2 "not a function type: " (ShowCore.type_ typ))
+
 -- | Show an other error as a string
 otherError :: Errors.OtherError -> String
 otherError oe = Errors.unOtherError oe
+
 -- | Show a resolution error as a string, including the offending name or shape
 resolutionError :: Errors.ResolutionError -> String
 resolutionError re =
@@ -116,6 +126,7 @@ resolutionError re =
         (Errors.unexpectedShapeErrorExpected v0),
         " but got ",
         (Errors.unexpectedShapeErrorActual v0)]
+
 -- | Show a type arity mismatch error as a string
 typeArityMismatchError :: Checking.TypeArityMismatchError -> String
 typeArityMismatchError e =
@@ -133,6 +144,7 @@ typeArityMismatchError e =
         (Literals.showInt32 actual),
         "): ",
         (Formatting.showList ShowCore.type_ args)])
+
 -- | Show a type mismatch error as a string
 typeMismatchError :: Checking.TypeMismatchError -> String
 typeMismatchError e =
@@ -144,6 +156,7 @@ typeMismatchError e =
         (ShowCore.type_ expected),
         " but found ",
         (ShowCore.type_ actual)])
+
 -- | Show an unbound type variables error as a string
 unboundTypeVariablesError :: Checking.UnboundTypeVariablesError -> String
 unboundTypeVariablesError e =
@@ -155,6 +168,7 @@ unboundTypeVariablesError e =
         (Strings.intercalate ", " (Lists.map Core.unName (Sets.toList vars))),
         "} in type ",
         (ShowCore.type_ typ)])
+
 -- | Show an unequal types error as a string
 unequalTypesError :: Checking.UnequalTypesError -> String
 unequalTypesError e =
@@ -166,6 +180,7 @@ unequalTypesError e =
         (Formatting.showList ShowCore.type_ types),
         " in ",
         desc])
+
 -- | Show a unification error as a string
 unificationError :: Errors.UnificationError -> String
 unificationError e =
@@ -180,13 +195,16 @@ unificationError e =
         (ShowCore.type_ rt),
         ": ",
         msg])
+
 -- | Show an unsupported term variant error as a string
 unsupportedTermVariantError :: Checking.UnsupportedTermVariantError -> String
 unsupportedTermVariantError e =
     Strings.cat2 "unsupported term variant: " (ShowVariants.termVariant (Checking.unsupportedTermVariantErrorTermVariant e))
+
 -- | Show an untyped lambda error as a string
 untypedLambdaError :: t0 -> String
 untypedLambdaError _ = "untyped lambda"
+
 -- | Show an untyped let binding error as a string
 untypedLetBindingError :: Checking.UntypedLetBindingError -> String
 untypedLetBindingError e =

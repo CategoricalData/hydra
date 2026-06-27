@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | DSL functions for hydra.system
 
 module Hydra.Dsl.System where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Dsl.File as DslFile
@@ -12,6 +14,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.ByteString as B
 import qualified Data.Map as M
+
 -- | DSL constructor for hydra.system.Command
 command :: Typed.TypedTerm File.FilePath -> Typed.TypedTerm [String] -> Typed.TypedTerm (Maybe File.FilePath) -> Typed.TypedTerm (Maybe (M.Map System.EnvironmentVariable String)) -> Typed.TypedTerm System.Command
 command program arguments workingDirectory environment =
@@ -30,6 +33,7 @@ command program arguments workingDirectory environment =
         Core.Field {
           Core.fieldName = (Core.Name "environment"),
           Core.fieldTerm = (Typed.unTypedTerm environment)}]}))
+
 -- | DSL accessor for the arguments field of hydra.system.Command
 commandArguments :: Typed.TypedTerm System.Command -> Typed.TypedTerm [String]
 commandArguments x =
@@ -38,6 +42,7 @@ commandArguments x =
         Core.projectionTypeName = (Core.Name "hydra.system.Command"),
         Core.projectionFieldName = (Core.Name "arguments")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the environment field of hydra.system.Command
 commandEnvironment :: Typed.TypedTerm System.Command -> Typed.TypedTerm (Maybe (M.Map System.EnvironmentVariable String))
 commandEnvironment x =
@@ -46,6 +51,7 @@ commandEnvironment x =
         Core.projectionTypeName = (Core.Name "hydra.system.Command"),
         Core.projectionFieldName = (Core.Name "environment")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the program field of hydra.system.Command
 commandProgram :: Typed.TypedTerm System.Command -> Typed.TypedTerm File.FilePath
 commandProgram x =
@@ -54,6 +60,7 @@ commandProgram x =
         Core.projectionTypeName = (Core.Name "hydra.system.Command"),
         Core.projectionFieldName = (Core.Name "program")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the arguments field of hydra.system.Command
 commandWithArguments :: Typed.TypedTerm System.Command -> Typed.TypedTerm [String] -> Typed.TypedTerm System.Command
 commandWithArguments original newVal =
@@ -84,6 +91,7 @@ commandWithArguments original newVal =
               Core.projectionTypeName = (Core.Name "hydra.system.Command"),
               Core.projectionFieldName = (Core.Name "environment")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the environment field of hydra.system.Command
 commandWithEnvironment :: Typed.TypedTerm System.Command -> Typed.TypedTerm (Maybe (M.Map System.EnvironmentVariable String)) -> Typed.TypedTerm System.Command
 commandWithEnvironment original newVal =
@@ -114,6 +122,7 @@ commandWithEnvironment original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "environment"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the program field of hydra.system.Command
 commandWithProgram :: Typed.TypedTerm System.Command -> Typed.TypedTerm File.FilePath -> Typed.TypedTerm System.Command
 commandWithProgram original newVal =
@@ -144,6 +153,7 @@ commandWithProgram original newVal =
               Core.projectionTypeName = (Core.Name "hydra.system.Command"),
               Core.projectionFieldName = (Core.Name "environment")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the workingDirectory field of hydra.system.Command
 commandWithWorkingDirectory :: Typed.TypedTerm System.Command -> Typed.TypedTerm (Maybe File.FilePath) -> Typed.TypedTerm System.Command
 commandWithWorkingDirectory original newVal =
@@ -174,6 +184,7 @@ commandWithWorkingDirectory original newVal =
               Core.projectionTypeName = (Core.Name "hydra.system.Command"),
               Core.projectionFieldName = (Core.Name "environment")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL accessor for the workingDirectory field of hydra.system.Command
 commandWorkingDirectory :: Typed.TypedTerm System.Command -> Typed.TypedTerm (Maybe File.FilePath)
 commandWorkingDirectory x =
@@ -182,12 +193,14 @@ commandWorkingDirectory x =
         Core.projectionTypeName = (Core.Name "hydra.system.Command"),
         Core.projectionFieldName = (Core.Name "workingDirectory")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL constructor for the hydra.system.EnvironmentVariable wrapper
 environmentVariable :: Typed.TypedTerm String -> Typed.TypedTerm System.EnvironmentVariable
 environmentVariable x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.system.EnvironmentVariable"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
 -- | DSL constructor for hydra.system.ProcessResult
 processResult :: Typed.TypedTerm System.StatusCode -> Typed.TypedTerm B.ByteString -> Typed.TypedTerm B.ByteString -> Typed.TypedTerm System.ProcessResult
 processResult exitCode stdout stderr =
@@ -203,6 +216,7 @@ processResult exitCode stdout stderr =
         Core.Field {
           Core.fieldName = (Core.Name "stderr"),
           Core.fieldTerm = (Typed.unTypedTerm stderr)}]}))
+
 -- | DSL accessor for the exitCode field of hydra.system.ProcessResult
 processResultExitCode :: Typed.TypedTerm System.ProcessResult -> Typed.TypedTerm System.StatusCode
 processResultExitCode x =
@@ -211,6 +225,7 @@ processResultExitCode x =
         Core.projectionTypeName = (Core.Name "hydra.system.ProcessResult"),
         Core.projectionFieldName = (Core.Name "exitCode")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the stderr field of hydra.system.ProcessResult
 processResultStderr :: Typed.TypedTerm System.ProcessResult -> Typed.TypedTerm B.ByteString
 processResultStderr x =
@@ -219,6 +234,7 @@ processResultStderr x =
         Core.projectionTypeName = (Core.Name "hydra.system.ProcessResult"),
         Core.projectionFieldName = (Core.Name "stderr")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the stdout field of hydra.system.ProcessResult
 processResultStdout :: Typed.TypedTerm System.ProcessResult -> Typed.TypedTerm B.ByteString
 processResultStdout x =
@@ -227,6 +243,7 @@ processResultStdout x =
         Core.projectionTypeName = (Core.Name "hydra.system.ProcessResult"),
         Core.projectionFieldName = (Core.Name "stdout")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the exitCode field of hydra.system.ProcessResult
 processResultWithExitCode :: Typed.TypedTerm System.ProcessResult -> Typed.TypedTerm System.StatusCode -> Typed.TypedTerm System.ProcessResult
 processResultWithExitCode original newVal =
@@ -250,6 +267,7 @@ processResultWithExitCode original newVal =
               Core.projectionTypeName = (Core.Name "hydra.system.ProcessResult"),
               Core.projectionFieldName = (Core.Name "stderr")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the stderr field of hydra.system.ProcessResult
 processResultWithStderr :: Typed.TypedTerm System.ProcessResult -> Typed.TypedTerm B.ByteString -> Typed.TypedTerm System.ProcessResult
 processResultWithStderr original newVal =
@@ -273,6 +291,7 @@ processResultWithStderr original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "stderr"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the stdout field of hydra.system.ProcessResult
 processResultWithStdout :: Typed.TypedTerm System.ProcessResult -> Typed.TypedTerm B.ByteString -> Typed.TypedTerm System.ProcessResult
 processResultWithStdout original newVal =
@@ -296,18 +315,21 @@ processResultWithStdout original newVal =
               Core.projectionTypeName = (Core.Name "hydra.system.ProcessResult"),
               Core.projectionFieldName = (Core.Name "stderr")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for the hydra.system.StatusCode wrapper
 statusCode :: Typed.TypedTerm Int -> Typed.TypedTerm System.StatusCode
 statusCode x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.system.StatusCode"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the body of hydra.system.EnvironmentVariable
 unEnvironmentVariable :: Typed.TypedTerm System.EnvironmentVariable -> Typed.TypedTerm String
 unEnvironmentVariable x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.system.EnvironmentVariable")),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the body of hydra.system.StatusCode
 unStatusCode :: Typed.TypedTerm System.StatusCode -> Typed.TypedTerm Int
 unStatusCode x =

@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | DSL functions for hydra.lib.chars
 
 module Hydra.Dsl.Lib.Chars where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -57,36 +59,42 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | DSL reference to hydra.lib.chars.isAlphaNum
 isAlphaNum :: Typed.TypedTerm Int -> Typed.TypedTerm Bool
 isAlphaNum arg0 =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.chars.isAlphaNum")),
       Core.applicationArgument = (Typed.unTypedTerm arg0)}))
+
 -- | DSL reference to hydra.lib.chars.isLower
 isLower :: Typed.TypedTerm Int -> Typed.TypedTerm Bool
 isLower arg0 =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.chars.isLower")),
       Core.applicationArgument = (Typed.unTypedTerm arg0)}))
+
 -- | DSL reference to hydra.lib.chars.isSpace
 isSpace :: Typed.TypedTerm Int -> Typed.TypedTerm Bool
 isSpace arg0 =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.chars.isSpace")),
       Core.applicationArgument = (Typed.unTypedTerm arg0)}))
+
 -- | DSL reference to hydra.lib.chars.isUpper
 isUpper :: Typed.TypedTerm Int -> Typed.TypedTerm Bool
 isUpper arg0 =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.chars.isUpper")),
       Core.applicationArgument = (Typed.unTypedTerm arg0)}))
+
 -- | DSL reference to hydra.lib.chars.toLower
 toLower :: Typed.TypedTerm Int -> Typed.TypedTerm Int
 toLower arg0 =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.chars.toLower")),
       Core.applicationArgument = (Typed.unTypedTerm arg0)}))
+
 -- | DSL reference to hydra.lib.chars.toUpper
 toUpper :: Typed.TypedTerm Int -> Typed.TypedTerm Int
 toUpper arg0 =

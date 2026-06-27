@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Validation functions for modules and packages
 
 module Hydra.Validate.Packaging where
+
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
@@ -44,6 +46,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Append a rule-tagged InvalidModuleError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds.
 appendFindingModule :: Validation.ValidationProfile -> Validation.ValidationResult t0 -> Maybe (Core.Name, t0) -> Validation.ValidationResult t0
 appendFindingModule p acc finding =
@@ -57,6 +60,7 @@ appendFindingModule p acc finding =
         Validation.validationResultWarnings = wrns}) acc) (Logic.ifElse (Sets.member ruleName (Validation.validationProfileWarningRules p)) (Logic.ifElse (Equality.lt (Lists.length wrns) (Validation.validationProfileMaxWarnings p)) (Validation.ValidationResult {
         Validation.validationResultErrors = errs,
         Validation.validationResultWarnings = (Lists.concat2 wrns (Lists.singleton payload))}) acc) acc)))
+
 -- | Append a rule-tagged InvalidPackageError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds.
 appendFindingPackage :: Validation.ValidationProfile -> Validation.ValidationResult t0 -> Maybe (Core.Name, t0) -> Validation.ValidationResult t0
 appendFindingPackage p acc finding =
@@ -70,6 +74,7 @@ appendFindingPackage p acc finding =
         Validation.validationResultWarnings = wrns}) acc) (Logic.ifElse (Sets.member ruleName (Validation.validationProfileWarningRules p)) (Logic.ifElse (Equality.lt (Lists.length wrns) (Validation.validationProfileMaxWarnings p)) (Validation.ValidationResult {
         Validation.validationResultErrors = errs,
         Validation.validationResultWarnings = (Lists.concat2 wrns (Lists.singleton payload))}) acc) acc)))
+
 -- | Check for module namespaces that conflict when mapped to target language paths
 checkConflictingModuleNames :: Packaging.Package -> Maybe ErrorPackaging.InvalidPackageError
 checkConflictingModuleNames pkg =
@@ -88,6 +93,7 @@ checkConflictingModuleNames pkg =
                       ErrorPackaging.conflictingModuleNameErrorFirst = first,
                       ErrorPackaging.conflictingModuleNameErrorSecond = ns}))))))) (\_ -> acc))) (Maps.empty, Nothing) (Packaging.packageModules pkg)
       in (Pairs.second result)
+
 -- | Check for union variant names that, when mapped to constructor names, conflict with other type definitions
 checkConflictingVariantNames :: Packaging.Module -> Maybe ErrorPackaging.InvalidModuleError
 checkConflictingVariantNames mod =
@@ -112,6 +118,7 @@ checkConflictingVariantNames mod =
                 ErrorPackaging.conflictingVariantNameErrorConflictingName = (Core.Name constructorName)}))) Nothing)) (\_ -> innerAcc)) Nothing v1
             _ -> Nothing
         _ -> Nothing) (\_ -> acc)) Nothing defs)
+
 -- | Check that every top-level definition is wrapped in a description annotation
 checkDefinitionDocumentation :: Packaging.Module -> Maybe ErrorPackaging.InvalidModuleError
 checkDefinitionDocumentation mod =
@@ -136,6 +143,7 @@ checkDefinitionDocumentation mod =
         in (Logic.ifElse documented Nothing (Just (ErrorPackaging.InvalidModuleErrorMissingDocumentation (ErrorPackaging.MissingDocumentationError {
           ErrorPackaging.missingDocumentationErrorModuleName = ns,
           ErrorPackaging.missingDocumentationErrorName = name}))))) (\_ -> acc)) Nothing (Packaging.moduleDefinitions mod))
+
 -- | Check that all definition names in a module have the module's name as a prefix
 checkDefinitionModuleNames :: Packaging.Module -> Maybe ErrorPackaging.InvalidModuleError
 checkDefinitionModuleNames mod =
@@ -150,6 +158,7 @@ checkDefinitionModuleNames mod =
         in (Logic.ifElse (Equality.equal (Strings.fromList namePrefix) prefix) Nothing (Just (ErrorPackaging.InvalidModuleErrorDefinitionNotInModuleName (ErrorPackaging.DefinitionNotInModuleNameError {
           ErrorPackaging.definitionNotInModuleNameErrorModuleName = ns,
           ErrorPackaging.definitionNotInModuleNameErrorName = name}))))) (\_ -> acc)) Nothing (Packaging.moduleDefinitions mod))
+
 -- | Check that term definitions have camelCase local names and type definitions have PascalCase local names
 checkDefinitionNameConvention :: Packaging.Module -> Maybe ErrorPackaging.InvalidModuleError
 checkDefinitionNameConvention mod =
@@ -174,6 +183,7 @@ checkDefinitionNameConvention mod =
           ErrorPackaging.invalidDefinitionNameErrorModuleName = ns,
           ErrorPackaging.invalidDefinitionNameErrorName = name,
           ErrorPackaging.invalidDefinitionNameErrorExpectedConvention = expected}))))) (\_ -> acc)) Nothing (Packaging.moduleDefinitions mod))
+
 -- | Check that a module's definitions list is sorted in ascending lexicographic order by local name
 checkDefinitionOrdering :: Packaging.Module -> Maybe ErrorPackaging.InvalidModuleError
 checkDefinitionOrdering mod =
@@ -195,6 +205,7 @@ checkDefinitionOrdering mod =
                             ErrorPackaging.definitionsOutOfOrderErrorPrecedingName = prevName,
                             ErrorPackaging.definitionsOutOfOrderErrorFollowingName = currName})))))))) (\_ -> acc))) (Nothing, Nothing) (Packaging.moduleDefinitions mod)
       in (Pairs.second result)
+
 -- | Check for duplicate definition names in a module
 checkDuplicateDefinitionNames :: Packaging.Module -> Maybe ErrorPackaging.InvalidModuleError
 checkDuplicateDefinitionNames mod =
@@ -212,6 +223,7 @@ checkDuplicateDefinitionNames mod =
                           ErrorPackaging.duplicateDefinitionNameErrorModuleName = ns,
                           ErrorPackaging.duplicateDefinitionNameErrorName = name})))) (Sets.insert name seen, Nothing))) (\_ -> acc))) (Sets.empty, Nothing) (Packaging.moduleDefinitions mod)
       in (Pairs.second result)
+
 -- | Check for duplicate module namespaces in a package
 checkDuplicateModuleNames :: Packaging.Package -> Maybe ErrorPackaging.InvalidPackageError
 checkDuplicateModuleNames pkg =
@@ -227,6 +239,7 @@ checkDuplicateModuleNames pkg =
                     (Just (ErrorPackaging.InvalidPackageErrorDuplicateModuleName (ErrorPackaging.DuplicateModuleNameError {
                       ErrorPackaging.duplicateModuleNameErrorModuleName = ns})))) (Sets.insert ns seen, Nothing))) (\_ -> acc))) (Sets.empty, Nothing) (Packaging.packageModules pkg)
       in (Pairs.second result)
+
 -- | Check that the module's namespace matches the dotted-lowercase naming convention
 checkModuleNameConvention :: Packaging.Module -> Maybe ErrorPackaging.InvalidModuleError
 checkModuleNameConvention mod =
@@ -234,6 +247,7 @@ checkModuleNameConvention mod =
       let ns = Packaging.moduleName mod
       in (Logic.ifElse (Regex.matches Constants.regexNamespace (Packaging.unModuleName ns)) Nothing (Just (ErrorPackaging.InvalidModuleErrorInvalidModuleNameConvention (ErrorPackaging.InvalidModuleNameConventionError {
         ErrorPackaging.invalidModuleNameConventionErrorModuleName = ns}))))
+
 -- | Check that the package's name matches the hyphen-separated lowercase naming convention
 checkPackageNameConvention :: Packaging.Package -> Maybe ErrorPackaging.InvalidPackageError
 checkPackageNameConvention pkg =
@@ -241,6 +255,7 @@ checkPackageNameConvention pkg =
       let pname = Packaging.packageName pkg
       in (Logic.ifElse (Regex.matches Constants.regexPackageName (Packaging.unPackageName pname)) Nothing (Just (ErrorPackaging.InvalidPackageErrorInvalidPackageName (ErrorPackaging.InvalidPackageNameError {
         ErrorPackaging.invalidPackageNameErrorPackageName = pname}))))
+
 -- | Extract the name from a definition
 definitionName :: Packaging.Definition -> Core.Name
 definitionName def =
@@ -248,10 +263,12 @@ definitionName def =
       Packaging.DefinitionTerm v0 -> Packaging.termDefinitionName v0
       Packaging.DefinitionType v0 -> Packaging.typeDefinitionName v0
       Packaging.DefinitionPrimitive v0 -> Packaging.primitiveDefinitionName v0
+
 -- | True iff the given rule name appears in the profile's errorRules or warningRules.
 enabledPackaging :: Validation.ValidationProfile -> Core.Name -> Bool
 enabledPackaging p ruleName =
     Logic.or (Sets.member ruleName (Validation.validationProfileErrorRules p)) (Sets.member ruleName (Validation.validationProfileWarningRules p))
+
 -- | The default validation profile for module/package validation. Every kernel-shipped check classified as an error; no warnings; maxErrors=1, maxWarnings=20.
 kernelDefaultPackagingProfile :: Validation.ValidationProfile
 kernelDefaultPackagingProfile =
@@ -270,18 +287,21 @@ kernelDefaultPackagingProfile =
       Validation.validationProfileWarningRules = Sets.empty,
       Validation.validationProfileMaxErrors = 1,
       Validation.validationProfileMaxWarnings = 20}
+
 -- | Validate a kernel module against all kernel-default packaging rules; returns the first error found or nothing if valid. Convenience wrapper around 'module'' with 'kernelDefaultPackagingProfile'.
 kernelModule :: Packaging.Module -> Maybe ErrorPackaging.InvalidModuleError
 kernelModule mod =
     Lists.maybeHead (Validation.validationResultErrors (module_ kernelDefaultPackagingProfile (Validation.ValidationResult {
       Validation.validationResultErrors = [],
       Validation.validationResultWarnings = []}) mod))
+
 -- | Validate a kernel package against all kernel-default packaging rules; returns the first error found or nothing if valid. Convenience wrapper around 'package' with 'kernelDefaultPackagingProfile'.
 kernelPackage :: Packaging.Package -> Maybe ErrorPackaging.InvalidPackageError
 kernelPackage pkg =
     Lists.maybeHead (Validation.validationResultErrors (package kernelDefaultPackagingProfile (Validation.ValidationResult {
       Validation.validationResultErrors = [],
       Validation.validationResultWarnings = []}) pkg))
+
 -- | Validate a module against the given ValidationProfile, accumulating findings into a ValidationResult. Errors hard-stop the rule sequence once maxErrors is reached.
 module_ :: Validation.ValidationProfile -> Validation.ValidationResult ErrorPackaging.InvalidModuleError -> Packaging.Module -> Validation.ValidationResult ErrorPackaging.InvalidModuleError
 module_ p acc0 mod =
@@ -293,6 +313,7 @@ module_ p acc0 mod =
       (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidModuleError.definitionsOutOfOrder")) (Optionals.map (\f -> (Core.Name "hydra.error.packaging.InvalidModuleError.definitionsOutOfOrder", f)) (checkDefinitionOrdering mod)) Nothing),
       (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidModuleError.duplicateDefinitionName")) (Optionals.map (\f -> (Core.Name "hydra.error.packaging.InvalidModuleError.duplicateDefinitionName", f)) (checkDuplicateDefinitionNames mod)) Nothing),
       (Logic.ifElse (enabledPackaging p (Core.Name "hydra.error.packaging.InvalidModuleError.invalidModuleNameConvention")) (Optionals.map (\f -> (Core.Name "hydra.error.packaging.InvalidModuleError.invalidModuleNameConvention", f)) (checkModuleNameConvention mod)) Nothing)]
+
 -- | Validate a package against the given ValidationProfile, accumulating findings into a ValidationResult. Errors hard-stop traversal once maxErrors is reached.
 package :: Validation.ValidationProfile -> Validation.ValidationResult ErrorPackaging.InvalidPackageError -> Packaging.Package -> Validation.ValidationResult ErrorPackaging.InvalidPackageError
 package p acc0 pkg =

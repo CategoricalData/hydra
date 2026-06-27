@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term encoders for hydra.validation
 
 module Hydra.Encode.Validation where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.Error.Core as ErrorCore
@@ -10,6 +12,7 @@ import qualified Hydra.Overlay.Haskell.Lib.Sets as Sets
 import qualified Hydra.Validation as Validation
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Encoder for hydra.validation.ValidationProfile
 validationProfile :: Validation.ValidationProfile -> Core.Term
 validationProfile x =
@@ -28,6 +31,7 @@ validationProfile x =
         Core.Field {
           Core.fieldName = (Core.Name "maxWarnings"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x2))) (Validation.validationProfileMaxWarnings x))}]})
+
 -- | Encoder for hydra.validation.ValidationResult
 validationResult :: (e -> Core.Term) -> Validation.ValidationResult e -> Core.Term
 validationResult e x =

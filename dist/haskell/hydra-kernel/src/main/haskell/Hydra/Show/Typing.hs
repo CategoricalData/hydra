@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | String representations of hydra.typing types
 
 module Hydra.Show.Typing where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -36,6 +38,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Show a type constraint as a string
 typeConstraint :: Typing.TypeConstraint -> String
 typeConstraint tc =
@@ -46,6 +49,7 @@ typeConstraint tc =
         ShowCore.type_ ltyp,
         "\8801",
         (ShowCore.type_ rtyp)])
+
 -- | Show a type substitution as a string
 typeSubst :: Typing.TypeSubst -> String
 typeSubst ts =

@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Primitives in the hydra.lib.sets module.
 
 module Hydra.Lib.Sets where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -31,6 +33,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 delete :: Packaging.PrimitiveDefinition
 delete =
     Packaging.PrimitiveDefinition {
@@ -66,6 +69,7 @@ delete =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 difference :: Packaging.PrimitiveDefinition
 difference =
     Packaging.PrimitiveDefinition {
@@ -135,6 +139,7 @@ difference =
             Core.applicationArgument = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.toList")),
               Core.applicationArgument = (Core.TermVariable (Core.Name "s1"))}))}))}))})))}
+
 empty :: Packaging.PrimitiveDefinition
 empty =
     Packaging.PrimitiveDefinition {
@@ -160,6 +165,7 @@ empty =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 fromList :: Packaging.PrimitiveDefinition
 fromList =
     Packaging.PrimitiveDefinition {
@@ -190,6 +196,7 @@ fromList =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 insert :: Packaging.PrimitiveDefinition
 insert =
     Packaging.PrimitiveDefinition {
@@ -225,6 +232,7 @@ insert =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 intersection :: Packaging.PrimitiveDefinition
 intersection =
     Packaging.PrimitiveDefinition {
@@ -294,6 +302,7 @@ intersection =
             Core.applicationArgument = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.toList")),
               Core.applicationArgument = (Core.TermVariable (Core.Name "s1"))}))}))}))})))}
+
 map :: Packaging.PrimitiveDefinition
 map =
     Packaging.PrimitiveDefinition {
@@ -349,6 +358,7 @@ map =
               Core.applicationArgument = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.toList")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "s"))}))}))}))}))})))}
+
 member :: Packaging.PrimitiveDefinition
 member =
     Packaging.PrimitiveDefinition {
@@ -384,6 +394,7 @@ member =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 null :: Packaging.PrimitiveDefinition
 null =
     Packaging.PrimitiveDefinition {
@@ -414,6 +425,7 @@ null =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 singleton :: Packaging.PrimitiveDefinition
 singleton =
     Packaging.PrimitiveDefinition {
@@ -444,6 +456,7 @@ singleton =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 size :: Packaging.PrimitiveDefinition
 size =
     Packaging.PrimitiveDefinition {
@@ -474,6 +487,7 @@ size =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 toList :: Packaging.PrimitiveDefinition
 toList =
     Packaging.PrimitiveDefinition {
@@ -504,6 +518,7 @@ toList =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 union :: Packaging.PrimitiveDefinition
 union =
     Packaging.PrimitiveDefinition {
@@ -563,6 +578,7 @@ union =
             Core.applicationArgument = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.toList")),
               Core.applicationArgument = (Core.TermVariable (Core.Name "s1"))}))}))}))})))}
+
 unions :: Packaging.PrimitiveDefinition
 unions =
     Packaging.PrimitiveDefinition {

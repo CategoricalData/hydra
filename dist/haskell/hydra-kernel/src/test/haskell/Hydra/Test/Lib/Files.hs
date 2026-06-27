@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Effectful test cases for hydra.lib.files primitives
 
 module Hydra.Test.Lib.Files where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.File as File
 import qualified Hydra.Overlay.Haskell.Lib.Effects as Effects
@@ -14,6 +16,7 @@ import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Hydra.Overlay.Haskell.Lib.Literals as Literals
+
 -- | Effectful test cases for hydra.lib.files primitives
 allTests :: Testing.TestGroup
 allTests =

@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | DSL functions for hydra.lib.sets
 
 module Hydra.Dsl.Lib.Sets where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -58,6 +60,7 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
+
 -- | DSL reference to hydra.lib.sets.delete
 delete :: Ord x => (Typed.TypedTerm x -> Typed.TypedTerm (S.Set x) -> Typed.TypedTerm (S.Set x))
 delete arg0 arg1 =
@@ -66,6 +69,7 @@ delete arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.delete")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.sets.difference
 difference :: Ord x => (Typed.TypedTerm (S.Set x) -> Typed.TypedTerm (S.Set x) -> Typed.TypedTerm (S.Set x))
 difference arg0 arg1 =
@@ -74,15 +78,18 @@ difference arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.difference")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.sets.empty
 empty :: Ord x => (Typed.TypedTerm (S.Set x))
 empty = Typed.TypedTerm (Core.TermVariable (Core.Name "hydra.lib.sets.empty"))
+
 -- | DSL reference to hydra.lib.sets.fromList
 fromList :: Ord x => (Typed.TypedTerm [x] -> Typed.TypedTerm (S.Set x))
 fromList arg0 =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.fromList")),
       Core.applicationArgument = (Typed.unTypedTerm arg0)}))
+
 -- | DSL reference to hydra.lib.sets.insert
 insert :: Ord x => (Typed.TypedTerm x -> Typed.TypedTerm (S.Set x) -> Typed.TypedTerm (S.Set x))
 insert arg0 arg1 =
@@ -91,6 +98,7 @@ insert arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.insert")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.sets.intersection
 intersection :: Ord x => (Typed.TypedTerm (S.Set x) -> Typed.TypedTerm (S.Set x) -> Typed.TypedTerm (S.Set x))
 intersection arg0 arg1 =
@@ -99,6 +107,7 @@ intersection arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.intersection")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.sets.map
 map :: (Ord x, Ord y) => (Typed.TypedTerm (x -> y) -> Typed.TypedTerm (S.Set x) -> Typed.TypedTerm (S.Set y))
 map arg0 arg1 =
@@ -107,6 +116,7 @@ map arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.map")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.sets.member
 member :: Ord x => (Typed.TypedTerm x -> Typed.TypedTerm (S.Set x) -> Typed.TypedTerm Bool)
 member arg0 arg1 =
@@ -115,30 +125,35 @@ member arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.member")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.sets.null
 null :: Ord x => (Typed.TypedTerm (S.Set x) -> Typed.TypedTerm Bool)
 null arg0 =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.null")),
       Core.applicationArgument = (Typed.unTypedTerm arg0)}))
+
 -- | DSL reference to hydra.lib.sets.singleton
 singleton :: Ord x => (Typed.TypedTerm x -> Typed.TypedTerm (S.Set x))
 singleton arg0 =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.singleton")),
       Core.applicationArgument = (Typed.unTypedTerm arg0)}))
+
 -- | DSL reference to hydra.lib.sets.size
 size :: Ord x => (Typed.TypedTerm (S.Set x) -> Typed.TypedTerm Int)
 size arg0 =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.size")),
       Core.applicationArgument = (Typed.unTypedTerm arg0)}))
+
 -- | DSL reference to hydra.lib.sets.toList
 toList :: Ord x => (Typed.TypedTerm (S.Set x) -> Typed.TypedTerm [x])
 toList arg0 =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.toList")),
       Core.applicationArgument = (Typed.unTypedTerm arg0)}))
+
 -- | DSL reference to hydra.lib.sets.union
 union :: Ord x => (Typed.TypedTerm (S.Set x) -> Typed.TypedTerm (S.Set x) -> Typed.TypedTerm (S.Set x))
 union arg0 arg1 =
@@ -147,6 +162,7 @@ union arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.union")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.sets.unions
 unions :: Ord x => (Typed.TypedTerm [S.Set x] -> Typed.TypedTerm (S.Set x))
 unions arg0 =

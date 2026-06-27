@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | DSL functions for hydra.lib.logic
 
 module Hydra.Dsl.Lib.Logic where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -57,6 +59,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | DSL reference to hydra.lib.logic.and
 and :: Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool
 and arg0 arg1 =
@@ -65,6 +68,7 @@ and arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.and")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.logic.ifElse
 ifElse :: Typed.TypedTerm Bool -> Typed.TypedTerm x -> Typed.TypedTerm x -> Typed.TypedTerm x
 ifElse arg0 arg1 arg2 =
@@ -75,12 +79,14 @@ ifElse arg0 arg1 arg2 =
           Core.applicationArgument = (Typed.unTypedTerm arg0)})),
         Core.applicationArgument = (Typed.unTypedTerm arg1)})),
       Core.applicationArgument = (Typed.unTypedTerm arg2)}))
+
 -- | DSL reference to hydra.lib.logic.not
 not :: Typed.TypedTerm Bool -> Typed.TypedTerm Bool
 not arg0 =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.logic.not")),
       Core.applicationArgument = (Typed.unTypedTerm arg0)}))
+
 -- | DSL reference to hydra.lib.logic.or
 or :: Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool
 or arg0 arg1 =
