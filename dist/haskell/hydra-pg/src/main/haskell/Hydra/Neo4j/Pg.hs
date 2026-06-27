@@ -47,8 +47,8 @@ edgeToRelationship mapping edge =
 graphToNeo4j :: Ord t0 => (Neo4jModel.Neo4jMapping t0 -> PgModel.Graph t0 -> Either String ([Neo4jModel.Node], [Neo4jModel.Relationship]))
 graphToNeo4j mapping graph =
     Eithers.bind (Eithers.mapList (\v -> vertexToNode mapping v) (Maps.elems (PgModel.graphVertices graph))) (\nodes -> Eithers.bind (Eithers.mapList (\e -> edgeToRelationship mapping e) (Maps.elems (PgModel.graphEdges graph))) (\rels -> Right (nodes, rels)))
--- | Convert a Neo4j graph (nodes and relationships) to a property-graph Graph against a GraphType.
-neo4jToGraph :: Neo4jModel.Neo4jMapping t0 -> Neo4jModel.GraphType -> [Neo4jModel.Node] -> [Neo4jModel.Relationship] -> Either String (PgModel.Graph t0)
+-- | Convert a Neo4j graph (nodes and relationships) to property-graph vertices and edges against a GraphType.
+neo4jToGraph :: Neo4jModel.Neo4jMapping t0 -> Neo4jModel.GraphType -> [Neo4jModel.Node] -> [Neo4jModel.Relationship] -> Either String ([PgModel.Vertex t0], [PgModel.Edge t0])
 neo4jToGraph mapping gt nodes rels =
 
       let labelOf =
@@ -60,9 +60,7 @@ neo4jToGraph mapping gt nodes rels =
                   (Neo4jModel.unElementId eid)])) (\labels -> Logic.ifElse (Equality.equal (Lists.length labels) 1) (Right (Optionals.fromOptional (Neo4jModel.NodeLabel "") (Lists.maybeHead labels))) (Left (Strings.cat [
                   "endpoint node is not single-labeled: ",
                   (Neo4jModel.unElementId eid)]))))) nodes
-      in (Eithers.bind (Eithers.mapList (\n -> nodeToVertex mapping n) nodes) (\vertices -> Eithers.bind (Eithers.mapList (\r -> Eithers.bind (labelOf (Neo4jModel.relationshipStart r)) (\startLabel -> Eithers.bind (labelOf (Neo4jModel.relationshipEnd r)) (\endLabel -> relationshipToEdge mapping gt startLabel endLabel r))) rels) (\edges -> Right (PgModel.Graph {
-        PgModel.graphVertices = (Maps.fromList (Lists.map (\v -> (PgModel.vertexId v, v)) vertices)),
-        PgModel.graphEdges = (Maps.fromList (Lists.map (\e -> (PgModel.edgeId e, e)) edges))}))))
+      in (Eithers.bind (Eithers.mapList (\n -> nodeToVertex mapping n) nodes) (\vertices -> Eithers.bind (Eithers.mapList (\r -> Eithers.bind (labelOf (Neo4jModel.relationshipStart r)) (\startLabel -> Eithers.bind (labelOf (Neo4jModel.relationshipEnd r)) (\endLabel -> relationshipToEdge mapping gt startLabel endLabel r))) rels) (\edges -> Right (vertices, edges))))
 -- | Convert a Neo4j node to a property-graph vertex; fails on a multi-label node.
 nodeToVertex :: Neo4jModel.Neo4jMapping t0 -> Neo4jModel.Node -> Either String (PgModel.Vertex t0)
 nodeToVertex mapping node =
