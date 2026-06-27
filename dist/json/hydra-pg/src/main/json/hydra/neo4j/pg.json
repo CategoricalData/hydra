@@ -1,0 +1,1812 @@
+{
+  "name": "hydra.neo4j.pg",
+  "metadata": {
+    "description": "A mapping between Hydra's property-graph model (hydra.pg.model, TinkerPop-shaped) and the Neo4j model (hydra.neo4j.model). It is not an isomorphism and not invertible: ids and values are bridged by caller-supplied conversions (Neo4jMapping); a Neo4j relationship type expands into a property-graph edge label conditionally on the schema; and multi-label nodes, which Hydra's single-label vertices cannot represent, are rejected.",
+    "comments": [],
+    "seeAlso": []},
+  "dependencies": [{"module": "hydra.neo4j.model"}, {"module": "hydra.pg.model"}, {"module": "hydra.core"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.neo4j.pg.edgeLabelForRelationship",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "hydra.neo4j.model.GraphType"}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.neo4j.model.NodeLabel"}, "isLazy": false},
+            {"name": "arg2", "type": {"variable": "hydra.neo4j.model.NodeLabel"}, "isLazy": false},
+            {"name": "arg3", "type": {"variable": "hydra.neo4j.model.RelationshipType"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.pg.model.EdgeLabel"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "gt",
+                "domain": {"variable": "hydra.neo4j.model.GraphType"},
+                "body": {
+                  "lambda": {
+                    "parameter": "startLabel",
+                    "domain": {"variable": "hydra.neo4j.model.NodeLabel"},
+                    "body": {
+                      "lambda": {
+                        "parameter": "endLabel",
+                        "domain": {"variable": "hydra.neo4j.model.NodeLabel"},
+                        "body": {
+                          "lambda": {
+                            "parameter": "relType",
+                            "domain": {"variable": "hydra.neo4j.model.RelationshipType"},
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "typeStr",
+                                    "term": {"application": {"function": {"unwrap": "hydra.neo4j.model.RelationshipType"}, "argument": {"variable": "relType"}}},
+                                    "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                                  {
+                                    "name": "matching",
+                                    "term": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.filter"}, "type": {"variable": "hydra.neo4j.model.RelationshipElementType"}}},
+                                            "argument": {
+                                              "lambda": {
+                                                "parameter": "ret",
+                                                "domain": {"variable": "hydra.neo4j.model.RelationshipElementType"},
+                                                "body": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {"unwrap": "hydra.neo4j.model.RelationshipType"},
+                                                            "argument": {
+                                                              "application": {
+                                                                "function": {"project": {"typeName": "hydra.neo4j.model.RelationshipElementType", "fieldName": "type"}},
+                                                                "argument": {"variable": "ret"}}}}}}},
+                                                    "argument": {"variable": "typeStr"}}}}}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {"project": {"typeName": "hydra.neo4j.model.GraphType", "fieldName": "relationships"}},
+                                            "argument": {"variable": "gt"}}}}},
+                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.neo4j.model.RelationshipElementType"}}}},
+                                  {
+                                    "name": "camelType",
+                                    "term": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {"variable": "hydra.formatting.convertCase"},
+                                                "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "upperSnake", "term": {"unit": {}}}}}}},
+                                            "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": {"unit": {}}}}}}},
+                                        "argument": {"variable": "typeStr"}}},
+                                    "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                                  {
+                                    "name": "startStr",
+                                    "term": {"application": {"function": {"unwrap": "hydra.neo4j.model.NodeLabel"}, "argument": {"variable": "startLabel"}}},
+                                    "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                                  {
+                                    "name": "endStr",
+                                    "term": {"application": {"function": {"unwrap": "hydra.neo4j.model.NodeLabel"}, "argument": {"variable": "endLabel"}}},
+                                    "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                                  {
+                                    "name": "expanded",
+                                    "term": {
+                                      "application": {
+                                        "function": {"variable": "hydra.lib.strings.cat"},
+                                        "argument": {
+                                          "list": [
+                                            {
+                                              "application": {
+                                                "function": {"variable": "hydra.formatting.decapitalize"},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {"variable": "hydra.formatting.convertCase"},
+                                                            "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": {"unit": {}}}}}}},
+                                                        "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": {"unit": {}}}}}}},
+                                                    "argument": {"variable": "startStr"}}}}},
+                                            {"application": {"function": {"variable": "hydra.formatting.capitalize"}, "argument": {"variable": "camelType"}}},
+                                            {
+                                              "application": {
+                                                "function": {"variable": "hydra.formatting.capitalize"},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {"variable": "hydra.formatting.convertCase"},
+                                                            "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": {"unit": {}}}}}}},
+                                                        "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": {"unit": {}}}}}}},
+                                                    "argument": {"variable": "endStr"}}}}}]}}},
+                                    "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
+                                "body": {
+                                  "wrap": {
+                                    "typeName": "hydra.pg.model.EdgeLabel",
+                                    "body": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.gt"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "hydra.neo4j.model.RelationshipElementType"}}},
+                                                            "argument": {"variable": "matching"}}}}},
+                                                    "argument": {"literal": {"integer": {"int32": 1}}}}}}},
+                                            "argument": {"variable": "expanded"}}},
+                                        "argument": {"variable": "camelType"}}}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Compute the property-graph edge label for a Neo4j relationship type, given the schema and endpoint labels."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.neo4j.pg.edgeToRelationship",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"application": {"function": {"variable": "hydra.neo4j.model.Neo4jMapping"}, "argument": {"variable": "t0"}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}},
+              "isLazy": false}],
+          "result": {"type": {"either": {"left": {"literal": {"string": {}}}, "right": {"variable": "hydra.neo4j.model.Relationship"}}}}},
+        "body": {
+          "typeLambda": {
+            "parameter": "t0",
+            "body": {
+              "annotated": {
+                "body": {
+                  "lambda": {
+                    "parameter": "mapping",
+                    "domain": {"application": {"function": {"variable": "hydra.neo4j.model.Neo4jMapping"}, "argument": {"variable": "t0"}}},
+                    "body": {
+                      "lambda": {
+                        "parameter": "edge",
+                        "domain": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}},
+                        "body": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                        "type": {"variable": "hydra.neo4j.model.ElementId"}}},
+                                    "type": {"variable": "hydra.neo4j.model.Relationship"}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"project": {"typeName": "hydra.neo4j.model.Neo4jMapping", "fieldName": "encodeId"}},
+                                            "type": {"variable": "t0"}}},
+                                        "argument": {"variable": "mapping"}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Edge", "fieldName": "id"}}, "type": {"variable": "t0"}}},
+                                        "argument": {"variable": "edge"}}}}}}},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "eid",
+                                "domain": {"variable": "hydra.neo4j.model.ElementId"},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                "type": {"variable": "hydra.neo4j.model.ElementId"}}},
+                                            "type": {"variable": "hydra.neo4j.model.Relationship"}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"project": {"typeName": "hydra.neo4j.model.Neo4jMapping", "fieldName": "encodeId"}},
+                                                    "type": {"variable": "t0"}}},
+                                                "argument": {"variable": "mapping"}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {
+                                                  "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Edge", "fieldName": "out"}}, "type": {"variable": "t0"}}},
+                                                "argument": {"variable": "edge"}}}}}}},
+                                    "argument": {
+                                      "lambda": {
+                                        "parameter": "startId",
+                                        "domain": {"variable": "hydra.neo4j.model.ElementId"},
+                                        "body": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                        "type": {"variable": "hydra.neo4j.model.ElementId"}}},
+                                                    "type": {"variable": "hydra.neo4j.model.Relationship"}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"project": {"typeName": "hydra.neo4j.model.Neo4jMapping", "fieldName": "encodeId"}},
+                                                            "type": {"variable": "t0"}}},
+                                                        "argument": {"variable": "mapping"}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {
+                                                          "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Edge", "fieldName": "in"}}, "type": {"variable": "t0"}}},
+                                                        "argument": {"variable": "edge"}}}}}}},
+                                            "argument": {
+                                              "lambda": {
+                                                "parameter": "endId",
+                                                "domain": {"variable": "hydra.neo4j.model.ElementId"},
+                                                "body": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                                "type": {"map": {"keys": {"variable": "hydra.neo4j.model.Key"}, "values": {"variable": "hydra.neo4j.model.Value"}}}}},
+                                                            "type": {"variable": "hydra.neo4j.model.Relationship"}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "lambda": {
+                                                                    "parameter": "mapping",
+                                                                    "domain": {"application": {"function": {"variable": "hydra.neo4j.model.Neo4jMapping"}, "argument": {"variable": "t0"}}},
+                                                                    "body": {
+                                                                      "lambda": {
+                                                                        "parameter": "props",
+                                                                        "domain": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t0"}}},
+                                                                        "body": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"variable": "hydra.lib.eithers.map"},
+                                                                                            "type": {"list": {"pair": {"first": {"variable": "hydra.neo4j.model.Key"}, "second": {"variable": "hydra.neo4j.model.Value"}}}}}},
+                                                                                        "type": {"map": {"keys": {"variable": "hydra.neo4j.model.Key"}, "values": {"variable": "hydra.neo4j.model.Value"}}}}},
+                                                                                    "type": {"literal": {"string": {}}}}},
+                                                                                "argument": {
+                                                                                  "lambda": {
+                                                                                    "parameter": "pairs",
+                                                                                    "domain": {"list": {"pair": {"first": {"variable": "hydra.neo4j.model.Key"}, "second": {"variable": "hydra.neo4j.model.Value"}}}},
+                                                                                    "body": {
+                                                                                      "application": {
+                                                                                        "function": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.neo4j.model.Key"}}},
+                                                                                            "type": {"variable": "hydra.neo4j.model.Value"}}},
+                                                                                        "argument": {"variable": "pairs"}}}}}}},
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"variable": "hydra.lib.eithers.mapList"},
+                                                                                                "type": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "t0"}}}}},
+                                                                                            "type": {"pair": {"first": {"variable": "hydra.neo4j.model.Key"}, "second": {"variable": "hydra.neo4j.model.Value"}}}}},
+                                                                                        "type": {"literal": {"string": {}}}}},
+                                                                                    "argument": {
+                                                                                      "lambda": {
+                                                                                        "parameter": "entry",
+                                                                                        "domain": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "t0"}}},
+                                                                                        "body": {
+                                                                                          "application": {
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"variable": "hydra.neo4j.model.Value"}}},
+                                                                                                        "type": {"pair": {"first": {"variable": "hydra.neo4j.model.Key"}, "second": {"variable": "hydra.neo4j.model.Value"}}}}},
+                                                                                                    "type": {"literal": {"string": {}}}}},
+                                                                                                "argument": {
+                                                                                                  "lambda": {
+                                                                                                    "parameter": "encoded",
+                                                                                                    "domain": {"variable": "hydra.neo4j.model.Value"},
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {
+                                                                                                              "pair": {
+                                                                                                                "first": {
+                                                                                                                  "wrap": {
+                                                                                                                    "typeName": "hydra.neo4j.model.Key",
+                                                                                                                    "body": {
+                                                                                                                      "application": {
+                                                                                                                        "function": {"unwrap": "hydra.pg.model.PropertyKey"},
+                                                                                                                        "argument": {
+                                                                                                                          "application": {
+                                                                                                                            "function": {
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.pg.model.PropertyKey"}}},
+                                                                                                                                "type": {"variable": "t0"}}},
+                                                                                                                            "argument": {"variable": "entry"}}}}}}},
+                                                                                                                "second": {"variable": "encoded"}}},
+                                                                                                            "type": {"variable": "hydra.neo4j.model.Key"}}},
+                                                                                                        "type": {"variable": "hydra.neo4j.model.Value"}}}}}}},
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "function": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"project": {"typeName": "hydra.neo4j.model.Neo4jMapping", "fieldName": "encodeValue"}},
+                                                                                                        "type": {"variable": "t0"}}},
+                                                                                                    "argument": {"variable": "mapping"}}},
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "function": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.pg.model.PropertyKey"}}},
+                                                                                                        "type": {"variable": "t0"}}},
+                                                                                                    "argument": {"variable": "entry"}}}}}}}}}}},
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.toList"}, "type": {"variable": "hydra.pg.model.PropertyKey"}}},
+                                                                                        "type": {"variable": "t0"}}},
+                                                                                    "argument": {"variable": "props"}}}}}}}}}}},
+                                                                "argument": {"variable": "mapping"}}},
+                                                            "argument": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Edge", "fieldName": "properties"}}, "type": {"variable": "t0"}}},
+                                                                "argument": {"variable": "edge"}}}}}}},
+                                                    "argument": {
+                                                      "lambda": {
+                                                        "parameter": "props",
+                                                        "domain": {"map": {"keys": {"variable": "hydra.neo4j.model.Key"}, "values": {"variable": "hydra.neo4j.model.Value"}}},
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "either": {
+                                                                    "right": {
+                                                                      "record": {
+                                                                        "typeName": "hydra.neo4j.model.Relationship",
+                                                                        "fields": [
+                                                                          {"name": "id", "term": {"variable": "eid"}},
+                                                                          {"name": "properties", "term": {"variable": "props"}},
+                                                                          {
+                                                                            "name": "type",
+                                                                            "term": {
+                                                                              "wrap": {
+                                                                                "typeName": "hydra.neo4j.model.RelationshipType",
+                                                                                "body": {
+                                                                                  "application": {
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "function": {"variable": "hydra.formatting.convertCase"},
+                                                                                            "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": {"unit": {}}}}}}},
+                                                                                        "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "upperSnake", "term": {"unit": {}}}}}}},
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "function": {"unwrap": "hydra.pg.model.EdgeLabel"},
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "function": {
+                                                                                              "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Edge", "fieldName": "label"}}, "type": {"variable": "t0"}}},
+                                                                                            "argument": {"variable": "edge"}}}}}}}}}},
+                                                                          {"name": "start", "term": {"variable": "startId"}},
+                                                                          {"name": "end", "term": {"variable": "endId"}}]}}}},
+                                                                "type": {"literal": {"string": {}}}}},
+                                                            "type": {"variable": "hydra.neo4j.model.Relationship"}}}}}}}}}}}}}}}}}}}}}}},
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Convert a property-graph edge to a Neo4j relationship (edge label -> UPPER_SNAKE type)."}}}]}}}}}}},
+    {
+      "term": {
+        "name": "hydra.neo4j.pg.graphToNeo4j",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": [{"simple": "ordering"}]}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"application": {"function": {"variable": "hydra.neo4j.model.Neo4jMapping"}, "argument": {"variable": "t0"}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {"application": {"function": {"variable": "hydra.pg.model.Graph"}, "argument": {"variable": "t0"}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "either": {
+                "left": {"literal": {"string": {}}},
+                "right": {
+                  "pair": {
+                    "first": {"list": {"variable": "hydra.neo4j.model.Node"}},
+                    "second": {"list": {"variable": "hydra.neo4j.model.Relationship"}}}}}}}},
+        "body": {
+          "typeLambda": {
+            "parameter": "t0",
+            "body": {
+              "annotated": {
+                "body": {
+                  "lambda": {
+                    "parameter": "mapping",
+                    "domain": {"application": {"function": {"variable": "hydra.neo4j.model.Neo4jMapping"}, "argument": {"variable": "t0"}}},
+                    "body": {
+                      "lambda": {
+                        "parameter": "graph",
+                        "domain": {"application": {"function": {"variable": "hydra.pg.model.Graph"}, "argument": {"variable": "t0"}}},
+                        "body": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                        "type": {"list": {"variable": "hydra.neo4j.model.Node"}}}},
+                                    "type": {
+                                      "pair": {
+                                        "first": {"list": {"variable": "hydra.neo4j.model.Node"}},
+                                        "second": {"list": {"variable": "hydra.neo4j.model.Relationship"}}}}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.eithers.mapList"},
+                                                    "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}}},
+                                                "type": {"variable": "hydra.neo4j.model.Node"}}},
+                                            "type": {"literal": {"string": {}}}}},
+                                        "argument": {
+                                          "lambda": {
+                                            "parameter": "v",
+                                            "domain": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}},
+                                            "body": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.neo4j.pg.vertexToNode"}, "type": {"variable": "t0"}}},
+                                                    "argument": {"variable": "mapping"}}},
+                                                "argument": {"variable": "v"}}}}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.elems"}, "type": {"variable": "t0"}}},
+                                            "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Graph", "fieldName": "vertices"}}, "type": {"variable": "t0"}}},
+                                            "argument": {"variable": "graph"}}}}}}}}},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "nodes",
+                                "domain": {"list": {"variable": "hydra.neo4j.model.Node"}},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                "type": {"list": {"variable": "hydra.neo4j.model.Relationship"}}}},
+                                            "type": {
+                                              "pair": {
+                                                "first": {"list": {"variable": "hydra.neo4j.model.Node"}},
+                                                "second": {"list": {"variable": "hydra.neo4j.model.Relationship"}}}}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.eithers.mapList"},
+                                                            "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}},
+                                                        "type": {"variable": "hydra.neo4j.model.Relationship"}}},
+                                                    "type": {"literal": {"string": {}}}}},
+                                                "argument": {
+                                                  "lambda": {
+                                                    "parameter": "e",
+                                                    "domain": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}},
+                                                    "body": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.neo4j.pg.edgeToRelationship"}, "type": {"variable": "t0"}}},
+                                                            "argument": {"variable": "mapping"}}},
+                                                        "argument": {"variable": "e"}}}}}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.elems"}, "type": {"variable": "t0"}}},
+                                                    "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {
+                                                      "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Graph", "fieldName": "edges"}}, "type": {"variable": "t0"}}},
+                                                    "argument": {"variable": "graph"}}}}}}}}},
+                                    "argument": {
+                                      "lambda": {
+                                        "parameter": "rels",
+                                        "domain": {"list": {"variable": "hydra.neo4j.model.Relationship"}},
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "either": {
+                                                    "right": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"pair": {"first": {"variable": "nodes"}, "second": {"variable": "rels"}}},
+                                                            "type": {"list": {"variable": "hydra.neo4j.model.Node"}}}},
+                                                        "type": {"list": {"variable": "hydra.neo4j.model.Relationship"}}}}}},
+                                                "type": {"literal": {"string": {}}}}},
+                                            "type": {
+                                              "pair": {
+                                                "first": {"list": {"variable": "hydra.neo4j.model.Node"}},
+                                                "second": {"list": {"variable": "hydra.neo4j.model.Relationship"}}}}}}}}}}}}}}}}}},
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Convert a whole property-graph Graph to a Neo4j graph (nodes and relationships)."}}}]}}}}}}},
+    {
+      "term": {
+        "name": "hydra.neo4j.pg.neo4jToGraph",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"application": {"function": {"variable": "hydra.neo4j.model.Neo4jMapping"}, "argument": {"variable": "t0"}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.neo4j.model.GraphType"}, "isLazy": false},
+            {"name": "arg2", "type": {"list": {"variable": "hydra.neo4j.model.Node"}}, "isLazy": false},
+            {"name": "arg3", "type": {"list": {"variable": "hydra.neo4j.model.Relationship"}}, "isLazy": false}],
+          "result": {
+            "type": {
+              "either": {
+                "left": {"literal": {"string": {}}},
+                "right": {
+                  "pair": {
+                    "first": {"list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}},
+                    "second": {"list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}}}}}}},
+        "body": {
+          "typeLambda": {
+            "parameter": "t0",
+            "body": {
+              "annotated": {
+                "body": {
+                  "lambda": {
+                    "parameter": "mapping",
+                    "domain": {"application": {"function": {"variable": "hydra.neo4j.model.Neo4jMapping"}, "argument": {"variable": "t0"}}},
+                    "body": {
+                      "lambda": {
+                        "parameter": "gt",
+                        "domain": {"variable": "hydra.neo4j.model.GraphType"},
+                        "body": {
+                          "lambda": {
+                            "parameter": "nodes",
+                            "domain": {"list": {"variable": "hydra.neo4j.model.Node"}},
+                            "body": {
+                              "lambda": {
+                                "parameter": "rels",
+                                "domain": {"list": {"variable": "hydra.neo4j.model.Relationship"}},
+                                "body": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "labelOf",
+                                        "term": {
+                                          "application": {
+                                            "function": {
+                                              "lambda": {
+                                                "parameter": "nodes",
+                                                "domain": {"list": {"variable": "hydra.neo4j.model.Node"}},
+                                                "body": {
+                                                  "let": {
+                                                    "bindings": [
+                                                      {
+                                                        "name": "m",
+                                                        "term": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"literal": {"string": {}}}}},
+                                                                "type": {"list": {"variable": "hydra.neo4j.model.NodeLabel"}}}},
+                                                            "argument": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.neo4j.model.Node"}}},
+                                                                        "type": {"pair": {"first": {"literal": {"string": {}}}, "second": {"list": {"variable": "hydra.neo4j.model.NodeLabel"}}}}}},
+                                                                    "argument": {
+                                                                      "lambda": {
+                                                                        "parameter": "n",
+                                                                        "domain": {"variable": "hydra.neo4j.model.Node"},
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "pair": {
+                                                                                    "first": {
+                                                                                      "application": {
+                                                                                        "function": {"unwrap": "hydra.neo4j.model.ElementId"},
+                                                                                        "argument": {
+                                                                                          "application": {"function": {"project": {"typeName": "hydra.neo4j.model.Node", "fieldName": "id"}}, "argument": {"variable": "n"}}}}},
+                                                                                    "second": {
+                                                                                      "application": {
+                                                                                        "function": {
+                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.neo4j.model.NodeLabel"}}},
+                                                                                        "argument": {
+                                                                                          "application": {"function": {"project": {"typeName": "hydra.neo4j.model.Node", "fieldName": "labels"}}, "argument": {"variable": "n"}}}}}}},
+                                                                                "type": {"literal": {"string": {}}}}},
+                                                                            "type": {"list": {"variable": "hydra.neo4j.model.NodeLabel"}}}}}}}},
+                                                                "argument": {"variable": "nodes"}}}}},
+                                                        "typeScheme": {
+                                                          "variables": [],
+                                                          "body": {"map": {"keys": {"literal": {"string": {}}}, "values": {"list": {"variable": "hydra.neo4j.model.NodeLabel"}}}}}}],
+                                                    "body": {
+                                                      "lambda": {
+                                                        "parameter": "eid",
+                                                        "domain": {"variable": "hydra.neo4j.model.ElementId"},
+                                                        "body": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"list": {"variable": "hydra.neo4j.model.NodeLabel"}}}},
+                                                                        "type": {"either": {"left": {"literal": {"string": {}}}, "right": {"variable": "hydra.neo4j.model.NodeLabel"}}}}},
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"literal": {"string": {}}}}},
+                                                                                "type": {"list": {"variable": "hydra.neo4j.model.NodeLabel"}}}},
+                                                                            "argument": {"application": {"function": {"unwrap": "hydra.neo4j.model.ElementId"}, "argument": {"variable": "eid"}}}}},
+                                                                        "argument": {"variable": "m"}}}}},
+                                                                "argument": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "either": {
+                                                                            "left": {
+                                                                              "application": {
+                                                                                "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                "argument": {
+                                                                                  "list": [
+                                                                                    {"literal": {"string": "no node with id "}},
+                                                                                    {"application": {"function": {"unwrap": "hydra.neo4j.model.ElementId"}, "argument": {"variable": "eid"}}}]}}}}},
+                                                                        "type": {"literal": {"string": {}}}}},
+                                                                    "type": {"variable": "hydra.neo4j.model.NodeLabel"}}}}},
+                                                            "argument": {
+                                                              "lambda": {
+                                                                "parameter": "labels",
+                                                                "domain": {"list": {"variable": "hydra.neo4j.model.NodeLabel"}},
+                                                                "body": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                                "type": {"either": {"left": {"literal": {"string": {}}}, "right": {"variable": "hydra.neo4j.model.NodeLabel"}}}}},
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "function": {
+                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "hydra.neo4j.model.NodeLabel"}}},
+                                                                                        "argument": {"variable": "labels"}}}}},
+                                                                                "argument": {"literal": {"integer": {"int32": 1}}}}}}},
+                                                                        "argument": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "either": {
+                                                                                    "right": {
+                                                                                      "application": {
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "function": {
+                                                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"variable": "hydra.neo4j.model.NodeLabel"}}},
+                                                                                            "argument": {"wrap": {"typeName": "hydra.neo4j.model.NodeLabel", "body": {"literal": {"string": ""}}}}}},
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "function": {
+                                                                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.neo4j.model.NodeLabel"}}},
+                                                                                            "argument": {"variable": "labels"}}}}}}},
+                                                                                "type": {"literal": {"string": {}}}}},
+                                                                            "type": {"variable": "hydra.neo4j.model.NodeLabel"}}}}},
+                                                                    "argument": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "either": {
+                                                                                "left": {
+                                                                                  "application": {
+                                                                                    "function": {"variable": "hydra.lib.strings.cat"},
+                                                                                    "argument": {
+                                                                                      "list": [
+                                                                                        {"literal": {"string": "endpoint node is not single-labeled: "}},
+                                                                                        {"application": {"function": {"unwrap": "hydra.neo4j.model.ElementId"}, "argument": {"variable": "eid"}}}]}}}}},
+                                                                            "type": {"literal": {"string": {}}}}},
+                                                                        "type": {"variable": "hydra.neo4j.model.NodeLabel"}}}}}}}}}}}}}}},
+                                            "argument": {"variable": "nodes"}}},
+                                        "typeScheme": {
+                                          "variables": [],
+                                          "body": {
+                                            "function": {
+                                              "domain": {"variable": "hydra.neo4j.model.ElementId"},
+                                              "codomain": {"either": {"left": {"literal": {"string": {}}}, "right": {"variable": "hydra.neo4j.model.NodeLabel"}}}}}}}],
+                                    "body": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                    "type": {"list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}}}},
+                                                "type": {
+                                                  "pair": {
+                                                    "first": {"list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}},
+                                                    "second": {"list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}}}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.mapList"}, "type": {"variable": "hydra.neo4j.model.Node"}}},
+                                                            "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}}},
+                                                        "type": {"literal": {"string": {}}}}},
+                                                    "argument": {
+                                                      "lambda": {
+                                                        "parameter": "n",
+                                                        "domain": {"variable": "hydra.neo4j.model.Node"},
+                                                        "body": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.neo4j.pg.nodeToVertex"}, "type": {"variable": "t0"}}},
+                                                                "argument": {"variable": "mapping"}}},
+                                                            "argument": {"variable": "n"}}}}}}},
+                                                "argument": {"variable": "nodes"}}}}},
+                                        "argument": {
+                                          "lambda": {
+                                            "parameter": "vertices",
+                                            "domain": {"list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}},
+                                            "body": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                            "type": {"list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}}},
+                                                        "type": {
+                                                          "pair": {
+                                                            "first": {"list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}},
+                                                            "second": {"list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}}}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {"body": {"variable": "hydra.lib.eithers.mapList"}, "type": {"variable": "hydra.neo4j.model.Relationship"}}},
+                                                                    "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}},
+                                                                "type": {"literal": {"string": {}}}}},
+                                                            "argument": {
+                                                              "lambda": {
+                                                                "parameter": "r",
+                                                                "domain": {"variable": "hydra.neo4j.model.Relationship"},
+                                                                "body": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                                                "type": {"variable": "hydra.neo4j.model.NodeLabel"}}},
+                                                                            "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}},
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "function": {"variable": "labelOf"},
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "function": {"project": {"typeName": "hydra.neo4j.model.Relationship", "fieldName": "start"}},
+                                                                                "argument": {"variable": "r"}}}}}}},
+                                                                    "argument": {
+                                                                      "lambda": {
+                                                                        "parameter": "startLabel",
+                                                                        "domain": {"variable": "hydra.neo4j.model.NodeLabel"},
+                                                                        "body": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                                                        "type": {"variable": "hydra.neo4j.model.NodeLabel"}}},
+                                                                                    "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}},
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "function": {"variable": "labelOf"},
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "function": {"project": {"typeName": "hydra.neo4j.model.Relationship", "fieldName": "end"}},
+                                                                                        "argument": {"variable": "r"}}}}}}},
+                                                                            "argument": {
+                                                                              "lambda": {
+                                                                                "parameter": "endLabel",
+                                                                                "domain": {"variable": "hydra.neo4j.model.NodeLabel"},
+                                                                                "body": {
+                                                                                  "application": {
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.neo4j.pg.relationshipToEdge"}, "type": {"variable": "t0"}}},
+                                                                                                    "argument": {"variable": "mapping"}}},
+                                                                                                "argument": {"variable": "gt"}}},
+                                                                                            "argument": {"variable": "startLabel"}}},
+                                                                                        "argument": {"variable": "endLabel"}}},
+                                                                                    "argument": {"variable": "r"}}}}}}}}}}}}}}},
+                                                        "argument": {"variable": "rels"}}}}},
+                                                "argument": {
+                                                  "lambda": {
+                                                    "parameter": "edges",
+                                                    "domain": {"list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}},
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "either": {
+                                                                "right": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"pair": {"first": {"variable": "vertices"}, "second": {"variable": "edges"}}},
+                                                                        "type": {"list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}}}},
+                                                                    "type": {"list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}}}}},
+                                                            "type": {"literal": {"string": {}}}}},
+                                                        "type": {
+                                                          "pair": {
+                                                            "first": {"list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}},
+                                                            "second": {"list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}}}}}}}}}}}}}}}}}}}}}}},
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {"string": "Convert a Neo4j graph (nodes and relationships) to property-graph vertices and edges against a GraphType."}}}]}}}}}}},
+    {
+      "term": {
+        "name": "hydra.neo4j.pg.nodeToVertex",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"application": {"function": {"variable": "hydra.neo4j.model.Neo4jMapping"}, "argument": {"variable": "t0"}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.neo4j.model.Node"}, "isLazy": false}],
+          "result": {
+            "type": {
+              "either": {
+                "left": {"literal": {"string": {}}},
+                "right": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}}}}},
+        "body": {
+          "typeLambda": {
+            "parameter": "t0",
+            "body": {
+              "annotated": {
+                "body": {
+                  "lambda": {
+                    "parameter": "mapping",
+                    "domain": {"application": {"function": {"variable": "hydra.neo4j.model.Neo4jMapping"}, "argument": {"variable": "t0"}}},
+                    "body": {
+                      "lambda": {
+                        "parameter": "node",
+                        "domain": {"variable": "hydra.neo4j.model.Node"},
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "labels",
+                                "term": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.neo4j.model.NodeLabel"}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {"project": {"typeName": "hydra.neo4j.model.Node", "fieldName": "labels"}},
+                                        "argument": {"variable": "node"}}}}},
+                                "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.neo4j.model.NodeLabel"}}}},
+                              {
+                                "name": "soleLabel",
+                                "term": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"variable": "hydra.neo4j.model.NodeLabel"}}},
+                                        "argument": {"wrap": {"typeName": "hydra.neo4j.model.NodeLabel", "body": {"literal": {"string": ""}}}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.neo4j.model.NodeLabel"}}},
+                                        "argument": {"variable": "labels"}}}}},
+                                "typeScheme": {"variables": [], "body": {"variable": "hydra.neo4j.model.NodeLabel"}}}],
+                            "body": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"variable": "hydra.lib.logic.ifElse"},
+                                            "type": {
+                                              "either": {
+                                                "left": {"literal": {"string": {}}},
+                                                "right": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}}}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {
+                                                      "typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "hydra.neo4j.model.NodeLabel"}}},
+                                                    "argument": {"variable": "labels"}}}}},
+                                            "argument": {"literal": {"integer": {"int32": 1}}}}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                    "type": {"variable": "t0"}}},
+                                                "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"project": {"typeName": "hydra.neo4j.model.Neo4jMapping", "fieldName": "decodeId"}},
+                                                        "type": {"variable": "t0"}}},
+                                                    "argument": {"variable": "mapping"}}},
+                                                "argument": {
+                                                  "application": {"function": {"project": {"typeName": "hydra.neo4j.model.Node", "fieldName": "id"}}, "argument": {"variable": "node"}}}}}}},
+                                        "argument": {
+                                          "lambda": {
+                                            "parameter": "vid",
+                                            "domain": {"variable": "t0"},
+                                            "body": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                            "type": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t0"}}}}},
+                                                        "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {
+                                                              "lambda": {
+                                                                "parameter": "mapping",
+                                                                "domain": {"application": {"function": {"variable": "hydra.neo4j.model.Neo4jMapping"}, "argument": {"variable": "t0"}}},
+                                                                "body": {
+                                                                  "lambda": {
+                                                                    "parameter": "props",
+                                                                    "domain": {"map": {"keys": {"variable": "hydra.neo4j.model.Key"}, "values": {"variable": "hydra.neo4j.model.Value"}}},
+                                                                    "body": {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"variable": "hydra.lib.eithers.map"},
+                                                                                        "type": {"list": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "t0"}}}}}},
+                                                                                    "type": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t0"}}}}},
+                                                                                "type": {"literal": {"string": {}}}}},
+                                                                            "argument": {
+                                                                              "lambda": {
+                                                                                "parameter": "pairs",
+                                                                                "domain": {"list": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "t0"}}}},
+                                                                                "body": {
+                                                                                  "application": {
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.pg.model.PropertyKey"}}},
+                                                                                        "type": {"variable": "t0"}}},
+                                                                                    "argument": {"variable": "pairs"}}}}}}},
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"variable": "hydra.lib.eithers.mapList"},
+                                                                                            "type": {"pair": {"first": {"variable": "hydra.neo4j.model.Key"}, "second": {"variable": "hydra.neo4j.model.Value"}}}}},
+                                                                                        "type": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "t0"}}}}},
+                                                                                    "type": {"literal": {"string": {}}}}},
+                                                                                "argument": {
+                                                                                  "lambda": {
+                                                                                    "parameter": "entry",
+                                                                                    "domain": {"pair": {"first": {"variable": "hydra.neo4j.model.Key"}, "second": {"variable": "hydra.neo4j.model.Value"}}},
+                                                                                    "body": {
+                                                                                      "application": {
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "function": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"variable": "t0"}}},
+                                                                                                    "type": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "t0"}}}}},
+                                                                                                "type": {"literal": {"string": {}}}}},
+                                                                                            "argument": {
+                                                                                              "lambda": {
+                                                                                                "parameter": "decoded",
+                                                                                                "domain": {"variable": "t0"},
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "pair": {
+                                                                                                            "first": {
+                                                                                                              "wrap": {
+                                                                                                                "typeName": "hydra.pg.model.PropertyKey",
+                                                                                                                "body": {
+                                                                                                                  "application": {
+                                                                                                                    "function": {"unwrap": "hydra.neo4j.model.Key"},
+                                                                                                                    "argument": {
+                                                                                                                      "application": {
+                                                                                                                        "function": {
+                                                                                                                          "typeApplication": {
+                                                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.neo4j.model.Key"}}},
+                                                                                                                            "type": {"variable": "hydra.neo4j.model.Value"}}},
+                                                                                                                        "argument": {"variable": "entry"}}}}}}},
+                                                                                                            "second": {"variable": "decoded"}}},
+                                                                                                        "type": {"variable": "hydra.pg.model.PropertyKey"}}},
+                                                                                                    "type": {"variable": "t0"}}}}}}},
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"project": {"typeName": "hydra.neo4j.model.Neo4jMapping", "fieldName": "decodeValue"}},
+                                                                                                    "type": {"variable": "t0"}}},
+                                                                                                "argument": {"variable": "mapping"}}},
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.neo4j.model.Key"}}},
+                                                                                                    "type": {"variable": "hydra.neo4j.model.Value"}}},
+                                                                                                "argument": {"variable": "entry"}}}}}}}}}}},
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.toList"}, "type": {"variable": "hydra.neo4j.model.Key"}}},
+                                                                                    "type": {"variable": "hydra.neo4j.model.Value"}}},
+                                                                                "argument": {"variable": "props"}}}}}}}}}}},
+                                                            "argument": {"variable": "mapping"}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {"project": {"typeName": "hydra.neo4j.model.Node", "fieldName": "properties"}},
+                                                            "argument": {"variable": "node"}}}}}}},
+                                                "argument": {
+                                                  "lambda": {
+                                                    "parameter": "props",
+                                                    "domain": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t0"}}},
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "either": {
+                                                                "right": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "record": {
+                                                                        "typeName": "hydra.pg.model.Vertex",
+                                                                        "fields": [
+                                                                          {
+                                                                            "name": "label",
+                                                                            "term": {
+                                                                              "wrap": {
+                                                                                "typeName": "hydra.pg.model.VertexLabel",
+                                                                                "body": {"application": {"function": {"unwrap": "hydra.neo4j.model.NodeLabel"}, "argument": {"variable": "soleLabel"}}}}}},
+                                                                          {"name": "id", "term": {"variable": "vid"}},
+                                                                          {"name": "properties", "term": {"variable": "props"}}]}},
+                                                                    "type": {"variable": "t0"}}}}},
+                                                            "type": {"literal": {"string": {}}}}},
+                                                        "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}}}}}}}}}}}}},
+                                "argument": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "either": {
+                                            "left": {
+                                              "application": {
+                                                "function": {"variable": "hydra.lib.strings.cat"},
+                                                "argument": {
+                                                  "list": [
+                                                    {"literal": {"string": "cannot map a multi-label Neo4j node to a single-label property-graph vertex: "}},
+                                                    {
+                                                      "application": {
+                                                        "function": {"unwrap": "hydra.neo4j.model.ElementId"},
+                                                        "argument": {
+                                                          "application": {"function": {"project": {"typeName": "hydra.neo4j.model.Node", "fieldName": "id"}}, "argument": {"variable": "node"}}}}}]}}}}},
+                                        "type": {"literal": {"string": {}}}}},
+                                    "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}}}}}}}}}}},
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Convert a Neo4j node to a property-graph vertex; fails on a multi-label node."}}}]}}}}}}},
+    {
+      "term": {
+        "name": "hydra.neo4j.pg.relationshipToEdge",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"application": {"function": {"variable": "hydra.neo4j.model.Neo4jMapping"}, "argument": {"variable": "t0"}}},
+              "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.neo4j.model.GraphType"}, "isLazy": false},
+            {"name": "arg2", "type": {"variable": "hydra.neo4j.model.NodeLabel"}, "isLazy": false},
+            {"name": "arg3", "type": {"variable": "hydra.neo4j.model.NodeLabel"}, "isLazy": false},
+            {"name": "arg4", "type": {"variable": "hydra.neo4j.model.Relationship"}, "isLazy": false}],
+          "result": {
+            "type": {
+              "either": {
+                "left": {"literal": {"string": {}}},
+                "right": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}}}},
+        "body": {
+          "typeLambda": {
+            "parameter": "t0",
+            "body": {
+              "annotated": {
+                "body": {
+                  "lambda": {
+                    "parameter": "mapping",
+                    "domain": {"application": {"function": {"variable": "hydra.neo4j.model.Neo4jMapping"}, "argument": {"variable": "t0"}}},
+                    "body": {
+                      "lambda": {
+                        "parameter": "gt",
+                        "domain": {"variable": "hydra.neo4j.model.GraphType"},
+                        "body": {
+                          "lambda": {
+                            "parameter": "startLabel",
+                            "domain": {"variable": "hydra.neo4j.model.NodeLabel"},
+                            "body": {
+                              "lambda": {
+                                "parameter": "endLabel",
+                                "domain": {"variable": "hydra.neo4j.model.NodeLabel"},
+                                "body": {
+                                  "lambda": {
+                                    "parameter": "rel",
+                                    "domain": {"variable": "hydra.neo4j.model.Relationship"},
+                                    "body": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                    "type": {"variable": "t0"}}},
+                                                "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"project": {"typeName": "hydra.neo4j.model.Neo4jMapping", "fieldName": "decodeId"}},
+                                                        "type": {"variable": "t0"}}},
+                                                    "argument": {"variable": "mapping"}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {"project": {"typeName": "hydra.neo4j.model.Relationship", "fieldName": "id"}},
+                                                    "argument": {"variable": "rel"}}}}}}},
+                                        "argument": {
+                                          "lambda": {
+                                            "parameter": "eid",
+                                            "domain": {"variable": "t0"},
+                                            "body": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                            "type": {"variable": "t0"}}},
+                                                        "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"project": {"typeName": "hydra.neo4j.model.Neo4jMapping", "fieldName": "decodeId"}},
+                                                                "type": {"variable": "t0"}}},
+                                                            "argument": {"variable": "mapping"}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {"project": {"typeName": "hydra.neo4j.model.Relationship", "fieldName": "start"}},
+                                                            "argument": {"variable": "rel"}}}}}}},
+                                                "argument": {
+                                                  "lambda": {
+                                                    "parameter": "outId",
+                                                    "domain": {"variable": "t0"},
+                                                    "body": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                                    "type": {"variable": "t0"}}},
+                                                                "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}},
+                                                            "argument": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {"project": {"typeName": "hydra.neo4j.model.Neo4jMapping", "fieldName": "decodeId"}},
+                                                                        "type": {"variable": "t0"}}},
+                                                                    "argument": {"variable": "mapping"}}},
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "function": {"project": {"typeName": "hydra.neo4j.model.Relationship", "fieldName": "end"}},
+                                                                    "argument": {"variable": "rel"}}}}}}},
+                                                        "argument": {
+                                                          "lambda": {
+                                                            "parameter": "inId",
+                                                            "domain": {"variable": "t0"},
+                                                            "body": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                                            "type": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t0"}}}}},
+                                                                        "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}},
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "lambda": {
+                                                                                "parameter": "mapping",
+                                                                                "domain": {"application": {"function": {"variable": "hydra.neo4j.model.Neo4jMapping"}, "argument": {"variable": "t0"}}},
+                                                                                "body": {
+                                                                                  "lambda": {
+                                                                                    "parameter": "props",
+                                                                                    "domain": {"map": {"keys": {"variable": "hydra.neo4j.model.Key"}, "values": {"variable": "hydra.neo4j.model.Value"}}},
+                                                                                    "body": {
+                                                                                      "application": {
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "function": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"variable": "hydra.lib.eithers.map"},
+                                                                                                        "type": {"list": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "t0"}}}}}},
+                                                                                                    "type": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t0"}}}}},
+                                                                                                "type": {"literal": {"string": {}}}}},
+                                                                                            "argument": {
+                                                                                              "lambda": {
+                                                                                                "parameter": "pairs",
+                                                                                                "domain": {"list": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "t0"}}}},
+                                                                                                "body": {
+                                                                                                  "application": {
+                                                                                                    "function": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.pg.model.PropertyKey"}}},
+                                                                                                        "type": {"variable": "t0"}}},
+                                                                                                    "argument": {"variable": "pairs"}}}}}}},
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {"variable": "hydra.lib.eithers.mapList"},
+                                                                                                            "type": {"pair": {"first": {"variable": "hydra.neo4j.model.Key"}, "second": {"variable": "hydra.neo4j.model.Value"}}}}},
+                                                                                                        "type": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "t0"}}}}},
+                                                                                                    "type": {"literal": {"string": {}}}}},
+                                                                                                "argument": {
+                                                                                                  "lambda": {
+                                                                                                    "parameter": "entry",
+                                                                                                    "domain": {"pair": {"first": {"variable": "hydra.neo4j.model.Key"}, "second": {"variable": "hydra.neo4j.model.Value"}}},
+                                                                                                    "body": {
+                                                                                                      "application": {
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "function": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"variable": "t0"}}},
+                                                                                                                    "type": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "t0"}}}}},
+                                                                                                                "type": {"literal": {"string": {}}}}},
+                                                                                                            "argument": {
+                                                                                                              "lambda": {
+                                                                                                                "parameter": "decoded",
+                                                                                                                "domain": {"variable": "t0"},
+                                                                                                                "body": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {
+                                                                                                                          "pair": {
+                                                                                                                            "first": {
+                                                                                                                              "wrap": {
+                                                                                                                                "typeName": "hydra.pg.model.PropertyKey",
+                                                                                                                                "body": {
+                                                                                                                                  "application": {
+                                                                                                                                    "function": {"unwrap": "hydra.neo4j.model.Key"},
+                                                                                                                                    "argument": {
+                                                                                                                                      "application": {
+                                                                                                                                        "function": {
+                                                                                                                                          "typeApplication": {
+                                                                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.neo4j.model.Key"}}},
+                                                                                                                                            "type": {"variable": "hydra.neo4j.model.Value"}}},
+                                                                                                                                        "argument": {"variable": "entry"}}}}}}},
+                                                                                                                            "second": {"variable": "decoded"}}},
+                                                                                                                        "type": {"variable": "hydra.pg.model.PropertyKey"}}},
+                                                                                                                    "type": {"variable": "t0"}}}}}}},
+                                                                                                        "argument": {
+                                                                                                          "application": {
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "function": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {"project": {"typeName": "hydra.neo4j.model.Neo4jMapping", "fieldName": "decodeValue"}},
+                                                                                                                    "type": {"variable": "t0"}}},
+                                                                                                                "argument": {"variable": "mapping"}}},
+                                                                                                            "argument": {
+                                                                                                              "application": {
+                                                                                                                "function": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.neo4j.model.Key"}}},
+                                                                                                                    "type": {"variable": "hydra.neo4j.model.Value"}}},
+                                                                                                                "argument": {"variable": "entry"}}}}}}}}}}},
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.toList"}, "type": {"variable": "hydra.neo4j.model.Key"}}},
+                                                                                                    "type": {"variable": "hydra.neo4j.model.Value"}}},
+                                                                                                "argument": {"variable": "props"}}}}}}}}}}},
+                                                                            "argument": {"variable": "mapping"}}},
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "function": {"project": {"typeName": "hydra.neo4j.model.Relationship", "fieldName": "properties"}},
+                                                                            "argument": {"variable": "rel"}}}}}}},
+                                                                "argument": {
+                                                                  "lambda": {
+                                                                    "parameter": "props",
+                                                                    "domain": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t0"}}},
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "either": {
+                                                                                "right": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "record": {
+                                                                                        "typeName": "hydra.pg.model.Edge",
+                                                                                        "fields": [
+                                                                                          {
+                                                                                            "name": "label",
+                                                                                            "term": {
+                                                                                              "application": {
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "function": {"application": {"function": {"variable": "hydra.neo4j.pg.edgeLabelForRelationship"}, "argument": {"variable": "gt"}}},
+                                                                                                        "argument": {"variable": "startLabel"}}},
+                                                                                                    "argument": {"variable": "endLabel"}}},
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "function": {"project": {"typeName": "hydra.neo4j.model.Relationship", "fieldName": "type"}},
+                                                                                                    "argument": {"variable": "rel"}}}}}},
+                                                                                          {"name": "id", "term": {"variable": "eid"}},
+                                                                                          {"name": "out", "term": {"variable": "outId"}},
+                                                                                          {"name": "in", "term": {"variable": "inId"}},
+                                                                                          {"name": "properties", "term": {"variable": "props"}}]}},
+                                                                                    "type": {"variable": "t0"}}}}},
+                                                                            "type": {"literal": {"string": {}}}}},
+                                                                        "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {
+                        "literal": {
+                          "string": "Convert a Neo4j relationship to a property-graph edge, expanding the type via the schema and endpoint labels."}}}]}}}}}}},
+    {
+      "term": {
+        "name": "hydra.neo4j.pg.vertexToNode",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"application": {"function": {"variable": "hydra.neo4j.model.Neo4jMapping"}, "argument": {"variable": "t0"}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}},
+              "isLazy": false}],
+          "result": {"type": {"either": {"left": {"literal": {"string": {}}}, "right": {"variable": "hydra.neo4j.model.Node"}}}}},
+        "body": {
+          "typeLambda": {
+            "parameter": "t0",
+            "body": {
+              "annotated": {
+                "body": {
+                  "lambda": {
+                    "parameter": "mapping",
+                    "domain": {"application": {"function": {"variable": "hydra.neo4j.model.Neo4jMapping"}, "argument": {"variable": "t0"}}},
+                    "body": {
+                      "lambda": {
+                        "parameter": "vertex",
+                        "domain": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}},
+                        "body": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                        "type": {"variable": "hydra.neo4j.model.ElementId"}}},
+                                    "type": {"variable": "hydra.neo4j.model.Node"}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"project": {"typeName": "hydra.neo4j.model.Neo4jMapping", "fieldName": "encodeId"}},
+                                            "type": {"variable": "t0"}}},
+                                        "argument": {"variable": "mapping"}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Vertex", "fieldName": "id"}}, "type": {"variable": "t0"}}},
+                                        "argument": {"variable": "vertex"}}}}}}},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "eid",
+                                "domain": {"variable": "hydra.neo4j.model.ElementId"},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                "type": {"map": {"keys": {"variable": "hydra.neo4j.model.Key"}, "values": {"variable": "hydra.neo4j.model.Value"}}}}},
+                                            "type": {"variable": "hydra.neo4j.model.Node"}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "lambda": {
+                                                    "parameter": "mapping",
+                                                    "domain": {"application": {"function": {"variable": "hydra.neo4j.model.Neo4jMapping"}, "argument": {"variable": "t0"}}},
+                                                    "body": {
+                                                      "lambda": {
+                                                        "parameter": "props",
+                                                        "domain": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t0"}}},
+                                                        "body": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {"variable": "hydra.lib.eithers.map"},
+                                                                            "type": {"list": {"pair": {"first": {"variable": "hydra.neo4j.model.Key"}, "second": {"variable": "hydra.neo4j.model.Value"}}}}}},
+                                                                        "type": {"map": {"keys": {"variable": "hydra.neo4j.model.Key"}, "values": {"variable": "hydra.neo4j.model.Value"}}}}},
+                                                                    "type": {"literal": {"string": {}}}}},
+                                                                "argument": {
+                                                                  "lambda": {
+                                                                    "parameter": "pairs",
+                                                                    "domain": {"list": {"pair": {"first": {"variable": "hydra.neo4j.model.Key"}, "second": {"variable": "hydra.neo4j.model.Value"}}}},
+                                                                    "body": {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"variable": "hydra.neo4j.model.Key"}}},
+                                                                            "type": {"variable": "hydra.neo4j.model.Value"}}},
+                                                                        "argument": {"variable": "pairs"}}}}}}},
+                                                            "argument": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {"variable": "hydra.lib.eithers.mapList"},
+                                                                                "type": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "t0"}}}}},
+                                                                            "type": {"pair": {"first": {"variable": "hydra.neo4j.model.Key"}, "second": {"variable": "hydra.neo4j.model.Value"}}}}},
+                                                                        "type": {"literal": {"string": {}}}}},
+                                                                    "argument": {
+                                                                      "lambda": {
+                                                                        "parameter": "entry",
+                                                                        "domain": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "t0"}}},
+                                                                        "body": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"variable": "hydra.neo4j.model.Value"}}},
+                                                                                        "type": {"pair": {"first": {"variable": "hydra.neo4j.model.Key"}, "second": {"variable": "hydra.neo4j.model.Value"}}}}},
+                                                                                    "type": {"literal": {"string": {}}}}},
+                                                                                "argument": {
+                                                                                  "lambda": {
+                                                                                    "parameter": "encoded",
+                                                                                    "domain": {"variable": "hydra.neo4j.model.Value"},
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {
+                                                                                              "pair": {
+                                                                                                "first": {
+                                                                                                  "wrap": {
+                                                                                                    "typeName": "hydra.neo4j.model.Key",
+                                                                                                    "body": {
+                                                                                                      "application": {
+                                                                                                        "function": {"unwrap": "hydra.pg.model.PropertyKey"},
+                                                                                                        "argument": {
+                                                                                                          "application": {
+                                                                                                            "function": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.pg.model.PropertyKey"}}},
+                                                                                                                "type": {"variable": "t0"}}},
+                                                                                                            "argument": {"variable": "entry"}}}}}}},
+                                                                                                "second": {"variable": "encoded"}}},
+                                                                                            "type": {"variable": "hydra.neo4j.model.Key"}}},
+                                                                                        "type": {"variable": "hydra.neo4j.model.Value"}}}}}}},
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"project": {"typeName": "hydra.neo4j.model.Neo4jMapping", "fieldName": "encodeValue"}},
+                                                                                        "type": {"variable": "t0"}}},
+                                                                                    "argument": {"variable": "mapping"}}},
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.pg.model.PropertyKey"}}},
+                                                                                        "type": {"variable": "t0"}}},
+                                                                                    "argument": {"variable": "entry"}}}}}}}}}}},
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.toList"}, "type": {"variable": "hydra.pg.model.PropertyKey"}}},
+                                                                        "type": {"variable": "t0"}}},
+                                                                    "argument": {"variable": "props"}}}}}}}}}}},
+                                                "argument": {"variable": "mapping"}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {
+                                                  "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Vertex", "fieldName": "properties"}}, "type": {"variable": "t0"}}},
+                                                "argument": {"variable": "vertex"}}}}}}},
+                                    "argument": {
+                                      "lambda": {
+                                        "parameter": "props",
+                                        "domain": {"map": {"keys": {"variable": "hydra.neo4j.model.Key"}, "values": {"variable": "hydra.neo4j.model.Value"}}},
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "either": {
+                                                    "right": {
+                                                      "record": {
+                                                        "typeName": "hydra.neo4j.model.Node",
+                                                        "fields": [
+                                                          {"name": "id", "term": {"variable": "eid"}},
+                                                          {
+                                                            "name": "labels",
+                                                            "term": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {"body": {"variable": "hydra.lib.sets.singleton"}, "type": {"variable": "hydra.neo4j.model.NodeLabel"}}},
+                                                                "argument": {
+                                                                  "wrap": {
+                                                                    "typeName": "hydra.neo4j.model.NodeLabel",
+                                                                    "body": {
+                                                                      "application": {
+                                                                        "function": {"unwrap": "hydra.pg.model.VertexLabel"},
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Vertex", "fieldName": "label"}}, "type": {"variable": "t0"}}},
+                                                                            "argument": {"variable": "vertex"}}}}}}}}}},
+                                                          {"name": "properties", "term": {"variable": "props"}}]}}}},
+                                                "type": {"literal": {"string": {}}}}},
+                                            "type": {"variable": "hydra.neo4j.model.Node"}}}}}}}}}}}}}}},
+                "annotation": {
+                  "map": [
+                    {
+                      "key": {"variable": "description"},
+                      "value": {"literal": {"string": "Convert a property-graph vertex to a Neo4j node (single label -> singleton label set)."}}}]}}}}}}}]}

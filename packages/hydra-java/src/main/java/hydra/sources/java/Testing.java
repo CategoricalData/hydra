@@ -1,6 +1,6 @@
 package hydra.sources.java;
 import hydra.core.Field;
-import static hydra.dsl.meta.Defs.unqualifiedDeps;
+import static hydra.overlay.java.dsl.meta.Defs.unqualifiedDeps;
 import hydra.core.Name;
 import hydra.core.Type;
 import hydra.dsl.Core;
@@ -8,7 +8,7 @@ import hydra.dsl.Packaging;
 import hydra.overlay.java.dsl.Types;
 import hydra.dsl.java.Environment;
 import hydra.dsl.java.Syntax;
-import hydra.dsl.meta.Phantoms;
+import hydra.overlay.java.dsl.meta.Phantoms;
 import hydra.dsl.lib.Eithers;
 import hydra.dsl.lib.Equality;
 import hydra.dsl.lib.Lists;
@@ -31,8 +31,8 @@ import hydra.overlay.java.util.Optional;
 import java.util.Arrays;
 import java.util.List;
 
-import static hydra.dsl.meta.Phantoms.*;
-import static hydra.dsl.java.Helpers.termDef;
+import static hydra.overlay.java.dsl.meta.Phantoms.*;
+import static hydra.overlay.java.dsl.Helpers.termDef;
 
 /**
  * Java test code generation codec for JUnit-based generation tests.

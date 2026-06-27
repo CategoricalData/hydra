@@ -22,141 +22,141 @@ import hydra.dsl.lib.Strings;
 import hydra.packaging.Definition;
 import hydra.packaging.EntityMetadata;
 import hydra.packaging.Module;
-import hydra.packaging.ModuleName;
 import hydra.packaging.ModuleDependency;
+import hydra.packaging.ModuleName;
 import hydra.typed.TypedTerm;
 import hydra.overlay.java.util.Optional;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static hydra.dsl.meta.Phantoms.*;
-import hydra.dsl.meta.Defs.Def;
-import static hydra.dsl.meta.Defs.define;
-import static hydra.dsl.meta.Defs.unqualifiedDeps;
-import static hydra.dsl.meta.Defs.ref;
-import static hydra.dsl.meta.Defs.definitionsOf;
+import static hydra.overlay.java.dsl.meta.Phantoms.*;
+import hydra.overlay.java.dsl.meta.Defs.Def;
+import static hydra.overlay.java.dsl.meta.Defs.define;
+import static hydra.overlay.java.dsl.meta.Defs.unqualifiedDeps;
+import static hydra.overlay.java.dsl.meta.Defs.ref;
+import static hydra.overlay.java.dsl.meta.Defs.definitionsOf;
 import java.util.function.Supplier;
-import hydra.errors.Error_;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.errors.OtherError;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.environment.Aliases;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.AdditiveExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.AdditiveExpression_Binary;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.AmbiguousName;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.AndExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.AnnotatedIdentifier;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.Annotation;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ArrayCreationExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ArrayCreationExpressionWithInitializer;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ArrayCreationExpressionWithInitializer_Primitive;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ArrayInitializer;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ArrayType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ArrayType_Variant;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.Assignment;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.AssignmentExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.AssignmentOperator;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.Block;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.BlockStatement;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.CastExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.CastExpression_NotPlusMinus;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.CastExpression_Primitive;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.CastExpression_RefAndBounds;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ClassBody;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ClassBodyDeclaration;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ClassDeclaration;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ClassInstanceCreationExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ClassMemberDeclaration;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ClassOrInterfaceType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ClassOrInterfaceTypeToInstantiate;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ClassType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ClassTypeQualifier;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ConditionalAndExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ConditionalExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ConditionalOrExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ConstructorBody;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ConstructorDeclaration;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ConstructorDeclarator;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ConstructorModifier;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.Dims;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ElementValue;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.EqualityExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.EqualityExpression_Binary;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ExclusiveOrExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.Expression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ExpressionName;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ExpressionStatement;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.FieldAccess;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.FieldAccess_Qualifier;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.FieldDeclaration;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.FormalParameter;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.FormalParameter_Simple;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.Identifier;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.InclusiveOrExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.InstanceofExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.InstanceofExpression_Rhs;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.IntegerLiteral;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.IntegralType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.InterfaceDeclaration;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.InterfaceMemberDeclaration;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.InterfaceMethodDeclaration;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.InterfaceType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.LambdaBody;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.LambdaExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.LambdaParameters;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.LeftHandSide;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.Literal;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.LocalVariableDeclaration;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.LocalVariableDeclarationStatement;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.LocalVariableType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.MarkerAnnotation;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.MethodBody;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.MethodDeclaration;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.MethodDeclarator;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.MethodHeader;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.MethodInvocation;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.MethodInvocation_Complex;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.MethodInvocation_Header;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.MethodInvocation_Variant;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.MethodModifier;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.MethodName;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.MultiplicativeExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.NormalClassDeclaration;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.NumericType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.PackageDeclaration;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.PackageName;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.PostfixExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.Primary;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.PrimaryNoNewArrayExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.PrimitiveType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.PrimitiveTypeWithAnnotations;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ReferenceType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.RelationalExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.Result;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ReturnStatement;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ShiftExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.SimpleTypeName;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.SingleElementAnnotation;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.Statement;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.StatementExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.StatementWithoutTrailingSubstatement;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.StringLiteral;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ThrowStatement;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.TypeArgument;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.TypeIdentifier;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.TypeName;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.TypeParameter;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.TypeVariable;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.UnannType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.UnaryExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.UnaryExpressionNotPlusMinus;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.UnqualifiedClassInstanceCreationExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.VariableDeclarator;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.VariableDeclaratorId;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.VariableInitializer;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.VariableModifier;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.Wildcard;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.util.QualifiedName;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.sources.java.Names;  // AUTO-IMPORT (hydra-java DSL)
+import hydra.errors.Error_;
+import hydra.errors.OtherError;
+import hydra.java.environment.Aliases;
+import hydra.java.syntax.AdditiveExpression;
+import hydra.java.syntax.AdditiveExpression_Binary;
+import hydra.java.syntax.AmbiguousName;
+import hydra.java.syntax.AndExpression;
+import hydra.java.syntax.AnnotatedIdentifier;
+import hydra.java.syntax.Annotation;
+import hydra.java.syntax.ArrayCreationExpression;
+import hydra.java.syntax.ArrayCreationExpressionWithInitializer;
+import hydra.java.syntax.ArrayCreationExpressionWithInitializer_Primitive;
+import hydra.java.syntax.ArrayInitializer;
+import hydra.java.syntax.ArrayType;
+import hydra.java.syntax.ArrayType_Variant;
+import hydra.java.syntax.Assignment;
+import hydra.java.syntax.AssignmentExpression;
+import hydra.java.syntax.AssignmentOperator;
+import hydra.java.syntax.Block;
+import hydra.java.syntax.BlockStatement;
+import hydra.java.syntax.CastExpression;
+import hydra.java.syntax.CastExpression_NotPlusMinus;
+import hydra.java.syntax.CastExpression_Primitive;
+import hydra.java.syntax.CastExpression_RefAndBounds;
+import hydra.java.syntax.ClassBody;
+import hydra.java.syntax.ClassBodyDeclaration;
+import hydra.java.syntax.ClassDeclaration;
+import hydra.java.syntax.ClassInstanceCreationExpression;
+import hydra.java.syntax.ClassMemberDeclaration;
+import hydra.java.syntax.ClassOrInterfaceType;
+import hydra.java.syntax.ClassOrInterfaceTypeToInstantiate;
+import hydra.java.syntax.ClassType;
+import hydra.java.syntax.ClassTypeQualifier;
+import hydra.java.syntax.ConditionalAndExpression;
+import hydra.java.syntax.ConditionalExpression;
+import hydra.java.syntax.ConditionalOrExpression;
+import hydra.java.syntax.ConstructorBody;
+import hydra.java.syntax.ConstructorDeclaration;
+import hydra.java.syntax.ConstructorDeclarator;
+import hydra.java.syntax.ConstructorModifier;
+import hydra.java.syntax.Dims;
+import hydra.java.syntax.ElementValue;
+import hydra.java.syntax.EqualityExpression;
+import hydra.java.syntax.EqualityExpression_Binary;
+import hydra.java.syntax.ExclusiveOrExpression;
+import hydra.java.syntax.Expression;
+import hydra.java.syntax.ExpressionName;
+import hydra.java.syntax.ExpressionStatement;
+import hydra.java.syntax.FieldAccess;
+import hydra.java.syntax.FieldAccess_Qualifier;
+import hydra.java.syntax.FieldDeclaration;
+import hydra.java.syntax.FormalParameter;
+import hydra.java.syntax.FormalParameter_Simple;
+import hydra.java.syntax.Identifier;
+import hydra.java.syntax.InclusiveOrExpression;
+import hydra.java.syntax.InstanceofExpression;
+import hydra.java.syntax.InstanceofExpression_Rhs;
+import hydra.java.syntax.IntegerLiteral;
+import hydra.java.syntax.IntegralType;
+import hydra.java.syntax.InterfaceDeclaration;
+import hydra.java.syntax.InterfaceMemberDeclaration;
+import hydra.java.syntax.InterfaceMethodDeclaration;
+import hydra.java.syntax.InterfaceType;
+import hydra.java.syntax.LambdaBody;
+import hydra.java.syntax.LambdaExpression;
+import hydra.java.syntax.LambdaParameters;
+import hydra.java.syntax.LeftHandSide;
+import hydra.java.syntax.Literal;
+import hydra.java.syntax.LocalVariableDeclaration;
+import hydra.java.syntax.LocalVariableDeclarationStatement;
+import hydra.java.syntax.LocalVariableType;
+import hydra.java.syntax.MarkerAnnotation;
+import hydra.java.syntax.MethodBody;
+import hydra.java.syntax.MethodDeclaration;
+import hydra.java.syntax.MethodDeclarator;
+import hydra.java.syntax.MethodHeader;
+import hydra.java.syntax.MethodInvocation;
+import hydra.java.syntax.MethodInvocation_Complex;
+import hydra.java.syntax.MethodInvocation_Header;
+import hydra.java.syntax.MethodInvocation_Variant;
+import hydra.java.syntax.MethodModifier;
+import hydra.java.syntax.MethodName;
+import hydra.java.syntax.MultiplicativeExpression;
+import hydra.java.syntax.NormalClassDeclaration;
+import hydra.java.syntax.NumericType;
+import hydra.java.syntax.PackageDeclaration;
+import hydra.java.syntax.PackageName;
+import hydra.java.syntax.PostfixExpression;
+import hydra.java.syntax.Primary;
+import hydra.java.syntax.PrimaryNoNewArrayExpression;
+import hydra.java.syntax.PrimitiveType;
+import hydra.java.syntax.PrimitiveTypeWithAnnotations;
+import hydra.java.syntax.ReferenceType;
+import hydra.java.syntax.RelationalExpression;
+import hydra.java.syntax.Result;
+import hydra.java.syntax.ReturnStatement;
+import hydra.java.syntax.ShiftExpression;
+import hydra.java.syntax.SimpleTypeName;
+import hydra.java.syntax.SingleElementAnnotation;
+import hydra.java.syntax.Statement;
+import hydra.java.syntax.StatementExpression;
+import hydra.java.syntax.StatementWithoutTrailingSubstatement;
+import hydra.java.syntax.StringLiteral;
+import hydra.java.syntax.ThrowStatement;
+import hydra.java.syntax.TypeArgument;
+import hydra.java.syntax.TypeIdentifier;
+import hydra.java.syntax.TypeName;
+import hydra.java.syntax.TypeParameter;
+import hydra.java.syntax.TypeVariable;
+import hydra.java.syntax.UnannType;
+import hydra.java.syntax.UnaryExpression;
+import hydra.java.syntax.UnaryExpressionNotPlusMinus;
+import hydra.java.syntax.UnqualifiedClassInstanceCreationExpression;
+import hydra.java.syntax.VariableDeclarator;
+import hydra.java.syntax.VariableDeclaratorId;
+import hydra.java.syntax.VariableInitializer;
+import hydra.java.syntax.VariableModifier;
+import hydra.java.syntax.Wildcard;
+import hydra.util.QualifiedName;
+import hydra.sources.java.Names;
 
 /**
  * Java utilities for constructing Java syntax trees — Java DSL port of
@@ -2909,7 +2909,7 @@ public class Utils {
                 "abstract",
                 "vtparams",
                 let(
-                    java.util.Arrays.asList(
+                    binds(
     field("mods",
                         Logic.ifElse(
                             var("abstract"),

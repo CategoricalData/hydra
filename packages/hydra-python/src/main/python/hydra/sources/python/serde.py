@@ -1,6 +1,6 @@
 """Python serializer: converts Python AST to concrete syntax (source code).
 
-Mirror of packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Serde.hs.
+Host-native DSL source (authoritative; the former Haskell copy was removed in #346).
 Serializes the Python syntax model into properly formatted Python source code.
 """
 
@@ -52,7 +52,7 @@ from hydra.sources.python._source_dsl import (
     unqualified_dep,
 )
 
-# Mirror Haskell:
+# Namespace order (imports precede importers):
 #   [Constants.ns, Serialization.ns] L.++ (PySyntax.ns:KernelTypes.kernelTypesNamespaces)
 DEPENDENCIES = [
     unqualified_dep(ModuleName("hydra.constants")),

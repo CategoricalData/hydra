@@ -24,72 +24,146 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleMetadata = descriptionMetadata (Just ("A Gremlin model, based on the Gremlin ANTLR grammar "
-      ++ "(master branch, as of 2024-06-30)."))}
+            moduleMetadata = descriptionMetadata (Just ("A Gremlin model, based on the Apache TinkerPop Gremlin ANTLR grammar "
+      ++ "(version 3.8.1). This is a streamlined model: it preserves the semantics of the grammar "
+      ++ "(steps, predicates, arguments, literals) while collapsing pure parser-production artifacts "
+      ++ "(single-use 'XAndY'/'XOrY' glue types and left-recursion 'rest' continuations) so that the "
+      ++ "representation maps cleanly onto TinkerPop's native traversal model."))}
   where
     definitions = [
-      queryList,
-      query,
-      traversalSourceQuery,
-      rootTraversalQuery,
-      traversalSource,
-      transactionPart,
-      rootTraversal,
-      traversalSourceSelfMethod,
-      genericLiteralArgumentAndOptionalTraversalBiFunctionArgument,
-      stringArgumentAndGenericLiteralArgument,
-      stringArgumentAndOptionalGenericLiteralArgument,
-      traversalSourceSpawnMethod,
-      genericLiteralMapNullableArgumentOrNestedTraversal,
-      serviceCall,
-      serviceArguments,
-      chainedTraversal,
-      chainedTraversalElement,
-      nestedTraversal,
-      terminatedTraversal,
-      traversalMethod,
-      stringArgumentOrNestedTraversal,
-      optionalTraversalScopeArgumentAndStringArgument,
-      stringArgumentAndOptionalStringLiteralVarargs,
-      traversalSackMethodArgumentOrIntegerArgument,
+      asArgs,
+      barrierArgs,
+      booleanArgument,
       byArgs,
       byOtherArgs,
-      traversalFunctionArgumentOrStringArgumentOrNestedTraversal,
+      cardinalityAndMap,
+      cardinalityAndObjects,
+      chainedTraversal,
       chooseArgs,
-      predicateTraversalArgument,
-      nestedTraversalArgument,
+      concatArgs,
+      configuration,
+      connectedComponentConstants,
+      dateAddArgs,
+      dateArgument,
+      dateDiffArgs,
+      dateLiteral,
       dedupArgs,
-      scopeStringArgument,
-      predicateOrTraversal,
-      genericLiteralArgumentAndTraversalBiFunctionArgument,
-      fromArgs,
-      hasArgs,
-      hasStringArgumentAndOptionalStringLiteralVarargs,
-      hasStringArgumentAndOptionalStringLiteralVarargsRest,
-      stringNullableArgumentAndGenericLiteralArgument,
-      stringNullableArgumentAndTraversalPredicate,
-      hasTraversalTokenArgs,
-      hasTraversalTokenArgsRest,
-      genericLiteralArgumentAndTraversalPredicate,
-      traversalPredicateOrStringLiteralVarargs,
-      traversalPredicateOrGenericLiteralArgument,
-      optionArgs,
-      traversalPredicateAndNestedTraversal,
-      traversalMergeArgumentAndGenericLiteralMapNullableArgument,
-      traversalMergeArgumentAndNestedTraversal,
-      genericLiteralArgumentAndNestedTraversal,
-      propertyArgs,
-      traversalCardinalityArgumentAndObjects,
-      genericLiteralMapNullableArgumentAndTraversalCardinalityArgument,
-      rangeArgs,
-      optionalStringArgumentAndNestedTraversal,
-      optionalTraversalScopeArgumentAndIntegerArgument,
-      selectArgs,
-      popStringsArgument,
-      traversalPopArgumentAndNestedTraversal,
-      tailArgs,
-      toArgs,
       directionAndVarargs,
+      floatArgument,
+      floatLiteral,
+      foldArgs,
+      fromArgs,
+      genericLiteral,
+      genericLiteralArgument,
+      genericLiteralCollection,
+      genericLiteralList,
+      genericLiteralListArgument,
+      genericLiteralMap,
+      genericLiteralMapArgument,
+      genericLiteralMapNullableArgument,
+      genericLiteralRange,
+      genericLiteralSet,
+      hasArgs,
+      hasArgsWithKey,
+      hasArgsWithToken,
+      hasValueClause,
+      identifier,
+      integerArgument,
+      integerLiteral,
+      integerRange,
+      ioOptionsKeys,
+      ioOptionsValues,
+      keyword,
+      keywordOrIdentifier,
+      mapEntry,
+      mapKey,
+      mergeArgs,
+      mergeMapOption,
+      mergeTraversalOption,
+      nestedTraversal,
+      numericArgument,
+      numericLiteral,
+      objectAndTraversal,
+      optionArgs,
+      pageRankConstants,
+      peerPressureConstants,
+      popAndTraversal,
+      predicateAndTraversal,
+      predicateOrObject,
+      predicateOrObjects,
+      predicateOrStrings,
+      predicateOrTraversal,
+      predicateOrTraversalChoice,
+      propertyArgs,
+      query,
+      queryList,
+      rangeArgs,
+      rangeArgument,
+      repeatArgs,
+      replaceArgs,
+      rootTraversal,
+      rootTraversalQuery,
+      sampleByScope,
+      scopeAndInteger,
+      scopeStringArgs,
+      selectArgs,
+      selectByKeys,
+      serviceArguments,
+      serviceCall,
+      shortestPathConstants,
+      splitArgs,
+      stringAndObject,
+      stringAndOptionalObject,
+      stringArgument,
+      stringArgumentOrNestedTraversal,
+      stringKeyAndObject,
+      stringKeyAndPredicate,
+      stringNullableArgument,
+      stringRange,
+      structureVertex,
+      structureVertexArgument,
+      substringArgs,
+      tailArgs,
+      terminatedTraversal,
+      toArgs,
+      transactionPart,
+      traversalBiFunctionArgument,
+      traversalCardinality,
+      traversalCardinalityArgument,
+      traversalColumn,
+      traversalColumnArgument,
+      traversalComparatorArgument,
+      traversalDT,
+      traversalDTArgument,
+      traversalDirection,
+      traversalDirectionArgument,
+      traversalFunction,
+      traversalFunctionArgument,
+      traversalGType,
+      traversalGTypeArgument,
+      traversalMerge,
+      traversalMergeArgument,
+      traversalMethod,
+      traversalOperator,
+      traversalOrder,
+      traversalOrderArgument,
+      traversalPick,
+      traversalPop,
+      traversalPopArgument,
+      traversalPredicate,
+      traversalSackMethodArgument,
+      traversalScope,
+      traversalScopeArgument,
+      traversalSource,
+      traversalSourceQuery,
+      traversalSourceSelfMethod,
+      traversalSourceSpawnMethod,
+      traversalStrategy,
+      traversalTerminalMethod,
+      traversalToken,
+      traversalTokenArgument,
+      twoTraversalPredicates,
+      typeOfArg,
       valueMapArgs,
       valueMapBooleanArgs,
       whereArgs,
@@ -97,81 +171,9 @@ module_ = Module {
       withArgs,
       withArgsKeys,
       withArgsValues,
-      concatArgs,
-      replaceArgs,
-      splitArgs,
-      substringArgs,
-      dateAddArgs,
-      dateDiffArgs,
-      structureVertex,
-      traversalStrategy,
-      configuration,
-      keywordOrIdentifier,
-      traversalScope,
-      traversalToken,
-      traversalMerge,
-      traversalOrder,
-      traversalDirection,
-      traversalCardinality,
-      traversalColumn,
-      traversalPop,
-      traversalOperator,
-      traversalPick,
-      traversalDT,
-      traversalPredicate,
-      twoTraversalPredicates,
-      traversalTerminalMethod,
-      traversalSelfMethod,
-      traversalFunction,
-      rangeArgument,
       withOptionKeys,
-      connectedComponentConstants,
-      pageRankConstants,
-      peerPressureConstants,
-      shortestPathConstants,
       withOptionsValues,
-      ioOptionsKeys,
-      ioOptionsValues,
-      booleanArgument,
-      integerArgument,
-      floatArgument,
-      stringArgument,
-      stringNullableArgument,
-      dateArgument,
-      genericLiteralArgument,
-      genericLiteralListArgument,
-      genericLiteralMapArgument,
-      genericLiteralMapNullableArgument,
-      structureVertexArgument,
-      traversalCardinalityArgument,
-      traversalColumnArgument,
-      traversalDirectionArgument,
-      traversalMergeArgument,
-      traversalOrderArgument,
-      traversalPopArgument,
-      traversalSackMethodArgument,
-      traversalScopeArgument,
-      traversalTokenArgument,
-      traversalComparatorArgument,
-      traversalFunctionArgument,
-      traversalBiFunctionArgument,
-      traversalDTArgument,
-      genericLiteralList,
-      genericLiteralRange,
-      integerRange,
-      stringRange,
-      genericLiteralSet,
-      genericLiteralCollection,
-      genericLiteral,
-      genericLiteralMap,
-      mapEntry,
-      mapKey,
-      integerLiteral,
-      floatLiteral,
-      numericLiteral,
-      dateLiteral,
-      keyword,
-      identifier]
+      withSackArgs]
 
 
 -- Helper for argument types (value or variable)
@@ -186,6 +188,19 @@ gremlin = typeref ns
 
 -- Type definitions
 
+asArgs :: TypeDefinition
+asArgs = define "AsArgs" $ T.record [
+  "first">: gremlin "StringArgument",
+  "rest">: T.list $ gremlin "StringNullableArgument"]
+
+barrierArgs :: TypeDefinition
+barrierArgs = define "BarrierArgs" $ T.union [
+  "consumer">: gremlin "TraversalSackMethodArgument",
+  "int">: gremlin "IntegerArgument"]
+
+booleanArgument :: TypeDefinition
+booleanArgument = defArgument "BooleanArgument" T.boolean
+
 byArgs :: TypeDefinition
 byArgs = define "ByArgs" $ T.union [
   "order">: gremlin "TraversalOrderArgument",
@@ -195,23 +210,30 @@ byArgs = define "ByArgs" $ T.union [
 byOtherArgs :: TypeDefinition
 byOtherArgs = define "ByOtherArgs" $ T.union [
   "comparator">: T.optional $ gremlin "TraversalComparatorArgument",
-  "other">: T.optional $ gremlin "TraversalFunctionArgumentOrStringArgumentOrNestedTraversal"]
+  -- Inlined: was TraversalFunctionArgumentOrStringArgumentOrNestedTraversal
+  "function">: gremlin "TraversalFunctionArgument",
+  "string">: gremlin "StringArgument",
+  "traversal">: gremlin "NestedTraversal"]
+
+cardinalityAndMap :: TypeDefinition
+cardinalityAndMap = define "CardinalityAndMap" $ T.record [
+  "cardinality">: gremlin "TraversalCardinalityArgument",
+  "object">: gremlin "GenericLiteralMapNullableArgument"]
+
+cardinalityAndObjects :: TypeDefinition
+cardinalityAndObjects = define "CardinalityAndObjects" $ T.record [
+  "cardinality">: gremlin "TraversalCardinalityArgument",
+  "objects">: minLengthList 2 $ gremlin "GenericLiteralArgument"]
 
 chainedTraversal :: TypeDefinition
-chainedTraversal = define "ChainedTraversal" $ T.record [
-  "first">: gremlin "TraversalMethod",
-  "rest">: gremlin "ChainedTraversalElement"]
-
-chainedTraversalElement :: TypeDefinition
-chainedTraversalElement = define "ChainedTraversalElement" $ T.union [
-  "method">: gremlin "TraversalMethod",
-  "self">: gremlin "TraversalSelfMethod"]
+chainedTraversal = define "ChainedTraversal" $ T.wrap $ nonemptyList $ gremlin "TraversalMethod"
 
 chooseArgs :: TypeDefinition
 chooseArgs = define "ChooseArgs" $ T.union [
   "function">: gremlin "TraversalFunctionArgument",
-  "predicateTraversal">: gremlin "PredicateTraversalArgument",
-  "traversal">: gremlin "NestedTraversalArgument"]
+  -- Inlined PredicateTraversalArgument: predicate + 1..2 nested traversals
+  "predicateTraversal">: gremlin "PredicateOrTraversalChoice",
+  "traversal">: gremlin "NestedTraversal"]
 
 concatArgs :: TypeDefinition
 concatArgs = define "ConcatArgs" $ T.union [
@@ -234,14 +256,20 @@ dateAddArgs = define "DateAddArgs" $ T.record [
   "unit">: gremlin "TraversalDTArgument",
   "duration">: gremlin "IntegerArgument"]
 
+dateArgument :: TypeDefinition
+dateArgument = defArgument "DateArgument" $ gremlin "DateLiteral"
+
 dateDiffArgs :: TypeDefinition
 dateDiffArgs = define "DateDiffArgs" $ T.union [
   "traversal">: gremlin "NestedTraversal",
   "date">: gremlin "DateArgument"]
 
+dateLiteral :: TypeDefinition
+dateLiteral = define "DateLiteral" $ T.wrap $ T.optional $ gremlin "StringArgument"
+
 dedupArgs :: TypeDefinition
 dedupArgs = define "DedupArgs" $ T.union [
-  "scopeString">: gremlin "ScopeStringArgument",
+  "scopeString">: gremlin "ScopeStringArgs",
   "string">: nonemptyList $ gremlin "StringNullableArgument"]
 
 directionAndVarargs :: TypeDefinition
@@ -249,70 +277,123 @@ directionAndVarargs = define "DirectionAndVarargs" $ T.record [
   "direction">: gremlin "TraversalDirectionArgument",
   "varargs">: T.list $ gremlin "StringNullableArgument"]
 
+floatArgument :: TypeDefinition
+floatArgument = defArgument "FloatArgument" $ gremlin "FloatLiteral"
+
+floatLiteral :: TypeDefinition
+floatLiteral = define "FloatLiteral" $ T.union [
+  "float">: T.float32,
+  "double">: T.float64,
+  "big">: T.decimal]
+
+foldArgs :: TypeDefinition
+foldArgs = define "FoldArgs" $ T.record [
+  "seed">: gremlin "GenericLiteralArgument",
+  "biFunction">: gremlin "TraversalBiFunctionArgument"]
+
 fromArgs :: TypeDefinition
 fromArgs = define "FromArgs" $ T.union [
   "string">: gremlin "StringArgument",
   "vertex">: gremlin "StructureVertexArgument",
   "traversal">: gremlin "NestedTraversal"]
 
-genericLiteralArgumentAndNestedTraversal :: TypeDefinition
-genericLiteralArgumentAndNestedTraversal = define "GenericLiteralArgumentAndNestedTraversal" $ T.record [
-  "object">: gremlin "GenericLiteralArgument",
-  "traversal">: gremlin "NestedTraversal"]
+genericLiteral :: TypeDefinition
+genericLiteral = define "GenericLiteral" $ T.union [
+  "numeric">: gremlin "NumericLiteral",
+  "boolean">: T.boolean,
+  "string">: T.string,
+  "date">: gremlin "DateLiteral",
+  "null">: T.unit,
+  "nan">: T.unit,
+  "inf">: T.unit,
+  "traversalToken">: gremlin "TraversalToken",
+  "traversalCardinality">: gremlin "TraversalCardinality",
+  "traversalDirection">: gremlin "TraversalDirection",
+  "traversalMerge">: gremlin "TraversalMerge",
+  "traversalPick">: gremlin "TraversalPick",
+  "traversalDT">: gremlin "TraversalDT",
+  "traversalGType">: gremlin "TraversalGType",
+  "structureVertex">: gremlin "StructureVertex",
+  "genericLiteralSet">: gremlin "GenericLiteralSet",
+  "genericLiteralCollection">: gremlin "GenericLiteralCollection",
+  "genericLiteralRange">: gremlin "GenericLiteralRange",
+  "nestedTraversal">: gremlin "NestedTraversal",
+  "terminatedTraversal">: gremlin "TerminatedTraversal",
+  "genericLiteralMap">: gremlin "GenericLiteralMap"]
 
-genericLiteralArgumentAndOptionalTraversalBiFunctionArgument :: TypeDefinition
-genericLiteralArgumentAndOptionalTraversalBiFunctionArgument = define "GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument" $ T.record [
-  "literal">: gremlin "GenericLiteralArgument",
-  "biFunction">: T.optional $ gremlin "TraversalBiFunctionArgument"]
+genericLiteralArgument :: TypeDefinition
+genericLiteralArgument = defArgument "GenericLiteralArgument" $ gremlin "GenericLiteral"
 
-genericLiteralArgumentAndTraversalBiFunctionArgument :: TypeDefinition
-genericLiteralArgumentAndTraversalBiFunctionArgument = define "GenericLiteralArgumentAndTraversalBiFunctionArgument" $ T.record [
-  "literal">: gremlin "GenericLiteralArgument",
-  "biFunction">: gremlin "TraversalBiFunctionArgument"]
+genericLiteralCollection :: TypeDefinition
+genericLiteralCollection = define "GenericLiteralCollection" $ T.wrap $ T.list $ gremlin "GenericLiteral"
 
-genericLiteralArgumentAndTraversalPredicate :: TypeDefinition
-genericLiteralArgumentAndTraversalPredicate = define "GenericLiteralArgumentAndTraversalPredicate" $ T.union [
-  "literal">: gremlin "GenericLiteralArgument",
-  "predicate">: gremlin "TraversalPredicate"]
+genericLiteralList :: TypeDefinition
+genericLiteralList = define "GenericLiteralList" $ T.wrap $ T.list $ gremlin "GenericLiteral"
 
-genericLiteralMapNullableArgumentAndTraversalCardinalityArgument :: TypeDefinition
-genericLiteralMapNullableArgumentAndTraversalCardinalityArgument = define "GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument" $ T.record [
-  "cardinality">: gremlin "TraversalCardinalityArgument",
-  "object">: gremlin "GenericLiteralMapNullableArgument"]
+genericLiteralListArgument :: TypeDefinition
+genericLiteralListArgument = defArgument "GenericLiteralListArgument" $ gremlin "GenericLiteralList"
 
-genericLiteralMapNullableArgumentOrNestedTraversal :: TypeDefinition
-genericLiteralMapNullableArgumentOrNestedTraversal = define "GenericLiteralMapNullableArgumentOrNestedTraversal" $ T.union [
-  "map">: gremlin "GenericLiteralMapNullableArgument",
-  "traversal">: gremlin "NestedTraversal"]
+genericLiteralMap :: TypeDefinition
+genericLiteralMap = define "GenericLiteralMap" $ T.wrap $ T.list $ gremlin "MapEntry"
+
+genericLiteralMapArgument :: TypeDefinition
+genericLiteralMapArgument = defArgument "GenericLiteralMapArgument" $ gremlin "GenericLiteralMap"
+
+genericLiteralMapNullableArgument :: TypeDefinition
+genericLiteralMapNullableArgument = defArgument "GenericLiteralMapNullableArgument" $ T.optional $ gremlin "GenericLiteralMap"
+
+genericLiteralRange :: TypeDefinition
+genericLiteralRange = define "GenericLiteralRange" $ T.union [
+  "integer">: gremlin "IntegerRange",
+  "string">: gremlin "StringRange"]
+
+genericLiteralSet :: TypeDefinition
+genericLiteralSet = define "GenericLiteralSet" $ T.wrap $ T.list $ gremlin "GenericLiteral"
 
 hasArgs :: TypeDefinition
 hasArgs = define "HasArgs" $ T.union [
-  "string">: gremlin "HasStringArgumentAndOptionalStringLiteralVarargs",
-  "traversalToken">: gremlin "HasTraversalTokenArgs"]
+  "string">: gremlin "HasArgsWithKey",
+  "traversalToken">: gremlin "HasArgsWithToken"]
 
-hasStringArgumentAndOptionalStringLiteralVarargs :: TypeDefinition
-hasStringArgumentAndOptionalStringLiteralVarargs = define "HasStringArgumentAndOptionalStringLiteralVarargs" $ T.record [
-  "string">: gremlin "StringNullableArgument",
-  "rest">: T.optional $ gremlin "HasStringArgumentAndOptionalStringLiteralVarargsRest"]
+hasArgsWithKey :: TypeDefinition
+hasArgsWithKey = define "HasArgsWithKey" $ T.record [
+  "key">: gremlin "StringNullableArgument",
+  -- Inlined HasStringArgumentAndOptionalStringLiteralVarargsRest as an optional value clause
+  "value">: T.optional $ gremlin "HasValueClause"]
 
-hasStringArgumentAndOptionalStringLiteralVarargsRest :: TypeDefinition
-hasStringArgumentAndOptionalStringLiteralVarargsRest = define "HasStringArgumentAndOptionalStringLiteralVarargsRest" $ T.union [
+hasArgsWithToken :: TypeDefinition
+hasArgsWithToken = define "HasArgsWithToken" $ T.record [
+  "token">: gremlin "TraversalTokenArgument",
+  "value">: gremlin "HasValueClause"]
+
+-- Unified "has" value clause (object | predicate | traversal | string+object | string+predicate)
+
+hasValueClause :: TypeDefinition
+hasValueClause = define "HasValueClause" $ T.union [
   "object">: gremlin "GenericLiteralArgument",
   "predicate">: gremlin "TraversalPredicate",
-  "stringObject">: gremlin "StringNullableArgumentAndGenericLiteralArgument",
-  "stringPredicate">: gremlin "StringNullableArgumentAndTraversalPredicate",
-  "traversal">: gremlin "NestedTraversal"]
+  "traversal">: gremlin "NestedTraversal",
+  "keyObject">: gremlin "StringKeyAndObject",
+  "keyPredicate">: gremlin "StringKeyAndPredicate"]
 
-hasTraversalTokenArgs :: TypeDefinition
-hasTraversalTokenArgs = define "HasTraversalTokenArgs" $ T.record [
-  "traversalToken">: gremlin "TraversalTokenArgument",
-  "rest">: gremlin "HasTraversalTokenArgsRest"]
+identifier :: TypeDefinition
+identifier = define "Identifier" $ T.wrap T.string
 
-hasTraversalTokenArgsRest :: TypeDefinition
-hasTraversalTokenArgsRest = define "HasTraversalTokenArgsRest" $ T.union [
-  "literal">: gremlin "GenericLiteralArgument",
-  "predicate">: gremlin "TraversalPredicate",
-  "traversal">: gremlin "NestedTraversal"]
+integerArgument :: TypeDefinition
+integerArgument = defArgument "IntegerArgument" $ gremlin "IntegerLiteral"
+
+integerLiteral :: TypeDefinition
+integerLiteral = define "IntegerLiteral" $ T.union [
+  "byte">: T.int8,
+  "short">: T.int16,
+  "int">: T.int32,
+  "long">: T.int64,
+  "big">: T.bigint]
+
+integerRange :: TypeDefinition
+integerRange = define "IntegerRange" $ T.record [
+  "left">: gremlin "IntegerLiteral",
+  "right">: gremlin "IntegerLiteral"]
 
 ioOptionsKeys :: TypeDefinition
 ioOptionsKeys = define "IoOptionsKeys" $ T.enum [
@@ -325,10 +406,50 @@ ioOptionsValues = define "IoOptionsValues" $ T.enum [
   "graphson",
   "graphml"]
 
+keyword :: TypeDefinition
+keyword = define "Keyword" $ T.enum [
+  "edges",
+  "keys",
+  "new",
+  "values"]
+
 keywordOrIdentifier :: TypeDefinition
 keywordOrIdentifier = define "KeywordOrIdentifier" $ T.union [
   "keyword">: gremlin "Keyword",
   "identifier">: gremlin "Identifier"]
+
+mapEntry :: TypeDefinition
+mapEntry = define "MapEntry" $ T.union [
+  "key">: gremlin "MapKey",
+  "value">: gremlin "GenericLiteral"]
+
+mapKey :: TypeDefinition
+mapKey = define "MapKey" $ T.union [
+  "string">: T.string,
+  "numeric">: gremlin "NumericLiteral",
+  "traversalToken">: gremlin "TraversalToken",
+  "traversalDirection">: gremlin "TraversalDirection",
+  "set">: gremlin "GenericLiteralSet",
+  "collection">: gremlin "GenericLiteralCollection",
+  "map">: gremlin "GenericLiteralMap",
+  "keyword">: gremlin "Keyword",
+  "identifier">: gremlin "Identifier"]
+
+mergeArgs :: TypeDefinition
+mergeArgs = define "MergeArgs" $ T.union [
+  "map">: gremlin "GenericLiteralMapNullableArgument",
+  "traversal">: gremlin "NestedTraversal"]
+
+mergeMapOption :: TypeDefinition
+mergeMapOption = define "MergeMapOption" $ T.record [
+  "merge">: gremlin "TraversalMergeArgument",
+  "map">: gremlin "GenericLiteralMapNullableArgument",
+  "cardinality">: T.optional $ gremlin "TraversalCardinality"]
+
+mergeTraversalOption :: TypeDefinition
+mergeTraversalOption = define "MergeTraversalOption" $ T.record [
+  "merge">: gremlin "TraversalMergeArgument",
+  "traversal">: gremlin "NestedTraversal"]
 
 nestedTraversal :: TypeDefinition
 nestedTraversal = define "NestedTraversal" $ T.union [
@@ -336,34 +457,29 @@ nestedTraversal = define "NestedTraversal" $ T.union [
   "chained">: gremlin "ChainedTraversal",
   "anonymous">: gremlin "ChainedTraversal"]
 
-nestedTraversalArgument :: TypeDefinition
-nestedTraversalArgument = define "NestedTraversalArgument" $ T.record [
-  "traversal1">: gremlin "NestedTraversal",
-  "traversal2">: T.optional $ gremlin "NestedTraversal",
-  "traversal3">: T.optional $ gremlin "NestedTraversal"]
+-- A chained traversal is simply a non-empty sequence of steps.
+-- (Streamlined from the grammar's left-recursive first/rest + ChainedTraversalElement.)
+
+numericArgument :: TypeDefinition
+numericArgument = defArgument "NumericArgument" $ gremlin "NumericLiteral"
+
+numericLiteral :: TypeDefinition
+numericLiteral = define "NumericLiteral" $ T.union [
+  "integer">: gremlin "IntegerLiteral",
+  "float">: gremlin "FloatLiteral"]
+
+objectAndTraversal :: TypeDefinition
+objectAndTraversal = define "ObjectAndTraversal" $ T.record [
+  "object">: gremlin "GenericLiteralArgument",
+  "traversal">: gremlin "NestedTraversal"]
 
 optionArgs :: TypeDefinition
 optionArgs = define "OptionArgs" $ T.union [
-  "predicateTraversal">: gremlin "TraversalPredicateAndNestedTraversal",
-  "mergeMap">: gremlin "TraversalMergeArgumentAndGenericLiteralMapNullableArgument",
-  "mergeTraversal">: gremlin "TraversalMergeArgumentAndNestedTraversal",
-  "objectTraversal">: gremlin "GenericLiteralArgumentAndNestedTraversal",
+  "predicateTraversal">: gremlin "PredicateAndTraversal",
+  "mergeMap">: gremlin "MergeMapOption",
+  "mergeTraversal">: gremlin "MergeTraversalOption",
+  "objectTraversal">: gremlin "ObjectAndTraversal",
   "traversal">: gremlin "NestedTraversal"]
-
-optionalStringArgumentAndNestedTraversal :: TypeDefinition
-optionalStringArgumentAndNestedTraversal = define "OptionalStringArgumentAndNestedTraversal" $ T.record [
-  "string">: T.optional $ gremlin "StringArgument",
-  "traversal">: gremlin "NestedTraversal"]
-
-optionalTraversalScopeArgumentAndIntegerArgument :: TypeDefinition
-optionalTraversalScopeArgumentAndIntegerArgument = define "OptionalTraversalScopeArgumentAndIntegerArgument" $ T.record [
-  "scope">: T.optional $ gremlin "TraversalScopeArgument",
-  "long">: gremlin "IntegerArgument"]
-
-optionalTraversalScopeArgumentAndStringArgument :: TypeDefinition
-optionalTraversalScopeArgumentAndStringArgument = define "OptionalTraversalScopeArgumentAndStringArgument" $ T.record [
-  "scope">: T.optional $ gremlin "TraversalScopeArgument",
-  "string">: gremlin "StringArgument"]
 
 pageRankConstants :: TypeDefinition
 pageRankConstants = define "PageRankConstants" $ T.enum [
@@ -377,28 +493,50 @@ peerPressureConstants = define "PeerPressureConstants" $ T.enum [
   "times",
   "propertyName"]
 
-popStringsArgument :: TypeDefinition
-popStringsArgument = define "PopStringsArgument" $ T.record [
+popAndTraversal :: TypeDefinition
+popAndTraversal = define "PopAndTraversal" $ T.record [
   "pop">: gremlin "TraversalPopArgument",
-  "string">: nonemptyList $ gremlin "StringArgument"]
+  "traversal">: gremlin "NestedTraversal"]
+
+predicateAndTraversal :: TypeDefinition
+predicateAndTraversal = define "PredicateAndTraversal" $ T.record [
+  "predicate">: gremlin "TraversalPredicate",
+  "traversal">: gremlin "NestedTraversal"]
+
+-- choose(predicate, trueTraversal[, falseTraversal])
+
+predicateOrObject :: TypeDefinition
+predicateOrObject = define "PredicateOrObject" $ T.union [
+  "predicate">: gremlin "TraversalPredicate",
+  "object">: gremlin "GenericLiteralArgument"]
+
+predicateOrObjects :: TypeDefinition
+predicateOrObjects = define "PredicateOrObjects" $ T.union [
+  "predicate">: gremlin "TraversalPredicate",
+  "objects">: T.list $ gremlin "GenericLiteralArgument"]
+
+predicateOrStrings :: TypeDefinition
+predicateOrStrings = define "PredicateOrStrings" $ T.union [
+  "predicate">: gremlin "TraversalPredicate",
+  "strings">: nonemptyList $ gremlin "StringNullableArgument"]
 
 predicateOrTraversal :: TypeDefinition
 predicateOrTraversal = define "PredicateOrTraversal" $ T.union [
   "predicate">: gremlin "TraversalPredicate",
   "traversal">: gremlin "NestedTraversal"]
 
-predicateTraversalArgument :: TypeDefinition
-predicateTraversalArgument = define "PredicateTraversalArgument" $ T.record [
+predicateOrTraversalChoice :: TypeDefinition
+predicateOrTraversalChoice = define "PredicateOrTraversalChoice" $ T.record [
   "predicate">: gremlin "TraversalPredicate",
-  "traversal1">: gremlin "NestedTraversal",
-  "traversal2">: T.optional $ gremlin "NestedTraversal"]
+  "true">: gremlin "NestedTraversal",
+  "false">: T.optional $ gremlin "NestedTraversal"]
 
 propertyArgs :: TypeDefinition
 propertyArgs = define "PropertyArgs" $ T.union [
-  "cardinalityObjects">: gremlin "TraversalCardinalityArgumentAndObjects",
+  "cardinalityObjects">: gremlin "CardinalityAndObjects",
   "objects">: minLengthList 2 $ gremlin "GenericLiteralArgument",
   "object">: gremlin "GenericLiteralMapNullableArgument",
-  "cardinalityObject">: gremlin "GenericLiteralMapNullableArgumentAndTraversalCardinalityArgument"]
+  "cardinalityObject">: gremlin "CardinalityAndMap"]
 
 query :: TypeDefinition
 query = define "Query" $ T.union [
@@ -421,6 +559,11 @@ rangeArgument = define "RangeArgument" $ T.record [
   "min">: gremlin "GenericLiteralArgument",
   "max">: gremlin "GenericLiteralArgument"]
 
+repeatArgs :: TypeDefinition
+repeatArgs = define "RepeatArgs" $ T.record [
+  "string">: T.optional $ gremlin "StringArgument",
+  "traversal">: gremlin "NestedTraversal"]
+
 replaceArgs :: TypeDefinition
 replaceArgs = define "ReplaceArgs" $ T.record [
   "scope">: T.optional $ gremlin "TraversalScopeArgument",
@@ -431,25 +574,40 @@ rootTraversal :: TypeDefinition
 rootTraversal = define "RootTraversal" $ T.record [
   "source">: gremlin "TraversalSource",
   "spawnMethod">: gremlin "TraversalSourceSpawnMethod",
-  "chained">: T.list $ gremlin "ChainedTraversalElement"]
+  "chained">: T.list $ gremlin "TraversalMethod"]
 
 rootTraversalQuery :: TypeDefinition
 rootTraversalQuery = define "RootTraversalQuery" $ T.record [
   "root">: gremlin "RootTraversal",
   "terminalMethod">: T.optional $ gremlin "TraversalTerminalMethod"]
 
-scopeStringArgument :: TypeDefinition
-scopeStringArgument = define "ScopeStringArgument" $ T.record [
+sampleByScope :: TypeDefinition
+sampleByScope = define "SampleByScope" $ T.record [
+  "scope">: T.optional $ gremlin "TraversalScopeArgument",
+  "integer">: gremlin "IntegerArgument"]
+
+scopeAndInteger :: TypeDefinition
+scopeAndInteger = define "ScopeAndInteger" $ T.record [
+  "scope">: T.optional $ gremlin "TraversalScopeArgument",
+  "integer">: gremlin "IntegerArgument"]
+
+scopeStringArgs :: TypeDefinition
+scopeStringArgs = define "ScopeStringArgs" $ T.record [
   "scope">: gremlin "TraversalScopeArgument",
   "strings">: T.list $ gremlin "StringNullableArgument"]
 
 selectArgs :: TypeDefinition
 selectArgs = define "SelectArgs" $ T.union [
   "column">: gremlin "TraversalColumnArgument",
-  "popStrings">: gremlin "PopStringsArgument",
-  "popTraversal">: gremlin "TraversalPopArgumentAndNestedTraversal",
+  "popStrings">: gremlin "SelectByKeys",
+  "popTraversal">: gremlin "PopAndTraversal",
   "strings">: nonemptyList $ gremlin "StringArgument",
   "traversal">: gremlin "NestedTraversal"]
+
+selectByKeys :: TypeDefinition
+selectByKeys = define "SelectByKeys" $ T.record [
+  "pop">: gremlin "TraversalPopArgument",
+  "keys">: nonemptyList $ gremlin "StringArgument"]
 
 serviceArguments :: TypeDefinition
 serviceArguments = define "ServiceArguments" $ T.union [
@@ -474,41 +632,50 @@ splitArgs = define "SplitArgs" $ T.record [
   "scope">: T.optional $ gremlin "TraversalScopeArgument",
   "delimiter">: gremlin "StringNullableArgument"]
 
-stringArgumentAndGenericLiteralArgument :: TypeDefinition
-stringArgumentAndGenericLiteralArgument = define "StringArgumentAndGenericLiteralArgument" $ T.record [
-  "string">: gremlin "StringArgument",
-  "literal">: gremlin "GenericLiteralArgument"]
+stringAndObject :: TypeDefinition
+stringAndObject = define "StringAndObject" $ T.record [
+  "key">: gremlin "StringArgument",
+  "value">: gremlin "GenericLiteralArgument"]
 
-stringArgumentAndOptionalGenericLiteralArgument :: TypeDefinition
-stringArgumentAndOptionalGenericLiteralArgument = define "StringArgumentAndOptionalGenericLiteralArgument" $ T.record [
-  "string">: gremlin "StringArgument",
-  "literal">: T.optional $ gremlin "GenericLiteralArgument"]
+stringAndOptionalObject :: TypeDefinition
+stringAndOptionalObject = define "StringAndOptionalObject" $ T.record [
+  "key">: gremlin "StringArgument",
+  "value">: T.optional $ gremlin "GenericLiteralArgument"]
 
-stringArgumentAndOptionalStringLiteralVarargs :: TypeDefinition
-stringArgumentAndOptionalStringLiteralVarargs = define "StringArgumentAndOptionalStringLiteralVarargs" $ T.record [
-  "first">: gremlin "StringArgument",
-  "rest">: T.list $ gremlin "StringNullableArgument"]
+stringArgument :: TypeDefinition
+stringArgument = defArgument "StringArgument" T.string
 
 stringArgumentOrNestedTraversal :: TypeDefinition
 stringArgumentOrNestedTraversal = define "StringArgumentOrNestedTraversal" $ T.union [
   "string">: gremlin "StringArgument",
   "traversal">: gremlin "NestedTraversal"]
 
-stringNullableArgumentAndGenericLiteralArgument :: TypeDefinition
-stringNullableArgumentAndGenericLiteralArgument = define "StringNullableArgumentAndGenericLiteralArgument" $ T.record [
-  "string">: gremlin "StringNullableArgument",
-  "literal">: gremlin "GenericLiteralArgument"]
+stringKeyAndObject :: TypeDefinition
+stringKeyAndObject = define "StringKeyAndObject" $ T.record [
+  "key">: gremlin "StringNullableArgument",
+  "object">: gremlin "GenericLiteralArgument"]
 
-stringNullableArgumentAndTraversalPredicate :: TypeDefinition
-stringNullableArgumentAndTraversalPredicate = define "StringNullableArgumentAndTraversalPredicate" $ T.record [
-  "string">: gremlin "StringNullableArgument",
+stringKeyAndPredicate :: TypeDefinition
+stringKeyAndPredicate = define "StringKeyAndPredicate" $ T.record [
+  "key">: gremlin "StringNullableArgument",
   "predicate">: gremlin "TraversalPredicate"]
+
+stringNullableArgument :: TypeDefinition
+stringNullableArgument = defArgument "StringNullableArgument" $ T.optional T.string
+
+stringRange :: TypeDefinition
+stringRange = define "StringRange" $ T.record [
+  "left">: T.string,
+  "right">: T.string]
 
 structureVertex :: TypeDefinition
 structureVertex = define "StructureVertex" $ T.record [
   "new">: T.boolean,
   "id">: gremlin "GenericLiteralArgument",
   "label">: gremlin "StringArgument"]
+
+structureVertexArgument :: TypeDefinition
+structureVertexArgument = defArgument "StructureVertexArgument" $ gremlin "StructureVertex"
 
 substringArgs :: TypeDefinition
 substringArgs = define "SubstringArgs" $ T.record [
@@ -539,21 +706,39 @@ transactionPart = define "TransactionPart" $ T.enum [
   "commit",
   "rollback"]
 
+traversalBiFunctionArgument :: TypeDefinition
+traversalBiFunctionArgument = defArgument "TraversalBiFunctionArgument" $ gremlin "TraversalOperator"
+
 traversalCardinality :: TypeDefinition
 traversalCardinality = define "TraversalCardinality" $ T.union [
   "single">: gremlin "GenericLiteral",
   "set">: gremlin "GenericLiteral",
   "list">: gremlin "GenericLiteral"]
 
-traversalCardinalityArgumentAndObjects :: TypeDefinition
-traversalCardinalityArgumentAndObjects = define "TraversalCardinalityArgumentAndObjects" $ T.record [
-  "cardinality">: gremlin "TraversalCardinalityArgument",
-  "objects">: minLengthList 2 $ gremlin "GenericLiteralArgument"]
+traversalCardinalityArgument :: TypeDefinition
+traversalCardinalityArgument = defArgument "TraversalCardinalityArgument" $ gremlin "TraversalCardinality"
 
 traversalColumn :: TypeDefinition
 traversalColumn = define "TraversalColumn" $ T.enum [
   "keys",
   "values"]
+
+traversalColumnArgument :: TypeDefinition
+traversalColumnArgument = defArgument "TraversalColumnArgument" $ gremlin "TraversalColumn"
+
+traversalComparatorArgument :: TypeDefinition
+traversalComparatorArgument = defArgument "TraversalComparatorArgument" $ gremlin "TraversalOrder"
+
+traversalDirection :: TypeDefinition
+traversalDirection = define "TraversalDirection" $ T.enum [
+  "in",
+  "out",
+  "both",
+  "from",
+  "to"]
+
+traversalDirectionArgument :: TypeDefinition
+traversalDirectionArgument = defArgument "TraversalDirectionArgument" $ gremlin "TraversalDirection"
 
 traversalDT :: TypeDefinition
 traversalDT = define "TraversalDT" $ T.enum [
@@ -562,22 +747,49 @@ traversalDT = define "TraversalDT" $ T.enum [
   "hour",
   "day"]
 
-traversalDirection :: TypeDefinition
-traversalDirection = define "TraversalDirection" $ T.enum [
-  "in",
-  "out",
-  "both"]
+traversalDTArgument :: TypeDefinition
+traversalDTArgument = defArgument "TraversalDTArgument" $ gremlin "TraversalDT"
 
 traversalFunction :: TypeDefinition
 traversalFunction = define "TraversalFunction" $ T.union [
   "token">: gremlin "TraversalToken",
   "column">: gremlin "TraversalColumn"]
 
-traversalFunctionArgumentOrStringArgumentOrNestedTraversal :: TypeDefinition
-traversalFunctionArgumentOrStringArgumentOrNestedTraversal = define "TraversalFunctionArgumentOrStringArgumentOrNestedTraversal" $ T.union [
-  "function">: gremlin "TraversalFunctionArgument",
-  "string">: gremlin "StringArgument",
-  "traversal">: gremlin "NestedTraversal"]
+traversalFunctionArgument :: TypeDefinition
+traversalFunctionArgument = defArgument "TraversalFunctionArgument" $ gremlin "TraversalFunction"
+
+traversalGType :: TypeDefinition
+traversalGType = define "TraversalGType" $ T.enum [
+  "bigDecimal", "bigDecimalU",
+  "bigInt", "bigIntU",
+  "binary", "binaryU",
+  "boolean", "booleanU",
+  "byte", "byteU",
+  "char", "charU",
+  "dateTime", "dateTimeU",
+  "double", "doubleU",
+  "duration", "durationU",
+  "edge", "edgeU",
+  "float", "floatU",
+  "graph", "graphU",
+  "int", "intU",
+  "list", "listU",
+  "long", "longU",
+  "map", "mapU",
+  "null", "nullU",
+  "number", "numberU",
+  "path", "pathU",
+  "property", "propertyU",
+  "set", "setU",
+  "short", "shortU",
+  "string", "stringU",
+  "tree", "treeU",
+  "uuid", "uuidL",
+  "vertex", "vertexU",
+  "vproperty", "vpropertyU"]
+
+traversalGTypeArgument :: TypeDefinition
+traversalGTypeArgument = defArgument "TraversalGTypeArgument" $ gremlin "TraversalGType"
 
 traversalMerge :: TypeDefinition
 traversalMerge = define "TraversalMerge" $ T.enum [
@@ -586,16 +798,8 @@ traversalMerge = define "TraversalMerge" $ T.enum [
   "outV",
   "inV"]
 
-traversalMergeArgumentAndGenericLiteralMapNullableArgument :: TypeDefinition
-traversalMergeArgumentAndGenericLiteralMapNullableArgument = define "TraversalMergeArgumentAndGenericLiteralMapNullableArgument" $ T.record [
-  "merge">: gremlin "TraversalMergeArgument",
-  "map">: gremlin "GenericLiteralMapNullableArgument",
-  "cardinality">: T.optional $ gremlin "TraversalCardinality"]
-
-traversalMergeArgumentAndNestedTraversal :: TypeDefinition
-traversalMergeArgumentAndNestedTraversal = define "TraversalMergeArgumentAndNestedTraversal" $ T.record [
-  "merge">: gremlin "TraversalMergeArgument",
-  "traversal">: gremlin "NestedTraversal"]
+traversalMergeArgument :: TypeDefinition
+traversalMergeArgument = defArgument "TraversalMergeArgument" $ gremlin "TraversalMerge"
 
 traversalMethod :: TypeDefinition
 traversalMethod = define "TraversalMethod" $ T.union [
@@ -603,65 +807,81 @@ traversalMethod = define "TraversalMethod" $ T.union [
   "e">: nonemptyList $ gremlin "GenericLiteralArgument",
   "addE">: gremlin "StringArgumentOrNestedTraversal",
   "addV">: T.optional $ gremlin "StringArgumentOrNestedTraversal",
-  "mergeE">: T.optional $ gremlin "GenericLiteralMapNullableArgumentOrNestedTraversal",
-  "mergeV">: T.optional $ gremlin "GenericLiteralMapNullableArgumentOrNestedTraversal",
-  "aggregate">: gremlin "OptionalTraversalScopeArgumentAndStringArgument",
+  "mergeE">: gremlin "MergeArgs",
+  "mergeV">: gremlin "MergeArgs",
+  "aggregate">: gremlin "StringArgument",
   "all">: gremlin "TraversalPredicate",
   "and">: T.list $ gremlin "NestedTraversal",
   "any">: gremlin "TraversalPredicate",
-  "as">: gremlin "StringArgumentAndOptionalStringLiteralVarargs",
-  "barrier">: T.optional $ gremlin "TraversalSackMethodArgumentOrIntegerArgument",
+  "as">: gremlin "AsArgs",
+  "asBool">: T.unit,
+  "asDate">: T.unit,
+  "asNumber">: T.optional $ gremlin "TraversalGTypeArgument",
+  "asString">: T.optional $ gremlin "TraversalScopeArgument",
+  "barrier">: T.optional $ gremlin "BarrierArgs",
   "both">: nonemptyList $ gremlin "StringNullableArgument",
   "bothE">: nonemptyList $ gremlin "StringNullableArgument",
   "bothV">: T.unit,
   "branch">: gremlin "NestedTraversal",
   "by">: gremlin "ByArgs",
-  "cap">: gremlin "StringArgumentAndOptionalStringLiteralVarargs",
+  "call">: gremlin "ServiceCall",
+  "cap">: gremlin "AsArgs",
   "choose">: gremlin "ChooseArgs",
   "coalesce">: T.list $ gremlin "NestedTraversal",
-  "coin">: gremlin "FloatArgument",
+  "coin">: gremlin "NumericArgument",
+  "combine">: gremlin "GenericLiteralArgument",
+  "concat">: gremlin "ConcatArgs",
   "conjoin">: gremlin "StringArgument",
   "connectedComponent">: T.unit,
   "constant">: gremlin "GenericLiteralArgument",
   "count">: T.optional $ gremlin "TraversalScopeArgument",
   "cyclicPath">: T.unit,
+  "dateAdd">: gremlin "DateAddArgs",
+  "dateDiff">: gremlin "DateDiffArgs",
   "dedup">: gremlin "DedupArgs",
   "difference">: gremlin "GenericLiteralArgument",
+  "discard">: T.unit,
   "disjunct">: gremlin "GenericLiteralArgument",
   "drop">: T.unit,
+  "element">: nonemptyList $ gremlin "StringNullableArgument",
   "elementMap">: nonemptyList $ gremlin "StringNullableArgument",
   "emit">: T.optional $ gremlin "PredicateOrTraversal",
+  "fail">: T.optional $ gremlin "StringArgument",
   "filter">: gremlin "PredicateOrTraversal",
   "flatMap">: gremlin "NestedTraversal",
-  "fold">: T.optional $ gremlin "GenericLiteralArgumentAndTraversalBiFunctionArgument",
+  "fold">: T.optional $ gremlin "FoldArgs",
+  "format">: gremlin "StringArgument",
   "from">: gremlin "FromArgs",
   "group">: T.optional $ gremlin "StringArgument",
   "groupCount">: T.optional $ gremlin "StringArgument",
   "has">: gremlin "HasArgs",
-  "hasId">: gremlin "GenericLiteralArgumentAndTraversalPredicate",
-  "hasKey">: gremlin "TraversalPredicateOrStringLiteralVarargs",
-  "hasLabel">: gremlin "TraversalPredicateOrStringLiteralVarargs",
+  "hasId">: gremlin "PredicateOrObjects",
+  "hasKey">: gremlin "PredicateOrStrings",
+  "hasLabel">: gremlin "PredicateOrStrings",
   "hasNot">: gremlin "StringNullableArgument",
-  "hasValue">: gremlin "TraversalPredicateOrGenericLiteralArgument",
+  "hasValue">: gremlin "PredicateOrObjects",
   "id">: T.unit,
   "identity">: T.unit,
   "in">: nonemptyList $ gremlin "StringNullableArgument",
   "inE">: nonemptyList $ gremlin "StringNullableArgument",
-  "intersect">: gremlin "GenericLiteralArgument",
   "inV">: T.unit,
   "index">: T.unit,
   "inject">: nonemptyList $ gremlin "GenericLiteralArgument",
-  "is">: gremlin "TraversalPredicateOrGenericLiteralArgument",
+  "intersect">: gremlin "GenericLiteralArgument",
+  "is">: gremlin "PredicateOrObject",
   "key">: T.unit,
   "label">: T.unit,
-  "limit">: gremlin "OptionalTraversalScopeArgumentAndIntegerArgument",
+  "length">: T.optional $ gremlin "TraversalScopeArgument",
+  "limit">: gremlin "ScopeAndInteger",
   "local">: gremlin "NestedTraversal",
   "loops">: T.optional $ gremlin "StringArgument",
+  "lTrim">: T.optional $ gremlin "TraversalScopeArgument",
   "map">: gremlin "NestedTraversal",
   "match">: T.list $ gremlin "NestedTraversal",
   "math">: gremlin "StringArgument",
   "max">: T.optional $ gremlin "TraversalScopeArgument",
   "mean">: T.optional $ gremlin "TraversalScopeArgument",
+  "merge">: gremlin "GenericLiteralArgument",
   "min">: T.optional $ gremlin "TraversalScopeArgument",
   "none">: gremlin "TraversalPredicate",
   "not">: gremlin "NestedTraversal",
@@ -673,37 +893,42 @@ traversalMethod = define "TraversalMethod" $ T.union [
   "out">: nonemptyList $ gremlin "StringNullableArgument",
   "outE">: nonemptyList $ gremlin "StringNullableArgument",
   "outV">: T.unit,
-  "pageRank">: T.optional $ gremlin "FloatArgument",
+  "pageRank">: T.optional $ gremlin "NumericArgument",
   "path">: T.unit,
   "peerPressure">: T.unit,
+  "product">: gremlin "GenericLiteralArgument",
   "profile">: T.optional $ gremlin "StringArgument",
-  "project">: gremlin "StringArgumentAndOptionalStringLiteralVarargs",
+  "project">: gremlin "AsArgs",
   "properties">: nonemptyList $ gremlin "StringNullableArgument",
   "property">: gremlin "PropertyArgs",
   "propertyMap">: nonemptyList $ gremlin "StringNullableArgument",
   "range">: gremlin "RangeArgs",
   "read">: T.unit,
-  "repeat">: gremlin "OptionalStringArgumentAndNestedTraversal",
+  "repeat">: gremlin "RepeatArgs",
+  "replace">: gremlin "ReplaceArgs",
+  "reverse">: T.unit,
+  "rTrim">: T.optional $ gremlin "TraversalScopeArgument",
   "sack">: T.optional $ gremlin "TraversalBiFunctionArgument",
-  "sample">: gremlin "OptionalTraversalScopeArgumentAndIntegerArgument",
+  "sample">: gremlin "SampleByScope",
   "select">: gremlin "SelectArgs",
-  "combine">: gremlin "GenericLiteralArgument",
-  "product">: gremlin "GenericLiteralArgument",
-  "merge">: gremlin "GenericLiteralArgument",
   "shortestPath">: T.unit,
   "sideEffect">: gremlin "NestedTraversal",
   "simplePath">: T.unit,
-  "skip">: gremlin "OptionalTraversalScopeArgumentAndIntegerArgument",
-  "store">: gremlin "StringArgument",
+  "skip">: gremlin "ScopeAndInteger",
+  "split">: gremlin "SplitArgs",
   "subgraph">: gremlin "StringArgument",
+  "substring">: gremlin "SubstringArgs",
   "sum">: T.optional $ gremlin "TraversalScopeArgument",
   "tail">: T.optional $ gremlin "TailArgs",
-  "fail">: T.optional $ gremlin "StringArgument",
+  "timeLimit">: gremlin "IntegerArgument",
   "times">: gremlin "IntegerArgument",
   "to">: gremlin "ToArgs",
   "toE">: gremlin "DirectionAndVarargs",
+  "toLower">: T.optional $ gremlin "TraversalScopeArgument",
+  "toUpper">: T.optional $ gremlin "TraversalScopeArgument",
   "toV">: gremlin "TraversalDirectionArgument",
   "tree">: T.optional $ gremlin "StringArgument",
+  "trim">: T.optional $ gremlin "TraversalScopeArgument",
   "unfold">: T.unit,
   "union">: T.list $ gremlin "NestedTraversal",
   "until">: gremlin "PredicateOrTraversal",
@@ -712,25 +937,9 @@ traversalMethod = define "TraversalMethod" $ T.union [
   "values">: nonemptyList $ gremlin "StringNullableArgument",
   "where">: gremlin "WhereArgs",
   "with">: gremlin "WithArgs",
-  "write">: T.unit,
-  "element">: nonemptyList $ gremlin "StringNullableArgument",
-  "call">: gremlin "ServiceCall",
-  "concat">: gremlin "ConcatArgs",
-  "asString">: T.optional $ gremlin "TraversalScopeArgument",
-  "format">: gremlin "StringArgument",
-  "toUpper">: T.optional $ gremlin "TraversalScopeArgument",
-  "toLower">: T.optional $ gremlin "TraversalScopeArgument",
-  "length">: T.optional $ gremlin "TraversalScopeArgument",
-  "trim">: T.optional $ gremlin "TraversalScopeArgument",
-  "lTrim">: T.optional $ gremlin "TraversalScopeArgument",
-  "rTrim">: T.optional $ gremlin "TraversalScopeArgument",
-  "reverse">: T.unit,
-  "replace">: gremlin "ReplaceArgs",
-  "split">: gremlin "SplitArgs",
-  "substring">: gremlin "SubstringArgs",
-  "asDate">: T.unit,
-  "dateAdd">: gremlin "DateAddArgs",
-  "dateDiff">: gremlin "DateDiffArgs"]
+  "write">: T.unit]
+
+-- as(label, ...labels) and the structurally-identical cap/project
 
 traversalOperator :: TypeDefinition
 traversalOperator = define "TraversalOperator" $ T.enum [
@@ -748,16 +957,18 @@ traversalOperator = define "TraversalOperator" $ T.enum [
 
 traversalOrder :: TypeDefinition
 traversalOrder = define "TraversalOrder" $ T.enum [
-  "incr",
-  "decr",
   "asc",
   "desc",
   "shuffle"]
 
+traversalOrderArgument :: TypeDefinition
+traversalOrderArgument = defArgument "TraversalOrderArgument" $ gremlin "TraversalOrder"
+
 traversalPick :: TypeDefinition
 traversalPick = define "TraversalPick" $ T.enum [
   "any",
-  "none"]
+  "none",
+  "unproductive"]
 
 traversalPop :: TypeDefinition
 traversalPop = define "TraversalPop" $ T.enum [
@@ -766,10 +977,8 @@ traversalPop = define "TraversalPop" $ T.enum [
   "all",
   "mixed"]
 
-traversalPopArgumentAndNestedTraversal :: TypeDefinition
-traversalPopArgumentAndNestedTraversal = define "TraversalPopArgumentAndNestedTraversal" $ T.record [
-  "pop">: gremlin "TraversalPopArgument",
-  "traversal">: gremlin "NestedTraversal"]
+traversalPopArgument :: TypeDefinition
+traversalPopArgument = defArgument "TraversalPopArgument" $ gremlin "TraversalPop"
 
 traversalPredicate :: TypeDefinition
 traversalPredicate = define "TraversalPredicate" $ T.union [
@@ -793,38 +1002,21 @@ traversalPredicate = define "TraversalPredicate" $ T.union [
   "notContaining">: gremlin "StringArgument",
   "regex">: gremlin "StringArgument",
   "notRegex">: gremlin "StringArgument",
+  "typeOf">: gremlin "TypeOfArg",
   "and">: gremlin "TwoTraversalPredicates",
   "or">: gremlin "TwoTraversalPredicates",
   "negate">: gremlin "TraversalPredicate"]
 
-traversalPredicateAndNestedTraversal :: TypeDefinition
-traversalPredicateAndNestedTraversal = define "TraversalPredicateAndNestedTraversal" $ T.record [
-  "predicate">: gremlin "TraversalPredicate",
-  "traversal">: gremlin "NestedTraversal"]
-
-traversalPredicateOrGenericLiteralArgument :: TypeDefinition
-traversalPredicateOrGenericLiteralArgument = define "TraversalPredicateOrGenericLiteralArgument" $ T.union [
-  "predicate">: gremlin "TraversalPredicate",
-  "literal">: T.list $ gremlin "GenericLiteralArgument"]
-
-traversalPredicateOrStringLiteralVarargs :: TypeDefinition
-traversalPredicateOrStringLiteralVarargs = define "TraversalPredicateOrStringLiteralVarargs" $ T.union [
-  "predicate">: gremlin "TraversalPredicate",
-  "string">: nonemptyList $ gremlin "StringNullableArgument"]
-
-traversalSackMethodArgumentOrIntegerArgument :: TypeDefinition
-traversalSackMethodArgumentOrIntegerArgument = define "TraversalSackMethodArgumentOrIntegerArgument" $ T.union [
-  "consumer">: gremlin "TraversalSackMethodArgument",
-  "int">: gremlin "IntegerArgument"]
+traversalSackMethodArgument :: TypeDefinition
+traversalSackMethodArgument = defArgument "TraversalSackMethodArgument" T.unit
 
 traversalScope :: TypeDefinition
 traversalScope = define "TraversalScope" $ T.enum [
   "local",
   "global"]
 
-traversalSelfMethod :: TypeDefinition
-traversalSelfMethod = define "TraversalSelfMethod" $ T.enum [
-  "discard"]
+traversalScopeArgument :: TypeDefinition
+traversalScopeArgument = defArgument "TraversalScopeArgument" $ gremlin "TraversalScope"
 
 traversalSource :: TypeDefinition
 traversalSource = define "TraversalSource" $ T.wrap $ T.list $ gremlin "TraversalSourceSelfMethod"
@@ -838,11 +1030,11 @@ traversalSourceSelfMethod :: TypeDefinition
 traversalSourceSelfMethod = define "TraversalSourceSelfMethod" $ T.union [
   "withBulk">: T.boolean,
   "withPath">: T.unit,
-  "withSack">: gremlin "GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument",
-  "withSideEffect">: gremlin "StringArgumentAndGenericLiteralArgument",
+  "withSack">: gremlin "WithSackArgs",
+  "withSideEffect">: gremlin "StringAndObject",
   "withStrategies">: nonemptyList $ gremlin "TraversalStrategy",
   "withoutStrategies">: nonemptyList $ gremlin "Identifier",
-  "with">: gremlin "StringArgumentAndOptionalGenericLiteralArgument"]
+  "with">: gremlin "StringAndOptionalObject"]
 
 traversalSourceSpawnMethod :: TypeDefinition
 traversalSourceSpawnMethod = define "TraversalSourceSpawnMethod" $ T.union [
@@ -850,8 +1042,8 @@ traversalSourceSpawnMethod = define "TraversalSourceSpawnMethod" $ T.union [
   "addV">: T.optional $ gremlin "StringArgumentOrNestedTraversal",
   "e">: nonemptyList $ gremlin "GenericLiteralArgument",
   "v">: nonemptyList $ gremlin "GenericLiteralArgument",
-  "mergeV">: gremlin "GenericLiteralMapNullableArgumentOrNestedTraversal",
-  "mergeE">: gremlin "GenericLiteralMapNullableArgumentOrNestedTraversal",
+  "mergeV">: gremlin "MergeArgs",
+  "mergeE">: gremlin "MergeArgs",
   "inject">: nonemptyList $ gremlin "GenericLiteralArgument",
   "io">: gremlin "StringArgument",
   "call">: T.optional $ gremlin "ServiceCall",
@@ -881,10 +1073,20 @@ traversalToken = define "TraversalToken" $ T.enum [
   "key",
   "value"]
 
+traversalTokenArgument :: TypeDefinition
+traversalTokenArgument = defArgument "TraversalTokenArgument" $ gremlin "TraversalToken"
+
+-- Literal types
+
 twoTraversalPredicates :: TypeDefinition
 twoTraversalPredicates = define "TwoTraversalPredicates" $ T.record [
   "left">: gremlin "TraversalPredicate",
   "right">: gremlin "TraversalPredicate"]
+
+typeOfArg :: TypeDefinition
+typeOfArg = define "TypeOfArg" $ T.union [
+  "gType">: gremlin "TraversalGType",
+  "string">: gremlin "StringArgument"]
 
 valueMapArgs :: TypeDefinition
 valueMapArgs = define "ValueMapArgs" $ T.union [
@@ -947,167 +1149,7 @@ withOptionsValues = define "WithOptionsValues" $ T.enum [
 
 -- Argument types
 
-booleanArgument :: TypeDefinition
-booleanArgument = defArgument "BooleanArgument" T.boolean
-
-dateArgument :: TypeDefinition
-dateArgument = defArgument "DateArgument" $ gremlin "DateLiteral"
-
-floatArgument :: TypeDefinition
-floatArgument = defArgument "FloatArgument" $ gremlin "FloatLiteral"
-
-genericLiteralArgument :: TypeDefinition
-genericLiteralArgument = defArgument "GenericLiteralArgument" $ gremlin "GenericLiteral"
-
-genericLiteralListArgument :: TypeDefinition
-genericLiteralListArgument = defArgument "GenericLiteralListArgument" $ gremlin "GenericLiteralList"
-
-genericLiteralMapArgument :: TypeDefinition
-genericLiteralMapArgument = defArgument "GenericLiteralMapArgument" $ gremlin "GenericLiteralMap"
-
-genericLiteralMapNullableArgument :: TypeDefinition
-genericLiteralMapNullableArgument = defArgument "GenericLiteralMapNullableArgument" $ T.optional $ gremlin "GenericLiteralMap"
-
-integerArgument :: TypeDefinition
-integerArgument = defArgument "IntegerArgument" $ gremlin "IntegerLiteral"
-
-stringArgument :: TypeDefinition
-stringArgument = defArgument "StringArgument" T.string
-
-stringNullableArgument :: TypeDefinition
-stringNullableArgument = defArgument "StringNullableArgument" $ T.optional T.string
-
-structureVertexArgument :: TypeDefinition
-structureVertexArgument = defArgument "StructureVertexArgument" $ gremlin "StructureVertex"
-
-traversalBiFunctionArgument :: TypeDefinition
-traversalBiFunctionArgument = defArgument "TraversalBiFunctionArgument" $ gremlin "TraversalOperator"
-
-traversalCardinalityArgument :: TypeDefinition
-traversalCardinalityArgument = defArgument "TraversalCardinalityArgument" $ gremlin "TraversalCardinality"
-
-traversalColumnArgument :: TypeDefinition
-traversalColumnArgument = defArgument "TraversalColumnArgument" $ gremlin "TraversalColumn"
-
-traversalComparatorArgument :: TypeDefinition
-traversalComparatorArgument = defArgument "TraversalComparatorArgument" $ gremlin "TraversalOrder"
-
-traversalDTArgument :: TypeDefinition
-traversalDTArgument = defArgument "TraversalDTArgument" $ gremlin "TraversalDT"
-
-traversalDirectionArgument :: TypeDefinition
-traversalDirectionArgument = defArgument "TraversalDirectionArgument" $ gremlin "TraversalDirection"
-
-traversalFunctionArgument :: TypeDefinition
-traversalFunctionArgument = defArgument "TraversalFunctionArgument" $ gremlin "TraversalFunction"
-
-traversalMergeArgument :: TypeDefinition
-traversalMergeArgument = defArgument "TraversalMergeArgument" $ gremlin "TraversalMerge"
-
-traversalOrderArgument :: TypeDefinition
-traversalOrderArgument = defArgument "TraversalOrderArgument" $ gremlin "TraversalOrder"
-
-traversalPopArgument :: TypeDefinition
-traversalPopArgument = defArgument "TraversalPopArgument" $ gremlin "TraversalPop"
-
-traversalSackMethodArgument :: TypeDefinition
-traversalSackMethodArgument = defArgument "TraversalSackMethodArgument" T.unit
-
-traversalScopeArgument :: TypeDefinition
-traversalScopeArgument = defArgument "TraversalScopeArgument" $ gremlin "TraversalScope"
-
-traversalTokenArgument :: TypeDefinition
-traversalTokenArgument = defArgument "TraversalTokenArgument" $ gremlin "TraversalToken"
-
--- Literal types
-
-dateLiteral :: TypeDefinition
-dateLiteral = define "DateLiteral" $ T.wrap $ T.optional $ gremlin "StringArgument"
-
-floatLiteral :: TypeDefinition
-floatLiteral = define "FloatLiteral" $ T.wrap T.float64
-
-genericLiteral :: TypeDefinition
-genericLiteral = define "GenericLiteral" $ T.union [
-  "numeric">: gremlin "NumericLiteral",
-  "boolean">: T.boolean,
-  "string">: T.string,
-  "date">: gremlin "DateLiteral",
-  "null">: T.unit,
-  "nan">: T.unit,
-  "inf">: T.unit,
-  "traversalToken">: gremlin "TraversalToken",
-  "traversalCardinality">: gremlin "TraversalCardinality",
-  "traversalDirection">: gremlin "TraversalDirection",
-  "traversalMerge">: gremlin "TraversalMerge",
-  "traversalPick">: gremlin "TraversalPick",
-  "traversalDT">: gremlin "TraversalDT",
-  "structureVertex">: gremlin "StructureVertex",
-  "genericLiteralSet">: gremlin "GenericLiteralSet",
-  "genericLiteralCollection">: gremlin "GenericLiteralCollection",
-  "genericLiteralRange">: gremlin "GenericLiteralRange",
-  "nestedTraversal">: gremlin "NestedTraversal",
-  "terminatedTraversal">: gremlin "TerminatedTraversal",
-  "genericLiteralMap">: gremlin "GenericLiteralMap"]
-
-genericLiteralCollection :: TypeDefinition
-genericLiteralCollection = define "GenericLiteralCollection" $ T.wrap $ T.list $ gremlin "GenericLiteral"
-
-genericLiteralList :: TypeDefinition
-genericLiteralList = define "GenericLiteralList" $ T.wrap $ T.list $ gremlin "GenericLiteral"
-
-genericLiteralMap :: TypeDefinition
-genericLiteralMap = define "GenericLiteralMap" $ T.wrap $ T.list $ gremlin "MapEntry"
-
-genericLiteralRange :: TypeDefinition
-genericLiteralRange = define "GenericLiteralRange" $ T.union [
-  "integer">: gremlin "IntegerRange",
-  "string">: gremlin "StringRange"]
-
-genericLiteralSet :: TypeDefinition
-genericLiteralSet = define "GenericLiteralSet" $ T.wrap $ T.list $ gremlin "GenericLiteral"
-
-identifier :: TypeDefinition
-identifier = define "Identifier" $ T.wrap T.string
-
-integerLiteral :: TypeDefinition
-integerLiteral = define "IntegerLiteral" $ T.wrap T.bigint
-
-integerRange :: TypeDefinition
-integerRange = define "IntegerRange" $ T.record [
-  "left">: gremlin "IntegerLiteral",
-  "right">: gremlin "IntegerLiteral"]
-
-keyword :: TypeDefinition
-keyword = define "Keyword" $ T.enum [
-  "edges",
-  "keys",
-  "new",
-  "values"]
-
-mapEntry :: TypeDefinition
-mapEntry = define "MapEntry" $ T.union [
-  "key">: gremlin "MapKey",
-  "value">: gremlin "GenericLiteral"]
-
-mapKey :: TypeDefinition
-mapKey = define "MapKey" $ T.union [
-  "string">: T.string,
-  "numeric">: gremlin "NumericLiteral",
-  "traversalToken">: gremlin "TraversalToken",
-  "traversalDirection">: gremlin "TraversalDirection",
-  "set">: gremlin "GenericLiteralSet",
-  "collection">: gremlin "GenericLiteralCollection",
-  "map">: gremlin "GenericLiteralMap",
-  "keyword">: gremlin "Keyword",
-  "identifier">: gremlin "Identifier"]
-
-numericLiteral :: TypeDefinition
-numericLiteral = define "NumericLiteral" $ T.union [
-  "integer">: gremlin "IntegerLiteral",
-  "float">: gremlin "FloatLiteral"]
-
-stringRange :: TypeDefinition
-stringRange = define "StringRange" $ T.record [
-  "left">: T.string,
-  "right">: T.string]
+withSackArgs :: TypeDefinition
+withSackArgs = define "WithSackArgs" $ T.record [
+  "initialValue">: gremlin "GenericLiteralArgument",
+  "biFunction">: T.optional $ gremlin "TraversalBiFunctionArgument"]

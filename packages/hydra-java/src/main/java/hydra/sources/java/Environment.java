@@ -1,6 +1,6 @@
 package hydra.sources.java;
 import hydra.overlay.java.dsl.Types;
-import static hydra.dsl.meta.Defs.unqualifiedDeps;
+import static hydra.overlay.java.dsl.meta.Defs.unqualifiedDeps;
 import hydra.packaging.Definition;
 import hydra.packaging.EntityMetadata;
 import hydra.packaging.Module;
@@ -11,9 +11,9 @@ import hydra.overlay.java.util.Optional;
 import java.util.Arrays;
 import java.util.List;
 
-import static hydra.dsl.java.Helpers.doc;
-import static hydra.dsl.java.Helpers.typeDef;
-import static hydra.dsl.java.Helpers.typeref;
+import static hydra.overlay.java.dsl.Helpers.doc;
+import static hydra.overlay.java.dsl.Helpers.typeDef;
+import static hydra.overlay.java.dsl.Helpers.typeref;
 
 /**
  * Environment types for Java code generation.
