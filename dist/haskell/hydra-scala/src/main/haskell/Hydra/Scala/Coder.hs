@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Scala code generator: converts Hydra modules to Scala source code
 
 module Hydra.Scala.Coder where
+
 import qualified Hydra.Analysis as Analysis
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Arity as Arity
@@ -65,6 +67,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
+
 -- | Apply a variable to a term, performing substitution for lambdas
 applyVar :: Core.Term -> Core.Name -> Core.Term
 applyVar fterm avar =
@@ -78,6 +81,7 @@ applyVar fterm avar =
         _ -> Core.TermApplication (Core.Application {
           Core.applicationFunction = fterm,
           Core.applicationArgument = (Core.TermVariable avar)})
+
 -- | Construct a Scala package from a Hydra module and its definitions
 constructModule :: t0 -> Graph.Graph -> Packaging.Module -> [Packaging.Definition] -> Either Errors.Error Syntax.Pkg
 constructModule cx g mod defs =
@@ -97,6 +101,7 @@ constructModule cx g mod defs =
           imports,
           typeDeclStats,
           termDeclStats])})))))
+
 -- | Drop N domain types from a function type, returning the remaining type
 dropDomains :: Int -> Core.Type -> Core.Type
 dropDomains n t =
@@ -104,6 +109,7 @@ dropDomains n t =
       Core.TypeFunction v0 -> dropDomains (Math.sub n 1) (Core.functionTypeCodomain v0)
       Core.TypeForall v0 -> dropDomains n (Core.forallTypeBody v0)
       _ -> t)
+
 -- | Encode a case branch
 encodeCase :: t0 -> Graph.Graph -> M.Map Core.Name Core.Type -> Maybe Core.Name -> Core.CaseAlternative -> Either Errors.Error Syntax.Case
 encodeCase cx g ftypes sn f =
@@ -156,6 +162,7 @@ encodeCase cx g ftypes sn f =
         Syntax.casePat = pat,
         Syntax.caseCond = Nothing,
         Syntax.caseBody = body})))
+
 -- | Encode a complex term definition with proper parameter types from the type signature
 encodeComplexTermDef :: t0 -> Graph.Graph -> String -> Core.Term -> Core.Type -> Either Errors.Error Syntax.Stat
 encodeComplexTermDef cx g lname term typ =
@@ -198,6 +205,7 @@ encodeComplexTermDef cx g lname term typ =
               p]) sparams),
             Syntax.defDefnDecltpe = (Just scod),
             Syntax.defDefnBody = defBody}))))))))))
+
 -- | Encode a Hydra function-valued term (lambda, project, cases, or unwrap) as a Scala expression
 encodeFunction :: t0 -> Graph.Graph -> M.Map Core.Name Core.Term -> Core.Term -> Maybe Core.Term -> Either Errors.Error Syntax.Data
 encodeFunction cx g meta funTerm arg =
@@ -245,6 +253,7 @@ encodeFunction cx g meta funTerm arg =
           Syntax.matchDataExpr = sa,
           Syntax.matchDataCases = scases})))))))
       _ -> Left (Errors.ErrorOther (Errors.OtherError "unsupported function"))
+
 -- | Encode a let binding as a val or def declaration. outerTypeVars are type params from the enclosing scope.
 encodeLetBinding :: t0 -> Graph.Graph -> S.Set Core.Name -> Core.Binding -> Either Errors.Error Syntax.Stat
 encodeLetBinding cx g outerTypeVars b =
@@ -279,6 +288,7 @@ encodeLetBinding cx g outerTypeVars b =
                 Syntax.nameDataValue = (Syntax.PredefString bname)}})],
           Syntax.valDefnDecltpe = (Just styp),
           Syntax.valDefnRhs = srhs})))))))))
+
 -- | Encode a literal value as a Scala literal
 encodeLiteral :: t0 -> t1 -> Core.Literal -> Either Errors.Error Syntax.Lit
 encodeLiteral cx g av =
@@ -303,6 +313,7 @@ encodeLiteral cx g av =
         _ -> Left (Errors.ErrorOther (Errors.OtherError "unexpected integer value"))
       Core.LiteralString v0 -> Right (Syntax.LitString v0)
       _ -> Left (Errors.ErrorOther (Errors.OtherError "unexpected literal"))
+
 -- | Encode a local def. outerTypeVars are type params already in scope (don't redeclare them).
 encodeLocalDef :: t0 -> Graph.Graph -> S.Set Core.Name -> String -> Core.Term -> Core.Type -> Either Errors.Error Syntax.Stat
 encodeLocalDef cx g outerTypeVars lname term typ =
@@ -346,6 +357,7 @@ encodeLocalDef cx g outerTypeVars lname term typ =
               p]) sparams),
             Syntax.defDefnDecltpe = (Just scod),
             Syntax.defDefnBody = defBody}))))))))))
+
 -- | Encode a Hydra term as a Scala expression
 encodeTerm :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Syntax.Data
 encodeTerm cx g term0 =
@@ -467,6 +479,7 @@ encodeTerm cx g term0 =
             Syntax.blockDataStats = (Lists.concat2 sbindings [
               Syntax.StatTerm sbody])})))))
         _ -> Left (Errors.ErrorOther (Errors.OtherError "unexpected term"))
+
 -- | Encode a term definition as a Scala statement
 encodeTermDefinition :: t0 -> Graph.Graph -> Packaging.TermDefinition -> Either Errors.Error Syntax.Stat
 encodeTermDefinition cx g td =
@@ -503,6 +516,7 @@ encodeTermDefinition cx g td =
           Syntax.defDefnParamss = [],
           Syntax.defDefnDecltpe = (Just stype),
           Syntax.defDefnBody = rhs})))))))))
+
 -- | Encode a Hydra type as a Scala type
 encodeType :: t0 -> t1 -> Core.Type -> Either Errors.Error Syntax.Type
 encodeType cx g t =
@@ -605,6 +619,7 @@ encodeType cx g t =
           Syntax.varTypeName = Syntax.NameType {
             Syntax.nameTypeValue = typeName}})))
       _ -> Left (Errors.ErrorOther (Errors.OtherError "unsupported type"))
+
 -- | Encode a type definition as a Scala statement
 encodeTypeDefinition :: t0 -> t1 -> Packaging.TypeDefinition -> Either Errors.Error Syntax.Stat
 encodeTypeDefinition cx g td =
@@ -735,6 +750,7 @@ encodeTypeDefinition cx g td =
                     Syntax.typeDefnTparams = tparams,
                     Syntax.typeDefnBody = styp})))
           in (Eithers.either (\_ -> mkAlias (Utils.stref "Any")) mkAlias (encodeType cx g typ))
+
 -- | Encode a parameter with its type annotation
 encodeTypedParam :: t0 -> t1 -> (Core.Name, Core.Type) -> Either Errors.Error Syntax.ParamData
 encodeTypedParam cx g pair =
@@ -746,10 +762,12 @@ encodeTypedParam cx g pair =
         Syntax.paramDataName = (Syntax.NameValue pname),
         Syntax.paramDataDecltpe = (Just sdom),
         Syntax.paramDataDefault = Nothing})))
+
 -- | Encode an untyped application term by first inferring types
 encodeUntypeApplicationTerm :: Typing.InferenceContext -> Graph.Graph -> Core.Term -> Either Errors.Error Syntax.Data
 encodeUntypeApplicationTerm cx g term =
     Eithers.bind (Inference.inferInGraphContext cx g term) (\result -> encodeTerm cx g (Typing.inferenceResultTerm result))
+
 -- | Extract the innermost body from a term
 extractBody :: Core.Term -> Core.Term
 extractBody t =
@@ -759,6 +777,7 @@ extractBody t =
       Core.TermTypeApplication v0 -> extractBody (Core.typeApplicationTermBody v0)
       Core.TermLet v0 -> extractBody (Core.letBody v0)
       _ -> t
+
 -- | Extract the final return type from a function type
 extractCodomain :: Core.Type -> Core.Type
 extractCodomain t =
@@ -766,6 +785,7 @@ extractCodomain t =
       Core.TypeFunction v0 -> extractCodomain (Core.functionTypeCodomain v0)
       Core.TypeForall v0 -> extractCodomain (Core.forallTypeBody v0)
       _ -> t
+
 -- | Extract domain types from a function type
 extractDomains :: Core.Type -> [Core.Type]
 extractDomains t =
@@ -773,6 +793,7 @@ extractDomains t =
       Core.TypeFunction v0 -> Lists.cons (Core.functionTypeDomain v0) (extractDomains (Core.functionTypeCodomain v0))
       Core.TypeForall v0 -> extractDomains (Core.forallTypeBody v0)
       _ -> []
+
 -- | Extract let bindings from a term
 extractLetBindings :: Core.Term -> [Core.Binding]
 extractLetBindings t =
@@ -782,6 +803,7 @@ extractLetBindings t =
       Core.TermTypeApplication v0 -> extractLetBindings (Core.typeApplicationTermBody v0)
       Core.TermLet v0 -> Lists.concat2 (Core.letBindings v0) (extractLetBindings (Core.letBody v0))
       _ -> []
+
 -- | Extract parameter names from a term
 extractParams :: Core.Term -> [Core.Name]
 extractParams t =
@@ -791,6 +813,7 @@ extractParams t =
       Core.TermTypeApplication v0 -> extractParams (Core.typeApplicationTermBody v0)
       Core.TermLet v0 -> extractParams (Core.letBody v0)
       _ -> []
+
 -- | Convert a field type to a Scala enum case
 fieldToEnumCase :: t0 -> t1 -> String -> [Syntax.ParamType] -> Core.FieldType -> Either Errors.Error Syntax.Stat
 fieldToEnumCase cx g parentName tparams ft =
@@ -829,6 +852,7 @@ fieldToEnumCase cx g parentName tparams ft =
             Syntax.initTpe = parentType,
             Syntax.initName = (Syntax.NameValue ""),
             Syntax.initArgss = []}]})))))
+
 -- | Convert a field type to a Scala parameter
 fieldToParam :: t0 -> t1 -> Core.FieldType -> Either Errors.Error Syntax.ParamData
 fieldToParam cx g ft =
@@ -840,18 +864,21 @@ fieldToParam cx g ft =
         Syntax.paramDataName = (Syntax.NameValue fname),
         Syntax.paramDataDecltpe = (Just sftyp),
         Syntax.paramDataDefault = Nothing})))
+
 -- | Find the domain type from annotations
 findDomain :: t0 -> Graph.Graph -> M.Map Core.Name Core.Term -> Either Errors.Error Core.Type
 findDomain cx g meta =
     Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_a -> _a) (Annotations.getType g meta)) (\r -> Optionals.cases r (Left (Errors.ErrorOther (Errors.OtherError "expected a typed term"))) (\t -> case (Strip.deannotateType t) of
       Core.TypeFunction v0 -> Right (Core.functionTypeDomain v0)
       _ -> Left (Errors.ErrorOther (Errors.OtherError "expected a function type"))))
+
 -- | Find import statements for the module
 findImports :: t0 -> Graph.Graph -> Packaging.Module -> Either Errors.Error [Syntax.Stat]
 findImports cx g mod =
     Eithers.bind (Analysis.moduleDependencyModuleNames cx g False False True False mod) (\elImps -> Eithers.bind (Analysis.moduleDependencyModuleNames cx g False True False False mod) (\primImps -> Right (Lists.concat [
       Lists.map toElImport (Sets.toList elImps),
       (Lists.map toPrimImport (Sets.toList primImps))])))
+
 -- | Find the Scala domain type for a function from annotations
 findSdom :: t0 -> Graph.Graph -> M.Map Core.Name Core.Term -> Either Errors.Error (Maybe Syntax.Type)
 findSdom cx g meta =
@@ -865,12 +892,14 @@ findSdom cx g meta =
           in (Eithers.bind (encodeType cx g dom2) (\sdom2 -> Right (Just sdom2)))
         _ -> Right Nothing
       _ -> Eithers.bind (encodeType cx g t) (\st -> Right (Just st))))
+
 -- | Convert a Hydra module to Scala source code
 moduleToScala :: Packaging.Module -> [Packaging.Definition] -> t0 -> Graph.Graph -> Either Errors.Error (M.Map String String)
 moduleToScala mod defs cx g =
     Eithers.bind (constructModule cx g mod defs) (\pkg ->
       let s = Serialization.printExpr (Serialization.parenthesize (Serde.pkgToExpr pkg))
       in (Right (Maps.singleton (Names.moduleNameToFilePath Util.CaseConventionCamel (File.FileExtension "scala") (Packaging.moduleName mod)) s)))
+
 -- | Strip wrap eliminations from terms (newtypes are erased in Scala)
 stripWrapEliminations :: Core.Term -> Core.Term
 stripWrapEliminations t =
@@ -890,6 +919,7 @@ stripWrapEliminations t =
               _ -> t
           _ -> t
       _ -> t
+
 -- | Create an element import statement
 toElImport :: Packaging.ModuleName -> Syntax.Stat
 toElImport ns =
@@ -900,6 +930,7 @@ toElImport ns =
             Syntax.nameDataValue = (Syntax.PredefString (Strings.intercalate "." (Strings.splitOn "." (Packaging.unModuleName ns))))})),
           Syntax.importerImportees = [
             Syntax.ImporteeWildcard]}]}))
+
 -- | Create a primitive import statement
 toPrimImport :: Packaging.ModuleName -> Syntax.Stat
 toPrimImport ns =
@@ -909,6 +940,7 @@ toPrimImport ns =
           Syntax.importerRef = (Syntax.RefDataName (Syntax.NameData {
             Syntax.nameDataValue = (Syntax.PredefString (Strings.intercalate "." (Strings.splitOn "." (Packaging.unModuleName ns))))})),
           Syntax.importerImportees = []}]}))
+
 -- | Convert a type parameter to a type variable reference
 typeParamToTypeVar :: Syntax.ParamType -> Syntax.Type
 typeParamToTypeVar tp =

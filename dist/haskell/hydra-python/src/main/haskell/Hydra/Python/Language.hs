@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Language constraints and reserved words for Python 3
 
 module Hydra.Python.Language where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Classes as Classes
 import qualified Hydra.Coders as Coders
@@ -32,6 +34,7 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
+
 -- | Language constraints for Python 3
 pythonLanguage :: Coders.Language
 pythonLanguage =
@@ -115,6 +118,7 @@ pythonLanguage =
           Variants.TypeVariantVoid,
           Variants.TypeVariantWrap]
     typePredicate = \_ -> True
+
 -- | A set of reserved words in Python
 pythonReservedWords :: S.Set String
 pythonReservedWords =

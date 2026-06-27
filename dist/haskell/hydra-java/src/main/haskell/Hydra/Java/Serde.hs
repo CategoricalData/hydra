@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Java serializer: converts Java AST to concrete syntax
 
 module Hydra.Java.Serde where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Classes as Classes
 import qualified Hydra.Coders as Coders
@@ -37,33 +39,42 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 additionalBoundToExpr :: Syntax.AdditionalBound -> Ast.Expr
 additionalBoundToExpr ab =
     Serialization.spaceSep [
       Serialization.cst "&",
       (interfaceTypeToExpr (Syntax.unAdditionalBound ab))]
+
 additiveExpressionToExpr :: Syntax.AdditiveExpression -> Ast.Expr
 additiveExpressionToExpr e =
     case e of
       Syntax.AdditiveExpressionUnary v0 -> multiplicativeExpressionToExpr v0
       Syntax.AdditiveExpressionPlus v0 -> Serialization.infixWs "+" (additiveExpressionToExpr (Syntax.additiveExpression_BinaryLhs v0)) (multiplicativeExpressionToExpr (Syntax.additiveExpression_BinaryRhs v0))
       Syntax.AdditiveExpressionMinus v0 -> Serialization.infixWs "-" (additiveExpressionToExpr (Syntax.additiveExpression_BinaryLhs v0)) (multiplicativeExpressionToExpr (Syntax.additiveExpression_BinaryRhs v0))
+
 ambiguousNameToExpr :: Syntax.AmbiguousName -> Ast.Expr
 ambiguousNameToExpr an = Serialization.dotSep (Lists.map identifierToExpr (Syntax.unAmbiguousName an))
+
 andExpressionToExpr :: Syntax.AndExpression -> Ast.Expr
 andExpressionToExpr ae = Serialization.infixWsList "&" (Lists.map equalityExpressionToExpr (Syntax.unAndExpression ae))
+
 annotatedIdentifierToExpr :: Syntax.AnnotatedIdentifier -> Ast.Expr
 annotatedIdentifierToExpr ai = identifierToExpr (Syntax.annotatedIdentifierIdentifier ai)
+
 annotationToExpr :: Syntax.Annotation -> Ast.Expr
 annotationToExpr ann =
     case ann of
       Syntax.AnnotationNormal v0 -> normalAnnotationToExpr v0
       Syntax.AnnotationMarker v0 -> markerAnnotationToExpr v0
       Syntax.AnnotationSingleElement v0 -> singleElementAnnotationToExpr v0
+
 annotationTypeDeclarationToExpr :: t0 -> Ast.Expr
 annotationTypeDeclarationToExpr _ = Serialization.cst "STUB:AnnotationInterfaceDeclaration"
+
 arrayAccessToExpr :: t0 -> Ast.Expr
 arrayAccessToExpr _ = Serialization.cst "STUB:ArrayAccess"
+
 arrayCreationExpressionToExpr :: Syntax.ArrayCreationExpression -> Ast.Expr
 arrayCreationExpressionToExpr ace =
     case ace of
@@ -79,6 +90,7 @@ arrayCreationExpressionToExpr ace =
               (Serialization.cst "[]")]),
             (arrayInitializerToExpr ai)])
         Syntax.ArrayCreationExpressionWithInitializerClassOrInterface _ -> Serialization.cst "STUB:ArrayCreationExpression"
+
 arrayInitializerToExpr :: Syntax.ArrayInitializer -> Ast.Expr
 arrayInitializerToExpr ai =
 
@@ -87,6 +99,7 @@ arrayInitializerToExpr ai =
         Serialization.cst "{",
         (Serialization.commaSep Serialization.inlineStyle (Lists.map variableInitializerToExpr firstGroup)),
         (Serialization.cst "}")]) (Serialization.cst "{}")) (Lists.maybeHead groups)))
+
 arrayTypeToExpr :: Syntax.ArrayType -> Ast.Expr
 arrayTypeToExpr at =
 
@@ -100,13 +113,16 @@ arrayTypeToExpr at =
       in (Serialization.noSep [
         varExpr,
         (dimsToExpr dims)])
+
 assertStatementToExpr :: t0 -> Ast.Expr
 assertStatementToExpr _ = Serialization.cst "STUB:AssertStatement"
+
 assignmentExpressionToExpr :: Syntax.AssignmentExpression -> Ast.Expr
 assignmentExpressionToExpr e =
     case e of
       Syntax.AssignmentExpressionConditional v0 -> conditionalExpressionToExpr v0
       Syntax.AssignmentExpressionAssignment v0 -> assignmentToExpr v0
+
 assignmentToExpr :: Syntax.Assignment -> Ast.Expr
 assignmentToExpr a =
 
@@ -128,6 +144,7 @@ assignmentToExpr a =
                     Syntax.AssignmentOperatorXor -> "^="
                     Syntax.AssignmentOperatorOr -> "|="
       in (Serialization.infixWs ctop (leftHandSideToExpr lhs) (expressionToExpr rhs))
+
 blockStatementToExpr :: Syntax.BlockStatement -> Ast.Expr
 blockStatementToExpr s =
     case s of
@@ -136,9 +153,11 @@ blockStatementToExpr s =
         Syntax.LocalClassOrInterfaceDeclarationClass v1 -> classDeclarationToExpr v1
         Syntax.LocalClassOrInterfaceDeclarationNormalInterface v1 -> interfaceDeclarationToExpr (Syntax.InterfaceDeclarationNormalInterface v1)
       Syntax.BlockStatementStatement v0 -> statementToExpr v0
+
 blockToExpr :: Syntax.Block -> Ast.Expr
 blockToExpr b =
     Serialization.curlyBlock Serialization.fullBlockStyle (Serialization.newlineSep (Lists.map blockStatementToExpr (Syntax.unBlock b)))
+
 breakStatementToExpr :: Syntax.BreakStatement -> Ast.Expr
 breakStatementToExpr bs =
 
@@ -146,8 +165,10 @@ breakStatementToExpr bs =
       in (Serialization.withSemi (Serialization.spaceSep (Optionals.cat [
         Just (Serialization.cst "break"),
         (Optionals.map identifierToExpr mlabel)])))
+
 castExpressionLambdaToExpr :: t0 -> Ast.Expr
 castExpressionLambdaToExpr _ = Serialization.cst "STUB:CastExpression_Lambda"
+
 castExpressionNotPlusMinusToExpr :: Syntax.CastExpression_NotPlusMinus -> Ast.Expr
 castExpressionNotPlusMinusToExpr npm =
 
@@ -156,6 +177,7 @@ castExpressionNotPlusMinusToExpr npm =
       in (Serialization.spaceSep [
         castExpressionRefAndBoundsToExpr rb,
         (unaryExpressionToExpr ex)])
+
 castExpressionPrimitiveToExpr :: Syntax.CastExpression_Primitive -> Ast.Expr
 castExpressionPrimitiveToExpr cp =
 
@@ -165,6 +187,7 @@ castExpressionPrimitiveToExpr cp =
         Serialization.parenList False [
           primitiveTypeWithAnnotationsToExpr pt],
         (unaryExpressionToExpr ex)])
+
 castExpressionRefAndBoundsToExpr :: Syntax.CastExpression_RefAndBounds -> Ast.Expr
 castExpressionRefAndBoundsToExpr rab =
 
@@ -174,12 +197,14 @@ castExpressionRefAndBoundsToExpr rab =
         Serialization.spaceSep (Optionals.cat [
           Just (referenceTypeToExpr rt),
           (Logic.ifElse (Lists.null adds) Nothing (Just (Serialization.spaceSep (Lists.map additionalBoundToExpr adds))))])])
+
 castExpressionToExpr :: Syntax.CastExpression -> Ast.Expr
 castExpressionToExpr e =
     case e of
       Syntax.CastExpressionPrimitive v0 -> castExpressionPrimitiveToExpr v0
       Syntax.CastExpressionNotPlusMinus v0 -> castExpressionNotPlusMinusToExpr v0
       Syntax.CastExpressionLambda v0 -> castExpressionLambdaToExpr v0
+
 classBodyDeclarationToExpr :: Syntax.ClassBodyDeclaration -> Ast.Expr
 classBodyDeclarationToExpr d =
     case d of
@@ -187,25 +212,30 @@ classBodyDeclarationToExpr d =
       Syntax.ClassBodyDeclarationInstanceInitializer v0 -> instanceInitializerToExpr v0
       Syntax.ClassBodyDeclarationStaticInitializer v0 -> staticInitializerToExpr v0
       Syntax.ClassBodyDeclarationConstructorDeclaration v0 -> constructorDeclarationToExpr v0
+
 classBodyDeclarationWithCommentsToExpr :: Syntax.ClassBodyDeclarationWithComments -> Ast.Expr
 classBodyDeclarationWithCommentsToExpr cbdwc =
 
       let d = Syntax.classBodyDeclarationWithCommentsValue cbdwc
           mc = Syntax.classBodyDeclarationWithCommentsComments cbdwc
       in (withComments mc (classBodyDeclarationToExpr d))
+
 classBodyToExpr :: Syntax.ClassBody -> Ast.Expr
 classBodyToExpr cb =
     Serialization.curlyBlock Serialization.fullBlockStyle (Serialization.doubleNewlineSep (Lists.map classBodyDeclarationWithCommentsToExpr (Syntax.unClassBody cb)))
+
 classDeclarationToExpr :: Syntax.ClassDeclaration -> Ast.Expr
 classDeclarationToExpr d =
     case d of
       Syntax.ClassDeclarationNormal v0 -> normalClassDeclarationToExpr v0
       Syntax.ClassDeclarationEnum v0 -> enumDeclarationToExpr v0
+
 classInstanceCreationExpressionQualifierToExpr :: Syntax.ClassInstanceCreationExpression_Qualifier -> Ast.Expr
 classInstanceCreationExpressionQualifierToExpr q =
     case q of
       Syntax.ClassInstanceCreationExpression_QualifierExpression v0 -> expressionNameToExpr v0
       Syntax.ClassInstanceCreationExpression_QualifierPrimary v0 -> primaryToExpr v0
+
 classInstanceCreationExpressionToExpr :: Syntax.ClassInstanceCreationExpression -> Ast.Expr
 classInstanceCreationExpressionToExpr cice =
 
@@ -214,8 +244,10 @@ classInstanceCreationExpressionToExpr cice =
       in (Optionals.cases mqual (unqualifiedClassInstanceCreationExpressionToExpr e) (\q -> Serialization.dotSep [
         classInstanceCreationExpressionQualifierToExpr q,
         (unqualifiedClassInstanceCreationExpressionToExpr e)]))
+
 classLiteralToExpr :: t0 -> Ast.Expr
 classLiteralToExpr _ = Serialization.cst "STUB:ClassLiteral"
+
 classMemberDeclarationToExpr :: Syntax.ClassMemberDeclaration -> Ast.Expr
 classMemberDeclarationToExpr d =
     case d of
@@ -224,6 +256,7 @@ classMemberDeclarationToExpr d =
       Syntax.ClassMemberDeclarationClass v0 -> classDeclarationToExpr v0
       Syntax.ClassMemberDeclarationInterface v0 -> interfaceDeclarationToExpr v0
       Syntax.ClassMemberDeclarationNone -> Serialization.cst ";"
+
 classModifierToExpr :: Syntax.ClassModifier -> Ast.Expr
 classModifierToExpr m =
     case m of
@@ -235,11 +268,13 @@ classModifierToExpr m =
       Syntax.ClassModifierStatic -> Serialization.cst "static"
       Syntax.ClassModifierFinal -> Serialization.cst "final"
       Syntax.ClassModifierStrictfp -> Serialization.cst "strictfp"
+
 classOrInterfaceTypeToExpr :: Syntax.ClassOrInterfaceType -> Ast.Expr
 classOrInterfaceTypeToExpr cit =
     case cit of
       Syntax.ClassOrInterfaceTypeClass v0 -> classTypeToExpr v0
       Syntax.ClassOrInterfaceTypeInterface v0 -> interfaceTypeToExpr v0
+
 classOrInterfaceTypeToInstantiateToExpr :: Syntax.ClassOrInterfaceTypeToInstantiate -> Ast.Expr
 classOrInterfaceTypeToInstantiateToExpr coitti =
 
@@ -248,6 +283,7 @@ classOrInterfaceTypeToInstantiateToExpr coitti =
       in (Serialization.noSep (Optionals.cat [
         Just (Serialization.dotSep (Lists.map annotatedIdentifierToExpr ids)),
         (Optionals.map typeArgumentsOrDiamondToExpr margs)]))
+
 classTypeToExpr :: Syntax.ClassType -> Ast.Expr
 classTypeToExpr ct =
 
@@ -269,6 +305,7 @@ classTypeToExpr ct =
           Logic.ifElse (Lists.null anns) Nothing (Just (Serialization.commaSep Serialization.inlineStyle (Lists.map annotationToExpr anns))),
           (Just qualifiedId)])),
         (Logic.ifElse (Lists.null args) Nothing (Just (Serialization.angleBracesList Serialization.inlineStyle (Lists.map typeArgumentToExpr args))))]))
+
 compilationUnitToExpr :: Syntax.CompilationUnit -> Ast.Expr
 compilationUnitToExpr u =
     case u of
@@ -287,22 +324,28 @@ compilationUnitToExpr u =
           pkgSec,
           importsSec,
           typesSec]))
+
 conditionalAndExpressionToExpr :: Syntax.ConditionalAndExpression -> Ast.Expr
 conditionalAndExpressionToExpr cae =
     Serialization.infixWsList "&&" (Lists.map inclusiveOrExpressionToExpr (Syntax.unConditionalAndExpression cae))
+
 conditionalExpressionTernaryCondToExpr :: t0 -> Ast.Expr
 conditionalExpressionTernaryCondToExpr _ = Serialization.cst "STUB:ConditionalExpression_TernaryCond"
+
 conditionalExpressionTernaryLambdaToExpr :: t0 -> Ast.Expr
 conditionalExpressionTernaryLambdaToExpr _ = Serialization.cst "STUB:ConditionalExpression_TernaryLambda"
+
 conditionalExpressionToExpr :: Syntax.ConditionalExpression -> Ast.Expr
 conditionalExpressionToExpr c =
     case c of
       Syntax.ConditionalExpressionSimple v0 -> conditionalOrExpressionToExpr v0
       Syntax.ConditionalExpressionTernaryCond v0 -> conditionalExpressionTernaryCondToExpr v0
       Syntax.ConditionalExpressionTernaryLambda v0 -> conditionalExpressionTernaryLambdaToExpr v0
+
 conditionalOrExpressionToExpr :: Syntax.ConditionalOrExpression -> Ast.Expr
 conditionalOrExpressionToExpr coe =
     Serialization.infixWsList "||" (Lists.map conditionalAndExpressionToExpr (Syntax.unConditionalOrExpression coe))
+
 constantDeclarationToExpr :: Syntax.ConstantDeclaration -> Ast.Expr
 constantDeclarationToExpr cd =
 
@@ -313,8 +356,10 @@ constantDeclarationToExpr cd =
         Logic.ifElse (Lists.null mods) Nothing (Just (Serialization.spaceSep (Lists.map constantModifierToExpr mods))),
         (Just (unannTypeToExpr typ)),
         (Just (Serialization.commaSep Serialization.inlineStyle (Lists.map variableDeclaratorToExpr vars)))])))
+
 constantModifierToExpr :: t0 -> Ast.Expr
 constantModifierToExpr _ = Serialization.cst "STUB:ConstantModifier"
+
 constructorBodyToExpr :: Syntax.ConstructorBody -> Ast.Expr
 constructorBodyToExpr cb =
 
@@ -323,6 +368,7 @@ constructorBodyToExpr cb =
       in (Serialization.curlyBlock Serialization.fullBlockStyle (Serialization.doubleNewlineSep (Optionals.cat [
         Optionals.map explicitConstructorInvocationToExpr minvoc,
         (Just (Serialization.newlineSep (Lists.map blockStatementToExpr stmts)))])))
+
 constructorDeclarationToExpr :: Syntax.ConstructorDeclaration -> Ast.Expr
 constructorDeclarationToExpr cd =
 
@@ -335,6 +381,7 @@ constructorDeclarationToExpr cd =
         (Just (constructorDeclaratorToExpr cons)),
         (Optionals.map throwsToExpr mthrows),
         (Just (constructorBodyToExpr body))]))
+
 constructorDeclaratorToExpr :: Syntax.ConstructorDeclarator -> Ast.Expr
 constructorDeclaratorToExpr cd =
 
@@ -345,6 +392,7 @@ constructorDeclaratorToExpr cd =
         Logic.ifElse (Lists.null tparams) Nothing (Just (Serialization.angleBracesList Serialization.inlineStyle (Lists.map typeParameterToExpr tparams))),
         (Just (simpleTypeNameToExpr name)),
         (Just (Serialization.parenListAdaptive (Lists.map formalParameterToExpr fparams)))]))
+
 constructorModifierToExpr :: Syntax.ConstructorModifier -> Ast.Expr
 constructorModifierToExpr m =
     case m of
@@ -352,6 +400,7 @@ constructorModifierToExpr m =
       Syntax.ConstructorModifierPublic -> Serialization.cst "public"
       Syntax.ConstructorModifierProtected -> Serialization.cst "protected"
       Syntax.ConstructorModifierPrivate -> Serialization.cst "private"
+
 continueStatementToExpr :: Syntax.ContinueStatement -> Ast.Expr
 continueStatementToExpr cs =
 
@@ -359,35 +408,44 @@ continueStatementToExpr cs =
       in (Serialization.withSemi (Serialization.spaceSep (Optionals.cat [
         Just (Serialization.cst "continue"),
         (Optionals.map identifierToExpr mlabel)])))
+
 dimsToExpr :: Syntax.Dims -> Ast.Expr
 dimsToExpr d = Serialization.noSep (Lists.map (\_ -> Serialization.cst "[]") (Syntax.unDims d))
+
 doStatementToExpr :: t0 -> Ast.Expr
 doStatementToExpr _ = Serialization.cst "STUB:DoStatement"
+
 elementValuePairToExpr :: Syntax.ElementValuePair -> Ast.Expr
 elementValuePairToExpr evp =
 
       let k = Syntax.elementValuePairKey evp
           v = Syntax.elementValuePairValue evp
       in (Serialization.infixWs "=" (identifierToExpr k) (elementValueToExpr v))
+
 elementValueToExpr :: Syntax.ElementValue -> Ast.Expr
 elementValueToExpr ev =
     case ev of
       Syntax.ElementValueConditionalExpression v0 -> conditionalExpressionToExpr v0
       Syntax.ElementValueElementValueArrayInitializer v0 -> Serialization.commaSep Serialization.inlineStyle (Lists.map elementValueToExpr (Syntax.unElementValueArrayInitializer v0))
       Syntax.ElementValueAnnotation v0 -> annotationToExpr v0
+
 enumDeclarationToExpr :: t0 -> Ast.Expr
 enumDeclarationToExpr _ = Serialization.cst "STUB:EnumDeclaration"
+
 equalityExpressionToExpr :: Syntax.EqualityExpression -> Ast.Expr
 equalityExpressionToExpr e =
     case e of
       Syntax.EqualityExpressionUnary v0 -> relationalExpressionToExpr v0
       Syntax.EqualityExpressionEqual v0 -> Serialization.infixWs "==" (equalityExpressionToExpr (Syntax.equalityExpression_BinaryLhs v0)) (relationalExpressionToExpr (Syntax.equalityExpression_BinaryRhs v0))
       Syntax.EqualityExpressionNotEqual v0 -> Serialization.infixWs "!=" (equalityExpressionToExpr (Syntax.equalityExpression_BinaryLhs v0)) (relationalExpressionToExpr (Syntax.equalityExpression_BinaryRhs v0))
+
 exclusiveOrExpressionToExpr :: Syntax.ExclusiveOrExpression -> Ast.Expr
 exclusiveOrExpressionToExpr eoe =
     Serialization.infixWsList "^" (Lists.map andExpressionToExpr (Syntax.unExclusiveOrExpression eoe))
+
 explicitConstructorInvocationToExpr :: t0 -> Ast.Expr
 explicitConstructorInvocationToExpr _ = Serialization.cst "STUB:ExplicitConstructorInvocation"
+
 expressionNameToExpr :: Syntax.ExpressionName -> Ast.Expr
 expressionNameToExpr en =
 
@@ -396,13 +454,16 @@ expressionNameToExpr en =
       in (Serialization.dotSep (Optionals.cat [
         Optionals.map ambiguousNameToExpr mqual,
         (Just (identifierToExpr id))]))
+
 expressionStatementToExpr :: Syntax.ExpressionStatement -> Ast.Expr
 expressionStatementToExpr es = Serialization.withSemi (statementExpressionToExpr (Syntax.unExpressionStatement es))
+
 expressionToExpr :: Syntax.Expression -> Ast.Expr
 expressionToExpr e =
     case e of
       Syntax.ExpressionLambda v0 -> lambdaExpressionToExpr v0
       Syntax.ExpressionAssignment v0 -> assignmentExpressionToExpr v0
+
 fieldAccessToExpr :: Syntax.FieldAccess -> Ast.Expr
 fieldAccessToExpr fa =
 
@@ -419,6 +480,7 @@ fieldAccessToExpr fa =
           typeNameToExpr v0,
           (Serialization.cst "super"),
           (identifierToExpr id)]
+
 fieldDeclarationToExpr :: Syntax.FieldDeclaration -> Ast.Expr
 fieldDeclarationToExpr fd =
 
@@ -429,6 +491,7 @@ fieldDeclarationToExpr fd =
         Logic.ifElse (Lists.null mods) Nothing (Just (Serialization.spaceSep (Lists.map fieldModifierToExpr mods))),
         (Just (unannTypeToExpr typ)),
         (Just (Serialization.commaSep Serialization.inlineStyle (Lists.map variableDeclaratorToExpr vars)))])))
+
 fieldModifierToExpr :: Syntax.FieldModifier -> Ast.Expr
 fieldModifierToExpr m =
     case m of
@@ -440,16 +503,20 @@ fieldModifierToExpr m =
       Syntax.FieldModifierFinal -> Serialization.cst "final"
       Syntax.FieldModifierTransient -> Serialization.cst "transient"
       Syntax.FieldModifierVolatile -> Serialization.cst "volatile"
+
 floatingPointLiteralToExpr :: Syntax.FloatingPointLiteral -> Ast.Expr
 floatingPointLiteralToExpr fl =
     Serialization.cst (javaFloatLiteralText (Literals.showFloat64 (Syntax.unFloatingPointLiteral fl)))
+
 floatingPointTypeToExpr :: Syntax.FloatingPointType -> Ast.Expr
 floatingPointTypeToExpr ft =
     case ft of
       Syntax.FloatingPointTypeFloat -> Serialization.cst "float"
       Syntax.FloatingPointTypeDouble -> Serialization.cst "double"
+
 forStatementToExpr :: t0 -> Ast.Expr
 forStatementToExpr _ = Serialization.cst "STUB:ForStatement"
+
 formalParameterSimpleToExpr :: Syntax.FormalParameter_Simple -> Ast.Expr
 formalParameterSimpleToExpr fps =
 
@@ -460,15 +527,19 @@ formalParameterSimpleToExpr fps =
         Logic.ifElse (Lists.null mods) Nothing (Just (Serialization.spaceSep (Lists.map variableModifierToExpr mods))),
         (Just (unannTypeToExpr typ)),
         (Just (variableDeclaratorIdToExpr id))]))
+
 formalParameterToExpr :: Syntax.FormalParameter -> Ast.Expr
 formalParameterToExpr p =
     case p of
       Syntax.FormalParameterSimple v0 -> formalParameterSimpleToExpr v0
       Syntax.FormalParameterVariableArity v0 -> variableArityParameterToExpr v0
+
 identifierToExpr :: Syntax.Identifier -> Ast.Expr
 identifierToExpr id = Serialization.cst (Syntax.unIdentifier id)
+
 ifThenElseStatementToExpr :: t0 -> Ast.Expr
 ifThenElseStatementToExpr _ = Serialization.cst "STUB:IfThenElseStatement"
+
 ifThenStatementToExpr :: Syntax.IfThenStatement -> Ast.Expr
 ifThenStatementToExpr its =
 
@@ -479,6 +550,7 @@ ifThenStatementToExpr its =
         (Serialization.parenList False [
           expressionToExpr cond]),
         (Serialization.curlyBlock Serialization.fullBlockStyle (statementToExpr thn))])
+
 importDeclarationToExpr :: Syntax.ImportDeclaration -> Ast.Expr
 importDeclarationToExpr imp =
     case imp of
@@ -488,17 +560,21 @@ importDeclarationToExpr imp =
       Syntax.ImportDeclarationTypeImportOnDemand _ -> Serialization.cst "STUB:ImportDeclarationTypeImportOnDemand"
       Syntax.ImportDeclarationSingleStaticImport _ -> Serialization.cst "STUB:ImportDeclarationSingleStaticImport"
       Syntax.ImportDeclarationStaticImportOnDemand _ -> Serialization.cst "STUB:ImportDeclarationStaticImportOnDemand"
+
 inclusiveOrExpressionToExpr :: Syntax.InclusiveOrExpression -> Ast.Expr
 inclusiveOrExpressionToExpr ioe =
     Serialization.infixWsList "|" (Lists.map exclusiveOrExpressionToExpr (Syntax.unInclusiveOrExpression ioe))
+
 instanceInitializerToExpr :: t0 -> Ast.Expr
 instanceInitializerToExpr _ = Serialization.cst "STUB:InstanceInitializer"
+
 integerLiteralToExpr :: Syntax.IntegerLiteral -> Ast.Expr
 integerLiteralToExpr il =
 
       let i = Syntax.unIntegerLiteral il
           suffix = Logic.ifElse (Logic.or (Equality.gt i 2147483647) (Equality.lt i (-2147483648))) "L" ""
       in (Serialization.cst (Strings.cat2 (Literals.showBigint i) suffix))
+
 integralTypeToExpr :: Syntax.IntegralType -> Ast.Expr
 integralTypeToExpr t =
     case t of
@@ -507,14 +583,17 @@ integralTypeToExpr t =
       Syntax.IntegralTypeInt -> Serialization.cst "int"
       Syntax.IntegralTypeLong -> Serialization.cst "long"
       Syntax.IntegralTypeChar -> Serialization.cst "char"
+
 interfaceBodyToExpr :: Syntax.InterfaceBody -> Ast.Expr
 interfaceBodyToExpr ib =
     Serialization.curlyBlock Serialization.fullBlockStyle (Serialization.doubleNewlineSep (Lists.map interfaceMemberDeclarationWithCommentsToExpr (Syntax.unInterfaceBody ib)))
+
 interfaceDeclarationToExpr :: Syntax.InterfaceDeclaration -> Ast.Expr
 interfaceDeclarationToExpr d =
     case d of
       Syntax.InterfaceDeclarationNormalInterface v0 -> normalInterfaceDeclarationToExpr v0
       Syntax.InterfaceDeclarationAnnotationInterface v0 -> annotationTypeDeclarationToExpr v0
+
 interfaceMemberDeclarationToExpr :: Syntax.InterfaceMemberDeclaration -> Ast.Expr
 interfaceMemberDeclarationToExpr d =
     case d of
@@ -522,12 +601,14 @@ interfaceMemberDeclarationToExpr d =
       Syntax.InterfaceMemberDeclarationInterfaceMethod v0 -> interfaceMethodDeclarationToExpr v0
       Syntax.InterfaceMemberDeclarationClass v0 -> classDeclarationToExpr v0
       Syntax.InterfaceMemberDeclarationInterface v0 -> interfaceDeclarationToExpr v0
+
 interfaceMemberDeclarationWithCommentsToExpr :: Syntax.InterfaceMemberDeclarationWithComments -> Ast.Expr
 interfaceMemberDeclarationWithCommentsToExpr imdwc =
 
       let d = Syntax.interfaceMemberDeclarationWithCommentsValue imdwc
           mc = Syntax.interfaceMemberDeclarationWithCommentsComments imdwc
       in (withComments mc (interfaceMemberDeclarationToExpr d))
+
 interfaceMethodDeclarationToExpr :: Syntax.InterfaceMethodDeclaration -> Ast.Expr
 interfaceMethodDeclarationToExpr imd =
 
@@ -538,6 +619,7 @@ interfaceMethodDeclarationToExpr imd =
         Logic.ifElse (Lists.null mods) Nothing (Just (Serialization.spaceSep (Lists.map interfaceMethodModifierToExpr mods))),
         (Just (methodHeaderToExpr header)),
         (Just (methodBodyToExpr body))]))
+
 interfaceMethodModifierToExpr :: Syntax.InterfaceMethodModifier -> Ast.Expr
 interfaceMethodModifierToExpr m =
     case m of
@@ -548,6 +630,7 @@ interfaceMethodModifierToExpr m =
       Syntax.InterfaceMethodModifierDefault -> Serialization.cst "default"
       Syntax.InterfaceMethodModifierStatic -> Serialization.cst "static"
       Syntax.InterfaceMethodModifierStrictfp -> Serialization.cst "strictfp"
+
 interfaceModifierToExpr :: Syntax.InterfaceModifier -> Ast.Expr
 interfaceModifierToExpr m =
     case m of
@@ -558,35 +641,43 @@ interfaceModifierToExpr m =
       Syntax.InterfaceModifierAbstract -> Serialization.cst "abstract"
       Syntax.InterfaceModifierStatic -> Serialization.cst "static"
       Syntax.InterfaceModifierStrictfp -> Serialization.cst "strictfp"
+
 interfaceTypeToExpr :: Syntax.InterfaceType -> Ast.Expr
 interfaceTypeToExpr it = classTypeToExpr (Syntax.unInterfaceType it)
+
 javaFloatLiteralText :: String -> String
 javaFloatLiteralText s =
     Logic.ifElse (Equality.equal s "NaN") "Double.NaN" (Logic.ifElse (Equality.equal s "Infinity") "Double.POSITIVE_INFINITY" (Logic.ifElse (Equality.equal s "-Infinity") "Double.NEGATIVE_INFINITY" s))
+
 labeledStatementToExpr :: t0 -> Ast.Expr
 labeledStatementToExpr _ = Serialization.cst "STUB:LabeledStatement"
+
 lambdaBodyToExpr :: Syntax.LambdaBody -> Ast.Expr
 lambdaBodyToExpr b =
     case b of
       Syntax.LambdaBodyExpression v0 -> expressionToExpr v0
       Syntax.LambdaBodyBlock v0 -> blockToExpr v0
+
 lambdaExpressionToExpr :: Syntax.LambdaExpression -> Ast.Expr
 lambdaExpressionToExpr le =
 
       let params = Syntax.lambdaExpressionParameters le
           body = Syntax.lambdaExpressionBody le
       in (Serialization.infixWs "->" (lambdaParametersToExpr params) (lambdaBodyToExpr body))
+
 lambdaParametersToExpr :: Syntax.LambdaParameters -> Ast.Expr
 lambdaParametersToExpr p =
     case p of
       Syntax.LambdaParametersTuple v0 -> Serialization.parenList False (Lists.map lambdaParametersToExpr v0)
       Syntax.LambdaParametersSingle v0 -> identifierToExpr v0
+
 leftHandSideToExpr :: Syntax.LeftHandSide -> Ast.Expr
 leftHandSideToExpr lhs =
     case lhs of
       Syntax.LeftHandSideExpressionName v0 -> expressionNameToExpr v0
       Syntax.LeftHandSideFieldAccess v0 -> fieldAccessToExpr v0
       Syntax.LeftHandSideArrayAccess v0 -> arrayAccessToExpr v0
+
 literalToExpr :: Syntax.Literal -> Ast.Expr
 literalToExpr l =
     case l of
@@ -599,14 +690,17 @@ literalToExpr l =
         in (Serialization.cst (Strings.cat2 "'" (Strings.cat2 (Logic.ifElse (Equality.equal ci 39) "\\'" (Logic.ifElse (Equality.equal ci 92) "\\\\" (Logic.ifElse (Equality.equal ci 10) "\\n" (Logic.ifElse (Equality.equal ci 13) "\\r" (Logic.ifElse (Equality.equal ci 9) "\\t" (Logic.ifElse (Logic.and (Equality.gte ci 32) (Equality.lt ci 127)) (Strings.fromList [
           ci]) (Serde.javaUnicodeEscape ci))))))) "'")))
       Syntax.LiteralString v0 -> stringLiteralToExpr v0
+
 localNameToExpr :: Syntax.LocalVariableType -> Ast.Expr
 localNameToExpr t =
     case t of
       Syntax.LocalVariableTypeType v0 -> unannTypeToExpr v0
       Syntax.LocalVariableTypeVar -> Serialization.cst "var"
+
 localVariableDeclarationStatementToExpr :: Syntax.LocalVariableDeclarationStatement -> Ast.Expr
 localVariableDeclarationStatementToExpr lvds =
     Serialization.withSemi (localVariableDeclarationToExpr (Syntax.unLocalVariableDeclarationStatement lvds))
+
 localVariableDeclarationToExpr :: Syntax.LocalVariableDeclaration -> Ast.Expr
 localVariableDeclarationToExpr lvd =
 
@@ -617,13 +711,16 @@ localVariableDeclarationToExpr lvd =
         Logic.ifElse (Lists.null mods) Nothing (Just (Serialization.spaceSep (Lists.map variableModifierToExpr mods))),
         (Just (localNameToExpr t)),
         (Just (Serialization.commaSep Serialization.inlineStyle (Lists.map variableDeclaratorToExpr decls)))]))
+
 markerAnnotationToExpr :: Syntax.MarkerAnnotation -> Ast.Expr
 markerAnnotationToExpr ma = Serialization.prefix "@" (typeNameToExpr (Syntax.unMarkerAnnotation ma))
+
 methodBodyToExpr :: Syntax.MethodBody -> Ast.Expr
 methodBodyToExpr b =
     case b of
       Syntax.MethodBodyBlock v0 -> blockToExpr v0
       Syntax.MethodBodyNone -> Serialization.cst ";"
+
 methodDeclarationToExpr :: Syntax.MethodDeclaration -> Ast.Expr
 methodDeclarationToExpr md =
 
@@ -639,6 +736,7 @@ methodDeclarationToExpr md =
       in (Serialization.newlineSep (Optionals.cat [
         Logic.ifElse (Lists.null anns) Nothing (Just (Serialization.newlineSep (Lists.map annotationToExpr anns))),
         (Just headerAndBody)]))
+
 methodDeclaratorToExpr :: Syntax.MethodDeclarator -> Ast.Expr
 methodDeclaratorToExpr md =
 
@@ -647,6 +745,7 @@ methodDeclaratorToExpr md =
       in (Serialization.noSep [
         identifierToExpr id,
         (Serialization.parenListAdaptive (Lists.map formalParameterToExpr params))])
+
 methodHeaderToExpr :: Syntax.MethodHeader -> Ast.Expr
 methodHeaderToExpr mh =
 
@@ -659,6 +758,7 @@ methodHeaderToExpr mh =
         (Just (resultToExpr result)),
         (Just (methodDeclaratorToExpr decl)),
         (Optionals.map throwsToExpr mthrows)]))
+
 methodInvocationToExpr :: Syntax.MethodInvocation -> Ast.Expr
 methodInvocationToExpr mi =
 
@@ -696,6 +796,7 @@ methodInvocationToExpr mi =
       in (Serialization.noSep [
         headerSec,
         argSec])
+
 methodModifierToExpr :: Syntax.MethodModifier -> Ast.Expr
 methodModifierToExpr m =
     case m of
@@ -709,10 +810,13 @@ methodModifierToExpr m =
       Syntax.MethodModifierSynchronized -> Serialization.cst "synchronized"
       Syntax.MethodModifierNative -> Serialization.cst "native"
       Syntax.MethodModifierStrictfp -> Serialization.cst "strictfp"
+
 methodNameToExpr :: Syntax.MethodName -> Ast.Expr
 methodNameToExpr mn = identifierToExpr (Syntax.unMethodName mn)
+
 methodReferenceToExpr :: t0 -> Ast.Expr
 methodReferenceToExpr _ = Serialization.cst "STUB:MethodReference"
+
 multiplicativeExpressionToExpr :: Syntax.MultiplicativeExpression -> Ast.Expr
 multiplicativeExpressionToExpr e =
     case e of
@@ -720,6 +824,7 @@ multiplicativeExpressionToExpr e =
       Syntax.MultiplicativeExpressionTimes v0 -> Serialization.infixWs "*" (multiplicativeExpressionToExpr (Syntax.multiplicativeExpression_BinaryLhs v0)) (unaryExpressionToExpr (Syntax.multiplicativeExpression_BinaryRhs v0))
       Syntax.MultiplicativeExpressionDivide v0 -> Serialization.infixWs "/" (multiplicativeExpressionToExpr (Syntax.multiplicativeExpression_BinaryLhs v0)) (unaryExpressionToExpr (Syntax.multiplicativeExpression_BinaryRhs v0))
       Syntax.MultiplicativeExpressionMod v0 -> Serialization.infixWs "%" (multiplicativeExpressionToExpr (Syntax.multiplicativeExpression_BinaryLhs v0)) (unaryExpressionToExpr (Syntax.multiplicativeExpression_BinaryRhs v0))
+
 normalAnnotationToExpr :: Syntax.NormalAnnotation -> Ast.Expr
 normalAnnotationToExpr na =
 
@@ -728,6 +833,7 @@ normalAnnotationToExpr na =
       in (Serialization.prefix "@" (Serialization.noSep [
         typeNameToExpr tname,
         (Serialization.commaSep Serialization.inlineStyle (Lists.map elementValuePairToExpr pairs))]))
+
 normalClassDeclarationToExpr :: Syntax.NormalClassDeclaration -> Ast.Expr
 normalClassDeclarationToExpr ncd =
 
@@ -750,6 +856,7 @@ normalClassDeclarationToExpr ncd =
           Serialization.cst "implements",
           (Serialization.commaSep Serialization.inlineStyle (Lists.map interfaceTypeToExpr superi))]))),
         (Just (classBodyToExpr body))]))
+
 normalInterfaceDeclarationToExpr :: Syntax.NormalInterfaceDeclaration -> Ast.Expr
 normalInterfaceDeclarationToExpr nid =
 
@@ -768,11 +875,13 @@ normalInterfaceDeclarationToExpr nid =
           Serialization.cst "extends",
           (Serialization.commaSep Serialization.inlineStyle (Lists.map interfaceTypeToExpr extends))]))),
         (Just (interfaceBodyToExpr body))]))
+
 numericTypeToExpr :: Syntax.NumericType -> Ast.Expr
 numericTypeToExpr nt =
     case nt of
       Syntax.NumericTypeIntegral v0 -> integralTypeToExpr v0
       Syntax.NumericTypeFloatingPoint v0 -> floatingPointTypeToExpr v0
+
 packageDeclarationToExpr :: Syntax.PackageDeclaration -> Ast.Expr
 packageDeclarationToExpr pd =
 
@@ -783,16 +892,22 @@ packageDeclarationToExpr pd =
         (Just (Serialization.spaceSep [
           Serialization.cst "package",
           (Serialization.cst (Strings.intercalate "." (Lists.map (\id -> Syntax.unIdentifier id) ids)))]))])))
+
 packageModifierToExpr :: Syntax.PackageModifier -> Ast.Expr
 packageModifierToExpr pm = annotationToExpr (Syntax.unPackageModifier pm)
+
 packageNameToExpr :: Syntax.PackageName -> Ast.Expr
 packageNameToExpr pn = Serialization.dotSep (Lists.map identifierToExpr (Syntax.unPackageName pn))
+
 packageOrTypeNameToExpr :: Syntax.PackageOrTypeName -> Ast.Expr
 packageOrTypeNameToExpr potn = Serialization.dotSep (Lists.map identifierToExpr (Syntax.unPackageOrTypeName potn))
+
 postDecrementExpressionToExpr :: t0 -> Ast.Expr
 postDecrementExpressionToExpr _ = Serialization.cst "STUB:PostDecrementExpression"
+
 postIncrementExpressionToExpr :: t0 -> Ast.Expr
 postIncrementExpressionToExpr _ = Serialization.cst "STUB:PostIncrementExpression"
+
 postfixExpressionToExpr :: Syntax.PostfixExpression -> Ast.Expr
 postfixExpressionToExpr e =
     case e of
@@ -800,10 +915,13 @@ postfixExpressionToExpr e =
       Syntax.PostfixExpressionName v0 -> expressionNameToExpr v0
       Syntax.PostfixExpressionPostIncrement v0 -> postIncrementExpressionToExpr v0
       Syntax.PostfixExpressionPostDecrement v0 -> postDecrementExpressionToExpr v0
+
 preDecrementExpressionToExpr :: t0 -> Ast.Expr
 preDecrementExpressionToExpr _ = Serialization.cst "STUB:PreDecrementExpression"
+
 preIncrementExpressionToExpr :: t0 -> Ast.Expr
 preIncrementExpressionToExpr _ = Serialization.cst "STUB:PreIncrementExpression"
+
 primaryNoNewArrayExpressionExpressionToExpr :: Syntax.PrimaryNoNewArrayExpression -> Ast.Expr
 primaryNoNewArrayExpressionExpressionToExpr p =
     case p of
@@ -820,16 +938,19 @@ primaryNoNewArrayExpressionExpressionToExpr p =
       Syntax.PrimaryNoNewArrayExpressionArrayAccess v0 -> arrayAccessToExpr v0
       Syntax.PrimaryNoNewArrayExpressionMethodInvocation v0 -> methodInvocationToExpr v0
       Syntax.PrimaryNoNewArrayExpressionMethodReference v0 -> methodReferenceToExpr v0
+
 primaryToExpr :: Syntax.Primary -> Ast.Expr
 primaryToExpr p =
     case p of
       Syntax.PrimaryNoNewArray v0 -> primaryNoNewArrayExpressionExpressionToExpr v0
       Syntax.PrimaryArrayCreation v0 -> arrayCreationExpressionToExpr v0
+
 primitiveTypeToExpr :: Syntax.PrimitiveType -> Ast.Expr
 primitiveTypeToExpr pt =
     case pt of
       Syntax.PrimitiveTypeNumeric v0 -> numericTypeToExpr v0
       Syntax.PrimitiveTypeBoolean -> Serialization.cst "boolean"
+
 primitiveTypeWithAnnotationsToExpr :: Syntax.PrimitiveTypeWithAnnotations -> Ast.Expr
 primitiveTypeWithAnnotationsToExpr ptwa =
 
@@ -838,20 +959,25 @@ primitiveTypeWithAnnotationsToExpr ptwa =
       in (Serialization.spaceSep (Optionals.cat [
         Logic.ifElse (Lists.null anns) Nothing (Just (Serialization.spaceSep (Lists.map annotationToExpr anns))),
         (Just (primitiveTypeToExpr pt))]))
+
 receiverParameterToExpr :: t0 -> Ast.Expr
 receiverParameterToExpr _ = Serialization.cst "STUB:ReceiverParameter"
+
 referenceTypeToExpr :: Syntax.ReferenceType -> Ast.Expr
 referenceTypeToExpr rt =
     case rt of
       Syntax.ReferenceTypeClassOrInterface v0 -> classOrInterfaceTypeToExpr v0
       Syntax.ReferenceTypeVariable v0 -> typeVariableToExpr v0
       Syntax.ReferenceTypeArray v0 -> arrayTypeToExpr v0
+
 relationalExpressionGreaterThanEqualToExpr :: Syntax.RelationalExpression_GreaterThanEqual -> Ast.Expr
 relationalExpressionGreaterThanEqualToExpr gte =
     Serialization.infixWs ">=" (relationalExpressionToExpr (Syntax.relationalExpression_GreaterThanEqualLhs gte)) (shiftExpressionToExpr (Syntax.relationalExpression_GreaterThanEqualRhs gte))
+
 relationalExpressionGreaterThanToExpr :: Syntax.RelationalExpression_GreaterThan -> Ast.Expr
 relationalExpressionGreaterThanToExpr gt =
     Serialization.infixWs ">" (relationalExpressionToExpr (Syntax.relationalExpression_GreaterThanLhs gt)) (shiftExpressionToExpr (Syntax.relationalExpression_GreaterThanRhs gt))
+
 relationalExpressionInstanceOfToExpr :: Syntax.InstanceofExpression -> Ast.Expr
 relationalExpressionInstanceOfToExpr io =
 
@@ -860,12 +986,15 @@ relationalExpressionInstanceOfToExpr io =
                 Syntax.InstanceofExpression_RhsReferenceType v0 -> referenceTypeToExpr v0
                 Syntax.InstanceofExpression_RhsPattern _ -> Serialization.cst "STUB:Pattern"
       in (Serialization.infixWs "instanceof" (relationalExpressionToExpr (Syntax.instanceofExpressionLhs io)) rhsExpr)
+
 relationalExpressionLessThanEqualToExpr :: Syntax.RelationalExpression_LessThanEqual -> Ast.Expr
 relationalExpressionLessThanEqualToExpr lte =
     Serialization.infixWs "<=" (relationalExpressionToExpr (Syntax.relationalExpression_LessThanEqualLhs lte)) (shiftExpressionToExpr (Syntax.relationalExpression_LessThanEqualRhs lte))
+
 relationalExpressionLessThanToExpr :: Syntax.RelationalExpression_LessThan -> Ast.Expr
 relationalExpressionLessThanToExpr lt =
     Serialization.infixWs "<" (relationalExpressionToExpr (Syntax.relationalExpression_LessThanLhs lt)) (shiftExpressionToExpr (Syntax.relationalExpression_LessThanRhs lt))
+
 relationalExpressionToExpr :: Syntax.RelationalExpression -> Ast.Expr
 relationalExpressionToExpr e =
     case e of
@@ -875,11 +1004,13 @@ relationalExpressionToExpr e =
       Syntax.RelationalExpressionLessThanEqual v0 -> relationalExpressionLessThanEqualToExpr v0
       Syntax.RelationalExpressionGreaterThanEqual v0 -> relationalExpressionGreaterThanEqualToExpr v0
       Syntax.RelationalExpressionInstanceofExpression v0 -> relationalExpressionInstanceOfToExpr v0
+
 resultToExpr :: Syntax.Result -> Ast.Expr
 resultToExpr r =
     case r of
       Syntax.ResultType v0 -> unannTypeToExpr v0
       Syntax.ResultVoid -> Serialization.cst "void"
+
 returnStatementToExpr :: Syntax.ReturnStatement -> Ast.Expr
 returnStatementToExpr rs =
 
@@ -887,10 +1018,12 @@ returnStatementToExpr rs =
       in (Serialization.withSemi (Serialization.spaceSep (Optionals.cat [
         Just (Serialization.cst "return"),
         (Optionals.map expressionToExpr mex)])))
+
 -- | Sanitize a string for use in a Java comment
 sanitizeJavaComment :: String -> String
 sanitizeJavaComment s =
     Strings.intercalate "&gt;" (Strings.splitOn ">" (Strings.intercalate "&lt;" (Strings.splitOn "<" (Strings.intercalate "&amp;" (Strings.splitOn "&" s)))))
+
 shiftExpressionToExpr :: Syntax.ShiftExpression -> Ast.Expr
 shiftExpressionToExpr e =
     case e of
@@ -898,8 +1031,10 @@ shiftExpressionToExpr e =
       Syntax.ShiftExpressionShiftLeft v0 -> Serialization.infixWs "<<" (shiftExpressionToExpr (Syntax.shiftExpression_BinaryLhs v0)) (additiveExpressionToExpr (Syntax.shiftExpression_BinaryRhs v0))
       Syntax.ShiftExpressionShiftRight v0 -> Serialization.infixWs ">>" (shiftExpressionToExpr (Syntax.shiftExpression_BinaryLhs v0)) (additiveExpressionToExpr (Syntax.shiftExpression_BinaryRhs v0))
       Syntax.ShiftExpressionShiftRightZeroFill v0 -> Serialization.infixWs ">>>" (shiftExpressionToExpr (Syntax.shiftExpression_BinaryLhs v0)) (additiveExpressionToExpr (Syntax.shiftExpression_BinaryRhs v0))
+
 simpleTypeNameToExpr :: Syntax.SimpleTypeName -> Ast.Expr
 simpleTypeNameToExpr stn = typeIdentifierToExpr (Syntax.unSimpleTypeName stn)
+
 singleElementAnnotationToExpr :: Syntax.SingleElementAnnotation -> Ast.Expr
 singleElementAnnotationToExpr sea =
 
@@ -909,12 +1044,14 @@ singleElementAnnotationToExpr sea =
         typeNameToExpr tname,
         (Serialization.parenList False [
           elementValueToExpr v])])))
+
 -- | Create a single-line Java comment. Empty text emits `//` (no trailing space) so blank line comments don't carry trailing whitespace.
 singleLineComment :: String -> Ast.Expr
 singleLineComment c =
 
       let sanitized = sanitizeJavaComment c
       in (Serialization.cst (Logic.ifElse (Equality.equal sanitized "") "//" (Strings.cat2 "// " sanitized)))
+
 statementExpressionToExpr :: Syntax.StatementExpression -> Ast.Expr
 statementExpressionToExpr e =
     case e of
@@ -925,6 +1062,7 @@ statementExpressionToExpr e =
       Syntax.StatementExpressionPostDecrement v0 -> postDecrementExpressionToExpr v0
       Syntax.StatementExpressionMethodInvocation v0 -> methodInvocationToExpr v0
       Syntax.StatementExpressionClassInstanceCreation v0 -> classInstanceCreationExpressionToExpr v0
+
 statementToExpr :: Syntax.Statement -> Ast.Expr
 statementToExpr s =
     case s of
@@ -934,6 +1072,7 @@ statementToExpr s =
       Syntax.StatementIfThenElse v0 -> ifThenElseStatementToExpr v0
       Syntax.StatementWhile v0 -> whileStatementToExpr v0
       Syntax.StatementFor v0 -> forStatementToExpr v0
+
 statementWithoutTrailingSubstatementToExpr :: Syntax.StatementWithoutTrailingSubstatement -> Ast.Expr
 statementWithoutTrailingSubstatementToExpr s =
     case s of
@@ -949,37 +1088,47 @@ statementWithoutTrailingSubstatementToExpr s =
       Syntax.StatementWithoutTrailingSubstatementSynchronized v0 -> synchronizedStatementToExpr v0
       Syntax.StatementWithoutTrailingSubstatementThrow v0 -> throwStatementToExpr v0
       Syntax.StatementWithoutTrailingSubstatementTry v0 -> tryStatementToExpr v0
+
 staticInitializerToExpr :: t0 -> Ast.Expr
 staticInitializerToExpr _ = Serialization.cst "STUB:StaticInitializer"
+
 -- | Serialize a Java string literal with proper Unicode escaping.
 stringLiteralToExpr :: Syntax.StringLiteral -> Ast.Expr
 stringLiteralToExpr sl =
 
       let s = Syntax.unStringLiteral sl
       in (Serialization.cst (Strings.cat2 "\"" (Strings.cat2 (Serde.escapeJavaString s) "\"")))
+
 switchStatementToExpr :: t0 -> Ast.Expr
 switchStatementToExpr _ = Serialization.cst "STUB:SwitchStatement"
+
 synchronizedStatementToExpr :: t0 -> Ast.Expr
 synchronizedStatementToExpr _ = Serialization.cst "STUB:SynchronizedStatement"
+
 throwStatementToExpr :: Syntax.ThrowStatement -> Ast.Expr
 throwStatementToExpr ts =
     Serialization.withSemi (Serialization.spaceSep [
       Serialization.cst "throw",
       (expressionToExpr (Syntax.unThrowStatement ts))])
+
 throwsToExpr :: t0 -> Ast.Expr
 throwsToExpr _ = Serialization.cst "STUB:Throws"
+
 tryStatementToExpr :: t0 -> Ast.Expr
 tryStatementToExpr _ = Serialization.cst "STUB:TryStatement"
+
 typeArgumentToExpr :: Syntax.TypeArgument -> Ast.Expr
 typeArgumentToExpr a =
     case a of
       Syntax.TypeArgumentReference v0 -> referenceTypeToExpr v0
       Syntax.TypeArgumentWildcard v0 -> wildcardToExpr v0
+
 typeArgumentsOrDiamondToExpr :: Syntax.TypeArgumentsOrDiamond -> Ast.Expr
 typeArgumentsOrDiamondToExpr targs =
     case targs of
       Syntax.TypeArgumentsOrDiamondArguments v0 -> Serialization.angleBracesList Serialization.inlineStyle (Lists.map typeArgumentToExpr v0)
       Syntax.TypeArgumentsOrDiamondDiamond -> Serialization.cst "<>"
+
 typeBoundToExpr :: Syntax.TypeBound -> Ast.Expr
 typeBoundToExpr b =
     case b of
@@ -988,20 +1137,24 @@ typeBoundToExpr b =
         let cit = Syntax.typeBound_ClassOrInterfaceType v0
             additional = Syntax.typeBound_ClassOrInterfaceAdditional v0
         in (Logic.ifElse (Lists.null additional) (classOrInterfaceTypeToExpr cit) (Serialization.spaceSep (Lists.cons (classOrInterfaceTypeToExpr cit) (Lists.map additionalBoundToExpr additional))))
+
 typeDeclarationToExpr :: Syntax.TopLevelClassOrInterfaceDeclaration -> Ast.Expr
 typeDeclarationToExpr d =
     case d of
       Syntax.TopLevelClassOrInterfaceDeclarationClass v0 -> classDeclarationToExpr v0
       Syntax.TopLevelClassOrInterfaceDeclarationInterface v0 -> interfaceDeclarationToExpr v0
       Syntax.TopLevelClassOrInterfaceDeclarationNone -> Serialization.cst ";"
+
 typeDeclarationWithCommentsToExpr :: Syntax.TopLevelClassOrInterfaceDeclarationWithComments -> Ast.Expr
 typeDeclarationWithCommentsToExpr tdwc =
 
       let d = Syntax.topLevelClassOrInterfaceDeclarationWithCommentsValue tdwc
           mc = Syntax.topLevelClassOrInterfaceDeclarationWithCommentsComments tdwc
       in (withComments mc (typeDeclarationToExpr d))
+
 typeIdentifierToExpr :: Syntax.TypeIdentifier -> Ast.Expr
 typeIdentifierToExpr tid = identifierToExpr (Syntax.unTypeIdentifier tid)
+
 typeNameToExpr :: Syntax.TypeName -> Ast.Expr
 typeNameToExpr tn =
 
@@ -1010,8 +1163,10 @@ typeNameToExpr tn =
       in (Serialization.dotSep (Optionals.cat [
         Optionals.map packageOrTypeNameToExpr mqual,
         (Just (typeIdentifierToExpr id))]))
+
 typeParameterModifierToExpr :: Syntax.TypeParameterModifier -> Ast.Expr
 typeParameterModifierToExpr tpm = annotationToExpr (Syntax.unTypeParameterModifier tpm)
+
 typeParameterToExpr :: Syntax.TypeParameter -> Ast.Expr
 typeParameterToExpr tp =
 
@@ -1024,11 +1179,13 @@ typeParameterToExpr tp =
         (Optionals.map (\b -> Serialization.spaceSep [
           Serialization.cst "extends",
           (typeBoundToExpr b)]) bound)]))
+
 typeToExpr :: Syntax.Type -> Ast.Expr
 typeToExpr t =
     case t of
       Syntax.TypePrimitive v0 -> primitiveTypeWithAnnotationsToExpr v0
       Syntax.TypeReference v0 -> referenceTypeToExpr v0
+
 typeVariableToExpr :: Syntax.TypeVariable -> Ast.Expr
 typeVariableToExpr tv =
 
@@ -1037,8 +1194,10 @@ typeVariableToExpr tv =
       in (Serialization.spaceSep (Optionals.cat [
         Logic.ifElse (Lists.null anns) Nothing (Just (Serialization.spaceSep (Lists.map annotationToExpr anns))),
         (Just (typeIdentifierToExpr id))]))
+
 unannTypeToExpr :: Syntax.UnannType -> Ast.Expr
 unannTypeToExpr ut = typeToExpr (Syntax.unUnannType ut)
+
 unaryExpressionNotPlusMinusToExpr :: Syntax.UnaryExpressionNotPlusMinus -> Ast.Expr
 unaryExpressionNotPlusMinusToExpr e =
     case e of
@@ -1050,6 +1209,7 @@ unaryExpressionNotPlusMinusToExpr e =
         Serialization.cst "!",
         (unaryExpressionToExpr v0)]
       Syntax.UnaryExpressionNotPlusMinusCast v0 -> castExpressionToExpr v0
+
 unaryExpressionToExpr :: Syntax.UnaryExpression -> Ast.Expr
 unaryExpressionToExpr e =
     case e of
@@ -1062,6 +1222,7 @@ unaryExpressionToExpr e =
         Serialization.cst "-",
         (unaryExpressionToExpr v0)]
       Syntax.UnaryExpressionOther v0 -> unaryExpressionNotPlusMinusToExpr v0
+
 unqualifiedClassInstanceCreationExpressionToExpr :: Syntax.UnqualifiedClassInstanceCreationExpression -> Ast.Expr
 unqualifiedClassInstanceCreationExpressionToExpr ucice =
 
@@ -1076,8 +1237,10 @@ unqualifiedClassInstanceCreationExpressionToExpr ucice =
           classOrInterfaceTypeToInstantiateToExpr cit,
           (Serialization.parenList False (Lists.map expressionToExpr args))])),
         (Optionals.map classBodyToExpr mbody)]))
+
 variableArityParameterToExpr :: t0 -> Ast.Expr
 variableArityParameterToExpr _ = Serialization.cst "STUB:VariableArityParameter"
+
 variableDeclaratorIdToExpr :: Syntax.VariableDeclaratorId -> Ast.Expr
 variableDeclaratorIdToExpr vdi =
 
@@ -1086,6 +1249,7 @@ variableDeclaratorIdToExpr vdi =
       in (Serialization.noSep (Optionals.cat [
         Just (identifierToExpr id),
         (Optionals.map dimsToExpr mdims)]))
+
 variableDeclaratorToExpr :: Syntax.VariableDeclarator -> Ast.Expr
 variableDeclaratorToExpr vd =
 
@@ -1093,16 +1257,19 @@ variableDeclaratorToExpr vd =
           minit = Syntax.variableDeclaratorInitializer vd
           idSec = variableDeclaratorIdToExpr id
       in (Optionals.cases minit idSec (\init -> Serialization.infixWs "=" idSec (variableInitializerToExpr init)))
+
 variableInitializerToExpr :: Syntax.VariableInitializer -> Ast.Expr
 variableInitializerToExpr i =
     case i of
       Syntax.VariableInitializerExpression v0 -> expressionToExpr v0
       Syntax.VariableInitializerArrayInitializer v0 -> arrayInitializerToExpr v0
+
 variableModifierToExpr :: Syntax.VariableModifier -> Ast.Expr
 variableModifierToExpr m =
     case m of
       Syntax.VariableModifierAnnotation v0 -> annotationToExpr v0
       Syntax.VariableModifierFinal -> Serialization.cst "final"
+
 whileStatementToExpr :: Syntax.WhileStatement -> Ast.Expr
 whileStatementToExpr ws =
 
@@ -1114,6 +1281,7 @@ whileStatementToExpr ws =
         (Serialization.parenList False [
           condSer]),
         (Serialization.curlyBlock Serialization.fullBlockStyle (statementToExpr body))])
+
 wildcardBoundsToExpr :: Syntax.WildcardBounds -> Ast.Expr
 wildcardBoundsToExpr b =
     case b of
@@ -1123,6 +1291,7 @@ wildcardBoundsToExpr b =
       Syntax.WildcardBoundsSuper v0 -> Serialization.spaceSep [
         Serialization.cst "super",
         (referenceTypeToExpr v0)]
+
 wildcardToExpr :: Syntax.Wildcard -> Ast.Expr
 wildcardToExpr w =
 
@@ -1132,6 +1301,7 @@ wildcardToExpr w =
         Logic.ifElse (Lists.null anns) Nothing (Just (Serialization.commaSep Serialization.inlineStyle (Lists.map annotationToExpr anns))),
         (Just (Serialization.cst "*")),
         (Optionals.map wildcardBoundsToExpr mbounds)]))
+
 -- | Wrap an expression with optional Javadoc comments. Blank lines inside the doc body emit ` *` (no trailing space) instead of ` * `.
 withComments :: Maybe String -> Ast.Expr -> Ast.Expr
 withComments mc expr =
