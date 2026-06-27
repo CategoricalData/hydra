@@ -72,7 +72,7 @@ case "$PACKAGE" in
     hydra-kernel|hydra-haskell)
         LOAD_FLAGS=""
         ;;
-    hydra-java|hydra-python|hydra-scala|hydra-lisp|hydra-go)
+    hydra-jvm|hydra-java|hydra-python|hydra-scala|hydra-lisp|hydra-go)
         LOAD_FLAGS="--include-coders"
         ;;
     hydra-pg|hydra-rdf|hydra-coq|hydra-typescript|hydra-ext|hydra-wasm|hydra-bench)
