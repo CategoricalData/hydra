@@ -1,0 +1,846 @@
+{
+  "name": "hydra.tinkerpop.examples.modern",
+  "metadata": {
+    "description": "The TinkerPop \"Modern\" property graph (schema and data), encoded as Hydra terms. The canonical example graph used throughout Apache TinkerPop documentation.",
+    "comments": [],
+    "seeAlso": []},
+  "dependencies": [{"module": "hydra.core"}, {"module": "hydra.pg.model"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.tinkerpop.examples.modern.modernGraph",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.pg.model.Graph"}, "argument": {"variable": "hydra.core.Literal"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "typeApplication": {
+                "body": {
+                  "record": {
+                    "typeName": "hydra.pg.model.Graph",
+                    "fields": [
+                      {
+                        "name": "vertices",
+                        "term": {
+                          "map": [
+                            {
+                              "key": {
+                                "inject": {
+                                  "typeName": "hydra.core.Literal",
+                                  "field": {
+                                    "name": "integer",
+                                    "term": {
+                                      "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 1}}}}}}}}},
+                              "value": {
+                                "typeApplication": {
+                                  "body": {
+                                    "record": {
+                                      "typeName": "hydra.pg.model.Vertex",
+                                      "fields": [
+                                        {
+                                          "name": "label",
+                                          "term": {"wrap": {"typeName": "hydra.pg.model.VertexLabel", "body": {"literal": {"string": "person"}}}}},
+                                        {
+                                          "name": "id",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.Literal",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {
+                                                  "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 1}}}}}}}}}},
+                                        {
+                                          "name": "properties",
+                                          "term": {
+                                            "map": [
+                                              {
+                                                "key": {"wrap": {"typeName": "hydra.pg.model.PropertyKey", "body": {"literal": {"string": "age"}}}},
+                                                "value": {
+                                                  "inject": {
+                                                    "typeName": "hydra.core.Literal",
+                                                    "field": {
+                                                      "name": "integer",
+                                                      "term": {
+                                                        "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 29}}}}}}}}}},
+                                              {
+                                                "key": {"wrap": {"typeName": "hydra.pg.model.PropertyKey", "body": {"literal": {"string": "name"}}}},
+                                                "value": {"inject": {"typeName": "hydra.core.Literal", "field": {"name": "string", "term": {"literal": {"string": "marko"}}}}}}]}}]}},
+                                  "type": {"variable": "hydra.core.Literal"}}}},
+                            {
+                              "key": {
+                                "inject": {
+                                  "typeName": "hydra.core.Literal",
+                                  "field": {
+                                    "name": "integer",
+                                    "term": {
+                                      "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 2}}}}}}}}},
+                              "value": {
+                                "typeApplication": {
+                                  "body": {
+                                    "record": {
+                                      "typeName": "hydra.pg.model.Vertex",
+                                      "fields": [
+                                        {
+                                          "name": "label",
+                                          "term": {"wrap": {"typeName": "hydra.pg.model.VertexLabel", "body": {"literal": {"string": "person"}}}}},
+                                        {
+                                          "name": "id",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.Literal",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {
+                                                  "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 2}}}}}}}}}},
+                                        {
+                                          "name": "properties",
+                                          "term": {
+                                            "map": [
+                                              {
+                                                "key": {"wrap": {"typeName": "hydra.pg.model.PropertyKey", "body": {"literal": {"string": "age"}}}},
+                                                "value": {
+                                                  "inject": {
+                                                    "typeName": "hydra.core.Literal",
+                                                    "field": {
+                                                      "name": "integer",
+                                                      "term": {
+                                                        "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 27}}}}}}}}}},
+                                              {
+                                                "key": {"wrap": {"typeName": "hydra.pg.model.PropertyKey", "body": {"literal": {"string": "name"}}}},
+                                                "value": {"inject": {"typeName": "hydra.core.Literal", "field": {"name": "string", "term": {"literal": {"string": "vadas"}}}}}}]}}]}},
+                                  "type": {"variable": "hydra.core.Literal"}}}},
+                            {
+                              "key": {
+                                "inject": {
+                                  "typeName": "hydra.core.Literal",
+                                  "field": {
+                                    "name": "integer",
+                                    "term": {
+                                      "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 3}}}}}}}}},
+                              "value": {
+                                "typeApplication": {
+                                  "body": {
+                                    "record": {
+                                      "typeName": "hydra.pg.model.Vertex",
+                                      "fields": [
+                                        {
+                                          "name": "label",
+                                          "term": {"wrap": {"typeName": "hydra.pg.model.VertexLabel", "body": {"literal": {"string": "software"}}}}},
+                                        {
+                                          "name": "id",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.Literal",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {
+                                                  "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 3}}}}}}}}}},
+                                        {
+                                          "name": "properties",
+                                          "term": {
+                                            "map": [
+                                              {
+                                                "key": {"wrap": {"typeName": "hydra.pg.model.PropertyKey", "body": {"literal": {"string": "lang"}}}},
+                                                "value": {"inject": {"typeName": "hydra.core.Literal", "field": {"name": "string", "term": {"literal": {"string": "java"}}}}}},
+                                              {
+                                                "key": {"wrap": {"typeName": "hydra.pg.model.PropertyKey", "body": {"literal": {"string": "name"}}}},
+                                                "value": {"inject": {"typeName": "hydra.core.Literal", "field": {"name": "string", "term": {"literal": {"string": "lop"}}}}}}]}}]}},
+                                  "type": {"variable": "hydra.core.Literal"}}}},
+                            {
+                              "key": {
+                                "inject": {
+                                  "typeName": "hydra.core.Literal",
+                                  "field": {
+                                    "name": "integer",
+                                    "term": {
+                                      "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 4}}}}}}}}},
+                              "value": {
+                                "typeApplication": {
+                                  "body": {
+                                    "record": {
+                                      "typeName": "hydra.pg.model.Vertex",
+                                      "fields": [
+                                        {
+                                          "name": "label",
+                                          "term": {"wrap": {"typeName": "hydra.pg.model.VertexLabel", "body": {"literal": {"string": "person"}}}}},
+                                        {
+                                          "name": "id",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.Literal",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {
+                                                  "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 4}}}}}}}}}},
+                                        {
+                                          "name": "properties",
+                                          "term": {
+                                            "map": [
+                                              {
+                                                "key": {"wrap": {"typeName": "hydra.pg.model.PropertyKey", "body": {"literal": {"string": "age"}}}},
+                                                "value": {
+                                                  "inject": {
+                                                    "typeName": "hydra.core.Literal",
+                                                    "field": {
+                                                      "name": "integer",
+                                                      "term": {
+                                                        "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 32}}}}}}}}}},
+                                              {
+                                                "key": {"wrap": {"typeName": "hydra.pg.model.PropertyKey", "body": {"literal": {"string": "name"}}}},
+                                                "value": {"inject": {"typeName": "hydra.core.Literal", "field": {"name": "string", "term": {"literal": {"string": "josh"}}}}}}]}}]}},
+                                  "type": {"variable": "hydra.core.Literal"}}}},
+                            {
+                              "key": {
+                                "inject": {
+                                  "typeName": "hydra.core.Literal",
+                                  "field": {
+                                    "name": "integer",
+                                    "term": {
+                                      "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 5}}}}}}}}},
+                              "value": {
+                                "typeApplication": {
+                                  "body": {
+                                    "record": {
+                                      "typeName": "hydra.pg.model.Vertex",
+                                      "fields": [
+                                        {
+                                          "name": "label",
+                                          "term": {"wrap": {"typeName": "hydra.pg.model.VertexLabel", "body": {"literal": {"string": "software"}}}}},
+                                        {
+                                          "name": "id",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.Literal",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {
+                                                  "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 5}}}}}}}}}},
+                                        {
+                                          "name": "properties",
+                                          "term": {
+                                            "map": [
+                                              {
+                                                "key": {"wrap": {"typeName": "hydra.pg.model.PropertyKey", "body": {"literal": {"string": "lang"}}}},
+                                                "value": {"inject": {"typeName": "hydra.core.Literal", "field": {"name": "string", "term": {"literal": {"string": "java"}}}}}},
+                                              {
+                                                "key": {"wrap": {"typeName": "hydra.pg.model.PropertyKey", "body": {"literal": {"string": "name"}}}},
+                                                "value": {"inject": {"typeName": "hydra.core.Literal", "field": {"name": "string", "term": {"literal": {"string": "ripple"}}}}}}]}}]}},
+                                  "type": {"variable": "hydra.core.Literal"}}}},
+                            {
+                              "key": {
+                                "inject": {
+                                  "typeName": "hydra.core.Literal",
+                                  "field": {
+                                    "name": "integer",
+                                    "term": {
+                                      "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 6}}}}}}}}},
+                              "value": {
+                                "typeApplication": {
+                                  "body": {
+                                    "record": {
+                                      "typeName": "hydra.pg.model.Vertex",
+                                      "fields": [
+                                        {
+                                          "name": "label",
+                                          "term": {"wrap": {"typeName": "hydra.pg.model.VertexLabel", "body": {"literal": {"string": "person"}}}}},
+                                        {
+                                          "name": "id",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.Literal",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {
+                                                  "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 6}}}}}}}}}},
+                                        {
+                                          "name": "properties",
+                                          "term": {
+                                            "map": [
+                                              {
+                                                "key": {"wrap": {"typeName": "hydra.pg.model.PropertyKey", "body": {"literal": {"string": "age"}}}},
+                                                "value": {
+                                                  "inject": {
+                                                    "typeName": "hydra.core.Literal",
+                                                    "field": {
+                                                      "name": "integer",
+                                                      "term": {
+                                                        "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 35}}}}}}}}}},
+                                              {
+                                                "key": {"wrap": {"typeName": "hydra.pg.model.PropertyKey", "body": {"literal": {"string": "name"}}}},
+                                                "value": {"inject": {"typeName": "hydra.core.Literal", "field": {"name": "string", "term": {"literal": {"string": "peter"}}}}}}]}}]}},
+                                  "type": {"variable": "hydra.core.Literal"}}}}]}},
+                      {
+                        "name": "edges",
+                        "term": {
+                          "map": [
+                            {
+                              "key": {
+                                "inject": {
+                                  "typeName": "hydra.core.Literal",
+                                  "field": {
+                                    "name": "integer",
+                                    "term": {
+                                      "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 7}}}}}}}}},
+                              "value": {
+                                "typeApplication": {
+                                  "body": {
+                                    "record": {
+                                      "typeName": "hydra.pg.model.Edge",
+                                      "fields": [
+                                        {"name": "label", "term": {"wrap": {"typeName": "hydra.pg.model.EdgeLabel", "body": {"literal": {"string": "knows"}}}}},
+                                        {
+                                          "name": "id",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.Literal",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {
+                                                  "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 7}}}}}}}}}},
+                                        {
+                                          "name": "out",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.Literal",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {
+                                                  "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 1}}}}}}}}}},
+                                        {
+                                          "name": "in",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.Literal",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {
+                                                  "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 2}}}}}}}}}},
+                                        {
+                                          "name": "properties",
+                                          "term": {
+                                            "map": [
+                                              {
+                                                "key": {"wrap": {"typeName": "hydra.pg.model.PropertyKey", "body": {"literal": {"string": "weight"}}}},
+                                                "value": {
+                                                  "inject": {
+                                                    "typeName": "hydra.core.Literal",
+                                                    "field": {
+                                                      "name": "float",
+                                                      "term": {
+                                                        "inject": {"typeName": "hydra.core.FloatValue", "field": {"name": "float64", "term": {"literal": {"float": {"float64": 0.5}}}}}}}}}}]}}]}},
+                                  "type": {"variable": "hydra.core.Literal"}}}},
+                            {
+                              "key": {
+                                "inject": {
+                                  "typeName": "hydra.core.Literal",
+                                  "field": {
+                                    "name": "integer",
+                                    "term": {
+                                      "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 8}}}}}}}}},
+                              "value": {
+                                "typeApplication": {
+                                  "body": {
+                                    "record": {
+                                      "typeName": "hydra.pg.model.Edge",
+                                      "fields": [
+                                        {"name": "label", "term": {"wrap": {"typeName": "hydra.pg.model.EdgeLabel", "body": {"literal": {"string": "knows"}}}}},
+                                        {
+                                          "name": "id",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.Literal",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {
+                                                  "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 8}}}}}}}}}},
+                                        {
+                                          "name": "out",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.Literal",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {
+                                                  "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 1}}}}}}}}}},
+                                        {
+                                          "name": "in",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.Literal",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {
+                                                  "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 4}}}}}}}}}},
+                                        {
+                                          "name": "properties",
+                                          "term": {
+                                            "map": [
+                                              {
+                                                "key": {"wrap": {"typeName": "hydra.pg.model.PropertyKey", "body": {"literal": {"string": "weight"}}}},
+                                                "value": {
+                                                  "inject": {
+                                                    "typeName": "hydra.core.Literal",
+                                                    "field": {
+                                                      "name": "float",
+                                                      "term": {
+                                                        "inject": {"typeName": "hydra.core.FloatValue", "field": {"name": "float64", "term": {"literal": {"float": {"float64": 1}}}}}}}}}}]}}]}},
+                                  "type": {"variable": "hydra.core.Literal"}}}},
+                            {
+                              "key": {
+                                "inject": {
+                                  "typeName": "hydra.core.Literal",
+                                  "field": {
+                                    "name": "integer",
+                                    "term": {
+                                      "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 9}}}}}}}}},
+                              "value": {
+                                "typeApplication": {
+                                  "body": {
+                                    "record": {
+                                      "typeName": "hydra.pg.model.Edge",
+                                      "fields": [
+                                        {
+                                          "name": "label",
+                                          "term": {"wrap": {"typeName": "hydra.pg.model.EdgeLabel", "body": {"literal": {"string": "created"}}}}},
+                                        {
+                                          "name": "id",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.Literal",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {
+                                                  "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 9}}}}}}}}}},
+                                        {
+                                          "name": "out",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.Literal",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {
+                                                  "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 1}}}}}}}}}},
+                                        {
+                                          "name": "in",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.Literal",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {
+                                                  "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 3}}}}}}}}}},
+                                        {
+                                          "name": "properties",
+                                          "term": {
+                                            "map": [
+                                              {
+                                                "key": {"wrap": {"typeName": "hydra.pg.model.PropertyKey", "body": {"literal": {"string": "weight"}}}},
+                                                "value": {
+                                                  "inject": {
+                                                    "typeName": "hydra.core.Literal",
+                                                    "field": {
+                                                      "name": "float",
+                                                      "term": {
+                                                        "inject": {"typeName": "hydra.core.FloatValue", "field": {"name": "float64", "term": {"literal": {"float": {"float64": 0.4}}}}}}}}}}]}}]}},
+                                  "type": {"variable": "hydra.core.Literal"}}}},
+                            {
+                              "key": {
+                                "inject": {
+                                  "typeName": "hydra.core.Literal",
+                                  "field": {
+                                    "name": "integer",
+                                    "term": {
+                                      "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 10}}}}}}}}},
+                              "value": {
+                                "typeApplication": {
+                                  "body": {
+                                    "record": {
+                                      "typeName": "hydra.pg.model.Edge",
+                                      "fields": [
+                                        {
+                                          "name": "label",
+                                          "term": {"wrap": {"typeName": "hydra.pg.model.EdgeLabel", "body": {"literal": {"string": "created"}}}}},
+                                        {
+                                          "name": "id",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.Literal",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {
+                                                  "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 10}}}}}}}}}},
+                                        {
+                                          "name": "out",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.Literal",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {
+                                                  "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 4}}}}}}}}}},
+                                        {
+                                          "name": "in",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.Literal",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {
+                                                  "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 5}}}}}}}}}},
+                                        {
+                                          "name": "properties",
+                                          "term": {
+                                            "map": [
+                                              {
+                                                "key": {"wrap": {"typeName": "hydra.pg.model.PropertyKey", "body": {"literal": {"string": "weight"}}}},
+                                                "value": {
+                                                  "inject": {
+                                                    "typeName": "hydra.core.Literal",
+                                                    "field": {
+                                                      "name": "float",
+                                                      "term": {
+                                                        "inject": {"typeName": "hydra.core.FloatValue", "field": {"name": "float64", "term": {"literal": {"float": {"float64": 1}}}}}}}}}}]}}]}},
+                                  "type": {"variable": "hydra.core.Literal"}}}},
+                            {
+                              "key": {
+                                "inject": {
+                                  "typeName": "hydra.core.Literal",
+                                  "field": {
+                                    "name": "integer",
+                                    "term": {
+                                      "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 11}}}}}}}}},
+                              "value": {
+                                "typeApplication": {
+                                  "body": {
+                                    "record": {
+                                      "typeName": "hydra.pg.model.Edge",
+                                      "fields": [
+                                        {
+                                          "name": "label",
+                                          "term": {"wrap": {"typeName": "hydra.pg.model.EdgeLabel", "body": {"literal": {"string": "created"}}}}},
+                                        {
+                                          "name": "id",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.Literal",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {
+                                                  "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 11}}}}}}}}}},
+                                        {
+                                          "name": "out",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.Literal",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {
+                                                  "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 4}}}}}}}}}},
+                                        {
+                                          "name": "in",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.Literal",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {
+                                                  "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 3}}}}}}}}}},
+                                        {
+                                          "name": "properties",
+                                          "term": {
+                                            "map": [
+                                              {
+                                                "key": {"wrap": {"typeName": "hydra.pg.model.PropertyKey", "body": {"literal": {"string": "weight"}}}},
+                                                "value": {
+                                                  "inject": {
+                                                    "typeName": "hydra.core.Literal",
+                                                    "field": {
+                                                      "name": "float",
+                                                      "term": {
+                                                        "inject": {"typeName": "hydra.core.FloatValue", "field": {"name": "float64", "term": {"literal": {"float": {"float64": 0.4}}}}}}}}}}]}}]}},
+                                  "type": {"variable": "hydra.core.Literal"}}}},
+                            {
+                              "key": {
+                                "inject": {
+                                  "typeName": "hydra.core.Literal",
+                                  "field": {
+                                    "name": "integer",
+                                    "term": {
+                                      "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 12}}}}}}}}},
+                              "value": {
+                                "typeApplication": {
+                                  "body": {
+                                    "record": {
+                                      "typeName": "hydra.pg.model.Edge",
+                                      "fields": [
+                                        {
+                                          "name": "label",
+                                          "term": {"wrap": {"typeName": "hydra.pg.model.EdgeLabel", "body": {"literal": {"string": "created"}}}}},
+                                        {
+                                          "name": "id",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.Literal",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {
+                                                  "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 12}}}}}}}}}},
+                                        {
+                                          "name": "out",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.Literal",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {
+                                                  "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 6}}}}}}}}}},
+                                        {
+                                          "name": "in",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.Literal",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {
+                                                  "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 3}}}}}}}}}},
+                                        {
+                                          "name": "properties",
+                                          "term": {
+                                            "map": [
+                                              {
+                                                "key": {"wrap": {"typeName": "hydra.pg.model.PropertyKey", "body": {"literal": {"string": "weight"}}}},
+                                                "value": {
+                                                  "inject": {
+                                                    "typeName": "hydra.core.Literal",
+                                                    "field": {
+                                                      "name": "float",
+                                                      "term": {
+                                                        "inject": {"typeName": "hydra.core.FloatValue", "field": {"name": "float64", "term": {"literal": {"float": {"float64": 0.2}}}}}}}}}}]}}]}},
+                                  "type": {"variable": "hydra.core.Literal"}}}}]}}]}},
+                "type": {"variable": "hydra.core.Literal"}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The TinkerPop Modern property graph data, with int32 Literal ids"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.tinkerpop.examples.modern.modernSchema",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.pg.model.GraphSchema"}, "argument": {"variable": "hydra.core.LiteralType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "typeApplication": {
+                "body": {
+                  "record": {
+                    "typeName": "hydra.pg.model.GraphSchema",
+                    "fields": [
+                      {
+                        "name": "vertices",
+                        "term": {
+                          "map": [
+                            {
+                              "key": {"wrap": {"typeName": "hydra.pg.model.VertexLabel", "body": {"literal": {"string": "person"}}}},
+                              "value": {
+                                "typeApplication": {
+                                  "body": {
+                                    "record": {
+                                      "typeName": "hydra.pg.model.VertexType",
+                                      "fields": [
+                                        {
+                                          "name": "label",
+                                          "term": {"wrap": {"typeName": "hydra.pg.model.VertexLabel", "body": {"literal": {"string": "person"}}}}},
+                                        {
+                                          "name": "id",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.LiteralType",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": {"unit": {}}}}}}}}},
+                                        {
+                                          "name": "properties",
+                                          "term": {
+                                            "list": [
+                                              {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "record": {
+                                                      "typeName": "hydra.pg.model.PropertyType",
+                                                      "fields": [
+                                                        {"name": "key", "term": {"wrap": {"typeName": "hydra.pg.model.PropertyKey", "body": {"literal": {"string": "name"}}}}},
+                                                        {
+                                                          "name": "value",
+                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}},
+                                                        {"name": "required", "term": {"literal": {"boolean": true}}}]}},
+                                                  "type": {"variable": "hydra.core.LiteralType"}}},
+                                              {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "record": {
+                                                      "typeName": "hydra.pg.model.PropertyType",
+                                                      "fields": [
+                                                        {"name": "key", "term": {"wrap": {"typeName": "hydra.pg.model.PropertyKey", "body": {"literal": {"string": "age"}}}}},
+                                                        {
+                                                          "name": "value",
+                                                          "term": {
+                                                            "inject": {
+                                                              "typeName": "hydra.core.LiteralType",
+                                                              "field": {
+                                                                "name": "integer",
+                                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": {"unit": {}}}}}}}}},
+                                                        {"name": "required", "term": {"literal": {"boolean": false}}}]}},
+                                                  "type": {"variable": "hydra.core.LiteralType"}}}]}}]}},
+                                  "type": {"variable": "hydra.core.LiteralType"}}}},
+                            {
+                              "key": {"wrap": {"typeName": "hydra.pg.model.VertexLabel", "body": {"literal": {"string": "software"}}}},
+                              "value": {
+                                "typeApplication": {
+                                  "body": {
+                                    "record": {
+                                      "typeName": "hydra.pg.model.VertexType",
+                                      "fields": [
+                                        {
+                                          "name": "label",
+                                          "term": {"wrap": {"typeName": "hydra.pg.model.VertexLabel", "body": {"literal": {"string": "software"}}}}},
+                                        {
+                                          "name": "id",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.LiteralType",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": {"unit": {}}}}}}}}},
+                                        {
+                                          "name": "properties",
+                                          "term": {
+                                            "list": [
+                                              {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "record": {
+                                                      "typeName": "hydra.pg.model.PropertyType",
+                                                      "fields": [
+                                                        {"name": "key", "term": {"wrap": {"typeName": "hydra.pg.model.PropertyKey", "body": {"literal": {"string": "name"}}}}},
+                                                        {
+                                                          "name": "value",
+                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}},
+                                                        {"name": "required", "term": {"literal": {"boolean": true}}}]}},
+                                                  "type": {"variable": "hydra.core.LiteralType"}}},
+                                              {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "record": {
+                                                      "typeName": "hydra.pg.model.PropertyType",
+                                                      "fields": [
+                                                        {"name": "key", "term": {"wrap": {"typeName": "hydra.pg.model.PropertyKey", "body": {"literal": {"string": "lang"}}}}},
+                                                        {
+                                                          "name": "value",
+                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}},
+                                                        {"name": "required", "term": {"literal": {"boolean": true}}}]}},
+                                                  "type": {"variable": "hydra.core.LiteralType"}}}]}}]}},
+                                  "type": {"variable": "hydra.core.LiteralType"}}}}]}},
+                      {
+                        "name": "edges",
+                        "term": {
+                          "map": [
+                            {
+                              "key": {"wrap": {"typeName": "hydra.pg.model.EdgeLabel", "body": {"literal": {"string": "created"}}}},
+                              "value": {
+                                "typeApplication": {
+                                  "body": {
+                                    "record": {
+                                      "typeName": "hydra.pg.model.EdgeType",
+                                      "fields": [
+                                        {
+                                          "name": "label",
+                                          "term": {"wrap": {"typeName": "hydra.pg.model.EdgeLabel", "body": {"literal": {"string": "created"}}}}},
+                                        {
+                                          "name": "id",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.LiteralType",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": {"unit": {}}}}}}}}},
+                                        {"name": "out", "term": {"wrap": {"typeName": "hydra.pg.model.VertexLabel", "body": {"literal": {"string": "person"}}}}},
+                                        {
+                                          "name": "in",
+                                          "term": {"wrap": {"typeName": "hydra.pg.model.VertexLabel", "body": {"literal": {"string": "software"}}}}},
+                                        {
+                                          "name": "properties",
+                                          "term": {
+                                            "list": [
+                                              {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "record": {
+                                                      "typeName": "hydra.pg.model.PropertyType",
+                                                      "fields": [
+                                                        {"name": "key", "term": {"wrap": {"typeName": "hydra.pg.model.PropertyKey", "body": {"literal": {"string": "weight"}}}}},
+                                                        {
+                                                          "name": "value",
+                                                          "term": {
+                                                            "inject": {
+                                                              "typeName": "hydra.core.LiteralType",
+                                                              "field": {
+                                                                "name": "float",
+                                                                "term": {"inject": {"typeName": "hydra.core.FloatType", "field": {"name": "float64", "term": {"unit": {}}}}}}}}},
+                                                        {"name": "required", "term": {"literal": {"boolean": true}}}]}},
+                                                  "type": {"variable": "hydra.core.LiteralType"}}}]}}]}},
+                                  "type": {"variable": "hydra.core.LiteralType"}}}},
+                            {
+                              "key": {"wrap": {"typeName": "hydra.pg.model.EdgeLabel", "body": {"literal": {"string": "knows"}}}},
+                              "value": {
+                                "typeApplication": {
+                                  "body": {
+                                    "record": {
+                                      "typeName": "hydra.pg.model.EdgeType",
+                                      "fields": [
+                                        {"name": "label", "term": {"wrap": {"typeName": "hydra.pg.model.EdgeLabel", "body": {"literal": {"string": "knows"}}}}},
+                                        {
+                                          "name": "id",
+                                          "term": {
+                                            "inject": {
+                                              "typeName": "hydra.core.LiteralType",
+                                              "field": {
+                                                "name": "integer",
+                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": {"unit": {}}}}}}}}},
+                                        {"name": "out", "term": {"wrap": {"typeName": "hydra.pg.model.VertexLabel", "body": {"literal": {"string": "person"}}}}},
+                                        {"name": "in", "term": {"wrap": {"typeName": "hydra.pg.model.VertexLabel", "body": {"literal": {"string": "person"}}}}},
+                                        {
+                                          "name": "properties",
+                                          "term": {
+                                            "list": [
+                                              {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "record": {
+                                                      "typeName": "hydra.pg.model.PropertyType",
+                                                      "fields": [
+                                                        {"name": "key", "term": {"wrap": {"typeName": "hydra.pg.model.PropertyKey", "body": {"literal": {"string": "weight"}}}}},
+                                                        {
+                                                          "name": "value",
+                                                          "term": {
+                                                            "inject": {
+                                                              "typeName": "hydra.core.LiteralType",
+                                                              "field": {
+                                                                "name": "float",
+                                                                "term": {"inject": {"typeName": "hydra.core.FloatType", "field": {"name": "float64", "term": {"unit": {}}}}}}}}},
+                                                        {"name": "required", "term": {"literal": {"boolean": true}}}]}},
+                                                  "type": {"variable": "hydra.core.LiteralType"}}}]}}]}},
+                                  "type": {"variable": "hydra.core.LiteralType"}}}}]}}]}},
+                "type": {"variable": "hydra.core.LiteralType"}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The TinkerPop Modern property graph schema, with LiteralType property/id types"}}}]}}}}}]}

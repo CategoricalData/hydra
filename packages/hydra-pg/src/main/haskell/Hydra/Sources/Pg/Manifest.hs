@@ -40,6 +40,7 @@ import qualified Hydra.Sources.Pg.Rdf.Mappings as PgRdfMappings
 import qualified Hydra.Sources.Pg.TermsToElements as TermsToElements
 import qualified Hydra.Sources.Pg.Utils as PgUtils
 import qualified Hydra.Sources.Show.Error.Pg as ShowErrorPg
+import qualified Hydra.Sources.Tinkerpop.Examples.Modern as TinkerpopModern
 import qualified Hydra.Sources.Tinkerpop.Features as TinkerpopFeatures
 import qualified Hydra.Sources.Tinkerpop.Gremlin as Gremlin
 import qualified Hydra.Sources.Tinkerpop.Language as TinkerpopLanguage
@@ -73,6 +74,7 @@ mainModules = [
   ShowErrorPg.module_,
   TinkerpopFeatures.module_,
   TinkerpopLanguage.module_,
+  TinkerpopModern.module_,
   ValidatePg.module_]
 
 -- | Modules in this package whose type definitions should produce derived
