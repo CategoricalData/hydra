@@ -124,7 +124,9 @@ def "Term" $
 ```
 
 **Key Points:**
-- Maintain alphabetical order within the union
+- Maintain alphabetical order within the union *(a convention specific to the kernel core types
+  `hydra.core.Term`/`Type` — it keeps these large unions easy to scan; it is **not** a general rule
+  that all record/union fields must be alphabetical)*
 - Use appropriate type combinators:
   - `Types.either_` for Either types
   - `optional` for Maybe types

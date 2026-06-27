@@ -408,6 +408,8 @@ Key rules:
 
 - **Alphabetical ordering**: All definitions in the `definitions` list and their
   corresponding function implementations must be in alphabetical order. No exceptions.
+  (This governs *definition* order only — fields within a record and variants within a
+  union are ordered meaningfully, not alphabetically.)
 - **Fail immediately on errors**: Never silently return defaults or swallow failures.
 - **Consistent imports**: Copy the import block from an existing module of the same kind.
   Use the standard aliases (`Lists`, `Maps`, `Core`, `Graph`, etc.).
