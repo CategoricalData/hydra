@@ -98,7 +98,17 @@ case "$PKG" in
         PKG_HYDRA="$HYDRA_ROOT/dist/typescript/$PKG/src/main/typescript/hydra"
         KERNEL_HYDRA="$HYDRA_ROOT/dist/typescript/hydra-kernel/src/main/typescript/hydra"
         symlink_hydra_tree "$KERNEL_HYDRA" "$PKG_HYDRA"
-        # hydra-scala's serde imports ../java/serde.js (a sibling coder package).
+        # hydra-java and hydra-scala both import ../jvm/serde.js from hydra-jvm.
+        # Symlink hydra-jvm's jvm/ subdir into each so the relative import resolves.
+        JVM_HYDRA="$HYDRA_ROOT/dist/typescript/hydra-jvm/src/main/typescript/hydra/jvm"
+        JVM_DEST="$PKG_HYDRA/jvm"
+        if [ "$PKG" = "hydra-java" ] || [ "$PKG" = "hydra-scala" ]; then
+            if [ -d "$JVM_HYDRA" ] && [ ! -e "$JVM_DEST" ]; then
+                ln -sf "$JVM_HYDRA" "$JVM_DEST"
+                echo "  Symlinked hydra-jvm/jvm/ into $PKG for cross-coder import"
+            fi
+        fi
+        # hydra-scala's serde also imports ../java/serde.js (a sibling coder package).
         # Symlink hydra-java's java/ subdir into hydra-scala so the import resolves.
         if [ "$PKG" = "hydra-scala" ]; then
             JAVA_HYDRA="$HYDRA_ROOT/dist/typescript/hydra-java/src/main/typescript/hydra/java"
