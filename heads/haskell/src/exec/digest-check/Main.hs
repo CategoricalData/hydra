@@ -68,6 +68,7 @@ import Hydra.Packaging (ModuleName(..))
 import qualified Hydra.PackageRouting as PackageRouting
 import Hydra.PackageRouting (buildRoutingMap)
 import Hydra.Sources.Ext (extRoutingInput)
+import Hydra.Generation (loadNativePackageModuleNamesTagged)
 
 import Control.Monad (forM)
 import qualified Data.Map as M
@@ -357,10 +358,16 @@ doRefreshInput opts = do
   -- Source hashes: discover every (namespace, file) pair, filter to
   -- the ones routed to <pkg>, hash those source files. Package ownership
   -- is resolved through the declared-modules routing map (#474), not a
-  -- name prefix; native-owned hydra.{java,python}.* namespaces have no
-  -- discoverable source files, so extRoutingInput alone is a sufficient
-  -- routing basis here.
-  let routingMap = buildRoutingMap extRoutingInput
+  -- name prefix.
+  --
+  -- discoverModuleNameFiles DOES surface native hydra.{java,python}.* namespaces
+  -- (it scans each package's native .java/.py coder sources), so the routing map
+  -- must include the native packages' modules — otherwise the fail-loud router
+  -- (#511) rejects e.g. hydra.java.coder. Load them tagged-by-package from the
+  -- per-package manifests, mirroring update-json-main, and union into the routing
+  -- input.
+  nativeRoutingInput <- loadNativePackageModuleNamesTagged distJsonRoot
+  let routingMap = buildRoutingMap (extRoutingInput ++ nativeRoutingInput)
   nsFiles <- Digest.discoverModuleNameFiles
   let ownedPairs =
         [ (ns, fp)

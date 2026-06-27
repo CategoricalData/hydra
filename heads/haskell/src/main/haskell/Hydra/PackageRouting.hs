@@ -42,7 +42,6 @@
 module Hydra.PackageRouting (
   RoutingMap,
   buildRoutingMap,
-  routingFallback,
   namespaceToPackageIn,
   namespaceToPackageJsonDirIn,
   namespaceToPackageTestJsonDirIn,
@@ -68,13 +67,8 @@ import qualified System.FilePath as FP
 defaultDistJsonRoot :: FilePath
 defaultDistJsonRoot = "../../dist/json"
 
--- | A resolved module-to-package routing table. Total via 'routingFallback'.
+-- | A resolved module-to-package routing table.
 newtype RoutingMap = RoutingMap (M.Map ModuleName String)
-
--- | Package returned for any module not present in the 'RoutingMap'. Matches
--- the historical fallback of the old prefix table.
-routingFallback :: String
-routingFallback = "hydra-kernel"
 
 -- | Build a 'RoutingMap' from each package's declared modules.
 --
@@ -124,8 +118,20 @@ sourceWrapperName (ModuleName s) =
         step c []           = [[c]]
 
 -- | Map a module name to the package that owns it, via a 'RoutingMap'.
+--
+-- Fails loudly if the module is not in the routing map. Every legitimate module
+-- is declared in some package's manifest (and so appears in the map, directly or
+-- via derived-name expansion); an unrouted module is a registration bug — most
+-- often a new module not added to its package's Manifest.mainModules. The old
+-- silent fallback to "hydra-kernel" masked exactly this class of bug (the
+-- unrouted JSON was written into the kernel tree and then pruned by the kernel
+-- sync, leaving no trace). No silent failures.
 namespaceToPackageIn :: RoutingMap -> ModuleName -> String
-namespaceToPackageIn (RoutingMap m) ns = M.findWithDefault routingFallback ns m
+namespaceToPackageIn (RoutingMap m) ns = case M.lookup ns m of
+  Just p  -> p
+  Nothing -> error $ "unrouted module: " ++ unModuleName ns
+    ++ " is not declared in any package's manifest (RoutingMap). Add it to the"
+    ++ " owning package's Manifest.mainModules."
 
 -- | Given a dist-json root and a module name, compute the directory under
 -- which that module's JSON file should be written.
