@@ -128,7 +128,7 @@ kernel.
 |---|---|
 | [hydra-kernel](packages/hydra-kernel/README.md) | Core types, terms, type inference, validation, primitives, and the coder framework. Every other package depends on this. |
 | [hydra-ext](packages/hydra-ext/README.md) | Extension coders: Avro, Protobuf, GraphQL, Pegasus/PDL, JSON Schema, YAML, SQL, C++, Rust, Csharp, plus domain models. |
-| [hydra-pg](packages/hydra-pg/README.md) | Property-graph model and coders (GraphSON, Cypher, GQL, TinkerPop, Graphviz, RDF mappings); the PG validator. |
+| [hydra-pg](packages/hydra-pg/README.md) | Property-graph model and coders (GraphSON, Cypher, GQL, TinkerPop, Graphviz, RDF mappings); the PG validator; a Neo4j model with client-side validation and a property-graph mapping. |
 | [hydra-rdf](packages/hydra-rdf/README.md) | RDF 1.1, SHACL, OWL 2, ShEx, and XML Schema syntax models; N-Triples serialization. |
 | [hydra-bench](packages/hydra-bench/README.md) | Synthetic inference benchmark workloads. Opt-in: not part of default sync. |
 | [hydra-haskell](packages/hydra-haskell/README.md), [hydra-java](packages/hydra-java/README.md), [hydra-python](packages/hydra-python/README.md), [hydra-scala](packages/hydra-scala/README.md), [hydra-lisp](packages/hydra-lisp/README.md), [hydra-typescript](packages/hydra-typescript/README.md), [hydra-go](packages/hydra-go/README.md), [hydra-coq](packages/hydra-coq/README.md), [hydra-wasm](packages/hydra-wasm/README.md) | Per-language coder packages (DSL sources for translating Hydra modules to each target). See the [Implementations](#implementations) table for head status. |

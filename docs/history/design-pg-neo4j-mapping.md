@@ -1,6 +1,8 @@
 # Proposal: a mapping between `hydra.pg.model` (TinkerPop) and `hydra.neo4j.model`
 
-Status: proposal / in-flight design (not built). For #510.
+Status: implemented as `hydra.neo4j.pg` (first pass). For #510. This document is the design record;
+the shipped feature is documented in the [hydra-pg README](../../packages/hydra-pg/README.md). Some
+details below describe earlier design iterations (e.g. the open questions) and are kept for rationale.
 
 ## Goal
 
