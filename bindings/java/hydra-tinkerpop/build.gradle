@@ -80,10 +80,16 @@ dependencies {
     // its tests enabled — they verify the Hydra↔Bytecode↔Hydra and Gremlin-text↔Hydra mappings round-trip.
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // tinkergraph-gremlin: an in-memory TinkerPop graph, for the unit-level graph<->pg.model bridge tests
+    // (no Gremlin Server needed). Server-dependent bridge tests are integration tests, run separately.
+    testImplementation 'org.apache.tinkerpop:tinkergraph-gremlin:3.8.0'
 }
 
 test {
-    useJUnitPlatform()
+    // Exclude integration tests (those requiring a running Gremlin Server) from the default unit run.
+    useJUnitPlatform {
+        excludeTags 'integration'
+    }
 }
 
 // sourcesJar duplicate handling — see bindings/java/hydra-rdf4j/build.gradle.
