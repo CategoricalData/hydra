@@ -103,7 +103,7 @@ public class HydraGremlinBridge {
                 properties.put(new PropertyKey(prop.key()), objectToValue.apply(prop.value()));
             }
 
-            vertices.put(id, new Vertex<>(label, id, properties));
+            vertices.put(id, new Vertex<>(label, id, hydra.overlay.java.util.PersistentMap.coerce(properties)));
         }
 
         Map<V, Edge<V>> edges = new HashMap<>();
@@ -122,10 +122,10 @@ public class HydraGremlinBridge {
                 properties.put(new PropertyKey(prop.key()), objectToValue.apply(prop.value()));
             }
 
-            edges.put(id, new Edge<>(label, id, outId, inId, properties));
+            edges.put(id, new Edge<>(label, id, outId, inId, hydra.overlay.java.util.PersistentMap.coerce(properties)));
         }
 
-        return new Graph<>(vertices, edges);
+        return new Graph<>(hydra.overlay.java.util.PersistentMap.coerce(vertices), hydra.overlay.java.util.PersistentMap.coerce(edges));
     }
 
     /**
@@ -151,7 +151,7 @@ public class HydraGremlinBridge {
                 properties.put(new PropertyKey((String) key), objectToValue.apply(entry.getValue()));
             }
 
-            vertices.put(id, new Vertex<>(label, id, properties));
+            vertices.put(id, new Vertex<>(label, id, hydra.overlay.java.util.PersistentMap.coerce(properties)));
         }
 
         Map<V, Edge<V>> edges = new HashMap<>();
@@ -173,10 +173,10 @@ public class HydraGremlinBridge {
                 properties.put(new PropertyKey((String) key), objectToValue.apply(entry.getValue()));
             }
 
-            edges.put(id, new Edge<>(label, id, outId, inId, properties));
+            edges.put(id, new Edge<>(label, id, outId, inId, hydra.overlay.java.util.PersistentMap.coerce(properties)));
         }
 
-        return new Graph<>(vertices, edges);
+        return new Graph<>(hydra.overlay.java.util.PersistentMap.coerce(vertices), hydra.overlay.java.util.PersistentMap.coerce(edges));
     }
 
     /**
