@@ -136,6 +136,22 @@ _LocalTime_hour = Core.Name "hour"
 _LocalTime_minute = Core.Name "minute"
 _LocalTime_second = Core.Name "second"
 _LocalTime_nanosecond = Core.Name "nanosecond"
+-- | The caller-supplied conversions a mapping between Hydra's property-graph model (hydra.pg.model) and this Neo4j model needs: a pair of partial functions converting property-graph values to and from Neo4j element ids, and another pair converting them to and from Neo4j property values. Errors are plain strings for now; once issue #518 generalizes the kernel Coder, these four fields collapse to two Coders. Failures (e.g. a value with no Neo4j representation) surface via the Either.
+data Neo4jMapping v =
+  Neo4jMapping {
+    -- | Encode a property-graph value as a Neo4j element id
+    neo4jMappingEncodeId :: (v -> Either String ElementId),
+    -- | Decode a Neo4j element id as a property-graph value
+    neo4jMappingDecodeId :: (ElementId -> Either String v),
+    -- | Encode a property-graph value as a Neo4j property value
+    neo4jMappingEncodeValue :: (v -> Either String Value),
+    -- | Decode a Neo4j property value as a property-graph value
+    neo4jMappingDecodeValue :: (Value -> Either String v)}
+_Neo4jMapping = Core.Name "hydra.neo4j.model.Neo4jMapping"
+_Neo4jMapping_encodeId = Core.Name "encodeId"
+_Neo4jMapping_decodeId = Core.Name "decodeId"
+_Neo4jMapping_encodeValue = Core.Name "encodeValue"
+_Neo4jMapping_decodeValue = Core.Name "decodeValue"
 -- | A node; a graph element with a set of labels and a map of properties
 data Node =
   Node {

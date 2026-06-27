@@ -330,6 +330,77 @@
                     "value": {"literal": {"string": "A time of day without a time zone, following java.time.LocalTime (the driver's asLocalTime())"}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.neo4j.model.Neo4jMapping",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "forall": {
+                  "parameter": "v",
+                  "body": {
+                    "record": [
+                      {
+                        "name": "encodeId",
+                        "type": {
+                          "annotated": {
+                            "body": {
+                              "function": {
+                                "domain": {"variable": "v"},
+                                "codomain": {"either": {"left": {"literal": {"string": {}}}, "right": {"variable": "hydra.neo4j.model.ElementId"}}}}},
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Encode a property-graph value as a Neo4j element id"}}}]}}}},
+                      {
+                        "name": "decodeId",
+                        "type": {
+                          "annotated": {
+                            "body": {
+                              "function": {
+                                "domain": {"variable": "hydra.neo4j.model.ElementId"},
+                                "codomain": {"either": {"left": {"literal": {"string": {}}}, "right": {"variable": "v"}}}}},
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Decode a Neo4j element id as a property-graph value"}}}]}}}},
+                      {
+                        "name": "encodeValue",
+                        "type": {
+                          "annotated": {
+                            "body": {
+                              "function": {
+                                "domain": {"variable": "v"},
+                                "codomain": {"either": {"left": {"literal": {"string": {}}}, "right": {"variable": "hydra.neo4j.model.Value"}}}}},
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Encode a property-graph value as a Neo4j property value"}}}]}}}},
+                      {
+                        "name": "decodeValue",
+                        "type": {
+                          "annotated": {
+                            "body": {
+                              "function": {
+                                "domain": {"variable": "hydra.neo4j.model.Value"},
+                                "codomain": {"either": {"left": {"literal": {"string": {}}}, "right": {"variable": "v"}}}}},
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Decode a Neo4j property value as a property-graph value"}}}]}}}}]}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "The caller-supplied conversions a mapping between Hydra's property-graph model (hydra.pg.model) and this Neo4j model needs: a pair of partial functions converting property-graph values to and from Neo4j element ids, and another pair converting them to and from Neo4j property values. Errors are plain strings for now; once issue #518 generalizes the kernel Coder, these four fields collapse to two Coders. Failures (e.g. a value with no Neo4j representation) surface via the Either."}}}]}}}}}},
+    {
+      "type": {
         "name": "hydra.neo4j.model.Node",
         "body": {
           "variables": [],

@@ -19,6 +19,7 @@
     "hydra.graphviz.dot",
     "hydra.graphviz.serde",
     "hydra.neo4j.model",
+    "hydra.neo4j.pg",
     "hydra.pg.coder",
     "hydra.pg.graphson.coder",
     "hydra.pg.graphson.construct",
