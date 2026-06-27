@@ -43,12 +43,14 @@ public class UpdateJavaJson {
     private static final String MODULE_FIELD = "module_";
 
     /**
-     * Java DSL source modules under {@code hydra.sources.java.*}. The
-     * fully-qualified class names exposing a static {@code module_} field of
-     * type {@link Module}. Order mirrors the Haskell {@code mainModules} list
-     * in {@code Hydra.Sources.Java.Manifest}.
+     * Java/JVM DSL source modules in dependency order: hydra-jvm first (no deps
+     * on hydra-java), then hydra-java (depends on hydra-jvm). Fully-qualified class
+     * names exposing a static {@code module_} field of type {@link Module}.
      */
     private static final List<String> SOURCE_CLASS_NAMES = java.util.Arrays.asList(
+        // hydra-jvm (must precede hydra-java in the universe)
+        "hydra.sources.jvm.Serde",
+        // hydra-java
         "hydra.sources.java.Coder",
         "hydra.sources.java.Environment",
         "hydra.sources.java.Language",

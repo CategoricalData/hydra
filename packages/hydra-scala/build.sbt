@@ -19,6 +19,7 @@ lazy val root = project
     Compile / unmanagedSourceDirectories ++= Seq(
       baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-kernel" / "src" / "main" / "scala",
       baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-haskell" / "src" / "main" / "scala",
+      baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-jvm" / "src" / "main" / "scala",
       baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-java" / "src" / "main" / "scala",
       baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-python" / "src" / "main" / "scala",
       baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-scala" / "src" / "main" / "scala",

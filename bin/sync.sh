@@ -352,11 +352,12 @@ PHASE1_FRESH_CHECK="$HYDRA_ROOT/bin/lib/check-phase1-fresh.py"
 # so Phase 1.5 always re-seeds (vs. the warm freshness gate).
 JAVA_JSON_SENTINEL="$HYDRA_ROOT/dist/json/hydra-java/src/main/json/hydra/java/coder.json"
 PYTHON_JSON_SENTINEL="$HYDRA_ROOT/dist/json/hydra-python/src/main/json/hydra/python/coder.json"
-if [ ! -f "$JAVA_JSON_SENTINEL" ] || [ ! -f "$PYTHON_JSON_SENTINEL" ]; then
+JVM_JSON_SENTINEL="$HYDRA_ROOT/dist/json/hydra-jvm/src/main/json/hydra/jvm/serde.json"
+if [ ! -f "$JAVA_JSON_SENTINEL" ] || [ ! -f "$PYTHON_JSON_SENTINEL" ] || [ ! -f "$JVM_JSON_SENTINEL" ]; then
     export HYDRA_INCLUDE_JAVA_PYTHON=1
     echo ""
-    echo "Cold-start detected (missing hydra-java/hydra-python JSON);"
-    echo "Phase 1.5 will seed it via the native Java/Python drivers (published hosts)."
+    echo "Cold-start detected (missing hydra-java/hydra-python/hydra-jvm JSON);"
+    echo "Phase 1.5 will seed it via the native Java/Python/JVM drivers (published hosts)."
     echo ""
 fi
 
@@ -423,7 +424,8 @@ heal_java_python_native() {
     if [ "$jm" = "local" ]; then
         # Mirror the srcDirs in packages/hydra-java/build.gradle so the local rollup
         # compiles against a complete dist/java on a cold checkout.
-        for pkg in hydra-kernel hydra-haskell hydra-java hydra-lisp hydra-python hydra-scala hydra-typescript; do
+        # hydra-jvm must precede hydra-java (dependency order). (#505)
+        for pkg in hydra-kernel hydra-haskell hydra-jvm hydra-java hydra-lisp hydra-python hydra-scala hydra-typescript; do
             "$HYDRA_ROOT/heads/java/bin/assemble-distribution.sh" "$pkg" || return 1
         done
     fi
@@ -440,13 +442,18 @@ heal_java_python_native() {
 }
 if [ -x "$JP_FRESH_CHECK" ]; then
     if [ "${HYDRA_INCLUDE_JAVA_PYTHON:-0}" = "1" ]; then
-        banner1 "Phase 1.5: cold-start native Java/Python coder JSON (published hosts) (#346)"
+        banner1 "Phase 1.5: cold-start native Java/Python/JVM coder JSON (published hosts) (#346/#505)"
         echo ""
         heal_java_python_native || exit 1
         "$JP_FRESH_CHECK" "$HYDRA_ROOT" --record || true
+        # #505: hydra-jvm JSON was just seeded; re-run update-json-main so that
+        # packages whose inference was skipped (e.g. hydra-scala → hydra.jvm.serde)
+        # now resolve correctly and get written.
+        echo "  Re-running update-json-main to resolve hydra-jvm-dependent packages..."
+        (cd "$HYDRA_HASKELL_DIR" && stack exec update-json-main) || exit 1
         echo ""
     elif ! "$JP_FRESH_CHECK" "$HYDRA_ROOT"; then
-        banner1 "Phase 1.5: re-exporting stale hydra-java/hydra-python coder JSON (#406)"
+        banner1 "Phase 1.5: re-exporting stale hydra-java/hydra-python/hydra-jvm coder JSON (#406/#505)"
         echo ""
         heal_java_python_native || exit 1
         "$JP_FRESH_CHECK" "$HYDRA_ROOT" --record || true
@@ -554,16 +561,16 @@ for H in $HOSTS; do
     # dist/<H>/hydra-* regardless of --targets — closing #445.
     case "$H" in
         java)
-            STATIC_DEPS="hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp hydra-typescript"
+            STATIC_DEPS="hydra-haskell hydra-jvm hydra-java hydra-python hydra-scala hydra-lisp hydra-typescript"
             ;;
         python)
-            STATIC_DEPS="hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp"
+            STATIC_DEPS="hydra-haskell hydra-jvm hydra-java hydra-python hydra-scala hydra-lisp"
             ;;
         scala)
-            STATIC_DEPS="hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp"
+            STATIC_DEPS="hydra-haskell hydra-jvm hydra-java hydra-python hydra-scala hydra-lisp"
             ;;
         typescript)
-            STATIC_DEPS="hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp"
+            STATIC_DEPS="hydra-haskell hydra-jvm hydra-java hydra-python hydra-scala hydra-lisp"
             ;;
         *)
             STATIC_DEPS=""

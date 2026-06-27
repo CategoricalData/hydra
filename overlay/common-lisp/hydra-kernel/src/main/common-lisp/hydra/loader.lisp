@@ -696,7 +696,13 @@
                                  (or (member f *hydra-handwritten-top-level-files*
                                              :test #'equal)
                                      (and (>= (length f) 24)
-                                          (string= "overlay/common_lisp/lib/" (subseq f 0 24)))))
+                                          (string= "overlay/common_lisp/lib/" (subseq f 0 24)))
+                                     ;; #501: the hand-written test_env (hydra.test.testEnv) lives at
+                                     ;; overlay/common_lisp/test/ and is plain cl:load'd explicitly by
+                                     ;; run-tests.lisp (it has a cl:defpackage the rewriting loader would
+                                     ;; mangle). Exclude it from the gen-main walk so it is not re-loaded.
+                                     (and (>= (length f) 25)
+                                          (string= "overlay/common_lisp/test/" (subseq f 0 25)))))
                                all-files))
          ;; Build ordered list: priority first, then remaining, then drop
          ;; anything in the caller-supplied skip set (see *hydra-skip-gen-main-files*).
@@ -736,6 +742,7 @@
            "test/lib/regex.lisp"
            "test/lib/sets.lisp"
            "test/lib/strings.lisp"
+           "test/lib/system.lisp"
            "test/annotations.lisp"
            "test/checking/advanced.lisp"
            "test/checking/algebraic_types.lisp"
@@ -752,6 +759,7 @@
            "test/hoisting/all.lisp"
            "test/inference/algebraic_types.lisp"
            "test/inference/algorithm_w.lisp"
+           "test/inference/annotations.lisp"
            "test/inference/classes.lisp"
            "test/inference/failures.lisp"
            "test/inference/fundamentals.lisp"

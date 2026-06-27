@@ -55,6 +55,7 @@ KEEP=false
 PUBLISH_SET=(
     hydra-kernel
     hydra-haskell
+    hydra-jvm
     hydra-java
     hydra-python
     hydra-scala

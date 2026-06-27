@@ -60,6 +60,7 @@ PUBLISHED_HOSTS = frozenset({
     "hydra-kernel",
     "hydra-haskell",
     "hydra-java",
+    "hydra-jvm",
     "hydra-python",
     "hydra-scala",
     "hydra-lisp",

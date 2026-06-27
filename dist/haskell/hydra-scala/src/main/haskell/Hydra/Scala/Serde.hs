@@ -13,8 +13,8 @@ import qualified Hydra.Error.System as ErrorSystem
 import qualified Hydra.Errors as Errors
 import qualified Hydra.File as File
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Java.Serde as Serde
 import qualified Hydra.Json.Model as Model
+import qualified Hydra.Jvm.Serde as Serde
 import qualified Hydra.Overlay.Haskell.Lib.Equality as Equality
 import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
 import qualified Hydra.Overlay.Haskell.Lib.Literals as Literals

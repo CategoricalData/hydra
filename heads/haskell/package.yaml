@@ -57,6 +57,7 @@ library:
     - ../../dist/haskell/hydra-haskell/src/main/haskell
     - ../../dist/haskell/hydra-coq/src/main/haskell
     - ../../dist/haskell/hydra-typescript/src/main/haskell
+    - ../../dist/haskell/hydra-jvm/src/main/haskell
     - ../../dist/haskell/hydra-java/src/main/haskell
     - ../../dist/haskell/hydra-python/src/main/haskell
     - ../../dist/haskell/hydra-scala/src/main/haskell

@@ -20,8 +20,10 @@ status).
 The Java and Python coder DSL sources (`packages/hydra-{java,python}/`) are
 authored in Java and Python respectively (host-native), and are now the **sole** source of truth: the
 Haskell DSL copies under `packages/hydra-{java,python}/src/main/haskell/` have been **deleted** (#346).
+The `hydra-jvm` package (`packages/hydra-jvm/`) is also authored in Java (host-native) and shares
+the same generation pipeline.
 The native sources are authoritative for the generated output: the main sync regenerates
-`dist/json/hydra-{java,python}` from them in Phase 5 (`bin/generate-hydra-java-from-java.sh`,
+`dist/json/hydra-{jvm,java,python}` from them in Phase 5 (`bin/generate-hydra-java-from-java.sh`,
 `bin/generate-hydra-python-from-python.sh`), and the native drivers also synthesize the
 `hydra.dsl.{java,python}.*` wrapper modules (previously written by the Haskell DSL pass). As of 0.16 the
 drivers run against the **published host by default** (`net.fortytwo.hydra:hydra-java` from Maven /
@@ -29,8 +31,8 @@ drivers run against the **published host by default** (`net.fortytwo.hydra:hydra
 for backward-incompatible kernel changes — the #370 "consume" path. See
 [Consuming published hosts](docs/build-system.md#consuming-published-hosts)
 and [Migration shims](docs/recipes/migration-shims.md). Note: the Haskell generator still loads the
-`hydra.{java,python}.*` JSON into its inference universe (so cross-package references like
-`hydra-scala` → `hydra.java.serde` resolve), but no longer *generates* those packages.
+`hydra.{jvm,java,python}.*` JSON into its inference universe (so cross-package references like
+`hydra-scala` → `hydra.jvm.serde` resolve), but no longer *generates* those packages.
 
 The **Haskell host** compiles the kernel from the co-generated `dist/haskell/hydra-kernel` (always
 generated as a target); secondary coders may be consumed from Hackage once published. `dist/haskell/hydra-kernel`

@@ -372,7 +372,7 @@ inferAndWriteByPackageSeededFor
         let pkgTargets   = M.findWithDefault [] pkg pkgToMods
             pkgUniverse  = M.findWithDefault [] pkg pkgToUniverse
             targetNs     = S.fromList (map moduleName pkgTargets)
-            -- Native-owned packages (#344: hydra-java, hydra-python) are NEVER
+            -- Native-owned packages (#344: hydra-jvm, hydra-java, hydra-python) are NEVER
             -- inferred here. Their canonical JSON is produced by the native
             -- generators, and their full universe includes the native coder
             -- module (e.g. hydra.java.coder), which references kernel term
@@ -380,20 +380,20 @@ inferAndWriteByPackageSeededFor
             -- are not in this pass's by-name accumulator — re-inferring it
             -- fails with "no such binding". Their existing JSON TypeSchemes are
             -- still harvested below (free, no inference), so downstream by-name
-            -- refs like hydra-scala -> hydra.java.serde.escapeJavaString still
+            -- refs like hydra-scala -> hydra.jvm.serde.escapeJavaString still
             -- resolve (#470). Before #466 these packages had the dsl wrappers as
             -- write targets so inferTargets was non-empty and never hit the
             -- null-pkgTargets fallback; now that the wrappers are excluded from
             -- the write universe (they're derived modules; inference must not
             -- run on them) the fallback would otherwise infer the whole native
             -- universe — hence this explicit skip.
-            isNativeOwnedPkg = pkg == "hydra-java" || pkg == "hydra-python"
+            isNativeOwnedPkg = pkg == "hydra-jvm" || pkg == "hydra-java" || pkg == "hydra-python"
             -- Infer only this package's write targets — re-inferring its whole
             -- universe (e.g. the full Java coder) blows the CI heap cap. The
             -- universe still participates as type-resolution context below, and
             -- its existing TypeSchemes (incl. native-JSON #344 signatures) are
             -- harvested into the accumulator below to seed downstream by-name
-            -- refs like hydra-scala -> hydra.java.serde.escapeJavaString (#470).
+            -- refs like hydra-scala -> hydra.jvm.serde.escapeJavaString (#470).
             inferTargets
               | isNativeOwnedPkg = []
               | null pkgTargets  = pkgUniverse
@@ -409,6 +409,15 @@ inferAndWriteByPackageSeededFor
                     (InferenceContext 0 []) bootstrapGraph
                     accBindingSchemes accSchemaSchemes
                     pkgUniverse inferTargets of
+                  Left (Error.ErrorResolution (Error.ResolutionErrorNoSuchBinding e))
+                    | any (\pfx -> L.isPrefixOf pfx (unName (Error.noSuchBindingErrorName e)))
+                           ["hydra.jvm.", "hydra.java.", "hydra.python."]
+                    -> do
+                      putStrLn $ "  WARNING: skipping inference for " ++ pkg
+                               ++ " (missing native binding: "
+                               ++ unName (Error.noSuchBindingErrorName e)
+                               ++ "; cold tree — Phase 1.5 will seed it)"
+                      return []
                   Left err -> fail $ "Per-package inference failed for "
                                   ++ pkg ++ ": " ++ showError err
                                   ++ " (raw: " ++ show err ++ ")"
@@ -436,10 +445,10 @@ inferAndWriteByPackageSeededFor
         -- Schemes are harvested from the package's FULL universe, not just the
         -- (re-)inferred targets. Universe modules excluded from inference still
         -- carry the TypeSchemes the native generators already emitted in their
-        -- JSON signatures (#344: hydra.{java,python}.* — produced by the native
-        -- Java/Python generators in Phase 0). Harvesting those existing
+        -- JSON signatures (#344/#505: hydra.{jvm,java,python}.* — produced by
+        -- the native Java/Python generators). Harvesting those existing
         -- signatures is free (no inference), and it seeds bindings like
-        -- hydra.java.serde.escapeJavaString so a downstream by-name reference
+        -- hydra.jvm.serde.escapeJavaString so a downstream by-name reference
         -- (hydra-scala -> that binding) resolves. (#470)
         --
         -- A freshly (re-)inferred target's scheme must override the native
@@ -1309,14 +1318,14 @@ writeDslJsonPackageSplit routingMap distJsonRoot universeModules typeModules = d
     reconcilePackageJsonOrphans routingMap distJsonRoot (writtenMainModules ++ nonEmpty)
   where
     -- The main pass writes every universe module EXCEPT native-generator-owned
-    -- hydra.java.*/hydra.python.* (#344). Mirror that exclusion so the keep-set
-    -- matches what was actually written. (Those two packages are skipped by
-    -- the reconcile below anyway, but keeping the keep-set faithful avoids any
+    -- hydra.jvm.*/hydra.java.*/hydra.python.* (#344, #505). Mirror that exclusion
+    -- so the keep-set matches what was actually written. (Those packages are skipped
+    -- by the reconcile below anyway, but keeping the keep-set faithful avoids any
     -- accidental cross-package surprise.)
     writtenMainModules = filter (not . isNativeOwnedNs) universeModules
     isNativeOwnedNs m =
       let ns = unModuleName (moduleName m)
-      in L.isPrefixOf "hydra.java." ns || L.isPrefixOf "hydra.python." ns
+      in L.isPrefixOf "hydra.jvm." ns || L.isPrefixOf "hydra.java." ns || L.isPrefixOf "hydra.python." ns
 
 -- | Generate ALL derived modules (DSL wrappers + term encoders + term
 -- decoders) for a list of source type modules and write them, routed per
@@ -1357,12 +1366,12 @@ writeDerivedJsonPackageSplit routingMap distJsonRoot universeModules dslSourceMo
     writtenMainModules = filter (not . isNativeOwnedNs) universeModules
     isNativeOwnedNs m =
       let ns = unModuleName (moduleName m)
-      in L.isPrefixOf "hydra.java." ns || L.isPrefixOf "hydra.python." ns
+      in L.isPrefixOf "hydra.jvm." ns || L.isPrefixOf "hydra.java." ns || L.isPrefixOf "hydra.python." ns
 
 -- | Packages whose dist/json tree is written by a NON-Haskell generator and
--- so must NOT be reconciled by the Haskell JSON write path. hydra-java and
--- hydra-python receive their canonical hydra.<lang>.* JSON from the native
--- Java/Python generators (#344); during the transition the Haskell DSL pass
+-- so must NOT be reconciled by the Haskell JSON write path. hydra-jvm, hydra-java,
+-- and hydra-python receive their canonical JSON from the native Java/Python
+-- generators (#344, #505); during the transition the Haskell DSL pass
 -- ALSO writes their hydra.dsl.<lang>.* wrappers into the same dir, so neither
 -- generator alone holds the complete keep-set. Rather than coordinate two
 -- generators over one dir, the Haskell side simply skips them; the native
@@ -1370,7 +1379,7 @@ writeDerivedJsonPackageSplit routingMap distJsonRoot universeModules dslSourceMo
 -- these packages are deleted (before 0.16), they become cleanly single-writer
 -- and this skip can be revisited. See #405.
 jsonReconcileSkipPackages :: S.Set String
-jsonReconcileSkipPackages = S.fromList ["hydra-java", "hydra-python"]
+jsonReconcileSkipPackages = S.fromList ["hydra-jvm", "hydra-java", "hydra-python"]
 
 -- | Files (relative to a package's src/main/json) that legitimately live in
 -- the JSON tree but are NOT written by update-json-main, so the #405
@@ -1635,22 +1644,21 @@ loadModulesFromJson basePath universeModules namespaces = do
             putStrLn $ "  Loaded: " ++ unModuleName ns
             return mod
 
--- | Load the hydra-java and hydra-python modules (hydra.{java,python}.* +
--- hydra.dsl.{java,python}.*) from their already-generated dist/json so they can
--- seed the inference universe. Their Haskell DSL sources have been deleted
--- (#346/#370); the native drivers are the sole writers, but the Haskell generator
+-- | Load the hydra-jvm, hydra-java, and hydra-python modules from their
+-- already-generated dist/json so they can seed the inference universe. Their
+-- sources are native (Java/Python DSL, #344/#346/#370/#505); the Haskell generator
 -- still needs these modules present to resolve cross-package references (e.g.
--- hydra-scala -> hydra.java.serde.escapeJavaString). Missing manifests (a truly
+-- hydra-scala -> hydra.jvm.serde.escapeJavaString). Missing manifests (a truly
 -- cold tree before Phase 1.5 seeds them) are tolerated: such a run cannot
 -- reference them yet either. The decode context is the base universe (kernel etc.).
 --
 -- Lives here (not in a single exe's Main) so every JSON-writing driver shares
 -- one loader: update-json-main AND transform-haskell-dsl-to-json must seed the
 -- native packages identically, else the on-demand sync path (sync-packages.sh)
--- can't resolve hydra.java.serde.* for hydra-scala. (#346)
+-- can't resolve hydra.jvm.serde.* for hydra-scala. (#346, #505)
 loadNativePackageModules :: FilePath -> [Module] -> IO [Module]
 loadNativePackageModules distRoot baseUniverse =
-    fmap L.concat $ CM.forM ["hydra-java", "hydra-python"] $ \pkg -> do
+    fmap L.concat $ CM.forM ["hydra-jvm", "hydra-java", "hydra-python"] $ \pkg -> do
       let pkgJson = distRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
           manifest = pkgJson FP.</> "manifest.json"
       exists <- SD.doesFileExist manifest

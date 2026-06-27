@@ -429,7 +429,55 @@ const main = async (): Promise<void> => {
   // implementations collide with the generated def-module paths.
   const twoPassLibTargets = new Set(["java"]);
 
-  const writeOne = (isTest: boolean, mods: unknown[], universe: unknown[]): number => {
+  // Redirect consumer references to hydra.lib.<sub> into the host-native overlay
+  // namespace hydra.overlay.<lang>.lib.<sub>, where the runtime implementations live
+  // (post-#501). The hydra.lib.* modules themselves are the generated def-modules
+  // (PrimitiveDefinition data, not callable), so consumer code that calls a primitive
+  // must resolve to the overlay impl. Mirrors the Haskell bootstrap-from-json
+  // `redirectForSubs` (Main.hs) and bootstrap.py's _LIB_SUBS — the TS host must apply
+  // the same redirect when emitting other hosts (e.g. ts -> python). Applied to the
+  // main and test (consumer) passes only, never the lib pass (which emits hydra.lib.*).
+  // For #507.
+  const baseLibSubs = ["chars","eithers","equality","lists","literals","logic","maps","math","optionals","pairs","regex","sets","strings"];
+  const effectfulSubs = ["effects","files","system","text"];
+  // Per-target sub list: hosts with native effectful impls also redirect those.
+  const libSubsByTarget: Record<string, string[]> = {
+    java:          baseLibSubs,
+    python:        [...baseLibSubs, ...effectfulSubs],
+    scala:         [...baseLibSubs, ...effectfulSubs],
+    clojure:       [...baseLibSubs, ...effectfulSubs],
+    scheme:        [...baseLibSubs, ...effectfulSubs],
+    "common-lisp": [...baseLibSubs, ...effectfulSubs],
+    "emacs-lisp":  [...baseLibSubs, ...effectfulSubs],
+    typescript:    [...baseLibSubs, ...effectfulSubs],
+    haskell:       [],
+    go:            [],
+  };
+  const langSegByTarget: Record<string, string> = {
+    "common-lisp": "common_lisp",
+    "emacs-lisp":  "emacs_lisp",
+  };
+  const redirectLibRefs = (src: string): string => {
+    const subs = libSubsByTarget[opts.target] ?? [];
+    if (subs.length === 0) return src;
+    const langSeg = langSegByTarget[opts.target] ?? opts.target;
+    const oldPfx = "hydra.lib.";
+    const newPfx = "hydra.overlay." + langSeg + ".lib.";
+    // Protect string literals "hydra.lib.X" (data, not import refs) from rewriting.
+    const sentinel = " HYDRALIBNAME ";
+    let s = src.split("\"hydra.lib.").join("\"" + sentinel);
+    for (const sub of subs) {
+      // member access, import-terminators, and "from hydra.lib import X" (python).
+      s = s.split(oldPfx + sub + ".").join(newPfx + sub + ".");
+      s = s.split(oldPfx + sub + ";").join(newPfx + sub + ";");
+      s = s.split(oldPfx + sub + "\n").join(newPfx + sub + "\n");
+      s = s.split(oldPfx + sub + " ").join(newPfx + sub + " ");
+      s = s.split("hydra.lib import " + sub).join("hydra.overlay." + langSeg + ".lib import " + sub);
+    }
+    return s.split(sentinel).join("hydra.lib.");
+  };
+
+  const writeOne = (isTest: boolean, mods: unknown[], universe: unknown[], redirect = true): number => {
     if (mods.length === 0) return 0;
     const generateSourceFiles = (codegen as { generateSourceFiles: (...args: unknown[]) => { tag: "left"; value: unknown } | { tag: "right"; value: ReadonlyArray<readonly [string, string]> } }).generateSourceFiles;
     const targetBase = isTest ? outTest : outMain;
@@ -454,7 +502,7 @@ const main = async (): Promise<void> => {
           const [relPath, content] = entry;
           const outPath = join(targetBase, relPath);
           mkdirSync(dirname(outPath), { recursive: true });
-          writeFileSync(outPath, content);
+          writeFileSync(outPath, redirect ? redirectLibRefs(content) : content);
           count++;
         }
       } catch (e) {
@@ -513,7 +561,7 @@ const main = async (): Promise<void> => {
       const nonLibMods = allModules.filter((m) => !isLibMod(m));
       const libUniverse = [...libModsLowered, ...nonLibMods];
       console.log(`  Lib pass: ${libModsLowered.length} hydra.lib.* modules → ${outMain}`);
-      libFileCount = writeOne(false, libModsLowered, libUniverse);
+      libFileCount = writeOne(false, libModsLowered, libUniverse, false);
     }
   }
 

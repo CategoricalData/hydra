@@ -102,8 +102,8 @@ discoverModuleNameFiles = do
         Y.catMaybes <$> mapM extractNs files
 
     -- Scan a package's native (.java/.py) self-host coder sources, which live
-    -- under packages/<pkg>/src/main/<lang>/hydra/sources/. Only hydra-java and
-    -- hydra-python currently have these; other packages have no such dir and
+    -- under packages/<pkg>/src/main/<lang>/hydra/sources/. hydra-jvm, hydra-java,
+    -- and hydra-python currently have these; other packages have no such dir and
     -- yield [].
     scanNativePackage pkg = do
       let javaDir = packagesRoot FP.</> pkg FP.</> "src" FP.</> "main"
@@ -156,7 +156,7 @@ discoverModuleNameFiles = do
 
     -- Extract the namespace a native (.java/.py) coder source defines for
     -- itself. Two idioms, one per host language:
-    --   * Java:   `ModuleName NS = new ModuleName("hydra.java.<x>")`
+    --   * Java:   `ModuleName NS = new ModuleName("hydra.{jvm,java}.<x>")` (#344, #505)
     --   * Python: `NS = ModuleName("hydra.python.<x>")` (optionally `_NS`),
     --             at column 0.
     -- Both files also reference OTHER modules via `new ModuleName("...")`

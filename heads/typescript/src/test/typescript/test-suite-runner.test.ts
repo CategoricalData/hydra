@@ -10,6 +10,7 @@
 // `heads/python/src/test/python/test_suite_runner.py`.
 
 import { describe, expect, it } from "vitest";
+import { mkdirSync, rmSync } from "node:fs";
 
 import { allTests } from "../../../../../dist/typescript/hydra-kernel/src/test/typescript/hydra/test/testSuite.js";
 
@@ -18,9 +19,30 @@ interface TestCaseUniversal {
   readonly expected: (_: void) => string;
 }
 
-interface TestCase {
-  readonly tag: "universal";
-  readonly value: TestCaseUniversal;
+// An effectful test case: actual/expected are unit-thunks. In TypeScript the
+// effect type is transparent (effect<t> = t), so forcing the actual thunk *is*
+// running the effect (mirroring the Python runner). File-I/O cases write under
+// the canonical temp dir prepared before each case.
+interface TestCaseEffectful {
+  readonly actual: (_: void) => string;
+  readonly expected: (_: void) => string;
+}
+
+type TestCase =
+  | { readonly tag: "universal"; readonly value: TestCaseUniversal }
+  | { readonly tag: "effectful"; readonly value: TestCaseEffectful };
+
+// Canonical root directory for effectful (file I/O) test cases. Must match the
+// testDir constant in Hydra.Sources.Test.Lib.Files and the EFFECTFUL_TEST_DIR
+// in the Python runner / effectfulTestDir in the Haskell runner. Hard-coded
+// *nix path for now (#494).
+const EFFECTFUL_TEST_DIR = "/tmp/hydra-testing";
+
+// Prepare a guaranteed-empty canonical temp directory before an effectful test
+// case. Mirrors prepare_effectful_temp_dir in the Python runner.
+function prepareEffectfulTempDir(): void {
+  rmSync(EFFECTFUL_TEST_DIR, { recursive: true, force: true });
+  mkdirSync(EFFECTFUL_TEST_DIR, { recursive: true });
 }
 
 interface Tag {
@@ -63,11 +85,20 @@ function runCase(c: TestCaseWithMetadata): void {
   }
   it(c.name, () => {
     const tc = c.case_;
-    if (tc.tag !== "universal") {
+    const unit = undefined as unknown as void;
+    if (tc.tag === "universal") {
+      const u = tc.value;
+      expect(u.actual(unit)).toBe(u.expected(unit));
+    } else if (tc.tag === "effectful") {
+      // For #494: force the actual thunk (running the effect) after preparing
+      // the canonical temp dir; compare to the expected string. Mirrors the
+      // Python runner's run_effectful.
+      prepareEffectfulTempDir();
+      const e = tc.value;
+      expect(e.actual(unit)).toBe(e.expected(unit));
+    } else {
       throw new Error(`unknown test-case variant: ${(tc as { tag: string }).tag}`);
     }
-    const u = tc.value;
-    expect(u.actual(undefined as unknown as void)).toBe(u.expected(undefined as unknown as void));
   });
 }
 

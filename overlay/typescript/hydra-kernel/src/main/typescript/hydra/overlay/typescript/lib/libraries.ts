@@ -23,14 +23,14 @@
 // extraPaths bridge hand-written + generated code into one namespace at
 // compile/test time.
 
-import type { Name, Term, Type, TypeScheme } from "../core.js";
-import type { InferenceContext } from "../typing.js";
-import type { Graph, Primitive } from "../graph.js";
-import type { Error as HydraError } from "../errors.js";
-import type { Either } from "../runtime.js";
+import type { Name, Term, Type, TypeScheme } from "../../../core.js";
+import type { InferenceContext } from "../../../typing.js";
+import type { Graph, Primitive } from "../../../graph.js";
+import type { Error as HydraError } from "../../../errors.js";
+import type { Either } from "../../../runtime.js";
 
-import * as extractCore from "../extract/core.js";
-import * as scoping from "../scoping.js";
+import * as extractCore from "../../../extract/core.js";
+import * as scoping from "../../../scoping.js";
 
 import * as libChars from "./chars.js";
 import * as libEquality from "./equality.js";
@@ -46,8 +46,8 @@ import * as libStrings from "./strings.js";
 // HOF primitives like `maps.alter` need to invoke Hydra closures —
 // they take a function argument that's a Term and must call reduceTerm
 // with `apply(closure, arg)` to evaluate.
-import { reduceTerm } from "../reduction.js";
-import * as lexical from "../lexical.js";
+import { reduceTerm } from "../../../reduction.js";
+import * as lexical from "../../../lexical.js";
 
 // As of issue #446 the `Primitive.implementation` carrier no longer threads
 // an `InferenceContext`; the implementation receives only `(graph, args)`.
@@ -196,17 +196,27 @@ const bind = <A, B>(e: Either<HydraError, A>, f: (a: A) => Either<HydraError, B>
 
 type Impl = (g: Graph, args: readonly Term[]) => Either<HydraError, Term>;
 
-const prim = (qname: string, ts: TypeScheme, impl: Impl): Primitive => ({
-  definition: {
-    name: { value: qname } as Name,
-    metadata: { tag: "none" },
-    signature: scoping.typeSchemeToTermSignature(ts as any) as any,
-    isPure: true,
-    isTotal: true,
-    defaultImplementation: { tag: "none" },
-  },
-  implementation: impl,
-});
+const prim = (qname: string, ts: TypeScheme, impl: Impl, lazyPositions?: readonly number[], isPure?: boolean): Primitive => {
+  const sig = scoping.typeSchemeToTermSignature(ts as any) as any;
+  if (lazyPositions && lazyPositions.length > 0) {
+    const params: Array<{ isLazy?: boolean }> = (sig as any).parameters ?? [];
+    for (const pos of lazyPositions) {
+      if (params[pos]) params[pos] = { ...params[pos], isLazy: true };
+    }
+    (sig as any).parameters = params;
+  }
+  return {
+    definition: {
+      name: { value: qname } as Name,
+      metadata: { tag: "none" },
+      signature: sig,
+      isPure: isPure !== false,
+      isTotal: true,
+      defaultImplementation: { tag: "none" },
+    },
+    implementation: impl,
+  };
+};
 
 // === Curried-arity bridges ===
 //
@@ -302,7 +312,8 @@ const logicPrimitives = (): readonly Primitive[] => {
         bind(need(args, 0, "ifElse"), (a0) =>
           bind(need(args, 1, "ifElse-then"), (a1) =>
             bind(need(args, 2, "ifElse-else"), (a2) =>
-              bind(dBool(g, a0), (b) => right(b ? a1 : a2)))))),
+              bind(dBool(g, a0), (b) => right(b ? a1 : a2))))),
+      [1, 2]),
   ];
 };
 
@@ -1686,7 +1697,8 @@ const mapsPrimitives = (): readonly Primitive[] => {
               bind(asMap(m), (mp) => {
                 const r = libMaps.lookup(k, mp);
                 return right(r.tag === "given" ? (r.value as Term) : (d as Term));
-              }))))),
+              })))),
+      [0]),
     // elems :: Map k v -> [v]
     prim("hydra.lib.maps.elems", schemeC(tyFn(tyMap(tyVar("k"), tyVar("v")), tyList(tyVar("v"))), ["k", "v"], [["k", ["ordering"]]]),
       (_g, args) =>
@@ -1764,7 +1776,7 @@ const effectFail = (name: string): Impl =>
     left({ tag: "other", value: `effect primitive cannot be reduced by the pure reducer: ${name}` } as never);
 
 const effectPrim = (qname: string, ts: TypeScheme): Primitive =>
-  prim(qname, ts, effectFail(qname));
+  prim(qname, ts, effectFail(qname), undefined, false);
 
 const effectsPrimitives = (): readonly Primitive[] => {
   const x = tyVar("x");
@@ -1889,7 +1901,8 @@ const optionalsPrimitives = (): readonly Primitive[] => {
             const mv = asOptional(m);
             if (!mv) return left({ tag: "other", value: "expected an optional" } as never);
             return right(mv.tag === "given" ? mv.value : def);
-          }))),
+          })),
+      [0]),
     prim("hydra.lib.optionals.isGiven", scheme(tyFn(tyOptional(tyVar("a")), tyBool), ["a"]),
       (_g, args) =>
         bind(need(args, 0, "isGiven"), (m) => {
@@ -1958,7 +1971,8 @@ const optionalsPrimitives = (): readonly Primitive[] => {
               if (mv.tag === "none") return right(def);
               const app: Term = { tag: "application", value: { function_: fn, argument: mv.value } } as never;
               return (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
-            })))),
+            }))),
+      [1]),
     prim("hydra.lib.optionals.mapOptional", scheme(tyFnCurried(tyFn(tyVar("a"), tyOptional(tyVar("b"))), tyList(tyVar("a")), tyList(tyVar("b"))), ["a", "b"]),
       (g, args) =>
         bind(need(args, 0, "mapOptional-fn"), (fn) =>
@@ -2051,7 +2065,8 @@ const eithersPrimitives = (): readonly Primitive[] => {
             const ev = asEither(e);
             if (!ev) return left({ tag: "other", value: "expected an either" } as never);
             return right(ev.tag === "left" ? ev.value : def);
-          }))),
+          })),
+      [0]),
     prim("hydra.lib.eithers.fromRight", scheme(tyFnCurried(tyVar("b"), tyEither(tyVar("a"), tyVar("b")), tyVar("b")), ["a", "b"]),
       (_g, args) =>
         bind(need(args, 0, "fromRight-def"), (def) =>
@@ -2059,7 +2074,8 @@ const eithersPrimitives = (): readonly Primitive[] => {
             const ev = asEither(e);
             if (!ev) return left({ tag: "other", value: "expected an either" } as never);
             return right(ev.tag === "right" ? ev.value : def);
-          }))),
+          })),
+      [0]),
     prim("hydra.lib.eithers.lefts", scheme(tyFn(tyList(tyEither(tyVar("a"), tyVar("b"))), tyList(tyVar("a"))), ["a", "b"]),
       (_g, args) =>
         bind(need(args, 0, "lefts"), (xs) => {

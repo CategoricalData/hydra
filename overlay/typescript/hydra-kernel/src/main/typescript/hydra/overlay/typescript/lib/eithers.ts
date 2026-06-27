@@ -7,8 +7,8 @@
 // typed as `any`. Tightening these wastes type-checker time on synthesized
 // code without catching real bugs; the runtime checks `tag` directly.
 
-import type { Either, Optional } from "../runtime.js";
-import { Left, Right, Given, None } from "../runtime.js";
+import type { Either, Optional } from "../../../runtime.js";
+import { Left, Right, Given, None } from "../../../runtime.js";
 
 export const bimap = (fl: (l: any) => any, fr: (r: any) => any, e: any): Either<any, any> =>
   e.tag === "left" ? Left(fl(e.value)) : Right(fr(e.value));

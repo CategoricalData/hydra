@@ -1354,7 +1354,17 @@ importsToText = def "importsToText" $
         "targetIsTest" <~ Logic.and
           (Logic.not (Lists.null (var "targetSegs")))
           (Equality.equal (Optionals.fromOptional (string "") (Lists.maybeHead (var "targetSegs"))) (string "test")) $
-        "targetPath" <~ Strings.intercalate (string "/") (var "targetSegs") $
+        -- #501/#507: the TS lib runtime impls (hydra.lib.*) ship under the renamed
+        -- overlay namespace at hydra/overlay/typescript/lib/, not hydra/lib/ (which holds
+        -- only the generated PrimitiveDefinition def-modules). A generated reference to
+        -- hydra.lib.<x> must import from overlay/typescript/lib/<x>. Remap ONLY the on-disk
+        -- path here; the module alias (nsSlug below) keeps the original hydra.lib.<x> segments
+        -- so the import alias still matches the call sites.
+        "targetPathSegs" <~ Logic.ifElse
+          (Equality.equal (Optionals.fromOptional (string "") (Lists.maybeHead (var "targetSegs"))) (string "lib"))
+          (Lists.concat2 (list [string "overlay", string "typescript"]) (var "targetSegs"))
+          (var "targetSegs") $
+        "targetPath" <~ Strings.intercalate (string "/") (var "targetPathSegs") $
         -- Cross-tree paths: test → main needs extra "../../main/typescript/".
         -- main → test would need the inverse, but currently no main module
         -- imports test, so that branch is omitted.
