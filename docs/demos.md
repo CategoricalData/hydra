@@ -66,6 +66,24 @@ An orchestrator script runs all three, compares their output, and displays a tim
 
 See the [ValidatePG README](../demos/validatepg/README.md) for setup and usage.
 
+## Neo4j validation (live graph validation via the Neo4j driver)
+
+Validates a **live Neo4j graph** against a Hydra Neo4j graph type, running the same
+`hydra.validate.neo4j.validateGraph` in Java and Python. Each host connects to a running Neo4j
+using that language's Neo4j client driver, reads the nodes and relationships, maps the driver's
+types onto `hydra.neo4j.model`, and reports all violations.
+
+It showcases the capability Neo4j itself lacks — retroactive, client-side, whole-graph validation
+that reports every violation at once (Neo4j enforces constraints and graph types only at write time,
+one element at a time). The demo covers property existence and type constraints, overloaded
+relationship-type endpoint patterns, and open- vs. closed-world matching. It needs a running Neo4j
+and the Neo4j driver for each host, and skips gracefully when neither is available.
+
+The client-interfacing logic lives in the demo for now; it will move to a reusable
+`overlay/{java,python}/hydra-neo4j` once #511 lands.
+
+See the [Neo4j validation README](../demos/neo4j-validation/README.md) for setup and usage.
+
 ## SHACL (RDF data generation and validation)
 
 This demo generates [SHACL](https://www.w3.org/TR/shacl/) shapes from Hydra's kernel types,
