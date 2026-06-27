@@ -1,6 +1,6 @@
 """Python naming utilities: encoding Hydra names as Python names.
 
-Mirror of packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Names.hs.
+Host-native DSL source (authoritative; the former Haskell copy was removed in #346).
 """
 
 from hydra.core import Name
