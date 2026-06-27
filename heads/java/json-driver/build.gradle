@@ -1,7 +1,7 @@
 // #370 published-host Java DSL->JSON driver (standalone build).
 //
 // Compiles ONLY the hand-written hydra-java DSL authoring sources
-// (hydra.sources.java.*, hydra.dsl.meta.*, hydra.dsl.java.Helpers, ...) plus the
+// (hydra.sources.java.*, hydra.overlay.java.dsl.meta.*, hydra.overlay.java.dsl.Helpers, ...) plus the
 // two driver files (hydra.Generation, hydra.UpdateJavaJson) against the PUBLISHED
 // Java host net.fortytwo.hydra:hydra-java:<hostVersion> resolved from Maven
 // Central — NOT against any local dist/java build. This is the default path the
@@ -43,6 +43,14 @@ java {
 sourceSets {
     main {
         java {
+            // Hand-written meta-DSL (Phantoms/Defs/Helpers), namespace
+            // hydra.overlay.java.dsl.meta.* + hydra.overlay.java.dsl.Helpers —
+            // authored overlay source, must precede the sources that import it
+            // (dependency order). NOTE: only meta/* + Helpers are compiled here;
+            // the sibling overlay Types/Terms/Literals ship in the published
+            // hydra-java host JAR, so they are resolved from the classpath, not
+            // recompiled (recompiling would split-package conflict with the JAR).
+            srcDir file("$hydraRoot/overlay/java/hydra-kernel/src/main/java")
             // hydra-jvm DSL authoring sources (shared JVM helpers; #505).
             // Must precede hydra-java (dependency order).
             srcDir file("$hydraRoot/packages/hydra-jvm/src/main/java")
@@ -51,6 +59,8 @@ sourceSets {
             // Just the two driver files from heads/java (everything else there
             // needs the local dist or the cross-target coders).
             srcDir file("$hydraRoot/heads/java/src/main/java")
+            include 'hydra/overlay/java/dsl/meta/**'
+            include 'hydra/overlay/java/dsl/Helpers.java'
             include 'hydra/sources/jvm/**'
             include 'hydra/sources/java/**'
             include 'hydra/dsl/**'

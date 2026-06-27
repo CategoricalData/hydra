@@ -1,6 +1,6 @@
 """Python test code generation codec for pytest-based generation tests.
 
-Mirror of packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Testing.hs.
+Host-native DSL source (authoritative; the former Haskell copy was removed in #346).
 """
 
 from hydra.core import Name
@@ -37,7 +37,7 @@ from hydra.sources.python._source_dsl import (
     unqualified_dep,
 )
 
-# Mirror Haskell:
+# Namespace order (imports precede importers):
 #   [SerializationSource.ns, Formatting.ns, Names.ns, TestUtils.ns, Constants.ns] L.++
 #   (PySyntax.ns:KernelTypes.kernelTypesNamespaces)
 DEPENDENCIES = [
@@ -369,7 +369,7 @@ def _generate_test_file_with_python_codec():
 
 
 # ----------------------------------------------------------------------
-# Module assembly (alphabetical, matching Haskell)
+# Module assembly (alphabetical, per the definitions-list ordering rule)
 # ----------------------------------------------------------------------
 
 def _build_module() -> Module:

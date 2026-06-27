@@ -1,6 +1,6 @@
 """Python utilities for constructing Python syntax trees.
 
-Mirror of packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Utils.hs.
+Host-native DSL source (authoritative; the former Haskell copy was removed in #346).
 """
 
 from hydra.core import Name
@@ -36,7 +36,7 @@ from hydra.sources.python._source_dsl import (
     unqualified_dep,
 )
 
-# Mirror Haskell:
+# Namespace order (imports precede importers):
 #   [PyNames.ns, PySerde.ns, Serialization.ns, Analysis.ns] L.++
 #   (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces)
 DEPENDENCIES = [

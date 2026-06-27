@@ -1,0 +1,480 @@
+{
+  "name": "hydra.error.neo4j",
+  "metadata": {"description": "Error types for Neo4j property graph validation", "comments": [], "seeAlso": []},
+  "dependencies": [{"module": "hydra.neo4j.model"}],
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.error.neo4j.InvalidGraphError",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "node",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.error.neo4j.InvalidGraphNodeError"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A node in the graph is invalid"}}}]}}}},
+                  {
+                    "name": "relationship",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.error.neo4j.InvalidGraphRelationshipError"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A relationship in the graph is invalid"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An error indicating that a Neo4j property graph is invalid"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.error.neo4j.InvalidGraphNodeError",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "id",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.ElementId"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The element id of the invalid node"}}}]}}}},
+                  {
+                    "name": "error",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.error.neo4j.InvalidNodeError"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The specific error"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An invalid node within a graph, identified by its element id"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.error.neo4j.InvalidGraphRelationshipError",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "id",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.ElementId"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The element id of the invalid relationship"}}}]}}}},
+                  {
+                    "name": "error",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.error.neo4j.InvalidRelationshipError"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The specific error"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An invalid relationship within a graph, identified by its element id"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.error.neo4j.InvalidNodeError",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "keyViolation",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.error.neo4j.KeyError"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A key constraint is violated"}}}]}}}},
+                  {
+                    "name": "missingImpliedLabel",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.error.neo4j.MissingLabelError"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The node is missing a label implied by its node element type"}}}]}}}},
+                  {
+                    "name": "missingProperty",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.error.neo4j.PropertyExistenceError"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The node is missing a property required by a property existence constraint"}}}]}}}},
+                  {
+                    "name": "noSuchLabel",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.error.neo4j.NoSuchLabelError"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The node's labels do not match any node element type in the graph type"}}}]}}}},
+                  {
+                    "name": "uniquenessViolation",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.error.neo4j.PropertyUniquenessError"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A property uniqueness constraint is violated"}}}]}}}},
+                  {
+                    "name": "wrongPropertyType",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.error.neo4j.PropertyTypeError"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A property of the node violates a property type constraint"}}}]}}}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An error indicating that a node is invalid"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.error.neo4j.InvalidRelationshipError",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "endNodeNotFound",
+                    "type": {
+                      "annotated": {
+                        "body": {"unit": {}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The end node does not exist in the graph"}}}]}}}},
+                  {
+                    "name": "keyViolation",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.error.neo4j.KeyError"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A key constraint is violated"}}}]}}}},
+                  {
+                    "name": "missingProperty",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.error.neo4j.PropertyExistenceError"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The relationship is missing a property required by a property existence constraint"}}}]}}}},
+                  {
+                    "name": "noMatchingPattern",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.error.neo4j.NoMatchingPatternError"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The relationship's type is declared, but its endpoint labels match none of the declared source/target patterns for that type"}}}]}}}},
+                  {
+                    "name": "noSuchType",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.error.neo4j.NoSuchRelationshipTypeError"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The relationship's type does not match any relationship element type in the graph type"}}}]}}}},
+                  {
+                    "name": "startNodeNotFound",
+                    "type": {
+                      "annotated": {
+                        "body": {"unit": {}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The start node does not exist in the graph"}}}]}}}},
+                  {
+                    "name": "uniquenessViolation",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.error.neo4j.PropertyUniquenessError"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A property uniqueness constraint is violated"}}}]}}}},
+                  {
+                    "name": "wrongPropertyType",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.error.neo4j.PropertyTypeError"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A property of the relationship violates a property type constraint"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An error indicating that a relationship is invalid"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.error.neo4j.KeyError",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "properties",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.neo4j.model.Key"}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The properties that constitute the key"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "An error indicating that a key constraint is violated: the listed properties do not all exist, or their combined values are not unique"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.error.neo4j.MissingLabelError",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "label",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.NodeLabel"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The implied label that was not present on the node"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An error indicating that a node is missing a label implied by its node element type"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.error.neo4j.NoMatchingPatternError",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "allowedPatterns",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.error.neo4j.RelationshipPattern"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The declared source/target label patterns for the relationship's type"}}}]}}}},
+                  {
+                    "name": "actualStartLabels",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.neo4j.model.NodeLabel"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The labels of the relationship's actual start node"}}}]}}}},
+                  {
+                    "name": "actualEndLabels",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.neo4j.model.NodeLabel"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The labels of the relationship's actual end node"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "An error indicating that a relationship's endpoint labels match none of the declared source/target patterns for its relationship type"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.error.neo4j.NoSuchLabelError",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "labels",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.neo4j.model.NodeLabel"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The labels of the node for which no node element type was found"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An error indicating that no node element type matches a node's labels"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.error.neo4j.NoSuchRelationshipTypeError",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.RelationshipType"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The relationship type that was not found"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An error indicating that a relationship type does not match any relationship element type"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.error.neo4j.PropertyExistenceError",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "key",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.Key"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The key of the missing property"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "An error indicating that an element is missing a property required by a property existence constraint"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.error.neo4j.PropertyTypeError",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "key",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.Key"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The key of the property"}}}]}}}},
+                  {
+                    "name": "expectedType",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.ValueType"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The type the property's value was required to have"}}}]}}}},
+                  {
+                    "name": "value",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.Value"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The actual value of the property"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An error indicating that a property's value violates a property type constraint"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.error.neo4j.PropertyUniquenessError",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "properties",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.neo4j.model.Key"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The properties whose combined values must be unique"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "An error indicating that a property uniqueness constraint is violated: the combined values of the listed properties are not unique"}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.error.neo4j.RelationshipPattern",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "startLabel",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.NodeLabel"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The required start-node label"}}}]}}}},
+                  {
+                    "name": "endLabel",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.neo4j.model.NodeLabel"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The required end-node label"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A declared source/target label pattern for a relationship type, used in NoMatchingPatternError"}}}]}}}}}}]}

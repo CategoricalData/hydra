@@ -19,6 +19,7 @@ import Hydra.Kernel
 
 import qualified Hydra.Sources.Cypher.Features as CypherFeatures
 import qualified Hydra.Sources.Cypher.OpenCypher as OpenCypher
+import qualified Hydra.Sources.Error.Neo4j as ErrorNeo4j
 import qualified Hydra.Sources.Error.Pg as ErrorPg
 import qualified Hydra.Sources.Gql.OpenGql as OpenGql
 import qualified Hydra.Sources.Gql.PathAlgebra.Expressions as PathAlgebraExpressions
@@ -26,6 +27,8 @@ import qualified Hydra.Sources.Gql.PathAlgebra.Syntax as PathAlgebraSyntax
 import qualified Hydra.Sources.Graphviz.Coder as GraphvizCoder
 import qualified Hydra.Sources.Graphviz.Dot as DotSyntax
 import qualified Hydra.Sources.Graphviz.Serde as GraphvizSerde
+import qualified Hydra.Sources.Neo4j.Model as Neo4jModel
+import qualified Hydra.Sources.Neo4j.Pg as Neo4jPg
 import qualified Hydra.Sources.Pg.Coder as PgCoder
 import qualified Hydra.Sources.Pg.Graphson.Coder as GraphsonCoder
 import qualified Hydra.Sources.Pg.Graphson.Construct as GraphsonConstruct
@@ -40,14 +43,17 @@ import qualified Hydra.Sources.Pg.Rdf.Mappings as PgRdfMappings
 import qualified Hydra.Sources.Pg.TermsToElements as TermsToElements
 import qualified Hydra.Sources.Pg.Utils as PgUtils
 import qualified Hydra.Sources.Show.Error.Pg as ShowErrorPg
+import qualified Hydra.Sources.Tinkerpop.Examples.Modern as TinkerpopModern
 import qualified Hydra.Sources.Tinkerpop.Features as TinkerpopFeatures
 import qualified Hydra.Sources.Tinkerpop.Gremlin as Gremlin
 import qualified Hydra.Sources.Tinkerpop.Language as TinkerpopLanguage
+import qualified Hydra.Sources.Validate.Neo4j as ValidateNeo4j
 import qualified Hydra.Sources.Validate.Pg as ValidatePg
 
 mainModules :: [Module]
 mainModules = [
   CypherFeatures.module_,
+  ErrorNeo4j.module_,
   ErrorPg.module_,
   GraphsonCoder.module_,
   GraphsonConstruct.module_,
@@ -57,6 +63,8 @@ mainModules = [
   DotSyntax.module_,
   GraphvizSerde.module_,
   Gremlin.module_,
+  Neo4jModel.module_,
+  Neo4jPg.module_,
   OpenCypher.module_,
   OpenGql.module_,
   PathAlgebraExpressions.module_,
@@ -73,6 +81,8 @@ mainModules = [
   ShowErrorPg.module_,
   TinkerpopFeatures.module_,
   TinkerpopLanguage.module_,
+  TinkerpopModern.module_,
+  ValidateNeo4j.module_,
   ValidatePg.module_]
 
 -- | Modules in this package whose type definitions should produce derived
@@ -96,6 +106,7 @@ mainDslModules = [
 -- produce hydra.{encode,decode}.pg.{model,mapping}.
 mainEncodingModules :: [Module]
 mainEncodingModules = [
+  Neo4jModel.module_,
   PgModel.module_,
   PgMapping.module_]
 

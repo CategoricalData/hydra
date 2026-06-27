@@ -1,6 +1,6 @@
 """A Python syntax model, based on the Python v3 PEG grammar.
 
-Mirror of packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Syntax.hs.
+Host-native DSL source (authoritative; the former Haskell copy was removed in #346).
 Retrieved from https://docs.python.org/3/reference/grammar.html on 2024-12-22.
 """
 
@@ -59,7 +59,7 @@ def _union(fields):
 
 # ----------------------------------------------------------------------
 # Type definitions
-# Order mirrors Haskell: constructs ++ terminals ++ nonterminals
+# Ordered by grammatical role: constructs, then terminals, then nonterminals
 # ----------------------------------------------------------------------
 
 # constructs (added for Hydra-Python; not from grammar)

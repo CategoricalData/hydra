@@ -1,6 +1,6 @@
 package hydra.sources.java;
 import hydra.dsl.java.Syntax;
-import hydra.dsl.meta.Phantoms;
+import hydra.overlay.java.dsl.meta.Phantoms;
 import hydra.java.syntax.AdditionalBound;
 import hydra.java.syntax.AdditiveExpression;
 import hydra.java.syntax.AdditiveExpression_Binary;
@@ -80,7 +80,7 @@ import hydra.overlay.java.util.Optional;
 
 import java.util.List;
 
-import static hydra.dsl.meta.Phantoms.list;
+import static hydra.overlay.java.dsl.meta.Phantoms.list;
 
 /**
  * Convenience layer over the generated {@link Syntax} DSL. Java analogue of

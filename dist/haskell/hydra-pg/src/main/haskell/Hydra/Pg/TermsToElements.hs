@@ -8,9 +8,12 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.File as ErrorFile
 import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Error.System as ErrorSystem
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
+import qualified Hydra.File as File
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as JsonModel
 import qualified Hydra.Overlay.Haskell.Lib.Eithers as Eithers
@@ -32,8 +35,10 @@ import qualified Hydra.Relational as Relational
 import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
+import qualified Hydra.System as System
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing
+import qualified Hydra.Time as Time
 import qualified Hydra.Topology as Topology
 import qualified Hydra.Typed as Typed
 import qualified Hydra.Typing as Typing
@@ -209,7 +214,9 @@ readInjection cx g cases encoded =
         let key = Pairs.first f
             val = Pairs.second f
             matching = Lists.filter (\c -> Equality.equal (Pairs.first c) key) cases
-        in (Optionals.cases (Lists.maybeHead matching) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected field: " (Core.unName key))))) (\m -> Pairs.second m val)))))
+        in (Optionals.cases (Lists.maybeHead matching) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "unexpected field: " (Core.unName key))))) (\m ->
+          let handler = Pairs.second m
+          in (handler val))))))
 -- | Read a record from a term as a map of field names to values
 readRecord :: t0 -> Graph.Graph -> (M.Map Core.Name Core.Term -> Either Errors.Error t1) -> Core.Term -> Either Errors.Error t1
 readRecord cx g cons term =
