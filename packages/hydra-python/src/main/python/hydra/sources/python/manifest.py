@@ -1,6 +1,6 @@
 """Package manifest for hydra-python.
 
-Mirror of packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Manifest.hs.
+Host-native DSL source (authoritative; the former Haskell copy was removed in #346).
 Owns the Python coder DSL sources.
 
 This module exports `main_modules` and `test_modules` lists, used by build tooling

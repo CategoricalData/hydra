@@ -1,6 +1,6 @@
 """Language constraints and reserved words for Python 3.
 
-Mirror of packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Language.hs.
+Host-native DSL source (authoritative; the former Haskell copy was removed in #346).
 Builds the same Module value; serializing it via hydra.dsl.core's module-to-JSON
 path produces JSON byte-equivalent to the Haskell-generated language.json.
 """
@@ -176,8 +176,8 @@ _NS = ModuleName("hydra.python.language")
 
 def _build_module() -> Module:
     """Construct the hydra.python.language Module value."""
-    # We need a placeholder module first because definition_in_module needs it.
-    # Mirror Haskell pattern: define = definitionInModule module_; build defs; then module_ uses them.
+    # Two-phase module build: definition_in_module needs the Module, so make a
+    # placeholder first, build defs against it, then assemble the real module.
     placeholder = Module(
         _NS,
         Given(EntityMetadata(

@@ -1,6 +1,6 @@
 """Environment types for Python code generation.
 
-Mirror of packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Environment.hs.
+Host-native DSL source (authoritative; the former Haskell copy was removed in #346).
 """
 
 from hydra.core import Name, Type, TypeScheme
@@ -181,7 +181,7 @@ def _python_version():
 # ----------------------------------------------------------------------
 
 # Order in source: pythonVersion, pythonEnvironment, pythonModuleMetadata, pyGraph
-# (matches Haskell)
+# (explicit non-alphabetical order: dependencies precede dependents)
 
 def _build_module() -> Module:
     return Module(

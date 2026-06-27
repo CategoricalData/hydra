@@ -1,6 +1,6 @@
 """Python code generator: converts Hydra modules to Python source code.
 
-Mirror of packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Coder.hs.
+Host-native DSL source (authoritative; the former Haskell copy was removed in #346).
 """
 
 from hydra.core import Name
@@ -48,7 +48,7 @@ from hydra.sources.python._source_dsl import (
     unqualified_dep,
 )
 
-# Mirror Haskell:
+# Namespace order (imports precede importers):
 #   [PyUtils.ns, PyNames.ns, PySerde.ns, Serialization.ns, Analysis.ns,
 #    Environment.ns, Formatting.ns, Names.ns, Predicates.ns, Resolution.ns,
 #    Rewriting.ns, Dependencies.ns, Scoping.ns, Strip.ns, Variables.ns,
@@ -162,7 +162,7 @@ def _type_cases_with_one_branch(arg_term, default_result, branch_field,
 
     The branch_field is emitted first; the remaining variants in
     `other_variants_in_order` each get `constant default_result`. The order is
-    significant — match the order in the Haskell source for the def being ported.
+    significant — follow the union's declared variant order.
     """
     fields = [branch_field]
     for v in other_variants_in_order:

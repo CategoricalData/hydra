@@ -21,149 +21,149 @@ import hydra.dsl.lib.Sets;
 import hydra.dsl.lib.Strings;
 import hydra.packaging.Definition;
 import hydra.packaging.Module;
-import hydra.packaging.ModuleName;
 import hydra.packaging.ModuleDependency;
+import hydra.packaging.ModuleName;
 import hydra.typed.TypedTerm;
 import hydra.overlay.java.util.Optional;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static hydra.dsl.meta.Phantoms.*;
-import hydra.dsl.meta.Defs.Def;
-import static hydra.dsl.meta.Defs.define;
-import static hydra.dsl.meta.Defs.unqualifiedDeps;
-import static hydra.dsl.meta.Defs.ref;
-import static hydra.dsl.meta.Defs.definitionsOf;
+import static hydra.overlay.java.dsl.meta.Phantoms.*;
+import hydra.overlay.java.dsl.meta.Defs.Def;
+import static hydra.overlay.java.dsl.meta.Defs.define;
+import static hydra.overlay.java.dsl.meta.Defs.unqualifiedDeps;
+import static hydra.overlay.java.dsl.meta.Defs.ref;
+import static hydra.overlay.java.dsl.meta.Defs.definitionsOf;
 import java.util.function.Supplier;
-import hydra.core.AnnotatedTerm;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.core.AnnotatedType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.core.Application;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.core.ApplicationType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.core.Binding;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.core.CaseAlternative;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.core.CaseStatement;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.core.EitherType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.core.FieldType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.core.FloatType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.core.FloatValue;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.core.ForallType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.core.FunctionType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.core.Injection;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.core.IntegerType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.core.IntegerValue;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.core.Lambda;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.core.Let;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.core.Literal;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.core.LiteralType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.core.MapType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.core.PairType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.core.Projection;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.core.Record;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.core.Term;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.core.TypeApplicationTerm;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.core.TypeLambda;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.core.WrappedTerm;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.errors.DecodingError;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.errors.Error_;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.errors.OtherError;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.graph.Graph;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.graph.Primitive;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.environment.Aliases;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.environment.JavaEnvironment;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.environment.JavaFeatures;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.environment.JavaSymbolClass;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.AmbiguousName;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.AnnotatedIdentifier;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ArrayType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ArrayType_Variant;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.Block;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.BlockStatement;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ClassBody;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ClassBodyDeclaration;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ClassBodyDeclarationWithComments;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ClassDeclaration;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ClassMemberDeclaration;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ClassModifier;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ClassOrInterfaceType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ClassOrInterfaceTypeToInstantiate;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ClassType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ClassTypeQualifier;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.CompilationUnit;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ConditionalAndExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ConstantDeclaration;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ContinueStatement;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.Dims;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.EqualityExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.EqualityExpression_Binary;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.Expression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ExpressionName;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.FieldAccess;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.FieldAccess_Qualifier;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.FieldModifier;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.FloatingPointLiteral;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.FloatingPointType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.Identifier;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.IfThenStatement;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ImportDeclaration;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.IntegerLiteral;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.IntegralType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.InterfaceBody;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.InterfaceDeclaration;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.InterfaceMemberDeclaration;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.InterfaceMemberDeclarationWithComments;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.InterfaceMethodModifier;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.InterfaceModifier;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.InterfaceType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.LambdaBody;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.LambdaExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.LambdaParameters;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.LeftHandSide;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.MethodInvocation;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.MethodInvocation_Complex;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.MethodInvocation_Header;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.MethodInvocation_Variant;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.MethodModifier;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.MethodName;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.MultiplicativeExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.MultiplicativeExpression_Binary;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.NormalClassDeclaration;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.NormalInterfaceDeclaration;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.NumericType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.OrdinaryCompilationUnit;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.PostfixExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.PrimitiveType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.PrimitiveTypeWithAnnotations;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.ReferenceType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.Result;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.SingleTypeImportDeclaration;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.Statement;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.StatementWithoutTrailingSubstatement;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.TopLevelClassOrInterfaceDeclaration;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.TopLevelClassOrInterfaceDeclarationWithComments;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.TypeArgument;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.TypeArgumentsOrDiamond;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.TypeIdentifier;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.UnannType;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.UnaryExpression;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.UnaryExpressionNotPlusMinus;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.VariableDeclarator;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.VariableDeclaratorId;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.VariableInitializer;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.WhileStatement;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.packaging.EntityMetadata;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.file.FileExtension;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.packaging.PrimitiveDefinition;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.util.QualifiedName;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.packaging.TermDefinition;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.packaging.TypeDefinition;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.sources.java.Names;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.sources.java.Serde;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.sources.java.Utils;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.typing.FunctionStructure;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.typing.Parameter;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.typing.TermSignature;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.util.CaseConvention;  // AUTO-IMPORT (hydra-java DSL)
+import hydra.core.AnnotatedTerm;
+import hydra.core.AnnotatedType;
+import hydra.core.Application;
+import hydra.core.ApplicationType;
+import hydra.core.Binding;
+import hydra.core.CaseAlternative;
+import hydra.core.CaseStatement;
+import hydra.core.EitherType;
+import hydra.core.FieldType;
+import hydra.core.FloatType;
+import hydra.core.FloatValue;
+import hydra.core.ForallType;
+import hydra.core.FunctionType;
+import hydra.core.Injection;
+import hydra.core.IntegerType;
+import hydra.core.IntegerValue;
+import hydra.core.Lambda;
+import hydra.core.Let;
+import hydra.core.Literal;
+import hydra.core.LiteralType;
+import hydra.core.MapType;
+import hydra.core.PairType;
+import hydra.core.Projection;
+import hydra.core.Record;
+import hydra.core.Term;
+import hydra.core.TypeApplicationTerm;
+import hydra.core.TypeLambda;
+import hydra.core.WrappedTerm;
+import hydra.errors.DecodingError;
+import hydra.errors.Error_;
+import hydra.errors.OtherError;
+import hydra.graph.Graph;
+import hydra.graph.Primitive;
+import hydra.java.environment.Aliases;
+import hydra.java.environment.JavaEnvironment;
+import hydra.java.environment.JavaFeatures;
+import hydra.java.environment.JavaSymbolClass;
+import hydra.java.syntax.AmbiguousName;
+import hydra.java.syntax.AnnotatedIdentifier;
+import hydra.java.syntax.ArrayType;
+import hydra.java.syntax.ArrayType_Variant;
+import hydra.java.syntax.Block;
+import hydra.java.syntax.BlockStatement;
+import hydra.java.syntax.ClassBody;
+import hydra.java.syntax.ClassBodyDeclaration;
+import hydra.java.syntax.ClassBodyDeclarationWithComments;
+import hydra.java.syntax.ClassDeclaration;
+import hydra.java.syntax.ClassMemberDeclaration;
+import hydra.java.syntax.ClassModifier;
+import hydra.java.syntax.ClassOrInterfaceType;
+import hydra.java.syntax.ClassOrInterfaceTypeToInstantiate;
+import hydra.java.syntax.ClassType;
+import hydra.java.syntax.ClassTypeQualifier;
+import hydra.java.syntax.CompilationUnit;
+import hydra.java.syntax.ConditionalAndExpression;
+import hydra.java.syntax.ConstantDeclaration;
+import hydra.java.syntax.ContinueStatement;
+import hydra.java.syntax.Dims;
+import hydra.java.syntax.EqualityExpression;
+import hydra.java.syntax.EqualityExpression_Binary;
+import hydra.java.syntax.Expression;
+import hydra.java.syntax.ExpressionName;
+import hydra.java.syntax.FieldAccess;
+import hydra.java.syntax.FieldAccess_Qualifier;
+import hydra.java.syntax.FieldModifier;
+import hydra.java.syntax.FloatingPointLiteral;
+import hydra.java.syntax.FloatingPointType;
+import hydra.java.syntax.Identifier;
+import hydra.java.syntax.IfThenStatement;
+import hydra.java.syntax.ImportDeclaration;
+import hydra.java.syntax.IntegerLiteral;
+import hydra.java.syntax.IntegralType;
+import hydra.java.syntax.InterfaceBody;
+import hydra.java.syntax.InterfaceDeclaration;
+import hydra.java.syntax.InterfaceMemberDeclaration;
+import hydra.java.syntax.InterfaceMemberDeclarationWithComments;
+import hydra.java.syntax.InterfaceMethodModifier;
+import hydra.java.syntax.InterfaceModifier;
+import hydra.java.syntax.InterfaceType;
+import hydra.java.syntax.LambdaBody;
+import hydra.java.syntax.LambdaExpression;
+import hydra.java.syntax.LambdaParameters;
+import hydra.java.syntax.LeftHandSide;
+import hydra.java.syntax.MethodInvocation;
+import hydra.java.syntax.MethodInvocation_Complex;
+import hydra.java.syntax.MethodInvocation_Header;
+import hydra.java.syntax.MethodInvocation_Variant;
+import hydra.java.syntax.MethodModifier;
+import hydra.java.syntax.MethodName;
+import hydra.java.syntax.MultiplicativeExpression;
+import hydra.java.syntax.MultiplicativeExpression_Binary;
+import hydra.java.syntax.NormalClassDeclaration;
+import hydra.java.syntax.NormalInterfaceDeclaration;
+import hydra.java.syntax.NumericType;
+import hydra.java.syntax.OrdinaryCompilationUnit;
+import hydra.java.syntax.PostfixExpression;
+import hydra.java.syntax.PrimitiveType;
+import hydra.java.syntax.PrimitiveTypeWithAnnotations;
+import hydra.java.syntax.ReferenceType;
+import hydra.java.syntax.Result;
+import hydra.java.syntax.SingleTypeImportDeclaration;
+import hydra.java.syntax.Statement;
+import hydra.java.syntax.StatementWithoutTrailingSubstatement;
+import hydra.java.syntax.TopLevelClassOrInterfaceDeclaration;
+import hydra.java.syntax.TopLevelClassOrInterfaceDeclarationWithComments;
+import hydra.java.syntax.TypeArgument;
+import hydra.java.syntax.TypeArgumentsOrDiamond;
+import hydra.java.syntax.TypeIdentifier;
+import hydra.java.syntax.UnannType;
+import hydra.java.syntax.UnaryExpression;
+import hydra.java.syntax.UnaryExpressionNotPlusMinus;
+import hydra.java.syntax.VariableDeclarator;
+import hydra.java.syntax.VariableDeclaratorId;
+import hydra.java.syntax.VariableInitializer;
+import hydra.java.syntax.WhileStatement;
+import hydra.packaging.EntityMetadata;
+import hydra.file.FileExtension;
+import hydra.packaging.PrimitiveDefinition;
+import hydra.util.QualifiedName;
+import hydra.packaging.TermDefinition;
+import hydra.packaging.TypeDefinition;
+import hydra.sources.java.Names;
+import hydra.sources.java.Serde;
+import hydra.sources.java.Utils;
+import hydra.typing.FunctionStructure;
+import hydra.typing.Parameter;
+import hydra.typing.TermSignature;
+import hydra.util.CaseConvention;
 
 /**
  * Java code generator: converts Hydra modules to Java source code.
@@ -1048,8 +1048,7 @@ public class Coder {
                 "cx",
                 "g0",
                 let(
-                    java.util.Arrays.asList(
-    field("aliases",
+                    binds(    field("aliases",
                         proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env")),
     field("g",
                         proj(JavaEnvironment.TYPE_, JavaEnvironment.GRAPH, "env")),
@@ -2678,8 +2677,7 @@ public class Coder {
                 "mod",
                 "members",
                 let(
-                    java.util.Arrays.asList(
-    field("ns",
+                    binds(    field("ns",
                         proj(Module.TYPE_, Module.NAME, "mod")),
     field("parentNs",
                         apply(ref(Coder.namespaceParent), var("ns"))),
@@ -2806,8 +2804,7 @@ public class Coder {
                                     right(var("fallbackTypeApps")),
                                     lambda("ts",
                                         let(
-                                            java.util.Arrays.asList(
-    field("schemeType",
+                                            binds(    field("schemeType",
                                                 proj(TypeScheme.TYPE_, TypeScheme.BODY, "ts")),
     field("allSchemeVars",
                                                 Lists.filter(
@@ -3011,7 +3008,7 @@ public class Coder {
     public static final Def declarationForRecordType = def(
         "declarationForRecordType",
         () -> lambda(
-                java.util.Arrays.asList("isInner", "isSer", "aliases", "tparams", "elName", "fields", "cx", "g"),
+                params("isInner", "isSer", "aliases", "tparams", "elName", "fields", "cx", "g"),
                 apply(
                     ref(Coder.declarationForRecordType_prime),
                     var("isInner"),
@@ -3027,7 +3024,7 @@ public class Coder {
     public static final Def declarationForRecordType_prime = def(
         "declarationForRecordType'",
         () -> lambda(
-                java.util.Arrays.asList("isInner", "isSer", "aliases", "tparams", "elName", "parentName", "fields", "cx", "g"),
+                params("isInner", "isSer", "aliases", "tparams", "elName", "parentName", "fields", "cx", "g"),
                 Eithers.bind(
                     Eithers.mapList(
                         lambda("f",
@@ -3050,8 +3047,7 @@ public class Coder {
                                         var("g"))),
                                 Lists.zip(var("memberVars"), var("fields"))),
                             lambda("memberVars'",
-                                let(java.util.Arrays.asList(
-                                    field("elNameStr",
+                                let(binds(                                    field("elNameStr",
                                         apply(
                                             unwrap(Identifier.TYPE_),
                                             apply(
@@ -3387,8 +3383,7 @@ public class Coder {
                                     Lists.zip(var("variantDecls"), var("fields"))),
                                 lambda("variantDecls'",
                                     let(
-                                        java.util.Arrays.asList(
-    field("privateConst",
+                                        binds(    field("privateConst",
                                             apply(
                                                 ref(Utils.makeConstructor),
                                                 var("aliases"),
@@ -3419,8 +3414,7 @@ public class Coder {
                                             Lists.map(
                                                 lambda("ft",
                                                     let(
-                                                        java.util.Arrays.asList(
-    field("fname",
+                                                        binds(    field("fname",
                                                             proj(FieldType.TYPE_, FieldType.NAME, "ft")),
     field("fnameStr",
                                                             apply(
@@ -3617,8 +3611,7 @@ public class Coder {
                                             Lists.map(
                                                 lambda("ft",
                                                     let(
-                                                        java.util.Arrays.asList(
-    field("fname",
+                                                        binds(    field("fname",
                                                             proj(FieldType.TYPE_, FieldType.NAME, "ft")),
     field("varName",
                                                             apply(
@@ -3769,8 +3762,7 @@ public class Coder {
                                                         var("fields")),
                                                     lambda("tn1",
                                                         let(
-                                                            java.util.Arrays.asList(
-    field("tn",
+                                                            binds(    field("tn",
                                                                 Lists.concat2(
                                                                     list(var("tn0")),
                                                                     var("tn1"))),
@@ -4123,8 +4115,7 @@ public class Coder {
                 "cod",
                 "tparams",
                 let(
-                    java.util.Arrays.asList(
-    field("tparamSet",
+                    binds(    field("tparamSet",
                         Sets.fromList(var("tparams"))),
     field("allPairs",
                         Lists.bind(
@@ -4656,7 +4647,7 @@ public class Coder {
     public static final Def encodeApplication_fallback = def(
         "encodeApplication_fallback",
         () -> lambda(
-                java.util.Arrays.asList("env", "aliases", "gr", "typeApps", "lhs", "rhs", "cx", "g"),
+                params("env", "aliases", "gr", "typeApps", "lhs", "rhs", "cx", "g"),
                 Eithers.bind(
                     Eithers.bimap(
                         lambda("__de",
@@ -6451,8 +6442,7 @@ public class Coder {
                                         var("g")),
                                     lambda("fs",
                                         let(
-                                            java.util.Arrays.asList(
-    field("schemeVars",
+                                            binds(    field("schemeVars",
                                                 Lists.filter(
                                                     lambda("v",
                                                         apply(ref(Coder.isSimpleName), var("v"))),
@@ -6510,8 +6500,7 @@ public class Coder {
                                                         var("g"))),
                                                 lambda("typeVarSubst",
                                                     let(
-                                                        java.util.Arrays.asList(
-    field("overgenSubst",
+                                                        binds(    field("overgenSubst",
                                                             apply(
                                                                 ref(Coder.detectAccumulatorUnification),
                                                                 var("schemeDoms"),
@@ -8403,10 +8392,9 @@ public class Coder {
     public static final Def encodeTermTCO = def(
         "encodeTermTCO",
         () -> lambda(
-                java.util.Arrays.asList("env0", "funcName", "paramNames", "tcoVarRenames", "tcoDepth", "term", "cx", "g"),
+                params("env0", "funcName", "paramNames", "tcoVarRenames", "tcoDepth", "term", "cx", "g"),
                 let(
-                    java.util.Arrays.asList(
-    field("aliases0",
+                    binds(    field("aliases0",
                         proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env0")),
     field("env",
                         record(JavaEnvironment.TYPE_,
@@ -10155,8 +10143,7 @@ public class Coder {
                                     right(var("allTypeArgs")),
                                     lambda("ts",
                                         let(
-                                            java.util.Arrays.asList(
-    field("schemeVars",
+                                            binds(    field("schemeVars",
                                                 Lists.filter(
                                                     lambda("v",
                                                         apply(ref(Coder.isSimpleName), var("v"))),
@@ -11361,7 +11348,7 @@ public class Coder {
     public static final Def otherwiseBranch = def(
         "otherwiseBranch",
         () -> lambda(
-                java.util.Arrays.asList("env", "aliases", "dom", "cod", "tname", "jcod", "targs", "d", "cx", "g"),
+                params("env", "aliases", "dom", "cod", "tname", "jcod", "targs", "d", "cx", "g"),
                 let(
                     field("jdom",
                         inject(hydra.java.syntax.Type.TYPE_,
@@ -11925,9 +11912,8 @@ public class Coder {
     public static final Def recordBuilderClass = def(
         "recordBuilderClass",
         () -> lambda(
-                java.util.Arrays.asList("aliases", "tparams", "elName", "fields", "cx", "g"),
-                let(java.util.Arrays.asList(
-                    // ReferenceTypes for the record's type parameters, e.g. [V] for Vertex<V>.
+                params("aliases", "tparams", "elName", "fields", "cx", "g"),
+                let(binds(                    // ReferenceTypes for the record's type parameters, e.g. [V] for Vertex<V>.
                     field("typeArgRefs",
                         Lists.map(
                             ref(Utils.typeParameterToReferenceType),
@@ -12063,8 +12049,7 @@ public class Coder {
                                                                         var("returnThisStmt")))))))))),
                                     var("fields")),
                                 lambda("setterMethods",
-                                    let(java.util.Arrays.asList(
-                                        // build(): 'return new R<...>(f1, ..., fn);'
+                                    let(binds(                                        // build(): 'return new R<...>(f1, ..., fn);'
                                         field("buildMods",
                                             list(
                                                 inject(MethodModifier.TYPE_,
@@ -12269,8 +12254,7 @@ public class Coder {
                 "elName",
                 "fields",
                 let(
-                    java.util.Arrays.asList(
-    field("anns",
+                    binds(    field("anns",
                         list(ref(Utils.overrideAnnotation))),
     field("mods",
                         list(
@@ -13129,7 +13113,7 @@ public class Coder {
     public static final Def collectionTypeArgs = def(
         "collectionTypeArgs",
         () -> lambda(
-                java.util.Arrays.asList("label", "n", "aliases", "anns", "tyapps", "cx", "g"),
+                params("label", "n", "aliases", "anns", "tyapps", "cx", "g"),
                 Logic.ifElse(
                     Logic.not(Lists.null_(var("tyapps"))),
                     apply(
@@ -13256,7 +13240,7 @@ public class Coder {
     public static final Def toClassDecl = def(
         "toClassDecl",
         () -> lambda(
-                java.util.Arrays.asList("isInner", "isSer", "aliases", "tparams", "elName", "t", "cx", "g"),
+                params("isInner", "isSer", "aliases", "tparams", "elName", "t", "cx", "g"),
                 let("wrap",
                     lambda("t'",
                         apply(
@@ -13471,7 +13455,7 @@ public class Coder {
     public static final Def toDeclStatement = def(
         "toDeclStatement",
         () -> lambda(
-                java.util.Arrays.asList("envExt", "aliasesExt", "gExt", "recursiveVars", "thunkedVars", "flatBindings", "name", "cx", "g"),
+                params("envExt", "aliasesExt", "gExt", "recursiveVars", "thunkedVars", "flatBindings", "name", "cx", "g"),
                 let(
                     field("binding",
                         Optionals.fromOptional(
@@ -13676,7 +13660,7 @@ public class Coder {
     public static final Def typeAppFallbackCast = def(
         "typeAppFallbackCast",
         () -> lambda(
-                java.util.Arrays.asList("env", "aliases", "anns", "tyapps", "jatyp", "body", "typ", "cx", "g"),
+                params("env", "aliases", "anns", "tyapps", "jatyp", "body", "typ", "cx", "g"),
                 let("annotatedBody",
                     apply(
                         var("hydra.annotations.setTermAnnotation"),
@@ -13721,7 +13705,7 @@ public class Coder {
     public static final Def typeAppNullaryOrHoisted = def(
         "typeAppNullaryOrHoisted",
         () -> lambda(
-                java.util.Arrays.asList("env", "aliases", "anns", "tyapps", "jatyp", "body", "correctedTyp", "varName", "cls", "allTypeArgs", "cx", "g"),
+                params("env", "aliases", "anns", "tyapps", "jatyp", "body", "correctedTyp", "varName", "cls", "allTypeArgs", "cx", "g"),
                 let(
                     field("qn",
                         apply(var("hydra.names.qualifyName"), var("varName"))),
@@ -13985,8 +13969,7 @@ public class Coder {
                 "variantName",
                 "fields",
                 let(
-                    java.util.Arrays.asList(
-    field("anns",
+                    binds(    field("anns",
                         list(
                             ref(Utils.overrideAnnotation),
                             ref(Utils.suppressWarningsUncheckedAnnotation))),
@@ -14108,7 +14091,7 @@ public class Coder {
     public static final Def visitBranch = def(
         "visitBranch",
         () -> lambda(
-                java.util.Arrays.asList("env", "aliases", "dom", "tname", "jcod", "targs", "field", "cx", "g"),
+                params("env", "aliases", "dom", "tname", "jcod", "targs", "field", "cx", "g"),
                 let(
                     field("jdom",
                         inject(hydra.java.syntax.Type.TYPE_,

@@ -2,7 +2,6 @@ package hydra.dsl;
 
 import hydra.core.Projection;
 import hydra.core.Term;
-import hydra.overlay.java.dsl.prims.Strings;
 import hydra.core.Name;
 import org.junit.jupiter.api.Test;
 
@@ -48,7 +47,7 @@ public class TermsTest {
 
     private final Term cat3 =
             lambda("s1", lambda("s2",
-                    lambda("s3", apply(Strings.cat(), list(variable("s1"), variable("s2"), variable("s3"))))));
+                    lambda("s3", apply(primitive("hydra.lib.strings.cat"), list(variable("s1"), variable("s2"), variable("s3"))))));
 
     private final Term longitude = project("LatLon", "lon");
 
@@ -85,9 +84,9 @@ public class TermsTest {
         assertEquals(name("Location"), ((Term.Inject) bayAreaLocation).value.typeName);
         assertEquals(name("latlon"), ((Term.Inject) bayAreaLocation).value.field.name);
 
-        assertTrue(Strings.length() instanceof Term.Variable);
+        assertTrue(primitive("hydra.lib.strings.length") instanceof Term.Variable);
         assertEquals(name("hydra.lib.strings.length"),
-                ((Term.Variable) Strings.length()).value);
+                ((Term.Variable) primitive("hydra.lib.strings.length")).value);
 
         assertTrue(cat3 instanceof Term.Lambda);
         assertEquals(new Name("s1"),

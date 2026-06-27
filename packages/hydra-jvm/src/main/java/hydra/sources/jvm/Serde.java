@@ -16,12 +16,12 @@ import hydra.overlay.java.util.Optional;
 import java.util.Arrays;
 import java.util.List;
 
-import static hydra.dsl.meta.Phantoms.*;
-import hydra.dsl.meta.Defs.Def;
-import static hydra.dsl.meta.Defs.define;
-import static hydra.dsl.meta.Defs.unqualifiedDeps;
-import static hydra.dsl.meta.Defs.ref;
-import static hydra.dsl.meta.Defs.definitionsOf;
+import static hydra.overlay.java.dsl.meta.Phantoms.*;
+import hydra.overlay.java.dsl.meta.Defs.Def;
+import static hydra.overlay.java.dsl.meta.Defs.define;
+import static hydra.overlay.java.dsl.meta.Defs.unqualifiedDeps;
+import static hydra.overlay.java.dsl.meta.Defs.ref;
+import static hydra.overlay.java.dsl.meta.Defs.definitionsOf;
 import java.util.function.Supplier;
 
 public class Serde {
