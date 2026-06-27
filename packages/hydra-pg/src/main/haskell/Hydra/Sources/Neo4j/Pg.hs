@@ -46,7 +46,7 @@ module_ = Module {
      toDefinition edgeLabelForRelationship,
      toDefinition edgeToRelationship,
      toDefinition (graphToNeo4j :: TypedTermDefinition (N4.Neo4jMapping Int -> PG.Graph Int -> Either String ([N4.Node], [Relationship]))),
-     toDefinition (neo4jToGraph :: TypedTermDefinition (N4.Neo4jMapping Int -> GraphType -> [N4.Node] -> [Relationship] -> Either String (PG.Graph Int))),
+     toDefinition neo4jToGraph,
      toDefinition nodeToVertex,
      toDefinition relationshipToEdge,
      toDefinition vertexToNode]
@@ -205,15 +205,17 @@ graphToNeo4j = mappingDefinition "graphToNeo4j" $
     ("rels" ~>
     right (pair (var "nodes") (var "rels"))))
 
--- | Convert a Neo4j graph (a list of nodes and a list of relationships) to a
--- property-graph Graph, against a GraphType. Each node is converted via
--- nodeToVertex (failing on multi-label nodes), and each relationship via
--- relationshipToEdge, whose edge-label expansion needs the endpoint nodes'
--- labels — resolved here from the node list (each node's single label).
--- Relationships whose endpoints are not among the given nodes fail.
-neo4jToGraph :: forall v. Ord v => TypedTermDefinition (N4.Neo4jMapping v -> GraphType -> [N4.Node] -> [Relationship] -> Either String (PG.Graph v))
+-- | Convert a Neo4j graph (a list of nodes and a list of relationships) to
+-- property-graph vertices and edges, against a GraphType. Each node is
+-- converted via nodeToVertex (failing on multi-label nodes), and each
+-- relationship via relationshipToEdge, whose edge-label expansion needs the
+-- endpoint nodes' labels — resolved here from the node list (each node's single
+-- label). Returns the vertices and edges as lists; the caller assembles them
+-- into a Graph (its `v` provides the Ord instance the Graph's id-keyed maps
+-- need, which this translingual function cannot impose on a polymorphic `v`).
+neo4jToGraph :: TypedTermDefinition (N4.Neo4jMapping v -> GraphType -> [N4.Node] -> [Relationship] -> Either String ([PG.Vertex v], [PG.Edge v]))
 neo4jToGraph = mappingDefinition "neo4jToGraph" $
-  doc "Convert a Neo4j graph (nodes and relationships) to a property-graph Graph against a GraphType." $
+  doc "Convert a Neo4j graph (nodes and relationships) to property-graph vertices and edges against a GraphType." $
   "mapping" ~> "gt" ~> "nodes" ~> "rels" ~>
   lets [
     "labelOf">: soleLabelForId @@ var "nodes"]
@@ -227,9 +229,7 @@ neo4jToGraph = mappingDefinition "neo4jToGraph" $
           ("endLabel" ~> relationshipToEdge @@ var "mapping" @@ var "gt" @@ var "startLabel" @@ var "endLabel" @@ var "r")))
       (var "rels"))
     ("edges" ~>
-    right (record PG._Graph [
-      PG._Graph_vertices>>: (Maps.fromList (Lists.map ("v" ~> pair (project PG._Vertex PG._Vertex_id @@ var "v") (var "v")) (var "vertices")) :: TypedTerm (M.Map v (PG.Vertex v))),
-      PG._Graph_edges>>: (Maps.fromList (Lists.map ("e" ~> pair (project PG._Edge PG._Edge_id @@ var "e") (var "e")) (var "edges")) :: TypedTerm (M.Map v (PG.Edge v)))])))
+    right (pair (var "vertices") (var "edges"))))
 
 -- | Build a resolver from element id to that id's single node label, for use in
 -- neo4jToGraph's edge-label expansion. Returns Left if no node with that id is

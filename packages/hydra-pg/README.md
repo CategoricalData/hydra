@@ -152,10 +152,13 @@ which runs it in Java and Python against a live Neo4j via the Neo4j client drive
 
 The `hydra.neo4j.pg` module maps graph *data* between this Neo4j model and Hydra's TinkerPop-shaped
 property-graph model (`hydra.pg.model`): per-element (`vertexToNode` / `nodeToVertex`,
-`edgeToRelationship` / `relationshipToEdge`) and whole-graph (`graphToNeo4j` / `neo4jToGraph`, which map a
-PG `Graph` to/from a list of Neo4j nodes and relationships, building the endpoint-label resolver from the
-node list internally — as the validator's `validateGraph` does). This is the data-model-layer rebuild of
-the interoperability Apache TinkerPop lost when `neo4j-gremlin` was removed.
+`edgeToRelationship` / `relationshipToEdge`) and whole-graph (`graphToNeo4j`, mapping a PG `Graph` to Neo4j
+nodes and relationships; and `neo4jToGraph`, mapping Neo4j nodes and relationships to PG vertices and
+edges, building the endpoint-label resolver from the node list internally as the validator's
+`validateGraph` does). `neo4jToGraph` returns the vertices and edges as lists for the caller to assemble
+into a `Graph` — a `Graph`'s id-keyed maps need an `Ord` instance on the id type that a translingual
+function cannot impose on a polymorphic value type. This is the data-model-layer rebuild of the
+interoperability Apache TinkerPop lost when `neo4j-gremlin` was removed.
 
 The mapping is **not an isomorphism and not invertible** — the two models do not carry the same
 information — so the design is about characterizing exactly where and how each direction loses or
