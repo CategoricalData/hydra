@@ -26,6 +26,7 @@ module_ = Module {
     definitions = [
       definition,
       definitionReference,
+      dependencyScope,
       entityMetadata,
       entityReference,
       lifecycleInfo,
@@ -68,6 +69,28 @@ definitionReference = define "DefinitionReference" $
     "primitive">:
       doc "A reference to a primitive definition, by name"
       Core.name]
+
+dependencyScope :: TypeDefinition
+dependencyScope = define "DependencyScope" $
+  doc ("The scope in which a package dependency is required. Relevant mainly to dependencies on"
+    ++ " third-party (non-Hydra) artifacts, where build systems distinguish compile-time, runtime,"
+    ++ " test-only, and build-tool-only dependencies. Hydra inter-package dependencies normally"
+    ++ " leave the scope unspecified.") $
+  T.union [
+    "api">:
+      doc ("A dependency exported transitively to consumers of this package (e.g. Gradle `api`,"
+        ++ " Cabal `build-depends`): present at both compile time and runtime, and visible downstream")
+      T.unit,
+    "runtime">:
+      doc "A dependency required at runtime but not at compile time"
+      T.unit,
+    "test">:
+      doc "A dependency required only to compile and run the package's tests"
+      T.unit,
+    "tool">:
+      doc ("A build-tool-only dependency, used to generate or process sources at build time but not"
+        ++ " present in the compiled artifact (e.g. an ANTLR tool jar or an annotation processor)")
+      T.unit]
 
 entityMetadata :: TypeDefinition
 entityMetadata = define "EntityMetadata" $
@@ -178,11 +201,20 @@ packageDependency = define "PackageDependency" $
       packageName,
     "version">:
       doc "The version-range constraint on the depended-on package"
-      versionSpecifier]
+      versionSpecifier,
+    "scope">:
+      doc ("The scope in which the dependency is required, if specified. Normally absent for Hydra"
+        ++ " inter-package dependencies; specified for third-party dependencies whose build scope"
+        ++ " (compile/runtime/test/tool) is significant.") $
+      T.optional dependencyScope]
 
 packageName :: TypeDefinition
 packageName = define "PackageName" $
-  doc "The unique name of a package, e.g. \"hydra-kernel\" or \"hydra-python\"" $
+  doc ("The unique name of a package, e.g. \"hydra-kernel\" or \"hydra-python\". For dependencies on"
+    ++ " third-party artifacts in ecosystems with a group/namespace component (notably Maven), the"
+    ++ " group and artifact are carried in a single name separated by a colon, e.g."
+    ++ " \"org.eclipse.rdf4j:rdf4j-rio-ntriples\"; the consuming host splits on the colon to recover"
+    ++ " the group when emitting build configuration. Hydra package names contain no colon.") $
   T.wrap T.string
 
 primitiveDefinition :: TypeDefinition
@@ -247,10 +279,13 @@ version = define "Version" $
 versionSpecifier :: TypeDefinition
 versionSpecifier = define "VersionSpecifier" $
   doc ("A specifier constraining acceptable versions of a dependency."
-    ++ " Currently only the `any` (unit) specifier is defined; future variants"
-    ++ " such as `exact`, `caret`, and `range` may be added without breaking"
-    ++ " consumers of the `any` form.") $
+    ++ " The `any` and `exact` variants are defined; future variants"
+    ++ " such as `caret` and `range` may be added without breaking"
+    ++ " consumers of the existing forms.") $
   T.union [
     "any">:
       doc "Any version satisfies the dependency" $
-      T.unit]
+      T.unit,
+    "exact">:
+      doc "Exactly the given version satisfies the dependency; used to pin a specific release"
+      version]
