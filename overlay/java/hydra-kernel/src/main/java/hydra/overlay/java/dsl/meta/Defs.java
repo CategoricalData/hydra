@@ -1,4 +1,4 @@
-package hydra.dsl.meta;
+package hydra.overlay.java.dsl.meta;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;

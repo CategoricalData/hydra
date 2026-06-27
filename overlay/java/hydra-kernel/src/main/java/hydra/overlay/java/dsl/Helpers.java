@@ -1,4 +1,4 @@
-package hydra.dsl.java;
+package hydra.overlay.java.dsl;
 import hydra.Scoping;
 import hydra.core.Name;
 import hydra.core.Term;
@@ -30,7 +30,7 @@ import java.util.Map;
  * {@link #docTerm}) construct {@link Definition} instances directly.
  *
  * <p>For the deferred-body {@code Def} wrapper used by auto-ported source
- * modules, see {@link hydra.dsl.meta.Defs}.
+ * modules, see {@link hydra.overlay.java.dsl.meta.Defs}.
  */
 public final class Helpers {
     private Helpers() {}

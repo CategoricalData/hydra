@@ -1,4 +1,4 @@
-package hydra.dsl.meta;
+package hydra.overlay.java.dsl.meta;
 import hydra.Scoping;
 import hydra.core.Binding;
 import hydra.core.Field;
@@ -27,7 +27,7 @@ import java.util.Map;
 
 /**
  * Term-level phantom-typed DSL. Java analogue of
- * {@code hydra.dsl.meta.phantoms} in Python and {@code Hydra.Dsl.Meta.Phantoms}
+ * {@code hydra.overlay.java.dsl.meta.phantoms} in Python and {@code Hydra.Dsl.Meta.Phantoms}
  * in Haskell.
  *
  * <p>All functions take {@link TypedTerm} arguments and return a {@link TypedTerm}, so that
@@ -63,7 +63,7 @@ public final class Phantoms {
     }
 
     /** {@code var name} — Name overload, useful when the name comes from a
-     *  generated TYPE_/field constant or {@link hydra.dsl.meta.Defs.Def#name()}. */
+     *  generated TYPE_/field constant or {@link hydra.overlay.java.dsl.meta.Defs.Def#name()}. */
     public static <A> TypedTerm<A> var(Name name) {
         return tterm(Terms.variable(name));
     }
@@ -110,6 +110,11 @@ public final class Phantoms {
             result = lambda(params.get(i), result);
         }
         return result;
+    }
+
+    /** Collect parameter names for {@link #lambda(List, TypedTerm)} without the {@code Arrays.asList} noise. */
+    public static List<String> params(String... names) {
+        return Arrays.asList(names);
     }
 
     /** {@code lambdaTyped "x" :: paramType body} — typed single-parameter lambda. */
@@ -198,6 +203,11 @@ public final class Phantoms {
     /** {@code let [bindings...] body} — list-of-bindings variant for chains of arbitrary length. */
     public static <A> TypedTerm<A> let(List<Field> bindings, TypedTerm<?> body) {
         return tterm(Terms.lets(bindings, body.value));
+    }
+
+    /** Collect let-bindings for {@link #let(List, TypedTerm)} without the {@code Arrays.asList} noise. */
+    public static List<Field> binds(Field... bindings) {
+        return Arrays.asList(bindings);
     }
 
     /**

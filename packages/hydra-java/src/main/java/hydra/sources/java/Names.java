@@ -21,23 +21,23 @@ import hydra.dsl.lib.Strings;
 import hydra.packaging.Definition;
 import hydra.packaging.EntityMetadata;
 import hydra.packaging.Module;
-import hydra.packaging.ModuleName;
 import hydra.packaging.ModuleDependency;
+import hydra.packaging.ModuleName;
 import hydra.typed.TypedTerm;
 import hydra.overlay.java.util.Optional;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static hydra.dsl.meta.Phantoms.*;
-import hydra.dsl.meta.Defs.Def;
-import static hydra.dsl.meta.Defs.define;
-import static hydra.dsl.meta.Defs.unqualifiedDeps;
-import static hydra.dsl.meta.Defs.ref;
-import static hydra.dsl.meta.Defs.definitionsOf;
+import static hydra.overlay.java.dsl.meta.Phantoms.*;
+import hydra.overlay.java.dsl.meta.Defs.Def;
+import static hydra.overlay.java.dsl.meta.Defs.define;
+import static hydra.overlay.java.dsl.meta.Defs.unqualifiedDeps;
+import static hydra.overlay.java.dsl.meta.Defs.ref;
+import static hydra.overlay.java.dsl.meta.Defs.definitionsOf;
 import java.util.function.Supplier;
-import hydra.java.syntax.Identifier;  // AUTO-IMPORT (hydra-java DSL)
-import hydra.java.syntax.PackageName;  // AUTO-IMPORT (hydra-java DSL)
+import hydra.java.syntax.Identifier;
+import hydra.java.syntax.PackageName;
 
 /**
  * Java naming constants and package name utilities.
