@@ -68,21 +68,21 @@ source "$HYDRA_ROOT_DIR/bin/lib/assemble-common.sh"
 # inputs themselves changing. See assemble-common.sh and #347.
 export HYDRA_GENERATOR_STAMP=$(compute_generator_stamp java)
 
-# Step 0 (hydra-kernel only): drop hand-written runtime files BEFORE
-# generation, recording them in a keep-paths manifest so #357 prune in
-# bootstrap-from-json --prune-stale below won't remove them. Was Step 3
-# in the pre-#357 layout; moving it up preserves the published Maven
-# artifact's runtime support while letting the prune step delete stale
-# generated classes from removed modules.
+# Step 0: copy any hand-written overlay source for this package BEFORE
+# generation, recording the copied files in a keep-paths manifest so #357 prune
+# in bootstrap-from-json --prune-stale below won't remove them. Was Step 3 in
+# the pre-#357 layout; moving it up preserves hand-written runtime/support while
+# letting the prune step delete stale generated classes from removed modules.
+#
+# Generalized from the kernel-only runtime copy (#418) to any package (#511):
+# copy-overlay.sh is a no-op for packages with no overlay/java/<pkg>/ tree, and
+# copies the overlay onto the dist for those that have one (hydra-kernel runtime;
+# hydra-pg / hydra-rdf binding source folded into overlay; etc.).
 KEEP_MANIFEST="$(mktemp -t hydra-keep-paths-java.XXXXXX)"
 trap 'rm -f "$KEEP_MANIFEST"' EXIT
-case "$PACKAGE" in
-    hydra-kernel)
-        echo "Step 0: Copying hand-written Java runtime into hydra-kernel dist..."
-        "$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT" --manifest "$KEEP_MANIFEST"
-        echo ""
-        ;;
-esac
+echo "Step 0: Copying hand-written Java overlay source into $PACKAGE dist (if any)..."
+"$SCRIPT_DIR/copy-overlay.sh" "$PACKAGE" --dist-root "$DIST_ROOT" --manifest "$KEEP_MANIFEST"
+echo ""
 
 # Step 1: Main modules.
 if assemble_check_fresh "$INPUT_DIGEST_MAIN" "$OUT_MAIN_DIR" "$OUTPUT_DIGEST_MAIN"; then
