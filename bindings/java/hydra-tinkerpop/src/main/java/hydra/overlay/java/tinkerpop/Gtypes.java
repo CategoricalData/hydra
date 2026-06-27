@@ -1,4 +1,4 @@
-package hydra.tinkerpop;
+package hydra.overlay.java.tinkerpop;
 
 /**
  * Maps Hydra {@code TraversalGType} (the Gremlin grammar's type tokens, used by {@code asNumber} and the

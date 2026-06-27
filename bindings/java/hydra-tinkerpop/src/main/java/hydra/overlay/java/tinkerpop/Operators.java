@@ -1,4 +1,4 @@
-package hydra.tinkerpop;
+package hydra.overlay.java.tinkerpop;
 
 /** Maps Hydra {@code TraversalOperator} to TinkerPop's {@code Operator} enum (used by sack/fold bi-functions). */
 final class Operators {

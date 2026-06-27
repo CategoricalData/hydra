@@ -1,4 +1,4 @@
-package hydra.tinkerpop;
+package hydra.overlay.java.tinkerpop;
 
 import org.apache.tinkerpop.gremlin.process.traversal.DT;
 
