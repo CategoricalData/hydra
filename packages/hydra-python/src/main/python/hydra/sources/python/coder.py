@@ -929,32 +929,68 @@ def _empty_metadata():
     )
 
 
+# Inner sub-terms of encodeApplication, extracted for readability. Each returns a DSL
+# sub-term; free DSL variables (cx/env/fun/arity/pargs/result) are resolved by name within
+# the enclosing term scope built by _encode_application, so no Python parameters are threaded.
+def _encode_application_result():
+    """`\\result -> let lhs/remainingRargs/pyapp in right pyapp` — fold the remaining
+    arguments onto the head expression once encodeApplicationInner has split them."""
+    return lam(
+        "result",
+        let_chain(
+            [
+                ("lhs", Pairs.first(var("result"))),
+                ("remainingRargs", Pairs.second(var("result"))),
+                (
+                    "pyapp",
+                    Lists.foldl(
+                        lambdas(
+                            ["t", "a"],
+                            _kref.utils_function_call(
+                                _kref.utils_py_expression_to_py_primary(var("t")),
+                                list_([var("a")]),
+                            ),
+                        ),
+                        var("lhs"),
+                        var("remainingRargs"),
+                    ),
+                ),
+            ],
+            right(var("pyapp")),
+        ),
+    )
+
+
+def _encode_application_from_pargs():
+    """`\\pargs -> let hargs/rargs in encodeApplicationInner ... >>= result` — split the
+    encoded argument list at the function's arity and feed the halves to the inner encoder."""
+    return lam(
+        "pargs",
+        let_chain(
+            [
+                ("hargs", Lists.take(var("arity"), var("pargs"))),
+                ("rargs", Lists.drop(var("arity"), var("pargs"))),
+            ],
+            Eithers.bind(
+                _local("encodeApplicationInner")(var("cx"), var("env"), var("fun"), var("hargs"), var("rargs")),
+                _encode_application_result(),
+            ),
+        ),
+    )
+
+
 def _encode_application():
     body = lambdas(
         ["cx", "env", "app"],
         let_chain(
             [
-                (
-                    "g",
-                    _local("pythonEnvironmentGetGraph")(var("env")),
-                ),
+                ("g", _local("pythonEnvironmentGetGraph")(var("env"))),
                 ("term", Core.term_application(var("app"))),
-                (
-                    "gathered",
-                    _kref.analysis_gather_args(var("term"), list_([])),
-                ),
+                ("gathered", _kref.analysis_gather_args(var("term"), list_([]))),
                 ("fun", Pairs.first(var("gathered"))),
                 ("args", Pairs.second(var("gathered"))),
-                (
-                    "knownArity",
-                    _local("termArityWithPrimitives")(var("g"), var("fun")),
-                ),
-                (
-                    "arity",
-                    Math.max(
-                        var("knownArity"), Lists.length(var("args"))
-                    ),
-                ),
+                ("knownArity", _local("termArityWithPrimitives")(var("g"), var("fun"))),
+                ("arity", Math.max(var("knownArity"), Lists.length(var("args")))),
             ],
             Eithers.bind(
                 Eithers.map_list(
@@ -964,50 +1000,7 @@ def _encode_application():
                     ),
                     var("args"),
                 ),
-                lam(
-                    "pargs",
-                    let_chain(
-                        [
-                            (
-                                "hargs",
-                                Lists.take(var("arity"), var("pargs")),
-                            ),
-                            (
-                                "rargs",
-                                Lists.drop(var("arity"), var("pargs")),
-                            ),
-                        ],
-                        Eithers.bind(
-                            _local("encodeApplicationInner")(var("cx"), var("env"), var("fun"), var("hargs"), var("rargs")),
-                            lam(
-                                "result",
-                                let_chain(
-                                    [
-                                        ("lhs", Pairs.first(var("result"))),
-                                        (
-                                            "remainingRargs",
-                                            Pairs.second(var("result")),
-                                        ),
-                                        (
-                                            "pyapp",
-                                            Lists.foldl(
-                                                lambdas(
-                                                    ["t", "a"],
-                                                    _kref.utils_function_call(_kref.utils_py_expression_to_py_primary(var("t")), list_(
-                                                            [var("a")]
-                                                        )),
-                                                ),
-                                                var("lhs"),
-                                                var("remainingRargs"),
-                                            ),
-                                        ),
-                                    ],
-                                    right(var("pyapp")),
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
+                _encode_application_from_pargs(),
             ),
         ),
     )
