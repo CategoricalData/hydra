@@ -11,8 +11,8 @@
 //
 // All operations are non-mutating: each modifier returns a fresh map.
 
-import type { Optional } from "../runtime.js";
-import { Given, None } from "../runtime.js";
+import type { Optional } from "../../../runtime.js";
+import { Given, None } from "../../../runtime.js";
 
 const canon = (k: unknown): string => {
   switch (typeof k) {

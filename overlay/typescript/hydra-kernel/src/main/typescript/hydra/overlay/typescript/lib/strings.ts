@@ -52,7 +52,7 @@ export const lines = (s: string): readonly string[] => {
 // matching Haskell's `Data.List.unlines`.
 export const unlines = (xs: readonly string[]): string => xs.map((x) => x + "\n").join("");
 
-export const maybeCharAt = (i: number, s: string): import("../runtime.js").Optional<number> => {
+export const maybeCharAt = (i: number, s: string): import("../../../runtime.js").Optional<number> => {
   const cp = s.codePointAt(i);
   return cp === undefined ? { tag: "none" } : { tag: "given", value: cp };
 };

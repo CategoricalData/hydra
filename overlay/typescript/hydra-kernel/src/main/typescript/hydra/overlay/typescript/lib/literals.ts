@@ -10,8 +10,8 @@
 // The functions below mirror the Python implementation in
 // heads/python/src/main/python/hydra/lib/literals.py.
 
-import type { Optional } from "../runtime.js";
-import { Given, None } from "../runtime.js";
+import type { Optional } from "../../../runtime.js";
+import { Given, None } from "../../../runtime.js";
 
 // === show family ===
 

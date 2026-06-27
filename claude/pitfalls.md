@@ -1038,6 +1038,47 @@ references one of those primitives, because `Lexical.lookupPrimitive` cannot fin
 name in the graph's primitive map. Symptom: 15+ common-suite inference failures for a new
 primitive family with no other code errors.
 
+### TS overlay lib files: relative import depth after #501 namespace rename
+
+After #501 moved the overlay TS lib files from `overlay/typescript/hydra-kernel/src/main/typescript/hydra/lib/`
+to `overlay/typescript/hydra-kernel/src/main/typescript/hydra/overlay/typescript/lib/`, all relative
+imports inside those files need 3 levels of `../` to reach `hydra/`, not 1:
+
+- `"../runtime.js"` resolves from old `hydra/lib/` to `hydra/runtime.js` ✓
+- `"../runtime.js"` resolves from new `hydra/overlay/typescript/lib/` to `hydra/overlay/typescript/runtime.js` ✗ (doesn't exist)
+- `"../../../runtime.js"` resolves from new path to `hydra/runtime.js` ✓
+
+Similarly, `libraries.ts` imports of generated kernel modules (`core.js`, `graph.js`, etc.) that used
+`"../"` (relative to the old `hydra/lib/` location, reaching `hydra/`) now need `"../../../"`.
+
+Path arithmetic from `hydra/overlay/typescript/lib/`: `../` = `typescript/`, `../../` = `overlay/`, `../../../` = `hydra/`.
+
+Also: `copy-kernel-runtime.sh` must include `overlay` in its subpackage copy loop so the
+`hydra/overlay/` subtree lands in `dist/typescript/hydra-kernel/`. Without it, `bootstrap.ts`
+fails to resolve `./overlay/typescript/lib/maps.js`. And `setup-typescript-target.sh` must
+copy `$HYDRA_TS_DIST/hydra/overlay/` into the bootstrap output dir alongside `hydra/lib/`.
+
+### TS effectful test runner is reverted on every `origin/main` merge
+
+`heads/typescript/src/test/typescript/test-suite-runner.test.ts` was extended in commit
+`c74fe91b81` (#503) to support the `"effectful"` test-case variant (file I/O tests). However,
+commit `7a20149da2` (the #501 overlay namespace rename, which landed in origin/main) accidentally
+reverted this file to the 91-line version without effectful support. Because `7a20149da2` is in
+origin/main's ancestry, every `git merge origin/main` will auto-resolve this file to the old
+91-line version (Git picks the "merged" result from origin/main's perspective).
+
+After every merge from origin/main, verify the runner has effectful support:
+```
+wc -l heads/typescript/src/test/typescript/test-suite-runner.test.ts
+```
+It should be 122 lines. If it's 91, restore from `c74fe91b81`:
+```
+git show c74fe91b81:heads/typescript/src/test/typescript/test-suite-runner.test.ts \
+  > heads/typescript/src/test/typescript/test-suite-runner.test.ts
+```
+Then commit the restore. Without it, all effectful (file I/O) test cases fail because the
+runner doesn't handle `tc.tag === "effectful"`.
+
 ## Testing & benchmarks
 
 ### `run-benchmark-tests.sh` Python leg needs `.venv`

@@ -13,6 +13,7 @@ import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Error.File as ErrorFile
 import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Error.System as ErrorSystem
 import qualified Hydra.Errors as Errors
 import qualified Hydra.File as File
 import qualified Hydra.Formatting as Formatting
@@ -41,6 +42,7 @@ import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Strip as Strip
+import qualified Hydra.System as System
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Time as Time
@@ -617,7 +619,11 @@ importsToText kind currentNs names =
                         targetSegs = Lists.drop 1 (Strings.splitOn "." (Packaging.unModuleName ns))
                         targetIsTest =
                                 Logic.and (Logic.not (Lists.null targetSegs)) (Equality.equal (Optionals.fromOptional "" (Lists.maybeHead targetSegs)) "test")
-                        targetPath = Strings.intercalate "/" targetSegs
+                        targetPathSegs =
+                                Logic.ifElse (Equality.equal (Optionals.fromOptional "" (Lists.maybeHead targetSegs)) "lib") (Lists.concat2 [
+                                  "overlay",
+                                  "typescript"] targetSegs) targetSegs
+                        targetPath = Strings.intercalate "/" targetPathSegs
                         upPrefix =
                                 Logic.ifElse (Logic.and currentIsTest (Logic.not targetIsTest)) (Strings.cat2 baseUpPrefix "../../../main/typescript/hydra/") baseUpPrefix
                         nsSlug = Strings.intercalate "_" targetSegs

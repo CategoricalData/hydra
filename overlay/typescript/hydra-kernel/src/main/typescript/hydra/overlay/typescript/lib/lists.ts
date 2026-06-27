@@ -10,8 +10,8 @@
 // continuations) can call these without TS2345 noise. Runtime behavior is
 // correct for any array-shaped input.
 
-import type { Optional } from "../runtime.js";
-import { Given, None } from "../runtime.js";
+import type { Optional } from "../../../runtime.js";
+import { Given, None } from "../../../runtime.js";
 
 export const apply = <A, B>(fs: readonly ((a: A) => B)[], xs: any): readonly B[] => {
   const out: B[] = [];
