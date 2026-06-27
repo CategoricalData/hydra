@@ -148,6 +148,43 @@ of the package, the validator is translingual: the same logic runs in every host
 [Neo4j validation demo](https://github.com/CategoricalData/hydra/tree/main/demos/neo4j-validation),
 which runs it in Java and Python against a live Neo4j via the Neo4j client driver.
 
+### Mapping to the property-graph model
+
+The `hydra.neo4j.pg` module maps graph *data* between this Neo4j model and Hydra's TinkerPop-shaped
+property-graph model (`hydra.pg.model`): per-element (`vertexToNode` / `nodeToVertex`,
+`edgeToRelationship` / `relationshipToEdge`) and whole-graph (`graphToNeo4j` / `neo4jToGraph`, which map a
+PG `Graph` to/from a list of Neo4j nodes and relationships, building the endpoint-label resolver from the
+node list internally — as the validator's `validateGraph` does). This is the data-model-layer rebuild of
+the interoperability Apache TinkerPop lost when `neo4j-gremlin` was removed.
+
+The mapping is **not an isomorphism and not invertible** — the two models do not carry the same
+information — so the design is about characterizing exactly where and how each direction loses or
+constrains. Four mismatches, each with a deliberate resolution:
+
+- **Element id** (parametric vs. `ElementId`) and **property value** (parametric vs. the closed `Value`)
+  are bridged by **caller-supplied conversions**, bundled in a `Neo4jMapping` record (four partial
+  functions: `encodeId` / `decodeId` / `encodeValue` / `decodeValue`, each `... -> Either string ...`).
+  This follows `hydra.pg.mapping.Schema`, which already parameterizes ids/values this way. (These four
+  fields are what a generalized `Coder` would express once
+  [#518](https://github.com/CategoricalData/hydra/issues/518) frees the kernel `Coder` from its
+  inference-context coupling; until then they are spelled out, with plain `string` errors.)
+- **Relationship-type overloading + case.** A Neo4j relationship type may be overloaded across endpoint
+  patterns (`LIKES` connects `Person→Movie` and `Person→Person`), but a Hydra PG edge label is unique per
+  `(out-label, label, in-label)`. So Neo4j → PG expansion is **schema-conditional**: a type with a single
+  `RelationshipElementType` becomes the plain recased label (`LIKES → likes`), while an overloaded type is
+  disambiguated by endpoint labels (`LIKES` from a `Person` to a `Movie` → `personLikesMovie`), using
+  Hydra's built-in `hydra.formatting.convertCase` (UPPER_SNAKE ↔ camelCase). PG → Neo4j simply recases
+  the edge label (`likes → LIKES`) and does **not** un-expand — round trips are not expected to be the
+  identity.
+- **Multi-label nodes.** Neo4j nodes carry a label *set*; Hydra vertices carry a single label. Hydra PG
+  is strictly more constrained, so some valid Neo4j graphs have no valid Hydra image. For now,
+  `nodeToVertex` **fails on any multi-label node** (a deliberate first-pass simplification; a future
+  version may salvage some multi-label graphs).
+
+Like the validator, the mapping is pure and translingual. With mutually-inverse caller conversions and
+single-label nodes, the structural parts (labels, property walk, endpoint wiring) are lossless; all
+remaining loss is delegated to — and characterized by — the caller's id/value conversions.
+
 ## Demos
 
 Four demos exercise this package end-to-end:

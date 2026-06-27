@@ -4,7 +4,7 @@ module Hydra.Sources.Neo4j.Model where
 import           Hydra.Kernel
 import           Hydra.Overlay.Haskell.Dsl.Annotations
 import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types                 ((>:), (@@))
+import           Hydra.Overlay.Haskell.Dsl.Types                 ((>:), (@@), (~>))
 import qualified Hydra.Overlay.Haskell.Dsl.Types                 as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Data.List                       as L
@@ -43,6 +43,7 @@ module_ = Module {
       localDate,
       localDateTime,
       localTime,
+      neo4jMapping,
       node,
       nodeElementType,
       nodeLabel,
@@ -202,6 +203,28 @@ localTime = define "LocalTime" $
     "nanosecond">:
       doc "The nanosecond of the second" $
       T.int32]
+
+neo4jMapping :: TypeDefinition
+neo4jMapping = define "Neo4jMapping" $
+  doc ("The caller-supplied conversions a mapping between Hydra's property-graph model (hydra.pg.model) "
+    ++ "and this Neo4j model needs: a pair of partial functions converting property-graph values to and "
+    ++ "from Neo4j element ids, and another pair converting them to and from Neo4j property values. "
+    ++ "Errors are plain strings for now; once issue #518 generalizes the kernel Coder, these four "
+    ++ "fields collapse to two Coders. Failures (e.g. a value with no Neo4j representation) surface via "
+    ++ "the Either.") $
+  T.forAll "v" $ T.record [
+    "encodeId">:
+      doc "Encode a property-graph value as a Neo4j element id" $
+      "v" ~> T.either_ T.string (neo4j "ElementId"),
+    "decodeId">:
+      doc "Decode a Neo4j element id as a property-graph value" $
+      neo4j "ElementId" ~> T.either_ T.string "v",
+    "encodeValue">:
+      doc "Encode a property-graph value as a Neo4j property value" $
+      "v" ~> T.either_ T.string (neo4j "Value"),
+    "decodeValue">:
+      doc "Decode a Neo4j property value as a property-graph value" $
+      neo4j "Value" ~> T.either_ T.string "v"]
 
 node :: TypeDefinition
 node = define "Node" $

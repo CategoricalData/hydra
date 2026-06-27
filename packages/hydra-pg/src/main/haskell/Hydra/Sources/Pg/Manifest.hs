@@ -28,6 +28,7 @@ import qualified Hydra.Sources.Graphviz.Coder as GraphvizCoder
 import qualified Hydra.Sources.Graphviz.Dot as DotSyntax
 import qualified Hydra.Sources.Graphviz.Serde as GraphvizSerde
 import qualified Hydra.Sources.Neo4j.Model as Neo4jModel
+import qualified Hydra.Sources.Neo4j.Pg as Neo4jPg
 import qualified Hydra.Sources.Pg.Coder as PgCoder
 import qualified Hydra.Sources.Pg.Graphson.Coder as GraphsonCoder
 import qualified Hydra.Sources.Pg.Graphson.Construct as GraphsonConstruct
@@ -62,6 +63,7 @@ mainModules = [
   GraphvizSerde.module_,
   Gremlin.module_,
   Neo4jModel.module_,
+  Neo4jPg.module_,
   OpenCypher.module_,
   OpenGql.module_,
   PathAlgebraExpressions.module_,
