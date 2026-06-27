@@ -170,7 +170,7 @@ tmux select-pane     -t "bug_${NUM}_${SLUG}" -T "bug_${NUM}_${SLUG}"
 # time on mechanical sync/regen/verify, which Sonnet handles fine. Override
 # via SPAWN_MODEL=opus (or any other model alias) for genuinely hard bugs.
 SPAWN_MODEL="${SPAWN_MODEL:-opusplan}"
-tmux send-keys -t "bug_${NUM}_${SLUG}" "claude-remote -m ${SPAWN_MODEL}" Enter
+tmux send-keys -t "bug_${NUM}_${SLUG}" "claude-remote -b -m ${SPAWN_MODEL}" Enter
 
 # Give claude time to spin up its TUI before sending the trigger prompt.
 # 8s is comfortable headroom for Claude Code v2.1's startup. We then send

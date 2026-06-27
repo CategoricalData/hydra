@@ -1989,8 +1989,70 @@ const optionalsPrimitives = (): readonly Primitive[] => {
             }
             return right({ tag: "list", value: out } as never);
           }))),
+    prim("hydra.lib.optionals.compose", scheme(
+      tyFnCurried(tyFn(tyVar("a"), tyOptional(tyVar("b"))), tyFn(tyVar("b"), tyOptional(tyVar("c"))), tyVar("a"), tyOptional(tyVar("c"))),
+      ["a", "b", "c"]),
+      (g, args) =>
+        bind(need(args, 0, "compose-f"), (f) =>
+          bind(need(args, 1, "compose-g"), (gf) =>
+            bind(need(args, 2, "compose-x"), (x) => {
+              const app1: Term = { tag: "application", value: { function_: f, argument: x } } as never;
+              const reduce = reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>;
+              return bind(reduce(reduceCx, g, true, app1), (fx) => {
+                const mvfx = asOptional(fx);
+                if (!mvfx) return left({ tag: "other", value: "compose: f(x) did not return an optional" } as never);
+                if (mvfx.tag === "none") return right(tOptionalNone);
+                const app2: Term = { tag: "application", value: { function_: gf, argument: mvfx.value } } as never;
+                return reduce(reduceCx, g, true, app2);
+              });
+            })))),
+    prim("hydra.lib.optionals.apply", scheme(tyFnCurried(tyOptional(tyFn(tyVar("a"), tyVar("b"))), tyOptional(tyVar("a")), tyOptional(tyVar("b"))), ["a", "b"]),
+      (g, args) =>
+        bind(need(args, 0, "apply-mf"), (mf) =>
+          bind(need(args, 1, "apply-mx"), (mx) => {
+            const mvf = asOptional(mf);
+            if (!mvf) return left({ tag: "other", value: "apply: expected an optional function" } as never);
+            if (mvf.tag === "none") return right(tOptionalNone);
+            const mvx = asOptional(mx);
+            if (!mvx) return left({ tag: "other", value: "apply: expected an optional value" } as never);
+            if (mvx.tag === "none") return right(tOptionalNone);
+            const app: Term = { tag: "application", value: { function_: mvf.value, argument: mvx.value } } as never;
+            const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
+            if (r.tag === "left") return r as Either<HydraError, Term>;
+            return right(tOptionalGiven(r.value));
+          }))),
   ];
 };
+
+// === lib.text ===
+
+const textPrimitives = (): readonly Primitive[] => [
+  prim("hydra.lib.text.decodeUtf8", scheme(tyFn(tyBinary, tyEither(tyString, tyString)), []),
+    (_g, args) =>
+      bind(need(args, 0, "decodeUtf8"), (b) => {
+        const bin = b as { tag: string; value?: unknown };
+        if (bin.tag !== "literal") return left({ tag: "other", value: "decodeUtf8: expected binary literal" } as never);
+        const lit = bin.value as { tag: string; value?: unknown };
+        if (lit.tag !== "binary") return left({ tag: "other", value: "decodeUtf8: expected binary literal" } as never);
+        const raw = lit.value;
+        try {
+          const str = raw instanceof Uint8Array
+            ? new TextDecoder("utf-8", { fatal: true }).decode(raw)
+            : typeof raw === "string" ? raw : String(raw);
+          return right({ tag: "either", value: { tag: "right", value: tString(str) } } as never);
+        } catch {
+          return right({ tag: "either", value: { tag: "left", value: tString("UTF-8 decode error") } } as never);
+        }
+      })),
+  prim("hydra.lib.text.encodeUtf8", scheme(tyFn(tyString, tyBinary), []),
+    (_g, args) =>
+      bind(need(args, 0, "encodeUtf8"), (s) => {
+        const str = s as { tag: string; value?: { tag?: string; value?: unknown } };
+        if (str.tag !== "literal" || str.value?.tag !== "string") return left({ tag: "other", value: "encodeUtf8: expected string literal" } as never);
+        const bytes = new TextEncoder().encode(str.value.value as string);
+        return right(tBinary(bytes));
+      })),
+];
 
 // === lib.eithers ===
 
@@ -2155,11 +2217,29 @@ export const standardPrimitives = (): readonly Primitive[] => [
   ...regexPrimitives(),
   ...setsPrimitives(),
   ...stringsPrimitives(),
+  ...textPrimitives(),
   ...systemPrimitives(),
 ];
 
 function pairsPrimitivesList(): readonly Primitive[] {
   return [
+    prim("hydra.lib.pairs.bimap", scheme(
+      tyFnCurried(tyFn(tyVar("a"), tyVar("c")), tyFn(tyVar("b"), tyVar("d")),
+        tyPair(tyVar("a"), tyVar("b")), tyPair(tyVar("c"), tyVar("d"))),
+      ["a", "b", "c", "d"]),
+      (g, args) =>
+        bind(need(args, 0, "bimap"), (f) =>
+          bind(need(args, 1, "bimap"), (gf) =>
+            bind(need(args, 2, "bimap"), (p) => {
+              const pair = p as { tag: string; value?: readonly [Term, Term] };
+              if (pair.tag !== "pair" || !pair.value) return left({ tag: "other", value: "bimap: expected pair" } as never);
+              const app1: Term = { tag: "application", value: { function_: f, argument: pair.value[0] } } as never;
+              const app2: Term = { tag: "application", value: { function_: gf, argument: pair.value[1] } } as never;
+              const reduce = reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>;
+              return bind(reduce(reduceCx, g, true, app1), (first) =>
+                bind(reduce(reduceCx, g, true, app2), (second) =>
+                  right({ tag: "pair", value: [first, second] } as never)));
+            })))),
     prim("hydra.lib.pairs.first", scheme(tyFn(tyPair(tyVar("a"), tyVar("b")), tyVar("a")), ["a", "b"]),
       (_g, args) =>
         bind(need(args, 0, "first"), (a0) => {
