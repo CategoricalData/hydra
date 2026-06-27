@@ -16,8 +16,8 @@
 
 import { spawnSync } from "node:child_process";
 import process from "node:process";
-import type { Either, Optional } from "../runtime.js";
-import { Left, Right, Given, None } from "../runtime.js";
+import type { Either, Optional } from "../../../runtime.js";
+import { Left, Right, Given, None } from "../../../runtime.js";
 
 // ---- Helpers ---------------------------------------------------------------
 
