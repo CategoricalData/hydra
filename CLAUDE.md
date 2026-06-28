@@ -72,18 +72,18 @@ graphs with deep support for polymorphism.
   `hydra.overlay.<lang>.*` is exclusively host-native.
 - **`dist/`** holds generated and copied artifacts. **Never manually edit**
   (unless doing a bootstrap patch, which must be overwritten by regeneration afterward).
-- **`bindings/`** holds host-specific third-party integrations — adapters that wire Hydra
-  packages to external libraries (e.g., `bindings/java/hydra-rdf4j/` connects `hydra-rdf` to
-  rdf4j; `bindings/java/hydra-neo4j/` provides Cypher and GQL parsers via ANTLR).
-  Each binding is a separately publishable artifact in its host language and is **not**
-  part of the DSL-driven sync pipeline.
+- Host-specific third-party integrations — adapters that wire Hydra packages to external libraries
+  (e.g. Eclipse rdf4j for `hydra-rdf`; Cypher/GQL ANTLR parsers and the TinkerPop/Gremlin bridge for
+  `hydra-pg`) — live in `overlay/<lang>/<pkg>/` as host-native overlay source, each declaring its
+  third-party build configuration in `overlay/<lang>/<pkg>/build.json`. (These were formerly a separate
+  top-level `bindings/` tree; folded into overlays in #511. See [docs/overlays.md](docs/overlays.md).)
 
 The test for `packages/` vs `heads/`: does this code describe (or help describe) Hydra modules,
 or does it run them after translation?
 Description goes in `packages/`; running goes in `heads/`.
 Hand-written source destined for a published distribution package (but not part of the head's own
-compile) goes in `overlay/`. Bindings sit outside all of these: hand-written adapters between Hydra and
-an external system.
+compile) goes in `overlay/` — including host-specific third-party integrations (the former `bindings/`),
+which are overlay source under `overlay/<lang>/<pkg>/`.
 
 The test for `packages/` vs `overlay/`: could this code be expressed in the Hydra DSL and generated
 into every target language?

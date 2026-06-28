@@ -598,7 +598,17 @@ public class Generation {
         // hydra.yaml.model lives in hydra-kernel; route ext-owned yaml modules explicitly.
         new Pair<>("hydra.yaml.coder",            "hydra-ext"),
         new Pair<>("hydra.yaml.language",         "hydra-ext"),
-        new Pair<>("hydra.yaml.serde",            "hydra-ext")
+        new Pair<>("hydra.yaml.serde",            "hydra-ext"),
+        // hydra.gradle is a build-config type module authored in hydra-java. Its
+        // namespace is build-system-keyed (no hydra.java. prefix), so route it —
+        // and its synthesized term-coder wrappers — to hydra-java explicitly
+        // rather than letting them fall through to the hydra-kernel default. The
+        // derived hydra.{encode,decode}.gradle modules need their own entries
+        // because this prefix table (unlike the Haskell buildRoutingMap) does not
+        // auto-expand derived names; cf. the hydra.{decode,encode}.pg entries (#511).
+        new Pair<>("hydra.gradle",                "hydra-java"),
+        new Pair<>("hydra.decode.gradle",         "hydra-java"),
+        new Pair<>("hydra.encode.gradle",         "hydra-java")
     );
 
     /**
@@ -954,6 +964,70 @@ public class Generation {
     }
 
     /**
+     * Write per-package {@code manifest.json} files for the native packages this
+     * driver owns (hydra-jvm / hydra-java / hydra-python), source-driven and in
+     * the current rich schema, mirroring the Haskell
+     * {@code Hydra.Generation.writePerPackageManifestsJson} byte-for-byte
+     * (alphabetized object fields, lexicographically-sorted namespace arrays).
+     *
+     * <p>Replaces the previously-static (stale) native-package manifests (#511):
+     * those were left over from the dead-code flat-schema writer / a hardcoded
+     * heredoc and were never regenerated, so a new module (e.g. hydra.gradle)
+     * never appeared in the manifest and routing silently fell back to
+     * hydra-kernel. dist/ must contain no static files: the manifest is now
+     * generated from the loaded source modules, partitioned by
+     * {@link #namespaceToPackage}.</p>
+     *
+     * @param distJsonRoot  dist/json root
+     * @param mainMods      the source modules to list under each package's mainModules
+     * @param dslMods       the DSL-type source modules (mainDslModules)
+     * @param encMods       the encoding-source modules (mainEncodingModules)
+     */
+    public static void writePackageManifests(
+            String distJsonRoot,
+            List<Module> mainMods,
+            List<Module> dslMods,
+            List<Module> encMods) throws IOException {
+        Map<String, List<Module>> mainByPkg = new java.util.TreeMap<>();
+        for (Pair<String, List<Module>> p : groupByPackage(mainMods)) mainByPkg.put(p.first, p.second);
+        Map<String, List<Module>> dslByPkg = new java.util.TreeMap<>();
+        for (Pair<String, List<Module>> p : groupByPackage(dslMods)) dslByPkg.put(p.first, p.second);
+        Map<String, List<Module>> encByPkg = new java.util.TreeMap<>();
+        for (Pair<String, List<Module>> p : groupByPackage(encMods)) encByPkg.put(p.first, p.second);
+
+        for (String pkg : mainByPkg.keySet()) {
+            List<Module> main = mainByPkg.getOrDefault(pkg, java.util.Collections.emptyList());
+            List<Module> dsl  = dslByPkg.getOrDefault(pkg, java.util.Collections.emptyList());
+            List<Module> enc  = encByPkg.getOrDefault(pkg, java.util.Collections.emptyList());
+            // Field order alphabetized to match the Haskell writer's byte output.
+            List<Pair<String, Value>> fields = new ArrayList<>();
+            fields.add(new Pair<>("mainDslModules", namespacesArray(dsl)));
+            fields.add(new Pair<>("mainEncodingModules", namespacesArray(enc)));
+            fields.add(new Pair<>("mainModules", namespacesArray(main)));
+            fields.add(new Pair<>("manifestFormatVersion",
+                new Value.Number_(java.math.BigDecimal.valueOf(1))));
+            fields.add(new Pair<>("package", new Value.String_(pkg)));
+            fields.add(new Pair<>("testModules", namespacesArray(java.util.Collections.emptyList())));
+            String jsonStr = hydra.json.Writer.printJson(new Value.Object_(fields));
+            Path pkgDir = Paths.get(distJsonRoot, pkg, "src", "main", "json");
+            Files.createDirectories(pkgDir);
+            Path filePath = pkgDir.resolve("manifest.json");
+            Files.write(filePath, (jsonStr + "\n").getBytes(StandardCharsets.UTF_8));
+            System.err.println("  Wrote manifest: " + filePath);
+        }
+    }
+
+    /** A sorted JSON string array of the namespaces of the given modules. */
+    private static Value namespacesArray(List<Module> mods) {
+        List<String> nss = new ArrayList<>();
+        for (Module m : mods) nss.add(m.name.value);
+        java.util.Collections.sort(nss);
+        List<Value> arr = new ArrayList<>();
+        for (String ns : nss) arr.add(new Value.String_(ns));
+        return new Value.Array(arr);
+    }
+
+    /**
      * Synthesize the DSL-wrapper modules (hydra.dsl.java.*) for a set of
      * type-defining modules, mirroring {@code Hydra.Generation.generateDslModules}
      * and the Python driver's {@code generate_dsl_modules}.
@@ -1004,5 +1078,76 @@ public class Generation {
             writePackageSplitJson(distJsonRoot, universeMods, nonEmpty, nonEmpty);
         }
         return nonEmpty;
+    }
+
+    /**
+     * Synthesize the per-module term-coder wrappers (hydra.encode.* and
+     * hydra.decode.*) for {@code typeMods}, mirroring the Haskell
+     * {@code Hydra.Generation.generateEncoderModules / generateDecoderModules}
+     * (which curry {@code Hydra.Encoding.encodeModule} / {@code Hydra.Decoding.decodeModule}
+     * into {@code generateCoderModules}). Adds encode/decode synthesis to the native
+     * Java path, which previously generated only DSL wrappers (#511): a
+     * translingual type module authored in the Java DSL (e.g. hydra.gradle) gets a
+     * generated hydra.decode.<x> exactly as kernel types get hydra.decode.packaging,
+     * so its JSON (e.g. overlay build.json) is read by the canonical
+     * Decode.fromJson → Term → hydra.decode.<x> path rather than any hand-written
+     * parser.
+     */
+    public static List<Module> generateEncoderModules(
+            List<Module> universeMods, List<Module> typeMods) {
+        return generateCoderModulesVia(universeMods, typeMods,
+            (c, g, m) -> hydra.Encoding.encodeModule(c, g, m), "encoder");
+    }
+
+    public static List<Module> generateDecoderModules(
+            List<Module> universeMods, List<Module> typeMods) {
+        return generateCoderModulesVia(universeMods, typeMods,
+            (c, g, m) -> hydra.Decoding.decodeModule(c, g, m), "decoder");
+    }
+
+    /** Shared synthesis driver for the encode/decode coder modules; mirrors
+     * {@link #generateDslModules} but with a caller-supplied per-module transform. */
+    private static List<Module> generateCoderModulesVia(
+            List<Module> universeMods, List<Module> typeMods,
+            hydra.overlay.java.tools.Function3<hydra.typing.InferenceContext, Graph, Module,
+                Either<hydra.errors.Error_, Optional<Module>>> transform,
+            String label) {
+        hydra.typing.InferenceContext cx = new hydra.typing.InferenceContext(
+            0, new java.util.ArrayList<>());
+        Function<hydra.typing.InferenceContext,
+            Function<Graph, Function<Module,
+                Either<hydra.errors.Error_, Optional<Module>>>>> codec =
+            c -> g -> m -> transform.apply(c, g, m);
+        Either<hydra.errors.Error_, List<Module>> result =
+            Codegen.generateCoderModules(codec, bootstrapGraph(), universeMods, typeMods, cx);
+        if (result instanceof Either.Left) {
+            hydra.errors.Error_ err =
+                ((Either.Left<hydra.errors.Error_, List<Module>>) result).value;
+            throw new RuntimeException("generate" + label + "Modules: synthesis failed: " + err);
+        }
+        return ((Either.Right<hydra.errors.Error_, List<Module>>) result).value;
+    }
+
+    /**
+     * Generate and write the encode + decode coder modules for {@code typeMods}
+     * under {@code distJsonRoot}. Skips empty modules (matching the DSL analog).
+     * Returns the modules written.
+     */
+    public static List<Module> synthesizeAndWriteEncodeDecodeModules(
+            String distJsonRoot, List<Module> universeMods, List<Module> typeMods)
+            throws IOException {
+        List<Module> written = new ArrayList<>();
+        List<Module> coderMods = new ArrayList<>();
+        coderMods.addAll(generateEncoderModules(universeMods, typeMods));
+        coderMods.addAll(generateDecoderModules(universeMods, typeMods));
+        List<Module> nonEmpty = new ArrayList<>();
+        for (Module m : coderMods) {
+            if (!m.definitions.isEmpty()) nonEmpty.add(m);
+        }
+        if (!nonEmpty.isEmpty()) {
+            writePackageSplitJson(distJsonRoot, universeMods, nonEmpty, nonEmpty);
+            written.addAll(nonEmpty);
+        }
+        return written;
     }
 }

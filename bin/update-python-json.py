@@ -89,6 +89,7 @@ SOURCE_MODULE_NAMES = [
     "environment",
     "language",
     "names",
+    "pyproject",
     "serde",
     "syntax",
     "testing",

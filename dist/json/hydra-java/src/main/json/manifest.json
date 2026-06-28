@@ -1,6 +1,8 @@
 {
-  "dslModules": ["hydra.dsl.java.environment", "hydra.dsl.java.syntax"],
+  "mainDslModules": ["hydra.java.environment", "hydra.java.syntax"],
+  "mainEncodingModules": ["hydra.gradle"],
   "mainModules": [
+    "hydra.gradle",
     "hydra.java.coder",
     "hydra.java.environment",
     "hydra.java.language",

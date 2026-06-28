@@ -1656,18 +1656,60 @@ loadModulesFromJson basePath universeModules namespaces = do
 -- one loader: update-json-main AND transform-haskell-dsl-to-json must seed the
 -- native packages identically, else the on-demand sync path (sync-packages.sh)
 -- can't resolve hydra.jvm.serde.* for hydra-scala. (#346, #505)
-loadNativePackageModules :: FilePath -> [Module] -> IO [Module]
-loadNativePackageModules distRoot baseUniverse =
-    fmap L.concat $ CM.forM ["hydra-jvm", "hydra-java", "hydra-python"] $ \pkg -> do
+-- | Load the native packages' modules from dist/json, TAGGED by owning package
+-- (#511). Returns one @(package, [Module])@ row per native package so callers can
+-- build routing input directly from where each module was LOADED, rather than
+-- re-deriving the package from a namespace prefix — the latter drops modules whose
+-- namespace lacks the package's prefix segment (e.g. hydra.gradle, owned by
+-- hydra-java but with no @java@ segment).
+--
+-- Reads the current rich manifest schema (mainModules + mainDslModules +
+-- mainEncodingModules) and, for forward/backward compatibility across the manifest
+-- migration, the legacy flat @dslModules@ field too (#474). Each list is read
+-- tolerantly: a package whose manifest omits a field contributes nothing for it.
+loadNativePackageModulesTagged :: FilePath -> [Module] -> IO [(String, [Module])]
+loadNativePackageModulesTagged distRoot baseUniverse =
+    CM.forM ["hydra-jvm", "hydra-java", "hydra-python"] $ \pkg -> do
       let pkgJson = distRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
           manifest = pkgJson FP.</> "manifest.json"
       exists <- SD.doesFileExist manifest
       if not exists
         then do
           putStrLn $ "  (skipping " ++ pkg ++ ": no manifest yet — cold tree)"
-          return []
+          return (pkg, [])
         else do
-          mainNs <- readManifestField pkgJson "mainModules"
-          dslNs  <- readManifestField pkgJson "dslModules"
-          loadModulesFromJson pkgJson baseUniverse (mainNs ++ dslNs)
+          mainNs   <- readManifestField pkgJson "mainModules"
+          dslNs    <- readManifestFieldOrEmpty pkgJson "mainDslModules"
+          encNs    <- readManifestFieldOrEmpty pkgJson "mainEncodingModules"
+          legacyNs <- readManifestFieldOrEmpty pkgJson "dslModules"
+          mods <- loadModulesFromJson pkgJson baseUniverse
+            (L.nub (mainNs ++ dslNs ++ encNs ++ legacyNs))
+          return (pkg, mods)
+
+-- | Flattened form of 'loadNativePackageModulesTagged': all native modules in one
+-- list, package tags discarded. Retained for callers that only need the module set
+-- (not routing).
+loadNativePackageModules :: FilePath -> [Module] -> IO [Module]
+loadNativePackageModules distRoot baseUniverse =
+    fmap (L.concatMap snd) (loadNativePackageModulesTagged distRoot baseUniverse)
+
+-- | Like 'loadNativePackageModulesTagged' but returns only the module NAMES per
+-- package, reading the manifest name lists directly WITHOUT decoding the modules
+-- (so it needs no seeded universe). For callers that only build a routing map from
+-- native packages (e.g. digest-check), where decoding would be wasted work and
+-- would require a base universe. (#511)
+loadNativePackageModuleNamesTagged :: FilePath -> IO [(String, [ModuleName])]
+loadNativePackageModuleNamesTagged distRoot =
+    CM.forM ["hydra-jvm", "hydra-java", "hydra-python"] $ \pkg -> do
+      let pkgJson = distRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
+          manifest = pkgJson FP.</> "manifest.json"
+      exists <- SD.doesFileExist manifest
+      if not exists
+        then return (pkg, [])
+        else do
+          mainNs   <- readManifestField pkgJson "mainModules"
+          dslNs    <- readManifestFieldOrEmpty pkgJson "mainDslModules"
+          encNs    <- readManifestFieldOrEmpty pkgJson "mainEncodingModules"
+          legacyNs <- readManifestFieldOrEmpty pkgJson "dslModules"
+          return (pkg, L.nub (mainNs ++ dslNs ++ encNs ++ legacyNs))
 

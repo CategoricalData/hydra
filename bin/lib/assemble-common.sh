@@ -179,16 +179,24 @@ runtime_identity() {
 # Haskell runtime also exits non-zero, so a fault is conservatively treated
 # as a miss (rebuild) rather than swallowed as a hit — the safe direction.
 assemble_check_fresh() {
-    local input_digest="$1" output_dir="$2" output_digest="$3"
+    local input_digest="$1" output_dir="$2" output_digest="$3" keep_manifest="${4:-}"
     # First-build / missing-artifact fast path: provably not fresh.
     if [ ! -f "$input_digest" ] || [ ! -f "$output_digest" ]; then
         return 1
+    fi
+    # Pass the keep-paths manifest (hand-written overlay files copied into the
+    # output dir by copy-overlay.sh) so the #393 orphan reconcile inside `fresh`
+    # does not delete them — they are not in the recorded output digest. (#511)
+    local keep_args=()
+    if [ -n "$keep_manifest" ] && [ -f "$keep_manifest" ]; then
+        keep_args=(--keep-paths-from "$keep_manifest")
     fi
     (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
      stack exec digest-check -- fresh \
         --inputs "$input_digest" \
         --output-dir "$output_dir" \
-        --output-digest "$output_digest")
+        --output-digest "$output_digest" \
+        "${keep_args[@]}")
 }
 
 # Write the per-source-set output digest after a (re)generation. Called in

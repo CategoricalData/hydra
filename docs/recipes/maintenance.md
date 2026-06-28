@@ -380,7 +380,8 @@ The core principles (see CLAUDE.md and the
    `heads/<host>/`. Per-package host code — both third-party adapters
    (rdf4j, ANTLR-generated parsers, TinkerPop, etc.) and pure host-language
    DSL helpers tied to a single Hydra package (e.g., Java fluent builders for
-   `hydra-pg`) — lives in `bindings/<host>/<artifact>/`. See
+   `hydra-pg`) — lives as overlay source in `overlay/<lang>/<pkg>/` (folded from
+   the former `bindings/` tree in #511; see [overlays.md](../overlays.md)). See
    [implementation.md, principle 7](../implementation.md#key-design-principles).
    The split keeps `heads/<host>/` minimal: language-independent Hydra runtime
    + stdlib + build tooling, with no per-package host code.

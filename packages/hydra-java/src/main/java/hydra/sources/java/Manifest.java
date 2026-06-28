@@ -19,6 +19,7 @@ public class Manifest {
     public static final List<Module> mainModules = Arrays.asList(
         Coder.module_,
         Environment.module_,
+        Gradle.module_,
         Language.module_,
         Names.module_,
         Serde.module_,

@@ -19,7 +19,7 @@
 module Main where
 
 import Hydra.Generation (writeModulesJsonPackageSplit, writeDerivedJsonPackageSplit, modulesToGraph,
-  loadModulesFromJson, readManifestField, loadNativePackageModules,
+  loadModulesFromJson, readManifestField, loadNativePackageModulesTagged,
   generateEncoderModules, generateDecoderModules)
 import Hydra.PackageRouting (defaultDistJsonRoot, buildRoutingMap)
 import Hydra.Sources.Ext (
@@ -112,22 +112,17 @@ main = do
   decMods <- generateDecoderModules baseUniverse allEncodingModules
   let synthesizedEncodeDecode = dedupByNamespace (encMods ++ decMods)
 
-  nativeModules <- loadNativePackageModules distRoot baseUniverse
+  nativeTagged <- loadNativePackageModulesTagged distRoot baseUniverse
+  let nativeModules = L.concatMap snd nativeTagged
   let universe = dedupByNamespace (baseUniverse ++ synthesizedEncodeDecode ++ nativeModules)
 
   -- Routing map (#474), derived from each package's compiled mainModules plus
   -- the native (hydra-jvm / hydra-java / hydra-python) modules loaded from dist/json.
-  -- Native modules are tagged by namespace prefix; everything else comes from
-  -- extRoutingInput.
-  let nativeRoutingInput =
-        [ ("hydra-jvm",    [ Kernel.moduleName m | m <- nativeModules
-                           , L.isPrefixOf "hydra.jvm." (Packaging.unModuleName (Kernel.moduleName m)) ])
-        , ("hydra-java",   [ Kernel.moduleName m | m <- nativeModules
-                           , L.isPrefixOf "hydra.java." (Packaging.unModuleName (Kernel.moduleName m))
-                             || L.isPrefixOf "hydra.dsl.java." (Packaging.unModuleName (Kernel.moduleName m)) ])
-        , ("hydra-python", [ Kernel.moduleName m | m <- nativeModules
-                           , L.isPrefixOf "hydra.python." (Packaging.unModuleName (Kernel.moduleName m))
-                             || L.isPrefixOf "hydra.dsl.python." (Packaging.unModuleName (Kernel.moduleName m)) ]) ]
+  -- Native modules are tagged by the package whose manifest they were LOADED from
+  -- (#511), NOT by namespace prefix — prefix-tagging dropped modules without the
+  -- package's prefix segment (e.g. hydra.gradle, owned by hydra-java). everything
+  -- else comes from extRoutingInput.
+  let nativeRoutingInput = [ (pkg, fmap Kernel.moduleName mods) | (pkg, mods) <- nativeTagged ]
       routingMap = buildRoutingMap (extRoutingInput ++ nativeRoutingInput)
 
   putStrLn "=== Generate Hydra JSON modules ==="

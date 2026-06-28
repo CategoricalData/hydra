@@ -1,0 +1,114 @@
+{
+  "name": "hydra.gradle",
+  "metadata": {"description": "Build configuration for Gradle-built distribution packages.", "comments": [], "seeAlso": []},
+  "dependencies": [{"module": "hydra.packaging"}, {"module": "hydra.file"}],
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.gradle.AntlrConfig",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "arguments",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"literal": {"string": {}}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "Arguments passed to the ANTLR tool, e.g. [\"-visitor\"] or [\"-visitor\", \"-listener\"]. Faithful to ANTLR's command-line interface; covers all ANTLR flags without enumerating them."}}}]}}}},
+                  {
+                    "name": "outputDirectory",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.file.FilePath"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "Directory into which ANTLR emits generated lexer/parser sources, relative to the package root (e.g. \"build/generated-src/antlr/main\"). The host also folds this into the main source set."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Configuration for the Gradle antlr plugin's grammar generation (generateGrammarSource)."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.gradle.GradleBuildConfiguration",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "dependencies",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.packaging.PackageDependency"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "Third-party (non-project) dependencies required by the package. Inter-package dependencies within the project are derived separately and are not listed here. Each dependency's scope (api/runtime/test/tool) is significant; its name carries the Maven group and artifact separated by a colon."}}}]}}}},
+                  {
+                    "name": "excludes",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"literal": {"string": {}}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Source paths or patterns to exclude from compilation, relative to the package root."}}}]}}}},
+                  {
+                    "name": "extraSourceDirs",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.file.FilePath"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "Additional source directories to fold into the package's main source set, beyond the generated and overlaid sources (e.g. a directory of build-tool-generated sources)."}}}]}}}},
+                  {
+                    "name": "plugins",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"literal": {"string": {}}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Gradle plugin identifiers to apply to the build, e.g. \"antlr\". Applied in the given order."}}}]}}}},
+                  {
+                    "name": "antlr",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.gradle.AntlrConfig"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "ANTLR grammar-generation configuration, present when the package uses the antlr plugin. When given, the host emits the generateGrammarSource configuration and the compileJava-depends-on-generateGrammarSource ordering. Modeled as structured vocabulary rather than a raw Groovy fragment."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "The build configuration for a single Gradle-built distribution package, beyond its generated sources."}}}]}}}}}}]}

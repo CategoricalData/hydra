@@ -15368,6 +15368,224 @@
                                                             "term": {"literal": {"string": "A typed reference to a definition: a type, a term, or a primitive, identified by name"}}}}}}}}}]}}}}}]}}}}},
                       "annotation": {"map": [{"key": {"variable": "type"}, "value": {"variable": "hydra.core.Type"}}]}}}},
                 {
+                  "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.DependencyScope"}}}},
+                  "value": {
+                    "annotated": {
+                      "body": {
+                        "inject": {
+                          "typeName": "hydra.core.Type",
+                          "field": {
+                            "name": "annotated",
+                            "term": {
+                              "record": {
+                                "typeName": "hydra.core.AnnotatedType",
+                                "fields": [
+                                  {
+                                    "name": "body",
+                                    "term": {
+                                      "inject": {
+                                        "typeName": "hydra.core.Type",
+                                        "field": {
+                                          "name": "union",
+                                          "term": {
+                                            "list": [
+                                              {
+                                                "record": {
+                                                  "typeName": "hydra.core.FieldType",
+                                                  "fields": [
+                                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "api"}}}}},
+                                                    {
+                                                      "name": "type",
+                                                      "term": {
+                                                        "inject": {
+                                                          "typeName": "hydra.core.Type",
+                                                          "field": {
+                                                            "name": "annotated",
+                                                            "term": {
+                                                              "record": {
+                                                                "typeName": "hydra.core.AnnotatedType",
+                                                                "fields": [
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {
+                                                                    "name": "annotation",
+                                                                    "term": {
+                                                                      "inject": {
+                                                                        "typeName": "hydra.core.Term",
+                                                                        "field": {
+                                                                          "name": "map",
+                                                                          "term": {
+                                                                            "map": [
+                                                                              {
+                                                                                "key": {
+                                                                                  "inject": {
+                                                                                    "typeName": "hydra.core.Term",
+                                                                                    "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "description"}}}}}}},
+                                                                                "value": {
+                                                                                  "inject": {
+                                                                                    "typeName": "hydra.core.Term",
+                                                                                    "field": {
+                                                                                      "name": "literal",
+                                                                                      "term": {
+                                                                                        "inject": {
+                                                                                          "typeName": "hydra.core.Literal",
+                                                                                          "field": {
+                                                                                            "name": "string",
+                                                                                            "term": {
+                                                                                              "literal": {
+                                                                                                "string": "A dependency exported transitively to consumers of this package (e.g. Gradle `api`, Cabal `build-depends`): present at both compile time and runtime, and visible downstream"}}}}}}}}}]}}}}}]}}}}}}]}},
+                                              {
+                                                "record": {
+                                                  "typeName": "hydra.core.FieldType",
+                                                  "fields": [
+                                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "runtime"}}}}},
+                                                    {
+                                                      "name": "type",
+                                                      "term": {
+                                                        "inject": {
+                                                          "typeName": "hydra.core.Type",
+                                                          "field": {
+                                                            "name": "annotated",
+                                                            "term": {
+                                                              "record": {
+                                                                "typeName": "hydra.core.AnnotatedType",
+                                                                "fields": [
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {
+                                                                    "name": "annotation",
+                                                                    "term": {
+                                                                      "inject": {
+                                                                        "typeName": "hydra.core.Term",
+                                                                        "field": {
+                                                                          "name": "map",
+                                                                          "term": {
+                                                                            "map": [
+                                                                              {
+                                                                                "key": {
+                                                                                  "inject": {
+                                                                                    "typeName": "hydra.core.Term",
+                                                                                    "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "description"}}}}}}},
+                                                                                "value": {
+                                                                                  "inject": {
+                                                                                    "typeName": "hydra.core.Term",
+                                                                                    "field": {
+                                                                                      "name": "literal",
+                                                                                      "term": {
+                                                                                        "inject": {
+                                                                                          "typeName": "hydra.core.Literal",
+                                                                                          "field": {"name": "string", "term": {"literal": {"string": "A dependency required at runtime but not at compile time"}}}}}}}}}]}}}}}]}}}}}}]}},
+                                              {
+                                                "record": {
+                                                  "typeName": "hydra.core.FieldType",
+                                                  "fields": [
+                                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "test"}}}}},
+                                                    {
+                                                      "name": "type",
+                                                      "term": {
+                                                        "inject": {
+                                                          "typeName": "hydra.core.Type",
+                                                          "field": {
+                                                            "name": "annotated",
+                                                            "term": {
+                                                              "record": {
+                                                                "typeName": "hydra.core.AnnotatedType",
+                                                                "fields": [
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {
+                                                                    "name": "annotation",
+                                                                    "term": {
+                                                                      "inject": {
+                                                                        "typeName": "hydra.core.Term",
+                                                                        "field": {
+                                                                          "name": "map",
+                                                                          "term": {
+                                                                            "map": [
+                                                                              {
+                                                                                "key": {
+                                                                                  "inject": {
+                                                                                    "typeName": "hydra.core.Term",
+                                                                                    "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "description"}}}}}}},
+                                                                                "value": {
+                                                                                  "inject": {
+                                                                                    "typeName": "hydra.core.Term",
+                                                                                    "field": {
+                                                                                      "name": "literal",
+                                                                                      "term": {
+                                                                                        "inject": {
+                                                                                          "typeName": "hydra.core.Literal",
+                                                                                          "field": {"name": "string", "term": {"literal": {"string": "A dependency required only to compile and run the package's tests"}}}}}}}}}]}}}}}]}}}}}}]}},
+                                              {
+                                                "record": {
+                                                  "typeName": "hydra.core.FieldType",
+                                                  "fields": [
+                                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "tool"}}}}},
+                                                    {
+                                                      "name": "type",
+                                                      "term": {
+                                                        "inject": {
+                                                          "typeName": "hydra.core.Type",
+                                                          "field": {
+                                                            "name": "annotated",
+                                                            "term": {
+                                                              "record": {
+                                                                "typeName": "hydra.core.AnnotatedType",
+                                                                "fields": [
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {
+                                                                    "name": "annotation",
+                                                                    "term": {
+                                                                      "inject": {
+                                                                        "typeName": "hydra.core.Term",
+                                                                        "field": {
+                                                                          "name": "map",
+                                                                          "term": {
+                                                                            "map": [
+                                                                              {
+                                                                                "key": {
+                                                                                  "inject": {
+                                                                                    "typeName": "hydra.core.Term",
+                                                                                    "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "description"}}}}}}},
+                                                                                "value": {
+                                                                                  "inject": {
+                                                                                    "typeName": "hydra.core.Term",
+                                                                                    "field": {
+                                                                                      "name": "literal",
+                                                                                      "term": {
+                                                                                        "inject": {
+                                                                                          "typeName": "hydra.core.Literal",
+                                                                                          "field": {
+                                                                                            "name": "string",
+                                                                                            "term": {
+                                                                                              "literal": {
+                                                                                                "string": "A build-tool-only dependency, used to generate or process sources at build time but not present in the compiled artifact (e.g. an ANTLR tool jar or an annotation processor)"}}}}}}}}}]}}}}}]}}}}}}]}}]}}}}},
+                                  {
+                                    "name": "annotation",
+                                    "term": {
+                                      "inject": {
+                                        "typeName": "hydra.core.Term",
+                                        "field": {
+                                          "name": "map",
+                                          "term": {
+                                            "map": [
+                                              {
+                                                "key": {
+                                                  "inject": {
+                                                    "typeName": "hydra.core.Term",
+                                                    "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "description"}}}}}}},
+                                                "value": {
+                                                  "inject": {
+                                                    "typeName": "hydra.core.Term",
+                                                    "field": {
+                                                      "name": "literal",
+                                                      "term": {
+                                                        "inject": {
+                                                          "typeName": "hydra.core.Literal",
+                                                          "field": {
+                                                            "name": "string",
+                                                            "term": {
+                                                              "literal": {
+                                                                "string": "The scope in which a package dependency is required. Relevant mainly to dependencies on third-party (non-Hydra) artifacts, where build systems distinguish compile-time, runtime, test-only, and build-tool-only dependencies. Hydra inter-package dependencies normally leave the scope unspecified."}}}}}}}}}]}}}}}]}}}}},
+                      "annotation": {"map": [{"key": {"variable": "type"}, "value": {"variable": "hydra.core.Type"}}]}}}},
+                {
                   "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.EntityMetadata"}}}},
                   "value": {
                     "annotated": {
@@ -16800,7 +17018,63 @@
                                                                                       "term": {
                                                                                         "inject": {
                                                                                           "typeName": "hydra.core.Literal",
-                                                                                          "field": {"name": "string", "term": {"literal": {"string": "The version-range constraint on the depended-on package"}}}}}}}}}]}}}}}]}}}}}}]}}]}}}}},
+                                                                                          "field": {"name": "string", "term": {"literal": {"string": "The version-range constraint on the depended-on package"}}}}}}}}}]}}}}}]}}}}}}]}},
+                                              {
+                                                "record": {
+                                                  "typeName": "hydra.core.FieldType",
+                                                  "fields": [
+                                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "scope"}}}}},
+                                                    {
+                                                      "name": "type",
+                                                      "term": {
+                                                        "inject": {
+                                                          "typeName": "hydra.core.Type",
+                                                          "field": {
+                                                            "name": "annotated",
+                                                            "term": {
+                                                              "record": {
+                                                                "typeName": "hydra.core.AnnotatedType",
+                                                                "fields": [
+                                                                  {
+                                                                    "name": "body",
+                                                                    "term": {
+                                                                      "inject": {
+                                                                        "typeName": "hydra.core.Type",
+                                                                        "field": {
+                                                                          "name": "optional",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.Type",
+                                                                              "field": {
+                                                                                "name": "variable",
+                                                                                "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.DependencyScope"}}}}}}}}}}},
+                                                                  {
+                                                                    "name": "annotation",
+                                                                    "term": {
+                                                                      "inject": {
+                                                                        "typeName": "hydra.core.Term",
+                                                                        "field": {
+                                                                          "name": "map",
+                                                                          "term": {
+                                                                            "map": [
+                                                                              {
+                                                                                "key": {
+                                                                                  "inject": {
+                                                                                    "typeName": "hydra.core.Term",
+                                                                                    "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "description"}}}}}}},
+                                                                                "value": {
+                                                                                  "inject": {
+                                                                                    "typeName": "hydra.core.Term",
+                                                                                    "field": {
+                                                                                      "name": "literal",
+                                                                                      "term": {
+                                                                                        "inject": {
+                                                                                          "typeName": "hydra.core.Literal",
+                                                                                          "field": {
+                                                                                            "name": "string",
+                                                                                            "term": {
+                                                                                              "literal": {
+                                                                                                "string": "The scope in which the dependency is required, if specified. Normally absent for Hydra inter-package dependencies; specified for third-party dependencies whose build scope (compile/runtime/test/tool) is significant."}}}}}}}}}]}}}}}]}}}}}}]}}]}}}}},
                                   {
                                     "name": "annotation",
                                     "term": {
@@ -16878,7 +17152,9 @@
                                                           "typeName": "hydra.core.Literal",
                                                           "field": {
                                                             "name": "string",
-                                                            "term": {"literal": {"string": "The unique name of a package, e.g. \"hydra-kernel\" or \"hydra-python\""}}}}}}}}}]}}}}}]}}}}},
+                                                            "term": {
+                                                              "literal": {
+                                                                "string": "The unique name of a package, e.g. \"hydra-kernel\" or \"hydra-python\". For dependencies on third-party artifacts in ecosystems with a group/namespace component (notably Maven), the group and artifact are carried in a single name separated by a colon, e.g. \"org.eclipse.rdf4j:rdf4j-rio-ntriples\"; the consuming host splits on the colon to recover the group when emitting build configuration. Hydra package names contain no colon."}}}}}}}}}]}}}}}]}}}}},
                       "annotation": {"map": [{"key": {"variable": "type"}, "value": {"variable": "hydra.core.Type"}}]}}}},
                 {
                   "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.PrimitiveDefinition"}}}},
@@ -17725,6 +18001,162 @@
                                                           "field": {"name": "string", "term": {"literal": {"string": "A version string, e.g. \"0.15\" or \"1.0.0\"."}}}}}}}}}]}}}}}]}}}}},
                       "annotation": {"map": [{"key": {"variable": "type"}, "value": {"variable": "hydra.core.Type"}}]}}}},
                 {
+                  "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.VersionRange"}}}},
+                  "value": {
+                    "annotated": {
+                      "body": {
+                        "inject": {
+                          "typeName": "hydra.core.Type",
+                          "field": {
+                            "name": "annotated",
+                            "term": {
+                              "record": {
+                                "typeName": "hydra.core.AnnotatedType",
+                                "fields": [
+                                  {
+                                    "name": "body",
+                                    "term": {
+                                      "inject": {
+                                        "typeName": "hydra.core.Type",
+                                        "field": {
+                                          "name": "record",
+                                          "term": {
+                                            "list": [
+                                              {
+                                                "record": {
+                                                  "typeName": "hydra.core.FieldType",
+                                                  "fields": [
+                                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "lowerInclusive"}}}}},
+                                                    {
+                                                      "name": "type",
+                                                      "term": {
+                                                        "inject": {
+                                                          "typeName": "hydra.core.Type",
+                                                          "field": {
+                                                            "name": "annotated",
+                                                            "term": {
+                                                              "record": {
+                                                                "typeName": "hydra.core.AnnotatedType",
+                                                                "fields": [
+                                                                  {
+                                                                    "name": "body",
+                                                                    "term": {
+                                                                      "inject": {
+                                                                        "typeName": "hydra.core.Type",
+                                                                        "field": {
+                                                                          "name": "optional",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.Type",
+                                                                              "field": {
+                                                                                "name": "variable",
+                                                                                "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.Version"}}}}}}}}}}},
+                                                                  {
+                                                                    "name": "annotation",
+                                                                    "term": {
+                                                                      "inject": {
+                                                                        "typeName": "hydra.core.Term",
+                                                                        "field": {
+                                                                          "name": "map",
+                                                                          "term": {
+                                                                            "map": [
+                                                                              {
+                                                                                "key": {
+                                                                                  "inject": {
+                                                                                    "typeName": "hydra.core.Term",
+                                                                                    "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "description"}}}}}}},
+                                                                                "value": {
+                                                                                  "inject": {
+                                                                                    "typeName": "hydra.core.Term",
+                                                                                    "field": {
+                                                                                      "name": "literal",
+                                                                                      "term": {
+                                                                                        "inject": {
+                                                                                          "typeName": "hydra.core.Literal",
+                                                                                          "field": {
+                                                                                            "name": "string",
+                                                                                            "term": {"literal": {"string": "The inclusive lower bound, if any (the minimum acceptable version)."}}}}}}}}}]}}}}}]}}}}}}]}},
+                                              {
+                                                "record": {
+                                                  "typeName": "hydra.core.FieldType",
+                                                  "fields": [
+                                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "upperExclusive"}}}}},
+                                                    {
+                                                      "name": "type",
+                                                      "term": {
+                                                        "inject": {
+                                                          "typeName": "hydra.core.Type",
+                                                          "field": {
+                                                            "name": "annotated",
+                                                            "term": {
+                                                              "record": {
+                                                                "typeName": "hydra.core.AnnotatedType",
+                                                                "fields": [
+                                                                  {
+                                                                    "name": "body",
+                                                                    "term": {
+                                                                      "inject": {
+                                                                        "typeName": "hydra.core.Type",
+                                                                        "field": {
+                                                                          "name": "optional",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.Type",
+                                                                              "field": {
+                                                                                "name": "variable",
+                                                                                "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.Version"}}}}}}}}}}},
+                                                                  {
+                                                                    "name": "annotation",
+                                                                    "term": {
+                                                                      "inject": {
+                                                                        "typeName": "hydra.core.Term",
+                                                                        "field": {
+                                                                          "name": "map",
+                                                                          "term": {
+                                                                            "map": [
+                                                                              {
+                                                                                "key": {
+                                                                                  "inject": {
+                                                                                    "typeName": "hydra.core.Term",
+                                                                                    "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "description"}}}}}}},
+                                                                                "value": {
+                                                                                  "inject": {
+                                                                                    "typeName": "hydra.core.Term",
+                                                                                    "field": {
+                                                                                      "name": "literal",
+                                                                                      "term": {
+                                                                                        "inject": {
+                                                                                          "typeName": "hydra.core.Literal",
+                                                                                          "field": {
+                                                                                            "name": "string",
+                                                                                            "term": {"literal": {"string": "The exclusive upper bound, if any (versions strictly below this are acceptable)."}}}}}}}}}]}}}}}]}}}}}}]}}]}}}}},
+                                  {
+                                    "name": "annotation",
+                                    "term": {
+                                      "inject": {
+                                        "typeName": "hydra.core.Term",
+                                        "field": {
+                                          "name": "map",
+                                          "term": {
+                                            "map": [
+                                              {
+                                                "key": {
+                                                  "inject": {
+                                                    "typeName": "hydra.core.Term",
+                                                    "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "description"}}}}}}},
+                                                "value": {
+                                                  "inject": {
+                                                    "typeName": "hydra.core.Term",
+                                                    "field": {
+                                                      "name": "literal",
+                                                      "term": {
+                                                        "inject": {
+                                                          "typeName": "hydra.core.Literal",
+                                                          "field": {
+                                                            "name": "string",
+                                                            "term": {"literal": {"string": "A version range with an optional inclusive lower bound and an optional exclusive upper bound."}}}}}}}}}]}}}}}]}}}}},
+                      "annotation": {"map": [{"key": {"variable": "type"}, "value": {"variable": "hydra.core.Type"}}]}}}},
+                {
                   "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.VersionSpecifier"}}}},
                   "value": {
                     "annotated": {
@@ -17785,7 +18217,156 @@
                                                                                       "term": {
                                                                                         "inject": {
                                                                                           "typeName": "hydra.core.Literal",
-                                                                                          "field": {"name": "string", "term": {"literal": {"string": "Any version satisfies the dependency"}}}}}}}}}]}}}}}]}}}}}}]}}]}}}}},
+                                                                                          "field": {"name": "string", "term": {"literal": {"string": "Any version satisfies the dependency"}}}}}}}}}]}}}}}]}}}}}}]}},
+                                              {
+                                                "record": {
+                                                  "typeName": "hydra.core.FieldType",
+                                                  "fields": [
+                                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "exact"}}}}},
+                                                    {
+                                                      "name": "type",
+                                                      "term": {
+                                                        "inject": {
+                                                          "typeName": "hydra.core.Type",
+                                                          "field": {
+                                                            "name": "annotated",
+                                                            "term": {
+                                                              "record": {
+                                                                "typeName": "hydra.core.AnnotatedType",
+                                                                "fields": [
+                                                                  {
+                                                                    "name": "body",
+                                                                    "term": {
+                                                                      "inject": {
+                                                                        "typeName": "hydra.core.Type",
+                                                                        "field": {
+                                                                          "name": "variable",
+                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.Version"}}}}}}}},
+                                                                  {
+                                                                    "name": "annotation",
+                                                                    "term": {
+                                                                      "inject": {
+                                                                        "typeName": "hydra.core.Term",
+                                                                        "field": {
+                                                                          "name": "map",
+                                                                          "term": {
+                                                                            "map": [
+                                                                              {
+                                                                                "key": {
+                                                                                  "inject": {
+                                                                                    "typeName": "hydra.core.Term",
+                                                                                    "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "description"}}}}}}},
+                                                                                "value": {
+                                                                                  "inject": {
+                                                                                    "typeName": "hydra.core.Term",
+                                                                                    "field": {
+                                                                                      "name": "literal",
+                                                                                      "term": {
+                                                                                        "inject": {
+                                                                                          "typeName": "hydra.core.Literal",
+                                                                                          "field": {
+                                                                                            "name": "string",
+                                                                                            "term": {"literal": {"string": "Exactly the given version satisfies the dependency; used to pin a specific release"}}}}}}}}}]}}}}}]}}}}}}]}},
+                                              {
+                                                "record": {
+                                                  "typeName": "hydra.core.FieldType",
+                                                  "fields": [
+                                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "atLeast"}}}}},
+                                                    {
+                                                      "name": "type",
+                                                      "term": {
+                                                        "inject": {
+                                                          "typeName": "hydra.core.Type",
+                                                          "field": {
+                                                            "name": "annotated",
+                                                            "term": {
+                                                              "record": {
+                                                                "typeName": "hydra.core.AnnotatedType",
+                                                                "fields": [
+                                                                  {
+                                                                    "name": "body",
+                                                                    "term": {
+                                                                      "inject": {
+                                                                        "typeName": "hydra.core.Type",
+                                                                        "field": {
+                                                                          "name": "variable",
+                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.Version"}}}}}}}},
+                                                                  {
+                                                                    "name": "annotation",
+                                                                    "term": {
+                                                                      "inject": {
+                                                                        "typeName": "hydra.core.Term",
+                                                                        "field": {
+                                                                          "name": "map",
+                                                                          "term": {
+                                                                            "map": [
+                                                                              {
+                                                                                "key": {
+                                                                                  "inject": {
+                                                                                    "typeName": "hydra.core.Term",
+                                                                                    "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "description"}}}}}}},
+                                                                                "value": {
+                                                                                  "inject": {
+                                                                                    "typeName": "hydra.core.Term",
+                                                                                    "field": {
+                                                                                      "name": "literal",
+                                                                                      "term": {
+                                                                                        "inject": {
+                                                                                          "typeName": "hydra.core.Literal",
+                                                                                          "field": {
+                                                                                            "name": "string",
+                                                                                            "term": {"literal": {"string": "Any version greater than or equal to the given version (e.g. PyPI \">=7.0\")"}}}}}}}}}]}}}}}]}}}}}}]}},
+                                              {
+                                                "record": {
+                                                  "typeName": "hydra.core.FieldType",
+                                                  "fields": [
+                                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "range"}}}}},
+                                                    {
+                                                      "name": "type",
+                                                      "term": {
+                                                        "inject": {
+                                                          "typeName": "hydra.core.Type",
+                                                          "field": {
+                                                            "name": "annotated",
+                                                            "term": {
+                                                              "record": {
+                                                                "typeName": "hydra.core.AnnotatedType",
+                                                                "fields": [
+                                                                  {
+                                                                    "name": "body",
+                                                                    "term": {
+                                                                      "inject": {
+                                                                        "typeName": "hydra.core.Type",
+                                                                        "field": {
+                                                                          "name": "variable",
+                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.VersionRange"}}}}}}}},
+                                                                  {
+                                                                    "name": "annotation",
+                                                                    "term": {
+                                                                      "inject": {
+                                                                        "typeName": "hydra.core.Term",
+                                                                        "field": {
+                                                                          "name": "map",
+                                                                          "term": {
+                                                                            "map": [
+                                                                              {
+                                                                                "key": {
+                                                                                  "inject": {
+                                                                                    "typeName": "hydra.core.Term",
+                                                                                    "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "description"}}}}}}},
+                                                                                "value": {
+                                                                                  "inject": {
+                                                                                    "typeName": "hydra.core.Term",
+                                                                                    "field": {
+                                                                                      "name": "literal",
+                                                                                      "term": {
+                                                                                        "inject": {
+                                                                                          "typeName": "hydra.core.Literal",
+                                                                                          "field": {
+                                                                                            "name": "string",
+                                                                                            "term": {
+                                                                                              "literal": {
+                                                                                                "string": "A version range with an optional inclusive lower bound and optional exclusive upper bound (e.g. \">=3.7,<4.0\")"}}}}}}}}}]}}}}}]}}}}}}]}}]}}}}},
                                   {
                                     "name": "annotation",
                                     "term": {
@@ -17812,7 +18393,7 @@
                                                             "name": "string",
                                                             "term": {
                                                               "literal": {
-                                                                "string": "A specifier constraining acceptable versions of a dependency. Currently only the `any` (unit) specifier is defined; future variants such as `exact`, `caret`, and `range` may be added without breaking consumers of the `any` form."}}}}}}}}}]}}}}}]}}}}},
+                                                                "string": "A specifier constraining acceptable versions of a dependency. Build systems render each variant into their own syntax (e.g. a range becomes \">=3.7,<4.0\" for PyPI or \"[3.7,4.0)\" for Maven). Further variants such as `caret` may be added without breaking consumers of the existing forms."}}}}}}}}}]}}}}}]}}}}},
                       "annotation": {"map": [{"key": {"variable": "type"}, "value": {"variable": "hydra.core.Type"}}]}}}},
                 {
                   "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.typing.FunctionStructure"}}}},

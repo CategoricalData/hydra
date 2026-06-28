@@ -1,0 +1,4 @@
+{
+  "dependencies": [
+    {"name": "gremlinpython", "version": {"range": {"lowerInclusive": "3.7", "upperExclusive": "4.0"}}, "scope": {"api": {}}},
+    {"name": "pytest", "version": {"atLeast": "7.0"}, "scope": {"test": {}}}]}

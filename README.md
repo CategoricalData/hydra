@@ -133,19 +133,19 @@ kernel.
 | [hydra-bench](packages/hydra-bench/README.md) | Synthetic inference benchmark workloads. Opt-in: not part of default sync. |
 | [hydra-haskell](packages/hydra-haskell/README.md), [hydra-java](packages/hydra-java/README.md), [hydra-python](packages/hydra-python/README.md), [hydra-scala](packages/hydra-scala/README.md), [hydra-lisp](packages/hydra-lisp/README.md), [hydra-typescript](packages/hydra-typescript/README.md), [hydra-go](packages/hydra-go/README.md), [hydra-coq](packages/hydra-coq/README.md), [hydra-wasm](packages/hydra-wasm/README.md) | Per-language coder packages (DSL sources for translating Hydra modules to each target). See the [Implementations](#implementations) table for head status. |
 
-#### Bindings
+#### Host-native overlays
 
-A **binding** is a hand-written, host-specific artifact that connects a Hydra
-package to an external system. Bindings sit outside the `packages/heads/overlay/dist`
-pipeline; they have no DSL definition. See
-[Code organization § About `bindings/`](https://github.com/CategoricalData/hydra/wiki/Code-Organization#about-bindings)
-for the rules.
+Host-specific integrations that connect a Hydra package to an external system — and other hand-written,
+language-specific source — live under `overlay/<lang>/<pkg>/` and are copied onto the generated
+distribution package. (These were formerly a separate `bindings/` tree; folded into overlays in #511.)
+See [docs/overlays.md](docs/overlays.md) for how the overlay system works.
 
-| Binding | Purpose |
-|---|---|
-| [hydra-rdf4j](bindings/java/hydra-rdf4j/README.md) | Eclipse rdf4j integration for `hydra-rdf`. |
-| [hydra-neo4j](bindings/java/hydra-neo4j/README.md) | Cypher and openGQL parsers via ANTLR, converting to `hydra.pg.query.*`. |
-| [hydra-pg-dsl](bindings/java/hydra-pg-dsl/README.md) | Java fluent builders (`Graphs`, `Queries`, `Merging`) for `hydra-pg`. |
+| Integration | Where | Purpose |
+|---|---|---|
+| Eclipse rdf4j | `overlay/java/hydra-rdf` ([README](packages/hydra-rdf/README.md)) | RDF serialization via rdf4j Rio for `hydra-rdf`. |
+| Cypher / GQL parsers | `overlay/java/hydra-pg` ([README](packages/hydra-pg/README.md)) | ANTLR-based openCypher/GQL parsers, converting to `hydra.pg.query.*`. |
+| TinkerPop / Gremlin | `overlay/{java,python}/hydra-pg` ([README](packages/hydra-pg/README.md)) | Hydra ↔ Gremlin bytecode + pg ↔ TinkerGraph bridge. |
+| PG DSL builders | `overlay/java/hydra-pg` ([README](packages/hydra-pg/README.md)) | Java fluent builders (`Graphs`, `Queries`, `Merging`) for `hydra-pg`. |
 
 ## Resources
 

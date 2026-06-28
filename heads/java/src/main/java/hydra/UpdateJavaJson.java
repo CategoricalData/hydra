@@ -53,6 +53,7 @@ public class UpdateJavaJson {
         // hydra-java
         "hydra.sources.java.Coder",
         "hydra.sources.java.Environment",
+        "hydra.sources.java.Gradle",
         "hydra.sources.java.Language",
         "hydra.sources.java.Names",
         "hydra.sources.java.Serde",
@@ -190,6 +191,34 @@ public class UpdateJavaJson {
             List<Module> writtenDsl = Generation.synthesizeAndWriteDslModules(
                 distJsonRoot, universePlusSources, dslTypeMods);
             System.err.println("  DSL wrappers: " + writtenDsl.size() + " module(s) written");
+
+            // #511: synthesize term encode/decode wrappers (hydra.encode.* /
+            // hydra.decode.*) for native type modules that must be read from /
+            // written to JSON as typed values. hydra.gradle is the build-config
+            // type whose overlay build.json is read via the canonical
+            // Decode.fromJson → Term → hydra.decode.gradle path (exactly as
+            // hydra.packaging.Module is read via hydra.decode.packaging). The
+            // native Java path previously synthesized only DSL wrappers; this adds
+            // the encode/decode synthesis it lacked.
+            List<Module> encTypeMods = new ArrayList<>();
+            for (Module m : sources) {
+                if (m.name.value.equals("hydra.gradle")) {
+                    encTypeMods.add(m);
+                }
+            }
+            List<Module> writtenCoders = Generation.synthesizeAndWriteEncodeDecodeModules(
+                distJsonRoot, universePlusSources, encTypeMods);
+            System.err.println("  encode/decode wrappers: " + writtenCoders.size() + " module(s) written");
+
+            // #511: write the native packages' manifest.json source-driven (rich
+            // schema, partitioned by Generation.namespaceToPackage). Previously
+            // these manifests were static/stale, so a new module (hydra.gradle)
+            // never appeared and routing silently fell back to hydra-kernel.
+            // mainModules = the loaded source modules (includes hydra.gradle);
+            // mainDslModules = the DSL-type source modules; mainEncodingModules =
+            // the encode/decode source modules (hydra.gradle).
+            Generation.writePackageManifests(
+                distJsonRoot, sources, dslTypeMods, encTypeMods);
         } catch (RuntimeException | java.io.IOException ex) {
             System.err.println("  FAILED: " + ex.getMessage());
             Throwable cause = (ex instanceof RuntimeException) ? ex.getCause() : ex;

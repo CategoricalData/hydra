@@ -94,19 +94,19 @@ The implementation follows a layered architecture:
    relationship — the layout follows the tree instead of the tree following declarations — and
    silently drift when files are added, renamed, or hand-edited. When a build script needs to know
    which files to copy or process, the answer must come from a declaration, not a `find` walk.
-7. **Per-package host code lives in `bindings/`**: Handwritten host-language code tied
-   to a specific Hydra package belongs under `bindings/<host>/<artifact>/`, not in
-   `heads/<host>/`. Two flavors: (a) third-party adapters that wrap external libraries
-   (e.g., `hydra-rdf4j` connects `hydra.rdf.syntax.*` to Eclipse rdf4j; `hydra-neo4j`
-   provides ANTLR-based Cypher/GQL parsers); and (b) per-package host DSL helpers with
-   no third-party deps (e.g., `hydra-pg-dsl` provides Java fluent builders for
-   `hydra.pg.{model,query}`). Each binding is independently versioned and publishable;
-   it depends on exactly one Hydra package (e.g., `hydra-rdf4j` depends on `hydra-rdf`).
-   The binding tree is **not** part of the DSL pipeline — bindings don't appear in
-   `hydra.json`'s package list, aren't synced through `bin/sync.sh`, and aren't
-   consumed by the bootstrap demo. They sit at the leaves of the dependency graph.
-   This rule keeps `heads/<host>/` runtimes minimal: language-independent Hydra
-   runtime + stdlib + build tooling.
+7. **Per-package host code lives in `overlay/`**: Handwritten host-language code tied
+   to a specific Hydra package belongs under `overlay/<lang>/<pkg>/`, not in
+   `heads/<host>/`. This includes (a) third-party adapters that wrap external libraries
+   (e.g., the Eclipse rdf4j integration for `hydra-rdf`; the ANTLR-based Cypher/GQL
+   parsers and the TinkerPop/Gremlin bridge for `hydra-pg`); and (b) per-package host
+   helpers with no third-party deps (e.g., the Java fluent builders for
+   `hydra.pg.{model,query}`). Such an overlay declares any third-party build
+   configuration in `overlay/<lang>/<pkg>/build.json`, and is copied onto the package's
+   distribution at assembly time rather than published as a separate artifact. (These
+   host-specific integrations were formerly a separate top-level `bindings/` tree, each
+   independently published; folded into overlays in #511 — see
+   [overlays.md](overlays.md).) This keeps `heads/<host>/` runtimes minimal:
+   language-independent Hydra runtime + stdlib + build tooling.
 
 ---
 
