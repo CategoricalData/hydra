@@ -1,13 +1,8 @@
 package hydra.overlay.java;
 
 import hydra.coders.Coder;
-import hydra.typing.InferenceContext;
-import hydra.errors.Error_;
-import hydra.overlay.java.util.ConsList;
 import hydra.overlay.java.util.Either;
-import hydra.overlay.java.util.PersistentMap;
 
-import java.util.Collections;
 import java.util.function.Function;
 
 
@@ -20,14 +15,15 @@ public class Coders {
      * @param <V1> the first value type
      * @param <V2> the intermediate value type
      * @param <V3> the final value type
+     * @param <E> the error type
      * @param coder1 the first coder
      * @param coder2 the second coder
      * @return the composed coder
      */
-    public static <V1, V2, V3> Coder<V1, V3> compose(
-            Coder<V1, V2> coder1,
-            Coder<V2, V3> coder2) {
-        return new Coder<V1, V3>(
+    public static <V1, V2, V3, E> Coder<V1, V3, E> compose(
+            Coder<V1, V2, E> coder1,
+            Coder<V2, V3, E> coder2) {
+        return new Coder<V1, V3, E>(
                 composeEncode(coder1.encode, coder2.encode),
                 composeEncode(coder2.decode, coder1.decode));
     }
@@ -41,9 +37,9 @@ public class Coders {
      * @param coder2 the second stateless coder
      * @return the composed stateless coder
      */
-    public static <V1, V2, V3> Coder<V1, V3> composeStateless(
-            Coder<V1, V2> coder1,
-            Coder<V2, V3> coder2) {
+    public static <V1, V2, V3> Coder<V1, V3, String> composeStateless(
+            Coder<V1, V2, String> coder1,
+            Coder<V2, V3, String> coder2) {
         return compose(coder1, coder2);
     }
 
@@ -51,10 +47,11 @@ public class Coders {
      * Find the inverse of a coder.
      * @param <V1> the first value type
      * @param <V2> the second value type
+     * @param <E> the error type
      * @param coder the coder to invert
      * @return the inverted coder
      */
-    public static <V1, V2> Coder<V2, V1> inverse(Coder<V1, V2> coder) {
+    public static <V1, V2, E> Coder<V2, V1, E> inverse(Coder<V1, V2, E> coder) {
         return new Coder<>(coder.decode, coder.encode);
     }
 
@@ -65,50 +62,45 @@ public class Coders {
      * @param coder the stateless coder to invert
      * @return the inverted stateless coder
      */
-    public static <V1, V2> Coder<V2, V1> inverseStateless(Coder<V1, V2> coder) {
-        return new Coder<V2, V1>(coder.decode, coder.encode);
+    public static <V1, V2> Coder<V2, V1, String> inverseStateless(Coder<V1, V2, String> coder) {
+        return new Coder<V2, V1, String>(coder.decode, coder.encode);
     }
 
     /**
      * Pass an initial value through the Coder's encode function, then back through the decode function.
      * @param <V1> the initial value type
      * @param <V2> the intermediate value type
+     * @param <E> the error type
      * @param coder the coder to use for encoding and decoding
      * @param initialValue the initial value to encode and decode
      * @return an Either containing the round-tripped value or an error
      */
-    public static <V1, V2> Either<String, V1> roundTrip(Coder<V1, V2> coder, V1 initialValue) {
-        InferenceContext cx = new InferenceContext(0, new java.util.ArrayList<>());
-        Either<Error_, V2> encResult = coder.encode.apply(cx).apply(initialValue);
+    public static <V1, V2, E> Either<E, V1> roundTrip(Coder<V1, V2, E> coder, V1 initialValue) {
+        Either<E, V2> encResult = coder.encode.apply(initialValue);
         if (encResult.isLeft()) {
-            return Either.left(hydra.show.Errors.error(((Either.Left<Error_, V2>) encResult).value));
+            return Either.left(((Either.Left<E, V2>) encResult).value);
         }
-        V2 encoded = ((Either.Right<Error_, V2>) encResult).value;
-        Either<Error_, V1> decResult = coder.decode.apply(cx).apply(encoded);
-        if (decResult.isLeft()) {
-            return Either.left(hydra.show.Errors.error(((Either.Left<Error_, V1>) decResult).value));
-        }
-        return Either.right(((Either.Right<Error_, V1>) decResult).value);
+        V2 encoded = ((Either.Right<E, V2>) encResult).value;
+        return coder.decode.apply(encoded);
     }
 
     /**
-     * Compose two Coder-style encode functions.
+     * Compose two encode functions.
      */
-    private static <A, B, C> Function<InferenceContext, Function<A, Either<Error_, C>>>
-            composeEncode(
-                Function<InferenceContext, Function<A, Either<Error_, B>>> first,
-                Function<InferenceContext, Function<B, Either<Error_, C>>> second) {
-        return cx -> a -> {
-            Either<Error_, B> r1 = first.apply(cx).apply(a);
-            return r1.accept(new Either.Visitor<Error_, B, Either<Error_, C>>() {
+    private static <A, B, C, E> Function<A, Either<E, C>> composeEncode(
+                Function<A, Either<E, B>> first,
+                Function<B, Either<E, C>> second) {
+        return a -> {
+            Either<E, B> r1 = first.apply(a);
+            return r1.accept(new Either.Visitor<E, B, Either<E, C>>() {
                 @Override
-                public Either<Error_, C> visit(Either.Left<Error_, B> left) {
+                public Either<E, C> visit(Either.Left<E, B> left) {
                     return Either.left(left.value);
                 }
 
                 @Override
-                public Either<Error_, C> visit(Either.Right<Error_, B> right) {
-                    return second.apply(cx).apply(right.value);
+                public Either<E, C> visit(Either.Right<E, B> right) {
+                    return second.apply(right.value);
                 }
             });
         };

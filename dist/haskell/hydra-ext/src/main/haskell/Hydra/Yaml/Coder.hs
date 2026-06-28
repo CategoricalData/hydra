@@ -43,8 +43,8 @@ import qualified Hydra.Yaml.Model as YamlModel
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Decode a YAML value to a record term
-decodeRecord :: Core.Name -> [(Core.FieldType, (Coders.Coder Core.Term YamlModel.Node))] -> Typing.InferenceContext -> YamlModel.Node -> Either Errors.Error Core.Term
-decodeRecord tname coders cx n =
+decodeRecord :: Core.Name -> [(Core.FieldType, (Coders.Coder Core.Term YamlModel.Node Errors.Error))] -> YamlModel.Node -> Either Errors.Error Core.Term
+decodeRecord tname coders n =
 
       let decodeObjectBody =
               \m ->
@@ -55,7 +55,7 @@ decodeRecord tname coders cx n =
                               fname = Core.fieldTypeName ft
                               defaultValue = YamlModel.NodeScalar YamlModel.ScalarNull
                               yamlValue = Optionals.fromOptional defaultValue (Maps.lookup (YamlModel.NodeScalar (YamlModel.ScalarStr (Core.unName fname))) m)
-                          in (Eithers.bind (Coders.coderDecode coder_ cx yamlValue) (\v -> Right (Core.Field {
+                          in (Eithers.bind (Coders.coderDecode coder_ yamlValue) (\v -> Right (Core.Field {
                             Core.fieldName = fname,
                             Core.fieldTerm = v})))
                 in (Eithers.bind (Eithers.mapList decodeField coders) (\fields -> Right (Core.TermRecord (Core.Record {
@@ -65,8 +65,8 @@ decodeRecord tname coders cx n =
         YamlModel.NodeMapping v0 -> decodeObjectBody v0
         _ -> Left (Errors.ErrorOther (Errors.OtherError "expected mapping"))
 -- | Encode a record term to YAML
-encodeRecord :: [(Core.FieldType, (Coders.Coder Core.Term YamlModel.Node))] -> Typing.InferenceContext -> Graph.Graph -> Core.Term -> Either Errors.Error YamlModel.Node
-encodeRecord coders cx graph term =
+encodeRecord :: [(Core.FieldType, (Coders.Coder Core.Term YamlModel.Node Errors.Error))] -> Graph.Graph -> Core.Term -> Either Errors.Error YamlModel.Node
+encodeRecord coders graph term =
 
       let stripped = Strip.deannotateTerm term
           isMaybeNothing =
@@ -83,52 +83,52 @@ encodeRecord coders cx graph term =
                         coder_ = Pairs.second ftAndCoder
                         fname = Core.fieldName field
                         fvalue = Core.fieldTerm field
-                    in (Logic.ifElse (isMaybeNothing ft fvalue) (Right Nothing) (Eithers.bind (Coders.coderEncode coder_ cx fvalue) (\encoded -> Right (Just (YamlModel.NodeScalar (YamlModel.ScalarStr (Core.unName fname)), encoded)))))
+                    in (Logic.ifElse (isMaybeNothing ft fvalue) (Right Nothing) (Eithers.bind (Coders.coderEncode coder_ fvalue) (\encoded -> Right (Just (YamlModel.NodeScalar (YamlModel.ScalarStr (Core.unName fname)), encoded)))))
       in (Eithers.bind (ExtractCore.termRecord graph stripped) (\record ->
         let fields = Core.recordFields record
         in (Eithers.bind (Eithers.mapList encodeField (Lists.zip coders fields)) (\maybeFields -> Right (YamlModel.NodeMapping (Maps.fromList (Optionals.cat maybeFields)))))))
 -- | Create a YAML coder for literal types
-literalYamlCoder :: Core.LiteralType -> Either t0 (Coders.Coder Core.Literal YamlModel.Scalar)
+literalYamlCoder :: Core.LiteralType -> Either t0 (Coders.Coder Core.Literal YamlModel.Scalar Errors.Error)
 literalYamlCoder lt =
 
       let decodeBool =
-              \cx -> \s -> case s of
+              \s -> case s of
                 YamlModel.ScalarBool v0 -> Right (Core.LiteralBoolean v0)
                 _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
                   "expected boolean, found scalar"])))
           decodeDecimal =
-                  \cx -> \s -> case s of
+                  \s -> case s of
                     YamlModel.ScalarDecimal v0 -> Right (Core.LiteralDecimal v0)
                     YamlModel.ScalarFloat v0 -> Right (Core.LiteralDecimal (LibLiterals.float64ToDecimal v0))
                     YamlModel.ScalarInt v0 -> Right (Core.LiteralDecimal (LibLiterals.bigintToDecimal v0))
                     _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
                       "expected decimal, found scalar"])))
           decodeFloat =
-                  \cx -> \s -> case s of
+                  \s -> case s of
                     YamlModel.ScalarDecimal v0 -> Right (Core.LiteralFloat (Core.FloatValueFloat64 (LibLiterals.decimalToFloat64 v0)))
                     YamlModel.ScalarFloat v0 -> Right (Core.LiteralFloat (Core.FloatValueFloat64 v0))
                     _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
                       "expected float, found scalar"])))
           decodeInteger =
-                  \cx -> \s -> case s of
+                  \s -> case s of
                     YamlModel.ScalarInt v0 -> Right (Core.LiteralInteger (Core.IntegerValueBigint v0))
                     _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
                       "expected integer, found scalar"])))
           decodeString =
-                  \cx -> \s -> case s of
+                  \s -> case s of
                     YamlModel.ScalarStr v0 -> Right (Core.LiteralString v0)
                     _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
                       "expected string, found scalar"])))
           encoded =
                   case lt of
                     Core.LiteralTypeBoolean -> Coders.Coder {
-                      Coders.coderEncode = (\cx -> \lit -> Eithers.bind (ExtractCore.booleanLiteral lit) (\b -> Right (YamlModel.ScalarBool b))),
+                      Coders.coderEncode = (\lit -> Eithers.bind (ExtractCore.booleanLiteral lit) (\b -> Right (YamlModel.ScalarBool b))),
                       Coders.coderDecode = decodeBool}
                     Core.LiteralTypeDecimal -> Coders.Coder {
-                      Coders.coderEncode = (\cx -> \lit -> Eithers.bind (ExtractCore.decimalLiteral lit) (\d -> Right (YamlModel.ScalarDecimal d))),
+                      Coders.coderEncode = (\lit -> Eithers.bind (ExtractCore.decimalLiteral lit) (\d -> Right (YamlModel.ScalarDecimal d))),
                       Coders.coderDecode = decodeDecimal}
                     Core.LiteralTypeFloat _ -> Coders.Coder {
-                      Coders.coderEncode = (\cx -> \lit -> Eithers.bind (ExtractCore.floatLiteral lit) (\f ->
+                      Coders.coderEncode = (\lit -> Eithers.bind (ExtractCore.floatLiteral lit) (\f ->
                         let bf =
                                 case f of
                                   Core.FloatValueFloat32 v1 -> LibLiterals.float32ToFloat64 v1
@@ -139,65 +139,65 @@ literalYamlCoder lt =
                           shown])))) (Right (YamlModel.ScalarFloat bf))))),
                       Coders.coderDecode = decodeFloat}
                     Core.LiteralTypeInteger _ -> Coders.Coder {
-                      Coders.coderEncode = (\cx -> \lit -> Eithers.bind (ExtractCore.integerLiteral lit) (\i -> Eithers.bind (ExtractCore.bigintValue i) (\bi -> Right (YamlModel.ScalarInt bi)))),
+                      Coders.coderEncode = (\lit -> Eithers.bind (ExtractCore.integerLiteral lit) (\i -> Eithers.bind (ExtractCore.bigintValue i) (\bi -> Right (YamlModel.ScalarInt bi)))),
                       Coders.coderDecode = decodeInteger}
                     Core.LiteralTypeString -> Coders.Coder {
-                      Coders.coderEncode = (\cx -> \lit -> Eithers.bind (ExtractCore.stringLiteral lit) (\s -> Right (YamlModel.ScalarStr s))),
+                      Coders.coderEncode = (\lit -> Eithers.bind (ExtractCore.stringLiteral lit) (\s -> Right (YamlModel.ScalarStr s))),
                       Coders.coderDecode = decodeString}
       in (Right encoded)
 -- | Create a YAML coder for record types
-recordCoder :: Core.Name -> [Core.FieldType] -> t0 -> Graph.Graph -> Either Errors.Error (Coders.Coder Core.Term YamlModel.Node)
+recordCoder :: Core.Name -> [Core.FieldType] -> t0 -> Graph.Graph -> Either Errors.Error (Coders.Coder Core.Term YamlModel.Node Errors.Error)
 recordCoder tname rt cx g =
 
       let getCoder = \f -> Eithers.bind (termCoder (Core.fieldTypeType f) cx g) (\coder -> Right (f, coder))
       in (Eithers.bind (Eithers.mapList getCoder rt) (\coders -> Right (Coders.Coder {
-        Coders.coderEncode = (\cx2 -> \term -> encodeRecord coders cx2 g term),
-        Coders.coderDecode = (\cx2 -> \val -> decodeRecord tname coders cx2 val)})))
+        Coders.coderEncode = (\term -> encodeRecord coders g term),
+        Coders.coderDecode = (\val -> decodeRecord tname coders val)})))
 -- | True for IEEE sentinel strings that Hydra YAML cannot represent as a float scalar.
 requiresYamlStringSentinel :: String -> Bool
 requiresYamlStringSentinel s =
     Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Logic.or (Equality.equal s "-Infinity") (Equality.equal s "-0.0")))
 -- | Create a YAML coder for term types
-termCoder :: Core.Type -> t0 -> Graph.Graph -> Either Errors.Error (Coders.Coder Core.Term YamlModel.Node)
+termCoder :: Core.Type -> t0 -> Graph.Graph -> Either Errors.Error (Coders.Coder Core.Term YamlModel.Node Errors.Error)
 termCoder typ cx g =
 
       let stripped = Strip.deannotateType typ
           encodeLiteral =
-                  \ac -> \cx2 -> \term -> case term of
-                    Core.TermLiteral v0 -> Eithers.bind (Coders.coderEncode ac cx2 v0) (\scalar -> Right (YamlModel.NodeScalar scalar))
+                  \ac -> \term -> case term of
+                    Core.TermLiteral v0 -> Eithers.bind (Coders.coderEncode ac v0) (\scalar -> Right (YamlModel.NodeScalar scalar))
                     _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
                       "expected literal term, found: ",
                       (ShowCore.term term)])))
           encodeList =
-                  \lc -> \cx2 -> \term -> case term of
-                    Core.TermList v0 -> Eithers.bind (Eithers.mapList (\el -> Coders.coderEncode lc cx2 el) v0) (\encodedEls -> Right (YamlModel.NodeSequence encodedEls))
+                  \lc -> \term -> case term of
+                    Core.TermList v0 -> Eithers.bind (Eithers.mapList (\el -> Coders.coderEncode lc el) v0) (\encodedEls -> Right (YamlModel.NodeSequence encodedEls))
                     _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
                       "expected list term, found: ",
                       (ShowCore.term term)])))
           decodeList =
-                  \lc -> \cx2 -> \n -> case n of
-                    YamlModel.NodeSequence v0 -> Eithers.bind (Eithers.mapList (\node -> Coders.coderDecode lc cx2 node) v0) (\decodedNodes -> Right (Core.TermList decodedNodes))
+                  \lc -> \n -> case n of
+                    YamlModel.NodeSequence v0 -> Eithers.bind (Eithers.mapList (\node -> Coders.coderDecode lc node) v0) (\decodedNodes -> Right (Core.TermList decodedNodes))
                     _ -> Left (Errors.ErrorOther (Errors.OtherError "expected sequence"))
           encodeMaybe =
-                  \maybeElementCoder -> \cx2 -> \optionalTerm ->
+                  \maybeElementCoder -> \optionalTerm ->
                     let strippedMaybeTerm = Strip.deannotateTerm optionalTerm
                     in case strippedMaybeTerm of
-                      Core.TermOptional v0 -> Optionals.cases v0 (Right (YamlModel.NodeScalar YamlModel.ScalarNull)) (\innerTerm -> Eithers.bind (Coders.coderEncode maybeElementCoder cx2 innerTerm) (\encodedInner -> Right encodedInner))
+                      Core.TermOptional v0 -> Optionals.cases v0 (Right (YamlModel.NodeScalar YamlModel.ScalarNull)) (\innerTerm -> Eithers.bind (Coders.coderEncode maybeElementCoder innerTerm) (\encodedInner -> Right encodedInner))
                       _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
                         "expected optional term, found: ",
                         (ShowCore.term optionalTerm)])))
           decodeMaybe =
-                  \maybeElementCoder -> \cx2 -> \yamlVal -> case yamlVal of
+                  \maybeElementCoder -> \yamlVal -> case yamlVal of
                     YamlModel.NodeScalar v0 -> case v0 of
                       YamlModel.ScalarNull -> Right (Core.TermOptional Nothing)
-                      _ -> Eithers.bind (Coders.coderDecode maybeElementCoder cx2 yamlVal) (\decodedInner -> Right (Core.TermOptional (Just decodedInner)))
-                    _ -> Eithers.bind (Coders.coderDecode maybeElementCoder cx2 yamlVal) (\decodedInner -> Right (Core.TermOptional (Just decodedInner)))
+                      _ -> Eithers.bind (Coders.coderDecode maybeElementCoder yamlVal) (\decodedInner -> Right (Core.TermOptional (Just decodedInner)))
+                    _ -> Eithers.bind (Coders.coderDecode maybeElementCoder yamlVal) (\decodedInner -> Right (Core.TermOptional (Just decodedInner)))
           result =
                   case stripped of
                     Core.TypeLiteral v0 -> Eithers.bind (literalYamlCoder v0) (\ac -> Right (Coders.Coder {
                       Coders.coderEncode = (encodeLiteral ac),
-                      Coders.coderDecode = (\cx2 -> \n -> case n of
-                        YamlModel.NodeScalar v1 -> Eithers.bind (Coders.coderDecode ac cx2 v1) (\lit -> Right (Core.TermLiteral lit))
+                      Coders.coderDecode = (\n -> case n of
+                        YamlModel.NodeScalar v1 -> Eithers.bind (Coders.coderDecode ac v1) (\lit -> Right (Core.TermLiteral lit))
                         _ -> Left (Errors.ErrorOther (Errors.OtherError "expected scalar node")))}))
                     Core.TypeList v0 -> Eithers.bind (termCoder v0 cx g) (\lc -> Right (Coders.Coder {
                       Coders.coderEncode = (encodeList lc),
@@ -207,23 +207,23 @@ termCoder typ cx g =
                           vt = Core.mapTypeValues v0
                       in (Eithers.bind (termCoder kt cx g) (\kc -> Eithers.bind (termCoder vt cx g) (\vc ->
                         let encodeEntry =
-                                \cx2 -> \kv ->
+                                \kv ->
                                   let k = Pairs.first kv
                                       v = Pairs.second kv
-                                  in (Eithers.bind (Coders.coderEncode kc cx2 k) (\encodedK -> Eithers.bind (Coders.coderEncode vc cx2 v) (\encodedV -> Right (encodedK, encodedV))))
+                                  in (Eithers.bind (Coders.coderEncode kc k) (\encodedK -> Eithers.bind (Coders.coderEncode vc v) (\encodedV -> Right (encodedK, encodedV))))
                             decodeEntry =
-                                    \cx2 -> \kv ->
+                                    \kv ->
                                       let k = Pairs.first kv
                                           v = Pairs.second kv
-                                      in (Eithers.bind (Coders.coderDecode kc cx2 k) (\decodedK -> Eithers.bind (Coders.coderDecode vc cx2 v) (\decodedV -> Right (decodedK, decodedV))))
+                                      in (Eithers.bind (Coders.coderDecode kc k) (\decodedK -> Eithers.bind (Coders.coderDecode vc v) (\decodedV -> Right (decodedK, decodedV))))
                         in (Right (Coders.Coder {
-                          Coders.coderEncode = (\cx2 -> \term -> case term of
-                            Core.TermMap v1 -> Eithers.bind (Eithers.mapList (\entry -> encodeEntry cx2 entry) (Maps.toList v1)) (\entries -> Right (YamlModel.NodeMapping (Maps.fromList entries)))
+                          Coders.coderEncode = (\term -> case term of
+                            Core.TermMap v1 -> Eithers.bind (Eithers.mapList (\entry -> encodeEntry entry) (Maps.toList v1)) (\entries -> Right (YamlModel.NodeMapping (Maps.fromList entries)))
                             _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
                               "expected map term, found: ",
                               (ShowCore.term term)])))),
-                          Coders.coderDecode = (\cx2 -> \n -> case n of
-                            YamlModel.NodeMapping v1 -> Eithers.bind (Eithers.mapList (\entry -> decodeEntry cx2 entry) (Maps.toList v1)) (\entries -> Right (Core.TermMap (Maps.fromList entries)))
+                          Coders.coderDecode = (\n -> case n of
+                            YamlModel.NodeMapping v1 -> Eithers.bind (Eithers.mapList (\entry -> decodeEntry entry) (Maps.toList v1)) (\entries -> Right (Core.TermMap (Maps.fromList entries)))
                             _ -> Left (Errors.ErrorOther (Errors.OtherError "expected mapping")))})))))
                     Core.TypeOptional v0 -> Eithers.bind (termCoder v0 cx g) (\maybeElementCoder -> Right (Coders.Coder {
                       Coders.coderEncode = (encodeMaybe maybeElementCoder),
@@ -235,26 +235,26 @@ termCoder typ cx g =
                       (ShowCore.type_ typ)])))
       in result
 -- | YAML coder for unit values
-unitCoder :: Coders.Coder Core.Term YamlModel.Node
+unitCoder :: Coders.Coder Core.Term YamlModel.Node Errors.Error
 unitCoder =
     Coders.Coder {
       Coders.coderEncode = encodeUnit,
       Coders.coderDecode = decodeUnit}
   where
     encodeUnit =
-        \cx -> \term -> case (Strip.deannotateTerm term) of
+        \term -> case (Strip.deannotateTerm term) of
           Core.TermUnit -> Right (YamlModel.NodeScalar YamlModel.ScalarNull)
           _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
             "expected unit, found: ",
             (ShowCore.term term)])))
     decodeUnit =
-        \cx -> \n -> case n of
+        \n -> case n of
           YamlModel.NodeScalar v0 -> case v0 of
             YamlModel.ScalarNull -> Right Core.TermUnit
             _ -> Left (Errors.ErrorOther (Errors.OtherError "expected null scalar"))
           _ -> Left (Errors.ErrorOther (Errors.OtherError "expected null"))
 -- | Create a YAML coder for a given type
-yamlCoder :: Core.Type -> t0 -> Graph.Graph -> Either Errors.Error (Coders.Coder Core.Term YamlModel.Node)
+yamlCoder :: Core.Type -> t0 -> Graph.Graph -> Either Errors.Error (Coders.Coder Core.Term YamlModel.Node Errors.Error)
 yamlCoder typ cx g =
 
       let mkTermCoder = \t -> termCoder t cx g

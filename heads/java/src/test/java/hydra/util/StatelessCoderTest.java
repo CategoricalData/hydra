@@ -60,7 +60,7 @@ public class StatelessCoderTest extends HydraTestBase {
         assertRoundTripIsNoop(toStringCoder, 1);
 
         // For certain values, a round-trip "from the right" is also a no-op
-        Coder<String, Integer> inverse = inverseStateless(toStringCoder);
+        Coder<String, Integer, String> inverse = inverseStateless(toStringCoder);
         assertRoundTripIsNoop(inverse, "42");
 
         // However, for some values, a round-trip "from the right" fails.
@@ -72,7 +72,7 @@ public class StatelessCoderTest extends HydraTestBase {
     public void checkInverses() {
         // The inverse of the "add one" coder is a "subtract one" coder;
         // it just swaps the encode and decode functions.
-        Coder<Integer, Integer> subtractOneCoder = inverseStateless(addOneCoder);
+        Coder<Integer, Integer, String> subtractOneCoder = inverseStateless(addOneCoder);
         assertSucceedsWith(0, coderEncode(subtractOneCoder, 1));
         assertSucceedsWith(1, coderDecode(subtractOneCoder, 0));
     }
@@ -80,8 +80,8 @@ public class StatelessCoderTest extends HydraTestBase {
     @Test
     public void checkComposition() {
         // Compose two coders to create a new coder
-        Coder<Integer, String> composed = composeStateless(addOneCoder, toStringCoder);
-        Coder<String, Integer> inverse = inverseStateless(composed);
+        Coder<Integer, String, String> composed = composeStateless(addOneCoder, toStringCoder);
+        Coder<String, Integer, String> inverse = inverseStateless(composed);
 
         // The composed encode function adds one, then converts the number to a string
         assertSucceedsWith("2", coderEncode(composed, 1));
@@ -99,31 +99,11 @@ public class StatelessCoderTest extends HydraTestBase {
         assertRoundTripFails(inverse, "not a number");
     }
 
-    /**
-     * Apply a Coder's encode function, converting errors to simple strings.
-     */
-    private static <V1, V2> Either<String, V2> coderEncode(Coder<V1, V2> coder, V1 value) {
-        hydra.typing.InferenceContext cx = new hydra.typing.InferenceContext(0, new java.util.ArrayList<>());
-        Either<hydra.errors.Error_, V2> result =
-            coder.encode.apply(cx).apply(value);
-        if (result.isRight()) {
-            return Either.right(((Either.Right<hydra.errors.Error_, V2>) result).value);
-        } else {
-            return Either.left(hydra.show.Errors.error(((Either.Left<hydra.errors.Error_, V2>) result).value));
-        }
+    private static <V1, V2> Either<String, V2> coderEncode(Coder<V1, V2, String> coder, V1 value) {
+        return coder.encode.apply(value);
     }
 
-    /**
-     * Apply a Coder's decode function, converting errors to simple strings.
-     */
-    private static <V1, V2> Either<String, V1> coderDecode(Coder<V1, V2> coder, V2 value) {
-        hydra.typing.InferenceContext cx = new hydra.typing.InferenceContext(0, new java.util.ArrayList<>());
-        Either<hydra.errors.Error_, V1> result =
-            coder.decode.apply(cx).apply(value);
-        if (result.isRight()) {
-            return Either.right(((Either.Right<hydra.errors.Error_, V1>) result).value);
-        } else {
-            return Either.left(hydra.show.Errors.error(((Either.Left<hydra.errors.Error_, V1>) result).value));
-        }
+    private static <V1, V2> Either<String, V1> coderDecode(Coder<V1, V2, String> coder, V2 value) {
+        return coder.decode.apply(value);
     }
 }

@@ -9,7 +9,6 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.Errors as Errors
 import qualified Hydra.Encode.File as File
-import qualified Hydra.Encode.Typing as Typing
 import qualified Hydra.Encode.Util as Util
 import qualified Hydra.Encode.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)

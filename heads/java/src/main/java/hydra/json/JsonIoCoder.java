@@ -2,9 +2,6 @@ package hydra.json;
 
 import com.cedarsoftware.util.io.JsonObject;
 import hydra.coders.Coder;
-import hydra.typing.InferenceContext;
-import hydra.errors.Error_;
-import hydra.errors.OtherError;
 import hydra.json.model.Value;
 import hydra.overlay.java.util.Either;
 
@@ -21,28 +18,12 @@ import hydra.overlay.java.util.Pair;
 /**
  * A bidirectional coder between Hydra's native JSON values and the JSON objects supported by json-io.
  */
-public class JsonIoCoder extends Coder<Value, Object> {
+public class JsonIoCoder extends Coder<Value, Object, String> {
     /**
      * Constructs a new JsonIoCoder.
      */
     public JsonIoCoder() {
-        super(toCoderFn(JsonIoCoder::encode), toCoderFn(JsonIoCoder::decode));
-    }
-
-    /**
-     * Convert a simple Either-based function to the Coder's Context-based Either signature.
-     */
-    private static <A, B> java.util.function.Function<InferenceContext, java.util.function.Function<A, Either<Error_, B>>>
-            toCoderFn(java.util.function.Function<A, Either<String, B>> fn) {
-        return cx -> a -> {
-            Either<String, B> result = fn.apply(a);
-            if (result.isRight()) {
-                return Either.right(((Either.Right<String, B>) result).value);
-            } else {
-                String msg = ((Either.Left<String, B>) result).value;
-                return Either.left(new Error_.Other(new OtherError(msg)));
-            }
-        };
+        super(JsonIoCoder::encode, JsonIoCoder::decode);
     }
 
     /**

@@ -523,17 +523,17 @@ adaptTypeScheme = define "adaptTypeScheme" $
   "t1" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ var "t0" $
   right $ Core.typeScheme (var "vars0") (var "t1") (Core.typeSchemeConstraints (var "ts0"))
 
-composeCoders :: TypedTermDefinition (Coder a b -> Coder b c -> Coder a c)
+composeCoders :: TypedTermDefinition (Coder a b e -> Coder b c e -> Coder a c e)
 composeCoders = define "composeCoders" $
   doc "Compose two coders into a single coder" $
   "c1" ~> "c2" ~>
   Coders.coder
-    ("cx" ~> "a" ~>
-      "b1" <<~ Coders.coderEncode (var "c1") @@ var "cx" @@ var "a" $
-      Coders.coderEncode (var "c2") @@ var "cx" @@ var "b1")
-    ("cx" ~> "c" ~>
-      "b2" <<~ Coders.coderDecode (var "c2") @@ var "cx" @@ var "c" $
-      Coders.coderDecode (var "c1") @@ var "cx" @@ var "b2")
+    ("a" ~>
+      "b1" <<~ Coders.coderEncode (var "c1") @@ var "a" $
+      Coders.coderEncode (var "c2") @@ var "b1")
+    ("c" ~>
+      "b2" <<~ Coders.coderDecode (var "c2") @@ var "c" $
+      Coders.coderDecode (var "c1") @@ var "b2")
 
 dataGraphToDefinitions :: TypedTermDefinition (LanguageConstraints -> Bool -> Bool -> Bool -> Bool -> [Binding] -> Graph -> [ModuleName] -> InferenceContext -> Prelude.Either Error (Graph, [[TermDefinition]]))
 dataGraphToDefinitions = define "dataGraphToDefinitions" $
@@ -1014,7 +1014,7 @@ schemaGraphToDefinitions = define "schemaGraphToDefinitions" $
           ("n" ~> Optionals.map ("t" ~> pair (var "n") (var "t")) (Maps.lookup (var "n" :: TypedTerm Name) (var "tmap1")))
           (var "names"))
       (var "nameLists"))
-simpleLanguageAdapter :: TypedTermDefinition (Language -> InferenceContext -> Graph -> Type -> Prelude.Either Error (Adapter Type Type Term Term))
+simpleLanguageAdapter :: TypedTermDefinition (Language -> InferenceContext -> Graph -> Type -> Prelude.Either Error (Adapter Type Type Term Term Error))
 simpleLanguageAdapter = define "simpleLanguageAdapter" $
   doc "Given a target language and a source type, produce an adapter which rewrites the type and its terms according to the language's constraints. The encode direction adapts terms; the decode direction is identity." $
   "lang" ~> "cx" ~> "g" ~> "typ" ~>
@@ -1026,9 +1026,9 @@ simpleLanguageAdapter = define "simpleLanguageAdapter" $
     (var "typ")
     (var "adaptedType")
     (Coders.coder
-      ("cx" ~> "term" ~>
+      ("term" ~>
           adaptTerm @@ var "constraints" @@ var "litmap" @@ var "cx" @@ var "g" @@ var "term")
-      ("cx" ~> "term" ~> right $ var "term"))
+      ("term" ~> right $ var "term"))
 
 
 --------------------------------------------------------------------------------

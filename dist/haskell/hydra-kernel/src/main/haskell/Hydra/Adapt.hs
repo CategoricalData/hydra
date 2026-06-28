@@ -344,11 +344,11 @@ adaptTypeScheme constraints litmap ts0 =
         Core.typeSchemeConstraints = (Core.typeSchemeConstraints ts0)})))
 
 -- | Compose two coders into a single coder
-composeCoders :: Coders.Coder t0 t1 -> Coders.Coder t1 t2 -> Coders.Coder t0 t2
+composeCoders :: Coders.Coder t0 t1 t2 -> Coders.Coder t1 t3 t2 -> Coders.Coder t0 t3 t2
 composeCoders c1 c2 =
     Coders.Coder {
-      Coders.coderEncode = (\cx -> \a -> Eithers.bind (Coders.coderEncode c1 cx a) (\b1 -> Coders.coderEncode c2 cx b1)),
-      Coders.coderDecode = (\cx -> \c -> Eithers.bind (Coders.coderDecode c2 cx c) (\b2 -> Coders.coderDecode c1 cx b2))}
+      Coders.coderEncode = (\a -> Eithers.bind (Coders.coderEncode c1 a) (\b1 -> Coders.coderEncode c2 b1)),
+      Coders.coderDecode = (\c -> Eithers.bind (Coders.coderDecode c2 c) (\b2 -> Coders.coderDecode c1 b2))}
 
 -- | Given a data graph along with language constraints, original ordered bindings, and a designated list of namespaces, adapt the graph to the language constraints, then return the processed graph along with term definitions grouped by namespace (in the order of the input namespaces). Inference is performed before adaptation if bindings lack type annotations. Hoisting must preserve type schemes; if any binding loses its type scheme after hoisting, the pipeline fails. Adaptation preserves type application/lambda wrappers and adapts embedded types. Post-adaptation inference is performed to ensure binding TypeSchemes are fully consistent. The doExpand flag controls eta expansion. The doHoistCaseStatements flag controls case statement hoisting (needed for Python). The doHoistPolymorphicLetBindings flag controls polymorphic let binding hoisting (needed for Java). The originalBindings parameter provides the original ordered bindings (from module elements).
 dataGraphToDefinitions :: Coders.LanguageConstraints -> Bool -> Bool -> Bool -> Bool -> [Core.Binding] -> Graph.Graph -> [Packaging.ModuleName] -> Typing.InferenceContext -> Either Errors.Error (Graph.Graph, [[Packaging.TermDefinition]])
@@ -737,7 +737,7 @@ schemaGraphToDefinitions constraints graph nameLists cx =
           (Lists.map (\names -> Lists.map toDef (Optionals.mapOptional (\n -> Optionals.map (\t -> (n, t)) (Maps.lookup n tmap1)) names)) nameLists))))))
 
 -- | Given a target language and a source type, produce an adapter which rewrites the type and its terms according to the language's constraints. The encode direction adapts terms; the decode direction is identity.
-simpleLanguageAdapter :: Coders.Language -> t0 -> Graph.Graph -> Core.Type -> Either Errors.Error (Coders.Adapter Core.Type Core.Type Core.Term Core.Term)
+simpleLanguageAdapter :: Coders.Language -> t0 -> Graph.Graph -> Core.Type -> Either Errors.Error (Coders.Adapter Core.Type Core.Type Core.Term Core.Term Errors.Error)
 simpleLanguageAdapter lang cx g typ =
 
       let constraints = Coders.languageConstraints lang
@@ -747,8 +747,8 @@ simpleLanguageAdapter lang cx g typ =
         Coders.adapterSource = typ,
         Coders.adapterTarget = adaptedType,
         Coders.adapterCoder = Coders.Coder {
-          Coders.coderEncode = (\cx2 -> \term -> adaptTerm constraints litmap cx2 g term),
-          Coders.coderDecode = (\cx2 -> \term -> Right term)}})))
+          Coders.coderEncode = (\term -> adaptTerm constraints litmap cx g term),
+          Coders.coderDecode = (\term -> Right term)}})))
 
 -- | Find a list of alternatives for a given term, if any
 termAlternatives :: t0 -> Graph.Graph -> Core.Term -> Either Errors.Error [Core.Term]

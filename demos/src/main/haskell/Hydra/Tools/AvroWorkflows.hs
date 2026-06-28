@@ -109,8 +109,8 @@ propertyGraphGraphsonLastMile = LastMile encoder serializer "jsonl"
   where
     encoder typ cx graf = do
       encodeTerm <- typeApplicationTermToPropertyGraph examplePgSchema typ () () cx graf
-      return $ \term _graf cx' -> do
-        elements <- encodeTerm term cx'
+      return $ \term _graf _cx' -> do
+        elements <- encodeTerm term
         pgElementsToGraphson encodeStringValue elements
     serializer jsonValues = Right $ L.unlines $ L.map JsonWriter.printJson jsonValues
 
@@ -140,7 +140,7 @@ typeApplicationTermToShaclRdf _ _cx _g = Right encode
           else pure []
         notInGraph = L.null $ L.filter (\e -> bindingTerm e == term) $ graphToBindings graf
 
-transformAvroJson :: JsonPayloadFormat -> Adapter Avro.Schema Type Json.Value Term -> LastMile x -> FilePath -> FilePath -> IO ()
+transformAvroJson :: JsonPayloadFormat -> Adapter Avro.Schema Type Json.Value Term Error -> LastMile x -> FilePath -> FilePath -> IO ()
 transformAvroJson format adapter lastMile inFile outFile = do
     putStr $ "\t" ++ inFile ++ " --> "
     contents <- readFile inFile
@@ -159,7 +159,7 @@ transformAvroJson format adapter lastMile inFile outFile = do
     jsonToTarget inFile' adapter' lmEncoder cx (index, payload) = case parseJsonEither payload of
         Left msg -> fail $ "Failed to read JSON payload #" ++ show index ++ " in file " ++ inFile' ++ ": " ++ msg
         Right json -> do
-          term <- eitherToIo $ coderEncode (adapterCoder adapter') cx json
+          term <- eitherToIo $ coderEncode (adapterCoder adapter') json
           let bindings = extractElements (adapterTarget adapter') term
           let graph = bindingsToGraph hydraCoreGraph bindings
           eitherToIo $ lmEncoder term graph cx
@@ -180,7 +180,7 @@ transformAvroJsonDirectory lastMile schemaPath srcDir destDir = do
     return ()
   where
     loadAdapter cx schemaStr = do
-      avroSchema <- coderDecode (avroSchemaStringCoder cx) cx schemaStr
+      avroSchema <- coderDecode (avroSchemaStringCoder cx) schemaStr
       fst <$> avroHydraAdapter cx avroSchema emptyAvroEnvironment
 
     transformFile adapter srcFile = do

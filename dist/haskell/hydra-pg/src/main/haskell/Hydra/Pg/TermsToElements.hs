@@ -127,11 +127,11 @@ evalStep cx step term =
 expectList :: t0 -> Graph.Graph -> (t0 -> Graph.Graph -> Core.Term -> Either Errors.Error t1) -> Core.Term -> Either Errors.Error [t1]
 expectList cx g f term = Eithers.bind (ExtractCore.list g term) (\elems -> Eithers.mapList (f cx g) elems)
 -- | Parse an edge id pattern from a value spec and schema
-parseEdgeIdPattern :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.ValueSpec -> Either t5 (Typing.InferenceContext -> Core.Term -> Either Errors.Error [t4])
+parseEdgeIdPattern :: t0 -> t1 -> Mapping.Schema t2 t3 t4 Errors.Error -> Mapping.ValueSpec -> Either t5 (Core.Term -> Either Errors.Error [t4])
 parseEdgeIdPattern cx g schema spec =
-    Eithers.bind (parseValueSpec cx g spec) (\fun -> Right (\cx_ -> \term -> Eithers.bind (fun cx_ term) (\terms -> Eithers.mapList (Coders.coderEncode (Mapping.schemaEdgeIds schema) cx_) terms)))
+    Eithers.bind (parseValueSpec cx g spec) (\fun -> Right (\term -> Eithers.bind (fun term) (\terms -> Eithers.mapList (Coders.coderEncode (Mapping.schemaEdgeIds schema)) terms)))
 -- | Parse an edge specification into a label and encoder function
-parseEdgeSpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.EdgeSpec -> Either t5 (PgModel.Label, (Typing.InferenceContext -> Core.Term -> Either Errors.Error [PgModel.Element t4]))
+parseEdgeSpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 Errors.Error -> Mapping.EdgeSpec -> Either t5 (PgModel.Label, (Core.Term -> Either Errors.Error [PgModel.Element t4]))
 parseEdgeSpec cx g schema spec =
 
       let label = Mapping.edgeSpecLabel spec
@@ -141,7 +141,7 @@ parseEdgeSpec cx g schema spec =
           props = Mapping.edgeSpecProperties spec
       in (Eithers.bind (parseEdgeIdPattern cx g schema id) (\getId -> Eithers.bind (parseVertexIdPattern cx g schema outV) (\getOut -> Eithers.bind (parseVertexIdPattern cx g schema inV) (\getIn -> Eithers.bind (Eithers.mapList (parsePropertySpec cx g schema) props) (\getProps -> Right (
         PgModel.LabelEdge label,
-        (\cx_ -> \term -> Eithers.bind (requireUnique cx_ "edge id" (getId cx_) term) (\tid -> Eithers.bind (requireUnique cx_ "vertex id" (getOut cx_) term) (\tout -> Eithers.bind (requireUnique cx_ "edge id" (getIn cx_) term) (\tin -> Eithers.bind (Eithers.map (\_xs -> Maps.fromList _xs) (Eithers.mapList (\gf -> requireUnique cx_ "property key" (gf cx_) term) getProps)) (\tprops -> Right [
+        (\term -> Eithers.bind (requireUnique cx "edge id" getId term) (\tid -> Eithers.bind (requireUnique cx "vertex id" getOut term) (\tout -> Eithers.bind (requireUnique cx "edge id" getIn term) (\tin -> Eithers.bind (Eithers.map (\_xs -> Maps.fromList _xs) (Eithers.mapList (\gf -> requireUnique cx "property key" gf term) getProps)) (\tprops -> Right [
           PgModel.ElementEdge (PgModel.Edge {
             PgModel.edgeLabel = label,
             PgModel.edgeId = tid,
@@ -149,13 +149,13 @@ parseEdgeSpec cx g schema spec =
             PgModel.edgeIn = tin,
             PgModel.edgeProperties = tprops})])))))))))))
 -- | Parse an element specification into a label and encoder function
-parseElementSpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.ElementSpec -> Either t5 (PgModel.Label, (Typing.InferenceContext -> Core.Term -> Either Errors.Error [PgModel.Element t4]))
+parseElementSpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 Errors.Error -> Mapping.ElementSpec -> Either t5 (PgModel.Label, (Core.Term -> Either Errors.Error [PgModel.Element t4]))
 parseElementSpec cx g schema spec =
     case spec of
       Mapping.ElementSpecVertex v0 -> parseVertexSpec cx g schema v0
       Mapping.ElementSpecEdge v0 -> parseEdgeSpec cx g schema v0
 -- | Parse a string pattern into a function that traverses terms
-parsePattern :: t0 -> t1 -> String -> Either t2 (t3 -> Core.Term -> Either Errors.Error [Core.Term])
+parsePattern :: t0 -> t1 -> String -> Either t2 (Core.Term -> Either Errors.Error [Core.Term])
 parsePattern cx _g pat =
 
       let segments = Strings.splitOn "${" pat
@@ -168,27 +168,27 @@ parsePattern cx _g pat =
                         litPart = Strings.intercalate "}" (Lists.drop 1 parts)
                         pathSteps = Strings.splitOn "/" pathStr
                     in (pathSteps, litPart)) rest
-      in (Right (\cx_ -> \term -> applyPattern cx_ firstLit parsed term))
+      in (Right (\term -> applyPattern cx firstLit parsed term))
 -- | Parse a property specification into an encoder function
-parsePropertySpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.PropertySpec -> Either t5 (Typing.InferenceContext -> Core.Term -> Either Errors.Error [(PgModel.PropertyKey, t4)])
+parsePropertySpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 Errors.Error -> Mapping.PropertySpec -> Either t5 (Core.Term -> Either Errors.Error [(PgModel.PropertyKey, t4)])
 parsePropertySpec cx g schema spec =
 
       let key = Mapping.propertySpecKey spec
           value = Mapping.propertySpecValue spec
-      in (Eithers.bind (parseValueSpec cx g value) (\fun -> Right (\cx_ -> \term -> Eithers.bind (fun cx_ term) (\results -> Eithers.bind (Eithers.mapList (Coders.coderEncode (Mapping.schemaPropertyValues schema) cx_) results) (\values -> Right (Lists.map (\v -> (key, v)) values))))))
+      in (Eithers.bind (parseValueSpec cx g value) (\fun -> Right (\term -> Eithers.bind (fun term) (\results -> Eithers.bind (Eithers.mapList (Coders.coderEncode (Mapping.schemaPropertyValues schema)) results) (\values -> Right (Lists.map (\v -> (key, v)) values))))))
 -- | Parse a value specification into a function that processes terms
-parseValueSpec :: t0 -> t1 -> Mapping.ValueSpec -> Either t2 (t3 -> Core.Term -> Either Errors.Error [Core.Term])
+parseValueSpec :: t0 -> t1 -> Mapping.ValueSpec -> Either t2 (Core.Term -> Either Errors.Error [Core.Term])
 parseValueSpec cx g spec =
     case spec of
-      Mapping.ValueSpecValue -> Right (\_cx -> \term -> Right [
+      Mapping.ValueSpecValue -> Right (\term -> Right [
         term])
       Mapping.ValueSpecPattern v0 -> parsePattern cx g v0
 -- | Parse a vertex id pattern from a value spec and schema
-parseVertexIdPattern :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.ValueSpec -> Either t5 (Typing.InferenceContext -> Core.Term -> Either Errors.Error [t4])
+parseVertexIdPattern :: t0 -> t1 -> Mapping.Schema t2 t3 t4 Errors.Error -> Mapping.ValueSpec -> Either t5 (Core.Term -> Either Errors.Error [t4])
 parseVertexIdPattern cx g schema spec =
-    Eithers.bind (parseValueSpec cx g spec) (\fun -> Right (\cx_ -> \term -> Eithers.bind (fun cx_ term) (\terms -> Eithers.mapList (Coders.coderEncode (Mapping.schemaVertexIds schema) cx_) terms)))
+    Eithers.bind (parseValueSpec cx g spec) (\fun -> Right (\term -> Eithers.bind (fun term) (\terms -> Eithers.mapList (Coders.coderEncode (Mapping.schemaVertexIds schema)) terms)))
 -- | Parse a vertex specification into a label and encoder function
-parseVertexSpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.VertexSpec -> Either t5 (PgModel.Label, (Typing.InferenceContext -> Core.Term -> Either Errors.Error [PgModel.Element t4]))
+parseVertexSpec :: t0 -> t1 -> Mapping.Schema t2 t3 t4 Errors.Error -> Mapping.VertexSpec -> Either t5 (PgModel.Label, (Core.Term -> Either Errors.Error [PgModel.Element t4]))
 parseVertexSpec cx g schema spec =
 
       let label = Mapping.vertexSpecLabel spec
@@ -196,7 +196,7 @@ parseVertexSpec cx g schema spec =
           props = Mapping.vertexSpecProperties spec
       in (Eithers.bind (parseVertexIdPattern cx g schema id) (\getId -> Eithers.bind (Eithers.mapList (parsePropertySpec cx g schema) props) (\getProps -> Right (
         PgModel.LabelVertex label,
-        (\cx_ -> \term -> Eithers.bind (requireUnique cx_ "vertex id" (getId cx_) term) (\tid -> Eithers.bind (Eithers.map (\_xs -> Maps.fromList _xs) (Eithers.mapList (\gf -> requireUnique cx_ "property key" (gf cx_) term) getProps)) (\tprops -> Right [
+        (\term -> Eithers.bind (requireUnique cx "vertex id" getId term) (\tid -> Eithers.bind (Eithers.map (\_xs -> Maps.fromList _xs) (Eithers.mapList (\gf -> requireUnique cx "property key" gf term) getProps)) (\tprops -> Right [
           PgModel.ElementVertex (PgModel.Vertex {
             PgModel.vertexLabel = label,
             PgModel.vertexId = tid,
@@ -226,7 +226,7 @@ requireUnique :: t0 -> String -> (t1 -> Either Errors.Error [t2]) -> t1 -> Eithe
 requireUnique cx context fun term =
     Eithers.bind (fun term) (\results -> Logic.ifElse (Lists.null results) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "No value found: " context)))) (Logic.ifElse (Equality.equal (Lists.length results) 1) (Optionals.cases (Lists.maybeHead results) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Multiple values found: " context)))) (\x -> Right x)) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Multiple values found: " context))))))
 -- | Create an adapter that maps terms to property graph elements using a mapping specification
-termToElementsAdapter :: t0 -> Graph.Graph -> Mapping.Schema t1 t2 t3 -> Core.Type -> Either Errors.Error (Coders.Adapter Core.Type [PgModel.Label] Core.Term [PgModel.Element t3])
+termToElementsAdapter :: t0 -> Graph.Graph -> Mapping.Schema t1 t2 t3 Errors.Error -> Core.Type -> Either Errors.Error (Coders.Adapter Core.Type [PgModel.Label] Core.Term [PgModel.Element t3] Errors.Error)
 termToElementsAdapter cx g schema typ =
 
       let key_elements = Core.Name "elements"
@@ -235,8 +235,8 @@ termToElementsAdapter cx g schema typ =
         Coders.adapterSource = typ,
         Coders.adapterTarget = [],
         Coders.adapterCoder = Coders.Coder {
-          Coders.coderEncode = (\_cx -> \_t -> Right []),
-          Coders.coderDecode = (\cx_ -> \_els -> Left (Errors.ErrorOther (Errors.OtherError "no corresponding element type")))}})) (\term -> Eithers.bind (expectList cx g decodeElementSpec term) (\specTerms -> Eithers.bind (Eithers.mapList (parseElementSpec cx g schema) specTerms) (\specs ->
+          Coders.coderEncode = (\_t -> Right []),
+          Coders.coderDecode = (\_els -> Left (Errors.ErrorOther (Errors.OtherError "no corresponding element type")))}})) (\term -> Eithers.bind (expectList cx g decodeElementSpec term) (\specTerms -> Eithers.bind (Eithers.mapList (parseElementSpec cx g schema) specTerms) (\specs ->
         let labels = Lists.nub (Lists.map (\_p -> Pairs.first _p) specs)
             encoders = Lists.map (\_p -> Pairs.second _p) specs
         in (Right (Coders.Adapter {
@@ -244,8 +244,8 @@ termToElementsAdapter cx g schema typ =
           Coders.adapterSource = typ,
           Coders.adapterTarget = labels,
           Coders.adapterCoder = Coders.Coder {
-            Coders.coderEncode = (\cx_ -> \t -> Eithers.map (\_xs -> Lists.concat _xs) (Eithers.mapList (\e -> e cx_ t) encoders)),
-            Coders.coderDecode = (\cx_ -> \_els -> Left (Errors.ErrorOther (Errors.OtherError "element decoding is not yet supported")))}}))))))
+            Coders.coderEncode = (\t -> Eithers.map (\_xs -> Lists.concat _xs) (Eithers.mapList (\e -> e t) encoders)),
+            Coders.coderDecode = (\_els -> Left (Errors.ErrorOther (Errors.OtherError "element decoding is not yet supported")))}}))))))
 -- | Convert a term to its string representation
 termToString :: Core.Term -> String
 termToString term =

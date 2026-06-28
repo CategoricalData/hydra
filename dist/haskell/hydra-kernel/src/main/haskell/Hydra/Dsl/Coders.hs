@@ -10,14 +10,12 @@ import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Dsl.Errors as DslErrors
 import qualified Hydra.Dsl.File as DslFile
 import qualified Hydra.Dsl.Graph as DslGraph
-import qualified Hydra.Dsl.Typing as DslTyping
 import qualified Hydra.Dsl.Util as DslUtil
 import qualified Hydra.Dsl.Variants as DslVariants
 import qualified Hydra.Errors as Errors
 import qualified Hydra.File as File
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Typed as Typed
-import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -26,7 +24,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | DSL constructor for hydra.coders.Adapter
-adapter :: Typed.TypedTerm Bool -> Typed.TypedTerm t1 -> Typed.TypedTerm t2 -> Typed.TypedTerm (Coders.Coder v1 v2) -> Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2)
+adapter :: Typed.TypedTerm Bool -> Typed.TypedTerm t1 -> Typed.TypedTerm t2 -> Typed.TypedTerm (Coders.Coder v1 v2 e) -> Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2 e)
 adapter isLossy source target coder =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.coders.Adapter"),
@@ -45,7 +43,7 @@ adapter isLossy source target coder =
           Core.fieldTerm = (Typed.unTypedTerm coder)}]}))
 
 -- | DSL accessor for the coder field of hydra.coders.Adapter
-adapterCoder :: Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2) -> Typed.TypedTerm (Coders.Coder v1 v2)
+adapterCoder :: Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2 e) -> Typed.TypedTerm (Coders.Coder v1 v2 e)
 adapterCoder x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -54,7 +52,7 @@ adapterCoder x =
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
 -- | DSL constructor for hydra.coders.AdapterContext
-adapterContext :: Typed.TypedTerm Graph.Graph -> Typed.TypedTerm Coders.Language -> Typed.TypedTerm (M.Map Core.Name (Coders.Adapter Core.Type Core.Type Core.Term Core.Term)) -> Typed.TypedTerm Coders.AdapterContext
+adapterContext :: Typed.TypedTerm Graph.Graph -> Typed.TypedTerm Coders.Language -> Typed.TypedTerm (M.Map Core.Name (Coders.Adapter Core.Type Core.Type Core.Term Core.Term Errors.Error)) -> Typed.TypedTerm Coders.AdapterContext
 adapterContext graph language adapters =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.coders.AdapterContext"),
@@ -70,7 +68,7 @@ adapterContext graph language adapters =
           Core.fieldTerm = (Typed.unTypedTerm adapters)}]}))
 
 -- | DSL accessor for the adapters field of hydra.coders.AdapterContext
-adapterContextAdapters :: Typed.TypedTerm Coders.AdapterContext -> Typed.TypedTerm (M.Map Core.Name (Coders.Adapter Core.Type Core.Type Core.Term Core.Term))
+adapterContextAdapters :: Typed.TypedTerm Coders.AdapterContext -> Typed.TypedTerm (M.Map Core.Name (Coders.Adapter Core.Type Core.Type Core.Term Core.Term Errors.Error))
 adapterContextAdapters x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -97,7 +95,7 @@ adapterContextLanguage x =
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
 -- | DSL updater for the adapters field of hydra.coders.AdapterContext
-adapterContextWithAdapters :: Typed.TypedTerm Coders.AdapterContext -> Typed.TypedTerm (M.Map Core.Name (Coders.Adapter Core.Type Core.Type Core.Term Core.Term)) -> Typed.TypedTerm Coders.AdapterContext
+adapterContextWithAdapters :: Typed.TypedTerm Coders.AdapterContext -> Typed.TypedTerm (M.Map Core.Name (Coders.Adapter Core.Type Core.Type Core.Term Core.Term Errors.Error)) -> Typed.TypedTerm Coders.AdapterContext
 adapterContextWithAdapters original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.coders.AdapterContext"),
@@ -169,7 +167,7 @@ adapterContextWithLanguage original newVal =
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 
 -- | DSL accessor for the isLossy field of hydra.coders.Adapter
-adapterIsLossy :: Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2) -> Typed.TypedTerm Bool
+adapterIsLossy :: Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2 e) -> Typed.TypedTerm Bool
 adapterIsLossy x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -178,7 +176,7 @@ adapterIsLossy x =
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
 -- | DSL accessor for the source field of hydra.coders.Adapter
-adapterSource :: Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2) -> Typed.TypedTerm t1
+adapterSource :: Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2 e) -> Typed.TypedTerm t1
 adapterSource x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -187,7 +185,7 @@ adapterSource x =
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
 -- | DSL accessor for the target field of hydra.coders.Adapter
-adapterTarget :: Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2) -> Typed.TypedTerm t2
+adapterTarget :: Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2 e) -> Typed.TypedTerm t2
 adapterTarget x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -196,7 +194,7 @@ adapterTarget x =
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
 -- | DSL updater for the coder field of hydra.coders.Adapter
-adapterWithCoder :: Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2) -> Typed.TypedTerm (Coders.Coder v1 v2) -> Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2)
+adapterWithCoder :: Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2 e) -> Typed.TypedTerm (Coders.Coder v1 v2 e) -> Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2 e)
 adapterWithCoder original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.coders.Adapter"),
@@ -227,7 +225,7 @@ adapterWithCoder original newVal =
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 
 -- | DSL updater for the isLossy field of hydra.coders.Adapter
-adapterWithIsLossy :: Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2) -> Typed.TypedTerm Bool -> Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2)
+adapterWithIsLossy :: Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2 e) -> Typed.TypedTerm Bool -> Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2 e)
 adapterWithIsLossy original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.coders.Adapter"),
@@ -258,7 +256,7 @@ adapterWithIsLossy original newVal =
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 
 -- | DSL updater for the source field of hydra.coders.Adapter
-adapterWithSource :: Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2) -> Typed.TypedTerm t1 -> Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2)
+adapterWithSource :: Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2 e) -> Typed.TypedTerm t1 -> Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2 e)
 adapterWithSource original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.coders.Adapter"),
@@ -289,7 +287,7 @@ adapterWithSource original newVal =
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 
 -- | DSL updater for the target field of hydra.coders.Adapter
-adapterWithTarget :: Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2) -> Typed.TypedTerm t2 -> Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2)
+adapterWithTarget :: Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2 e) -> Typed.TypedTerm t2 -> Typed.TypedTerm (Coders.Adapter t1 t2 v1 v2 e)
 adapterWithTarget original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.coders.Adapter"),
@@ -320,7 +318,7 @@ adapterWithTarget original newVal =
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 
 -- | DSL constructor for hydra.coders.Bicoder
-bicoder :: Typed.TypedTerm (t1 -> Coders.Adapter t1 t2 v1 v2) -> Typed.TypedTerm (t2 -> Coders.Adapter t2 t1 v2 v1) -> Typed.TypedTerm (Coders.Bicoder t1 t2 v1 v2)
+bicoder :: Typed.TypedTerm (t1 -> Coders.Adapter t1 t2 v1 v2 e) -> Typed.TypedTerm (t2 -> Coders.Adapter t2 t1 v2 v1 e) -> Typed.TypedTerm (Coders.Bicoder t1 t2 v1 v2 e)
 bicoder encode decode =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.coders.Bicoder"),
@@ -333,7 +331,7 @@ bicoder encode decode =
           Core.fieldTerm = (Typed.unTypedTerm decode)}]}))
 
 -- | DSL accessor for the decode field of hydra.coders.Bicoder
-bicoderDecode :: Typed.TypedTerm (Coders.Bicoder t1 t2 v1 v2) -> Typed.TypedTerm (t2 -> Coders.Adapter t2 t1 v2 v1)
+bicoderDecode :: Typed.TypedTerm (Coders.Bicoder t1 t2 v1 v2 e) -> Typed.TypedTerm (t2 -> Coders.Adapter t2 t1 v2 v1 e)
 bicoderDecode x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -342,7 +340,7 @@ bicoderDecode x =
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
 -- | DSL accessor for the encode field of hydra.coders.Bicoder
-bicoderEncode :: Typed.TypedTerm (Coders.Bicoder t1 t2 v1 v2) -> Typed.TypedTerm (t1 -> Coders.Adapter t1 t2 v1 v2)
+bicoderEncode :: Typed.TypedTerm (Coders.Bicoder t1 t2 v1 v2 e) -> Typed.TypedTerm (t1 -> Coders.Adapter t1 t2 v1 v2 e)
 bicoderEncode x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -351,7 +349,7 @@ bicoderEncode x =
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
 -- | DSL updater for the decode field of hydra.coders.Bicoder
-bicoderWithDecode :: Typed.TypedTerm (Coders.Bicoder t1 t2 v1 v2) -> Typed.TypedTerm (t2 -> Coders.Adapter t2 t1 v2 v1) -> Typed.TypedTerm (Coders.Bicoder t1 t2 v1 v2)
+bicoderWithDecode :: Typed.TypedTerm (Coders.Bicoder t1 t2 v1 v2 e) -> Typed.TypedTerm (t2 -> Coders.Adapter t2 t1 v2 v1 e) -> Typed.TypedTerm (Coders.Bicoder t1 t2 v1 v2 e)
 bicoderWithDecode original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.coders.Bicoder"),
@@ -368,7 +366,7 @@ bicoderWithDecode original newVal =
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 
 -- | DSL updater for the encode field of hydra.coders.Bicoder
-bicoderWithEncode :: Typed.TypedTerm (Coders.Bicoder t1 t2 v1 v2) -> Typed.TypedTerm (t1 -> Coders.Adapter t1 t2 v1 v2) -> Typed.TypedTerm (Coders.Bicoder t1 t2 v1 v2)
+bicoderWithEncode :: Typed.TypedTerm (Coders.Bicoder t1 t2 v1 v2 e) -> Typed.TypedTerm (t1 -> Coders.Adapter t1 t2 v1 v2 e) -> Typed.TypedTerm (Coders.Bicoder t1 t2 v1 v2 e)
 bicoderWithEncode original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.coders.Bicoder"),
@@ -1242,7 +1240,7 @@ caseConventionsWithTypeVariable original newVal =
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 
 -- | DSL constructor for hydra.coders.Coder
-coder :: Typed.TypedTerm (Typing.InferenceContext -> v1 -> Either Errors.Error v2) -> Typed.TypedTerm (Typing.InferenceContext -> v2 -> Either Errors.Error v1) -> Typed.TypedTerm (Coders.Coder v1 v2)
+coder :: Typed.TypedTerm (v1 -> Either e v2) -> Typed.TypedTerm (v2 -> Either e v1) -> Typed.TypedTerm (Coders.Coder v1 v2 e)
 coder encode decode =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.coders.Coder"),
@@ -1255,7 +1253,7 @@ coder encode decode =
           Core.fieldTerm = (Typed.unTypedTerm decode)}]}))
 
 -- | DSL accessor for the decode field of hydra.coders.Coder
-coderDecode :: Typed.TypedTerm (Coders.Coder v1 v2) -> Typed.TypedTerm (Typing.InferenceContext -> v2 -> Either Errors.Error v1)
+coderDecode :: Typed.TypedTerm (Coders.Coder v1 v2 e) -> Typed.TypedTerm (v2 -> Either e v1)
 coderDecode x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1282,7 +1280,7 @@ coderDirectionEncode =
         Core.fieldTerm = Core.TermUnit}}))
 
 -- | DSL accessor for the encode field of hydra.coders.Coder
-coderEncode :: Typed.TypedTerm (Coders.Coder v1 v2) -> Typed.TypedTerm (Typing.InferenceContext -> v1 -> Either Errors.Error v2)
+coderEncode :: Typed.TypedTerm (Coders.Coder v1 v2 e) -> Typed.TypedTerm (v1 -> Either e v2)
 coderEncode x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1291,7 +1289,7 @@ coderEncode x =
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
 -- | DSL updater for the decode field of hydra.coders.Coder
-coderWithDecode :: Typed.TypedTerm (Coders.Coder v1 v2) -> Typed.TypedTerm (Typing.InferenceContext -> v2 -> Either Errors.Error v1) -> Typed.TypedTerm (Coders.Coder v1 v2)
+coderWithDecode :: Typed.TypedTerm (Coders.Coder v1 v2 e) -> Typed.TypedTerm (v2 -> Either e v1) -> Typed.TypedTerm (Coders.Coder v1 v2 e)
 coderWithDecode original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.coders.Coder"),
@@ -1308,7 +1306,7 @@ coderWithDecode original newVal =
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 
 -- | DSL updater for the encode field of hydra.coders.Coder
-coderWithEncode :: Typed.TypedTerm (Coders.Coder v1 v2) -> Typed.TypedTerm (Typing.InferenceContext -> v1 -> Either Errors.Error v2) -> Typed.TypedTerm (Coders.Coder v1 v2)
+coderWithEncode :: Typed.TypedTerm (Coders.Coder v1 v2 e) -> Typed.TypedTerm (v1 -> Either e v2) -> Typed.TypedTerm (Coders.Coder v1 v2 e)
 coderWithEncode original newVal =
     Typed.TypedTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.coders.Coder"),

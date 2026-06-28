@@ -507,8 +507,11 @@
             "type": {
               "application": {
                 "function": {
-                  "application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "hydra.pg.graphson.syntax.Vertex"}}},
-                "argument": {"variable": "hydra.json.model.Value"}}}}},
+                  "application": {
+                    "function": {
+                      "application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "hydra.pg.graphson.syntax.Vertex"}}},
+                    "argument": {"variable": "hydra.json.model.Value"}}},
+                "argument": {"variable": "hydra.errors.Error"}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -516,16 +519,14 @@
                 "body": {
                   "typeApplication": {
                     "body": {
-                      "record": {
-                        "typeName": "hydra.coders.Coder",
-                        "fields": [
-                          {
-                            "name": "encode",
-                            "term": {
-                              "lambda": {
-                                "parameter": "_cx",
-                                "domain": {"variable": "hydra.typing.InferenceContext"},
-                                "body": {
+                      "typeApplication": {
+                        "body": {
+                          "record": {
+                            "typeName": "hydra.coders.Coder",
+                            "fields": [
+                              {
+                                "name": "encode",
+                                "term": {
                                   "lambda": {
                                     "parameter": "v",
                                     "domain": {"variable": "hydra.pg.graphson.syntax.Vertex"},
@@ -537,14 +538,10 @@
                                               "either": {
                                                 "right": {"application": {"function": {"variable": "hydra.pg.graphson.coder.vertexToJson"}, "argument": {"variable": "v"}}}}},
                                             "type": {"variable": "hydra.errors.Error"}}},
-                                        "type": {"variable": "hydra.json.model.Value"}}}}}}}},
-                          {
-                            "name": "decode",
-                            "term": {
-                              "lambda": {
-                                "parameter": "_cx",
-                                "domain": {"variable": "hydra.typing.InferenceContext"},
-                                "body": {
+                                        "type": {"variable": "hydra.json.model.Value"}}}}}},
+                              {
+                                "name": "decode",
+                                "term": {
                                   "lambda": {
                                     "parameter": "_",
                                     "domain": {"variable": "hydra.json.model.Value"},
@@ -564,9 +561,10 @@
                                                           "typeName": "hydra.errors.OtherError",
                                                           "body": {"literal": {"string": "decoding GraphSON JSON is currently unsupported"}}}}}}}}},
                                             "type": {"variable": "hydra.errors.Error"}}},
-                                        "type": {"variable": "hydra.pg.graphson.syntax.Vertex"}}}}}}}}]}},
-                    "type": {"variable": "hydra.pg.graphson.syntax.Vertex"}}},
-                "type": {"variable": "hydra.json.model.Value"}}},
+                                        "type": {"variable": "hydra.pg.graphson.syntax.Vertex"}}}}}}]}},
+                        "type": {"variable": "hydra.pg.graphson.syntax.Vertex"}}},
+                    "type": {"variable": "hydra.json.model.Value"}}},
+                "type": {"variable": "hydra.errors.Error"}}},
             "annotation": {
               "map": [
                 {

@@ -9,6 +9,7 @@ import           Hydra.Overlay.Haskell.Dsl.Types                 ((>:))
 import qualified Hydra.Overlay.Haskell.Dsl.Types                 as T
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
 import qualified Hydra.Sources.Kernel.Types.Coders as Coders
+import qualified Hydra.Sources.Kernel.Types.Errors as Errors
 
 ns :: ModuleName
 ns = ModuleName "hydra.avro.environment"
@@ -20,7 +21,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
-            moduleDependencies = unqualifiedDep <$> [CoreTypes.ns, Coders.ns, ModuleName "hydra.avro.schema", ModuleName "hydra.json.model"],
+            moduleDependencies = unqualifiedDep <$> [CoreTypes.ns, Coders.ns, Errors.ns, ModuleName "hydra.avro.schema", ModuleName "hydra.json.model"],
             moduleMetadata = descriptionMetadata (Just "Type definitions for the Avro code generation environment")}
   where
     definitions = [
@@ -57,9 +58,9 @@ avroForeignKeyType = define "AvroForeignKey" $
       doc "A function which constructs element names from string values" $
       T.function T.string (coreType "Name")]
 
--- | AvroHydraAdapter = Adapter Avro.Schema Type Json.Value Term
+-- | AvroHydraAdapter = Adapter Avro.Schema Type Json.Value Term Error
 avroHydraAdapterType :: Type
-avroHydraAdapterType = T.apply (T.apply (T.apply (T.apply (computeType "Adapter") avroSchemaType) (coreType "Type")) jsonValueType) (coreType "Term")
+avroHydraAdapterType = T.apply (T.apply (T.apply (T.apply (T.apply (computeType "Adapter") avroSchemaType) (coreType "Type")) jsonValueType) (coreType "Term")) (errorsType "Error")
 
 -- | An Avro primary key annotation
 avroPrimaryKeyType :: TypeDefinition
@@ -94,6 +95,9 @@ computeType = typeref Coders.ns
 coreType :: String -> Type
 coreType = typeref CoreTypes.ns
 
+errorsType :: String -> Type
+errorsType = typeref Errors.ns
+
 -- | Environment for encoding Hydra types to Avro schemas
 encodeEnvironmentType :: TypeDefinition
 encodeEnvironmentType = define "EncodeEnvironment" $
@@ -106,9 +110,9 @@ encodeEnvironmentType = define "EncodeEnvironment" $
       doc "Adapters for types that have already been fully emitted (emit references for these)" $
       T.map (coreType "Name") hydraAvroAdapterType]
 
--- | HydraAvroAdapter = Adapter Type Avro.Schema Term Json.Value (reverse direction)
+-- | HydraAvroAdapter = Adapter Type Avro.Schema Term Json.Value Error (reverse direction)
 hydraAvroAdapterType :: Type
-hydraAvroAdapterType = T.apply (T.apply (T.apply (T.apply (computeType "Adapter") (coreType "Type")) avroSchemaType) (coreType "Term")) jsonValueType
+hydraAvroAdapterType = T.apply (T.apply (T.apply (T.apply (T.apply (computeType "Adapter") (coreType "Type")) avroSchemaType) (coreType "Term")) jsonValueType) (errorsType "Error")
 
 jsonValueType :: Type
 jsonValueType = typeref (ModuleName "hydra.json.model") "Value"

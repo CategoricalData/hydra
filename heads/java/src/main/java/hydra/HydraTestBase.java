@@ -43,7 +43,7 @@ public class HydraTestBase {
      * @param coder the coder to test
      * @param initialValue the initial value
      */
-    protected static <V1, V2> void assertRoundTripIsNoop(Coder<V1, V2> coder, V1 initialValue) {
+    protected static <V1, V2> void assertRoundTripIsNoop(Coder<V1, V2, String> coder, V1 initialValue) {
         assertSucceedsWith(initialValue, roundTrip(coder, initialValue));
     }
 
@@ -54,7 +54,7 @@ public class HydraTestBase {
      * @param coder the coder to test
      * @param initialValue the initial value
      */
-    protected static <V1, V2> void assertRoundTripFails(Coder<V1, V2> coder, V1 initialValue) {
+    protected static <V1, V2> void assertRoundTripFails(Coder<V1, V2, String> coder, V1 initialValue) {
         assertFails(roundTrip(coder, initialValue));
     }
 

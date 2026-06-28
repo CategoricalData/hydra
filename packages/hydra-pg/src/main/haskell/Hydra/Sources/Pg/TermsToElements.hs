@@ -315,7 +315,7 @@ expectList = define "expectList" $
       ("elems" ~> Eithers.mapList (var "f" @@ var "cx" @@ var "g") (var "elems"))
 
 -- | Parse an edge id pattern from a value spec and schema
-parseEdgeIdPattern :: TypedTermDefinition (InferenceContext -> Graph -> PGM.Schema s t v -> PGM.ValueSpec -> Either Error (InferenceContext ->Term -> Either Error [v]))
+parseEdgeIdPattern :: TypedTermDefinition (InferenceContext -> Graph -> PGM.Schema s t v e -> PGM.ValueSpec -> Either Error (InferenceContext ->Term -> Either Error [v]))
 parseEdgeIdPattern = define "parseEdgeIdPattern" $
   doc "Parse an edge id pattern from a value spec and schema" $
   "cx" ~> "g" ~> "schema" ~> "spec" ~>
@@ -323,13 +323,13 @@ parseEdgeIdPattern = define "parseEdgeIdPattern" $
       ("fun" ~> right
         ("cx'" ~> "term" ~>
           Eithers.bind (var "fun" @@ var "cx'" @@ var "term")
-            ("terms" ~> Eithers.mapList (Coders.coderEncode (project PGM._Schema PGM._Schema_edgeIds @@ var "schema") @@ var "cx'") (var "terms"))))
+            ("terms" ~> Eithers.mapList (Coders.coderEncode (project PGM._Schema PGM._Schema_edgeIds @@ var "schema")) (var "terms"))))
 
 -- | Parse an edge specification into a label and encoder function
 -- This and parseVertexSpec use `forall s t v.` (no constraint) only to bring `v` into scope for an
 -- in-body `:: TypedTerm (M.Map PG.PropertyKey v)` annotation, needed now that the generated
 -- `Hydra.Dsl.Lib.Maps` requires the map type to be pinned (the key here is concrete, so no `Ord`). See #467.
-parseEdgeSpec :: forall s t v. TypedTermDefinition (InferenceContext -> Graph -> PGM.Schema s t v -> PGM.EdgeSpec
+parseEdgeSpec :: forall s t v e. TypedTermDefinition (InferenceContext -> Graph -> PGM.Schema s t v e -> PGM.EdgeSpec
   -> Either Error (PG.Label, InferenceContext -> Term -> Either Error [PG.Element v]))
 parseEdgeSpec = define "parseEdgeSpec" $
   doc "Parse an edge specification into a label and encoder function" $
@@ -359,7 +359,7 @@ parseEdgeSpec = define "parseEdgeSpec" $
                             PG._Edge_properties>>: var "tprops"])])))))))))))
 
 -- | Parse an element specification into a label and encoder function
-parseElementSpec :: TypedTermDefinition (InferenceContext -> Graph -> PGM.Schema s t v -> PGM.ElementSpec
+parseElementSpec :: TypedTermDefinition (InferenceContext -> Graph -> PGM.Schema s t v e -> PGM.ElementSpec
   -> Either Error (PG.Label, InferenceContext -> Term -> Either Error [PG.Element v]))
 parseElementSpec = define "parseElementSpec" $
   doc "Parse an element specification into a label and encoder function" $
@@ -393,7 +393,7 @@ parsePattern = define "parsePattern" $
       applyPattern @@ var "cx'" @@ var "firstLit" @@ var "parsed" @@ var "term")
 
 -- | Parse a property specification into an encoder function
-parsePropertySpec :: TypedTermDefinition (InferenceContext -> Graph -> PGM.Schema s t v -> PGM.PropertySpec
+parsePropertySpec :: TypedTermDefinition (InferenceContext -> Graph -> PGM.Schema s t v e -> PGM.PropertySpec
   -> Either Error (InferenceContext ->Term -> Either Error [(PG.PropertyKey, v)]))
 parsePropertySpec = define "parsePropertySpec" $
   doc "Parse a property specification into an encoder function" $
@@ -404,7 +404,7 @@ parsePropertySpec = define "parsePropertySpec" $
       ("fun" ~> right
         ("cx'" ~> "term" ~>
           Eithers.bind (var "fun" @@ var "cx'" @@ var "term")
-            ("results" ~> Eithers.bind (Eithers.mapList (Coders.coderEncode (project PGM._Schema PGM._Schema_propertyValues @@ var "schema") @@ var "cx'") (var "results"))
+            ("results" ~> Eithers.bind (Eithers.mapList (Coders.coderEncode (project PGM._Schema PGM._Schema_propertyValues @@ var "schema")) (var "results"))
               ("values" ~> right (Lists.map ("v" ~> pair (var "key") (var "v")) (var "values"))))))
 
 -- | Parse a value specification into a function that processes terms
@@ -418,7 +418,7 @@ parseValueSpec = define "parseValueSpec" $
     @@ var "spec"
 
 -- | Parse a vertex id pattern from a value spec and schema
-parseVertexIdPattern :: TypedTermDefinition (InferenceContext -> Graph -> PGM.Schema s t v -> PGM.ValueSpec -> Either Error (InferenceContext ->Term -> Either Error [v]))
+parseVertexIdPattern :: TypedTermDefinition (InferenceContext -> Graph -> PGM.Schema s t v e -> PGM.ValueSpec -> Either Error (InferenceContext ->Term -> Either Error [v]))
 parseVertexIdPattern = define "parseVertexIdPattern" $
   doc "Parse a vertex id pattern from a value spec and schema" $
   "cx" ~> "g" ~> "schema" ~> "spec" ~>
@@ -426,10 +426,10 @@ parseVertexIdPattern = define "parseVertexIdPattern" $
       ("fun" ~> right
         ("cx'" ~> "term" ~>
           Eithers.bind (var "fun" @@ var "cx'" @@ var "term")
-            ("terms" ~> Eithers.mapList (Coders.coderEncode (project PGM._Schema PGM._Schema_vertexIds @@ var "schema") @@ var "cx'") (var "terms"))))
+            ("terms" ~> Eithers.mapList (Coders.coderEncode (project PGM._Schema PGM._Schema_vertexIds @@ var "schema")) (var "terms"))))
 
 -- | Parse a vertex specification into a label and encoder function
-parseVertexSpec :: forall s t v. TypedTermDefinition (InferenceContext -> Graph -> PGM.Schema s t v -> PGM.VertexSpec
+parseVertexSpec :: forall s t v e. TypedTermDefinition (InferenceContext -> Graph -> PGM.Schema s t v e -> PGM.VertexSpec
   -> Either Error (PG.Label, InferenceContext -> Term -> Either Error [PG.Element v]))
 parseVertexSpec = define "parseVertexSpec" $
   doc "Parse a vertex specification into a label and encoder function" $
@@ -493,16 +493,16 @@ requireUnique = define "requireUnique" $
             (left $ Error.errorOther $ Error.otherError $ string "Multiple values found: " ++ var "context")))
 
 -- | Create an adapter that maps terms to property graph elements using a mapping specification
-termToElementsAdapter :: TypedTermDefinition (InferenceContext -> Graph -> PGM.Schema s t v -> Type
-  -> Either Error (Adapter Type [PG.Label] Term [PG.Element v]))
+termToElementsAdapter :: TypedTermDefinition (InferenceContext -> Graph -> PGM.Schema s t v e -> Type
+  -> Either Error (Adapter Type [PG.Label] Term [PG.Element v] e))
 termToElementsAdapter = define "termToElementsAdapter" $
   doc "Create an adapter that maps terms to property graph elements using a mapping specification" $
   "cx" ~> "g" ~> "schema" ~> "typ" ~> lets [
     "key_elements">: Core.name (string "elements")] $
     Optionals.cases (Annotations.getTypeAnnotation @@ var "key_elements" @@ var "typ") (right $ Coders.adapter false (var "typ") (list ([] :: [TypedTerm PG.Label]))
         (Coders.coder
-          ("_cx" ~> "_t" ~> right (list ([] :: [TypedTerm (PG.Element ())])))
-          ("cx'" ~> "_els" ~> left (Error.errorOther $ Error.otherError $ string "no corresponding element type")))) ("term" ~>
+          ("_t" ~> right (list ([] :: [TypedTerm (PG.Element ())])))
+          ("_els" ~> left (Error.errorOther $ Error.otherError $ string "no corresponding element type")))) ("term" ~>
         Eithers.bind (expectList @@ var "cx" @@ var "g" @@ decodeElementSpec @@ var "term")
           ("specTerms" ~> Eithers.bind (Eithers.mapList (parseElementSpec @@ var "cx" @@ var "g" @@ var "schema") (var "specTerms"))
             ("specs" ~> lets [
@@ -510,9 +510,9 @@ termToElementsAdapter = define "termToElementsAdapter" $
               "encoders">: Lists.map ("_p" ~> Pairs.second (var "_p")) (var "specs")] $
               right (Coders.adapter false (var "typ") (var "labels")
                 (Coders.coder
-                  ("cx'" ~> "t" ~>
-                    Eithers.map ("_xs" ~> Lists.concat (var "_xs")) (Eithers.mapList ("e" ~> var "e" @@ var "cx'" @@ var "t") (var "encoders")))
-                  ("cx'" ~> "_els" ~> left (Error.errorOther $ Error.otherError $ string "element decoding is not yet supported")))))))
+                  ("t" ~>
+                    Eithers.map ("_xs" ~> Lists.concat (var "_xs")) (Eithers.mapList ("e" ~> var "e" @@ var "cx" @@ var "t") (var "encoders")))
+                  ("_els" ~> left (Error.errorOther $ Error.otherError $ string "element decoding is not yet supported")))))))
 
 -- | Convert a term to its string representation
 termToString :: TypedTermDefinition (Term -> String)
