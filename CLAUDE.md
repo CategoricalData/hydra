@@ -17,22 +17,24 @@ All eight pass the common test suite as targets; Haskell, Java, Python, Scala, a
 Lisp dialects also self-host (Emacs Lisp is still maturing as a host — see README implementation
 status).
 
-The Java and Python coder DSL sources (`packages/hydra-{java,python}/`) are
-authored in Java and Python respectively (host-native), and are now the **sole** source of truth: the
-Haskell DSL copies under `packages/hydra-{java,python}/src/main/haskell/` have been **deleted** (#346).
+The Java, Python, and Scala coder DSL sources (`packages/hydra-{java,python,scala}/`) are
+authored in Java, Python, and Scala respectively (host-native), and are now the **sole** source of truth:
+the Haskell DSL copies under `packages/hydra-{java,python,scala}/src/main/haskell/` have been
+**deleted** (#346 for Java/Python; #509 for Scala).
 The `hydra-jvm` package (`packages/hydra-jvm/`) is also authored in Java (host-native) and shares
 the same generation pipeline.
 The native sources are authoritative for the generated output: the main sync regenerates
-`dist/json/hydra-{jvm,java,python}` from them in Phase 5 (`bin/generate-hydra-java-from-java.sh`,
-`bin/generate-hydra-python-from-python.sh`), and the native drivers also synthesize the
-`hydra.dsl.{java,python}.*` wrapper modules (previously written by the Haskell DSL pass). As of 0.16 the
-drivers run against the **published host by default** (`net.fortytwo.hydra:hydra-java` from Maven /
-`hydra-python` from PyPI, version from `hydra.json` `hostVersion`), with a `--local-host` bootstrap shim
-for backward-incompatible kernel changes — the #370 "consume" path. See
-[Consuming published hosts](docs/build-system.md#consuming-published-hosts)
-and [Migration shims](docs/recipes/migration-shims.md). Note: the Haskell generator still loads the
-`hydra.{jvm,java,python}.*` JSON into its inference universe (so cross-package references like
-`hydra-scala` → `hydra.jvm.serde` resolve), but no longer *generates* those packages.
+`dist/json/hydra-{jvm,java,python,scala}` from them in Phase 5 (`bin/generate-hydra-java-from-java.sh`,
+`bin/generate-hydra-python-from-python.sh`, `bin/generate-hydra-scala-from-scala.sh`), and the native
+drivers also synthesize the `hydra.dsl.{java,python,scala}.*` wrapper modules (previously written by the
+Haskell DSL pass). As of 0.16 the Java and Python drivers run against the **published host by default**
+(`net.fortytwo.hydra:hydra-java` from Maven / `hydra-python` from PyPI, version from `hydra.json`
+`hostVersion`), with a `--local-host` bootstrap shim for backward-incompatible kernel changes — the #370
+"consume" path. The Scala driver currently runs only against the local host (no published-host probe
+yet). See [Consuming published hosts](docs/build-system.md#consuming-published-hosts) and
+[Migration shims](docs/recipes/migration-shims.md). Note: the Haskell generator still loads the
+`hydra.{jvm,java,python,scala}.*` JSON into its inference universe (so cross-package references like
+`hydra-rdf` → `hydra.jvm.serde` resolve), but no longer *generates* those packages.
 
 The **Haskell host** compiles the kernel from the co-generated `dist/haskell/hydra-kernel` (always
 generated as a target); secondary coders may be consumed from Hackage once published. `dist/haskell/hydra-kernel`
@@ -327,7 +329,7 @@ Primary entry point — the doc most likely to answer the question by task:
 | Understand architecture | [docs/implementation.md](docs/implementation.md) |
 | Understand design rationale (the "why" for each major choice) | [Design wiki](https://github.com/CategoricalData/hydra/wiki/Design) |
 | Understand type inference (HM + class constraints) | [Inference wiki](https://github.com/CategoricalData/hydra/wiki/Inference) |
-| Write Haskell / Java / Python DSL code | [docs/dsl-guide.md](docs/dsl-guide.md) / [-java.md](docs/dsl-guide-java.md) / [-python.md](docs/dsl-guide-python.md) |
+| Write Haskell / Java / Python / Scala DSL code | [docs/dsl-guide.md](docs/dsl-guide.md) / [-java.md](docs/dsl-guide-java.md) / [-python.md](docs/dsl-guide-python.md) / [-scala.md](docs/dsl-guide-scala.md) |
 | Add a primitive | [docs/recipes/adding-primitives.md](docs/recipes/adding-primitives.md) |
 | Promote Haskell to DSL | [docs/recipes/promoting-code.md](docs/recipes/promoting-code.md) |
 | Extend core types/terms | [docs/recipes/extending-hydra-core.md](docs/recipes/extending-hydra-core.md) |

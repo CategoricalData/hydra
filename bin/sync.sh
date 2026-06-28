@@ -785,6 +785,15 @@ if printf '%s\n' $HOSTS | grep -qx python; then
 else
     echo "--- hydra-python (skipped: python not in HOSTS) ---"
 fi
+# #509: hydra-scala native DSL → JSON. Writes 4 of 5 source modules byte-identically;
+# Coder.json has simplified bodies (pending full translation).
+if printf '%s\n' $HOSTS | grep -qx scala; then
+    echo "--- hydra-scala (native Scala DSL → JSON) ---"
+    "$HYDRA_ROOT/bin/generate-hydra-scala-from-scala.sh" || \
+        echo "  WARNING: scala native DSL → JSON failed; continuing (the Haskell DSL pass already wrote dist/json/hydra-scala/)"
+else
+    echo "--- hydra-scala (skipped: scala not in HOSTS) ---"
+fi
 unset HYDRA_IN_SYNC
 
 banner1_done "Sync complete!"

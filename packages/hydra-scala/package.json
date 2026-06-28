@@ -2,6 +2,6 @@
   "packageFormatVersion": 1,
   "name": "hydra-scala",
   "description": "Scala support for Hydra",
-  "sourceLanguage": "haskell",
+  "sourceLanguage": "scala",
   "dependencies": ["hydra-jvm"]
 }
