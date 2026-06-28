@@ -461,6 +461,25 @@ if [ -x "$JP_FRESH_CHECK" ]; then
     fi
 fi
 
+# hydra-scala input-digest seed (#509). hydra-scala is host-native like
+# hydra-jvm/java/python: its coder JSON is committed and re-derived by the Phase 5
+# Scala driver, but Phase 2's assembly gate (assemble_refresh_digest) needs
+# dist/json/hydra-scala/build/main/digest.json to exist beforehand. Unlike the
+# Java/Python digests (refreshed inside generate-hydra-java-from-java.sh during the
+# conditional Phase 1.5 heal), nothing seeds the Scala digest before Phase 2, so do
+# it here unconditionally when absent. Cheap no-op when already present; the JSON
+# itself is not re-derived (no sbt run).
+if [ ! -f "$HYDRA_ROOT/dist/json/hydra-scala/build/main/digest.json" ] && \
+   [ -d "$HYDRA_ROOT/dist/json/hydra-scala/src/main/json" ]; then
+    echo "Seeding hydra-scala input digest for Phase 2 assembly gate (#509)..."
+    (cd "$HYDRA_HASKELL_DIR" && \
+     stack build hydra:exe:digest-check >/dev/null && \
+     stack exec digest-check -- refresh-input \
+       --package hydra-scala \
+       --dist-json-root "$HYDRA_ROOT/dist/json") || exit 1
+    echo ""
+fi
+
 # ────────────────────────────────────────────────────────────────────
 # Phase 2: Each coder (hydra-<L> for L ∈ union) regenerated in Haskell.
 # ────────────────────────────────────────────────────────────────────
