@@ -1,0 +1,16 @@
+{
+  "dependencies": [
+    {"name": "org.apache.commons:commons-text", "version": {"exact": "1.10.0"}, "scope": {"api": {}}},
+    {"name": "org.antlr:antlr4-runtime", "version": {"exact": "4.13.2"}, "scope": {"api": {}}},
+    {"name": "org.antlr:antlr4", "version": {"exact": "4.13.2"}, "scope": {"tool": {}}},
+    {"name": "org.apache.tinkerpop:gremlin-core", "version": {"exact": "3.8.0"}, "scope": {"api": {}}},
+    {"name": "org.apache.tinkerpop:gremlin-language", "version": {"exact": "3.8.0"}, "scope": {"api": {}}},
+    {"name": "org.junit.jupiter:junit-jupiter", "version": {"exact": "5.9.2"}, "scope": {"test": {}}},
+    {"name": "org.junit.platform:junit-platform-launcher", "version": {"any": {}}, "scope": {"test": {}}},
+    {"name": "org.apache.tinkerpop:tinkergraph-gremlin", "version": {"exact": "3.8.0"}, "scope": {"test": {}}}],
+  "excludes": [],
+  "extraSourceDirs": ["build/generated-src/antlr/main"],
+  "plugins": ["antlr"],
+  "antlr": {
+    "arguments": ["-visitor"],
+    "outputDirectory": "build/generated-src/antlr/main"}}
