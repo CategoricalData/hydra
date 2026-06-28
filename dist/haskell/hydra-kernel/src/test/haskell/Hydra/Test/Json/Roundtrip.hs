@@ -566,6 +566,171 @@ allTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
+          Testing.testGroupName = "union types",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = [
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "union non-unit variant (string)",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeUnion [
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "bool"),
+                    Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "string"),
+                    Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "unit"),
+                    Core.fieldTypeType = Core.TypeUnit}]) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeUnion [
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "bool"),
+                    Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "string"),
+                    Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "unit"),
+                    Core.fieldTypeType = Core.TypeUnit}]) (Core.TermInject (Core.Injection {
+                  Core.injectionTypeName = (Core.Name "test"),
+                  Core.injectionField = Core.Field {
+                    Core.fieldName = (Core.Name "string"),
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "hello"))}})))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermInject (Core.Injection {
+                  Core.injectionTypeName = (Core.Name "test"),
+                  Core.injectionField = Core.Field {
+                    Core.fieldName = (Core.Name "string"),
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "hello"))}})))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "union non-unit variant (bool)",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeUnion [
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "bool"),
+                    Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "string"),
+                    Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "unit"),
+                    Core.fieldTypeType = Core.TypeUnit}]) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeUnion [
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "bool"),
+                    Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "string"),
+                    Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "unit"),
+                    Core.fieldTypeType = Core.TypeUnit}]) (Core.TermInject (Core.Injection {
+                  Core.injectionTypeName = (Core.Name "test"),
+                  Core.injectionField = Core.Field {
+                    Core.fieldName = (Core.Name "bool"),
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralBoolean True))}})))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermInject (Core.Injection {
+                  Core.injectionTypeName = (Core.Name "test"),
+                  Core.injectionField = Core.Field {
+                    Core.fieldName = (Core.Name "bool"),
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralBoolean True))}})))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "union unit variant round-trip",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeUnion [
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "bool"),
+                    Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "string"),
+                    Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "unit"),
+                    Core.fieldTypeType = Core.TypeUnit}]) json)) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeUnion [
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "bool"),
+                    Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "string"),
+                    Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "unit"),
+                    Core.fieldTypeType = Core.TypeUnit}]) (Core.TermInject (Core.Injection {
+                  Core.injectionTypeName = (Core.Name "test"),
+                  Core.injectionField = Core.Field {
+                    Core.fieldName = (Core.Name "unit"),
+                    Core.fieldTerm = Core.TermUnit}})))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermInject (Core.Injection {
+                  Core.injectionTypeName = (Core.Name "test"),
+                  Core.injectionField = Core.Field {
+                    Core.fieldName = (Core.Name "unit"),
+                    Core.fieldTerm = Core.TermUnit}})))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "union unit variant wire shape",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Writer.printJson json) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeUnion [
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "bool"),
+                    Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "string"),
+                    Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "unit"),
+                    Core.fieldTypeType = Core.TypeUnit}]) (Core.TermInject (Core.Injection {
+                  Core.injectionTypeName = (Core.Name "test"),
+                  Core.injectionField = Core.Field {
+                    Core.fieldName = (Core.Name "unit"),
+                    Core.fieldTerm = Core.TermUnit}})))),
+                Testing.universalTestCaseExpected = (\_ -> "\"unit\"")})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "union non-unit variant wire shape",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Writer.printJson json) (Encode.toJson Maps.empty (Core.Name "test") (Core.TypeUnion [
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "bool"),
+                    Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "string"),
+                    Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "unit"),
+                    Core.fieldTypeType = Core.TypeUnit}]) (Core.TermInject (Core.Injection {
+                  Core.injectionTypeName = (Core.Name "test"),
+                  Core.injectionField = Core.Field {
+                    Core.fieldName = (Core.Name "string"),
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "hello"))}})))),
+                Testing.universalTestCaseExpected = (\_ -> "{\"string\": \"hello\"}")})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "union unit variant legacy object form",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson Maps.empty (Core.Name "test") (Core.TypeUnion [
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "bool"),
+                    Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeBoolean)},
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "string"),
+                    Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)},
+                  Core.FieldType {
+                    Core.fieldTypeName = (Core.Name "unit"),
+                    Core.fieldTypeType = Core.TypeUnit}]) (Model.ValueObject [
+                  ("unit", (Model.ValueObject []))]))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermInject (Core.Injection {
+                  Core.injectionTypeName = (Core.Name "test"),
+                  Core.injectionField = Core.Field {
+                    Core.fieldName = (Core.Name "unit"),
+                    Core.fieldTerm = Core.TermUnit}})))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []}]},
+        Testing.TestGroup {
           Testing.testGroupName = "wire shape",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],

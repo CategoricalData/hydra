@@ -200,7 +200,7 @@
                     "handler": {
                       "lambda": {
                         "parameter": "y",
-                        "domain": {"unit": {}},
+                        "domain": "unit",
                         "body": {
                           "inject": {
                             "typeName": "hydra.core.Term",
@@ -227,15 +227,15 @@
                                                   "function": {
                                                     "lambda": {
                                                       "parameter": "_",
-                                                      "domain": {"unit": {}},
-                                                      "body": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}},
+                                                      "domain": "unit",
+                                                      "body": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}},
                                                   "argument": {"variable": "y"}}}}]}}}]}}}}}}}},
                   {
                     "name": "decode",
                     "handler": {
                       "lambda": {
                         "parameter": "y",
-                        "domain": {"unit": {}},
+                        "domain": "unit",
                         "body": {
                           "inject": {
                             "typeName": "hydra.core.Term",
@@ -262,8 +262,8 @@
                                                   "function": {
                                                     "lambda": {
                                                       "parameter": "_",
-                                                      "domain": {"unit": {}},
-                                                      "body": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}},
+                                                      "domain": "unit",
+                                                      "body": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}},
                                                   "argument": {"variable": "y"}}}}]}}}]}}}}}}}}]}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.coders.CoderDirection"}}}]}}}}},
@@ -285,7 +285,7 @@
                     "handler": {
                       "lambda": {
                         "parameter": "y",
-                        "domain": {"unit": {}},
+                        "domain": "unit",
                         "body": {
                           "inject": {
                             "typeName": "hydra.core.Term",
@@ -314,15 +314,15 @@
                                                   "function": {
                                                     "lambda": {
                                                       "parameter": "_",
-                                                      "domain": {"unit": {}},
-                                                      "body": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}},
+                                                      "domain": "unit",
+                                                      "body": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}},
                                                   "argument": {"variable": "y"}}}}]}}}]}}}}}}}},
                   {
                     "name": "nestedCaseStatements",
                     "handler": {
                       "lambda": {
                         "parameter": "y",
-                        "domain": {"unit": {}},
+                        "domain": "unit",
                         "body": {
                           "inject": {
                             "typeName": "hydra.core.Term",
@@ -351,15 +351,15 @@
                                                   "function": {
                                                     "lambda": {
                                                       "parameter": "_",
-                                                      "domain": {"unit": {}},
-                                                      "body": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}},
+                                                      "domain": "unit",
+                                                      "body": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}},
                                                   "argument": {"variable": "y"}}}}]}}}]}}}}}}}},
                   {
                     "name": "nestedPolymorphicLetBindings",
                     "handler": {
                       "lambda": {
                         "parameter": "y",
-                        "domain": {"unit": {}},
+                        "domain": "unit",
                         "body": {
                           "inject": {
                             "typeName": "hydra.core.Term",
@@ -388,8 +388,8 @@
                                                   "function": {
                                                     "lambda": {
                                                       "parameter": "_",
-                                                      "domain": {"unit": {}},
-                                                      "body": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}},
+                                                      "domain": "unit",
+                                                      "body": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}},
                                                   "argument": {"variable": "y"}}}}]}}}]}}}}}}}}]}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.coders.LanguageFeature"}}}]}}}}},
@@ -425,7 +425,7 @@
                                   "function": {
                                     "lambda": {
                                       "parameter": "x",
-                                      "domain": {"literal": {"string": {}}},
+                                      "domain": {"literal": "string"},
                                       "body": {
                                         "inject": {
                                           "typeName": "hydra.core.Term",
@@ -453,7 +453,7 @@
                     "handler": {
                       "lambda": {
                         "parameter": "y",
-                        "domain": {"unit": {}},
+                        "domain": "unit",
                         "body": {
                           "inject": {
                             "typeName": "hydra.core.Term",
@@ -480,15 +480,15 @@
                                                   "function": {
                                                     "lambda": {
                                                       "parameter": "_",
-                                                      "domain": {"unit": {}},
-                                                      "body": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}},
+                                                      "domain": "unit",
+                                                      "body": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}},
                                                   "argument": {"variable": "y"}}}}]}}}]}}}}}}}},
                   {
                     "name": "post",
                     "handler": {
                       "lambda": {
                         "parameter": "y",
-                        "domain": {"unit": {}},
+                        "domain": "unit",
                         "body": {
                           "inject": {
                             "typeName": "hydra.core.Term",
@@ -515,8 +515,8 @@
                                                   "function": {
                                                     "lambda": {
                                                       "parameter": "_",
-                                                      "domain": {"unit": {}},
-                                                      "body": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}},
+                                                      "domain": "unit",
+                                                      "body": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}},
                                                   "argument": {"variable": "y"}}}}]}}}]}}}}}}}}]}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.coders.TraversalOrder"}}}]}}}}}]}

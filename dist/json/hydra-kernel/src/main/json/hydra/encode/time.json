@@ -44,7 +44,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "parameter": "x",
-                                                  "domain": {"literal": {"integer": {"int64": {}}}},
+                                                  "domain": {"literal": {"integer": "int64"}},
                                                   "body": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Term",
@@ -70,7 +70,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "parameter": "x",
-                                                  "domain": {"literal": {"integer": {"uint32": {}}}},
+                                                  "domain": {"literal": {"integer": "uint32"}},
                                                   "body": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Term",

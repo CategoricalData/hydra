@@ -160,7 +160,7 @@
                     "name": "endNodeNotFound",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The end node does not exist in the graph"}}}]}}}},
                   {
@@ -205,7 +205,7 @@
                     "name": "startNodeNotFound",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The start node does not exist in the graph"}}}]}}}},
                   {

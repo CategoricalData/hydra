@@ -40,8 +40,8 @@
           "parameters": [
             {"name": "arg0", "type": {"variable": "t0"}, "isLazy": false},
             {"name": "arg1", "type": {"variable": "hydra.testing.TestGroup"}, "isLazy": false},
-            {"name": "arg2", "type": {"literal": {"string": {}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+            {"name": "arg2", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "typeLambda": {
             "parameter": "t0",
@@ -58,7 +58,7 @@
                         "body": {
                           "lambda": {
                             "parameter": "testBody",
-                            "domain": {"literal": {"string": {}}},
+                            "domain": {"literal": "string"},
                             "body": {
                               "let": {
                                 "bindings": [
@@ -68,7 +68,7 @@
                                       "application": {
                                         "function": {"project": {"typeName": "hydra.testing.TestGroup", "fieldName": "name"}},
                                         "argument": {"variable": "testGroup"}}},
-                                    "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}},
                                   {
                                     "name": "header",
                                     "term": {
@@ -86,7 +86,7 @@
                                                 "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "# "}}}},
                                                 "argument": {"variable": "groupName_"}}},
                                             {"literal": {"string": "\n\n"}}]}}},
-                                    "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
+                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
                                 "body": {
                                   "application": {
                                     "function": {"variable": "hydra.lib.strings.cat"},
@@ -99,14 +99,14 @@
         "name": "hydra.python.testing.formatPythonTestName",
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "name",
-                "domain": {"literal": {"string": {}}},
+                "domain": {"literal": "string"},
                 "body": {
                   "application": {
                     "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "test_"}}}},
@@ -119,19 +119,19 @@
                               "application": {
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"integer": {"int32": {}}}}}},
-                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"integer": "int32"}}}},
+                                    "type": {"literal": {"integer": "int32"}}}},
                                 "argument": {
                                   "lambda": {
                                     "parameter": "c",
-                                    "domain": {"literal": {"integer": {"int32": {}}}},
+                                    "domain": {"literal": {"integer": "int32"}},
                                     "body": {
                                       "application": {
                                         "function": {
                                           "application": {
                                             "function": {
                                               "application": {
-                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"integer": "int32"}}}},
                                                 "argument": {"application": {"function": {"variable": "hydra.lib.chars.isAlphaNum"}, "argument": {"variable": "c"}}}}},
                                             "argument": {"application": {"function": {"variable": "hydra.lib.chars.toLower"}, "argument": {"variable": "c"}}}}},
                                         "argument": {"literal": {"integer": {"int32": 95}}}}}}}}},
@@ -147,9 +147,9 @@
         "signature": {
           "typeParameters": [{"name": "t0", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"list": {"literal": {"string": {}}}}, "isLazy": false},
+            {"name": "arg0", "type": {"list": {"literal": "string"}}, "isLazy": false},
             {"name": "arg1", "type": {"variable": "hydra.testing.TestCaseWithMetadata"}, "isLazy": false}],
-          "result": {"type": {"either": {"left": {"variable": "t0"}, "right": {"list": {"literal": {"string": {}}}}}}}},
+          "result": {"type": {"either": {"left": {"variable": "t0"}, "right": {"list": {"literal": "string"}}}}}},
         "body": {
           "typeLambda": {
             "parameter": "t0",
@@ -158,7 +158,7 @@
                 "body": {
                   "lambda": {
                     "parameter": "groupPath",
-                    "domain": {"list": {"literal": {"string": {}}}},
+                    "domain": {"list": {"literal": "string"}},
                     "body": {
                       "lambda": {
                         "parameter": "tcm",
@@ -172,7 +172,7 @@
                                   "application": {
                                     "function": {"project": {"typeName": "hydra.testing.TestCaseWithMetadata", "fieldName": "name"}},
                                     "argument": {"variable": "tcm"}}},
-                                "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                                "typeScheme": {"variables": [], "body": {"literal": "string"}}},
                               {
                                 "name": "tcase",
                                 "term": {
@@ -203,8 +203,8 @@
                                                           "application": {
                                                             "function": {"project": {"typeName": "hydra.testing.UniversalTestCase", "fieldName": "actual"}},
                                                             "argument": {"variable": "ucase"}}},
-                                                        "argument": {"unit": {}}}},
-                                                    "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                                                        "argument": "unit"}},
+                                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}},
                                                   {
                                                     "name": "expected_",
                                                     "term": {
@@ -213,8 +213,8 @@
                                                           "application": {
                                                             "function": {"project": {"typeName": "hydra.testing.UniversalTestCase", "fieldName": "expected"}},
                                                             "argument": {"variable": "ucase"}}},
-                                                        "argument": {"unit": {}}}},
-                                                    "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                                                        "argument": "unit"}},
+                                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}},
                                                   {
                                                     "name": "fullName",
                                                     "term": {
@@ -223,10 +223,10 @@
                                                           "application": {
                                                             "function": {
                                                               "application": {
-                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}},
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": "string"}}},
                                                                 "argument": {
                                                                   "application": {
-                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"literal": {"string": {}}}}},
+                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"literal": "string"}}},
                                                                     "argument": {"variable": "groupPath"}}}}},
                                                             "argument": {"variable": "name_"}}},
                                                         "argument": {
@@ -236,15 +236,15 @@
                                                               "application": {
                                                                 "function": {
                                                                   "application": {
-                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"literal": {"string": {}}}}},
+                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"literal": "string"}}},
                                                                     "argument": {"variable": "groupPath"}}},
                                                                 "argument": {"list": [{"variable": "name_"}]}}}}}}},
-                                                    "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}},
                                                   {
                                                     "name": "formattedName",
                                                     "term": {
                                                       "application": {"function": {"variable": "hydra.python.testing.formatPythonTestName"}, "argument": {"variable": "fullName"}}},
-                                                    "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
+                                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
                                                 "body": {
                                                   "typeApplication": {
                                                     "body": {
@@ -268,7 +268,7 @@
                                                                         {"variable": "expected_"},
                                                                         {"literal": {"string": ")"}}]}}}]}}},
                                                         "type": {"variable": "t0"}}},
-                                                    "type": {"list": {"literal": {"string": {}}}}}}}}}}}]}},
+                                                    "type": {"list": {"literal": "string"}}}}}}}}}]}},
                                 "argument": {"variable": "tcase"}}}}}}}}},
                 "annotation": {
                   "map": [
@@ -286,9 +286,7 @@
             {"name": "arg2", "type": {"variable": "t0"}, "isLazy": false}],
           "result": {
             "type": {
-              "either": {
-                "left": {"variable": "t1"},
-                "right": {"pair": {"first": {"literal": {"string": {}}}, "second": {"literal": {"string": {}}}}}}}}},
+              "either": {"left": {"variable": "t1"}, "right": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}}}},
         "body": {
           "typeLambda": {
             "parameter": "t0",
@@ -325,9 +323,9 @@
         "signature": {
           "typeParameters": [{"name": "t0", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"list": {"literal": {"string": {}}}}, "isLazy": false},
+            {"name": "arg0", "type": {"list": {"literal": "string"}}, "isLazy": false},
             {"name": "arg1", "type": {"variable": "hydra.testing.TestGroup"}, "isLazy": false}],
-          "result": {"type": {"either": {"left": {"variable": "t0"}, "right": {"literal": {"string": {}}}}}}},
+          "result": {"type": {"either": {"left": {"variable": "t0"}, "right": {"literal": "string"}}}}},
         "body": {
           "typeLambda": {
             "parameter": "t0",
@@ -336,7 +334,7 @@
                 "body": {
                   "lambda": {
                     "parameter": "groupPath",
-                    "domain": {"list": {"literal": {"string": {}}}},
+                    "domain": {"list": {"literal": "string"}},
                     "body": {
                       "lambda": {
                         "parameter": "testGroup",
@@ -367,8 +365,8 @@
                                         "body": {
                                           "typeApplication": {
                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "t0"}}},
-                                            "type": {"list": {"list": {"literal": {"string": {}}}}}}},
-                                        "type": {"literal": {"string": {}}}}},
+                                            "type": {"list": {"list": {"literal": "string"}}}}},
+                                        "type": {"literal": "string"}}},
                                     "argument": {
                                       "application": {
                                         "function": {
@@ -379,7 +377,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {"body": {"variable": "hydra.lib.eithers.mapList"}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
-                                                    "type": {"list": {"literal": {"string": {}}}}}},
+                                                    "type": {"list": {"literal": "string"}}}},
                                                 "type": {"variable": "t0"}}},
                                             "argument": {
                                               "lambda": {
@@ -396,7 +394,7 @@
                                 "argument": {
                                   "lambda": {
                                     "parameter": "testCaseLines",
-                                    "domain": {"list": {"list": {"literal": {"string": {}}}}},
+                                    "domain": {"list": {"list": {"literal": "string"}}},
                                     "body": {
                                       "application": {
                                         "function": {
@@ -406,8 +404,8 @@
                                                 "body": {
                                                   "typeApplication": {
                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "t0"}}},
-                                                    "type": {"list": {"literal": {"string": {}}}}}},
-                                                "type": {"literal": {"string": {}}}}},
+                                                    "type": {"list": {"literal": "string"}}}},
+                                                "type": {"literal": "string"}}},
                                             "argument": {
                                               "application": {
                                                 "function": {
@@ -418,7 +416,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "typeApplication": {"body": {"variable": "hydra.lib.eithers.mapList"}, "type": {"variable": "hydra.testing.TestGroup"}}},
-                                                            "type": {"literal": {"string": {}}}}},
+                                                            "type": {"literal": "string"}}},
                                                         "type": {"variable": "t0"}}},
                                                     "argument": {
                                                       "lambda": {
@@ -433,14 +431,14 @@
                                                                   "application": {
                                                                     "function": {"project": {"typeName": "hydra.testing.TestGroup", "fieldName": "name"}},
                                                                     "argument": {"variable": "subgroup"}}},
-                                                                "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                                                                "typeScheme": {"variables": [], "body": {"literal": "string"}}},
                                                               {
                                                                 "name": "header",
                                                                 "term": {
                                                                   "application": {
                                                                     "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "# "}}}},
                                                                     "argument": {"variable": "groupName"}}},
-                                                                "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
+                                                                "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
                                                             "body": {
                                                               "application": {
                                                                 "function": {
@@ -449,13 +447,13 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"literal": {"string": {}}}}},
-                                                                            "type": {"literal": {"string": {}}}}},
+                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"literal": "string"}}},
+                                                                            "type": {"literal": "string"}}},
                                                                         "type": {"variable": "t0"}}},
                                                                     "argument": {
                                                                       "lambda": {
                                                                         "parameter": "content",
-                                                                        "domain": {"literal": {"string": {}}},
+                                                                        "domain": {"literal": "string"},
                                                                         "body": {
                                                                           "application": {
                                                                             "function": {"variable": "hydra.lib.strings.cat"},
@@ -470,7 +468,7 @@
                                                                           "application": {
                                                                             "function": {
                                                                               "application": {
-                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"literal": {"string": {}}}}},
+                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"literal": "string"}}},
                                                                                 "argument": {"variable": "groupPath"}}},
                                                                             "argument": {"list": [{"variable": "groupName"}]}}}}},
                                                                     "argument": {"variable": "subgroup"}}}}}}}}}}},
@@ -478,7 +476,7 @@
                                         "argument": {
                                           "lambda": {
                                             "parameter": "subgroupBlocks",
-                                            "domain": {"list": {"literal": {"string": {}}}},
+                                            "domain": {"list": {"literal": "string"}},
                                             "body": {
                                               "let": {
                                                 "bindings": [
@@ -490,9 +488,9 @@
                                                           "application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": "\n\n"}}}},
                                                         "argument": {
                                                           "application": {
-                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"literal": {"string": {}}}}},
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"literal": "string"}}},
                                                             "argument": {"variable": "testCaseLines"}}}}},
-                                                    "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}},
                                                   {
                                                     "name": "subgroupsStr",
                                                     "term": {
@@ -500,7 +498,7 @@
                                                         "function": {
                                                           "application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": "\n\n"}}}},
                                                         "argument": {"variable": "subgroupBlocks"}}},
-                                                    "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
+                                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
                                                 "body": {
                                                   "typeApplication": {
                                                     "body": {
@@ -519,7 +517,7 @@
                                                                           "application": {
                                                                             "function": {
                                                                               "application": {
-                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}},
+                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": "string"}}},
                                                                                 "argument": {
                                                                                   "application": {
                                                                                     "function": {
@@ -529,21 +527,21 @@
                                                                                           "application": {
                                                                                             "function": {
                                                                                               "application": {
-                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}},
+                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": "string"}}},
                                                                                                 "argument": {"variable": "testCasesStr"}}},
                                                                                             "argument": {"literal": {"string": ""}}}}}},
                                                                                     "argument": {
                                                                                       "application": {
                                                                                         "function": {
                                                                                           "application": {
-                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}},
+                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": "string"}}},
                                                                                             "argument": {"variable": "subgroupsStr"}}},
                                                                                         "argument": {"literal": {"string": ""}}}}}}}},
                                                                             "argument": {"literal": {"string": ""}}}},
                                                                         "argument": {"literal": {"string": "\n\n"}}}},
                                                                     {"variable": "subgroupsStr"}]}}}}},
                                                         "type": {"variable": "t0"}}},
-                                                    "type": {"literal": {"string": {}}}}}}}}}}}}}}}}}}}}},
+                                                    "type": {"literal": "string"}}}}}}}}}}}}}}}}}}},
                 "annotation": {
                   "map": [
                     {
@@ -559,9 +557,7 @@
             {"name": "arg1", "type": {"variable": "hydra.testing.TestGroup"}, "isLazy": false}],
           "result": {
             "type": {
-              "either": {
-                "left": {"variable": "t0"},
-                "right": {"pair": {"first": {"literal": {"string": {}}}, "second": {"literal": {"string": {}}}}}}}}},
+              "either": {"left": {"variable": "t0"}, "right": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}}}},
         "body": {
           "typeLambda": {
             "parameter": "t0",
@@ -583,13 +579,13 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"literal": {"string": {}}}}},
-                                        "type": {"pair": {"first": {"literal": {"string": {}}}, "second": {"literal": {"string": {}}}}}}},
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"literal": "string"}}},
+                                        "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
                                     "type": {"variable": "t0"}}},
                                 "argument": {
                                   "lambda": {
                                     "parameter": "testBody",
-                                    "domain": {"literal": {"string": {}}},
+                                    "domain": {"literal": "string"},
                                     "body": {
                                       "let": {
                                         "bindings": [
@@ -606,7 +602,7 @@
                                                         "argument": {"variable": "testModule"}}},
                                                     "argument": {"variable": "testGroup"}}},
                                                 "argument": {"variable": "testBody"}}},
-                                            "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                                            "typeScheme": {"variables": [], "body": {"literal": "string"}}},
                                           {
                                             "name": "ns_",
                                             "term": {
@@ -620,21 +616,20 @@
                                               "application": {
                                                 "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "."}}}},
                                                 "argument": {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "ns_"}}}}},
-                                            "typeScheme": {"variables": [], "body": {"list": {"literal": {"string": {}}}}}},
+                                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}},
                                           {
                                             "name": "dirParts",
                                             "term": {
                                               "application": {
                                                 "function": {
                                                   "application": {
-                                                    "function": {
-                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"list": {"literal": {"string": {}}}}}},
-                                                    "argument": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}}},
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"list": {"literal": "string"}}}},
+                                                    "argument": {"typeApplication": {"body": {"list": []}, "type": {"literal": "string"}}}}},
                                                 "argument": {
                                                   "application": {
-                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeInit"}, "type": {"literal": {"string": {}}}}},
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeInit"}, "type": {"literal": "string"}}},
                                                     "argument": {"variable": "parts"}}}}},
-                                            "typeScheme": {"variables": [], "body": {"list": {"literal": {"string": {}}}}}},
+                                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}},
                                           {
                                             "name": "fileName",
                                             "term": {
@@ -647,14 +642,14 @@
                                                       "application": {
                                                         "function": {
                                                           "application": {
-                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"literal": {"string": {}}}}},
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.fromOptional"}, "type": {"literal": "string"}}},
                                                             "argument": {"literal": {"string": ""}}}},
                                                         "argument": {
                                                           "application": {
-                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeLast"}, "type": {"literal": {"string": {}}}}},
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeLast"}, "type": {"literal": "string"}}},
                                                             "argument": {"variable": "parts"}}}}},
                                                     {"literal": {"string": ".py"}}]}}},
-                                            "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                                            "typeScheme": {"variables": [], "body": {"literal": "string"}}},
                                           {
                                             "name": "filePath",
                                             "term": {
@@ -668,21 +663,21 @@
                                                         "argument": {"variable": "dirParts"}}},
                                                     {"literal": {"string": "/"}},
                                                     {"variable": "fileName"}]}}},
-                                            "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
+                                            "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
                                         "body": {
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
                                                 "body": {"pair": {"first": {"variable": "filePath"}, "second": {"variable": "testModuleContent"}}},
-                                                "type": {"literal": {"string": {}}}}},
-                                            "type": {"literal": {"string": {}}}}}}}}}}},
+                                                "type": {"literal": "string"}}},
+                                            "type": {"literal": "string"}}}}}}}}},
                             "argument": {
                               "application": {
                                 "function": {
                                   "application": {
                                     "function": {
                                       "typeApplication": {"body": {"variable": "hydra.python.testing.generatePythonTestGroupHierarchy"}, "type": {"variable": "t0"}}},
-                                    "argument": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}}},
+                                    "argument": {"typeApplication": {"body": {"list": []}, "type": {"literal": "string"}}}}},
                                 "argument": {"variable": "testGroup"}}}}}}}}},
                 "annotation": {
                   "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generate a complete test file for Python"}}}]}}}}}}}]}

@@ -16,7 +16,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"union": [{"name": "python310", "type": {"unit": {}}}, {"name": "python312", "type": {"unit": {}}}]},
+              "body": {"union": [{"name": "python310", "type": "unit"}, {"name": "python312", "type": "unit"}]},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Target Python version for code generation"}}}]}}}}}},
     {
@@ -71,7 +71,7 @@
                     "name": "skipCasts",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {
                           "map": [
                             {
@@ -111,27 +111,27 @@
                       "annotated": {
                         "body": {"set": {"variable": "hydra.core.Name"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Type variables used in the module"}}}]}}}},
-                  {"name": "usesAnnotated", "type": {"literal": {"boolean": {}}}},
-                  {"name": "usesCallable", "type": {"literal": {"boolean": {}}}},
-                  {"name": "usesCast", "type": {"literal": {"boolean": {}}}},
-                  {"name": "usesLruCache", "type": {"literal": {"boolean": {}}}},
-                  {"name": "usesTypeAlias", "type": {"literal": {"boolean": {}}}},
-                  {"name": "usesDataclass", "type": {"literal": {"boolean": {}}}},
-                  {"name": "usesDecimal", "type": {"literal": {"boolean": {}}}},
-                  {"name": "usesEither", "type": {"literal": {"boolean": {}}}},
-                  {"name": "usesEnum", "type": {"literal": {"boolean": {}}}},
-                  {"name": "usesFrozenDict", "type": {"literal": {"boolean": {}}}},
-                  {"name": "usesFrozenList", "type": {"literal": {"boolean": {}}}},
-                  {"name": "usesFrozenSet", "type": {"literal": {"boolean": {}}}},
-                  {"name": "usesGeneric", "type": {"literal": {"boolean": {}}}},
-                  {"name": "usesJust", "type": {"literal": {"boolean": {}}}},
-                  {"name": "usesLeft", "type": {"literal": {"boolean": {}}}},
-                  {"name": "usesMaybe", "type": {"literal": {"boolean": {}}}},
-                  {"name": "usesName", "type": {"literal": {"boolean": {}}}},
-                  {"name": "usesNode", "type": {"literal": {"boolean": {}}}},
-                  {"name": "usesNothing", "type": {"literal": {"boolean": {}}}},
-                  {"name": "usesRight", "type": {"literal": {"boolean": {}}}},
-                  {"name": "usesTypeVar", "type": {"literal": {"boolean": {}}}}]},
+                  {"name": "usesAnnotated", "type": {"literal": "boolean"}},
+                  {"name": "usesCallable", "type": {"literal": "boolean"}},
+                  {"name": "usesCast", "type": {"literal": "boolean"}},
+                  {"name": "usesLruCache", "type": {"literal": "boolean"}},
+                  {"name": "usesTypeAlias", "type": {"literal": "boolean"}},
+                  {"name": "usesDataclass", "type": {"literal": "boolean"}},
+                  {"name": "usesDecimal", "type": {"literal": "boolean"}},
+                  {"name": "usesEither", "type": {"literal": "boolean"}},
+                  {"name": "usesEnum", "type": {"literal": "boolean"}},
+                  {"name": "usesFrozenDict", "type": {"literal": "boolean"}},
+                  {"name": "usesFrozenList", "type": {"literal": "boolean"}},
+                  {"name": "usesFrozenSet", "type": {"literal": "boolean"}},
+                  {"name": "usesGeneric", "type": {"literal": "boolean"}},
+                  {"name": "usesJust", "type": {"literal": "boolean"}},
+                  {"name": "usesLeft", "type": {"literal": "boolean"}},
+                  {"name": "usesMaybe", "type": {"literal": "boolean"}},
+                  {"name": "usesName", "type": {"literal": "boolean"}},
+                  {"name": "usesNode", "type": {"literal": "boolean"}},
+                  {"name": "usesNothing", "type": {"literal": "boolean"}},
+                  {"name": "usesRight", "type": {"literal": "boolean"}},
+                  {"name": "usesTypeVar", "type": {"literal": "boolean"}}]},
               "annotation": {
                 "map": [
                   {

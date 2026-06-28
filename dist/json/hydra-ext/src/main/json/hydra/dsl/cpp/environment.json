@@ -24,7 +24,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"literal": {"string": {}}}}},
+                      "body": {"application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"literal": "string"}}},
                       "annotation": {
                         "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ModuleName mapping for code generation"}}}]}}}}},
               "isLazy": false},
@@ -38,7 +38,7 @@
                       "body": {
                         "pair": {
                           "first": {"list": {"variable": "hydra.core.Name"}},
-                          "second": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"literal": {"string": {}}}}}}},
+                          "second": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"literal": "string"}}}}},
                       "annotation": {
                         "map": [
                           {"key": {"variable": "description"}, "value": {"literal": {"string": "Type variables in scope, with their C++ names"}}}]}}}}},
@@ -56,7 +56,7 @@
                     "function": {"variable": "hydra.typed.TypedTerm"},
                     "argument": {
                       "annotated": {
-                        "body": {"application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"literal": {"string": {}}}}},
+                        "body": {"application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"literal": "string"}}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ModuleName mapping for code generation"}}}]}}}}},
                 "body": {
@@ -70,7 +70,7 @@
                             "body": {
                               "pair": {
                                 "first": {"list": {"variable": "hydra.core.Name"}},
-                                "second": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"literal": {"string": {}}}}}}},
+                                "second": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"literal": "string"}}}}},
                             "annotation": {
                               "map": [
                                 {"key": {"variable": "description"}, "value": {"literal": {"string": "Type variables in scope, with their C++ names"}}}]}}}}},
@@ -133,7 +133,7 @@
                 "function": {"variable": "hydra.typed.TypedTerm"},
                 "argument": {
                   "annotated": {
-                    "body": {"application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"literal": {"string": {}}}}},
+                    "body": {"application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"literal": "string"}}},
                     "annotation": {
                       "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ModuleName mapping for code generation"}}}]}}}}}}},
         "body": {
@@ -198,7 +198,7 @@
                     "body": {
                       "pair": {
                         "first": {"list": {"variable": "hydra.core.Name"}},
-                        "second": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"literal": {"string": {}}}}}}},
+                        "second": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"literal": "string"}}}}},
                     "annotation": {
                       "map": [
                         {"key": {"variable": "description"}, "value": {"literal": {"string": "Type variables in scope, with their C++ names"}}}]}}}}}}},
@@ -264,7 +264,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"literal": {"string": {}}}}},
+                      "body": {"application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"literal": "string"}}},
                       "annotation": {
                         "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ModuleName mapping for code generation"}}}]}}}}},
               "isLazy": false}],
@@ -286,7 +286,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"literal": {"string": {}}}}},
+                            "body": {"application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"literal": "string"}}},
                             "annotation": {
                               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ModuleName mapping for code generation"}}}]}}}}},
                     "body": {
@@ -380,7 +380,7 @@
                       "body": {
                         "pair": {
                           "first": {"list": {"variable": "hydra.core.Name"}},
-                          "second": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"literal": {"string": {}}}}}}},
+                          "second": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"literal": "string"}}}}},
                       "annotation": {
                         "map": [
                           {"key": {"variable": "description"}, "value": {"literal": {"string": "Type variables in scope, with their C++ names"}}}]}}}}},
@@ -406,7 +406,7 @@
                             "body": {
                               "pair": {
                                 "first": {"list": {"variable": "hydra.core.Name"}},
-                                "second": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"literal": {"string": {}}}}}}},
+                                "second": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"literal": "string"}}}}},
                             "annotation": {
                               "map": [
                                 {"key": {"variable": "description"}, "value": {"literal": {"string": "Type variables in scope, with their C++ names"}}}]}}}}},

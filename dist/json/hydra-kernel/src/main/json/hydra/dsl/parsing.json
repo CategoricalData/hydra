@@ -16,7 +16,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"string": {}}},
+                      "body": {"literal": "string"},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An error message"}}}]}}}}},
               "isLazy": false},
             {
@@ -26,7 +26,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"string": {}}},
+                      "body": {"literal": "string"},
                       "annotation": {
                         "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining input at the point of failure"}}}]}}}}},
               "isLazy": false}],
@@ -43,7 +43,7 @@
                     "function": {"variable": "hydra.typed.TypedTerm"},
                     "argument": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An error message"}}}]}}}}},
                 "body": {
                   "lambda": {
@@ -53,7 +53,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"literal": {"string": {}}},
+                            "body": {"literal": "string"},
                             "annotation": {
                               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining input at the point of failure"}}}]}}}}},
                     "body": {
@@ -110,7 +110,7 @@
                 "function": {"variable": "hydra.typed.TypedTerm"},
                 "argument": {
                   "annotated": {
-                    "body": {"literal": {"string": {}}},
+                    "body": {"literal": "string"},
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An error message"}}}]}}}}}}},
         "body": {
           "annotated": {
@@ -171,7 +171,7 @@
                 "function": {"variable": "hydra.typed.TypedTerm"},
                 "argument": {
                   "annotated": {
-                    "body": {"literal": {"string": {}}},
+                    "body": {"literal": "string"},
                     "annotation": {
                       "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining input at the point of failure"}}}]}}}}}}},
         "body": {
@@ -234,7 +234,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"string": {}}},
+                      "body": {"literal": "string"},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An error message"}}}]}}}}},
               "isLazy": false}],
           "result": {
@@ -255,7 +255,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"literal": {"string": {}}},
+                            "body": {"literal": "string"},
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An error message"}}}]}}}}},
                     "body": {
                       "wrap": {
@@ -341,7 +341,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"string": {}}},
+                      "body": {"literal": "string"},
                       "annotation": {
                         "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining input at the point of failure"}}}]}}}}},
               "isLazy": false}],
@@ -363,7 +363,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"literal": {"string": {}}},
+                            "body": {"literal": "string"},
                             "annotation": {
                               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining input at the point of failure"}}}]}}}}},
                     "body": {
@@ -597,7 +597,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"string": {}}},
+                      "body": {"literal": "string"},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining unparsed input"}}}]}}}}},
               "isLazy": false}],
           "result": {
@@ -625,7 +625,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"literal": {"string": {}}},
+                            "body": {"literal": "string"},
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining unparsed input"}}}]}}}}},
                     "body": {
                       "wrap": {
@@ -749,7 +749,7 @@
                 "function": {"variable": "hydra.typed.TypedTerm"},
                 "argument": {
                   "annotated": {
-                    "body": {"literal": {"string": {}}},
+                    "body": {"literal": "string"},
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining unparsed input"}}}]}}}}}}},
         "body": {
           "annotated": {
@@ -928,7 +928,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"string": {}}},
+                      "body": {"literal": "string"},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining unparsed input"}}}]}}}}},
               "isLazy": false}],
           "result": {
@@ -953,7 +953,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"literal": {"string": {}}},
+                            "body": {"literal": "string"},
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining unparsed input"}}}]}}}}},
                     "body": {
                       "wrap": {
@@ -1034,7 +1034,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "function": {
-                      "domain": {"literal": {"string": {}}},
+                      "domain": {"literal": "string"},
                       "codomain": {"application": {"function": {"variable": "hydra.parsing.ParseResult"}, "argument": {"variable": "a"}}}}}}},
               "isLazy": false}],
           "result": {
@@ -1052,7 +1052,7 @@
                     "function": {"variable": "hydra.typed.TypedTerm"},
                     "argument": {
                       "function": {
-                        "domain": {"literal": {"string": {}}},
+                        "domain": {"literal": "string"},
                         "codomain": {"application": {"function": {"variable": "hydra.parsing.ParseResult"}, "argument": {"variable": "a"}}}}}}},
                 "body": {
                   "wrap": {
@@ -1096,7 +1096,7 @@
                 "function": {"variable": "hydra.typed.TypedTerm"},
                 "argument": {
                   "function": {
-                    "domain": {"literal": {"string": {}}},
+                    "domain": {"literal": "string"},
                     "codomain": {"application": {"function": {"variable": "hydra.parsing.ParseResult"}, "argument": {"variable": "a"}}}}}}}}},
         "body": {
           "annotated": {

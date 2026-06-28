@@ -1,6 +1,6 @@
 -- Note: this is an automatically generated file. Do not edit.
 
--- | Reflection functions for working with term, type, and literal type variants, as well as numeric precision.
+-- | Reflection functions for working with term, type, and literal type variants, as well as numeric precision. 
 
 module Hydra.Reflect where
 

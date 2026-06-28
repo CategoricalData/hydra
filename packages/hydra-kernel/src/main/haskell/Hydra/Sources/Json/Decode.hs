@@ -368,7 +368,7 @@ fromJson = define "fromJson" $
             (var "decodedFields"))
         (var "objResult"),
 
-    -- Unions (single-key object)
+    -- Unions (single-key object, or bare string for unit-valued variants)
     _Type_union>>: "rt" ~>
       -- Helper to decode a field once found
       "decodeVariant" <~ ("key" ~> "val" ~> "ftype" ~>
@@ -396,11 +396,23 @@ fromJson = define "fromJson" $
         Logic.ifElse (Equality.equal (Lists.length $ Maps.keys (var "obj" :: TypedTerm (M.Map String Value))) (int32 1))
           (var "decodeSingleKey" @@ var "obj")
           (left $ string "expected single-key object for union")) $
-      "objResult" <~ (expectObject @@ var "value") $
-      Eithers.either
-        ("err" ~> left $ var "err")
-        ("obj" ~> var "processUnion" @@ var "obj")
-        (var "objResult"),
+      -- Decode compact string form: "variantName" -> inject with unit payload
+      "decodeCompactString" <~ ("s" ~>
+        Optionals.cases (Lists.find
+            ("ft" ~> Equality.equal (Core.unName $ Core.fieldTypeName $ var "ft") (var "s"))
+            (var "rt")) (left $ Strings.cat $ list [string "unknown variant: ", var "s"])
+          ("ft" ~>
+            "ftypeStripped" <~ (Strip.deannotateType @@ (Core.fieldTypeType $ var "ft")) $
+            cases _Type (var "ftypeStripped") (Just $ left $ Strings.cat $ list [string "compact string form requires unit-typed variant, got non-unit type for variant: ", var "s"]) [
+              _Type_unit>>: constant $ right $ Core.termInject $ Core.injection
+                (var "tname")
+                (Core.field (Core.name $ var "s") Core.termUnit)])) $
+      cases _Value (var "value")
+        (Just $ left $ string "expected string or object for union") [
+        _Value_string>>: "s" ~> var "decodeCompactString" @@ var "s",
+        _Value_object>>: "obj" ~>
+          "objAsMap" <~ (Maps.fromList $ var "obj" :: TypedTerm (M.Map String Value)) $
+          var "processUnion" @@ var "objAsMap"],
 
     -- Unit (empty object)
     _Type_unit>>: constant $

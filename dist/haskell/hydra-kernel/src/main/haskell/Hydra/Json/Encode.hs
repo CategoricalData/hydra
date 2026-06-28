@@ -163,9 +163,15 @@ toJson types tname typ term =
                           "unknown variant: ",
                           fname])) (\ft -> Right (Core.fieldTypeType ft))
             in (Eithers.either (\err -> Left err) (\ftype ->
-              let encodedUnion = toJson types tname ftype fterm
-              in (Eithers.map (\v -> Model.ValueObject [
-                (fname, v)]) encodedUnion)) ftypeResult)
+              let ftypeStripped = Strip.deannotateType ftype
+                  isUnit =
+                          case ftypeStripped of
+                            Core.TypeUnit -> True
+                            _ -> False
+              in (Logic.ifElse isUnit (Right (Model.ValueString fname)) (
+                let encodedUnion = toJson types tname ftype fterm
+                in (Eithers.map (\v -> Model.ValueObject [
+                  (fname, v)]) encodedUnion)))) ftypeResult)
           _ -> Left "expected union term"
         Core.TypeUnit -> Right (Model.ValueObject [])
         Core.TypeWrap v0 -> case strippedTerm of
@@ -252,9 +258,15 @@ toJsonUntyped term =
           let field = Core.injectionField v0
               fname = Core.unName (Core.fieldName field)
               fterm = Core.fieldTerm field
-              encodedUnion = toJsonUntyped fterm
-          in (Eithers.map (\v -> Model.ValueObject [
-            (fname, v)]) encodedUnion)
+              ftermStripped = Strip.deannotateTerm fterm
+              isUnit =
+                      case ftermStripped of
+                        Core.TermUnit -> True
+                        _ -> False
+          in (Logic.ifElse isUnit (Right (Model.ValueString fname)) (
+            let encodedUnion = toJsonUntyped fterm
+            in (Eithers.map (\v -> Model.ValueObject [
+              (fname, v)]) encodedUnion)))
         Core.TermUnit -> Right (Model.ValueObject [])
         Core.TermWrap v0 -> toJsonUntyped (Core.wrappedTermBody v0)
         Core.TermMap v0 ->
