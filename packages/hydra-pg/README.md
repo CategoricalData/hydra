@@ -15,6 +15,14 @@ For background on Hydra's approach to property graphs, see the
 - **Cypher syntax model** — the openCypher grammar plus Cypher feature/function metadata.
 - **GQL syntax model** — the ISO/IEC GQL grammar and a path-algebra syntax model.
 - **TinkerPop syntax model** — Gremlin grammar plus TinkerPop feature metadata.
+
+  > **TODO (#521): Gremlin-text parsing is currently unavailable.** The Hydra ↔ Gremlin bytecode
+  > mapping and the pg ↔ TinkerGraph bridge work, but parsing Gremlin *query text* (via TinkerPop's
+  > `GremlinQueryParser`) is disabled: its ANTLR runtime (4.9.1, ATN format v3) conflicts with the
+  > ANTLR ≥4.10 required by the co-located Neo4j Cypher/GQL grammars, and the two parsers cannot
+  > share a classpath. The `RoundTripTest` round-trip tests are `@Disabled` pending a fix. See
+  > [#521](https://github.com/CategoricalData/hydra/issues/521) (recommended fix: vendor `Gremlin.g4`
+  > and regenerate the parser against a modern ANTLR so Gremlin and Neo4j can coexist).
 - **Graphviz coder and DOT serializer** — for rendering property graphs as diagrams.
 - **PG-to-RDF mappings** — produces RDF descriptions of property-graph vertices and edges,
   for use with `hydra-rdf`.
