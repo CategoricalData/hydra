@@ -31,17 +31,6 @@ def _py(local: str) -> Type:
     return T.variable(f"hydra.python.syntax.{local}")
 
 
-def _ne(et: Type) -> Type:
-    """nonemptyList helper.
-
-    Mirrors a bug in Haskell's Hydra.Dsl.Annotations.bounded:
-    `annotMin t = Y.maybe t (`setMinLength` t) max` should reference `min`
-    but uses `max` instead. Result: nonemptyList silently drops the
-    minLength annotation. We replicate this for byte-equivalence.
-    """
-    return T.list_(et)
-
-
 def _def(local_name: str, typ: Type) -> DefinitionType:
     name = Name(f"{NS.value}.{local_name}")
     ts = TypeScheme((), typ, None_())
@@ -68,7 +57,7 @@ _constructs = [
         ("comment", T.string()),
         ("statement", _py("Statement")),
     ])),
-    _def("Module", T.wrap(T.list_(_ne(_py("Statement"))))),
+    _def("Module", T.wrap(T.list_(Annotations.nonempty_list(_py("Statement"))))),
     _def("QuoteStyle", T.enum(["single", "double", "tripleSingle", "tripleDouble"])),
     _def("StringPrefix", T.enum(["raw", "bytes", "rawBytes", "unicode"])),
 ]
@@ -93,16 +82,16 @@ _terminals = [
 _nonterminals = [
     _def("File", T.wrap(T.list_(_py("Statement")))),
     _def("Interactive", T.wrap(_py("Statement"))),
-    _def("Eval", T.wrap(_ne(_py("Expression")))),
+    _def("Eval", T.wrap(Annotations.nonempty_list(_py("Expression")))),
     _def("Statement", _union([
         ("compound", _py("CompoundStatement")),
-        ("simple", _ne(_py("SimpleStatement"))),
+        ("simple", Annotations.nonempty_list(_py("SimpleStatement"))),
         ("annotated", _py("AnnotatedStatement")),
     ])),
     _def("SimpleStatement", _union([
         ("assignment", _py("Assignment")),
         ("typeAlias", _py("TypeAlias")),
-        ("starExpressions", _ne(_py("StarExpression"))),
+        ("starExpressions", Annotations.nonempty_list(_py("StarExpression"))),
         ("return", _py("ReturnStatement")),
         ("import", _py("ImportStatement")),
         ("raise", _py("RaiseStatement")),
@@ -112,8 +101,8 @@ _nonterminals = [
         ("assert", _py("AssertStatement")),
         ("break", T.unit()),
         ("continue", T.unit()),
-        ("global", _ne(_py("Name"))),
-        ("nonlocal", _ne(_py("Name"))),
+        ("global", Annotations.nonempty_list(_py("Name"))),
+        ("nonlocal", Annotations.nonempty_list(_py("Name"))),
     ])),
     _def("CompoundStatement", _union([
         ("function", _py("FunctionDefinition")),
@@ -136,7 +125,7 @@ _nonterminals = [
         ("rhs", T.maybe(_py("AnnotatedRhs"))),
     ])),
     _def("UntypedAssignment", _record([
-        ("targets", _ne(_py("StarTarget"))),
+        ("targets", Annotations.nonempty_list(_py("StarTarget"))),
         ("rhs", _py("AnnotatedRhs")),
         ("typeComment", T.maybe(_py("TypeComment"))),
     ])),
@@ -147,7 +136,7 @@ _nonterminals = [
     ])),
     _def("AnnotatedRhs", _union([
         ("yield", _py("YieldExpression")),
-        ("star", _ne(_py("StarExpression"))),
+        ("star", Annotations.nonempty_list(_py("StarExpression"))),
     ])),
     _def("AugAssign", T.enum([
         "plusEqual", "minusEqual", "timesEqual", "atEqual", "slashEqual",
@@ -170,7 +159,7 @@ _nonterminals = [
         ("name", _py("ImportName")),
         ("from", _py("ImportFrom")),
     ])),
-    _def("ImportName", T.wrap(_ne(_py("DottedAsName")))),
+    _def("ImportName", T.wrap(Annotations.nonempty_list(_py("DottedAsName")))),
     _def("ImportFrom", _record([
         ("prefixes", T.list_(_py("RelativeImportPrefix"))),
         ("dottedName", T.maybe(_py("DottedName"))),
@@ -178,8 +167,8 @@ _nonterminals = [
     ])),
     _def("RelativeImportPrefix", T.enum(["dot", "ellipsis"])),
     _def("ImportFromTargets", _union([
-        ("simple", _ne(_py("ImportFromAsName"))),
-        ("parens", _ne(_py("ImportFromAsName"))),
+        ("simple", Annotations.nonempty_list(_py("ImportFromAsName"))),
+        ("parens", Annotations.nonempty_list(_py("ImportFromAsName"))),
         ("star", T.unit()),
     ])),
     _def("ImportFromAsName", _record([
@@ -190,12 +179,12 @@ _nonterminals = [
         ("name", _py("DottedName")),
         ("as", T.maybe(_py("Name"))),
     ])),
-    _def("DottedName", T.wrap(_ne(_py("Name")))),
+    _def("DottedName", T.wrap(Annotations.nonempty_list(_py("Name")))),
     _def("Block", _union([
-        ("indented", _ne(_ne(_py("Statement")))),
-        ("simple", _ne(_py("SimpleStatement"))),
+        ("indented", Annotations.nonempty_list(Annotations.nonempty_list(_py("Statement")))),
+        ("simple", Annotations.nonempty_list(_py("SimpleStatement"))),
     ])),
-    _def("Decorators", T.wrap(_ne(_py("NamedExpression")))),
+    _def("Decorators", T.wrap(Annotations.nonempty_list(_py("NamedExpression")))),
     _def("ClassDefinition", _record([
         ("decorators", T.maybe(_py("Decorators"))),
         ("name", _py("Name")),
@@ -235,18 +224,18 @@ _nonterminals = [
         ("starEtc", T.maybe(_py("StarEtc"))),
     ])),
     _def("ParamNoDefaultParameters", _record([
-        ("paramNoDefault", _ne(_py("ParamNoDefault"))),
+        ("paramNoDefault", Annotations.nonempty_list(_py("ParamNoDefault"))),
         ("paramWithDefault", T.list_(_py("ParamWithDefault"))),
         ("starEtc", T.maybe(_py("StarEtc"))),
     ])),
     _def("ParamWithDefaultParameters", _record([
-        ("paramWithDefault", _ne(_py("ParamWithDefault"))),
+        ("paramWithDefault", Annotations.nonempty_list(_py("ParamWithDefault"))),
         ("starEtc", T.maybe(_py("StarEtc"))),
     ])),
-    _def("SlashNoDefault", T.wrap(_ne(_py("ParamNoDefault")))),
+    _def("SlashNoDefault", T.wrap(Annotations.nonempty_list(_py("ParamNoDefault")))),
     _def("SlashWithDefault", _record([
         ("paramNoDefault", T.list_(_py("ParamNoDefault"))),
-        ("paramWithDefault", _ne(_py("ParamWithDefault"))),
+        ("paramWithDefault", Annotations.nonempty_list(_py("ParamWithDefault"))),
     ])),
     _def("StarEtc", _union([
         ("starNoDefault", _py("NoDefaultStarEtc")),
@@ -265,7 +254,7 @@ _nonterminals = [
         ("keywords", T.maybe(_py("Keywords"))),
     ])),
     _def("CommaStarEtc", _record([
-        ("paramMaybeDefault", _ne(_py("ParamMaybeDefault"))),
+        ("paramMaybeDefault", Annotations.nonempty_list(_py("ParamMaybeDefault"))),
         ("keywords", T.maybe(_py("Keywords"))),
     ])),
     _def("Keywords", T.wrap(_py("ParamNoDefault"))),
@@ -314,15 +303,15 @@ _nonterminals = [
     ])),
     _def("ForStatement", _record([
         ("async", T.boolean()),
-        ("targets", _ne(_py("StarTarget"))),
-        ("expressions", _ne(_py("StarExpression"))),
+        ("targets", Annotations.nonempty_list(_py("StarTarget"))),
+        ("expressions", Annotations.nonempty_list(_py("StarExpression"))),
         ("typeComment", T.maybe(_py("TypeComment"))),
         ("body", _py("Block")),
         ("else", T.maybe(_py("Block"))),
     ])),
     _def("WithStatement", _record([
         ("async", T.boolean()),
-        ("items", _ne(_py("WithItem"))),
+        ("items", Annotations.nonempty_list(_py("WithItem"))),
         ("typeComment", T.maybe(_py("TypeComment"))),
         ("body", _py("Block")),
     ])),
@@ -341,13 +330,13 @@ _nonterminals = [
     ])),
     _def("TryExceptStatement", _record([
         ("body", _py("Block")),
-        ("excepts", _ne(_py("ExceptBlock"))),
+        ("excepts", Annotations.nonempty_list(_py("ExceptBlock"))),
         ("else", T.maybe(_py("Block"))),
         ("finally", T.maybe(_py("Block"))),
     ])),
     _def("TryExceptStarStatement", _record([
         ("body", _py("Block")),
-        ("excepts", _ne(_py("ExceptStarBlock"))),
+        ("excepts", Annotations.nonempty_list(_py("ExceptStarBlock"))),
         ("else", T.maybe(_py("Block"))),
         ("finally", T.maybe(_py("Block"))),
     ])),
@@ -366,10 +355,10 @@ _nonterminals = [
     ])),
     _def("MatchStatement", _record([
         ("subject", _py("SubjectExpression")),
-        ("cases", _ne(_py("CaseBlock"))),
+        ("cases", Annotations.nonempty_list(_py("CaseBlock"))),
     ])),
     _def("SubjectExpression", _union([
-        ("tuple", _ne(_py("StarNamedExpression"))),
+        ("tuple", Annotations.nonempty_list(_py("StarNamedExpression"))),
         ("simple", _py("NamedExpression")),
     ])),
     _def("CaseBlock", _record([
@@ -390,7 +379,7 @@ _nonterminals = [
         ("pattern", _py("OrPattern")),
         ("as", _py("PatternCaptureTarget")),
     ])),
-    _def("OrPattern", T.wrap(_ne(_py("ClosedPattern")))),
+    _def("OrPattern", T.wrap(Annotations.nonempty_list(_py("ClosedPattern")))),
     _def("ClosedPattern", _union([
         ("literal", _py("LiteralExpression")),
         ("capture", _py("CapturePattern")),
@@ -431,8 +420,8 @@ _nonterminals = [
     _def("CapturePattern", T.wrap(_py("PatternCaptureTarget"))),
     _def("PatternCaptureTarget", T.wrap(_py("Name"))),
     _def("ValuePattern", T.wrap(_py("Attribute"))),
-    _def("Attribute", T.wrap(_ne(_py("Name")))),
-    _def("NameOrAttribute", T.wrap(_ne(_py("Name")))),
+    _def("Attribute", T.wrap(Annotations.nonempty_list(_py("Name")))),
+    _def("NameOrAttribute", T.wrap(Annotations.nonempty_list(_py("Name")))),
     _def("GroupPattern", T.wrap(_py("Pattern"))),
     _def("SequencePattern", _union([
         ("list", T.maybe(_py("MaybeSequencePattern"))),
@@ -442,7 +431,7 @@ _nonterminals = [
         ("head", _py("MaybeStarPattern")),
         ("tail", T.maybe(_py("MaybeSequencePattern"))),
     ])),
-    _def("MaybeSequencePattern", T.wrap(_ne(_py("MaybeStarPattern")))),
+    _def("MaybeSequencePattern", T.wrap(Annotations.nonempty_list(_py("MaybeStarPattern")))),
     _def("MaybeStarPattern", _union([
         ("star", _py("StarPattern")),
         ("pattern", _py("Pattern")),
@@ -455,7 +444,7 @@ _nonterminals = [
         ("items", T.maybe(_py("ItemsPattern"))),
         ("doubleStar", T.maybe(_py("DoubleStarPattern"))),
     ])),
-    _def("ItemsPattern", T.wrap(_ne(_py("KeyValuePattern")))),
+    _def("ItemsPattern", T.wrap(Annotations.nonempty_list(_py("KeyValuePattern")))),
     _def("KeyValuePattern", _record([
         ("key", _py("LiteralExpressionOrAttribute")),
         ("value", _py("Pattern")),
@@ -470,8 +459,8 @@ _nonterminals = [
         ("positionalPatterns", T.maybe(_py("PositionalPatterns"))),
         ("keywordPatterns", T.maybe(_py("KeywordPatterns"))),
     ])),
-    _def("PositionalPatterns", T.wrap(_ne(_py("Pattern")))),
-    _def("KeywordPatterns", T.wrap(_ne(_py("KeywordPattern")))),
+    _def("PositionalPatterns", T.wrap(Annotations.nonempty_list(_py("Pattern")))),
+    _def("KeywordPatterns", T.wrap(Annotations.nonempty_list(_py("KeywordPattern")))),
     _def("KeywordPattern", _record([
         ("name", _py("Name")),
         ("pattern", _py("Pattern")),
@@ -517,7 +506,7 @@ _nonterminals = [
         ("star", _py("BitwiseOr")),
         ("simple", _py("Expression")),
     ])),
-    _def("StarNamedExpressions", T.wrap(_ne(_py("StarNamedExpression")))),
+    _def("StarNamedExpressions", T.wrap(Annotations.nonempty_list(_py("StarNamedExpression")))),
     _def("StarNamedExpression", _union([
         ("star", _py("BitwiseOr")),
         ("simple", _py("NamedExpression")),
@@ -530,8 +519,8 @@ _nonterminals = [
         ("assignment", _py("AssignmentExpression")),
         ("simple", _py("Expression")),
     ])),
-    _def("Disjunction", T.wrap(_ne(_py("Conjunction")))),
-    _def("Conjunction", T.wrap(_ne(_py("Inversion")))),
+    _def("Disjunction", T.wrap(Annotations.nonempty_list(_py("Conjunction")))),
+    _def("Conjunction", T.wrap(Annotations.nonempty_list(_py("Inversion")))),
     _def("Inversion", _union([
         ("not", _py("Inversion")),
         ("simple", _py("Comparison")),
@@ -666,7 +655,7 @@ _nonterminals = [
     ])),
     _def("LambdaSlashWithDefault", _record([
         ("paramNoDefault", T.list_(_py("LambdaParamNoDefault"))),
-        ("paramWithDefault", _ne(_py("LambdaParamWithDefault"))),
+        ("paramWithDefault", Annotations.nonempty_list(_py("LambdaParamWithDefault"))),
     ])),
     _def("LambdaStarEtc", _union([
         ("star", T.boolean()),
@@ -686,7 +675,7 @@ _nonterminals = [
     ])),
     _def("List", T.wrap(T.list_(_py("StarNamedExpression")))),
     _def("Tuple", T.wrap(T.list_(_py("StarNamedExpression")))),
-    _def("Set", T.wrap(_ne(_py("StarNamedExpression")))),
+    _def("Set", T.wrap(Annotations.nonempty_list(_py("StarNamedExpression")))),
     _def("Dict", T.wrap(T.list_(_py("DoubleStarredKvpair")))),
     _def("DoubleStarredKvpair", _union([
         ("starred", _py("BitwiseOr")),
@@ -696,10 +685,10 @@ _nonterminals = [
         ("key", _py("Expression")),
         ("value", _py("Expression")),
     ])),
-    _def("ForIfClauses", T.wrap(_ne(_py("ForIfClause")))),
+    _def("ForIfClauses", T.wrap(Annotations.nonempty_list(_py("ForIfClause")))),
     _def("ForIfClause", _record([
         ("async", T.boolean()),
-        ("targets", _ne(_py("StarTarget"))),
+        ("targets", Annotations.nonempty_list(_py("StarTarget"))),
         ("in", _py("Disjunction")),
         ("ifs", T.list_(_py("Disjunction"))),
     ])),
@@ -746,8 +735,8 @@ _nonterminals = [
         ("kwarg", _py("Kwarg")),
         ("doubleStarred", _py("Expression")),
     ])),
-    _def("StarTargetsListSeq", T.wrap(_ne(_py("StarTarget")))),
-    _def("StarTargetsTupleSeq", T.wrap(_ne(_py("StarTarget")))),
+    _def("StarTargetsListSeq", T.wrap(Annotations.nonempty_list(_py("StarTarget")))),
+    _def("StarTargetsTupleSeq", T.wrap(Annotations.nonempty_list(_py("StarTarget")))),
     _def("StarTarget", _union([
         ("starred", _py("StarTarget")),
         ("unstarred", _py("TargetWithStarAtom")),
@@ -795,7 +784,7 @@ _nonterminals = [
         ("primary", _py("TPrimary")),
         ("arguments", T.maybe(_py("Args"))),
     ])),
-    _def("DelTargets", T.wrap(_ne(_py("DelTarget")))),
+    _def("DelTargets", T.wrap(Annotations.nonempty_list(_py("DelTarget")))),
     _def("DelTarget", _union([
         ("primaryAndName", _py("TPrimaryAndName")),
         ("primaryAndSlices", _py("TPrimaryAndSlices")),

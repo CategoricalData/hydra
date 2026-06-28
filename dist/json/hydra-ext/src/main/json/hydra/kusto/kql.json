@@ -114,20 +114,51 @@
                       "map": [
                         {
                           "key": {"variable": "description"},
-                          "value": {"literal": {"string": "See https://learn.microsoft.com/en-us/azure/data-explorer/kusto/query/distinct-operator"}}}]}}}},
-              {"name": "extend", "type": {"list": {"variable": "hydra.kusto.kql.ColumnAssignment"}}},
+                          "value": {"literal": {"string": "See https://learn.microsoft.com/en-us/azure/data-explorer/kusto/query/distinct-operator"}}},
+                        {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+              {
+                "name": "extend",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.kusto.kql.ColumnAssignment"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
               {"name": "join", "type": {"variable": "hydra.kusto.kql.JoinCommand"}},
               {"name": "limit", "type": {"literal": {"integer": "int32"}}},
               {"name": "mvexpand", "type": {"variable": "hydra.kusto.kql.ColumnName"}},
-              {"name": "orderBy", "type": {"list": {"variable": "hydra.kusto.kql.SortBy"}}},
+              {
+                "name": "orderBy",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.kusto.kql.SortBy"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
               {"name": "parse", "type": {"variable": "hydra.kusto.kql.ParseCommand"}},
               {"name": "print", "type": {"variable": "hydra.kusto.kql.PrintCommand"}},
-              {"name": "project", "type": {"list": {"variable": "hydra.kusto.kql.Projection"}}},
-              {"name": "projectAway", "type": {"list": {"variable": "hydra.kusto.kql.ColumnName"}}},
-              {"name": "projectRename", "type": {"list": {"variable": "hydra.kusto.kql.ColumnAlias"}}},
+              {
+                "name": "project",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.kusto.kql.Projection"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+              {
+                "name": "projectAway",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.kusto.kql.ColumnName"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+              {
+                "name": "projectRename",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.kusto.kql.ColumnAlias"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
               {"name": "render", "type": {"literal": "string"}},
               {"name": "search", "type": {"variable": "hydra.kusto.kql.SearchCommand"}},
-              {"name": "sortBy", "type": {"list": {"variable": "hydra.kusto.kql.SortBy"}}},
+              {
+                "name": "sortBy",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.kusto.kql.SortBy"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
               {"name": "summarize", "type": {"variable": "hydra.kusto.kql.SummarizeCommand"}},
               {
                 "name": "take",
@@ -165,7 +196,12 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "and", "type": {"list": {"variable": "hydra.kusto.kql.Expression"}}},
+              {
+                "name": "and",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.kusto.kql.Expression"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
               {"name": "any", "type": "unit"},
               {"name": "between", "type": {"variable": "hydra.kusto.kql.BetweenExpression"}},
               {"name": "binary", "type": {"variable": "hydra.kusto.kql.BinaryExpression"}},
@@ -175,7 +211,12 @@
               {"name": "index", "type": {"variable": "hydra.kusto.kql.IndexExpression"}},
               {"name": "list", "type": {"list": {"variable": "hydra.kusto.kql.Expression"}}},
               {"name": "literal", "type": {"variable": "hydra.kusto.kql.Literal"}},
-              {"name": "or", "type": {"list": {"variable": "hydra.kusto.kql.Expression"}}},
+              {
+                "name": "or",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.kusto.kql.Expression"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
               {"name": "parentheses", "type": {"variable": "hydra.kusto.kql.Expression"}},
               {"name": "property", "type": {"variable": "hydra.kusto.kql.PropertyExpression"}},
               {"name": "unary", "type": {"variable": "hydra.kusto.kql.UnaryExpression"}}]}}}},
@@ -256,7 +297,12 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "bindings", "type": {"list": {"variable": "hydra.kusto.kql.LetBinding"}}},
+              {
+                "name": "bindings",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.kusto.kql.LetBinding"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
               {"name": "expression", "type": {"variable": "hydra.kusto.kql.TabularExpression"}}]}}}},
     {
       "type": {
@@ -291,11 +337,22 @@
           "body": {
             "record": [
               {"name": "column", "type": {"variable": "hydra.kusto.kql.ColumnName"}},
-              {"name": "pairs", "type": {"list": {"variable": "hydra.kusto.kql.KeyValuePair"}}}]}}}},
+              {
+                "name": "pairs",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.kusto.kql.KeyValuePair"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.PipelineExpression",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.kusto.kql.TabularExpression"}}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "wrap": {
+              "annotated": {
+                "body": {"list": {"variable": "hydra.kusto.kql.TabularExpression"}},
+                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.PrintCommand",
@@ -350,7 +407,12 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "columns", "type": {"list": {"variable": "hydra.kusto.kql.ColumnAssignment"}}},
+              {
+                "name": "columns",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.kusto.kql.ColumnAssignment"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
               {"name": "by", "type": {"list": {"variable": "hydra.kusto.kql.ColumnName"}}}]}}}},
     {"type": {"name": "hydra.kusto.kql.TableName", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
     {
@@ -406,7 +468,12 @@
               {"name": "kind", "type": {"optional": {"variable": "hydra.kusto.kql.UnionKind"}}},
               {"name": "withSource", "type": {"optional": {"variable": "hydra.kusto.kql.ColumnName"}}},
               {"name": "isFuzzy", "type": {"optional": {"literal": "boolean"}}},
-              {"name": "tables", "type": {"list": {"variable": "hydra.kusto.kql.TableName"}}}]}}}},
+              {
+                "name": "tables",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.kusto.kql.TableName"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]}}}},
     {
       "type": {
         "name": "hydra.kusto.kql.UnionKind",
