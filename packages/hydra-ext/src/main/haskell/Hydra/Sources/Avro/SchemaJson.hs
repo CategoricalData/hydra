@@ -182,31 +182,31 @@ module_ = Module {
 
 -- | Error helpers
 
-avroSchemaJsonCoder :: TypedTermDefinition (InferenceContext -> Coder Avro.Schema JM.Value)
+avroSchemaJsonCoder :: TypedTermDefinition (InferenceContext -> Coder Avro.Schema JM.Value Error)
 avroSchemaJsonCoder = define "avroSchemaJsonCoder" $
   doc "Create a coder between Avro schemas and JSON values" $
   lambda "cx" $
     record _Coder [
-      _Coder_encode>>: lambda "_cx" $ lambda "schema" $ Phantoms.right (encodeSchema @@ var "schema"),
-      _Coder_decode>>: lambda "cx2" $ lambda "json" $ decodeSchema @@ var "cx2" @@ var "json"]
+      _Coder_encode>>: lambda "schema" $ Phantoms.right (encodeSchema @@ var "schema"),
+      _Coder_decode>>: lambda "json" $ decodeSchema @@ var "cx" @@ var "json"]
 
 avroSchemaPhantomNs :: ModuleName
 avroSchemaPhantomNs = ModuleName "hydra.avro.schema"
 
-avroSchemaStringCoder :: TypedTermDefinition (InferenceContext -> Coder Avro.Schema String)
+avroSchemaStringCoder :: TypedTermDefinition (InferenceContext -> Coder Avro.Schema String Error)
 avroSchemaStringCoder = define "avroSchemaStringCoder" $
   doc "Create a coder between Avro schemas and JSON strings" $
   lambda "cx" $
     record _Coder [
-      _Coder_encode>>: lambda "_cx" $ lambda "schema" $
+      _Coder_encode>>: lambda "schema" $
         Phantoms.right (showJsonValue @@ (encodeSchema @@ var "schema")),
-      _Coder_decode>>: lambda "cx2" $ lambda "s" $
+      _Coder_decode>>: lambda "s" $
         Eithers.bind
           (Eithers.either
-            (lambda "e" $ err @@ var "cx2" @@ var "e")
+            (lambda "e" $ err @@ var "cx" @@ var "e")
             (lambda "v" $ Phantoms.right (var "v"))
             (stringToJsonValue @@ var "s"))
-          (lambda "json" $ decodeSchema @@ var "cx2" @@ var "json")]
+          (lambda "json" $ decodeSchema @@ var "cx" @@ var "json")]
 
 
 -- | Decode functions

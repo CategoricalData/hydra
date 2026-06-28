@@ -106,23 +106,23 @@ testContext = InferenceContext { inferenceContextFreshTypeVariableCount = 0, inf
 check :: String -> H.SpecWith a -> H.SpecWith a
 check desc = H.describe $ "Check type inference for " <> desc
 
-checkSerdeRoundTrip :: (InferenceContext -> Graph -> Type -> Either Error (Coder Term BS.ByteString))
+checkSerdeRoundTrip :: (InferenceContext -> Graph -> Type -> Either Error (Coder Term BS.ByteString Error))
   -> TypeApplicationTerm -> H.Expectation
 checkSerdeRoundTrip mkSerde (TypeApplicationTerm term typ) = do
     case mkSerde testContext testGraph typ of
       Left e -> HL.assertFailure (showError e)
       Right serde -> do
-        case coderEncode serde testContext term >>= coderDecode serde testContext of
+        case coderEncode serde term >>= coderDecode serde of
           Left e -> HL.assertFailure (showError e)
           Right roundTripped -> deannotateTerm roundTripped `H.shouldBe` deannotateTerm term
 
-checkSerialization :: (InferenceContext -> Graph -> Type -> Either Error (Coder Term String))
+checkSerialization :: (InferenceContext -> Graph -> Type -> Either Error (Coder Term String Error))
   -> TypeApplicationTerm -> String -> H.Expectation
 checkSerialization mkSerdeStr (TypeApplicationTerm term typ) expected = do
     case mkSerdeStr testContext testGraph typ of
       Left e -> HL.assertFailure (showError e)
       Right serde -> shouldSucceedWith
-        (mapError $ fmap normalize $ coderEncode serde testContext term)
+        (mapError $ fmap normalize $ coderEncode serde term)
         (normalize expected)
   where
     normalize = unlines . L.filter (not . L.null) . lines

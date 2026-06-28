@@ -3,9 +3,6 @@ package hydra.json;
 import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
 import hydra.coders.Coder;
-import hydra.typing.InferenceContext;
-import hydra.errors.Error_;
-import hydra.errors.OtherError;
 import hydra.json.model.Value;
 import hydra.overlay.java.util.Either;
 
@@ -15,7 +12,7 @@ import java.util.Map;
 /**
  * A bidirectional coder between Hydra's native JSON values and strings (via json-io).
  */
-public class JsonSerde extends Coder<Value, String> {
+public class JsonSerde extends Coder<Value, String, String> {
     private static final Map<String, Object> WRITER_ARGS = new HashMap<String, Object>() {{
         put(JsonWriter.TYPE, false);
         put(JsonWriter.PRETTY_PRINT, false);
@@ -25,23 +22,7 @@ public class JsonSerde extends Coder<Value, String> {
      * Constructs a new JsonSerde.
      */
     public JsonSerde() {
-        super(toCoderFn(JsonSerde::encode), toCoderFn(JsonSerde::decode));
-    }
-
-    /**
-     * Convert a simple Either-based function to the Coder's Context-based Either signature.
-     */
-    private static <A, B> java.util.function.Function<InferenceContext, java.util.function.Function<A, Either<Error_, B>>>
-            toCoderFn(java.util.function.Function<A, Either<String, B>> fn) {
-        return cx -> a -> {
-            Either<String, B> result = fn.apply(a);
-            if (result.isRight()) {
-                return Either.right(((Either.Right<String, B>) result).value);
-            } else {
-                String msg = ((Either.Left<String, B>) result).value;
-                return Either.left(new Error_.Other(new OtherError(msg)));
-            }
-        };
+        super(JsonSerde::encode, JsonSerde::decode);
     }
 
     /**

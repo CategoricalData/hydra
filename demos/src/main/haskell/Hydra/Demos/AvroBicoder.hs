@@ -100,12 +100,12 @@ runForwardDemo = do
             case parseJson dataStr of
               Left e -> putStrLn $ "  Data parse error: " ++ e
               Right dataJson -> do
-                case Coders.coderEncode (Coders.adapterCoder adapter) cx dataJson of
+                case Coders.coderEncode (Coders.adapterCoder adapter) dataJson of
                   Left e -> putStrLn $ "  Encode error: " ++ show e
                   Right hydraTerm -> do
                     putStrLn "  JSON data -> Hydra term: OK"
                     -- Decode back to JSON to verify round-trip
-                    case Coders.coderDecode (Coders.adapterCoder adapter) cx hydraTerm of
+                    case Coders.coderDecode (Coders.adapterCoder adapter) hydraTerm of
                       Left e -> putStrLn $ "  Decode error: " ++ show e
                       Right jsonResult -> do
                         let resultStr = JsonWriter.printJson jsonResult
@@ -168,7 +168,7 @@ runReverseDemo = do
             Core.Field (Core.Name "tags") (Core.TermList [
               Core.TermLiteral (Core.LiteralString "engineer"),
               Core.TermLiteral (Core.LiteralString "haskell")])]
-      case Coders.coderEncode (Coders.adapterCoder adapter) cx personTerm of
+      case Coders.coderEncode (Coders.adapterCoder adapter) personTerm of
         Left err -> putStrLn $ "  Term encode ERROR: " ++ ShowError.error err
         Right jsonVal -> do
           let termJsonStr = JsonWriter.printJson jsonVal
@@ -266,19 +266,19 @@ runSchemaCodecDemo = do
           Avro.Field "timestamp" Nothing (Avro.SchemaPrimitive Avro.PrimitiveLong) Nothing Nothing Nothing M.empty],
         Avro.namedAnnotations = M.empty}
 
-  case Coders.coderEncode coder cx schema of
+  case Coders.coderEncode coder schema of
     Left e -> putStrLn $ "  Encode error: " ++ show e
     Right jsonStr -> do
       putStrLn $ "  Encoded: " ++ jsonStr
       -- Decode it back
-      case Coders.coderDecode coder cx jsonStr of
+      case Coders.coderDecode coder jsonStr of
         Left e -> putStrLn $ "  Decode error: " ++ show e
         Right decoded -> do
           if decoded == schema
             then putStrLn "  PASS: round-trip produces identical schema"
             else putStrLn "  NOTE: round-trip produces structurally different schema (may differ in optional fields)"
           -- Re-encode to verify
-          case Coders.coderEncode coder cx decoded of
+          case Coders.coderEncode coder decoded of
             Left e -> putStrLn $ "  Re-encode error: " ++ show e
             Right jsonStr2 -> do
               if jsonStr == jsonStr2

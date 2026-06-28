@@ -5,16 +5,14 @@ import hydra.coders.Coder;
 import java.util.function.Function;
 
 /**
- * A convenience class for stateless adapters.
- * Since Adapter no longer has state type parameters, this class provides
- * convenience constructors that accept StatelessCoder (which wraps Either-based functions).
+ * A convenience class for stateless adapters with String errors.
  *
  * @param <T1> the source type descriptor
  * @param <T2> the target type descriptor
  * @param <V1> the source value type
  * @param <V2> the target value type
  */
-public class StatelessAdapter<T1, T2, V1, V2> extends Adapter<T1, T2, V1, V2> {
+public class StatelessAdapter<T1, T2, V1, V2> extends Adapter<T1, T2, V1, V2, String> {
     /**
      * Construct a stateless adapter.
      * @param isLossy whether the adapter is lossy
@@ -22,7 +20,7 @@ public class StatelessAdapter<T1, T2, V1, V2> extends Adapter<T1, T2, V1, V2> {
      * @param target the target type descriptor
      * @param coder the coder
      */
-    public StatelessAdapter(boolean isLossy, T1 source, T2 target, Coder<V1, V2> coder) {
+    public StatelessAdapter(boolean isLossy, T1 source, T2 target, Coder<V1, V2, String> coder) {
         super(isLossy, source, target, coder);
     }
 
@@ -41,7 +39,7 @@ public class StatelessAdapter<T1, T2, V1, V2> extends Adapter<T1, T2, V1, V2> {
     public static <T1, T2, V1, V2> StatelessAdapter<T1, T2, V1, V2> of(boolean isLossy,
                                                                        T1 source,
                                                                        T2 target,
-                                                                       Coder<V1, V2> coder) {
+                                                                       Coder<V1, V2, String> coder) {
         return new StatelessAdapter<T1, T2, V1, V2>(isLossy, source, target, coder);
     }
 

@@ -110,14 +110,14 @@ propertySpec = define "PropertySpec" $
 schema :: TypeDefinition
 schema = define "Schema" $
   doc "A set of mappings which translates between Hydra terms and annotations, and application-specific property graph types" $
-  T.forAlls ["s", "t", "v"] $
+  T.forAlls ["s", "t", "v", "e"] $
     T.record [
-      "vertexIdTypes">: compute "Coder" @@ core "Type" @@ "t",
-      "vertexIds">: compute "Coder" @@ core "Term" @@ "v",
-      "edgeIdTypes">: compute "Coder" @@ core "Type" @@ "t",
-      "edgeIds">: compute "Coder" @@ core "Term" @@ "v",
-      "propertyTypes">: compute "Coder" @@ core "Type" @@ "t",
-      "propertyValues">: compute "Coder" @@ core "Term" @@ "v",
+      "vertexIdTypes">: compute "Coder" @@ core "Type" @@ "t" @@ "e",
+      "vertexIds">: compute "Coder" @@ core "Term" @@ "v" @@ "e",
+      "edgeIdTypes">: compute "Coder" @@ core "Type" @@ "t" @@ "e",
+      "edgeIds">: compute "Coder" @@ core "Term" @@ "v" @@ "e",
+      "propertyTypes">: compute "Coder" @@ core "Type" @@ "t" @@ "e",
+      "propertyValues">: compute "Coder" @@ core "Term" @@ "v" @@ "e",
       "annotations">: mappings "AnnotationSchema",
       "defaultVertexId">: "v",
       "defaultEdgeId">: "v"]

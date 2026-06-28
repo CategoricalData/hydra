@@ -110,7 +110,7 @@ runTermLevelForward tc =
     case forwardAdapter (T.termLevelForwardTestCaseSchema tc) of
       Left err -> H.expectationFailure $ "adapter creation failed: " ++ err
       Right adapter -> do
-        let result = Util.coderEncode (Util.adapterCoder adapter) testContext (T.termLevelForwardTestCaseJson tc)
+        let result = Util.coderEncode (Util.adapterCoder adapter) (T.termLevelForwardTestCaseJson tc)
         case result of
           Left err -> H.expectationFailure $ "encode failed: " ++ show err
           Right term -> term `H.shouldBe` T.termLevelForwardTestCaseTerm tc
@@ -122,7 +122,7 @@ runTermLevelReverse tc =
     case forwardAdapter (T.termLevelReverseTestCaseSchema tc) of
       Left err -> H.expectationFailure $ "adapter creation failed: " ++ err
       Right adapter -> do
-        let result = Util.coderDecode (Util.adapterCoder adapter) testContext (T.termLevelReverseTestCaseTerm tc)
+        let result = Util.coderDecode (Util.adapterCoder adapter) (T.termLevelReverseTestCaseTerm tc)
         case result of
           Left err -> H.expectationFailure $ "decode failed: " ++ show err
           Right json -> json `H.shouldBe` T.termLevelReverseTestCaseJson tc
@@ -135,10 +135,10 @@ runTermLevelRoundTripJson tc =
       Left err -> H.expectationFailure $ "adapter creation failed: " ++ err
       Right adapter -> do
         let coder = Util.adapterCoder adapter
-        case Util.coderEncode coder testContext (T.termLevelRoundTripJsonTestCaseJson tc) of
+        case Util.coderEncode coder (T.termLevelRoundTripJsonTestCaseJson tc) of
           Left err -> H.expectationFailure $ "encode failed: " ++ show err
           Right term -> do
-            case Util.coderDecode coder testContext term of
+            case Util.coderDecode coder term of
               Left err -> H.expectationFailure $ "decode failed: " ++ show err
               Right json -> json `H.shouldBe` T.termLevelRoundTripJsonTestCaseExpectedJson tc
 
@@ -150,10 +150,10 @@ runTermLevelRoundTripTerm tc =
       Left err -> H.expectationFailure $ "reverse adapter creation failed: " ++ err
       Right adapter -> do
         let coder = Util.adapterCoder adapter
-        case Util.coderEncode coder testContext (T.termLevelRoundTripTermTestCaseTerm tc) of
+        case Util.coderEncode coder (T.termLevelRoundTripTermTestCaseTerm tc) of
           Left err -> H.expectationFailure $ "encode (term->json) failed: " ++ show err
           Right json -> do
-            case Util.coderDecode coder testContext json of
+            case Util.coderDecode coder json of
               Left err -> H.expectationFailure $ "decode (json->term) failed: " ++ show err
               Right term -> term `H.shouldBe` T.termLevelRoundTripTermTestCaseExpectedTerm tc
 
@@ -169,7 +169,7 @@ runUnion tc =
         mapM_ (checkTermPair adapter) (T.unionTestCaseTermPairs tc)
   where
     checkTermPair adapter (term, expectedJson) = do
-      case Util.coderEncode (Util.adapterCoder adapter) testContext term of
+      case Util.coderEncode (Util.adapterCoder adapter) term of
         Left err -> H.expectationFailure $ "encode failed: " ++ show err
         Right json -> json `H.shouldBe` expectedJson
 

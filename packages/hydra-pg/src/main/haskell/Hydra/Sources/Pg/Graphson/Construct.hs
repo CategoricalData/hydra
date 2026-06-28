@@ -172,12 +172,12 @@ edgePropertyToGraphson = define "edgePropertyToGraphson" $
       (var "encodeValue" @@ (Pairs.second $ var "prop"))
 
 -- | A coder that converts GraphSON vertices to JSON
-graphsonVertexToJsonCoder :: TypedTermDefinition (Coder G.Vertex JM.Value)
+graphsonVertexToJsonCoder :: TypedTermDefinition (Coder G.Vertex JM.Value Error)
 graphsonVertexToJsonCoder = define "graphsonVertexToJsonCoder" $
   doc "A coder that converts GraphSON vertices to JSON. Decoding is not supported." $
   Coders.coder
-    ("_cx" ~> "v" ~> right (Coder.vertexToJson @@ var "v"))
-    ("_cx" ~> "_" ~> left (Error.errorOther $ Error.otherError $ string "decoding GraphSON JSON is currently unsupported"))
+    ("v" ~> right (Coder.vertexToJson @@ var "v"))
+    ("_" ~> left (Error.errorOther $ Error.otherError $ string "decoding GraphSON JSON is currently unsupported"))
 
 -- Type references
 gson :: String -> Type

@@ -6,7 +6,6 @@ import           Hydra.Overlay.Haskell.Dsl.Annotations (doc)
 import           Hydra.Overlay.Haskell.Bootstrap
 import           Hydra.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
 import qualified Hydra.Overlay.Haskell.Dsl.Types as T
-import qualified Hydra.Sources.Kernel.Types.Typing as Typing
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Errors as Error
 import qualified Hydra.Sources.Kernel.Types.File as File
@@ -25,7 +24,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
-            moduleDependencies = unqualifiedDep <$> [Error.ns, File.ns, Graph.ns, Variants.ns, Core.ns, Typing.ns, Util.ns],
+            moduleDependencies = unqualifiedDep <$> [Error.ns, File.ns, Graph.ns, Variants.ns, Core.ns, Util.ns],
             moduleMetadata = descriptionMetadata (Just "Abstractions for paired transformations between languages")}
   where
     definitions = [
@@ -46,7 +45,7 @@ module_ = Module {
 adapter :: TypeDefinition
 adapter = define "Adapter" $
   doc "A two-level bidirectional encoder which adapts types to types and terms to terms" $
-  T.forAlls ["t1", "t2", "v1", "v2"] $ T.record [
+  T.forAlls ["t1", "t2", "v1", "v2", "e"] $ T.record [
     "isLossy">:
       doc "Whether information may be lost in the course of this adaptation"
       T.boolean,
@@ -58,7 +57,7 @@ adapter = define "Adapter" $
       "t2",
     "coder">:
       doc "The coder for transforming instances of the source type to instances of the target type" $
-      coder @@ "v1" @@ "v2"]
+      coder @@ "v1" @@ "v2" @@ "e"]
 
 adapterContext :: TypeDefinition
 adapterContext = define "AdapterContext" $
@@ -74,18 +73,18 @@ adapterContext = define "AdapterContext" $
       doc "A map of type names to adapters for those types" $
       T.map Core.name (adapter
         @@ Core.type_ @@ Core.type_
-        @@ Core.term @@ Core.term)]
+        @@ Core.term @@ Core.term @@ Error.error_)]
 
 bicoder :: TypeDefinition
 bicoder = define "Bicoder" $
   doc "A two-level encoder and decoder, operating both at a type level and an instance (data) level" $
-  T.forAlls ["t1", "t2", "v1", "v2"] $ T.record [
+  T.forAlls ["t1", "t2", "v1", "v2", "e"] $ T.record [
     "encode">:
       doc "A function from source types to adapters" $
-      "t1" ~> adapter @@ "t1" @@ "t2" @@ "v1" @@ "v2",
+      "t1" ~> adapter @@ "t1" @@ "t2" @@ "v1" @@ "v2" @@ "e",
     "decode">:
       doc "A function from target types to adapters" $
-      "t2" ~> adapter @@ "t2" @@ "t1" @@ "v2" @@ "v1"]
+      "t2" ~> adapter @@ "t2" @@ "t1" @@ "v2" @@ "v1" @@ "e"]
 
 caseConventions :: TypeDefinition
 caseConventions = define "CaseConventions" $
@@ -124,14 +123,14 @@ caseConventions = define "CaseConventions" $
 
 coder :: TypeDefinition
 coder = define "Coder" $
-  doc "An encoder and decoder; a bidirectional transformation between two types" $
-  T.forAlls ["v1", "v2"] $ T.record [
+  doc "An encoder and decoder; a pair of partial functions between two types" $
+  T.forAlls ["v1", "v2", "e"] $ T.record [
     "encode">:
-      doc "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing" $
-      Typing.inferenceContext ~> "v1" ~> T.either_ Error.error_ "v2",
+      doc "A function which encodes a domain value to a codomain value, with the possibility of failure" $
+      "v1" ~> T.either_ "e" "v2",
     "decode">:
-      doc "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing" $
-      Typing.inferenceContext ~> "v2" ~> T.either_ Error.error_ "v1"]
+      doc "A function which decodes a codomain value to a domain value, with the possibility of failure" $
+      "v2" ~> T.either_ "e" "v1"]
 
 coderDirection :: TypeDefinition
 coderDirection = define "CoderDirection" $
@@ -205,7 +204,7 @@ languageName = define "LanguageName" $
 symmetricAdapter :: TypeDefinition
 symmetricAdapter = define "SymmetricAdapter" $
   doc "A bidirectional encoder which maps between the same type and term languages on either side" $
-  T.forAlls ["t", "v"] $ adapter @@ "t" @@ "t" @@ "v" @@ "v"
+  T.forAlls ["t", "v", "e"] $ adapter @@ "t" @@ "t" @@ "v" @@ "v" @@ "e"
 
 traversalOrder :: TypeDefinition
 traversalOrder = define "TraversalOrder" $
@@ -218,4 +217,4 @@ typeAdapter :: TypeDefinition
 typeAdapter = define "TypeAdapter" $
   doc "A function which maps a Hydra type to a symmetric adapter between types and terms" $
   adapterContext ~> Core.type_ ~> T.either_ T.string
-    (symmetricAdapter @@ Core.type_ @@ Core.term)
+    (symmetricAdapter @@ Core.type_ @@ Core.term @@ T.string)
