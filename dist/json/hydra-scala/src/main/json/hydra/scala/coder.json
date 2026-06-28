@@ -6263,7 +6263,7 @@
                                                         "name": "collectTypeArgs",
                                                         "term": {
                                                           "lambda": {
-                                                            "parameter": "t",
+                                                            "parameter": "t2",
                                                             "domain": {"variable": "hydra.core.Type"},
                                                             "body": {
                                                               "lambda": {
@@ -6277,7 +6277,9 @@
                                                                         "default": {
                                                                           "typeApplication": {
                                                                             "body": {
-                                                                              "typeApplication": {"body": {"pair": {"first": {"variable": "t"}, "second": {"variable": "acc"}}}, "type": {"variable": "hydra.core.Type"}}},
+                                                                              "typeApplication": {
+                                                                                "body": {"pair": {"first": {"variable": "t2"}, "second": {"variable": "acc"}}},
+                                                                                "type": {"variable": "hydra.core.Type"}}},
                                                                             "type": {"list": {"variable": "hydra.core.Type"}}}},
                                                                         "cases": [
                                                                           {
@@ -6313,7 +6315,7 @@
                                                                                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "hydra.core.Type"}}},
                                                                                                 "argument": {"variable": "a2"}}},
                                                                                             "argument": {"variable": "acc"}}}}}}}}}}]}},
-                                                                    "argument": {"application": {"function": {"variable": "hydra.strip.deannotateType"}, "argument": {"variable": "t"}}}}}}}}},
+                                                                    "argument": {"application": {"function": {"variable": "hydra.strip.deannotateType"}, "argument": {"variable": "t2"}}}}}}}}},
                                                         "typeScheme": {
                                                           "variables": [],
                                                           "body": {
@@ -7928,86 +7930,121 @@
                                           "cases": {
                                             "typeName": "hydra.core.Type",
                                             "default": {
-                                              "let": {
-                                                "bindings": [
-                                                  {
-                                                    "name": "mkAlias",
-                                                    "term": {
-                                                      "typeLambda": {
-                                                        "parameter": "t2",
-                                                        "body": {
-                                                          "lambda": {
-                                                            "parameter": "styp",
-                                                            "domain": {"variable": "hydra.scala.syntax.Type"},
-                                                            "body": {
-                                                              "typeApplication": {
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {
-                                                                      "either": {
-                                                                        "right": {
-                                                                          "inject": {
-                                                                            "typeName": "hydra.scala.syntax.Stat",
-                                                                            "field": {
-                                                                              "name": "defn",
-                                                                              "term": {
-                                                                                "inject": {
-                                                                                  "typeName": "hydra.scala.syntax.Defn",
-                                                                                  "field": {
-                                                                                    "name": "type",
-                                                                                    "term": {
-                                                                                      "record": {
-                                                                                        "typeName": "hydra.scala.syntax.TypeDefn",
-                                                                                        "fields": [
-                                                                                          {"name": "mods", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Mod"}}}},
-                                                                                          {
-                                                                                            "name": "name",
-                                                                                            "term": {"record": {"typeName": "hydra.scala.syntax.NameType", "fields": [{"name": "value", "term": {"variable": "lname"}}]}}},
-                                                                                          {"name": "tparams", "term": {"variable": "tparams"}},
-                                                                                          {"name": "body", "term": {"variable": "styp"}}]}}}}}}}}}},
-                                                                    "type": {"variable": "t2"}}},
-                                                                "type": {"variable": "hydra.scala.syntax.Stat"}}}}}}},
-                                                    "typeScheme": {
-                                                      "variables": ["t2"],
-                                                      "body": {
-                                                        "function": {
-                                                          "domain": {"variable": "hydra.scala.syntax.Type"},
-                                                          "codomain": {"either": {"left": {"variable": "t2"}, "right": {"variable": "hydra.scala.syntax.Stat"}}}}}}}],
-                                                "body": {
+                                              "application": {
+                                                "function": {
                                                   "application": {
                                                     "function": {
                                                       "application": {
                                                         "function": {
                                                           "application": {
                                                             "function": {
-                                                              "typeApplication": {
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.either"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                                    "type": {"variable": "hydra.scala.syntax.Type"}}},
-                                                                "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.scala.syntax.Stat"}}}}},
-                                                            "argument": {
-                                                              "lambda": {
-                                                                "parameter": "_",
-                                                                "domain": {"variable": "hydra.errors.Error"},
-                                                                "body": {
-                                                                  "application": {
-                                                                    "function": {"typeApplication": {"body": {"variable": "mkAlias"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                                    "argument": {"application": {"function": {"variable": "hydra.scala.utils.stref"}, "argument": {"literal": {"string": "Any"}}}}}}}}}},
-                                                        "argument": {"typeApplication": {"body": {"variable": "mkAlias"}, "type": {"variable": "hydra.errors.Error"}}}}},
-                                                    "argument": {
-                                                      "application": {
-                                                        "function": {
-                                                          "application": {
-                                                            "function": {
                                                               "application": {
                                                                 "function": {
-                                                                  "typeApplication": {
-                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.scala.coder.encodeType"}, "type": {"variable": "t0"}}},
-                                                                    "type": {"variable": "t1"}}},
-                                                                "argument": {"variable": "cx"}}},
-                                                            "argument": {"variable": "g"}}},
-                                                        "argument": {"variable": "typ"}}}}}}},
+                                                                  "lambda": {
+                                                                    "parameter": "lname2",
+                                                                    "domain": {"literal": "string"},
+                                                                    "body": {
+                                                                      "lambda": {
+                                                                        "parameter": "tparams2",
+                                                                        "domain": {"list": {"variable": "hydra.scala.syntax.ParamType"}},
+                                                                        "body": {
+                                                                          "lambda": {
+                                                                            "parameter": "cx2",
+                                                                            "domain": {"variable": "t0"},
+                                                                            "body": {
+                                                                              "lambda": {
+                                                                                "parameter": "g2",
+                                                                                "domain": {"variable": "t1"},
+                                                                                "body": {
+                                                                                  "lambda": {
+                                                                                    "parameter": "typ2",
+                                                                                    "domain": {"variable": "hydra.core.Type"},
+                                                                                    "body": {
+                                                                                      "let": {
+                                                                                        "bindings": [
+                                                                                          {
+                                                                                            "name": "mkAlias",
+                                                                                            "term": {
+                                                                                              "typeLambda": {
+                                                                                                "parameter": "t2",
+                                                                                                "body": {
+                                                                                                  "lambda": {
+                                                                                                    "parameter": "styp",
+                                                                                                    "domain": {"variable": "hydra.scala.syntax.Type"},
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {
+                                                                                                              "either": {
+                                                                                                                "right": {
+                                                                                                                  "inject": {
+                                                                                                                    "typeName": "hydra.scala.syntax.Stat",
+                                                                                                                    "field": {
+                                                                                                                      "name": "defn",
+                                                                                                                      "term": {
+                                                                                                                        "inject": {
+                                                                                                                          "typeName": "hydra.scala.syntax.Defn",
+                                                                                                                          "field": {
+                                                                                                                            "name": "type",
+                                                                                                                            "term": {
+                                                                                                                              "record": {
+                                                                                                                                "typeName": "hydra.scala.syntax.TypeDefn",
+                                                                                                                                "fields": [
+                                                                                                                                  {"name": "mods", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Mod"}}}},
+                                                                                                                                  {
+                                                                                                                                    "name": "name",
+                                                                                                                                    "term": {"record": {"typeName": "hydra.scala.syntax.NameType", "fields": [{"name": "value", "term": {"variable": "lname2"}}]}}},
+                                                                                                                                  {"name": "tparams", "term": {"variable": "tparams2"}},
+                                                                                                                                  {"name": "body", "term": {"variable": "styp"}}]}}}}}}}}}},
+                                                                                                            "type": {"variable": "t2"}}},
+                                                                                                        "type": {"variable": "hydra.scala.syntax.Stat"}}}}}}},
+                                                                                            "typeScheme": {
+                                                                                              "variables": ["t2"],
+                                                                                              "body": {
+                                                                                                "function": {
+                                                                                                  "domain": {"variable": "hydra.scala.syntax.Type"},
+                                                                                                  "codomain": {"either": {"left": {"variable": "t2"}, "right": {"variable": "hydra.scala.syntax.Stat"}}}}}}}],
+                                                                                        "body": {
+                                                                                          "application": {
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "function": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.either"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                            "type": {"variable": "hydra.scala.syntax.Type"}}},
+                                                                                                        "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.scala.syntax.Stat"}}}}},
+                                                                                                    "argument": {
+                                                                                                      "lambda": {
+                                                                                                        "parameter": "_",
+                                                                                                        "domain": {"variable": "hydra.errors.Error"},
+                                                                                                        "body": {
+                                                                                                          "application": {
+                                                                                                            "function": {"typeApplication": {"body": {"variable": "mkAlias"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                            "argument": {"application": {"function": {"variable": "hydra.scala.utils.stref"}, "argument": {"literal": {"string": "Any"}}}}}}}}}},
+                                                                                                "argument": {"typeApplication": {"body": {"variable": "mkAlias"}, "type": {"variable": "hydra.errors.Error"}}}}},
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "function": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.scala.coder.encodeType"}, "type": {"variable": "t0"}}},
+                                                                                                            "type": {"variable": "t1"}}},
+                                                                                                        "argument": {"variable": "cx2"}}},
+                                                                                                    "argument": {"variable": "g2"}}},
+                                                                                                "argument": {"variable": "typ2"}}}}}}}}}}}}}}}}},
+                                                                "argument": {"variable": "lname"}}},
+                                                            "argument": {"variable": "tparams"}}},
+                                                        "argument": {"variable": "cx"}}},
+                                                    "argument": {"variable": "g"}}},
+                                                "argument": {"variable": "typ"}}},
                                             "cases": [
                                               {
                                                 "name": "forall",
@@ -8170,86 +8207,121 @@
                                                               "cases": {
                                                                 "typeName": "hydra.core.Type",
                                                                 "default": {
-                                                                  "let": {
-                                                                    "bindings": [
-                                                                      {
-                                                                        "name": "mkAlias",
-                                                                        "term": {
-                                                                          "typeLambda": {
-                                                                            "parameter": "t2",
-                                                                            "body": {
-                                                                              "lambda": {
-                                                                                "parameter": "styp",
-                                                                                "domain": {"variable": "hydra.scala.syntax.Type"},
-                                                                                "body": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {
-                                                                                          "either": {
-                                                                                            "right": {
-                                                                                              "inject": {
-                                                                                                "typeName": "hydra.scala.syntax.Stat",
-                                                                                                "field": {
-                                                                                                  "name": "defn",
-                                                                                                  "term": {
-                                                                                                    "inject": {
-                                                                                                      "typeName": "hydra.scala.syntax.Defn",
-                                                                                                      "field": {
-                                                                                                        "name": "type",
-                                                                                                        "term": {
-                                                                                                          "record": {
-                                                                                                            "typeName": "hydra.scala.syntax.TypeDefn",
-                                                                                                            "fields": [
-                                                                                                              {"name": "mods", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Mod"}}}},
-                                                                                                              {
-                                                                                                                "name": "name",
-                                                                                                                "term": {"record": {"typeName": "hydra.scala.syntax.NameType", "fields": [{"name": "value", "term": {"variable": "lname"}}]}}},
-                                                                                                              {"name": "tparams", "term": {"variable": "allTparams"}},
-                                                                                                              {"name": "body", "term": {"variable": "styp"}}]}}}}}}}}}},
-                                                                                        "type": {"variable": "t2"}}},
-                                                                                    "type": {"variable": "hydra.scala.syntax.Stat"}}}}}}},
-                                                                        "typeScheme": {
-                                                                          "variables": ["t2"],
-                                                                          "body": {
-                                                                            "function": {
-                                                                              "domain": {"variable": "hydra.scala.syntax.Type"},
-                                                                              "codomain": {"either": {"left": {"variable": "t2"}, "right": {"variable": "hydra.scala.syntax.Stat"}}}}}}}],
-                                                                    "body": {
+                                                                  "application": {
+                                                                    "function": {
                                                                       "application": {
                                                                         "function": {
                                                                           "application": {
                                                                             "function": {
                                                                               "application": {
                                                                                 "function": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.either"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                                                        "type": {"variable": "hydra.scala.syntax.Type"}}},
-                                                                                    "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.scala.syntax.Stat"}}}}},
-                                                                                "argument": {
-                                                                                  "lambda": {
-                                                                                    "parameter": "_",
-                                                                                    "domain": {"variable": "hydra.errors.Error"},
-                                                                                    "body": {
-                                                                                      "application": {
-                                                                                        "function": {"typeApplication": {"body": {"variable": "mkAlias"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                                                        "argument": {"application": {"function": {"variable": "hydra.scala.utils.stref"}, "argument": {"literal": {"string": "Any"}}}}}}}}}},
-                                                                            "argument": {"typeApplication": {"body": {"variable": "mkAlias"}, "type": {"variable": "hydra.errors.Error"}}}}},
-                                                                        "argument": {
-                                                                          "application": {
-                                                                            "function": {
-                                                                              "application": {
-                                                                                "function": {
                                                                                   "application": {
                                                                                     "function": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.scala.coder.encodeType"}, "type": {"variable": "t0"}}},
-                                                                                        "type": {"variable": "t1"}}},
-                                                                                    "argument": {"variable": "cx"}}},
-                                                                                "argument": {"variable": "g"}}},
-                                                                            "argument": {"variable": "innerBody"}}}}}}},
+                                                                                      "lambda": {
+                                                                                        "parameter": "lname2",
+                                                                                        "domain": {"literal": "string"},
+                                                                                        "body": {
+                                                                                          "lambda": {
+                                                                                            "parameter": "tparams2",
+                                                                                            "domain": {"list": {"variable": "hydra.scala.syntax.ParamType"}},
+                                                                                            "body": {
+                                                                                              "lambda": {
+                                                                                                "parameter": "cx2",
+                                                                                                "domain": {"variable": "t0"},
+                                                                                                "body": {
+                                                                                                  "lambda": {
+                                                                                                    "parameter": "g2",
+                                                                                                    "domain": {"variable": "t1"},
+                                                                                                    "body": {
+                                                                                                      "lambda": {
+                                                                                                        "parameter": "typ2",
+                                                                                                        "domain": {"variable": "hydra.core.Type"},
+                                                                                                        "body": {
+                                                                                                          "let": {
+                                                                                                            "bindings": [
+                                                                                                              {
+                                                                                                                "name": "mkAlias",
+                                                                                                                "term": {
+                                                                                                                  "typeLambda": {
+                                                                                                                    "parameter": "t2",
+                                                                                                                    "body": {
+                                                                                                                      "lambda": {
+                                                                                                                        "parameter": "styp",
+                                                                                                                        "domain": {"variable": "hydra.scala.syntax.Type"},
+                                                                                                                        "body": {
+                                                                                                                          "typeApplication": {
+                                                                                                                            "body": {
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {
+                                                                                                                                  "either": {
+                                                                                                                                    "right": {
+                                                                                                                                      "inject": {
+                                                                                                                                        "typeName": "hydra.scala.syntax.Stat",
+                                                                                                                                        "field": {
+                                                                                                                                          "name": "defn",
+                                                                                                                                          "term": {
+                                                                                                                                            "inject": {
+                                                                                                                                              "typeName": "hydra.scala.syntax.Defn",
+                                                                                                                                              "field": {
+                                                                                                                                                "name": "type",
+                                                                                                                                                "term": {
+                                                                                                                                                  "record": {
+                                                                                                                                                    "typeName": "hydra.scala.syntax.TypeDefn",
+                                                                                                                                                    "fields": [
+                                                                                                                                                      {"name": "mods", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Mod"}}}},
+                                                                                                                                                      {
+                                                                                                                                                        "name": "name",
+                                                                                                                                                        "term": {"record": {"typeName": "hydra.scala.syntax.NameType", "fields": [{"name": "value", "term": {"variable": "lname2"}}]}}},
+                                                                                                                                                      {"name": "tparams", "term": {"variable": "tparams2"}},
+                                                                                                                                                      {"name": "body", "term": {"variable": "styp"}}]}}}}}}}}}},
+                                                                                                                                "type": {"variable": "t2"}}},
+                                                                                                                            "type": {"variable": "hydra.scala.syntax.Stat"}}}}}}},
+                                                                                                                "typeScheme": {
+                                                                                                                  "variables": ["t2"],
+                                                                                                                  "body": {
+                                                                                                                    "function": {
+                                                                                                                      "domain": {"variable": "hydra.scala.syntax.Type"},
+                                                                                                                      "codomain": {"either": {"left": {"variable": "t2"}, "right": {"variable": "hydra.scala.syntax.Stat"}}}}}}}],
+                                                                                                            "body": {
+                                                                                                              "application": {
+                                                                                                                "function": {
+                                                                                                                  "application": {
+                                                                                                                    "function": {
+                                                                                                                      "application": {
+                                                                                                                        "function": {
+                                                                                                                          "typeApplication": {
+                                                                                                                            "body": {
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.either"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                                                "type": {"variable": "hydra.scala.syntax.Type"}}},
+                                                                                                                            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.scala.syntax.Stat"}}}}},
+                                                                                                                        "argument": {
+                                                                                                                          "lambda": {
+                                                                                                                            "parameter": "_",
+                                                                                                                            "domain": {"variable": "hydra.errors.Error"},
+                                                                                                                            "body": {
+                                                                                                                              "application": {
+                                                                                                                                "function": {"typeApplication": {"body": {"variable": "mkAlias"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                                                "argument": {"application": {"function": {"variable": "hydra.scala.utils.stref"}, "argument": {"literal": {"string": "Any"}}}}}}}}}},
+                                                                                                                    "argument": {"typeApplication": {"body": {"variable": "mkAlias"}, "type": {"variable": "hydra.errors.Error"}}}}},
+                                                                                                                "argument": {
+                                                                                                                  "application": {
+                                                                                                                    "function": {
+                                                                                                                      "application": {
+                                                                                                                        "function": {
+                                                                                                                          "application": {
+                                                                                                                            "function": {
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.scala.coder.encodeType"}, "type": {"variable": "t0"}}},
+                                                                                                                                "type": {"variable": "t1"}}},
+                                                                                                                            "argument": {"variable": "cx2"}}},
+                                                                                                                        "argument": {"variable": "g2"}}},
+                                                                                                                    "argument": {"variable": "typ2"}}}}}}}}}}}}}}}}},
+                                                                                    "argument": {"variable": "lname"}}},
+                                                                                "argument": {"variable": "allTparams"}}},
+                                                                            "argument": {"variable": "cx"}}},
+                                                                        "argument": {"variable": "g"}}},
+                                                                    "argument": {"variable": "innerBody"}}},
                                                                 "cases": [
                                                                   {
                                                                     "name": "record",
@@ -8262,93 +8334,128 @@
                                                                             "function": {
                                                                               "application": {
                                                                                 "function": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                                                        "type": {"list": {"variable": "hydra.scala.syntax.ParamData"}}}},
-                                                                                    "type": {"variable": "hydra.scala.syntax.Stat"}}},
-                                                                                "argument": {
                                                                                   "application": {
                                                                                     "function": {
                                                                                       "application": {
                                                                                         "function": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {
-                                                                                              "typeApplication": {
-                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.mapList"}, "type": {"variable": "hydra.core.FieldType"}}},
-                                                                                                "type": {"variable": "hydra.scala.syntax.ParamData"}}},
-                                                                                            "type": {"variable": "hydra.errors.Error"}}},
-                                                                                        "argument": {
-                                                                                          "lambda": {
-                                                                                            "parameter": "f",
-                                                                                            "domain": {"variable": "hydra.core.FieldType"},
-                                                                                            "body": {
-                                                                                              "application": {
-                                                                                                "function": {
-                                                                                                  "application": {
-                                                                                                    "function": {
-                                                                                                      "application": {
-                                                                                                        "function": {
-                                                                                                          "typeApplication": {
-                                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.scala.coder.fieldToParam"}, "type": {"variable": "t0"}}},
-                                                                                                            "type": {"variable": "t1"}}},
-                                                                                                        "argument": {"variable": "cx"}}},
-                                                                                                    "argument": {"variable": "g"}}},
-                                                                                                "argument": {"variable": "f"}}}}}}},
-                                                                                    "argument": {"variable": "rt2"}}}}},
-                                                                            "argument": {
-                                                                              "lambda": {
-                                                                                "parameter": "params",
-                                                                                "domain": {"list": {"variable": "hydra.scala.syntax.ParamData"}},
-                                                                                "body": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {
-                                                                                          "either": {
-                                                                                            "right": {
-                                                                                              "inject": {
-                                                                                                "typeName": "hydra.scala.syntax.Stat",
-                                                                                                "field": {
-                                                                                                  "name": "defn",
-                                                                                                  "term": {
-                                                                                                    "inject": {
-                                                                                                      "typeName": "hydra.scala.syntax.Defn",
-                                                                                                      "field": {
-                                                                                                        "name": "class",
-                                                                                                        "term": {
-                                                                                                          "record": {
-                                                                                                            "typeName": "hydra.scala.syntax.ClassDefn",
-                                                                                                            "fields": [
-                                                                                                              {
-                                                                                                                "name": "mods",
-                                                                                                                "term": {"list": [{"inject": {"typeName": "hydra.scala.syntax.Mod", "field": {"name": "case", "term": "unit"}}}]}},
-                                                                                                              {"name": "name", "term": {"variable": "tname"}},
-                                                                                                              {"name": "tparams", "term": {"variable": "allTparams"}},
-                                                                                                              {
-                                                                                                                "name": "ctor",
-                                                                                                                "term": {
-                                                                                                                  "record": {
-                                                                                                                    "typeName": "hydra.scala.syntax.PrimaryCtor",
-                                                                                                                    "fields": [
-                                                                                                                      {"name": "mods", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Mod"}}}},
-                                                                                                                      {
-                                                                                                                        "name": "name",
-                                                                                                                        "term": {"inject": {"typeName": "hydra.scala.syntax.Name", "field": {"name": "value", "term": {"literal": {"string": ""}}}}}},
-                                                                                                                      {"name": "paramss", "term": {"list": [{"variable": "params"}]}}]}}},
-                                                                                                              {
-                                                                                                                "name": "template",
-                                                                                                                "term": {
-                                                                                                                  "record": {
-                                                                                                                    "typeName": "hydra.scala.syntax.Template",
-                                                                                                                    "fields": [
-                                                                                                                      {"name": "early", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Stat"}}}},
-                                                                                                                      {"name": "inits", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Init"}}}},
-                                                                                                                      {"name": "self", "term": {"wrap": {"typeName": "hydra.scala.syntax.Self", "body": "unit"}}},
-                                                                                                                      {"name": "stats", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Stat"}}}}]}}}]}}}}}}}}}},
-                                                                                        "type": {"variable": "hydra.errors.Error"}}},
-                                                                                    "type": {"variable": "hydra.scala.syntax.Stat"}}}}}}}}}},
+                                                                                          "application": {
+                                                                                            "function": {
+                                                                                              "lambda": {
+                                                                                                "parameter": "tname",
+                                                                                                "domain": {"variable": "hydra.scala.syntax.NameType"},
+                                                                                                "body": {
+                                                                                                  "lambda": {
+                                                                                                    "parameter": "tparams",
+                                                                                                    "domain": {"list": {"variable": "hydra.scala.syntax.ParamType"}},
+                                                                                                    "body": {
+                                                                                                      "lambda": {
+                                                                                                        "parameter": "cx",
+                                                                                                        "domain": {"variable": "t0"},
+                                                                                                        "body": {
+                                                                                                          "lambda": {
+                                                                                                            "parameter": "g",
+                                                                                                            "domain": {"variable": "t1"},
+                                                                                                            "body": {
+                                                                                                              "lambda": {
+                                                                                                                "parameter": "rt",
+                                                                                                                "domain": {"list": {"variable": "hydra.core.FieldType"}},
+                                                                                                                "body": {
+                                                                                                                  "application": {
+                                                                                                                    "function": {
+                                                                                                                      "application": {
+                                                                                                                        "function": {
+                                                                                                                          "typeApplication": {
+                                                                                                                            "body": {
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                                                "type": {"list": {"variable": "hydra.scala.syntax.ParamData"}}}},
+                                                                                                                            "type": {"variable": "hydra.scala.syntax.Stat"}}},
+                                                                                                                        "argument": {
+                                                                                                                          "application": {
+                                                                                                                            "function": {
+                                                                                                                              "application": {
+                                                                                                                                "function": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {
+                                                                                                                                      "typeApplication": {
+                                                                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.mapList"}, "type": {"variable": "hydra.core.FieldType"}}},
+                                                                                                                                        "type": {"variable": "hydra.scala.syntax.ParamData"}}},
+                                                                                                                                    "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                                                "argument": {
+                                                                                                                                  "lambda": {
+                                                                                                                                    "parameter": "f",
+                                                                                                                                    "domain": {"variable": "hydra.core.FieldType"},
+                                                                                                                                    "body": {
+                                                                                                                                      "application": {
+                                                                                                                                        "function": {
+                                                                                                                                          "application": {
+                                                                                                                                            "function": {
+                                                                                                                                              "application": {
+                                                                                                                                                "function": {
+                                                                                                                                                  "typeApplication": {
+                                                                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.scala.coder.fieldToParam"}, "type": {"variable": "t0"}}},
+                                                                                                                                                    "type": {"variable": "t1"}}},
+                                                                                                                                                "argument": {"variable": "cx"}}},
+                                                                                                                                            "argument": {"variable": "g"}}},
+                                                                                                                                        "argument": {"variable": "f"}}}}}}},
+                                                                                                                            "argument": {"variable": "rt"}}}}},
+                                                                                                                    "argument": {
+                                                                                                                      "lambda": {
+                                                                                                                        "parameter": "params",
+                                                                                                                        "domain": {"list": {"variable": "hydra.scala.syntax.ParamData"}},
+                                                                                                                        "body": {
+                                                                                                                          "typeApplication": {
+                                                                                                                            "body": {
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {
+                                                                                                                                  "either": {
+                                                                                                                                    "right": {
+                                                                                                                                      "inject": {
+                                                                                                                                        "typeName": "hydra.scala.syntax.Stat",
+                                                                                                                                        "field": {
+                                                                                                                                          "name": "defn",
+                                                                                                                                          "term": {
+                                                                                                                                            "inject": {
+                                                                                                                                              "typeName": "hydra.scala.syntax.Defn",
+                                                                                                                                              "field": {
+                                                                                                                                                "name": "class",
+                                                                                                                                                "term": {
+                                                                                                                                                  "record": {
+                                                                                                                                                    "typeName": "hydra.scala.syntax.ClassDefn",
+                                                                                                                                                    "fields": [
+                                                                                                                                                      {
+                                                                                                                                                        "name": "mods",
+                                                                                                                                                        "term": {"list": [{"inject": {"typeName": "hydra.scala.syntax.Mod", "field": {"name": "case", "term": "unit"}}}]}},
+                                                                                                                                                      {"name": "name", "term": {"variable": "tname"}},
+                                                                                                                                                      {"name": "tparams", "term": {"variable": "tparams"}},
+                                                                                                                                                      {
+                                                                                                                                                        "name": "ctor",
+                                                                                                                                                        "term": {
+                                                                                                                                                          "record": {
+                                                                                                                                                            "typeName": "hydra.scala.syntax.PrimaryCtor",
+                                                                                                                                                            "fields": [
+                                                                                                                                                              {"name": "mods", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Mod"}}}},
+                                                                                                                                                              {
+                                                                                                                                                                "name": "name",
+                                                                                                                                                                "term": {"inject": {"typeName": "hydra.scala.syntax.Name", "field": {"name": "value", "term": {"literal": {"string": ""}}}}}},
+                                                                                                                                                              {"name": "paramss", "term": {"list": [{"variable": "params"}]}}]}}},
+                                                                                                                                                      {
+                                                                                                                                                        "name": "template",
+                                                                                                                                                        "term": {
+                                                                                                                                                          "record": {
+                                                                                                                                                            "typeName": "hydra.scala.syntax.Template",
+                                                                                                                                                            "fields": [
+                                                                                                                                                              {"name": "early", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Stat"}}}},
+                                                                                                                                                              {"name": "inits", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Init"}}}},
+                                                                                                                                                              {"name": "self", "term": {"wrap": {"typeName": "hydra.scala.syntax.Self", "body": "unit"}}},
+                                                                                                                                                              {"name": "stats", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Stat"}}}}]}}}]}}}}}}}}}},
+                                                                                                                                "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                                            "type": {"variable": "hydra.scala.syntax.Stat"}}}}}}}}}}}}}}}}},
+                                                                                            "argument": {"variable": "tname"}}},
+                                                                                        "argument": {"variable": "allTparams"}}},
+                                                                                    "argument": {"variable": "cx"}}},
+                                                                                "argument": {"variable": "g"}}},
+                                                                            "argument": {"variable": "rt2"}}}}}},
                                                                   {
                                                                     "name": "union",
                                                                     "handler": {
@@ -8360,99 +8467,141 @@
                                                                             "function": {
                                                                               "application": {
                                                                                 "function": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                                                        "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}}},
-                                                                                    "type": {"variable": "hydra.scala.syntax.Stat"}}},
-                                                                                "argument": {
                                                                                   "application": {
                                                                                     "function": {
                                                                                       "application": {
                                                                                         "function": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {
-                                                                                              "typeApplication": {
-                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.mapList"}, "type": {"variable": "hydra.core.FieldType"}}},
-                                                                                                "type": {"variable": "hydra.scala.syntax.Stat"}}},
-                                                                                            "type": {"variable": "hydra.errors.Error"}}},
-                                                                                        "argument": {
-                                                                                          "lambda": {
-                                                                                            "parameter": "f",
-                                                                                            "domain": {"variable": "hydra.core.FieldType"},
-                                                                                            "body": {
+                                                                                          "application": {
+                                                                                            "function": {
                                                                                               "application": {
                                                                                                 "function": {
-                                                                                                  "application": {
-                                                                                                    "function": {
-                                                                                                      "application": {
-                                                                                                        "function": {
-                                                                                                          "application": {
-                                                                                                            "function": {
-                                                                                                              "application": {
-                                                                                                                "function": {
-                                                                                                                  "typeApplication": {
-                                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.scala.coder.fieldToEnumCase"}, "type": {"variable": "t0"}}},
-                                                                                                                    "type": {"variable": "t1"}}},
-                                                                                                                "argument": {"variable": "cx"}}},
-                                                                                                            "argument": {"variable": "g"}}},
-                                                                                                        "argument": {"variable": "lname"}}},
-                                                                                                    "argument": {"variable": "allTparams"}}},
-                                                                                                "argument": {"variable": "f"}}}}}}},
-                                                                                    "argument": {"variable": "rt2"}}}}},
-                                                                            "argument": {
-                                                                              "lambda": {
-                                                                                "parameter": "cases",
-                                                                                "domain": {"list": {"variable": "hydra.scala.syntax.Stat"}},
-                                                                                "body": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {
-                                                                                          "either": {
-                                                                                            "right": {
-                                                                                              "inject": {
-                                                                                                "typeName": "hydra.scala.syntax.Stat",
-                                                                                                "field": {
-                                                                                                  "name": "defn",
-                                                                                                  "term": {
-                                                                                                    "inject": {
-                                                                                                      "typeName": "hydra.scala.syntax.Defn",
-                                                                                                      "field": {
-                                                                                                        "name": "enum",
-                                                                                                        "term": {
-                                                                                                          "record": {
-                                                                                                            "typeName": "hydra.scala.syntax.EnumDefn",
-                                                                                                            "fields": [
-                                                                                                              {"name": "mods", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Mod"}}}},
-                                                                                                              {"name": "name", "term": {"variable": "tname"}},
-                                                                                                              {"name": "tparams", "term": {"variable": "allTparams"}},
-                                                                                                              {
-                                                                                                                "name": "ctor",
-                                                                                                                "term": {
-                                                                                                                  "record": {
-                                                                                                                    "typeName": "hydra.scala.syntax.PrimaryCtor",
-                                                                                                                    "fields": [
-                                                                                                                      {"name": "mods", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Mod"}}}},
-                                                                                                                      {
-                                                                                                                        "name": "name",
-                                                                                                                        "term": {"inject": {"typeName": "hydra.scala.syntax.Name", "field": {"name": "value", "term": {"literal": {"string": ""}}}}}},
-                                                                                                                      {
-                                                                                                                        "name": "paramss",
-                                                                                                                        "term": {"typeApplication": {"body": {"list": []}, "type": {"list": {"variable": "hydra.scala.syntax.ParamData"}}}}}]}}},
-                                                                                                              {
-                                                                                                                "name": "template",
-                                                                                                                "term": {
-                                                                                                                  "record": {
-                                                                                                                    "typeName": "hydra.scala.syntax.Template",
-                                                                                                                    "fields": [
-                                                                                                                      {"name": "early", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Stat"}}}},
-                                                                                                                      {"name": "inits", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Init"}}}},
-                                                                                                                      {"name": "self", "term": {"wrap": {"typeName": "hydra.scala.syntax.Self", "body": "unit"}}},
-                                                                                                                      {"name": "stats", "term": {"variable": "cases"}}]}}}]}}}}}}}}}},
-                                                                                        "type": {"variable": "hydra.errors.Error"}}},
-                                                                                    "type": {"variable": "hydra.scala.syntax.Stat"}}}}}}}}}},
+                                                                                                  "lambda": {
+                                                                                                    "parameter": "tname",
+                                                                                                    "domain": {"variable": "hydra.scala.syntax.NameType"},
+                                                                                                    "body": {
+                                                                                                      "lambda": {
+                                                                                                        "parameter": "lname",
+                                                                                                        "domain": {"literal": "string"},
+                                                                                                        "body": {
+                                                                                                          "lambda": {
+                                                                                                            "parameter": "tparams",
+                                                                                                            "domain": {"list": {"variable": "hydra.scala.syntax.ParamType"}},
+                                                                                                            "body": {
+                                                                                                              "lambda": {
+                                                                                                                "parameter": "cx",
+                                                                                                                "domain": {"variable": "t0"},
+                                                                                                                "body": {
+                                                                                                                  "lambda": {
+                                                                                                                    "parameter": "g",
+                                                                                                                    "domain": {"variable": "t1"},
+                                                                                                                    "body": {
+                                                                                                                      "lambda": {
+                                                                                                                        "parameter": "rt",
+                                                                                                                        "domain": {"list": {"variable": "hydra.core.FieldType"}},
+                                                                                                                        "body": {
+                                                                                                                          "application": {
+                                                                                                                            "function": {
+                                                                                                                              "application": {
+                                                                                                                                "function": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {
+                                                                                                                                      "typeApplication": {
+                                                                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                                                        "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}}},
+                                                                                                                                    "type": {"variable": "hydra.scala.syntax.Stat"}}},
+                                                                                                                                "argument": {
+                                                                                                                                  "application": {
+                                                                                                                                    "function": {
+                                                                                                                                      "application": {
+                                                                                                                                        "function": {
+                                                                                                                                          "typeApplication": {
+                                                                                                                                            "body": {
+                                                                                                                                              "typeApplication": {
+                                                                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.mapList"}, "type": {"variable": "hydra.core.FieldType"}}},
+                                                                                                                                                "type": {"variable": "hydra.scala.syntax.Stat"}}},
+                                                                                                                                            "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                                                        "argument": {
+                                                                                                                                          "lambda": {
+                                                                                                                                            "parameter": "f",
+                                                                                                                                            "domain": {"variable": "hydra.core.FieldType"},
+                                                                                                                                            "body": {
+                                                                                                                                              "application": {
+                                                                                                                                                "function": {
+                                                                                                                                                  "application": {
+                                                                                                                                                    "function": {
+                                                                                                                                                      "application": {
+                                                                                                                                                        "function": {
+                                                                                                                                                          "application": {
+                                                                                                                                                            "function": {
+                                                                                                                                                              "application": {
+                                                                                                                                                                "function": {
+                                                                                                                                                                  "typeApplication": {
+                                                                                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.scala.coder.fieldToEnumCase"}, "type": {"variable": "t0"}}},
+                                                                                                                                                                    "type": {"variable": "t1"}}},
+                                                                                                                                                                "argument": {"variable": "cx"}}},
+                                                                                                                                                            "argument": {"variable": "g"}}},
+                                                                                                                                                        "argument": {"variable": "lname"}}},
+                                                                                                                                                    "argument": {"variable": "tparams"}}},
+                                                                                                                                                "argument": {"variable": "f"}}}}}}},
+                                                                                                                                    "argument": {"variable": "rt"}}}}},
+                                                                                                                            "argument": {
+                                                                                                                              "lambda": {
+                                                                                                                                "parameter": "cases",
+                                                                                                                                "domain": {"list": {"variable": "hydra.scala.syntax.Stat"}},
+                                                                                                                                "body": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {
+                                                                                                                                      "typeApplication": {
+                                                                                                                                        "body": {
+                                                                                                                                          "either": {
+                                                                                                                                            "right": {
+                                                                                                                                              "inject": {
+                                                                                                                                                "typeName": "hydra.scala.syntax.Stat",
+                                                                                                                                                "field": {
+                                                                                                                                                  "name": "defn",
+                                                                                                                                                  "term": {
+                                                                                                                                                    "inject": {
+                                                                                                                                                      "typeName": "hydra.scala.syntax.Defn",
+                                                                                                                                                      "field": {
+                                                                                                                                                        "name": "enum",
+                                                                                                                                                        "term": {
+                                                                                                                                                          "record": {
+                                                                                                                                                            "typeName": "hydra.scala.syntax.EnumDefn",
+                                                                                                                                                            "fields": [
+                                                                                                                                                              {"name": "mods", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Mod"}}}},
+                                                                                                                                                              {"name": "name", "term": {"variable": "tname"}},
+                                                                                                                                                              {"name": "tparams", "term": {"variable": "tparams"}},
+                                                                                                                                                              {
+                                                                                                                                                                "name": "ctor",
+                                                                                                                                                                "term": {
+                                                                                                                                                                  "record": {
+                                                                                                                                                                    "typeName": "hydra.scala.syntax.PrimaryCtor",
+                                                                                                                                                                    "fields": [
+                                                                                                                                                                      {"name": "mods", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Mod"}}}},
+                                                                                                                                                                      {
+                                                                                                                                                                        "name": "name",
+                                                                                                                                                                        "term": {"inject": {"typeName": "hydra.scala.syntax.Name", "field": {"name": "value", "term": {"literal": {"string": ""}}}}}},
+                                                                                                                                                                      {
+                                                                                                                                                                        "name": "paramss",
+                                                                                                                                                                        "term": {"typeApplication": {"body": {"list": []}, "type": {"list": {"variable": "hydra.scala.syntax.ParamData"}}}}}]}}},
+                                                                                                                                                              {
+                                                                                                                                                                "name": "template",
+                                                                                                                                                                "term": {
+                                                                                                                                                                  "record": {
+                                                                                                                                                                    "typeName": "hydra.scala.syntax.Template",
+                                                                                                                                                                    "fields": [
+                                                                                                                                                                      {"name": "early", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Stat"}}}},
+                                                                                                                                                                      {"name": "inits", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Init"}}}},
+                                                                                                                                                                      {"name": "self", "term": {"wrap": {"typeName": "hydra.scala.syntax.Self", "body": "unit"}}},
+                                                                                                                                                                      {"name": "stats", "term": {"variable": "cases"}}]}}}]}}}}}}}}}},
+                                                                                                                                        "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                                                    "type": {"variable": "hydra.scala.syntax.Stat"}}}}}}}}}}}}}}}}}}},
+                                                                                                "argument": {"variable": "tname"}}},
+                                                                                            "argument": {"variable": "lname"}}},
+                                                                                        "argument": {"variable": "allTparams"}}},
+                                                                                    "argument": {"variable": "cx"}}},
+                                                                                "argument": {"variable": "g"}}},
+                                                                            "argument": {"variable": "rt2"}}}}}},
                                                                   {
                                                                     "name": "wrap",
                                                                     "handler": {
@@ -8525,93 +8674,128 @@
                                                         "function": {
                                                           "application": {
                                                             "function": {
-                                                              "typeApplication": {
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                                    "type": {"list": {"variable": "hydra.scala.syntax.ParamData"}}}},
-                                                                "type": {"variable": "hydra.scala.syntax.Stat"}}},
-                                                            "argument": {
                                                               "application": {
                                                                 "function": {
                                                                   "application": {
                                                                     "function": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "typeApplication": {
-                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.mapList"}, "type": {"variable": "hydra.core.FieldType"}}},
-                                                                            "type": {"variable": "hydra.scala.syntax.ParamData"}}},
-                                                                        "type": {"variable": "hydra.errors.Error"}}},
-                                                                    "argument": {
-                                                                      "lambda": {
-                                                                        "parameter": "f",
-                                                                        "domain": {"variable": "hydra.core.FieldType"},
-                                                                        "body": {
-                                                                          "application": {
-                                                                            "function": {
-                                                                              "application": {
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "function": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.scala.coder.fieldToParam"}, "type": {"variable": "t0"}}},
-                                                                                        "type": {"variable": "t1"}}},
-                                                                                    "argument": {"variable": "cx"}}},
-                                                                                "argument": {"variable": "g"}}},
-                                                                            "argument": {"variable": "f"}}}}}}},
-                                                                "argument": {"variable": "rt"}}}}},
-                                                        "argument": {
-                                                          "lambda": {
-                                                            "parameter": "params",
-                                                            "domain": {"list": {"variable": "hydra.scala.syntax.ParamData"}},
-                                                            "body": {
-                                                              "typeApplication": {
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {
-                                                                      "either": {
-                                                                        "right": {
-                                                                          "inject": {
-                                                                            "typeName": "hydra.scala.syntax.Stat",
-                                                                            "field": {
-                                                                              "name": "defn",
-                                                                              "term": {
-                                                                                "inject": {
-                                                                                  "typeName": "hydra.scala.syntax.Defn",
-                                                                                  "field": {
-                                                                                    "name": "class",
-                                                                                    "term": {
-                                                                                      "record": {
-                                                                                        "typeName": "hydra.scala.syntax.ClassDefn",
-                                                                                        "fields": [
-                                                                                          {
-                                                                                            "name": "mods",
-                                                                                            "term": {"list": [{"inject": {"typeName": "hydra.scala.syntax.Mod", "field": {"name": "case", "term": "unit"}}}]}},
-                                                                                          {"name": "name", "term": {"variable": "tname"}},
-                                                                                          {"name": "tparams", "term": {"variable": "tparams"}},
-                                                                                          {
-                                                                                            "name": "ctor",
-                                                                                            "term": {
-                                                                                              "record": {
-                                                                                                "typeName": "hydra.scala.syntax.PrimaryCtor",
-                                                                                                "fields": [
-                                                                                                  {"name": "mods", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Mod"}}}},
-                                                                                                  {
-                                                                                                    "name": "name",
-                                                                                                    "term": {"inject": {"typeName": "hydra.scala.syntax.Name", "field": {"name": "value", "term": {"literal": {"string": ""}}}}}},
-                                                                                                  {"name": "paramss", "term": {"list": [{"variable": "params"}]}}]}}},
-                                                                                          {
-                                                                                            "name": "template",
-                                                                                            "term": {
-                                                                                              "record": {
-                                                                                                "typeName": "hydra.scala.syntax.Template",
-                                                                                                "fields": [
-                                                                                                  {"name": "early", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Stat"}}}},
-                                                                                                  {"name": "inits", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Init"}}}},
-                                                                                                  {"name": "self", "term": {"wrap": {"typeName": "hydra.scala.syntax.Self", "body": "unit"}}},
-                                                                                                  {"name": "stats", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Stat"}}}}]}}}]}}}}}}}}}},
-                                                                    "type": {"variable": "hydra.errors.Error"}}},
-                                                                "type": {"variable": "hydra.scala.syntax.Stat"}}}}}}}}}},
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "lambda": {
+                                                                            "parameter": "tname",
+                                                                            "domain": {"variable": "hydra.scala.syntax.NameType"},
+                                                                            "body": {
+                                                                              "lambda": {
+                                                                                "parameter": "tparams",
+                                                                                "domain": {"list": {"variable": "hydra.scala.syntax.ParamType"}},
+                                                                                "body": {
+                                                                                  "lambda": {
+                                                                                    "parameter": "cx",
+                                                                                    "domain": {"variable": "t0"},
+                                                                                    "body": {
+                                                                                      "lambda": {
+                                                                                        "parameter": "g",
+                                                                                        "domain": {"variable": "t1"},
+                                                                                        "body": {
+                                                                                          "lambda": {
+                                                                                            "parameter": "rt",
+                                                                                            "domain": {"list": {"variable": "hydra.core.FieldType"}},
+                                                                                            "body": {
+                                                                                              "application": {
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "function": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                            "type": {"list": {"variable": "hydra.scala.syntax.ParamData"}}}},
+                                                                                                        "type": {"variable": "hydra.scala.syntax.Stat"}}},
+                                                                                                    "argument": {
+                                                                                                      "application": {
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "function": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.mapList"}, "type": {"variable": "hydra.core.FieldType"}}},
+                                                                                                                    "type": {"variable": "hydra.scala.syntax.ParamData"}}},
+                                                                                                                "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                            "argument": {
+                                                                                                              "lambda": {
+                                                                                                                "parameter": "f",
+                                                                                                                "domain": {"variable": "hydra.core.FieldType"},
+                                                                                                                "body": {
+                                                                                                                  "application": {
+                                                                                                                    "function": {
+                                                                                                                      "application": {
+                                                                                                                        "function": {
+                                                                                                                          "application": {
+                                                                                                                            "function": {
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.scala.coder.fieldToParam"}, "type": {"variable": "t0"}}},
+                                                                                                                                "type": {"variable": "t1"}}},
+                                                                                                                            "argument": {"variable": "cx"}}},
+                                                                                                                        "argument": {"variable": "g"}}},
+                                                                                                                    "argument": {"variable": "f"}}}}}}},
+                                                                                                        "argument": {"variable": "rt"}}}}},
+                                                                                                "argument": {
+                                                                                                  "lambda": {
+                                                                                                    "parameter": "params",
+                                                                                                    "domain": {"list": {"variable": "hydra.scala.syntax.ParamData"}},
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {
+                                                                                                              "either": {
+                                                                                                                "right": {
+                                                                                                                  "inject": {
+                                                                                                                    "typeName": "hydra.scala.syntax.Stat",
+                                                                                                                    "field": {
+                                                                                                                      "name": "defn",
+                                                                                                                      "term": {
+                                                                                                                        "inject": {
+                                                                                                                          "typeName": "hydra.scala.syntax.Defn",
+                                                                                                                          "field": {
+                                                                                                                            "name": "class",
+                                                                                                                            "term": {
+                                                                                                                              "record": {
+                                                                                                                                "typeName": "hydra.scala.syntax.ClassDefn",
+                                                                                                                                "fields": [
+                                                                                                                                  {
+                                                                                                                                    "name": "mods",
+                                                                                                                                    "term": {"list": [{"inject": {"typeName": "hydra.scala.syntax.Mod", "field": {"name": "case", "term": "unit"}}}]}},
+                                                                                                                                  {"name": "name", "term": {"variable": "tname"}},
+                                                                                                                                  {"name": "tparams", "term": {"variable": "tparams"}},
+                                                                                                                                  {
+                                                                                                                                    "name": "ctor",
+                                                                                                                                    "term": {
+                                                                                                                                      "record": {
+                                                                                                                                        "typeName": "hydra.scala.syntax.PrimaryCtor",
+                                                                                                                                        "fields": [
+                                                                                                                                          {"name": "mods", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Mod"}}}},
+                                                                                                                                          {
+                                                                                                                                            "name": "name",
+                                                                                                                                            "term": {"inject": {"typeName": "hydra.scala.syntax.Name", "field": {"name": "value", "term": {"literal": {"string": ""}}}}}},
+                                                                                                                                          {"name": "paramss", "term": {"list": [{"variable": "params"}]}}]}}},
+                                                                                                                                  {
+                                                                                                                                    "name": "template",
+                                                                                                                                    "term": {
+                                                                                                                                      "record": {
+                                                                                                                                        "typeName": "hydra.scala.syntax.Template",
+                                                                                                                                        "fields": [
+                                                                                                                                          {"name": "early", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Stat"}}}},
+                                                                                                                                          {"name": "inits", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Init"}}}},
+                                                                                                                                          {"name": "self", "term": {"wrap": {"typeName": "hydra.scala.syntax.Self", "body": "unit"}}},
+                                                                                                                                          {"name": "stats", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Stat"}}}}]}}}]}}}}}}}}}},
+                                                                                                            "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                        "type": {"variable": "hydra.scala.syntax.Stat"}}}}}}}}}}}}}}}}},
+                                                                        "argument": {"variable": "tname"}}},
+                                                                    "argument": {"variable": "tparams"}}},
+                                                                "argument": {"variable": "cx"}}},
+                                                            "argument": {"variable": "g"}}},
+                                                        "argument": {"variable": "rt"}}}}}},
                                               {
                                                 "name": "union",
                                                 "handler": {
@@ -8623,99 +8807,141 @@
                                                         "function": {
                                                           "application": {
                                                             "function": {
-                                                              "typeApplication": {
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                                    "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}}},
-                                                                "type": {"variable": "hydra.scala.syntax.Stat"}}},
-                                                            "argument": {
                                                               "application": {
                                                                 "function": {
                                                                   "application": {
                                                                     "function": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "typeApplication": {
-                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.mapList"}, "type": {"variable": "hydra.core.FieldType"}}},
-                                                                            "type": {"variable": "hydra.scala.syntax.Stat"}}},
-                                                                        "type": {"variable": "hydra.errors.Error"}}},
-                                                                    "argument": {
-                                                                      "lambda": {
-                                                                        "parameter": "f",
-                                                                        "domain": {"variable": "hydra.core.FieldType"},
-                                                                        "body": {
+                                                                      "application": {
+                                                                        "function": {
                                                                           "application": {
                                                                             "function": {
-                                                                              "application": {
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "function": {
-                                                                                      "application": {
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "function": {
-                                                                                              "typeApplication": {
-                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.scala.coder.fieldToEnumCase"}, "type": {"variable": "t0"}}},
-                                                                                                "type": {"variable": "t1"}}},
-                                                                                            "argument": {"variable": "cx"}}},
-                                                                                        "argument": {"variable": "g"}}},
-                                                                                    "argument": {"variable": "lname"}}},
-                                                                                "argument": {"variable": "tparams"}}},
-                                                                            "argument": {"variable": "f"}}}}}}},
-                                                                "argument": {"variable": "rt"}}}}},
-                                                        "argument": {
-                                                          "lambda": {
-                                                            "parameter": "cases",
-                                                            "domain": {"list": {"variable": "hydra.scala.syntax.Stat"}},
-                                                            "body": {
-                                                              "typeApplication": {
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {
-                                                                      "either": {
-                                                                        "right": {
-                                                                          "inject": {
-                                                                            "typeName": "hydra.scala.syntax.Stat",
-                                                                            "field": {
-                                                                              "name": "defn",
-                                                                              "term": {
-                                                                                "inject": {
-                                                                                  "typeName": "hydra.scala.syntax.Defn",
-                                                                                  "field": {
-                                                                                    "name": "enum",
-                                                                                    "term": {
-                                                                                      "record": {
-                                                                                        "typeName": "hydra.scala.syntax.EnumDefn",
-                                                                                        "fields": [
-                                                                                          {"name": "mods", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Mod"}}}},
-                                                                                          {"name": "name", "term": {"variable": "tname"}},
-                                                                                          {"name": "tparams", "term": {"variable": "tparams"}},
-                                                                                          {
-                                                                                            "name": "ctor",
-                                                                                            "term": {
-                                                                                              "record": {
-                                                                                                "typeName": "hydra.scala.syntax.PrimaryCtor",
-                                                                                                "fields": [
-                                                                                                  {"name": "mods", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Mod"}}}},
-                                                                                                  {
-                                                                                                    "name": "name",
-                                                                                                    "term": {"inject": {"typeName": "hydra.scala.syntax.Name", "field": {"name": "value", "term": {"literal": {"string": ""}}}}}},
-                                                                                                  {
-                                                                                                    "name": "paramss",
-                                                                                                    "term": {"typeApplication": {"body": {"list": []}, "type": {"list": {"variable": "hydra.scala.syntax.ParamData"}}}}}]}}},
-                                                                                          {
-                                                                                            "name": "template",
-                                                                                            "term": {
-                                                                                              "record": {
-                                                                                                "typeName": "hydra.scala.syntax.Template",
-                                                                                                "fields": [
-                                                                                                  {"name": "early", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Stat"}}}},
-                                                                                                  {"name": "inits", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Init"}}}},
-                                                                                                  {"name": "self", "term": {"wrap": {"typeName": "hydra.scala.syntax.Self", "body": "unit"}}},
-                                                                                                  {"name": "stats", "term": {"variable": "cases"}}]}}}]}}}}}}}}}},
-                                                                    "type": {"variable": "hydra.errors.Error"}}},
-                                                                "type": {"variable": "hydra.scala.syntax.Stat"}}}}}}}}}},
+                                                                              "lambda": {
+                                                                                "parameter": "tname",
+                                                                                "domain": {"variable": "hydra.scala.syntax.NameType"},
+                                                                                "body": {
+                                                                                  "lambda": {
+                                                                                    "parameter": "lname",
+                                                                                    "domain": {"literal": "string"},
+                                                                                    "body": {
+                                                                                      "lambda": {
+                                                                                        "parameter": "tparams",
+                                                                                        "domain": {"list": {"variable": "hydra.scala.syntax.ParamType"}},
+                                                                                        "body": {
+                                                                                          "lambda": {
+                                                                                            "parameter": "cx",
+                                                                                            "domain": {"variable": "t0"},
+                                                                                            "body": {
+                                                                                              "lambda": {
+                                                                                                "parameter": "g",
+                                                                                                "domain": {"variable": "t1"},
+                                                                                                "body": {
+                                                                                                  "lambda": {
+                                                                                                    "parameter": "rt",
+                                                                                                    "domain": {"list": {"variable": "hydra.core.FieldType"}},
+                                                                                                    "body": {
+                                                                                                      "application": {
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "function": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                                    "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}}},
+                                                                                                                "type": {"variable": "hydra.scala.syntax.Stat"}}},
+                                                                                                            "argument": {
+                                                                                                              "application": {
+                                                                                                                "function": {
+                                                                                                                  "application": {
+                                                                                                                    "function": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {
+                                                                                                                          "typeApplication": {
+                                                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.mapList"}, "type": {"variable": "hydra.core.FieldType"}}},
+                                                                                                                            "type": {"variable": "hydra.scala.syntax.Stat"}}},
+                                                                                                                        "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                                    "argument": {
+                                                                                                                      "lambda": {
+                                                                                                                        "parameter": "f",
+                                                                                                                        "domain": {"variable": "hydra.core.FieldType"},
+                                                                                                                        "body": {
+                                                                                                                          "application": {
+                                                                                                                            "function": {
+                                                                                                                              "application": {
+                                                                                                                                "function": {
+                                                                                                                                  "application": {
+                                                                                                                                    "function": {
+                                                                                                                                      "application": {
+                                                                                                                                        "function": {
+                                                                                                                                          "application": {
+                                                                                                                                            "function": {
+                                                                                                                                              "typeApplication": {
+                                                                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.scala.coder.fieldToEnumCase"}, "type": {"variable": "t0"}}},
+                                                                                                                                                "type": {"variable": "t1"}}},
+                                                                                                                                            "argument": {"variable": "cx"}}},
+                                                                                                                                        "argument": {"variable": "g"}}},
+                                                                                                                                    "argument": {"variable": "lname"}}},
+                                                                                                                                "argument": {"variable": "tparams"}}},
+                                                                                                                            "argument": {"variable": "f"}}}}}}},
+                                                                                                                "argument": {"variable": "rt"}}}}},
+                                                                                                        "argument": {
+                                                                                                          "lambda": {
+                                                                                                            "parameter": "cases",
+                                                                                                            "domain": {"list": {"variable": "hydra.scala.syntax.Stat"}},
+                                                                                                            "body": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {
+                                                                                                                      "either": {
+                                                                                                                        "right": {
+                                                                                                                          "inject": {
+                                                                                                                            "typeName": "hydra.scala.syntax.Stat",
+                                                                                                                            "field": {
+                                                                                                                              "name": "defn",
+                                                                                                                              "term": {
+                                                                                                                                "inject": {
+                                                                                                                                  "typeName": "hydra.scala.syntax.Defn",
+                                                                                                                                  "field": {
+                                                                                                                                    "name": "enum",
+                                                                                                                                    "term": {
+                                                                                                                                      "record": {
+                                                                                                                                        "typeName": "hydra.scala.syntax.EnumDefn",
+                                                                                                                                        "fields": [
+                                                                                                                                          {"name": "mods", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Mod"}}}},
+                                                                                                                                          {"name": "name", "term": {"variable": "tname"}},
+                                                                                                                                          {"name": "tparams", "term": {"variable": "tparams"}},
+                                                                                                                                          {
+                                                                                                                                            "name": "ctor",
+                                                                                                                                            "term": {
+                                                                                                                                              "record": {
+                                                                                                                                                "typeName": "hydra.scala.syntax.PrimaryCtor",
+                                                                                                                                                "fields": [
+                                                                                                                                                  {"name": "mods", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Mod"}}}},
+                                                                                                                                                  {
+                                                                                                                                                    "name": "name",
+                                                                                                                                                    "term": {"inject": {"typeName": "hydra.scala.syntax.Name", "field": {"name": "value", "term": {"literal": {"string": ""}}}}}},
+                                                                                                                                                  {
+                                                                                                                                                    "name": "paramss",
+                                                                                                                                                    "term": {"typeApplication": {"body": {"list": []}, "type": {"list": {"variable": "hydra.scala.syntax.ParamData"}}}}}]}}},
+                                                                                                                                          {
+                                                                                                                                            "name": "template",
+                                                                                                                                            "term": {
+                                                                                                                                              "record": {
+                                                                                                                                                "typeName": "hydra.scala.syntax.Template",
+                                                                                                                                                "fields": [
+                                                                                                                                                  {"name": "early", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Stat"}}}},
+                                                                                                                                                  {"name": "inits", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Init"}}}},
+                                                                                                                                                  {"name": "self", "term": {"wrap": {"typeName": "hydra.scala.syntax.Self", "body": "unit"}}},
+                                                                                                                                                  {"name": "stats", "term": {"variable": "cases"}}]}}}]}}}}}}}}}},
+                                                                                                                    "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                                "type": {"variable": "hydra.scala.syntax.Stat"}}}}}}}}}}}}}}}}}}},
+                                                                            "argument": {"variable": "tname"}}},
+                                                                        "argument": {"variable": "lname"}}},
+                                                                    "argument": {"variable": "tparams"}}},
+                                                                "argument": {"variable": "cx"}}},
+                                                            "argument": {"variable": "g"}}},
+                                                        "argument": {"variable": "rt"}}}}}},
                                               {
                                                 "name": "wrap",
                                                 "handler": {

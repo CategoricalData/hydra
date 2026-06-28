@@ -666,7 +666,7 @@ encodeTypeDefinition cx g td =
                           Syntax.paramTypeVbounds = [],
                           Syntax.paramTypeCbounds = []}) allForallParams
           in case (Strip.deannotateType innerBody) of
-            Core.TypeRecord v1 -> Eithers.bind (Eithers.mapList (\f -> fieldToParam cx g f) v1) (\params -> Right (Syntax.StatDefn (Syntax.DefnClass (Syntax.ClassDefn {
+            Core.TypeRecord v1 -> (\rt -> Eithers.bind (Eithers.mapList (\f -> fieldToParam cx g f) rt) (\params -> Right (Syntax.StatDefn (Syntax.DefnClass (Syntax.ClassDefn {
               Syntax.classDefnMods = [
                 Syntax.ModCase],
               Syntax.classDefnName = tname,
@@ -680,8 +680,8 @@ encodeTypeDefinition cx g td =
                 Syntax.templateEarly = [],
                 Syntax.templateInits = [],
                 Syntax.templateSelf = (Syntax.Self ()),
-                Syntax.templateStats = []}}))))
-            Core.TypeUnion v1 -> Eithers.bind (Eithers.mapList (\f -> fieldToEnumCase cx g lname allTparams f) v1) (\cases -> Right (Syntax.StatDefn (Syntax.DefnEnum (Syntax.EnumDefn {
+                Syntax.templateStats = []}}))))) v1
+            Core.TypeUnion v1 -> (\g2 -> \rt -> Eithers.bind (Eithers.mapList (\f -> fieldToEnumCase cx g2 lname allTparams f) rt) (\cases -> Right (Syntax.StatDefn (Syntax.DefnEnum (Syntax.EnumDefn {
               Syntax.enumDefnMods = [],
               Syntax.enumDefnName = tname,
               Syntax.enumDefnTparams = allTparams,
@@ -693,13 +693,13 @@ encodeTypeDefinition cx g td =
                 Syntax.templateEarly = [],
                 Syntax.templateInits = [],
                 Syntax.templateSelf = (Syntax.Self ()),
-                Syntax.templateStats = cases}}))))
+                Syntax.templateStats = cases}}))))) g v1
             Core.TypeWrap v1 -> Eithers.bind (encodeType cx g v1) (\styp -> Right (Syntax.StatDefn (Syntax.DefnType (Syntax.TypeDefn {
               Syntax.typeDefnMods = [],
               Syntax.typeDefnName = tname,
               Syntax.typeDefnTparams = allTparams,
               Syntax.typeDefnBody = styp}))))
-            _ ->
+            _ -> (\cx2 -> \g2 -> \typ2 ->
               let mkAlias =
                       \styp -> Right (Syntax.StatDefn (Syntax.DefnType (Syntax.TypeDefn {
                         Syntax.typeDefnMods = [],
@@ -707,8 +707,8 @@ encodeTypeDefinition cx g td =
                           Syntax.nameTypeValue = lname},
                         Syntax.typeDefnTparams = allTparams,
                         Syntax.typeDefnBody = styp})))
-              in (Eithers.either (\_ -> mkAlias (Utils.stref "Any")) mkAlias (encodeType cx g innerBody))
-        Core.TypeRecord v0 -> Eithers.bind (Eithers.mapList (\f -> fieldToParam cx g f) v0) (\params -> Right (Syntax.StatDefn (Syntax.DefnClass (Syntax.ClassDefn {
+              in (Eithers.either (\_ -> mkAlias (Utils.stref "Any")) mkAlias (encodeType cx2 g2 typ2))) cx g innerBody
+        Core.TypeRecord v0 -> (\cx2 -> \g2 -> \rt2 -> Eithers.bind (Eithers.mapList (\f -> fieldToParam cx2 g2 f) rt2) (\params -> Right (Syntax.StatDefn (Syntax.DefnClass (Syntax.ClassDefn {
           Syntax.classDefnMods = [
             Syntax.ModCase],
           Syntax.classDefnName = tname,
@@ -722,11 +722,11 @@ encodeTypeDefinition cx g td =
             Syntax.templateEarly = [],
             Syntax.templateInits = [],
             Syntax.templateSelf = (Syntax.Self ()),
-            Syntax.templateStats = []}}))))
-        Core.TypeUnion v0 -> Eithers.bind (Eithers.mapList (\f -> fieldToEnumCase cx g lname tparams f) v0) (\cases -> Right (Syntax.StatDefn (Syntax.DefnEnum (Syntax.EnumDefn {
+            Syntax.templateStats = []}}))))) cx g v0
+        Core.TypeUnion v0 -> (\tparams2 -> \cx2 -> \g2 -> \rt2 -> Eithers.bind (Eithers.mapList (\f -> fieldToEnumCase cx2 g2 lname tparams2 f) rt2) (\cases -> Right (Syntax.StatDefn (Syntax.DefnEnum (Syntax.EnumDefn {
           Syntax.enumDefnMods = [],
           Syntax.enumDefnName = tname,
-          Syntax.enumDefnTparams = tparams,
+          Syntax.enumDefnTparams = tparams2,
           Syntax.enumDefnCtor = Syntax.PrimaryCtor {
             Syntax.primaryCtorMods = [],
             Syntax.primaryCtorName = (Syntax.NameValue ""),
@@ -735,21 +735,21 @@ encodeTypeDefinition cx g td =
             Syntax.templateEarly = [],
             Syntax.templateInits = [],
             Syntax.templateSelf = (Syntax.Self ()),
-            Syntax.templateStats = cases}}))))
+            Syntax.templateStats = cases}}))))) tparams cx g v0
         Core.TypeWrap v0 -> Eithers.bind (encodeType cx g v0) (\styp -> Right (Syntax.StatDefn (Syntax.DefnType (Syntax.TypeDefn {
           Syntax.typeDefnMods = [],
           Syntax.typeDefnName = tname,
           Syntax.typeDefnTparams = tparams,
           Syntax.typeDefnBody = styp}))))
-        _ ->
+        _ -> (\lname2 -> \tparams2 -> \cx2 -> \g2 -> \typ2 ->
           let mkAlias =
                   \styp -> Right (Syntax.StatDefn (Syntax.DefnType (Syntax.TypeDefn {
                     Syntax.typeDefnMods = [],
                     Syntax.typeDefnName = Syntax.NameType {
-                      Syntax.nameTypeValue = lname},
-                    Syntax.typeDefnTparams = tparams,
+                      Syntax.nameTypeValue = lname2},
+                    Syntax.typeDefnTparams = tparams2,
                     Syntax.typeDefnBody = styp})))
-          in (Eithers.either (\_ -> mkAlias (Utils.stref "Any")) mkAlias (encodeType cx g typ))
+          in (Eithers.either (\_ -> mkAlias (Utils.stref "Any")) mkAlias (encodeType cx2 g2 typ2))) lname tparams cx g typ
 
 -- | Encode a parameter with its type annotation
 encodeTypedParam :: t0 -> t1 -> (Core.Name, Core.Type) -> Either Errors.Error Syntax.ParamData
