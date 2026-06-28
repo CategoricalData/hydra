@@ -204,7 +204,13 @@
     {
       "type": {
         "name": "hydra.csharp.syntax.TupleType",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.csharp.syntax.TupleTypeElement"}}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "wrap": {
+              "annotated": {
+                "body": {"list": {"variable": "hydra.csharp.syntax.TupleTypeElement"}},
+                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.TupleTypeElement",
@@ -265,7 +271,13 @@
     {
       "type": {
         "name": "hydra.csharp.syntax.ArgumentList",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.csharp.syntax.Argument"}}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "wrap": {
+              "annotated": {
+                "body": {"list": {"variable": "hydra.csharp.syntax.Argument"}},
+                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.Argument",
@@ -382,7 +394,12 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "elements", "type": {"list": {"variable": "hydra.csharp.syntax.TupleElement"}}},
+              {
+                "name": "elements",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.csharp.syntax.TupleElement"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
               {"name": "deconstruction", "type": {"variable": "hydra.csharp.syntax.DeconstructionTuple"}}]}}}},
     {
       "type": {
@@ -396,7 +413,13 @@
     {
       "type": {
         "name": "hydra.csharp.syntax.DeconstructionTuple",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.csharp.syntax.DeconstructionElement"}}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "wrap": {
+              "annotated": {
+                "body": {"list": {"variable": "hydra.csharp.syntax.DeconstructionElement"}},
+                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.DeconstructionElement",
@@ -610,7 +633,13 @@
     {
       "type": {
         "name": "hydra.csharp.syntax.ExpressionList",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.csharp.syntax.Expression"}}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "wrap": {
+              "annotated": {
+                "body": {"list": {"variable": "hydra.csharp.syntax.Expression"}},
+                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ArrayCreationExpression",
@@ -662,7 +691,13 @@
     {
       "type": {
         "name": "hydra.csharp.syntax.MemberDeclaratorList",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.csharp.syntax.MemberDeclarator"}}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "wrap": {
+              "annotated": {
+                "body": {"list": {"variable": "hydra.csharp.syntax.MemberDeclarator"}},
+                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.MemberDeclarator",
@@ -699,7 +734,13 @@
     {
       "type": {
         "name": "hydra.csharp.syntax.UnboundTypeName",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.csharp.syntax.UnboundTypeNamePart"}}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "wrap": {
+              "annotated": {
+                "body": {"list": {"variable": "hydra.csharp.syntax.UnboundTypeNamePart"}},
+                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.UnboundTypeNamePart",
@@ -1190,7 +1231,12 @@
               {"name": "let", "type": {"variable": "hydra.csharp.syntax.LetClause"}},
               {"name": "where", "type": {"variable": "hydra.csharp.syntax.BooleanExpression"}},
               {"name": "join", "type": {"variable": "hydra.csharp.syntax.JoinClause"}},
-              {"name": "orderby", "type": {"list": {"variable": "hydra.csharp.syntax.Ordering"}}}]}}}},
+              {
+                "name": "orderby",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.csharp.syntax.Ordering"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]}}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.LetClause",
@@ -1436,7 +1482,12 @@
             "record": [
               {"name": "refKind", "type": {"variable": "hydra.csharp.syntax.RefKind"}},
               {"name": "type", "type": {"variable": "hydra.csharp.syntax.Type"}},
-              {"name": "declarators", "type": {"list": {"variable": "hydra.csharp.syntax.RefLocalVariableDeclarator"}}}]}}}},
+              {
+                "name": "declarators",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.csharp.syntax.RefLocalVariableDeclarator"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]}}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.RefLocalVariableDeclarator",
@@ -1454,7 +1505,12 @@
           "body": {
             "record": [
               {"name": "type", "type": {"variable": "hydra.csharp.syntax.Type"}},
-              {"name": "declarators", "type": {"list": {"variable": "hydra.csharp.syntax.ConstantDeclarator"}}}]}}}},
+              {
+                "name": "declarators",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.csharp.syntax.ConstantDeclarator"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]}}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ConstantDeclarator",
@@ -1590,7 +1646,12 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "labels", "type": {"list": {"variable": "hydra.csharp.syntax.SwitchLabel"}}},
+              {
+                "name": "labels",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.csharp.syntax.SwitchLabel"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
               {"name": "statements", "type": {"list": {"variable": "hydra.csharp.syntax.Statement"}}}]}}}},
     {
       "type": {
@@ -1660,7 +1721,13 @@
     {
       "type": {
         "name": "hydra.csharp.syntax.StatementExpressionList",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.csharp.syntax.StatementExpression"}}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "wrap": {
+              "annotated": {
+                "body": {"list": {"variable": "hydra.csharp.syntax.StatementExpression"}},
+                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ForeachStatement",
@@ -1800,7 +1867,13 @@
     {
       "type": {
         "name": "hydra.csharp.syntax.QualifiedIdentifier",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.csharp.syntax.Identifier"}}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "wrap": {
+              "annotated": {
+                "body": {"list": {"variable": "hydra.csharp.syntax.Identifier"}},
+                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.NamespaceBody",
@@ -1899,7 +1972,13 @@
     {
       "type": {
         "name": "hydra.csharp.syntax.TypeParameterList",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.csharp.syntax.TypeParameterPart"}}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "wrap": {
+              "annotated": {
+                "body": {"list": {"variable": "hydra.csharp.syntax.TypeParameterPart"}},
+                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.TypeParameterPart",
@@ -1951,7 +2030,13 @@
     {
       "type": {
         "name": "hydra.csharp.syntax.SecondaryConstraints",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.csharp.syntax.SecondaryConstraint"}}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "wrap": {
+              "annotated": {
+                "body": {"list": {"variable": "hydra.csharp.syntax.SecondaryConstraint"}},
+                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.SecondaryConstraint",
@@ -1993,7 +2078,12 @@
               {"name": "attributes", "type": {"optional": {"variable": "hydra.csharp.syntax.Attributes"}}},
               {"name": "modifiers", "type": {"list": {"variable": "hydra.csharp.syntax.ConstantModifier"}}},
               {"name": "type", "type": {"variable": "hydra.csharp.syntax.Type"}},
-              {"name": "declarators", "type": {"list": {"variable": "hydra.csharp.syntax.ConstantDeclarator"}}}]}}}},
+              {
+                "name": "declarators",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.csharp.syntax.ConstantDeclarator"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]}}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ConstantModifier",
@@ -2016,7 +2106,12 @@
               {"name": "attributes", "type": {"optional": {"variable": "hydra.csharp.syntax.Attributes"}}},
               {"name": "modifiers", "type": {"list": {"variable": "hydra.csharp.syntax.FieldModifier"}}},
               {"name": "type", "type": {"variable": "hydra.csharp.syntax.Type"}},
-              {"name": "declarators", "type": {"list": {"variable": "hydra.csharp.syntax.VariableDeclarator"}}}]}}}},
+              {
+                "name": "declarators",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.csharp.syntax.VariableDeclarator"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]}}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.FieldModifier",
@@ -2036,7 +2131,13 @@
     {
       "type": {
         "name": "hydra.csharp.syntax.VariableDeclarators",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.csharp.syntax.VariableDeclarator"}}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "wrap": {
+              "annotated": {
+                "body": {"list": {"variable": "hydra.csharp.syntax.VariableDeclarator"}},
+                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.VariableDeclarator",
@@ -3001,7 +3102,13 @@
     {
       "type": {
         "name": "hydra.csharp.syntax.Attributes",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.csharp.syntax.AttributeSection"}}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "wrap": {
+              "annotated": {
+                "body": {"list": {"variable": "hydra.csharp.syntax.AttributeSection"}},
+                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.AttributeSection",
@@ -3023,7 +3130,13 @@
     {
       "type": {
         "name": "hydra.csharp.syntax.AttributeList",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.csharp.syntax.Attribute"}}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "wrap": {
+              "annotated": {
+                "body": {"list": {"variable": "hydra.csharp.syntax.Attribute"}},
+                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.Attribute",
@@ -3049,7 +3162,13 @@
     {
       "type": {
         "name": "hydra.csharp.syntax.PositionalArgumentList",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.csharp.syntax.PositionalArgument"}}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "wrap": {
+              "annotated": {
+                "body": {"list": {"variable": "hydra.csharp.syntax.PositionalArgument"}},
+                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.PositionalArgument",
@@ -3062,7 +3181,13 @@
     {
       "type": {
         "name": "hydra.csharp.syntax.NamedArgumentList",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.csharp.syntax.NamedArgument"}}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "wrap": {
+              "annotated": {
+                "body": {"list": {"variable": "hydra.csharp.syntax.NamedArgument"}},
+                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.NamedArgument",
@@ -3112,7 +3237,12 @@
           "body": {
             "record": [
               {"name": "pointerType", "type": {"variable": "hydra.csharp.syntax.PointerType"}},
-              {"name": "declarators", "type": {"list": {"variable": "hydra.csharp.syntax.FixedPointerDeclarator"}}},
+              {
+                "name": "declarators",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.csharp.syntax.FixedPointerDeclarator"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
               {"name": "statement", "type": {"variable": "hydra.csharp.syntax.EmbeddedStatement"}}]}}}},
     {
       "type": {
@@ -3131,9 +3261,19 @@
           "body": {
             "record": [
               {"name": "attributes", "type": {"optional": {"variable": "hydra.csharp.syntax.Attributes"}}},
-              {"name": "modifiers", "type": {"list": {"variable": "hydra.csharp.syntax.FixedSizeBufferModifier"}}},
+              {
+                "name": "modifiers",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.csharp.syntax.FixedSizeBufferModifier"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
               {"name": "elementType", "type": {"variable": "hydra.csharp.syntax.Type"}},
-              {"name": "declarators", "type": {"list": {"variable": "hydra.csharp.syntax.FixedSizeBufferDeclarator"}}}]}}}},
+              {
+                "name": "declarators",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.csharp.syntax.FixedSizeBufferDeclarator"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]}}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.FixedSizeBufferModifier",

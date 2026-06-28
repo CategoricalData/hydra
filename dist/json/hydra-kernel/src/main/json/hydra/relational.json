@@ -76,7 +76,8 @@
                               "key": {"variable": "description"},
                               "value": {
                                 "literal": {
-                                  "string": "The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation."}}}]}}}}]},
+                                  "string": "The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation."}}},
+                            {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]},
               "annotation": {
                 "map": [
                   {
@@ -90,7 +91,11 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"list": {"variable": "hydra.relational.ColumnName"}}},
+              "body": {
+                "wrap": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.relational.ColumnName"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
               "annotation": {
                 "map": [
                   {
@@ -140,7 +145,10 @@
                         "type": {
                           "annotated": {
                             "body": {"list": {"application": {"function": {"variable": "hydra.relational.ColumnSchema"}, "argument": {"variable": "t"}}}},
-                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A list of column specifications"}}}]}}}},
+                            "annotation": {
+                              "map": [
+                                {"key": {"variable": "description"}, "value": {"literal": {"string": "A list of column specifications"}}},
+                                {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                       {
                         "name": "primaryKeys",
                         "type": {
@@ -190,7 +198,14 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"forall": {"parameter": "v", "body": {"wrap": {"list": {"variable": "v"}}}}},
+              "body": {
+                "forall": {
+                  "parameter": "v",
+                  "body": {
+                    "wrap": {
+                      "annotated": {
+                        "body": {"list": {"variable": "v"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
               "annotation": {
                 "map": [
                   {

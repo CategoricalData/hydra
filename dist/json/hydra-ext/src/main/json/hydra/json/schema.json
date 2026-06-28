@@ -23,7 +23,13 @@
     {
       "type": {
         "name": "hydra.json.schema.Schema",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.json.schema.Restriction"}}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "wrap": {
+              "annotated": {
+                "body": {"list": {"variable": "hydra.json.schema.Restriction"}},
+                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
     {
       "type": {
         "name": "hydra.json.schema.Restriction",
@@ -48,7 +54,12 @@
           "body": {
             "union": [
               {"name": "single", "type": {"variable": "hydra.json.schema.TypeName"}},
-              {"name": "multiple", "type": {"list": {"variable": "hydra.json.schema.TypeName"}}}]}}}},
+              {
+                "name": "multiple",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.json.schema.TypeName"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]}}}},
     {
       "type": {
         "name": "hydra.json.schema.TypeName",
@@ -112,7 +123,12 @@
           "body": {
             "union": [
               {"name": "sameItems", "type": {"variable": "hydra.json.schema.Schema"}},
-              {"name": "varItems", "type": {"list": {"variable": "hydra.json.schema.Schema"}}}]}}}},
+              {
+                "name": "varItems",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.json.schema.Schema"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]}}}},
     {
       "type": {
         "name": "hydra.json.schema.AdditionalItems",
@@ -131,7 +147,12 @@
                 "name": "properties",
                 "type": {"map": {"keys": {"variable": "hydra.json.schema.Keyword"}, "values": {"variable": "hydra.json.schema.Schema"}}}},
               {"name": "additionalProperties", "type": {"variable": "hydra.json.schema.AdditionalItems"}},
-              {"name": "required", "type": {"list": {"variable": "hydra.json.schema.Keyword"}}},
+              {
+                "name": "required",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.json.schema.Keyword"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
               {"name": "minProperties", "type": {"literal": {"integer": "int32"}}},
               {"name": "maxProperties", "type": {"literal": {"integer": "int32"}}},
               {
@@ -157,10 +178,30 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "allOf", "type": {"list": {"variable": "hydra.json.schema.Schema"}}},
-              {"name": "anyOf", "type": {"list": {"variable": "hydra.json.schema.Schema"}}},
-              {"name": "oneOf", "type": {"list": {"variable": "hydra.json.schema.Schema"}}},
+              {
+                "name": "allOf",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.json.schema.Schema"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+              {
+                "name": "anyOf",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.json.schema.Schema"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+              {
+                "name": "oneOf",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.json.schema.Schema"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
               {"name": "not", "type": {"variable": "hydra.json.schema.Schema"}},
-              {"name": "enum", "type": {"list": {"variable": "hydra.json.model.Value"}}}]}}}},
+              {
+                "name": "enum",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.json.model.Value"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]}}}},
     {
       "type": {"name": "hydra.json.schema.SchemaReference", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}}]}

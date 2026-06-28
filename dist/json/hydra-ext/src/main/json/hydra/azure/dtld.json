@@ -34,7 +34,7 @@
                                 "literal": {
                                   "string": "The 'programming' name of the command. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$."}}},
                             {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
-                            {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 64}}}}]}}}},
+                            {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                   {
                     "name": "id",
                     "type": {
@@ -43,10 +43,7 @@
                           "optional": {
                             "annotated": {
                               "body": {"variable": "hydra.azure.dtld.Dtmi"},
-                              "annotation": {
-                                "map": [
-                                  {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
+                              "annotation": {"map": [{"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
                         "annotation": {
                           "map": [
                             {
@@ -64,7 +61,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]}}}},
                   {
                     "name": "description",
@@ -77,7 +74,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]}}}},
                   {
@@ -91,7 +88,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 64}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]}}}},
                   {
                     "name": "commandType",
@@ -146,7 +143,7 @@
                                 "literal": {
                                   "string": "The 'programming' name of the payload. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$."}}},
                             {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
-                            {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 64}}}}]}}}},
+                            {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                   {
                     "name": "schema",
                     "type": {
@@ -161,10 +158,7 @@
                           "optional": {
                             "annotated": {
                               "body": {"variable": "hydra.azure.dtld.Dtmi"},
-                              "annotation": {
-                                "map": [
-                                  {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
+                              "annotation": {"map": [{"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
                         "annotation": {
                           "map": [
                             {
@@ -182,7 +176,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]}}}},
                   {
                     "name": "description",
@@ -195,7 +189,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]}}}},
                   {
@@ -209,7 +203,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 64}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]}}}}]},
               "annotation": {
                 "map": [
@@ -259,7 +253,7 @@
                                 "literal": {
                                   "string": "The 'programming' name of the component. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$."}}},
                             {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
-                            {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 64}}}}]}}}},
+                            {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                   {
                     "name": "schema",
                     "type": {
@@ -274,10 +268,7 @@
                           "optional": {
                             "annotated": {
                               "body": {"variable": "hydra.azure.dtld.Dtmi"},
-                              "annotation": {
-                                "map": [
-                                  {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
+                              "annotation": {"map": [{"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
                         "annotation": {
                           "map": [
                             {
@@ -295,7 +286,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]}}}},
                   {
                     "name": "description",
@@ -308,7 +299,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]}}}},
                   {
@@ -322,7 +313,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 64}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]}}}}]},
               "annotation": {
                 "map": [
@@ -362,7 +353,7 @@
                                 "literal": {
                                   "string": "The 'programming' name of the enum value. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$."}}},
                             {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
-                            {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 64}}}}]}}}},
+                            {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                   {
                     "name": "enumValue",
                     "type": {
@@ -383,10 +374,7 @@
                           "optional": {
                             "annotated": {
                               "body": {"variable": "hydra.azure.dtld.Dtmi"},
-                              "annotation": {
-                                "map": [
-                                  {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
+                              "annotation": {"map": [{"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
                         "annotation": {
                           "map": [
                             {
@@ -404,7 +392,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]}}}},
                   {
                     "name": "description",
@@ -417,7 +405,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]}}}},
                   {
@@ -431,7 +419,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 64}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]}}}}]},
               "annotation": {
                 "map": [
@@ -458,7 +446,7 @@
                                 "literal": {
                                   "string": "The 'programming' name of the field. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$."}}},
                             {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
-                            {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 64}}}}]}}}},
+                            {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                   {
                     "name": "schema",
                     "type": {
@@ -473,10 +461,7 @@
                           "optional": {
                             "annotated": {
                               "body": {"variable": "hydra.azure.dtld.Dtmi"},
-                              "annotation": {
-                                "map": [
-                                  {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
+                              "annotation": {"map": [{"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
                         "annotation": {
                           "map": [
                             {
@@ -494,7 +479,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]}}}},
                   {
                     "name": "description",
@@ -507,7 +492,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]}}}},
                   {
@@ -521,7 +506,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 64}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]}}}}]},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Field describes a field in an Object."}}}]}}}}}},
@@ -549,8 +534,7 @@
                         {
                           "key": {"variable": "description"},
                           "value": {"literal": {"string": "A digital twin model identifier for the interface"}}},
-                        {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 128}}}},
-                        {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 128}}}}]}}}},
+                        {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 128}}}}]}}}},
               {
                 "name": "type",
                 "type": {
@@ -580,7 +564,7 @@
                           "annotation": {
                             "map": [
                               {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                              {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                              {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]}}}},
               {
                 "name": "contents",
@@ -590,10 +574,7 @@
                       "optional": {
                         "annotated": {
                           "body": {"set": {"variable": "hydra.azure.dtld.Interface_Contents"}},
-                          "annotation": {
-                            "map": [
-                              {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 300}}}},
-                              {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 300}}}}]}}}},
+                          "annotation": {"map": [{"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 300}}}}]}}}},
                     "annotation": {
                       "map": [
                         {
@@ -612,7 +593,7 @@
                           "annotation": {
                             "map": [
                               {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                              {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                              {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                     "annotation": {
                       "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]}}}},
               {
@@ -626,7 +607,7 @@
                           "annotation": {
                             "map": [
                               {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
-                              {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 64}}}}]}}}},
+                              {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]}}}},
               {
                 "name": "extends",
@@ -636,10 +617,7 @@
                       "optional": {
                         "annotated": {
                           "body": {"set": {"variable": "hydra.azure.dtld.Interface"}},
-                          "annotation": {
-                            "map": [
-                              {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2}}}},
-                              {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2}}}}]}}}},
+                          "annotation": {"map": [{"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2}}}}]}}}},
                     "annotation": {
                       "map": [
                         {
@@ -692,7 +670,7 @@
                                 "literal": {
                                   "string": "The 'programming' name of the map's key. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$."}}},
                             {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
-                            {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 64}}}}]}}}},
+                            {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                   {
                     "name": "schema",
                     "type": {
@@ -707,10 +685,7 @@
                           "optional": {
                             "annotated": {
                               "body": {"variable": "hydra.azure.dtld.Dtmi"},
-                              "annotation": {
-                                "map": [
-                                  {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
+                              "annotation": {"map": [{"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
                         "annotation": {
                           "map": [
                             {
@@ -728,7 +703,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]}}}},
                   {
                     "name": "description",
@@ -741,7 +716,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]}}}},
                   {
@@ -755,7 +730,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 64}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]}}}}]},
               "annotation": {
                 "map": [
@@ -784,7 +759,7 @@
                                 "literal": {
                                   "string": "The 'programming' name of the map's value. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$."}}},
                             {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
-                            {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 64}}}}]}}}},
+                            {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                   {
                     "name": "schema",
                     "type": {
@@ -799,10 +774,7 @@
                           "optional": {
                             "annotated": {
                               "body": {"variable": "hydra.azure.dtld.Dtmi"},
-                              "annotation": {
-                                "map": [
-                                  {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
+                              "annotation": {"map": [{"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
                         "annotation": {
                           "map": [
                             {
@@ -820,7 +792,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]}}}},
                   {
                     "name": "description",
@@ -833,7 +805,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]}}}},
                   {
@@ -847,7 +819,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 64}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]}}}}]},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A MapValue describes the values in a Map."}}}]}}}}}},
@@ -883,7 +855,7 @@
                                 "literal": {
                                   "string": "The 'programming' name of the property. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$.."}}},
                             {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
-                            {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 64}}}}]}}}},
+                            {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                   {
                     "name": "schema",
                     "type": {
@@ -898,10 +870,7 @@
                           "optional": {
                             "annotated": {
                               "body": {"variable": "hydra.azure.dtld.Dtmi"},
-                              "annotation": {
-                                "map": [
-                                  {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
+                              "annotation": {"map": [{"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
                         "annotation": {
                           "map": [
                             {
@@ -919,7 +888,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]}}}},
                   {
                     "name": "description",
@@ -932,7 +901,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]}}}},
                   {
@@ -946,7 +915,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 64}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]}}}},
                   {
                     "name": "unit",
@@ -1006,7 +975,7 @@
                                 "literal": {
                                   "string": "The 'programming' name of the relationship. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$."}}},
                             {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
-                            {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 64}}}}]}}}},
+                            {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                   {
                     "name": "id",
                     "type": {
@@ -1015,10 +984,7 @@
                           "optional": {
                             "annotated": {
                               "body": {"variable": "hydra.azure.dtld.Dtmi"},
-                              "annotation": {
-                                "map": [
-                                  {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
+                              "annotation": {"map": [{"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
                         "annotation": {
                           "map": [
                             {
@@ -1037,7 +1003,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]}}}},
                   {
                     "name": "description",
@@ -1050,7 +1016,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]}}}},
                   {
@@ -1064,13 +1030,17 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 64}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]}}}},
                   {
                     "name": "maxMultiplicity",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"integer": "int32"}}},
+                        "body": {
+                          "optional": {
+                            "annotated": {
+                              "body": {"literal": {"integer": "int32"}},
+                              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {
                           "map": [
                             {
@@ -1082,7 +1052,11 @@
                     "name": "minMultiplicity",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"integer": "int32"}}},
+                        "body": {
+                          "optional": {
+                            "annotated": {
+                              "body": {"literal": {"integer": "int32"}},
+                              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 0}}}}]}}}},
                         "annotation": {
                           "map": [
                             {
@@ -1098,10 +1072,7 @@
                           "optional": {
                             "annotated": {
                               "body": {"set": {"variable": "hydra.azure.dtld.Property"}},
-                              "annotation": {
-                                "map": [
-                                  {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 300}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 300}}}}]}}}},
+                              "annotation": {"map": [{"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 300}}}}]}}}},
                         "annotation": {
                           "map": [
                             {
@@ -1184,10 +1155,7 @@
                           "optional": {
                             "annotated": {
                               "body": {"variable": "hydra.azure.dtld.Dtmi"},
-                              "annotation": {
-                                "map": [
-                                  {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
+                              "annotation": {"map": [{"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
                         "annotation": {
                           "map": [
                             {
@@ -1205,7 +1173,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]}}}},
                   {
                     "name": "description",
@@ -1218,7 +1186,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]}}}},
                   {
@@ -1232,7 +1200,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 64}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]}}}}]},
               "annotation": {
                 "map": [
@@ -1301,10 +1269,7 @@
                           "optional": {
                             "annotated": {
                               "body": {"variable": "hydra.azure.dtld.Dtmi"},
-                              "annotation": {
-                                "map": [
-                                  {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
+                              "annotation": {"map": [{"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
                         "annotation": {
                           "map": [
                             {
@@ -1322,7 +1287,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]}}}},
                   {
                     "name": "description",
@@ -1335,7 +1300,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]}}}},
                   {
@@ -1349,7 +1314,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 64}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]}}}}]},
               "annotation": {
                 "map": [
@@ -1375,8 +1340,7 @@
                         "annotation": {
                           "map": [
                             {"key": {"variable": "description"}, "value": {"literal": {"string": "The globally unique identifier for the schema"}}},
-                            {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}},
-                            {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
+                            {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
                   {
                     "name": "type",
                     "type": {
@@ -1400,7 +1364,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]}}}},
                   {
                     "name": "description",
@@ -1413,7 +1377,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]}}}},
                   {
@@ -1427,7 +1391,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 64}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]}}}}]},
               "annotation": {
                 "map": [
@@ -1484,10 +1448,7 @@
                           "optional": {
                             "annotated": {
                               "body": {"variable": "hydra.azure.dtld.Dtmi"},
-                              "annotation": {
-                                "map": [
-                                  {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
+                              "annotation": {"map": [{"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
                         "annotation": {
                           "map": [
                             {
@@ -1505,7 +1466,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]}}}},
                   {
                     "name": "description",
@@ -1518,7 +1479,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]}}}},
                   {
@@ -1532,7 +1493,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 64}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]}}}}]},
               "annotation": {
                 "map": [
@@ -1566,8 +1527,7 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "A set of field descriptions, one for each field in the Object"}}},
-                            {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 30}}}},
-                            {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 30}}}}]}}}},
+                            {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 30}}}}]}}}},
                   {
                     "name": "id",
                     "type": {
@@ -1576,10 +1536,7 @@
                           "optional": {
                             "annotated": {
                               "body": {"variable": "hydra.azure.dtld.Dtmi"},
-                              "annotation": {
-                                "map": [
-                                  {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
+                              "annotation": {"map": [{"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
                         "annotation": {
                           "map": [
                             {
@@ -1597,7 +1554,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]}}}},
                   {
                     "name": "description",
@@ -1610,7 +1567,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]}}}},
                   {
@@ -1624,7 +1581,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 64}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]}}}}]},
               "annotation": {
                 "map": [
@@ -1749,7 +1706,7 @@
                                 "literal": {
                                   "string": "The 'programming' name of the telemetry. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9_]*[a-zA-Z0-9])?$.."}}},
                             {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
-                            {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 64}}}}]}}}},
+                            {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                   {
                     "name": "schema",
                     "type": {
@@ -1764,10 +1721,7 @@
                           "optional": {
                             "annotated": {
                               "body": {"variable": "hydra.azure.dtld.Dtmi"},
-                              "annotation": {
-                                "map": [
-                                  {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
+                              "annotation": {"map": [{"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 2048}}}}]}}}},
                         "annotation": {
                           "map": [
                             {
@@ -1785,7 +1739,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment for model authors"}}}]}}}},
                   {
                     "name": "description",
@@ -1798,7 +1752,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 512}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 512}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable description for display"}}}]}}}},
                   {
@@ -1812,7 +1766,7 @@
                               "annotation": {
                                 "map": [
                                   {"key": {"variable": "maxLength"}, "value": {"literal": {"integer": {"int32": 64}}}},
-                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 64}}}}]}}}},
+                                  {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]}}}},
                   {
                     "name": "unit",

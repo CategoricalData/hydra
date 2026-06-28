@@ -127,19 +127,28 @@
                 "type": {
                   "map": {
                     "keys": {"variable": "hydra.pg.graphson.syntax.EdgeLabel"},
-                    "values": {"list": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}}}}},
+                    "values": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
               {
                 "name": "outEdges",
                 "type": {
                   "map": {
                     "keys": {"variable": "hydra.pg.graphson.syntax.EdgeLabel"},
-                    "values": {"list": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}}}}},
+                    "values": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
               {
                 "name": "properties",
                 "type": {
                   "map": {
                     "keys": {"variable": "hydra.pg.graphson.syntax.PropertyKey"},
-                    "values": {"list": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}}}}}]}}}},
+                    "values": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}]}}}},
     {
       "type": {"name": "hydra.pg.graphson.syntax.VertexLabel", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
     {
