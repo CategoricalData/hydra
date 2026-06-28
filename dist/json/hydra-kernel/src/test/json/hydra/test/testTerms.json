@@ -9,17 +9,17 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"float": {"float32": {}}}}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": {"float": {"float32": {}}}}, "isLazy": false}],
+            {"name": "arg0", "type": {"literal": {"float": "float32"}}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": {"float": "float32"}}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.core.Term"}}},
         "body": {
           "lambda": {
             "parameter": "lat",
-            "domain": {"literal": {"float": {"float32": {}}}},
+            "domain": {"literal": {"float": "float32"}},
             "body": {
               "lambda": {
                 "parameter": "lon",
-                "domain": {"literal": {"float": {"float32": {}}}},
+                "domain": {"literal": {"float": "float32"}},
                 "body": {
                   "inject": {
                     "typeName": "hydra.core.Term",
@@ -217,7 +217,7 @@
                                             "typeName": "hydra.core.Type",
                                             "field": {
                                               "name": "literal",
-                                              "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}}]}}}}}},
+                                              "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}}]}}}}}},
                         {
                           "name": "constraints",
                           "term": {

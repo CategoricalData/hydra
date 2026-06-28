@@ -665,7 +665,7 @@
                                               "typeName": "hydra.core.LiteralType",
                                               "field": {
                                                 "name": "integer",
-                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": {"unit": {}}}}}}}}},
+                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": "unit"}}}}}}},
                                         {
                                           "name": "properties",
                                           "term": {
@@ -679,7 +679,7 @@
                                                         {"name": "key", "term": {"wrap": {"typeName": "hydra.pg.model.PropertyKey", "body": {"literal": {"string": "name"}}}}},
                                                         {
                                                           "name": "value",
-                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}},
+                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}},
                                                         {"name": "required", "term": {"literal": {"boolean": true}}}]}},
                                                   "type": {"variable": "hydra.core.LiteralType"}}},
                                               {
@@ -696,7 +696,7 @@
                                                               "typeName": "hydra.core.LiteralType",
                                                               "field": {
                                                                 "name": "integer",
-                                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": {"unit": {}}}}}}}}},
+                                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": "unit"}}}}}}},
                                                         {"name": "required", "term": {"literal": {"boolean": false}}}]}},
                                                   "type": {"variable": "hydra.core.LiteralType"}}}]}}]}},
                                   "type": {"variable": "hydra.core.LiteralType"}}}},
@@ -718,7 +718,7 @@
                                               "typeName": "hydra.core.LiteralType",
                                               "field": {
                                                 "name": "integer",
-                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": {"unit": {}}}}}}}}},
+                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": "unit"}}}}}}},
                                         {
                                           "name": "properties",
                                           "term": {
@@ -732,7 +732,7 @@
                                                         {"name": "key", "term": {"wrap": {"typeName": "hydra.pg.model.PropertyKey", "body": {"literal": {"string": "name"}}}}},
                                                         {
                                                           "name": "value",
-                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}},
+                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}},
                                                         {"name": "required", "term": {"literal": {"boolean": true}}}]}},
                                                   "type": {"variable": "hydra.core.LiteralType"}}},
                                               {
@@ -744,7 +744,7 @@
                                                         {"name": "key", "term": {"wrap": {"typeName": "hydra.pg.model.PropertyKey", "body": {"literal": {"string": "lang"}}}}},
                                                         {
                                                           "name": "value",
-                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}},
+                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}},
                                                         {"name": "required", "term": {"literal": {"boolean": true}}}]}},
                                                   "type": {"variable": "hydra.core.LiteralType"}}}]}}]}},
                                   "type": {"variable": "hydra.core.LiteralType"}}}}]}},
@@ -770,7 +770,7 @@
                                               "typeName": "hydra.core.LiteralType",
                                               "field": {
                                                 "name": "integer",
-                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": {"unit": {}}}}}}}}},
+                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": "unit"}}}}}}},
                                         {"name": "out", "term": {"wrap": {"typeName": "hydra.pg.model.VertexLabel", "body": {"literal": {"string": "person"}}}}},
                                         {
                                           "name": "in",
@@ -793,7 +793,7 @@
                                                               "typeName": "hydra.core.LiteralType",
                                                               "field": {
                                                                 "name": "float",
-                                                                "term": {"inject": {"typeName": "hydra.core.FloatType", "field": {"name": "float64", "term": {"unit": {}}}}}}}}},
+                                                                "term": {"inject": {"typeName": "hydra.core.FloatType", "field": {"name": "float64", "term": "unit"}}}}}}},
                                                         {"name": "required", "term": {"literal": {"boolean": true}}}]}},
                                                   "type": {"variable": "hydra.core.LiteralType"}}}]}}]}},
                                   "type": {"variable": "hydra.core.LiteralType"}}}},
@@ -813,7 +813,7 @@
                                               "typeName": "hydra.core.LiteralType",
                                               "field": {
                                                 "name": "integer",
-                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": {"unit": {}}}}}}}}},
+                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": "unit"}}}}}}},
                                         {"name": "out", "term": {"wrap": {"typeName": "hydra.pg.model.VertexLabel", "body": {"literal": {"string": "person"}}}}},
                                         {"name": "in", "term": {"wrap": {"typeName": "hydra.pg.model.VertexLabel", "body": {"literal": {"string": "person"}}}}},
                                         {
@@ -834,7 +834,7 @@
                                                               "typeName": "hydra.core.LiteralType",
                                                               "field": {
                                                                 "name": "float",
-                                                                "term": {"inject": {"typeName": "hydra.core.FloatType", "field": {"name": "float64", "term": {"unit": {}}}}}}}}},
+                                                                "term": {"inject": {"typeName": "hydra.core.FloatType", "field": {"name": "float64", "term": "unit"}}}}}}},
                                                         {"name": "required", "term": {"literal": {"boolean": true}}}]}},
                                                   "type": {"variable": "hydra.core.LiteralType"}}}]}}]}},
                                   "type": {"variable": "hydra.core.LiteralType"}}}}]}}]}},

@@ -287,10 +287,15 @@ toJson = define "toJson" $
           Eithers.either
             ("err" ~> left $ var "err")
             ("ftype" ~>
-              "encodedUnion" <~ (toJson @@ var "types" @@ var "tname" @@ var "ftype" @@ var "fterm") $
-              Eithers.map
-                ("v" ~> Json.valueObject $ list [pair (var "fname") (var "v")])
-                (var "encodedUnion"))
+              "ftypeStripped" <~ (Strip.deannotateType @@ var "ftype") $
+              "isUnit" <~ (cases _Type (var "ftypeStripped") (Just false) [
+                _Type_unit>>: constant true]) $
+              Logic.ifElse (var "isUnit")
+                (right $ Json.valueString $ var "fname")
+                ("encodedUnion" <~ (toJson @@ var "types" @@ var "tname" @@ var "ftype" @@ var "fterm") $
+                  Eithers.map
+                    ("v" ~> Json.valueObject $ list [pair (var "fname") (var "v")])
+                    (var "encodedUnion")))
             (var "ftypeResult")],
 
     -- Unit (empty object)
@@ -423,15 +428,20 @@ toJsonUntyped = define "toJsonUntyped" $
       "encodedFields" <~ (Eithers.mapList (var "encodeField") (var "fields")) $
       Eithers.map ("fs" ~> Json.valueObject $ var "fs") (var "encodedFields"),
 
-    -- Unions (single-key object)
+    -- Unions (single-key object, or bare string for unit-valued variants)
     _Term_inject>>: "inj" ~>
       "field" <~ (Core.injectionField $ var "inj") $
       "fname" <~ (Core.unName $ Core.fieldName $ var "field") $
       "fterm" <~ (Core.fieldTerm $ var "field") $
-      "encodedUnion" <~ (toJsonUntyped @@ var "fterm") $
-      Eithers.map
-        ("v" ~> Json.valueObject $ list [pair (var "fname") (var "v")])
-        (var "encodedUnion"),
+      "ftermStripped" <~ (Strip.deannotateTerm @@ var "fterm") $
+      "isUnit" <~ (cases _Term (var "ftermStripped") (Just false) [
+        _Term_unit>>: constant true]) $
+      Logic.ifElse (var "isUnit")
+        (right $ Json.valueString $ var "fname")
+        ("encodedUnion" <~ (toJsonUntyped @@ var "fterm") $
+          Eithers.map
+            ("v" ~> Json.valueObject $ list [pair (var "fname") (var "v")])
+            (var "encodedUnion")),
 
     -- Unit
     _Term_unit>>: constant $ right $ Json.valueObject $ list ([] :: [TypedTerm (String, Value)]),

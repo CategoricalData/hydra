@@ -38,7 +38,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"boolean": {}}},
+                      "body": {"literal": "boolean"},
                       "annotation": {
                         "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The constant boolean value of the condition"}}}]}}}}},
               "isLazy": false}],
@@ -69,7 +69,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"literal": {"boolean": {}}},
+                            "body": {"literal": "boolean"},
                             "annotation": {
                               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The constant boolean value of the condition"}}}]}}}}},
                     "body": {
@@ -194,7 +194,7 @@
                 "function": {"variable": "hydra.typed.TypedTerm"},
                 "argument": {
                   "annotated": {
-                    "body": {"literal": {"boolean": {}}},
+                    "body": {"literal": "boolean"},
                     "annotation": {
                       "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The constant boolean value of the condition"}}}]}}}}}}},
         "body": {
@@ -372,7 +372,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"boolean": {}}},
+                      "body": {"literal": "boolean"},
                       "annotation": {
                         "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The constant boolean value of the condition"}}}]}}}}},
               "isLazy": false}],
@@ -394,7 +394,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"literal": {"boolean": {}}},
+                            "body": {"literal": "boolean"},
                             "annotation": {
                               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The constant boolean value of the condition"}}}]}}}}},
                     "body": {

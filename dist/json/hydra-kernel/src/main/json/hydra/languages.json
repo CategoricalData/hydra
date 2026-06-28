@@ -88,9 +88,7 @@
                           "application": {
                             "function": {"cases": {"typeName": "hydra.core.Type", "default": {"literal": {"boolean": true}}, "cases": []}},
                             "argument": {"variable": "t"}}}}},
-                    "typeScheme": {
-                      "variables": [],
-                      "body": {"function": {"domain": {"variable": "hydra.core.Type"}, "codomain": {"literal": {"boolean": {}}}}}}}],
+                    "typeScheme": {"variables": [], "body": {"function": {"domain": {"variable": "hydra.core.Type"}, "codomain": {"literal": "boolean"}}}}}],
                 "body": {
                   "record": {
                     "typeName": "hydra.coders.Language",
@@ -118,11 +116,10 @@
                               "typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.coders.LanguageFeature"}}},
                             "argument": {
                               "list": [
-                                {"inject": {"typeName": "hydra.coders.LanguageFeature", "field": {"name": "partialApplication", "term": {"unit": {}}}}},
+                                {"inject": {"typeName": "hydra.coders.LanguageFeature", "field": {"name": "partialApplication", "term": "unit"}}},
+                                {"inject": {"typeName": "hydra.coders.LanguageFeature", "field": {"name": "nestedCaseStatements", "term": "unit"}}},
                                 {
-                                  "inject": {"typeName": "hydra.coders.LanguageFeature", "field": {"name": "nestedCaseStatements", "term": {"unit": {}}}}},
-                                {
-                                  "inject": {"typeName": "hydra.coders.LanguageFeature", "field": {"name": "nestedPolymorphicLetBindings", "term": {"unit": {}}}}}]}}}},
+                                  "inject": {"typeName": "hydra.coders.LanguageFeature", "field": {"name": "nestedPolymorphicLetBindings", "term": "unit"}}}]}}}},
                       {
                         "name": "caseConventions",
                         "term": {
@@ -131,34 +128,34 @@
                             "fields": [
                               {
                                 "name": "constant",
-                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "upperSnake", "term": {"unit": {}}}}}},
+                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "upperSnake", "term": "unit"}}}},
                               {
                                 "name": "directory",
-                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": {"unit": {}}}}}},
+                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": "unit"}}}},
                               {
                                 "name": "enumValue",
-                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": {"unit": {}}}}}},
+                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": "unit"}}}},
                               {
                                 "name": "field",
-                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": {"unit": {}}}}}},
+                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": "unit"}}}},
                               {
                                 "name": "file",
-                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": {"unit": {}}}}}},
+                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": "unit"}}}},
                               {
                                 "name": "module",
-                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "lowerSnake", "term": {"unit": {}}}}}},
+                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "lowerSnake", "term": "unit"}}}},
                               {
                                 "name": "term",
-                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": {"unit": {}}}}}},
+                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": "unit"}}}},
                               {
                                 "name": "termVariable",
-                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": {"unit": {}}}}}},
+                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": "unit"}}}},
                               {
                                 "name": "type",
-                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": {"unit": {}}}}}},
+                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": "unit"}}}},
                               {
                                 "name": "typeVariable",
-                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": {"unit": {}}}}}}]}}},
+                                "term": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": "unit"}}}}]}}},
                       {
                         "name": "defaultFileExtension",
                         "term": {"wrap": {"typeName": "hydra.file.FileExtension", "body": {"literal": {"string": ""}}}}}]}}}},

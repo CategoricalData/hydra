@@ -38,7 +38,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"optional": {"literal": {"string": {}}}}, "isLazy": false},
+            {"name": "arg0", "type": {"optional": {"literal": "string"}}, "isLazy": false},
             {"name": "arg1", "type": {"variable": "hydra.python.syntax.Expression"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.python.syntax.Expression"}}},
         "body": {
@@ -46,7 +46,7 @@
             "body": {
               "lambda": {
                 "parameter": "mcomment",
-                "domain": {"optional": {"literal": {"string": {}}}},
+                "domain": {"optional": {"literal": "string"}},
                 "body": {
                   "lambda": {
                     "parameter": "expr",
@@ -59,14 +59,14 @@
                               "application": {
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": {"string": {}}}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": "string"}}},
                                     "type": {"variable": "hydra.python.syntax.Expression"}}},
                                 "argument": {"variable": "mcomment"}}},
                             "argument": {"variable": "expr"}}},
                         "argument": {
                           "lambda": {
                             "parameter": "c",
-                            "domain": {"literal": {"string": {}}},
+                            "domain": {"literal": "string"},
                             "body": {
                               "application": {
                                 "function": {"variable": "hydra.python.utils.pyPrimaryToPyExpression"},
@@ -94,7 +94,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"optional": {"literal": {"string": {}}}}, "isLazy": false},
+            {"name": "arg0", "type": {"optional": {"literal": "string"}}, "isLazy": false},
             {"name": "arg1", "type": {"variable": "hydra.python.syntax.Statement"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.python.syntax.Statement"}}},
         "body": {
@@ -102,7 +102,7 @@
             "body": {
               "lambda": {
                 "parameter": "mcomment",
-                "domain": {"optional": {"literal": {"string": {}}}},
+                "domain": {"optional": {"literal": "string"}},
                 "body": {
                   "lambda": {
                     "parameter": "stmt",
@@ -115,14 +115,14 @@
                               "application": {
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": {"string": {}}}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": "string"}}},
                                     "type": {"variable": "hydra.python.syntax.Statement"}}},
                                 "argument": {"variable": "mcomment"}}},
                             "argument": {"variable": "stmt"}}},
                         "argument": {
                           "lambda": {
                             "parameter": "c",
-                            "domain": {"literal": {"string": {}}},
+                            "domain": {"literal": "string"},
                             "body": {
                               "inject": {
                                 "typeName": "hydra.python.syntax.Statement",
@@ -245,14 +245,14 @@
         "name": "hydra.python.utils.commentStatement",
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.python.syntax.Statement"}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "s",
-                "domain": {"literal": {"string": {}}},
+                "domain": {"literal": "string"},
                 "body": {
                   "application": {
                     "function": {"variable": "hydra.python.utils.pyExpressionToPyStatement"},
@@ -527,7 +527,7 @@
                                   "application": {
                                     "function": {
                                       "application": {
-                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": "int32"}}}},
                                         "argument": {
                                           "application": {
                                             "function": {
@@ -603,7 +603,7 @@
                                                   "application": {
                                                     "function": {
                                                       "application": {
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": "int32"}}}},
                                                         "argument": {
                                                           "application": {
                                                             "function": {
@@ -695,7 +695,7 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.python.syntax.AwaitPrimary", "fieldName": "await"}},
                             "argument": {"variable": "lhs"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": {"boolean": {}}}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
                       {
                         "name": "prim",
                         "term": {
@@ -799,20 +799,20 @@
         "name": "hydra.python.utils.doubleQuotedString",
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.python.syntax.Expression"}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "s",
-                "domain": {"literal": {"string": {}}},
+                "domain": {"literal": "string"},
                 "body": {
                   "application": {
                     "function": {
                       "application": {
                         "function": {"variable": "hydra.python.utils.stringToPyExpression"},
-                        "argument": {"inject": {"typeName": "hydra.python.syntax.QuoteStyle", "field": {"name": "double", "term": {"unit": {}}}}}}},
+                        "argument": {"inject": {"typeName": "hydra.python.syntax.QuoteStyle", "field": {"name": "double", "term": "unit"}}}}},
                     "argument": {"variable": "s"}}}}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a double-quoted string expression"}}}]}}}}},
@@ -878,7 +878,7 @@
                                       "application": {
                                         "function": {
                                           "application": {
-                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}},
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": "string"}}},
                                             "argument": {
                                               "application": {
                                                 "function": {"unwrap": "hydra.packaging.ModuleName"},
@@ -1035,7 +1035,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"optional": {"literal": {"string": {}}}}, "isLazy": false},
+            {"name": "arg0", "type": {"optional": {"literal": "string"}}, "isLazy": false},
             {"name": "arg1", "type": {"list": {"list": {"variable": "hydra.python.syntax.Statement"}}}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.python.syntax.Block"}}},
         "body": {
@@ -1043,7 +1043,7 @@
             "body": {
               "lambda": {
                 "parameter": "mcomment",
-                "domain": {"optional": {"literal": {"string": {}}}},
+                "domain": {"optional": {"literal": "string"}},
                 "body": {
                   "lambda": {
                     "parameter": "stmts",
@@ -1061,14 +1061,14 @@
                                       "application": {
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": {"string": {}}}}},
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": "string"}}},
                                             "type": {"list": {"variable": "hydra.python.syntax.Statement"}}}},
                                         "argument": {"variable": "mcomment"}}},
                                     "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.python.syntax.Statement"}}}}},
                                 "argument": {
                                   "lambda": {
                                     "parameter": "s",
-                                    "domain": {"literal": {"string": {}}},
+                                    "domain": {"literal": "string"},
                                     "body": {
                                       "list": [{"application": {"function": {"variable": "hydra.python.utils.commentStatement"}, "argument": {"variable": "s"}}}]}}}}},
                             "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.python.syntax.Statement"}}}},
@@ -1135,7 +1135,7 @@
                                                             "argument": {
                                                               "application": {
                                                                 "function": {"variable": "hydra.python.utils.pyAtomToPyExpression"},
-                                                                "argument": {"inject": {"typeName": "hydra.python.syntax.Atom", "field": {"name": "ellipsis", "term": {"unit": {}}}}}}}}}]}}}}]}]}}}}}},
+                                                                "argument": {"inject": {"typeName": "hydra.python.syntax.Atom", "field": {"name": "ellipsis", "term": "unit"}}}}}}}]}}}}]}]}}}}}},
                             "argument": {"inject": {"typeName": "hydra.python.syntax.Block", "field": {"name": "indented", "term": {"variable": "groups"}}}}}}}}}}}},
             "annotation": {
               "map": [
@@ -1174,7 +1174,7 @@
           "typeParameters": [],
           "parameters": [
             {"name": "arg0", "type": {"variable": "hydra.python.syntax.Name"}, "isLazy": false},
-            {"name": "arg1", "type": {"optional": {"literal": {"string": {}}}}, "isLazy": false},
+            {"name": "arg1", "type": {"optional": {"literal": "string"}}, "isLazy": false},
             {"name": "arg2", "type": {"variable": "hydra.python.syntax.Expression"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.python.syntax.Statement"}}},
         "body": {
@@ -1186,7 +1186,7 @@
                 "body": {
                   "lambda": {
                     "parameter": "mcomment",
-                    "domain": {"optional": {"literal": {"string": {}}}},
+                    "domain": {"optional": {"literal": "string"}},
                     "body": {
                       "lambda": {
                         "parameter": "expr",
@@ -1280,7 +1280,7 @@
                                                         "typeName": "hydra.python.syntax.Primary",
                                                         "field": {
                                                           "name": "simple",
-                                                          "term": {"inject": {"typeName": "hydra.python.syntax.Atom", "field": {"name": "ellipsis", "term": {"unit": {}}}}}}}}}}}]}}}},
+                                                          "term": {"inject": {"typeName": "hydra.python.syntax.Atom", "field": {"name": "ellipsis", "term": "unit"}}}}}}}}}]}}}},
                                     "argument": {
                                       "lambda": {
                                         "parameter": "p",
@@ -2547,14 +2547,14 @@
         "name": "hydra.python.utils.raiseAssertionError",
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.python.syntax.Statement"}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "msg",
-                "domain": {"literal": {"string": {}}},
+                "domain": {"literal": "string"},
                 "body": {
                   "application": {
                     "function": {"variable": "hydra.python.utils.pySimpleStatementToPyStatement"},
@@ -2601,14 +2601,14 @@
         "name": "hydra.python.utils.raiseTypeError",
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.python.syntax.Statement"}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "msg",
-                "domain": {"literal": {"string": {}}},
+                "domain": {"literal": "string"},
                 "body": {
                   "application": {
                     "function": {"variable": "hydra.python.utils.pySimpleStatementToPyStatement"},
@@ -2784,20 +2784,20 @@
         "name": "hydra.python.utils.singleQuotedString",
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.python.syntax.Expression"}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "s",
-                "domain": {"literal": {"string": {}}},
+                "domain": {"literal": "string"},
                 "body": {
                   "application": {
                     "function": {
                       "application": {
                         "function": {"variable": "hydra.python.utils.stringToPyExpression"},
-                        "argument": {"inject": {"typeName": "hydra.python.syntax.QuoteStyle", "field": {"name": "single", "term": {"unit": {}}}}}}},
+                        "argument": {"inject": {"typeName": "hydra.python.syntax.QuoteStyle", "field": {"name": "single", "term": "unit"}}}}},
                     "argument": {"variable": "s"}}}}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Create a single-quoted string expression"}}}]}}}}},
@@ -2808,7 +2808,7 @@
           "typeParameters": [],
           "parameters": [
             {"name": "arg0", "type": {"variable": "hydra.python.syntax.QuoteStyle"}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": {"string": {}}}, "isLazy": false}],
+            {"name": "arg1", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.python.syntax.Expression"}}},
         "body": {
           "annotated": {
@@ -2819,7 +2819,7 @@
                 "body": {
                   "lambda": {
                     "parameter": "s",
-                    "domain": {"literal": {"string": {}}},
+                    "domain": {"literal": "string"},
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.python.utils.pyAtomToPyExpression"},
@@ -2848,7 +2848,7 @@
         "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.python.environment.PythonVersion"}}},
         "body": {
           "annotated": {
-            "body": {"inject": {"typeName": "hydra.python.environment.PythonVersion", "field": {"name": "python310", "term": {"unit": {}}}}},
+            "body": {"inject": {"typeName": "hydra.python.environment.PythonVersion", "field": {"name": "python310", "term": "unit"}}},
             "annotation": {
               "map": [
                 {
@@ -2859,14 +2859,14 @@
         "name": "hydra.python.utils.tripleQuotedString",
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.python.syntax.Expression"}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "s",
-                "domain": {"literal": {"string": {}}},
+                "domain": {"literal": "string"},
                 "body": {
                   "application": {
                     "function": {"variable": "hydra.python.utils.pyAtomToPyExpression"},
@@ -2882,11 +2882,10 @@
                                 {"name": "value", "term": {"variable": "s"}},
                                 {
                                   "name": "prefix",
-                                  "term": {
-                                    "optional": {"inject": {"typeName": "hydra.python.syntax.StringPrefix", "field": {"name": "raw", "term": {"unit": {}}}}}}},
+                                  "term": {"optional": {"inject": {"typeName": "hydra.python.syntax.StringPrefix", "field": {"name": "raw", "term": "unit"}}}}},
                                 {
                                   "name": "quoteStyle",
-                                  "term": {"inject": {"typeName": "hydra.python.syntax.QuoteStyle", "field": {"name": "tripleDouble", "term": {"unit": {}}}}}}]}}}}}}}}},
+                                  "term": {"inject": {"typeName": "hydra.python.syntax.QuoteStyle", "field": {"name": "tripleDouble", "term": "unit"}}}}]}}}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -2902,7 +2901,7 @@
           "parameters": [
             {"name": "arg0", "type": {"variable": "hydra.python.syntax.Name"}, "isLazy": false},
             {"name": "arg1", "type": {"list": {"variable": "hydra.python.syntax.TypeParameter"}}, "isLazy": false},
-            {"name": "arg2", "type": {"optional": {"literal": {"string": {}}}}, "isLazy": false},
+            {"name": "arg2", "type": {"optional": {"literal": "string"}}, "isLazy": false},
             {"name": "arg3", "type": {"variable": "hydra.python.syntax.Expression"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.python.syntax.Statement"}}},
         "body": {
@@ -2918,7 +2917,7 @@
                     "body": {
                       "lambda": {
                         "parameter": "mcomment",
-                        "domain": {"optional": {"literal": {"string": {}}}},
+                        "domain": {"optional": {"literal": "string"}},
                         "body": {
                           "lambda": {
                             "parameter": "tyexpr",
@@ -2955,7 +2954,7 @@
           "parameters": [
             {"name": "arg0", "type": {"variable": "hydra.python.syntax.Name"}, "isLazy": false},
             {"name": "arg1", "type": {"variable": "t0"}, "isLazy": false},
-            {"name": "arg2", "type": {"optional": {"literal": {"string": {}}}}, "isLazy": false},
+            {"name": "arg2", "type": {"optional": {"literal": "string"}}, "isLazy": false},
             {"name": "arg3", "type": {"variable": "hydra.python.syntax.Expression"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.python.syntax.Statement"}}},
         "body": {
@@ -2974,7 +2973,7 @@
                         "body": {
                           "lambda": {
                             "parameter": "mcomment",
-                            "domain": {"optional": {"literal": {"string": {}}}},
+                            "domain": {"optional": {"literal": "string"}},
                             "body": {
                               "lambda": {
                                 "parameter": "tyexpr",
@@ -3146,7 +3145,7 @@
           "typeParameters": [],
           "parameters": [
             {"name": "arg0", "type": {"variable": "hydra.python.syntax.Name"}, "isLazy": false},
-            {"name": "arg1", "type": {"optional": {"literal": {"string": {}}}}, "isLazy": false},
+            {"name": "arg1", "type": {"optional": {"literal": "string"}}, "isLazy": false},
             {"name": "arg2", "type": {"variable": "hydra.python.syntax.Expression"}, "isLazy": false},
             {"name": "arg3", "type": {"list": {"variable": "hydra.python.syntax.Statement"}}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "hydra.python.syntax.Statement"}}}},
@@ -3159,7 +3158,7 @@
                 "body": {
                   "lambda": {
                     "parameter": "mcomment",
-                    "domain": {"optional": {"literal": {"string": {}}}},
+                    "domain": {"optional": {"literal": "string"}},
                     "body": {
                       "lambda": {
                         "parameter": "tyexpr",
@@ -3174,7 +3173,7 @@
                                   {
                                     "name": "nameStr",
                                     "term": {"application": {"function": {"unwrap": "hydra.python.syntax.Name"}, "argument": {"variable": "name"}}},
-                                    "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
+                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
                                 "body": {
                                   "let": {
                                     "bindings": [
@@ -3203,7 +3202,7 @@
                                               "application": {
                                                 "function": {"variable": "hydra.serialization.printExpr"},
                                                 "argument": {"application": {"function": {"variable": "hydra.python.serde.expressionToExpr"}, "argument": {"variable": "tyexpr"}}}}},
-                                            "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
+                                            "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
                                         "body": {
                                           "let": {
                                             "bindings": [
@@ -3390,7 +3389,7 @@
                                                                                     "function": {
                                                                                       "application": {
                                                                                         "function": {"variable": "hydra.python.utils.indentedBlock"},
-                                                                                        "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}}},
+                                                                                        "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}}},
                                                                                     "argument": {"list": [{"list": [{"variable": "returnObject"}]}]}}}}]}}}]}}}}}}}},
                                                     "typeScheme": {"variables": [], "body": {"variable": "hydra.python.syntax.Statement"}}}],
                                                 "body": {
@@ -3540,7 +3539,7 @@
                                                                         "function": {
                                                                           "application": {
                                                                             "function": {"variable": "hydra.python.utils.indentedBlock"},
-                                                                            "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}}},
+                                                                            "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}}},
                                                                         "argument": {"list": [{"list": [{"variable": "getItemMethod"}]}]}}}}]}}}},
                                                         "typeScheme": {"variables": [], "body": {"variable": "hydra.python.syntax.Statement"}}}],
                                                     "body": {
@@ -3582,7 +3581,7 @@
                                                                                 "term": {
                                                                                   "application": {
                                                                                     "function": {"variable": "hydra.python.utils.pySimpleStatementToPyStatement"},
-                                                                                    "argument": {"inject": {"typeName": "hydra.python.syntax.SimpleStatement", "field": {"name": "pass", "term": {"unit": {}}}}}}},
+                                                                                    "argument": {"inject": {"typeName": "hydra.python.syntax.SimpleStatement", "field": {"name": "pass", "term": "unit"}}}}},
                                                                                 "typeScheme": {"variables": [], "body": {"variable": "hydra.python.syntax.Statement"}}}],
                                                                             "body": {"list": [{"list": [{"variable": "docStmt"}]}, {"list": [{"variable": "passStmt"}]}]}}}}},
                                                                     "argument": {"list": [{"list": [{"variable": "docStmt"}]}, {"variable": "extraStmts"}]}}},
@@ -3761,7 +3760,7 @@
                                                                                             "function": {
                                                                                               "application": {
                                                                                                 "function": {"variable": "hydra.python.utils.indentedBlock"},
-                                                                                                "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}}},
+                                                                                                "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}}},
                                                                                             "argument": {"variable": "bodyGroups"}}}}]}}}}}},
                                                                         "typeScheme": {"variables": [], "body": {"variable": "hydra.python.syntax.Statement"}}}],
                                                                     "body": {"list": [{"variable": "metaClass"}, {"variable": "unionClass"}]}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
@@ -3789,7 +3788,7 @@
                       {
                         "name": "classNameStr",
                         "term": {"application": {"function": {"unwrap": "hydra.python.syntax.Name"}, "argument": {"variable": "className"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -4131,7 +4130,7 @@
                                                                     "function": {
                                                                       "application": {
                                                                         "function": {"variable": "hydra.python.utils.indentedBlock"},
-                                                                        "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}}},
+                                                                        "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}}},
                                                                     "argument": {"list": [{"list": [{"variable": "returnIsinstance"}]}]}}}}]}}}]}}}}}}}},
                                     "typeScheme": {"variables": [], "body": {"variable": "hydra.python.syntax.Statement"}}}],
                                 "body": {
@@ -4225,7 +4224,7 @@
                                                                             "function": {
                                                                               "application": {
                                                                                 "function": {"variable": "hydra.python.utils.indentedBlock"},
-                                                                                "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}}},
+                                                                                "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}}},
                                                                             "argument": {"list": [{"list": [{"variable": "returnHash"}]}]}}}}]}}}]}}}}}}}},
                                             "typeScheme": {"variables": [], "body": {"variable": "hydra.python.syntax.Statement"}}}],
                                         "body": {"list": [{"variable": "slotsStmt"}, {"variable": "eqMethod"}, {"variable": "hashMethod"}]}}}}}}}}}}}}}}},

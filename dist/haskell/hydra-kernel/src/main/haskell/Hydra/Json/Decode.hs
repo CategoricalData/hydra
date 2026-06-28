@@ -235,8 +235,26 @@ fromJson types tname typ value =
                       \obj -> Optionals.cases (Lists.maybeHead (Maps.keys obj)) (Left "expected single-key object for union") (\k -> findAndDecode k (Maps.lookup k obj) v0)
               processUnion =
                       \obj -> Logic.ifElse (Equality.equal (Lists.length (Maps.keys obj)) 1) (decodeSingleKey obj) (Left "expected single-key object for union")
-              objResult = expectObject value
-          in (Eithers.either (\err -> Left err) (\obj -> processUnion obj) objResult)
+              decodeCompactString =
+                      \s -> Optionals.cases (Lists.find (\ft -> Equality.equal (Core.unName (Core.fieldTypeName ft)) s) v0) (Left (Strings.cat [
+                        "unknown variant: ",
+                        s])) (\ft ->
+                        let ftypeStripped = Strip.deannotateType (Core.fieldTypeType ft)
+                        in case ftypeStripped of
+                          Core.TypeUnit -> Right (Core.TermInject (Core.Injection {
+                            Core.injectionTypeName = tname,
+                            Core.injectionField = Core.Field {
+                              Core.fieldName = (Core.Name s),
+                              Core.fieldTerm = Core.TermUnit}}))
+                          _ -> Left (Strings.cat [
+                            "compact string form requires unit-typed variant, got non-unit type for variant: ",
+                            s]))
+          in case value of
+            Model.ValueString v1 -> decodeCompactString v1
+            Model.ValueObject v1 ->
+              let objAsMap = Maps.fromList v1
+              in (processUnion objAsMap)
+            _ -> Left "expected string or object for union"
         Core.TypeUnit ->
           let objResult = expectObject value
           in (Eithers.map (\_2 -> Core.TermUnit) objResult)

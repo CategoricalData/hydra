@@ -44,7 +44,7 @@
                 "typeName": "hydra.testing.TestGroup",
                 "fields": [
                   {"name": "name", "term": {"literal": {"string": "validate.core"}}},
-                  {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                  {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                   {
                     "name": "subgroups",
                     "term": {
@@ -69,7 +69,7 @@
             "typeName": "hydra.testing.TestGroup",
             "fields": [
               {"name": "name", "term": {"literal": {"string": "duplicate bindings"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
               {
                 "name": "subgroups",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -98,7 +98,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -109,7 +109,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "application": {
                                                               "function": {
@@ -155,7 +155,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -166,7 +166,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.core.InvalidTermError"}}}}},
                                                       "argument": {"literal": {"string": "valid"}}}},
                                                   "argument": {
@@ -174,7 +174,7 @@
                                                       "parameter": "e",
                                                       "domain": {"variable": "hydra.error.core.InvalidTermError"},
                                                       "body": {"application": {"function": {"variable": "hydra.show.error.core.invalidTermError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                     {
                       "record": {
@@ -197,7 +197,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -208,7 +208,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "application": {
                                                               "function": {
@@ -283,7 +283,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -294,7 +294,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.core.InvalidTermError"}}}}},
                                                       "argument": {"literal": {"string": "valid"}}}},
                                                   "argument": {
@@ -302,7 +302,7 @@
                                                       "parameter": "e",
                                                       "domain": {"variable": "hydra.error.core.InvalidTermError"},
                                                       "body": {"application": {"function": {"variable": "hydra.show.error.core.invalidTermError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                     {
                       "record": {
@@ -325,7 +325,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -336,7 +336,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "application": {
                                                               "function": {
@@ -433,7 +433,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -444,7 +444,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.core.InvalidTermError"}}}}},
                                                       "argument": {"literal": {"string": "valid"}}}},
                                                   "argument": {
@@ -452,7 +452,7 @@
                                                       "parameter": "e",
                                                       "domain": {"variable": "hydra.error.core.InvalidTermError"},
                                                       "body": {"application": {"function": {"variable": "hydra.show.error.core.invalidTermError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                     {
                       "record": {
@@ -475,7 +475,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -486,7 +486,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "application": {
                                                               "function": {
@@ -583,7 +583,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -594,7 +594,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "optional": {
                                                               "inject": {
@@ -618,7 +618,7 @@
                                                       "parameter": "e",
                                                       "domain": {"variable": "hydra.error.core.InvalidTermError"},
                                                       "body": {"application": {"function": {"variable": "hydra.show.error.core.invalidTermError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                     {
                       "record": {
@@ -641,7 +641,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -652,7 +652,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "application": {
                                                               "function": {
@@ -762,7 +762,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -773,7 +773,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "optional": {
                                                               "inject": {
@@ -789,7 +789,7 @@
                                                                           "term": {
                                                                             "wrap": {
                                                                               "typeName": "hydra.paths.SubtermPath",
-                                                                              "body": {"list": [{"inject": {"typeName": "hydra.paths.SubtermStep", "field": {"name": "lambdaBody", "term": {"unit": {}}}}}]}}}},
+                                                                              "body": {"list": [{"inject": {"typeName": "hydra.paths.SubtermStep", "field": {"name": "lambdaBody", "term": "unit"}}}]}}}},
                                                                         {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "a"}}}}}]}}}}}}}},
                                                       "argument": {"literal": {"string": "valid"}}}},
                                                   "argument": {
@@ -797,7 +797,7 @@
                                                       "parameter": "e",
                                                       "domain": {"variable": "hydra.error.core.InvalidTermError"},
                                                       "body": {"application": {"function": {"variable": "hydra.show.error.core.invalidTermError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                     {
                       "record": {
@@ -820,7 +820,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -831,7 +831,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "application": {
                                                               "function": {
@@ -965,7 +965,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -976,7 +976,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "optional": {
                                                               "inject": {
@@ -992,7 +992,7 @@
                                                                           "term": {
                                                                             "wrap": {
                                                                               "typeName": "hydra.paths.SubtermPath",
-                                                                              "body": {"list": [{"inject": {"typeName": "hydra.paths.SubtermStep", "field": {"name": "letBody", "term": {"unit": {}}}}}]}}}},
+                                                                              "body": {"list": [{"inject": {"typeName": "hydra.paths.SubtermStep", "field": {"name": "letBody", "term": "unit"}}}]}}}},
                                                                         {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "y"}}}}}]}}}}}}}},
                                                       "argument": {"literal": {"string": "valid"}}}},
                                                   "argument": {
@@ -1000,7 +1000,7 @@
                                                       "parameter": "e",
                                                       "domain": {"variable": "hydra.error.core.InvalidTermError"},
                                                       "body": {"application": {"function": {"variable": "hydra.show.error.core.invalidTermError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                     {
                       "record": {
@@ -1023,7 +1023,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -1034,7 +1034,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "application": {
                                                               "function": {
@@ -1160,7 +1160,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -1171,7 +1171,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "optional": {
                                                               "inject": {
@@ -1200,7 +1200,7 @@
                                                       "parameter": "e",
                                                       "domain": {"variable": "hydra.error.core.InvalidTermError"},
                                                       "body": {"application": {"function": {"variable": "hydra.show.error.core.invalidTermError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                     {
                       "record": {
@@ -1223,7 +1223,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -1234,7 +1234,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "application": {
                                                               "function": {
@@ -1346,7 +1346,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -1357,7 +1357,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.core.InvalidTermError"}}}}},
                                                       "argument": {"literal": {"string": "valid"}}}},
                                                   "argument": {
@@ -1365,7 +1365,7 @@
                                                       "parameter": "e",
                                                       "domain": {"variable": "hydra.error.core.InvalidTermError"},
                                                       "body": {"application": {"function": {"variable": "hydra.show.error.core.invalidTermError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}}},
     {
       "term": {
@@ -1376,7 +1376,7 @@
             "typeName": "hydra.testing.TestGroup",
             "fields": [
               {"name": "name", "term": {"literal": {"string": "duplicate fields"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
               {
                 "name": "subgroups",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -1405,7 +1405,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -1416,7 +1416,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "application": {
                                                               "function": {
@@ -1462,7 +1462,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -1473,7 +1473,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.core.InvalidTermError"}}}}},
                                                       "argument": {"literal": {"string": "valid"}}}},
                                                   "argument": {
@@ -1481,7 +1481,7 @@
                                                       "parameter": "e",
                                                       "domain": {"variable": "hydra.error.core.InvalidTermError"},
                                                       "body": {"application": {"function": {"variable": "hydra.show.error.core.invalidTermError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                     {
                       "record": {
@@ -1504,7 +1504,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -1515,7 +1515,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "application": {
                                                               "function": {
@@ -1601,7 +1601,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -1612,7 +1612,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.core.InvalidTermError"}}}}},
                                                       "argument": {"literal": {"string": "valid"}}}},
                                                   "argument": {
@@ -1620,7 +1620,7 @@
                                                       "parameter": "e",
                                                       "domain": {"variable": "hydra.error.core.InvalidTermError"},
                                                       "body": {"application": {"function": {"variable": "hydra.show.error.core.invalidTermError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                     {
                       "record": {
@@ -1643,7 +1643,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -1654,7 +1654,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "application": {
                                                               "function": {
@@ -1740,7 +1740,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -1751,7 +1751,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "optional": {
                                                               "inject": {
@@ -1775,7 +1775,7 @@
                                                       "parameter": "e",
                                                       "domain": {"variable": "hydra.error.core.InvalidTermError"},
                                                       "body": {"application": {"function": {"variable": "hydra.show.error.core.invalidTermError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                     {
                       "record": {
@@ -1798,7 +1798,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -1809,7 +1809,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "application": {
                                                               "function": {
@@ -1908,7 +1908,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -1919,7 +1919,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "optional": {
                                                               "inject": {
@@ -1935,7 +1935,7 @@
                                                                           "term": {
                                                                             "wrap": {
                                                                               "typeName": "hydra.paths.SubtermPath",
-                                                                              "body": {"list": [{"inject": {"typeName": "hydra.paths.SubtermStep", "field": {"name": "lambdaBody", "term": {"unit": {}}}}}]}}}},
+                                                                              "body": {"list": [{"inject": {"typeName": "hydra.paths.SubtermStep", "field": {"name": "lambdaBody", "term": "unit"}}}]}}}},
                                                                         {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "x"}}}}}]}}}}}}}},
                                                       "argument": {"literal": {"string": "valid"}}}},
                                                   "argument": {
@@ -1943,7 +1943,7 @@
                                                       "parameter": "e",
                                                       "domain": {"variable": "hydra.error.core.InvalidTermError"},
                                                       "body": {"application": {"function": {"variable": "hydra.show.error.core.invalidTermError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                     {
                       "record": {
@@ -1966,7 +1966,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -1977,7 +1977,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "application": {
                                                               "function": {
@@ -2100,7 +2100,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -2111,7 +2111,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "optional": {
                                                               "inject": {
@@ -2127,7 +2127,7 @@
                                                                           "term": {
                                                                             "wrap": {
                                                                               "typeName": "hydra.paths.SubtermPath",
-                                                                              "body": {"list": [{"inject": {"typeName": "hydra.paths.SubtermStep", "field": {"name": "letBody", "term": {"unit": {}}}}}]}}}},
+                                                                              "body": {"list": [{"inject": {"typeName": "hydra.paths.SubtermStep", "field": {"name": "letBody", "term": "unit"}}}]}}}},
                                                                         {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "x"}}}}}]}}}}}}}},
                                                       "argument": {"literal": {"string": "valid"}}}},
                                                   "argument": {
@@ -2135,7 +2135,7 @@
                                                       "parameter": "e",
                                                       "domain": {"variable": "hydra.error.core.InvalidTermError"},
                                                       "body": {"application": {"function": {"variable": "hydra.show.error.core.invalidTermError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}}},
     {
       "term": {
@@ -2146,7 +2146,7 @@
             "typeName": "hydra.testing.TestGroup",
             "fields": [
               {"name": "name", "term": {"literal": {"string": "empty let bindings"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
               {
                 "name": "subgroups",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -2175,7 +2175,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -2186,7 +2186,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "application": {
                                                               "function": {
@@ -2261,7 +2261,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -2272,7 +2272,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.core.InvalidTermError"}}}}},
                                                       "argument": {"literal": {"string": "valid"}}}},
                                                   "argument": {
@@ -2280,7 +2280,7 @@
                                                       "parameter": "e",
                                                       "domain": {"variable": "hydra.error.core.InvalidTermError"},
                                                       "body": {"application": {"function": {"variable": "hydra.show.error.core.invalidTermError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                     {
                       "record": {
@@ -2303,7 +2303,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -2314,7 +2314,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "application": {
                                                               "function": {
@@ -2372,7 +2372,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -2383,7 +2383,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "optional": {
                                                               "inject": {
@@ -2406,7 +2406,7 @@
                                                       "parameter": "e",
                                                       "domain": {"variable": "hydra.error.core.InvalidTermError"},
                                                       "body": {"application": {"function": {"variable": "hydra.show.error.core.invalidTermError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}}},
     {
       "term": {
@@ -2417,7 +2417,7 @@
             "typeName": "hydra.testing.TestGroup",
             "fields": [
               {"name": "name", "term": {"literal": {"string": "identity application"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
               {
                 "name": "subgroups",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -2446,7 +2446,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -2457,7 +2457,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "application": {
                                                               "function": {
@@ -2541,7 +2541,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -2552,7 +2552,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.core.InvalidTermError"}}}}},
                                                       "argument": {"literal": {"string": "valid"}}}},
                                                   "argument": {
@@ -2560,7 +2560,7 @@
                                                       "parameter": "e",
                                                       "domain": {"variable": "hydra.error.core.InvalidTermError"},
                                                       "body": {"application": {"function": {"variable": "hydra.show.error.core.invalidTermError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                     {
                       "record": {
@@ -2583,7 +2583,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -2594,7 +2594,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "application": {
                                                               "function": {
@@ -2670,7 +2670,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -2681,7 +2681,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "optional": {
                                                               "inject": {
@@ -2704,7 +2704,7 @@
                                                       "parameter": "e",
                                                       "domain": {"variable": "hydra.error.core.InvalidTermError"},
                                                       "body": {"application": {"function": {"variable": "hydra.show.error.core.invalidTermError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}}},
     {
       "term": {
@@ -2715,7 +2715,7 @@
             "typeName": "hydra.testing.TestGroup",
             "fields": [
               {"name": "name", "term": {"literal": {"string": "profile-aware behaviour"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
               {
                 "name": "subgroups",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -2744,7 +2744,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -2769,7 +2769,7 @@
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                                                  "type": {"literal": {"string": {}}}}},
+                                                                                  "type": {"literal": "string"}}},
                                                                               "argument": {
                                                                                 "lambda": {
                                                                                   "parameter": "e",
@@ -2870,7 +2870,7 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                                              "type": {"literal": {"string": {}}}}},
+                                                                              "type": {"literal": "string"}}},
                                                                           "argument": {
                                                                             "lambda": {
                                                                               "parameter": "w",
@@ -2956,7 +2956,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -2981,7 +2981,7 @@
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                                                  "type": {"literal": {"string": {}}}}},
+                                                                                  "type": {"literal": "string"}}},
                                                                               "argument": {
                                                                                 "lambda": {
                                                                                   "parameter": "e",
@@ -3032,7 +3032,7 @@
                                                                                                             "term": {
                                                                                                               "wrap": {
                                                                                                                 "typeName": "hydra.paths.SubtermPath",
-                                                                                                                "body": {"list": [{"inject": {"typeName": "hydra.paths.SubtermStep", "field": {"name": "letBody", "term": {"unit": {}}}}}]}}}}]}}}}}]}},
+                                                                                                                "body": {"list": [{"inject": {"typeName": "hydra.paths.SubtermStep", "field": {"name": "letBody", "term": "unit"}}}]}}}}]}}}}}]}},
                                                                                         {
                                                                                           "name": "warnings",
                                                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.error.core.InvalidTermError"}}}}]}},
@@ -3058,7 +3058,7 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                                              "type": {"literal": {"string": {}}}}},
+                                                                              "type": {"literal": "string"}}},
                                                                           "argument": {
                                                                             "lambda": {
                                                                               "parameter": "w",
@@ -3109,13 +3109,13 @@
                                                                                                         "term": {
                                                                                                           "wrap": {
                                                                                                             "typeName": "hydra.paths.SubtermPath",
-                                                                                                            "body": {"list": [{"inject": {"typeName": "hydra.paths.SubtermStep", "field": {"name": "letBody", "term": {"unit": {}}}}}]}}}}]}}}}}]}},
+                                                                                                            "body": {"list": [{"inject": {"typeName": "hydra.paths.SubtermStep", "field": {"name": "letBody", "term": "unit"}}}]}}}}]}}}}}]}},
                                                                                     {
                                                                                       "name": "warnings",
                                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.error.core.InvalidTermError"}}}}]}},
                                                                               "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}},
                                                           "argument": {"literal": {"string": "]"}}}}}}}}}}}]}}}}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                     {
                       "record": {
@@ -3138,7 +3138,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -3163,7 +3163,7 @@
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                                                  "type": {"literal": {"string": {}}}}},
+                                                                                  "type": {"literal": "string"}}},
                                                                               "argument": {
                                                                                 "lambda": {
                                                                                   "parameter": "e",
@@ -3264,7 +3264,7 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                                              "type": {"literal": {"string": {}}}}},
+                                                                              "type": {"literal": "string"}}},
                                                                           "argument": {
                                                                             "lambda": {
                                                                               "parameter": "w",
@@ -3350,7 +3350,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -3375,7 +3375,7 @@
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                                                  "type": {"literal": {"string": {}}}}},
+                                                                                  "type": {"literal": "string"}}},
                                                                               "argument": {
                                                                                 "lambda": {
                                                                                   "parameter": "e",
@@ -3429,7 +3429,7 @@
                                                                                                             "term": {
                                                                                                               "wrap": {
                                                                                                                 "typeName": "hydra.paths.SubtermPath",
-                                                                                                                "body": {"list": [{"inject": {"typeName": "hydra.paths.SubtermStep", "field": {"name": "letBody", "term": {"unit": {}}}}}]}}}}]}}}}}]}}]}},
+                                                                                                                "body": {"list": [{"inject": {"typeName": "hydra.paths.SubtermStep", "field": {"name": "letBody", "term": "unit"}}}]}}}}]}}}}}]}}]}},
                                                                                   "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}},
                                                               "argument": {"literal": {"string": "]"}}}}}}}},
                                                   "argument": {
@@ -3452,7 +3452,7 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                                              "type": {"literal": {"string": {}}}}},
+                                                                              "type": {"literal": "string"}}},
                                                                           "argument": {
                                                                             "lambda": {
                                                                               "parameter": "w",
@@ -3506,10 +3506,10 @@
                                                                                                         "term": {
                                                                                                           "wrap": {
                                                                                                             "typeName": "hydra.paths.SubtermPath",
-                                                                                                            "body": {"list": [{"inject": {"typeName": "hydra.paths.SubtermStep", "field": {"name": "letBody", "term": {"unit": {}}}}}]}}}}]}}}}}]}}]}},
+                                                                                                            "body": {"list": [{"inject": {"typeName": "hydra.paths.SubtermStep", "field": {"name": "letBody", "term": "unit"}}}]}}}}]}}}}}]}}]}},
                                                                               "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}},
                                                           "argument": {"literal": {"string": "]"}}}}}}}}}}}]}}}}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                     {
                       "record": {
@@ -3532,7 +3532,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -3557,7 +3557,7 @@
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                                                  "type": {"literal": {"string": {}}}}},
+                                                                                  "type": {"literal": "string"}}},
                                                                               "argument": {
                                                                                 "lambda": {
                                                                                   "parameter": "e",
@@ -3643,7 +3643,7 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                                              "type": {"literal": {"string": {}}}}},
+                                                                              "type": {"literal": "string"}}},
                                                                           "argument": {
                                                                             "lambda": {
                                                                               "parameter": "w",
@@ -3714,7 +3714,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -3739,7 +3739,7 @@
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                                                  "type": {"literal": {"string": {}}}}},
+                                                                                  "type": {"literal": "string"}}},
                                                                               "argument": {
                                                                                 "lambda": {
                                                                                   "parameter": "e",
@@ -3785,7 +3785,7 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                                              "type": {"literal": {"string": {}}}}},
+                                                                              "type": {"literal": "string"}}},
                                                                           "argument": {
                                                                             "lambda": {
                                                                               "parameter": "w",
@@ -3811,7 +3811,7 @@
                                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.error.core.InvalidTermError"}}}}]}},
                                                                               "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}},
                                                           "argument": {"literal": {"string": "]"}}}}}}}}}}}]}}}}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                     {
                       "record": {
@@ -3834,7 +3834,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -3859,7 +3859,7 @@
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                                                  "type": {"literal": {"string": {}}}}},
+                                                                                  "type": {"literal": "string"}}},
                                                                               "argument": {
                                                                                 "lambda": {
                                                                                   "parameter": "e",
@@ -3960,7 +3960,7 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                                              "type": {"literal": {"string": {}}}}},
+                                                                              "type": {"literal": "string"}}},
                                                                           "argument": {
                                                                             "lambda": {
                                                                               "parameter": "w",
@@ -4046,7 +4046,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -4071,7 +4071,7 @@
                                                                                 "typeApplication": {
                                                                                   "body": {
                                                                                     "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                                                  "type": {"literal": {"string": {}}}}},
+                                                                                  "type": {"literal": "string"}}},
                                                                               "argument": {
                                                                                 "lambda": {
                                                                                   "parameter": "e",
@@ -4133,7 +4133,7 @@
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                                              "type": {"literal": {"string": {}}}}},
+                                                                              "type": {"literal": "string"}}},
                                                                           "argument": {
                                                                             "lambda": {
                                                                               "parameter": "w",
@@ -4175,7 +4175,7 @@
                                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.error.core.InvalidTermError"}}}}]}},
                                                                               "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}}},
                                                           "argument": {"literal": {"string": "]"}}}}}}}}}}}]}}}}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}}},
     {
       "term": {
@@ -4186,7 +4186,7 @@
             "typeName": "hydra.testing.TestGroup",
             "fields": [
               {"name": "name", "term": {"literal": {"string": "variable shadowing"}}},
-              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
               {
                 "name": "subgroups",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
@@ -4215,7 +4215,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -4226,7 +4226,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "application": {
                                                               "function": {
@@ -4277,7 +4277,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -4288,7 +4288,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.core.InvalidTermError"}}}}},
                                                       "argument": {"literal": {"string": "valid"}}}},
                                                   "argument": {
@@ -4296,7 +4296,7 @@
                                                       "parameter": "e",
                                                       "domain": {"variable": "hydra.error.core.InvalidTermError"},
                                                       "body": {"application": {"function": {"variable": "hydra.show.error.core.invalidTermError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                     {
                       "record": {
@@ -4319,7 +4319,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -4330,7 +4330,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "application": {
                                                               "function": {
@@ -4394,7 +4394,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -4405,7 +4405,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.core.InvalidTermError"}}}}},
                                                       "argument": {"literal": {"string": "valid"}}}},
                                                   "argument": {
@@ -4413,7 +4413,7 @@
                                                       "parameter": "e",
                                                       "domain": {"variable": "hydra.error.core.InvalidTermError"},
                                                       "body": {"application": {"function": {"variable": "hydra.show.error.core.invalidTermError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                     {
                       "record": {
@@ -4436,7 +4436,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -4447,7 +4447,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {
                                                             "application": {
                                                               "function": {
@@ -4535,7 +4535,7 @@
                                           "term": {
                                             "lambda": {
                                               "parameter": "_",
-                                              "domain": {"unit": {}},
+                                              "domain": "unit",
                                               "body": {
                                                 "application": {
                                                   "function": {
@@ -4546,7 +4546,7 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                              "type": {"literal": {"string": {}}}}},
+                                                              "type": {"literal": "string"}}},
                                                           "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.core.InvalidTermError"}}}}},
                                                       "argument": {"literal": {"string": "valid"}}}},
                                                   "argument": {
@@ -4554,5 +4554,5 @@
                                                       "parameter": "e",
                                                       "domain": {"variable": "hydra.error.core.InvalidTermError"},
                                                       "body": {"application": {"function": {"variable": "hydra.show.error.core.invalidTermError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
-                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}}}]}

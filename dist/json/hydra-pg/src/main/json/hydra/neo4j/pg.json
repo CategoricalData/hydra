@@ -41,7 +41,7 @@
                                   {
                                     "name": "typeStr",
                                     "term": {"application": {"function": {"unwrap": "hydra.neo4j.model.RelationshipType"}, "argument": {"variable": "relType"}}},
-                                    "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}},
                                   {
                                     "name": "matching",
                                     "term": {
@@ -58,7 +58,7 @@
                                                   "application": {
                                                     "function": {
                                                       "application": {
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}},
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": "string"}}},
                                                         "argument": {
                                                           "application": {
                                                             "function": {"unwrap": "hydra.neo4j.model.RelationshipType"},
@@ -81,18 +81,18 @@
                                             "function": {
                                               "application": {
                                                 "function": {"variable": "hydra.formatting.convertCase"},
-                                                "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "upperSnake", "term": {"unit": {}}}}}}},
-                                            "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": {"unit": {}}}}}}},
+                                                "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "upperSnake", "term": "unit"}}}}},
+                                            "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": "unit"}}}}},
                                         "argument": {"variable": "typeStr"}}},
-                                    "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}},
                                   {
                                     "name": "startStr",
                                     "term": {"application": {"function": {"unwrap": "hydra.neo4j.model.NodeLabel"}, "argument": {"variable": "startLabel"}}},
-                                    "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}},
                                   {
                                     "name": "endStr",
                                     "term": {"application": {"function": {"unwrap": "hydra.neo4j.model.NodeLabel"}, "argument": {"variable": "endLabel"}}},
-                                    "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}},
                                   {
                                     "name": "expanded",
                                     "term": {
@@ -110,8 +110,8 @@
                                                         "function": {
                                                           "application": {
                                                             "function": {"variable": "hydra.formatting.convertCase"},
-                                                            "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": {"unit": {}}}}}}},
-                                                        "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": {"unit": {}}}}}}},
+                                                            "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": "unit"}}}}},
+                                                        "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": "unit"}}}}},
                                                     "argument": {"variable": "startStr"}}}}},
                                             {"application": {"function": {"variable": "hydra.formatting.capitalize"}, "argument": {"variable": "camelType"}}},
                                             {
@@ -124,10 +124,10 @@
                                                         "function": {
                                                           "application": {
                                                             "function": {"variable": "hydra.formatting.convertCase"},
-                                                            "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": {"unit": {}}}}}}},
-                                                        "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": {"unit": {}}}}}}},
+                                                            "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": "unit"}}}}},
+                                                        "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": "unit"}}}}},
                                                     "argument": {"variable": "endStr"}}}}}]}}},
-                                    "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
+                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
                                 "body": {
                                   "wrap": {
                                     "typeName": "hydra.pg.model.EdgeLabel",
@@ -137,12 +137,12 @@
                                           "application": {
                                             "function": {
                                               "application": {
-                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}},
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": "string"}}},
                                                 "argument": {
                                                   "application": {
                                                     "function": {
                                                       "application": {
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.gt"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.gt"}, "type": {"literal": {"integer": "int32"}}}},
                                                         "argument": {
                                                           "application": {
                                                             "function": {
@@ -171,7 +171,7 @@
               "name": "arg1",
               "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}},
               "isLazy": false}],
-          "result": {"type": {"either": {"left": {"literal": {"string": {}}}, "right": {"variable": "hydra.neo4j.model.Relationship"}}}}},
+          "result": {"type": {"either": {"left": {"literal": "string"}, "right": {"variable": "hydra.neo4j.model.Relationship"}}}}},
         "body": {
           "typeLambda": {
             "parameter": "t0",
@@ -193,7 +193,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": "string"}}},
                                         "type": {"variable": "hydra.neo4j.model.ElementId"}}},
                                     "type": {"variable": "hydra.neo4j.model.Relationship"}}},
                                 "argument": {
@@ -222,7 +222,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
-                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": "string"}}},
                                                 "type": {"variable": "hydra.neo4j.model.ElementId"}}},
                                             "type": {"variable": "hydra.neo4j.model.Relationship"}}},
                                         "argument": {
@@ -251,7 +251,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": "string"}}},
                                                         "type": {"variable": "hydra.neo4j.model.ElementId"}}},
                                                     "type": {"variable": "hydra.neo4j.model.Relationship"}}},
                                                 "argument": {
@@ -280,7 +280,7 @@
                                                           "typeApplication": {
                                                             "body": {
                                                               "typeApplication": {
-                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": "string"}}},
                                                                 "type": {"map": {"keys": {"variable": "hydra.neo4j.model.Key"}, "values": {"variable": "hydra.neo4j.model.Value"}}}}},
                                                             "type": {"variable": "hydra.neo4j.model.Relationship"}}},
                                                         "argument": {
@@ -308,7 +308,7 @@
                                                                                             "body": {"variable": "hydra.lib.eithers.map"},
                                                                                             "type": {"list": {"pair": {"first": {"variable": "hydra.neo4j.model.Key"}, "second": {"variable": "hydra.neo4j.model.Value"}}}}}},
                                                                                         "type": {"map": {"keys": {"variable": "hydra.neo4j.model.Key"}, "values": {"variable": "hydra.neo4j.model.Value"}}}}},
-                                                                                    "type": {"literal": {"string": {}}}}},
+                                                                                    "type": {"literal": "string"}}},
                                                                                 "argument": {
                                                                                   "lambda": {
                                                                                     "parameter": "pairs",
@@ -333,7 +333,7 @@
                                                                                                 "body": {"variable": "hydra.lib.eithers.mapList"},
                                                                                                 "type": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "t0"}}}}},
                                                                                             "type": {"pair": {"first": {"variable": "hydra.neo4j.model.Key"}, "second": {"variable": "hydra.neo4j.model.Value"}}}}},
-                                                                                        "type": {"literal": {"string": {}}}}},
+                                                                                        "type": {"literal": "string"}}},
                                                                                     "argument": {
                                                                                       "lambda": {
                                                                                         "parameter": "entry",
@@ -348,7 +348,7 @@
                                                                                                       "typeApplication": {
                                                                                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"variable": "hydra.neo4j.model.Value"}}},
                                                                                                         "type": {"pair": {"first": {"variable": "hydra.neo4j.model.Key"}, "second": {"variable": "hydra.neo4j.model.Value"}}}}},
-                                                                                                    "type": {"literal": {"string": {}}}}},
+                                                                                                    "type": {"literal": "string"}}},
                                                                                                 "argument": {
                                                                                                   "lambda": {
                                                                                                     "parameter": "encoded",
@@ -433,8 +433,8 @@
                                                                                         "function": {
                                                                                           "application": {
                                                                                             "function": {"variable": "hydra.formatting.convertCase"},
-                                                                                            "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": {"unit": {}}}}}}},
-                                                                                        "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "upperSnake", "term": {"unit": {}}}}}}},
+                                                                                            "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": "unit"}}}}},
+                                                                                        "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "upperSnake", "term": "unit"}}}}},
                                                                                     "argument": {
                                                                                       "application": {
                                                                                         "function": {"unwrap": "hydra.pg.model.EdgeLabel"},
@@ -445,7 +445,7 @@
                                                                                             "argument": {"variable": "edge"}}}}}}}}}},
                                                                           {"name": "start", "term": {"variable": "startId"}},
                                                                           {"name": "end", "term": {"variable": "endId"}}]}}}},
-                                                                "type": {"literal": {"string": {}}}}},
+                                                                "type": {"literal": "string"}}},
                                                             "type": {"variable": "hydra.neo4j.model.Relationship"}}}}}}}}}}}}}}}}}}}}}}},
                 "annotation": {
                   "map": [
@@ -469,7 +469,7 @@
           "result": {
             "type": {
               "either": {
-                "left": {"literal": {"string": {}}},
+                "left": {"literal": "string"},
                 "right": {
                   "pair": {
                     "first": {"list": {"variable": "hydra.neo4j.model.Node"}},
@@ -495,7 +495,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": "string"}}},
                                         "type": {"list": {"variable": "hydra.neo4j.model.Node"}}}},
                                     "type": {
                                       "pair": {
@@ -514,7 +514,7 @@
                                                     "body": {"variable": "hydra.lib.eithers.mapList"},
                                                     "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}}},
                                                 "type": {"variable": "hydra.neo4j.model.Node"}}},
-                                            "type": {"literal": {"string": {}}}}},
+                                            "type": {"literal": "string"}}},
                                         "argument": {
                                           "lambda": {
                                             "parameter": "v",
@@ -549,7 +549,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
-                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": "string"}}},
                                                 "type": {"list": {"variable": "hydra.neo4j.model.Relationship"}}}},
                                             "type": {
                                               "pair": {
@@ -568,7 +568,7 @@
                                                             "body": {"variable": "hydra.lib.eithers.mapList"},
                                                             "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}},
                                                         "type": {"variable": "hydra.neo4j.model.Relationship"}}},
-                                                    "type": {"literal": {"string": {}}}}},
+                                                    "type": {"literal": "string"}}},
                                                 "argument": {
                                                   "lambda": {
                                                     "parameter": "e",
@@ -608,7 +608,7 @@
                                                             "body": {"pair": {"first": {"variable": "nodes"}, "second": {"variable": "rels"}}},
                                                             "type": {"list": {"variable": "hydra.neo4j.model.Node"}}}},
                                                         "type": {"list": {"variable": "hydra.neo4j.model.Relationship"}}}}}},
-                                                "type": {"literal": {"string": {}}}}},
+                                                "type": {"literal": "string"}}},
                                             "type": {
                                               "pair": {
                                                 "first": {"list": {"variable": "hydra.neo4j.model.Node"}},
@@ -634,7 +634,7 @@
           "result": {
             "type": {
               "either": {
-                "left": {"literal": {"string": {}}},
+                "left": {"literal": "string"},
                 "right": {
                   "pair": {
                     "first": {"list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}},
@@ -680,7 +680,7 @@
                                                           "application": {
                                                             "function": {
                                                               "typeApplication": {
-                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"literal": {"string": {}}}}},
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.fromList"}, "type": {"literal": "string"}}},
                                                                 "type": {"list": {"variable": "hydra.neo4j.model.NodeLabel"}}}},
                                                             "argument": {
                                                               "application": {
@@ -689,7 +689,7 @@
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.neo4j.model.Node"}}},
-                                                                        "type": {"pair": {"first": {"literal": {"string": {}}}, "second": {"list": {"variable": "hydra.neo4j.model.NodeLabel"}}}}}},
+                                                                        "type": {"pair": {"first": {"literal": "string"}, "second": {"list": {"variable": "hydra.neo4j.model.NodeLabel"}}}}}},
                                                                     "argument": {
                                                                       "lambda": {
                                                                         "parameter": "n",
@@ -711,12 +711,12 @@
                                                                                           "typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.neo4j.model.NodeLabel"}}},
                                                                                         "argument": {
                                                                                           "application": {"function": {"project": {"typeName": "hydra.neo4j.model.Node", "fieldName": "labels"}}, "argument": {"variable": "n"}}}}}}},
-                                                                                "type": {"literal": {"string": {}}}}},
+                                                                                "type": {"literal": "string"}}},
                                                                             "type": {"list": {"variable": "hydra.neo4j.model.NodeLabel"}}}}}}}},
                                                                 "argument": {"variable": "nodes"}}}}},
                                                         "typeScheme": {
                                                           "variables": [],
-                                                          "body": {"map": {"keys": {"literal": {"string": {}}}, "values": {"list": {"variable": "hydra.neo4j.model.NodeLabel"}}}}}}],
+                                                          "body": {"map": {"keys": {"literal": "string"}, "values": {"list": {"variable": "hydra.neo4j.model.NodeLabel"}}}}}}],
                                                     "body": {
                                                       "lambda": {
                                                         "parameter": "eid",
@@ -731,14 +731,14 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"list": {"variable": "hydra.neo4j.model.NodeLabel"}}}},
-                                                                        "type": {"either": {"left": {"literal": {"string": {}}}, "right": {"variable": "hydra.neo4j.model.NodeLabel"}}}}},
+                                                                        "type": {"either": {"left": {"literal": "string"}, "right": {"variable": "hydra.neo4j.model.NodeLabel"}}}}},
                                                                     "argument": {
                                                                       "application": {
                                                                         "function": {
                                                                           "application": {
                                                                             "function": {
                                                                               "typeApplication": {
-                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"literal": {"string": {}}}}},
+                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"literal": "string"}}},
                                                                                 "type": {"list": {"variable": "hydra.neo4j.model.NodeLabel"}}}},
                                                                             "argument": {"application": {"function": {"unwrap": "hydra.neo4j.model.ElementId"}, "argument": {"variable": "eid"}}}}},
                                                                         "argument": {"variable": "m"}}}}},
@@ -755,7 +755,7 @@
                                                                                   "list": [
                                                                                     {"literal": {"string": "no node with id "}},
                                                                                     {"application": {"function": {"unwrap": "hydra.neo4j.model.ElementId"}, "argument": {"variable": "eid"}}}]}}}}},
-                                                                        "type": {"literal": {"string": {}}}}},
+                                                                        "type": {"literal": "string"}}},
                                                                     "type": {"variable": "hydra.neo4j.model.NodeLabel"}}}}},
                                                             "argument": {
                                                               "lambda": {
@@ -770,12 +770,12 @@
                                                                             "function": {
                                                                               "typeApplication": {
                                                                                 "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                                "type": {"either": {"left": {"literal": {"string": {}}}, "right": {"variable": "hydra.neo4j.model.NodeLabel"}}}}},
+                                                                                "type": {"either": {"left": {"literal": "string"}, "right": {"variable": "hydra.neo4j.model.NodeLabel"}}}}},
                                                                             "argument": {
                                                                               "application": {
                                                                                 "function": {
                                                                                   "application": {
-                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": "int32"}}}},
                                                                                     "argument": {
                                                                                       "application": {
                                                                                         "function": {
@@ -800,7 +800,7 @@
                                                                                             "function": {
                                                                                               "typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.neo4j.model.NodeLabel"}}},
                                                                                             "argument": {"variable": "labels"}}}}}}},
-                                                                                "type": {"literal": {"string": {}}}}},
+                                                                                "type": {"literal": "string"}}},
                                                                             "type": {"variable": "hydra.neo4j.model.NodeLabel"}}}}},
                                                                     "argument": {
                                                                       "typeApplication": {
@@ -815,7 +815,7 @@
                                                                                       "list": [
                                                                                         {"literal": {"string": "endpoint node is not single-labeled: "}},
                                                                                         {"application": {"function": {"unwrap": "hydra.neo4j.model.ElementId"}, "argument": {"variable": "eid"}}}]}}}}},
-                                                                            "type": {"literal": {"string": {}}}}},
+                                                                            "type": {"literal": "string"}}},
                                                                         "type": {"variable": "hydra.neo4j.model.NodeLabel"}}}}}}}}}}}}}}},
                                             "argument": {"variable": "nodes"}}},
                                         "typeScheme": {
@@ -823,7 +823,7 @@
                                           "body": {
                                             "function": {
                                               "domain": {"variable": "hydra.neo4j.model.ElementId"},
-                                              "codomain": {"either": {"left": {"literal": {"string": {}}}, "right": {"variable": "hydra.neo4j.model.NodeLabel"}}}}}}}],
+                                              "codomain": {"either": {"left": {"literal": "string"}, "right": {"variable": "hydra.neo4j.model.NodeLabel"}}}}}}}],
                                     "body": {
                                       "application": {
                                         "function": {
@@ -832,7 +832,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
-                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": "string"}}},
                                                     "type": {"list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}}}},
                                                 "type": {
                                                   "pair": {
@@ -848,7 +848,7 @@
                                                           "typeApplication": {
                                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.mapList"}, "type": {"variable": "hydra.neo4j.model.Node"}}},
                                                             "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}}},
-                                                        "type": {"literal": {"string": {}}}}},
+                                                        "type": {"literal": "string"}}},
                                                     "argument": {
                                                       "lambda": {
                                                         "parameter": "n",
@@ -873,7 +873,7 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "typeApplication": {
-                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": "string"}}},
                                                             "type": {"list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}}},
                                                         "type": {
                                                           "pair": {
@@ -890,7 +890,7 @@
                                                                     "body": {
                                                                       "typeApplication": {"body": {"variable": "hydra.lib.eithers.mapList"}, "type": {"variable": "hydra.neo4j.model.Relationship"}}},
                                                                     "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}},
-                                                                "type": {"literal": {"string": {}}}}},
+                                                                "type": {"literal": "string"}}},
                                                             "argument": {
                                                               "lambda": {
                                                                 "parameter": "r",
@@ -903,7 +903,7 @@
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
-                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": "string"}}},
                                                                                 "type": {"variable": "hydra.neo4j.model.NodeLabel"}}},
                                                                             "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}},
                                                                         "argument": {
@@ -925,7 +925,7 @@
                                                                                   "typeApplication": {
                                                                                     "body": {
                                                                                       "typeApplication": {
-                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": "string"}}},
                                                                                         "type": {"variable": "hydra.neo4j.model.NodeLabel"}}},
                                                                                     "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}},
                                                                                 "argument": {
@@ -973,7 +973,7 @@
                                                                         "body": {"pair": {"first": {"variable": "vertices"}, "second": {"variable": "edges"}}},
                                                                         "type": {"list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}}}},
                                                                     "type": {"list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}}}}},
-                                                            "type": {"literal": {"string": {}}}}},
+                                                            "type": {"literal": "string"}}},
                                                         "type": {
                                                           "pair": {
                                                             "first": {"list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}},
@@ -998,7 +998,7 @@
           "result": {
             "type": {
               "either": {
-                "left": {"literal": {"string": {}}},
+                "left": {"literal": "string"},
                 "right": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}}}}},
         "body": {
           "typeLambda": {
@@ -1053,13 +1053,13 @@
                                             "body": {"variable": "hydra.lib.logic.ifElse"},
                                             "type": {
                                               "either": {
-                                                "left": {"literal": {"string": {}}},
+                                                "left": {"literal": "string"},
                                                 "right": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}}}}},
                                         "argument": {
                                           "application": {
                                             "function": {
                                               "application": {
-                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": "int32"}}}},
                                                 "argument": {
                                                   "application": {
                                                     "function": {
@@ -1074,7 +1074,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
-                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": "string"}}},
                                                     "type": {"variable": "t0"}}},
                                                 "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}}},
                                             "argument": {
@@ -1100,7 +1100,7 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "typeApplication": {
-                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": "string"}}},
                                                             "type": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t0"}}}}},
                                                         "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}}},
                                                     "argument": {
@@ -1128,7 +1128,7 @@
                                                                                         "body": {"variable": "hydra.lib.eithers.map"},
                                                                                         "type": {"list": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "t0"}}}}}},
                                                                                     "type": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t0"}}}}},
-                                                                                "type": {"literal": {"string": {}}}}},
+                                                                                "type": {"literal": "string"}}},
                                                                             "argument": {
                                                                               "lambda": {
                                                                                 "parameter": "pairs",
@@ -1154,7 +1154,7 @@
                                                                                             "body": {"variable": "hydra.lib.eithers.mapList"},
                                                                                             "type": {"pair": {"first": {"variable": "hydra.neo4j.model.Key"}, "second": {"variable": "hydra.neo4j.model.Value"}}}}},
                                                                                         "type": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "t0"}}}}},
-                                                                                    "type": {"literal": {"string": {}}}}},
+                                                                                    "type": {"literal": "string"}}},
                                                                                 "argument": {
                                                                                   "lambda": {
                                                                                     "parameter": "entry",
@@ -1169,7 +1169,7 @@
                                                                                                   "typeApplication": {
                                                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"variable": "t0"}}},
                                                                                                     "type": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "t0"}}}}},
-                                                                                                "type": {"literal": {"string": {}}}}},
+                                                                                                "type": {"literal": "string"}}},
                                                                                             "argument": {
                                                                                               "lambda": {
                                                                                                 "parameter": "decoded",
@@ -1249,7 +1249,7 @@
                                                                           {"name": "id", "term": {"variable": "vid"}},
                                                                           {"name": "properties", "term": {"variable": "props"}}]}},
                                                                     "type": {"variable": "t0"}}}}},
-                                                            "type": {"literal": {"string": {}}}}},
+                                                            "type": {"literal": "string"}}},
                                                         "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}}}}}}}}}}}}},
                                 "argument": {
                                   "typeApplication": {
@@ -1268,7 +1268,7 @@
                                                         "function": {"unwrap": "hydra.neo4j.model.ElementId"},
                                                         "argument": {
                                                           "application": {"function": {"project": {"typeName": "hydra.neo4j.model.Node", "fieldName": "id"}}, "argument": {"variable": "node"}}}}}]}}}}},
-                                        "type": {"literal": {"string": {}}}}},
+                                        "type": {"literal": "string"}}},
                                     "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}}}}}}}}}}},
                 "annotation": {
                   "map": [
@@ -1292,7 +1292,7 @@
           "result": {
             "type": {
               "either": {
-                "left": {"literal": {"string": {}}},
+                "left": {"literal": "string"},
                 "right": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}}}},
         "body": {
           "typeLambda": {
@@ -1327,7 +1327,7 @@
                                               "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
-                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": "string"}}},
                                                     "type": {"variable": "t0"}}},
                                                 "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}},
                                             "argument": {
@@ -1355,7 +1355,7 @@
                                                       "typeApplication": {
                                                         "body": {
                                                           "typeApplication": {
-                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": "string"}}},
                                                             "type": {"variable": "t0"}}},
                                                         "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}},
                                                     "argument": {
@@ -1383,7 +1383,7 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "typeApplication": {
-                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": "string"}}},
                                                                     "type": {"variable": "t0"}}},
                                                                 "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}},
                                                             "argument": {
@@ -1411,7 +1411,7 @@
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": "string"}}},
                                                                             "type": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t0"}}}}},
                                                                         "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}},
                                                                     "argument": {
@@ -1439,7 +1439,7 @@
                                                                                                         "body": {"variable": "hydra.lib.eithers.map"},
                                                                                                         "type": {"list": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "t0"}}}}}},
                                                                                                     "type": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t0"}}}}},
-                                                                                                "type": {"literal": {"string": {}}}}},
+                                                                                                "type": {"literal": "string"}}},
                                                                                             "argument": {
                                                                                               "lambda": {
                                                                                                 "parameter": "pairs",
@@ -1465,7 +1465,7 @@
                                                                                                             "body": {"variable": "hydra.lib.eithers.mapList"},
                                                                                                             "type": {"pair": {"first": {"variable": "hydra.neo4j.model.Key"}, "second": {"variable": "hydra.neo4j.model.Value"}}}}},
                                                                                                         "type": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "t0"}}}}},
-                                                                                                    "type": {"literal": {"string": {}}}}},
+                                                                                                    "type": {"literal": "string"}}},
                                                                                                 "argument": {
                                                                                                   "lambda": {
                                                                                                     "parameter": "entry",
@@ -1480,7 +1480,7 @@
                                                                                                                   "typeApplication": {
                                                                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"variable": "t0"}}},
                                                                                                                     "type": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "t0"}}}}},
-                                                                                                                "type": {"literal": {"string": {}}}}},
+                                                                                                                "type": {"literal": "string"}}},
                                                                                                             "argument": {
                                                                                                               "lambda": {
                                                                                                                 "parameter": "decoded",
@@ -1571,7 +1571,7 @@
                                                                                           {"name": "in", "term": {"variable": "inId"}},
                                                                                           {"name": "properties", "term": {"variable": "props"}}]}},
                                                                                     "type": {"variable": "t0"}}}}},
-                                                                            "type": {"literal": {"string": {}}}}},
+                                                                            "type": {"literal": "string"}}},
                                                                         "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
                 "annotation": {
                   "map": [
@@ -1594,7 +1594,7 @@
               "name": "arg1",
               "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}},
               "isLazy": false}],
-          "result": {"type": {"either": {"left": {"literal": {"string": {}}}, "right": {"variable": "hydra.neo4j.model.Node"}}}}},
+          "result": {"type": {"either": {"left": {"literal": "string"}, "right": {"variable": "hydra.neo4j.model.Node"}}}}},
         "body": {
           "typeLambda": {
             "parameter": "t0",
@@ -1616,7 +1616,7 @@
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": "string"}}},
                                         "type": {"variable": "hydra.neo4j.model.ElementId"}}},
                                     "type": {"variable": "hydra.neo4j.model.Node"}}},
                                 "argument": {
@@ -1645,7 +1645,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
-                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": {"string": {}}}}},
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"literal": "string"}}},
                                                 "type": {"map": {"keys": {"variable": "hydra.neo4j.model.Key"}, "values": {"variable": "hydra.neo4j.model.Value"}}}}},
                                             "type": {"variable": "hydra.neo4j.model.Node"}}},
                                         "argument": {
@@ -1673,7 +1673,7 @@
                                                                             "body": {"variable": "hydra.lib.eithers.map"},
                                                                             "type": {"list": {"pair": {"first": {"variable": "hydra.neo4j.model.Key"}, "second": {"variable": "hydra.neo4j.model.Value"}}}}}},
                                                                         "type": {"map": {"keys": {"variable": "hydra.neo4j.model.Key"}, "values": {"variable": "hydra.neo4j.model.Value"}}}}},
-                                                                    "type": {"literal": {"string": {}}}}},
+                                                                    "type": {"literal": "string"}}},
                                                                 "argument": {
                                                                   "lambda": {
                                                                     "parameter": "pairs",
@@ -1698,7 +1698,7 @@
                                                                                 "body": {"variable": "hydra.lib.eithers.mapList"},
                                                                                 "type": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "t0"}}}}},
                                                                             "type": {"pair": {"first": {"variable": "hydra.neo4j.model.Key"}, "second": {"variable": "hydra.neo4j.model.Value"}}}}},
-                                                                        "type": {"literal": {"string": {}}}}},
+                                                                        "type": {"literal": "string"}}},
                                                                     "argument": {
                                                                       "lambda": {
                                                                         "parameter": "entry",
@@ -1713,7 +1713,7 @@
                                                                                       "typeApplication": {
                                                                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"variable": "hydra.neo4j.model.Value"}}},
                                                                                         "type": {"pair": {"first": {"variable": "hydra.neo4j.model.Key"}, "second": {"variable": "hydra.neo4j.model.Value"}}}}},
-                                                                                    "type": {"literal": {"string": {}}}}},
+                                                                                    "type": {"literal": "string"}}},
                                                                                 "argument": {
                                                                                   "lambda": {
                                                                                     "parameter": "encoded",
@@ -1803,7 +1803,7 @@
                                                                               "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Vertex", "fieldName": "label"}}, "type": {"variable": "t0"}}},
                                                                             "argument": {"variable": "vertex"}}}}}}}}}},
                                                           {"name": "properties", "term": {"variable": "props"}}]}}}},
-                                                "type": {"literal": {"string": {}}}}},
+                                                "type": {"literal": "string"}}},
                                             "type": {"variable": "hydra.neo4j.model.Node"}}}}}}}}}}}}}}},
                 "annotation": {
                   "map": [
