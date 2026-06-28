@@ -18,6 +18,7 @@ import hydra.sources.python.coder as _coder
 import hydra.sources.python.environment as _environment
 import hydra.sources.python.language as _language
 import hydra.sources.python.names as _names
+import hydra.sources.python.pyproject as _pyproject
 import hydra.sources.python.serde as _serde
 import hydra.sources.python.syntax as _syntax
 import hydra.sources.python.testing as _testing
@@ -29,6 +30,7 @@ main_modules: list[Module] = [
     _environment.module_,
     _language.module_,
     _names.module_,
+    _pyproject.module_,
     _serde.module_,
     _syntax.module_,
     _testing.module_,
