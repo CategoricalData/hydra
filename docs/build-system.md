@@ -30,7 +30,7 @@ The organizing principle of Hydra's build is a clean separation between **source
   source that a distribution package needs but that is *not* generated — e.g. the Haskell
   kernel runtime (`Hydra.Haskell.Lib.*`, the DSL term helpers, `Hydra.Settings`,
   `Hydra.Kernel`) and the `hydra` umbrella module. The overlay tree is a top-level sibling of
-  `packages/`, `dist/`, `heads/`, and `bindings/`, mirroring the `dist/<lang>/<pkg>/` shape.
+  `packages/`, `dist/`, and `heads/`, mirroring the `dist/<lang>/<pkg>/` shape.
   Overlay sources are authored, not generated, and are never compiled in place — only after
   being copied into `dist/`.
 
@@ -53,35 +53,21 @@ the overlay tree. Two invariants follow, and both are load-bearing:
 
 ### What goes in `packages/` vs `overlay/`
 
-The boundary follows the translingual line:
+The boundary follows the translingual line: **`packages/<pkg>/`** holds code that describes Hydra
+modules *independently of any target language* (DSL definitions + the host-authored helpers that write
+them), while **`overlay/<lang>/<pkg>/`** holds host-native source that must ship but cannot be
+translingual — primitive implementations, runtime data structures (`cons_list.py`,
+`PersistentMap.java`), test bridges, and third-party library integrations (rdf4j, TinkerPop, the
+Cypher/GQL parsers — formerly the `bindings/` tree, folded into overlays as of #511).
 
-- **`packages/<pkg>/`** is for code that describes Hydra modules *independently of any target
-  language* — that is, code which, after transformation, becomes valid in every target.
-  DSL module definitions (kernel types, coders, test suites) go here.
-  So do DSL helper utilities that are authored in the host language but whose purpose is to
-  help write those translingual definitions (e.g., term builders, type constructors).
-- **`overlay/<lang>/<pkg>/`** is for host-native, language-specific source that must ship
-  in the distribution but cannot be expressed as translingual DSL — for example, primitive
-  implementations (the actual Python/Java/Haskell bodies behind `hydra.lib.*` functions),
-  runtime utilities (`cons_list.py`, `PersistentMap.java`), and test bridges (`test_env.py`).
+Heuristic: if the code *could* be generated into every target it belongs in `packages/`; if it is
+inherently host-specific it belongs in `overlay/`. Overlay files use the `hydra.overlay.<lang>.*`
+namespace, keeping `hydra.*` exclusively translingual and `hydra.overlay.<lang>.*` exclusively
+host-native.
 
-A useful heuristic: if the code *could* be expressed in the Hydra DSL and generated into
-every target, it belongs in `packages/`.
-If it is inherently host-specific — because it calls platform APIs, provides native
-implementations of primitives, or is a runtime data structure that every generated program
-leans on — it belongs in `overlay/`.
-
-### Namespace convention for overlay files
-
-After #501, overlay files use the `hydra.overlay.<lang>.*` namespace (e.g.
-`hydra.overlay.python.lib.chars`, `hydra.overlay.java.lib.Chars`,
-`Hydra.Overlay.Haskell.Lib.Chars`).
-This hard separation ensures:
-
-- **`hydra.*` (including `hydra.<lang>.*`, `hydra.dsl.*`, `hydra.lib.*`)** → exclusively
-  *translingual* — every name in this space is either generated or derived from generated code.
-- **`hydra.overlay.<lang>.*`** → exclusively *host-native* — everything here is hand-written
-  and lives under `overlay/`.
+**For the full overlay reference** — the governing equation, namespace rules, folding host-specific
+integrations, the `build.json` → generated `build.gradle`/`pyproject.toml` flow, prune protection, and
+how to route a new native module — see **[overlays.md](overlays.md)**.
 
 The `bootstrap-from-json` redirect mechanism rewrites generated consumer call-sites from
 `hydra.lib.<sub>.<fn>` → `hydra.overlay.<lang>.lib.<sub>.<fn>` at assemble time, so generated

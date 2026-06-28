@@ -79,13 +79,18 @@ compatible** — no copyleft or Category X dependency was found in the core host
 - **Python** (`heads/python/pyproject.toml`): zero runtime dependencies; `pytest`/`ruff`/`pyright`
   are dev-only.
 - **Java** (`heads/java/build.gradle`, `generate-java-package-build.py`): `EXTERNAL_DEPS = {}` —
-  the published per-package jars carry no third-party runtime deps. (External integrations live in
-  `bindings/`, outside the publish set.)
+  the published per-package jars carry no third-party runtime deps. (External integrations are
+  host-native overlay source under `overlay/<lang>/<pkg>/`, declaring their third-party deps in
+  `build.json`; folded from the former `bindings/` tree in #511. **TODO:** re-audit whether and how
+  these overlay-declared deps now reach the published per-package jars — see
+  [docs/overlays.md](overlays.md).)
 - **Scala** (`packages/hydra-scala/build.sbt`): `org.apache.commons:commons-text` (Apache-2.0),
   `scalactic`/`scalatest` (Apache-2.0, test scope).
 
 The heavier external-dependency surface (rdf4j, ANTLR, Pegasus, Avro/Protobuf tooling) lives in
-`bindings/` and `demos/`, which are **not** part of the release publish set — consistent with the
+`demos/` and in the host-native overlays for `hydra-pg`/`hydra-rdf` (rdf4j, ANTLR — folded from the
+former `bindings/` in #511). Demos are **not** part of the release publish set; the overlay-declared
+integration deps should be re-audited for the publish set (see TODO above) — consistent with the
 [Security wiki page](https://github.com/CategoricalData/hydra/wiki/Security)'s dependency-surface
 distinction. The formal per-dependency license attestation is now recorded below in
 [Dependency license attestation](#dependency-license-attestation); every dependency is ASF Category A
