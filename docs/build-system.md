@@ -243,7 +243,7 @@ strictly in order, but any phase can short-circuit independently.
 | 2. Coder Haskell dists | per-language assemblers | `dist/haskell/hydra-<lang>/` for every L in (hosts ∪ targets) |
 | 3. Kernel/pg/rdf into each target | per-target assemblers | `dist/<lang>/{hydra-kernel,hydra-pg,hydra-rdf}/` |
 | 4. Cross-host coders | per-host assemblers | `dist/<host>/hydra-<target>/` for every (host, target) with host ≠ haskell |
-| 5. Native DSL → JSON for hydra-java and hydra-python | `bin/generate-hydra-<lang>-from-<lang>.sh` | Overwrites `dist/json/hydra-{java,python}/` from host-native sources |
+| 5. Native DSL → JSON for hydra-java, hydra-python, hydra-scala | `bin/generate-hydra-<lang>-from-<lang>.sh` | Overwrites `dist/json/hydra-{java,python,scala}/` from host-native sources |
 
 Phase 1.5 closes a warm/cold asymmetry from #344 that
 [#406](https://github.com/CategoricalData/hydra/issues/406) made deterministic.
@@ -262,7 +262,14 @@ As of #346/#370 both heals run via the **native drivers against the published ho
 `packages/hydra-{java,python}/src/main/haskell/` have been **deleted**, so `hydraJavaModules`
 and `hydraPythonModules` are empty and `update-json-main` no longer writes those namespaces.
 It does still *load* the `hydra.{java,python}.*` JSON into its inference universe so
-cross-package references resolve (e.g. `hydra-scala` → `hydra.java.serde.escapeJavaString`).
+cross-package references resolve.
+
+**Scala parallels this** (#509): `packages/hydra-scala/src/main/haskell/` has been deleted,
+`hydraScalaModules` is empty, and Phase 5 invokes `bin/generate-hydra-scala-from-scala.sh`
+which runs the native Scala driver (`hydra.UpdateScalaJson` under `heads/scala/`) to write
+`dist/json/hydra-scala/`. The driver currently runs only against the local host (no
+published-host probe yet); a future revision will add that with the same `--local-host`
+bootstrap shim as Java/Python.
 
 The general invariant: **when a package is inferred, the typed output of every package it
 depends on must already be in its inference universe** — that is just the dependency DAG, and it
@@ -626,13 +633,14 @@ version) or `"local"` (build that host from source); an absent key means publish
 knob — e.g. `hostOverrides: { "python": "local" }` builds the Python host from source while Java and
 Haskell continue consuming their published artifacts.
 
-**How it works.** The Java and Python coder packages are authored host-natively
-(`packages/hydra-{java,python}/src/main/{java,python}/hydra/sources/`) and regenerated to
-`dist/json/hydra-{java,python}` by a thin driver (`hydra.UpdateJavaJson` /
-`bin/update-python-json.py`). The driver reads the kernel universe from
+**How it works.** The Java, Python, and Scala coder packages are authored host-natively
+(`packages/hydra-{java,python,scala}/src/main/{java,python,scala}/hydra/sources/`) and regenerated to
+`dist/json/hydra-{java,python,scala}` by a thin driver (`hydra.UpdateJavaJson` /
+`bin/update-python-json.py` / `hydra.UpdateScalaJson`). The driver reads the kernel universe from
 `dist/json/hydra-kernel/` (data) and the DSL sources from `packages/` (local), and applies a
 **coder runtime**. That coder runtime is the only piece that needs to be a *host*: for Java it
-is the `hydra-java` jar; for Python the `hydra-python` wheel.
+is the `hydra-java` jar; for Python the `hydra-python` wheel; for Scala the locally-built `hydra-scala`
+sbt build (no published-host probe yet — Scala always runs in `--local-host` mode).
 
 - **Published-host mode (default).** The driver resolves
   `net.fortytwo.hydra:hydra-java:<hostVersion>` from Maven Central (a standalone Gradle

@@ -6,9 +6,10 @@ This guide explains Hydra's domain-specific languages (DSLs) for constructing ty
 This guide focuses on the Haskell DSLs.
 Haskell is Hydra's bootstrapping language—the Hydra kernel itself is written in Haskell—so this guide is
 particularly intended for Hydra developers working on the kernel or extending Hydra's core functionality.
-For Java and Python DSL usage, see:
+For host-native DSL usage, see:
 - [DSL Guide (Java)](dsl-guide-java.md) - Working with Hydra types and terms in Java
 - [DSL Guide (Python)](dsl-guide-python.md) - Working with Hydra types and terms in Python
+- [DSL Guide (Scala)](dsl-guide-scala.md) - Working with Hydra types and terms in Scala
 
 ## Prerequisites
 
@@ -1523,6 +1524,7 @@ Lists.foldl (binaryFunction Math.add) (int32 0) (var "numbers")
 - [Code organization](https://github.com/CategoricalData/hydra/wiki/Code-organization) - Project structure
 - [Java DSL guide](dsl-guide-java.md) - Java-specific DSL reference
 - [Python DSL guide](dsl-guide-python.md) - Python-specific DSL reference
+- [Scala DSL guide](dsl-guide-scala.md) - Scala-specific DSL reference
 
 ---
 

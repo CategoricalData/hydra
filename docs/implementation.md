@@ -1686,15 +1686,16 @@ overlay/haskell/hydra-kernel/.../Hydra/Haskell/Lib/
 ### Code generators (DSL sources)
 
 Per-language DSL sources live under `packages/hydra-<lang>/src/main/`. Most are authored in Haskell
-(`.../haskell/Hydra/Sources/<Lang>/`); `hydra-java` and `hydra-python` are authored host-natively in
-Java and Python (`.../{java,python}/hydra/sources/`):
+(`.../haskell/Hydra/Sources/<Lang>/`); `hydra-java`, `hydra-python`, and `hydra-scala` are authored
+host-natively in Java, Python, and Scala (`.../{java,python,scala}/hydra/sources/`):
 
 - [`packages/hydra-haskell/src/main/haskell/Hydra/Sources/Haskell/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Haskell)
 - `packages/hydra-java/src/main/java/hydra/sources/java/` — Java coder, authored in Java
   (host-native sole source of truth; the Haskell DSL copy was deleted in #346)
 - `packages/hydra-python/src/main/python/hydra/sources/python/` — Python coder, authored in Python
   (host-native sole source of truth; the Haskell DSL copy was deleted in #346)
-- [`packages/hydra-scala/src/main/haskell/Hydra/Sources/Scala/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-scala/src/main/haskell/Hydra/Sources/Scala)
+- `packages/hydra-scala/src/main/scala/hydra/sources/scala/` — Scala coder, authored in Scala
+  (host-native sole source of truth; the Haskell DSL copy was deleted in #509)
 - [`packages/hydra-lisp/src/main/haskell/Hydra/Sources/Lisp/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-lisp/src/main/haskell/Hydra/Sources/Lisp)
 - [`packages/hydra-pg/src/main/haskell/Hydra/Sources/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-pg/src/main/haskell/Hydra/Sources) — property graphs (Pg, Cypher, Tinkerpop, Graphviz)
 - [`packages/hydra-rdf/src/main/haskell/Hydra/Sources/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-rdf/src/main/haskell/Hydra/Sources) — RDF, SHACL, OWL, ShEx, XML schema
