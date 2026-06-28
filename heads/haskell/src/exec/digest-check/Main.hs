@@ -71,6 +71,7 @@ import Hydra.Sources.Ext (extRoutingInput)
 import Hydra.Generation (loadNativePackageModuleNamesTagged)
 
 import Control.Monad (forM)
+import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 import System.Directory (doesFileExist)
@@ -88,6 +89,7 @@ data Options = Options
   , optOutputDir    :: Maybe FilePath
   , optPackage      :: Maybe String      -- for RefreshInput
   , optDistJsonRoot :: Maybe FilePath    -- for RefreshInput
+  , optKeepPathsFrom :: Maybe FilePath   -- protect these paths from #393 reconcile (overlay files)
   } deriving Show
 
 usage :: String
@@ -111,7 +113,7 @@ usage = unlines
   ]
 
 emptyOptions :: Mode -> Options
-emptyOptions m = Options m "" "" Nothing Nothing Nothing
+emptyOptions m = Options m "" "" Nothing Nothing Nothing Nothing
 
 parseArgs :: [String] -> Either String Options
 parseArgs [] = Left "Missing subcommand"
@@ -141,6 +143,7 @@ parseArgs (cmd : rest) = do
     go opts ("--output-dir" : v : xs)      = go (opts { optOutputDir    = Just v }) xs
     go opts ("--package" : v : xs)         = go (opts { optPackage      = Just v }) xs
     go opts ("--dist-json-root" : v : xs)  = go (opts { optDistJsonRoot = Just v }) xs
+    go opts ("--keep-paths-from" : v : xs) = go (opts { optKeepPathsFrom = Just v }) xs
     go _ (a : _) = Left ("Unknown argument: " ++ a)
 
 main :: IO ()
@@ -254,8 +257,32 @@ doFresh opts = do
           -- The output digest itself often lives inside outputDir; protect
           -- it from deletion (it's about to be rewritten on reconcile and
           -- isn't a recorded output).
-          protectRel = S.singleton
-            (FP.normalise (Hydra.Digest.makeRelativeTo outputDir (optOutputDigest opts)))
+          protectDigest = FP.normalise (Hydra.Digest.makeRelativeTo outputDir (optOutputDigest opts))
+      -- Hand-written OVERLAY files copied into this dir (e.g. binding source folded
+      -- into a package, #511) are not in the recorded output digest, so without
+      -- protection the #393 reconcile would delete them. Read the keep-paths
+      -- manifest (same one copy-overlay.sh writes) and protect any entry that
+      -- actually lives under this output dir. Manifest lines: "<dir>\t<relToDir>".
+      overlayProtect <- case optKeepPathsFrom opts of
+        Nothing -> return []
+        Just mf -> do
+          exists <- doesFileExist mf
+          if not exists then return [] else do
+            contents <- readFile mf
+            return
+              [ FP.normalise relToOut
+              | line <- lines contents
+              , (d, '\t':relToSrc) <- [break (== '\t') line]
+              , let full = d FP.</> relToSrc
+              , let relToOut = Hydra.Digest.makeRelativeTo outputDir full
+              -- keep only paths genuinely UNDER outputDir: makeRelativeTo returns
+              -- the path unchanged (still absolute, leading '/') when it isn't under
+              -- base, so drop anything absolute or escaping via "..".
+              , not (null relToOut)
+              , head relToOut /= '/'
+              , not (".." `L.isPrefixOf` relToOut)
+              ]
+      let protectRel = S.fromList (protectDigest : overlayProtect)
       orphans <- Hydra.Digest.reconcileOrphans outputDir keepRel protectRel
       if null orphans
         then do

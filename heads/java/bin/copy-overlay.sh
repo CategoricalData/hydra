@@ -52,26 +52,44 @@ while [ $# -gt 0 ]; do
     esac
 done
 
-OVERLAY_DIR="$HYDRA_ROOT_DIR/overlay/java/$PACKAGE/src/main/java"
-OUT_DIR="$DIST_ROOT/$PACKAGE/src/main/java"
+# Copy the WHOLE overlay src/ tree (not just main/java): a binding overlay may
+# carry main/java/ (hand-written classes), main/antlr/ (ANTLR .g4 grammars),
+# main/resources/, and test/ — all must land in the dist so the package builds
+# (#511). Operating at the src/ level preserves that substructure and matches the
+# governing equation dist = transform(packages) + copy(overlay) verbatim.
+OVERLAY_SRC="$HYDRA_ROOT_DIR/overlay/java/$PACKAGE/src"
+OUT_SRC="$DIST_ROOT/$PACKAGE/src"
 
-if [ ! -d "$OVERLAY_DIR" ]; then
+if [ ! -d "$OVERLAY_SRC" ]; then
     # No overlay tree for this package: nothing to copy. Not an error — most
-    # packages have no hand-written Java.
+    # packages have no hand-written source.
     exit 0
 fi
 
-mkdir -p "$OUT_DIR"
+mkdir -p "$OUT_SRC"
 
-# Merge the entire overlay tree onto the generated dist. Trailing /. on the
+# Merge the entire overlay src/ tree onto the generated dist. Trailing /. on the
 # source copies CONTENTS into the dest, leaving generated siblings untouched.
-cp -R "$OVERLAY_DIR/." "$OUT_DIR/"
+cp -R "$OVERLAY_SRC/." "$OUT_SRC/"
 
 if [ -n "$MANIFEST_FILE" ]; then
-    # Emit '<OUT_DIR>\t<relPath>' for every regular file currently under OUT_DIR.
-    ( cd "$OUT_DIR" && find . -type f -print | sed 's|^\./||' \
-        | awk -v dir="$OUT_DIR" '{ printf "%s\t%s\n", dir, $0 }' \
+    # Record EVERY overlay file into the keep-paths manifest so neither prune
+    # path deletes hand-written overlay source:
+    #   - bootstrap-from-json --prune-stale (full regen, #357)
+    #   - digest-check fresh --keep-paths-from (#393 cache-skip reconcile, #511)
+    # BOTH key the keep-set by SOURCE-SET dir (e.g. .../src/main/java) and match
+    # paths relative to THAT dir — not the package src/ root. The overlay layout
+    # is src/<config>/<lang>/<rel> (e.g. main/java/hydra/..., test/java/...,
+    # main/antlr/...), so the source-set dir is the first two components. Emit
+    # '<OUT_SRC>/<config>/<lang>\t<rel>' per file. Walk the overlay tree itself
+    # (authoritative source list) so only overlay files are protected.
+    ( cd "$OVERLAY_SRC" && find . -type f -print | sed 's|^\./||' \
+        | awk -v base="$OUT_SRC" -F/ '{
+              ss = $1 "/" $2;                         # e.g. main/java
+              rel = substr($0, length(ss) + 2);       # path after "main/java/"
+              printf "%s/%s\t%s\n", base, ss, rel;
+          }' \
         >> "$MANIFEST_FILE" )
 fi
 
-echo "  Overlaid hand-written Java source from overlay/java/$PACKAGE/ into $OUT_DIR/"
+echo "  Overlaid hand-written overlay source from overlay/java/$PACKAGE/ into $OUT_SRC/"

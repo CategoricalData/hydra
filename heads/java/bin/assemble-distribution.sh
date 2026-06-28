@@ -85,7 +85,7 @@ echo "Step 0: Copying hand-written Java overlay source into $PACKAGE dist (if an
 echo ""
 
 # Step 1: Main modules.
-if assemble_check_fresh "$INPUT_DIGEST_MAIN" "$OUT_MAIN_DIR" "$OUTPUT_DIGEST_MAIN"; then
+if assemble_check_fresh "$INPUT_DIGEST_MAIN" "$OUT_MAIN_DIR" "$OUTPUT_DIGEST_MAIN" "$KEEP_MANIFEST"; then
     echo "Step 1: Main modules unchanged; skipping main regeneration."
 else
     rm -f "$OUTPUT_DIGEST_MAIN"

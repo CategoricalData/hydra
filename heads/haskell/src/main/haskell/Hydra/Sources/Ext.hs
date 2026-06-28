@@ -210,7 +210,11 @@ extRoutingInput =
   , ("hydra-lisp",       map moduleName hydraLispModules)
   , ("hydra-pg",         map moduleName (hydraPgModules
                            ++ [GenPGTransform.module_]))
-  , ("hydra-python",     map moduleName hydraPythonModules)
+  -- hydra.python.pyproject is a build-config module authored in the hydra-python
+  -- package's native Python DSL (no Haskell Module value to reference, hence listed
+  -- by bare name), analogous to hydra.gradle above. Declared explicitly so the
+  -- fail-loud router routes it to hydra-python (#511).
+  , ("hydra-python",     map moduleName hydraPythonModules ++ [ModuleName "hydra.python.pyproject"])
   , ("hydra-rdf",        map moduleName hydraRdfModules)
   , ("hydra-scala",      map moduleName hydraScalaModules)
   , ("hydra-wasm",       map moduleName hydraWasmModules)

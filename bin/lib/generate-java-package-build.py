@@ -37,22 +37,64 @@ HOMEPAGE = "https://github.com/CategoricalData/hydra"
 SCM_CONNECTION = "scm:git://github.com/CategoricalData/hydra.git"
 GROUP_ID = "net.fortytwo.hydra"
 
-# Per-package external (non-Hydra) Maven dependencies. Cypher/GQL/RDF native
-# integrations live in heads/java but are not copied into per-package dists for
-# 0.15 (they belong in bindings/ once that subtree exists). So no external
-# Maven deps are needed yet.
-EXTERNAL_DEPS: dict[str, list[str]] = {}
+# Map a hydra.gradle DependencyScope variant tag to the Gradle dependency
+# configuration that realizes it. (#511) The build.json carries scope as a
+# single-key object, e.g. {"api": {}} / {"tool": {}}.
+SCOPE_TO_CONFIGURATION = {
+    "api": "api",
+    "runtime": "runtimeOnly",
+    "test": "testImplementation",
+    "tool": "antlr",  # the antlr plugin's build-tool configuration
+}
 
-# Per-package compileJava excludes. Empty for 0.15.
-COMPILE_EXCLUDES: dict[str, list[str]] = {}
+
+def load_overlay_build_config(repo_root: str, name: str) -> dict:
+    """Load overlay/java/<pkg>/build.json — the encoded hydra.gradle
+    GradleBuildConfiguration for this package (#511). Returns {} when absent
+    (most packages have no overlay build config).
+
+    INTERIM: this reads the JSON directly. The build.json format is the canonical
+    encoding of hydra.gradle.GradleBuildConfiguration (validated by round-trip);
+    when the build system is nativized (#416) this hand parse is replaced by the
+    generated hydra.decode.gradle decoder. The on-disk format does not change.
+    """
+    path = os.path.join(repo_root, "overlay", "java", name, "build.json")
+    if not os.path.isfile(path):
+        return {}
+    with open(path) as f:
+        return json.load(f)
 
 
-def render_build_gradle(name: str, description: str, version: str, deps: list[str]) -> str:
+def _scope_tag(scope_obj) -> str:
+    """The single variant key of an encoded DependencyScope, or 'api' if absent."""
+    if not scope_obj:
+        return "api"
+    return next(iter(scope_obj.keys()))
+
+
+def _version_string(version_obj) -> str:
+    """Extract the concrete version from an encoded VersionSpecifier.
+    {"exact": "5.0.2"} -> "5.0.2"; {"any": {}} -> "" (unpinned)."""
+    if "exact" in version_obj:
+        return version_obj["exact"]
+    return ""
+
+
+def render_build_gradle(name: str, description: str, version: str, deps: list[str],
+                        overlay: dict | None = None) -> str:
+    overlay = overlay or {}
     dep_lines = []
+    # Hydra inter-package deps (from package.json), always api-scoped.
     for dep in deps:
         dep_lines.append(f"    api '{GROUP_ID}:{dep}:{version}'")
-    for ext in EXTERNAL_DEPS.get(name, []):
-        dep_lines.append(f"    api '{ext}'")
+    # Third-party deps from the overlay build.json, scope-mapped (#511). Each is
+    # an encoded hydra.packaging.PackageDependency: {name, version, scope?}.
+    for d in overlay.get("dependencies", []):
+        coord = d["name"]
+        ver = _version_string(d.get("version", {}))
+        cfg = SCOPE_TO_CONFIGURATION.get(_scope_tag(d.get("scope")), "api")
+        suffix = f":{ver}" if ver else ""
+        dep_lines.append(f"    {cfg} '{coord}{suffix}'")
     deps_block = "\n".join(dep_lines) if dep_lines else "    // no Hydra inter-package dependencies"
 
     # The published Maven artifact is main only; the generated test tree
@@ -74,12 +116,44 @@ tasks.matching { it.name in ['compileTestJava', 'test', 'processTestResources'] 
     enabled = false
 }"""
 
-    excludes = COMPILE_EXCLUDES.get(name, [])
+    excludes = overlay.get("excludes", [])
     if excludes:
         exclude_lines = "\n".join(f"    exclude '{p}'" for p in excludes)
         compile_block = f"\n\ncompileJava {{\n{exclude_lines}\n}}"
     else:
         compile_block = ""
+
+    # Extra plugins from the overlay (e.g. "antlr"), applied after the base set.
+    overlay_plugins = overlay.get("plugins", [])
+    plugins_block = "".join(f"\n    id '{p}'" for p in overlay_plugins)
+
+    # Extra source dirs folded into the main source set (e.g. ANTLR output).
+    extra_src_dirs = overlay.get("extraSourceDirs", [])
+    if extra_src_dirs:
+        src_lines = "\n".join(
+            f'            srcDir file("$projectDir/{d}")' for d in extra_src_dirs)
+        source_sets_block = (
+            "\n\n// Extra source directories folded into the main source set (#511).\n"
+            "sourceSets {\n    main {\n        java {\n" + src_lines + "\n        }\n    }\n}")
+    else:
+        source_sets_block = ""
+
+    # ANTLR grammar generation, modeled structurally (#511) rather than as a raw
+    # Groovy fragment. Present when the package uses the antlr plugin.
+    antlr = overlay.get("antlr")
+    if antlr:
+        args = antlr.get("arguments", [])
+        out_dir = antlr.get("outputDirectory", "build/generated-src/antlr/main")
+        args_groovy = ", ".join(f"'{a}'" for a in args)
+        antlr_block = (
+            "\n\n// ANTLR grammar generation (from hydra.gradle AntlrConfig, #511).\n"
+            "compileJava.dependsOn generateGrammarSource\n"
+            "generateGrammarSource {\n"
+            f"    arguments += [{args_groovy}]\n"
+            f'    outputDirectory = file("$projectDir/{out_dir}")\n'
+            "}")
+    else:
+        antlr_block = ""
 
     return f"""// Generated file. Do not edit.
 // Regenerated by bin/lib/generate-java-package-build.py from packages/{name}/package.json
@@ -102,7 +176,7 @@ buildscript {{
 plugins {{
     id 'java-library'
     id 'maven-publish'
-    id 'signing'
+    id 'signing'{plugins_block}
 }}
 
 if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {{
@@ -141,7 +215,7 @@ dependencies {{
     if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {{
         nmcpAggregation project
     }}
-}}{compile_block}{test_task_block}
+}}{compile_block}{source_sets_block}{antlr_block}{test_task_block}
 
 publishing {{
     publications {{
@@ -269,8 +343,10 @@ def main() -> int:
     build_path = os.path.join(out_dir, "build.gradle")
     settings_path = os.path.join(out_dir, "settings.gradle")
 
+    overlay = load_overlay_build_config(args.repo_root, args.package)
+
     with open(build_path, "w") as f:
-        f.write(render_build_gradle(pkg_name, description, version, deps))
+        f.write(render_build_gradle(pkg_name, description, version, deps, overlay))
     with open(settings_path, "w") as f:
         f.write(render_settings_gradle(pkg_name))
 

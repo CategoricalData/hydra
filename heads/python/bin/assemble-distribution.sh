@@ -66,28 +66,23 @@ source "$HYDRA_ROOT_DIR/bin/lib/assemble-common.sh"
 # Per-target generator stamp; see assemble-common.sh and #347.
 export HYDRA_GENERATOR_STAMP=$(compute_generator_stamp python)
 
-# Step 0 (hydra-kernel only): drop hand-written runtime files BEFORE
-# generation, recording them in a keep-paths manifest so #357 prune in
-# bootstrap-from-json --prune-stale below won't remove them. Was Step
-# 3a/3b in the pre-#357 layout.
+# Step 0: copy any hand-written Python overlay source for this package BEFORE
+# generation, recording the copied files in a keep-paths manifest so #357 prune
+# in bootstrap-from-json --prune-stale below won't remove them. Was Step 3a/3b in
+# the pre-#357 layout.
+#
+# Generalized from the kernel-only runtime copy (#418) to any package (#511):
+# copy-overlay.sh is a no-op for packages with no overlay/python/<pkg>/ tree, and
+# copies the overlay onto the dist for those that have one (hydra-kernel runtime;
+# hydra-pg / hydra-rdf binding source folded into overlay; etc.).
 KEEP_MANIFEST="$(mktemp -t hydra-keep-paths-python.XXXXXX)"
 trap 'rm -f "$KEEP_MANIFEST"' EXIT
-case "$PACKAGE" in
-    hydra-kernel)
-        # Copy the hand-written Python kernel runtime (and the test bridge
-        # hydra/test/test_env.py) from the overlay tree into dist/. The generated
-        # test_graph.py imports hydra.test.test_env, which must resolve under the
-        # dist tree at test time; per #434 the bridge lives in
-        # overlay/python/hydra-kernel/src/test/python/ and is copied by
-        # copy-kernel-runtime.sh, the only reader of overlay/.
-        echo "Step 0: Copying hand-written Python runtime into hydra-kernel dist..."
-        "$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT" --manifest "$KEEP_MANIFEST"
-        echo ""
-        ;;
-esac
+echo "Step 0: Copying hand-written Python overlay source into $PACKAGE dist (if any)..."
+"$SCRIPT_DIR/copy-overlay.sh" "$PACKAGE" --dist-root "$DIST_ROOT" --manifest "$KEEP_MANIFEST"
+echo ""
 
 # Step 1: Main modules.
-if assemble_check_fresh "$INPUT_DIGEST_MAIN" "$OUT_MAIN" "$OUTPUT_DIGEST_MAIN"; then
+if assemble_check_fresh "$INPUT_DIGEST_MAIN" "$OUT_MAIN" "$OUTPUT_DIGEST_MAIN" "$KEEP_MANIFEST"; then
     echo "Step 1: Main modules unchanged; skipping main regeneration."
 else
     rm -f "$OUTPUT_DIGEST_MAIN"
