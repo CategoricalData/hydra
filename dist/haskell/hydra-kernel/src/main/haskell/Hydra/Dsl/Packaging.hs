@@ -1502,6 +1502,66 @@ version x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.packaging.Version"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+-- | DSL constructor for hydra.packaging.VersionRange
+versionRange :: Typed.TypedTerm (Maybe Packaging.Version) -> Typed.TypedTerm (Maybe Packaging.Version) -> Typed.TypedTerm Packaging.VersionRange
+versionRange lowerInclusive upperExclusive =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.VersionRange"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "lowerInclusive"),
+          Core.fieldTerm = (Typed.unTypedTerm lowerInclusive)},
+        Core.Field {
+          Core.fieldName = (Core.Name "upperExclusive"),
+          Core.fieldTerm = (Typed.unTypedTerm upperExclusive)}]}))
+-- | DSL accessor for the lowerInclusive field of hydra.packaging.VersionRange
+versionRangeLowerInclusive :: Typed.TypedTerm Packaging.VersionRange -> Typed.TypedTerm (Maybe Packaging.Version)
+versionRangeLowerInclusive x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.packaging.VersionRange"),
+        Core.projectionFieldName = (Core.Name "lowerInclusive")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL accessor for the upperExclusive field of hydra.packaging.VersionRange
+versionRangeUpperExclusive :: Typed.TypedTerm Packaging.VersionRange -> Typed.TypedTerm (Maybe Packaging.Version)
+versionRangeUpperExclusive x =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.packaging.VersionRange"),
+        Core.projectionFieldName = (Core.Name "upperExclusive")})),
+      Core.applicationArgument = (Typed.unTypedTerm x)}))
+-- | DSL updater for the lowerInclusive field of hydra.packaging.VersionRange
+versionRangeWithLowerInclusive :: Typed.TypedTerm Packaging.VersionRange -> Typed.TypedTerm (Maybe Packaging.Version) -> Typed.TypedTerm Packaging.VersionRange
+versionRangeWithLowerInclusive original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.VersionRange"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "lowerInclusive"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "upperExclusive"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.VersionRange"),
+              Core.projectionFieldName = (Core.Name "upperExclusive")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+-- | DSL updater for the upperExclusive field of hydra.packaging.VersionRange
+versionRangeWithUpperExclusive :: Typed.TypedTerm Packaging.VersionRange -> Typed.TypedTerm (Maybe Packaging.Version) -> Typed.TypedTerm Packaging.VersionRange
+versionRangeWithUpperExclusive original newVal =
+    Typed.TypedTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.VersionRange"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "lowerInclusive"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.VersionRange"),
+              Core.projectionFieldName = (Core.Name "lowerInclusive")})),
+            Core.applicationArgument = (Typed.unTypedTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "upperExclusive"),
+          Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 -- | DSL injection for the any variant of hydra.packaging.VersionSpecifier
 versionSpecifierAny :: Typed.TypedTerm Packaging.VersionSpecifier
 versionSpecifierAny =
@@ -1510,6 +1570,14 @@ versionSpecifierAny =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "any"),
         Core.fieldTerm = Core.TermUnit}}))
+-- | DSL injection for the atLeast variant of hydra.packaging.VersionSpecifier
+versionSpecifierAtLeast :: Typed.TypedTerm Packaging.Version -> Typed.TypedTerm Packaging.VersionSpecifier
+versionSpecifierAtLeast x =
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.packaging.VersionSpecifier"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "atLeast"),
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL injection for the exact variant of hydra.packaging.VersionSpecifier
 versionSpecifierExact :: Typed.TypedTerm Packaging.Version -> Typed.TypedTerm Packaging.VersionSpecifier
 versionSpecifierExact x =
@@ -1517,4 +1585,12 @@ versionSpecifierExact x =
       Core.injectionTypeName = (Core.Name "hydra.packaging.VersionSpecifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "exact"),
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
+-- | DSL injection for the range variant of hydra.packaging.VersionSpecifier
+versionSpecifierRange :: Typed.TypedTerm Packaging.VersionRange -> Typed.TypedTerm Packaging.VersionSpecifier
+versionSpecifierRange x =
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.packaging.VersionSpecifier"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "range"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))

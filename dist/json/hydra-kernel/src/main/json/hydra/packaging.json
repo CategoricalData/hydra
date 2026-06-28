@@ -630,6 +630,40 @@
                   {"key": {"variable": "description"}, "value": {"literal": {"string": "A version string, e.g. \"0.15\" or \"1.0.0\"."}}}]}}}}}},
     {
       "type": {
+        "name": "hydra.packaging.VersionRange",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "lowerInclusive",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.packaging.Version"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The inclusive lower bound, if any (the minimum acceptable version)."}}}]}}}},
+                  {
+                    "name": "upperExclusive",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.packaging.Version"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The exclusive upper bound, if any (versions strictly below this are acceptable)."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A version range with an optional inclusive lower bound and an optional exclusive upper bound."}}}]}}}}}},
+    {
+      "type": {
         "name": "hydra.packaging.VersionSpecifier",
         "body": {
           "variables": [],
@@ -653,11 +687,33 @@
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Exactly the given version satisfies the dependency; used to pin a specific release"}}}]}}}}]},
+                              "value": {"literal": {"string": "Exactly the given version satisfies the dependency; used to pin a specific release"}}}]}}}},
+                  {
+                    "name": "atLeast",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.packaging.Version"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Any version greater than or equal to the given version (e.g. PyPI \">=7.0\")"}}}]}}}},
+                  {
+                    "name": "range",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.packaging.VersionRange"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "A version range with an optional inclusive lower bound and optional exclusive upper bound (e.g. \">=3.7,<4.0\")"}}}]}}}}]},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A specifier constraining acceptable versions of a dependency. The `any` and `exact` variants are defined; future variants such as `caret` and `range` may be added without breaking consumers of the existing forms."}}}]}}}}}}]}
+                        "string": "A specifier constraining acceptable versions of a dependency. Build systems render each variant into their own syntax (e.g. a range becomes \">=3.7,<4.0\" for PyPI or \"[3.7,4.0)\" for Maven). Further variants such as `caret` may be added without breaking consumers of the existing forms."}}}]}}}}}}]}

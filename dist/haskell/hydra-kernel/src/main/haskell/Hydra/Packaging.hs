@@ -220,13 +220,30 @@ newtype Version =
     unVersion :: String}
   deriving (Eq, Ord, Read, Show)
 _Version = Core.Name "hydra.packaging.Version"
--- | A specifier constraining acceptable versions of a dependency. The `any` and `exact` variants are defined; future variants such as `caret` and `range` may be added without breaking consumers of the existing forms.
+-- | A version range with an optional inclusive lower bound and an optional exclusive upper bound.
+data VersionRange =
+  VersionRange {
+    -- | The inclusive lower bound, if any (the minimum acceptable version).
+    versionRangeLowerInclusive :: (Maybe Version),
+    -- | The exclusive upper bound, if any (versions strictly below this are acceptable).
+    versionRangeUpperExclusive :: (Maybe Version)}
+  deriving (Eq, Ord, Read, Show)
+_VersionRange = Core.Name "hydra.packaging.VersionRange"
+_VersionRange_lowerInclusive = Core.Name "lowerInclusive"
+_VersionRange_upperExclusive = Core.Name "upperExclusive"
+-- | A specifier constraining acceptable versions of a dependency. Build systems render each variant into their own syntax (e.g. a range becomes ">=3.7,<4.0" for PyPI or "[3.7,4.0)" for Maven). Further variants such as `caret` may be added without breaking consumers of the existing forms.
 data VersionSpecifier =
   -- | Any version satisfies the dependency
   VersionSpecifierAny |
   -- | Exactly the given version satisfies the dependency; used to pin a specific release
-  VersionSpecifierExact Version
+  VersionSpecifierExact Version |
+  -- | Any version greater than or equal to the given version (e.g. PyPI ">=7.0")
+  VersionSpecifierAtLeast Version |
+  -- | A version range with an optional inclusive lower bound and optional exclusive upper bound (e.g. ">=3.7,<4.0")
+  VersionSpecifierRange VersionRange
   deriving (Eq, Ord, Read, Show)
 _VersionSpecifier = Core.Name "hydra.packaging.VersionSpecifier"
 _VersionSpecifier_any = Core.Name "any"
 _VersionSpecifier_exact = Core.Name "exact"
+_VersionSpecifier_atLeast = Core.Name "atLeast"
+_VersionSpecifier_range = Core.Name "range"

@@ -10,6 +10,18 @@ import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
 import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | Encoder for hydra.gradle.AntlrConfig
+antlrConfig :: Gradle.AntlrConfig -> Core.Term
+antlrConfig x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.gradle.AntlrConfig"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "arguments"),
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) xs)) (Gradle.antlrConfigArguments x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "outputDirectory"),
+          Core.fieldTerm = (File.filePath (Gradle.antlrConfigOutputDirectory x))}]})
 -- | Encoder for hydra.gradle.GradleBuildConfiguration
 gradleBuildConfiguration :: Gradle.GradleBuildConfiguration -> Core.Term
 gradleBuildConfiguration x =
@@ -29,5 +41,5 @@ gradleBuildConfiguration x =
           Core.fieldName = (Core.Name "plugins"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) xs)) (Gradle.gradleBuildConfigurationPlugins x))},
         Core.Field {
-          Core.fieldName = (Core.Name "raw"),
-          Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Gradle.gradleBuildConfigurationRaw x))}]})
+          Core.fieldName = (Core.Name "antlr"),
+          Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map antlrConfig opt)) (Gradle.gradleBuildConfigurationAntlr x))}]})

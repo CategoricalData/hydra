@@ -2669,6 +2669,30 @@ typesByName =
               Core.TermVariable (Core.Name "description"),
               (Core.TermLiteral (Core.LiteralString "A version string, e.g. \"0.15\" or \"1.0.0\".")))]))}))),
       (
+        Core.Name "hydra.packaging.VersionRange",
+        (Core.TypeAnnotated (Core.AnnotatedType {
+          Core.annotatedTypeBody = (Core.TypeRecord [
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "lowerInclusive"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeOptional (Core.TypeVariable (Core.Name "hydra.packaging.Version"))),
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "The inclusive lower bound, if any (the minimum acceptable version).")))]))}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "upperExclusive"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeOptional (Core.TypeVariable (Core.Name "hydra.packaging.Version"))),
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "The exclusive upper bound, if any (versions strictly below this are acceptable).")))]))}))}]),
+          Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+            (
+              Core.TermVariable (Core.Name "description"),
+              (Core.TermLiteral (Core.LiteralString "A version range with an optional inclusive lower bound and an optional exclusive upper bound.")))]))}))),
+      (
         Core.Name "hydra.packaging.VersionSpecifier",
         (Core.TypeAnnotated (Core.AnnotatedType {
           Core.annotatedTypeBody = (Core.TypeUnion [
@@ -2685,11 +2709,27 @@ typesByName =
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (
                     Core.TermVariable (Core.Name "description"),
-                    (Core.TermLiteral (Core.LiteralString "Exactly the given version satisfies the dependency; used to pin a specific release")))]))}))}]),
+                    (Core.TermLiteral (Core.LiteralString "Exactly the given version satisfies the dependency; used to pin a specific release")))]))}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "atLeast"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.packaging.Version")),
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "Any version greater than or equal to the given version (e.g. PyPI \">=7.0\")")))]))}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "range"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.packaging.VersionRange")),
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "A version range with an optional inclusive lower bound and optional exclusive upper bound (e.g. \">=3.7,<4.0\")")))]))}))}]),
           Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
             (
               Core.TermVariable (Core.Name "description"),
-              (Core.TermLiteral (Core.LiteralString "A specifier constraining acceptable versions of a dependency. The `any` and `exact` variants are defined; future variants such as `caret` and `range` may be added without breaking consumers of the existing forms.")))]))}))),
+              (Core.TermLiteral (Core.LiteralString "A specifier constraining acceptable versions of a dependency. Build systems render each variant into their own syntax (e.g. a range becomes \">=3.7,<4.0\" for PyPI or \"[3.7,4.0)\" for Maven). Further variants such as `caret` may be added without breaking consumers of the existing forms.")))]))}))),
       (
         Core.Name "hydra.typing.FunctionStructure",
         (Core.TypeAnnotated (Core.AnnotatedType {

@@ -245,6 +245,16 @@ version cx raw =
           _ -> Left (Errors.DecodingError "expected string literal")
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.packaging.VersionRange
+versionRange :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.VersionRange
+versionRange cx raw =
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermRecord v0 ->
+        let fieldMap = ExtractCore.toFieldMap v0
+        in (Eithers.bind (ExtractCore.requireField "lowerInclusive" (ExtractCore.decodeMaybe version) fieldMap cx) (\field_lowerInclusive -> Eithers.bind (ExtractCore.requireField "upperExclusive" (ExtractCore.decodeMaybe version) fieldMap cx) (\field_upperExclusive -> Right (Packaging.VersionRange {
+          Packaging.versionRangeLowerInclusive = field_lowerInclusive,
+          Packaging.versionRangeUpperExclusive = field_upperExclusive}))))
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.packaging.VersionRange")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.packaging.VersionSpecifier
 versionSpecifier :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.VersionSpecifier
 versionSpecifier cx raw =
@@ -256,7 +266,9 @@ versionSpecifier cx raw =
             variantMap =
                     Maps.fromList [
                       (Core.Name "any", (\input -> Eithers.map (\t -> Packaging.VersionSpecifierAny) (ExtractCore.decodeUnit cx input))),
-                      (Core.Name "exact", (\input -> Eithers.map (\t -> Packaging.VersionSpecifierExact t) (version cx input)))]
+                      (Core.Name "exact", (\input -> Eithers.map (\t -> Packaging.VersionSpecifierExact t) (version cx input))),
+                      (Core.Name "atLeast", (\input -> Eithers.map (\t -> Packaging.VersionSpecifierAtLeast t) (version cx input))),
+                      (Core.Name "range", (\input -> Eithers.map (\t -> Packaging.VersionSpecifierRange t) (versionRange cx input)))]
         in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),

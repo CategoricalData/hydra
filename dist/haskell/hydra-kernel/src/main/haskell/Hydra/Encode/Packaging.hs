@@ -259,6 +259,18 @@ version x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.packaging.Version"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Packaging.unVersion x))})
+-- | Encoder for hydra.packaging.VersionRange
+versionRange :: Packaging.VersionRange -> Core.Term
+versionRange x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.VersionRange"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "lowerInclusive"),
+          Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map version opt)) (Packaging.versionRangeLowerInclusive x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "upperExclusive"),
+          Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map version opt)) (Packaging.versionRangeUpperExclusive x))}]})
 -- | Encoder for hydra.packaging.VersionSpecifier
 versionSpecifier :: Packaging.VersionSpecifier -> Core.Term
 versionSpecifier x =
@@ -273,3 +285,13 @@ versionSpecifier x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "exact"),
           Core.fieldTerm = (version v0)}})
+      Packaging.VersionSpecifierAtLeast v0 -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.packaging.VersionSpecifier"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "atLeast"),
+          Core.fieldTerm = (version v0)}})
+      Packaging.VersionSpecifierRange v0 -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.packaging.VersionSpecifier"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "range"),
+          Core.fieldTerm = (versionRange v0)}})

@@ -1,0 +1,14 @@
+{
+  "name": "hydra.python.pyproject",
+  "metadata": {
+    "description": "Build configuration for PEP 621 (pyproject.toml) Python distribution packages.",
+    "comments": [],
+    "seeAlso": []},
+  "dependencies": [{"module": "hydra.packaging"}],
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.python.pyproject.PyProjectBuildConfiguration",
+        "body": {
+          "variables": [],
+          "body": {"record": [{"name": "dependencies", "type": {"list": {"variable": "hydra.packaging.PackageDependency"}}}]}}}}]}

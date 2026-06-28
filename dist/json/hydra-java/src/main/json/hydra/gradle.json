@@ -5,6 +5,44 @@
   "definitions": [
     {
       "type": {
+        "name": "hydra.gradle.AntlrConfig",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "arguments",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"literal": {"string": {}}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "Arguments passed to the ANTLR tool, e.g. [\"-visitor\"] or [\"-visitor\", \"-listener\"]. Faithful to ANTLR's command-line interface; covers all ANTLR flags without enumerating them."}}}]}}}},
+                  {
+                    "name": "outputDirectory",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.file.FilePath"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "Directory into which ANTLR emits generated lexer/parser sources, relative to the package root (e.g. \"build/generated-src/antlr/main\"). The host also folds this into the main source set."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Configuration for the Gradle antlr plugin's grammar generation (generateGrammarSource)."}}}]}}}}}},
+    {
+      "type": {
         "name": "hydra.gradle.GradleBuildConfiguration",
         "body": {
           "variables": [],
@@ -57,17 +95,17 @@
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "Gradle plugin identifiers to apply to the build, e.g. \"antlr\". Applied in the given order."}}}]}}}},
                   {
-                    "name": "raw",
+                    "name": "antlr",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"variable": "hydra.gradle.AntlrConfig"}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
                               "value": {
                                 "literal": {
-                                  "string": "An optional fragment of host-native build configuration (Groovy) spliced verbatim into the generated build script, for imperative needs that the structured fields above cannot express (e.g. configuring a code-generation task). Opaque to Hydra; preferred only when no structured field applies."}}}]}}}}]},
+                                  "string": "ANTLR grammar-generation configuration, present when the package uses the antlr plugin. When given, the host emits the generateGrammarSource configuration and the compileJava-depends-on-generateGrammarSource ordering. Modeled as structured vocabulary rather than a raw Groovy fragment."}}}]}}}}]},
               "annotation": {
                 "map": [
                   {
