@@ -37,7 +37,7 @@
                                         "name": "isLossy",
                                         "type": {
                                           "annotated": {
-                                            "body": {"literal": {"boolean": {}}},
+                                            "body": {"literal": "boolean"},
                                             "annotation": {
                                               "map": [
                                                 {
@@ -351,7 +351,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"union": [{"name": "encode", "type": {"unit": {}}}, {"name": "decode", "type": {"unit": {}}}]},
+              "body": {"union": [{"name": "encode", "type": "unit"}, {"name": "decode", "type": "unit"}]},
               "annotation": {
                 "map": [
                   {
@@ -463,7 +463,7 @@
                     "name": "types",
                     "type": {
                       "annotated": {
-                        "body": {"function": {"domain": {"variable": "hydra.core.Type"}, "codomain": {"literal": {"boolean": {}}}}},
+                        "body": {"function": {"domain": {"variable": "hydra.core.Type"}, "codomain": {"literal": "boolean"}}},
                         "annotation": {
                           "map": [
                             {
@@ -487,7 +487,7 @@
                     "name": "partialApplication",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -499,7 +499,7 @@
                     "name": "nestedCaseStatements",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -511,7 +511,7 @@
                     "name": "nestedPolymorphicLetBindings",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -533,7 +533,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique name of a language"}}}]}}}}}},
     {
       "type": {
@@ -582,13 +582,13 @@
                     "name": "pre",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Pre-order traversal"}}}]}}}},
                   {
                     "name": "post",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Post-order traversal"}}}]}}}}]},
               "annotation": {
                 "map": [
@@ -610,7 +610,7 @@
                       "domain": {"variable": "hydra.core.Type"},
                       "codomain": {
                         "either": {
-                          "left": {"literal": {"string": {}}},
+                          "left": {"literal": "string"},
                           "right": {
                             "application": {
                               "function": {
@@ -618,7 +618,7 @@
                                   "function": {
                                     "application": {"function": {"variable": "hydra.coders.SymmetricAdapter"}, "argument": {"variable": "hydra.core.Type"}}},
                                   "argument": {"variable": "hydra.core.Term"}}},
-                              "argument": {"literal": {"string": {}}}}}}}}}}},
+                              "argument": {"literal": "string"}}}}}}}}},
               "annotation": {
                 "map": [
                   {

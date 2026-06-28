@@ -705,13 +705,13 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"unit": {}}}},
+                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": "unit"}},
                                                                                                 "type": {"variable": "hydra.packaging.DependencyScope"}}},
                                                                                             "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                         "argument": {
                                                                                           "lambda": {
                                                                                             "parameter": "t",
-                                                                                            "domain": {"unit": {}},
+                                                                                            "domain": "unit",
                                                                                             "body": {"inject": {"typeName": "hydra.packaging.DependencyScope", "field": {"name": "api", "term": {"variable": "t"}}}}}}}},
                                                                                     "argument": {
                                                                                       "application": {
@@ -756,13 +756,13 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"unit": {}}}},
+                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": "unit"}},
                                                                                                 "type": {"variable": "hydra.packaging.DependencyScope"}}},
                                                                                             "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                         "argument": {
                                                                                           "lambda": {
                                                                                             "parameter": "t",
-                                                                                            "domain": {"unit": {}},
+                                                                                            "domain": "unit",
                                                                                             "body": {"inject": {"typeName": "hydra.packaging.DependencyScope", "field": {"name": "runtime", "term": {"variable": "t"}}}}}}}},
                                                                                     "argument": {
                                                                                       "application": {
@@ -807,13 +807,13 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"unit": {}}}},
+                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": "unit"}},
                                                                                                 "type": {"variable": "hydra.packaging.DependencyScope"}}},
                                                                                             "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                         "argument": {
                                                                                           "lambda": {
                                                                                             "parameter": "t",
-                                                                                            "domain": {"unit": {}},
+                                                                                            "domain": "unit",
                                                                                             "body": {"inject": {"typeName": "hydra.packaging.DependencyScope", "field": {"name": "test", "term": {"variable": "t"}}}}}}}},
                                                                                     "argument": {
                                                                                       "application": {
@@ -858,13 +858,13 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"unit": {}}}},
+                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": "unit"}},
                                                                                                 "type": {"variable": "hydra.packaging.DependencyScope"}}},
                                                                                             "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                         "argument": {
                                                                                           "lambda": {
                                                                                             "parameter": "t",
-                                                                                            "domain": {"unit": {}},
+                                                                                            "domain": "unit",
                                                                                             "body": {"inject": {"typeName": "hydra.packaging.DependencyScope", "field": {"name": "tool", "term": {"variable": "t"}}}}}}}},
                                                                                     "argument": {
                                                                                       "application": {

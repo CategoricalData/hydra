@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term encoders for hydra.gradle
 
 module Hydra.Encode.Gradle where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.File as File
 import qualified Hydra.Encode.Packaging as Packaging
@@ -10,6 +12,7 @@ import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
 import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Encoder for hydra.gradle.AntlrConfig
 antlrConfig :: Gradle.AntlrConfig -> Core.Term
 antlrConfig x =
@@ -22,6 +25,7 @@ antlrConfig x =
         Core.Field {
           Core.fieldName = (Core.Name "outputDirectory"),
           Core.fieldTerm = (File.filePath (Gradle.antlrConfigOutputDirectory x))}]})
+
 -- | Encoder for hydra.gradle.GradleBuildConfiguration
 gradleBuildConfiguration :: Gradle.GradleBuildConfiguration -> Core.Term
 gradleBuildConfiguration x =

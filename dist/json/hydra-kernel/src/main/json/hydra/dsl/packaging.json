@@ -416,7 +416,7 @@
                                   "typeName": "hydra.core.Field",
                                   "fields": [
                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "api"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -455,7 +455,7 @@
                                   "typeName": "hydra.core.Field",
                                   "fields": [
                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "runtime"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -494,7 +494,7 @@
                                   "typeName": "hydra.core.Field",
                                   "fields": [
                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "test"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -533,7 +533,7 @@
                                   "typeName": "hydra.core.Field",
                                   "fields": [
                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "tool"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {

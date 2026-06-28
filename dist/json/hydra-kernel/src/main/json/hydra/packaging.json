@@ -84,7 +84,7 @@
                     "name": "api",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -96,7 +96,7 @@
                     "name": "runtime",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -106,7 +106,7 @@
                     "name": "test",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -116,7 +116,7 @@
                     "name": "tool",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
