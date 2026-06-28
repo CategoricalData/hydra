@@ -16,7 +16,7 @@
               "body": {
                 "record": [
                   {"name": "elementType", "type": {"variable": "hydra.delta.parquet.DataType"}},
-                  {"name": "containsNull", "type": {"literal": {"boolean": {}}}}]},
+                  {"name": "containsNull", "type": {"literal": "boolean"}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Represent array data type."}}}]}}}}}},
     {
       "type": {
@@ -31,28 +31,28 @@
                     "name": "binary",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The data type representing byte[] values."}}}]}}}},
                   {
                     "name": "boolean",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Data type representing boolean type values."}}}]}}}},
                   {
                     "name": "byte",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The data type representing byte type values."}}}]}}}},
                   {
                     "name": "date",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -64,7 +64,7 @@
                     "name": "double",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {"key": {"variable": "description"}, "value": {"literal": {"string": "The data type representing double type values."}}}]}}}},
@@ -72,7 +72,7 @@
                     "name": "float",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {"key": {"variable": "description"}, "value": {"literal": {"string": "The data type representing float type values."}}}]}}}},
@@ -80,7 +80,7 @@
                     "name": "integer",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -90,14 +90,14 @@
                     "name": "long",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The data type representing long type values."}}}]}}}},
                   {
                     "name": "short",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {"key": {"variable": "description"}, "value": {"literal": {"string": "The data type representing short type values."}}}]}}}},
@@ -105,7 +105,7 @@
                     "name": "string",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {"key": {"variable": "description"}, "value": {"literal": {"string": "The data type representing string type values."}}}]}}}},
@@ -113,7 +113,7 @@
                     "name": "timestamp",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -174,8 +174,8 @@
             "annotated": {
               "body": {
                 "record": [
-                  {"name": "precision", "type": {"literal": {"integer": {"int32": {}}}}},
-                  {"name": "scale", "type": {"literal": {"integer": {"int32": {}}}}}]},
+                  {"name": "precision", "type": {"literal": {"integer": "int32"}}},
+                  {"name": "scale", "type": {"literal": {"integer": "int32"}}}]},
               "annotation": {
                 "map": [
                   {
@@ -194,7 +194,7 @@
                 "record": [
                   {"name": "keyType", "type": {"variable": "hydra.delta.parquet.DataType"}},
                   {"name": "valueType", "type": {"variable": "hydra.delta.parquet.DataType"}},
-                  {"name": "valueContainsNull", "type": {"literal": {"boolean": {}}}}]},
+                  {"name": "valueContainsNull", "type": {"literal": "boolean"}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Data type representing a map type."}}}]}}}}}},
     {
       "type": {
@@ -205,9 +205,9 @@
             "annotated": {
               "body": {
                 "record": [
-                  {"name": "name", "type": {"literal": {"string": {}}}},
+                  {"name": "name", "type": {"literal": "string"}},
                   {"name": "dataType", "type": {"variable": "hydra.delta.parquet.DataType"}},
-                  {"name": "nullable", "type": {"literal": {"boolean": {}}}}]},
+                  {"name": "nullable", "type": {"literal": "boolean"}}]},
               "annotation": {
                 "map": [
                   {

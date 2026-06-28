@@ -1177,7 +1177,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"string": {}}},
+                      "body": {"literal": "string"},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable label for the node"}}}]}}}}},
               "isLazy": false},
             {
@@ -1187,7 +1187,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"string": {}}},
+                      "body": {"literal": "string"},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unique identifier for the node"}}}]}}}}},
               "isLazy": false}],
           "result": {
@@ -1213,7 +1213,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"literal": {"string": {}}},
+                            "body": {"literal": "string"},
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable label for the node"}}}]}}}}},
                     "body": {
                       "lambda": {
@@ -1223,7 +1223,7 @@
                             "function": {"variable": "hydra.typed.TypedTerm"},
                             "argument": {
                               "annotated": {
-                                "body": {"literal": {"string": {}}},
+                                "body": {"literal": "string"},
                                 "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unique identifier for the node"}}}]}}}}},
                         "body": {
                           "wrap": {
@@ -1348,7 +1348,7 @@
                 "function": {"variable": "hydra.typed.TypedTerm"},
                 "argument": {
                   "annotated": {
-                    "body": {"literal": {"string": {}}},
+                    "body": {"literal": "string"},
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable label for the node"}}}]}}}}}}},
         "body": {
           "annotated": {
@@ -1409,7 +1409,7 @@
                 "function": {"variable": "hydra.typed.TypedTerm"},
                 "argument": {
                   "annotated": {
-                    "body": {"literal": {"string": {}}},
+                    "body": {"literal": "string"},
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unique identifier for the node"}}}]}}}}}}},
         "body": {
           "annotated": {
@@ -1612,7 +1612,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"string": {}}},
+                      "body": {"literal": "string"},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable label for the node"}}}]}}}}},
               "isLazy": false}],
           "result": {
@@ -1633,7 +1633,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"literal": {"string": {}}},
+                            "body": {"literal": "string"},
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable label for the node"}}}]}}}}},
                     "body": {
                       "wrap": {
@@ -1753,7 +1753,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"string": {}}},
+                      "body": {"literal": "string"},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unique identifier for the node"}}}]}}}}},
               "isLazy": false}],
           "result": {
@@ -1774,7 +1774,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"literal": {"string": {}}},
+                            "body": {"literal": "string"},
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unique identifier for the node"}}}]}}}}},
                     "body": {
                       "wrap": {
@@ -2002,7 +2002,7 @@
                                   "typeName": "hydra.core.Field",
                                   "fields": [
                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "annotatedBody"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -2043,7 +2043,7 @@
                                     {
                                       "name": "name",
                                       "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "applicationFunction"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -2084,7 +2084,7 @@
                                     {
                                       "name": "name",
                                       "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "applicationArgument"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -2123,7 +2123,7 @@
                                   "typeName": "hydra.core.Field",
                                   "fields": [
                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "lambdaBody"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -2164,7 +2164,7 @@
                                     {
                                       "name": "name",
                                       "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "unionCasesDefault"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -2272,7 +2272,7 @@
                                   "typeName": "hydra.core.Field",
                                   "fields": [
                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "letBody"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -2360,7 +2360,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"integer": {"int32": {}}}},
+                      "body": {"literal": {"integer": "int32"}},
                       "annotation": {
                         "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access an element of a list by index"}}}]}}}}},
               "isLazy": false}],
@@ -2377,7 +2377,7 @@
                     "function": {"variable": "hydra.typed.TypedTerm"},
                     "argument": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access an element of a list by index"}}}]}}}}},
                 "body": {
@@ -2423,7 +2423,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"integer": {"int32": {}}}},
+                      "body": {"literal": {"integer": "int32"}},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access a key in a map by index"}}}]}}}}},
               "isLazy": false}],
           "result": {
@@ -2439,7 +2439,7 @@
                     "function": {"variable": "hydra.typed.TypedTerm"},
                     "argument": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access a key in a map by index"}}}]}}}}},
                 "body": {
                   "wrap": {
@@ -2484,7 +2484,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"integer": {"int32": {}}}},
+                      "body": {"literal": {"integer": "int32"}},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access a value in a map by index"}}}]}}}}},
               "isLazy": false}],
           "result": {
@@ -2500,7 +2500,7 @@
                     "function": {"variable": "hydra.typed.TypedTerm"},
                     "argument": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access a value in a map by index"}}}]}}}}},
                 "body": {
                   "wrap": {
@@ -2565,7 +2565,7 @@
                                   "typeName": "hydra.core.Field",
                                   "fields": [
                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "optionalTerm"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -2584,7 +2584,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"integer": {"int32": {}}}},
+                      "body": {"literal": {"integer": "int32"}},
                       "annotation": {
                         "map": [
                           {
@@ -2604,7 +2604,7 @@
                     "function": {"variable": "hydra.typed.TypedTerm"},
                     "argument": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {
                           "map": [
                             {
@@ -2716,7 +2716,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"integer": {"int32": {}}}},
+                      "body": {"literal": {"integer": "int32"}},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access an element of a set by index"}}}]}}}}},
               "isLazy": false}],
           "result": {
@@ -2732,7 +2732,7 @@
                     "function": {"variable": "hydra.typed.TypedTerm"},
                     "argument": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access an element of a set by index"}}}]}}}}},
                 "body": {
                   "wrap": {
@@ -2797,7 +2797,7 @@
                                   "typeName": "hydra.core.Field",
                                   "fields": [
                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "sumTerm"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -2836,7 +2836,7 @@
                                   "typeName": "hydra.core.Field",
                                   "fields": [
                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "typeLambdaBody"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -2877,7 +2877,7 @@
                                     {
                                       "name": "name",
                                       "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "typeApplicationTerm"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -2916,7 +2916,7 @@
                                   "typeName": "hydra.core.Field",
                                   "fields": [
                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "injectionTerm"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -2955,7 +2955,7 @@
                                   "typeName": "hydra.core.Field",
                                   "fields": [
                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "wrappedTerm"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -4135,7 +4135,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"string": {}}},
+                      "body": {"literal": "string"},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable label for the node"}}}]}}}}},
               "isLazy": false},
             {
@@ -4145,7 +4145,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"string": {}}},
+                      "body": {"literal": "string"},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unique identifier for the node"}}}]}}}}},
               "isLazy": false}],
           "result": {
@@ -4171,7 +4171,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"literal": {"string": {}}},
+                            "body": {"literal": "string"},
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable label for the node"}}}]}}}}},
                     "body": {
                       "lambda": {
@@ -4181,7 +4181,7 @@
                             "function": {"variable": "hydra.typed.TypedTerm"},
                             "argument": {
                               "annotated": {
-                                "body": {"literal": {"string": {}}},
+                                "body": {"literal": "string"},
                                 "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unique identifier for the node"}}}]}}}}},
                         "body": {
                           "wrap": {
@@ -4306,7 +4306,7 @@
                 "function": {"variable": "hydra.typed.TypedTerm"},
                 "argument": {
                   "annotated": {
-                    "body": {"literal": {"string": {}}},
+                    "body": {"literal": "string"},
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable label for the node"}}}]}}}}}}},
         "body": {
           "annotated": {
@@ -4367,7 +4367,7 @@
                 "function": {"variable": "hydra.typed.TypedTerm"},
                 "argument": {
                   "annotated": {
-                    "body": {"literal": {"string": {}}},
+                    "body": {"literal": "string"},
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unique identifier for the node"}}}]}}}}}}},
         "body": {
           "annotated": {
@@ -4570,7 +4570,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"string": {}}},
+                      "body": {"literal": "string"},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable label for the node"}}}]}}}}},
               "isLazy": false}],
           "result": {
@@ -4591,7 +4591,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"literal": {"string": {}}},
+                            "body": {"literal": "string"},
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable label for the node"}}}]}}}}},
                     "body": {
                       "wrap": {
@@ -4711,7 +4711,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"string": {}}},
+                      "body": {"literal": "string"},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unique identifier for the node"}}}]}}}}},
               "isLazy": false}],
           "result": {
@@ -4732,7 +4732,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"literal": {"string": {}}},
+                            "body": {"literal": "string"},
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unique identifier for the node"}}}]}}}}},
                     "body": {
                       "wrap": {
@@ -4960,7 +4960,7 @@
                                   "typeName": "hydra.core.Field",
                                   "fields": [
                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "annotatedBody"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -5001,7 +5001,7 @@
                                     {
                                       "name": "name",
                                       "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "applicationFunction"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -5042,7 +5042,7 @@
                                     {
                                       "name": "name",
                                       "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "applicationArgument"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -5081,7 +5081,7 @@
                                   "typeName": "hydra.core.Field",
                                   "fields": [
                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "eitherLeft"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -5120,7 +5120,7 @@
                                   "typeName": "hydra.core.Field",
                                   "fields": [
                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "eitherRight"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -5159,7 +5159,7 @@
                                   "typeName": "hydra.core.Field",
                                   "fields": [
                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "forallBody"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -5198,7 +5198,7 @@
                                   "typeName": "hydra.core.Field",
                                   "fields": [
                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "functionDomain"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -5237,7 +5237,7 @@
                                   "typeName": "hydra.core.Field",
                                   "fields": [
                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "functionCodomain"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -5276,7 +5276,7 @@
                                   "typeName": "hydra.core.Field",
                                   "fields": [
                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "listElement"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -5315,7 +5315,7 @@
                                   "typeName": "hydra.core.Field",
                                   "fields": [
                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "mapKeys"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -5354,7 +5354,7 @@
                                   "typeName": "hydra.core.Field",
                                   "fields": [
                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "mapValues"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -5393,7 +5393,7 @@
                                   "typeName": "hydra.core.Field",
                                   "fields": [
                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "optionalElement"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -5432,7 +5432,7 @@
                                   "typeName": "hydra.core.Field",
                                   "fields": [
                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "pairFirst"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -5471,7 +5471,7 @@
                                   "typeName": "hydra.core.Field",
                                   "fields": [
                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "pairSecond"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -5579,7 +5579,7 @@
                                   "typeName": "hydra.core.Field",
                                   "fields": [
                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "setElement"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -5687,7 +5687,7 @@
                                   "typeName": "hydra.core.Field",
                                   "fields": [
                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "wrappedType"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {

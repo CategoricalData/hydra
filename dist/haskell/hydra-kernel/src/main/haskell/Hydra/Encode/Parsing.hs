@@ -1,12 +1,15 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term encoders for hydra.parsing
 
 module Hydra.Encode.Parsing where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Parsing as Parsing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Encoder for hydra.parsing.ParseError
 parseError :: Parsing.ParseError -> Core.Term
 parseError x =
@@ -19,6 +22,7 @@ parseError x =
         Core.Field {
           Core.fieldName = (Core.Name "remainder"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Parsing.parseErrorRemainder x))}]})
+
 -- | Encoder for hydra.parsing.ParseResult
 parseResult :: (a -> Core.Term) -> Parsing.ParseResult a -> Core.Term
 parseResult a x =
@@ -33,6 +37,7 @@ parseResult a x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "failure"),
           Core.fieldTerm = (parseError v0)}})
+
 -- | Encoder for hydra.parsing.ParseSuccess
 parseSuccess :: (a -> Core.Term) -> Parsing.ParseSuccess a -> Core.Term
 parseSuccess a x =

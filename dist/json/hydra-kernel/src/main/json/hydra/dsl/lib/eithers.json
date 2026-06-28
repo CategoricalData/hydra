@@ -613,7 +613,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}}},
               "isLazy": false}],
-          "result": {"type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": {"boolean": {}}}}}}},
+          "result": {"type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "boolean"}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -661,7 +661,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}}},
               "isLazy": false}],
-          "result": {"type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": {"boolean": {}}}}}}},
+          "result": {"type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "boolean"}}}}},
         "body": {
           "annotated": {
             "body": {

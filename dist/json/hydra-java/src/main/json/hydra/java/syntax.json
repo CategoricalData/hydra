@@ -6,8 +6,7 @@
     "seeAlso": []},
   "dependencies": [{"module": "hydra.core"}],
   "definitions": [
-    {
-      "type": {"name": "hydra.java.syntax.Identifier", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+    {"type": {"name": "hydra.java.syntax.Identifier", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
     {
       "type": {
         "name": "hydra.java.syntax.TypeIdentifier",
@@ -19,11 +18,11 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "null", "type": {"unit": {}}},
+              {"name": "null", "type": "unit"},
               {"name": "integer", "type": {"variable": "hydra.java.syntax.IntegerLiteral"}},
               {"name": "floatingPoint", "type": {"variable": "hydra.java.syntax.FloatingPointLiteral"}},
-              {"name": "boolean", "type": {"literal": {"boolean": {}}}},
-              {"name": "character", "type": {"literal": {"integer": {"uint16": {}}}}},
+              {"name": "boolean", "type": {"literal": "boolean"}},
+              {"name": "character", "type": {"literal": {"integer": "uint16"}}},
               {"name": "string", "type": {"variable": "hydra.java.syntax.StringLiteral"}},
               {"name": "textBlock", "type": {"variable": "hydra.java.syntax.TextBlock"}}]}}}},
     {
@@ -33,7 +32,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"integer": {"bigint": {}}}}},
+              "body": {"wrap": {"literal": {"integer": "bigint"}}},
               "annotation": {
                 "map": [
                   {
@@ -46,7 +45,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"float": {"float64": {}}}}},
+              "body": {"wrap": {"literal": {"float": "float64"}}},
               "annotation": {
                 "map": [
                   {
@@ -59,7 +58,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
                   {
@@ -72,7 +71,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
                   {
@@ -102,7 +101,7 @@
         "body": {
           "variables": [],
           "body": {
-            "union": [{"name": "numeric", "type": {"variable": "hydra.java.syntax.NumericType"}}, {"name": "boolean", "type": {"unit": {}}}]}}}},
+            "union": [{"name": "numeric", "type": {"variable": "hydra.java.syntax.NumericType"}}, {"name": "boolean", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.NumericType",
@@ -119,17 +118,15 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "byte", "type": {"unit": {}}},
-              {"name": "short", "type": {"unit": {}}},
-              {"name": "int", "type": {"unit": {}}},
-              {"name": "long", "type": {"unit": {}}},
-              {"name": "char", "type": {"unit": {}}}]}}}},
+              {"name": "byte", "type": "unit"},
+              {"name": "short", "type": "unit"},
+              {"name": "int", "type": "unit"},
+              {"name": "long", "type": "unit"},
+              {"name": "char", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.FloatingPointType",
-        "body": {
-          "variables": [],
-          "body": {"union": [{"name": "float", "type": {"unit": {}}}, {"name": "double", "type": {"unit": {}}}]}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "float", "type": "unit"}, {"name": "double", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.ReferenceType",
@@ -167,7 +164,7 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "none", "type": {"unit": {}}},
+              {"name": "none", "type": "unit"},
               {"name": "package", "type": {"variable": "hydra.java.syntax.PackageName"}},
               {"name": "parent", "type": {"variable": "hydra.java.syntax.ClassOrInterfaceType"}}]}}}},
     {
@@ -394,7 +391,7 @@
             "union": [
               {"name": "class", "type": {"variable": "hydra.java.syntax.ClassDeclaration"}},
               {"name": "interface", "type": {"variable": "hydra.java.syntax.InterfaceDeclaration"}},
-              {"name": "none", "type": {"unit": {}}}]}}}},
+              {"name": "none", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.TopLevelClassOrInterfaceDeclarationWithComments",
@@ -403,7 +400,7 @@
           "body": {
             "record": [
               {"name": "value", "type": {"variable": "hydra.java.syntax.TopLevelClassOrInterfaceDeclaration"}},
-              {"name": "comments", "type": {"optional": {"literal": {"string": {}}}}}]}}}},
+              {"name": "comments", "type": {"optional": {"literal": "string"}}}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.ModuleDeclaration",
@@ -412,7 +409,7 @@
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.java.syntax.Annotation"}}},
-              {"name": "open", "type": {"literal": {"boolean": {}}}},
+              {"name": "open", "type": {"literal": "boolean"}},
               {"name": "identifiers", "type": {"list": {"variable": "hydra.java.syntax.Identifier"}}},
               {"name": "directives", "type": {"list": {"variable": "hydra.java.syntax.ModuleDirective"}}}]}}}},
     {
@@ -467,9 +464,7 @@
     {
       "type": {
         "name": "hydra.java.syntax.RequiresModifier",
-        "body": {
-          "variables": [],
-          "body": {"union": [{"name": "transitive", "type": {"unit": {}}}, {"name": "static", "type": {"unit": {}}}]}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "transitive", "type": "unit"}, {"name": "static", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.ClassDeclaration",
@@ -502,15 +497,15 @@
           "body": {
             "union": [
               {"name": "annotation", "type": {"variable": "hydra.java.syntax.Annotation"}},
-              {"name": "public", "type": {"unit": {}}},
-              {"name": "protected", "type": {"unit": {}}},
-              {"name": "private", "type": {"unit": {}}},
-              {"name": "abstract", "type": {"unit": {}}},
-              {"name": "static", "type": {"unit": {}}},
-              {"name": "final", "type": {"unit": {}}},
-              {"name": "sealed", "type": {"unit": {}}},
-              {"name": "nonSealed", "type": {"unit": {}}},
-              {"name": "strictfp", "type": {"unit": {}}}]}}}},
+              {"name": "public", "type": "unit"},
+              {"name": "protected", "type": "unit"},
+              {"name": "private", "type": "unit"},
+              {"name": "abstract", "type": "unit"},
+              {"name": "static", "type": "unit"},
+              {"name": "final", "type": "unit"},
+              {"name": "sealed", "type": "unit"},
+              {"name": "nonSealed", "type": "unit"},
+              {"name": "strictfp", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.ClassBody",
@@ -534,7 +529,7 @@
           "body": {
             "record": [
               {"name": "value", "type": {"variable": "hydra.java.syntax.ClassBodyDeclaration"}},
-              {"name": "comments", "type": {"optional": {"literal": {"string": {}}}}}]}}}},
+              {"name": "comments", "type": {"optional": {"literal": "string"}}}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.ClassMemberDeclaration",
@@ -546,7 +541,7 @@
               {"name": "method", "type": {"variable": "hydra.java.syntax.MethodDeclaration"}},
               {"name": "class", "type": {"variable": "hydra.java.syntax.ClassDeclaration"}},
               {"name": "interface", "type": {"variable": "hydra.java.syntax.InterfaceDeclaration"}},
-              {"name": "none", "type": {"unit": {}}}]}}}},
+              {"name": "none", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.FieldDeclaration",
@@ -565,13 +560,13 @@
           "body": {
             "union": [
               {"name": "annotation", "type": {"variable": "hydra.java.syntax.Annotation"}},
-              {"name": "public", "type": {"unit": {}}},
-              {"name": "protected", "type": {"unit": {}}},
-              {"name": "private", "type": {"unit": {}}},
-              {"name": "static", "type": {"unit": {}}},
-              {"name": "final", "type": {"unit": {}}},
-              {"name": "transient", "type": {"unit": {}}},
-              {"name": "volatile", "type": {"unit": {}}}]}}}},
+              {"name": "public", "type": "unit"},
+              {"name": "protected", "type": "unit"},
+              {"name": "private", "type": "unit"},
+              {"name": "static", "type": "unit"},
+              {"name": "final", "type": "unit"},
+              {"name": "transient", "type": "unit"},
+              {"name": "volatile", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.VariableDeclarator",
@@ -644,15 +639,15 @@
           "body": {
             "union": [
               {"name": "annotation", "type": {"variable": "hydra.java.syntax.Annotation"}},
-              {"name": "public", "type": {"unit": {}}},
-              {"name": "protected", "type": {"unit": {}}},
-              {"name": "private", "type": {"unit": {}}},
-              {"name": "abstract", "type": {"unit": {}}},
-              {"name": "static", "type": {"unit": {}}},
-              {"name": "final", "type": {"unit": {}}},
-              {"name": "synchronized", "type": {"unit": {}}},
-              {"name": "native", "type": {"unit": {}}},
-              {"name": "strictfp", "type": {"unit": {}}}]}}}},
+              {"name": "public", "type": "unit"},
+              {"name": "protected", "type": "unit"},
+              {"name": "private", "type": "unit"},
+              {"name": "abstract", "type": "unit"},
+              {"name": "static", "type": "unit"},
+              {"name": "final", "type": "unit"},
+              {"name": "synchronized", "type": "unit"},
+              {"name": "native", "type": "unit"},
+              {"name": "strictfp", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.MethodHeader",
@@ -669,8 +664,7 @@
         "name": "hydra.java.syntax.Result",
         "body": {
           "variables": [],
-          "body": {
-            "union": [{"name": "type", "type": {"variable": "hydra.java.syntax.UnannType"}}, {"name": "void", "type": {"unit": {}}}]}}}},
+          "body": {"union": [{"name": "type", "type": {"variable": "hydra.java.syntax.UnannType"}}, {"name": "void", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.MethodDeclarator",
@@ -727,7 +721,7 @@
         "body": {
           "variables": [],
           "body": {
-            "union": [{"name": "annotation", "type": {"variable": "hydra.java.syntax.Annotation"}}, {"name": "final", "type": {"unit": {}}}]}}}},
+            "union": [{"name": "annotation", "type": {"variable": "hydra.java.syntax.Annotation"}}, {"name": "final", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.Throws",
@@ -746,7 +740,7 @@
         "name": "hydra.java.syntax.MethodBody",
         "body": {
           "variables": [],
-          "body": {"union": [{"name": "block", "type": {"variable": "hydra.java.syntax.Block"}}, {"name": "none", "type": {"unit": {}}}]}}}},
+          "body": {"union": [{"name": "block", "type": {"variable": "hydra.java.syntax.Block"}}, {"name": "none", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.InstanceInitializer",
@@ -774,9 +768,9 @@
           "body": {
             "union": [
               {"name": "annotation", "type": {"variable": "hydra.java.syntax.Annotation"}},
-              {"name": "public", "type": {"unit": {}}},
-              {"name": "protected", "type": {"unit": {}}},
-              {"name": "private", "type": {"unit": {}}}]}}}},
+              {"name": "public", "type": "unit"},
+              {"name": "protected", "type": "unit"},
+              {"name": "private", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.ConstructorDeclarator",
@@ -818,7 +812,7 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "this", "type": {"unit": {}}},
+              {"name": "this", "type": "unit"},
               {"name": "super", "type": {"optional": {"variable": "hydra.java.syntax.ExpressionName"}}},
               {"name": "primary", "type": {"variable": "hydra.java.syntax.Primary"}}]}}}},
     {
@@ -964,14 +958,14 @@
           "body": {
             "union": [
               {"name": "annotation", "type": {"variable": "hydra.java.syntax.Annotation"}},
-              {"name": "public", "type": {"unit": {}}},
-              {"name": "protected", "type": {"unit": {}}},
-              {"name": "private", "type": {"unit": {}}},
-              {"name": "abstract", "type": {"unit": {}}},
-              {"name": "static", "type": {"unit": {}}},
-              {"name": "sealed", "type": {"unit": {}}},
-              {"name": "nonSealed", "type": {"unit": {}}},
-              {"name": "strictfp", "type": {"unit": {}}}]}}}},
+              {"name": "public", "type": "unit"},
+              {"name": "protected", "type": "unit"},
+              {"name": "private", "type": "unit"},
+              {"name": "abstract", "type": "unit"},
+              {"name": "static", "type": "unit"},
+              {"name": "sealed", "type": "unit"},
+              {"name": "nonSealed", "type": "unit"},
+              {"name": "strictfp", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.InterfaceBody",
@@ -995,7 +989,7 @@
           "body": {
             "record": [
               {"name": "value", "type": {"variable": "hydra.java.syntax.InterfaceMemberDeclaration"}},
-              {"name": "comments", "type": {"optional": {"literal": {"string": {}}}}}]}}}},
+              {"name": "comments", "type": {"optional": {"literal": "string"}}}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.ConstantDeclaration",
@@ -1014,9 +1008,9 @@
           "body": {
             "union": [
               {"name": "annotation", "type": {"variable": "hydra.java.syntax.Annotation"}},
-              {"name": "public", "type": {"unit": {}}},
-              {"name": "static", "type": {"unit": {}}},
-              {"name": "final", "type": {"unit": {}}}]}}}},
+              {"name": "public", "type": "unit"},
+              {"name": "static", "type": "unit"},
+              {"name": "final", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.InterfaceMethodDeclaration",
@@ -1035,12 +1029,12 @@
           "body": {
             "union": [
               {"name": "annotation", "type": {"variable": "hydra.java.syntax.Annotation"}},
-              {"name": "public", "type": {"unit": {}}},
-              {"name": "private", "type": {"unit": {}}},
-              {"name": "abstract", "type": {"unit": {}}},
-              {"name": "default", "type": {"unit": {}}},
-              {"name": "static", "type": {"unit": {}}},
-              {"name": "strictfp", "type": {"unit": {}}}]}}}},
+              {"name": "public", "type": "unit"},
+              {"name": "private", "type": "unit"},
+              {"name": "abstract", "type": "unit"},
+              {"name": "default", "type": "unit"},
+              {"name": "static", "type": "unit"},
+              {"name": "strictfp", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.AnnotationInterfaceDeclaration",
@@ -1086,8 +1080,8 @@
           "body": {
             "union": [
               {"name": "annotation", "type": {"variable": "hydra.java.syntax.Annotation"}},
-              {"name": "public", "type": {"unit": {}}},
-              {"name": "abstract", "type": {"unit": {}}}]}}}},
+              {"name": "public", "type": "unit"},
+              {"name": "abstract", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.DefaultValue",
@@ -1193,8 +1187,7 @@
         "name": "hydra.java.syntax.LocalVariableType",
         "body": {
           "variables": [],
-          "body": {
-            "union": [{"name": "type", "type": {"variable": "hydra.java.syntax.UnannType"}}, {"name": "var", "type": {"unit": {}}}]}}}},
+          "body": {"union": [{"name": "type", "type": {"variable": "hydra.java.syntax.UnannType"}}, {"name": "var", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.Statement",
@@ -1228,7 +1221,7 @@
           "body": {
             "union": [
               {"name": "block", "type": {"variable": "hydra.java.syntax.Block"}},
-              {"name": "empty", "type": {"unit": {}}},
+              {"name": "empty", "type": "unit"},
               {"name": "expression", "type": {"variable": "hydra.java.syntax.ExpressionStatement"}},
               {"name": "assert", "type": {"variable": "hydra.java.syntax.AssertStatement"}},
               {"name": "switch", "type": {"variable": "hydra.java.syntax.SwitchStatement"}},
@@ -1386,9 +1379,9 @@
           "body": {
             "union": [
               {"name": "case", "type": {"list": {"variable": "hydra.java.syntax.CaseConstant"}}},
-              {"name": "null", "type": {"literal": {"boolean": {}}}},
+              {"name": "null", "type": {"literal": "boolean"}},
               {"name": "casePattern", "type": {"variable": "hydra.java.syntax.CasePattern"}},
-              {"name": "default", "type": {"unit": {}}}]}}}},
+              {"name": "default", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.CaseConstant",
@@ -1697,7 +1690,7 @@
             "union": [
               {"name": "literal", "type": {"variable": "hydra.java.syntax.Literal"}},
               {"name": "classLiteral", "type": {"variable": "hydra.java.syntax.ClassLiteral"}},
-              {"name": "this", "type": {"unit": {}}},
+              {"name": "this", "type": "unit"},
               {"name": "dotThis", "type": {"variable": "hydra.java.syntax.TypeName"}},
               {"name": "parens", "type": {"variable": "hydra.java.syntax.Expression"}},
               {"name": "classInstance", "type": {"variable": "hydra.java.syntax.ClassInstanceCreationExpression"}},
@@ -1715,7 +1708,7 @@
               {"name": "type", "type": {"variable": "hydra.java.syntax.TypeNameArray"}},
               {"name": "numericType", "type": {"variable": "hydra.java.syntax.NumericTypeArray"}},
               {"name": "boolean", "type": {"variable": "hydra.java.syntax.BooleanArray"}},
-              {"name": "void", "type": {"unit": {}}}]}}}},
+              {"name": "void", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.TypeNameArray",
@@ -1740,7 +1733,7 @@
         "body": {
           "variables": [],
           "body": {
-            "union": [{"name": "simple", "type": {"unit": {}}}, {"name": "array", "type": {"variable": "hydra.java.syntax.BooleanArray"}}]}}}},
+            "union": [{"name": "simple", "type": "unit"}, {"name": "array", "type": {"variable": "hydra.java.syntax.BooleanArray"}}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.ClassInstanceCreationExpression",
@@ -1796,7 +1789,7 @@
           "body": {
             "union": [
               {"name": "arguments", "type": {"list": {"variable": "hydra.java.syntax.TypeArgument"}}},
-              {"name": "diamond", "type": {"unit": {}}}]}}}},
+              {"name": "diamond", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.FieldAccess",
@@ -1814,7 +1807,7 @@
           "body": {
             "union": [
               {"name": "primary", "type": {"variable": "hydra.java.syntax.Primary"}},
-              {"name": "super", "type": {"unit": {}}},
+              {"name": "super", "type": "unit"},
               {"name": "typed", "type": {"variable": "hydra.java.syntax.TypeName"}}]}}}},
     {
       "type": {
@@ -1875,7 +1868,7 @@
               {"name": "type", "type": {"variable": "hydra.java.syntax.TypeName"}},
               {"name": "expression", "type": {"variable": "hydra.java.syntax.ExpressionName"}},
               {"name": "primary", "type": {"variable": "hydra.java.syntax.Primary"}},
-              {"name": "super", "type": {"unit": {}}},
+              {"name": "super", "type": "unit"},
               {"name": "typeSuper", "type": {"variable": "hydra.java.syntax.TypeName"}}]}}}},
     {
       "type": {
@@ -1929,7 +1922,7 @@
             "record": [
               {"name": "typeArguments", "type": {"list": {"variable": "hydra.java.syntax.TypeArgument"}}},
               {"name": "identifier", "type": {"variable": "hydra.java.syntax.Identifier"}},
-              {"name": "super", "type": {"literal": {"boolean": {}}}}]}}}},
+              {"name": "super", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.MethodReference_New",
@@ -2074,8 +2067,7 @@
         "name": "hydra.java.syntax.LambdaParameterType",
         "body": {
           "variables": [],
-          "body": {
-            "union": [{"name": "type", "type": {"variable": "hydra.java.syntax.UnannType"}}, {"name": "var", "type": {"unit": {}}}]}}}},
+          "body": {"union": [{"name": "type", "type": {"variable": "hydra.java.syntax.UnannType"}}, {"name": "var", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.LambdaBody",
@@ -2121,18 +2113,18 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "simple", "type": {"unit": {}}},
-              {"name": "times", "type": {"unit": {}}},
-              {"name": "div", "type": {"unit": {}}},
-              {"name": "mod", "type": {"unit": {}}},
-              {"name": "plus", "type": {"unit": {}}},
-              {"name": "minus", "type": {"unit": {}}},
-              {"name": "shiftLeft", "type": {"unit": {}}},
-              {"name": "shiftRight", "type": {"unit": {}}},
-              {"name": "shiftRightZeroFill", "type": {"unit": {}}},
-              {"name": "and", "type": {"unit": {}}},
-              {"name": "xor", "type": {"unit": {}}},
-              {"name": "or", "type": {"unit": {}}}]}}}},
+              {"name": "simple", "type": "unit"},
+              {"name": "times", "type": "unit"},
+              {"name": "div", "type": "unit"},
+              {"name": "mod", "type": "unit"},
+              {"name": "plus", "type": "unit"},
+              {"name": "minus", "type": "unit"},
+              {"name": "shiftLeft", "type": "unit"},
+              {"name": "shiftRight", "type": "unit"},
+              {"name": "shiftRightZeroFill", "type": "unit"},
+              {"name": "and", "type": "unit"},
+              {"name": "xor", "type": "unit"},
+              {"name": "or", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.java.syntax.ConditionalExpression",

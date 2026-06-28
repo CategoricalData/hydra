@@ -132,7 +132,7 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "binding", "type": {"literal": {"boolean": {}}}},
+              {"name": "binding", "type": {"literal": "boolean"}},
               {"name": "param", "type": {"variable": "openGql.grammar.SessionSetParameterName"}},
               {"name": "init", "type": {"variable": "openGql.grammar.OptTypedBindingTableInitializer"}}]}}}},
     {
@@ -151,7 +151,7 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "ifNotExists", "type": {"literal": {"boolean": {}}}},
+              {"name": "ifNotExists", "type": {"literal": "boolean"}},
               {"name": "parameter", "type": {"variable": "openGql.grammar.SessionParameterSpecification"}}]}}}},
     {
       "type": {
@@ -165,9 +165,9 @@
           "body": {
             "union": [
               {"name": "parametersOrCharacteristics", "type": {"variable": "openGql.grammar.AllParametersOrCharacteristics"}},
-              {"name": "schema", "type": {"unit": {}}},
-              {"name": "graph", "type": {"unit": {}}},
-              {"name": "timeZone", "type": {"unit": {}}},
+              {"name": "schema", "type": "unit"},
+              {"name": "graph", "type": "unit"},
+              {"name": "timeZone", "type": "unit"},
               {"name": "parameterSessionSpecification", "type": {"variable": "openGql.grammar.ParameterSessionSpecification"}}]}}}},
     {
       "type": {
@@ -176,14 +176,14 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "all", "type": {"literal": {"boolean": {}}}},
+              {"name": "all", "type": {"literal": "boolean"}},
               {"name": "type", "type": {"variable": "openGql.grammar.ParametersOrCharacteristics"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.ParametersOrCharacteristics",
         "body": {
           "variables": [],
-          "body": {"union": [{"name": "parameters", "type": {"unit": {}}}, {"name": "characteristics", "type": {"unit": {}}}]}}}},
+          "body": {"union": [{"name": "parameters", "type": "unit"}, {"name": "characteristics", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.ParameterSessionSpecification",
@@ -191,9 +191,9 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "parameter", "type": {"literal": {"boolean": {}}}},
+              {"name": "parameter", "type": {"literal": "boolean"}},
               {"name": "sessionParameterSpecification", "type": {"variable": "openGql.grammar.SessionParameterSpecification"}}]}}}},
-    {"type": {"name": "openGql.grammar.SessionCloseCommand", "body": {"variables": [], "body": {"unit": {}}}}},
+    {"type": {"name": "openGql.grammar.SessionCloseCommand", "body": {"variables": [], "body": "unit"}}},
     {
       "type": {
         "name": "openGql.grammar.SessionParameterSpecification",
@@ -213,11 +213,9 @@
     {
       "type": {
         "name": "openGql.grammar.TransactionAccessMode",
-        "body": {
-          "variables": [],
-          "body": {"union": [{"name": "readOnly", "type": {"unit": {}}}, {"name": "readWrite", "type": {"unit": {}}}]}}}},
-    {"type": {"name": "openGql.grammar.RollbackCommand", "body": {"variables": [], "body": {"unit": {}}}}},
-    {"type": {"name": "openGql.grammar.CommitCommand", "body": {"variables": [], "body": {"unit": {}}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "readOnly", "type": "unit"}, {"name": "readWrite", "type": "unit"}]}}}},
+    {"type": {"name": "openGql.grammar.RollbackCommand", "body": {"variables": [], "body": "unit"}}},
+    {"type": {"name": "openGql.grammar.CommitCommand", "body": {"variables": [], "body": "unit"}}},
     {
       "type": {
         "name": "openGql.grammar.NestedProcedureSpecification",
@@ -313,7 +311,7 @@
             "record": [
               {"name": "typed", "type": {"optional": {"variable": "openGql.grammar.Typed"}}},
               {"name": "valueType", "type": {"variable": "openGql.grammar.GraphReferenceValueType"}}]}}}},
-    {"type": {"name": "openGql.grammar.GraphInitializer", "body": {"variables": [], "body": {"unit": {}}}}},
+    {"type": {"name": "openGql.grammar.GraphInitializer", "body": {"variables": [], "body": "unit"}}},
     {
       "type": {
         "name": "openGql.grammar.BindingTableVariableDefinition",
@@ -321,7 +319,7 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "binding", "type": {"literal": {"boolean": {}}}},
+              {"name": "binding", "type": {"literal": "boolean"}},
               {"name": "variable", "type": {"variable": "openGql.grammar.BindingVariable"}},
               {"name": "initializer", "type": {"variable": "openGql.grammar.OptTypedBindingTableInitializer"}}]}}}},
     {
@@ -342,7 +340,7 @@
             "record": [
               {"name": "typed", "type": {"optional": {"variable": "openGql.grammar.Typed"}}},
               {"name": "valueType", "type": {"variable": "openGql.grammar.BindingTableReferenceValueType"}}]}}}},
-    {"type": {"name": "openGql.grammar.BindingTableInitializer", "body": {"variables": [], "body": {"unit": {}}}}},
+    {"type": {"name": "openGql.grammar.BindingTableInitializer", "body": {"variables": [], "body": "unit"}}},
     {
       "type": {
         "name": "openGql.grammar.ValueVariableDefinition",
@@ -370,7 +368,7 @@
             "record": [
               {"name": "typed", "type": {"optional": {"variable": "openGql.grammar.Typed"}}},
               {"name": "valueType", "type": {"variable": "openGql.grammar.ValueType"}}]}}}},
-    {"type": {"name": "openGql.grammar.ValueInitializer", "body": {"variables": [], "body": {"unit": {}}}}},
+    {"type": {"name": "openGql.grammar.ValueInitializer", "body": {"variables": [], "body": "unit"}}},
     {
       "type": {
         "name": "openGql.grammar.GraphExpression",
@@ -385,9 +383,7 @@
     {
       "type": {
         "name": "openGql.grammar.CurrentGraph",
-        "body": {
-          "variables": [],
-          "body": {"union": [{"name": "graph", "type": {"unit": {}}}, {"name": "propertyGraph", "type": {"unit": {}}}]}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "graph", "type": "unit"}, {"name": "propertyGraph", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.BindingTableExpression",
@@ -399,8 +395,7 @@
               {"name": "object", "type": {"variable": "openGql.grammar.ObjectExpressionPrimary"}},
               {"name": "table", "type": {"variable": "openGql.grammar.BindingTableReference"}},
               {"name": "name", "type": {"variable": "openGql.grammar.ObjectNameOrBindingVariable"}}]}}}},
-    {
-      "type": {"name": "openGql.grammar.NestedBindingTableQuerySpecification", "body": {"variables": [], "body": {"unit": {}}}}},
+    {"type": {"name": "openGql.grammar.NestedBindingTableQuerySpecification", "body": {"variables": [], "body": "unit"}}},
     {
       "type": {
         "name": "openGql.grammar.ObjectExpressionPrimary",
@@ -444,7 +439,7 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "ifNotExists", "type": {"literal": {"boolean": {}}}},
+              {"name": "ifNotExists", "type": {"literal": "boolean"}},
               {"name": "parentAndName", "type": {"variable": "openGql.grammar.CatalogSchemaParentAndName"}}]}}}},
     {
       "type": {
@@ -453,7 +448,7 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "ifExists", "type": {"literal": {"boolean": {}}}},
+              {"name": "ifExists", "type": {"literal": "boolean"}},
               {"name": "parentAndName", "type": {"variable": "openGql.grammar.CatalogSchemaParentAndName"}}]}}}},
     {
       "type": {
@@ -471,8 +466,7 @@
         "name": "openGql.grammar.CreateGraphOption",
         "body": {
           "variables": [],
-          "body": {
-            "union": [{"name": "graphIfNotExists", "type": {"literal": {"boolean": {}}}}, {"name": "orReplace", "type": {"unit": {}}}]}}}},
+          "body": {"union": [{"name": "graphIfNotExists", "type": {"literal": "boolean"}}, {"name": "orReplace", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.GraphTypeOption",
@@ -490,7 +484,7 @@
           "body": {
             "record": [
               {"name": "typed", "type": {"optional": {"variable": "openGql.grammar.Typed"}}},
-              {"name": "graph", "type": {"literal": {"boolean": {}}}}]}}}},
+              {"name": "graph", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.OfGraphType",
@@ -526,7 +520,7 @@
           "body": {
             "record": [
               {"name": "typed", "type": {"optional": {"variable": "openGql.grammar.Typed"}}},
-              {"name": "graph", "type": {"literal": {"boolean": {}}}},
+              {"name": "graph", "type": {"literal": "boolean"}},
               {"name": "specification", "type": {"variable": "openGql.grammar.NestedGraphTypeSpecification"}}]}}}},
     {
       "type": {
@@ -535,7 +529,7 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "ifExists", "type": {"literal": {"boolean": {}}}},
+              {"name": "ifExists", "type": {"literal": "boolean"}},
               {"name": "parentAndName", "type": {"variable": "openGql.grammar.CatalogGraphParentAndName"}}]}}}},
     {
       "type": {
@@ -552,8 +546,7 @@
         "name": "openGql.grammar.CreateGraphTypeOption",
         "body": {
           "variables": [],
-          "body": {
-            "union": [{"name": "typeIfNotExists", "type": {"literal": {"boolean": {}}}}, {"name": "orReplace", "type": {"unit": {}}}]}}}},
+          "body": {"union": [{"name": "typeIfNotExists", "type": {"literal": "boolean"}}, {"name": "orReplace", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.GraphTypeSource",
@@ -575,7 +568,7 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "ifExists", "type": {"literal": {"boolean": {}}}},
+              {"name": "ifExists", "type": {"literal": "boolean"}},
               {"name": "parentAndName", "type": {"variable": "openGql.grammar.CatalogGraphTypeParentAndName"}}]}}}},
     {
       "type": {
@@ -766,9 +759,7 @@
     {
       "type": {
         "name": "openGql.grammar.DetachOption",
-        "body": {
-          "variables": [],
-          "body": {"union": [{"name": "detach", "type": {"unit": {}}}, {"name": "noDetach", "type": {"unit": {}}}]}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "detach", "type": "unit"}, {"name": "noDetach", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.DeleteItemList",
@@ -810,9 +801,7 @@
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "setOperator", "type": {"variable": "openGql.grammar.SetOperator"}},
-              {"name": "otherwise", "type": {"unit": {}}}]}}}},
+            "union": [{"name": "setOperator", "type": {"variable": "openGql.grammar.SetOperator"}}, {"name": "otherwise", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.SetOperator",
@@ -828,10 +817,7 @@
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "union", "type": {"unit": {}}},
-              {"name": "except", "type": {"unit": {}}},
-              {"name": "intersect", "type": {"unit": {}}}]}}}},
+            "union": [{"name": "union", "type": "unit"}, {"name": "except", "type": "unit"}, {"name": "intersect", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.CompositeQueryPrimary",
@@ -1053,9 +1039,7 @@
     {
       "type": {
         "name": "openGql.grammar.OrdinalityOrOffsetType",
-        "body": {
-          "variables": [],
-          "body": {"union": [{"name": "ordinality", "type": {"unit": {}}}, {"name": "offset", "type": {"unit": {}}}]}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "ordinality", "type": "unit"}, {"name": "offset", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.OrderByAndPageStatement",
@@ -1093,7 +1077,7 @@
           "body": {
             "union": [
               {"name": "returnAndOptionalOrderBy", "type": {"variable": "openGql.grammar.ReturnAndOptionalOrderByAndPage"}},
-              {"name": "finish", "type": {"unit": {}}}]}}}},
+              {"name": "finish", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.ReturnAndOptionalOrderByAndPage",
@@ -1115,7 +1099,7 @@
           "body": {
             "union": [
               {"name": "items", "type": {"variable": "openGql.grammar.ReturnItemsAndGroupBy"}},
-              {"name": "noBindings", "type": {"unit": {}}}]}}}},
+              {"name": "noBindings", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.ReturnItemsAndGroupBy",
@@ -1132,9 +1116,7 @@
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "asterisk", "type": {"unit": {}}},
-              {"name": "itemList", "type": {"variable": "openGql.grammar.ReturnItemList"}}]}}}},
+            "union": [{"name": "asterisk", "type": "unit"}, {"name": "itemList", "type": {"variable": "openGql.grammar.ReturnItemList"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.ReturnItemList",
@@ -1148,7 +1130,7 @@
             "record": [
               {"name": "expression", "type": {"variable": "openGql.grammar.AggregatingValueExpression"}},
               {"name": "alias", "type": {"optional": {"variable": "openGql.grammar.ReturnItemAlias"}}}]}}}},
-    {"type": {"name": "openGql.grammar.ReturnItemAlias", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
+    {"type": {"name": "openGql.grammar.ReturnItemAlias", "body": {"variables": [], "body": {"literal": "string"}}}},
     {
       "type": {
         "name": "openGql.grammar.SelectStatement",
@@ -1165,9 +1147,7 @@
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "asterisk", "type": {"unit": {}}},
-              {"name": "itemList", "type": {"variable": "openGql.grammar.SelectItemList"}}]}}}},
+            "union": [{"name": "asterisk", "type": "unit"}, {"name": "itemList", "type": {"variable": "openGql.grammar.SelectItemList"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.SelectStatementBodyAndClauses",
@@ -1195,7 +1175,7 @@
             "record": [
               {"name": "expression", "type": {"variable": "openGql.grammar.AggregatingValueExpression"}},
               {"name": "alias", "type": {"optional": {"variable": "openGql.grammar.SelectItemAlias"}}}]}}}},
-    {"type": {"name": "openGql.grammar.SelectItemAlias", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
+    {"type": {"name": "openGql.grammar.SelectItemAlias", "body": {"variables": [], "body": {"literal": "string"}}}},
     {
       "type": {
         "name": "openGql.grammar.HavingClause",
@@ -1247,7 +1227,7 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "optional", "type": {"literal": {"boolean": {}}}},
+              {"name": "optional", "type": {"literal": "boolean"}},
               {"name": "call", "type": {"variable": "openGql.grammar.ProcedureCall"}}]}}}},
     {
       "type": {
@@ -1322,7 +1302,7 @@
           "body": {
             "union": [
               {"name": "items", "type": {"list": {"variable": "openGql.grammar.GraphPatternYieldItem"}}},
-              {"name": "noBindings", "type": {"unit": {}}}]}}}},
+              {"name": "noBindings", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.GraphPatternYieldItem",
@@ -1360,14 +1340,13 @@
         "name": "openGql.grammar.ElementBindingsOrElements",
         "body": {
           "variables": [],
-          "body": {
-            "union": [{"name": "elementBindings", "type": {"literal": {"boolean": {}}}}, {"name": "elements", "type": {"unit": {}}}]}}}},
+          "body": {"union": [{"name": "elementBindings", "type": {"literal": "boolean"}}, {"name": "elements", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.EdgeBindingsOrEdges",
         "body": {
           "variables": [],
-          "body": {"union": [{"name": "edgeBindings", "type": {"literal": {"boolean": {}}}}, {"name": "edges", "type": {"unit": {}}}]}}}},
+          "body": {"union": [{"name": "edgeBindings", "type": {"literal": "boolean"}}, {"name": "edges", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.PathPatternList",
@@ -1490,10 +1469,10 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "walk", "type": {"unit": {}}},
-              {"name": "trail", "type": {"unit": {}}},
-              {"name": "simple", "type": {"unit": {}}},
-              {"name": "acyclic", "type": {"unit": {}}}]}}}},
+              {"name": "walk", "type": "unit"},
+              {"name": "trail", "type": "unit"},
+              {"name": "simple", "type": "unit"},
+              {"name": "acyclic", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.PathSearchPrefix",
@@ -1516,7 +1495,7 @@
     {
       "type": {
         "name": "openGql.grammar.PathOrPaths",
-        "body": {"variables": [], "body": {"union": [{"name": "path", "type": {"unit": {}}}, {"name": "paths", "type": {"unit": {}}}]}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "path", "type": "unit"}, {"name": "paths", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.AnyPathSearch",
@@ -1580,7 +1559,7 @@
               {"name": "numberOfGroups", "type": {"optional": {"variable": "openGql.grammar.NumberOfGroups"}}},
               {"name": "mode", "type": {"optional": {"variable": "openGql.grammar.PathMode"}}},
               {"name": "orPaths", "type": {"optional": {"variable": "openGql.grammar.PathOrPaths"}}},
-              {"name": "groups", "type": {"literal": {"boolean": {}}}}]}}}},
+              {"name": "groups", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.NumberOfGroups",
@@ -1662,7 +1641,7 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "temp", "type": {"optional": {"literal": {"boolean": {}}}}},
+              {"name": "temp", "type": {"optional": {"literal": "boolean"}}},
               {"name": "variable", "type": {"variable": "openGql.grammar.ElementVariable"}}]}}}},
     {
       "type": {
@@ -1676,7 +1655,7 @@
     {
       "type": {
         "name": "openGql.grammar.IsOrColon",
-        "body": {"variables": [], "body": {"union": [{"name": "is", "type": {"unit": {}}}, {"name": "colon", "type": {"unit": {}}}]}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "is", "type": "unit"}, {"name": "colon", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.ElementPatternPredicate",
@@ -1765,13 +1744,13 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "leftArrow", "type": {"unit": {}}},
-              {"name": "tilde", "type": {"unit": {}}},
-              {"name": "rightArrow", "type": {"unit": {}}},
-              {"name": "leftArrowTilde", "type": {"unit": {}}},
-              {"name": "tildeRightArrow", "type": {"unit": {}}},
-              {"name": "leftMinusRight", "type": {"unit": {}}},
-              {"name": "minusSign", "type": {"unit": {}}}]}}}},
+              {"name": "leftArrow", "type": "unit"},
+              {"name": "tilde", "type": "unit"},
+              {"name": "rightArrow", "type": "unit"},
+              {"name": "leftArrowTilde", "type": "unit"},
+              {"name": "tildeRightArrow", "type": "unit"},
+              {"name": "leftMinusRight", "type": "unit"},
+              {"name": "minusSign", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.ParenthesizedPathPatternExpression",
@@ -1802,7 +1781,7 @@
               {"name": "conjunction", "type": {"variable": "openGql.grammar.ConjunctionLabelExpression"}},
               {"name": "disjunction", "type": {"variable": "openGql.grammar.DisjunctionLabelExpression"}},
               {"name": "name", "type": {"variable": "openGql.grammar.LabelName"}},
-              {"name": "wildcard", "type": {"unit": {}}},
+              {"name": "wildcard", "type": "unit"},
               {"name": "parenthesized", "type": {"variable": "openGql.grammar.LabelExpression"}}]}}}},
     {
       "type": {
@@ -1837,8 +1816,8 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "asterisk", "type": {"unit": {}}},
-              {"name": "plusSign", "type": {"unit": {}}},
+              {"name": "asterisk", "type": "unit"},
+              {"name": "plusSign", "type": "unit"},
               {"name": "fixed", "type": {"variable": "openGql.grammar.FixedQuantifier"}},
               {"name": "general", "type": {"variable": "openGql.grammar.GeneralQuantifier"}}]}}}},
     {
@@ -2093,7 +2072,7 @@
           "body": {
             "union": [
               {"name": "elements", "type": {"list": {"variable": "openGql.grammar.GroupingElement"}}},
-              {"name": "emptySet", "type": {"unit": {}}}]}}}},
+              {"name": "emptySet", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.GroupingElement",
@@ -2123,15 +2102,11 @@
     {
       "type": {
         "name": "openGql.grammar.OrderingSpecification",
-        "body": {
-          "variables": [],
-          "body": {"union": [{"name": "ascending", "type": {"unit": {}}}, {"name": "descending", "type": {"unit": {}}}]}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "ascending", "type": "unit"}, {"name": "descending", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.NullOrdering",
-        "body": {
-          "variables": [],
-          "body": {"union": [{"name": "nullsFirst", "type": {"unit": {}}}, {"name": "nullsLast", "type": {"unit": {}}}]}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "nullsFirst", "type": "unit"}, {"name": "nullsLast", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.LimitClause",
@@ -2148,9 +2123,7 @@
     {
       "type": {
         "name": "openGql.grammar.OffsetSynonym",
-        "body": {
-          "variables": [],
-          "body": {"union": [{"name": "offset", "type": {"unit": {}}}, {"name": "skipReservedWord", "type": {"unit": {}}}]}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "offset", "type": "unit"}, {"name": "skipReservedWord", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.SchemaReference",
@@ -2168,7 +2141,7 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "root", "type": {"unit": {}}},
+              {"name": "root", "type": "unit"},
               {"name": "directoryAndSchema", "type": {"variable": "openGql.grammar.AbsoluteDirectoryAndSchema"}}]}}}},
     {
       "type": {
@@ -2207,10 +2180,7 @@
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "homeSchema", "type": {"unit": {}}},
-              {"name": "currentSchema", "type": {"unit": {}}},
-              {"name": "period", "type": {"unit": {}}}]}}}},
+            "union": [{"name": "homeSchema", "type": "unit"}, {"name": "currentSchema", "type": "unit"}, {"name": "period", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.AbsoluteDirectoryPath",
@@ -2222,7 +2192,7 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "parentDirectories", "type": {"literal": {"integer": {"int32": {}}}}},
+              {"name": "parentDirectories", "type": {"literal": {"integer": "int32"}}},
               {"name": "simplePath", "type": {"optional": {"variable": "openGql.grammar.SimpleDirectoryPath"}}}]}}}},
     {
       "type": {
@@ -2262,7 +2232,7 @@
         "name": "openGql.grammar.HomeGraph",
         "body": {
           "variables": [],
-          "body": {"union": [{"name": "homePropertyGraph", "type": {"unit": {}}}, {"name": "homeGraph", "type": {"unit": {}}}]}}}},
+          "body": {"union": [{"name": "homePropertyGraph", "type": "unit"}, {"name": "homeGraph", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.GraphTypeReference",
@@ -2336,7 +2306,7 @@
             "record": [
               {"name": "schemaReference", "type": {"variable": "openGql.grammar.SchemaReference"}},
               {"name": "objects", "type": {"list": {"variable": "openGql.grammar.ObjectName"}}}]}}}},
-    {"type": {"name": "openGql.grammar.ReferenceParameterSpecification", "body": {"variables": [], "body": {"unit": {}}}}},
+    {"type": {"name": "openGql.grammar.ReferenceParameterSpecification", "body": {"variables": [], "body": "unit"}}},
     {
       "type": {
         "name": "openGql.grammar.NestedGraphTypeSpecification",
@@ -2432,7 +2402,7 @@
             "record": [
               {"name": "keyLabelSet", "type": {"variable": "openGql.grammar.NodeTypeKeyLabelSet"}},
               {"name": "impliedContent", "type": {"optional": {"variable": "openGql.grammar.NodeTypeImpliedContent"}}}]}}}},
-    {"type": {"name": "openGql.grammar.LocalNodeTypeAlias", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
+    {"type": {"name": "openGql.grammar.LocalNodeTypeAlias", "body": {"variables": [], "body": {"literal": "string"}}}},
     {
       "type": {
         "name": "openGql.grammar.NodeTypeImpliedContent",
@@ -2651,9 +2621,7 @@
     {
       "type": {
         "name": "openGql.grammar.EdgeKind",
-        "body": {
-          "variables": [],
-          "body": {"union": [{"name": "directed", "type": {"unit": {}}}, {"name": "undirected", "type": {"unit": {}}}]}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "directed", "type": "unit"}, {"name": "undirected", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.EndpointPairPhrase",
@@ -2708,17 +2676,13 @@
     {
       "type": {
         "name": "openGql.grammar.ConnectorPointingRight",
-        "body": {
-          "variables": [],
-          "body": {"union": [{"name": "to", "type": {"unit": {}}}, {"name": "rightArrow", "type": {"unit": {}}}]}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "to", "type": "unit"}, {"name": "rightArrow", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.ConnectorUndirected",
-        "body": {"variables": [], "body": {"union": [{"name": "to", "type": {"unit": {}}}, {"name": "tilde", "type": {"unit": {}}}]}}}},
-    {
-      "type": {"name": "openGql.grammar.SourceNodeTypeAlias", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
-    {
-      "type": {"name": "openGql.grammar.DestinationNodeTypeAlias", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "to", "type": "unit"}, {"name": "tilde", "type": "unit"}]}}}},
+    {"type": {"name": "openGql.grammar.SourceNodeTypeAlias", "body": {"variables": [], "body": {"literal": "string"}}}},
+    {"type": {"name": "openGql.grammar.DestinationNodeTypeAlias", "body": {"variables": [], "body": {"literal": "string"}}}},
     {
       "type": {
         "name": "openGql.grammar.LabelSetPhrase",
@@ -2771,7 +2735,7 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "binding", "type": {"literal": {"boolean": {}}}},
+              {"name": "binding", "type": {"literal": "boolean"}},
               {"name": "fieldTypes", "type": {"variable": "openGql.grammar.FieldTypesSpecification"}}]}}}},
     {
       "type": {
@@ -2800,7 +2764,7 @@
               {"name": "typeName", "type": {"variable": "openGql.grammar.ListValueTypeName"}},
               {"name": "valueType", "type": {"variable": "openGql.grammar.ValueType"}},
               {"name": "maxLength", "type": {"optional": {"variable": "openGql.grammar.MaxLength"}}},
-              {"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+              {"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.ListValueTypeAlt2",
@@ -2811,7 +2775,7 @@
               {"name": "valueType", "type": {"variable": "openGql.grammar.ValueType"}},
               {"name": "typeName", "type": {"variable": "openGql.grammar.ListValueTypeName"}},
               {"name": "maxLength", "type": {"optional": {"variable": "openGql.grammar.MaxLength"}}},
-              {"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+              {"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.ListValueTypeAlt3",
@@ -2821,14 +2785,13 @@
             "record": [
               {"name": "typeName", "type": {"variable": "openGql.grammar.ListValueTypeName"}},
               {"name": "maxLength", "type": {"optional": {"variable": "openGql.grammar.MaxLength"}}},
-              {"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+              {"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.OpenDynamicUnionType",
         "body": {
           "variables": [],
-          "body": {
-            "record": [{"name": "value", "type": {"literal": {"boolean": {}}}}, {"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+          "body": {"record": [{"name": "value", "type": {"literal": "boolean"}}, {"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.DynamicPropertyValueType",
@@ -2836,10 +2799,10 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "any", "type": {"optional": {"literal": {"boolean": {}}}}},
-              {"name": "property", "type": {"unit": {}}},
-              {"name": "value", "type": {"unit": {}}},
-              {"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+              {"name": "any", "type": {"optional": {"literal": "boolean"}}},
+              {"name": "property", "type": "unit"},
+              {"name": "value", "type": "unit"},
+              {"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.ClosedDynamicUnionTypeAlt1",
@@ -2847,7 +2810,7 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "anyValue", "type": {"optional": {"literal": {"boolean": {}}}}},
+              {"name": "anyValue", "type": {"optional": {"literal": "boolean"}}},
               {"name": "valueTypes", "type": {"list": {"variable": "openGql.grammar.ValueType"}}}]}}}},
     {
       "type": {
@@ -2855,7 +2818,7 @@
         "body": {
           "variables": [],
           "body": {"record": [{"name": "valueTypes", "type": {"list": {"variable": "openGql.grammar.ValueType"}}}]}}}},
-    {"type": {"name": "openGql.grammar.Typed", "body": {"variables": [], "body": {"unit": {}}}}},
+    {"type": {"name": "openGql.grammar.Typed", "body": {"variables": [], "body": "unit"}}},
     {
       "type": {
         "name": "openGql.grammar.PredefinedType",
@@ -2873,7 +2836,7 @@
     {
       "type": {
         "name": "openGql.grammar.BooleanType",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.CharacterStringType",
@@ -2893,7 +2856,7 @@
             "record": [
               {"name": "minLength", "type": {"optional": {"variable": "openGql.grammar.MinLength"}}},
               {"name": "maxLength", "type": {"optional": {"variable": "openGql.grammar.MaxLength"}}},
-              {"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+              {"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.CharType",
@@ -2902,7 +2865,7 @@
           "body": {
             "record": [
               {"name": "fixedLength", "type": {"optional": {"variable": "openGql.grammar.FixedLength"}}},
-              {"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+              {"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.VarcharType",
@@ -2911,7 +2874,7 @@
           "body": {
             "record": [
               {"name": "maxLength", "type": {"optional": {"variable": "openGql.grammar.MaxLength"}}},
-              {"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+              {"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.ByteStringType",
@@ -2931,7 +2894,7 @@
             "record": [
               {"name": "minLength", "type": {"optional": {"variable": "openGql.grammar.MinLength"}}},
               {"name": "maxLength", "type": {"optional": {"variable": "openGql.grammar.MaxLength"}}},
-              {"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+              {"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.BinaryType",
@@ -2940,7 +2903,7 @@
           "body": {
             "record": [
               {"name": "fixedLength", "type": {"optional": {"variable": "openGql.grammar.FixedLength"}}},
-              {"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+              {"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.VarbinaryType",
@@ -2949,7 +2912,7 @@
           "body": {
             "record": [
               {"name": "maxLength", "type": {"optional": {"variable": "openGql.grammar.MaxLength"}}},
-              {"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+              {"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.MinLength",
@@ -3009,35 +2972,35 @@
     {
       "type": {
         "name": "openGql.grammar.Int8Type",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.Int16Type",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.Int32Type",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.Int64Type",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.Int128Type",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.Int256Type",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.SmallIntType",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.BigIntType",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.IntWithPrecision",
@@ -3046,7 +3009,7 @@
           "body": {
             "record": [
               {"name": "precision", "type": {"optional": {"variable": "openGql.grammar.Precision"}}},
-              {"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+              {"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.SignedVerboseBinaryExactNumericType",
@@ -3054,7 +3017,7 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "signed", "type": {"literal": {"boolean": {}}}},
+              {"name": "signed", "type": {"literal": "boolean"}},
               {"name": "verboseType", "type": {"variable": "openGql.grammar.VerboseBinaryExactNumericType"}}]}}}},
     {
       "type": {
@@ -3076,35 +3039,35 @@
     {
       "type": {
         "name": "openGql.grammar.Uint8Type",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.Uint16Type",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.Uint32Type",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.Uint64Type",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.Uint128Type",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.Uint256Type",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.USmallIntType",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.UBigIntType",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.UintWithPrecision",
@@ -3113,7 +3076,7 @@
           "body": {
             "record": [
               {"name": "precision", "type": {"optional": {"variable": "openGql.grammar.Precision"}}},
-              {"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+              {"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.VerboseBinaryExactNumericType",
@@ -3133,35 +3096,35 @@
     {
       "type": {
         "name": "openGql.grammar.Integer8Type",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.Integer16Type",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.Integer32Type",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.Integer64Type",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.Integer128Type",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.Integer256Type",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.SmallIntegerType",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.BigIntegerType",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.IntegerWithPrecision",
@@ -3170,7 +3133,7 @@
           "body": {
             "record": [
               {"name": "precision", "type": {"optional": {"variable": "openGql.grammar.Precision"}}},
-              {"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+              {"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.Precision",
@@ -3188,7 +3151,7 @@
             "record": [
               {"name": "precision", "type": {"variable": "openGql.grammar.Precision"}},
               {"name": "scale", "type": {"optional": {"variable": "openGql.grammar.Scale"}}},
-              {"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+              {"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.Scale",
@@ -3211,23 +3174,23 @@
     {
       "type": {
         "name": "openGql.grammar.Float16Type",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.Float32Type",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.Float64Type",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.Float128Type",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.Float256Type",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.FloatTypeWithPrecision",
@@ -3236,18 +3199,17 @@
           "body": {
             "record": [
               {"name": "precisionAndScale", "type": {"optional": {"variable": "openGql.grammar.PrecisionAndScale"}}},
-              {"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+              {"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.RealType",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.DoubleTypeWithPrecision",
         "body": {
           "variables": [],
-          "body": {
-            "record": [{"name": "precision", "type": {"literal": {"boolean": {}}}}, {"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+          "body": {"record": [{"name": "precision", "type": {"literal": "boolean"}}, {"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.TemporalType",
@@ -3281,11 +3243,11 @@
     {
       "type": {
         "name": "openGql.grammar.ZonedDatetimeType",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.TimestampWithTimeZoneType",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.LocalDatetimeTypeChoice",
@@ -3298,15 +3260,15 @@
     {
       "type": {
         "name": "openGql.grammar.LocalDatetimeType",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.TimestampWithoutTimeZoneType",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.DateType",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.TimeType",
@@ -3319,11 +3281,11 @@
     {
       "type": {
         "name": "openGql.grammar.ZonedTimeType",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.TimeWithTimeZoneType",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.LocalTimeTypeChoice",
@@ -3336,11 +3298,11 @@
     {
       "type": {
         "name": "openGql.grammar.LocalTimeType",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.TimeWithoutTimeZoneType",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.TemporalDurationType",
@@ -3349,13 +3311,11 @@
           "body": {
             "record": [
               {"name": "qualifier", "type": {"variable": "openGql.grammar.TemporalDurationQualifier"}},
-              {"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+              {"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.TemporalDurationQualifier",
-        "body": {
-          "variables": [],
-          "body": {"union": [{"name": "yearToMonth", "type": {"unit": {}}}, {"name": "dayToSecond", "type": {"unit": {}}}]}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "yearToMonth", "type": "unit"}, {"name": "dayToSecond", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.ReferenceValueType",
@@ -3376,8 +3336,8 @@
             "union": [
               {"name": "nullType", "type": {"variable": "openGql.grammar.NullType"}},
               {"name": "emptyType", "type": {"variable": "openGql.grammar.EmptyType"}}]}}}},
-    {"type": {"name": "openGql.grammar.NullType", "body": {"variables": [], "body": {"unit": {}}}}},
-    {"type": {"name": "openGql.grammar.EmptyType", "body": {"variables": [], "body": {"unit": {}}}}},
+    {"type": {"name": "openGql.grammar.NullType", "body": {"variables": [], "body": "unit"}}},
+    {"type": {"name": "openGql.grammar.EmptyType", "body": {"variables": [], "body": "unit"}}},
     {
       "type": {
         "name": "openGql.grammar.GraphReferenceValueType",
@@ -3394,9 +3354,9 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "property", "type": {"literal": {"boolean": {}}}},
+              {"name": "property", "type": {"literal": "boolean"}},
               {"name": "nestedSpec", "type": {"variable": "openGql.grammar.NestedGraphTypeSpecification"}},
-              {"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+              {"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.OpenGraphReferenceValueType",
@@ -3404,9 +3364,9 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "any", "type": {"optional": {"literal": {"boolean": {}}}}},
-              {"name": "property", "type": {"literal": {"boolean": {}}}},
-              {"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+              {"name": "any", "type": {"optional": {"literal": "boolean"}}},
+              {"name": "property", "type": {"literal": "boolean"}},
+              {"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.BindingTableReferenceValueType",
@@ -3415,7 +3375,7 @@
           "body": {
             "record": [
               {"name": "bindingTableType", "type": {"variable": "openGql.grammar.BindingTableType"}},
-              {"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+              {"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.NodeReferenceValueType",
@@ -3433,7 +3393,7 @@
           "body": {
             "record": [
               {"name": "nodeTypeSpec", "type": {"variable": "openGql.grammar.NodeTypeSpecification"}},
-              {"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+              {"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.OpenNodeReferenceValueType",
@@ -3441,9 +3401,9 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "any", "type": {"literal": {"boolean": {}}}},
+              {"name": "any", "type": {"literal": "boolean"}},
               {"name": "nodeSynonym", "type": {"variable": "openGql.grammar.NodeSynonym"}},
-              {"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+              {"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.EdgeReferenceValueType",
@@ -3461,7 +3421,7 @@
           "body": {
             "record": [
               {"name": "edgeTypeSpec", "type": {"variable": "openGql.grammar.EdgeTypeSpecification"}},
-              {"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+              {"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.OpenEdgeReferenceValueType",
@@ -3469,13 +3429,13 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "any", "type": {"literal": {"boolean": {}}}},
+              {"name": "any", "type": {"literal": "boolean"}},
               {"name": "edgeSynonym", "type": {"variable": "openGql.grammar.EdgeSynonym"}},
-              {"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+              {"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.PathValueType",
-        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.ListValueTypeName",
@@ -3483,12 +3443,12 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "group", "type": {"literal": {"boolean": {}}}},
+              {"name": "group", "type": {"literal": "boolean"}},
               {"name": "synonym", "type": {"variable": "openGql.grammar.ListValueTypeNameSynonym"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.ListValueTypeNameSynonym",
-        "body": {"variables": [], "body": {"union": [{"name": "list", "type": {"unit": {}}}, {"name": "array", "type": {"unit": {}}}]}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "list", "type": "unit"}, {"name": "array", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.RecordType",
@@ -3503,8 +3463,7 @@
         "name": "openGql.grammar.AnyRecordType",
         "body": {
           "variables": [],
-          "body": {
-            "record": [{"name": "any", "type": {"literal": {"boolean": {}}}}, {"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+          "body": {"record": [{"name": "any", "type": {"literal": "boolean"}}, {"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.SpecifiedRecordType",
@@ -3512,9 +3471,9 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "record", "type": {"literal": {"boolean": {}}}},
+              {"name": "record", "type": {"literal": "boolean"}},
               {"name": "fieldTypes", "type": {"variable": "openGql.grammar.FieldTypesSpecification"}},
-              {"name": "notNull", "type": {"literal": {"boolean": {}}}}]}}}},
+              {"name": "notNull", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.FieldTypesSpecification",
@@ -3523,7 +3482,7 @@
       "type": {
         "name": "openGql.grammar.FieldTypeList",
         "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.FieldType"}}}}},
-    {"type": {"name": "openGql.grammar.NotNull", "body": {"variables": [], "body": {"unit": {}}}}},
+    {"type": {"name": "openGql.grammar.NotNull", "body": {"variables": [], "body": "unit"}}},
     {
       "type": {
         "name": "openGql.grammar.FieldType",
@@ -3570,12 +3529,12 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "equals", "type": {"unit": {}}},
-              {"name": "notEquals", "type": {"unit": {}}},
-              {"name": "lessThan", "type": {"unit": {}}},
-              {"name": "greaterThan", "type": {"unit": {}}},
-              {"name": "lessThanOrEquals", "type": {"unit": {}}},
-              {"name": "greaterThanOrEquals", "type": {"unit": {}}}]}}}},
+              {"name": "equals", "type": "unit"},
+              {"name": "notEquals", "type": "unit"},
+              {"name": "lessThan", "type": "unit"},
+              {"name": "greaterThan", "type": "unit"},
+              {"name": "lessThanOrEquals", "type": "unit"},
+              {"name": "greaterThanOrEquals", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.ExistsPredicate",
@@ -3600,7 +3559,7 @@
     {
       "type": {
         "name": "openGql.grammar.NullPredicatePart2",
-        "body": {"variables": [], "body": {"record": [{"name": "not", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "not", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.ValueTypePredicate",
@@ -3617,7 +3576,7 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "not", "type": {"literal": {"boolean": {}}}},
+              {"name": "not", "type": {"literal": "boolean"}},
               {"name": "typed", "type": {"variable": "openGql.grammar.Typed"}},
               {"name": "valueType", "type": {"variable": "openGql.grammar.ValueType"}}]}}}},
     {
@@ -3627,7 +3586,7 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "not", "type": {"literal": {"boolean": {}}}},
+              {"name": "not", "type": {"literal": "boolean"}},
               {"name": "normalForm", "type": {"optional": {"variable": "openGql.grammar.NormalForm"}}}]}}}},
     {
       "type": {
@@ -3641,7 +3600,7 @@
     {
       "type": {
         "name": "openGql.grammar.DirectedPredicatePart2",
-        "body": {"variables": [], "body": {"record": [{"name": "not", "type": {"literal": {"boolean": {}}}}]}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "not", "type": {"literal": "boolean"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.LabeledPredicate",
@@ -3665,7 +3624,7 @@
         "name": "openGql.grammar.IsLabeledOrColon",
         "body": {
           "variables": [],
-          "body": {"union": [{"name": "not", "type": {"literal": {"boolean": {}}}}, {"name": "colon", "type": {"unit": {}}}]}}}},
+          "body": {"union": [{"name": "not", "type": {"literal": "boolean"}}, {"name": "colon", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.SourceDestinationPredicate",
@@ -3686,7 +3645,7 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "not", "type": {"literal": {"boolean": {}}}},
+              {"name": "not", "type": {"literal": "boolean"}},
               {"name": "sourceOf", "type": {"variable": "openGql.grammar.EdgeReference"}}]}}}},
     {
       "type": {
@@ -3696,7 +3655,7 @@
           "body": {
             "record": [
               {"name": "nodeReference", "type": {"variable": "openGql.grammar.NodeReference"}},
-              {"name": "not", "type": {"literal": {"boolean": {}}}},
+              {"name": "not", "type": {"literal": "boolean"}},
               {"name": "destinationOf", "type": {"variable": "openGql.grammar.EdgeReference"}}]}}}},
     {
       "type": {
@@ -3793,7 +3752,7 @@
           "body": {
             "record": [
               {"name": "valueExpression", "type": {"variable": "openGql.grammar.ValueExpression"}},
-              {"name": "not", "type": {"literal": {"boolean": {}}}},
+              {"name": "not", "type": {"literal": "boolean"}},
               {"name": "truthValue", "type": {"variable": "openGql.grammar.TruthValue"}}]}}}},
     {
       "type": {
@@ -3835,23 +3794,19 @@
     {
       "type": {
         "name": "openGql.grammar.Sign",
-        "body": {"variables": [], "body": {"union": [{"name": "plus", "type": {"unit": {}}}, {"name": "minus", "type": {"unit": {}}}]}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "plus", "type": "unit"}, {"name": "minus", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.MultDivOperator",
-        "body": {
-          "variables": [],
-          "body": {"union": [{"name": "multiply", "type": {"unit": {}}}, {"name": "divide", "type": {"unit": {}}}]}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "multiply", "type": "unit"}, {"name": "divide", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.AddSubtractOperator",
-        "body": {
-          "variables": [],
-          "body": {"union": [{"name": "add", "type": {"unit": {}}}, {"name": "subtract", "type": {"unit": {}}}]}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "add", "type": "unit"}, {"name": "subtract", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.DisjunctiveOperator",
-        "body": {"variables": [], "body": {"union": [{"name": "or", "type": {"unit": {}}}, {"name": "xor", "type": {"unit": {}}}]}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "or", "type": "unit"}, {"name": "xor", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.ValueFunction",
@@ -3894,7 +3849,7 @@
     {
       "type": {
         "name": "openGql.grammar.Side",
-        "body": {"variables": [], "body": {"union": [{"name": "left", "type": {"unit": {}}}, {"name": "right", "type": {"unit": {}}}]}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "left", "type": "unit"}, {"name": "right", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.TrimSingleCharacterOrByteString",
@@ -3911,7 +3866,7 @@
     {
       "type": {
         "name": "openGql.grammar.Case",
-        "body": {"variables": [], "body": {"union": [{"name": "upper", "type": {"unit": {}}}, {"name": "lower", "type": {"unit": {}}}]}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "upper", "type": "unit"}, {"name": "lower", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.TrimMultiCharacterCharacterString",
@@ -3927,11 +3882,7 @@
         "name": "openGql.grammar.TrimType",
         "body": {
           "variables": [],
-          "body": {
-            "union": [
-              {"name": "btrim", "type": {"unit": {}}},
-              {"name": "ltrim", "type": {"unit": {}}},
-              {"name": "rtrim", "type": {"unit": {}}}]}}}},
+          "body": {"union": [{"name": "btrim", "type": "unit"}, {"name": "ltrim", "type": "unit"}, {"name": "rtrim", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.NormalizeCharacterString",
@@ -4026,7 +3977,7 @@
           "body": {
             "union": [
               {"name": "dynamicParameterSpecification", "type": {"variable": "openGql.grammar.DynamicParameterSpecification"}},
-              {"name": "sessionUser", "type": {"unit": {}}}]}}}},
+              {"name": "sessionUser", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.DynamicParameterSpecification",
@@ -4154,9 +4105,7 @@
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "simple", "type": {"variable": "openGql.grammar.ResultExpression"}},
-              {"name": "nullLiteral", "type": {"unit": {}}}]}}}},
+            "union": [{"name": "simple", "type": {"variable": "openGql.grammar.ResultExpression"}}, {"name": "nullLiteral", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.ResultExpression",
@@ -4178,7 +4127,7 @@
           "body": {
             "union": [
               {"name": "valueExpression", "type": {"variable": "openGql.grammar.ValueExpression"}},
-              {"name": "nullLiteral", "type": {"unit": {}}}]}}}},
+              {"name": "nullLiteral", "type": "unit"}]}}}},
     {
       "type": {"name": "openGql.grammar.CastTarget", "body": {"variables": [], "body": {"variable": "openGql.grammar.ValueType"}}}},
     {
@@ -4188,7 +4137,7 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "countAll", "type": {"unit": {}}},
+              {"name": "countAll", "type": "unit"},
               {"name": "generalSetFunction", "type": {"variable": "openGql.grammar.GeneralSetFunction"}},
               {"name": "binarySetFunction", "type": {"variable": "openGql.grammar.BinarySetFunction"}}]}}}},
     {
@@ -4218,26 +4167,24 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "avg", "type": {"unit": {}}},
-              {"name": "count", "type": {"unit": {}}},
-              {"name": "max", "type": {"unit": {}}},
-              {"name": "min", "type": {"unit": {}}},
-              {"name": "sum", "type": {"unit": {}}},
-              {"name": "collectList", "type": {"unit": {}}},
-              {"name": "stddevSamp", "type": {"unit": {}}},
-              {"name": "stddevPop", "type": {"unit": {}}}]}}}},
+              {"name": "avg", "type": "unit"},
+              {"name": "count", "type": "unit"},
+              {"name": "max", "type": "unit"},
+              {"name": "min", "type": "unit"},
+              {"name": "sum", "type": "unit"},
+              {"name": "collectList", "type": "unit"},
+              {"name": "stddevSamp", "type": "unit"},
+              {"name": "stddevPop", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.SetQuantifier",
-        "body": {
-          "variables": [],
-          "body": {"union": [{"name": "distinct", "type": {"unit": {}}}, {"name": "all", "type": {"unit": {}}}]}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "distinct", "type": "unit"}, {"name": "all", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.BinarySetFunctionType",
         "body": {
           "variables": [],
-          "body": {"union": [{"name": "percentileCont", "type": {"unit": {}}}, {"name": "percentileDisc", "type": {"unit": {}}}]}}}},
+          "body": {"union": [{"name": "percentileCont", "type": "unit"}, {"name": "percentileDisc", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.DependentValueExpression",
@@ -4507,18 +4454,18 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "sin", "type": {"unit": {}}},
-              {"name": "cos", "type": {"unit": {}}},
-              {"name": "tan", "type": {"unit": {}}},
-              {"name": "cot", "type": {"unit": {}}},
-              {"name": "sinh", "type": {"unit": {}}},
-              {"name": "cosh", "type": {"unit": {}}},
-              {"name": "tanh", "type": {"unit": {}}},
-              {"name": "asin", "type": {"unit": {}}},
-              {"name": "acos", "type": {"unit": {}}},
-              {"name": "atan", "type": {"unit": {}}},
-              {"name": "degrees", "type": {"unit": {}}},
-              {"name": "radians", "type": {"unit": {}}}]}}}},
+              {"name": "sin", "type": "unit"},
+              {"name": "cos", "type": "unit"},
+              {"name": "tan", "type": "unit"},
+              {"name": "cot", "type": "unit"},
+              {"name": "sinh", "type": "unit"},
+              {"name": "cosh", "type": "unit"},
+              {"name": "tanh", "type": "unit"},
+              {"name": "asin", "type": "unit"},
+              {"name": "acos", "type": "unit"},
+              {"name": "atan", "type": "unit"},
+              {"name": "degrees", "type": "unit"},
+              {"name": "radians", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.GeneralLogarithmFunction",
@@ -4604,11 +4551,7 @@
         "name": "openGql.grammar.TrimSpecification",
         "body": {
           "variables": [],
-          "body": {
-            "union": [
-              {"name": "leading", "type": {"unit": {}}},
-              {"name": "trailing", "type": {"unit": {}}},
-              {"name": "both", "type": {"unit": {}}}]}}}},
+          "body": {"union": [{"name": "leading", "type": "unit"}, {"name": "trailing", "type": "unit"}, {"name": "both", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.TrimCharacterOrByteString",
@@ -4620,10 +4563,10 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "nfc", "type": {"unit": {}}},
-              {"name": "nfd", "type": {"unit": {}}},
-              {"name": "nfkc", "type": {"unit": {}}},
-              {"name": "nfkd", "type": {"unit": {}}}]}}}},
+              {"name": "nfc", "type": "unit"},
+              {"name": "nfd", "type": "unit"},
+              {"name": "nfkc", "type": "unit"},
+              {"name": "nfkd", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.StringLength",
@@ -4651,7 +4594,7 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "currentDate", "type": {"unit": {}}},
+              {"name": "currentDate", "type": "unit"},
               {"name": "dateWithParams", "type": {"optional": {"variable": "openGql.grammar.DateFunctionParameters"}}}]}}}},
     {
       "type": {
@@ -4660,7 +4603,7 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "currentTime", "type": {"unit": {}}},
+              {"name": "currentTime", "type": "unit"},
               {"name": "zonedTimeWithParams", "type": {"optional": {"variable": "openGql.grammar.TimeFunctionParameters"}}}]}}}},
     {
       "type": {
@@ -4673,7 +4616,7 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "currentTimestamp", "type": {"unit": {}}},
+              {"name": "currentTimestamp", "type": "unit"},
               {"name": "zonedDatetimeWithParams", "type": {"optional": {"variable": "openGql.grammar.DatetimeFunctionParameters"}}}]}}}},
     {
       "type": {
@@ -4682,7 +4625,7 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "localTimestamp", "type": {"unit": {}}},
+              {"name": "localTimestamp", "type": "unit"},
               {"name": "localDatetimeWithParams", "type": {"optional": {"variable": "openGql.grammar.DatetimeFunctionParameters"}}}]}}}},
     {
       "type": {
@@ -4763,16 +4706,16 @@
             "union": [
               {"name": "durationString", "type": {"variable": "openGql.grammar.DurationString"}},
               {"name": "recordConstructor", "type": {"variable": "openGql.grammar.RecordConstructor"}}]}}}},
-    {"type": {"name": "openGql.grammar.ObjectName", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
+    {"type": {"name": "openGql.grammar.ObjectName", "body": {"variables": [], "body": {"literal": "string"}}}},
     {
-      "type": {"name": "openGql.grammar.ObjectNameOrBindingVariable", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
-    {"type": {"name": "openGql.grammar.DirectoryName", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
-    {"type": {"name": "openGql.grammar.SchemaName", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
-    {"type": {"name": "openGql.grammar.GraphName", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
-    {"type": {"name": "openGql.grammar.DelimitedGraphName", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
-    {"type": {"name": "openGql.grammar.GraphTypeName", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
-    {"type": {"name": "openGql.grammar.NodeTypeName", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
-    {"type": {"name": "openGql.grammar.EdgeTypeName", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
+      "type": {"name": "openGql.grammar.ObjectNameOrBindingVariable", "body": {"variables": [], "body": {"literal": "string"}}}},
+    {"type": {"name": "openGql.grammar.DirectoryName", "body": {"variables": [], "body": {"literal": "string"}}}},
+    {"type": {"name": "openGql.grammar.SchemaName", "body": {"variables": [], "body": {"literal": "string"}}}},
+    {"type": {"name": "openGql.grammar.GraphName", "body": {"variables": [], "body": {"literal": "string"}}}},
+    {"type": {"name": "openGql.grammar.DelimitedGraphName", "body": {"variables": [], "body": {"literal": "string"}}}},
+    {"type": {"name": "openGql.grammar.GraphTypeName", "body": {"variables": [], "body": {"literal": "string"}}}},
+    {"type": {"name": "openGql.grammar.NodeTypeName", "body": {"variables": [], "body": {"literal": "string"}}}},
+    {"type": {"name": "openGql.grammar.EdgeTypeName", "body": {"variables": [], "body": {"literal": "string"}}}},
     {
       "type": {
         "name": "openGql.grammar.BindingTableName",
@@ -4780,14 +4723,14 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "regularIdentifier", "type": {"literal": {"string": {}}}},
+              {"name": "regularIdentifier", "type": {"literal": "string"}},
               {"name": "delimitedBindingTableName", "type": {"variable": "openGql.grammar.DelimitedBindingTableName"}}]}}}},
     {
-      "type": {"name": "openGql.grammar.DelimitedBindingTableName", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
-    {"type": {"name": "openGql.grammar.ProcedureName", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
-    {"type": {"name": "openGql.grammar.LabelName", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
-    {"type": {"name": "openGql.grammar.PropertyName", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
-    {"type": {"name": "openGql.grammar.FieldName", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
+      "type": {"name": "openGql.grammar.DelimitedBindingTableName", "body": {"variables": [], "body": {"literal": "string"}}}},
+    {"type": {"name": "openGql.grammar.ProcedureName", "body": {"variables": [], "body": {"literal": "string"}}}},
+    {"type": {"name": "openGql.grammar.LabelName", "body": {"variables": [], "body": {"literal": "string"}}}},
+    {"type": {"name": "openGql.grammar.PropertyName", "body": {"variables": [], "body": {"literal": "string"}}}},
+    {"type": {"name": "openGql.grammar.FieldName", "body": {"variables": [], "body": {"literal": "string"}}}},
     {
       "type": {
         "name": "openGql.grammar.ElementVariable",
@@ -4796,8 +4739,8 @@
       "type": {
         "name": "openGql.grammar.PathVariable",
         "body": {"variables": [], "body": {"variable": "openGql.grammar.BindingVariable"}}}},
-    {"type": {"name": "openGql.grammar.SubpathVariable", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
-    {"type": {"name": "openGql.grammar.BindingVariable", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
+    {"type": {"name": "openGql.grammar.SubpathVariable", "body": {"variables": [], "body": {"literal": "string"}}}},
+    {"type": {"name": "openGql.grammar.BindingVariable", "body": {"variables": [], "body": {"literal": "string"}}}},
     {
       "type": {
         "name": "openGql.grammar.UnsignedLiteral",
@@ -4848,14 +4791,13 @@
       "type": {
         "name": "openGql.grammar.RecordLiteral",
         "body": {"variables": [], "body": {"variable": "openGql.grammar.RecordConstructor"}}}},
-    {"type": {"name": "openGql.grammar.Identifier", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
-    {"type": {"name": "openGql.grammar.RegularIdentifier", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
+    {"type": {"name": "openGql.grammar.Identifier", "body": {"variables": [], "body": {"literal": "string"}}}},
+    {"type": {"name": "openGql.grammar.RegularIdentifier", "body": {"variables": [], "body": {"literal": "string"}}}},
     {
       "type": {
         "name": "openGql.grammar.TimeZoneString",
         "body": {"variables": [], "body": {"variable": "openGql.grammar.CharacterStringLiteral"}}}},
-    {
-      "type": {"name": "openGql.grammar.CharacterStringLiteral", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
+    {"type": {"name": "openGql.grammar.CharacterStringLiteral", "body": {"variables": [], "body": {"literal": "string"}}}},
     {
       "type": {
         "name": "openGql.grammar.UnsignedNumericLiteral",
@@ -4872,10 +4814,10 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "scientificWithSuffix", "type": {"literal": {"string": {}}}},
-              {"name": "commonWithSuffix", "type": {"literal": {"string": {}}}},
-              {"name": "commonWithoutSuffix", "type": {"literal": {"string": {}}}},
-              {"name": "integerWithSuffix", "type": {"literal": {"string": {}}}},
+              {"name": "scientificWithSuffix", "type": {"literal": "string"}},
+              {"name": "commonWithSuffix", "type": {"literal": "string"}},
+              {"name": "commonWithoutSuffix", "type": {"literal": "string"}},
+              {"name": "integerWithSuffix", "type": {"literal": "string"}},
               {"name": "unsignedInteger", "type": {"variable": "openGql.grammar.UnsignedInteger"}}]}}}},
     {
       "type": {
@@ -4884,10 +4826,10 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "scientificWithSuffix", "type": {"literal": {"string": {}}}},
-              {"name": "scientificWithoutSuffix", "type": {"literal": {"string": {}}}},
-              {"name": "commonWithSuffix", "type": {"literal": {"string": {}}}},
-              {"name": "integerWithSuffix", "type": {"literal": {"string": {}}}}]}}}},
+              {"name": "scientificWithSuffix", "type": {"literal": "string"}},
+              {"name": "scientificWithoutSuffix", "type": {"literal": "string"}},
+              {"name": "commonWithSuffix", "type": {"literal": "string"}},
+              {"name": "integerWithSuffix", "type": {"literal": "string"}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.UnsignedInteger",
@@ -4895,13 +4837,12 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "decimal", "type": {"literal": {"string": {}}}},
-              {"name": "hexadecimal", "type": {"literal": {"string": {}}}},
-              {"name": "octal", "type": {"literal": {"string": {}}}},
-              {"name": "binary", "type": {"literal": {"string": {}}}}]}}}},
-    {
-      "type": {"name": "openGql.grammar.UnsignedDecimalInteger", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
-    {"type": {"name": "openGql.grammar.NullLiteral", "body": {"variables": [], "body": {"unit": {}}}}},
+              {"name": "decimal", "type": {"literal": "string"}},
+              {"name": "hexadecimal", "type": {"literal": "string"}},
+              {"name": "octal", "type": {"literal": "string"}},
+              {"name": "binary", "type": {"literal": "string"}}]}}}},
+    {"type": {"name": "openGql.grammar.UnsignedDecimalInteger", "body": {"variables": [], "body": {"literal": "string"}}}},
+    {"type": {"name": "openGql.grammar.NullLiteral", "body": {"variables": [], "body": "unit"}}},
     {
       "type": {
         "name": "openGql.grammar.DateString",
@@ -4925,34 +4866,26 @@
     {
       "type": {
         "name": "openGql.grammar.NodeSynonym",
-        "body": {"variables": [], "body": {"union": [{"name": "node", "type": {"unit": {}}}, {"name": "vertex", "type": {"unit": {}}}]}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "node", "type": "unit"}, {"name": "vertex", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.EdgesSynonym",
-        "body": {
-          "variables": [],
-          "body": {"union": [{"name": "edges", "type": {"unit": {}}}, {"name": "relationships", "type": {"unit": {}}}]}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "edges", "type": "unit"}, {"name": "relationships", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.EdgeSynonym",
-        "body": {
-          "variables": [],
-          "body": {"union": [{"name": "edge", "type": {"unit": {}}}, {"name": "relationship", "type": {"unit": {}}}]}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "edge", "type": "unit"}, {"name": "relationship", "type": "unit"}]}}}},
     {
       "type": {
         "name": "openGql.grammar.Implies",
         "body": {
           "variables": [],
-          "body": {"union": [{"name": "rightDoubleArrow", "type": {"unit": {}}}, {"name": "implies", "type": {"unit": {}}}]}}}},
-    {"type": {"name": "openGql.grammar.ParameterName", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
+          "body": {"union": [{"name": "rightDoubleArrow", "type": "unit"}, {"name": "implies", "type": "unit"}]}}}},
+    {"type": {"name": "openGql.grammar.ParameterName", "body": {"variables": [], "body": {"literal": "string"}}}},
     {
       "type": {
         "name": "openGql.grammar.BooleanLiteral",
         "body": {
           "variables": [],
-          "body": {
-            "union": [
-              {"name": "true", "type": {"unit": {}}},
-              {"name": "false", "type": {"unit": {}}},
-              {"name": "unknown", "type": {"unit": {}}}]}}}},
-    {"type": {"name": "openGql.grammar.ByteStringLiteral", "body": {"variables": [], "body": {"literal": {"string": {}}}}}}]}
+          "body": {"union": [{"name": "true", "type": "unit"}, {"name": "false", "type": "unit"}, {"name": "unknown", "type": "unit"}]}}}},
+    {"type": {"name": "openGql.grammar.ByteStringLiteral", "body": {"variables": [], "body": {"literal": "string"}}}}]}

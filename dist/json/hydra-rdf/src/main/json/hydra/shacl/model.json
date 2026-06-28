@@ -12,7 +12,7 @@
             "annotated": {
               "body": {
                 "record": [
-                  {"name": "isClosed", "type": {"literal": {"boolean": {}}}},
+                  {"name": "isClosed", "type": {"literal": "boolean"}},
                   {"name": "ignoredProperties", "type": {"optional": {"set": {"variable": "hydra.rdf.syntax.Property"}}}}]},
               "annotation": {
                 "map": [
@@ -182,7 +182,7 @@
                     "name": "maxLength",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"bigint": {}}}},
+                        "body": {"literal": {"integer": "bigint"}},
                         "annotation": {
                           "map": [
                             {
@@ -212,7 +212,7 @@
                     "name": "minLength",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"bigint": {}}}},
+                        "body": {"literal": {"integer": "bigint"}},
                         "annotation": {
                           "map": [
                             {
@@ -293,7 +293,7 @@
                     "name": "deactivated",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"boolean": {}}}},
+                        "body": {"optional": {"literal": "boolean"}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#deactivated"}}}]}}}},
                   {
@@ -378,37 +378,37 @@
                 "name": "blankNode",
                 "type": {
                   "annotated": {
-                    "body": {"unit": {}},
+                    "body": "unit",
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A blank node"}}}]}}}},
               {
                 "name": "iri",
                 "type": {
                   "annotated": {
-                    "body": {"unit": {}},
+                    "body": "unit",
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An IRI"}}}]}}}},
               {
                 "name": "literal",
                 "type": {
                   "annotated": {
-                    "body": {"unit": {}},
+                    "body": "unit",
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A literal"}}}]}}}},
               {
                 "name": "blankNodeOrIri",
                 "type": {
                   "annotated": {
-                    "body": {"unit": {}},
+                    "body": "unit",
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A blank node or an IRI"}}}]}}}},
               {
                 "name": "blankNodeOrLiteral",
                 "type": {
                   "annotated": {
-                    "body": {"unit": {}},
+                    "body": "unit",
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A blank node or a literal"}}}]}}}},
               {
                 "name": "iriOrLiteral",
                 "type": {
                   "annotated": {
-                    "body": {"unit": {}},
+                    "body": "unit",
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An IRI or a literal"}}}]}}}}]}}}},
     {
       "type": {
@@ -431,9 +431,7 @@
           "body": {
             "annotated": {
               "body": {
-                "record": [
-                  {"name": "regex", "type": {"literal": {"string": {}}}},
-                  {"name": "flags", "type": {"optional": {"literal": {"string": {}}}}}]},
+                "record": [{"name": "regex", "type": {"literal": "string"}}, {"name": "flags", "type": {"optional": {"literal": "string"}}}]},
               "annotation": {
                 "map": [
                   {
@@ -485,7 +483,7 @@
                     "name": "order",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"integer": {"bigint": {}}}}},
+                        "body": {"optional": {"literal": {"integer": "bigint"}}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "See https://www.w3.org/TR/shacl/#order"}}}]}}}},
                   {"name": "path", "type": {"variable": "hydra.rdf.syntax.Iri"}}]},
@@ -527,7 +525,7 @@
                     "name": "maxCount",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"bigint": {}}}},
+                        "body": {"literal": {"integer": "bigint"}},
                         "annotation": {
                           "map": [
                             {
@@ -539,7 +537,7 @@
                     "name": "minCount",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"bigint": {}}}},
+                        "body": {"literal": {"integer": "bigint"}},
                         "annotation": {
                           "map": [
                             {
@@ -551,7 +549,7 @@
                     "name": "uniqueLang",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {
                           "map": [
                             {
@@ -587,9 +585,9 @@
                     "name": "qualifiedValueShape",
                     "type": {
                       "application": {"function": {"variable": "hydra.shacl.model.Reference"}, "argument": {"variable": "hydra.shacl.model.Shape"}}}},
-                  {"name": "qualifiedMaxCount", "type": {"literal": {"integer": {"bigint": {}}}}},
-                  {"name": "qualifiedMinCount", "type": {"literal": {"integer": {"bigint": {}}}}},
-                  {"name": "qualifiedValueShapesDisjoint", "type": {"optional": {"literal": {"boolean": {}}}}}]},
+                  {"name": "qualifiedMaxCount", "type": {"literal": {"integer": "bigint"}}},
+                  {"name": "qualifiedMinCount", "type": {"literal": {"integer": "bigint"}}},
+                  {"name": "qualifiedValueShapesDisjoint", "type": {"optional": {"literal": "boolean"}}}]},
               "annotation": {
                 "map": [
                   {
@@ -638,7 +636,7 @@
                 "name": "info",
                 "type": {
                   "annotated": {
-                    "body": {"unit": {}},
+                    "body": "unit",
                     "annotation": {
                       "map": [
                         {
@@ -648,7 +646,7 @@
                 "name": "warning",
                 "type": {
                   "annotated": {
-                    "body": {"unit": {}},
+                    "body": "unit",
                     "annotation": {
                       "map": [
                         {
@@ -658,7 +656,7 @@
                 "name": "violation",
                 "type": {
                   "annotated": {
-                    "body": {"unit": {}},
+                    "body": "unit",
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A constraint violation"}}}]}}}}]}}}},
     {
       "type": {

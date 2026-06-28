@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term decoders for hydra.relational
 
 module Hydra.Decode.Relational where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Errors as Errors
@@ -14,6 +16,7 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Decoder for hydra.relational.ColumnName
 columnName :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Relational.ColumnName
 columnName cx raw =
@@ -24,6 +27,7 @@ columnName cx raw =
           _ -> Left (Errors.DecodingError "expected string literal")
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.relational.ColumnSchema
 columnSchema :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Relational.ColumnSchema t)
 columnSchema t cx raw =
@@ -34,6 +38,7 @@ columnSchema t cx raw =
           Relational.columnSchemaName = field_name,
           Relational.columnSchemaDomain = field_domain}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.relational.ColumnSchema")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.relational.ForeignKey
 foreignKey :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Relational.ForeignKey
 foreignKey cx raw =
@@ -44,18 +49,21 @@ foreignKey cx raw =
           Relational.foreignKeyForeignRelation = field_foreignRelation,
           Relational.foreignKeyKeys = field_keys}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.relational.ForeignKey")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.relational.PrimaryKey
 primaryKey :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Relational.PrimaryKey
 primaryKey cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermWrap v0 -> Eithers.map (\b -> Relational.PrimaryKey b) (ExtractCore.decodeList columnName cx (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.relational.Relation
 relation :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError v) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Relational.Relation v)
 relation v cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermWrap v0 -> Eithers.map (\b -> Relational.Relation b) (ExtractCore.decodeList (row v) cx (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.relational.RelationName
 relationName :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Relational.RelationName
 relationName cx raw =
@@ -66,6 +74,7 @@ relationName cx raw =
           _ -> Left (Errors.DecodingError "expected string literal")
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.relational.RelationSchema
 relationSchema :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Relational.RelationSchema t)
 relationSchema t cx raw =
@@ -78,12 +87,14 @@ relationSchema t cx raw =
           Relational.relationSchemaPrimaryKeys = field_primaryKeys,
           Relational.relationSchemaForeignKeys = field_foreignKeys}))))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.relational.RelationSchema")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.relational.Relationship
 relationship :: Ord v => ((Graph.Graph -> Core.Term -> Either Errors.DecodingError v) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Relational.Relationship v))
 relationship v cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermWrap v0 -> Eithers.map (\b -> Relational.Relationship b) (ExtractCore.decodeSet (ExtractCore.decodeMap columnName v) cx (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.relational.Row
 row :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError v) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Relational.Row v)
 row v cx raw =

@@ -6,7 +6,7 @@
     {
       "type": {
         "name": "hydra.pg.query.AggregationQuery",
-        "body": {"variables": [], "body": {"union": [{"name": "count", "type": {"unit": {}}}]}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "count", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.pg.query.ApplicationQuery",
@@ -35,8 +35,7 @@
         "name": "hydra.pg.query.BinaryBooleanOperator",
         "body": {
           "variables": [],
-          "body": {
-            "union": [{"name": "and", "type": {"unit": {}}}, {"name": "or", "type": {"unit": {}}}, {"name": "xor", "type": {"unit": {}}}]}}}},
+          "body": {"union": [{"name": "and", "type": "unit"}, {"name": "or", "type": "unit"}, {"name": "xor", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.pg.query.BinaryOperator",
@@ -46,7 +45,7 @@
             "union": [
               {"name": "boolean", "type": {"variable": "hydra.pg.query.BinaryBooleanOperator"}},
               {"name": "comparison", "type": {"variable": "hydra.pg.query.ComparisonOperator"}},
-              {"name": "power", "type": {"unit": {}}}]}}}},
+              {"name": "power", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.pg.query.Binding",
@@ -63,12 +62,12 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "eq", "type": {"unit": {}}},
-              {"name": "neq", "type": {"unit": {}}},
-              {"name": "lt", "type": {"unit": {}}},
-              {"name": "lte", "type": {"unit": {}}},
-              {"name": "gt", "type": {"unit": {}}},
-              {"name": "gte", "type": {"unit": {}}}]}}}},
+              {"name": "eq", "type": "unit"},
+              {"name": "neq", "type": "unit"},
+              {"name": "lt", "type": "unit"},
+              {"name": "lte", "type": "unit"},
+              {"name": "gt", "type": "unit"},
+              {"name": "gte", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.pg.query.EdgeProjectionPattern",
@@ -109,7 +108,7 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "optional", "type": {"literal": {"boolean": {}}}},
+              {"name": "optional", "type": {"literal": "boolean"}},
               {"name": "pattern", "type": {"list": {"variable": "hydra.pg.query.Projection"}}},
               {"name": "where", "type": {"optional": {"variable": "hydra.pg.query.Expression"}}}]}}}},
     {
@@ -128,7 +127,7 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "all", "type": {"literal": {"boolean": {}}}},
+              {"name": "all", "type": {"literal": "boolean"}},
               {"name": "explicit", "type": {"list": {"variable": "hydra.pg.query.Projection"}}}]}}}},
     {
       "type": {
@@ -148,8 +147,7 @@
             "record": [
               {"name": "base", "type": {"variable": "hydra.pg.query.Expression"}},
               {"name": "key", "type": {"variable": "hydra.pg.model.PropertyKey"}}]}}}},
-    {
-      "type": {"name": "hydra.pg.query.PropertyValue", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+    {"type": {"name": "hydra.pg.query.PropertyValue", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
     {
       "type": {
         "name": "hydra.pg.query.PropertyValuePattern",
@@ -158,7 +156,7 @@
           "body": {
             "union": [
               {"name": "variable", "type": {"variable": "hydra.pg.model.PropertyKey"}},
-              {"name": "value", "type": {"literal": {"string": {}}}}]}}}},
+              {"name": "value", "type": {"literal": "string"}}]}}}},
     {
       "type": {
         "name": "hydra.pg.query.Query",
@@ -171,7 +169,7 @@
               {"name": "LetQuery", "type": {"variable": "hydra.pg.query.LetQuery"}},
               {"name": "match", "type": {"variable": "hydra.pg.query.MatchQuery"}},
               {"name": "select", "type": {"variable": "hydra.pg.query.SelectQuery"}},
-              {"name": "value", "type": {"literal": {"string": {}}}}]}}}},
+              {"name": "value", "type": {"literal": "string"}}]}}}},
     {
       "type": {
         "name": "hydra.pg.query.SelectQuery",
@@ -179,7 +177,7 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "distinct", "type": {"literal": {"boolean": {}}}},
+              {"name": "distinct", "type": {"literal": "boolean"}},
               {"name": "projection", "type": {"variable": "hydra.pg.query.Projections"}}]}}}},
     {
       "type": {
@@ -193,8 +191,8 @@
     {
       "type": {
         "name": "hydra.pg.query.UnaryOperator",
-        "body": {"variables": [], "body": {"union": [{"name": "negate", "type": {"unit": {}}}]}}}},
-    {"type": {"name": "hydra.pg.query.Variable", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "negate", "type": "unit"}]}}}},
+    {"type": {"name": "hydra.pg.query.Variable", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
     {
       "type": {
         "name": "hydra.pg.query.VertexPattern",

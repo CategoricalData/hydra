@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Primitives in the hydra.lib.logic module.
 
 module Hydra.Lib.Logic where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -31,6 +33,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 and :: Packaging.PrimitiveDefinition
 and =
     Packaging.PrimitiveDefinition {
@@ -74,6 +77,7 @@ and =
                 Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "b"))})),
             Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean False))}))}))})))}
+
 ifElse :: Packaging.PrimitiveDefinition
 ifElse =
     Packaging.PrimitiveDefinition {
@@ -113,6 +117,7 @@ ifElse =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 not :: Packaging.PrimitiveDefinition
 not =
     Packaging.PrimitiveDefinition {
@@ -147,6 +152,7 @@ not =
               Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
             Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean False))})),
           Core.applicationArgument = (Core.TermLiteral (Core.LiteralBoolean True))}))})))}
+
 or :: Packaging.PrimitiveDefinition
 or =
     Packaging.PrimitiveDefinition {

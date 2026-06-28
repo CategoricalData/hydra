@@ -1,12 +1,15 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term encoders for hydra.error.system
 
 module Hydra.Encode.Error.System where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.File as File
 import qualified Hydra.Error.System as System
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Encoder for hydra.error.system.SystemError
 systemError :: System.SystemError -> Core.Term
 systemError x =

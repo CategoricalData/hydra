@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term decoders for hydra.yaml.model
 
 module Hydra.Decode.Yaml.Model where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Errors as Errors
@@ -17,6 +19,7 @@ import qualified Hydra.Util as Util
 import qualified Hydra.Yaml.Model as Model
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Decoder for hydra.yaml.model.Node
 node :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Model.Node
 node cx raw =
@@ -35,6 +38,7 @@ node cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.yaml.model.Scalar
 scalar :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Model.Scalar
 scalar cx raw =

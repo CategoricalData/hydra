@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hydra-tinkerpop"
+version = "0.17.0"
+description = "Hydra <-> TinkerPop (Gremlin) bridge: property-graph data conversion and validation"
+requires-python = ">=3.9"
+# hydra-python is consumed locally (from dist/python) during development; not published in 0.17.0.
+# This binding will migrate into overlay/ before any publish, so PyPI wiring is intentionally omitted.
+dependencies = [
+    "gremlinpython>=3.7,<4.0",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=7.0",
+]
+
+# Implicit namespace packages: the `hydra` namespace is shared with the generated hydra-python
+# distribution (which ships no __init__.py at the namespace levels). Do NOT add __init__.py under
+# hydra/, hydra/overlay/, hydra/overlay/python/ — that would shadow the generated packages.
+[tool.setuptools.packages.find]
+where = ["src"]
+namespaces = true

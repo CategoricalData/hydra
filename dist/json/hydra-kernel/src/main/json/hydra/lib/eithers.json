@@ -272,7 +272,7 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [{"name": "arg0", "type": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"boolean": {}}}}},
+          "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
@@ -300,7 +300,7 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [{"name": "arg0", "type": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"boolean": {}}}}},
+          "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {

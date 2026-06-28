@@ -993,12 +993,12 @@
                                                       "application": {
                                                         "function": {
                                                           "typeApplication": {
-                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.foldl"}, "type": {"literal": {"boolean": {}}}}},
+                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.foldl"}, "type": {"literal": "boolean"}}},
                                                             "type": {"variable": "hydra.typing.TypeParameter"}}},
                                                         "argument": {
                                                           "lambda": {
                                                             "parameter": "acc",
-                                                            "domain": {"literal": {"boolean": {}}},
+                                                            "domain": {"literal": "boolean"},
                                                             "body": {
                                                               "lambda": {
                                                                 "parameter": "tp",
@@ -1019,7 +1019,7 @@
                                                                                 "argument": {"variable": "tp"}}}}}}}}}}}}}}},
                                                     "argument": {"literal": {"boolean": false}}}},
                                                 "argument": {"variable": "typeParams"}}},
-                                            "typeScheme": {"variables": [], "body": {"literal": {"boolean": {}}}}}],
+                                            "typeScheme": {"variables": [], "body": {"literal": "boolean"}}}],
                                         "body": {
                                           "let": {
                                             "bindings": [
@@ -1398,7 +1398,7 @@
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"list": {"variable": "hydra.typing.Parameter"}}}},
-                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                    "type": {"literal": {"integer": "int32"}}}},
                                                                 "argument": {
                                                                   "application": {
                                                                     "function": {
@@ -1410,12 +1410,12 @@
                                                                                 "body": {
                                                                                   "typeApplication": {
                                                                                     "body": {"variable": "hydra.lib.lists.foldl"},
-                                                                                    "type": {"pair": {"first": {"list": {"variable": "hydra.typing.Parameter"}}, "second": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                                    "type": {"pair": {"first": {"list": {"variable": "hydra.typing.Parameter"}}, "second": {"literal": {"integer": "int32"}}}}}},
                                                                                 "type": {"variable": "hydra.core.Type"}}},
                                                                             "argument": {
                                                                               "lambda": {
                                                                                 "parameter": "acc",
-                                                                                "domain": {"pair": {"first": {"list": {"variable": "hydra.typing.Parameter"}}, "second": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                "domain": {"pair": {"first": {"list": {"variable": "hydra.typing.Parameter"}}, "second": {"literal": {"integer": "int32"}}}},
                                                                                 "body": {
                                                                                   "lambda": {
                                                                                     "parameter": "ty",
@@ -1431,7 +1431,7 @@
                                                                                                   "typeApplication": {
                                                                                                     "body": {
                                                                                                       "typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"list": {"variable": "hydra.typing.Parameter"}}}},
-                                                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                                    "type": {"literal": {"integer": "int32"}}}},
                                                                                                 "argument": {"variable": "acc"}}},
                                                                                             "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typing.Parameter"}}}}],
                                                                                         "body": {
@@ -1445,9 +1445,9 @@
                                                                                                       "typeApplication": {
                                                                                                         "body": {
                                                                                                           "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"list": {"variable": "hydra.typing.Parameter"}}}},
-                                                                                                        "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                                        "type": {"literal": {"integer": "int32"}}}},
                                                                                                     "argument": {"variable": "acc"}}},
-                                                                                                "typeScheme": {"variables": [], "body": {"literal": {"integer": {"int32": {}}}}}}],
+                                                                                                "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}}}],
                                                                                             "body": {
                                                                                               "typeApplication": {
                                                                                                 "body": {
@@ -1475,7 +1475,7 @@
                                                                                                                                   "list": [
                                                                                                                                     {"literal": {"string": "arg"}},
                                                                                                                                     {"application": {"function": {"variable": "hydra.lib.literals.showInt32"}, "argument": {"variable": "i"}}}]}}}}}},
-                                                                                                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                                                                                                                      {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                                                                                                       {"name": "type", "term": {"variable": "ty"}},
                                                                                                                       {"name": "isLazy", "term": {"literal": {"boolean": false}}}]}}}},
                                                                                                             "argument": {"variable": "pairAcc"}}},
@@ -1484,7 +1484,7 @@
                                                                                                             "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"variable": "i"}}},
                                                                                                             "argument": {"literal": {"integer": {"int32": 1}}}}}}},
                                                                                                     "type": {"list": {"variable": "hydra.typing.Parameter"}}}},
-                                                                                                "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}}}}}},
+                                                                                                "type": {"literal": {"integer": "int32"}}}}}}}}}}}}}},
                                                                         "argument": {
                                                                           "typeApplication": {
                                                                             "body": {
@@ -1494,7 +1494,7 @@
                                                                                     "first": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.typing.Parameter"}}},
                                                                                     "second": {"literal": {"integer": {"int32": 0}}}}},
                                                                                 "type": {"list": {"variable": "hydra.typing.Parameter"}}}},
-                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                            "type": {"literal": {"integer": "int32"}}}}}},
                                                                     "argument": {"variable": "paramTypes"}}}}}}},
                                                         "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typing.Parameter"}}}}],
                                                     "body": {
@@ -1506,7 +1506,7 @@
                                                               "record": {
                                                                 "typeName": "hydra.typing.Result",
                                                                 "fields": [
-                                                                  {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"string": {}}}}}},
+                                                                  {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                                                   {"name": "type", "term": {"variable": "resultType"}}]}},
                                                             "typeScheme": {"variables": [], "body": {"variable": "hydra.typing.Result"}}}],
                                                         "body": {

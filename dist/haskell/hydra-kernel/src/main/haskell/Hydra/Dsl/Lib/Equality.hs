@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | DSL functions for hydra.lib.equality
 
 module Hydra.Dsl.Lib.Equality where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -57,6 +59,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | DSL reference to hydra.lib.equality.compare
 compare :: Typed.TypedTerm x -> Typed.TypedTerm x -> Typed.TypedTerm Util.Comparison
 compare arg0 arg1 =
@@ -65,6 +68,7 @@ compare arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.compare")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.equality.equal
 equal :: Typed.TypedTerm x -> Typed.TypedTerm x -> Typed.TypedTerm Bool
 equal arg0 arg1 =
@@ -73,6 +77,7 @@ equal arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.equal")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.equality.gt
 gt :: Typed.TypedTerm x -> Typed.TypedTerm x -> Typed.TypedTerm Bool
 gt arg0 arg1 =
@@ -81,6 +86,7 @@ gt arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.gt")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.equality.gte
 gte :: Typed.TypedTerm x -> Typed.TypedTerm x -> Typed.TypedTerm Bool
 gte arg0 arg1 =
@@ -89,12 +95,14 @@ gte arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.gte")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.equality.identity
 identity :: Typed.TypedTerm x -> Typed.TypedTerm x
 identity arg0 =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.identity")),
       Core.applicationArgument = (Typed.unTypedTerm arg0)}))
+
 -- | DSL reference to hydra.lib.equality.lt
 lt :: Typed.TypedTerm x -> Typed.TypedTerm x -> Typed.TypedTerm Bool
 lt arg0 arg1 =
@@ -103,6 +111,7 @@ lt arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.lt")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.equality.lte
 lte :: Typed.TypedTerm x -> Typed.TypedTerm x -> Typed.TypedTerm Bool
 lte arg0 arg1 =
@@ -111,6 +120,7 @@ lte arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.lte")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.equality.max
 max :: Typed.TypedTerm x -> Typed.TypedTerm x -> Typed.TypedTerm x
 max arg0 arg1 =
@@ -119,6 +129,7 @@ max arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.equality.max")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.equality.min
 min :: Typed.TypedTerm x -> Typed.TypedTerm x -> Typed.TypedTerm x
 min arg0 arg1 =

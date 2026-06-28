@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Transform test cases for code generation, filtering to tests that can be compiled to target languages
 
 module Hydra.Test.Transform where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -39,9 +41,11 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Add generation namespace prefix
 addGenerationPrefix :: Packaging.ModuleName -> Packaging.ModuleName
 addGenerationPrefix ns_ = Packaging.ModuleName (Strings.cat2 "generation." (Packaging.unModuleName ns_))
+
 -- | Build a Term representing a convertCase function call
 buildConvertCaseCall :: Util.CaseConvention -> Util.CaseConvention -> String -> Core.Term
 buildConvertCaseCall fromConv toConv input_ =
@@ -52,26 +56,31 @@ buildConvertCaseCall fromConv toConv input_ =
           Core.applicationArgument = (encodeCaseConvention fromConv)})),
         Core.applicationArgument = (encodeCaseConvention toConv)})),
       Core.applicationArgument = (Core.TermLiteral (Core.LiteralString input_))})
+
 -- | Build a Term representing a topologicalSort function call
 buildTopologicalSortCall :: [(Int, [Int])] -> Core.Term
 buildTopologicalSortCall adjList =
     Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.sorting.topologicalSort")),
       Core.applicationArgument = (encodeAdjacencyList adjList)})
+
 -- | Build a Term representing a topologicalSortComponents function call
 buildTopologicalSortSCCCall :: [(Int, [Int])] -> Core.Term
 buildTopologicalSortSCCCall adjList =
     Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.sorting.topologicalSortComponents")),
       Core.applicationArgument = (encodeAdjacencyList adjList)})
+
 -- | Collect all test cases from a test group (flattening hierarchy)
 collectTestCases :: Testing.TestGroup -> [Testing.TestCaseWithMetadata]
 collectTestCases tg =
     Lists.concat2 (Testing.testGroupCases tg) (Lists.concat (Lists.map (\sg -> collectTestCases sg) (Testing.testGroupSubgroups tg)))
+
 -- | Encode an adjacency list as a Term
 encodeAdjacencyList :: [(Int, [Int])] -> Core.Term
 encodeAdjacencyList pairs =
     Core.TermList (Lists.map (\p -> Core.TermPair (encodeInt (Pairs.first p), (Core.TermList (Lists.map (\d -> encodeInt d) (Pairs.second p))))) pairs)
+
 -- | Encode CaseConvention as a Term (unit variant)
 encodeCaseConvention :: Util.CaseConvention -> Core.Term
 encodeCaseConvention conv =
@@ -84,19 +93,24 @@ encodeCaseConvention conv =
           Util.CaseConventionCamel -> Core.Name "camel"
           Util.CaseConventionPascal -> Core.Name "pascal",
         Core.fieldTerm = Core.TermUnit}})
+
 -- | Encode Either [[Int]] [Int] as a Term
 encodeEitherListList :: Either [[Int]] [Int] -> Core.Term
 encodeEitherListList e =
     Core.TermEither (Eithers.bimap (\cycles -> encodeListList cycles) (\sorted -> encodeIntList sorted) e)
+
 -- | Encode an Int as a Term
 encodeInt :: Int -> Core.Term
 encodeInt n = Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 n))
+
 -- | Encode [Int] as a Term
 encodeIntList :: [Int] -> Core.Term
 encodeIntList ints = Core.TermList (Lists.map (\n -> encodeInt n) ints)
+
 -- | Encode [[Int]] as a Term
 encodeListList :: [[Int]] -> Core.Term
 encodeListList lists = Core.TermList (Lists.map (\l -> encodeIntList l) lists)
+
 -- | Transform module with generation namespace
 transformModule :: Packaging.Module -> Packaging.Module
 transformModule m =
@@ -105,9 +119,11 @@ transformModule m =
       Packaging.moduleMetadata = (Packaging.moduleMetadata m),
       Packaging.moduleDependencies = (Packaging.moduleDependencies m),
       Packaging.moduleDefinitions = (Packaging.moduleDefinitions m)}
+
 -- | Pass through test cases unchanged
 transformTestCase :: t0 -> Maybe t0
 transformTestCase tcm = Just tcm
+
 -- | Transform test group hierarchy to only include delegated evaluation tests
 transformToCompiledTests :: Testing.TestGroup -> Maybe Testing.TestGroup
 transformToCompiledTests tg =

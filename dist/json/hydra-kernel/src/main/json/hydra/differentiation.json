@@ -2057,7 +2057,7 @@
                                 "handler": {
                                   "lambda": {
                                     "parameter": "_",
-                                    "domain": {"unit": {}},
+                                    "domain": "unit",
                                     "body": {
                                       "inject": {
                                         "typeName": "hydra.core.Term",

@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | JSON encoding for Hydra terms. Converts Terms to JSON Values using Either for error handling.
 
 module Hydra.Json.Encode where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -46,6 +48,7 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
+
 -- | Encode a float value to JSON. Finite values become JSON numbers (shortest round-trip); IEEE specials (NaN/Inf/-0.0) become JSON strings. Float32 and Float64 are symmetric; the schema disambiguates precision on decode.
 encodeFloat :: Core.FloatValue -> Either t0 Model.Value
 encodeFloat fv =
@@ -56,6 +59,7 @@ encodeFloat fv =
       Core.FloatValueFloat64 v0 ->
         let s = LibLiterals.showFloat64 v0
         in (Logic.ifElse (requiresJsonStringSentinel s) (Right (Model.ValueString s)) (Right (Model.ValueNumber (LibLiterals.float64ToDecimal v0))))
+
 -- | Encode an integer value to JSON. Small ints use native numbers; large ints use strings.
 encodeInteger :: Core.IntegerValue -> Either t0 Model.Value
 encodeInteger iv =
@@ -69,6 +73,7 @@ encodeInteger iv =
       Core.IntegerValueUint8 v0 -> Right (Model.ValueNumber (LibLiterals.bigintToDecimal (LibLiterals.uint8ToBigint v0)))
       Core.IntegerValueUint16 v0 -> Right (Model.ValueNumber (LibLiterals.bigintToDecimal (LibLiterals.uint16ToBigint v0)))
       Core.IntegerValueUint32 v0 -> Right (Model.ValueNumber (LibLiterals.bigintToDecimal (LibLiterals.uint32ToBigint v0)))
+
 -- | Encode a Hydra literal to a JSON value
 encodeLiteral :: Core.Literal -> Either t0 Model.Value
 encodeLiteral lit =
@@ -79,10 +84,12 @@ encodeLiteral lit =
       Core.LiteralFloat v0 -> encodeFloat v0
       Core.LiteralInteger v0 -> encodeInteger v0
       Core.LiteralString v0 -> Right (Model.ValueString v0)
+
 -- | True for IEEE sentinel strings that JSON must escape as a string to preserve.
 requiresJsonStringSentinel :: String -> Bool
 requiresJsonStringSentinel s =
     Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Logic.or (Equality.equal s "-Infinity") (Equality.equal s "-0.0")))
+
 -- | Encode a Hydra term to a JSON value given a type and type name. Returns Left for unsupported constructs.
 toJson :: M.Map Core.Name Core.Type -> Core.Name -> Core.Type -> Core.Term -> Either String Model.Value
 toJson types tname typ term =
@@ -156,9 +163,15 @@ toJson types tname typ term =
                           "unknown variant: ",
                           fname])) (\ft -> Right (Core.fieldTypeType ft))
             in (Eithers.either (\err -> Left err) (\ftype ->
-              let encodedUnion = toJson types tname ftype fterm
-              in (Eithers.map (\v -> Model.ValueObject [
-                (fname, v)]) encodedUnion)) ftypeResult)
+              let ftypeStripped = Strip.deannotateType ftype
+                  isUnit =
+                          case ftypeStripped of
+                            Core.TypeUnit -> True
+                            _ -> False
+              in (Logic.ifElse isUnit (Right (Model.ValueString fname)) (
+                let encodedUnion = toJson types tname ftype fterm
+                in (Eithers.map (\v -> Model.ValueObject [
+                  (fname, v)]) encodedUnion)))) ftypeResult)
           _ -> Left "expected union term"
         Core.TypeUnit -> Right (Model.ValueObject [])
         Core.TypeWrap v0 -> case strippedTerm of
@@ -212,6 +225,7 @@ toJson types tname typ term =
         _ -> Left (Strings.cat [
           "unsupported type for JSON encoding: ",
           (ShowCore.type_ typ)])
+
 -- | Encode a Hydra term to a JSON value without type information. Falls back to array-wrapped Maybe encoding.
 toJsonUntyped :: Core.Term -> Either String Model.Value
 toJsonUntyped term =
@@ -244,9 +258,15 @@ toJsonUntyped term =
           let field = Core.injectionField v0
               fname = Core.unName (Core.fieldName field)
               fterm = Core.fieldTerm field
-              encodedUnion = toJsonUntyped fterm
-          in (Eithers.map (\v -> Model.ValueObject [
-            (fname, v)]) encodedUnion)
+              ftermStripped = Strip.deannotateTerm fterm
+              isUnit =
+                      case ftermStripped of
+                        Core.TermUnit -> True
+                        _ -> False
+          in (Logic.ifElse isUnit (Right (Model.ValueString fname)) (
+            let encodedUnion = toJsonUntyped fterm
+            in (Eithers.map (\v -> Model.ValueObject [
+              (fname, v)]) encodedUnion)))
         Core.TermUnit -> Right (Model.ValueObject [])
         Core.TermWrap v0 -> toJsonUntyped (Core.wrappedTermBody v0)
         Core.TermMap v0 ->

@@ -182,7 +182,7 @@
           "typeParameters": [{"name": "t0", "constraints": []}],
           "parameters": [
             {"name": "arg0", "type": {"variable": "t0"}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": {"boolean": {}}}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": "boolean"}, "isLazy": false},
             {
               "name": "arg2",
               "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}},
@@ -202,7 +202,7 @@
                     "body": {
                       "lambda": {
                         "parameter": "minimal",
-                        "domain": {"literal": {"boolean": {}}},
+                        "domain": {"literal": "boolean"},
                         "body": {
                           "lambda": {
                             "parameter": "schema",
@@ -299,7 +299,7 @@
                                                                     "handler": {
                                                                       "lambda": {
                                                                         "parameter": "_",
-                                                                        "domain": {"unit": {}},
+                                                                        "domain": "unit",
                                                                         "body": {
                                                                           "inject": {"typeName": "hydra.core.FloatValue", "field": {"name": "float32", "term": {"literal": {"float": {"float32": 0}}}}}}}}},
                                                                   {
@@ -307,7 +307,7 @@
                                                                     "handler": {
                                                                       "lambda": {
                                                                         "parameter": "_",
-                                                                        "domain": {"unit": {}},
+                                                                        "domain": "unit",
                                                                         "body": {
                                                                           "inject": {"typeName": "hydra.core.FloatValue", "field": {"name": "float64", "term": {"literal": {"float": {"float64": 0}}}}}}}}}]}},
                                                             "argument": {"variable": "ft"}}}}},
@@ -334,7 +334,7 @@
                                                                         "handler": {
                                                                           "lambda": {
                                                                             "parameter": "_",
-                                                                            "domain": {"unit": {}},
+                                                                            "domain": "unit",
                                                                             "body": {
                                                                               "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "bigint", "term": {"literal": {"integer": {"bigint": "0"}}}}}}}}},
                                                                       {
@@ -342,7 +342,7 @@
                                                                         "handler": {
                                                                           "lambda": {
                                                                             "parameter": "_",
-                                                                            "domain": {"unit": {}},
+                                                                            "domain": "unit",
                                                                             "body": {
                                                                               "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int8", "term": {"literal": {"integer": {"int8": 0}}}}}}}}},
                                                                       {
@@ -350,7 +350,7 @@
                                                                         "handler": {
                                                                           "lambda": {
                                                                             "parameter": "_",
-                                                                            "domain": {"unit": {}},
+                                                                            "domain": "unit",
                                                                             "body": {
                                                                               "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int16", "term": {"literal": {"integer": {"int16": 0}}}}}}}}},
                                                                       {
@@ -358,7 +358,7 @@
                                                                         "handler": {
                                                                           "lambda": {
                                                                             "parameter": "_",
-                                                                            "domain": {"unit": {}},
+                                                                            "domain": "unit",
                                                                             "body": {
                                                                               "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 0}}}}}}}}},
                                                                       {
@@ -366,7 +366,7 @@
                                                                         "handler": {
                                                                           "lambda": {
                                                                             "parameter": "_",
-                                                                            "domain": {"unit": {}},
+                                                                            "domain": "unit",
                                                                             "body": {
                                                                               "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int64", "term": {"literal": {"integer": {"int64": "0"}}}}}}}}},
                                                                       {
@@ -374,7 +374,7 @@
                                                                         "handler": {
                                                                           "lambda": {
                                                                             "parameter": "_",
-                                                                            "domain": {"unit": {}},
+                                                                            "domain": "unit",
                                                                             "body": {
                                                                               "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "uint8", "term": {"literal": {"integer": {"uint8": 0}}}}}}}}},
                                                                       {
@@ -382,7 +382,7 @@
                                                                         "handler": {
                                                                           "lambda": {
                                                                             "parameter": "_",
-                                                                            "domain": {"unit": {}},
+                                                                            "domain": "unit",
                                                                             "body": {
                                                                               "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "uint16", "term": {"literal": {"integer": {"uint16": 0}}}}}}}}},
                                                                       {
@@ -390,7 +390,7 @@
                                                                         "handler": {
                                                                           "lambda": {
                                                                             "parameter": "_",
-                                                                            "domain": {"unit": {}},
+                                                                            "domain": "unit",
                                                                             "body": {
                                                                               "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "uint32", "term": {"literal": {"integer": {"uint32": 0}}}}}}}}},
                                                                       {
@@ -398,7 +398,7 @@
                                                                         "handler": {
                                                                           "lambda": {
                                                                             "parameter": "_",
-                                                                            "domain": {"unit": {}},
+                                                                            "domain": "unit",
                                                                             "body": {
                                                                               "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "uint64", "term": {"literal": {"integer": {"uint64": "0"}}}}}}}}}]}},
                                                                 "argument": {"variable": "it"}}}}},
@@ -425,21 +425,21 @@
                                                                             "handler": {
                                                                               "lambda": {
                                                                                 "parameter": "_",
-                                                                                "domain": {"unit": {}},
+                                                                                "domain": "unit",
                                                                                 "body": {"inject": {"typeName": "hydra.core.Literal", "field": {"name": "string", "term": {"literal": {"string": ""}}}}}}}},
                                                                           {
                                                                             "name": "boolean",
                                                                             "handler": {
                                                                               "lambda": {
                                                                                 "parameter": "_",
-                                                                                "domain": {"unit": {}},
+                                                                                "domain": "unit",
                                                                                 "body": {"inject": {"typeName": "hydra.core.Literal", "field": {"name": "boolean", "term": {"literal": {"boolean": false}}}}}}}},
                                                                           {
                                                                             "name": "decimal",
                                                                             "handler": {
                                                                               "lambda": {
                                                                                 "parameter": "_",
-                                                                                "domain": {"unit": {}},
+                                                                                "domain": "unit",
                                                                                 "body": {"inject": {"typeName": "hydra.core.Literal", "field": {"name": "decimal", "term": {"literal": {"decimal": 0}}}}}}}},
                                                                           {
                                                                             "name": "integer",
@@ -466,7 +466,7 @@
                                                                             "handler": {
                                                                               "lambda": {
                                                                                 "parameter": "_",
-                                                                                "domain": {"unit": {}},
+                                                                                "domain": "unit",
                                                                                 "body": {"inject": {"typeName": "hydra.core.Literal", "field": {"name": "string", "term": {"literal": {"string": ""}}}}}}}}]}},
                                                                     "argument": {"variable": "lt"}}}}},
                                                             "typeScheme": {

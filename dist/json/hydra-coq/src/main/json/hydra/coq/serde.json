@@ -142,7 +142,7 @@
                                                                                   "application": {
                                                                                     "function": {"project": {"typeName": "hydra.coq.syntax.NaturalArg", "fieldName": "natural"}},
                                                                                     "argument": {"variable": "na2"}}}}},
-                                                                            "typeScheme": {"variables": [], "body": {"literal": {"integer": {"bigint": {}}}}}}],
+                                                                            "typeScheme": {"variables": [], "body": {"literal": {"integer": "bigint"}}}}],
                                                                         "body": {
                                                                           "application": {
                                                                             "function": {"variable": "hydra.serialization.cst"},
@@ -1330,14 +1330,14 @@
                         "handler": {
                           "lambda": {
                             "parameter": "_",
-                            "domain": {"unit": {}},
+                            "domain": "unit",
                             "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "Local"}}}}}}},
                       {
                         "name": "global",
                         "handler": {
                           "lambda": {
                             "parameter": "_",
-                            "domain": {"unit": {}},
+                            "domain": "unit",
                             "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "Global"}}}}}}}]}},
                 "argument": {"variable": "loc"}}}}}}},
     {
@@ -1684,7 +1684,7 @@
                         "handler": {
                           "lambda": {
                             "parameter": "_",
-                            "domain": {"unit": {}},
+                            "domain": "unit",
                             "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "_"}}}}}}},
                       {
                         "name": "parens",
@@ -1725,7 +1725,7 @@
                                   {
                                     "name": "v",
                                     "term": {"application": {"function": {"unwrap": "hydra.coq.syntax.Number"}, "argument": {"variable": "n"}}},
-                                    "typeScheme": {"variables": [], "body": {"literal": {"float": {"float64": {}}}}}}],
+                                    "typeScheme": {"variables": [], "body": {"literal": {"float": "float64"}}}}],
                                 "body": {
                                   "application": {
                                     "function": {"variable": "hydra.serialization.cst"},
@@ -2343,7 +2343,7 @@
                                         "handler": {
                                           "lambda": {
                                             "parameter": "_",
-                                            "domain": {"unit": {}},
+                                            "domain": "unit",
                                             "body": {
                                               "list": [{"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "Import"}}}}]}}}},
                                       {
@@ -2351,7 +2351,7 @@
                                         "handler": {
                                           "lambda": {
                                             "parameter": "_",
-                                            "domain": {"unit": {}},
+                                            "domain": "unit",
                                             "body": {
                                               "list": [{"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "Export"}}}}]}}}}]}},
                                 "argument": {"variable": "q"}}}}}}},
@@ -2629,35 +2629,35 @@
                         "handler": {
                           "lambda": {
                             "parameter": "_",
-                            "domain": {"unit": {}},
+                            "domain": "unit",
                             "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "Set"}}}}}}},
                       {
                         "name": "prop",
                         "handler": {
                           "lambda": {
                             "parameter": "_",
-                            "domain": {"unit": {}},
+                            "domain": "unit",
                             "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "Prop"}}}}}}},
                       {
                         "name": "sProp",
                         "handler": {
                           "lambda": {
                             "parameter": "_",
-                            "domain": {"unit": {}},
+                            "domain": "unit",
                             "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "SProp"}}}}}}},
                       {
                         "name": "type",
                         "handler": {
                           "lambda": {
                             "parameter": "_",
-                            "domain": {"unit": {}},
+                            "domain": "unit",
                             "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "Type"}}}}}}},
                       {
                         "name": "typeWithAnyUniverse",
                         "handler": {
                           "lambda": {
                             "parameter": "_",
-                            "domain": {"unit": {}},
+                            "domain": "unit",
                             "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "Type"}}}}}}},
                       {
                         "name": "typeWithUniverse",
@@ -3352,7 +3352,7 @@
                                                   {
                                                     "name": "v",
                                                     "term": {"application": {"function": {"unwrap": "hydra.coq.syntax.Number"}, "argument": {"variable": "n"}}},
-                                                    "typeScheme": {"variables": [], "body": {"literal": {"float": {"float64": {}}}}}}],
+                                                    "typeScheme": {"variables": [], "body": {"literal": {"float": "float64"}}}}],
                                                 "body": {
                                                   "application": {
                                                     "function": {"variable": "hydra.serialization.cst"},
@@ -3394,21 +3394,21 @@
                         "handler": {
                           "lambda": {
                             "parameter": "_",
-                            "domain": {"unit": {}},
+                            "domain": "unit",
                             "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "{| |}"}}}}}}},
                       {
                         "name": "generalizing",
                         "handler": {
                           "lambda": {
                             "parameter": "_",
-                            "domain": {"unit": {}},
+                            "domain": "unit",
                             "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "`( )"}}}}}}},
                       {
                         "name": "ltac",
                         "handler": {
                           "lambda": {
                             "parameter": "_",
-                            "domain": {"unit": {}},
+                            "domain": "unit",
                             "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "ltac:( )"}}}}}}},
                       {
                         "name": "parens",
@@ -3443,7 +3443,7 @@
                         "handler": {
                           "lambda": {
                             "parameter": "_",
-                            "domain": {"unit": {}},
+                            "domain": "unit",
                             "body": {
                               "application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "?projection"}}}}}}},
                       {
@@ -3451,7 +3451,7 @@
                         "handler": {
                           "lambda": {
                             "parameter": "_",
-                            "domain": {"unit": {}},
+                            "domain": "unit",
                             "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "?scope"}}}}}}},
                       {
                         "name": "term0",
@@ -3597,21 +3597,21 @@
                                 "handler": {
                                   "lambda": {
                                     "parameter": "_",
-                                    "domain": {"unit": {}},
+                                    "domain": "unit",
                                     "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "Theorem"}}}}}}},
                               {
                                 "name": "lemma",
                                 "handler": {
                                   "lambda": {
                                     "parameter": "_",
-                                    "domain": {"unit": {}},
+                                    "domain": "unit",
                                     "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "Lemma"}}}}}}},
                               {
                                 "name": "proposition",
                                 "handler": {
                                   "lambda": {
                                     "parameter": "_",
-                                    "domain": {"unit": {}},
+                                    "domain": "unit",
                                     "body": {
                                       "application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "Proposition"}}}}}}},
                               {
@@ -3619,14 +3619,14 @@
                                 "handler": {
                                   "lambda": {
                                     "parameter": "_",
-                                    "domain": {"unit": {}},
+                                    "domain": "unit",
                                     "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "Corollary"}}}}}}},
                               {
                                 "name": "example",
                                 "handler": {
                                   "lambda": {
                                     "parameter": "_",
-                                    "domain": {"unit": {}},
+                                    "domain": "unit",
                                     "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "Example"}}}}}}}]}},
                         "argument": {
                           "application": {

@@ -41,8 +41,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"binary": {}}}, "isLazy": false}],
-          "result": {"type": {"either": {"left": {"literal": {"string": {}}}, "right": {"literal": {"string": {}}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "binary"}, "isLazy": false}],
+          "result": {"type": {"either": {"left": {"literal": "string"}, "right": {"literal": "string"}}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -56,7 +56,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"binary": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"literal": "binary"}}},
         "isPure": true,
         "isTotal": true}}]}

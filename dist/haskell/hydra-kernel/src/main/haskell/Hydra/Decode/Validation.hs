@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term decoders for hydra.validation
 
 module Hydra.Decode.Validation where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Decode.Error.Core as ErrorCore
@@ -15,6 +17,7 @@ import qualified Hydra.Util as Util
 import qualified Hydra.Validation as Validation
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Decoder for hydra.validation.ValidationProfile
 validationProfile :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Validation.ValidationProfile
 validationProfile cx raw =
@@ -39,6 +42,7 @@ validationProfile cx raw =
           Validation.validationProfileMaxErrors = field_maxErrors,
           Validation.validationProfileMaxWarnings = field_maxWarnings}))))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.validation.ValidationProfile")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.validation.ValidationResult
 validationResult :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError e) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Validation.ValidationResult e)
 validationResult e cx raw =

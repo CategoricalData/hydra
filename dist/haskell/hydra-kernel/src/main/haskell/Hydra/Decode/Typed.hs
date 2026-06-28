@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term decoders for hydra.typed
 
 module Hydra.Decode.Typed where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Errors as Errors
@@ -14,6 +16,7 @@ import qualified Hydra.Typed as Typed
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Decoder for hydra.typed.TypedBinding
 typedBinding :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError a) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Typed.TypedBinding a)
 typedBinding a cx raw =
@@ -24,12 +27,14 @@ typedBinding a cx raw =
           Typed.typedBindingName = field_name,
           Typed.typedBindingTerm = field_term}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.typed.TypedBinding")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.typed.TypedTerm
 typedTerm :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError a) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Typed.TypedTerm a)
 typedTerm a cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermWrap v0 -> Eithers.map (\b -> Typed.TypedTerm b) (DecodeCore.term cx (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.typed.TypedTermDefinition
 typedTermDefinition :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError a) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Typed.TypedTermDefinition a)
 typedTermDefinition a cx raw =

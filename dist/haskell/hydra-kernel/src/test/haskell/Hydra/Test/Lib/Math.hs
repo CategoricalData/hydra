@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Test cases for hydra.lib.math primitives
 
 module Hydra.Test.Lib.Math where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Overlay.Haskell.Lib.Eithers as Eithers
@@ -11,6 +13,7 @@ import qualified Hydra.Test.TestGraph as TestGraph
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Test cases for hydra.lib.math primitives
 allTests :: Testing.TestGroup
 allTests =

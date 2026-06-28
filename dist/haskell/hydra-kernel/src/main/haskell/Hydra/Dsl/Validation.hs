@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | DSL functions for hydra.validation
 
 module Hydra.Dsl.Validation where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Dsl.Error.Core as DslErrorCore
@@ -11,6 +13,7 @@ import qualified Hydra.Validation as Validation
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
+
 -- | DSL constructor for hydra.validation.ValidationProfile
 validationProfile :: Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Int -> Typed.TypedTerm Int -> Typed.TypedTerm Validation.ValidationProfile
 validationProfile errorRules warningRules maxErrors maxWarnings =
@@ -29,6 +32,7 @@ validationProfile errorRules warningRules maxErrors maxWarnings =
         Core.Field {
           Core.fieldName = (Core.Name "maxWarnings"),
           Core.fieldTerm = (Typed.unTypedTerm maxWarnings)}]}))
+
 -- | DSL accessor for the errorRules field of hydra.validation.ValidationProfile
 validationProfileErrorRules :: Typed.TypedTerm Validation.ValidationProfile -> Typed.TypedTerm (S.Set Core.Name)
 validationProfileErrorRules x =
@@ -37,6 +41,7 @@ validationProfileErrorRules x =
         Core.projectionTypeName = (Core.Name "hydra.validation.ValidationProfile"),
         Core.projectionFieldName = (Core.Name "errorRules")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the maxErrors field of hydra.validation.ValidationProfile
 validationProfileMaxErrors :: Typed.TypedTerm Validation.ValidationProfile -> Typed.TypedTerm Int
 validationProfileMaxErrors x =
@@ -45,6 +50,7 @@ validationProfileMaxErrors x =
         Core.projectionTypeName = (Core.Name "hydra.validation.ValidationProfile"),
         Core.projectionFieldName = (Core.Name "maxErrors")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the maxWarnings field of hydra.validation.ValidationProfile
 validationProfileMaxWarnings :: Typed.TypedTerm Validation.ValidationProfile -> Typed.TypedTerm Int
 validationProfileMaxWarnings x =
@@ -53,6 +59,7 @@ validationProfileMaxWarnings x =
         Core.projectionTypeName = (Core.Name "hydra.validation.ValidationProfile"),
         Core.projectionFieldName = (Core.Name "maxWarnings")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the warningRules field of hydra.validation.ValidationProfile
 validationProfileWarningRules :: Typed.TypedTerm Validation.ValidationProfile -> Typed.TypedTerm (S.Set Core.Name)
 validationProfileWarningRules x =
@@ -61,6 +68,7 @@ validationProfileWarningRules x =
         Core.projectionTypeName = (Core.Name "hydra.validation.ValidationProfile"),
         Core.projectionFieldName = (Core.Name "warningRules")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the errorRules field of hydra.validation.ValidationProfile
 validationProfileWithErrorRules :: Typed.TypedTerm Validation.ValidationProfile -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Validation.ValidationProfile
 validationProfileWithErrorRules original newVal =
@@ -91,6 +99,7 @@ validationProfileWithErrorRules original newVal =
               Core.projectionTypeName = (Core.Name "hydra.validation.ValidationProfile"),
               Core.projectionFieldName = (Core.Name "maxWarnings")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the maxErrors field of hydra.validation.ValidationProfile
 validationProfileWithMaxErrors :: Typed.TypedTerm Validation.ValidationProfile -> Typed.TypedTerm Int -> Typed.TypedTerm Validation.ValidationProfile
 validationProfileWithMaxErrors original newVal =
@@ -121,6 +130,7 @@ validationProfileWithMaxErrors original newVal =
               Core.projectionTypeName = (Core.Name "hydra.validation.ValidationProfile"),
               Core.projectionFieldName = (Core.Name "maxWarnings")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the maxWarnings field of hydra.validation.ValidationProfile
 validationProfileWithMaxWarnings :: Typed.TypedTerm Validation.ValidationProfile -> Typed.TypedTerm Int -> Typed.TypedTerm Validation.ValidationProfile
 validationProfileWithMaxWarnings original newVal =
@@ -151,6 +161,7 @@ validationProfileWithMaxWarnings original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "maxWarnings"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the warningRules field of hydra.validation.ValidationProfile
 validationProfileWithWarningRules :: Typed.TypedTerm Validation.ValidationProfile -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Validation.ValidationProfile
 validationProfileWithWarningRules original newVal =
@@ -181,6 +192,7 @@ validationProfileWithWarningRules original newVal =
               Core.projectionTypeName = (Core.Name "hydra.validation.ValidationProfile"),
               Core.projectionFieldName = (Core.Name "maxWarnings")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.validation.ValidationResult
 validationResult :: Typed.TypedTerm [e] -> Typed.TypedTerm [e] -> Typed.TypedTerm (Validation.ValidationResult e)
 validationResult errors warnings =
@@ -193,6 +205,7 @@ validationResult errors warnings =
         Core.Field {
           Core.fieldName = (Core.Name "warnings"),
           Core.fieldTerm = (Typed.unTypedTerm warnings)}]}))
+
 -- | DSL accessor for the errors field of hydra.validation.ValidationResult
 validationResultErrors :: Typed.TypedTerm (Validation.ValidationResult e) -> Typed.TypedTerm [e]
 validationResultErrors x =
@@ -201,6 +214,7 @@ validationResultErrors x =
         Core.projectionTypeName = (Core.Name "hydra.validation.ValidationResult"),
         Core.projectionFieldName = (Core.Name "errors")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the warnings field of hydra.validation.ValidationResult
 validationResultWarnings :: Typed.TypedTerm (Validation.ValidationResult e) -> Typed.TypedTerm [e]
 validationResultWarnings x =
@@ -209,6 +223,7 @@ validationResultWarnings x =
         Core.projectionTypeName = (Core.Name "hydra.validation.ValidationResult"),
         Core.projectionFieldName = (Core.Name "warnings")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the errors field of hydra.validation.ValidationResult
 validationResultWithErrors :: Typed.TypedTerm (Validation.ValidationResult e) -> Typed.TypedTerm [e] -> Typed.TypedTerm (Validation.ValidationResult e)
 validationResultWithErrors original newVal =
@@ -225,6 +240,7 @@ validationResultWithErrors original newVal =
               Core.projectionTypeName = (Core.Name "hydra.validation.ValidationResult"),
               Core.projectionFieldName = (Core.Name "warnings")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the warnings field of hydra.validation.ValidationResult
 validationResultWithWarnings :: Typed.TypedTerm (Validation.ValidationResult e) -> Typed.TypedTerm [e] -> Typed.TypedTerm (Validation.ValidationResult e)
 validationResultWithWarnings original newVal =

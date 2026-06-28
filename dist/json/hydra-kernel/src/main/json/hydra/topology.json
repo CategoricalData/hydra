@@ -67,7 +67,7 @@
                     "name": "counter",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {
                           "map": [
                             {
@@ -77,7 +77,7 @@
                     "name": "indices",
                     "type": {
                       "annotated": {
-                        "body": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}},
+                        "body": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": "int32"}}}},
                         "annotation": {
                           "map": [
                             {
@@ -87,7 +87,7 @@
                     "name": "lowLinks",
                     "type": {
                       "annotated": {
-                        "body": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}},
+                        "body": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": "int32"}}}},
                         "annotation": {
                           "map": [
                             {
@@ -136,7 +136,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"literal": {"integer": {"int32": {}}}},
+              "body": {"literal": {"integer": "int32"}},
               "annotation": {
                 "map": [
                   {

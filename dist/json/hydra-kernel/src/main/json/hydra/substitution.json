@@ -161,7 +161,7 @@
                               "body": {
                                 "function": {
                                   "domain": {"variable": "hydra.core.Name"},
-                                  "codomain": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": {"boolean": {}}}}}}}}},
+                                  "codomain": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": "boolean"}}}}}}},
                           {
                             "name": "withExtra",
                             "term": {

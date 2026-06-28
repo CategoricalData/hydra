@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term decoders for hydra.topology
 
 module Hydra.Decode.Topology where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Errors as Errors
@@ -15,9 +17,11 @@ import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
+
 -- | Decoder for hydra.topology.Graph
 graph :: Graph.Graph -> Core.Term -> Either Errors.DecodingError (M.Map Topology.Vertex [Topology.Vertex])
 graph = ExtractCore.decodeMap vertex (ExtractCore.decodeList vertex)
+
 -- | Decoder for hydra.topology.TarjanState
 tarjanState :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Topology.TarjanState
 tarjanState cx raw =
@@ -50,6 +54,7 @@ tarjanState cx raw =
           Topology.tarjanStateOnStack = field_onStack,
           Topology.tarjanStateSccs = field_sccs}))))))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.topology.TarjanState")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.topology.Vertex
 vertex :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Int
 vertex cx raw =

@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term encoders for hydra.query
 
 module Hydra.Encode.Query where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
@@ -9,6 +11,7 @@ import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Query as Query
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Encoder for hydra.query.ComparisonConstraint
 comparisonConstraint :: Query.ComparisonConstraint -> Core.Term
 comparisonConstraint x =
@@ -43,6 +46,7 @@ comparisonConstraint x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "greaterThanOrEqual"),
           Core.fieldTerm = Core.TermUnit}})
+
 -- | Encoder for hydra.query.Edge
 edge :: Query.Edge -> Core.Term
 edge x =
@@ -58,6 +62,7 @@ edge x =
         Core.Field {
           Core.fieldName = (Core.Name "in"),
           Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map EncodeCore.name opt)) (Query.edgeIn x))}]})
+
 -- | Encoder for hydra.query.GraphPattern
 graphPattern :: Query.GraphPattern -> Core.Term
 graphPattern x =
@@ -70,6 +75,7 @@ graphPattern x =
         Core.Field {
           Core.fieldName = (Core.Name "patterns"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map pattern xs)) (Query.graphPatternPatterns x))}]})
+
 -- | Encoder for hydra.query.Node
 node :: Query.Node -> Core.Term
 node x =
@@ -89,6 +95,7 @@ node x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "wildcard"),
           Core.fieldTerm = Core.TermUnit}})
+
 -- | Encoder for hydra.query.Path
 path :: Query.Path -> Core.Term
 path x =
@@ -108,6 +115,7 @@ path x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "inverse"),
           Core.fieldTerm = (path v0)}})
+
 -- | Encoder for hydra.query.PathEquation
 pathEquation :: Query.PathEquation -> Core.Term
 pathEquation x =
@@ -120,6 +128,7 @@ pathEquation x =
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (path (Query.pathEquationRight x))}]})
+
 -- | Encoder for hydra.query.Pattern
 pattern :: Query.Pattern -> Core.Term
 pattern x =
@@ -149,6 +158,7 @@ pattern x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "graph"),
           Core.fieldTerm = (graphPattern v0)}})
+
 -- | Encoder for hydra.query.PatternImplication
 patternImplication :: Query.PatternImplication -> Core.Term
 patternImplication x =
@@ -161,6 +171,7 @@ patternImplication x =
         Core.Field {
           Core.fieldName = (Core.Name "consequent"),
           Core.fieldTerm = (pattern (Query.patternImplicationConsequent x))}]})
+
 -- | Encoder for hydra.query.Query
 query :: Query.Query -> Core.Term
 query x =
@@ -173,6 +184,7 @@ query x =
         Core.Field {
           Core.fieldName = (Core.Name "patterns"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map pattern xs)) (Query.queryPatterns x))}]})
+
 -- | Encoder for hydra.query.Range
 range :: Query.Range -> Core.Term
 range x =
@@ -185,6 +197,7 @@ range x =
         Core.Field {
           Core.fieldName = (Core.Name "max"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 x2))) (Query.rangeMax x))}]})
+
 -- | Encoder for hydra.query.RegexQuantifier
 regexQuantifier :: Query.RegexQuantifier -> Core.Term
 regexQuantifier x =
@@ -224,6 +237,7 @@ regexQuantifier x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "range"),
           Core.fieldTerm = (range v0)}})
+
 -- | Encoder for hydra.query.RegexSequence
 regexSequence :: Query.RegexSequence -> Core.Term
 regexSequence x =
@@ -236,6 +250,7 @@ regexSequence x =
         Core.Field {
           Core.fieldName = (Core.Name "quantifier"),
           Core.fieldTerm = (regexQuantifier (Query.regexSequenceQuantifier x))}]})
+
 -- | Encoder for hydra.query.Step
 step :: Query.Step -> Core.Term
 step x =
@@ -255,6 +270,7 @@ step x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "compare"),
           Core.fieldTerm = (comparisonConstraint v0)}})
+
 -- | Encoder for hydra.query.TriplePattern
 triplePattern :: Query.TriplePattern -> Core.Term
 triplePattern x =
@@ -270,6 +286,7 @@ triplePattern x =
         Core.Field {
           Core.fieldName = (Core.Name "object"),
           Core.fieldTerm = (node (Query.triplePatternObject x))}]})
+
 -- | Encoder for hydra.query.Variable
 variable :: Query.Variable -> Core.Term
 variable x =

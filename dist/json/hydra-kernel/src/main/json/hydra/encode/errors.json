@@ -42,7 +42,7 @@
                                   "function": {
                                     "lambda": {
                                       "parameter": "x",
-                                      "domain": {"literal": {"string": {}}},
+                                      "domain": {"literal": "string"},
                                       "body": {
                                         "inject": {
                                           "typeName": "hydra.core.Term",
@@ -57,15 +57,15 @@
         "name": "hydra.encode.errors.emptyListError",
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"unit": {}}, "isLazy": false}],
+          "parameters": [{"name": "arg0", "type": "unit", "isLazy": false}],
           "result": {"type": {"variable": "hydra.core.Term"}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "_",
-                "domain": {"unit": {}},
-                "body": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}},
+                "domain": "unit",
+                "body": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.errors.EmptyListError"}}}]}}}}},
     {
@@ -1062,15 +1062,15 @@
         "name": "hydra.encode.errors.notEnoughCasesError",
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"unit": {}}, "isLazy": false}],
+          "parameters": [{"name": "arg0", "type": "unit", "isLazy": false}],
           "result": {"type": {"variable": "hydra.core.Term"}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "_",
-                "domain": {"unit": {}},
-                "body": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}},
+                "domain": "unit",
+                "body": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.errors.NotEnoughCasesError"}}}]}}}}},
     {
@@ -1105,7 +1105,7 @@
                                   "function": {
                                     "lambda": {
                                       "parameter": "x",
-                                      "domain": {"literal": {"string": {}}},
+                                      "domain": {"literal": "string"},
                                       "body": {
                                         "inject": {
                                           "typeName": "hydra.core.Term",
@@ -1169,7 +1169,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "parameter": "x",
-                                                  "domain": {"literal": {"string": {}}},
+                                                  "domain": {"literal": "string"},
                                                   "body": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Term",
@@ -1214,7 +1214,7 @@
                                   "function": {
                                     "lambda": {
                                       "parameter": "x",
-                                      "domain": {"literal": {"string": {}}},
+                                      "domain": {"literal": "string"},
                                       "body": {
                                         "inject": {
                                           "typeName": "hydra.core.Term",
@@ -1421,7 +1421,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "parameter": "x",
-                                                  "domain": {"literal": {"string": {}}},
+                                                  "domain": {"literal": "string"},
                                                   "body": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Term",
@@ -1444,7 +1444,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "parameter": "x",
-                                                  "domain": {"literal": {"string": {}}},
+                                                  "domain": {"literal": "string"},
                                                   "body": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Term",
@@ -1527,7 +1527,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "parameter": "x",
-                                                  "domain": {"literal": {"string": {}}},
+                                                  "domain": {"literal": "string"},
                                                   "body": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Term",

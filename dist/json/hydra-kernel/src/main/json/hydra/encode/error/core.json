@@ -62,7 +62,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "parameter": "x",
-                                                  "domain": {"literal": {"boolean": {}}},
+                                                  "domain": {"literal": "boolean"},
                                                   "body": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Term",

@@ -1,12 +1,15 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Error types for core type and term validation
 
 module Hydra.Error.Core where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | An application of ifElse where the condition is a literal boolean, creating a dead branch (optional)
 data ConstantConditionError =
   ConstantConditionError {
@@ -15,9 +18,13 @@ data ConstantConditionError =
     -- | The constant boolean value of the condition
     constantConditionErrorValue :: Bool}
   deriving (Eq, Ord, Read, Show)
+
 _ConstantConditionError = Core.Name "hydra.error.core.ConstantConditionError"
+
 _ConstantConditionError_location = Core.Name "location"
+
 _ConstantConditionError_value = Core.Name "value"
+
 -- | A duplicate binding name in a let expression
 data DuplicateBindingError =
   DuplicateBindingError {
@@ -26,9 +33,13 @@ data DuplicateBindingError =
     -- | The duplicated binding name
     duplicateBindingErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
+
 _DuplicateBindingError = Core.Name "hydra.error.core.DuplicateBindingError"
+
 _DuplicateBindingError_location = Core.Name "location"
+
 _DuplicateBindingError_name = Core.Name "name"
+
 -- | A duplicate field name in a record or union type
 data DuplicateFieldError =
   DuplicateFieldError {
@@ -37,9 +48,13 @@ data DuplicateFieldError =
     -- | The duplicated field name
     duplicateFieldErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
+
 _DuplicateFieldError = Core.Name "hydra.error.core.DuplicateFieldError"
+
 _DuplicateFieldError_location = Core.Name "location"
+
 _DuplicateFieldError_name = Core.Name "name"
+
 -- | A record type with duplicate field names
 data DuplicateRecordTypeFieldNamesError =
   DuplicateRecordTypeFieldNamesError {
@@ -48,9 +63,13 @@ data DuplicateRecordTypeFieldNamesError =
     -- | The duplicated field name
     duplicateRecordTypeFieldNamesErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
+
 _DuplicateRecordTypeFieldNamesError = Core.Name "hydra.error.core.DuplicateRecordTypeFieldNamesError"
+
 _DuplicateRecordTypeFieldNamesError_location = Core.Name "location"
+
 _DuplicateRecordTypeFieldNamesError_name = Core.Name "name"
+
 -- | A union type with duplicate field names
 data DuplicateUnionTypeFieldNamesError =
   DuplicateUnionTypeFieldNamesError {
@@ -59,9 +78,13 @@ data DuplicateUnionTypeFieldNamesError =
     -- | The duplicated field name
     duplicateUnionTypeFieldNamesErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
+
 _DuplicateUnionTypeFieldNamesError = Core.Name "hydra.error.core.DuplicateUnionTypeFieldNamesError"
+
 _DuplicateUnionTypeFieldNamesError_location = Core.Name "location"
+
 _DuplicateUnionTypeFieldNamesError_name = Core.Name "name"
+
 -- | A case statement with no cases and no default (optional)
 data EmptyCaseStatementError =
   EmptyCaseStatementError {
@@ -70,57 +93,79 @@ data EmptyCaseStatementError =
     -- | The name of the union type being matched
     emptyCaseStatementErrorTypeName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
+
 _EmptyCaseStatementError = Core.Name "hydra.error.core.EmptyCaseStatementError"
+
 _EmptyCaseStatementError_location = Core.Name "location"
+
 _EmptyCaseStatementError_typeName = Core.Name "typeName"
+
 -- | A let expression with an empty list of bindings (optional)
 data EmptyLetBindingsError =
   EmptyLetBindingsError {
     -- | The path to the empty let expression within the term
     emptyLetBindingsErrorLocation :: Paths.SubtermPath}
   deriving (Eq, Ord, Read, Show)
+
 _EmptyLetBindingsError = Core.Name "hydra.error.core.EmptyLetBindingsError"
+
 _EmptyLetBindingsError_location = Core.Name "location"
+
 -- | A record type with no fields; TypeUnit is preferred for the unit-like case (optional)
 data EmptyRecordTypeError =
   EmptyRecordTypeError {
     -- | The path to the empty record type
     emptyRecordTypeErrorLocation :: Paths.SubtermPath}
   deriving (Eq, Ord, Read, Show)
+
 _EmptyRecordTypeError = Core.Name "hydra.error.core.EmptyRecordTypeError"
+
 _EmptyRecordTypeError_location = Core.Name "location"
+
 -- | A term annotation with an empty annotation map (optional)
 data EmptyTermAnnotationError =
   EmptyTermAnnotationError {
     -- | The path to the empty annotation within the term
     emptyTermAnnotationErrorLocation :: Paths.SubtermPath}
   deriving (Eq, Ord, Read, Show)
+
 _EmptyTermAnnotationError = Core.Name "hydra.error.core.EmptyTermAnnotationError"
+
 _EmptyTermAnnotationError_location = Core.Name "location"
+
 -- | A type annotation with an empty annotation map (optional)
 data EmptyTypeAnnotationError =
   EmptyTypeAnnotationError {
     -- | The path to the empty annotation
     emptyTypeAnnotationErrorLocation :: Paths.SubtermPath}
   deriving (Eq, Ord, Read, Show)
+
 _EmptyTypeAnnotationError = Core.Name "hydra.error.core.EmptyTypeAnnotationError"
+
 _EmptyTypeAnnotationError_location = Core.Name "location"
+
 -- | A record, injection, projection, or case statement with an empty type name (optional)
 data EmptyTypeNameInTermError =
   EmptyTypeNameInTermError {
     -- | The path to the term with the empty type name
     emptyTypeNameInTermErrorLocation :: Paths.SubtermPath}
   deriving (Eq, Ord, Read, Show)
+
 _EmptyTypeNameInTermError = Core.Name "hydra.error.core.EmptyTypeNameInTermError"
+
 _EmptyTypeNameInTermError_location = Core.Name "location"
+
 -- | A union type with no alternatives; TypeVoid is preferred (optional)
 data EmptyUnionTypeError =
   EmptyUnionTypeError {
     -- | The path to the empty union type
     emptyUnionTypeErrorLocation :: Paths.SubtermPath}
   deriving (Eq, Ord, Read, Show)
+
 _EmptyUnionTypeError = Core.Name "hydra.error.core.EmptyUnionTypeError"
+
 _EmptyUnionTypeError_location = Core.Name "location"
+
 -- | A forall type parameter name that violates type variable naming conventions (optional)
 data InvalidForallParameterNameError =
   InvalidForallParameterNameError {
@@ -129,9 +174,13 @@ data InvalidForallParameterNameError =
     -- | The invalid parameter name
     invalidForallParameterNameErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
+
 _InvalidForallParameterNameError = Core.Name "hydra.error.core.InvalidForallParameterNameError"
+
 _InvalidForallParameterNameError_location = Core.Name "location"
+
 _InvalidForallParameterNameError_name = Core.Name "name"
+
 -- | A lambda parameter name that violates naming conventions (optional)
 data InvalidLambdaParameterNameError =
   InvalidLambdaParameterNameError {
@@ -140,9 +189,13 @@ data InvalidLambdaParameterNameError =
     -- | The invalid parameter name
     invalidLambdaParameterNameErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
+
 _InvalidLambdaParameterNameError = Core.Name "hydra.error.core.InvalidLambdaParameterNameError"
+
 _InvalidLambdaParameterNameError_location = Core.Name "location"
+
 _InvalidLambdaParameterNameError_name = Core.Name "name"
+
 -- | A let binding name that violates naming conventions (optional)
 data InvalidLetBindingNameError =
   InvalidLetBindingNameError {
@@ -151,16 +204,23 @@ data InvalidLetBindingNameError =
     -- | The invalid binding name
     invalidLetBindingNameErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
+
 _InvalidLetBindingNameError = Core.Name "hydra.error.core.InvalidLetBindingNameError"
+
 _InvalidLetBindingNameError_location = Core.Name "location"
+
 _InvalidLetBindingNameError_name = Core.Name "name"
+
 -- | An error indicating that a literal value is invalid
 data InvalidLiteralError =
   -- | The literal's type does not match the expected literal type
   InvalidLiteralErrorTypeMismatch LiteralTypeMismatchError
   deriving (Eq, Ord, Read, Show)
+
 _InvalidLiteralError = Core.Name "hydra.error.core.InvalidLiteralError"
+
 _InvalidLiteralError_typeMismatch = Core.Name "typeMismatch"
+
 -- | An error indicating that a term is invalid
 data InvalidTermError =
   -- | An ifElse with a literal boolean condition (optional)
@@ -208,29 +268,53 @@ data InvalidTermError =
   -- | A term variable whose type is not known
   InvalidTermErrorUntypedTermVariable UntypedTermVariableError
   deriving (Eq, Ord, Read, Show)
+
 _InvalidTermError = Core.Name "hydra.error.core.InvalidTermError"
+
 _InvalidTermError_constantCondition = Core.Name "constantCondition"
+
 _InvalidTermError_duplicateBinding = Core.Name "duplicateBinding"
+
 _InvalidTermError_duplicateField = Core.Name "duplicateField"
+
 _InvalidTermError_emptyCaseStatement = Core.Name "emptyCaseStatement"
+
 _InvalidTermError_emptyLetBindings = Core.Name "emptyLetBindings"
+
 _InvalidTermError_emptyTermAnnotation = Core.Name "emptyTermAnnotation"
+
 _InvalidTermError_emptyTypeNameInTerm = Core.Name "emptyTypeNameInTerm"
+
 _InvalidTermError_invalidLambdaParameterName = Core.Name "invalidLambdaParameterName"
+
 _InvalidTermError_invalidLetBindingName = Core.Name "invalidLetBindingName"
+
 _InvalidTermError_invalidTypeLambdaParameterName = Core.Name "invalidTypeLambdaParameterName"
+
 _InvalidTermError_nestedTermAnnotation = Core.Name "nestedTermAnnotation"
+
 _InvalidTermError_redundantWrapUnwrap = Core.Name "redundantWrapUnwrap"
+
 _InvalidTermError_selfApplication = Core.Name "selfApplication"
+
 _InvalidTermError_termVariableShadowing = Core.Name "termVariableShadowing"
+
 _InvalidTermError_typeVariableShadowingInTypeLambda = Core.Name "typeVariableShadowingInTypeLambda"
+
 _InvalidTermError_undefinedTermVariable = Core.Name "undefinedTermVariable"
+
 _InvalidTermError_undefinedTypeVariableInBindingType = Core.Name "undefinedTypeVariableInBindingType"
+
 _InvalidTermError_undefinedTypeVariableInLambdaDomain = Core.Name "undefinedTypeVariableInLambdaDomain"
+
 _InvalidTermError_undefinedTypeVariableInTypeApplication = Core.Name "undefinedTypeVariableInTypeApplication"
+
 _InvalidTermError_unknownPrimitiveName = Core.Name "unknownPrimitiveName"
+
 _InvalidTermError_unnecessaryIdentityApplication = Core.Name "unnecessaryIdentityApplication"
+
 _InvalidTermError_untypedTermVariable = Core.Name "untypedTermVariable"
+
 -- | An error indicating that a type is invalid
 data InvalidTypeError =
   -- | A record type with duplicate field names
@@ -262,21 +346,37 @@ data InvalidTypeError =
   -- | TypeVoid in a position where no value can be constructed (optional)
   InvalidTypeErrorVoidInNonBottomPosition VoidInNonBottomPositionError
   deriving (Eq, Ord, Read, Show)
+
 _InvalidTypeError = Core.Name "hydra.error.core.InvalidTypeError"
+
 _InvalidTypeError_duplicateRecordTypeFieldNames = Core.Name "duplicateRecordTypeFieldNames"
+
 _InvalidTypeError_duplicateUnionTypeFieldNames = Core.Name "duplicateUnionTypeFieldNames"
+
 _InvalidTypeError_emptyRecordType = Core.Name "emptyRecordType"
+
 _InvalidTypeError_emptyTypeAnnotation = Core.Name "emptyTypeAnnotation"
+
 _InvalidTypeError_emptyUnionType = Core.Name "emptyUnionType"
+
 _InvalidTypeError_invalidForallParameterName = Core.Name "invalidForallParameterName"
+
 _InvalidTypeError_invalidTypeSchemeVariableName = Core.Name "invalidTypeSchemeVariableName"
+
 _InvalidTypeError_nestedTypeAnnotation = Core.Name "nestedTypeAnnotation"
+
 _InvalidTypeError_nonComparableMapKeyType = Core.Name "nonComparableMapKeyType"
+
 _InvalidTypeError_nonComparableSetElementType = Core.Name "nonComparableSetElementType"
+
 _InvalidTypeError_singleVariantUnion = Core.Name "singleVariantUnion"
+
 _InvalidTypeError_typeVariableShadowingInForall = Core.Name "typeVariableShadowingInForall"
+
 _InvalidTypeError_undefinedTypeVariable = Core.Name "undefinedTypeVariable"
+
 _InvalidTypeError_voidInNonBottomPosition = Core.Name "voidInNonBottomPosition"
+
 -- | A type lambda parameter name that violates naming conventions (optional)
 data InvalidTypeLambdaParameterNameError =
   InvalidTypeLambdaParameterNameError {
@@ -285,9 +385,13 @@ data InvalidTypeLambdaParameterNameError =
     -- | The invalid type lambda parameter name
     invalidTypeLambdaParameterNameErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
+
 _InvalidTypeLambdaParameterNameError = Core.Name "hydra.error.core.InvalidTypeLambdaParameterNameError"
+
 _InvalidTypeLambdaParameterNameError_location = Core.Name "location"
+
 _InvalidTypeLambdaParameterNameError_name = Core.Name "name"
+
 -- | A type scheme variable name that violates type variable naming conventions (optional)
 data InvalidTypeSchemeVariableNameError =
   InvalidTypeSchemeVariableNameError {
@@ -296,9 +400,13 @@ data InvalidTypeSchemeVariableNameError =
     -- | The invalid variable name
     invalidTypeSchemeVariableNameErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
+
 _InvalidTypeSchemeVariableNameError = Core.Name "hydra.error.core.InvalidTypeSchemeVariableNameError"
+
 _InvalidTypeSchemeVariableNameError_location = Core.Name "location"
+
 _InvalidTypeSchemeVariableNameError_name = Core.Name "name"
+
 -- | A mismatch between an expected literal type and the type of an actual literal value
 data LiteralTypeMismatchError =
   LiteralTypeMismatchError {
@@ -307,25 +415,35 @@ data LiteralTypeMismatchError =
     -- | The actual literal type, derived from the value
     literalTypeMismatchErrorActualType :: Core.LiteralType}
   deriving (Eq, Ord, Read, Show)
+
 _LiteralTypeMismatchError = Core.Name "hydra.error.core.LiteralTypeMismatchError"
+
 _LiteralTypeMismatchError_expectedType = Core.Name "expectedType"
+
 _LiteralTypeMismatchError_actualType = Core.Name "actualType"
+
 -- | A term annotation directly wrapping another term annotation; annotations should be merged (optional)
 data NestedTermAnnotationError =
   NestedTermAnnotationError {
     -- | The path to the outer annotation within the term
     nestedTermAnnotationErrorLocation :: Paths.SubtermPath}
   deriving (Eq, Ord, Read, Show)
+
 _NestedTermAnnotationError = Core.Name "hydra.error.core.NestedTermAnnotationError"
+
 _NestedTermAnnotationError_location = Core.Name "location"
+
 -- | A type annotation directly wrapping another type annotation; annotations should be merged (optional)
 data NestedTypeAnnotationError =
   NestedTypeAnnotationError {
     -- | The path to the outer annotation
     nestedTypeAnnotationErrorLocation :: Paths.SubtermPath}
   deriving (Eq, Ord, Read, Show)
+
 _NestedTypeAnnotationError = Core.Name "hydra.error.core.NestedTypeAnnotationError"
+
 _NestedTypeAnnotationError_location = Core.Name "location"
+
 -- | A map type whose key type is or directly contains a function type, which cannot be compared for equality
 data NonComparableMapKeyTypeError =
   NonComparableMapKeyTypeError {
@@ -334,9 +452,13 @@ data NonComparableMapKeyTypeError =
     -- | The non-comparable key type
     nonComparableMapKeyTypeErrorKeyType :: Core.Type}
   deriving (Eq, Ord, Read, Show)
+
 _NonComparableMapKeyTypeError = Core.Name "hydra.error.core.NonComparableMapKeyTypeError"
+
 _NonComparableMapKeyTypeError_location = Core.Name "location"
+
 _NonComparableMapKeyTypeError_keyType = Core.Name "keyType"
+
 -- | A set type whose element type is or directly contains a function type, which cannot be compared for equality
 data NonComparableSetElementTypeError =
   NonComparableSetElementTypeError {
@@ -345,9 +467,13 @@ data NonComparableSetElementTypeError =
     -- | The non-comparable element type
     nonComparableSetElementTypeErrorElementType :: Core.Type}
   deriving (Eq, Ord, Read, Show)
+
 _NonComparableSetElementTypeError = Core.Name "hydra.error.core.NonComparableSetElementTypeError"
+
 _NonComparableSetElementTypeError_location = Core.Name "location"
+
 _NonComparableSetElementTypeError_elementType = Core.Name "elementType"
+
 -- | An unwrap elimination applied to a wrap term of the same type, forming a no-op round-trip (optional)
 data RedundantWrapUnwrapError =
   RedundantWrapUnwrapError {
@@ -356,9 +482,13 @@ data RedundantWrapUnwrapError =
     -- | The type name of the wrapper
     redundantWrapUnwrapErrorTypeName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
+
 _RedundantWrapUnwrapError = Core.Name "hydra.error.core.RedundantWrapUnwrapError"
+
 _RedundantWrapUnwrapError_location = Core.Name "location"
+
 _RedundantWrapUnwrapError_typeName = Core.Name "typeName"
+
 -- | A variable applied to itself, which is almost always a mistake in Hydra's type system (optional)
 data SelfApplicationError =
   SelfApplicationError {
@@ -367,9 +497,13 @@ data SelfApplicationError =
     -- | The name of the variable applied to itself
     selfApplicationErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
+
 _SelfApplicationError = Core.Name "hydra.error.core.SelfApplicationError"
+
 _SelfApplicationError_location = Core.Name "location"
+
 _SelfApplicationError_name = Core.Name "name"
+
 -- | A union type with exactly one field; could be a wrapped type or record instead (optional)
 data SingleVariantUnionError =
   SingleVariantUnionError {
@@ -378,9 +512,13 @@ data SingleVariantUnionError =
     -- | The name of the single field
     singleVariantUnionErrorFieldName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
+
 _SingleVariantUnionError = Core.Name "hydra.error.core.SingleVariantUnionError"
+
 _SingleVariantUnionError_location = Core.Name "location"
+
 _SingleVariantUnionError_fieldName = Core.Name "fieldName"
+
 -- | A lambda parameter or let binding name that shadows a variable already in scope (optional)
 data TermVariableShadowingError =
   TermVariableShadowingError {
@@ -389,9 +527,13 @@ data TermVariableShadowingError =
     -- | The name of the shadowed variable
     termVariableShadowingErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
+
 _TermVariableShadowingError = Core.Name "hydra.error.core.TermVariableShadowingError"
+
 _TermVariableShadowingError_location = Core.Name "location"
+
 _TermVariableShadowingError_name = Core.Name "name"
+
 -- | A forall type parameter that shadows a type variable already in scope (optional)
 data TypeVariableShadowingInForallError =
   TypeVariableShadowingInForallError {
@@ -400,9 +542,13 @@ data TypeVariableShadowingInForallError =
     -- | The name of the shadowed type variable
     typeVariableShadowingInForallErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
+
 _TypeVariableShadowingInForallError = Core.Name "hydra.error.core.TypeVariableShadowingInForallError"
+
 _TypeVariableShadowingInForallError_location = Core.Name "location"
+
 _TypeVariableShadowingInForallError_name = Core.Name "name"
+
 -- | A type lambda parameter that shadows a type variable already in scope (optional)
 data TypeVariableShadowingInTypeLambdaError =
   TypeVariableShadowingInTypeLambdaError {
@@ -411,9 +557,13 @@ data TypeVariableShadowingInTypeLambdaError =
     -- | The name of the shadowed type variable
     typeVariableShadowingInTypeLambdaErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
+
 _TypeVariableShadowingInTypeLambdaError = Core.Name "hydra.error.core.TypeVariableShadowingInTypeLambdaError"
+
 _TypeVariableShadowingInTypeLambdaError_location = Core.Name "location"
+
 _TypeVariableShadowingInTypeLambdaError_name = Core.Name "name"
+
 -- | A reference to a field that does not exist in the given type
 data UndefinedFieldError =
   UndefinedFieldError {
@@ -422,9 +572,13 @@ data UndefinedFieldError =
     -- | The name of the type in which the field was expected
     undefinedFieldErrorTypeName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
+
 _UndefinedFieldError = Core.Name "hydra.error.core.UndefinedFieldError"
+
 _UndefinedFieldError_fieldName = Core.Name "fieldName"
+
 _UndefinedFieldError_typeName = Core.Name "typeName"
+
 -- | A variable reference to a term name that is not bound in scope
 data UndefinedTermVariableError =
   UndefinedTermVariableError {
@@ -433,9 +587,13 @@ data UndefinedTermVariableError =
     -- | The name of the undefined variable
     undefinedTermVariableErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
+
 _UndefinedTermVariableError = Core.Name "hydra.error.core.UndefinedTermVariableError"
+
 _UndefinedTermVariableError_location = Core.Name "location"
+
 _UndefinedTermVariableError_name = Core.Name "name"
+
 -- | A type variable reference to a name that is not bound in scope
 data UndefinedTypeVariableError =
   UndefinedTypeVariableError {
@@ -444,9 +602,13 @@ data UndefinedTypeVariableError =
     -- | The name of the undefined type variable
     undefinedTypeVariableErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
+
 _UndefinedTypeVariableError = Core.Name "hydra.error.core.UndefinedTypeVariableError"
+
 _UndefinedTypeVariableError_location = Core.Name "location"
+
 _UndefinedTypeVariableError_name = Core.Name "name"
+
 -- | A type variable in a let binding's type scheme that is not bound by the scheme or enclosing scope
 data UndefinedTypeVariableInBindingTypeError =
   UndefinedTypeVariableInBindingTypeError {
@@ -455,9 +617,13 @@ data UndefinedTypeVariableInBindingTypeError =
     -- | The name of the undefined type variable
     undefinedTypeVariableInBindingTypeErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
+
 _UndefinedTypeVariableInBindingTypeError = Core.Name "hydra.error.core.UndefinedTypeVariableInBindingTypeError"
+
 _UndefinedTypeVariableInBindingTypeError_location = Core.Name "location"
+
 _UndefinedTypeVariableInBindingTypeError_name = Core.Name "name"
+
 -- | A type variable in a lambda domain annotation that is not bound in scope
 data UndefinedTypeVariableInLambdaDomainError =
   UndefinedTypeVariableInLambdaDomainError {
@@ -466,9 +632,13 @@ data UndefinedTypeVariableInLambdaDomainError =
     -- | The name of the undefined type variable
     undefinedTypeVariableInLambdaDomainErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
+
 _UndefinedTypeVariableInLambdaDomainError = Core.Name "hydra.error.core.UndefinedTypeVariableInLambdaDomainError"
+
 _UndefinedTypeVariableInLambdaDomainError_location = Core.Name "location"
+
 _UndefinedTypeVariableInLambdaDomainError_name = Core.Name "name"
+
 -- | A type variable in a type application term that is not bound in scope
 data UndefinedTypeVariableInTypeApplicationError =
   UndefinedTypeVariableInTypeApplicationError {
@@ -477,9 +647,13 @@ data UndefinedTypeVariableInTypeApplicationError =
     -- | The name of the undefined type variable
     undefinedTypeVariableInTypeApplicationErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
+
 _UndefinedTypeVariableInTypeApplicationError = Core.Name "hydra.error.core.UndefinedTypeVariableInTypeApplicationError"
+
 _UndefinedTypeVariableInTypeApplicationError_location = Core.Name "location"
+
 _UndefinedTypeVariableInTypeApplicationError_name = Core.Name "name"
+
 -- | An unexpected term variant was encountered
 data UnexpectedTermVariantError =
   UnexpectedTermVariantError {
@@ -488,9 +662,13 @@ data UnexpectedTermVariantError =
     -- | The actual term that was encountered
     unexpectedTermVariantErrorActualTerm :: Core.Term}
   deriving (Eq, Ord, Read, Show)
+
 _UnexpectedTermVariantError = Core.Name "hydra.error.core.UnexpectedTermVariantError"
+
 _UnexpectedTermVariantError_expectedVariant = Core.Name "expectedVariant"
+
 _UnexpectedTermVariantError_actualTerm = Core.Name "actualTerm"
+
 -- | An unexpected type variant was encountered
 data UnexpectedTypeVariantError =
   UnexpectedTypeVariantError {
@@ -499,9 +677,13 @@ data UnexpectedTypeVariantError =
     -- | The actual type that was encountered
     unexpectedTypeVariantErrorActualType :: Core.Type}
   deriving (Eq, Ord, Read, Show)
+
 _UnexpectedTypeVariantError = Core.Name "hydra.error.core.UnexpectedTypeVariantError"
+
 _UnexpectedTypeVariantError_expectedVariant = Core.Name "expectedVariant"
+
 _UnexpectedTypeVariantError_actualType = Core.Name "actualType"
+
 -- | A primitive function reference to a name not in the known primitive registry
 data UnknownPrimitiveNameError =
   UnknownPrimitiveNameError {
@@ -510,17 +692,24 @@ data UnknownPrimitiveNameError =
     -- | The unknown primitive name
     unknownPrimitiveNameErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
+
 _UnknownPrimitiveNameError = Core.Name "hydra.error.core.UnknownPrimitiveNameError"
+
 _UnknownPrimitiveNameError_location = Core.Name "location"
+
 _UnknownPrimitiveNameError_name = Core.Name "name"
+
 -- | An application of an identity lambda to an argument, which simplifies to the argument (optional)
 data UnnecessaryIdentityApplicationError =
   UnnecessaryIdentityApplicationError {
     -- | The path to the identity application within the term
     unnecessaryIdentityApplicationErrorLocation :: Paths.SubtermPath}
   deriving (Eq, Ord, Read, Show)
+
 _UnnecessaryIdentityApplicationError = Core.Name "hydra.error.core.UnnecessaryIdentityApplicationError"
+
 _UnnecessaryIdentityApplicationError_location = Core.Name "location"
+
 -- | A term variable whose type is not known in the current scope
 data UntypedTermVariableError =
   UntypedTermVariableError {
@@ -529,14 +718,20 @@ data UntypedTermVariableError =
     -- | The name of the untyped variable
     untypedTermVariableErrorName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
+
 _UntypedTermVariableError = Core.Name "hydra.error.core.UntypedTermVariableError"
+
 _UntypedTermVariableError_location = Core.Name "location"
+
 _UntypedTermVariableError_name = Core.Name "name"
+
 -- | TypeVoid appearing in a position where no value can be constructed, such as a record field, list element, map key/value, set element, pair component, or function codomain (optional)
 data VoidInNonBottomPositionError =
   VoidInNonBottomPositionError {
     -- | The path to the void type in a non-bottom position
     voidInNonBottomPositionErrorLocation :: Paths.SubtermPath}
   deriving (Eq, Ord, Read, Show)
+
 _VoidInNonBottomPositionError = Core.Name "hydra.error.core.VoidInNonBottomPositionError"
+
 _VoidInNonBottomPositionError_location = Core.Name "location"

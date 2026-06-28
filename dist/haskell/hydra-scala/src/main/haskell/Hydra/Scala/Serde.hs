@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Serialization functions for converting Scala AST to abstract expressions
 
 module Hydra.Scala.Serde where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -41,6 +43,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Convert a case clause to an expression
 caseToExpr :: Syntax.Case -> Ast.Expr
 caseToExpr c =
@@ -52,6 +55,7 @@ caseToExpr c =
         (patToExpr pat),
         (Serialization.cst "=>"),
         (termToExpr term)])
+
 -- | Convert a function-data lambda to an expression
 dataFunctionToExpr :: Syntax.FunctionData -> Ast.Expr
 dataFunctionToExpr f =
@@ -67,9 +71,11 @@ dataFunctionToExpr f =
         Serialization.parenListAdaptive (Lists.map dataParamToExpr params),
         (Serialization.cst "=>"),
         bodyExpr]))
+
 -- | Convert a data name to an expression
 dataNameToExpr :: Syntax.NameData -> Ast.Expr
 dataNameToExpr dn = Serialization.cst (Syntax.unPredefString (Syntax.nameDataValue dn))
+
 -- | Convert a data parameter to an expression
 dataParamToExpr :: Syntax.ParamData -> Ast.Expr
 dataParamToExpr dp =
@@ -81,12 +87,14 @@ dataParamToExpr dp =
         (Optionals.map (\t -> Serialization.spaceSep [
           Serialization.cst ":",
           (typeToExpr t)]) stype)]))
+
 -- | Convert a data reference to an expression
 dataRefToExpr :: Syntax.RefData -> Ast.Expr
 dataRefToExpr ref =
     case ref of
       Syntax.RefDataName v0 -> dataNameToExpr v0
       Syntax.RefDataSelect v0 -> dataSelectToExpr v0
+
 -- | Convert a data select to an expression
 dataSelectToExpr :: Syntax.SelectData -> Ast.Expr
 dataSelectToExpr sel =
@@ -94,6 +102,7 @@ dataSelectToExpr sel =
       let arg = Syntax.selectDataQual sel
           name = Syntax.selectDataName sel
       in (Serialization.ifx dotOp (termToExpr arg) (termToExpr (Syntax.DataRef (Syntax.RefDataName name))))
+
 -- | Convert a definition to an expression
 defnToExpr :: Syntax.Defn -> Ast.Expr
 defnToExpr def =
@@ -222,6 +231,7 @@ defnToExpr def =
             dataNameToExpr name,
             params]),
           extendsClause])
+
 -- | The dot operator for member access
 dotOp :: Ast.Op
 dotOp =
@@ -232,9 +242,11 @@ dotOp =
         Ast.paddingRight = Ast.WsNone},
       Ast.opPrecedence = (Ast.Precedence 0),
       Ast.opAssociativity = Ast.AssociativityLeft}
+
 -- | The function arrow operator (=>)
 functionArrowOp :: Ast.Op
 functionArrowOp = Serialization.op "=>" (Math.negate 1) Ast.AssociativityRight
+
 -- | Convert an import/export statement to an expression
 importExportStatToExpr :: Syntax.ImportExportStat -> Ast.Expr
 importExportStatToExpr ie =
@@ -242,6 +254,7 @@ importExportStatToExpr ie =
       Syntax.ImportExportStatImport v0 ->
         let importers = Syntax.importImporters v0
         in (Serialization.newlineSep (Lists.map importerToExpr importers))
+
 -- | Convert an importer to an expression
 importerToExpr :: Syntax.Importer -> Ast.Expr
 importerToExpr imp =
@@ -268,9 +281,11 @@ importerToExpr imp =
         (Serialization.noSep [
           Serialization.cst refName,
           forImportees])])
+
 -- | Convert an init to an expression
 initToExpr :: Syntax.Init -> Ast.Expr
 initToExpr init = typeToExpr (Syntax.initTpe init)
+
 -- | Convert a literal to an expression
 litToExpr :: Syntax.Lit -> Ast.Expr
 litToExpr lit =
@@ -286,6 +301,7 @@ litToExpr lit =
       Syntax.LitString v0 -> Serialization.cst (Strings.cat2 "\"" (Strings.cat2 (Serde.escapeJavaString v0) "\""))
       Syntax.LitBytes v0 -> Serialization.cst (Strings.cat2 "Array[Byte](" (Strings.cat2 (Strings.intercalate ", " (Lists.map (\b -> Strings.cat2 (Literals.showInt32 b) ".toByte") v0)) ")"))
       _ -> Serialization.cst "TODO:literal"
+
 -- | The match operator
 matchOp :: Ast.Op
 matchOp =
@@ -296,6 +312,7 @@ matchOp =
         Ast.paddingRight = (Ast.WsBreakAndIndent "  ")},
       Ast.opPrecedence = (Ast.Precedence 0),
       Ast.opAssociativity = Ast.AssociativityNone}
+
 -- | Convert a modifier to an expression
 modToExpr :: Syntax.Mod -> Ast.Expr
 modToExpr m =
@@ -309,11 +326,13 @@ modToExpr m =
       Syntax.ModLazy -> Serialization.cst "lazy"
       Syntax.ModPrivate _ -> Serialization.cst "private"
       Syntax.ModProtected _ -> Serialization.cst "protected"
+
 -- | Convert a name to an expression
 nameToExpr :: Syntax.Name -> Ast.Expr
 nameToExpr name =
     case name of
       Syntax.NameValue v0 -> Serialization.cst v0
+
 -- | Convert a pattern to an expression
 patToExpr :: Syntax.Pat -> Ast.Expr
 patToExpr pat =
@@ -326,6 +345,7 @@ patToExpr pat =
           (Serialization.parenListAdaptive (Lists.map patToExpr args))]))
       Syntax.PatVar v0 -> dataNameToExpr (Syntax.varPatName v0)
       Syntax.PatWildcard -> Serialization.cst "_"
+
 -- | Convert a package to an expression
 pkgToExpr :: Syntax.Pkg -> Ast.Expr
 pkgToExpr pkg =
@@ -340,9 +360,11 @@ pkgToExpr pkg =
         [
           package],
         (Lists.map statToExpr stats)]))
+
 scalaFloatLiteralText :: String -> String -> String -> String
 scalaFloatLiteralText prefix suffix s =
     Logic.ifElse (Equality.equal s "NaN") (Strings.cat2 prefix ".NaN") (Logic.ifElse (Equality.equal s "Infinity") (Strings.cat2 prefix ".PositiveInfinity") (Logic.ifElse (Equality.equal s "-Infinity") (Strings.cat2 prefix ".NegativeInfinity") (Strings.cat2 s suffix)))
+
 -- | Convert a statement to an expression
 statToExpr :: Syntax.Stat -> Ast.Expr
 statToExpr stat =
@@ -350,6 +372,7 @@ statToExpr stat =
       Syntax.StatTerm v0 -> termToExpr v0
       Syntax.StatDefn v0 -> defnToExpr v0
       Syntax.StatImportExport v0 -> importExportStatToExpr v0
+
 -- | Convert a term to an expression
 termToExpr :: Syntax.Data -> Ast.Expr
 termToExpr term =
@@ -378,12 +401,15 @@ termToExpr term =
       Syntax.DataBlock v0 ->
         let stats = Syntax.blockDataStats v0
         in (Serialization.curlyBlock Serialization.fullBlockStyle (Serialization.newlineSep (Lists.map statToExpr stats)))
+
 -- | Convert a type name to an expression
 typeNameToExpr :: Syntax.NameType -> Ast.Expr
 typeNameToExpr tn = Serialization.cst (Syntax.nameTypeValue tn)
+
 -- | Convert a type parameter to an expression
 typeParamToExpr :: Syntax.ParamType -> Ast.Expr
 typeParamToExpr tp = nameToExpr (Syntax.paramTypeName tp)
+
 -- | Convert a type to an expression
 typeToExpr :: Syntax.Type -> Ast.Expr
 typeToExpr typ =

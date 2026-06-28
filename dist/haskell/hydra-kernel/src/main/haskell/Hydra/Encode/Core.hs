@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term encoders for hydra.core
 
 module Hydra.Encode.Core where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Overlay.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
@@ -11,6 +13,7 @@ import qualified Hydra.Overlay.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Overlay.Haskell.Lib.Sets as Sets
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Encoder for hydra.core.AnnotatedTerm
 annotatedTerm :: Core.AnnotatedTerm -> Core.Term
 annotatedTerm x =
@@ -23,6 +26,7 @@ annotatedTerm x =
         Core.Field {
           Core.fieldName = (Core.Name "annotation"),
           Core.fieldTerm = (term (Core.annotatedTermAnnotation x))}]})
+
 -- | Encoder for hydra.core.AnnotatedType
 annotatedType :: Core.AnnotatedType -> Core.Term
 annotatedType x =
@@ -35,6 +39,7 @@ annotatedType x =
         Core.Field {
           Core.fieldName = (Core.Name "annotation"),
           Core.fieldTerm = (term (Core.annotatedTypeAnnotation x))}]})
+
 -- | Encoder for hydra.core.Application
 application :: Core.Application -> Core.Term
 application x =
@@ -47,6 +52,7 @@ application x =
         Core.Field {
           Core.fieldName = (Core.Name "argument"),
           Core.fieldTerm = (term (Core.applicationArgument x))}]})
+
 -- | Encoder for hydra.core.ApplicationType
 applicationType :: Core.ApplicationType -> Core.Term
 applicationType x =
@@ -59,6 +65,7 @@ applicationType x =
         Core.Field {
           Core.fieldName = (Core.Name "argument"),
           Core.fieldTerm = (type_ (Core.applicationTypeArgument x))}]})
+
 -- | Encoder for hydra.core.Binding
 binding :: Core.Binding -> Core.Term
 binding x =
@@ -74,6 +81,7 @@ binding x =
         Core.Field {
           Core.fieldName = (Core.Name "typeScheme"),
           Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map typeScheme opt)) (Core.bindingTypeScheme x))}]})
+
 -- | Encoder for hydra.core.CaseAlternative
 caseAlternative :: Core.CaseAlternative -> Core.Term
 caseAlternative x =
@@ -86,6 +94,7 @@ caseAlternative x =
         Core.Field {
           Core.fieldName = (Core.Name "handler"),
           Core.fieldTerm = (term (Core.caseAlternativeHandler x))}]})
+
 -- | Encoder for hydra.core.CaseStatement
 caseStatement :: Core.CaseStatement -> Core.Term
 caseStatement x =
@@ -101,6 +110,7 @@ caseStatement x =
         Core.Field {
           Core.fieldName = (Core.Name "cases"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map caseAlternative xs)) (Core.caseStatementCases x))}]})
+
 -- | Encoder for hydra.core.EitherType
 eitherType :: Core.EitherType -> Core.Term
 eitherType x =
@@ -113,6 +123,7 @@ eitherType x =
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (type_ (Core.eitherTypeRight x))}]})
+
 -- | Encoder for hydra.core.Field
 field :: Core.Field -> Core.Term
 field x =
@@ -125,6 +136,7 @@ field x =
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (term (Core.fieldTerm x))}]})
+
 -- | Encoder for hydra.core.FieldType
 fieldType :: Core.FieldType -> Core.Term
 fieldType x =
@@ -137,6 +149,7 @@ fieldType x =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (type_ (Core.fieldTypeType x))}]})
+
 -- | Encoder for hydra.core.FloatType
 floatType :: Core.FloatType -> Core.Term
 floatType x =
@@ -151,6 +164,7 @@ floatType x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "float64"),
           Core.fieldTerm = Core.TermUnit}})
+
 -- | Encoder for hydra.core.FloatValue
 floatValue :: Core.FloatValue -> Core.Term
 floatValue x =
@@ -165,6 +179,7 @@ floatValue x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "float64"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 v0)))}})
+
 -- | Encoder for hydra.core.ForallType
 forallType :: Core.ForallType -> Core.Term
 forallType x =
@@ -177,6 +192,7 @@ forallType x =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (type_ (Core.forallTypeBody x))}]})
+
 -- | Encoder for hydra.core.FunctionType
 functionType :: Core.FunctionType -> Core.Term
 functionType x =
@@ -189,6 +205,7 @@ functionType x =
         Core.Field {
           Core.fieldName = (Core.Name "codomain"),
           Core.fieldTerm = (type_ (Core.functionTypeCodomain x))}]})
+
 -- | Encoder for hydra.core.Injection
 injection :: Core.Injection -> Core.Term
 injection x =
@@ -201,6 +218,7 @@ injection x =
         Core.Field {
           Core.fieldName = (Core.Name "field"),
           Core.fieldTerm = (field (Core.injectionField x))}]})
+
 -- | Encoder for hydra.core.IntegerType
 integerType :: Core.IntegerType -> Core.Term
 integerType x =
@@ -250,6 +268,7 @@ integerType x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "uint64"),
           Core.fieldTerm = Core.TermUnit}})
+
 -- | Encoder for hydra.core.IntegerValue
 integerValue :: Core.IntegerValue -> Core.Term
 integerValue x =
@@ -299,6 +318,7 @@ integerValue x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "uint64"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint64 v0)))}})
+
 -- | Encoder for hydra.core.Lambda
 lambda :: Core.Lambda -> Core.Term
 lambda x =
@@ -314,6 +334,7 @@ lambda x =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (term (Core.lambdaBody x))}]})
+
 -- | Encoder for hydra.core.Let
 let_ :: Core.Let -> Core.Term
 let_ x =
@@ -326,6 +347,7 @@ let_ x =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (term (Core.letBody x))}]})
+
 -- | Encoder for hydra.core.Literal
 literal :: Core.Literal -> Core.Term
 literal x =
@@ -360,6 +382,7 @@ literal x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "string"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralString v0))}})
+
 -- | Encoder for hydra.core.LiteralType
 literalType :: Core.LiteralType -> Core.Term
 literalType x =
@@ -394,6 +417,7 @@ literalType x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "string"),
           Core.fieldTerm = Core.TermUnit}})
+
 -- | Encoder for hydra.core.MapType
 mapType :: Core.MapType -> Core.Term
 mapType x =
@@ -406,12 +430,14 @@ mapType x =
         Core.Field {
           Core.fieldName = (Core.Name "values"),
           Core.fieldTerm = (type_ (Core.mapTypeValues x))}]})
+
 -- | Encoder for hydra.core.Name
 name :: Core.Name -> Core.Term
 name x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Core.unName x))})
+
 -- | Encoder for hydra.core.PairType
 pairType :: Core.PairType -> Core.Term
 pairType x =
@@ -424,6 +450,7 @@ pairType x =
         Core.Field {
           Core.fieldName = (Core.Name "second"),
           Core.fieldTerm = (type_ (Core.pairTypeSecond x))}]})
+
 -- | Encoder for hydra.core.Projection
 projection :: Core.Projection -> Core.Term
 projection x =
@@ -436,6 +463,7 @@ projection x =
         Core.Field {
           Core.fieldName = (Core.Name "fieldName"),
           Core.fieldTerm = (name (Core.projectionFieldName x))}]})
+
 -- | Encoder for hydra.core.Record
 record :: Core.Record -> Core.Term
 record x =
@@ -448,6 +476,7 @@ record x =
         Core.Field {
           Core.fieldName = (Core.Name "fields"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map field xs)) (Core.recordFields x))}]})
+
 -- | Encoder for hydra.core.Term
 term :: Core.Term -> Core.Term
 term x =
@@ -557,6 +586,7 @@ term x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "wrap"),
           Core.fieldTerm = (wrappedTerm v0)}})
+
 -- | Encoder for hydra.core.Type
 type_ :: Core.Type -> Core.Term
 type_ x =
@@ -651,6 +681,7 @@ type_ x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "wrap"),
           Core.fieldTerm = (type_ v0)}})
+
 -- | Encoder for hydra.core.TypeApplicationTerm
 typeApplicationTerm :: Core.TypeApplicationTerm -> Core.Term
 typeApplicationTerm x =
@@ -663,6 +694,7 @@ typeApplicationTerm x =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (type_ (Core.typeApplicationTermType x))}]})
+
 -- | Encoder for hydra.core.TypeClassConstraint
 typeClassConstraint :: Core.TypeClassConstraint -> Core.Term
 typeClassConstraint x =
@@ -672,6 +704,7 @@ typeClassConstraint x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "simple"),
           Core.fieldTerm = (name v0)}})
+
 -- | Encoder for hydra.core.TypeLambda
 typeLambda :: Core.TypeLambda -> Core.Term
 typeLambda x =
@@ -684,6 +717,7 @@ typeLambda x =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (term (Core.typeLambdaBody x))}]})
+
 -- | Encoder for hydra.core.TypeScheme
 typeScheme :: Core.TypeScheme -> Core.Term
 typeScheme x =
@@ -699,6 +733,7 @@ typeScheme x =
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map (\m -> Core.TermMap (Maps.bimap name typeVariableConstraints m)) opt)) (Core.typeSchemeConstraints x))}]})
+
 -- | Encoder for hydra.core.TypeVariableConstraints
 typeVariableConstraints :: Core.TypeVariableConstraints -> Core.Term
 typeVariableConstraints x =
@@ -708,6 +743,7 @@ typeVariableConstraints x =
         Core.Field {
           Core.fieldName = (Core.Name "classes"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map typeClassConstraint xs)) (Core.typeVariableConstraintsClasses x))}]})
+
 -- | Encoder for hydra.core.WrappedTerm
 wrappedTerm :: Core.WrappedTerm -> Core.Term
 wrappedTerm x =

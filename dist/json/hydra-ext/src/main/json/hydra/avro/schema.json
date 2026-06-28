@@ -21,7 +21,7 @@
                 "name": "symbols",
                 "type": {
                   "annotated": {
-                    "body": {"list": {"literal": {"string": {}}}},
+                    "body": {"list": {"literal": "string"}},
                     "annotation": {
                       "map": [
                         {
@@ -33,7 +33,7 @@
                 "name": "default",
                 "type": {
                   "annotated": {
-                    "body": {"optional": {"literal": {"string": {}}}},
+                    "body": {"optional": {"literal": "string"}},
                     "annotation": {
                       "map": [
                         {
@@ -52,7 +52,7 @@
                 "name": "name",
                 "type": {
                   "annotated": {
-                    "body": {"literal": {"string": {}}},
+                    "body": {"literal": "string"},
                     "annotation": {
                       "map": [
                         {"key": {"variable": "description"}, "value": {"literal": {"string": "a JSON string providing the name of the field"}}}]}}}},
@@ -60,7 +60,7 @@
                 "name": "doc",
                 "type": {
                   "annotated": {
-                    "body": {"optional": {"literal": {"string": {}}}},
+                    "body": {"optional": {"literal": "string"}},
                     "annotation": {
                       "map": [
                         {"key": {"variable": "description"}, "value": {"literal": {"string": "a JSON string describing this field for users"}}}]}}}},
@@ -96,7 +96,7 @@
                 "name": "aliases",
                 "type": {
                   "annotated": {
-                    "body": {"optional": {"list": {"literal": {"string": {}}}}},
+                    "body": {"optional": {"list": {"literal": "string"}}},
                     "annotation": {
                       "map": [
                         {
@@ -106,7 +106,7 @@
                 "name": "annotations",
                 "type": {
                   "annotated": {
-                    "body": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.json.model.Value"}}},
+                    "body": {"map": {"keys": {"literal": "string"}, "values": {"variable": "hydra.json.model.Value"}}},
                     "annotation": {
                       "map": [
                         {
@@ -123,7 +123,7 @@
                 "name": "size",
                 "type": {
                   "annotated": {
-                    "body": {"literal": {"integer": {"int32": {}}}},
+                    "body": {"literal": {"integer": "int32"}},
                     "annotation": {
                       "map": [
                         {
@@ -144,19 +144,19 @@
                 "name": "name",
                 "type": {
                   "annotated": {
-                    "body": {"literal": {"string": {}}},
+                    "body": {"literal": "string"},
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "a string naming this schema"}}}]}}}},
               {
                 "name": "namespace",
                 "type": {
                   "annotated": {
-                    "body": {"optional": {"literal": {"string": {}}}},
+                    "body": {"optional": {"literal": "string"}},
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "a string that qualifies the name"}}}]}}}},
               {
                 "name": "aliases",
                 "type": {
                   "annotated": {
-                    "body": {"optional": {"list": {"literal": {"string": {}}}}},
+                    "body": {"optional": {"list": {"literal": "string"}}},
                     "annotation": {
                       "map": [
                         {
@@ -166,7 +166,7 @@
                 "name": "doc",
                 "type": {
                   "annotated": {
-                    "body": {"optional": {"literal": {"string": {}}}},
+                    "body": {"optional": {"literal": "string"}},
                     "annotation": {
                       "map": [
                         {
@@ -177,7 +177,7 @@
                 "name": "annotations",
                 "type": {
                   "annotated": {
-                    "body": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.json.model.Value"}}},
+                    "body": {"map": {"keys": {"literal": "string"}, "values": {"variable": "hydra.json.model.Value"}}},
                     "annotation": {
                       "map": [
                         {
@@ -199,10 +199,7 @@
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "ascending", "type": {"unit": {}}},
-              {"name": "descending", "type": {"unit": {}}},
-              {"name": "ignore", "type": {"unit": {}}}]}}}},
+            "union": [{"name": "ascending", "type": "unit"}, {"name": "descending", "type": "unit"}, {"name": "ignore", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.avro.schema.Primitive",
@@ -214,31 +211,31 @@
                 "name": "null",
                 "type": {
                   "annotated": {
-                    "body": {"unit": {}},
+                    "body": "unit",
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "no value"}}}]}}}},
               {
                 "name": "boolean",
                 "type": {
                   "annotated": {
-                    "body": {"unit": {}},
+                    "body": "unit",
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A binary value"}}}]}}}},
               {
                 "name": "int",
                 "type": {
                   "annotated": {
-                    "body": {"unit": {}},
+                    "body": "unit",
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "32-bit signed integer"}}}]}}}},
               {
                 "name": "long",
                 "type": {
                   "annotated": {
-                    "body": {"unit": {}},
+                    "body": "unit",
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "64-bit signed integer"}}}]}}}},
               {
                 "name": "float",
                 "type": {
                   "annotated": {
-                    "body": {"unit": {}},
+                    "body": "unit",
                     "annotation": {
                       "map": [
                         {
@@ -248,7 +245,7 @@
                 "name": "double",
                 "type": {
                   "annotated": {
-                    "body": {"unit": {}},
+                    "body": "unit",
                     "annotation": {
                       "map": [
                         {
@@ -258,13 +255,13 @@
                 "name": "bytes",
                 "type": {
                   "annotated": {
-                    "body": {"unit": {}},
+                    "body": "unit",
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "sequence of 8-bit unsigned bytes"}}}]}}}},
               {
                 "name": "string",
                 "type": {
                   "annotated": {
-                    "body": {"unit": {}},
+                    "body": "unit",
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "unicode character sequence"}}}]}}}}]}}}},
     {
       "type": {
@@ -294,7 +291,7 @@
                 "name": "reference",
                 "type": {
                   "annotated": {
-                    "body": {"literal": {"string": {}}},
+                    "body": {"literal": "string"},
                     "annotation": {
                       "map": [
                         {

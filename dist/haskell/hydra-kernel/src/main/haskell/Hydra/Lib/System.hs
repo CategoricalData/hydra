@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Primitives in the hydra.lib.system module.
 
 module Hydra.Lib.System where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -31,6 +33,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 execute :: Packaging.PrimitiveDefinition
 execute =
     Packaging.PrimitiveDefinition {
@@ -57,6 +60,7 @@ execute =
       Packaging.primitiveDefinitionIsPure = False,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 exit :: Packaging.PrimitiveDefinition
 exit =
     Packaging.PrimitiveDefinition {
@@ -81,6 +85,7 @@ exit =
       Packaging.primitiveDefinitionIsPure = False,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 getEnvironment :: Packaging.PrimitiveDefinition
 getEnvironment =
     Packaging.PrimitiveDefinition {
@@ -102,6 +107,7 @@ getEnvironment =
       Packaging.primitiveDefinitionIsPure = False,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 getEnvironmentVariable :: Packaging.PrimitiveDefinition
 getEnvironmentVariable =
     Packaging.PrimitiveDefinition {
@@ -126,6 +132,7 @@ getEnvironmentVariable =
       Packaging.primitiveDefinitionIsPure = False,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 getTime :: Packaging.PrimitiveDefinition
 getTime =
     Packaging.PrimitiveDefinition {
@@ -145,6 +152,7 @@ getTime =
       Packaging.primitiveDefinitionIsPure = False,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 getWorkingDirectory :: Packaging.PrimitiveDefinition
 getWorkingDirectory =
     Packaging.PrimitiveDefinition {

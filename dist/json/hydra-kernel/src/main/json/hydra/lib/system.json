@@ -58,7 +58,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.system.StatusCode"}, "isLazy": false}],
-          "result": {"type": {"effect": {"unit": {}}}}},
+          "result": {"type": {"effect": "unit"}}},
         "isPure": false,
         "isTotal": true}},
     {
@@ -73,7 +73,7 @@
           "typeParameters": [],
           "parameters": [],
           "result": {
-            "type": {"effect": {"map": {"keys": {"variable": "hydra.system.EnvironmentVariable"}, "values": {"literal": {"string": {}}}}}}}},
+            "type": {"effect": {"map": {"keys": {"variable": "hydra.system.EnvironmentVariable"}, "values": {"literal": "string"}}}}}},
         "isPure": false,
         "isTotal": true}},
     {
@@ -87,7 +87,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.system.EnvironmentVariable"}, "isLazy": false}],
-          "result": {"type": {"effect": {"optional": {"literal": {"string": {}}}}}}},
+          "result": {"type": {"effect": {"optional": {"literal": "string"}}}}},
         "isPure": false,
         "isTotal": true}},
     {

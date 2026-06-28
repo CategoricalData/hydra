@@ -16,7 +16,7 @@
                     "name": "seconds",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int64": {}}}},
+                        "body": {"literal": {"integer": "int64"}},
                         "annotation": {
                           "map": [
                             {
@@ -28,7 +28,7 @@
                     "name": "nanoseconds",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"uint32": {}}}},
+                        "body": {"literal": {"integer": "uint32"}},
                         "annotation": {
                           "map": [
                             {

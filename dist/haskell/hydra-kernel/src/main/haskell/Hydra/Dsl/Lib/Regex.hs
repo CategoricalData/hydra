@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | DSL functions for hydra.lib.regex
 
 module Hydra.Dsl.Lib.Regex where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -57,6 +59,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | DSL reference to hydra.lib.regex.find
 find :: Typed.TypedTerm String -> Typed.TypedTerm String -> Typed.TypedTerm (Maybe String)
 find arg0 arg1 =
@@ -65,6 +68,7 @@ find arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.regex.find")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.regex.findAll
 findAll :: Typed.TypedTerm String -> Typed.TypedTerm String -> Typed.TypedTerm [String]
 findAll arg0 arg1 =
@@ -73,6 +77,7 @@ findAll arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.regex.findAll")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.regex.matches
 matches :: Typed.TypedTerm String -> Typed.TypedTerm String -> Typed.TypedTerm Bool
 matches arg0 arg1 =
@@ -81,6 +86,7 @@ matches arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.regex.matches")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.regex.replace
 replace :: Typed.TypedTerm String -> Typed.TypedTerm String -> Typed.TypedTerm String -> Typed.TypedTerm String
 replace arg0 arg1 arg2 =
@@ -91,6 +97,7 @@ replace arg0 arg1 arg2 =
           Core.applicationArgument = (Typed.unTypedTerm arg0)})),
         Core.applicationArgument = (Typed.unTypedTerm arg1)})),
       Core.applicationArgument = (Typed.unTypedTerm arg2)}))
+
 -- | DSL reference to hydra.lib.regex.replaceAll
 replaceAll :: Typed.TypedTerm String -> Typed.TypedTerm String -> Typed.TypedTerm String -> Typed.TypedTerm String
 replaceAll arg0 arg1 arg2 =
@@ -101,6 +108,7 @@ replaceAll arg0 arg1 arg2 =
           Core.applicationArgument = (Typed.unTypedTerm arg0)})),
         Core.applicationArgument = (Typed.unTypedTerm arg1)})),
       Core.applicationArgument = (Typed.unTypedTerm arg2)}))
+
 -- | DSL reference to hydra.lib.regex.split
 split :: Typed.TypedTerm String -> Typed.TypedTerm String -> Typed.TypedTerm [String]
 split arg0 arg1 =

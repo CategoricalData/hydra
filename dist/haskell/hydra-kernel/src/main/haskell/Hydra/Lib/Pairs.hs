@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Primitives in the hydra.lib.pairs module.
 
 module Hydra.Lib.Pairs where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -31,6 +33,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 bimap :: Packaging.PrimitiveDefinition
 bimap =
     Packaging.PrimitiveDefinition {
@@ -105,6 +108,7 @@ bimap =
                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.second")),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))}))))}))}))})))}
+
 first :: Packaging.PrimitiveDefinition
 first =
     Packaging.PrimitiveDefinition {
@@ -138,6 +142,7 @@ first =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 second :: Packaging.PrimitiveDefinition
 second =
     Packaging.PrimitiveDefinition {

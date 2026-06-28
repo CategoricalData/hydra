@@ -6,14 +6,12 @@
     "seeAlso": []},
   "dependencies": [],
   "definitions": [
+    {"type": {"name": "hydra.graphql.syntax.Name", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
+    {"type": {"name": "hydra.graphql.syntax.IntValue", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
     {
-      "type": {"name": "hydra.graphql.syntax.Name", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+      "type": {"name": "hydra.graphql.syntax.FloatValue", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
     {
-      "type": {"name": "hydra.graphql.syntax.IntValue", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
-    {
-      "type": {"name": "hydra.graphql.syntax.FloatValue", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
-    {
-      "type": {"name": "hydra.graphql.syntax.StringValue", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+      "type": {"name": "hydra.graphql.syntax.StringValue", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.Document",
@@ -67,10 +65,7 @@
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "Query", "type": {"unit": {}}},
-              {"name": "Mutation", "type": {"unit": {}}},
-              {"name": "Subscription", "type": {"unit": {}}}]}}}},
+            "union": [{"name": "Query", "type": "unit"}, {"name": "Mutation", "type": "unit"}, {"name": "Subscription", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.SelectionSet",
@@ -102,8 +97,7 @@
         "name": "hydra.graphql.syntax.Alias",
         "body": {
           "variables": [],
-          "body": {
-            "union": [{"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}}, {"name": "Colon", "type": {"unit": {}}}]}}}},
+          "body": {"union": [{"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}}, {"name": "Colon", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.Arguments",
@@ -157,7 +151,7 @@
         "body": {
           "variables": [],
           "body": {
-            "union": [{"name": "On", "type": {"unit": {}}}, {"name": "NamedType", "type": {"variable": "hydra.graphql.syntax.NamedType"}}]}}}},
+            "union": [{"name": "On", "type": "unit"}, {"name": "NamedType", "type": {"variable": "hydra.graphql.syntax.NamedType"}}]}}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.Value",
@@ -177,8 +171,8 @@
     {
       "type": {
         "name": "hydra.graphql.syntax.BooleanValue",
-        "body": {"variables": [], "body": {"union": [{"name": "True", "type": {"unit": {}}}, {"name": "False", "type": {"unit": {}}}]}}}},
-    {"type": {"name": "hydra.graphql.syntax.NullValue", "body": {"variables": [], "body": {"wrap": {"unit": {}}}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "True", "type": "unit"}, {"name": "False", "type": "unit"}]}}}},
+    {"type": {"name": "hydra.graphql.syntax.NullValue", "body": {"variables": [], "body": {"wrap": "unit"}}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.EnumValue",
@@ -470,7 +464,7 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "Amp", "type": {"optional": {"unit": {}}}},
+              {"name": "Amp", "type": {"optional": "unit"}},
               {"name": "NamedType", "type": {"variable": "hydra.graphql.syntax.NamedType"}}]}}}},
     {
       "type": {
@@ -612,7 +606,7 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "Or", "type": {"optional": {"unit": {}}}},
+              {"name": "Or", "type": {"optional": "unit"}},
               {"name": "NamedType", "type": {"variable": "hydra.graphql.syntax.NamedType"}}]}}}},
     {
       "type": {
@@ -767,7 +761,7 @@
               {"name": "Description", "type": {"optional": {"variable": "hydra.graphql.syntax.Description"}}},
               {"name": "Name", "type": {"variable": "hydra.graphql.syntax.Name"}},
               {"name": "ArgumentsDefinition", "type": {"optional": {"variable": "hydra.graphql.syntax.ArgumentsDefinition"}}},
-              {"name": "Repeatable", "type": {"optional": {"unit": {}}}},
+              {"name": "Repeatable", "type": {"optional": "unit"}},
               {"name": "DirectiveLocations", "type": {"variable": "hydra.graphql.syntax.DirectiveLocations"}}]}}}},
     {
       "type": {
@@ -794,7 +788,7 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "Or", "type": {"optional": {"unit": {}}}},
+              {"name": "Or", "type": {"optional": "unit"}},
               {"name": "DirectiveLocation", "type": {"variable": "hydra.graphql.syntax.DirectiveLocation"}}]}}}},
     {
       "type": {
@@ -812,14 +806,14 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "QUERY", "type": {"unit": {}}},
-              {"name": "MUTATION", "type": {"unit": {}}},
-              {"name": "SUBSCRIPTION", "type": {"unit": {}}},
-              {"name": "FIELD", "type": {"unit": {}}},
-              {"name": "FRAGMENT_DEFINITION", "type": {"unit": {}}},
-              {"name": "FRAGMENT_SPREAD", "type": {"unit": {}}},
-              {"name": "INLINE_FRAGMENT", "type": {"unit": {}}},
-              {"name": "VARIABLE_DEFINITION", "type": {"unit": {}}}]}}}},
+              {"name": "QUERY", "type": "unit"},
+              {"name": "MUTATION", "type": "unit"},
+              {"name": "SUBSCRIPTION", "type": "unit"},
+              {"name": "FIELD", "type": "unit"},
+              {"name": "FRAGMENT_DEFINITION", "type": "unit"},
+              {"name": "FRAGMENT_SPREAD", "type": "unit"},
+              {"name": "INLINE_FRAGMENT", "type": "unit"},
+              {"name": "VARIABLE_DEFINITION", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.TypeSystemDirectiveLocation",
@@ -827,14 +821,14 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "SCHEMA", "type": {"unit": {}}},
-              {"name": "SCALAR", "type": {"unit": {}}},
-              {"name": "OBJECT", "type": {"unit": {}}},
-              {"name": "FIELD_DEFINITION", "type": {"unit": {}}},
-              {"name": "ARGUMENT_DEFINITION", "type": {"unit": {}}},
-              {"name": "INTERFACE", "type": {"unit": {}}},
-              {"name": "UNION", "type": {"unit": {}}},
-              {"name": "ENUM", "type": {"unit": {}}},
-              {"name": "ENUM_VALUE", "type": {"unit": {}}},
-              {"name": "INPUT_OBJECT", "type": {"unit": {}}},
-              {"name": "INPUT_FIELD_DEFINITION", "type": {"unit": {}}}]}}}}]}
+              {"name": "SCHEMA", "type": "unit"},
+              {"name": "SCALAR", "type": "unit"},
+              {"name": "OBJECT", "type": "unit"},
+              {"name": "FIELD_DEFINITION", "type": "unit"},
+              {"name": "ARGUMENT_DEFINITION", "type": "unit"},
+              {"name": "INTERFACE", "type": "unit"},
+              {"name": "UNION", "type": "unit"},
+              {"name": "ENUM", "type": "unit"},
+              {"name": "ENUM_VALUE", "type": "unit"},
+              {"name": "INPUT_OBJECT", "type": "unit"},
+              {"name": "INPUT_FIELD_DEFINITION", "type": "unit"}]}}}}]}

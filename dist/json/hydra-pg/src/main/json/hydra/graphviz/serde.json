@@ -157,21 +157,21 @@
                             "handler": {
                               "lambda": {
                                 "parameter": "_",
-                                "domain": {"unit": {}},
+                                "domain": "unit",
                                 "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "graph"}}}}}}},
                           {
                             "name": "node",
                             "handler": {
                               "lambda": {
                                 "parameter": "_",
-                                "domain": {"unit": {}},
+                                "domain": "unit",
                                 "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "node"}}}}}}},
                           {
                             "name": "edge",
                             "handler": {
                               "lambda": {
                                 "parameter": "_",
-                                "domain": {"unit": {}},
+                                "domain": "unit",
                                 "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "edge"}}}}}}}]}},
                     "argument": {"variable": "t"}}}}},
             "annotation": {
@@ -200,70 +200,70 @@
                             "handler": {
                               "lambda": {
                                 "parameter": "_",
-                                "domain": {"unit": {}},
+                                "domain": "unit",
                                 "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "n"}}}}}}},
                           {
                             "name": "ne",
                             "handler": {
                               "lambda": {
                                 "parameter": "_",
-                                "domain": {"unit": {}},
+                                "domain": "unit",
                                 "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "ne"}}}}}}},
                           {
                             "name": "e",
                             "handler": {
                               "lambda": {
                                 "parameter": "_",
-                                "domain": {"unit": {}},
+                                "domain": "unit",
                                 "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "e"}}}}}}},
                           {
                             "name": "se",
                             "handler": {
                               "lambda": {
                                 "parameter": "_",
-                                "domain": {"unit": {}},
+                                "domain": "unit",
                                 "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "se"}}}}}}},
                           {
                             "name": "s",
                             "handler": {
                               "lambda": {
                                 "parameter": "_",
-                                "domain": {"unit": {}},
+                                "domain": "unit",
                                 "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "s"}}}}}}},
                           {
                             "name": "sw",
                             "handler": {
                               "lambda": {
                                 "parameter": "_",
-                                "domain": {"unit": {}},
+                                "domain": "unit",
                                 "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "sw"}}}}}}},
                           {
                             "name": "w",
                             "handler": {
                               "lambda": {
                                 "parameter": "_",
-                                "domain": {"unit": {}},
+                                "domain": "unit",
                                 "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "w"}}}}}}},
                           {
                             "name": "nw",
                             "handler": {
                               "lambda": {
                                 "parameter": "_",
-                                "domain": {"unit": {}},
+                                "domain": "unit",
                                 "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "nw"}}}}}}},
                           {
                             "name": "c",
                             "handler": {
                               "lambda": {
                                 "parameter": "_",
-                                "domain": {"unit": {}},
+                                "domain": "unit",
                                 "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "c"}}}}}}},
                           {
                             "name": "none",
                             "handler": {
                               "lambda": {
                                 "parameter": "_",
-                                "domain": {"unit": {}},
+                                "domain": "unit",
                                 "body": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "none"}}}}}}}]}},
                     "argument": {"variable": "p"}}}}},
             "annotation": {
@@ -274,7 +274,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"boolean": {}}}, "isLazy": false},
+            {"name": "arg0", "type": {"literal": "boolean"}, "isLazy": false},
             {"name": "arg1", "type": {"variable": "hydra.graphviz.dot.EdgeStmt"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.ast.Expr"}}},
         "body": {
@@ -282,7 +282,7 @@
             "body": {
               "lambda": {
                 "parameter": "directed",
-                "domain": {"literal": {"boolean": {}}},
+                "domain": {"literal": "boolean"},
                 "body": {
                   "lambda": {
                     "parameter": "es",
@@ -319,11 +319,11 @@
                                   "application": {
                                     "function": {
                                       "application": {
-                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}},
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": "string"}}},
                                         "argument": {"variable": "directed"}}},
                                     "argument": {"literal": {"string": "->"}}}},
                                 "argument": {"literal": {"string": "--"}}}},
-                            "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                            "typeScheme": {"variables": [], "body": {"literal": "string"}}},
                           {
                             "name": "rhsParts",
                             "term": {
@@ -455,14 +455,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.graphviz.dot.Graph", "fieldName": "strict"}},
                             "argument": {"variable": "g"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": {"boolean": {}}}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
                       {
                         "name": "directed",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.graphviz.dot.Graph", "fieldName": "directed"}},
                             "argument": {"variable": "g"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": {"boolean": {}}}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
                       {
                         "name": "stmts",
                         "term": {
@@ -478,11 +478,11 @@
                               "application": {
                                 "function": {
                                   "application": {
-                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}},
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": "string"}}},
                                     "argument": {"variable": "directed"}}},
                                 "argument": {"literal": {"string": "digraph"}}}},
                             "argument": {"literal": {"string": "graph"}}}},
-                        "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
                       {
                         "name": "graphExpr",
                         "term": {
@@ -617,7 +617,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"boolean": {}}}, "isLazy": false},
+            {"name": "arg0", "type": {"literal": "boolean"}, "isLazy": false},
             {"name": "arg1", "type": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.ast.Expr"}}},
         "body": {
@@ -625,7 +625,7 @@
             "body": {
               "lambda": {
                 "parameter": "directed",
-                "domain": {"literal": {"boolean": {}}},
+                "domain": {"literal": "boolean"},
                 "body": {
                   "lambda": {
                     "parameter": "ns",
@@ -800,7 +800,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"boolean": {}}}, "isLazy": false},
+            {"name": "arg0", "type": {"literal": "boolean"}, "isLazy": false},
             {"name": "arg1", "type": {"variable": "hydra.graphviz.dot.Stmt"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.ast.Expr"}}},
         "body": {
@@ -808,7 +808,7 @@
             "body": {
               "lambda": {
                 "parameter": "directed",
-                "domain": {"literal": {"boolean": {}}},
+                "domain": {"literal": "boolean"},
                 "body": {
                   "lambda": {
                     "parameter": "s",
@@ -869,7 +869,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"boolean": {}}}, "isLazy": false},
+            {"name": "arg0", "type": {"literal": "boolean"}, "isLazy": false},
             {"name": "arg1", "type": {"variable": "hydra.graphviz.dot.Subgraph"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.ast.Expr"}}},
         "body": {
@@ -877,7 +877,7 @@
             "body": {
               "lambda": {
                 "parameter": "directed",
-                "domain": {"literal": {"boolean": {}}},
+                "domain": {"literal": "boolean"},
                 "body": {
                   "lambda": {
                     "parameter": "sg",

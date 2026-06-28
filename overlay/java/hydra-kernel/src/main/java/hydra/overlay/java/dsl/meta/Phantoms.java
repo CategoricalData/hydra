@@ -32,7 +32,7 @@ import java.util.Map;
  *
  * <p>All functions take {@link TypedTerm} arguments and return a {@link TypedTerm}, so that
  * the Java type system tracks the phantom types of intermediate terms. The
- * actual underlying values are built via {@link hydra.dsl.Terms}.</p>
+ * actual underlying values are built via {@link Terms}.</p>
  */
 public final class Phantoms {
     private Phantoms() {}

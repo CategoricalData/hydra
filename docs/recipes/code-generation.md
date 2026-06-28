@@ -40,21 +40,22 @@ The authoring host language varies per package:
 | **hydra-jvm** | **Java (`src/main/java/hydra/sources/jvm/`)** | (Phase 5 via `bin/generate-hydra-java-from-java.sh`) |
 | **hydra-java** | **Java (`src/main/java/hydra/sources/java/`)** | `bin/generate-hydra-java-from-java.sh` |
 | **hydra-python** | **Python (`src/main/python/hydra/sources/python/`)** | `bin/generate-hydra-python-from-python.sh` |
-| hydra-scala, hydra-lisp, hydra-pg, hydra-rdf, hydra-ext, ... | Haskell (`src/main/haskell/...`) | (Haskell Phase 1) |
+| **hydra-scala** | **Scala (`src/main/scala/hydra/sources/scala/`)** | `bin/generate-hydra-scala-from-scala.sh` |
+| hydra-lisp, hydra-pg, hydra-rdf, hydra-ext, ... | Haskell (`src/main/haskell/...`) | (Haskell Phase 1) |
 
-> **hydra-jvm, hydra-java, and hydra-python are host-native, sole source of truth (#346/#370/#505):**
-> their coder sources are authored in Java and Python under
-> `packages/hydra-{jvm,java,python}/src/main/{java,python}/hydra/sources/`. The legacy
+> **hydra-jvm, hydra-java, hydra-python, and hydra-scala are host-native, sole source of truth
+> (#346/#370/#505/#509):** their coder sources are authored in Java, Python, and Scala under
+> `packages/hydra-{jvm,java,python,scala}/src/main/{java,python,scala}/hydra/sources/`. The legacy
 > Haskell DSL copies have been **deleted** — there is no fallback. The native
-> drivers (`bin/generate-hydra-{java,python}-from-{java,python}.sh`, run by `bin/sync.sh`
-> Phase 5) are the sole writers of `dist/json/hydra-{jvm,java,python}/`. `hydra-jvm` is
+> drivers (`bin/generate-hydra-{java,python,scala}-from-{java,python,scala}.sh`, run by `bin/sync.sh`
+> Phase 5) are the sole writers of `dist/json/hydra-{jvm,java,python,scala}/`. `hydra-jvm` is
 > generated in the same Phase 5 pass as `hydra-java` (it contains shared JVM helpers
-> depended on by both `hydra-java` and `hydra-scala`). All three packages default to
+> depended on by both `hydra-java` and `hydra-scala`). Java and Python default to
 > the **published host** (Maven `hydra-java` / PyPI `hydra-python`, version from
-> `hydra.json` `hostVersion`). `update-json-main` still *loads* the resulting
-> `hydra.{jvm,java,python}.*` JSON into its inference universe so cross-package
-> references resolve (e.g. `hydra-scala` → `hydra.jvm.serde`), but no longer
-> *generates* it. See
+> `hydra.json` `hostVersion`); Scala currently runs only against the local sbt build (no
+> published-host probe yet). `update-json-main` still *loads* the resulting
+> `hydra.{jvm,java,python,scala}.*` JSON into its inference universe so cross-package
+> references resolve, but no longer *generates* it. See
 > [The build system § Consuming published hosts](../build-system.md#consuming-published-hosts)
 > and [Migration shims](migration-shims.md).
 
@@ -244,16 +245,16 @@ Both scripts:
    See [`claude/pitfalls.md`](../../claude/pitfalls.md) under "Wrapper
    scripts auto-sync; testers don't" for the full convention.
 2. Run the native DSL → JSON driver (`hydra.UpdateJavaJson` via
-   `bin/update-java-json.sh` / `bin/update-python-json.py`), which loads the
-   kernel universe from `dist/json/hydra-kernel/`, imports/reflects on the
-   package's DSL source modules, infers types, and writes the resulting JSON.
+   `bin/update-java-json.sh` / `bin/update-python-json.py` / `hydra.UpdateScalaJson` via
+   `bin/generate-hydra-scala-from-scala.sh`), which loads the kernel universe from
+   `dist/json/hydra-kernel/`, imports/reflects on the package's DSL source modules,
+   infers types, and writes the resulting JSON.
 3. Optionally byte-compare the new output to the existing
-   `dist/json/hydra-{java,python}/` to verify byte-identical reproduction
+   `dist/json/hydra-{java,python,scala}/` to verify byte-identical reproduction
    of canonical.
 
-Use these when you have edited the Java or Python DSL sources and need to
-refresh `dist/json/` from them, or to validate that the host-native sources
-and the legacy Haskell sources still agree.
+Use these when you have edited the Java, Python, or Scala DSL sources and need to
+refresh `dist/json/` from them.
 
 > See [bin/update-java-json.md](../../bin/update-java-json.md) and
 > [bin/update-python-json.md](../../bin/update-python-json.md) for
@@ -261,13 +262,14 @@ and the legacy Haskell sources still agree.
 > pre-computed type-scheme workaround used for `hydra.java.coder`.
 
 > **Sync integration:** the main sync (`bin/sync.sh`) regenerates
-> `dist/json/hydra-{java,python}/` via the native drivers in Phase 5 (and heals them
-> in Phase 1.5 when the kernel changed) — automatically, no explicit run needed.
-> The drivers default to the **published host**; pass `--local-host` (or set
-> `hostOverrides["<host>"]="local"` in `hydra.json`) to build the coder
-> from local `dist/` for a backward-incompatible kernel change. The
-> `generate-hydra-{java,python}-from-{java,python}.sh` scripts run the same path
-> standalone.
+> `dist/json/hydra-{java,python,scala}/` via the native drivers in Phase 5 (and heals
+> Java/Python in Phase 1.5 when the kernel changed) — automatically, no explicit
+> run needed. The Java and Python drivers default to the **published host**; pass
+> `--local-host` (or set `hostOverrides["<host>"]="local"` in `hydra.json`) to build
+> the coder from local `dist/` for a backward-incompatible kernel change. Scala
+> currently runs only against the local sbt build. The
+> `generate-hydra-{java,python,scala}-from-{java,python,scala}.sh` scripts run the
+> same path standalone.
 
 ## Generating from DSL modules directly
 

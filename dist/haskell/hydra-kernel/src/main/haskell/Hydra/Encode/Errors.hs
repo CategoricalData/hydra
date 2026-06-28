@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term encoders for hydra.errors
 
 module Hydra.Encode.Errors where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.Error.Checking as Checking
@@ -12,15 +14,18 @@ import qualified Hydra.Encode.Variants as Variants
 import qualified Hydra.Errors as Errors
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Encoder for hydra.errors.DecodingError
 decodingError :: Errors.DecodingError -> Core.Term
 decodingError x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Errors.unDecodingError x))})
+
 -- | Encoder for hydra.errors.EmptyListError
 emptyListError :: () -> Core.Term
 emptyListError _ = Core.TermUnit
+
 -- | Encoder for hydra.errors.Error
 error :: Errors.Error -> Core.Term
 error x =
@@ -100,6 +105,7 @@ error x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unification"),
           Core.fieldTerm = (unificationError v0)}})
+
 -- | Encoder for hydra.errors.ExtractionError
 extractionError :: Errors.ExtractionError -> Core.Term
 extractionError x =
@@ -139,6 +145,7 @@ extractionError x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unexpectedShape"),
           Core.fieldTerm = (unexpectedShapeError v0)}})
+
 -- | Encoder for hydra.errors.InferenceError
 inferenceError :: Errors.InferenceError -> Core.Term
 inferenceError x =
@@ -158,6 +165,7 @@ inferenceError x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unification"),
           Core.fieldTerm = (unificationInferenceError v0)}})
+
 -- | Encoder for hydra.errors.MultipleBindingsError
 multipleBindingsError :: Errors.MultipleBindingsError -> Core.Term
 multipleBindingsError x =
@@ -167,6 +175,7 @@ multipleBindingsError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (Errors.multipleBindingsErrorName x))}]})
+
 -- | Encoder for hydra.errors.MultipleFieldsError
 multipleFieldsError :: Errors.MultipleFieldsError -> Core.Term
 multipleFieldsError x =
@@ -176,6 +185,7 @@ multipleFieldsError x =
         Core.Field {
           Core.fieldName = (Core.Name "fieldName"),
           Core.fieldTerm = (EncodeCore.name (Errors.multipleFieldsErrorFieldName x))}]})
+
 -- | Encoder for hydra.errors.NoMatchingFieldError
 noMatchingFieldError :: Errors.NoMatchingFieldError -> Core.Term
 noMatchingFieldError x =
@@ -185,6 +195,7 @@ noMatchingFieldError x =
         Core.Field {
           Core.fieldName = (Core.Name "fieldName"),
           Core.fieldTerm = (EncodeCore.name (Errors.noMatchingFieldErrorFieldName x))}]})
+
 -- | Encoder for hydra.errors.NoSuchBindingError
 noSuchBindingError :: Errors.NoSuchBindingError -> Core.Term
 noSuchBindingError x =
@@ -194,6 +205,7 @@ noSuchBindingError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (Errors.noSuchBindingErrorName x))}]})
+
 -- | Encoder for hydra.errors.NoSuchPrimitiveError
 noSuchPrimitiveError :: Errors.NoSuchPrimitiveError -> Core.Term
 noSuchPrimitiveError x =
@@ -203,15 +215,18 @@ noSuchPrimitiveError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (Errors.noSuchPrimitiveErrorName x))}]})
+
 -- | Encoder for hydra.errors.NotEnoughCasesError
 notEnoughCasesError :: () -> Core.Term
 notEnoughCasesError _ = Core.TermUnit
+
 -- | Encoder for hydra.errors.OtherError
 otherError :: Errors.OtherError -> Core.Term
 otherError x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.errors.OtherError"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Errors.unOtherError x))})
+
 -- | Encoder for hydra.errors.OtherInferenceError
 otherInferenceError :: Errors.OtherInferenceError -> Core.Term
 otherInferenceError x =
@@ -224,12 +239,14 @@ otherInferenceError x =
         Core.Field {
           Core.fieldName = (Core.Name "message"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Errors.otherInferenceErrorMessage x))}]})
+
 -- | Encoder for hydra.errors.OtherResolutionError
 otherResolutionError :: Errors.OtherResolutionError -> Core.Term
 otherResolutionError x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.errors.OtherResolutionError"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Errors.unOtherResolutionError x))})
+
 -- | Encoder for hydra.errors.ResolutionError
 resolutionError :: Errors.ResolutionError -> Core.Term
 resolutionError x =
@@ -259,6 +276,7 @@ resolutionError x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "unexpectedShape"),
           Core.fieldTerm = (unexpectedShapeError v0)}})
+
 -- | Encoder for hydra.errors.UnexpectedShapeError
 unexpectedShapeError :: Errors.UnexpectedShapeError -> Core.Term
 unexpectedShapeError x =
@@ -271,6 +289,7 @@ unexpectedShapeError x =
         Core.Field {
           Core.fieldName = (Core.Name "actual"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Errors.unexpectedShapeErrorActual x))}]})
+
 -- | Encoder for hydra.errors.UnificationError
 unificationError :: Errors.UnificationError -> Core.Term
 unificationError x =
@@ -286,6 +305,7 @@ unificationError x =
         Core.Field {
           Core.fieldName = (Core.Name "message"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Errors.unificationErrorMessage x))}]})
+
 -- | Encoder for hydra.errors.UnificationInferenceError
 unificationInferenceError :: Errors.UnificationInferenceError -> Core.Term
 unificationInferenceError x =

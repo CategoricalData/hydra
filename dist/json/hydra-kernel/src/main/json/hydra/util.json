@@ -12,10 +12,10 @@
             "annotated": {
               "body": {
                 "union": [
-                  {"name": "camel", "type": {"unit": {}}},
-                  {"name": "pascal", "type": {"unit": {}}},
-                  {"name": "lowerSnake", "type": {"unit": {}}},
-                  {"name": "upperSnake", "type": {"unit": {}}}]},
+                  {"name": "camel", "type": "unit"},
+                  {"name": "pascal", "type": "unit"},
+                  {"name": "lowerSnake", "type": "unit"},
+                  {"name": "upperSnake", "type": "unit"}]},
               "annotation": {
                 "map": [
                   {
@@ -29,10 +29,7 @@
           "body": {
             "annotated": {
               "body": {
-                "union": [
-                  {"name": "lessThan", "type": {"unit": {}}},
-                  {"name": "equalTo", "type": {"unit": {}}},
-                  {"name": "greaterThan", "type": {"unit": {}}}]},
+                "union": [{"name": "lessThan", "type": "unit"}, {"name": "equalTo", "type": "unit"}, {"name": "greaterThan", "type": "unit"}]},
               "annotation": {
                 "map": [
                   {
@@ -84,13 +81,13 @@
                     "name": "arbitrary",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Arbitrary precision"}}}]}}}},
                   {
                     "name": "bits",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Precision to a specified number of bits"}}}]}}}}]},
               "annotation": {
@@ -117,7 +114,7 @@
                     "name": "local",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The local name"}}}]}}}}]},
               "annotation": {
                 "map": [

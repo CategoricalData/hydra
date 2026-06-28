@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Primitives in the hydra.lib.literals module.
 
 module Hydra.Lib.Literals where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -31,6 +33,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 bigintToDecimal :: Packaging.PrimitiveDefinition
 bigintToDecimal =
     Packaging.PrimitiveDefinition {
@@ -56,6 +59,7 @@ bigintToDecimal =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 bigintToInt16 :: Packaging.PrimitiveDefinition
 bigintToInt16 =
     Packaging.PrimitiveDefinition {
@@ -81,6 +85,7 @@ bigintToInt16 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 bigintToInt32 :: Packaging.PrimitiveDefinition
 bigintToInt32 =
     Packaging.PrimitiveDefinition {
@@ -106,6 +111,7 @@ bigintToInt32 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 bigintToInt64 :: Packaging.PrimitiveDefinition
 bigintToInt64 =
     Packaging.PrimitiveDefinition {
@@ -131,6 +137,7 @@ bigintToInt64 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 bigintToInt8 :: Packaging.PrimitiveDefinition
 bigintToInt8 =
     Packaging.PrimitiveDefinition {
@@ -156,6 +163,7 @@ bigintToInt8 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 bigintToUint16 :: Packaging.PrimitiveDefinition
 bigintToUint16 =
     Packaging.PrimitiveDefinition {
@@ -181,6 +189,7 @@ bigintToUint16 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 bigintToUint32 :: Packaging.PrimitiveDefinition
 bigintToUint32 =
     Packaging.PrimitiveDefinition {
@@ -206,6 +215,7 @@ bigintToUint32 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 bigintToUint64 :: Packaging.PrimitiveDefinition
 bigintToUint64 =
     Packaging.PrimitiveDefinition {
@@ -231,6 +241,7 @@ bigintToUint64 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 bigintToUint8 :: Packaging.PrimitiveDefinition
 bigintToUint8 =
     Packaging.PrimitiveDefinition {
@@ -256,6 +267,7 @@ bigintToUint8 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 binaryToBytes :: Packaging.PrimitiveDefinition
 binaryToBytes =
     Packaging.PrimitiveDefinition {
@@ -282,6 +294,7 @@ binaryToBytes =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 binaryToString :: Packaging.PrimitiveDefinition
 binaryToString =
     Packaging.PrimitiveDefinition {
@@ -308,6 +321,7 @@ binaryToString =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 decimalToBigint :: Packaging.PrimitiveDefinition
 decimalToBigint =
     Packaging.PrimitiveDefinition {
@@ -333,6 +347,7 @@ decimalToBigint =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 decimalToFloat32 :: Packaging.PrimitiveDefinition
 decimalToFloat32 =
     Packaging.PrimitiveDefinition {
@@ -358,6 +373,7 @@ decimalToFloat32 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 decimalToFloat64 :: Packaging.PrimitiveDefinition
 decimalToFloat64 =
     Packaging.PrimitiveDefinition {
@@ -383,6 +399,7 @@ decimalToFloat64 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 float32ToDecimal :: Packaging.PrimitiveDefinition
 float32ToDecimal =
     Packaging.PrimitiveDefinition {
@@ -408,6 +425,7 @@ float32ToDecimal =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 float32ToFloat64 :: Packaging.PrimitiveDefinition
 float32ToFloat64 =
     Packaging.PrimitiveDefinition {
@@ -433,6 +451,7 @@ float32ToFloat64 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 float64ToDecimal :: Packaging.PrimitiveDefinition
 float64ToDecimal =
     Packaging.PrimitiveDefinition {
@@ -458,6 +477,7 @@ float64ToDecimal =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 float64ToFloat32 :: Packaging.PrimitiveDefinition
 float64ToFloat32 =
     Packaging.PrimitiveDefinition {
@@ -483,6 +503,7 @@ float64ToFloat32 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 int16ToBigint :: Packaging.PrimitiveDefinition
 int16ToBigint =
     Packaging.PrimitiveDefinition {
@@ -508,6 +529,7 @@ int16ToBigint =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 int32ToBigint :: Packaging.PrimitiveDefinition
 int32ToBigint =
     Packaging.PrimitiveDefinition {
@@ -533,6 +555,7 @@ int32ToBigint =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 int64ToBigint :: Packaging.PrimitiveDefinition
 int64ToBigint =
     Packaging.PrimitiveDefinition {
@@ -558,6 +581,7 @@ int64ToBigint =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 int8ToBigint :: Packaging.PrimitiveDefinition
 int8ToBigint =
     Packaging.PrimitiveDefinition {
@@ -583,6 +607,7 @@ int8ToBigint =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 readBigint :: Packaging.PrimitiveDefinition
 readBigint =
     Packaging.PrimitiveDefinition {
@@ -609,6 +634,7 @@ readBigint =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 readBoolean :: Packaging.PrimitiveDefinition
 readBoolean =
     Packaging.PrimitiveDefinition {
@@ -634,6 +660,7 @@ readBoolean =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 readDecimal :: Packaging.PrimitiveDefinition
 readDecimal =
     Packaging.PrimitiveDefinition {
@@ -660,6 +687,7 @@ readDecimal =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 readFloat32 :: Packaging.PrimitiveDefinition
 readFloat32 =
     Packaging.PrimitiveDefinition {
@@ -686,6 +714,7 @@ readFloat32 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 readFloat64 :: Packaging.PrimitiveDefinition
 readFloat64 =
     Packaging.PrimitiveDefinition {
@@ -712,6 +741,7 @@ readFloat64 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 readInt16 :: Packaging.PrimitiveDefinition
 readInt16 =
     Packaging.PrimitiveDefinition {
@@ -737,6 +767,7 @@ readInt16 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 readInt32 :: Packaging.PrimitiveDefinition
 readInt32 =
     Packaging.PrimitiveDefinition {
@@ -762,6 +793,7 @@ readInt32 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 readInt64 :: Packaging.PrimitiveDefinition
 readInt64 =
     Packaging.PrimitiveDefinition {
@@ -787,6 +819,7 @@ readInt64 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 readInt8 :: Packaging.PrimitiveDefinition
 readInt8 =
     Packaging.PrimitiveDefinition {
@@ -812,6 +845,7 @@ readInt8 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 readString :: Packaging.PrimitiveDefinition
 readString =
     Packaging.PrimitiveDefinition {
@@ -837,6 +871,7 @@ readString =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 readUint16 :: Packaging.PrimitiveDefinition
 readUint16 =
     Packaging.PrimitiveDefinition {
@@ -862,6 +897,7 @@ readUint16 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 readUint32 :: Packaging.PrimitiveDefinition
 readUint32 =
     Packaging.PrimitiveDefinition {
@@ -887,6 +923,7 @@ readUint32 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 readUint64 :: Packaging.PrimitiveDefinition
 readUint64 =
     Packaging.PrimitiveDefinition {
@@ -912,6 +949,7 @@ readUint64 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 readUint8 :: Packaging.PrimitiveDefinition
 readUint8 =
     Packaging.PrimitiveDefinition {
@@ -937,6 +975,7 @@ readUint8 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 showBigint :: Packaging.PrimitiveDefinition
 showBigint =
     Packaging.PrimitiveDefinition {
@@ -962,6 +1001,7 @@ showBigint =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 showBoolean :: Packaging.PrimitiveDefinition
 showBoolean =
     Packaging.PrimitiveDefinition {
@@ -987,6 +1027,7 @@ showBoolean =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 showDecimal :: Packaging.PrimitiveDefinition
 showDecimal =
     Packaging.PrimitiveDefinition {
@@ -1012,6 +1053,7 @@ showDecimal =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 showFloat32 :: Packaging.PrimitiveDefinition
 showFloat32 =
     Packaging.PrimitiveDefinition {
@@ -1037,6 +1079,7 @@ showFloat32 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 showFloat64 :: Packaging.PrimitiveDefinition
 showFloat64 =
     Packaging.PrimitiveDefinition {
@@ -1062,6 +1105,7 @@ showFloat64 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 showInt16 :: Packaging.PrimitiveDefinition
 showInt16 =
     Packaging.PrimitiveDefinition {
@@ -1087,6 +1131,7 @@ showInt16 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 showInt32 :: Packaging.PrimitiveDefinition
 showInt32 =
     Packaging.PrimitiveDefinition {
@@ -1112,6 +1157,7 @@ showInt32 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 showInt64 :: Packaging.PrimitiveDefinition
 showInt64 =
     Packaging.PrimitiveDefinition {
@@ -1137,6 +1183,7 @@ showInt64 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 showInt8 :: Packaging.PrimitiveDefinition
 showInt8 =
     Packaging.PrimitiveDefinition {
@@ -1162,6 +1209,7 @@ showInt8 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 showString :: Packaging.PrimitiveDefinition
 showString =
     Packaging.PrimitiveDefinition {
@@ -1187,6 +1235,7 @@ showString =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 showUint16 :: Packaging.PrimitiveDefinition
 showUint16 =
     Packaging.PrimitiveDefinition {
@@ -1212,6 +1261,7 @@ showUint16 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 showUint32 :: Packaging.PrimitiveDefinition
 showUint32 =
     Packaging.PrimitiveDefinition {
@@ -1237,6 +1287,7 @@ showUint32 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 showUint64 :: Packaging.PrimitiveDefinition
 showUint64 =
     Packaging.PrimitiveDefinition {
@@ -1262,6 +1313,7 @@ showUint64 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 showUint8 :: Packaging.PrimitiveDefinition
 showUint8 =
     Packaging.PrimitiveDefinition {
@@ -1287,6 +1339,7 @@ showUint8 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 stringToBinary :: Packaging.PrimitiveDefinition
 stringToBinary =
     Packaging.PrimitiveDefinition {
@@ -1312,6 +1365,7 @@ stringToBinary =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 uint16ToBigint :: Packaging.PrimitiveDefinition
 uint16ToBigint =
     Packaging.PrimitiveDefinition {
@@ -1337,6 +1391,7 @@ uint16ToBigint =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 uint32ToBigint :: Packaging.PrimitiveDefinition
 uint32ToBigint =
     Packaging.PrimitiveDefinition {
@@ -1362,6 +1417,7 @@ uint32ToBigint =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 uint64ToBigint :: Packaging.PrimitiveDefinition
 uint64ToBigint =
     Packaging.PrimitiveDefinition {
@@ -1387,6 +1443,7 @@ uint64ToBigint =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 uint8ToBigint :: Packaging.PrimitiveDefinition
 uint8ToBigint =
     Packaging.PrimitiveDefinition {

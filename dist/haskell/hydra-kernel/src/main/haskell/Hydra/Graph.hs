@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | The extension to graphs of Hydra's core type system (hydra.core)
 
 module Hydra.Graph where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Packaging as Packaging
@@ -10,6 +12,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
+
 -- | A graph, or lexical environment which binds names to terms, types, primitives, and metadata
 data Graph =
   Graph {
@@ -29,15 +32,25 @@ data Graph =
     graphSchemaTypes :: (M.Map Core.Name Core.TypeScheme),
     -- | The set of type variables introduced specifically by type lambdas
     graphTypeVariables :: (S.Set Core.Name)}
+
 _Graph = Core.Name "hydra.graph.Graph"
+
 _Graph_boundTerms = Core.Name "boundTerms"
+
 _Graph_boundTypes = Core.Name "boundTypes"
+
 _Graph_classConstraints = Core.Name "classConstraints"
+
 _Graph_lambdaVariables = Core.Name "lambdaVariables"
+
 _Graph_metadata = Core.Name "metadata"
+
 _Graph_primitives = Core.Name "primitives"
+
 _Graph_schemaTypes = Core.Name "schemaTypes"
+
 _Graph_typeVariables = Core.Name "typeVariables"
+
 -- | A library of primitive functions
 data Library =
   Library {
@@ -47,10 +60,15 @@ data Library =
     libraryPrefix :: String,
     -- | The primitives defined in this library
     libraryPrimitives :: [Primitive]}
+
 _Library = Core.Name "hydra.graph.Library"
+
 _Library_name = Core.Name "name"
+
 _Library_prefix = Core.Name "prefix"
+
 _Library_primitives = Core.Name "primitives"
+
 -- | A built-in function or constant, consisting of the host-independent PrimitiveDefinition (name, signature, metadata) plus a host-specific implementation.
 data Primitive =
   Primitive {
@@ -58,9 +76,13 @@ data Primitive =
     primitiveDefinition :: Packaging.PrimitiveDefinition,
     -- | A concrete, host-specific implementation of the primitive function: given the current graph, a mapping from a list of argument terms to a result term, or an error. Arguments are reduced and stripped of annotations by the interpreter before the implementation is invoked, so the implementation can pattern-match the argument terms directly; a higher-order primitive whose result shape is fixed by its data argument can return an unreduced applicative term and let the outer reducer fold it (no graph needed). The graph is retained for the higher-order primitives that must evaluate a function argument mid-computation (e.g. lists.filter): evaluating that function resolves primitive names against the graph's primitive table. The legacy `InferenceContext` parameter was vestigial and has been removed (https://github.com/CategoricalData/hydra/issues/446).
     primitiveImplementation :: (Graph -> [Core.Term] -> Either Errors.Error Core.Term)}
+
 _Primitive = Core.Name "hydra.graph.Primitive"
+
 _Primitive_definition = Core.Name "definition"
+
 _Primitive_implementation = Core.Name "implementation"
+
 -- | A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms.
 data TermCoder a =
   TermCoder {
@@ -70,7 +92,11 @@ data TermCoder a =
     termCoderEncode :: (Typing.InferenceContext -> Graph -> Core.Term -> Either Errors.Error a),
     -- | A decode function from native values to terms
     termCoderDecode :: (Typing.InferenceContext -> a -> Either Errors.Error Core.Term)}
+
 _TermCoder = Core.Name "hydra.graph.TermCoder"
+
 _TermCoder_type = Core.Name "type"
+
 _TermCoder_encode = Core.Name "encode"
+
 _TermCoder_decode = Core.Name "decode"

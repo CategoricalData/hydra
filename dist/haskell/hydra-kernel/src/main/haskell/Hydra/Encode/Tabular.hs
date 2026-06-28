@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term encoders for hydra.tabular
 
 module Hydra.Encode.Tabular where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.Relational as Relational
@@ -10,6 +12,7 @@ import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Tabular as Tabular
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Encoder for hydra.tabular.ColumnType
 columnType :: Tabular.ColumnType -> Core.Term
 columnType x =
@@ -22,18 +25,21 @@ columnType x =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (EncodeCore.type_ (Tabular.columnTypeType x))}]})
+
 -- | Encoder for hydra.tabular.DataRow
 dataRow :: (v -> Core.Term) -> Tabular.DataRow v -> Core.Term
 dataRow v x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.tabular.DataRow"),
       Core.wrappedTermBody = ((\xs -> Core.TermList (Lists.map (\opt -> Core.TermOptional (Optionals.map v opt)) xs)) (Tabular.unDataRow x))})
+
 -- | Encoder for hydra.tabular.HeaderRow
 headerRow :: Tabular.HeaderRow -> Core.Term
 headerRow x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.tabular.HeaderRow"),
       Core.wrappedTermBody = ((\xs -> Core.TermList (Lists.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) xs)) (Tabular.unHeaderRow x))})
+
 -- | Encoder for hydra.tabular.Table
 table :: (v -> Core.Term) -> Tabular.Table v -> Core.Term
 table v x =
@@ -46,6 +52,7 @@ table v x =
         Core.Field {
           Core.fieldName = (Core.Name "data"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map (dataRow v) xs)) (Tabular.tableData x))}]})
+
 -- | Encoder for hydra.tabular.TableType
 tableType :: Tabular.TableType -> Core.Term
 tableType x =

@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term decoders for hydra.core
 
 module Hydra.Decode.Core where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
@@ -15,6 +17,7 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Decoder for hydra.core.AnnotatedTerm
 annotatedTerm :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.AnnotatedTerm
 annotatedTerm cx raw =
@@ -25,6 +28,7 @@ annotatedTerm cx raw =
           Core.annotatedTermBody = field_body,
           Core.annotatedTermAnnotation = field_annotation}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.core.AnnotatedTerm")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.AnnotatedType
 annotatedType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.AnnotatedType
 annotatedType cx raw =
@@ -35,6 +39,7 @@ annotatedType cx raw =
           Core.annotatedTypeBody = field_body,
           Core.annotatedTypeAnnotation = field_annotation}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.core.AnnotatedType")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.Application
 application :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Application
 application cx raw =
@@ -45,6 +50,7 @@ application cx raw =
           Core.applicationFunction = field_function,
           Core.applicationArgument = field_argument}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.core.Application")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.ApplicationType
 applicationType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.ApplicationType
 applicationType cx raw =
@@ -55,6 +61,7 @@ applicationType cx raw =
           Core.applicationTypeFunction = field_function,
           Core.applicationTypeArgument = field_argument}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.core.ApplicationType")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.Binding
 binding :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Binding
 binding cx raw =
@@ -66,6 +73,7 @@ binding cx raw =
           Core.bindingTerm = field_term,
           Core.bindingTypeScheme = field_typeScheme})))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.core.Binding")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.CaseAlternative
 caseAlternative :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.CaseAlternative
 caseAlternative cx raw =
@@ -76,6 +84,7 @@ caseAlternative cx raw =
           Core.caseAlternativeName = field_name,
           Core.caseAlternativeHandler = field_handler}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.core.CaseAlternative")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.CaseStatement
 caseStatement :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.CaseStatement
 caseStatement cx raw =
@@ -87,6 +96,7 @@ caseStatement cx raw =
           Core.caseStatementDefault = field_default,
           Core.caseStatementCases = field_cases})))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.core.CaseStatement")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.EitherType
 eitherType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.EitherType
 eitherType cx raw =
@@ -97,6 +107,7 @@ eitherType cx raw =
           Core.eitherTypeLeft = field_left,
           Core.eitherTypeRight = field_right}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.core.EitherType")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.Field
 field :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Field
 field cx raw =
@@ -107,6 +118,7 @@ field cx raw =
           Core.fieldName = field_name,
           Core.fieldTerm = field_term}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.core.Field")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.FieldType
 fieldType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.FieldType
 fieldType cx raw =
@@ -117,6 +129,7 @@ fieldType cx raw =
           Core.fieldTypeName = field_name,
           Core.fieldTypeType = field_type}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.core.FieldType")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.FloatType
 floatType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.FloatType
 floatType cx raw =
@@ -134,6 +147,7 @@ floatType cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.FloatValue
 floatValue :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.FloatValue
 floatValue cx raw =
@@ -167,6 +181,7 @@ floatValue cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.ForallType
 forallType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.ForallType
 forallType cx raw =
@@ -177,6 +192,7 @@ forallType cx raw =
           Core.forallTypeParameter = field_parameter,
           Core.forallTypeBody = field_body}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.core.ForallType")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.FunctionType
 functionType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.FunctionType
 functionType cx raw =
@@ -187,6 +203,7 @@ functionType cx raw =
           Core.functionTypeDomain = field_domain,
           Core.functionTypeCodomain = field_codomain}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.core.FunctionType")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.Injection
 injection :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Injection
 injection cx raw =
@@ -197,6 +214,7 @@ injection cx raw =
           Core.injectionTypeName = field_typeName,
           Core.injectionField = field_field}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.core.Injection")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.IntegerType
 integerType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.IntegerType
 integerType cx raw =
@@ -221,6 +239,7 @@ integerType cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.IntegerValue
 integerValue :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.IntegerValue
 integerValue cx raw =
@@ -317,6 +336,7 @@ integerValue cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.Lambda
 lambda :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Lambda
 lambda cx raw =
@@ -328,6 +348,7 @@ lambda cx raw =
           Core.lambdaDomain = field_domain,
           Core.lambdaBody = field_body})))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.core.Lambda")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.Let
 let_ :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Let
 let_ cx raw =
@@ -338,6 +359,7 @@ let_ cx raw =
           Core.letBindings = field_bindings,
           Core.letBody = field_body}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.core.Let")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.Literal
 literal :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Literal
 literal cx raw =
@@ -383,6 +405,7 @@ literal cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.LiteralType
 literalType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.LiteralType
 literalType cx raw =
@@ -404,6 +427,7 @@ literalType cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.MapType
 mapType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.MapType
 mapType cx raw =
@@ -414,6 +438,7 @@ mapType cx raw =
           Core.mapTypeKeys = field_keys,
           Core.mapTypeValues = field_values}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.core.MapType")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.Name
 name :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Name
 name cx raw =
@@ -424,6 +449,7 @@ name cx raw =
           _ -> Left (Errors.DecodingError "expected string literal")
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.PairType
 pairType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.PairType
 pairType cx raw =
@@ -434,6 +460,7 @@ pairType cx raw =
           Core.pairTypeFirst = field_first,
           Core.pairTypeSecond = field_second}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.core.PairType")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.Projection
 projection :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Projection
 projection cx raw =
@@ -444,6 +471,7 @@ projection cx raw =
           Core.projectionTypeName = field_typeName,
           Core.projectionFieldName = field_fieldName}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.core.Projection")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.Record
 record :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Record
 record cx raw =
@@ -454,6 +482,7 @@ record cx raw =
           Core.recordTypeName = field_typeName,
           Core.recordFields = field_fields}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.core.Record")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.Term
 term :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Term
 term cx raw =
@@ -490,6 +519,7 @@ term cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.Type
 type_ :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.Type
 type_ cx raw =
@@ -523,6 +553,7 @@ type_ cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.TypeApplicationTerm
 typeApplicationTerm :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.TypeApplicationTerm
 typeApplicationTerm cx raw =
@@ -533,6 +564,7 @@ typeApplicationTerm cx raw =
           Core.typeApplicationTermBody = field_body,
           Core.typeApplicationTermType = field_type}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.core.TypeApplicationTerm")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.TypeClassConstraint
 typeClassConstraint :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.TypeClassConstraint
 typeClassConstraint cx raw =
@@ -549,6 +581,7 @@ typeClassConstraint cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.TypeLambda
 typeLambda :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.TypeLambda
 typeLambda cx raw =
@@ -559,6 +592,7 @@ typeLambda cx raw =
           Core.typeLambdaParameter = field_parameter,
           Core.typeLambdaBody = field_body}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.core.TypeLambda")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.TypeScheme
 typeScheme :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.TypeScheme
 typeScheme cx raw =
@@ -570,6 +604,7 @@ typeScheme cx raw =
           Core.typeSchemeBody = field_body,
           Core.typeSchemeConstraints = field_constraints})))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.core.TypeScheme")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.TypeVariableConstraints
 typeVariableConstraints :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.TypeVariableConstraints
 typeVariableConstraints cx raw =
@@ -579,6 +614,7 @@ typeVariableConstraints cx raw =
         in (Eithers.bind (ExtractCore.requireField "classes" (ExtractCore.decodeList typeClassConstraint) fieldMap cx) (\field_classes -> Right (Core.TypeVariableConstraints {
           Core.typeVariableConstraintsClasses = field_classes})))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.core.TypeVariableConstraints")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.core.WrappedTerm
 wrappedTerm :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Core.WrappedTerm
 wrappedTerm cx raw =

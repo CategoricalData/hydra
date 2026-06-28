@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Utilities for type unification.
 
 module Hydra.Unification where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -44,6 +46,7 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
+
 -- | Join two types, producing a list of type constraints.The comment is used to provide context for the constraints.
 joinTypes :: t0 -> Core.Type -> Core.Type -> String -> Either Errors.UnificationError [Typing.TypeConstraint]
 joinTypes cx left right comment =
@@ -125,6 +128,7 @@ joinTypes cx left right comment =
             joinOne v0 v1]
           _ -> cannotUnify
         _ -> cannotUnify
+
 -- | Robinson's algorithm, following https://www.cs.cornell.edu/courses/cs6110/2017sp/lectures/lec23.pdf
 -- | Specifically this is an implementation of the following rules:
 -- |   * Unify({(x, t)} ∪ E) = {t/x} Unify(E{t/x}) if x ∉ FV(t)
@@ -166,6 +170,7 @@ unifyTypeConstraints cx schemaTypes constraints =
                     _ -> tryBinding v0 sright
                   _ -> dflt
       in (Optionals.cases (Lists.uncons constraints) (Right Substitution.idTypeSubst) (\uc -> withConstraint (Pairs.first uc) (Pairs.second uc)))
+
 -- | Unify two lists of types pairwise, producing a single substitution that satisfies every pair. The lists must have the same length; the comment is attached to each generated constraint for diagnostics.
 unifyTypeLists :: t0 -> M.Map Core.Name t1 -> [Core.Type] -> [Core.Type] -> String -> Either Errors.UnificationError Typing.TypeSubst
 unifyTypeLists cx schemaTypes l r comment =
@@ -176,6 +181,7 @@ unifyTypeLists cx schemaTypes l r comment =
                 Typing.typeConstraintRight = r2,
                 Typing.typeConstraintComment = comment}
       in (unifyTypeConstraints cx schemaTypes (Lists.zipWith toConstraint l r))
+
 -- | Unify two types, producing a substitution that makes them equal (or an error). The comment is attached to the generated constraint for diagnostics.
 unifyTypes :: t0 -> M.Map Core.Name t1 -> Core.Type -> Core.Type -> String -> Either Errors.UnificationError Typing.TypeSubst
 unifyTypes cx schemaTypes l r comment =
@@ -184,6 +190,7 @@ unifyTypes cx schemaTypes l r comment =
         Typing.typeConstraintLeft = l,
         Typing.typeConstraintRight = r,
         Typing.typeConstraintComment = comment}]
+
 -- | Determine whether a type variable appears within a type expression.No distinction is made between free and bound type variables.
 variableOccursInType :: Core.Name -> Core.Type -> Bool
 variableOccursInType var typ0 =

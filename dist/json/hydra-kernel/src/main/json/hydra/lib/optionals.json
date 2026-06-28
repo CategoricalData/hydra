@@ -252,7 +252,7 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [{"name": "arg0", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
-          "result": {"type": {"literal": {"boolean": {}}}}},
+          "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
@@ -277,7 +277,7 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [{"name": "arg0", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
-          "result": {"type": {"literal": {"boolean": {}}}}},
+          "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {

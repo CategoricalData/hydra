@@ -29,14 +29,14 @@
                     "name": "title",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The displayed title for clients and users."}}}]}}}},
                   {
                     "name": "description",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {
                           "map": [
                             {
@@ -113,7 +113,7 @@
                     "name": "assets",
                     "type": {
                       "annotated": {
-                        "body": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.stac.items.Asset"}}},
+                        "body": {"map": {"keys": {"literal": "string"}, "values": {"variable": "hydra.stac.items.Asset"}}},
                         "annotation": {
                           "map": [
                             {
@@ -180,7 +180,7 @@
                     "name": "title",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {
                           "map": [
                             {
@@ -193,8 +193,7 @@
                     "value": {
                       "literal": {
                         "string": "This object describes a relationship with another entity. Data providers are advised to be liberal with the links section, to describe things like the Catalog an Item is in, related Items, parent or child Items (modeled in different ways, like an 'acquisition' or derived data). It is allowed to add additional fields such as a title and type."}}}]}}}}}},
-    {
-      "type": {"name": "hydra.stac.items.MediaType", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+    {"type": {"name": "hydra.stac.items.MediaType", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
     {
       "type": {
         "name": "hydra.stac.items.RelationType",
@@ -206,7 +205,7 @@
                 "union": [
                   {"name": "iana", "type": {"variable": "hydra.iana.linkrelations.LinkRelationType"}},
                   {"name": "stac", "type": {"variable": "hydra.stac.items.StacRelationType"}},
-                  {"name": "other", "type": {"literal": {"string": {}}}}]},
+                  {"name": "other", "type": {"literal": "string"}}]},
               "annotation": {
                 "map": [
                   {
@@ -227,7 +226,7 @@
                     "name": "thumbnail",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -239,7 +238,7 @@
                     "name": "overview",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -251,7 +250,7 @@
                     "name": "data",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -263,13 +262,13 @@
                     "name": "metadata",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "A metadata sidecar file describing the data in this Item, for example the Landsat-8 MTL file."}}}]}}}},
-                  {"name": "other", "type": {"literal": {"string": {}}}}]},
+                  {"name": "other", "type": {"literal": "string"}}]},
               "annotation": {
                 "map": [
                   {
@@ -288,7 +287,7 @@
                 "name": "self",
                 "type": {
                   "annotated": {
-                    "body": {"unit": {}},
+                    "body": "unit",
                     "annotation": {
                       "map": [
                         {
@@ -300,7 +299,7 @@
                 "name": "root",
                 "type": {
                   "annotated": {
-                    "body": {"unit": {}},
+                    "body": "unit",
                     "annotation": {
                       "map": [
                         {
@@ -310,7 +309,7 @@
                 "name": "parent",
                 "type": {
                   "annotated": {
-                    "body": {"unit": {}},
+                    "body": "unit",
                     "annotation": {
                       "map": [
                         {
@@ -320,7 +319,7 @@
                 "name": "collection",
                 "type": {
                   "annotated": {
-                    "body": {"unit": {}},
+                    "body": "unit",
                     "annotation": {
                       "map": [
                         {
@@ -332,13 +331,12 @@
                 "name": "derivedFrom",
                 "type": {
                   "annotated": {
-                    "body": {"unit": {}},
+                    "body": "unit",
                     "annotation": {
                       "map": [
                         {
                           "key": {"variable": "description"},
                           "value": {"literal": {"string": "URL to a STAC Item that was used as input data in the creation of this Item."}}}]}}}}]}}}},
-    {
-      "type": {"name": "hydra.stac.items.StacVersion", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
-    {"type": {"name": "hydra.stac.items.Uri", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
-    {"type": {"name": "hydra.stac.items.Url", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}}]}
+    {"type": {"name": "hydra.stac.items.StacVersion", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
+    {"type": {"name": "hydra.stac.items.Uri", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
+    {"type": {"name": "hydra.stac.items.Url", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}}]}

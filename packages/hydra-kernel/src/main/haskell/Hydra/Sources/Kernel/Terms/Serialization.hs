@@ -657,15 +657,28 @@ printExpr = define "printExpr" $
         _Ws_break>>: constant true,
         _Ws_breakAndIndent>>: constant true,
         _Ws_doubleBreak>>: constant true] $
-      -- Suppress padl whitespace when:
+      -- Whether padl is a plain line break (WsBreak/WsDoubleBreak) used as a
+      -- deliberate blank-line separator that must never be suppressed: e.g.
+      -- doubleNewlineSep uses an empty symbol with padl=padr=WsBreak to place a
+      -- blank line between top-level definitions (lhs + "\n" + "" + "\n" + rhs);
+      -- suppressing such a padl collapses the blank line, squashing definitions.
+      -- WsBreakAndIndent is deliberately EXCLUDED: it is the body-on-next-line
+      -- form (e.g. `foo x =` followed by an indented body), where the padl space
+      -- genuinely must be suppressed to avoid a spurious blank line after `=`.
+      "padlIsNewline" <~ cases _Ws (var "padl") (Just $ boolean False) [
+        _Ws_break>>: constant true,
+        _Ws_doubleBreak>>: constant true] $
+      -- Suppress padl whitespace only when it is NON-newline whitespace (a space
+      -- that would otherwise dangle at the end of a line) and:
       --  (a) sym is empty AND padr is a newline (lhs's trailing space
       --      would land at end of previous line), OR
       --  (b) sym is empty AND rhs is empty (the entire trailing
       --      separator is just whitespace with nothing after).
       "padlEffective" <~ Logic.ifElse
-        (Logic.and (Equality.equal (var "sym") (string ""))
-                   (Logic.or (var "padrIsNewline")
-                             (Equality.equal (var "rhs") (string ""))))
+        (Logic.and (Logic.not (var "padlIsNewline"))
+          (Logic.and (Equality.equal (var "sym") (string ""))
+                     (Logic.or (var "padrIsNewline")
+                               (Equality.equal (var "rhs") (string "")))))
         (string "")
         (var "pad" @@ var "padl") $
       "padrPad" <~ (var "pad" @@ var "padr") $

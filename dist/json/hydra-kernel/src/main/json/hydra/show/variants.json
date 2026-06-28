@@ -36,7 +36,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.variants.TermVariant"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -45,67 +45,51 @@
                 "cases": [
                   {
                     "name": "annotated",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "annotated"}}}}},
+                    "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "annotated"}}}}},
                   {
                     "name": "application",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "application"}}}}},
-                  {
-                    "name": "cases",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "cases"}}}}},
+                    "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "application"}}}}},
+                  {"name": "cases", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "cases"}}}}},
                   {
                     "name": "either",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "either"}}}}},
+                    "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "either"}}}}},
                   {
                     "name": "lambda",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "lambda"}}}}},
-                  {
-                    "name": "let",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "let"}}}}},
-                  {
-                    "name": "list",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "list"}}}}},
+                    "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "lambda"}}}}},
+                  {"name": "let", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "let"}}}}},
+                  {"name": "list", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "list"}}}}},
                   {
                     "name": "literal",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "literal"}}}}},
-                  {
-                    "name": "map",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "map"}}}}},
+                    "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "literal"}}}}},
+                  {"name": "map", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "map"}}}}},
                   {
                     "name": "optional",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "optional"}}}}},
-                  {
-                    "name": "pair",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "pair"}}}}},
+                    "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "optional"}}}}},
+                  {"name": "pair", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "pair"}}}}},
                   {
                     "name": "project",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "project"}}}}},
+                    "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "project"}}}}},
                   {
                     "name": "record",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "record"}}}}},
-                  {
-                    "name": "set",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "set"}}}}},
+                    "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "record"}}}}},
+                  {"name": "set", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "set"}}}}},
                   {
                     "name": "typeLambda",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "typeLambda"}}}}},
+                    "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "typeLambda"}}}}},
                   {
                     "name": "typeApplication",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "typeApplication"}}}}},
+                    "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "typeApplication"}}}}},
                   {
                     "name": "inject",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "inject"}}}}},
-                  {
-                    "name": "unit",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "unit"}}}}},
+                    "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "inject"}}}}},
+                  {"name": "unit", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "unit"}}}}},
                   {
                     "name": "unwrap",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "unwrap"}}}}},
+                    "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "unwrap"}}}}},
                   {
                     "name": "variable",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "variable"}}}}},
-                  {
-                    "name": "wrap",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "wrap"}}}}}]}},
+                    "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "variable"}}}}},
+                  {"name": "wrap", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "wrap"}}}}}]}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a term variant as a string"}}}]}}}}},
     {
       "term": {
@@ -113,7 +97,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.variants.TypeVariant"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -122,56 +106,40 @@
                 "cases": [
                   {
                     "name": "annotated",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "annotated"}}}}},
+                    "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "annotated"}}}}},
                   {
                     "name": "application",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "application"}}}}},
+                    "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "application"}}}}},
                   {
                     "name": "effect",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "effect"}}}}},
+                    "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "effect"}}}}},
                   {
                     "name": "either",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "either"}}}}},
+                    "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "either"}}}}},
                   {
                     "name": "forall",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "forall"}}}}},
+                    "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "forall"}}}}},
                   {
                     "name": "function",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "function"}}}}},
-                  {
-                    "name": "list",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "list"}}}}},
+                    "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "function"}}}}},
+                  {"name": "list", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "list"}}}}},
                   {
                     "name": "literal",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "literal"}}}}},
-                  {
-                    "name": "map",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "map"}}}}},
+                    "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "literal"}}}}},
+                  {"name": "map", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "map"}}}}},
                   {
                     "name": "optional",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "optional"}}}}},
-                  {
-                    "name": "pair",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "pair"}}}}},
+                    "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "optional"}}}}},
+                  {"name": "pair", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "pair"}}}}},
                   {
                     "name": "record",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "record"}}}}},
-                  {
-                    "name": "set",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "set"}}}}},
-                  {
-                    "name": "union",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "union"}}}}},
-                  {
-                    "name": "unit",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "unit"}}}}},
+                    "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "record"}}}}},
+                  {"name": "set", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "set"}}}}},
+                  {"name": "union", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "union"}}}}},
+                  {"name": "unit", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "unit"}}}}},
                   {
                     "name": "variable",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "variable"}}}}},
-                  {
-                    "name": "void",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "void"}}}}},
-                  {
-                    "name": "wrap",
-                    "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "wrap"}}}}}]}},
+                    "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "variable"}}}}},
+                  {"name": "void", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "void"}}}}},
+                  {"name": "wrap", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "wrap"}}}}}]}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a type variant as a string"}}}]}}}}}]}

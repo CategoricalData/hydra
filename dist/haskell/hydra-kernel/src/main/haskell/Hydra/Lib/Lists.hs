@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Primitives in the hydra.lib.lists module.
 
 module Hydra.Lib.Lists where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -31,6 +33,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 apply :: Packaging.PrimitiveDefinition
 apply =
     Packaging.PrimitiveDefinition {
@@ -70,6 +73,7 @@ apply =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 bind :: Packaging.PrimitiveDefinition
 bind =
     Packaging.PrimitiveDefinition {
@@ -132,6 +136,7 @@ bind =
                       Core.applicationArgument = (Core.TermVariable (Core.Name "acc"))}))}))}))})),
               Core.applicationArgument = (Core.TermList [])})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}))})))}
+
 concat :: Packaging.PrimitiveDefinition
 concat =
     Packaging.PrimitiveDefinition {
@@ -160,6 +165,7 @@ concat =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 concat2 :: Packaging.PrimitiveDefinition
 concat2 =
     Packaging.PrimitiveDefinition {
@@ -193,6 +199,7 @@ concat2 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 cons :: Packaging.PrimitiveDefinition
 cons =
     Packaging.PrimitiveDefinition {
@@ -226,6 +233,7 @@ cons =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 drop :: Packaging.PrimitiveDefinition
 drop =
     Packaging.PrimitiveDefinition {
@@ -259,6 +267,7 @@ drop =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 dropWhile :: Packaging.PrimitiveDefinition
 dropWhile =
     Packaging.PrimitiveDefinition {
@@ -306,6 +315,7 @@ dropWhile =
                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.span")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "p"))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}))}))})))}
+
 elem :: Packaging.PrimitiveDefinition
 elem =
     Packaging.PrimitiveDefinition {
@@ -341,6 +351,7 @@ elem =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 filter :: Packaging.PrimitiveDefinition
 filter =
     Packaging.PrimitiveDefinition {
@@ -406,6 +417,7 @@ filter =
                       Core.applicationArgument = (Core.TermVariable (Core.Name "acc"))}))}))}))})),
               Core.applicationArgument = (Core.TermList [])})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}))})))}
+
 find :: Packaging.PrimitiveDefinition
 find =
     Packaging.PrimitiveDefinition {
@@ -467,6 +479,7 @@ find =
                       Core.applicationArgument = (Core.TermVariable (Core.Name "acc"))}))}))}))})),
               Core.applicationArgument = (Core.TermOptional Nothing)})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}))})))}
+
 foldl :: Packaging.PrimitiveDefinition
 foldl =
     Packaging.PrimitiveDefinition {
@@ -513,6 +526,7 @@ foldl =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 foldr :: Packaging.PrimitiveDefinition
 foldr =
     Packaging.PrimitiveDefinition {
@@ -558,6 +572,7 @@ foldr =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 group :: Packaging.PrimitiveDefinition
 group =
     Packaging.PrimitiveDefinition {
@@ -588,6 +603,7 @@ group =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 intercalate :: Packaging.PrimitiveDefinition
 intercalate =
     Packaging.PrimitiveDefinition {
@@ -621,6 +637,7 @@ intercalate =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 intersperse :: Packaging.PrimitiveDefinition
 intersperse =
     Packaging.PrimitiveDefinition {
@@ -654,6 +671,7 @@ intersperse =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 length :: Packaging.PrimitiveDefinition
 length =
     Packaging.PrimitiveDefinition {
@@ -683,6 +701,7 @@ length =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 map :: Packaging.PrimitiveDefinition
 map =
     Packaging.PrimitiveDefinition {
@@ -721,6 +740,7 @@ map =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 maybeAt :: Packaging.PrimitiveDefinition
 maybeAt =
     Packaging.PrimitiveDefinition {
@@ -754,6 +774,7 @@ maybeAt =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 maybeHead :: Packaging.PrimitiveDefinition
 maybeHead =
     Packaging.PrimitiveDefinition {
@@ -782,6 +803,7 @@ maybeHead =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 maybeInit :: Packaging.PrimitiveDefinition
 maybeInit =
     Packaging.PrimitiveDefinition {
@@ -810,6 +832,7 @@ maybeInit =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 maybeLast :: Packaging.PrimitiveDefinition
 maybeLast =
     Packaging.PrimitiveDefinition {
@@ -838,6 +861,7 @@ maybeLast =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 maybeTail :: Packaging.PrimitiveDefinition
 maybeTail =
     Packaging.PrimitiveDefinition {
@@ -866,6 +890,7 @@ maybeTail =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 nub :: Packaging.PrimitiveDefinition
 nub =
     Packaging.PrimitiveDefinition {
@@ -897,6 +922,7 @@ nub =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 null :: Packaging.PrimitiveDefinition
 null =
     Packaging.PrimitiveDefinition {
@@ -925,6 +951,7 @@ null =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 partition :: Packaging.PrimitiveDefinition
 partition =
     Packaging.PrimitiveDefinition {
@@ -1008,6 +1035,7 @@ partition =
                             Core.applicationArgument = (Core.TermVariable (Core.Name "acc"))}))}))))}))}))}))})),
               Core.applicationArgument = (Core.TermPair (Core.TermList [], (Core.TermList [])))})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}))})))}
+
 pure :: Packaging.PrimitiveDefinition
 pure =
     Packaging.PrimitiveDefinition {
@@ -1036,6 +1064,7 @@ pure =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 replicate :: Packaging.PrimitiveDefinition
 replicate =
     Packaging.PrimitiveDefinition {
@@ -1069,6 +1098,7 @@ replicate =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 reverse :: Packaging.PrimitiveDefinition
 reverse =
     Packaging.PrimitiveDefinition {
@@ -1097,6 +1127,7 @@ reverse =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 singleton :: Packaging.PrimitiveDefinition
 singleton =
     Packaging.PrimitiveDefinition {
@@ -1125,6 +1156,7 @@ singleton =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 sort :: Packaging.PrimitiveDefinition
 sort =
     Packaging.PrimitiveDefinition {
@@ -1155,6 +1187,7 @@ sort =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 sortOn :: Packaging.PrimitiveDefinition
 sortOn =
     Packaging.PrimitiveDefinition {
@@ -1195,6 +1228,7 @@ sortOn =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 span :: Packaging.PrimitiveDefinition
 span =
     Packaging.PrimitiveDefinition {
@@ -1284,6 +1318,7 @@ span =
                             Core.applicationArgument = (Core.TermVariable (Core.Name "acc"))}))}))))}))}))}))})),
               Core.applicationArgument = (Core.TermPair (Core.TermList [], (Core.TermList [])))})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}))})))}
+
 take :: Packaging.PrimitiveDefinition
 take =
     Packaging.PrimitiveDefinition {
@@ -1317,6 +1352,7 @@ take =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 transpose :: Packaging.PrimitiveDefinition
 transpose =
     Packaging.PrimitiveDefinition {
@@ -1345,6 +1381,7 @@ transpose =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 uncons :: Packaging.PrimitiveDefinition
 uncons =
     Packaging.PrimitiveDefinition {
@@ -1375,6 +1412,7 @@ uncons =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 zip :: Packaging.PrimitiveDefinition
 zip =
     Packaging.PrimitiveDefinition {
@@ -1413,6 +1451,7 @@ zip =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 zipWith :: Packaging.PrimitiveDefinition
 zipWith =
     Packaging.PrimitiveDefinition {

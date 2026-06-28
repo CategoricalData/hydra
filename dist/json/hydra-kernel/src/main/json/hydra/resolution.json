@@ -165,7 +165,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.Type"}, "isLazy": false}],
-          "result": {"type": {"literal": {"boolean": {}}}}},
+          "result": {"type": {"literal": "boolean"}}},
         "body": {
           "annotated": {
             "body": {
@@ -660,7 +660,7 @@
                                                   "application": {
                                                     "function": {
                                                       "application": {
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}},
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": "string"}}},
                                                         "argument": {
                                                           "application": {
                                                             "function": {"unwrap": "hydra.core.Name"},
@@ -727,7 +727,7 @@
                                                       "application": {
                                                         "function": {
                                                           "application": {
-                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": "int32"}}}},
                                                             "argument": {
                                                               "application": {
                                                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "hydra.core.FieldType"}}},
@@ -808,7 +808,7 @@
                         "term": {
                           "lambda": {
                             "parameter": "depth",
-                            "domain": {"literal": {"integer": {"int32": {}}}},
+                            "domain": {"literal": {"integer": "int32"}},
                             "body": {
                               "lambda": {
                                 "parameter": "subst",
@@ -890,7 +890,7 @@
                           "variables": [],
                           "body": {
                             "function": {
-                              "domain": {"literal": {"integer": {"int32": {}}}},
+                              "domain": {"literal": {"integer": "int32"}},
                               "codomain": {
                                 "function": {
                                   "domain": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Name"}}},
@@ -1456,7 +1456,7 @@
           "typeParameters": [{"name": "t0", "constraints": []}, {"name": "t1", "constraints": []}],
           "parameters": [
             {"name": "arg0", "type": {"variable": "t0"}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": {"string": {}}}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": "string"}, "isLazy": false},
             {
               "name": "arg2",
               "type": {"function": {"domain": {"variable": "hydra.core.Type"}, "codomain": {"optional": {"variable": "t1"}}}},
@@ -1479,7 +1479,7 @@
                         "body": {
                           "lambda": {
                             "parameter": "label",
-                            "domain": {"literal": {"string": {}}},
+                            "domain": {"literal": "string"},
                             "body": {
                               "lambda": {
                                 "parameter": "getter",

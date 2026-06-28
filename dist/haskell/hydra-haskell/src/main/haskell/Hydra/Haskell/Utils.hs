@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Utilities for working with Haskell syntax trees
 
 module Hydra.Haskell.Utils where
+
 import qualified Hydra.Analysis as Analysis
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
@@ -48,12 +50,14 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
+
 -- | Create an application pattern from a name and argument patterns
 applicationPattern :: Syntax.Name -> [Syntax.Pattern] -> Syntax.Pattern
 applicationPattern name args =
     Syntax.PatternApplication (Syntax.ApplicationPattern {
       Syntax.applicationPatternName = name,
       Syntax.applicationPatternArgs = args})
+
 -- | Generate a Haskell name reference for a Hydra element
 elementReference :: Util.ModuleNames Syntax.ModuleName -> Core.Name -> Syntax.Name
 elementReference namespaces name =
@@ -72,12 +76,14 @@ elementReference namespaces name =
           aliasStr,
           ".",
           (sanitizeHaskellName local)]))))))
+
 -- | Create a Haskell function application expression
 hsapp :: Syntax.Expression -> Syntax.Expression -> Syntax.Expression
 hsapp l r =
     Syntax.ExpressionApplication (Syntax.ApplicationExpression {
       Syntax.applicationExpressionFunction = l,
       Syntax.applicationExpressionArgument = r})
+
 -- | Create a Haskell lambda expression
 hslambda :: Syntax.Name -> Syntax.Expression -> Syntax.Expression
 hslambda name rhs =
@@ -85,12 +91,15 @@ hslambda name rhs =
       Syntax.lambdaExpressionBindings = [
         Syntax.PatternName name],
       Syntax.lambdaExpressionInner = rhs})
+
 -- | Create a Haskell literal expression
 hslit :: Syntax.Literal -> Syntax.Expression
 hslit lit = Syntax.ExpressionLiteral lit
+
 -- | Create a Haskell variable expression from a string
 hsvar :: String -> Syntax.Expression
 hsvar s = Syntax.ExpressionVariable (rawName s)
+
 -- | Compute the Haskell module namespaces for a Hydra module
 namespacesForModule :: Packaging.Module -> t0 -> Graph.Graph -> Either Errors.Error (Util.ModuleNames Syntax.ModuleName)
 namespacesForModule mod cx g =
@@ -160,15 +169,18 @@ namespacesForModule mod cx g =
       in (Right (Util.ModuleNames {
         Util.moduleNamesFocus = focusPair,
         Util.moduleNamesMapping = resultMap})))
+
 -- | Generate an accessor name for a newtype wrapper (e.g., 'unFoo' for Foo)
 newtypeAccessorName :: Core.Name -> String
 newtypeAccessorName name = Strings.cat2 "un" (Names.localNameOf name)
+
 -- | Create a raw Haskell name from a string without sanitization
 rawName :: String -> Syntax.Name
 rawName n =
     Syntax.NameNormal (Syntax.QualifiedName {
       Syntax.qualifiedNameQualifiers = [],
       Syntax.qualifiedNameUnqualified = (Syntax.NamePart n)})
+
 -- | Generate a Haskell name for a record field accessor
 recordFieldReference :: Util.ModuleNames Syntax.ModuleName -> Core.Name -> Core.Name -> Syntax.Name
 recordFieldReference namespaces sname fname =
@@ -186,12 +198,15 @@ recordFieldReference namespaces sname fname =
                     Util.qualifiedNameLocal = nm}
           unqualName = Names.unqualifyName qualName
       in (elementReference namespaces unqualName)
+
 -- | Sanitize a string to be a valid Haskell identifier, escaping reserved words
 sanitizeHaskellName :: String -> String
 sanitizeHaskellName = Formatting.sanitizeWithUnderscores Language.reservedWords
+
 -- | Create a sanitized Haskell name from a string
 simpleName :: String -> Syntax.Name
 simpleName arg_ = rawName (sanitizeHaskellName arg_)
+
 -- | Create a simple value binding (e.g., 'foo = expr' or 'foo = expr where ...')
 simpleValueBinding :: Syntax.Name -> Syntax.Expression -> Maybe Syntax.LocalBindings -> Syntax.ValueBinding
 simpleValueBinding hname rhs bindings =
@@ -206,6 +221,7 @@ simpleValueBinding hname rhs bindings =
         Syntax.simpleValueBindingRhs = rightHandSide,
         Syntax.simpleValueBindingLocalBindings = bindings,
         Syntax.simpleValueBindingComments = Nothing}))
+
 -- | Convert a list of types into a nested type application
 toTypeApplication :: [Syntax.Type] -> Syntax.Type
 toTypeApplication types =
@@ -219,6 +235,7 @@ toTypeApplication types =
                     Syntax.applicationTypeContext = (app (Pairs.second p)),
                     Syntax.applicationTypeArgument = (Pairs.first p)}))) (Lists.uncons l))
       in (app (Lists.reverse types))
+
 -- | Extract the local type name from a fully qualified record type name
 typeNameForRecord :: Core.Name -> String
 typeNameForRecord sname =
@@ -226,6 +243,7 @@ typeNameForRecord sname =
       let snameStr = Core.unName sname
           parts = Strings.splitOn "." snameStr
       in (Optionals.fromOptional snameStr (Lists.maybeLast parts))
+
 -- | Generate a Haskell name for a union variant constructor, with disambiguation
 unionFieldReference :: S.Set Core.Name -> Util.ModuleNames Syntax.ModuleName -> Core.Name -> Core.Name -> Syntax.Name
 unionFieldReference boundNames namespaces sname fname =
@@ -250,6 +268,7 @@ unionFieldReference boundNames namespaces sname fname =
                     Util.qualifiedNameLocal = nm}
           unqualName = Names.unqualifyName qualName
       in (elementReference namespaces unqualName)
+
 -- | Unpack nested forall types into a list of type variables and the inner type
 unpackForallType :: Core.Type -> ([Core.Name], Core.Type)
 unpackForallType t =

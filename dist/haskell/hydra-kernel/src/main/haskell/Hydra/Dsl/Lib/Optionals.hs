@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | DSL functions for hydra.lib.optionals
 
 module Hydra.Dsl.Lib.Optionals where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -57,6 +59,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | DSL reference to hydra.lib.optionals.apply
 apply :: Typed.TypedTerm (Maybe (x -> y)) -> Typed.TypedTerm (Maybe x) -> Typed.TypedTerm (Maybe y)
 apply arg0 arg1 =
@@ -65,6 +68,7 @@ apply arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.apply")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.optionals.bind
 bind :: Typed.TypedTerm (Maybe x) -> Typed.TypedTerm (x -> Maybe y) -> Typed.TypedTerm (Maybe y)
 bind arg0 arg1 =
@@ -73,6 +77,7 @@ bind arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.bind")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.optionals.cases
 cases :: Typed.TypedTerm (Maybe x) -> Typed.TypedTerm y -> Typed.TypedTerm (x -> y) -> Typed.TypedTerm y
 cases arg0 arg1 arg2 =
@@ -83,12 +88,14 @@ cases arg0 arg1 arg2 =
           Core.applicationArgument = (Typed.unTypedTerm arg0)})),
         Core.applicationArgument = (Typed.unTypedTerm arg1)})),
       Core.applicationArgument = (Typed.unTypedTerm arg2)}))
+
 -- | DSL reference to hydra.lib.optionals.cat
 cat :: Typed.TypedTerm [Maybe x] -> Typed.TypedTerm [x]
 cat arg0 =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.cat")),
       Core.applicationArgument = (Typed.unTypedTerm arg0)}))
+
 -- | DSL reference to hydra.lib.optionals.compose
 compose :: Typed.TypedTerm (x -> Maybe y) -> Typed.TypedTerm (y -> Maybe z) -> Typed.TypedTerm x -> Typed.TypedTerm (Maybe z)
 compose arg0 arg1 arg2 =
@@ -99,6 +106,7 @@ compose arg0 arg1 arg2 =
           Core.applicationArgument = (Typed.unTypedTerm arg0)})),
         Core.applicationArgument = (Typed.unTypedTerm arg1)})),
       Core.applicationArgument = (Typed.unTypedTerm arg2)}))
+
 -- | DSL reference to hydra.lib.optionals.fromOptional
 fromOptional :: Typed.TypedTerm x -> Typed.TypedTerm (Maybe x) -> Typed.TypedTerm x
 fromOptional arg0 arg1 =
@@ -107,18 +115,21 @@ fromOptional arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.fromOptional")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.optionals.isGiven
 isGiven :: Typed.TypedTerm (Maybe x) -> Typed.TypedTerm Bool
 isGiven arg0 =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.isGiven")),
       Core.applicationArgument = (Typed.unTypedTerm arg0)}))
+
 -- | DSL reference to hydra.lib.optionals.isNone
 isNone :: Typed.TypedTerm (Maybe x) -> Typed.TypedTerm Bool
 isNone arg0 =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.isNone")),
       Core.applicationArgument = (Typed.unTypedTerm arg0)}))
+
 -- | DSL reference to hydra.lib.optionals.map
 map :: Typed.TypedTerm (x -> y) -> Typed.TypedTerm (Maybe x) -> Typed.TypedTerm (Maybe y)
 map arg0 arg1 =
@@ -127,6 +138,7 @@ map arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.map")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.optionals.mapOptional
 mapOptional :: Typed.TypedTerm (x -> Maybe y) -> Typed.TypedTerm [x] -> Typed.TypedTerm [y]
 mapOptional arg0 arg1 =
@@ -135,12 +147,14 @@ mapOptional arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.mapOptional")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.optionals.pure
 pure :: Typed.TypedTerm x -> Typed.TypedTerm (Maybe x)
 pure arg0 =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.optionals.pure")),
       Core.applicationArgument = (Typed.unTypedTerm arg0)}))
+
 -- | DSL reference to hydra.lib.optionals.toList
 toList :: Typed.TypedTerm (Maybe x) -> Typed.TypedTerm [x]
 toList arg0 =

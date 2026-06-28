@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Module dependency module name analysis
 
 module Hydra.Analysis where
+
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Arity as Arity
 import qualified Hydra.Ast as Ast
@@ -54,6 +56,7 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
+
 -- | Add names to existing module names mapping
 addNamesToModuleNames :: (Packaging.ModuleName -> t0) -> S.Set Core.Name -> Util.ModuleNames t0 -> Util.ModuleNames t0
 addNamesToModuleNames encodeModuleName names ns0 =
@@ -63,14 +66,17 @@ addNamesToModuleNames encodeModuleName names ns0 =
       in Util.ModuleNames {
         Util.moduleNamesFocus = (Util.moduleNamesFocus ns0),
         Util.moduleNamesMapping = (Maps.union (Util.moduleNamesMapping ns0) (Maps.fromList (Lists.map toPair (Sets.toList nss))))}
+
 -- | Analyze a function term, collecting lambdas, type lambdas, lets, and type applications
 analyzeFunctionTerm :: Typing.InferenceContext -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
 analyzeFunctionTerm cx getTC setTC env term =
     analyzeFunctionTermWith cx (\g -> \b -> Logic.ifElse (Predicates.isComplexBinding g b) (Just (Core.TermLiteral (Core.LiteralBoolean True))) Nothing) getTC setTC env term
+
 -- | Analyze a function term with configurable binding metadata
 analyzeFunctionTermWith :: Typing.InferenceContext -> (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
 analyzeFunctionTermWith cx forBinding getTC setTC env term =
     analyzeFunctionTermWithGather cx forBinding getTC setTC True env [] [] [] [] [] term
+
 -- | Final step of the function-term walk: type-apply the body and assemble the FunctionStructure
 analyzeFunctionTermWithFinish :: Typing.InferenceContext -> (t0 -> Graph.Graph) -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
 analyzeFunctionTermWithFinish cx getTC fEnv tparams args bindings doms tapps body =
@@ -88,6 +94,7 @@ analyzeFunctionTermWithFinish cx getTC fEnv tparams args bindings doms tapps bod
         Typing.functionStructureDomains = (Lists.reverse doms),
         Typing.functionStructureCodomain = mcod,
         Typing.functionStructureEnvironment = fEnv}))
+
 -- | Recursive step of the function-term walk: peel lambdas / type-lambdas / type-applications, accumulating params and bindings, then call analyzeFunctionTermWithFinish
 analyzeFunctionTermWithGather :: Typing.InferenceContext -> (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> Bool -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
 analyzeFunctionTermWithGather cx forBinding getTC setTC argMode gEnv tparams args bindings doms tapps t =
@@ -113,6 +120,7 @@ analyzeFunctionTermWithGather cx forBinding getTC setTC argMode gEnv tparams arg
             newEnv = setTC (Scoping.extendGraphForTypeLambda (getTC gEnv) v0) gEnv
         in (analyzeFunctionTermWithGather cx forBinding getTC setTC argMode newEnv (Lists.cons tvar tparams) args bindings doms tapps tlBody)
       _ -> analyzeFunctionTermWithFinish cx getTC gEnv tparams args bindings doms tapps t
+
 -- | Get dependency module names from definitions
 definitionDependencyModuleNames :: [Packaging.Definition] -> S.Set Packaging.ModuleName
 definitionDependencyModuleNames defs =
@@ -124,6 +132,7 @@ definitionDependencyModuleNames defs =
                 Packaging.DefinitionPrimitive v0 -> Dependencies.typeDependencyNames True (Core.typeSchemeBody (Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature v0)))
           allNames = Sets.unions (Lists.map defNames defs)
       in (Sets.fromList (Optionals.cat (Lists.map Names.moduleNameOf (Sets.toList allNames))))
+
 -- | Find dependency module names in all of a set of terms (Either version)
 dependencyModuleNames :: t0 -> Graph.Graph -> Bool -> Bool -> Bool -> Bool -> [Core.Binding] -> Either Errors.Error (S.Set Packaging.ModuleName)
 dependencyModuleNames cx graph binds withPrims withNoms withSchema els =
@@ -145,6 +154,7 @@ dependencyModuleNames cx graph binds withPrims withNoms withSchema els =
                   dataNames,
                   schemaNames]))))
       in (Eithers.map (\namesList -> Sets.fromList (Optionals.cat (Lists.map Names.moduleNameOf (Sets.toList (Sets.unions namesList))))) (Eithers.mapList depNames els))
+
 -- | Gather applications from a term, returning (args, baseTerm)
 gatherApplications :: Core.Term -> ([Core.Term], Core.Term)
 gatherApplications term =
@@ -157,6 +167,7 @@ gatherApplications term =
                   in (go (Lists.cons rhs args) lhs)
                 _ -> (args, t)
       in (go [] term)
+
 -- | Gather term arguments, stripping type-level constructs
 gatherArgs :: Core.Term -> [Core.Term] -> (Core.Term, [Core.Term])
 gatherArgs term args =
@@ -172,6 +183,7 @@ gatherArgs term args =
         let body = Core.typeApplicationTermBody v0
         in (gatherArgs body args)
       _ -> (term, args)
+
 -- | Gather term and type arguments from a term
 gatherArgsWithTypeApps :: Core.Term -> [Core.Term] -> [Core.Type] -> (Core.Term, ([Core.Term], [Core.Type]))
 gatherArgsWithTypeApps term args tyArgs =
@@ -188,12 +200,14 @@ gatherArgsWithTypeApps term args tyArgs =
             typ = Core.typeApplicationTermType v0
         in (gatherArgsWithTypeApps body args (Lists.cons typ tyArgs))
       _ -> (term, (args, tyArgs))
+
 -- | Check if a term body is self-tail-recursive with respect to a function name
 isSelfTailRecursive :: Core.Name -> Core.Term -> Bool
 isSelfTailRecursive funcName body =
 
       let callsSelf = Logic.not (Variables.isFreeVariableInTerm funcName body)
       in (Logic.ifElse callsSelf (isTailRecursiveInTailPosition funcName body) False)
+
 -- | Check if a term can be encoded as a simple assignment
 isSimpleAssignment :: Core.Term -> Bool
 isSimpleAssignment term =
@@ -208,6 +222,7 @@ isSimpleAssignment term =
         in case baseTerm of
           Core.TermCases _ -> False
           _ -> True
+
 -- | Check that all self-references are in tail position
 isTailRecursiveInTailPosition :: Core.Name -> Core.Term -> Bool
 isTailRecursiveInTailPosition funcName term =
@@ -244,6 +259,7 @@ isTailRecursiveInTailPosition funcName term =
                   Lists.foldl (\ok -> \b -> Logic.and ok (Variables.isFreeVariableInTerm funcName (Core.bindingTerm b))) True (Core.letBindings v0)
           in (Logic.and bindingsOk (isTailRecursiveInTailPosition funcName (Core.letBody v0)))
         _ -> Variables.isFreeVariableInTerm funcName term
+
 -- | Check whether a module contains any binary literal values
 moduleContainsBinaryLiterals :: Packaging.Module -> Bool
 moduleContainsBinaryLiterals mod =
@@ -260,6 +276,7 @@ moduleContainsBinaryLiterals mod =
                     Packaging.DefinitionTerm v0 -> Just (Packaging.termDefinitionBody v0)
                     _ -> Nothing) (Packaging.moduleDefinitions mod))
       in (Lists.foldl (\acc -> \t -> Logic.or acc (termContainsBinary t)) False defTerms)
+
 -- | Check whether a module contains any decimal literal values
 moduleContainsDecimalLiterals :: Packaging.Module -> Bool
 moduleContainsDecimalLiterals mod =
@@ -276,6 +293,7 @@ moduleContainsDecimalLiterals mod =
                     Packaging.DefinitionTerm v0 -> Just (Packaging.termDefinitionBody v0)
                     _ -> Nothing) (Packaging.moduleDefinitions mod))
       in (Lists.foldl (\acc -> \t -> Logic.or acc (termContainsDecimal t)) False defTerms)
+
 -- | Find dependency module names in all elements of a module, excluding the module's own module name (Either version)
 moduleDependencyModuleNames :: t0 -> Graph.Graph -> Bool -> Bool -> Bool -> Bool -> Packaging.Module -> Either Errors.Error (S.Set Packaging.ModuleName)
 moduleDependencyModuleNames cx graph binds withPrims withNoms withSchema mod =
@@ -302,6 +320,7 @@ moduleDependencyModuleNames cx graph binds withPrims withNoms withSchema mod =
                   Core.bindingTypeScheme = (Optionals.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
                 _ -> Nothing) (Packaging.moduleDefinitions mod))
       in (Eithers.map (\deps -> Sets.delete (Packaging.moduleName mod) deps) (dependencyModuleNames cx graph binds withPrims withNoms withSchema allBindings))
+
 -- | Create module names mapping for definitions
 moduleNamesForDefinitions :: (Packaging.ModuleName -> t0) -> Packaging.ModuleName -> [Packaging.Definition] -> Util.ModuleNames t0
 moduleNamesForDefinitions encodeModuleName focusNs defs =

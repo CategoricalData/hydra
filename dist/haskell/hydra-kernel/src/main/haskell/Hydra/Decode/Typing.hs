@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term decoders for hydra.typing
 
 module Hydra.Decode.Typing where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Decode.Paths as Paths
@@ -15,6 +17,7 @@ import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Decoder for hydra.typing.FunctionStructure
 functionStructure :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError env) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Typing.FunctionStructure env)
 functionStructure env cx raw =
@@ -30,6 +33,7 @@ functionStructure env cx raw =
           Typing.functionStructureCodomain = field_codomain,
           Typing.functionStructureEnvironment = field_environment})))))))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.typing.FunctionStructure")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.typing.InferenceContext
 inferenceContext :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Typing.InferenceContext
 inferenceContext cx raw =
@@ -46,6 +50,7 @@ inferenceContext cx raw =
           Typing.inferenceContextFreshTypeVariableCount = field_freshTypeVariableCount,
           Typing.inferenceContextTrace = field_trace}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.typing.InferenceContext")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.typing.InferenceResult
 inferenceResult :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Typing.InferenceResult
 inferenceResult cx raw =
@@ -59,6 +64,7 @@ inferenceResult cx raw =
           Typing.inferenceResultClassConstraints = field_classConstraints,
           Typing.inferenceResultContext = field_context})))))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.typing.InferenceResult")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.typing.Parameter
 parameter :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Typing.Parameter
 parameter cx raw =
@@ -79,6 +85,7 @@ parameter cx raw =
           Typing.parameterType = field_type,
           Typing.parameterIsLazy = field_isLazy}))))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.typing.Parameter")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.typing.Result
 result :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Typing.Result
 result cx raw =
@@ -93,6 +100,7 @@ result cx raw =
           Typing.resultDescription = field_description,
           Typing.resultType = field_type}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.typing.Result")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.typing.TermSignature
 termSignature :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Typing.TermSignature
 termSignature cx raw =
@@ -104,12 +112,14 @@ termSignature cx raw =
           Typing.termSignatureParameters = field_parameters,
           Typing.termSignatureResult = field_result})))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.typing.TermSignature")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.typing.TermSubst
 termSubst :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Typing.TermSubst
 termSubst cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermWrap v0 -> Eithers.map (\b -> Typing.TermSubst b) (ExtractCore.decodeMap DecodeCore.name DecodeCore.term cx (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.typing.TypeClass
 typeClass :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Typing.TypeClass
 typeClass cx raw =
@@ -123,6 +133,7 @@ typeClass cx raw =
           _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_description -> Right (Typing.TypeClass {
           Typing.typeClassDescription = field_description})))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.typing.TypeClass")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.typing.TypeConstraint
 typeConstraint :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Typing.TypeConstraint
 typeConstraint cx raw =
@@ -138,6 +149,7 @@ typeConstraint cx raw =
           Typing.typeConstraintRight = field_right,
           Typing.typeConstraintComment = field_comment})))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.typing.TypeConstraint")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.typing.TypeParameter
 typeParameter :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Typing.TypeParameter
 typeParameter cx raw =
@@ -148,6 +160,7 @@ typeParameter cx raw =
           Typing.typeParameterName = field_name,
           Typing.typeParameterConstraints = field_constraints}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.typing.TypeParameter")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.typing.TypeSubst
 typeSubst :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Typing.TypeSubst
 typeSubst cx raw =

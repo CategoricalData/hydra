@@ -28,6 +28,10 @@ import qualified Data.Scientific              as Sci
 
 -- Additional imports specific to this module
 import Hydra.Testing
+import Hydra.Json.Model (Value)
+import qualified Hydra.Json.Model as Model
+import qualified Hydra.Encode.Json.Model as EncodeJsonModel
+import qualified Hydra.Typed as Typed
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Sources.Json.Encode as EncodeModule
 import qualified Hydra.Sources.Json.Decode as JsonDecode
@@ -61,6 +65,7 @@ allTests = define "allTests" $
       collectionRoundtripGroup,
       optionalRoundtripGroup,
       recordRoundtripGroup,
+      unionRoundtripGroup,
       wireShapeGroup]
 
 -- Helper for creating JSON round-trip test cases (universal)
@@ -249,6 +254,58 @@ recordRoundtripGroup = subgroup "record types" [
       (record (name "test") [
         "name">: string "test",
         "value">: optional (just $ optional (just $ int32 42))])]
+
+----------------------------------------
+-- Union types (compact string form for unit-valued variants)
+----------------------------------------
+
+-- | Decode a pre-built JSON Value to a Term and show the result.
+-- Used for backward-compat tests: verify the old {"variant": {}} form still decodes.
+decodeTest :: String -> TypedTerm Type -> TypedTerm Value -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
+decodeTest testName typ jsonVal expectedTerm = universalCase testName
+  (Eithers.either
+    (Phantoms.lambda "e" $ Phantoms.var "e")
+    (Phantoms.lambda "decoded" $ ShowCore.term @@ Phantoms.var "decoded")
+    (JsonDecode.fromJson @@ Maps.empty @@ Core.name (Phantoms.string "test") @@ typ @@ jsonVal))
+  (ShowCore.term @@ expectedTerm)
+
+unionType :: TypedTerm Type
+unionType = T.union (name "test") [
+    "bool">: T.boolean,
+    "string">: T.string,
+    "unit">: T.unit]
+
+unionRoundtripGroup :: TypedTerm TestGroup
+unionRoundtripGroup = subgroup "union types" [
+    -- Non-unit variant: uses single-key object encoding (unchanged behaviour)
+    roundtripTest "union non-unit variant (string)"
+      unionType
+      (inject (name "test") "string" (string "hello")),
+
+    roundtripTest "union non-unit variant (bool)"
+      unionType
+      (inject (name "test") "bool" (boolean True)),
+
+    -- Unit-valued variant: compact string encoding ("unit" instead of {"unit": {}})
+    roundtripTest "union unit variant round-trip"
+      unionType
+      (inject (name "test") "unit" unit),
+
+    wireShapeTest "union unit variant wire shape"
+      unionType
+      (inject (name "test") "unit" unit)
+      "\"unit\"",
+
+    wireShapeTest "union non-unit variant wire shape"
+      unionType
+      (inject (name "test") "string" (string "hello"))
+      "{\"string\": \"hello\"}",
+
+    -- Backward compatibility: old {"unit": {}} form must still decode correctly
+    decodeTest "union unit variant legacy object form"
+      unionType
+      (Typed.TypedTerm (EncodeJsonModel.value (Model.ValueObject [("unit", Model.ValueObject [])])))
+      (inject (name "test") "unit" unit)]
 
 ----------------------------------------
 -- Wire shape (encoder output)

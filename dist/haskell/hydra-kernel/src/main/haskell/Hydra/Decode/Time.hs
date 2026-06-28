@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term decoders for hydra.time
 
 module Hydra.Decode.Time where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Errors as Errors
@@ -14,6 +16,7 @@ import qualified Hydra.Time as Time
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Decoder for hydra.time.Timespec
 timespec :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Time.Timespec
 timespec cx raw =

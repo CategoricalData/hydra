@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Primitives in the hydra.lib.regex module.
 
 module Hydra.Lib.Regex where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -31,6 +33,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 find :: Packaging.PrimitiveDefinition
 find =
     Packaging.PrimitiveDefinition {
@@ -62,6 +65,7 @@ find =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 findAll :: Packaging.PrimitiveDefinition
 findAll =
     Packaging.PrimitiveDefinition {
@@ -93,6 +97,7 @@ findAll =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 matches :: Packaging.PrimitiveDefinition
 matches =
     Packaging.PrimitiveDefinition {
@@ -124,6 +129,7 @@ matches =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 replace :: Packaging.PrimitiveDefinition
 replace =
     Packaging.PrimitiveDefinition {
@@ -161,6 +167,7 @@ replace =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 replaceAll :: Packaging.PrimitiveDefinition
 replaceAll =
     Packaging.PrimitiveDefinition {
@@ -197,6 +204,7 @@ replaceAll =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 split :: Packaging.PrimitiveDefinition
 split =
     Packaging.PrimitiveDefinition {

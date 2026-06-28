@@ -1,13 +1,16 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | DSL functions for hydra.parsing
 
 module Hydra.Dsl.Parsing where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Typed as Typed
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | DSL constructor for hydra.parsing.ParseError
 parseError :: Typed.TypedTerm String -> Typed.TypedTerm String -> Typed.TypedTerm Parsing.ParseError
 parseError message remainder =
@@ -20,6 +23,7 @@ parseError message remainder =
         Core.Field {
           Core.fieldName = (Core.Name "remainder"),
           Core.fieldTerm = (Typed.unTypedTerm remainder)}]}))
+
 -- | DSL accessor for the message field of hydra.parsing.ParseError
 parseErrorMessage :: Typed.TypedTerm Parsing.ParseError -> Typed.TypedTerm String
 parseErrorMessage x =
@@ -28,6 +32,7 @@ parseErrorMessage x =
         Core.projectionTypeName = (Core.Name "hydra.parsing.ParseError"),
         Core.projectionFieldName = (Core.Name "message")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the remainder field of hydra.parsing.ParseError
 parseErrorRemainder :: Typed.TypedTerm Parsing.ParseError -> Typed.TypedTerm String
 parseErrorRemainder x =
@@ -36,6 +41,7 @@ parseErrorRemainder x =
         Core.projectionTypeName = (Core.Name "hydra.parsing.ParseError"),
         Core.projectionFieldName = (Core.Name "remainder")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the message field of hydra.parsing.ParseError
 parseErrorWithMessage :: Typed.TypedTerm Parsing.ParseError -> Typed.TypedTerm String -> Typed.TypedTerm Parsing.ParseError
 parseErrorWithMessage original newVal =
@@ -52,6 +58,7 @@ parseErrorWithMessage original newVal =
               Core.projectionTypeName = (Core.Name "hydra.parsing.ParseError"),
               Core.projectionFieldName = (Core.Name "remainder")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the remainder field of hydra.parsing.ParseError
 parseErrorWithRemainder :: Typed.TypedTerm Parsing.ParseError -> Typed.TypedTerm String -> Typed.TypedTerm Parsing.ParseError
 parseErrorWithRemainder original newVal =
@@ -68,6 +75,7 @@ parseErrorWithRemainder original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "remainder"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL injection for the failure variant of hydra.parsing.ParseResult
 parseResultFailure :: Typed.TypedTerm Parsing.ParseError -> Typed.TypedTerm (Parsing.ParseResult a)
 parseResultFailure x =
@@ -76,6 +84,7 @@ parseResultFailure x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "failure"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the success variant of hydra.parsing.ParseResult
 parseResultSuccess :: Typed.TypedTerm (Parsing.ParseSuccess a) -> Typed.TypedTerm (Parsing.ParseResult a)
 parseResultSuccess x =
@@ -84,6 +93,7 @@ parseResultSuccess x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "success"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL constructor for hydra.parsing.ParseSuccess
 parseSuccess :: Typed.TypedTerm a -> Typed.TypedTerm String -> Typed.TypedTerm (Parsing.ParseSuccess a)
 parseSuccess value remainder =
@@ -96,6 +106,7 @@ parseSuccess value remainder =
         Core.Field {
           Core.fieldName = (Core.Name "remainder"),
           Core.fieldTerm = (Typed.unTypedTerm remainder)}]}))
+
 -- | DSL accessor for the remainder field of hydra.parsing.ParseSuccess
 parseSuccessRemainder :: Typed.TypedTerm (Parsing.ParseSuccess a) -> Typed.TypedTerm String
 parseSuccessRemainder x =
@@ -104,6 +115,7 @@ parseSuccessRemainder x =
         Core.projectionTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
         Core.projectionFieldName = (Core.Name "remainder")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the value field of hydra.parsing.ParseSuccess
 parseSuccessValue :: Typed.TypedTerm (Parsing.ParseSuccess a) -> Typed.TypedTerm a
 parseSuccessValue x =
@@ -112,6 +124,7 @@ parseSuccessValue x =
         Core.projectionTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
         Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the remainder field of hydra.parsing.ParseSuccess
 parseSuccessWithRemainder :: Typed.TypedTerm (Parsing.ParseSuccess a) -> Typed.TypedTerm String -> Typed.TypedTerm (Parsing.ParseSuccess a)
 parseSuccessWithRemainder original newVal =
@@ -128,6 +141,7 @@ parseSuccessWithRemainder original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "remainder"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the value field of hydra.parsing.ParseSuccess
 parseSuccessWithValue :: Typed.TypedTerm (Parsing.ParseSuccess a) -> Typed.TypedTerm a -> Typed.TypedTerm (Parsing.ParseSuccess a)
 parseSuccessWithValue original newVal =
@@ -144,12 +158,14 @@ parseSuccessWithValue original newVal =
               Core.projectionTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
               Core.projectionFieldName = (Core.Name "remainder")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for the hydra.parsing.Parser wrapper
 parser :: Typed.TypedTerm (String -> Parsing.ParseResult a) -> Typed.TypedTerm (Parsing.Parser a)
 parser x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.parsing.Parser"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the body of hydra.parsing.Parser
 unParser :: Typed.TypedTerm (Parsing.Parser a) -> Typed.TypedTerm (String -> Parsing.ParseResult a)
 unParser x =

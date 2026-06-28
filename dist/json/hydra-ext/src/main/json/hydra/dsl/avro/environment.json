@@ -26,7 +26,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"optional": {"literal": {"string": {}}}},
+                      "body": {"optional": {"literal": "string"}},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The optional namespace"}}}]}}}}},
               "isLazy": false},
             {
@@ -36,7 +36,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"string": {}}},
+                      "body": {"literal": "string"},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The local name"}}}]}}}}},
               "isLazy": false}],
           "result": {
@@ -54,7 +54,7 @@
                     "function": {"variable": "hydra.typed.TypedTerm"},
                     "argument": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The optional namespace"}}}]}}}}},
                 "body": {
                   "lambda": {
@@ -64,7 +64,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"literal": {"string": {}}},
+                            "body": {"literal": "string"},
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The local name"}}}]}}}}},
                     "body": {
                       "wrap": {
@@ -125,7 +125,7 @@
                 "function": {"variable": "hydra.typed.TypedTerm"},
                 "argument": {
                   "annotated": {
-                    "body": {"optional": {"literal": {"string": {}}}},
+                    "body": {"optional": {"literal": "string"}},
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The optional namespace"}}}]}}}}}}},
         "body": {
           "annotated": {
@@ -190,7 +190,7 @@
                 "function": {"variable": "hydra.typed.TypedTerm"},
                 "argument": {
                   "annotated": {
-                    "body": {"literal": {"string": {}}},
+                    "body": {"literal": "string"},
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The local name"}}}]}}}}}}},
         "body": {
           "annotated": {
@@ -256,7 +256,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"optional": {"literal": {"string": {}}}},
+                      "body": {"optional": {"literal": "string"}},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The optional namespace"}}}]}}}}},
               "isLazy": false}],
           "result": {
@@ -281,7 +281,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"optional": {"literal": {"string": {}}}},
+                            "body": {"optional": {"literal": "string"}},
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The optional namespace"}}}]}}}}},
                     "body": {
                       "wrap": {
@@ -369,7 +369,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"string": {}}},
+                      "body": {"literal": "string"},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The local name"}}}]}}}}},
               "isLazy": false}],
           "result": {
@@ -394,7 +394,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"literal": {"string": {}}},
+                            "body": {"literal": "string"},
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The local name"}}}]}}}}},
                     "body": {
                       "wrap": {
@@ -489,7 +489,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"function": {"domain": {"literal": {"string": {}}}, "codomain": {"variable": "hydra.core.Name"}}},
+                      "body": {"function": {"domain": {"literal": "string"}, "codomain": {"variable": "hydra.core.Name"}}},
                       "annotation": {
                         "map": [
                           {
@@ -523,7 +523,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"function": {"domain": {"literal": {"string": {}}}, "codomain": {"variable": "hydra.core.Name"}}},
+                            "body": {"function": {"domain": {"literal": "string"}, "codomain": {"variable": "hydra.core.Name"}}},
                             "annotation": {
                               "map": [
                                 {
@@ -651,7 +651,7 @@
                 "function": {"variable": "hydra.typed.TypedTerm"},
                 "argument": {
                   "annotated": {
-                    "body": {"function": {"domain": {"literal": {"string": {}}}, "codomain": {"variable": "hydra.core.Name"}}},
+                    "body": {"function": {"domain": {"literal": "string"}, "codomain": {"variable": "hydra.core.Name"}}},
                     "annotation": {
                       "map": [
                         {
@@ -832,7 +832,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"function": {"domain": {"literal": {"string": {}}}, "codomain": {"variable": "hydra.core.Name"}}},
+                      "body": {"function": {"domain": {"literal": "string"}, "codomain": {"variable": "hydra.core.Name"}}},
                       "annotation": {
                         "map": [
                           {
@@ -857,7 +857,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"function": {"domain": {"literal": {"string": {}}}, "codomain": {"variable": "hydra.core.Name"}}},
+                            "body": {"function": {"domain": {"literal": "string"}, "codomain": {"variable": "hydra.core.Name"}}},
                             "annotation": {
                               "map": [
                                 {
@@ -952,7 +952,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"function": {"domain": {"literal": {"string": {}}}, "codomain": {"variable": "hydra.core.Name"}}},
+                      "body": {"function": {"domain": {"literal": "string"}, "codomain": {"variable": "hydra.core.Name"}}},
                       "annotation": {
                         "map": [
                           {
@@ -982,7 +982,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"function": {"domain": {"literal": {"string": {}}}, "codomain": {"variable": "hydra.core.Name"}}},
+                            "body": {"function": {"domain": {"literal": "string"}, "codomain": {"variable": "hydra.core.Name"}}},
                             "annotation": {
                               "map": [
                                 {
@@ -1106,7 +1106,7 @@
                 "function": {"variable": "hydra.typed.TypedTerm"},
                 "argument": {
                   "annotated": {
-                    "body": {"function": {"domain": {"literal": {"string": {}}}, "codomain": {"variable": "hydra.core.Name"}}},
+                    "body": {"function": {"domain": {"literal": "string"}, "codomain": {"variable": "hydra.core.Name"}}},
                     "annotation": {
                       "map": [
                         {
@@ -1279,7 +1279,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"function": {"domain": {"literal": {"string": {}}}, "codomain": {"variable": "hydra.core.Name"}}},
+                      "body": {"function": {"domain": {"literal": "string"}, "codomain": {"variable": "hydra.core.Name"}}},
                       "annotation": {
                         "map": [
                           {
@@ -1304,7 +1304,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"function": {"domain": {"literal": {"string": {}}}, "codomain": {"variable": "hydra.core.Name"}}},
+                            "body": {"function": {"domain": {"literal": "string"}, "codomain": {"variable": "hydra.core.Name"}}},
                             "annotation": {
                               "map": [
                                 {
@@ -1416,7 +1416,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"optional": {"literal": {"string": {}}}},
+                      "body": {"optional": {"literal": "string"}},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The current Avro namespace"}}}]}}}}},
               "isLazy": false},
             {
@@ -1469,7 +1469,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"optional": {"literal": {"string": {}}}},
+                            "body": {"optional": {"literal": "string"}},
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The current Avro namespace"}}}]}}}}},
                     "body": {
                       "lambda": {
@@ -1626,7 +1626,7 @@
                 "function": {"variable": "hydra.typed.TypedTerm"},
                 "argument": {
                   "annotated": {
-                    "body": {"optional": {"literal": {"string": {}}}},
+                    "body": {"optional": {"literal": "string"}},
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The current Avro namespace"}}}]}}}}}}},
         "body": {
           "annotated": {
@@ -1924,7 +1924,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"optional": {"literal": {"string": {}}}},
+                      "body": {"optional": {"literal": "string"}},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The current Avro namespace"}}}]}}}}},
               "isLazy": false}],
           "result": {
@@ -1945,7 +1945,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"optional": {"literal": {"string": {}}}},
+                            "body": {"optional": {"literal": "string"}},
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The current Avro namespace"}}}]}}}}},
                     "body": {
                       "wrap": {

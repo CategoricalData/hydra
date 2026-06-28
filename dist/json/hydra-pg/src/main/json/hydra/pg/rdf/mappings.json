@@ -115,10 +115,10 @@
                                                               "application": {
                                                                 "function": {
                                                                   "application": {
-                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}},
+                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": "string"}}},
                                                                     "argument": {"application": {"function": {"unwrap": "hydra.pg.model.VertexLabel"}, "argument": {"variable": "outLabel"}}}}},
                                                                 "argument": {"application": {"function": {"unwrap": "hydra.pg.model.VertexLabel"}, "argument": {"variable": "vertexLabel"}}}}},
-                                                            "typeScheme": {"variables": [], "body": {"literal": {"boolean": {}}}}}],
+                                                            "typeScheme": {"variables": [], "body": {"literal": "boolean"}}}],
                                                         "body": {
                                                           "let": {
                                                             "bindings": [
@@ -168,12 +168,12 @@
                                                                                                                 "application": {
                                                                                                                   "function": {
                                                                                                                     "typeApplication": {"body": {"variable": "hydra.lib.sets.singleton"}, "type": {"variable": "hydra.rdf.syntax.RdfsClass"}}},
-                                                                                                                  "argument": {"wrap": {"typeName": "hydra.rdf.syntax.RdfsClass", "body": {"unit": {}}}}}}}}}}}},
-                                                                                                  {"name": "deactivated", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"boolean": {}}}}}},
+                                                                                                                  "argument": {"wrap": {"typeName": "hydra.rdf.syntax.RdfsClass", "body": "unit"}}}}}}}}}},
+                                                                                                  {"name": "deactivated", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "boolean"}}}},
                                                                                                   {"name": "message", "term": {"variable": "hydra.rdf.utils.emptyLangStrings"}},
                                                                                                   {
                                                                                                     "name": "severity",
-                                                                                                    "term": {"inject": {"typeName": "hydra.shacl.model.Severity", "field": {"name": "violation", "term": {"unit": {}}}}}},
+                                                                                                    "term": {"inject": {"typeName": "hydra.shacl.model.Severity", "field": {"name": "violation", "term": "unit"}}}},
                                                                                                   {
                                                                                                     "name": "targetClass",
                                                                                                     "term": {"typeApplication": {"body": {"variable": "hydra.lib.sets.empty"}, "type": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
@@ -196,9 +196,7 @@
                                                                                             "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.Node"}}}},
                                                                                           {"name": "description", "term": {"variable": "hydra.rdf.utils.emptyLangStrings"}},
                                                                                           {"name": "name", "term": {"variable": "hydra.rdf.utils.emptyLangStrings"}},
-                                                                                          {
-                                                                                            "name": "order",
-                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"integer": {"bigint": {}}}}}}},
+                                                                                          {"name": "order", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"integer": "bigint"}}}}},
                                                                                           {
                                                                                             "name": "path",
                                                                                             "term": {
@@ -862,11 +860,11 @@
                                                                                                 "name": "constraints",
                                                                                                 "term": {
                                                                                                   "typeApplication": {"body": {"variable": "hydra.lib.sets.empty"}, "type": {"variable": "hydra.shacl.model.CommonConstraint"}}}},
-                                                                                              {"name": "deactivated", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"boolean": {}}}}}},
+                                                                                              {"name": "deactivated", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "boolean"}}}},
                                                                                               {"name": "message", "term": {"variable": "hydra.rdf.utils.emptyLangStrings"}},
                                                                                               {
                                                                                                 "name": "severity",
-                                                                                                "term": {"inject": {"typeName": "hydra.shacl.model.Severity", "field": {"name": "violation", "term": {"unit": {}}}}}},
+                                                                                                "term": {"inject": {"typeName": "hydra.shacl.model.Severity", "field": {"name": "violation", "term": "unit"}}}},
                                                                                               {
                                                                                                 "name": "targetClass",
                                                                                                 "term": {"typeApplication": {"body": {"variable": "hydra.lib.sets.empty"}, "type": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
@@ -1064,7 +1062,7 @@
                                         "function": {
                                           "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.PropertyType", "fieldName": "required"}}, "type": {"variable": "t0"}}},
                                         "argument": {"variable": "pt"}}},
-                                    "typeScheme": {"variables": [], "body": {"literal": {"boolean": {}}}}},
+                                    "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
                                   {
                                     "name": "dtIri",
                                     "term": {
@@ -1120,11 +1118,11 @@
                                             "typeName": "hydra.shacl.model.CommonProperties",
                                             "fields": [
                                               {"name": "constraints", "term": {"variable": "constraints"}},
-                                              {"name": "deactivated", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"boolean": {}}}}}},
+                                              {"name": "deactivated", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "boolean"}}}},
                                               {"name": "message", "term": {"variable": "hydra.rdf.utils.emptyLangStrings"}},
                                               {
                                                 "name": "severity",
-                                                "term": {"inject": {"typeName": "hydra.shacl.model.Severity", "field": {"name": "violation", "term": {"unit": {}}}}}},
+                                                "term": {"inject": {"typeName": "hydra.shacl.model.Severity", "field": {"name": "violation", "term": "unit"}}}},
                                               {
                                                 "name": "targetClass",
                                                 "term": {"typeApplication": {"body": {"variable": "hydra.lib.sets.empty"}, "type": {"variable": "hydra.rdf.syntax.RdfsClass"}}}},
@@ -1144,9 +1142,7 @@
                                         "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.rdf.syntax.Node"}}}},
                                       {"name": "description", "term": {"variable": "hydra.rdf.utils.emptyLangStrings"}},
                                       {"name": "name", "term": {"variable": "hydra.rdf.utils.emptyLangStrings"}},
-                                      {
-                                        "name": "order",
-                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"integer": {"bigint": {}}}}}}},
+                                      {"name": "order", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"integer": "bigint"}}}}},
                                       {"name": "path", "term": {"variable": "path"}}]}}}}}}}}}},
                 "annotation": {
                   "map": [
@@ -1287,18 +1283,18 @@
                                                     "function": {
                                                       "typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.shacl.model.CommonConstraint"}}},
                                                     "argument": {"variable": "propShapes"}}}},
-                                              {"name": "deactivated", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": {"boolean": {}}}}}},
+                                              {"name": "deactivated", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "boolean"}}}},
                                               {"name": "message", "term": {"variable": "hydra.rdf.utils.emptyLangStrings"}},
                                               {
                                                 "name": "severity",
-                                                "term": {"inject": {"typeName": "hydra.shacl.model.Severity", "field": {"name": "violation", "term": {"unit": {}}}}}},
+                                                "term": {"inject": {"typeName": "hydra.shacl.model.Severity", "field": {"name": "violation", "term": "unit"}}}},
                                               {
                                                 "name": "targetClass",
                                                 "term": {
                                                   "application": {
                                                     "function": {
                                                       "typeApplication": {"body": {"variable": "hydra.lib.sets.singleton"}, "type": {"variable": "hydra.rdf.syntax.RdfsClass"}}},
-                                                    "argument": {"wrap": {"typeName": "hydra.rdf.syntax.RdfsClass", "body": {"unit": {}}}}}}},
+                                                    "argument": {"wrap": {"typeName": "hydra.rdf.syntax.RdfsClass", "body": "unit"}}}}},
                                               {
                                                 "name": "targetNode",
                                                 "term": {

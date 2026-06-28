@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term decoders for hydra.errors
 
 module Hydra.Decode.Errors where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Decode.Error.Checking as Checking
@@ -21,6 +23,7 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Decoder for hydra.errors.DecodingError
 decodingError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.DecodingError
 decodingError cx raw =
@@ -31,9 +34,11 @@ decodingError cx raw =
           _ -> Left (Errors.DecodingError "expected string literal")
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.errors.EmptyListError
 emptyListError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ()
 emptyListError cx t = ExtractCore.decodeUnit cx t
+
 -- | Decoder for hydra.errors.Error
 error :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.Error
 error cx raw =
@@ -80,6 +85,7 @@ error cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.errors.ExtractionError
 extractionError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.ExtractionError
 extractionError cx raw =
@@ -114,6 +120,7 @@ extractionError cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.errors.InferenceError
 inferenceError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.InferenceError
 inferenceError cx raw =
@@ -134,6 +141,7 @@ inferenceError cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.errors.MultipleBindingsError
 multipleBindingsError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.MultipleBindingsError
 multipleBindingsError cx raw =
@@ -143,6 +151,7 @@ multipleBindingsError cx raw =
         in (Eithers.bind (ExtractCore.requireField "name" DecodeCore.name fieldMap cx) (\field_name -> Right (Errors.MultipleBindingsError {
           Errors.multipleBindingsErrorName = field_name})))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.errors.MultipleBindingsError")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.errors.MultipleFieldsError
 multipleFieldsError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.MultipleFieldsError
 multipleFieldsError cx raw =
@@ -152,6 +161,7 @@ multipleFieldsError cx raw =
         in (Eithers.bind (ExtractCore.requireField "fieldName" DecodeCore.name fieldMap cx) (\field_fieldName -> Right (Errors.MultipleFieldsError {
           Errors.multipleFieldsErrorFieldName = field_fieldName})))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.errors.MultipleFieldsError")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.errors.NoMatchingFieldError
 noMatchingFieldError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.NoMatchingFieldError
 noMatchingFieldError cx raw =
@@ -161,6 +171,7 @@ noMatchingFieldError cx raw =
         in (Eithers.bind (ExtractCore.requireField "fieldName" DecodeCore.name fieldMap cx) (\field_fieldName -> Right (Errors.NoMatchingFieldError {
           Errors.noMatchingFieldErrorFieldName = field_fieldName})))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.errors.NoMatchingFieldError")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.errors.NoSuchBindingError
 noSuchBindingError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.NoSuchBindingError
 noSuchBindingError cx raw =
@@ -170,6 +181,7 @@ noSuchBindingError cx raw =
         in (Eithers.bind (ExtractCore.requireField "name" DecodeCore.name fieldMap cx) (\field_name -> Right (Errors.NoSuchBindingError {
           Errors.noSuchBindingErrorName = field_name})))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.errors.NoSuchBindingError")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.errors.NoSuchPrimitiveError
 noSuchPrimitiveError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.NoSuchPrimitiveError
 noSuchPrimitiveError cx raw =
@@ -179,9 +191,11 @@ noSuchPrimitiveError cx raw =
         in (Eithers.bind (ExtractCore.requireField "name" DecodeCore.name fieldMap cx) (\field_name -> Right (Errors.NoSuchPrimitiveError {
           Errors.noSuchPrimitiveErrorName = field_name})))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.errors.NoSuchPrimitiveError")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.errors.NotEnoughCasesError
 notEnoughCasesError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ()
 notEnoughCasesError cx t = ExtractCore.decodeUnit cx t
+
 -- | Decoder for hydra.errors.OtherError
 otherError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.OtherError
 otherError cx raw =
@@ -192,6 +206,7 @@ otherError cx raw =
           _ -> Left (Errors.DecodingError "expected string literal")
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.errors.OtherInferenceError
 otherInferenceError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.OtherInferenceError
 otherInferenceError cx raw =
@@ -206,6 +221,7 @@ otherInferenceError cx raw =
           Errors.otherInferenceErrorPath = field_path,
           Errors.otherInferenceErrorMessage = field_message}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.errors.OtherInferenceError")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.errors.OtherResolutionError
 otherResolutionError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.OtherResolutionError
 otherResolutionError cx raw =
@@ -216,6 +232,7 @@ otherResolutionError cx raw =
           _ -> Left (Errors.DecodingError "expected string literal")
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.errors.ResolutionError
 resolutionError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.ResolutionError
 resolutionError cx raw =
@@ -244,6 +261,7 @@ resolutionError cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.errors.UnexpectedShapeError
 unexpectedShapeError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.UnexpectedShapeError
 unexpectedShapeError cx raw =
@@ -262,6 +280,7 @@ unexpectedShapeError cx raw =
           Errors.unexpectedShapeErrorExpected = field_expected,
           Errors.unexpectedShapeErrorActual = field_actual}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.errors.UnexpectedShapeError")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.errors.UnificationError
 unificationError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.UnificationError
 unificationError cx raw =
@@ -277,6 +296,7 @@ unificationError cx raw =
           Errors.unificationErrorRightType = field_rightType,
           Errors.unificationErrorMessage = field_message})))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.errors.UnificationError")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.errors.UnificationInferenceError
 unificationInferenceError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Errors.UnificationInferenceError
 unificationInferenceError cx raw =

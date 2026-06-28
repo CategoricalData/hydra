@@ -15,22 +15,22 @@
             "annotated": {
               "body": {
                 "record": [
-                  {"name": "name", "type": {"optional": {"literal": {"string": {}}}}},
-                  {"name": "typeName", "type": {"optional": {"literal": {"string": {}}}}},
-                  {"name": "isOptional", "type": {"literal": {"boolean": {}}}},
+                  {"name": "name", "type": {"optional": {"literal": "string"}}},
+                  {"name": "typeName", "type": {"optional": {"literal": "string"}}},
+                  {"name": "isOptional", "type": {"literal": "boolean"}},
                   {"name": "cardinality", "type": {"optional": {"variable": "hydra.atlas.AtlasAttributeDef_Cardinality"}}},
-                  {"name": "valuesMinCount", "type": {"literal": {"integer": {"int32": {}}}}},
-                  {"name": "valuesMaxCount", "type": {"literal": {"integer": {"int32": {}}}}},
-                  {"name": "isUnique", "type": {"literal": {"boolean": {}}}},
-                  {"name": "isIndexable", "type": {"literal": {"boolean": {}}}},
-                  {"name": "includeInNotification", "type": {"literal": {"boolean": {}}}},
-                  {"name": "defaultValue", "type": {"optional": {"literal": {"string": {}}}}},
-                  {"name": "description", "type": {"optional": {"literal": {"string": {}}}}},
-                  {"name": "searchWeight", "type": {"literal": {"integer": {"int32": {}}}}},
+                  {"name": "valuesMinCount", "type": {"literal": {"integer": "int32"}}},
+                  {"name": "valuesMaxCount", "type": {"literal": {"integer": "int32"}}},
+                  {"name": "isUnique", "type": {"literal": "boolean"}},
+                  {"name": "isIndexable", "type": {"literal": "boolean"}},
+                  {"name": "includeInNotification", "type": {"literal": "boolean"}},
+                  {"name": "defaultValue", "type": {"optional": {"literal": "string"}}},
+                  {"name": "description", "type": {"optional": {"literal": "string"}}},
+                  {"name": "searchWeight", "type": {"literal": {"integer": "int32"}}},
                   {"name": "indexType", "type": {"optional": {"variable": "hydra.atlas.AtlasAttributeDef_IndexType"}}},
                   {"name": "constraints", "type": {"list": {"variable": "hydra.atlas.AtlasConstraintDef"}}},
-                  {"name": "options", "type": {"map": {"keys": {"literal": {"string": {}}}, "values": {"literal": {"string": {}}}}}},
-                  {"name": "displayName", "type": {"optional": {"literal": {"string": {}}}}}]},
+                  {"name": "options", "type": {"map": {"keys": {"literal": "string"}, "values": {"literal": "string"}}}},
+                  {"name": "displayName", "type": {"optional": {"literal": "string"}}}]},
               "annotation": {
                 "map": [
                   {
@@ -41,17 +41,11 @@
         "name": "hydra.atlas.AtlasAttributeDef_Cardinality",
         "body": {
           "variables": [],
-          "body": {
-            "union": [
-              {"name": "single", "type": {"unit": {}}},
-              {"name": "list", "type": {"unit": {}}},
-              {"name": "set", "type": {"unit": {}}}]}}}},
+          "body": {"union": [{"name": "single", "type": "unit"}, {"name": "list", "type": "unit"}, {"name": "set", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.atlas.AtlasAttributeDef_IndexType",
-        "body": {
-          "variables": [],
-          "body": {"union": [{"name": "default", "type": {"unit": {}}}, {"name": "string", "type": {"unit": {}}}]}}}},
+        "body": {"variables": [], "body": {"union": [{"name": "default", "type": "unit"}, {"name": "string", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.atlas.AtlasBaseTypeDef",
@@ -62,17 +56,17 @@
               "body": {
                 "record": [
                   {"name": "category", "type": {"optional": {"variable": "hydra.atlas.TypeCategory"}}},
-                  {"name": "guid", "type": {"optional": {"literal": {"string": {}}}}},
-                  {"name": "createdBy", "type": {"optional": {"literal": {"string": {}}}}},
-                  {"name": "updatedBy", "type": {"optional": {"literal": {"string": {}}}}},
+                  {"name": "guid", "type": {"optional": {"literal": "string"}}},
+                  {"name": "createdBy", "type": {"optional": {"literal": "string"}}},
+                  {"name": "updatedBy", "type": {"optional": {"literal": "string"}}},
                   {"name": "createTime", "type": {"optional": {"variable": "hydra.xml.schema.DateTime"}}},
                   {"name": "updateTime", "type": {"optional": {"variable": "hydra.xml.schema.DateTime"}}},
-                  {"name": "version", "type": {"optional": {"literal": {"integer": {"int64": {}}}}}},
-                  {"name": "name", "type": {"optional": {"literal": {"string": {}}}}},
-                  {"name": "description", "type": {"optional": {"literal": {"string": {}}}}},
-                  {"name": "typeVersion", "type": {"optional": {"literal": {"string": {}}}}},
-                  {"name": "serviceType", "type": {"optional": {"literal": {"string": {}}}}},
-                  {"name": "options", "type": {"map": {"keys": {"literal": {"string": {}}}, "values": {"literal": {"string": {}}}}}}]},
+                  {"name": "version", "type": {"optional": {"literal": {"integer": "int64"}}}},
+                  {"name": "name", "type": {"optional": {"literal": "string"}}},
+                  {"name": "description", "type": {"optional": {"literal": "string"}}},
+                  {"name": "typeVersion", "type": {"optional": {"literal": "string"}}},
+                  {"name": "serviceType", "type": {"optional": {"literal": "string"}}},
+                  {"name": "options", "type": {"map": {"keys": {"literal": "string"}, "values": {"literal": "string"}}}}]},
               "annotation": {
                 "map": [
                   {
@@ -87,8 +81,8 @@
             "annotated": {
               "body": {
                 "record": [
-                  {"name": "type", "type": {"optional": {"literal": {"string": {}}}}},
-                  {"name": "params", "type": {"map": {"keys": {"literal": {"string": {}}}, "values": {"literal": {"string": {}}}}}}]},
+                  {"name": "type", "type": {"optional": {"literal": "string"}}},
+                  {"name": "params", "type": {"map": {"keys": {"literal": "string"}, "values": {"literal": "string"}}}}]},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "class that captures details of a constraint."}}}]}}}}}},
     {
@@ -101,12 +95,12 @@
               "body": {
                 "record": [
                   {"name": "asAtlasStruct", "type": {"variable": "hydra.atlas.AtlasStructDef"}},
-                  {"name": "superTypes", "type": {"set": {"literal": {"string": {}}}}},
+                  {"name": "superTypes", "type": {"set": {"literal": "string"}}},
                   {
                     "name": "subTypes",
                     "type": {
                       "annotated": {
-                        "body": {"set": {"literal": {"string": {}}}},
+                        "body": {"set": {"literal": "string"}},
                         "annotation": {
                           "map": [
                             {
@@ -127,7 +121,7 @@
                     "name": "businessAttributeDefs",
                     "type": {
                       "annotated": {
-                        "body": {"map": {"keys": {"literal": {"string": {}}}, "values": {"list": {"variable": "hydra.atlas.AtlasAttributeDef"}}}},
+                        "body": {"map": {"keys": {"literal": "string"}, "values": {"list": {"variable": "hydra.atlas.AtlasAttributeDef"}}}},
                         "annotation": {
                           "map": [
                             {
@@ -147,8 +141,8 @@
               "body": {
                 "record": [
                   {"name": "asAtlasAttribute", "type": {"variable": "hydra.atlas.AtlasAttributeDef"}},
-                  {"name": "relationshipTypeName", "type": {"optional": {"literal": {"string": {}}}}},
-                  {"name": "isLegacyAttribute", "type": {"literal": {"boolean": {}}}}]},
+                  {"name": "relationshipTypeName", "type": {"optional": {"literal": "string"}}},
+                  {"name": "isLegacyAttribute", "type": {"literal": "boolean"}}]},
               "annotation": {
                 "map": [
                   {
@@ -175,13 +169,13 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "primitive", "type": {"unit": {}}},
-              {"name": "objectIdType", "type": {"unit": {}}},
-              {"name": "enum", "type": {"unit": {}}},
-              {"name": "struct", "type": {"unit": {}}},
-              {"name": "classification", "type": {"unit": {}}},
-              {"name": "entity", "type": {"unit": {}}},
-              {"name": "array", "type": {"unit": {}}},
-              {"name": "map", "type": {"unit": {}}},
-              {"name": "relationship", "type": {"unit": {}}},
-              {"name": "businessMetadata", "type": {"unit": {}}}]}}}}]}
+              {"name": "primitive", "type": "unit"},
+              {"name": "objectIdType", "type": "unit"},
+              {"name": "enum", "type": "unit"},
+              {"name": "struct", "type": "unit"},
+              {"name": "classification", "type": "unit"},
+              {"name": "entity", "type": "unit"},
+              {"name": "array", "type": "unit"},
+              {"name": "map", "type": "unit"},
+              {"name": "relationship", "type": "unit"},
+              {"name": "businessMetadata", "type": "unit"}]}}}}]}

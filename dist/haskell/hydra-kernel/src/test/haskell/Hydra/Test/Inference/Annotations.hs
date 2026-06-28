@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Inference tests for annotated terms
 
 module Hydra.Test.Inference.Annotations where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -38,6 +40,7 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
+
 -- | Inference tests for annotated terms
 allTests :: Testing.TestGroup
 allTests =
@@ -48,6 +51,7 @@ allTests =
         transparencyTests,
         failureTests],
       Testing.testGroupCases = []}
+
 failureTests :: Testing.TestGroup
 failureTests =
     Testing.TestGroup {
@@ -73,6 +77,7 @@ failureTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
+
 transparencyTests :: Testing.TestGroup
 transparencyTests =
     Testing.TestGroup {

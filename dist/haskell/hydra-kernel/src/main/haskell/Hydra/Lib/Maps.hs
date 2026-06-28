@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Primitives in the hydra.lib.maps module.
 
 module Hydra.Lib.Maps where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -31,6 +33,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 alter :: Packaging.PrimitiveDefinition
 alter =
     Packaging.PrimitiveDefinition {
@@ -115,6 +118,7 @@ alter =
                       Core.applicationArgument = (Core.TermVariable (Core.Name "k"))})),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "vNew"))})),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))}))}))}))})))}
+
 bimap :: Packaging.PrimitiveDefinition
 bimap =
     Packaging.PrimitiveDefinition {
@@ -204,6 +208,7 @@ bimap =
                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.toList")),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))}))}))}))})))}
+
 delete :: Packaging.PrimitiveDefinition
 delete =
     Packaging.PrimitiveDefinition {
@@ -246,6 +251,7 @@ delete =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 elems :: Packaging.PrimitiveDefinition
 elems =
     Packaging.PrimitiveDefinition {
@@ -281,6 +287,7 @@ elems =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 empty :: Packaging.PrimitiveDefinition
 empty =
     Packaging.PrimitiveDefinition {
@@ -311,6 +318,7 @@ empty =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 filter :: Packaging.PrimitiveDefinition
 filter =
     Packaging.PrimitiveDefinition {
@@ -376,6 +384,7 @@ filter =
               Core.applicationArgument = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.toList")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))}))}))})))}
+
 filterWithKey :: Packaging.PrimitiveDefinition
 filterWithKey =
     Packaging.PrimitiveDefinition {
@@ -447,6 +456,7 @@ filterWithKey =
               Core.applicationArgument = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.toList")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))}))}))})))}
+
 findWithDefault :: Packaging.PrimitiveDefinition
 findWithDefault =
     Packaging.PrimitiveDefinition {
@@ -509,6 +519,7 @@ findWithDefault =
                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.lookup")),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "k"))})),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))}))}))})))}
+
 fromList :: Packaging.PrimitiveDefinition
 fromList =
     Packaging.PrimitiveDefinition {
@@ -546,6 +557,7 @@ fromList =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 insert :: Packaging.PrimitiveDefinition
 insert =
     Packaging.PrimitiveDefinition {
@@ -593,6 +605,7 @@ insert =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 keys :: Packaging.PrimitiveDefinition
 keys =
     Packaging.PrimitiveDefinition {
@@ -628,6 +641,7 @@ keys =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 lookup :: Packaging.PrimitiveDefinition
 lookup =
     Packaging.PrimitiveDefinition {
@@ -668,6 +682,7 @@ lookup =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 map :: Packaging.PrimitiveDefinition
 map =
     Packaging.PrimitiveDefinition {
@@ -740,6 +755,7 @@ map =
               Core.applicationArgument = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.toList")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))}))}))})))}
+
 mapKeys :: Packaging.PrimitiveDefinition
 mapKeys =
     Packaging.PrimitiveDefinition {
@@ -813,6 +829,7 @@ mapKeys =
               Core.applicationArgument = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.toList")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}))}))}))})))}
+
 member :: Packaging.PrimitiveDefinition
 member =
     Packaging.PrimitiveDefinition {
@@ -853,6 +870,7 @@ member =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 null :: Packaging.PrimitiveDefinition
 null =
     Packaging.PrimitiveDefinition {
@@ -888,6 +906,7 @@ null =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 singleton :: Packaging.PrimitiveDefinition
 singleton =
     Packaging.PrimitiveDefinition {
@@ -928,6 +947,7 @@ singleton =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 size :: Packaging.PrimitiveDefinition
 size =
     Packaging.PrimitiveDefinition {
@@ -963,6 +983,7 @@ size =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 toList :: Packaging.PrimitiveDefinition
 toList =
     Packaging.PrimitiveDefinition {
@@ -1000,6 +1021,7 @@ toList =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 union :: Packaging.PrimitiveDefinition
 union =
     Packaging.PrimitiveDefinition {

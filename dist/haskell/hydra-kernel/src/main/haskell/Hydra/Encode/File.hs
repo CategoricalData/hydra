@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term encoders for hydra.file
 
 module Hydra.Encode.File where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.Time as Time
@@ -9,18 +11,21 @@ import qualified Hydra.File as File
 import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Encoder for hydra.file.FileExtension
 fileExtension :: File.FileExtension -> Core.Term
 fileExtension x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.file.FileExtension"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (File.unFileExtension x))})
+
 -- | Encoder for hydra.file.FilePath
 filePath :: File.FilePath -> Core.Term
 filePath x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.file.FilePath"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (File.unFilePath x))})
+
 -- | Encoder for hydra.file.FileStatus
 fileStatus :: File.FileStatus -> Core.Term
 fileStatus x =
@@ -42,6 +47,7 @@ fileStatus x =
         Core.Field {
           Core.fieldName = (Core.Name "statusChangeTime"),
           Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map Time.timespec opt)) (File.fileStatusStatusChangeTime x))}]})
+
 -- | Encoder for hydra.file.FileType
 fileType :: File.FileType -> Core.Term
 fileType x =

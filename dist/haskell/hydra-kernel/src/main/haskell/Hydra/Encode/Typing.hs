@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term encoders for hydra.typing
 
 module Hydra.Encode.Typing where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.Paths as Paths
@@ -11,6 +13,7 @@ import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Encoder for hydra.typing.FunctionStructure
 functionStructure :: (env -> Core.Term) -> Typing.FunctionStructure env -> Core.Term
 functionStructure env x =
@@ -38,6 +41,7 @@ functionStructure env x =
         Core.Field {
           Core.fieldName = (Core.Name "environment"),
           Core.fieldTerm = (env (Typing.functionStructureEnvironment x))}]})
+
 -- | Encoder for hydra.typing.InferenceContext
 inferenceContext :: Typing.InferenceContext -> Core.Term
 inferenceContext x =
@@ -50,6 +54,7 @@ inferenceContext x =
         Core.Field {
           Core.fieldName = (Core.Name "trace"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map Paths.subtermStep xs)) (Typing.inferenceContextTrace x))}]})
+
 -- | Encoder for hydra.typing.InferenceResult
 inferenceResult :: Typing.InferenceResult -> Core.Term
 inferenceResult x =
@@ -71,6 +76,7 @@ inferenceResult x =
         Core.Field {
           Core.fieldName = (Core.Name "context"),
           Core.fieldTerm = (inferenceContext (Typing.inferenceResultContext x))}]})
+
 -- | Encoder for hydra.typing.Parameter
 parameter :: Typing.Parameter -> Core.Term
 parameter x =
@@ -89,6 +95,7 @@ parameter x =
         Core.Field {
           Core.fieldName = (Core.Name "isLazy"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralBoolean x2)) (Typing.parameterIsLazy x))}]})
+
 -- | Encoder for hydra.typing.Result
 result :: Typing.Result -> Core.Term
 result x =
@@ -101,6 +108,7 @@ result x =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (EncodeCore.type_ (Typing.resultType x))}]})
+
 -- | Encoder for hydra.typing.TermSignature
 termSignature :: Typing.TermSignature -> Core.Term
 termSignature x =
@@ -116,12 +124,14 @@ termSignature x =
         Core.Field {
           Core.fieldName = (Core.Name "result"),
           Core.fieldTerm = (result (Typing.termSignatureResult x))}]})
+
 -- | Encoder for hydra.typing.TermSubst
 termSubst :: Typing.TermSubst -> Core.Term
 termSubst x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.typing.TermSubst"),
       Core.wrappedTermBody = ((\m -> Core.TermMap (Maps.bimap EncodeCore.name EncodeCore.term m)) (Typing.unTermSubst x))})
+
 -- | Encoder for hydra.typing.TypeClass
 typeClass :: Typing.TypeClass -> Core.Term
 typeClass x =
@@ -131,6 +141,7 @@ typeClass x =
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Typing.typeClassDescription x))}]})
+
 -- | Encoder for hydra.typing.TypeConstraint
 typeConstraint :: Typing.TypeConstraint -> Core.Term
 typeConstraint x =
@@ -146,6 +157,7 @@ typeConstraint x =
         Core.Field {
           Core.fieldName = (Core.Name "comment"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Typing.typeConstraintComment x))}]})
+
 -- | Encoder for hydra.typing.TypeParameter
 typeParameter :: Typing.TypeParameter -> Core.Term
 typeParameter x =
@@ -158,6 +170,7 @@ typeParameter x =
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map EncodeCore.typeClassConstraint xs)) (Typing.typeParameterConstraints x))}]})
+
 -- | Encoder for hydra.typing.TypeSubst
 typeSubst :: Typing.TypeSubst -> Core.Term
 typeSubst x =

@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Algorithm W inference tests
 
 module Hydra.Test.Inference.AlgorithmW where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -37,6 +39,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Algorithm W test cases
 allTests :: Testing.TestGroup
 allTests =
@@ -46,6 +49,7 @@ allTests =
       Testing.testGroupSubgroups = [
         testGroupForSystemF],
       Testing.testGroupCases = []}
+
 testGroupForSystemF :: Testing.TestGroup
 testGroupForSystemF =
     Testing.TestGroup {

@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | JSON decoding for Hydra terms. Converts JSON Values to Terms using Either for error handling.
 
 module Hydra.Json.Decode where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -45,6 +47,7 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
+
 -- | Decode a JSON value to a float term. Finite values arrive as JSON numbers; NaN/Inf/-0.0 arrive as JSON string sentinels. Float32 and Float64 are symmetric.
 decodeFloat :: Core.FloatType -> Model.Value -> Either String Core.Term
 decodeFloat ft value =
@@ -61,6 +64,7 @@ decodeFloat ft value =
           "invalid float64 sentinel: ",
           v1])) (\v -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 v))))
         _ -> Left "expected number or special float string for float64"
+
 -- | Decode a JSON value to an integer term. Small ints from numbers; large ints from strings.
 decodeInteger :: Core.IntegerType -> Model.Value -> Either String Core.Term
 decodeInteger it value =
@@ -109,6 +113,7 @@ decodeInteger it value =
             "invalid uint32: ",
             v1])) (\v -> Right (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint32 v)))))
         _ -> Left "expected number or string for uint32"
+
 -- | Decode a JSON value to a literal term
 decodeLiteral :: Core.LiteralType -> Model.Value -> Either String Core.Term
 decodeLiteral lt value =
@@ -127,30 +132,35 @@ decodeLiteral lt value =
       Core.LiteralTypeString ->
         let strResult = expectString value
         in (Eithers.map (\s -> Core.TermLiteral (Core.LiteralString s)) strResult)
+
 -- | Extract an array from a JSON value
 expectArray :: Model.Value -> Either String [Model.Value]
 expectArray value =
     case value of
       Model.ValueArray v0 -> Right v0
       _ -> Left "expected array"
+
 -- | Extract a number from a JSON value
 expectNumber :: Model.Value -> Either String Sci.Scientific
 expectNumber value =
     case value of
       Model.ValueNumber v0 -> Right v0
       _ -> Left "expected number"
+
 -- | Extract an object from a JSON value as a name-keyed map. Field order is not preserved here; decoding looks fields up by name.
 expectObject :: Model.Value -> Either String (M.Map String Model.Value)
 expectObject value =
     case value of
       Model.ValueObject v0 -> Right (Maps.fromList v0)
       _ -> Left "expected object"
+
 -- | Extract a string from a JSON value
 expectString :: Model.Value -> Either String String
 expectString value =
     case value of
       Model.ValueString v0 -> Right v0
       _ -> Left "expected string"
+
 -- | Decode a JSON value to a Hydra term given a type and type name. Returns Left for type mismatches.
 fromJson :: M.Map Core.Name Core.Type -> Core.Name -> Core.Type -> Model.Value -> Either String Core.Term
 fromJson types tname typ value =
@@ -225,8 +235,26 @@ fromJson types tname typ value =
                       \obj -> Optionals.cases (Lists.maybeHead (Maps.keys obj)) (Left "expected single-key object for union") (\k -> findAndDecode k (Maps.lookup k obj) v0)
               processUnion =
                       \obj -> Logic.ifElse (Equality.equal (Lists.length (Maps.keys obj)) 1) (decodeSingleKey obj) (Left "expected single-key object for union")
-              objResult = expectObject value
-          in (Eithers.either (\err -> Left err) (\obj -> processUnion obj) objResult)
+              decodeCompactString =
+                      \s -> Optionals.cases (Lists.find (\ft -> Equality.equal (Core.unName (Core.fieldTypeName ft)) s) v0) (Left (Strings.cat [
+                        "unknown variant: ",
+                        s])) (\ft ->
+                        let ftypeStripped = Strip.deannotateType (Core.fieldTypeType ft)
+                        in case ftypeStripped of
+                          Core.TypeUnit -> Right (Core.TermInject (Core.Injection {
+                            Core.injectionTypeName = tname,
+                            Core.injectionField = Core.Field {
+                              Core.fieldName = (Core.Name s),
+                              Core.fieldTerm = Core.TermUnit}}))
+                          _ -> Left (Strings.cat [
+                            "compact string form requires unit-typed variant, got non-unit type for variant: ",
+                            s]))
+          in case value of
+            Model.ValueString v1 -> decodeCompactString v1
+            Model.ValueObject v1 ->
+              let objAsMap = Maps.fromList v1
+              in (processUnion objAsMap)
+            _ -> Left "expected string or object for union"
         Core.TypeUnit ->
           let objResult = expectObject value
           in (Eithers.map (\_2 -> Core.TermUnit) objResult)
@@ -283,10 +311,12 @@ fromJson types tname typ value =
         _ -> Left (Strings.cat [
           "unsupported type for JSON decoding: ",
           (ShowCore.type_ typ)])
+
 -- | Parse an IEEE sentinel string (NaN, Infinity, -Infinity, -0.0) to a float64. Returns Nothing for unrecognized strings.
 parseSpecialFloat :: String -> Maybe Double
 parseSpecialFloat s =
     Logic.ifElse (Logic.or (Equality.equal s "NaN") (Logic.or (Equality.equal s "Infinity") (Logic.or (Equality.equal s "-Infinity") (Equality.equal s "-0.0")))) (LibLiterals.readFloat64 s) Nothing
+
 -- | Parse an IEEE sentinel string (NaN, Infinity, -Infinity, -0.0) to a float32. Returns Nothing for unrecognized strings.
 parseSpecialFloat32 :: String -> Maybe Float
 parseSpecialFloat32 s =
