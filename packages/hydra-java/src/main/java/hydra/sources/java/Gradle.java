@@ -1,6 +1,6 @@
 package hydra.sources.java;
 import hydra.core.Type;
-import static hydra.dsl.meta.Defs.unqualifiedDeps;
+import static hydra.overlay.java.dsl.meta.Defs.unqualifiedDeps;
 import hydra.overlay.java.dsl.Types;
 import hydra.packaging.Definition;
 import hydra.packaging.EntityMetadata;
@@ -12,9 +12,9 @@ import hydra.overlay.java.util.Optional;
 import java.util.Arrays;
 import java.util.List;
 
-import static hydra.dsl.java.Helpers.doc;
-import static hydra.dsl.java.Helpers.typeDef;
-import static hydra.dsl.java.Helpers.typeref;
+import static hydra.overlay.java.dsl.Helpers.doc;
+import static hydra.overlay.java.dsl.Helpers.typeDef;
+import static hydra.overlay.java.dsl.Helpers.typeref;
 
 /**
  * Build configuration for a Gradle-built distribution package: the host-specific information needed
@@ -72,15 +72,34 @@ public class Gradle {
                     "Gradle plugin identifiers to apply to the build, e.g. \"antlr\". Applied in the"
                         + " given order.",
                     Types.list(Types.string()))),
-                Types.field("raw", doc(
-                    "An optional fragment of host-native build configuration (Groovy) spliced"
-                        + " verbatim into the generated build script, for imperative needs that the"
-                        + " structured fields above cannot express (e.g. configuring a code-generation"
-                        + " task). Opaque to Hydra; preferred only when no structured field applies.",
-                    Types.optional(Types.string()))))));
+                Types.field("antlr", doc(
+                    "ANTLR grammar-generation configuration, present when the package uses the antlr"
+                        + " plugin. When given, the host emits the generateGrammarSource configuration"
+                        + " and the compileJava-depends-on-generateGrammarSource ordering. Modeled as"
+                        + " structured vocabulary rather than a raw Groovy fragment.",
+                    Types.optional(antlr("AntlrConfig")))))));
+    }
+
+    private static Type antlr(String local) { return typeref(NS, local); }
+
+    private static Definition antlrConfigDef() {
+        return typeDefHere("AntlrConfig", doc(
+            "Configuration for the Gradle antlr plugin's grammar generation (generateGrammarSource).",
+            Types.record(
+                Types.field("arguments", doc(
+                    "Arguments passed to the ANTLR tool, e.g. [\"-visitor\"] or [\"-visitor\","
+                        + " \"-listener\"]. Faithful to ANTLR's command-line interface; covers all"
+                        + " ANTLR flags without enumerating them.",
+                    Types.list(Types.string()))),
+                Types.field("outputDirectory", doc(
+                    "Directory into which ANTLR emits generated lexer/parser sources, relative to the"
+                        + " package root (e.g. \"build/generated-src/antlr/main\"). The host also folds"
+                        + " this into the main source set.",
+                    file("FilePath"))))));
     }
 
     private static final List<Definition> DEFINITIONS = Arrays.asList(
+        antlrConfigDef(),
         gradleBuildConfigurationDef()
     );
 
