@@ -440,6 +440,25 @@ heal_java_python_native() {
     HYDRA_IN_SYNC=1 "$HYDRA_ROOT/bin/generate-hydra-python-from-python.sh" \
         "--$pm-host" || return 1
 }
+# hydra-scala input-digest seed (#509). hydra-scala is host-native like
+# hydra-jvm/java/python: its coder JSON is committed and re-derived by the Phase 5
+# Scala driver, but the Phase-1.5 local-mode java rollup (assemble-distribution.sh
+# hydra-scala) AND the Phase-2 coder assembly both gate on
+# dist/json/hydra-scala/build/main/digest.json via assemble_refresh_digest. Unlike
+# the Java/Python digests (refreshed inside generate-hydra-java-from-java.sh), nothing
+# seeds the Scala digest. Do it here — BEFORE the Phase 1.5 heal — so the earliest
+# consumer finds it. Cheap no-op when present; the JSON itself is not re-derived.
+if [ ! -f "$HYDRA_ROOT/dist/json/hydra-scala/build/main/digest.json" ] && \
+   [ -d "$HYDRA_ROOT/dist/json/hydra-scala/src/main/json" ]; then
+    echo "Seeding hydra-scala input digest for assembly gate (#509)..."
+    (cd "$HYDRA_HASKELL_DIR" && \
+     stack build hydra:exe:digest-check >/dev/null && \
+     stack exec digest-check -- refresh-input \
+       --package hydra-scala \
+       --dist-json-root "$HYDRA_ROOT/dist/json") || exit 1
+    echo ""
+fi
+
 if [ -x "$JP_FRESH_CHECK" ]; then
     if [ "${HYDRA_INCLUDE_JAVA_PYTHON:-0}" = "1" ]; then
         banner1 "Phase 1.5: cold-start native Java/Python/JVM coder JSON (published hosts) (#346/#505)"
@@ -459,25 +478,6 @@ if [ -x "$JP_FRESH_CHECK" ]; then
         "$JP_FRESH_CHECK" "$HYDRA_ROOT" --record || true
         echo ""
     fi
-fi
-
-# hydra-scala input-digest seed (#509). hydra-scala is host-native like
-# hydra-jvm/java/python: its coder JSON is committed and re-derived by the Phase 5
-# Scala driver, but Phase 2's assembly gate (assemble_refresh_digest) needs
-# dist/json/hydra-scala/build/main/digest.json to exist beforehand. Unlike the
-# Java/Python digests (refreshed inside generate-hydra-java-from-java.sh during the
-# conditional Phase 1.5 heal), nothing seeds the Scala digest before Phase 2, so do
-# it here unconditionally when absent. Cheap no-op when already present; the JSON
-# itself is not re-derived (no sbt run).
-if [ ! -f "$HYDRA_ROOT/dist/json/hydra-scala/build/main/digest.json" ] && \
-   [ -d "$HYDRA_ROOT/dist/json/hydra-scala/src/main/json" ]; then
-    echo "Seeding hydra-scala input digest for Phase 2 assembly gate (#509)..."
-    (cd "$HYDRA_HASKELL_DIR" && \
-     stack build hydra:exe:digest-check >/dev/null && \
-     stack exec digest-check -- refresh-input \
-       --package hydra-scala \
-       --dist-json-root "$HYDRA_ROOT/dist/json") || exit 1
-    echo ""
 fi
 
 # ────────────────────────────────────────────────────────────────────
