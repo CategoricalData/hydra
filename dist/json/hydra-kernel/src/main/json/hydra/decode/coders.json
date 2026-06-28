@@ -12,7 +12,6 @@
     {"module": "hydra.decode.graph"},
     {"module": "hydra.decode.variants"},
     {"module": "hydra.decode.core"},
-    {"module": "hydra.decode.typing"},
     {"module": "hydra.decode.util"}],
   "definitions": [
     {

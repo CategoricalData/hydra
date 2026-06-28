@@ -40,17 +40,17 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 -- | Create a coder between Avro schemas and JSON values
-avroSchemaJsonCoder :: t0 -> Coders.Coder Schema.Schema Model.Value
+avroSchemaJsonCoder :: t0 -> Coders.Coder Schema.Schema Model.Value Errors.Error
 avroSchemaJsonCoder cx =
     Coders.Coder {
-      Coders.coderEncode = (\_cx -> \schema -> Right (encodeSchema schema)),
-      Coders.coderDecode = (\cx2 -> \json -> decodeSchema cx2 json)}
+      Coders.coderEncode = (\schema -> Right (encodeSchema schema)),
+      Coders.coderDecode = (\json -> decodeSchema cx json)}
 -- | Create a coder between Avro schemas and JSON strings
-avroSchemaStringCoder :: t0 -> Coders.Coder Schema.Schema String
+avroSchemaStringCoder :: t0 -> Coders.Coder Schema.Schema String Errors.Error
 avroSchemaStringCoder cx =
     Coders.Coder {
-      Coders.coderEncode = (\_cx -> \schema -> Right (showJsonValue (encodeSchema schema))),
-      Coders.coderDecode = (\cx2 -> \s -> Eithers.bind (Eithers.either (\e -> err cx2 e) (\v -> Right v) (stringToJsonValue s)) (\json -> decodeSchema cx2 json))}
+      Coders.coderEncode = (\schema -> Right (showJsonValue (encodeSchema schema))),
+      Coders.coderDecode = (\s -> Eithers.bind (Eithers.either (\e -> err cx e) (\v -> Right v) (stringToJsonValue s)) (\json -> decodeSchema cx json))}
 avro_aliases :: String
 avro_aliases = "aliases"
 avro_array :: String

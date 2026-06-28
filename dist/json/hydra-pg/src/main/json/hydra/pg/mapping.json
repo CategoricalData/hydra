@@ -164,46 +164,67 @@
                         "forall": {
                           "parameter": "v",
                           "body": {
-                            "record": [
-                              {
-                                "name": "vertexIdTypes",
-                                "type": {
-                                  "application": {
-                                    "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "hydra.core.Type"}}},
-                                    "argument": {"variable": "t"}}}},
-                              {
-                                "name": "vertexIds",
-                                "type": {
-                                  "application": {
-                                    "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "hydra.core.Term"}}},
-                                    "argument": {"variable": "v"}}}},
-                              {
-                                "name": "edgeIdTypes",
-                                "type": {
-                                  "application": {
-                                    "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "hydra.core.Type"}}},
-                                    "argument": {"variable": "t"}}}},
-                              {
-                                "name": "edgeIds",
-                                "type": {
-                                  "application": {
-                                    "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "hydra.core.Term"}}},
-                                    "argument": {"variable": "v"}}}},
-                              {
-                                "name": "propertyTypes",
-                                "type": {
-                                  "application": {
-                                    "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "hydra.core.Type"}}},
-                                    "argument": {"variable": "t"}}}},
-                              {
-                                "name": "propertyValues",
-                                "type": {
-                                  "application": {
-                                    "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "hydra.core.Term"}}},
-                                    "argument": {"variable": "v"}}}},
-                              {"name": "annotations", "type": {"variable": "hydra.pg.mapping.AnnotationSchema"}},
-                              {"name": "defaultVertexId", "type": {"variable": "v"}},
-                              {"name": "defaultEdgeId", "type": {"variable": "v"}}]}}}}}}},
+                            "forall": {
+                              "parameter": "e",
+                              "body": {
+                                "record": [
+                                  {
+                                    "name": "vertexIdTypes",
+                                    "type": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "hydra.core.Type"}}},
+                                            "argument": {"variable": "t"}}},
+                                        "argument": {"variable": "e"}}}},
+                                  {
+                                    "name": "vertexIds",
+                                    "type": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "hydra.core.Term"}}},
+                                            "argument": {"variable": "v"}}},
+                                        "argument": {"variable": "e"}}}},
+                                  {
+                                    "name": "edgeIdTypes",
+                                    "type": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "hydra.core.Type"}}},
+                                            "argument": {"variable": "t"}}},
+                                        "argument": {"variable": "e"}}}},
+                                  {
+                                    "name": "edgeIds",
+                                    "type": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "hydra.core.Term"}}},
+                                            "argument": {"variable": "v"}}},
+                                        "argument": {"variable": "e"}}}},
+                                  {
+                                    "name": "propertyTypes",
+                                    "type": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "hydra.core.Type"}}},
+                                            "argument": {"variable": "t"}}},
+                                        "argument": {"variable": "e"}}}},
+                                  {
+                                    "name": "propertyValues",
+                                    "type": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "hydra.core.Term"}}},
+                                            "argument": {"variable": "v"}}},
+                                        "argument": {"variable": "e"}}}},
+                                  {"name": "annotations", "type": {"variable": "hydra.pg.mapping.AnnotationSchema"}},
+                                  {"name": "defaultVertexId", "type": {"variable": "v"}},
+                                  {"name": "defaultEdgeId", "type": {"variable": "v"}}]}}}}}}}}},
               "annotation": {
                 "map": [
                   {

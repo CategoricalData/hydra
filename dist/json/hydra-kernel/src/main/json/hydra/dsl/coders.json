@@ -9,14 +9,12 @@
     {"module": "hydra.graph"},
     {"module": "hydra.variants"},
     {"module": "hydra.core"},
-    {"module": "hydra.typing"},
     {"module": "hydra.util"},
     {"module": "hydra.dsl.errors"},
     {"module": "hydra.dsl.file"},
     {"module": "hydra.dsl.graph"},
     {"module": "hydra.dsl.variants"},
     {"module": "hydra.dsl.core"},
-    {"module": "hydra.dsl.typing"},
     {"module": "hydra.dsl.util"}],
   "definitions": [
     {
@@ -27,7 +25,8 @@
             {"name": "t1", "constraints": []},
             {"name": "t2", "constraints": []},
             {"name": "v1", "constraints": []},
-            {"name": "v2", "constraints": []}],
+            {"name": "v2", "constraints": []},
+            {"name": "e", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
@@ -72,8 +71,11 @@
                     "annotated": {
                       "body": {
                         "application": {
-                          "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
-                          "argument": {"variable": "v2"}}},
+                          "function": {
+                            "application": {
+                              "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
+                              "argument": {"variable": "v2"}}},
+                          "argument": {"variable": "e"}}},
                       "annotation": {
                         "map": [
                           {
@@ -90,10 +92,13 @@
                       "application": {
                         "function": {
                           "application": {
-                            "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
-                            "argument": {"variable": "t2"}}},
-                        "argument": {"variable": "v1"}}},
-                    "argument": {"variable": "v2"}}}}}}},
+                            "function": {
+                              "application": {
+                                "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
+                                "argument": {"variable": "t2"}}},
+                            "argument": {"variable": "v1"}}},
+                        "argument": {"variable": "v2"}}},
+                    "argument": {"variable": "e"}}}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -140,8 +145,11 @@
                                   "annotated": {
                                     "body": {
                                       "application": {
-                                        "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
-                                        "argument": {"variable": "v2"}}},
+                                        "function": {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
+                                            "argument": {"variable": "v2"}}},
+                                        "argument": {"variable": "e"}}},
                                     "annotation": {
                                       "map": [
                                         {
@@ -208,7 +216,8 @@
             {"name": "t1", "constraints": []},
             {"name": "t2", "constraints": []},
             {"name": "v1", "constraints": []},
-            {"name": "v2", "constraints": []}],
+            {"name": "v2", "constraints": []},
+            {"name": "e", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
@@ -221,10 +230,13 @@
                         "application": {
                           "function": {
                             "application": {
-                              "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
-                              "argument": {"variable": "t2"}}},
-                          "argument": {"variable": "v1"}}},
-                      "argument": {"variable": "v2"}}}}},
+                              "function": {
+                                "application": {
+                                  "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
+                                  "argument": {"variable": "t2"}}},
+                              "argument": {"variable": "v1"}}},
+                          "argument": {"variable": "v2"}}},
+                      "argument": {"variable": "e"}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -252,10 +264,13 @@
                           "application": {
                             "function": {
                               "application": {
-                                "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
-                                "argument": {"variable": "t2"}}},
-                            "argument": {"variable": "v1"}}},
-                        "argument": {"variable": "v2"}}}}},
+                                "function": {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
+                                    "argument": {"variable": "t2"}}},
+                                "argument": {"variable": "v1"}}},
+                            "argument": {"variable": "v2"}}},
+                        "argument": {"variable": "e"}}}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.typed.TypedTerm",
@@ -299,7 +314,8 @@
             {"name": "t1", "constraints": []},
             {"name": "t2", "constraints": []},
             {"name": "v1", "constraints": []},
-            {"name": "v2", "constraints": []}],
+            {"name": "v2", "constraints": []},
+            {"name": "e", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
@@ -312,10 +328,13 @@
                         "application": {
                           "function": {
                             "application": {
-                              "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
-                              "argument": {"variable": "t2"}}},
-                          "argument": {"variable": "v1"}}},
-                      "argument": {"variable": "v2"}}}}},
+                              "function": {
+                                "application": {
+                                  "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
+                                  "argument": {"variable": "t2"}}},
+                              "argument": {"variable": "v1"}}},
+                          "argument": {"variable": "v2"}}},
+                      "argument": {"variable": "e"}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -339,10 +358,13 @@
                           "application": {
                             "function": {
                               "application": {
-                                "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
-                                "argument": {"variable": "t2"}}},
-                            "argument": {"variable": "v1"}}},
-                        "argument": {"variable": "v2"}}}}},
+                                "function": {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
+                                    "argument": {"variable": "t2"}}},
+                                "argument": {"variable": "v1"}}},
+                            "argument": {"variable": "v2"}}},
+                        "argument": {"variable": "e"}}}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.typed.TypedTerm",
@@ -386,7 +408,8 @@
             {"name": "t1", "constraints": []},
             {"name": "t2", "constraints": []},
             {"name": "v1", "constraints": []},
-            {"name": "v2", "constraints": []}],
+            {"name": "v2", "constraints": []},
+            {"name": "e", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
@@ -399,10 +422,13 @@
                         "application": {
                           "function": {
                             "application": {
-                              "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
-                              "argument": {"variable": "t2"}}},
-                          "argument": {"variable": "v1"}}},
-                      "argument": {"variable": "v2"}}}}},
+                              "function": {
+                                "application": {
+                                  "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
+                                  "argument": {"variable": "t2"}}},
+                              "argument": {"variable": "v1"}}},
+                          "argument": {"variable": "v2"}}},
+                      "argument": {"variable": "e"}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -426,10 +452,13 @@
                           "application": {
                             "function": {
                               "application": {
-                                "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
-                                "argument": {"variable": "t2"}}},
-                            "argument": {"variable": "v1"}}},
-                        "argument": {"variable": "v2"}}}}},
+                                "function": {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
+                                    "argument": {"variable": "t2"}}},
+                                "argument": {"variable": "v1"}}},
+                            "argument": {"variable": "v2"}}},
+                        "argument": {"variable": "e"}}}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.typed.TypedTerm",
@@ -473,7 +502,8 @@
             {"name": "t1", "constraints": []},
             {"name": "t2", "constraints": []},
             {"name": "v1", "constraints": []},
-            {"name": "v2", "constraints": []}],
+            {"name": "v2", "constraints": []},
+            {"name": "e", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
@@ -486,10 +516,13 @@
                         "application": {
                           "function": {
                             "application": {
-                              "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
-                              "argument": {"variable": "t2"}}},
-                          "argument": {"variable": "v1"}}},
-                      "argument": {"variable": "v2"}}}}},
+                              "function": {
+                                "application": {
+                                  "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
+                                  "argument": {"variable": "t2"}}},
+                              "argument": {"variable": "v1"}}},
+                          "argument": {"variable": "v2"}}},
+                      "argument": {"variable": "e"}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -499,8 +532,11 @@
                   "annotated": {
                     "body": {
                       "application": {
-                        "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
-                        "argument": {"variable": "v2"}}},
+                        "function": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
+                            "argument": {"variable": "v2"}}},
+                        "argument": {"variable": "e"}}},
                     "annotation": {
                       "map": [
                         {
@@ -520,10 +556,13 @@
                           "application": {
                             "function": {
                               "application": {
-                                "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
-                                "argument": {"variable": "t2"}}},
-                            "argument": {"variable": "v1"}}},
-                        "argument": {"variable": "v2"}}}}},
+                                "function": {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
+                                    "argument": {"variable": "t2"}}},
+                                "argument": {"variable": "v1"}}},
+                            "argument": {"variable": "v2"}}},
+                        "argument": {"variable": "e"}}}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.typed.TypedTerm",
@@ -567,7 +606,8 @@
             {"name": "t1", "constraints": []},
             {"name": "t2", "constraints": []},
             {"name": "v1", "constraints": []},
-            {"name": "v2", "constraints": []}],
+            {"name": "v2", "constraints": []},
+            {"name": "e", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
@@ -580,10 +620,13 @@
                         "application": {
                           "function": {
                             "application": {
-                              "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
-                              "argument": {"variable": "t2"}}},
-                          "argument": {"variable": "v1"}}},
-                      "argument": {"variable": "v2"}}}}},
+                              "function": {
+                                "application": {
+                                  "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
+                                  "argument": {"variable": "t2"}}},
+                              "argument": {"variable": "v1"}}},
+                          "argument": {"variable": "v2"}}},
+                      "argument": {"variable": "e"}}}}},
               "isLazy": false},
             {
               "name": "arg1",
@@ -609,10 +652,13 @@
                       "application": {
                         "function": {
                           "application": {
-                            "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
-                            "argument": {"variable": "t2"}}},
-                        "argument": {"variable": "v1"}}},
-                    "argument": {"variable": "v2"}}}}}}},
+                            "function": {
+                              "application": {
+                                "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
+                                "argument": {"variable": "t2"}}},
+                            "argument": {"variable": "v1"}}},
+                        "argument": {"variable": "v2"}}},
+                    "argument": {"variable": "e"}}}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -627,10 +673,13 @@
                           "application": {
                             "function": {
                               "application": {
-                                "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
-                                "argument": {"variable": "t2"}}},
-                            "argument": {"variable": "v1"}}},
-                        "argument": {"variable": "v2"}}}}},
+                                "function": {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
+                                    "argument": {"variable": "t2"}}},
+                                "argument": {"variable": "v1"}}},
+                            "argument": {"variable": "v2"}}},
+                        "argument": {"variable": "e"}}}}},
                 "body": {
                   "lambda": {
                     "parameter": "newVal",
@@ -787,7 +836,8 @@
             {"name": "t1", "constraints": []},
             {"name": "t2", "constraints": []},
             {"name": "v1", "constraints": []},
-            {"name": "v2", "constraints": []}],
+            {"name": "v2", "constraints": []},
+            {"name": "e", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
@@ -800,10 +850,13 @@
                         "application": {
                           "function": {
                             "application": {
-                              "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
-                              "argument": {"variable": "t2"}}},
-                          "argument": {"variable": "v1"}}},
-                      "argument": {"variable": "v2"}}}}},
+                              "function": {
+                                "application": {
+                                  "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
+                                  "argument": {"variable": "t2"}}},
+                              "argument": {"variable": "v1"}}},
+                          "argument": {"variable": "v2"}}},
+                      "argument": {"variable": "e"}}}}},
               "isLazy": false},
             {
               "name": "arg1",
@@ -825,10 +878,13 @@
                       "application": {
                         "function": {
                           "application": {
-                            "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
-                            "argument": {"variable": "t2"}}},
-                        "argument": {"variable": "v1"}}},
-                    "argument": {"variable": "v2"}}}}}}},
+                            "function": {
+                              "application": {
+                                "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
+                                "argument": {"variable": "t2"}}},
+                            "argument": {"variable": "v1"}}},
+                        "argument": {"variable": "v2"}}},
+                    "argument": {"variable": "e"}}}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -843,10 +899,13 @@
                           "application": {
                             "function": {
                               "application": {
-                                "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
-                                "argument": {"variable": "t2"}}},
-                            "argument": {"variable": "v1"}}},
-                        "argument": {"variable": "v2"}}}}},
+                                "function": {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
+                                    "argument": {"variable": "t2"}}},
+                                "argument": {"variable": "v1"}}},
+                            "argument": {"variable": "v2"}}},
+                        "argument": {"variable": "e"}}}}},
                 "body": {
                   "lambda": {
                     "parameter": "newVal",
@@ -999,7 +1058,8 @@
             {"name": "t1", "constraints": []},
             {"name": "t2", "constraints": []},
             {"name": "v1", "constraints": []},
-            {"name": "v2", "constraints": []}],
+            {"name": "v2", "constraints": []},
+            {"name": "e", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
@@ -1012,10 +1072,13 @@
                         "application": {
                           "function": {
                             "application": {
-                              "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
-                              "argument": {"variable": "t2"}}},
-                          "argument": {"variable": "v1"}}},
-                      "argument": {"variable": "v2"}}}}},
+                              "function": {
+                                "application": {
+                                  "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
+                                  "argument": {"variable": "t2"}}},
+                              "argument": {"variable": "v1"}}},
+                          "argument": {"variable": "v2"}}},
+                      "argument": {"variable": "e"}}}}},
               "isLazy": false},
             {
               "name": "arg1",
@@ -1037,10 +1100,13 @@
                       "application": {
                         "function": {
                           "application": {
-                            "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
-                            "argument": {"variable": "t2"}}},
-                        "argument": {"variable": "v1"}}},
-                    "argument": {"variable": "v2"}}}}}}},
+                            "function": {
+                              "application": {
+                                "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
+                                "argument": {"variable": "t2"}}},
+                            "argument": {"variable": "v1"}}},
+                        "argument": {"variable": "v2"}}},
+                    "argument": {"variable": "e"}}}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -1055,10 +1121,13 @@
                           "application": {
                             "function": {
                               "application": {
-                                "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
-                                "argument": {"variable": "t2"}}},
-                            "argument": {"variable": "v1"}}},
-                        "argument": {"variable": "v2"}}}}},
+                                "function": {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
+                                    "argument": {"variable": "t2"}}},
+                                "argument": {"variable": "v1"}}},
+                            "argument": {"variable": "v2"}}},
+                        "argument": {"variable": "e"}}}}},
                 "body": {
                   "lambda": {
                     "parameter": "newVal",
@@ -1211,7 +1280,8 @@
             {"name": "t1", "constraints": []},
             {"name": "t2", "constraints": []},
             {"name": "v1", "constraints": []},
-            {"name": "v2", "constraints": []}],
+            {"name": "v2", "constraints": []},
+            {"name": "e", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
@@ -1224,10 +1294,13 @@
                         "application": {
                           "function": {
                             "application": {
-                              "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
-                              "argument": {"variable": "t2"}}},
-                          "argument": {"variable": "v1"}}},
-                      "argument": {"variable": "v2"}}}}},
+                              "function": {
+                                "application": {
+                                  "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
+                                  "argument": {"variable": "t2"}}},
+                              "argument": {"variable": "v1"}}},
+                          "argument": {"variable": "v2"}}},
+                      "argument": {"variable": "e"}}}}},
               "isLazy": false},
             {
               "name": "arg1",
@@ -1238,8 +1311,11 @@
                     "annotated": {
                       "body": {
                         "application": {
-                          "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
-                          "argument": {"variable": "v2"}}},
+                          "function": {
+                            "application": {
+                              "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
+                              "argument": {"variable": "v2"}}},
+                          "argument": {"variable": "e"}}},
                       "annotation": {
                         "map": [
                           {
@@ -1256,10 +1332,13 @@
                       "application": {
                         "function": {
                           "application": {
-                            "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
-                            "argument": {"variable": "t2"}}},
-                        "argument": {"variable": "v1"}}},
-                    "argument": {"variable": "v2"}}}}}}},
+                            "function": {
+                              "application": {
+                                "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
+                                "argument": {"variable": "t2"}}},
+                            "argument": {"variable": "v1"}}},
+                        "argument": {"variable": "v2"}}},
+                    "argument": {"variable": "e"}}}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -1274,10 +1353,13 @@
                           "application": {
                             "function": {
                               "application": {
-                                "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
-                                "argument": {"variable": "t2"}}},
-                            "argument": {"variable": "v1"}}},
-                        "argument": {"variable": "v2"}}}}},
+                                "function": {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
+                                    "argument": {"variable": "t2"}}},
+                                "argument": {"variable": "v1"}}},
+                            "argument": {"variable": "v2"}}},
+                        "argument": {"variable": "e"}}}}},
                 "body": {
                   "lambda": {
                     "parameter": "newVal",
@@ -1288,8 +1370,11 @@
                           "annotated": {
                             "body": {
                               "application": {
-                                "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
-                                "argument": {"variable": "v2"}}},
+                                "function": {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
+                                    "argument": {"variable": "v2"}}},
+                                "argument": {"variable": "e"}}},
                             "annotation": {
                               "map": [
                                 {
@@ -1476,10 +1561,13 @@
                                 "application": {
                                   "function": {
                                     "application": {
-                                      "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.core.Type"}}},
-                                      "argument": {"variable": "hydra.core.Type"}}},
+                                      "function": {
+                                        "application": {
+                                          "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.core.Type"}}},
+                                          "argument": {"variable": "hydra.core.Type"}}},
+                                      "argument": {"variable": "hydra.core.Term"}}},
                                   "argument": {"variable": "hydra.core.Term"}}},
-                              "argument": {"variable": "hydra.core.Term"}}}}},
+                              "argument": {"variable": "hydra.errors.Error"}}}}},
                       "annotation": {
                         "map": [
                           {
@@ -1533,10 +1621,13 @@
                                           "application": {
                                             "function": {
                                               "application": {
-                                                "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.core.Type"}}},
-                                                "argument": {"variable": "hydra.core.Type"}}},
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.core.Type"}}},
+                                                    "argument": {"variable": "hydra.core.Type"}}},
+                                                "argument": {"variable": "hydra.core.Term"}}},
                                             "argument": {"variable": "hydra.core.Term"}}},
-                                        "argument": {"variable": "hydra.core.Term"}}}}},
+                                        "argument": {"variable": "hydra.errors.Error"}}}}},
                                 "annotation": {
                                   "map": [
                                     {
@@ -1743,10 +1834,13 @@
                               "application": {
                                 "function": {
                                   "application": {
-                                    "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.core.Type"}}},
-                                    "argument": {"variable": "hydra.core.Type"}}},
+                                    "function": {
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.core.Type"}}},
+                                        "argument": {"variable": "hydra.core.Type"}}},
+                                    "argument": {"variable": "hydra.core.Term"}}},
                                 "argument": {"variable": "hydra.core.Term"}}},
-                            "argument": {"variable": "hydra.core.Term"}}}}},
+                            "argument": {"variable": "hydra.errors.Error"}}}}},
                     "annotation": {
                       "map": [
                         {
@@ -2113,10 +2207,13 @@
                                 "application": {
                                   "function": {
                                     "application": {
-                                      "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.core.Type"}}},
-                                      "argument": {"variable": "hydra.core.Type"}}},
+                                      "function": {
+                                        "application": {
+                                          "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.core.Type"}}},
+                                          "argument": {"variable": "hydra.core.Type"}}},
+                                      "argument": {"variable": "hydra.core.Term"}}},
                                   "argument": {"variable": "hydra.core.Term"}}},
-                              "argument": {"variable": "hydra.core.Term"}}}}},
+                              "argument": {"variable": "hydra.errors.Error"}}}}},
                       "annotation": {
                         "map": [
                           {
@@ -2150,10 +2247,13 @@
                                       "application": {
                                         "function": {
                                           "application": {
-                                            "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.core.Type"}}},
-                                            "argument": {"variable": "hydra.core.Type"}}},
+                                            "function": {
+                                              "application": {
+                                                "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.core.Type"}}},
+                                                "argument": {"variable": "hydra.core.Type"}}},
+                                            "argument": {"variable": "hydra.core.Term"}}},
                                         "argument": {"variable": "hydra.core.Term"}}},
-                                    "argument": {"variable": "hydra.core.Term"}}}}},
+                                    "argument": {"variable": "hydra.errors.Error"}}}}},
                             "annotation": {
                               "map": [
                                 {
@@ -2267,7 +2367,8 @@
             {"name": "t1", "constraints": []},
             {"name": "t2", "constraints": []},
             {"name": "v1", "constraints": []},
-            {"name": "v2", "constraints": []}],
+            {"name": "v2", "constraints": []},
+            {"name": "e", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
@@ -2285,10 +2386,13 @@
                                 "application": {
                                   "function": {
                                     "application": {
-                                      "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
-                                      "argument": {"variable": "t2"}}},
-                                  "argument": {"variable": "v1"}}},
-                              "argument": {"variable": "v2"}}}}},
+                                      "function": {
+                                        "application": {
+                                          "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
+                                          "argument": {"variable": "t2"}}},
+                                      "argument": {"variable": "v1"}}},
+                                  "argument": {"variable": "v2"}}},
+                              "argument": {"variable": "e"}}}}},
                       "annotation": {
                         "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function from source types to adapters"}}}]}}}}},
               "isLazy": false},
@@ -2308,10 +2412,13 @@
                                 "application": {
                                   "function": {
                                     "application": {
-                                      "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t2"}}},
-                                      "argument": {"variable": "t1"}}},
-                                  "argument": {"variable": "v2"}}},
-                              "argument": {"variable": "v1"}}}}},
+                                      "function": {
+                                        "application": {
+                                          "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t2"}}},
+                                          "argument": {"variable": "t1"}}},
+                                      "argument": {"variable": "v2"}}},
+                                  "argument": {"variable": "v1"}}},
+                              "argument": {"variable": "e"}}}}},
                       "annotation": {
                         "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function from target types to adapters"}}}]}}}}},
               "isLazy": false}],
@@ -2325,10 +2432,13 @@
                       "application": {
                         "function": {
                           "application": {
-                            "function": {"application": {"function": {"variable": "hydra.coders.Bicoder"}, "argument": {"variable": "t1"}}},
-                            "argument": {"variable": "t2"}}},
-                        "argument": {"variable": "v1"}}},
-                    "argument": {"variable": "v2"}}}}}}},
+                            "function": {
+                              "application": {
+                                "function": {"application": {"function": {"variable": "hydra.coders.Bicoder"}, "argument": {"variable": "t1"}}},
+                                "argument": {"variable": "t2"}}},
+                            "argument": {"variable": "v1"}}},
+                        "argument": {"variable": "v2"}}},
+                    "argument": {"variable": "e"}}}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -2348,10 +2458,13 @@
                                   "application": {
                                     "function": {
                                       "application": {
-                                        "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
-                                        "argument": {"variable": "t2"}}},
-                                    "argument": {"variable": "v1"}}},
-                                "argument": {"variable": "v2"}}}}},
+                                        "function": {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
+                                            "argument": {"variable": "t2"}}},
+                                        "argument": {"variable": "v1"}}},
+                                    "argument": {"variable": "v2"}}},
+                                "argument": {"variable": "e"}}}}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function from source types to adapters"}}}]}}}}},
                 "body": {
@@ -2371,10 +2484,13 @@
                                       "application": {
                                         "function": {
                                           "application": {
-                                            "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t2"}}},
-                                            "argument": {"variable": "t1"}}},
-                                        "argument": {"variable": "v2"}}},
-                                    "argument": {"variable": "v1"}}}}},
+                                            "function": {
+                                              "application": {
+                                                "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t2"}}},
+                                                "argument": {"variable": "t1"}}},
+                                            "argument": {"variable": "v2"}}},
+                                        "argument": {"variable": "v1"}}},
+                                    "argument": {"variable": "e"}}}}},
                             "annotation": {
                               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function from target types to adapters"}}}]}}}}},
                     "body": {
@@ -2422,7 +2538,8 @@
             {"name": "t1", "constraints": []},
             {"name": "t2", "constraints": []},
             {"name": "v1", "constraints": []},
-            {"name": "v2", "constraints": []}],
+            {"name": "v2", "constraints": []},
+            {"name": "e", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
@@ -2435,10 +2552,13 @@
                         "application": {
                           "function": {
                             "application": {
-                              "function": {"application": {"function": {"variable": "hydra.coders.Bicoder"}, "argument": {"variable": "t1"}}},
-                              "argument": {"variable": "t2"}}},
-                          "argument": {"variable": "v1"}}},
-                      "argument": {"variable": "v2"}}}}},
+                              "function": {
+                                "application": {
+                                  "function": {"application": {"function": {"variable": "hydra.coders.Bicoder"}, "argument": {"variable": "t1"}}},
+                                  "argument": {"variable": "t2"}}},
+                              "argument": {"variable": "v1"}}},
+                          "argument": {"variable": "v2"}}},
+                      "argument": {"variable": "e"}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -2455,10 +2575,13 @@
                               "application": {
                                 "function": {
                                   "application": {
-                                    "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
-                                    "argument": {"variable": "t2"}}},
-                                "argument": {"variable": "v1"}}},
-                            "argument": {"variable": "v2"}}}}},
+                                    "function": {
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
+                                        "argument": {"variable": "t2"}}},
+                                    "argument": {"variable": "v1"}}},
+                                "argument": {"variable": "v2"}}},
+                            "argument": {"variable": "e"}}}}},
                     "annotation": {
                       "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function from source types to adapters"}}}]}}}}}}},
         "body": {
@@ -2475,10 +2598,13 @@
                           "application": {
                             "function": {
                               "application": {
-                                "function": {"application": {"function": {"variable": "hydra.coders.Bicoder"}, "argument": {"variable": "t1"}}},
-                                "argument": {"variable": "t2"}}},
-                            "argument": {"variable": "v1"}}},
-                        "argument": {"variable": "v2"}}}}},
+                                "function": {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.coders.Bicoder"}, "argument": {"variable": "t1"}}},
+                                    "argument": {"variable": "t2"}}},
+                                "argument": {"variable": "v1"}}},
+                            "argument": {"variable": "v2"}}},
+                        "argument": {"variable": "e"}}}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.typed.TypedTerm",
@@ -2522,7 +2648,8 @@
             {"name": "t1", "constraints": []},
             {"name": "t2", "constraints": []},
             {"name": "v1", "constraints": []},
-            {"name": "v2", "constraints": []}],
+            {"name": "v2", "constraints": []},
+            {"name": "e", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
@@ -2535,10 +2662,13 @@
                         "application": {
                           "function": {
                             "application": {
-                              "function": {"application": {"function": {"variable": "hydra.coders.Bicoder"}, "argument": {"variable": "t1"}}},
-                              "argument": {"variable": "t2"}}},
-                          "argument": {"variable": "v1"}}},
-                      "argument": {"variable": "v2"}}}}},
+                              "function": {
+                                "application": {
+                                  "function": {"application": {"function": {"variable": "hydra.coders.Bicoder"}, "argument": {"variable": "t1"}}},
+                                  "argument": {"variable": "t2"}}},
+                              "argument": {"variable": "v1"}}},
+                          "argument": {"variable": "v2"}}},
+                      "argument": {"variable": "e"}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -2555,10 +2685,13 @@
                               "application": {
                                 "function": {
                                   "application": {
-                                    "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t2"}}},
-                                    "argument": {"variable": "t1"}}},
-                                "argument": {"variable": "v2"}}},
-                            "argument": {"variable": "v1"}}}}},
+                                    "function": {
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t2"}}},
+                                        "argument": {"variable": "t1"}}},
+                                    "argument": {"variable": "v2"}}},
+                                "argument": {"variable": "v1"}}},
+                            "argument": {"variable": "e"}}}}},
                     "annotation": {
                       "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function from target types to adapters"}}}]}}}}}}},
         "body": {
@@ -2575,10 +2708,13 @@
                           "application": {
                             "function": {
                               "application": {
-                                "function": {"application": {"function": {"variable": "hydra.coders.Bicoder"}, "argument": {"variable": "t1"}}},
-                                "argument": {"variable": "t2"}}},
-                            "argument": {"variable": "v1"}}},
-                        "argument": {"variable": "v2"}}}}},
+                                "function": {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.coders.Bicoder"}, "argument": {"variable": "t1"}}},
+                                    "argument": {"variable": "t2"}}},
+                                "argument": {"variable": "v1"}}},
+                            "argument": {"variable": "v2"}}},
+                        "argument": {"variable": "e"}}}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.typed.TypedTerm",
@@ -2622,7 +2758,8 @@
             {"name": "t1", "constraints": []},
             {"name": "t2", "constraints": []},
             {"name": "v1", "constraints": []},
-            {"name": "v2", "constraints": []}],
+            {"name": "v2", "constraints": []},
+            {"name": "e", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
@@ -2635,10 +2772,13 @@
                         "application": {
                           "function": {
                             "application": {
-                              "function": {"application": {"function": {"variable": "hydra.coders.Bicoder"}, "argument": {"variable": "t1"}}},
-                              "argument": {"variable": "t2"}}},
-                          "argument": {"variable": "v1"}}},
-                      "argument": {"variable": "v2"}}}}},
+                              "function": {
+                                "application": {
+                                  "function": {"application": {"function": {"variable": "hydra.coders.Bicoder"}, "argument": {"variable": "t1"}}},
+                                  "argument": {"variable": "t2"}}},
+                              "argument": {"variable": "v1"}}},
+                          "argument": {"variable": "v2"}}},
+                      "argument": {"variable": "e"}}}}},
               "isLazy": false},
             {
               "name": "arg1",
@@ -2656,10 +2796,13 @@
                                 "application": {
                                   "function": {
                                     "application": {
-                                      "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
-                                      "argument": {"variable": "t2"}}},
-                                  "argument": {"variable": "v1"}}},
-                              "argument": {"variable": "v2"}}}}},
+                                      "function": {
+                                        "application": {
+                                          "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
+                                          "argument": {"variable": "t2"}}},
+                                      "argument": {"variable": "v1"}}},
+                                  "argument": {"variable": "v2"}}},
+                              "argument": {"variable": "e"}}}}},
                       "annotation": {
                         "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function from source types to adapters"}}}]}}}}},
               "isLazy": false}],
@@ -2673,10 +2816,13 @@
                       "application": {
                         "function": {
                           "application": {
-                            "function": {"application": {"function": {"variable": "hydra.coders.Bicoder"}, "argument": {"variable": "t1"}}},
-                            "argument": {"variable": "t2"}}},
-                        "argument": {"variable": "v1"}}},
-                    "argument": {"variable": "v2"}}}}}}},
+                            "function": {
+                              "application": {
+                                "function": {"application": {"function": {"variable": "hydra.coders.Bicoder"}, "argument": {"variable": "t1"}}},
+                                "argument": {"variable": "t2"}}},
+                            "argument": {"variable": "v1"}}},
+                        "argument": {"variable": "v2"}}},
+                    "argument": {"variable": "e"}}}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -2691,10 +2837,13 @@
                           "application": {
                             "function": {
                               "application": {
-                                "function": {"application": {"function": {"variable": "hydra.coders.Bicoder"}, "argument": {"variable": "t1"}}},
-                                "argument": {"variable": "t2"}}},
-                            "argument": {"variable": "v1"}}},
-                        "argument": {"variable": "v2"}}}}},
+                                "function": {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.coders.Bicoder"}, "argument": {"variable": "t1"}}},
+                                    "argument": {"variable": "t2"}}},
+                                "argument": {"variable": "v1"}}},
+                            "argument": {"variable": "v2"}}},
+                        "argument": {"variable": "e"}}}}},
                 "body": {
                   "lambda": {
                     "parameter": "newVal",
@@ -2712,10 +2861,13 @@
                                       "application": {
                                         "function": {
                                           "application": {
-                                            "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
-                                            "argument": {"variable": "t2"}}},
-                                        "argument": {"variable": "v1"}}},
-                                    "argument": {"variable": "v2"}}}}},
+                                            "function": {
+                                              "application": {
+                                                "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t1"}}},
+                                                "argument": {"variable": "t2"}}},
+                                            "argument": {"variable": "v1"}}},
+                                        "argument": {"variable": "v2"}}},
+                                    "argument": {"variable": "e"}}}}},
                             "annotation": {
                               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function from source types to adapters"}}}]}}}}},
                     "body": {
@@ -2792,7 +2944,8 @@
             {"name": "t1", "constraints": []},
             {"name": "t2", "constraints": []},
             {"name": "v1", "constraints": []},
-            {"name": "v2", "constraints": []}],
+            {"name": "v2", "constraints": []},
+            {"name": "e", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
@@ -2805,10 +2958,13 @@
                         "application": {
                           "function": {
                             "application": {
-                              "function": {"application": {"function": {"variable": "hydra.coders.Bicoder"}, "argument": {"variable": "t1"}}},
-                              "argument": {"variable": "t2"}}},
-                          "argument": {"variable": "v1"}}},
-                      "argument": {"variable": "v2"}}}}},
+                              "function": {
+                                "application": {
+                                  "function": {"application": {"function": {"variable": "hydra.coders.Bicoder"}, "argument": {"variable": "t1"}}},
+                                  "argument": {"variable": "t2"}}},
+                              "argument": {"variable": "v1"}}},
+                          "argument": {"variable": "v2"}}},
+                      "argument": {"variable": "e"}}}}},
               "isLazy": false},
             {
               "name": "arg1",
@@ -2826,10 +2982,13 @@
                                 "application": {
                                   "function": {
                                     "application": {
-                                      "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t2"}}},
-                                      "argument": {"variable": "t1"}}},
-                                  "argument": {"variable": "v2"}}},
-                              "argument": {"variable": "v1"}}}}},
+                                      "function": {
+                                        "application": {
+                                          "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t2"}}},
+                                          "argument": {"variable": "t1"}}},
+                                      "argument": {"variable": "v2"}}},
+                                  "argument": {"variable": "v1"}}},
+                              "argument": {"variable": "e"}}}}},
                       "annotation": {
                         "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function from target types to adapters"}}}]}}}}},
               "isLazy": false}],
@@ -2843,10 +3002,13 @@
                       "application": {
                         "function": {
                           "application": {
-                            "function": {"application": {"function": {"variable": "hydra.coders.Bicoder"}, "argument": {"variable": "t1"}}},
-                            "argument": {"variable": "t2"}}},
-                        "argument": {"variable": "v1"}}},
-                    "argument": {"variable": "v2"}}}}}}},
+                            "function": {
+                              "application": {
+                                "function": {"application": {"function": {"variable": "hydra.coders.Bicoder"}, "argument": {"variable": "t1"}}},
+                                "argument": {"variable": "t2"}}},
+                            "argument": {"variable": "v1"}}},
+                        "argument": {"variable": "v2"}}},
+                    "argument": {"variable": "e"}}}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -2861,10 +3023,13 @@
                           "application": {
                             "function": {
                               "application": {
-                                "function": {"application": {"function": {"variable": "hydra.coders.Bicoder"}, "argument": {"variable": "t1"}}},
-                                "argument": {"variable": "t2"}}},
-                            "argument": {"variable": "v1"}}},
-                        "argument": {"variable": "v2"}}}}},
+                                "function": {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.coders.Bicoder"}, "argument": {"variable": "t1"}}},
+                                    "argument": {"variable": "t2"}}},
+                                "argument": {"variable": "v1"}}},
+                            "argument": {"variable": "v2"}}},
+                        "argument": {"variable": "e"}}}}},
                 "body": {
                   "lambda": {
                     "parameter": "newVal",
@@ -2882,10 +3047,13 @@
                                       "application": {
                                         "function": {
                                           "application": {
-                                            "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t2"}}},
-                                            "argument": {"variable": "t1"}}},
-                                        "argument": {"variable": "v2"}}},
-                                    "argument": {"variable": "v1"}}}}},
+                                            "function": {
+                                              "application": {
+                                                "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "t2"}}},
+                                                "argument": {"variable": "t1"}}},
+                                            "argument": {"variable": "v2"}}},
+                                        "argument": {"variable": "v1"}}},
+                                    "argument": {"variable": "e"}}}}},
                             "annotation": {
                               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function from target types to adapters"}}}]}}}}},
                     "body": {
@@ -7813,7 +7981,7 @@
       "term": {
         "name": "hydra.dsl.coders.coder",
         "signature": {
-          "typeParameters": [{"name": "v1", "constraints": []}, {"name": "v2", "constraints": []}],
+          "typeParameters": [{"name": "v1", "constraints": []}, {"name": "v2", "constraints": []}, {"name": "e", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
@@ -7823,19 +7991,12 @@
                   "argument": {
                     "annotated": {
                       "body": {
-                        "function": {
-                          "domain": {"variable": "hydra.typing.InferenceContext"},
-                          "codomain": {
-                            "function": {
-                              "domain": {"variable": "v1"},
-                              "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v2"}}}}}}},
+                        "function": {"domain": {"variable": "v1"}, "codomain": {"either": {"left": {"variable": "e"}, "right": {"variable": "v2"}}}}},
                       "annotation": {
                         "map": [
                           {
                             "key": {"variable": "description"},
-                            "value": {
-                              "literal": {
-                                "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}]}}}}},
+                            "value": {"literal": {"string": "A function which encodes a domain value to a codomain value, with the possibility of failure"}}}]}}}}},
               "isLazy": false},
             {
               "name": "arg1",
@@ -7845,19 +8006,12 @@
                   "argument": {
                     "annotated": {
                       "body": {
-                        "function": {
-                          "domain": {"variable": "hydra.typing.InferenceContext"},
-                          "codomain": {
-                            "function": {
-                              "domain": {"variable": "v2"},
-                              "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v1"}}}}}}},
+                        "function": {"domain": {"variable": "v2"}, "codomain": {"either": {"left": {"variable": "e"}, "right": {"variable": "v1"}}}}},
                       "annotation": {
                         "map": [
                           {
                             "key": {"variable": "description"},
-                            "value": {
-                              "literal": {
-                                "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}]}}}}},
+                            "value": {"literal": {"string": "A function which decodes a codomain value to a domain value, with the possibility of failure"}}}]}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -7865,8 +8019,11 @@
                 "function": {"variable": "hydra.typed.TypedTerm"},
                 "argument": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
-                    "argument": {"variable": "v2"}}}}}}},
+                    "function": {
+                      "application": {
+                        "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
+                        "argument": {"variable": "v2"}}},
+                    "argument": {"variable": "e"}}}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -7878,19 +8035,12 @@
                     "argument": {
                       "annotated": {
                         "body": {
-                          "function": {
-                            "domain": {"variable": "hydra.typing.InferenceContext"},
-                            "codomain": {
-                              "function": {
-                                "domain": {"variable": "v1"},
-                                "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v2"}}}}}}},
+                          "function": {"domain": {"variable": "v1"}, "codomain": {"either": {"left": {"variable": "e"}, "right": {"variable": "v2"}}}}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {
-                                "literal": {
-                                  "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}]}}}}},
+                              "value": {"literal": {"string": "A function which encodes a domain value to a codomain value, with the possibility of failure"}}}]}}}}},
                 "body": {
                   "lambda": {
                     "parameter": "decode",
@@ -7900,19 +8050,12 @@
                         "argument": {
                           "annotated": {
                             "body": {
-                              "function": {
-                                "domain": {"variable": "hydra.typing.InferenceContext"},
-                                "codomain": {
-                                  "function": {
-                                    "domain": {"variable": "v2"},
-                                    "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v1"}}}}}}},
+                              "function": {"domain": {"variable": "v2"}, "codomain": {"either": {"left": {"variable": "e"}, "right": {"variable": "v1"}}}}},
                             "annotation": {
                               "map": [
                                 {
                                   "key": {"variable": "description"},
-                                  "value": {
-                                    "literal": {
-                                      "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}]}}}}},
+                                  "value": {"literal": {"string": "A function which decodes a codomain value to a domain value, with the possibility of failure"}}}]}}}}},
                     "body": {
                       "wrap": {
                         "typeName": "hydra.typed.TypedTerm",
@@ -7954,7 +8097,7 @@
       "term": {
         "name": "hydra.dsl.coders.coderEncode",
         "signature": {
-          "typeParameters": [{"name": "v1", "constraints": []}, {"name": "v2", "constraints": []}],
+          "typeParameters": [{"name": "v1", "constraints": []}, {"name": "v2", "constraints": []}, {"name": "e", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
@@ -7963,8 +8106,11 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "application": {
-                      "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
-                      "argument": {"variable": "v2"}}}}},
+                      "function": {
+                        "application": {
+                          "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
+                          "argument": {"variable": "v2"}}},
+                      "argument": {"variable": "e"}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -7973,19 +8119,12 @@
                 "argument": {
                   "annotated": {
                     "body": {
-                      "function": {
-                        "domain": {"variable": "hydra.typing.InferenceContext"},
-                        "codomain": {
-                          "function": {
-                            "domain": {"variable": "v1"},
-                            "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v2"}}}}}}},
+                      "function": {"domain": {"variable": "v1"}, "codomain": {"either": {"left": {"variable": "e"}, "right": {"variable": "v2"}}}}},
                     "annotation": {
                       "map": [
                         {
                           "key": {"variable": "description"},
-                          "value": {
-                            "literal": {
-                              "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}]}}}}}}},
+                          "value": {"literal": {"string": "A function which encodes a domain value to a codomain value, with the possibility of failure"}}}]}}}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -7996,8 +8135,11 @@
                     "function": {"variable": "hydra.typed.TypedTerm"},
                     "argument": {
                       "application": {
-                        "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
-                        "argument": {"variable": "v2"}}}}},
+                        "function": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
+                            "argument": {"variable": "v2"}}},
+                        "argument": {"variable": "e"}}}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.typed.TypedTerm",
@@ -8037,7 +8179,7 @@
       "term": {
         "name": "hydra.dsl.coders.coderDecode",
         "signature": {
-          "typeParameters": [{"name": "v1", "constraints": []}, {"name": "v2", "constraints": []}],
+          "typeParameters": [{"name": "v1", "constraints": []}, {"name": "v2", "constraints": []}, {"name": "e", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
@@ -8046,8 +8188,11 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "application": {
-                      "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
-                      "argument": {"variable": "v2"}}}}},
+                      "function": {
+                        "application": {
+                          "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
+                          "argument": {"variable": "v2"}}},
+                      "argument": {"variable": "e"}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -8056,19 +8201,12 @@
                 "argument": {
                   "annotated": {
                     "body": {
-                      "function": {
-                        "domain": {"variable": "hydra.typing.InferenceContext"},
-                        "codomain": {
-                          "function": {
-                            "domain": {"variable": "v2"},
-                            "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v1"}}}}}}},
+                      "function": {"domain": {"variable": "v2"}, "codomain": {"either": {"left": {"variable": "e"}, "right": {"variable": "v1"}}}}},
                     "annotation": {
                       "map": [
                         {
                           "key": {"variable": "description"},
-                          "value": {
-                            "literal": {
-                              "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}]}}}}}}},
+                          "value": {"literal": {"string": "A function which decodes a codomain value to a domain value, with the possibility of failure"}}}]}}}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -8079,8 +8217,11 @@
                     "function": {"variable": "hydra.typed.TypedTerm"},
                     "argument": {
                       "application": {
-                        "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
-                        "argument": {"variable": "v2"}}}}},
+                        "function": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
+                            "argument": {"variable": "v2"}}},
+                        "argument": {"variable": "e"}}}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.typed.TypedTerm",
@@ -8120,7 +8261,7 @@
       "term": {
         "name": "hydra.dsl.coders.coderWithEncode",
         "signature": {
-          "typeParameters": [{"name": "v1", "constraints": []}, {"name": "v2", "constraints": []}],
+          "typeParameters": [{"name": "v1", "constraints": []}, {"name": "v2", "constraints": []}, {"name": "e", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
@@ -8129,8 +8270,11 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "application": {
-                      "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
-                      "argument": {"variable": "v2"}}}}},
+                      "function": {
+                        "application": {
+                          "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
+                          "argument": {"variable": "v2"}}},
+                      "argument": {"variable": "e"}}}}},
               "isLazy": false},
             {
               "name": "arg1",
@@ -8140,19 +8284,12 @@
                   "argument": {
                     "annotated": {
                       "body": {
-                        "function": {
-                          "domain": {"variable": "hydra.typing.InferenceContext"},
-                          "codomain": {
-                            "function": {
-                              "domain": {"variable": "v1"},
-                              "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v2"}}}}}}},
+                        "function": {"domain": {"variable": "v1"}, "codomain": {"either": {"left": {"variable": "e"}, "right": {"variable": "v2"}}}}},
                       "annotation": {
                         "map": [
                           {
                             "key": {"variable": "description"},
-                            "value": {
-                              "literal": {
-                                "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}]}}}}},
+                            "value": {"literal": {"string": "A function which encodes a domain value to a codomain value, with the possibility of failure"}}}]}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -8160,8 +8297,11 @@
                 "function": {"variable": "hydra.typed.TypedTerm"},
                 "argument": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
-                    "argument": {"variable": "v2"}}}}}}},
+                    "function": {
+                      "application": {
+                        "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
+                        "argument": {"variable": "v2"}}},
+                    "argument": {"variable": "e"}}}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -8172,8 +8312,11 @@
                     "function": {"variable": "hydra.typed.TypedTerm"},
                     "argument": {
                       "application": {
-                        "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
-                        "argument": {"variable": "v2"}}}}},
+                        "function": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
+                            "argument": {"variable": "v2"}}},
+                        "argument": {"variable": "e"}}}}},
                 "body": {
                   "lambda": {
                     "parameter": "newVal",
@@ -8183,19 +8326,12 @@
                         "argument": {
                           "annotated": {
                             "body": {
-                              "function": {
-                                "domain": {"variable": "hydra.typing.InferenceContext"},
-                                "codomain": {
-                                  "function": {
-                                    "domain": {"variable": "v1"},
-                                    "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v2"}}}}}}},
+                              "function": {"domain": {"variable": "v1"}, "codomain": {"either": {"left": {"variable": "e"}, "right": {"variable": "v2"}}}}},
                             "annotation": {
                               "map": [
                                 {
                                   "key": {"variable": "description"},
-                                  "value": {
-                                    "literal": {
-                                      "string": "A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}]}}}}},
+                                  "value": {"literal": {"string": "A function which encodes a domain value to a codomain value, with the possibility of failure"}}}]}}}}},
                     "body": {
                       "wrap": {
                         "typeName": "hydra.typed.TypedTerm",
@@ -8266,7 +8402,7 @@
       "term": {
         "name": "hydra.dsl.coders.coderWithDecode",
         "signature": {
-          "typeParameters": [{"name": "v1", "constraints": []}, {"name": "v2", "constraints": []}],
+          "typeParameters": [{"name": "v1", "constraints": []}, {"name": "v2", "constraints": []}, {"name": "e", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
@@ -8275,8 +8411,11 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "application": {
-                      "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
-                      "argument": {"variable": "v2"}}}}},
+                      "function": {
+                        "application": {
+                          "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
+                          "argument": {"variable": "v2"}}},
+                      "argument": {"variable": "e"}}}}},
               "isLazy": false},
             {
               "name": "arg1",
@@ -8286,19 +8425,12 @@
                   "argument": {
                     "annotated": {
                       "body": {
-                        "function": {
-                          "domain": {"variable": "hydra.typing.InferenceContext"},
-                          "codomain": {
-                            "function": {
-                              "domain": {"variable": "v2"},
-                              "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v1"}}}}}}},
+                        "function": {"domain": {"variable": "v2"}, "codomain": {"either": {"left": {"variable": "e"}, "right": {"variable": "v1"}}}}},
                       "annotation": {
                         "map": [
                           {
                             "key": {"variable": "description"},
-                            "value": {
-                              "literal": {
-                                "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}]}}}}},
+                            "value": {"literal": {"string": "A function which decodes a codomain value to a domain value, with the possibility of failure"}}}]}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -8306,8 +8438,11 @@
                 "function": {"variable": "hydra.typed.TypedTerm"},
                 "argument": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
-                    "argument": {"variable": "v2"}}}}}}},
+                    "function": {
+                      "application": {
+                        "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
+                        "argument": {"variable": "v2"}}},
+                    "argument": {"variable": "e"}}}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -8318,8 +8453,11 @@
                     "function": {"variable": "hydra.typed.TypedTerm"},
                     "argument": {
                       "application": {
-                        "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
-                        "argument": {"variable": "v2"}}}}},
+                        "function": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "v1"}}},
+                            "argument": {"variable": "v2"}}},
+                        "argument": {"variable": "e"}}}}},
                 "body": {
                   "lambda": {
                     "parameter": "newVal",
@@ -8329,19 +8467,12 @@
                         "argument": {
                           "annotated": {
                             "body": {
-                              "function": {
-                                "domain": {"variable": "hydra.typing.InferenceContext"},
-                                "codomain": {
-                                  "function": {
-                                    "domain": {"variable": "v2"},
-                                    "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "v1"}}}}}}},
+                              "function": {"domain": {"variable": "v2"}, "codomain": {"either": {"left": {"variable": "e"}, "right": {"variable": "v1"}}}}},
                             "annotation": {
                               "map": [
                                 {
                                   "key": {"variable": "description"},
-                                  "value": {
-                                    "literal": {
-                                      "string": "A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing"}}}]}}}}},
+                                  "value": {"literal": {"string": "A function which decodes a codomain value to a domain value, with the possibility of failure"}}}]}}}}},
                     "body": {
                       "wrap": {
                         "typeName": "hydra.typed.TypedTerm",

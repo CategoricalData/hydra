@@ -67,11 +67,11 @@ edgePropertyToGraphson :: (t0 -> Either t1 t2) -> (PgModel.PropertyKey, t0) -> E
 edgePropertyToGraphson encodeValue prop =
     Eithers.map (\gv -> (Syntax.PropertyKey (PgModel.unPropertyKey (Pairs.first prop)), gv)) (encodeValue (Pairs.second prop))
 -- | A coder that converts GraphSON vertices to JSON. Decoding is not supported.
-graphsonVertexToJsonCoder :: Coders.Coder Syntax.Vertex JsonModel.Value
+graphsonVertexToJsonCoder :: Coders.Coder Syntax.Vertex JsonModel.Value Errors.Error
 graphsonVertexToJsonCoder =
     Coders.Coder {
-      Coders.coderEncode = (\_cx -> \v -> Right (Coder.vertexToJson v)),
-      Coders.coderDecode = (\_cx -> \_ -> Left (Errors.ErrorOther (Errors.OtherError "decoding GraphSON JSON is currently unsupported")))}
+      Coders.coderEncode = (\v -> Right (Coder.vertexToJson v)),
+      Coders.coderDecode = (\_ -> Left (Errors.ErrorOther (Errors.OtherError "decoding GraphSON JSON is currently unsupported")))}
 -- | Convert a property graph vertex with adjacent edges to a GraphSON vertex
 pgVertexWithAdjacentEdgesToGraphsonVertex :: (t0 -> Either t1 Syntax.Value) -> PgModel.VertexWithAdjacentEdges t0 -> Either t1 Syntax.Vertex
 pgVertexWithAdjacentEdgesToGraphsonVertex encodeValue vae =

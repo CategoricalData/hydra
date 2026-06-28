@@ -8,7 +8,6 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.File as File
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -17,7 +16,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | A two-level bidirectional encoder which adapts types to types and terms to terms
-data Adapter t1 t2 v1 v2 =
+data Adapter t1 t2 v1 v2 e =
   Adapter {
     -- | Whether information may be lost in the course of this adaptation
     adapterIsLossy :: Bool,
@@ -26,7 +25,7 @@ data Adapter t1 t2 v1 v2 =
     -- | The target type
     adapterTarget :: t2,
     -- | The coder for transforming instances of the source type to instances of the target type
-    adapterCoder :: (Coder v1 v2)}
+    adapterCoder :: (Coder v1 v2 e)}
 
 _Adapter = Core.Name "hydra.coders.Adapter"
 
@@ -46,7 +45,7 @@ data AdapterContext =
     -- | The language being encoded or decoded
     adapterContextLanguage :: Language,
     -- | A map of type names to adapters for those types
-    adapterContextAdapters :: (M.Map Core.Name (Adapter Core.Type Core.Type Core.Term Core.Term))}
+    adapterContextAdapters :: (M.Map Core.Name (Adapter Core.Type Core.Type Core.Term Core.Term Errors.Error))}
 
 _AdapterContext = Core.Name "hydra.coders.AdapterContext"
 
@@ -57,12 +56,12 @@ _AdapterContext_language = Core.Name "language"
 _AdapterContext_adapters = Core.Name "adapters"
 
 -- | A two-level encoder and decoder, operating both at a type level and an instance (data) level
-data Bicoder t1 t2 v1 v2 =
+data Bicoder t1 t2 v1 v2 e =
   Bicoder {
     -- | A function from source types to adapters
-    bicoderEncode :: (t1 -> Adapter t1 t2 v1 v2),
+    bicoderEncode :: (t1 -> Adapter t1 t2 v1 v2 e),
     -- | A function from target types to adapters
-    bicoderDecode :: (t2 -> Adapter t2 t1 v2 v1)}
+    bicoderDecode :: (t2 -> Adapter t2 t1 v2 v1 e)}
 
 _Bicoder = Core.Name "hydra.coders.Bicoder"
 
@@ -117,13 +116,13 @@ _CaseConventions_type = Core.Name "type"
 
 _CaseConventions_typeVariable = Core.Name "typeVariable"
 
--- | An encoder and decoder; a bidirectional transformation between two types
-data Coder v1 v2 =
+-- | An encoder and decoder; a pair of partial functions between two types
+data Coder v1 v2 e =
   Coder {
-    -- | A function which encodes source values as target values, given an InferenceContext for fresh-variable state and subterm-path tracing
-    coderEncode :: (Typing.InferenceContext -> v1 -> Either Errors.Error v2),
-    -- | A function which decodes target values as source values, given an InferenceContext for fresh-variable state and subterm-path tracing
-    coderDecode :: (Typing.InferenceContext -> v2 -> Either Errors.Error v1)}
+    -- | A function which encodes a domain value to a codomain value, with the possibility of failure
+    coderEncode :: (v1 -> Either e v2),
+    -- | A function which decodes a codomain value to a domain value, with the possibility of failure
+    coderDecode :: (v2 -> Either e v1)}
 
 _Coder = Core.Name "hydra.coders.Coder"
 
@@ -226,7 +225,7 @@ newtype LanguageName =
 _LanguageName = Core.Name "hydra.coders.LanguageName"
 
 -- | A bidirectional encoder which maps between the same type and term languages on either side
-type SymmetricAdapter t v = (Adapter t t v v)
+type SymmetricAdapter t v e = (Adapter t t v v e)
 
 _SymmetricAdapter = Core.Name "hydra.coders.SymmetricAdapter"
 
@@ -245,6 +244,6 @@ _TraversalOrder_pre = Core.Name "pre"
 _TraversalOrder_post = Core.Name "post"
 
 -- | A function which maps a Hydra type to a symmetric adapter between types and terms
-type TypeAdapter = (AdapterContext -> Core.Type -> Either String (SymmetricAdapter Core.Type Core.Term))
+type TypeAdapter = (AdapterContext -> Core.Type -> Either String (SymmetricAdapter Core.Type Core.Term String))
 
 _TypeAdapter = Core.Name "hydra.coders.TypeAdapter"

@@ -6,10 +6,12 @@
     {"module": "hydra.typed"},
     {"module": "hydra.core"},
     {"module": "hydra.coders"},
+    {"module": "hydra.errors"},
     {"module": "hydra.avro.schema"},
     {"module": "hydra.json.model"},
     {"module": "hydra.dsl.core"},
     {"module": "hydra.dsl.coders"},
+    {"module": "hydra.dsl.errors"},
     {"module": "hydra.dsl.avro.schema"},
     {"module": "hydra.dsl.json.model"}],
   "definitions": [
@@ -1399,10 +1401,13 @@
                                   "function": {
                                     "application": {
                                       "function": {
-                                        "application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.avro.schema.Schema"}}},
-                                      "argument": {"variable": "hydra.core.Type"}}},
-                                  "argument": {"variable": "hydra.json.model.Value"}}},
-                              "argument": {"variable": "hydra.core.Term"}}}}},
+                                        "application": {
+                                          "function": {
+                                            "application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.avro.schema.Schema"}}},
+                                          "argument": {"variable": "hydra.core.Type"}}},
+                                      "argument": {"variable": "hydra.json.model.Value"}}},
+                                  "argument": {"variable": "hydra.core.Term"}}},
+                              "argument": {"variable": "hydra.errors.Error"}}}}},
                       "annotation": {
                         "map": [
                           {
@@ -1452,10 +1457,13 @@
                                     "function": {
                                       "application": {
                                         "function": {
-                                          "application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.avro.schema.Schema"}}},
-                                        "argument": {"variable": "hydra.core.Type"}}},
-                                    "argument": {"variable": "hydra.json.model.Value"}}},
-                                "argument": {"variable": "hydra.core.Term"}}}}},
+                                          "application": {
+                                            "function": {
+                                              "application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.avro.schema.Schema"}}},
+                                            "argument": {"variable": "hydra.core.Type"}}},
+                                        "argument": {"variable": "hydra.json.model.Value"}}},
+                                    "argument": {"variable": "hydra.core.Term"}}},
+                                "argument": {"variable": "hydra.errors.Error"}}}}},
                         "annotation": {
                           "map": [
                             {
@@ -1556,10 +1564,13 @@
                                 "function": {
                                   "application": {
                                     "function": {
-                                      "application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.avro.schema.Schema"}}},
-                                    "argument": {"variable": "hydra.core.Type"}}},
-                                "argument": {"variable": "hydra.json.model.Value"}}},
-                            "argument": {"variable": "hydra.core.Term"}}}}},
+                                      "application": {
+                                        "function": {
+                                          "application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.avro.schema.Schema"}}},
+                                        "argument": {"variable": "hydra.core.Type"}}},
+                                    "argument": {"variable": "hydra.json.model.Value"}}},
+                                "argument": {"variable": "hydra.core.Term"}}},
+                            "argument": {"variable": "hydra.errors.Error"}}}}},
                     "annotation": {
                       "map": [
                         {
@@ -1759,10 +1770,13 @@
                                   "function": {
                                     "application": {
                                       "function": {
-                                        "application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.avro.schema.Schema"}}},
-                                      "argument": {"variable": "hydra.core.Type"}}},
-                                  "argument": {"variable": "hydra.json.model.Value"}}},
-                              "argument": {"variable": "hydra.core.Term"}}}}},
+                                        "application": {
+                                          "function": {
+                                            "application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.avro.schema.Schema"}}},
+                                          "argument": {"variable": "hydra.core.Type"}}},
+                                      "argument": {"variable": "hydra.json.model.Value"}}},
+                                  "argument": {"variable": "hydra.core.Term"}}},
+                              "argument": {"variable": "hydra.errors.Error"}}}}},
                       "annotation": {
                         "map": [
                           {
@@ -1797,10 +1811,13 @@
                                         "function": {
                                           "application": {
                                             "function": {
-                                              "application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.avro.schema.Schema"}}},
-                                            "argument": {"variable": "hydra.core.Type"}}},
-                                        "argument": {"variable": "hydra.json.model.Value"}}},
-                                    "argument": {"variable": "hydra.core.Term"}}}}},
+                                              "application": {
+                                                "function": {
+                                                  "application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.avro.schema.Schema"}}},
+                                                "argument": {"variable": "hydra.core.Type"}}},
+                                            "argument": {"variable": "hydra.json.model.Value"}}},
+                                        "argument": {"variable": "hydra.core.Term"}}},
+                                    "argument": {"variable": "hydra.errors.Error"}}}}},
                             "annotation": {
                               "map": [
                                 {
@@ -2225,10 +2242,13 @@
                                 "application": {
                                   "function": {
                                     "application": {
-                                      "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.core.Type"}}},
-                                      "argument": {"variable": "hydra.avro.schema.Schema"}}},
-                                  "argument": {"variable": "hydra.core.Term"}}},
-                              "argument": {"variable": "hydra.json.model.Value"}}}}},
+                                      "function": {
+                                        "application": {
+                                          "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.core.Type"}}},
+                                          "argument": {"variable": "hydra.avro.schema.Schema"}}},
+                                      "argument": {"variable": "hydra.core.Term"}}},
+                                  "argument": {"variable": "hydra.json.model.Value"}}},
+                              "argument": {"variable": "hydra.errors.Error"}}}}},
                       "annotation": {
                         "map": [
                           {
@@ -2270,10 +2290,13 @@
                                       "application": {
                                         "function": {
                                           "application": {
-                                            "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.core.Type"}}},
-                                            "argument": {"variable": "hydra.avro.schema.Schema"}}},
-                                        "argument": {"variable": "hydra.core.Term"}}},
-                                    "argument": {"variable": "hydra.json.model.Value"}}}}},
+                                            "function": {
+                                              "application": {
+                                                "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.core.Type"}}},
+                                                "argument": {"variable": "hydra.avro.schema.Schema"}}},
+                                            "argument": {"variable": "hydra.core.Term"}}},
+                                        "argument": {"variable": "hydra.json.model.Value"}}},
+                                    "argument": {"variable": "hydra.errors.Error"}}}}},
                             "annotation": {
                               "map": [
                                 {
@@ -2413,10 +2436,13 @@
                               "application": {
                                 "function": {
                                   "application": {
-                                    "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.core.Type"}}},
-                                    "argument": {"variable": "hydra.avro.schema.Schema"}}},
-                                "argument": {"variable": "hydra.core.Term"}}},
-                            "argument": {"variable": "hydra.json.model.Value"}}}}},
+                                    "function": {
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.core.Type"}}},
+                                        "argument": {"variable": "hydra.avro.schema.Schema"}}},
+                                    "argument": {"variable": "hydra.core.Term"}}},
+                                "argument": {"variable": "hydra.json.model.Value"}}},
+                            "argument": {"variable": "hydra.errors.Error"}}}}},
                     "annotation": {
                       "map": [
                         {
@@ -2610,10 +2636,13 @@
                                 "application": {
                                   "function": {
                                     "application": {
-                                      "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.core.Type"}}},
-                                      "argument": {"variable": "hydra.avro.schema.Schema"}}},
-                                  "argument": {"variable": "hydra.core.Term"}}},
-                              "argument": {"variable": "hydra.json.model.Value"}}}}},
+                                      "function": {
+                                        "application": {
+                                          "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.core.Type"}}},
+                                          "argument": {"variable": "hydra.avro.schema.Schema"}}},
+                                      "argument": {"variable": "hydra.core.Term"}}},
+                                  "argument": {"variable": "hydra.json.model.Value"}}},
+                              "argument": {"variable": "hydra.errors.Error"}}}}},
                       "annotation": {
                         "map": [
                           {
@@ -2651,10 +2680,13 @@
                                       "application": {
                                         "function": {
                                           "application": {
-                                            "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.core.Type"}}},
-                                            "argument": {"variable": "hydra.avro.schema.Schema"}}},
-                                        "argument": {"variable": "hydra.core.Term"}}},
-                                    "argument": {"variable": "hydra.json.model.Value"}}}}},
+                                            "function": {
+                                              "application": {
+                                                "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.core.Type"}}},
+                                                "argument": {"variable": "hydra.avro.schema.Schema"}}},
+                                            "argument": {"variable": "hydra.core.Term"}}},
+                                        "argument": {"variable": "hydra.json.model.Value"}}},
+                                    "argument": {"variable": "hydra.errors.Error"}}}}},
                             "annotation": {
                               "map": [
                                 {

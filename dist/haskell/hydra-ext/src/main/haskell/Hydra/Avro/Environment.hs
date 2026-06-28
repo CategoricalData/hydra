@@ -5,6 +5,7 @@ module Hydra.Avro.Environment where
 import qualified Hydra.Avro.Schema as Schema
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.Errors as Errors
 import qualified Hydra.Json.Model as Model
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
@@ -44,7 +45,7 @@ _AvroPrimaryKey_constructor = Core.Name "constructor"
 data AvroEnvironment =
   AvroEnvironment {
     -- | Named adapters for previously processed schemas
-    avroEnvironmentNamedAdapters :: (M.Map AvroQualifiedName (Coders.Adapter Schema.Schema Core.Type Model.Value Core.Term)),
+    avroEnvironmentNamedAdapters :: (M.Map AvroQualifiedName (Coders.Adapter Schema.Schema Core.Type Model.Value Core.Term Errors.Error)),
     -- | The current Avro namespace
     avroEnvironmentNamespace :: (Maybe String),
     -- | Generated Hydra elements
@@ -59,7 +60,7 @@ data EncodeEnvironment =
     -- | All named types available for reference
     encodeEnvironmentTypeMap :: (M.Map Core.Name Core.Type),
     -- | Adapters for types that have already been fully emitted (emit references for these)
-    encodeEnvironmentEmitted :: (M.Map Core.Name (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value))}
+    encodeEnvironmentEmitted :: (M.Map Core.Name (Coders.Adapter Core.Type Schema.Schema Core.Term Model.Value Errors.Error))}
 _EncodeEnvironment = Core.Name "hydra.avro.environment.EncodeEnvironment"
 _EncodeEnvironment_typeMap = Core.Name "typeMap"
 _EncodeEnvironment_emitted = Core.Name "emitted"

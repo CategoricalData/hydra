@@ -1,7 +1,12 @@
 {
   "name": "hydra.avro.environment",
   "metadata": {"description": "Type definitions for the Avro code generation environment", "comments": [], "seeAlso": []},
-  "dependencies": [{"module": "hydra.core"}, {"module": "hydra.coders"}, {"module": "hydra.avro.schema"}, {"module": "hydra.json.model"}],
+  "dependencies": [
+    {"module": "hydra.core"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.avro.schema"},
+    {"module": "hydra.json.model"}],
   "definitions": [
     {
       "type": {
@@ -114,10 +119,13 @@
                                     "function": {
                                       "application": {
                                         "function": {
-                                          "application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.avro.schema.Schema"}}},
-                                        "argument": {"variable": "hydra.core.Type"}}},
-                                    "argument": {"variable": "hydra.json.model.Value"}}},
-                                "argument": {"variable": "hydra.core.Term"}}}}},
+                                          "application": {
+                                            "function": {
+                                              "application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.avro.schema.Schema"}}},
+                                            "argument": {"variable": "hydra.core.Type"}}},
+                                        "argument": {"variable": "hydra.json.model.Value"}}},
+                                    "argument": {"variable": "hydra.core.Term"}}},
+                                "argument": {"variable": "hydra.errors.Error"}}}}},
                         "annotation": {
                           "map": [
                             {
@@ -167,10 +175,13 @@
                                   "application": {
                                     "function": {
                                       "application": {
-                                        "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.core.Type"}}},
-                                        "argument": {"variable": "hydra.avro.schema.Schema"}}},
-                                    "argument": {"variable": "hydra.core.Term"}}},
-                                "argument": {"variable": "hydra.json.model.Value"}}}}},
+                                        "function": {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.coders.Adapter"}, "argument": {"variable": "hydra.core.Type"}}},
+                                            "argument": {"variable": "hydra.avro.schema.Schema"}}},
+                                        "argument": {"variable": "hydra.core.Term"}}},
+                                    "argument": {"variable": "hydra.json.model.Value"}}},
+                                "argument": {"variable": "hydra.errors.Error"}}}}},
                         "annotation": {
                           "map": [
                             {
