@@ -40,6 +40,7 @@ module_ = Module {
       termDefinition,
       typeDefinition,
       version,
+      versionRange,
       versionSpecifier]
 
 definition :: TypeDefinition
@@ -279,13 +280,31 @@ version = define "Version" $
 versionSpecifier :: TypeDefinition
 versionSpecifier = define "VersionSpecifier" $
   doc ("A specifier constraining acceptable versions of a dependency."
-    ++ " The `any` and `exact` variants are defined; future variants"
-    ++ " such as `caret` and `range` may be added without breaking"
-    ++ " consumers of the existing forms.") $
+    ++ " Build systems render each variant into their own syntax (e.g. a range"
+    ++ " becomes \">=3.7,<4.0\" for PyPI or \"[3.7,4.0)\" for Maven). Further"
+    ++ " variants such as `caret` may be added without breaking consumers of"
+    ++ " the existing forms.") $
   T.union [
     "any">:
       doc "Any version satisfies the dependency" $
       T.unit,
     "exact">:
       doc "Exactly the given version satisfies the dependency; used to pin a specific release"
-      version]
+      version,
+    "atLeast">:
+      doc "Any version greater than or equal to the given version (e.g. PyPI \">=7.0\")"
+      version,
+    "range">:
+      doc "A version range with an optional inclusive lower bound and optional exclusive upper bound (e.g. \">=3.7,<4.0\")"
+      versionRange]
+
+versionRange :: TypeDefinition
+versionRange = define "VersionRange" $
+  doc "A version range with an optional inclusive lower bound and an optional exclusive upper bound." $
+  T.record [
+    "lowerInclusive">:
+      doc "The inclusive lower bound, if any (the minimum acceptable version)." $
+      T.optional version,
+    "upperExclusive">:
+      doc "The exclusive upper bound, if any (versions strictly below this are acceptable)." $
+      T.optional version]
