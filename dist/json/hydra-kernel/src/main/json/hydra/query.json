@@ -12,12 +12,12 @@
             "annotated": {
               "body": {
                 "union": [
-                  {"name": "equal", "type": {"unit": {}}},
-                  {"name": "notEqual", "type": {"unit": {}}},
-                  {"name": "lessThan", "type": {"unit": {}}},
-                  {"name": "greaterThan", "type": {"unit": {}}},
-                  {"name": "lessThanOrEqual", "type": {"unit": {}}},
-                  {"name": "greaterThanOrEqual", "type": {"unit": {}}}]},
+                  {"name": "equal", "type": "unit"},
+                  {"name": "notEqual", "type": "unit"},
+                  {"name": "lessThan", "type": "unit"},
+                  {"name": "greaterThan", "type": "unit"},
+                  {"name": "lessThanOrEqual", "type": "unit"},
+                  {"name": "greaterThanOrEqual", "type": "unit"}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "One of several comparison operators"}}}]}}}}}},
     {
       "type": {
@@ -120,7 +120,7 @@
                     "name": "wildcard",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -314,13 +314,13 @@
                     "name": "min",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The minimum value (inclusive)"}}}]}}}},
                   {
                     "name": "max",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The maximum value (inclusive)"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A range from min to max, inclusive"}}}]}}}}}},
     {
@@ -336,14 +336,14 @@
                     "name": "one",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "No quantifier; matches a single occurrence"}}}]}}}},
                   {
                     "name": "zeroOrOne",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -353,7 +353,7 @@
                     "name": "zeroOrMore",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -363,7 +363,7 @@
                     "name": "oneOrMore",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -373,7 +373,7 @@
                     "name": "exactly",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {
                           "map": [
                             {
@@ -383,7 +383,7 @@
                     "name": "atLeast",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {
                           "map": [
                             {
@@ -497,5 +497,5 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A query variable"}}}]}}}}}}]}

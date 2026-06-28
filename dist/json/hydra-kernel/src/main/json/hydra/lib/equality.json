@@ -65,7 +65,7 @@
           "parameters": [
             {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
             {"name": "arg1", "type": {"variable": "x"}, "isLazy": false}],
-          "result": {"type": {"literal": {"boolean": {}}}}},
+          "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -83,7 +83,7 @@
           "parameters": [
             {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
             {"name": "arg1", "type": {"variable": "x"}, "isLazy": false}],
-          "result": {"type": {"literal": {"boolean": {}}}}},
+          "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -101,7 +101,7 @@
           "parameters": [
             {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
             {"name": "arg1", "type": {"variable": "x"}, "isLazy": false}],
-          "result": {"type": {"literal": {"boolean": {}}}}},
+          "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -133,7 +133,7 @@
           "parameters": [
             {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
             {"name": "arg1", "type": {"variable": "x"}, "isLazy": false}],
-          "result": {"type": {"literal": {"boolean": {}}}}},
+          "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -151,7 +151,7 @@
           "parameters": [
             {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
             {"name": "arg1", "type": {"variable": "x"}, "isLazy": false}],
-          "result": {"type": {"literal": {"boolean": {}}}}},
+          "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
     {

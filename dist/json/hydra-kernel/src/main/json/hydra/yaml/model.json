@@ -47,13 +47,13 @@
                     "name": "bool",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Represents a true/false value"}}}]}}}},
                   {
                     "name": "decimal",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"decimal": {}}},
+                        "body": {"literal": "decimal"},
                         "annotation": {
                           "map": [
                             {
@@ -63,14 +63,14 @@
                     "name": "float",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"float": {"float64": {}}}},
+                        "body": {"literal": {"float": "float64"}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Represents an approximation to real numbers"}}}]}}}},
                   {
                     "name": "int",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"bigint": {}}}},
+                        "body": {"literal": {"integer": "bigint"}},
                         "annotation": {
                           "map": [
                             {
@@ -80,13 +80,13 @@
                     "name": "null",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Represents the lack of a value"}}}]}}}},
                   {
                     "name": "str",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A string value"}}}]}}}}]},
               "annotation": {
                 "map": [

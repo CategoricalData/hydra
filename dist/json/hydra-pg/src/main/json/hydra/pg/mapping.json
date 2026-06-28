@@ -15,21 +15,21 @@
             "annotated": {
               "body": {
                 "record": [
-                  {"name": "vertexLabel", "type": {"literal": {"string": {}}}},
-                  {"name": "edgeLabel", "type": {"literal": {"string": {}}}},
-                  {"name": "vertexId", "type": {"literal": {"string": {}}}},
-                  {"name": "edgeId", "type": {"literal": {"string": {}}}},
-                  {"name": "propertyKey", "type": {"literal": {"string": {}}}},
-                  {"name": "propertyValue", "type": {"literal": {"string": {}}}},
-                  {"name": "outVertex", "type": {"literal": {"string": {}}}},
-                  {"name": "outVertexLabel", "type": {"literal": {"string": {}}}},
-                  {"name": "inVertex", "type": {"literal": {"string": {}}}},
-                  {"name": "inVertexLabel", "type": {"literal": {"string": {}}}},
-                  {"name": "outEdge", "type": {"literal": {"string": {}}}},
-                  {"name": "outEdgeLabel", "type": {"literal": {"string": {}}}},
-                  {"name": "inEdge", "type": {"literal": {"string": {}}}},
-                  {"name": "inEdgeLabel", "type": {"literal": {"string": {}}}},
-                  {"name": "ignore", "type": {"literal": {"string": {}}}}]},
+                  {"name": "vertexLabel", "type": {"literal": "string"}},
+                  {"name": "edgeLabel", "type": {"literal": "string"}},
+                  {"name": "vertexId", "type": {"literal": "string"}},
+                  {"name": "edgeId", "type": {"literal": "string"}},
+                  {"name": "propertyKey", "type": {"literal": "string"}},
+                  {"name": "propertyValue", "type": {"literal": "string"}},
+                  {"name": "outVertex", "type": {"literal": "string"}},
+                  {"name": "outVertexLabel", "type": {"literal": "string"}},
+                  {"name": "inVertex", "type": {"literal": "string"}},
+                  {"name": "inVertexLabel", "type": {"literal": "string"}},
+                  {"name": "outEdge", "type": {"literal": "string"}},
+                  {"name": "outEdgeLabel", "type": {"literal": "string"}},
+                  {"name": "inEdge", "type": {"literal": "string"}},
+                  {"name": "inEdgeLabel", "type": {"literal": "string"}},
+                  {"name": "ignore", "type": {"literal": "string"}}]},
               "annotation": {
                 "map": [
                   {
@@ -224,7 +224,7 @@
                     "name": "value",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -234,7 +234,7 @@
                     "name": "pattern",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {
                           "map": [
                             {

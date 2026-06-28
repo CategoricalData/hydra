@@ -27,9 +27,7 @@
         "body": {
           "variables": [],
           "body": {
-            "record": [
-              {"name": "min", "type": {"literal": {"float": {"float64": {}}}}},
-              {"name": "max", "type": {"literal": {"float": {"float64": {}}}}}]}}}},
+            "record": [{"name": "min", "type": {"literal": {"float": "float64"}}}, {"name": "max", "type": {"literal": {"float": "float64"}}}]}}}},
     {
       "type": {
         "name": "hydra.geojson.model.Feature",
@@ -55,7 +53,7 @@
                     "name": "properties",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "hydra.json.model.Value"}}}},
+                        "body": {"optional": {"map": {"keys": {"literal": "string"}, "values": {"variable": "hydra.json.model.Value"}}}},
                         "annotation": {
                           "map": [
                             {
@@ -148,9 +146,7 @@
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "number", "type": {"literal": {"float": {"float64": {}}}}},
-              {"name": "string", "type": {"literal": {"string": {}}}}]}}}},
+            "union": [{"name": "number", "type": {"literal": {"float": "float64"}}}, {"name": "string", "type": {"literal": "string"}}]}}}},
     {
       "type": {
         "name": "hydra.geojson.model.LineString",
@@ -277,9 +273,9 @@
             "annotated": {
               "body": {
                 "record": [
-                  {"name": "latitude", "type": {"literal": {"float": {"float64": {}}}}},
-                  {"name": "longitude", "type": {"literal": {"float": {"float64": {}}}}},
-                  {"name": "altitude", "type": {"optional": {"literal": {"float": {"float64": {}}}}}}]},
+                  {"name": "latitude", "type": {"literal": {"float": "float64"}}},
+                  {"name": "longitude", "type": {"literal": {"float": "float64"}}},
+                  {"name": "altitude", "type": {"optional": {"literal": {"float": "float64"}}}}]},
               "annotation": {
                 "map": [
                   {

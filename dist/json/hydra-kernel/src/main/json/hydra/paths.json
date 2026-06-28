@@ -81,13 +81,13 @@
                     "name": "label",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable label for the node"}}}]}}}},
                   {
                     "name": "id",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unique identifier for the node"}}}]}}}}]},
               "annotation": {
                 "map": [
@@ -120,34 +120,34 @@
                     "name": "annotatedBody",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the body of an annotated term"}}}]}}}},
                   {
                     "name": "applicationFunction",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the function of an application term"}}}]}}}},
                   {
                     "name": "applicationArgument",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the argument of an application term"}}}]}}}},
                   {
                     "name": "lambdaBody",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the body of a lambda term"}}}]}}}},
                   {
                     "name": "unionCasesDefault",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {"key": {"variable": "description"}, "value": {"literal": {"string": "Access the default case of a union elimination"}}}]}}}},
@@ -165,7 +165,7 @@
                     "name": "letBody",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the body of a let term"}}}]}}}},
                   {
                     "name": "letBinding",
@@ -181,26 +181,26 @@
                     "name": "listElement",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access an element of a list by index"}}}]}}}},
                   {
                     "name": "mapKey",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access a key in a map by index"}}}]}}}},
                   {
                     "name": "mapValue",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access a value in a map by index"}}}]}}}},
                   {
                     "name": "optionalTerm",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -210,7 +210,7 @@
                     "name": "productTerm",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {
                           "map": [
                             {
@@ -227,41 +227,41 @@
                     "name": "setElement",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access an element of a set by index"}}}]}}}},
                   {
                     "name": "sumTerm",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the term inside a sum variant"}}}]}}}},
                   {
                     "name": "typeLambdaBody",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the body of a type lambda term"}}}]}}}},
                   {
                     "name": "typeApplicationTerm",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the term being applied to a type"}}}]}}}},
                   {
                     "name": "injectionTerm",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the term inside a union injection"}}}]}}}},
                   {
                     "name": "wrappedTerm",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the term inside a wrapped term"}}}]}}}}]},
               "annotation": {
@@ -347,13 +347,13 @@
                     "name": "label",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable label for the node"}}}]}}}},
                   {
                     "name": "id",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unique identifier for the node"}}}]}}}}]},
               "annotation": {
                 "map": [
@@ -386,42 +386,42 @@
                     "name": "annotatedBody",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the body of an annotated type"}}}]}}}},
                   {
                     "name": "applicationFunction",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the function of an application type"}}}]}}}},
                   {
                     "name": "applicationArgument",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the argument of an application type"}}}]}}}},
                   {
                     "name": "eitherLeft",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the left type of an either type"}}}]}}}},
                   {
                     "name": "eitherRight",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the right type of an either type"}}}]}}}},
                   {
                     "name": "forallBody",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -431,54 +431,54 @@
                     "name": "functionDomain",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the domain type of a function type"}}}]}}}},
                   {
                     "name": "functionCodomain",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the codomain type of a function type"}}}]}}}},
                   {
                     "name": "listElement",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the element type of a list type"}}}]}}}},
                   {
                     "name": "mapKeys",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the key type of a map type"}}}]}}}},
                   {
                     "name": "mapValues",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the value type of a map type"}}}]}}}},
                   {
                     "name": "optionalElement",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the element type of an optional type"}}}]}}}},
                   {
                     "name": "pairFirst",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the first type of a pair type"}}}]}}}},
                   {
                     "name": "pairSecond",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the second type of a pair type"}}}]}}}},
                   {
@@ -495,7 +495,7 @@
                     "name": "setElement",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the element type of a set type"}}}]}}}},
                   {
@@ -512,7 +512,7 @@
                     "name": "wrappedType",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Access the type inside a wrapped type"}}}]}}}}]},
               "annotation": {

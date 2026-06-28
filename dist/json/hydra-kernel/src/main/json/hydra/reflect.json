@@ -1,7 +1,7 @@
 {
   "name": "hydra.reflect",
   "metadata": {
-    "description": "Reflection functions for working with term, type, and literal type variants, as well as numeric precision. ",
+    "description": "Reflection functions for working with term, type, and literal type variants, as well as numeric precision.",
     "comments": [],
     "seeAlso": []},
   "dependencies": [

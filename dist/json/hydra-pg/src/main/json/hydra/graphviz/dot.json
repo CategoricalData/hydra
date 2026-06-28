@@ -6,7 +6,7 @@
     "seeAlso": []},
   "dependencies": [{"module": "hydra.core"}],
   "definitions": [
-    {"type": {"name": "hydra.graphviz.dot.Id", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+    {"type": {"name": "hydra.graphviz.dot.Id", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
     {
       "type": {
         "name": "hydra.graphviz.dot.Graph",
@@ -14,8 +14,8 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "strict", "type": {"literal": {"boolean": {}}}},
-              {"name": "directed", "type": {"literal": {"boolean": {}}}},
+              {"name": "strict", "type": {"literal": "boolean"}},
+              {"name": "directed", "type": {"literal": "boolean"}},
               {"name": "id", "type": {"optional": {"variable": "hydra.graphviz.dot.Id"}}},
               {"name": "statements", "type": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}}]}}}},
     {
@@ -53,11 +53,7 @@
         "name": "hydra.graphviz.dot.AttrType",
         "body": {
           "variables": [],
-          "body": {
-            "union": [
-              {"name": "graph", "type": {"unit": {}}},
-              {"name": "node", "type": {"unit": {}}},
-              {"name": "edge", "type": {"unit": {}}}]}}}},
+          "body": {"union": [{"name": "graph", "type": "unit"}, {"name": "node", "type": "unit"}, {"name": "edge", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.graphviz.dot.AttrList",
@@ -128,13 +124,13 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "n", "type": {"unit": {}}},
-              {"name": "ne", "type": {"unit": {}}},
-              {"name": "e", "type": {"unit": {}}},
-              {"name": "se", "type": {"unit": {}}},
-              {"name": "s", "type": {"unit": {}}},
-              {"name": "sw", "type": {"unit": {}}},
-              {"name": "w", "type": {"unit": {}}},
-              {"name": "nw", "type": {"unit": {}}},
-              {"name": "c", "type": {"unit": {}}},
-              {"name": "none", "type": {"unit": {}}}]}}}}]}
+              {"name": "n", "type": "unit"},
+              {"name": "ne", "type": "unit"},
+              {"name": "e", "type": "unit"},
+              {"name": "se", "type": "unit"},
+              {"name": "s", "type": "unit"},
+              {"name": "sw", "type": "unit"},
+              {"name": "w", "type": "unit"},
+              {"name": "nw", "type": "unit"},
+              {"name": "c", "type": "unit"},
+              {"name": "none", "type": "unit"}]}}}}]}

@@ -37,7 +37,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.pg.InvalidEdgeError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -74,7 +74,7 @@
                                     "argument": {"application": {"function": {"variable": "hydra.show.error.pg.wrongVertexLabelError"}, "argument": {"variable": "w"}}}}}}}},
                           {
                             "name": "inVertexNotFound",
-                            "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "in-vertex not found"}}}}},
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "in-vertex not found"}}}}},
                           {
                             "name": "label",
                             "handler": {
@@ -95,7 +95,7 @@
                                     "argument": {"application": {"function": {"variable": "hydra.show.error.pg.wrongVertexLabelError"}, "argument": {"variable": "w"}}}}}}}},
                           {
                             "name": "outVertexNotFound",
-                            "handler": {"lambda": {"parameter": "_", "domain": {"unit": {}}, "body": {"literal": {"string": "out-vertex not found"}}}}},
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "out-vertex not found"}}}}},
                           {
                             "name": "property",
                             "handler": {
@@ -113,7 +113,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.pg.InvalidElementPropertyError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -154,13 +154,13 @@
           "parameters": [
             {
               "name": "arg0",
-              "type": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": {"string": {}}}}},
+              "type": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": "string"}}},
               "isLazy": false},
             {
               "name": "arg1",
               "type": {"application": {"function": {"variable": "hydra.error.pg.InvalidGraphEdgeError"}, "argument": {"variable": "t0"}}},
               "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "typeLambda": {
             "parameter": "t0",
@@ -169,7 +169,7 @@
                 "body": {
                   "lambda": {
                     "parameter": "printValue",
-                    "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": {"string": {}}}}},
+                    "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": "string"}}},
                     "body": {
                       "lambda": {
                         "parameter": "e",
@@ -214,13 +214,13 @@
           "parameters": [
             {
               "name": "arg0",
-              "type": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": {"string": {}}}}},
+              "type": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": "string"}}},
               "isLazy": false},
             {
               "name": "arg1",
               "type": {"application": {"function": {"variable": "hydra.error.pg.InvalidGraphError"}, "argument": {"variable": "t0"}}},
               "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "typeLambda": {
             "parameter": "t0",
@@ -229,7 +229,7 @@
                 "body": {
                   "lambda": {
                     "parameter": "printValue",
-                    "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": {"string": {}}}}},
+                    "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": "string"}}},
                     "body": {
                       "lambda": {
                         "parameter": "e",
@@ -283,13 +283,13 @@
           "parameters": [
             {
               "name": "arg0",
-              "type": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": {"string": {}}}}},
+              "type": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": "string"}}},
               "isLazy": false},
             {
               "name": "arg1",
               "type": {"application": {"function": {"variable": "hydra.error.pg.InvalidGraphVertexError"}, "argument": {"variable": "t0"}}},
               "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "typeLambda": {
             "parameter": "t0",
@@ -298,7 +298,7 @@
                 "body": {
                   "lambda": {
                     "parameter": "printValue",
-                    "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": {"string": {}}}}},
+                    "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": "string"}}},
                     "body": {
                       "lambda": {
                         "parameter": "e",
@@ -341,7 +341,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.pg.InvalidPropertyError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -396,7 +396,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.pg.InvalidValueError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -426,7 +426,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.pg.InvalidVertexError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -474,7 +474,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.pg.NoSuchEdgeLabelError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -502,7 +502,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.pg.NoSuchVertexLabelError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -531,7 +531,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.pg.WrongVertexLabelError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {

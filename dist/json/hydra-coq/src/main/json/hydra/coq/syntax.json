@@ -120,9 +120,9 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "placeholder", "type": {"unit": {}}},
-              {"name": "inside1", "type": {"unit": {}}},
-              {"name": "inside2", "type": {"unit": {}}},
+              {"name": "placeholder", "type": "unit"},
+              {"name": "inside1", "type": "unit"},
+              {"name": "inside2", "type": "unit"},
               {"name": "outside", "type": {"optional": {"variable": "hydra.coq.syntax.IdentArg"}}}]}}}},
     {
       "type": {
@@ -418,7 +418,7 @@
             "record": [
               {"name": "caseItems", "type": {"list": {"variable": "hydra.coq.syntax.CaseItem"}}},
               {"name": "return", "type": {"optional": {"variable": "hydra.coq.syntax.Term100"}}},
-              {"name": "pipe", "type": {"literal": {"boolean": {}}}},
+              {"name": "pipe", "type": {"literal": "boolean"}},
               {"name": "equations", "type": {"list": {"variable": "hydra.coq.syntax.Equation"}}}]}}}},
     {
       "type": {
@@ -431,7 +431,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"integer": {"bigint": {}}}}},
+              "body": {"wrap": {"literal": {"integer": "bigint"}}},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A non-negative arbitrary-precision integer"}}}]}}}}}},
     {
@@ -453,9 +453,7 @@
               {"name": "lhs", "type": {"variable": "hydra.coq.syntax.Term1"}},
               {"name": "rhs", "type": {"list": {"variable": "hydra.coq.syntax.Arg"}}}]}}}},
     {
-      "type": {
-        "name": "hydra.coq.syntax.Number",
-        "body": {"variables": [], "body": {"wrap": {"literal": {"float": {"float64": {}}}}}}}},
+      "type": {"name": "hydra.coq.syntax.Number", "body": {"variables": [], "body": {"wrap": {"literal": {"float": "float64"}}}}}},
     {
       "type": {
         "name": "hydra.coq.syntax.OneTerm",
@@ -492,7 +490,7 @@
             "union": [
               {"name": "qualid", "type": {"variable": "hydra.coq.syntax.Qualid"}},
               {"name": "qualIdAndPattern", "type": {"variable": "hydra.coq.syntax.QualidAndPattern"}},
-              {"name": "placeholder", "type": {"unit": {}}},
+              {"name": "placeholder", "type": "unit"},
               {"name": "parens", "type": {"list": {"variable": "hydra.coq.syntax.Pattern"}}},
               {"name": "number", "type": {"variable": "hydra.coq.syntax.Number"}},
               {"name": "string", "type": {"variable": "hydra.coq.syntax.String"}}]}}}},
@@ -607,7 +605,7 @@
                     "name": "set",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -617,7 +615,7 @@
                     "name": "prop",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -627,7 +625,7 @@
                     "name": "sProp",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -635,12 +633,12 @@
                               "value": {
                                 "literal": {
                                   "string": "The sort 𝖲𝖯𝗋𝗈𝗉 is like 𝖯𝗋𝗈𝗉 but the propositions in 𝖲𝖯𝗋𝗈𝗉 are known to have irrelevant proofs (all proofs are equal)."}}}]}}}},
-                  {"name": "type", "type": {"unit": {}}},
-                  {"name": "typeWithAnyUniverse", "type": {"unit": {}}},
+                  {"name": "type", "type": "unit"},
+                  {"name": "typeWithAnyUniverse", "type": "unit"},
                   {"name": "typeWithUniverse", "type": {"variable": "hydra.coq.syntax.Universe"}}]},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The types of types are called sorts."}}}]}}}}}},
-    {"type": {"name": "hydra.coq.syntax.String", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+    {"type": {"name": "hydra.coq.syntax.String", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Term",
@@ -666,9 +664,9 @@
               {"name": "primitiveNotations", "type": {"variable": "hydra.coq.syntax.PrimitiveNotations"}},
               {"name": "evar", "type": {"variable": "hydra.coq.syntax.ExistentialVariable"}},
               {"name": "match", "type": {"variable": "hydra.coq.syntax.Match"}},
-              {"name": "record", "type": {"unit": {}}},
-              {"name": "generalizing", "type": {"unit": {}}},
-              {"name": "ltac", "type": {"unit": {}}},
+              {"name": "record", "type": "unit"},
+              {"name": "generalizing", "type": "unit"},
+              {"name": "ltac", "type": "unit"},
               {"name": "parens", "type": {"variable": "hydra.coq.syntax.Term"}}]}}}},
     {
       "type": {
@@ -677,8 +675,8 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "projection", "type": {"unit": {}}},
-              {"name": "scope", "type": {"unit": {}}},
+              {"name": "projection", "type": "unit"},
+              {"name": "scope", "type": "unit"},
               {"name": "term0", "type": {"variable": "hydra.coq.syntax.Term0"}}]}}}},
     {
       "type": {
@@ -721,7 +719,7 @@
                 "name": "normal",
                 "type": {
                   "annotated": {
-                    "body": {"unit": {}},
+                    "body": "unit",
                     "annotation": {
                       "map": [
                         {
@@ -732,7 +730,7 @@
                 "name": "vmCompute",
                 "type": {
                   "annotated": {
-                    "body": {"unit": {}},
+                    "body": "unit",
                     "annotation": {
                       "map": [
                         {
@@ -744,7 +742,7 @@
                 "name": "nativeCompute",
                 "type": {
                   "annotated": {
-                    "body": {"unit": {}},
+                    "body": "unit",
                     "annotation": {
                       "map": [
                         {
@@ -769,7 +767,7 @@
           "body": {
             "record": [
               {"name": "name", "type": {"optional": {"variable": "hydra.coq.syntax.Name"}}},
-              {"name": "generalizing", "type": {"literal": {"boolean": {}}}},
+              {"name": "generalizing", "type": {"literal": "boolean"}},
               {"name": "term", "type": {"variable": "hydra.coq.syntax.Term"}}]}}}},
     {
       "type": {
@@ -800,10 +798,10 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "set", "type": {"unit": {}}},
-              {"name": "prop", "type": {"unit": {}}},
-              {"name": "type", "type": {"unit": {}}},
-              {"name": "ignored", "type": {"unit": {}}},
+              {"name": "set", "type": "unit"},
+              {"name": "prop", "type": "unit"},
+              {"name": "type", "type": "unit"},
+              {"name": "ignored", "type": "unit"},
               {"name": "qualid", "type": {"variable": "hydra.coq.syntax.Qualid"}}]}}}},
     {
       "type": {
@@ -813,8 +811,8 @@
           "body": {
             "union": [
               {"name": "qualid", "type": {"variable": "hydra.coq.syntax.Qualid"}},
-              {"name": "set", "type": {"unit": {}}},
-              {"name": "prop", "type": {"unit": {}}}]}}}},
+              {"name": "set", "type": "unit"},
+              {"name": "prop", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.coq.syntax.AxiomDeclaration",
@@ -836,7 +834,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Coq comment (* ... *)"}}}]}}}}}},
     {
       "type": {
@@ -905,7 +903,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"union": [{"name": "import", "type": {"unit": {}}}, {"name": "export", "type": {"unit": {}}}]},
+              "body": {"union": [{"name": "import", "type": "unit"}, {"name": "export", "type": "unit"}]},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Qualification for Require/Import commands"}}}]}}}}}},
     {
@@ -936,7 +934,7 @@
               "body": {
                 "record": [
                   {"name": "locality", "type": {"optional": {"variable": "hydra.coq.syntax.Locality"}}},
-                  {"name": "coinductive", "type": {"literal": {"boolean": {}}}},
+                  {"name": "coinductive", "type": {"literal": "boolean"}},
                   {"name": "bodies", "type": {"list": {"variable": "hydra.coq.syntax.InductiveBody"}}}]},
               "annotation": {
                 "map": [
@@ -950,7 +948,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"union": [{"name": "local", "type": {"unit": {}}}, {"name": "global", "type": {"unit": {}}}]},
+              "body": {"union": [{"name": "local", "type": "unit"}, {"name": "global", "type": "unit"}]},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Local or Global qualifier for commands"}}}]}}}}}},
     {
@@ -977,7 +975,7 @@
                   {"name": "notation", "type": {"variable": "hydra.coq.syntax.String"}},
                   {"name": "definition", "type": {"variable": "hydra.coq.syntax.Term"}},
                   {"name": "level", "type": {"optional": {"variable": "hydra.coq.syntax.Natural"}}},
-                  {"name": "associativity", "type": {"optional": {"literal": {"string": {}}}}}]},
+                  {"name": "associativity", "type": {"optional": {"literal": "string"}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Notation declaration"}}}]}}}}}},
     {
       "type": {
@@ -1028,7 +1026,7 @@
               "body": {
                 "record": [
                   {"name": "from", "type": {"optional": {"variable": "hydra.coq.syntax.Qualid"}}},
-                  {"name": "require", "type": {"literal": {"boolean": {}}}},
+                  {"name": "require", "type": {"literal": "boolean"}},
                   {"name": "qualification", "type": {"optional": {"variable": "hydra.coq.syntax.ImportQualification"}}},
                   {"name": "modules", "type": {"list": {"variable": "hydra.coq.syntax.Qualid"}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Require Import/Export command"}}}]}}}}}},
@@ -1106,9 +1104,9 @@
             "annotated": {
               "body": {
                 "union": [
-                  {"name": "theorem", "type": {"unit": {}}},
-                  {"name": "lemma", "type": {"unit": {}}},
-                  {"name": "proposition", "type": {"unit": {}}},
-                  {"name": "corollary", "type": {"unit": {}}},
-                  {"name": "example", "type": {"unit": {}}}]},
+                  {"name": "theorem", "type": "unit"},
+                  {"name": "lemma", "type": "unit"},
+                  {"name": "proposition", "type": "unit"},
+                  {"name": "corollary", "type": "unit"},
+                  {"name": "example", "type": "unit"}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The kind of theorem command"}}}]}}}}}}]}

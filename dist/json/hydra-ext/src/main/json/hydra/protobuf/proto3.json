@@ -62,7 +62,7 @@
                     "name": "number",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Enum value number"}}}]}}}},
                   {
                     "name": "options",
@@ -72,9 +72,7 @@
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Protocol buffer options"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Enum value definition"}}}]}}}}}},
     {
-      "type": {
-        "name": "hydra.protobuf.proto3.EnumValueName",
-        "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+      "type": {"name": "hydra.protobuf.proto3.EnumValueName", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
     {
       "type": {
         "name": "hydra.protobuf.proto3.Field",
@@ -94,7 +92,7 @@
                     "name": "jsonName",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The field JSON name"}}}]}}}},
                   {
                     "name": "type",
@@ -106,7 +104,7 @@
                     "name": "number",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The field number"}}}]}}}},
                   {
                     "name": "options",
@@ -122,7 +120,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a field"}}}]}}}}}},
     {
       "type": {
@@ -136,9 +134,7 @@
               {"name": "repeated", "type": {"variable": "hydra.protobuf.proto3.SimpleType"}},
               {"name": "simple", "type": {"variable": "hydra.protobuf.proto3.SimpleType"}}]}}}},
     {
-      "type": {
-        "name": "hydra.protobuf.proto3.FileReference",
-        "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+      "type": {"name": "hydra.protobuf.proto3.FileReference", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
     {
       "type": {
         "name": "hydra.protobuf.proto3.MapType",
@@ -189,7 +185,7 @@
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {
                           "map": [
                             {
@@ -209,7 +205,7 @@
                     "key": {"variable": "description"},
                     "value": {"literal": {"string": "A protocol buffer option, which can be attached to a message, field, enumeration, etc"}}}]}}}}}},
     {
-      "type": {"name": "hydra.protobuf.proto3.PackageName", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+      "type": {"name": "hydra.protobuf.proto3.PackageName", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
     {
       "type": {
         "name": "hydra.protobuf.proto3.ProtoFile",
@@ -237,21 +233,21 @@
             "annotated": {
               "body": {
                 "union": [
-                  {"name": "bool", "type": {"unit": {}}},
-                  {"name": "bytes", "type": {"unit": {}}},
-                  {"name": "double", "type": {"unit": {}}},
-                  {"name": "fixed32", "type": {"unit": {}}},
-                  {"name": "fixed64", "type": {"unit": {}}},
-                  {"name": "float", "type": {"unit": {}}},
-                  {"name": "int32", "type": {"unit": {}}},
-                  {"name": "int64", "type": {"unit": {}}},
-                  {"name": "sfixed32", "type": {"unit": {}}},
-                  {"name": "sfixed64", "type": {"unit": {}}},
-                  {"name": "sint32", "type": {"unit": {}}},
-                  {"name": "sint64", "type": {"unit": {}}},
-                  {"name": "string", "type": {"unit": {}}},
-                  {"name": "uint32", "type": {"unit": {}}},
-                  {"name": "uint64", "type": {"unit": {}}}]},
+                  {"name": "bool", "type": "unit"},
+                  {"name": "bytes", "type": "unit"},
+                  {"name": "double", "type": "unit"},
+                  {"name": "fixed32", "type": "unit"},
+                  {"name": "fixed64", "type": "unit"},
+                  {"name": "float", "type": "unit"},
+                  {"name": "int32", "type": "unit"},
+                  {"name": "int64", "type": "unit"},
+                  {"name": "sfixed32", "type": "unit"},
+                  {"name": "sfixed64", "type": "unit"},
+                  {"name": "sint32", "type": "unit"},
+                  {"name": "sint64", "type": "unit"},
+                  {"name": "string", "type": "unit"},
+                  {"name": "uint32", "type": "unit"},
+                  {"name": "uint64", "type": "unit"}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "One of several Proto3 scalar types"}}}]}}}}}},
     {
       "type": {
@@ -276,7 +272,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
                   {"key": {"variable": "description"}, "value": {"literal": {"string": "The local name of an enum type or message type"}}}]}}}}}},
@@ -287,7 +283,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to an enum type or message type"}}}]}}}}}},
     {
@@ -297,6 +293,5 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {
-                "union": [{"name": "boolean", "type": {"literal": {"boolean": {}}}}, {"name": "string", "type": {"literal": {"string": {}}}}]},
+              "body": {"union": [{"name": "boolean", "type": {"literal": "boolean"}}, {"name": "string", "type": {"literal": "string"}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A scalar value"}}}]}}}}}}]}

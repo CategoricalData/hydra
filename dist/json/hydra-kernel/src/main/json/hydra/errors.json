@@ -16,7 +16,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
                   {
@@ -29,7 +29,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"unit": {}},
+              "body": "unit",
               "annotation": {
                 "map": [
                   {
@@ -384,7 +384,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"unit": {}},
+              "body": "unit",
               "annotation": {
                 "map": [
                   {
@@ -397,7 +397,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Any other error"}}}]}}}}}},
     {
       "type": {
@@ -422,7 +422,7 @@
                     "name": "message",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable error message"}}}]}}}}]},
               "annotation": {
                 "map": [
@@ -436,7 +436,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A generic resolution error: message"}}}]}}}}}},
     {
       "type": {
@@ -513,13 +513,13 @@
                     "name": "expected",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A description of the expected shape"}}}]}}}},
                   {
                     "name": "actual",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {
                           "map": [
                             {
@@ -557,7 +557,7 @@
                     "name": "message",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable error message"}}}]}}}}]},
               "annotation": {
                 "map": [

@@ -39,13 +39,13 @@
           "parameters": [
             {
               "name": "arg0",
-              "type": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": {"string": {}}}}},
+              "type": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": "string"}}},
               "isLazy": false},
             {
               "name": "arg1",
               "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}},
               "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "typeLambda": {
             "parameter": "t0",
@@ -54,7 +54,7 @@
                 "body": {
                   "lambda": {
                     "parameter": "printValue",
-                    "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": {"string": {}}}}},
+                    "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": "string"}}},
                     "body": {
                       "lambda": {
                         "parameter": "edge",
@@ -72,7 +72,7 @@
                                         "function": {
                                           "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Edge", "fieldName": "label"}}, "type": {"variable": "t0"}}},
                                         "argument": {"variable": "edge"}}}}},
-                                "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                                "typeScheme": {"variables": [], "body": {"literal": "string"}}},
                               {
                                 "name": "id",
                                 "term": {
@@ -83,7 +83,7 @@
                                         "function": {
                                           "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Edge", "fieldName": "id"}}, "type": {"variable": "t0"}}},
                                         "argument": {"variable": "edge"}}}}},
-                                "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                                "typeScheme": {"variables": [], "body": {"literal": "string"}}},
                               {
                                 "name": "outId",
                                 "term": {
@@ -94,7 +94,7 @@
                                         "function": {
                                           "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Edge", "fieldName": "out"}}, "type": {"variable": "t0"}}},
                                         "argument": {"variable": "edge"}}}}},
-                                "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                                "typeScheme": {"variables": [], "body": {"literal": "string"}}},
                               {
                                 "name": "inId",
                                 "term": {
@@ -105,7 +105,7 @@
                                         "function": {
                                           "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Edge", "fieldName": "in"}}, "type": {"variable": "t0"}}},
                                         "argument": {"variable": "edge"}}}}},
-                                "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                                "typeScheme": {"variables": [], "body": {"literal": "string"}}},
                               {
                                 "name": "props",
                                 "term": {
@@ -121,7 +121,7 @@
                                                   "typeApplication": {
                                                     "body": {"variable": "hydra.lib.lists.map"},
                                                     "type": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "t0"}}}}},
-                                                "type": {"literal": {"string": {}}}}},
+                                                "type": {"literal": "string"}}},
                                             "argument": {
                                               "lambda": {
                                                 "parameter": "p",
@@ -160,7 +160,7 @@
                                                 "function": {
                                                   "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Edge", "fieldName": "properties"}}, "type": {"variable": "t0"}}},
                                                 "argument": {"variable": "edge"}}}}}}}}},
-                                "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
+                                "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
                             "body": {
                               "application": {
                                 "function": {"variable": "hydra.lib.strings.cat"},
@@ -188,13 +188,13 @@
           "parameters": [
             {
               "name": "arg0",
-              "type": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": {"string": {}}}}},
+              "type": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": "string"}}},
               "isLazy": false},
             {
               "name": "arg1",
               "type": {"application": {"function": {"variable": "hydra.pg.model.Graph"}, "argument": {"variable": "t0"}}},
               "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "typeLambda": {
             "parameter": "t0",
@@ -203,7 +203,7 @@
                 "body": {
                   "lambda": {
                     "parameter": "printValue",
-                    "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": {"string": {}}}}},
+                    "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": "string"}}},
                     "body": {
                       "lambda": {
                         "parameter": "graph",
@@ -258,13 +258,13 @@
           "parameters": [
             {
               "name": "arg0",
-              "type": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": {"string": {}}}}},
+              "type": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": "string"}}},
               "isLazy": false},
             {
               "name": "arg1",
               "type": {"application": {"function": {"variable": "hydra.pg.model.LazyGraph"}, "argument": {"variable": "t0"}}},
               "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "typeLambda": {
             "parameter": "t0",
@@ -273,7 +273,7 @@
                 "body": {
                   "lambda": {
                     "parameter": "printValue",
-                    "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": {"string": {}}}}},
+                    "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": "string"}}},
                     "body": {
                       "lambda": {
                         "parameter": "lg",
@@ -320,7 +320,7 @@
                                                       "typeApplication": {
                                                         "body": {"variable": "hydra.lib.lists.map"},
                                                         "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}}},
-                                                    "type": {"literal": {"string": {}}}}},
+                                                    "type": {"literal": "string"}}},
                                                 "argument": {
                                                   "lambda": {
                                                     "parameter": "v",
@@ -353,7 +353,7 @@
                                                       "typeApplication": {
                                                         "body": {"variable": "hydra.lib.lists.map"},
                                                         "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}},
-                                                    "type": {"literal": {"string": {}}}}},
+                                                    "type": {"literal": "string"}}},
                                                 "argument": {
                                                   "lambda": {
                                                     "parameter": "e",
@@ -385,11 +385,11 @@
           "parameters": [
             {
               "name": "arg0",
-              "type": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": {"string": {}}}}},
+              "type": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": "string"}}},
               "isLazy": false},
             {"name": "arg1", "type": {"variable": "hydra.pg.model.PropertyKey"}, "isLazy": false},
             {"name": "arg2", "type": {"variable": "t0"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "typeLambda": {
             "parameter": "t0",
@@ -398,7 +398,7 @@
                 "body": {
                   "lambda": {
                     "parameter": "printValue",
-                    "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": {"string": {}}}}},
+                    "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": "string"}}},
                     "body": {
                       "lambda": {
                         "parameter": "key",
@@ -428,13 +428,13 @@
           "parameters": [
             {
               "name": "arg0",
-              "type": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": {"string": {}}}}},
+              "type": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": "string"}}},
               "isLazy": false},
             {
               "name": "arg1",
               "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}},
               "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "typeLambda": {
             "parameter": "t0",
@@ -443,7 +443,7 @@
                 "body": {
                   "lambda": {
                     "parameter": "printValue",
-                    "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": {"string": {}}}}},
+                    "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": "string"}}},
                     "body": {
                       "lambda": {
                         "parameter": "vertex",
@@ -461,7 +461,7 @@
                                         "function": {
                                           "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Vertex", "fieldName": "label"}}, "type": {"variable": "t0"}}},
                                         "argument": {"variable": "vertex"}}}}},
-                                "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                                "typeScheme": {"variables": [], "body": {"literal": "string"}}},
                               {
                                 "name": "id",
                                 "term": {
@@ -472,7 +472,7 @@
                                         "function": {
                                           "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Vertex", "fieldName": "id"}}, "type": {"variable": "t0"}}},
                                         "argument": {"variable": "vertex"}}}}},
-                                "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                                "typeScheme": {"variables": [], "body": {"literal": "string"}}},
                               {
                                 "name": "props",
                                 "term": {
@@ -488,7 +488,7 @@
                                                   "typeApplication": {
                                                     "body": {"variable": "hydra.lib.lists.map"},
                                                     "type": {"pair": {"first": {"variable": "hydra.pg.model.PropertyKey"}, "second": {"variable": "t0"}}}}},
-                                                "type": {"literal": {"string": {}}}}},
+                                                "type": {"literal": "string"}}},
                                             "argument": {
                                               "lambda": {
                                                 "parameter": "p",
@@ -527,7 +527,7 @@
                                                 "function": {
                                                   "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Vertex", "fieldName": "properties"}}, "type": {"variable": "t0"}}},
                                                 "argument": {"variable": "vertex"}}}}}}}}},
-                                "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}}],
+                                "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
                             "body": {
                               "application": {
                                 "function": {"variable": "hydra.lib.strings.cat"},

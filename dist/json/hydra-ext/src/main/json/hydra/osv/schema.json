@@ -10,7 +10,7 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "name", "type": {"literal": {"string": {}}}},
+              {"name": "name", "type": {"literal": "string"}},
               {"name": "contact", "type": {"optional": {"list": {"variable": "hydra.osv.schema.Url"}}}}]}}}},
     {
       "type": {
@@ -19,7 +19,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
                   {
@@ -50,7 +50,7 @@
               {"name": "withdrawn", "type": {"optional": {"variable": "hydra.osv.schema.Timestamp"}}},
               {"name": "aliases", "type": {"optional": {"list": {"variable": "hydra.osv.schema.Id"}}}},
               {"name": "related", "type": {"optional": {"list": {"variable": "hydra.osv.schema.Id"}}}},
-              {"name": "summary", "type": {"optional": {"literal": {"string": {}}}}},
+              {"name": "summary", "type": {"optional": {"literal": "string"}}},
               {"name": "details", "type": {"optional": {"variable": "hydra.osv.schema.Markdown"}}},
               {"name": "severity", "type": {"optional": {"list": {"variable": "hydra.osv.schema.Severity"}}}},
               {"name": "affected", "type": {"optional": {"list": {"variable": "hydra.osv.schema.PackageVersions"}}}},
@@ -74,7 +74,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
                   {
@@ -89,7 +89,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "CommonMark markdown text"}}}]}}}}}},
     {
       "type": {
@@ -98,7 +98,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
                   {
@@ -112,7 +112,7 @@
           "body": {
             "record": [
               {"name": "ecosystem", "type": {"variable": "hydra.osv.schema.Ecosystem"}},
-              {"name": "name", "type": {"literal": {"string": {}}}},
+              {"name": "name", "type": {"literal": "string"}},
               {"name": "purl", "type": {"optional": {"variable": "hydra.osv.schema.Url"}}}]}}}},
     {
       "type": {
@@ -140,7 +140,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
                   {
@@ -155,8 +155,7 @@
             "record": [
               {"name": "type", "type": {"variable": "hydra.osv.schema.SeverityType"}},
               {"name": "score", "type": {"variable": "hydra.osv.schema.SeverityScore"}}]}}}},
-    {
-      "type": {"name": "hydra.osv.schema.SeverityScore", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+    {"type": {"name": "hydra.osv.schema.SeverityScore", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
     {
       "type": {
         "name": "hydra.osv.schema.SeverityType",
@@ -164,7 +163,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The value CVSS_V3, or future supported types"}}}]}}}}}},
     {
@@ -174,13 +173,13 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
                     "value": {"literal": {"string": "An RFC3339-formatted timestamp in UTC (ending in 'Z')"}}}]}}}}}},
-    {"type": {"name": "hydra.osv.schema.Url", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+    {"type": {"name": "hydra.osv.schema.Url", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
     {
       "type": {
         "name": "hydra.osv.schema.Version",
@@ -188,7 +187,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
                   {
@@ -201,7 +200,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
                   {
@@ -214,7 +213,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
                   {
@@ -239,7 +238,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
                   {

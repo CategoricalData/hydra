@@ -303,13 +303,13 @@
                     "name": "float32",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 32-bit floating-point type"}}}]}}}},
                   {
                     "name": "float64",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 64-bit floating-point type"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A floating-point type"}}}]}}}}}},
     {
@@ -325,13 +325,13 @@
                     "name": "float32",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"float": {"float32": {}}}},
+                        "body": {"literal": {"float": "float32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 32-bit floating-point value"}}}]}}}},
                   {
                     "name": "float64",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"float": {"float64": {}}}},
+                        "body": {"literal": {"float": "float64"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 64-bit floating-point value"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A floating-point literal value"}}}]}}}}}},
     {
@@ -431,55 +431,55 @@
                     "name": "bigint",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An arbitrary-precision integer type"}}}]}}}},
                   {
                     "name": "int8",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An 8-bit signed integer type"}}}]}}}},
                   {
                     "name": "int16",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 16-bit signed integer type"}}}]}}}},
                   {
                     "name": "int32",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 32-bit signed integer type"}}}]}}}},
                   {
                     "name": "int64",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 64-bit signed integer type"}}}]}}}},
                   {
                     "name": "uint8",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An 8-bit unsigned integer type"}}}]}}}},
                   {
                     "name": "uint16",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 16-bit unsigned integer type"}}}]}}}},
                   {
                     "name": "uint32",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 32-bit unsigned integer type"}}}]}}}},
                   {
                     "name": "uint64",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 64-bit unsigned integer type"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An integer type"}}}]}}}}}},
     {
@@ -495,54 +495,54 @@
                     "name": "bigint",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"bigint": {}}}},
+                        "body": {"literal": {"integer": "bigint"}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An arbitrary-precision integer value"}}}]}}}},
                   {
                     "name": "int8",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int8": {}}}},
+                        "body": {"literal": {"integer": "int8"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An 8-bit signed integer value"}}}]}}}},
                   {
                     "name": "int16",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int16": {}}}},
+                        "body": {"literal": {"integer": "int16"}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 16-bit signed integer value (short value)"}}}]}}}},
                   {
                     "name": "int32",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 32-bit signed integer value (int value)"}}}]}}}},
                   {
                     "name": "int64",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int64": {}}}},
+                        "body": {"literal": {"integer": "int64"}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 64-bit signed integer value (long value)"}}}]}}}},
                   {
                     "name": "uint8",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"uint8": {}}}},
+                        "body": {"literal": {"integer": "uint8"}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An 8-bit unsigned integer value (byte)"}}}]}}}},
                   {
                     "name": "uint16",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"uint16": {}}}},
+                        "body": {"literal": {"integer": "uint16"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 16-bit unsigned integer value"}}}]}}}},
                   {
                     "name": "uint32",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"uint32": {}}}},
+                        "body": {"literal": {"integer": "uint32"}},
                         "annotation": {
                           "map": [
                             {"key": {"variable": "description"}, "value": {"literal": {"string": "A 32-bit unsigned integer value (unsigned int)"}}}]}}}},
@@ -550,7 +550,7 @@
                     "name": "uint64",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"uint64": {}}}},
+                        "body": {"literal": {"integer": "uint64"}},
                         "annotation": {
                           "map": [
                             {
@@ -627,19 +627,19 @@
                     "name": "binary",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"binary": {}}},
+                        "body": {"literal": "binary"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A binary literal"}}}]}}}},
                   {
                     "name": "boolean",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A boolean literal"}}}]}}}},
                   {
                     "name": "decimal",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"decimal": {}}},
+                        "body": {"literal": "decimal"},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An arbitrary-precision decimal literal"}}}]}}}},
                   {
@@ -658,7 +658,7 @@
                     "name": "string",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A string literal"}}}]}}}}]},
               "annotation": {
                 "map": [
@@ -676,21 +676,21 @@
                     "name": "binary",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of a binary (byte string) value"}}}]}}}},
                   {
                     "name": "boolean",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of a boolean (true/false) value"}}}]}}}},
                   {
                     "name": "decimal",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -712,7 +712,7 @@
                     "name": "string",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of a string value"}}}]}}}}]},
               "annotation": {
                 "map": [
@@ -750,7 +750,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
                   {
@@ -952,7 +952,7 @@
                     "name": "unit",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unit value; a term with no value"}}}]}}}},
                   {
                     "name": "unwrap",
@@ -1087,7 +1087,7 @@
                     "name": "unit",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -1103,7 +1103,7 @@
                     "name": "void",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {

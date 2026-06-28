@@ -210,7 +210,7 @@
           "parameters": [
             {
               "name": "arg0",
-              "type": {"function": {"domain": {"variable": "v"}, "codomain": {"literal": {"boolean": {}}}}},
+              "type": {"function": {"domain": {"variable": "v"}, "codomain": {"literal": "boolean"}}},
               "isLazy": false},
             {"name": "arg1", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false}],
           "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}},
@@ -256,7 +256,7 @@
               "type": {
                 "function": {
                   "domain": {"variable": "k"},
-                  "codomain": {"function": {"domain": {"variable": "v"}, "codomain": {"literal": {"boolean": {}}}}}}},
+                  "codomain": {"function": {"domain": {"variable": "v"}, "codomain": {"literal": "boolean"}}}}},
               "isLazy": false},
             {"name": "arg1", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false}],
           "result": {"type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}},
@@ -499,7 +499,7 @@
           "parameters": [
             {"name": "arg0", "type": {"variable": "k"}, "isLazy": false},
             {"name": "arg1", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"boolean": {}}}}},
+          "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -515,7 +515,7 @@
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [{"name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"boolean": {}}}}},
+          "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -549,7 +549,7 @@
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [{"name": "arg0", "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": {"int32": {}}}}}},
+          "result": {"type": {"literal": {"integer": "int32"}}}},
         "isPure": true,
         "isTotal": true}},
     {

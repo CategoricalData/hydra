@@ -43,9 +43,9 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"boolean": {}}}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": {"boolean": {}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"boolean": {}}}}},
+            {"name": "arg0", "type": {"literal": "boolean"}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": "boolean"}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
@@ -74,7 +74,7 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"boolean": {}}}, "isLazy": false},
+            {"name": "arg0", "type": {"literal": "boolean"}, "isLazy": false},
             {"name": "arg1", "type": {"variable": "x"}, "isLazy": true},
             {"name": "arg2", "type": {"variable": "x"}, "isLazy": true}],
           "result": {"type": {"variable": "x"}}},
@@ -89,8 +89,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"boolean": {}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"boolean": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "boolean"}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {
@@ -116,9 +116,9 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"boolean": {}}}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": {"boolean": {}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"boolean": {}}}}},
+            {"name": "arg0", "type": {"literal": "boolean"}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": "boolean"}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true,
         "defaultImplementation": {

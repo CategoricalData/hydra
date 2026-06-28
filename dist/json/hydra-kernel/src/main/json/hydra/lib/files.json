@@ -42,8 +42,8 @@
           "typeParameters": [],
           "parameters": [
             {"name": "arg0", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": {"binary": {}}}, "isLazy": false}],
-          "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"unit": {}}}}}}},
+            {"name": "arg1", "type": {"literal": "binary"}, "isLazy": false}],
+          "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}}},
         "isPure": false,
         "isTotal": true}},
     {
@@ -57,10 +57,10 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"boolean": {}}}, "isLazy": false},
+            {"name": "arg0", "type": {"literal": "boolean"}, "isLazy": false},
             {"name": "arg1", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false},
             {"name": "arg2", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false}],
-          "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"unit": {}}}}}}},
+          "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}}},
         "isPure": false,
         "isTotal": true}},
     {
@@ -74,9 +74,9 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"boolean": {}}}, "isLazy": false},
+            {"name": "arg0", "type": {"literal": "boolean"}, "isLazy": false},
             {"name": "arg1", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false}],
-          "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"unit": {}}}}}}},
+          "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}}},
         "isPure": false,
         "isTotal": true}},
     {
@@ -90,8 +90,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false}],
-          "result": {
-            "type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"literal": {"boolean": {}}}}}}}},
+          "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"literal": "boolean"}}}}}},
         "isPure": false,
         "isTotal": true}},
     {
@@ -121,8 +120,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false}],
-          "result": {
-            "type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"literal": {"binary": {}}}}}}}},
+          "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"literal": "binary"}}}}}},
         "isPure": false,
         "isTotal": true}},
     {
@@ -136,9 +134,9 @@
         "signature": {
           "typeParameters": [],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"boolean": {}}}, "isLazy": false},
+            {"name": "arg0", "type": {"literal": "boolean"}, "isLazy": false},
             {"name": "arg1", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false}],
-          "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"unit": {}}}}}}},
+          "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}}},
         "isPure": false,
         "isTotal": true}},
     {
@@ -152,7 +150,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false}],
-          "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"unit": {}}}}}}},
+          "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}}},
         "isPure": false,
         "isTotal": true}},
     {
@@ -168,7 +166,7 @@
           "parameters": [
             {"name": "arg0", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false},
             {"name": "arg1", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false}],
-          "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"unit": {}}}}}}},
+          "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}}},
         "isPure": false,
         "isTotal": true}},
     {
@@ -199,7 +197,7 @@
           "typeParameters": [],
           "parameters": [
             {"name": "arg0", "type": {"variable": "hydra.file.FilePath"}, "isLazy": false},
-            {"name": "arg1", "type": {"literal": {"binary": {}}}, "isLazy": false}],
-          "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"unit": {}}}}}}},
+            {"name": "arg1", "type": {"literal": "binary"}, "isLazy": false}],
+          "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}}},
         "isPure": false,
         "isTotal": true}}]}

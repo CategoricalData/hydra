@@ -612,7 +612,7 @@
                     "name": "functionNamespace",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {
                           "map": [
                             {
@@ -1025,10 +1025,7 @@
           "body": {
             "annotated": {
               "body": {
-                "union": [
-                  {"name": "parallel", "type": {"unit": {}}},
-                  {"name": "sequential", "type": {"unit": {}}},
-                  {"name": "recursive", "type": {"unit": {}}}]},
+                "union": [{"name": "parallel", "type": "unit"}, {"name": "sequential", "type": "unit"}, {"name": "recursive", "type": "unit"}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The kind of let binding"}}}]}}}}}},
     {
       "type": {
@@ -1265,7 +1262,7 @@
                     "name": "string",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A string literal"}}}]}}}},
                   {
                     "name": "character",
@@ -1277,7 +1274,7 @@
                     "name": "boolean",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {
                           "map": [
                             {"key": {"variable": "description"}, "value": {"literal": {"string": "A boolean literal (dialect-specific rendering)"}}}]}}}},
@@ -1285,7 +1282,7 @@
                     "name": "nil",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -1317,13 +1314,13 @@
                     "name": "value",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"bigint": {}}}},
+                        "body": {"literal": {"integer": "bigint"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The integer value"}}}]}}}},
                   {
                     "name": "bigint",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {
                           "map": [
                             {
@@ -1343,13 +1340,13 @@
                     "name": "value",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"float": {"float64": {}}}},
+                        "body": {"literal": {"float": "float64"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The float value"}}}]}}}},
                   {
                     "name": "precision",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {
                           "map": [
                             {
@@ -1369,7 +1366,7 @@
                     "name": "value",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The character value"}}}]}}}}]},
               "annotation": {
                 "map": [
@@ -1384,11 +1381,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {
-                "union": [
-                  {"name": "trueFalse", "type": {"unit": {}}},
-                  {"name": "tNil", "type": {"unit": {}}},
-                  {"name": "hashTF", "type": {"unit": {}}}]},
+              "body": {"union": [{"name": "trueFalse", "type": "unit"}, {"name": "tNil", "type": "unit"}, {"name": "hashTF", "type": "unit"}]},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The style of boolean literals in a dialect"}}}]}}}}}},
     {
@@ -1398,7 +1391,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"union": [{"name": "nil", "type": {"unit": {}}}, {"name": "emptyList", "type": {"unit": {}}}]},
+              "body": {"union": [{"name": "nil", "type": "unit"}, {"name": "emptyList", "type": "unit"}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The style of nil/null in a dialect"}}}]}}}}}},
     {
       "type": {
@@ -1407,7 +1400,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Lisp symbol (identifier)"}}}]}}}}}},
     {
       "type": {
@@ -1422,14 +1415,14 @@
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The keyword name (without the leading colon)"}}}]}}}},
                   {
                     "name": "namespace",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {
                           "map": [
                             {"key": {"variable": "description"}, "value": {"literal": {"string": "Optional namespace (e.g. my.ns/foo in Clojure)"}}}]}}}}]},
@@ -1452,13 +1445,13 @@
                     "name": "namespace",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The namespace or package"}}}]}}}},
                   {
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The local name"}}}]}}}}]},
               "annotation": {
                 "map": [
@@ -1473,7 +1466,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A namespace or package name"}}}]}}}}}},
     {
       "type": {
@@ -1494,7 +1487,7 @@
                     "name": "quoted",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {
                           "map": [
                             {
@@ -1729,7 +1722,7 @@
                     "name": "unit",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unit type"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A type specifier"}}}]}}}}}},
     {
@@ -1801,7 +1794,7 @@
                     "name": "all",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Import everything"}}}]}}}},
                   {
                     "name": "alias",
@@ -1879,7 +1872,7 @@
                     "name": "text",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The comment text"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A comment"}}}]}}}}}},
     {
@@ -1889,11 +1882,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {
-                "union": [
-                  {"name": "line", "type": {"unit": {}}},
-                  {"name": "block", "type": {"unit": {}}},
-                  {"name": "datum", "type": {"unit": {}}}]},
+              "body": {"union": [{"name": "line", "type": "unit"}, {"name": "block", "type": "unit"}, {"name": "datum", "type": "unit"}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The style of a comment"}}}]}}}}}},
     {
       "type": {
@@ -1902,7 +1891,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A documentation string"}}}]}}}}}},
     {
       "type": {
@@ -1913,10 +1902,10 @@
             "annotated": {
               "body": {
                 "union": [
-                  {"name": "clojure", "type": {"unit": {}}},
-                  {"name": "emacsLisp", "type": {"unit": {}}},
-                  {"name": "commonLisp", "type": {"unit": {}}},
-                  {"name": "scheme", "type": {"unit": {}}}]},
+                  {"name": "clojure", "type": "unit"},
+                  {"name": "emacsLisp", "type": "unit"},
+                  {"name": "commonLisp", "type": "unit"},
+                  {"name": "scheme", "type": "unit"}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Lisp dialect"}}}]}}}}}},
     {
       "type": {
@@ -1931,7 +1920,7 @@
                     "name": "atom",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An atomic value"}}}]}}}},
                   {
                     "name": "list",

@@ -41,8 +41,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"decimal": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
+          "result": {"type": {"literal": "decimal"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -56,8 +56,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": {"int16": {}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": "int16"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -71,8 +71,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": {"int32": {}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": "int32"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -86,8 +86,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": {"int64": {}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": "int64"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -101,8 +101,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": {"int8": {}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": "int8"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -116,8 +116,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": {"uint16": {}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": "uint16"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -131,8 +131,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": {"uint32": {}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": "uint32"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -146,8 +146,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": {"uint64": {}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": "uint64"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -161,8 +161,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": {"uint8": {}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": "uint8"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -177,8 +177,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"binary": {}}}, "isLazy": false}],
-          "result": {"type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "binary"}, "isLazy": false}],
+          "result": {"type": {"list": {"literal": {"integer": "int32"}}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -193,8 +193,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"binary": {}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "binary"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -206,8 +206,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"decimal": {}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": {"bigint": {}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "decimal"}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": "bigint"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -221,8 +221,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"decimal": {}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"float": {"float32": {}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "decimal"}, "isLazy": false}],
+          "result": {"type": {"literal": {"float": "float32"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -236,8 +236,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"decimal": {}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"float": {"float64": {}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "decimal"}, "isLazy": false}],
+          "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -251,8 +251,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": {"float32": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"decimal": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float32"}}, "isLazy": false}],
+          "result": {"type": {"literal": "decimal"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -266,8 +266,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": {"float32": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"float": {"float64": {}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float32"}}, "isLazy": false}],
+          "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -281,8 +281,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": {"float64": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"decimal": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+          "result": {"type": {"literal": "decimal"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -296,8 +296,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": {"float64": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"float": {"float32": {}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+          "result": {"type": {"literal": {"float": "float32"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -311,8 +311,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"int16": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": {"bigint": {}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int16"}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": "bigint"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -326,8 +326,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": {"bigint": {}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": "bigint"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -341,8 +341,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"int64": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": {"bigint": {}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int64"}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": "bigint"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -354,8 +354,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"int8": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": {"bigint": {}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int8"}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": "bigint"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -370,8 +370,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
-          "result": {"type": {"optional": {"literal": {"integer": {"bigint": {}}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"integer": "bigint"}}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -385,8 +385,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
-          "result": {"type": {"optional": {"literal": {"boolean": {}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": "boolean"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -401,8 +401,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
-          "result": {"type": {"optional": {"literal": {"decimal": {}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": "decimal"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -417,8 +417,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
-          "result": {"type": {"optional": {"literal": {"float": {"float32": {}}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"float": "float32"}}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -433,8 +433,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
-          "result": {"type": {"optional": {"literal": {"float": {"float64": {}}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"float": "float64"}}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -448,8 +448,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
-          "result": {"type": {"optional": {"literal": {"integer": {"int16": {}}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"integer": "int16"}}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -463,8 +463,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
-          "result": {"type": {"optional": {"literal": {"integer": {"int32": {}}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"integer": "int32"}}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -478,8 +478,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
-          "result": {"type": {"optional": {"literal": {"integer": {"int64": {}}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"integer": "int64"}}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -493,8 +493,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
-          "result": {"type": {"optional": {"literal": {"integer": {"int8": {}}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"integer": "int8"}}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -508,8 +508,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
-          "result": {"type": {"optional": {"literal": {"string": {}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": "string"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -523,8 +523,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
-          "result": {"type": {"optional": {"literal": {"integer": {"uint16": {}}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"integer": "uint16"}}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -538,8 +538,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
-          "result": {"type": {"optional": {"literal": {"integer": {"uint32": {}}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"integer": "uint32"}}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -553,8 +553,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
-          "result": {"type": {"optional": {"literal": {"integer": {"uint64": {}}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"integer": "uint64"}}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -568,8 +568,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
-          "result": {"type": {"optional": {"literal": {"integer": {"uint8": {}}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": {"integer": "uint8"}}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -583,8 +583,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"bigint": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -596,8 +596,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"boolean": {}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "boolean"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -611,8 +611,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"decimal": {}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "decimal"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -626,8 +626,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": {"float32": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float32"}}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -641,8 +641,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"float": {"float64": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -656,8 +656,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"int16": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int16"}}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -671,8 +671,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -686,8 +686,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"int64": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int64"}}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -701,8 +701,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"int8": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int8"}}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -716,8 +716,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -729,8 +729,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"uint16": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "uint16"}}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -742,8 +742,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"uint32": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "uint32"}}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -755,8 +755,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"uint64": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "uint64"}}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -768,8 +768,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"uint8": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "uint8"}}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -781,8 +781,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"binary": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"literal": "binary"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -796,8 +796,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"uint16": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": {"bigint": {}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "uint16"}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": "bigint"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -811,8 +811,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"uint32": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": {"bigint": {}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "uint32"}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": "bigint"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -826,8 +826,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"uint64": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": {"bigint": {}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "uint64"}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": "bigint"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -841,7 +841,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"uint8": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": {"bigint": {}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "uint8"}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": "bigint"}}}},
         "isPure": true,
         "isTotal": true}}]}

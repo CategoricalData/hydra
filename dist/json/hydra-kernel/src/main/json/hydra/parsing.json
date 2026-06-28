@@ -16,13 +16,13 @@
                     "name": "message",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An error message"}}}]}}}},
                   {
                     "name": "remainder",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining input at the point of failure"}}}]}}}}]},
               "annotation": {
@@ -82,7 +82,7 @@
                         "name": "remainder",
                         "type": {
                           "annotated": {
-                            "body": {"literal": {"string": {}}},
+                            "body": {"literal": "string"},
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The remaining unparsed input"}}}]}}}}]}}},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A successful parse result"}}}]}}}}}},
     {
@@ -98,7 +98,7 @@
                   "body": {
                     "wrap": {
                       "function": {
-                        "domain": {"literal": {"string": {}}},
+                        "domain": {"literal": "string"},
                         "codomain": {"application": {"function": {"variable": "hydra.parsing.ParseResult"}, "argument": {"variable": "a"}}}}}}}},
               "annotation": {
                 "map": [
