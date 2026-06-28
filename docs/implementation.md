@@ -149,8 +149,8 @@ the descriptions below cover the main ones:
 #### Transformation framework
 
 **Coders.hs** - `hydra.coders` module name
-- Defines `Coder`, `Adapter`, `Bicoder`, `Language`, `LanguageConstraints`, `AdapterContext`, `TraversalOrder`
-- The framework is Either-based; the former `Flow` monad was removed in #245
+- Defines `Coder v1 v2 e`, `Adapter t1 t2 v1 v2 e`, `Bicoder`, `SymmetricAdapter`, `Language`, `LanguageConstraints`, `AdapterContext`, `TraversalOrder`
+- `Coder` is a pair of partial functions (encode/decode), each returning `Either e` for generic error handling; the former `Flow` monad was removed in #245, and `InferenceContext` was removed from the encode/decode signatures in #518
 
 #### Graph and query
 
@@ -1060,12 +1060,15 @@ Language/
 
 All coders follow the same shape: a `Module` plus context goes in, a map of generated
 file paths to contents comes out, and errors are reported via `Either Error`.
+`InferenceContext` is passed for fresh-variable state and subterm-path tracing during
+type inference; it is separate from the `e` type parameter on `Coder` itself, which is
+about value-level encode/decode errors.
 
 Examples:
 ```haskell
-moduleToJava   :: InferenceContext -> Graph -> Module -> Either Error (M.Map FilePath String)
-moduleToPython :: InferenceContext -> Graph -> Module -> Either Error (M.Map FilePath String)
-moduleToCpp    :: InferenceContext -> Graph -> Module -> Either Error (M.Map FilePath String)
+moduleToJava   :: Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map FilePath String)
+moduleToPython :: Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map FilePath String)
+moduleToScala  :: Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map FilePath String)
 ```
 
 ### Coder framework
@@ -1074,20 +1077,31 @@ Located in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Co
 (generated output: `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Coders.hs`):
 
 ```haskell
--- Bidirectional transformation
-data Coder v1 v2 = Coder {
-  coderEncode :: InferenceContext -> v1 -> Either Error v2,
-  coderDecode :: InferenceContext -> v2 -> Either Error v1
+-- A Coder is a pair of partial functions.
+-- coderEncode returns Right v2 on success or Left e on failure; coderDecode is the inverse.
+-- The error type e is generic, allowing callers to choose String, Error, or any other type.
+data Coder v1 v2 e = Coder {
+  coderEncode :: v1 -> Either e v2,
+  coderDecode :: v2 -> Either e v1
 }
 
--- Adapter for language-specific transformations
-data Adapter t1 t2 v1 v2 = Adapter {
+-- Adapter for language-specific transformations; carries a Coder plus type-level metadata.
+data Adapter t1 t2 v1 v2 e = Adapter {
   adapterIsLossy :: Bool,              -- Track lossy conversions
   adapterSource :: t1,                 -- Source type schema
   adapterTarget :: t2,                 -- Target type schema
-  adapterCoder  :: Coder v1 v2         -- Value-level transformation
+  adapterCoder  :: Coder v1 v2 e       -- Value-level transformation
 }
 ```
+
+The `e` type parameter makes error handling polymorphic.
+Use `Error` (the kernel's structured error type from `hydra.errors`) when the coder
+participates in the kernel's inference and adaptation pipeline — it carries structured
+context such as extraction errors, unexpected shapes, and other errors.
+Use `String` for lightweight host-side coders where structured errors add no value;
+Java's `StatelessCoder<V1, V2>` and `StatelessAdapter<T1, T2, V1, V2>` are the
+canonical examples, both specializing `e = String`.
+`Bicoder` and `SymmetricAdapter` carry the same `e` parameter.
 
 ### Encoding process
 
@@ -1154,26 +1168,38 @@ moduleToJava cx g mod = do
 
 ### The adapter framework
 
-Adapters handle type compatibility between languages:
+Adapters handle type compatibility between languages.
+`AdapterContext` bundles the graph, the target language (with its constraints), and a
+cache of already-constructed adapters so that recursive type adaptation doesn't recompute
+the same adapter twice:
 
 ```haskell
--- Core adapter functions
+data AdapterContext = AdapterContext {
+  adapterContextGraph     :: Graph,
+  adapterContextLanguage  :: Language,
+  adapterContextAdapters  :: Map Name (Adapter Type Type Term Term Error)
+}
+```
+
+Core adapter functions:
+
+```haskell
 languageAdapter    :: InferenceContext -> AdapterContext -> Language -> Type
-                   -> Either Error (Adapter Type Type Term Term)
+                   -> Either Error (Adapter Type Type Term Term Error)
 
 adaptTypeForLanguage :: InferenceContext -> AdapterContext -> Language -> Type
                     -> Either Error Type
 
 termAdapter        :: InferenceContext -> AdapterContext -> Type
-                   -> Either Error (Adapter FieldType FieldType Field Field)
+                   -> Either Error (Adapter FieldType FieldType Field Field Error)
 ```
 
 **Adapter composition:**
 ```haskell
-composeCoders  :: Coder v1 v2 -> Coder v2 v3 -> Coder v1 v3
+composeCoders  :: Coder v1 v2 e -> Coder v2 v3 e -> Coder v1 v3 e
 
 constructCoder :: InferenceContext -> AdapterContext -> Language -> Type
-               -> Either Error (Coder Term Term)
+               -> Either Error (Coder Term Term Error)
 ```
 
 **Module transformation pipeline:**
