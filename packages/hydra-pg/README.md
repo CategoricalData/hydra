@@ -196,6 +196,31 @@ Like the validator, the mapping is pure and translingual. With mutually-inverse 
 single-label nodes, the structural parts (labels, property walk, endpoint wiring) are lossless; all
 remaining loss is delegated to — and characterized by — the caller's id/value conversions.
 
+## Host-native overlays
+
+Some property-graph integrations are inherently host-specific (third-party library calls, ANTLR
+parsers) and so are hand-written rather than generated. They live under `overlay/java/hydra-pg/`
+(and `overlay/python/hydra-pg/`) and are copied onto the generated distribution at assembly time
+(#511; formerly separate `bindings/java/*` artifacts). Each declares its third-party dependencies via
+`overlay/<lang>/hydra-pg/build.json` (the encoded `hydra.gradle` / `hydra.python.pyproject` build
+configuration).
+
+- **Neo4j openCypher + GQL parsers** (`hydra.overlay.java.{cypher,gql}`). ANTLR grammars under
+  `overlay/java/hydra-pg/src/main/antlr/`: `org/neo4j/Cypher.g4` (openCypher, generates
+  `org.neo4j.{CypherLexer,CypherParser}`) and `net/fortytwo/hydra/gql/parser/GQL.g4` (ISO/IEC GQL,
+  generates `net.fortytwo.hydra.gql.parser.{GQLLexer,GQLParser}` — a neutral Hydra-scoped namespace, as
+  GQL is an ISO standard, not Neo4j-owned). `CypherReader`/`GQLReader` wrap the generated parsers;
+  `FromCypher` converts parsed Cypher ASTs into the translingual `hydra.pg.query.*` model.
+- **TinkerPop / Gremlin bridge** (`hydra.overlay.java.tinkerpop`). A bidirectional mapping between the
+  generated `hydra.tinkerpop.gremlin` model and TinkerPop's native `Bytecode`: `HydraToBytecode`
+  (forward), `BytecodeToHydra` (reverse), and a pg ↔ TinkerGraph bridge (`coder.HydraGremlinBridge`,
+  `coder.Validate`). `GremlinText.parse` (Gremlin text → Hydra) is currently blocked by an ANTLR
+  runtime conflict — see the TODO under *What it provides* and
+  [#521](https://github.com/CategoricalData/hydra/issues/521). A Python TinkerPop coder lives in
+  `overlay/python/hydra-pg/`.
+- **PG DSL builders** (`hydra.overlay.java.pg.dsl`). Fluent Java builders (`Graphs.vertex/edge/...`)
+  for constructing `hydra.pg.model` graphs and schemas, plus `Merging` and query helpers.
+
 ## Demos
 
 Four demos exercise this package end-to-end:
