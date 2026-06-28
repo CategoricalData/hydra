@@ -571,7 +571,8 @@
                             "key": {"variable": "description"},
                             "value": {
                               "literal": {
-                                "string": "The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation."}}}]}}}}},
+                                "string": "The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation."}}},
+                          {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -603,7 +604,8 @@
                                   "key": {"variable": "description"},
                                   "value": {
                                     "literal": {
-                                      "string": "The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation."}}}]}}}}},
+                                      "string": "The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation."}}},
+                                {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}},
                     "body": {
                       "wrap": {
                         "typeName": "hydra.typed.TypedTerm",
@@ -731,7 +733,8 @@
                           "key": {"variable": "description"},
                           "value": {
                             "literal": {
-                              "string": "The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation."}}}]}}}}}}},
+                              "string": "The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation."}}},
+                        {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -906,7 +909,8 @@
                             "key": {"variable": "description"},
                             "value": {
                               "literal": {
-                                "string": "The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation."}}}]}}}}},
+                                "string": "The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation."}}},
+                          {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -933,7 +937,8 @@
                                   "key": {"variable": "description"},
                                   "value": {
                                     "literal": {
-                                      "string": "The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation."}}}]}}}}},
+                                      "string": "The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation."}}},
+                                {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}},
                     "body": {
                       "wrap": {
                         "typeName": "hydra.typed.TypedTerm",
@@ -1011,7 +1016,12 @@
             {
               "name": "arg0",
               "type": {
-                "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"list": {"variable": "hydra.relational.ColumnName"}}}},
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"list": {"variable": "hydra.relational.ColumnName"}},
+                      "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -1022,7 +1032,12 @@
               "lambda": {
                 "parameter": "x",
                 "domain": {
-                  "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"list": {"variable": "hydra.relational.ColumnName"}}}},
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.relational.ColumnName"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.typed.TypedTerm",
@@ -1059,7 +1074,12 @@
               "isLazy": false}],
           "result": {
             "type": {
-              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"list": {"variable": "hydra.relational.ColumnName"}}}}}},
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.relational.ColumnName"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -1313,7 +1333,10 @@
                   "argument": {
                     "annotated": {
                       "body": {"list": {"application": {"function": {"variable": "hydra.relational.ColumnSchema"}, "argument": {"variable": "t"}}}},
-                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A list of column specifications"}}}]}}}}},
+                      "annotation": {
+                        "map": [
+                          {"key": {"variable": "description"}, "value": {"literal": {"string": "A list of column specifications"}}},
+                          {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}},
               "isLazy": false},
             {
               "name": "arg2",
@@ -1370,7 +1393,10 @@
                         "argument": {
                           "annotated": {
                             "body": {"list": {"application": {"function": {"variable": "hydra.relational.ColumnSchema"}, "argument": {"variable": "t"}}}},
-                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A list of column specifications"}}}]}}}}},
+                            "annotation": {
+                              "map": [
+                                {"key": {"variable": "description"}, "value": {"literal": {"string": "A list of column specifications"}}},
+                                {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}},
                     "body": {
                       "lambda": {
                         "parameter": "primaryKeys",
@@ -1541,7 +1567,10 @@
                 "argument": {
                   "annotated": {
                     "body": {"list": {"application": {"function": {"variable": "hydra.relational.ColumnSchema"}, "argument": {"variable": "t"}}}},
-                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A list of column specifications"}}}]}}}}}}},
+                    "annotation": {
+                      "map": [
+                        {"key": {"variable": "description"}, "value": {"literal": {"string": "A list of column specifications"}}},
+                        {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -1927,7 +1956,10 @@
                   "argument": {
                     "annotated": {
                       "body": {"list": {"application": {"function": {"variable": "hydra.relational.ColumnSchema"}, "argument": {"variable": "t"}}}},
-                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A list of column specifications"}}}]}}}}},
+                      "annotation": {
+                        "map": [
+                          {"key": {"variable": "description"}, "value": {"literal": {"string": "A list of column specifications"}}},
+                          {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -1952,7 +1984,10 @@
                         "argument": {
                           "annotated": {
                             "body": {"list": {"application": {"function": {"variable": "hydra.relational.ColumnSchema"}, "argument": {"variable": "t"}}}},
-                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A list of column specifications"}}}]}}}}},
+                            "annotation": {
+                              "map": [
+                                {"key": {"variable": "description"}, "value": {"literal": {"string": "A list of column specifications"}}},
+                                {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}},
                     "body": {
                       "wrap": {
                         "typeName": "hydra.typed.TypedTerm",
@@ -2580,7 +2615,13 @@
           "parameters": [
             {
               "name": "arg0",
-              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"list": {"variable": "v"}}}},
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"list": {"variable": "v"}},
+                      "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -2592,7 +2633,13 @@
             "body": {
               "lambda": {
                 "parameter": "x",
-                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"list": {"variable": "v"}}}},
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {
+                      "annotated": {
+                        "body": {"list": {"variable": "v"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.typed.TypedTerm",
@@ -2629,7 +2676,14 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {"application": {"function": {"variable": "hydra.relational.Row"}, "argument": {"variable": "v"}}}}},
               "isLazy": false}],
-          "result": {"type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"list": {"variable": "v"}}}}}},
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {
+                  "annotated": {
+                    "body": {"list": {"variable": "v"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
         "body": {
           "annotated": {
             "body": {

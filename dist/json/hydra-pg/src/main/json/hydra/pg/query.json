@@ -10,7 +10,13 @@
     {
       "type": {
         "name": "hydra.pg.query.ApplicationQuery",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.pg.query.Query"}}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "wrap": {
+              "annotated": {
+                "body": {"list": {"variable": "hydra.pg.query.Query"}},
+                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
     {
       "type": {
         "name": "hydra.pg.query.AssociativeExpression",
@@ -19,7 +25,12 @@
           "body": {
             "record": [
               {"name": "operator", "type": {"variable": "hydra.pg.query.BinaryOperator"}},
-              {"name": "operands", "type": {"list": {"variable": "hydra.pg.query.Expression"}}}]}}}},
+              {
+                "name": "operands",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.pg.query.Expression"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]}}}},
     {
       "type": {
         "name": "hydra.pg.query.BinaryExpression",
