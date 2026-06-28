@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Test cases for code generation operations such as inferModules and inferModulesGiven
 
 module Hydra.Test.Generation where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Codegen as Codegen
 import qualified Hydra.Coders as Coders
@@ -39,6 +41,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Test cases for code generation operations
 allTests :: Testing.TestGroup
 allTests =

@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term encoders for hydra.util
 
 module Hydra.Encode.Util where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.Packaging as Packaging
@@ -11,6 +13,7 @@ import qualified Hydra.Overlay.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Encoder for hydra.util.CaseConvention
 caseConvention :: Util.CaseConvention -> Core.Term
 caseConvention x =
@@ -35,6 +38,7 @@ caseConvention x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "upperSnake"),
           Core.fieldTerm = Core.TermUnit}})
+
 -- | Encoder for hydra.util.Comparison
 comparison :: Util.Comparison -> Core.Term
 comparison x =
@@ -54,6 +58,7 @@ comparison x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "greaterThan"),
           Core.fieldTerm = Core.TermUnit}})
+
 -- | Encoder for hydra.util.ModuleNames
 moduleNames :: (n -> Core.Term) -> Util.ModuleNames n -> Core.Term
 moduleNames n x =
@@ -66,6 +71,7 @@ moduleNames n x =
         Core.Field {
           Core.fieldName = (Core.Name "mapping"),
           Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap Packaging.moduleName n m)) (Util.moduleNamesMapping x))}]})
+
 -- | Encoder for hydra.util.Precision
 precision :: Util.Precision -> Core.Term
 precision x =
@@ -80,6 +86,7 @@ precision x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "bits"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 v0)))}})
+
 -- | Encoder for hydra.util.QualifiedName
 qualifiedName :: Util.QualifiedName -> Core.Term
 qualifiedName x =

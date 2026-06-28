@@ -144,7 +144,7 @@
                     "name": "description",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {
                           "map": [
                             {
@@ -154,7 +154,7 @@
                     "name": "comments",
                     "type": {
                       "annotated": {
-                        "body": {"list": {"literal": {"string": {}}}},
+                        "body": {"list": {"literal": "string"}},
                         "annotation": {
                           "map": [
                             {
@@ -352,7 +352,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
                   {
@@ -451,7 +451,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
                   {
@@ -498,7 +498,7 @@
                     "name": "isPure",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {
                           "map": [
                             {
@@ -509,7 +509,7 @@
                     "name": "isTotal",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {
                           "map": [
                             {
@@ -624,7 +624,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
                   {"key": {"variable": "description"}, "value": {"literal": {"string": "A version string, e.g. \"0.15\" or \"1.0.0\"."}}}]}}}}}},
@@ -675,7 +675,7 @@
                     "name": "any",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Any version satisfies the dependency"}}}]}}}},
                   {

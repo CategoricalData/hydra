@@ -22,25 +22,25 @@
                     "name": "boolean",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A boolean value"}}}]}}}},
                   {
                     "name": "null",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "JSON's null value"}}}]}}}},
                   {
                     "name": "number",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"decimal": {}}},
+                        "body": {"literal": "decimal"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A numeric value"}}}]}}}},
                   {
                     "name": "object",
                     "type": {
                       "annotated": {
-                        "body": {"list": {"pair": {"first": {"literal": {"string": {}}}, "second": {"variable": "hydra.json.model.Value"}}}},
+                        "body": {"list": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.json.model.Value"}}}},
                         "annotation": {
                           "map": [
                             {
@@ -52,6 +52,6 @@
                     "name": "string",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A string value"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A JSON value"}}}]}}}}}}]}

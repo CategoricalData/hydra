@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | String representations of hydra.util types
 
 module Hydra.Show.Util where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -31,6 +33,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Show a case convention as a string
 caseConvention :: Util.CaseConvention -> String
 caseConvention c =
@@ -39,6 +42,7 @@ caseConvention c =
       Util.CaseConventionUpperSnake -> "UPPER_SNAKE_CASE"
       Util.CaseConventionCamel -> "camelCase"
       Util.CaseConventionPascal -> "PascalCase"
+
 -- | Show a comparison result as a string
 comparison :: Util.Comparison -> String
 comparison c =

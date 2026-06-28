@@ -1,12 +1,15 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term encoders for hydra.variants
 
 module Hydra.Encode.Variants where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Encoder for hydra.variants.LiteralVariant
 literalVariant :: Variants.LiteralVariant -> Core.Term
 literalVariant x =
@@ -41,6 +44,7 @@ literalVariant x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "string"),
           Core.fieldTerm = Core.TermUnit}})
+
 -- | Encoder for hydra.variants.TermVariant
 termVariant :: Variants.TermVariant -> Core.Term
 termVariant x =
@@ -150,6 +154,7 @@ termVariant x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "wrap"),
           Core.fieldTerm = Core.TermUnit}})
+
 -- | Encoder for hydra.variants.TypeVariant
 typeVariant :: Variants.TypeVariant -> Core.Term
 typeVariant x =

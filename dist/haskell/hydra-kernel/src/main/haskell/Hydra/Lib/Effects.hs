@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Primitives in the hydra.lib.effects module.
 
 module Hydra.Lib.Effects where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -31,6 +33,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 apply :: Packaging.PrimitiveDefinition
 apply =
     Packaging.PrimitiveDefinition {
@@ -68,6 +71,7 @@ apply =
       Packaging.primitiveDefinitionIsPure = False,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 bind :: Packaging.PrimitiveDefinition
 bind =
     Packaging.PrimitiveDefinition {
@@ -106,6 +110,7 @@ bind =
       Packaging.primitiveDefinitionIsPure = False,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 compose :: Packaging.PrimitiveDefinition
 compose =
     Packaging.PrimitiveDefinition {
@@ -153,6 +158,7 @@ compose =
       Packaging.primitiveDefinitionIsPure = False,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 foldl :: Packaging.PrimitiveDefinition
 foldl =
     Packaging.PrimitiveDefinition {
@@ -197,6 +203,7 @@ foldl =
       Packaging.primitiveDefinitionIsPure = False,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 map :: Packaging.PrimitiveDefinition
 map =
     Packaging.PrimitiveDefinition {
@@ -235,6 +242,7 @@ map =
       Packaging.primitiveDefinitionIsPure = False,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 mapList :: Packaging.PrimitiveDefinition
 mapList =
     Packaging.PrimitiveDefinition {
@@ -272,6 +280,7 @@ mapList =
       Packaging.primitiveDefinitionIsPure = False,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 mapOptional :: Packaging.PrimitiveDefinition
 mapOptional =
     Packaging.PrimitiveDefinition {
@@ -309,6 +318,7 @@ mapOptional =
       Packaging.primitiveDefinitionIsPure = False,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 pure :: Packaging.PrimitiveDefinition
 pure =
     Packaging.PrimitiveDefinition {

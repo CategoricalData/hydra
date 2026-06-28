@@ -12,10 +12,10 @@
             "annotated": {
               "body": {
                 "union": [
-                  {"name": "none", "type": {"unit": {}}},
-                  {"name": "left", "type": {"unit": {}}},
-                  {"name": "right", "type": {"unit": {}}},
-                  {"name": "both", "type": {"unit": {}}}]},
+                  {"name": "none", "type": "unit"},
+                  {"name": "left", "type": "unit"},
+                  {"name": "right", "type": "unit"},
+                  {"name": "both", "type": "unit"}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Operator associativity"}}}]}}}}}},
     {
       "type": {
@@ -30,13 +30,13 @@
                     "name": "indent",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An optional indentation string"}}}]}}}},
                   {
                     "name": "newlineBeforeContent",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {
                           "map": [
                             {"key": {"variable": "description"}, "value": {"literal": {"string": "Whether to place a newline before the content"}}}]}}}},
@@ -44,7 +44,7 @@
                     "name": "newlineAfterContent",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether to place a newline after the content"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Formatting option for code blocks"}}}]}}}}}},
@@ -160,14 +160,14 @@
                     "name": "allLines",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Indent all lines with the given string"}}}]}}}},
                   {
                     "name": "subsequentLines",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {
                           "map": [
                             {
@@ -290,7 +290,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"integer": {"int32": {}}}}},
+              "body": {"wrap": {"literal": {"integer": "int32"}}},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Operator precedence"}}}]}}}}}},
     {
       "type": {
@@ -327,7 +327,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Any symbol"}}}]}}}}}},
     {
       "type": {
@@ -342,32 +342,32 @@
                     "name": "none",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "No whitespace"}}}]}}}},
                   {
                     "name": "space",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A single space"}}}]}}}},
                   {
                     "name": "break",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A line break"}}}]}}}},
                   {
                     "name": "breakAndIndent",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A line break followed by indentation"}}}]}}}},
                   {
                     "name": "doubleBreak",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Two line breaks"}}}]}}}}]},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "One of several classes of whitespace"}}}]}}}}}}]}

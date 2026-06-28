@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | DSL functions for hydra.lib.pairs
 
 module Hydra.Dsl.Lib.Pairs where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -57,6 +59,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | DSL reference to hydra.lib.pairs.bimap
 bimap :: Typed.TypedTerm (a -> c) -> Typed.TypedTerm (b -> d) -> Typed.TypedTerm (a, b) -> Typed.TypedTerm (c, d)
 bimap arg0 arg1 arg2 =
@@ -67,12 +70,14 @@ bimap arg0 arg1 arg2 =
           Core.applicationArgument = (Typed.unTypedTerm arg0)})),
         Core.applicationArgument = (Typed.unTypedTerm arg1)})),
       Core.applicationArgument = (Typed.unTypedTerm arg2)}))
+
 -- | DSL reference to hydra.lib.pairs.first
 first :: Typed.TypedTerm (a, b) -> Typed.TypedTerm a
 first arg0 =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.first")),
       Core.applicationArgument = (Typed.unTypedTerm arg0)}))
+
 -- | DSL reference to hydra.lib.pairs.second
 second :: Typed.TypedTerm (a, b) -> Typed.TypedTerm b
 second arg0 =

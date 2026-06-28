@@ -222,7 +222,7 @@
                     "name": "message",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable error message"}}}]}}}}]},
               "annotation": {
                 "map": [
@@ -248,14 +248,14 @@
                     "name": "expectedArity",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The expected number of type arguments"}}}]}}}},
                   {
                     "name": "actualArity",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The actual number of type arguments provided"}}}]}}}},
                   {
@@ -374,7 +374,7 @@
                     "name": "description",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {
                           "map": [
                             {

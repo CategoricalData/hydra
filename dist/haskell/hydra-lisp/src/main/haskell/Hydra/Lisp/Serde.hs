@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Lisp serializer: converts Lisp AST to concrete syntax for Clojure, Emacs Lisp, Common Lisp, or Scheme
 
 module Hydra.Lisp.Serde where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
@@ -42,10 +44,12 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 andExpressionToExpr :: Syntax.Dialect -> Syntax.AndExpression -> Ast.Expr
 andExpressionToExpr d andExpr =
     Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat2 [
       Serialization.cst "and"] (Lists.map (expressionToExpr d) (Syntax.andExpressionExpressions andExpr))))
+
 applicationToExpr :: Syntax.Dialect -> Syntax.Application -> Ast.Expr
 applicationToExpr d app =
 
@@ -67,6 +71,7 @@ applicationToExpr d app =
                     fun] args) (Lists.concat2 [
                     fun] args)
       in (Serialization.parens (Serialization.spaceSepAdaptive allParts))
+
 caseExpressionToExpr :: Syntax.Dialect -> Syntax.CaseExpression -> Ast.Expr
 caseExpressionToExpr d caseExpr =
 
@@ -88,11 +93,13 @@ caseExpressionToExpr d caseExpr =
           scrutinee],
         clauseExprs,
         defaultPart])))
+
 commentToExpr :: Syntax.Comment -> Ast.Expr
 commentToExpr c =
 
       let text = Syntax.commentText c
       in (Serialization.cst (Logic.ifElse (Equality.equal text "") ";" (Strings.cat2 "; " text)))
+
 condExpressionToExpr :: Syntax.Dialect -> Syntax.CondExpression -> Ast.Expr
 condExpressionToExpr d condExpr =
 
@@ -158,6 +165,7 @@ condExpressionToExpr d condExpr =
               Serialization.cst "cond"],
             clauseExprs,
             defaultPart])))
+
 constantDefinitionToExpr :: Syntax.Dialect -> Syntax.ConstantDefinition -> Ast.Expr
 constantDefinitionToExpr d cdef =
 
@@ -167,6 +175,7 @@ constantDefinitionToExpr d cdef =
         Serialization.cst (defconstKeyword d),
         name,
         value]))
+
 defKeyword :: Syntax.Dialect -> String
 defKeyword d =
     case d of
@@ -174,6 +183,7 @@ defKeyword d =
       Syntax.DialectEmacsLisp -> "defvar"
       Syntax.DialectCommonLisp -> "cl:defvar"
       Syntax.DialectScheme -> "define"
+
 defconstKeyword :: Syntax.Dialect -> String
 defconstKeyword d =
     case d of
@@ -181,6 +191,7 @@ defconstKeyword d =
       Syntax.DialectEmacsLisp -> "defconst"
       Syntax.DialectCommonLisp -> "cl:defconstant"
       Syntax.DialectScheme -> "define"
+
 defnKeyword :: Syntax.Dialect -> String
 defnKeyword d =
     case d of
@@ -188,6 +199,7 @@ defnKeyword d =
       Syntax.DialectEmacsLisp -> "defun"
       Syntax.DialectCommonLisp -> "cl:defun"
       Syntax.DialectScheme -> "define"
+
 defrecordKeyword :: Syntax.Dialect -> String
 defrecordKeyword d =
     case d of
@@ -195,6 +207,7 @@ defrecordKeyword d =
       Syntax.DialectEmacsLisp -> "cl-defstruct"
       Syntax.DialectCommonLisp -> "cl:defstruct"
       Syntax.DialectScheme -> "define-record-type"
+
 doExpressionToExpr :: Syntax.Dialect -> Syntax.DoExpression -> Ast.Expr
 doExpressionToExpr d doExpr =
 
@@ -206,6 +219,7 @@ doExpressionToExpr d doExpr =
                 Syntax.DialectScheme -> "begin"
       in (Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat2 [
         Serialization.cst kw] (Lists.map (expressionToExpr d) (Syntax.doExpressionExpressions doExpr)))))
+
 docstringToExpr :: Syntax.Docstring -> Ast.Expr
 docstringToExpr ds =
 
@@ -213,6 +227,7 @@ docstringToExpr ds =
       in (Serialization.cst (Logic.ifElse (Equality.equal text "") ";;" (Strings.cat [
         ";; ",
         text])))
+
 exportDeclarationToExpr :: Syntax.Dialect -> Syntax.ExportDeclaration -> Ast.Expr
 exportDeclarationToExpr d edecl =
 
@@ -230,6 +245,7 @@ exportDeclarationToExpr d edecl =
           s]) syms)))
         Syntax.DialectScheme -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat2 [
           Serialization.cst "export"] syms))
+
 expressionToExpr :: Syntax.Dialect -> Syntax.Expression -> Ast.Expr
 expressionToExpr d expr =
     case expr of
@@ -294,6 +310,7 @@ expressionToExpr d expr =
           Serialization.cst ",@",
           (expressionToExpr d (Syntax.splicingUnquoteExpressionBody v0))]
       Syntax.ExpressionSExpression v0 -> sExpressionToExpr v0
+
 falseExpr :: Syntax.Dialect -> Ast.Expr
 falseExpr d =
     case d of
@@ -301,6 +318,7 @@ falseExpr d =
       Syntax.DialectEmacsLisp -> Serialization.cst "nil"
       Syntax.DialectCommonLisp -> Serialization.cst "cl:nil"
       Syntax.DialectScheme -> Serialization.cst "#f"
+
 fieldAccessToExpr :: Syntax.Dialect -> Syntax.FieldAccess -> Ast.Expr
 fieldAccessToExpr d fa =
 
@@ -331,6 +349,7 @@ fieldAccessToExpr d fa =
             (Serialization.cst "-"),
             field],
           target])
+
 formatLispFloat :: Syntax.Dialect -> Double -> String
 formatLispFloat d v =
 
@@ -348,6 +367,7 @@ formatLispFloat d v =
         Syntax.DialectScheme -> "-inf.0"
         Syntax.DialectCommonLisp -> "+hydra-neg-inf+"
         Syntax.DialectEmacsLisp -> "-1.0e+INF") s)))
+
 functionDefinitionToExpr :: Syntax.Dialect -> Syntax.FunctionDefinition -> Ast.Expr
 functionDefinitionToExpr d fdef =
 
@@ -383,6 +403,7 @@ functionDefinitionToExpr d fdef =
             Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat2 [
               name] params))],
           body]))
+
 ifExpressionToExpr :: Syntax.Dialect -> Syntax.IfExpression -> Ast.Expr
 ifExpressionToExpr d ifExpr =
 
@@ -397,6 +418,7 @@ ifExpressionToExpr d ifExpr =
           cond,
           then_],
         elsePart])))
+
 importDeclarationToExpr :: Syntax.Dialect -> Syntax.ImportDeclaration -> Ast.Expr
 importDeclarationToExpr d idecl =
 
@@ -417,6 +439,7 @@ importDeclarationToExpr d idecl =
         Syntax.DialectScheme -> Serialization.parens (Serialization.spaceSepAdaptive [
           Serialization.cst "import",
           (Serialization.parens (Serialization.cst modName))])
+
 keywordToExpr :: Syntax.Dialect -> Syntax.Keyword -> Ast.Expr
 keywordToExpr d k =
 
@@ -430,6 +453,7 @@ keywordToExpr d k =
           n,
           "/:",
           name]))
+
 lambdaKeyword :: Syntax.Dialect -> String
 lambdaKeyword d =
     case d of
@@ -437,6 +461,7 @@ lambdaKeyword d =
       Syntax.DialectEmacsLisp -> "lambda"
       Syntax.DialectCommonLisp -> "cl:lambda"
       Syntax.DialectScheme -> "lambda"
+
 lambdaToExpr :: Syntax.Dialect -> Syntax.Lambda -> Ast.Expr
 lambdaToExpr d lam =
 
@@ -475,6 +500,7 @@ lambdaToExpr d lam =
           [
             Serialization.parens (Serialization.spaceSepAdaptive params)],
           body]))
+
 letExpressionToExpr :: Syntax.Dialect -> Syntax.LetExpression -> Ast.Expr
 letExpressionToExpr d letExpr =
 
@@ -577,6 +603,7 @@ letExpressionToExpr d letExpr =
             [
               Serialization.parens (Serialization.spaceSepAdaptive bindingExprs)],
             body])))
+
 listKeyword :: Syntax.Dialect -> String
 listKeyword d =
     case d of
@@ -584,6 +611,7 @@ listKeyword d =
       Syntax.DialectEmacsLisp -> "list"
       Syntax.DialectCommonLisp -> "cl:list"
       Syntax.DialectScheme -> "list"
+
 listLiteralToExpr :: Syntax.Dialect -> Syntax.ListLiteral -> Ast.Expr
 listLiteralToExpr d ll =
 
@@ -593,6 +621,7 @@ listLiteralToExpr d ll =
         Serialization.cst "'",
         (Serialization.parens (Serialization.spaceSepAdaptive elems))]) (Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat2 [
         Serialization.cst (listKeyword d)] elems))))
+
 literalToExpr :: Syntax.Dialect -> Syntax.Literal -> Ast.Expr
 literalToExpr d lit =
     case lit of
@@ -656,6 +685,7 @@ literalToExpr d lit =
       Syntax.LiteralSymbol v0 -> Serialization.noSep [
         Serialization.cst "'",
         (symbolToExpr v0)]
+
 macroDefinitionToExpr :: Syntax.Dialect -> Syntax.MacroDefinition -> Ast.Expr
 macroDefinitionToExpr d mdef =
 
@@ -689,6 +719,7 @@ macroDefinitionToExpr d mdef =
             Serialization.cst "define-syntax",
             name],
           body]))
+
 mapLiteralToExpr :: Syntax.Dialect -> Syntax.MapLiteral -> Ast.Expr
 mapLiteralToExpr d ml =
 
@@ -714,6 +745,7 @@ mapLiteralToExpr d ml =
           Serialization.cst "cons",
           (expressionToExpr d (Syntax.mapEntryKey e)),
           (expressionToExpr d (Syntax.mapEntryValue e))])) entries)))
+
 moduleDeclarationToExpr :: Syntax.Dialect -> Syntax.ModuleDeclaration -> Ast.Expr
 moduleDeclarationToExpr d mdecl =
 
@@ -743,6 +775,7 @@ moduleDeclarationToExpr d mdecl =
         Syntax.DialectScheme -> Serialization.parens (Serialization.spaceSepAdaptive [
           Serialization.cst "define-library",
           (Serialization.parens (Serialization.cst name))])
+
 nilExpr :: Syntax.Dialect -> Ast.Expr
 nilExpr d =
     case d of
@@ -750,15 +783,18 @@ nilExpr d =
       Syntax.DialectEmacsLisp -> Serialization.cst "nil"
       Syntax.DialectCommonLisp -> Serialization.cst "cl:nil"
       Syntax.DialectScheme -> Serialization.cst "'()"
+
 notExpressionToExpr :: Syntax.Dialect -> Syntax.NotExpression -> Ast.Expr
 notExpressionToExpr d notExpr =
     Serialization.parens (Serialization.spaceSepAdaptive [
       Serialization.cst "not",
       (expressionToExpr d (Syntax.notExpressionExpression notExpr))])
+
 orExpressionToExpr :: Syntax.Dialect -> Syntax.OrExpression -> Ast.Expr
 orExpressionToExpr d orExpr =
     Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat2 [
       Serialization.cst "or"] (Lists.map (expressionToExpr d) (Syntax.orExpressionExpressions orExpr))))
+
 programToExpr :: Syntax.Program -> Ast.Expr
 programToExpr prog =
 
@@ -903,6 +939,7 @@ programToExpr prog =
                           beginClause]]))
           in (Serialization.doubleNewlineSep (Lists.concat2 warning [
             libraryExpr])))
+
 recordTypeDefinitionToExpr :: Syntax.Dialect -> Syntax.RecordTypeDefinition -> Ast.Expr
 recordTypeDefinitionToExpr d rdef =
 
@@ -961,11 +998,13 @@ recordTypeDefinitionToExpr d rdef =
               constructor,
               predicate],
             accessors])))
+
 sExpressionToExpr :: Syntax.SExpression -> Ast.Expr
 sExpressionToExpr sexpr =
     case sexpr of
       Syntax.SExpressionAtom v0 -> Serialization.cst v0
       Syntax.SExpressionList v0 -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.map sExpressionToExpr v0))
+
 setLiteralToExpr :: Syntax.Dialect -> Syntax.SetLiteral -> Ast.Expr
 setLiteralToExpr d sl =
 
@@ -980,8 +1019,10 @@ setLiteralToExpr d sl =
           Serialization.cst "cl:list"] elems))
         Syntax.DialectScheme -> Serialization.parens (Serialization.spaceSepAdaptive (Lists.concat2 [
           Serialization.cst "list"] elems))
+
 symbolToExpr :: Syntax.Symbol -> Ast.Expr
 symbolToExpr s = Serialization.cst (Syntax.unSymbol s)
+
 topLevelFormToExpr :: Syntax.Dialect -> Syntax.TopLevelForm -> Ast.Expr
 topLevelFormToExpr d form =
     case form of
@@ -991,6 +1032,7 @@ topLevelFormToExpr d form =
       Syntax.TopLevelFormRecordType v0 -> recordTypeDefinitionToExpr d v0
       Syntax.TopLevelFormMacro v0 -> macroDefinitionToExpr d v0
       Syntax.TopLevelFormExpression v0 -> expressionToExpr d v0
+
 topLevelFormWithCommentsToExpr :: Syntax.Dialect -> Syntax.TopLevelFormWithComments -> Ast.Expr
 topLevelFormWithCommentsToExpr d fwc =
 
@@ -1007,6 +1049,7 @@ topLevelFormWithCommentsToExpr d fwc =
         docPart,
         [
           formExpr]]))
+
 trueExpr :: Syntax.Dialect -> Ast.Expr
 trueExpr d =
     case d of
@@ -1014,6 +1057,7 @@ trueExpr d =
       Syntax.DialectEmacsLisp -> Serialization.cst "t"
       Syntax.DialectCommonLisp -> Serialization.cst "cl:t"
       Syntax.DialectScheme -> Serialization.cst "#t"
+
 variableDefinitionToExpr :: Syntax.Dialect -> Syntax.VariableDefinition -> Ast.Expr
 variableDefinitionToExpr d vdef =
 
@@ -1023,6 +1067,7 @@ variableDefinitionToExpr d vdef =
         Serialization.cst (defKeyword d),
         name,
         value]))
+
 variableReferenceToExpr :: Syntax.Dialect -> Syntax.VariableReference -> Ast.Expr
 variableReferenceToExpr d vref =
 
@@ -1035,6 +1080,7 @@ variableReferenceToExpr d vref =
         Syntax.DialectClojure -> name
         Syntax.DialectEmacsLisp -> name
         Syntax.DialectScheme -> name) name)
+
 vectorLiteralToExpr :: Syntax.Dialect -> Syntax.VectorLiteral -> Ast.Expr
 vectorLiteralToExpr d vl =
 

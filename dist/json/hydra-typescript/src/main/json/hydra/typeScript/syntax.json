@@ -10,7 +10,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
                   {
@@ -52,25 +52,25 @@
                     "name": "boolean",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A boolean literal (true or false)"}}}]}}}},
                   {
                     "name": "null",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The null literal"}}}]}}}},
                   {
                     "name": "undefined",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The undefined literal"}}}]}}}},
                   {
                     "name": "bigInt",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"bigint": {}}}},
+                        "body": {"literal": {"integer": "bigint"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A BigInt literal (e.g., 123n)"}}}]}}}},
                   {
                     "name": "template",
@@ -92,13 +92,13 @@
                     "name": "value",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The string value"}}}]}}}},
                   {
                     "name": "singleQuote",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {
                           "map": [
                             {
@@ -144,13 +144,13 @@
                     "name": "value",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The raw string value"}}}]}}}},
                   {
                     "name": "tail",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether this is the last element"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A static part of a template literal"}}}]}}}}}},
     {
@@ -166,13 +166,13 @@
                     "name": "integer",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int64": {}}}},
+                        "body": {"literal": {"integer": "int64"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An integer literal"}}}]}}}},
                   {
                     "name": "float",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"float": {"float64": {}}}},
+                        "body": {"literal": {"float": "float64"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A floating-point literal"}}}]}}}}]},
               "annotation": {
                 "map": [
@@ -282,25 +282,25 @@
                     "name": "any",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The 'any' type"}}}]}}}},
                   {
                     "name": "unknown",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The 'unknown' type"}}}]}}}},
                   {
                     "name": "void",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The 'void' type"}}}]}}}},
                   {
                     "name": "never",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The 'never' type"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A type expression"}}}]}}}}}},
     {
@@ -419,13 +419,13 @@
                     "name": "optional",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the property is optional"}}}]}}}},
                   {
                     "name": "readonly",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the property is readonly"}}}]}}}},
                   {
                     "name": "comments",
@@ -634,7 +634,7 @@
                     "name": "this",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The 'this' keyword"}}}]}}}},
                   {
                     "name": "new",
@@ -747,13 +747,13 @@
                     "name": "async",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the function is async"}}}]}}}},
                   {
                     "name": "generator",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the function is a generator"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function expression"}}}]}}}}}},
     {
@@ -781,7 +781,7 @@
                     "name": "async",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the function is async"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An arrow function expression"}}}]}}}}}},
     {
@@ -825,7 +825,7 @@
                     "name": "optional",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether using optional chaining (?.)"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function call expression"}}}]}}}}}},
@@ -854,14 +854,14 @@
                     "name": "computed",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether using bracket notation (obj[prop])"}}}]}}}},
                   {
                     "name": "optional",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether using optional chaining (?.)"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A member access expression"}}}]}}}}}},
@@ -910,7 +910,7 @@
                     "name": "prefix",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {
                           "map": [
                             {
@@ -974,13 +974,13 @@
                     "name": "computed",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the key is computed [expr]"}}}]}}}},
                   {
                     "name": "shorthand",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {
                           "map": [
                             {"key": {"variable": "description"}, "value": {"literal": {"string": "Whether using shorthand syntax {x} for {x: x}"}}}]}}}}]},
@@ -998,19 +998,19 @@
                     "name": "init",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A normal property initialization"}}}]}}}},
                   {
                     "name": "get",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A getter"}}}]}}}},
                   {
                     "name": "set",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A setter"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The kind of an object property"}}}]}}}}}},
     {
@@ -1038,7 +1038,7 @@
                     "name": "hole",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An empty slot (elision)"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An element in an array expression"}}}]}}}}}},
     {
@@ -1205,13 +1205,13 @@
                     "name": "empty",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An empty statement (;)"}}}]}}}},
                   {
                     "name": "debugger",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A debugger statement"}}}]}}}},
                   {
                     "name": "return",
@@ -1363,8 +1363,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {
-                "union": [{"name": "var", "type": {"unit": {}}}, {"name": "let", "type": {"unit": {}}}, {"name": "const", "type": {"unit": {}}}]},
+              "body": {"union": [{"name": "var", "type": "unit"}, {"name": "let", "type": "unit"}, {"name": "const", "type": "unit"}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The kind of variable declaration"}}}]}}}}}},
     {
       "type": {
@@ -1496,7 +1495,7 @@
                     "name": "await",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether this is a for-await-of"}}}]}}}},
                   {"name": "left", "type": {"variable": "hydra.typeScript.syntax.ForInLeft"}},
                   {"name": "right", "type": {"variable": "hydra.typeScript.syntax.Expression"}},
@@ -1627,13 +1626,13 @@
                     "name": "async",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the function is async"}}}]}}}},
                   {
                     "name": "generator",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the function is a generator"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function declaration"}}}]}}}}}},
     {
@@ -1704,13 +1703,13 @@
                     "name": "computed",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the key is computed"}}}]}}}},
                   {
                     "name": "static",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the method is static"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A method definition in a class"}}}]}}}}}},
     {
@@ -1722,10 +1721,10 @@
             "annotated": {
               "body": {
                 "union": [
-                  {"name": "constructor", "type": {"unit": {}}},
-                  {"name": "method", "type": {"unit": {}}},
-                  {"name": "get", "type": {"unit": {}}},
-                  {"name": "set", "type": {"unit": {}}}]},
+                  {"name": "constructor", "type": "unit"},
+                  {"name": "method", "type": "unit"},
+                  {"name": "get", "type": "unit"},
+                  {"name": "set", "type": "unit"}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The kind of a class method"}}}]}}}}}},
     {
       "type": {
@@ -1756,7 +1755,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"union": [{"name": "module", "type": {"unit": {}}}, {"name": "script", "type": {"unit": {}}}]},
+              "body": {"union": [{"name": "module", "type": "unit"}, {"name": "script", "type": "unit"}]},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the program is a module or script"}}}]}}}}}},
     {
@@ -1947,152 +1946,104 @@
                   {
                     "name": "add",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "+"}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "+"}}}]}}}},
                   {
                     "name": "subtract",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "-"}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "-"}}}]}}}},
                   {
                     "name": "multiply",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "*"}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "*"}}}]}}}},
                   {
                     "name": "divide",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "/"}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "/"}}}]}}}},
                   {
                     "name": "modulo",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "%"}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "%"}}}]}}}},
                   {
                     "name": "exponentiate",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "**"}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "**"}}}]}}}},
                   {
                     "name": "equal",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "=="}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "=="}}}]}}}},
                   {
                     "name": "notEqual",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "!="}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "!="}}}]}}}},
                   {
                     "name": "strictEqual",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "==="}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "==="}}}]}}}},
                   {
                     "name": "strictNotEqual",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "!=="}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "!=="}}}]}}}},
                   {
                     "name": "lessThan",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "<"}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "<"}}}]}}}},
                   {
                     "name": "lessThanOrEqual",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "<="}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "<="}}}]}}}},
                   {
                     "name": "greaterThan",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": ">"}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": ">"}}}]}}}},
                   {
                     "name": "greaterThanOrEqual",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": ">="}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": ">="}}}]}}}},
                   {
                     "name": "and",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "&&"}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "&&"}}}]}}}},
                   {
                     "name": "or",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "||"}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "||"}}}]}}}},
                   {
                     "name": "nullishCoalescing",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "??"}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "??"}}}]}}}},
                   {
                     "name": "bitwiseAnd",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "&"}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "&"}}}]}}}},
                   {
                     "name": "bitwiseOr",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "|"}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "|"}}}]}}}},
                   {
                     "name": "bitwiseXor",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "^"}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "^"}}}]}}}},
                   {
                     "name": "leftShift",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "<<"}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "<<"}}}]}}}},
                   {
                     "name": "rightShift",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": ">>"}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": ">>"}}}]}}}},
                   {
                     "name": "unsignedRightShift",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": ">>>"}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": ">>>"}}}]}}}},
                   {
                     "name": "in",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "in"}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "in"}}}]}}}},
                   {
                     "name": "instanceof",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "instanceof"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A binary operator"}}}]}}}}}},
     {
@@ -2107,57 +2058,45 @@
                   {
                     "name": "negate",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "-"}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "-"}}}]}}}},
                   {
                     "name": "plus",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "+"}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "+"}}}]}}}},
                   {
                     "name": "not",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "!"}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "!"}}}]}}}},
                   {
                     "name": "bitwiseNot",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "~"}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "~"}}}]}}}},
                   {
                     "name": "typeof",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "typeof"}}}]}}}},
                   {
                     "name": "void",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "void"}}}]}}}},
                   {
                     "name": "delete",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "delete"}}}]}}}},
                   {
                     "name": "increment",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "++"}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "++"}}}]}}}},
                   {
                     "name": "decrement",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "--"}}}]}}}}]},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "--"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unary operator"}}}]}}}}}},
     {
       "type": {
@@ -2171,99 +2110,69 @@
                   {
                     "name": "assign",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "="}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "="}}}]}}}},
                   {
                     "name": "addAssign",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "+="}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "+="}}}]}}}},
                   {
                     "name": "subtractAssign",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "-="}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "-="}}}]}}}},
                   {
                     "name": "multiplyAssign",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "*="}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "*="}}}]}}}},
                   {
                     "name": "divideAssign",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "/="}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "/="}}}]}}}},
                   {
                     "name": "moduloAssign",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "%="}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "%="}}}]}}}},
                   {
                     "name": "exponentiateAssign",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "**="}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "**="}}}]}}}},
                   {
                     "name": "leftShiftAssign",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "<<="}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "<<="}}}]}}}},
                   {
                     "name": "rightShiftAssign",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": ">>="}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": ">>="}}}]}}}},
                   {
                     "name": "unsignedRightShiftAssign",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": ">>>="}}}]}}}},
                   {
                     "name": "bitwiseAndAssign",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "&="}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "&="}}}]}}}},
                   {
                     "name": "bitwiseOrAssign",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "|="}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "|="}}}]}}}},
                   {
                     "name": "bitwiseXorAssign",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "^="}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "^="}}}]}}}},
                   {
                     "name": "andAssign",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "&&="}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "&&="}}}]}}}},
                   {
                     "name": "orAssign",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "||="}}}]}}}},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "||="}}}]}}}},
                   {
                     "name": "nullishAssign",
                     "type": {
-                      "annotated": {
-                        "body": {"unit": {}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "??="}}}]}}}}]},
+                      "annotated": {"body": "unit", "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "??="}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An assignment operator"}}}]}}}}}},
     {
       "type": {
@@ -2278,13 +2187,13 @@
                     "name": "line",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A single-line comment (// ...)"}}}]}}}},
                   {
                     "name": "block",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {
                           "map": [
                             {
@@ -2314,7 +2223,7 @@
                     "name": "description",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The main description"}}}]}}}},
                   {
                     "name": "tags",
@@ -2341,7 +2250,7 @@
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Tag name (param, returns, type, etc.)"}}}]}}}},
                   {
@@ -2361,7 +2270,7 @@
                     "name": "description",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Tag description"}}}]}}}}]},
               "annotation": {
                 "map": [

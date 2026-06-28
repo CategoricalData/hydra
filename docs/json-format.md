@@ -96,11 +96,31 @@ The key is the variant name; the value is the variant's payload, encoded by the 
 Each tagged-union object has exactly one key.
 This applies recursively at every level of the AST.
 
+**Compact string form for unit-valued variants.**
+When the variant's payload is `Unit` (see [Empty values](#empty-values)), the encoder emits
+a bare JSON string instead of the single-key object:
+
+```json
+"<variant-tag>"
+```
+
+This is backwards-compatible: decoders accept both forms.
+A decoder that sees a JSON string in a union position looks up the string as a variant name
+and, if the variant's type is `Unit`, decodes it as an inject with a unit payload.
+The old `{"<variant-tag>": {}}` form is still valid on input and decodes identically.
+
+Example — given a type `Scope` with variants `api: Unit` and `tool: Unit`:
+
+- `Scope.api` → `"api"` (compact form; previously `{"api": {}}`)
+- `Scope.tool` → `"tool"` (compact form; previously `{"tool": {}}`)
+
+Non-unit variants are unaffected and continue to use the single-key object form.
+
 Examples:
 
 - `Term.literal (string "hello")` → `{"literal": {"string": "hello"}}`
 - `Type.list (variable "T")` → `{"list": {"variable": "T"}}`
-- `Term.unit` → `{"unit": {}}` (nullary variants take an empty object payload; see [Empty values](#empty-values))
+- `Term.unit` → `{}` (unit type; see [Empty values](#empty-values))
 
 The single-key shape is structurally dual to the record encoding for the
 opposite reason that records are objects: a record is a conjunction (it has
@@ -182,7 +202,8 @@ elsewhere), and the omission is more compact than encoding `null`.
 
 ## Empty values
 
-- `Type.unit`, and any nullary variant payload, encodes as `{}`.
+- `Type.unit` (a standalone unit value, not as a union variant) encodes as `{}`.
+- A unit-typed union variant encodes as a bare string (see [Tagged unions](#tagged-unions)).
 - An empty list, set, or array of records encodes as `[]`.
 - An empty map encodes as `[]` (a map is encoded as an array of entries; see [Maps](#maps)).
 
@@ -457,6 +478,8 @@ A conforming decoder must:
 - Accept all of the above shapes and decode them to the corresponding Hydra terms/types.
 - Reject any tagged-union object with zero or more than one key.
 - Reject any `Either` object carrying both `left` and `right` keys.
+- Accept both the compact string form (`"variant"`) and the legacy object form (`{"variant": {}}`)
+  for unit-typed union variants.
 
 ## Sidecar and metadata files
 

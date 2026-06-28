@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Inference tests for type class constraints (ordering and equality)
 
 module Hydra.Test.Inference.Classes where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -39,6 +41,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
+
 -- | Type class constraint inference tests
 allTests :: Testing.TestGroup
 allTests =
@@ -54,6 +57,7 @@ allTests =
         testGroupForNestedContainers,
         testGroupForCollectionTerms],
       Testing.testGroupCases = []}
+
 testGroupForCollectionTerms :: Testing.TestGroup
 testGroupForCollectionTerms =
     Testing.TestGroup {
@@ -338,6 +342,7 @@ testGroupForCollectionTerms =
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]}]}],
       Testing.testGroupCases = []}
+
 testGroupForComposition :: Testing.TestGroup
 testGroupForComposition =
     Testing.TestGroup {
@@ -457,6 +462,7 @@ testGroupForComposition =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
+
 testGroupForLetBindings :: Testing.TestGroup
 testGroupForLetBindings =
     Testing.TestGroup {
@@ -677,6 +683,7 @@ testGroupForLetBindings =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
+
 testGroupForMonomorphicConstraints :: Testing.TestGroup
 testGroupForMonomorphicConstraints =
     Testing.TestGroup {
@@ -829,6 +836,7 @@ testGroupForMonomorphicConstraints =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
+
 testGroupForNestedContainers :: Testing.TestGroup
 testGroupForNestedContainers =
     Testing.TestGroup {
@@ -947,6 +955,7 @@ testGroupForNestedContainers =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
+
 testGroupForPartialApplication :: Testing.TestGroup
 testGroupForPartialApplication =
     Testing.TestGroup {
@@ -1112,6 +1121,7 @@ testGroupForPartialApplication =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
+
 testGroupForPrimitiveReferences :: Testing.TestGroup
 testGroupForPrimitiveReferences =
     Testing.TestGroup {

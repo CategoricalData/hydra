@@ -31,7 +31,7 @@
                     "name": "arguments",
                     "type": {
                       "annotated": {
-                        "body": {"list": {"literal": {"string": {}}}},
+                        "body": {"list": {"literal": "string"}},
                         "annotation": {
                           "map": [
                             {
@@ -55,7 +55,7 @@
                     "name": "environment",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"map": {"keys": {"variable": "hydra.system.EnvironmentVariable"}, "values": {"literal": {"string": {}}}}}},
+                        "body": {"optional": {"map": {"keys": {"variable": "hydra.system.EnvironmentVariable"}, "values": {"literal": "string"}}}},
                         "annotation": {
                           "map": [
                             {
@@ -77,7 +77,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
                   {
@@ -108,7 +108,7 @@
                     "name": "stdout",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"binary": {}}},
+                        "body": {"literal": "binary"},
                         "annotation": {
                           "map": [
                             {
@@ -118,7 +118,7 @@
                     "name": "stderr",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"binary": {}}},
+                        "body": {"literal": "binary"},
                         "annotation": {
                           "map": [
                             {
@@ -138,7 +138,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"integer": {"int32": {}}}}},
+              "body": {"wrap": {"literal": {"integer": "int32"}}},
               "annotation": {
                 "map": [
                   {

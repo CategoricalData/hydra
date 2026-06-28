@@ -542,7 +542,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"string": {}}},
+                      "body": {"literal": "string"},
                       "annotation": {
                         "map": [
                           {
@@ -562,7 +562,7 @@
                     "function": {"variable": "hydra.typed.TypedTerm"},
                     "argument": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {
                           "map": [
                             {
@@ -631,7 +631,7 @@
                                   "typeName": "hydra.core.Field",
                                   "fields": [
                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "provided"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}}]}}}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -650,7 +650,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"string": {}}},
+                      "body": {"literal": "string"},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A descriptive name for the workflow"}}}]}}}}},
               "isLazy": false},
             {
@@ -670,7 +670,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"string": {}}},
+                      "body": {"literal": "string"},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The source directory"}}}]}}}}},
               "isLazy": false},
             {
@@ -680,7 +680,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"string": {}}},
+                      "body": {"literal": "string"},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The destination directory"}}}]}}}}},
               "isLazy": false}],
           "result": {
@@ -696,7 +696,7 @@
                     "function": {"variable": "hydra.typed.TypedTerm"},
                     "argument": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A descriptive name for the workflow"}}}]}}}}},
                 "body": {
                   "lambda": {
@@ -716,7 +716,7 @@
                             "function": {"variable": "hydra.typed.TypedTerm"},
                             "argument": {
                               "annotated": {
-                                "body": {"literal": {"string": {}}},
+                                "body": {"literal": "string"},
                                 "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The source directory"}}}]}}}}},
                         "body": {
                           "lambda": {
@@ -726,7 +726,7 @@
                                 "function": {"variable": "hydra.typed.TypedTerm"},
                                 "argument": {
                                   "annotated": {
-                                    "body": {"literal": {"string": {}}},
+                                    "body": {"literal": "string"},
                                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The destination directory"}}}]}}}}},
                             "body": {
                               "wrap": {
@@ -801,7 +801,7 @@
                 "function": {"variable": "hydra.typed.TypedTerm"},
                 "argument": {
                   "annotated": {
-                    "body": {"literal": {"string": {}}},
+                    "body": {"literal": "string"},
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A descriptive name for the workflow"}}}]}}}}}}},
         "body": {
           "annotated": {
@@ -923,7 +923,7 @@
                 "function": {"variable": "hydra.typed.TypedTerm"},
                 "argument": {
                   "annotated": {
-                    "body": {"literal": {"string": {}}},
+                    "body": {"literal": "string"},
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The source directory"}}}]}}}}}}},
         "body": {
           "annotated": {
@@ -984,7 +984,7 @@
                 "function": {"variable": "hydra.typed.TypedTerm"},
                 "argument": {
                   "annotated": {
-                    "body": {"literal": {"string": {}}},
+                    "body": {"literal": "string"},
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The destination directory"}}}]}}}}}}},
         "body": {
           "annotated": {
@@ -1046,7 +1046,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"string": {}}},
+                      "body": {"literal": "string"},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A descriptive name for the workflow"}}}]}}}}},
               "isLazy": false}],
           "result": {
@@ -1067,7 +1067,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"literal": {"string": {}}},
+                            "body": {"literal": "string"},
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A descriptive name for the workflow"}}}]}}}}},
                     "body": {
                       "wrap": {
@@ -1396,7 +1396,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"string": {}}},
+                      "body": {"literal": "string"},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The source directory"}}}]}}}}},
               "isLazy": false}],
           "result": {
@@ -1417,7 +1417,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"literal": {"string": {}}},
+                            "body": {"literal": "string"},
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The source directory"}}}]}}}}},
                     "body": {
                       "wrap": {
@@ -1571,7 +1571,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"literal": {"string": {}}},
+                      "body": {"literal": "string"},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The destination directory"}}}]}}}}},
               "isLazy": false}],
           "result": {
@@ -1592,7 +1592,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"literal": {"string": {}}},
+                            "body": {"literal": "string"},
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The destination directory"}}}]}}}}},
                     "body": {
                       "wrap": {

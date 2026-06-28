@@ -1,13 +1,16 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term encoders for hydra.paths
 
 module Hydra.Encode.Paths where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
 import qualified Hydra.Paths as Paths
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Encoder for hydra.paths.SubtermEdge
 subtermEdge :: Paths.SubtermEdge -> Core.Term
 subtermEdge x =
@@ -23,6 +26,7 @@ subtermEdge x =
         Core.Field {
           Core.fieldName = (Core.Name "target"),
           Core.fieldTerm = (subtermNode (Paths.subtermEdgeTarget x))}]})
+
 -- | Encoder for hydra.paths.SubtermGraph
 subtermGraph :: Paths.SubtermGraph -> Core.Term
 subtermGraph x =
@@ -35,6 +39,7 @@ subtermGraph x =
         Core.Field {
           Core.fieldName = (Core.Name "edges"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map subtermEdge xs)) (Paths.subtermGraphEdges x))}]})
+
 -- | Encoder for hydra.paths.SubtermNode
 subtermNode :: Paths.SubtermNode -> Core.Term
 subtermNode x =
@@ -50,12 +55,14 @@ subtermNode x =
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Paths.subtermNodeId x))}]})
+
 -- | Encoder for hydra.paths.SubtermPath
 subtermPath :: Paths.SubtermPath -> Core.Term
 subtermPath x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.paths.SubtermPath"),
       Core.wrappedTermBody = ((\xs -> Core.TermList (Lists.map subtermStep xs)) (Paths.unSubtermPath x))})
+
 -- | Encoder for hydra.paths.SubtermStep
 subtermStep :: Paths.SubtermStep -> Core.Term
 subtermStep x =
@@ -160,6 +167,7 @@ subtermStep x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "wrappedTerm"),
           Core.fieldTerm = Core.TermUnit}})
+
 -- | Encoder for hydra.paths.SubtypeEdge
 subtypeEdge :: Paths.SubtypeEdge -> Core.Term
 subtypeEdge x =
@@ -175,6 +183,7 @@ subtypeEdge x =
         Core.Field {
           Core.fieldName = (Core.Name "target"),
           Core.fieldTerm = (subtypeNode (Paths.subtypeEdgeTarget x))}]})
+
 -- | Encoder for hydra.paths.SubtypeGraph
 subtypeGraph :: Paths.SubtypeGraph -> Core.Term
 subtypeGraph x =
@@ -187,6 +196,7 @@ subtypeGraph x =
         Core.Field {
           Core.fieldName = (Core.Name "edges"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map subtypeEdge xs)) (Paths.subtypeGraphEdges x))}]})
+
 -- | Encoder for hydra.paths.SubtypeNode
 subtypeNode :: Paths.SubtypeNode -> Core.Term
 subtypeNode x =
@@ -202,12 +212,14 @@ subtypeNode x =
         Core.Field {
           Core.fieldName = (Core.Name "id"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Paths.subtypeNodeId x))}]})
+
 -- | Encoder for hydra.paths.SubtypePath
 subtypePath :: Paths.SubtypePath -> Core.Term
 subtypePath x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.paths.SubtypePath"),
       Core.wrappedTermBody = ((\xs -> Core.TermList (Lists.map subtypeStep xs)) (Paths.unSubtypePath x))})
+
 -- | Encoder for hydra.paths.SubtypeStep
 subtypeStep :: Paths.SubtypeStep -> Core.Term
 subtypeStep x =

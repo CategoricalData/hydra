@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Primitives in the hydra.lib.equality module.
 
 module Hydra.Lib.Equality where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -31,6 +33,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 compare :: Packaging.PrimitiveDefinition
 compare =
     Packaging.PrimitiveDefinition {
@@ -67,6 +70,7 @@ compare =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 equal :: Packaging.PrimitiveDefinition
 equal =
     Packaging.PrimitiveDefinition {
@@ -103,6 +107,7 @@ equal =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 gt :: Packaging.PrimitiveDefinition
 gt =
     Packaging.PrimitiveDefinition {
@@ -138,6 +143,7 @@ gt =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 gte :: Packaging.PrimitiveDefinition
 gte =
     Packaging.PrimitiveDefinition {
@@ -173,6 +179,7 @@ gte =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 identity :: Packaging.PrimitiveDefinition
 identity =
     Packaging.PrimitiveDefinition {
@@ -204,6 +211,7 @@ identity =
         Core.lambdaParameter = (Core.Name "x"),
         Core.lambdaDomain = Nothing,
         Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}
+
 lt :: Packaging.PrimitiveDefinition
 lt =
     Packaging.PrimitiveDefinition {
@@ -239,6 +247,7 @@ lt =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 lte :: Packaging.PrimitiveDefinition
 lte =
     Packaging.PrimitiveDefinition {
@@ -274,6 +283,7 @@ lte =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 max :: Packaging.PrimitiveDefinition
 max =
     Packaging.PrimitiveDefinition {
@@ -325,6 +335,7 @@ max =
                   Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))})))}
+
 min :: Packaging.PrimitiveDefinition
 min =
     Packaging.PrimitiveDefinition {

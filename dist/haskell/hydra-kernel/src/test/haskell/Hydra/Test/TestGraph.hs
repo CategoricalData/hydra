@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | A module defining the graph used in the test suite.
 
 module Hydra.Test.TestGraph where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -37,17 +39,23 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
+
 testContext :: Typing.InferenceContext
 testContext = TestEnv.testContext
+
 testGraph :: Graph.Graph
 testGraph = TestEnv.testGraph testTypes testTerms
+
 testModuleName :: Packaging.ModuleName
 testModuleName = Packaging.ModuleName "testGraph"
+
 testSchemaModuleName :: Packaging.ModuleName
 testSchemaModuleName = Packaging.ModuleName "testSchemaGraph"
+
 testTerms :: M.Map Core.Name Core.Term
 testTerms = Maps.fromList [
   (Core.Name "testDataArthur", TestTerms.testDataArthur)]
+
 testTypes :: M.Map Core.Name Core.Type
 testTypes =
     Maps.fromList [

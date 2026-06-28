@@ -91,7 +91,7 @@
                     "name": "freshTypeVariableCount",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {
                           "map": [
                             {
@@ -190,7 +190,7 @@
                     "name": "description",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {
                           "map": [
                             {
@@ -206,7 +206,7 @@
                     "name": "isLazy",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {
                           "map": [
                             {
@@ -234,7 +234,7 @@
                     "name": "description",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {
                           "map": [
                             {
@@ -310,7 +310,7 @@
                     "name": "description",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {
                           "map": [
                             {"key": {"variable": "description"}, "value": {"literal": {"string": "A human-readable description of the type class"}}}]}}}}]},
@@ -348,7 +348,7 @@
                     "name": "comment",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {
                           "map": [
                             {

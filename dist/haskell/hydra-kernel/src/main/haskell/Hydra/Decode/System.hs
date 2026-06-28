@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term decoders for hydra.system
 
 module Hydra.Decode.System where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Decode.File as File
@@ -15,6 +17,7 @@ import qualified Hydra.System as System
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Decoder for hydra.system.Command
 command :: Graph.Graph -> Core.Term -> Either Errors.DecodingError System.Command
 command cx raw =
@@ -35,6 +38,7 @@ command cx raw =
           System.commandWorkingDirectory = field_workingDirectory,
           System.commandEnvironment = field_environment}))))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.system.Command")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.system.EnvironmentVariable
 environmentVariable :: Graph.Graph -> Core.Term -> Either Errors.DecodingError System.EnvironmentVariable
 environmentVariable cx raw =
@@ -45,6 +49,7 @@ environmentVariable cx raw =
           _ -> Left (Errors.DecodingError "expected string literal")
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.system.ProcessResult
 processResult :: Graph.Graph -> Core.Term -> Either Errors.DecodingError System.ProcessResult
 processResult cx raw =
@@ -64,6 +69,7 @@ processResult cx raw =
           System.processResultStdout = field_stdout,
           System.processResultStderr = field_stderr})))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.system.ProcessResult")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.system.StatusCode
 statusCode :: Graph.Graph -> Core.Term -> Either Errors.DecodingError System.StatusCode
 statusCode cx raw =

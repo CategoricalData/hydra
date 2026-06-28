@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term encoders for hydra.system
 
 module Hydra.Encode.System where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.File as File
@@ -11,6 +13,7 @@ import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.System as System
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Encoder for hydra.system.Command
 command :: System.Command -> Core.Term
 command x =
@@ -29,12 +32,14 @@ command x =
         Core.Field {
           Core.fieldName = (Core.Name "environment"),
           Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map (\m -> Core.TermMap (Maps.bimap environmentVariable (\x2 -> Core.TermLiteral (Core.LiteralString x2)) m)) opt)) (System.commandEnvironment x))}]})
+
 -- | Encoder for hydra.system.EnvironmentVariable
 environmentVariable :: System.EnvironmentVariable -> Core.Term
 environmentVariable x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.system.EnvironmentVariable"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (System.unEnvironmentVariable x))})
+
 -- | Encoder for hydra.system.ProcessResult
 processResult :: System.ProcessResult -> Core.Term
 processResult x =
@@ -50,6 +55,7 @@ processResult x =
         Core.Field {
           Core.fieldName = (Core.Name "stderr"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralBinary x2)) (System.processResultStderr x))}]})
+
 -- | Encoder for hydra.system.StatusCode
 statusCode :: System.StatusCode -> Core.Term
 statusCode x =

@@ -13,7 +13,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
                   {
@@ -26,7 +26,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"record": [{"name": "name", "type": {"literal": {"string": {}}}}]},
+              "body": {"record": [{"name": "name", "type": {"literal": "string"}}]},
               "annotation": {
                 "map": [
                   {
@@ -87,8 +87,8 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "value", "type": {"literal": {"string": {}}}},
-              {"name": "anonymous", "type": {"unit": {}}},
+              {"name": "value", "type": {"literal": "string"}},
+              {"name": "anonymous", "type": "unit"},
               {"name": "indeterminate", "type": {"variable": "hydra.scala.syntax.PredefString"}}]}}}},
     {
       "type": {
@@ -97,18 +97,18 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "null", "type": {"unit": {}}},
-              {"name": "int", "type": {"literal": {"integer": {"int32": {}}}}},
-              {"name": "double", "type": {"literal": {"float": {"float64": {}}}}},
-              {"name": "float", "type": {"literal": {"float": {"float32": {}}}}},
-              {"name": "byte", "type": {"literal": {"integer": {"int8": {}}}}},
-              {"name": "short", "type": {"literal": {"integer": {"int16": {}}}}},
-              {"name": "char", "type": {"literal": {"integer": {"uint16": {}}}}},
-              {"name": "long", "type": {"literal": {"integer": {"int64": {}}}}},
-              {"name": "boolean", "type": {"literal": {"boolean": {}}}},
-              {"name": "unit", "type": {"unit": {}}},
-              {"name": "string", "type": {"literal": {"string": {}}}},
-              {"name": "bytes", "type": {"list": {"literal": {"integer": {"int32": {}}}}}},
+              {"name": "null", "type": "unit"},
+              {"name": "int", "type": {"literal": {"integer": "int32"}}},
+              {"name": "double", "type": {"literal": {"float": "float64"}}},
+              {"name": "float", "type": {"literal": {"float": "float32"}}},
+              {"name": "byte", "type": {"literal": {"integer": "int8"}}},
+              {"name": "short", "type": {"literal": {"integer": "int16"}}},
+              {"name": "char", "type": {"literal": {"integer": "uint16"}}},
+              {"name": "long", "type": {"literal": {"integer": "int64"}}},
+              {"name": "boolean", "type": {"literal": "boolean"}},
+              {"name": "unit", "type": "unit"},
+              {"name": "string", "type": {"literal": "string"}},
+              {"name": "bytes", "type": {"list": {"literal": {"integer": "int32"}}}},
               {"name": "symbol", "type": {"variable": "hydra.scala.syntax.ScalaSymbol"}}]}}}},
     {
       "type": {
@@ -145,7 +145,7 @@
               {"name": "forYield", "type": {"variable": "hydra.scala.syntax.ForYieldData"}},
               {"name": "new", "type": {"variable": "hydra.scala.syntax.NewData"}},
               {"name": "newAnonymous", "type": {"variable": "hydra.scala.syntax.NewAnonymousData"}},
-              {"name": "placeholder", "type": {"unit": {}}},
+              {"name": "placeholder", "type": "unit"},
               {"name": "eta", "type": {"variable": "hydra.scala.syntax.EtaData"}},
               {"name": "repeated", "type": {"variable": "hydra.scala.syntax.RepeatedData"}},
               {"name": "param", "type": {"variable": "hydra.scala.syntax.ParamData"}}]}}}},
@@ -162,7 +162,7 @@
               {"name": "anonymous", "type": {"variable": "hydra.scala.syntax.AnonymousData"}},
               {"name": "select", "type": {"variable": "hydra.scala.syntax.SelectData"}},
               {"name": "applyUnary", "type": {"variable": "hydra.scala.syntax.ApplyUnaryData"}}]}}}},
-    {"type": {"name": "hydra.scala.syntax.ThisData", "body": {"variables": [], "body": {"wrap": {"unit": {}}}}}},
+    {"type": {"name": "hydra.scala.syntax.ThisData", "body": {"variables": [], "body": {"wrap": "unit"}}}},
     {
       "type": {
         "name": "hydra.scala.syntax.SuperData",
@@ -176,7 +176,7 @@
       "type": {
         "name": "hydra.scala.syntax.NameData",
         "body": {"variables": [], "body": {"record": [{"name": "value", "type": {"variable": "hydra.scala.syntax.PredefString"}}]}}}},
-    {"type": {"name": "hydra.scala.syntax.AnonymousData", "body": {"variables": [], "body": {"wrap": {"unit": {}}}}}},
+    {"type": {"name": "hydra.scala.syntax.AnonymousData", "body": {"variables": [], "body": {"wrap": "unit"}}}},
     {
       "type": {
         "name": "hydra.scala.syntax.SelectData",
@@ -463,8 +463,8 @@
     {
       "type": {
         "name": "hydra.scala.syntax.NameType",
-        "body": {"variables": [], "body": {"record": [{"name": "value", "type": {"literal": {"string": {}}}}]}}}},
-    {"type": {"name": "hydra.scala.syntax.AnonymousNameType", "body": {"variables": [], "body": {"wrap": {"unit": {}}}}}},
+        "body": {"variables": [], "body": {"record": [{"name": "value", "type": {"literal": "string"}}]}}}},
+    {"type": {"name": "hydra.scala.syntax.AnonymousNameType", "body": {"variables": [], "body": {"wrap": "unit"}}}},
     {
       "type": {
         "name": "hydra.scala.syntax.SelectType",
@@ -682,8 +682,8 @@
           "body": {
             "union": [
               {"name": "var", "type": {"variable": "hydra.scala.syntax.VarPat"}},
-              {"name": "wildcard", "type": {"unit": {}}},
-              {"name": "seqWildcard", "type": {"unit": {}}},
+              {"name": "wildcard", "type": "unit"},
+              {"name": "seqWildcard", "type": "unit"},
               {"name": "bind", "type": {"variable": "hydra.scala.syntax.BindPat"}},
               {"name": "alternative", "type": {"variable": "hydra.scala.syntax.AlternativePat"}},
               {"name": "tuple", "type": {"variable": "hydra.scala.syntax.TuplePat"}},
@@ -1079,7 +1079,7 @@
               {"name": "tpe", "type": {"variable": "hydra.scala.syntax.Type"}},
               {"name": "name", "type": {"variable": "hydra.scala.syntax.Name"}},
               {"name": "argss", "type": {"list": {"list": {"variable": "hydra.scala.syntax.Data"}}}}]}}}},
-    {"type": {"name": "hydra.scala.syntax.Self", "body": {"variables": [], "body": {"wrap": {"unit": {}}}}}},
+    {"type": {"name": "hydra.scala.syntax.Self", "body": {"variables": [], "body": {"wrap": "unit"}}}},
     {
       "type": {
         "name": "hydra.scala.syntax.Template",
@@ -1101,24 +1101,24 @@
               {"name": "annot", "type": {"variable": "hydra.scala.syntax.AnnotMod"}},
               {"name": "private", "type": {"variable": "hydra.scala.syntax.PrivateMod"}},
               {"name": "protected", "type": {"variable": "hydra.scala.syntax.ProtectedMod"}},
-              {"name": "implicit", "type": {"unit": {}}},
-              {"name": "final", "type": {"unit": {}}},
-              {"name": "sealed", "type": {"unit": {}}},
-              {"name": "open", "type": {"unit": {}}},
-              {"name": "super", "type": {"unit": {}}},
-              {"name": "override", "type": {"unit": {}}},
-              {"name": "case", "type": {"unit": {}}},
-              {"name": "abstract", "type": {"unit": {}}},
-              {"name": "covariant", "type": {"unit": {}}},
-              {"name": "contravariant", "type": {"unit": {}}},
-              {"name": "lazy", "type": {"unit": {}}},
-              {"name": "valParam", "type": {"unit": {}}},
-              {"name": "varParam", "type": {"unit": {}}},
-              {"name": "infix", "type": {"unit": {}}},
-              {"name": "inline", "type": {"unit": {}}},
-              {"name": "using", "type": {"unit": {}}},
-              {"name": "opaque", "type": {"unit": {}}},
-              {"name": "transparent", "type": {"unit": {}}}]}}}},
+              {"name": "implicit", "type": "unit"},
+              {"name": "final", "type": "unit"},
+              {"name": "sealed", "type": "unit"},
+              {"name": "open", "type": "unit"},
+              {"name": "super", "type": "unit"},
+              {"name": "override", "type": "unit"},
+              {"name": "case", "type": "unit"},
+              {"name": "abstract", "type": "unit"},
+              {"name": "covariant", "type": "unit"},
+              {"name": "contravariant", "type": "unit"},
+              {"name": "lazy", "type": "unit"},
+              {"name": "valParam", "type": "unit"},
+              {"name": "varParam", "type": "unit"},
+              {"name": "infix", "type": "unit"},
+              {"name": "inline", "type": "unit"},
+              {"name": "using", "type": "unit"},
+              {"name": "opaque", "type": "unit"},
+              {"name": "transparent", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.scala.syntax.AnnotMod",
@@ -1210,9 +1210,9 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "wildcard", "type": {"unit": {}}},
+              {"name": "wildcard", "type": "unit"},
               {"name": "given", "type": {"variable": "hydra.scala.syntax.GivenImportee"}},
-              {"name": "givenAll", "type": {"unit": {}}},
+              {"name": "givenAll", "type": "unit"},
               {"name": "name", "type": {"variable": "hydra.scala.syntax.NameImportee"}},
               {"name": "rename", "type": {"variable": "hydra.scala.syntax.RenameImportee"}},
               {"name": "unimport", "type": {"variable": "hydra.scala.syntax.UnimportImportee"}}]}}}},

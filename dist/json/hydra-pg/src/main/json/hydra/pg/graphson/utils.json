@@ -658,7 +658,7 @@
         "name": "hydra.pg.graphson.utils.encodeStringValue",
         "signature": {
           "typeParameters": [{"name": "t0", "constraints": []}],
-          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"either": {"left": {"variable": "t0"}, "right": {"variable": "hydra.pg.graphson.syntax.Value"}}}}},
         "body": {
           "typeLambda": {
@@ -668,7 +668,7 @@
                 "body": {
                   "lambda": {
                     "parameter": "s",
-                    "domain": {"literal": {"string": {}}},
+                    "domain": {"literal": "string"},
                     "body": {
                       "typeApplication": {
                         "body": {
@@ -751,7 +751,7 @@
                                             "handler": {
                                               "lambda": {
                                                 "parameter": "b",
-                                                "domain": {"literal": {"binary": {}}},
+                                                "domain": {"literal": "binary"},
                                                 "body": {
                                                   "typeApplication": {
                                                     "body": {
@@ -771,7 +771,7 @@
                                             "handler": {
                                               "lambda": {
                                                 "parameter": "b",
-                                                "domain": {"literal": {"boolean": {}}},
+                                                "domain": {"literal": "boolean"},
                                                 "body": {
                                                   "typeApplication": {
                                                     "body": {
@@ -812,7 +812,7 @@
                                                             "handler": {
                                                               "lambda": {
                                                                 "parameter": "f",
-                                                                "domain": {"literal": {"float": {"float32": {}}}},
+                                                                "domain": {"literal": {"float": "float32"}},
                                                                 "body": {
                                                                   "typeApplication": {
                                                                     "body": {
@@ -832,7 +832,7 @@
                                                             "handler": {
                                                               "lambda": {
                                                                 "parameter": "f",
-                                                                "domain": {"literal": {"float": {"float64": {}}}},
+                                                                "domain": {"literal": {"float": "float64"}},
                                                                 "body": {
                                                                   "typeApplication": {
                                                                     "body": {
@@ -879,7 +879,7 @@
                                                             "handler": {
                                                               "lambda": {
                                                                 "parameter": "i",
-                                                                "domain": {"literal": {"integer": {"bigint": {}}}},
+                                                                "domain": {"literal": {"integer": "bigint"}},
                                                                 "body": {
                                                                   "typeApplication": {
                                                                     "body": {
@@ -894,7 +894,7 @@
                                                             "handler": {
                                                               "lambda": {
                                                                 "parameter": "i",
-                                                                "domain": {"literal": {"integer": {"int32": {}}}},
+                                                                "domain": {"literal": {"integer": "int32"}},
                                                                 "body": {
                                                                   "typeApplication": {
                                                                     "body": {
@@ -909,7 +909,7 @@
                                                             "handler": {
                                                               "lambda": {
                                                                 "parameter": "i",
-                                                                "domain": {"literal": {"integer": {"int64": {}}}},
+                                                                "domain": {"literal": {"integer": "int64"}},
                                                                 "body": {
                                                                   "typeApplication": {
                                                                     "body": {
@@ -925,7 +925,7 @@
                                             "handler": {
                                               "lambda": {
                                                 "parameter": "s",
-                                                "domain": {"literal": {"string": {}}},
+                                                "domain": {"literal": "string"},
                                                 "body": {
                                                   "typeApplication": {
                                                     "body": {
@@ -941,13 +941,13 @@
                             "handler": {
                               "lambda": {
                                 "parameter": "_",
-                                "domain": {"unit": {}},
+                                "domain": "unit",
                                 "body": {
                                   "typeApplication": {
                                     "body": {
                                       "typeApplication": {
                                         "body": {
-                                          "either": {"right": {"inject": {"typeName": "hydra.pg.graphson.syntax.Value", "field": {"name": "null", "term": {"unit": {}}}}}}},
+                                          "either": {"right": {"inject": {"typeName": "hydra.pg.graphson.syntax.Value", "field": {"name": "null", "term": "unit"}}}}},
                                         "type": {"variable": "hydra.errors.Error"}}},
                                     "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}}}]}},
                     "argument": {"application": {"function": {"variable": "hydra.strip.deannotateTerm"}, "argument": {"variable": "term"}}}}}}},

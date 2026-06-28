@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Functions for generating term decoders from type modules
 
 module Hydra.Decoding where
+
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
@@ -50,6 +52,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Collect forall type variable names from a type
 collectForallVariables :: Core.Type -> [Core.Name]
 collectForallVariables typ =
@@ -57,6 +60,7 @@ collectForallVariables typ =
       Core.TypeAnnotated v0 -> collectForallVariables (Core.annotatedTypeBody v0)
       Core.TypeForall v0 -> Lists.cons (Core.forallTypeParameter v0) (collectForallVariables (Core.forallTypeBody v0))
       _ -> []
+
 -- | Collect type variables needing Ord constraints (from Map key and Set element types)
 collectOrdConstrainedVariables :: Core.Type -> [Core.Name]
 collectOrdConstrainedVariables typ =
@@ -78,9 +82,11 @@ collectOrdConstrainedVariables typ =
       Core.TypeUnion v0 -> Lists.concat (Lists.map (\ft -> collectOrdConstrainedVariables (Core.fieldTypeType ft)) v0)
       Core.TypeWrap v0 -> collectOrdConstrainedVariables v0
       _ -> []
+
 -- | Collect type variable names from a type (forall parameters only)
 collectTypeVariables :: Core.Type -> [Core.Name]
 collectTypeVariables typ = collectForallVariables typ
+
 -- | Collect all type variable names from a type expression
 collectTypeVariablesFromType :: Core.Type -> [Core.Name]
 collectTypeVariablesFromType typ =
@@ -101,6 +107,7 @@ collectTypeVariablesFromType typ =
         v0]
       Core.TypeWrap v0 -> collectTypeVariablesFromType v0
       _ -> []
+
 -- | Transform a type binding into a decoder binding
 decodeBinding :: t0 -> Graph.Graph -> Core.Binding -> Either Errors.DecodingError Core.Binding
 decodeBinding cx graph b =
@@ -115,6 +122,7 @@ decodeBinding cx graph b =
         Core.bindingName = (decodeBindingName (Core.bindingName b)),
         Core.bindingTerm = (Annotations.setTermDescription (Just description) rawBody),
         Core.bindingTypeScheme = (Just (decoderTypeSchemeNamed (Core.bindingName b) typ))})))
+
 -- | Generate a binding name for a decoder function from a type name
 decodeBindingName :: Core.Name -> Core.Name
 decodeBindingName n =
@@ -128,6 +136,7 @@ decodeBindingName n =
           "hydra",
           "decode"] (Lists.concat2 tail [
           localPart])))))))
+
 -- | Generate a decoder for an Either type
 decodeEitherType :: Core.EitherType -> Core.Term
 decodeEitherType et =
@@ -143,6 +152,7 @@ decodeEitherType et =
             Core.typeApplicationTermType = (decoderFullResultType (Core.eitherTypeRight et))})),
           Core.applicationArgument = leftDecoder})),
         Core.applicationArgument = rightDecoder}))
+
 -- | Generate a decoder for a polymorphic (forall) type
 decodeForallType :: Core.ForallType -> Core.Term
 decodeForallType ft =
@@ -156,6 +166,7 @@ decodeForallType ft =
             Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
             Core.eitherTypeRight = (Core.TypeVariable (Core.forallTypeParameter ft))}))}))}))),
       Core.lambdaBody = (decodeType (Core.forallTypeBody ft))})
+
 -- | Generate a decoder for a list type
 decodeListType :: Core.Type -> Core.Term
 decodeListType elemType =
@@ -166,6 +177,7 @@ decodeListType elemType =
           Core.typeApplicationTermBody = (Core.TermVariable (Core.Name "hydra.extract.core.decodeList")),
           Core.typeApplicationTermType = (decoderFullResultType elemType)})),
         Core.applicationArgument = elemDecoder}))
+
 -- | Generate a decoder for a literal type
 decodeLiteralType :: Core.LiteralType -> Core.Term
 decodeLiteralType lt =
@@ -1465,6 +1477,7 @@ decodeLiteralType lt =
                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})
+
 -- | Generate a decoder for a map type
 decodeMapType :: Core.MapType -> Core.Term
 decodeMapType mt =
@@ -1480,6 +1493,7 @@ decodeMapType mt =
             Core.typeApplicationTermType = (decoderFullResultType (Core.mapTypeValues mt))})),
           Core.applicationArgument = keyDecoder})),
         Core.applicationArgument = valDecoder}))
+
 -- | Generate a decoder for an optional type
 decodeMaybeType :: Core.Type -> Core.Term
 decodeMaybeType elemType =
@@ -1490,6 +1504,7 @@ decodeMaybeType elemType =
           Core.typeApplicationTermBody = (Core.TermVariable (Core.Name "hydra.extract.core.decodeMaybe")),
           Core.typeApplicationTermType = (decoderFullResultType elemType)})),
         Core.applicationArgument = elemDecoder}))
+
 -- | Transform a type module into a decoder module
 decodeModule :: t0 -> Graph.Graph -> Packaging.Module -> Either Errors.Error (Maybe Packaging.Module)
 decodeModule cx graph mod =
@@ -1533,6 +1548,7 @@ decodeModule cx graph mod =
           Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionSignature = (Optionals.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b)),
           Packaging.termDefinitionBody = (Core.bindingTerm b)})) decodedBindings)}))))))
+
 -- | Generate a decoder module name from a source module name
 decodeModuleName :: Packaging.ModuleName -> Packaging.ModuleName
 decodeModuleName ns =
@@ -1542,6 +1558,7 @@ decodeModuleName ns =
       in (Optionals.cases (Lists.uncons parts) fallback (\uc -> Packaging.ModuleName (Strings.cat [
         "hydra.decode.",
         (Strings.intercalate "." (Pairs.second uc))])))
+
 -- | Generate a decoder for a pair type
 decodePairType :: Core.PairType -> Core.Term
 decodePairType pt =
@@ -1557,9 +1574,11 @@ decodePairType pt =
             Core.typeApplicationTermType = (decoderFullResultType (Core.pairTypeSecond pt))})),
           Core.applicationArgument = firstDecoder})),
         Core.applicationArgument = secondDecoder}))
+
 -- | Generate a decoder for a record type
 decodeRecordType :: [Core.FieldType] -> Core.Term
 decodeRecordType rt = decodeRecordTypeImpl (Core.Name "unknown") rt (Core.TypeVariable (Core.Name "unknown"))
+
 -- | Generate a decoder for a record type with a type name. rtype is the fully-applied result type (e.g. Table<v>) used for the record's body annotations. (#476)
 decodeRecordTypeImpl :: Core.Name -> [Core.FieldType] -> Core.Type -> Core.Term
 decodeRecordTypeImpl tname rt rtype =
@@ -1679,9 +1698,11 @@ decodeRecordTypeImpl tname rt rtype =
                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))}))
+
 -- | Generate a decoder for a record type with element name
 decodeRecordTypeNamed :: Core.Name -> [Core.FieldType] -> Core.Type -> Core.Term
 decodeRecordTypeNamed ename rt rtype = decodeRecordTypeImpl ename rt rtype
+
 -- | Generate a decoder for a set type
 decodeSetType :: Core.Type -> Core.Term
 decodeSetType elemType =
@@ -1692,6 +1713,7 @@ decodeSetType elemType =
           Core.typeApplicationTermBody = (Core.TermVariable (Core.Name "hydra.extract.core.decodeSet")),
           Core.typeApplicationTermType = (decoderFullResultType elemType)})),
         Core.applicationArgument = elemDecoder}))
+
 -- | Generate a decoder term for a Type
 decodeType :: Core.Type -> Core.Term
 decodeType typ =
@@ -1727,6 +1749,7 @@ decodeType typ =
                 Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "unsupported type variant"))})))),
               Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError"))})),
             Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))}))})
+
 -- | Generate a decoder term for a Type, with element name for nominal types. rtype is the FULLY-APPLIED result type for nominal bodies (e.g. DataRow<v> for forall v. wrap...), so the body's intermediate type annotations carry the type parameters rather than a bare nominal name — otherwise Java/Scala coders emit raw types that fail to compile against the parameterized signature. (#476)
 decodeTypeNamed :: Core.Name -> Core.Type -> Core.Type -> Core.Term
 decodeTypeNamed ename typ rtype =
@@ -1771,9 +1794,11 @@ decodeTypeNamed ename typ rtype =
                 Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "unsupported type variant"))})))),
               Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError"))})),
             Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))}))})
+
 -- | Generate a decoder for a union type
 decodeUnionType :: [Core.FieldType] -> Core.Term
 decodeUnionType rt = decodeUnionTypeNamed (Core.Name "unknown") rt (Core.TypeVariable (Core.Name "unknown"))
+
 -- | Generate a decoder for a union type with the given element name. rtype is the fully-applied result type (e.g. Foo<v>) used for body annotations. (#476)
 decodeUnionTypeNamed :: Core.Name -> [Core.FieldType] -> Core.Type -> Core.Term
 decodeUnionTypeNamed ename rt rtype =
@@ -1963,6 +1988,7 @@ decodeUnionTypeNamed ename rt rtype =
                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))}))
+
 -- | Generate a decoder for the unit type
 decodeUnitType :: Core.Term
 decodeUnitType =
@@ -1977,9 +2003,11 @@ decodeUnitType =
             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeUnit")),
             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
           Core.applicationArgument = (Core.TermVariable (Core.Name "t"))}))}))})
+
 -- | Generate a decoder for a wrapped type
 decodeWrappedType :: Core.Type -> Core.Term
 decodeWrappedType wt = decodeWrappedTypeNamed (Core.Name "unknown") wt (Core.TypeVariable (Core.Name "unknown"))
+
 -- | Generate a decoder for a wrapped type with the given element name. rtype is the fully-applied result type (e.g. DataRow<v>) used for body annotations. (#476)
 decodeWrappedTypeNamed :: Core.Name -> Core.Type -> Core.Type -> Core.Term
 decodeWrappedTypeNamed ename wt rtype =
@@ -2061,6 +2089,7 @@ decodeWrappedTypeNamed ename wt rtype =
                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))}))
+
 -- | Get full result type for decoder
 decoderFullResultType :: Core.Type -> Core.Type
 decoderFullResultType typ =
@@ -2093,6 +2122,7 @@ decoderFullResultType typ =
       Core.TypeVoid -> Core.TypeVoid
       Core.TypeWrap v0 -> decoderFullResultType v0
       _ -> Core.TypeVariable (Core.Name "hydra.core.Term")
+
 -- | Get full result type for decoder with element name
 decoderFullResultTypeNamed :: Core.Name -> Core.Type -> Core.Type
 decoderFullResultTypeNamed ename typ =
@@ -2125,6 +2155,7 @@ decoderFullResultTypeNamed ename typ =
       Core.TypeVariable v0 -> Core.TypeVariable v0
       Core.TypeVoid -> Core.TypeVoid
       _ -> Core.TypeVariable (Core.Name "hydra.core.Term")
+
 -- | Compute the result type name for a decoder
 decoderResultType :: Core.Type -> Core.Name
 decoderResultType typ =
@@ -2137,6 +2168,7 @@ decoderResultType typ =
       Core.TypeUnion _ -> Core.Name "hydra.core.Term"
       Core.TypeWrap _ -> Core.Name "hydra.core.Term"
       _ -> Core.Name "hydra.core.Term"
+
 -- | Build decoder function type
 decoderType :: Core.Type -> Core.Type
 decoderType typ =
@@ -2151,6 +2183,7 @@ decoderType typ =
                         Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
                         Core.eitherTypeRight = resultType}))}))})
       in (prependForallDecoders baseType typ)
+
 -- | Build decoder function type with element name
 decoderTypeNamed :: Core.Name -> Core.Type -> Core.Type
 decoderTypeNamed ename typ =
@@ -2165,6 +2198,7 @@ decoderTypeNamed ename typ =
                         Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
                         Core.eitherTypeRight = resultType}))}))})
       in (prependForallDecoders baseType typ)
+
 -- | Build type scheme for a decoder function
 decoderTypeScheme :: Core.Type -> Core.TypeScheme
 decoderTypeScheme typ =
@@ -2182,6 +2216,7 @@ decoderTypeScheme typ =
         Core.typeSchemeVariables = typeVars,
         Core.typeSchemeBody = (decoderType typ),
         Core.typeSchemeConstraints = constraints}
+
 -- | Build type scheme for a decoder function with element name
 decoderTypeSchemeNamed :: Core.Name -> Core.Type -> Core.TypeScheme
 decoderTypeSchemeNamed ename typ =
@@ -2199,14 +2234,17 @@ decoderTypeSchemeNamed ename typ =
         Core.typeSchemeVariables = typeVars,
         Core.typeSchemeBody = (decoderTypeNamed ename typ),
         Core.typeSchemeConstraints = constraints}
+
 -- | Filter bindings to only decodable type definitions
 filterTypeBindings :: t0 -> Graph.Graph -> [Core.Binding] -> Either Errors.Error [Core.Binding]
 filterTypeBindings cx graph bindings =
     Eithers.map Optionals.cat (Eithers.mapList (isDecodableBinding cx graph) (Lists.filter Annotations.isNativeType bindings))
+
 -- | Check if a binding is decodable (serializable type)
 isDecodableBinding :: t0 -> Graph.Graph -> Core.Binding -> Either Errors.Error (Maybe Core.Binding)
 isDecodableBinding cx graph b =
     Eithers.bind (Predicates.isSerializableByName cx graph (Core.bindingName b)) (\serializable -> Right (Logic.ifElse serializable (Just b) Nothing))
+
 -- | Prepend decoder types for forall parameters to base type
 prependForallDecoders :: Core.Type -> Core.Type -> Core.Type
 prependForallDecoders baseType typ =

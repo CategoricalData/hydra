@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Java test code generation codec for JUnit-based generation tests
 
 module Hydra.Java.Testing where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Classes as Classes
 import qualified Hydra.Coders as Coders
@@ -39,6 +41,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Build the complete Java test module content
 buildJavaTestModule :: Packaging.Module -> Testing.TestGroup -> String -> String
 buildJavaTestModule testModule testGroup testBody =
@@ -74,6 +77,7 @@ buildJavaTestModule testModule testGroup testBody =
         header,
         testBody,
         "\n}\n"])
+
 -- | Standard imports for Java JUnit test files
 findJavaImports :: [String]
 findJavaImports =
@@ -81,6 +85,7 @@ findJavaImports =
       "import org.junit.jupiter.api.Test;",
       "import static org.junit.jupiter.api.Assertions.*;",
       "import java.util.*;"]
+
 -- | Format a test name for Java (PascalCase method name with 'test' prefix)
 formatJavaTestName :: String -> String
 formatJavaTestName name =
@@ -90,6 +95,7 @@ formatJavaTestName name =
           sanitized = Formatting.nonAlnumToUnderscores replaced
           pascal_ = Formatting.convertCase Util.CaseConventionLowerSnake Util.CaseConventionPascal sanitized
       in (Strings.cat2 "test" pascal_)
+
 -- | Generate a single JUnit test case from a test case with metadata
 generateJavaTestCase :: [String] -> Testing.TestCaseWithMetadata -> Either t0 [String]
 generateJavaTestCase groupPath tcm =
@@ -119,9 +125,11 @@ generateJavaTestCase groupPath tcm =
               actual_,
               ");"]),
             "    }"])
+
 -- | Generate a Java test file for a test group
 generateJavaTestFile :: Packaging.Module -> Testing.TestGroup -> t0 -> Either t1 (String, String)
 generateJavaTestFile testModule testGroup _g = generateTestFileWithJavaCodec testModule testGroup
+
 -- | Generate test hierarchy for Java with nested subgroups
 generateJavaTestGroupHierarchy :: [String] -> Testing.TestGroup -> Either t0 String
 generateJavaTestGroupHierarchy groupPath testGroup =
@@ -139,6 +147,7 @@ generateJavaTestGroupHierarchy groupPath testGroup =
           "\n\n",
           content]) (generateJavaTestGroupHierarchy (Lists.concat2 groupPath [
           groupName]) subgroup))) subgroups))))
+
 -- | Generate a complete test file for Java
 generateTestFileWithJavaCodec :: Packaging.Module -> Testing.TestGroup -> Either t0 (String, String)
 generateTestFileWithJavaCodec testModule testGroup =
@@ -155,6 +164,7 @@ generateTestFileWithJavaCodec testModule testGroup =
                     "/",
                     fileName]
       in (filePath, testModuleContent)) (generateJavaTestGroupHierarchy [] testGroup)
+
 -- | Convert namespace to Java class name
 namespaceToJavaClassName :: Packaging.ModuleName -> String
 namespaceToJavaClassName ns_ =

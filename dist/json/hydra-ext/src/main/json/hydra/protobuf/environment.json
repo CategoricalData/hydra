@@ -26,7 +26,7 @@
                     "name": "fieldIndex",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {
                           "map": [
                             {

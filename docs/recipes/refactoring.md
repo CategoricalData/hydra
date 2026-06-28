@@ -371,15 +371,17 @@ because each host spells the kernel symbol differently. A complete sweep must co
 - **`heads/python/`**: snake_case imports and calls (`from hydra.names import namespace_to_file_path`).
 - **`heads/lisp/*/`**: the mangled `hydra_<module>_<snake_symbol>` form
   (`hydra_codegen_namespace_to_path`, `hydra_names_namespace_to_file_path`).
-- **Native DSL sources** (`packages/hydra-{java,python}/src/main/<lang>/`): the generated
+- **Native DSL sources** (`packages/hydra-{java,python,scala}/src/main/<lang>/`): the generated
   DSL *helper* is referenced in the host's native casing — Python uses **snake_case
   attribute access** for the helper itself (`Util.module_names(...)`, not
   `Util.moduleNames(...)`) but **camelCase inside `var("hydra.…")` qualified-name strings**.
+  Scala mirrors Python here: the helper is in Scala-camelCase, but FQNs inside `v("hydra.…")`
+  / `applyP("hydra.…", …)` use the Hydra-canonical name.
   Getting this wrong is invisible until the native self-host regen (sync Phase 5) runs.
 
 The compile gate (`stack build` of `heads/haskell`) catches the Haskell-side misses
 including duplicate aliases; the **target-language misses only surface during `/sync`**
-(Python/Lisp head import errors, and the Phase-5 native Python/Java JSON regen). Plan
+(Python/Lisp head import errors, and the Phase-5 native Python/Java/Scala JSON regen). Plan
 for `/sync` to flush out a second round of fixes after the source-and-`dist` patch.
 
 ---

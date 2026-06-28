@@ -13,7 +13,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
                   {
@@ -115,7 +115,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unique relation (table) name"}}}]}}}}}},
     {
       "type": {

@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | DSL functions for hydra.lib.eithers
 
 module Hydra.Dsl.Lib.Eithers where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -58,6 +60,7 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
+
 -- | DSL reference to hydra.lib.eithers.bimap
 bimap :: Typed.TypedTerm (x -> z) -> Typed.TypedTerm (y -> w) -> Typed.TypedTerm (Either x y) -> Typed.TypedTerm (Either z w)
 bimap arg0 arg1 arg2 =
@@ -68,6 +71,7 @@ bimap arg0 arg1 arg2 =
           Core.applicationArgument = (Typed.unTypedTerm arg0)})),
         Core.applicationArgument = (Typed.unTypedTerm arg1)})),
       Core.applicationArgument = (Typed.unTypedTerm arg2)}))
+
 -- | DSL reference to hydra.lib.eithers.bind
 bind :: Typed.TypedTerm (Either x y) -> Typed.TypedTerm (y -> Either x z) -> Typed.TypedTerm (Either x z)
 bind arg0 arg1 =
@@ -76,6 +80,7 @@ bind arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.bind")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.eithers.either
 either :: Typed.TypedTerm (x -> z) -> Typed.TypedTerm (y -> z) -> Typed.TypedTerm (Either x y) -> Typed.TypedTerm z
 either arg0 arg1 arg2 =
@@ -86,6 +91,7 @@ either arg0 arg1 arg2 =
           Core.applicationArgument = (Typed.unTypedTerm arg0)})),
         Core.applicationArgument = (Typed.unTypedTerm arg1)})),
       Core.applicationArgument = (Typed.unTypedTerm arg2)}))
+
 -- | DSL reference to hydra.lib.eithers.foldl
 foldl :: Typed.TypedTerm (x -> y -> Either z x) -> Typed.TypedTerm x -> Typed.TypedTerm [y] -> Typed.TypedTerm (Either z x)
 foldl arg0 arg1 arg2 =
@@ -96,6 +102,7 @@ foldl arg0 arg1 arg2 =
           Core.applicationArgument = (Typed.unTypedTerm arg0)})),
         Core.applicationArgument = (Typed.unTypedTerm arg1)})),
       Core.applicationArgument = (Typed.unTypedTerm arg2)}))
+
 -- | DSL reference to hydra.lib.eithers.fromLeft
 fromLeft :: Typed.TypedTerm x -> Typed.TypedTerm (Either x y) -> Typed.TypedTerm x
 fromLeft arg0 arg1 =
@@ -104,6 +111,7 @@ fromLeft arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.fromLeft")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.eithers.fromRight
 fromRight :: Typed.TypedTerm y -> Typed.TypedTerm (Either x y) -> Typed.TypedTerm y
 fromRight arg0 arg1 =
@@ -112,24 +120,28 @@ fromRight arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.fromRight")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.eithers.isLeft
 isLeft :: Typed.TypedTerm (Either x y) -> Typed.TypedTerm Bool
 isLeft arg0 =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.isLeft")),
       Core.applicationArgument = (Typed.unTypedTerm arg0)}))
+
 -- | DSL reference to hydra.lib.eithers.isRight
 isRight :: Typed.TypedTerm (Either x y) -> Typed.TypedTerm Bool
 isRight arg0 =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.isRight")),
       Core.applicationArgument = (Typed.unTypedTerm arg0)}))
+
 -- | DSL reference to hydra.lib.eithers.lefts
 lefts :: Typed.TypedTerm [Either x y] -> Typed.TypedTerm [x]
 lefts arg0 =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.lefts")),
       Core.applicationArgument = (Typed.unTypedTerm arg0)}))
+
 -- | DSL reference to hydra.lib.eithers.map
 map :: Typed.TypedTerm (x -> y) -> Typed.TypedTerm (Either z x) -> Typed.TypedTerm (Either z y)
 map arg0 arg1 =
@@ -138,6 +150,7 @@ map arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.map")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.eithers.mapList
 mapList :: Typed.TypedTerm (x -> Either z y) -> Typed.TypedTerm [x] -> Typed.TypedTerm (Either z [y])
 mapList arg0 arg1 =
@@ -146,6 +159,7 @@ mapList arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.mapList")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.eithers.mapOptional
 mapOptional :: Typed.TypedTerm (x -> Either z y) -> Typed.TypedTerm (Maybe x) -> Typed.TypedTerm (Either z (Maybe y))
 mapOptional arg0 arg1 =
@@ -154,6 +168,7 @@ mapOptional arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.mapOptional")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.eithers.mapSet
 mapSet :: (Ord x, Ord y) => (Typed.TypedTerm (x -> Either z y) -> Typed.TypedTerm (S.Set x) -> Typed.TypedTerm (Either z (S.Set y)))
 mapSet arg0 arg1 =
@@ -162,12 +177,14 @@ mapSet arg0 arg1 =
         Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.mapSet")),
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
+
 -- | DSL reference to hydra.lib.eithers.partitionEithers
 partitionEithers :: Typed.TypedTerm [Either x y] -> Typed.TypedTerm ([x], [y])
 partitionEithers arg0 =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.partitionEithers")),
       Core.applicationArgument = (Typed.unTypedTerm arg0)}))
+
 -- | DSL reference to hydra.lib.eithers.rights
 rights :: Typed.TypedTerm [Either x y] -> Typed.TypedTerm [y]
 rights arg0 =

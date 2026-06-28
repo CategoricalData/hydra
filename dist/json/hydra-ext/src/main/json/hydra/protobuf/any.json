@@ -19,7 +19,7 @@
                     "name": "typeUrl",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {
                           "map": [
                             {
@@ -30,7 +30,7 @@
                     "name": "value",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"binary": {}}},
+                        "body": {"literal": "binary"},
                         "annotation": {
                           "map": [
                             {

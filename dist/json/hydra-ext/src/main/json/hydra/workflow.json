@@ -54,7 +54,7 @@
                     "name": "file",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {
                           "map": [
                             {
@@ -64,7 +64,7 @@
                     "name": "provided",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -88,7 +88,7 @@
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A descriptive name for the workflow"}}}]}}}},
                   {
                     "name": "schemaSpec",
@@ -100,13 +100,13 @@
                     "name": "srcDir",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The source directory"}}}]}}}},
                   {
                     "name": "destDir",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The destination directory"}}}]}}}}]},
               "annotation": {
                 "map": [

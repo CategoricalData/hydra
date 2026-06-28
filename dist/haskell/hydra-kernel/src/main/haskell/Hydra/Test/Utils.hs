@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Shared utility functions for test code generation codecs
 
 module Hydra.Test.Utils where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -35,10 +37,12 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Run type inference on a single term
 inferTerm :: Graph.Graph -> Core.Term -> Either String Core.Term
 inferTerm g term =
     Eithers.bimap (\e -> ShowErrors.error e) (\x -> Typing.inferenceResultTerm x) (Inference.inferInGraphContext Lexical.emptyInferenceContext g term)
+
 -- | Run type inference on the terms in a test case
 inferTestCase :: t0 -> Testing.TestCaseWithMetadata -> Either t1 Testing.TestCaseWithMetadata
 inferTestCase g tcm =
@@ -52,6 +56,7 @@ inferTestCase g tcm =
         Testing.testCaseWithMetadataCase = inferredCase,
         Testing.testCaseWithMetadataDescription = desc,
         Testing.testCaseWithMetadataTags = tags_}) (Right tcase))
+
 -- | Run type inference on all terms in a TestGroup to ensure lambdas have domain types
 inferTestGroupTerms :: t0 -> Testing.TestGroup -> Either t1 Testing.TestGroup
 inferTestGroupTerms g tg =

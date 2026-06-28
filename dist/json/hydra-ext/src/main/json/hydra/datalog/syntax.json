@@ -3,12 +3,9 @@
   "metadata": {"description": "A basic Datalog model", "comments": [], "seeAlso": []},
   "dependencies": [],
   "definitions": [
-    {
-      "type": {"name": "hydra.datalog.syntax.Constant", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
-    {
-      "type": {"name": "hydra.datalog.syntax.Relation", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
-    {
-      "type": {"name": "hydra.datalog.syntax.Variable", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+    {"type": {"name": "hydra.datalog.syntax.Constant", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
+    {"type": {"name": "hydra.datalog.syntax.Relation", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
+    {"type": {"name": "hydra.datalog.syntax.Variable", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.Program",

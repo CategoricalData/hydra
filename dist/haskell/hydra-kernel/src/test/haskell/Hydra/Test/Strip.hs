@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Test cases for annotation and type stripping operations
 
 module Hydra.Test.Strip where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -36,6 +38,7 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
+
 -- | Test cases for annotation and type stripping operations
 allTests :: Testing.TestGroup
 allTests =

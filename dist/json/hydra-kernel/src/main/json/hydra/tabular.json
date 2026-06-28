@@ -39,7 +39,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"list": {"literal": {"string": {}}}}},
+              "body": {"wrap": {"list": {"literal": "string"}}},
               "annotation": {
                 "map": [
                   {

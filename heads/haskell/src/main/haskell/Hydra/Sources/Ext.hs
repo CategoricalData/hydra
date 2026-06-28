@@ -39,7 +39,6 @@ import qualified Hydra.Sources.TypeScript.Manifest as TypeScriptManifest
 import qualified Hydra.Sources.Lisp.Manifest as LispManifest
 import qualified Hydra.Sources.Pg.Manifest as PgManifest
 import qualified Hydra.Sources.Rdf.Manifest as RdfManifest
-import qualified Hydra.Sources.Scala.Manifest as ScalaManifest
 import qualified Hydra.Sources.Wasm.Manifest as WasmManifest
 
 -- Override: demo-only module that today leaks into hydraExtModules.
@@ -122,8 +121,14 @@ hydraPythonModules = []
 hydraRdfModules :: [Module]
 hydraRdfModules = RdfManifest.mainModules
 
+-- | hydra-scala is no longer sourced from a Haskell DSL (#509). Its canonical
+-- hydra.scala.* and hydra.dsl.scala.* JSON is produced solely by the native
+-- Scala driver (hydra.UpdateScalaJson via bin/generate-hydra-scala-from-scala.sh)
+-- running against the published hydra-scala host. The Haskell DSL copy under
+-- packages/hydra-scala/src/main/haskell/ has been deleted. Kept as an empty
+-- binding to preserve the shape of the aggregations below.
 hydraScalaModules :: [Module]
-hydraScalaModules = ScalaManifest.mainModules
+hydraScalaModules = []
 
 hydraWasmModules :: [Module]
 hydraWasmModules = WasmManifest.mainModules
@@ -151,7 +156,6 @@ allDslModules =
   ++ LispManifest.mainDslModules
   ++ PgManifest.mainDslModules
   ++ RdfManifest.mainDslModules
-  ++ ScalaManifest.mainDslModules
   ++ WasmManifest.mainDslModules
 
 allEncodingModules :: [Module]
@@ -166,7 +170,6 @@ allEncodingModules =
   ++ LispManifest.mainEncodingModules
   ++ PgManifest.mainEncodingModules
   ++ RdfManifest.mainEncodingModules
-  ++ ScalaManifest.mainEncodingModules
   ++ WasmManifest.mainEncodingModules
 
 -- ----------------------------------------------------------------------

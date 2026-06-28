@@ -1,12 +1,15 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term encoders for hydra.typed
 
 module Hydra.Encode.Typed where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Typed as Typed
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Encoder for hydra.typed.TypedBinding
 typedBinding :: (a -> Core.Term) -> Typed.TypedBinding a -> Core.Term
 typedBinding a x =
@@ -19,12 +22,14 @@ typedBinding a x =
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (typedTerm a (Typed.typedBindingTerm x))}]})
+
 -- | Encoder for hydra.typed.TypedTerm
 typedTerm :: (a -> Core.Term) -> Typed.TypedTerm a -> Core.Term
 typedTerm a x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.typed.TypedTerm"),
       Core.wrappedTermBody = (EncodeCore.term (Typed.unTypedTerm x))})
+
 -- | Encoder for hydra.typed.TypedTermDefinition
 typedTermDefinition :: (a -> Core.Term) -> Typed.TypedTermDefinition a -> Core.Term
 typedTermDefinition a x =

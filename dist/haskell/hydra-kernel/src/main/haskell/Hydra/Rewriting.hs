@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Core rewrite and fold combinators for terms and types
 
 module Hydra.Rewriting where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -39,6 +41,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Apply a term-level function inside any leading type lambdas
 applyInsideTypeLambdasAndAnnotations :: (Core.Term -> Core.Term) -> Core.Term -> Core.Term
 applyInsideTypeLambdasAndAnnotations f term0 =
@@ -50,18 +53,21 @@ applyInsideTypeLambdasAndAnnotations f term0 =
         Core.typeLambdaParameter = (Core.typeLambdaParameter v0),
         Core.typeLambdaBody = (applyInsideTypeLambdasAndAnnotations f (Core.typeLambdaBody v0))})
       _ -> f term0
+
 -- | Fold over a term, traversing its subterms in the specified order
 foldOverTerm :: Coders.TraversalOrder -> (t0 -> Core.Term -> t0) -> t0 -> Core.Term -> t0
 foldOverTerm order fld b0 term =
     case order of
       Coders.TraversalOrderPre -> Lists.foldl (foldOverTerm order fld) (fld b0 term) (subterms term)
       Coders.TraversalOrderPost -> fld (Lists.foldl (foldOverTerm order fld) b0 (subterms term)) term
+
 -- | Fold over a type, traversing its subtypes in the specified order
 foldOverType :: Coders.TraversalOrder -> (t0 -> Core.Type -> t0) -> t0 -> Core.Type -> t0
 foldOverType order fld b0 typ =
     case order of
       Coders.TraversalOrderPre -> Lists.foldl (foldOverType order fld) (fld b0 typ) (subtypes typ)
       Coders.TraversalOrderPost -> fld (Lists.foldl (foldOverType order fld) b0 (subtypes typ)) typ
+
 -- | Fold over a term to produce a value, with both Graph and accessor path tracked. Like rewriteAndFoldTermWithGraphAndPath, but only folds without rewriting. The Graph is automatically updated when descending into lambdas, lets, and type lambdas.
 foldTermWithGraphAndPath :: ((t0 -> Core.Term -> t0) -> [Paths.SubtermStep] -> Graph.Graph -> t0 -> Core.Term -> t0) -> Graph.Graph -> t0 -> Core.Term -> t0
 foldTermWithGraphAndPath f cx0 val0 term0 =
@@ -75,6 +81,7 @@ foldTermWithGraphAndPath f cx0 val0 term0 =
                 in (f recurseForUser path cx val term, term)
           result = rewriteAndFoldTermWithGraphAndPath wrapper cx0 val0 term0
       in (Pairs.first result)
+
 -- | Apply a transformation to the first type beneath a chain of annotations
 mapBeneathTypeAnnotations :: (Core.Type -> Core.Type) -> Core.Type -> Core.Type
 mapBeneathTypeAnnotations f t =
@@ -83,6 +90,7 @@ mapBeneathTypeAnnotations f t =
         Core.annotatedTypeBody = (mapBeneathTypeAnnotations f (Core.annotatedTypeBody v0)),
         Core.annotatedTypeAnnotation = (Core.annotatedTypeAnnotation v0)})
       _ -> f t
+
 -- | Rewrite a term, and at the same time, fold a function over it, accumulating a value
 rewriteAndFoldTerm :: ((t0 -> Core.Term -> (t0, Core.Term)) -> t0 -> Core.Term -> (t0, Core.Term)) -> t0 -> Core.Term -> (t0, Core.Term)
 rewriteAndFoldTerm f term0 =
@@ -203,6 +211,7 @@ rewriteAndFoldTerm f term0 =
                   _ -> dflt
           recurse = f (fsub recurse)
       in (recurse term0)
+
 -- | Rewrite a term while folding to produce a value, with Graph updated as we descend into subterms. Combines the features of rewriteAndFoldTerm and rewriteTermWithGraph. The user function f receives a recurse function that handles subterm traversal and Graph management.
 rewriteAndFoldTermWithGraph :: ((t0 -> Core.Term -> (t0, Core.Term)) -> Graph.Graph -> t0 -> Core.Term -> (t0, Core.Term)) -> Graph.Graph -> t0 -> Core.Term -> (t0, Core.Term)
 rewriteAndFoldTermWithGraph f cx0 val0 term0 =
@@ -225,6 +234,7 @@ rewriteAndFoldTermWithGraph f cx0 val0 term0 =
                 in ((Pairs.first fResult, cx), (Pairs.second fResult))
           result = rewriteAndFoldTerm wrapper (val0, cx0) term0
       in (Pairs.first (Pairs.first result), (Pairs.second result))
+
 -- | Rewrite a term while folding to produce a value, with both Graph and accessor path tracked. The path is a list of SubtermSteps representing the position from the root to the current term. Combines the features of rewriteAndFoldTermWithPath and Graph tracking. The Graph is automatically updated when descending into lambdas, lets, and type lambdas.
 rewriteAndFoldTermWithGraphAndPath :: ((t0 -> Core.Term -> (t0, Core.Term)) -> [Paths.SubtermStep] -> Graph.Graph -> t0 -> Core.Term -> (t0, Core.Term)) -> Graph.Graph -> t0 -> Core.Term -> (t0, Core.Term)
 rewriteAndFoldTermWithGraphAndPath f cx0 val0 term0 =
@@ -247,6 +257,7 @@ rewriteAndFoldTermWithGraphAndPath f cx0 val0 term0 =
                 in ((cx, (Pairs.first fResult)), (Pairs.second fResult))
           result = rewriteAndFoldTermWithPath wrapper (cx0, val0) term0
       in (Pairs.second (Pairs.first result), (Pairs.second result))
+
 -- | Rewrite a term with path tracking, and fold a function over it, accumulating a value. The path is a list of SubtermSteps from root to current position.
 rewriteAndFoldTermWithPath :: (([Paths.SubtermStep] -> t0 -> Core.Term -> (t0, Core.Term)) -> [Paths.SubtermStep] -> t0 -> Core.Term -> (t0, Core.Term)) -> t0 -> Core.Term -> (t0, Core.Term)
 rewriteAndFoldTermWithPath f term0 =
@@ -414,6 +425,7 @@ rewriteAndFoldTermWithPath f term0 =
                   _ -> dflt
           recurse = f (fsub recurse)
       in (recurse [] term0)
+
 -- | Rewrite a term with a custom transformation function. The function receives a recursive walker and the current term and decides whether to recurse, replace, or both.
 rewriteTerm :: ((Core.Term -> Core.Term) -> Core.Term -> Core.Term) -> Core.Term -> Core.Term
 rewriteTerm f term0 =
@@ -486,6 +498,7 @@ rewriteTerm f term0 =
                     Core.wrappedTermBody = (recurse (Core.wrappedTermBody v0))})
           recurse = f (fsub recurse)
       in (recurse term0)
+
 -- | Either-based term rewriting with custom transformation function
 rewriteTermM :: ((Core.Term -> Either t0 Core.Term) -> Core.Term -> Either t0 Core.Term) -> Core.Term -> Either t0 Core.Term
 rewriteTermM f term0 =
@@ -576,6 +589,7 @@ rewriteTermM f term0 =
                       Core.wrappedTermBody = rt}))))
           recurse = f (fsub recurse)
       in (recurse term0)
+
 -- | A variant of rewriteTerm which allows a context (e.g. a TypeContext) to be passed down to all subterms during rewriting
 rewriteTermWithContext :: ((t0 -> Core.Term -> Core.Term) -> t0 -> Core.Term -> Core.Term) -> t0 -> Core.Term -> Core.Term
 rewriteTermWithContext f cx0 term0 =
@@ -649,6 +663,7 @@ rewriteTermWithContext f cx0 term0 =
                     Core.wrappedTermBody = (recurse (Core.wrappedTermBody v0))})
           rewrite = \cx -> \term -> f (forSubterms rewrite) cx term
       in (rewrite cx0 term0)
+
 -- | Either-based variant of rewriteTermWithContextM which allows a context (e.g. a TypeContext) to be passed down to all subterms during rewriting
 rewriteTermWithContextM :: ((t0 -> Core.Term -> Either t1 Core.Term) -> t0 -> Core.Term -> Either t1 Core.Term) -> t0 -> Core.Term -> Either t1 Core.Term
 rewriteTermWithContextM f cx0 term0 =
@@ -740,6 +755,7 @@ rewriteTermWithContextM f cx0 term0 =
                       Core.wrappedTermBody = rt}))))
           rewrite = \cx -> \term -> f (forSubterms rewrite) cx term
       in (rewrite cx0 term0)
+
 -- | Rewrite a term with the help of a Graph which is updated as we descend into subterms
 rewriteTermWithGraph :: ((Core.Term -> t0) -> Graph.Graph -> Core.Term -> t0) -> Graph.Graph -> Core.Term -> t0
 rewriteTermWithGraph f cx0 term0 =
@@ -763,6 +779,7 @@ rewriteTermWithGraph f cx0 term0 =
                   _ -> f recurse1 cx term
           rewrite = \cx -> \term -> f2 rewrite cx term
       in (rewrite cx0 term0)
+
 -- | Rewrite a type with a custom transformation function. The function receives a recursive walker and the current type and decides whether to recurse, replace, or both.
 rewriteType :: ((Core.Type -> Core.Type) -> Core.Type -> Core.Type) -> Core.Type -> Core.Type
 rewriteType f typ0 =
@@ -808,6 +825,7 @@ rewriteType f typ0 =
                   Core.TypeWrap v0 -> Core.TypeWrap (recurse v0)
           recurse = f (fsub recurse)
       in (recurse typ0)
+
 -- | Either-based type rewriting
 rewriteTypeM :: ((Core.Type -> Either t0 Core.Type) -> Core.Type -> Either t0 Core.Type) -> Core.Type -> Either t0 Core.Type
 rewriteTypeM f typ0 =
@@ -858,6 +876,7 @@ rewriteTypeM f typ0 =
                 Core.TypeWrap v0 -> Eithers.bind (recurse v0) (\t -> Right (Core.TypeWrap t))
           recurse = f (fsub recurse)
       in (recurse typ0)
+
 -- | Find the children of a given term
 subterms :: Core.Term -> [Core.Term]
 subterms x =
@@ -899,6 +918,7 @@ subterms x =
       Core.TermVariable _ -> []
       Core.TermWrap v0 -> [
         Core.wrappedTermBody v0]
+
 -- | Find the children of a given term
 subtermsWithSteps :: Core.Term -> [(Paths.SubtermStep, Core.Term)]
 subtermsWithSteps x =
@@ -936,6 +956,7 @@ subtermsWithSteps x =
       Core.TermVariable _ -> []
       Core.TermWrap v0 -> [
         (Paths.SubtermStepWrappedTerm, (Core.wrappedTermBody v0))]
+
 -- | Find the children of a given type expression
 subtypes :: Core.Type -> [Core.Type]
 subtypes x =

@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term decoders for hydra.coders
 
 module Hydra.Decode.Coders where
+
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
@@ -22,6 +24,7 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Decoder for hydra.coders.CaseConventions
 caseConventions :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Coders.CaseConventions
 caseConventions cx raw =
@@ -40,6 +43,7 @@ caseConventions cx raw =
           Coders.caseConventionsType = field_type,
           Coders.caseConventionsTypeVariable = field_typeVariable}))))))))))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.coders.CaseConventions")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.coders.CoderDirection
 coderDirection :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Coders.CoderDirection
 coderDirection cx raw =
@@ -57,6 +61,7 @@ coderDirection cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.coders.LanguageFeature
 languageFeature :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Coders.LanguageFeature
 languageFeature cx raw =
@@ -81,6 +86,7 @@ languageFeature cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.coders.LanguageName
 languageName :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Coders.LanguageName
 languageName cx raw =
@@ -91,6 +97,7 @@ languageName cx raw =
           _ -> Left (Errors.DecodingError "expected string literal")
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.coders.TraversalOrder
 traversalOrder :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Coders.TraversalOrder
 traversalOrder cx raw =

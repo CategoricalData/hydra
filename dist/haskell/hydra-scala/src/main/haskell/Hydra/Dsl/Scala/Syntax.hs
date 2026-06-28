@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | DSL functions for hydra.scala.syntax
 
 module Hydra.Dsl.Scala.Syntax where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Scala.Syntax as Syntax
@@ -9,6 +11,7 @@ import qualified Hydra.Typed as Typed
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Int as I
+
 -- | DSL constructor for hydra.scala.syntax.AlternativePat
 alternativePat :: Typed.TypedTerm Syntax.Pat -> Typed.TypedTerm Syntax.Pat -> Typed.TypedTerm Syntax.AlternativePat
 alternativePat lhs rhs =
@@ -21,6 +24,7 @@ alternativePat lhs rhs =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm rhs)}]}))
+
 -- | DSL accessor for the lhs field of hydra.scala.syntax.AlternativePat
 alternativePatLhs :: Typed.TypedTerm Syntax.AlternativePat -> Typed.TypedTerm Syntax.Pat
 alternativePatLhs x =
@@ -29,6 +33,7 @@ alternativePatLhs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.AlternativePat"),
         Core.projectionFieldName = (Core.Name "lhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the rhs field of hydra.scala.syntax.AlternativePat
 alternativePatRhs :: Typed.TypedTerm Syntax.AlternativePat -> Typed.TypedTerm Syntax.Pat
 alternativePatRhs x =
@@ -37,6 +42,7 @@ alternativePatRhs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.AlternativePat"),
         Core.projectionFieldName = (Core.Name "rhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the lhs field of hydra.scala.syntax.AlternativePat
 alternativePatWithLhs :: Typed.TypedTerm Syntax.AlternativePat -> Typed.TypedTerm Syntax.Pat -> Typed.TypedTerm Syntax.AlternativePat
 alternativePatWithLhs original newVal =
@@ -53,6 +59,7 @@ alternativePatWithLhs original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.AlternativePat"),
               Core.projectionFieldName = (Core.Name "rhs")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the rhs field of hydra.scala.syntax.AlternativePat
 alternativePatWithRhs :: Typed.TypedTerm Syntax.AlternativePat -> Typed.TypedTerm Syntax.Pat -> Typed.TypedTerm Syntax.AlternativePat
 alternativePatWithRhs original newVal =
@@ -69,6 +76,7 @@ alternativePatWithRhs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.AndType
 andType :: Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.AndType
 andType lhs rhs =
@@ -81,6 +89,7 @@ andType lhs rhs =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm rhs)}]}))
+
 -- | DSL accessor for the lhs field of hydra.scala.syntax.AndType
 andTypeLhs :: Typed.TypedTerm Syntax.AndType -> Typed.TypedTerm Syntax.Type
 andTypeLhs x =
@@ -89,6 +98,7 @@ andTypeLhs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.AndType"),
         Core.projectionFieldName = (Core.Name "lhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the rhs field of hydra.scala.syntax.AndType
 andTypeRhs :: Typed.TypedTerm Syntax.AndType -> Typed.TypedTerm Syntax.Type
 andTypeRhs x =
@@ -97,6 +107,7 @@ andTypeRhs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.AndType"),
         Core.projectionFieldName = (Core.Name "rhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the lhs field of hydra.scala.syntax.AndType
 andTypeWithLhs :: Typed.TypedTerm Syntax.AndType -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.AndType
 andTypeWithLhs original newVal =
@@ -113,6 +124,7 @@ andTypeWithLhs original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.AndType"),
               Core.projectionFieldName = (Core.Name "rhs")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the rhs field of hydra.scala.syntax.AndType
 andTypeWithRhs :: Typed.TypedTerm Syntax.AndType -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.AndType
 andTypeWithRhs original newVal =
@@ -129,6 +141,7 @@ andTypeWithRhs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.AnnotMod
 annotMod :: Typed.TypedTerm Syntax.Init -> Typed.TypedTerm Syntax.AnnotMod
 annotMod init =
@@ -138,6 +151,7 @@ annotMod init =
         Core.Field {
           Core.fieldName = (Core.Name "init"),
           Core.fieldTerm = (Typed.unTypedTerm init)}]}))
+
 -- | DSL accessor for the init field of hydra.scala.syntax.AnnotMod
 annotModInit :: Typed.TypedTerm Syntax.AnnotMod -> Typed.TypedTerm Syntax.Init
 annotModInit x =
@@ -146,6 +160,7 @@ annotModInit x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.AnnotMod"),
         Core.projectionFieldName = (Core.Name "init")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the init field of hydra.scala.syntax.AnnotMod
 annotModWithInit :: Typed.TypedTerm Syntax.AnnotMod -> Typed.TypedTerm Syntax.Init -> Typed.TypedTerm Syntax.AnnotMod
 annotModWithInit original newVal =
@@ -155,6 +170,7 @@ annotModWithInit original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "init"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.AnnotateData
 annotateData :: Typed.TypedTerm Syntax.Data -> Typed.TypedTerm [Syntax.AnnotMod] -> Typed.TypedTerm Syntax.AnnotateData
 annotateData expr annots =
@@ -167,6 +183,7 @@ annotateData expr annots =
         Core.Field {
           Core.fieldName = (Core.Name "annots"),
           Core.fieldTerm = (Typed.unTypedTerm annots)}]}))
+
 -- | DSL accessor for the annots field of hydra.scala.syntax.AnnotateData
 annotateDataAnnots :: Typed.TypedTerm Syntax.AnnotateData -> Typed.TypedTerm [Syntax.AnnotMod]
 annotateDataAnnots x =
@@ -175,6 +192,7 @@ annotateDataAnnots x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.AnnotateData"),
         Core.projectionFieldName = (Core.Name "annots")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the expr field of hydra.scala.syntax.AnnotateData
 annotateDataExpr :: Typed.TypedTerm Syntax.AnnotateData -> Typed.TypedTerm Syntax.Data
 annotateDataExpr x =
@@ -183,6 +201,7 @@ annotateDataExpr x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.AnnotateData"),
         Core.projectionFieldName = (Core.Name "expr")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the annots field of hydra.scala.syntax.AnnotateData
 annotateDataWithAnnots :: Typed.TypedTerm Syntax.AnnotateData -> Typed.TypedTerm [Syntax.AnnotMod] -> Typed.TypedTerm Syntax.AnnotateData
 annotateDataWithAnnots original newVal =
@@ -199,6 +218,7 @@ annotateDataWithAnnots original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "annots"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the expr field of hydra.scala.syntax.AnnotateData
 annotateDataWithExpr :: Typed.TypedTerm Syntax.AnnotateData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.AnnotateData
 annotateDataWithExpr original newVal =
@@ -215,6 +235,7 @@ annotateDataWithExpr original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.AnnotateData"),
               Core.projectionFieldName = (Core.Name "annots")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.AnnotateType
 annotateType :: Typed.TypedTerm Syntax.Type -> Typed.TypedTerm [Syntax.AnnotMod] -> Typed.TypedTerm Syntax.AnnotateType
 annotateType tpe annots =
@@ -227,6 +248,7 @@ annotateType tpe annots =
         Core.Field {
           Core.fieldName = (Core.Name "annots"),
           Core.fieldTerm = (Typed.unTypedTerm annots)}]}))
+
 -- | DSL accessor for the annots field of hydra.scala.syntax.AnnotateType
 annotateTypeAnnots :: Typed.TypedTerm Syntax.AnnotateType -> Typed.TypedTerm [Syntax.AnnotMod]
 annotateTypeAnnots x =
@@ -235,6 +257,7 @@ annotateTypeAnnots x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.AnnotateType"),
         Core.projectionFieldName = (Core.Name "annots")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the tpe field of hydra.scala.syntax.AnnotateType
 annotateTypeTpe :: Typed.TypedTerm Syntax.AnnotateType -> Typed.TypedTerm Syntax.Type
 annotateTypeTpe x =
@@ -243,6 +266,7 @@ annotateTypeTpe x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.AnnotateType"),
         Core.projectionFieldName = (Core.Name "tpe")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the annots field of hydra.scala.syntax.AnnotateType
 annotateTypeWithAnnots :: Typed.TypedTerm Syntax.AnnotateType -> Typed.TypedTerm [Syntax.AnnotMod] -> Typed.TypedTerm Syntax.AnnotateType
 annotateTypeWithAnnots original newVal =
@@ -259,6 +283,7 @@ annotateTypeWithAnnots original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "annots"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the tpe field of hydra.scala.syntax.AnnotateType
 annotateTypeWithTpe :: Typed.TypedTerm Syntax.AnnotateType -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.AnnotateType
 annotateTypeWithTpe original newVal =
@@ -275,18 +300,21 @@ annotateTypeWithTpe original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.AnnotateType"),
               Core.projectionFieldName = (Core.Name "annots")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for the hydra.scala.syntax.AnonymousData wrapper
 anonymousData :: Typed.TypedTerm () -> Typed.TypedTerm Syntax.AnonymousData
 anonymousData x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.scala.syntax.AnonymousData"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
 -- | DSL constructor for the hydra.scala.syntax.AnonymousNameType wrapper
 anonymousNameType :: Typed.TypedTerm () -> Typed.TypedTerm Syntax.AnonymousNameType
 anonymousNameType x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.scala.syntax.AnonymousNameType"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
 -- | DSL constructor for hydra.scala.syntax.ApplyData
 applyData :: Typed.TypedTerm Syntax.Data -> Typed.TypedTerm [Syntax.Data] -> Typed.TypedTerm Syntax.ApplyData
 applyData fun args =
@@ -299,6 +327,7 @@ applyData fun args =
         Core.Field {
           Core.fieldName = (Core.Name "args"),
           Core.fieldTerm = (Typed.unTypedTerm args)}]}))
+
 -- | DSL accessor for the args field of hydra.scala.syntax.ApplyData
 applyDataArgs :: Typed.TypedTerm Syntax.ApplyData -> Typed.TypedTerm [Syntax.Data]
 applyDataArgs x =
@@ -307,6 +336,7 @@ applyDataArgs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyData"),
         Core.projectionFieldName = (Core.Name "args")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the fun field of hydra.scala.syntax.ApplyData
 applyDataFun :: Typed.TypedTerm Syntax.ApplyData -> Typed.TypedTerm Syntax.Data
 applyDataFun x =
@@ -315,6 +345,7 @@ applyDataFun x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyData"),
         Core.projectionFieldName = (Core.Name "fun")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the args field of hydra.scala.syntax.ApplyData
 applyDataWithArgs :: Typed.TypedTerm Syntax.ApplyData -> Typed.TypedTerm [Syntax.Data] -> Typed.TypedTerm Syntax.ApplyData
 applyDataWithArgs original newVal =
@@ -331,6 +362,7 @@ applyDataWithArgs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "args"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the fun field of hydra.scala.syntax.ApplyData
 applyDataWithFun :: Typed.TypedTerm Syntax.ApplyData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.ApplyData
 applyDataWithFun original newVal =
@@ -347,6 +379,7 @@ applyDataWithFun original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyData"),
               Core.projectionFieldName = (Core.Name "args")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.ApplyInfixData
 applyInfixData :: Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm [Syntax.Type] -> Typed.TypedTerm [Syntax.Data] -> Typed.TypedTerm Syntax.ApplyInfixData
 applyInfixData lhs op targs args =
@@ -365,6 +398,7 @@ applyInfixData lhs op targs args =
         Core.Field {
           Core.fieldName = (Core.Name "args"),
           Core.fieldTerm = (Typed.unTypedTerm args)}]}))
+
 -- | DSL accessor for the args field of hydra.scala.syntax.ApplyInfixData
 applyInfixDataArgs :: Typed.TypedTerm Syntax.ApplyInfixData -> Typed.TypedTerm [Syntax.Data]
 applyInfixDataArgs x =
@@ -373,6 +407,7 @@ applyInfixDataArgs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyInfixData"),
         Core.projectionFieldName = (Core.Name "args")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the lhs field of hydra.scala.syntax.ApplyInfixData
 applyInfixDataLhs :: Typed.TypedTerm Syntax.ApplyInfixData -> Typed.TypedTerm Syntax.Data
 applyInfixDataLhs x =
@@ -381,6 +416,7 @@ applyInfixDataLhs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyInfixData"),
         Core.projectionFieldName = (Core.Name "lhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the op field of hydra.scala.syntax.ApplyInfixData
 applyInfixDataOp :: Typed.TypedTerm Syntax.ApplyInfixData -> Typed.TypedTerm Syntax.NameData
 applyInfixDataOp x =
@@ -389,6 +425,7 @@ applyInfixDataOp x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyInfixData"),
         Core.projectionFieldName = (Core.Name "op")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the targs field of hydra.scala.syntax.ApplyInfixData
 applyInfixDataTargs :: Typed.TypedTerm Syntax.ApplyInfixData -> Typed.TypedTerm [Syntax.Type]
 applyInfixDataTargs x =
@@ -397,6 +434,7 @@ applyInfixDataTargs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyInfixData"),
         Core.projectionFieldName = (Core.Name "targs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the args field of hydra.scala.syntax.ApplyInfixData
 applyInfixDataWithArgs :: Typed.TypedTerm Syntax.ApplyInfixData -> Typed.TypedTerm [Syntax.Data] -> Typed.TypedTerm Syntax.ApplyInfixData
 applyInfixDataWithArgs original newVal =
@@ -427,6 +465,7 @@ applyInfixDataWithArgs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "args"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the lhs field of hydra.scala.syntax.ApplyInfixData
 applyInfixDataWithLhs :: Typed.TypedTerm Syntax.ApplyInfixData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.ApplyInfixData
 applyInfixDataWithLhs original newVal =
@@ -457,6 +496,7 @@ applyInfixDataWithLhs original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyInfixData"),
               Core.projectionFieldName = (Core.Name "args")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the op field of hydra.scala.syntax.ApplyInfixData
 applyInfixDataWithOp :: Typed.TypedTerm Syntax.ApplyInfixData -> Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.ApplyInfixData
 applyInfixDataWithOp original newVal =
@@ -487,6 +527,7 @@ applyInfixDataWithOp original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyInfixData"),
               Core.projectionFieldName = (Core.Name "args")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the targs field of hydra.scala.syntax.ApplyInfixData
 applyInfixDataWithTargs :: Typed.TypedTerm Syntax.ApplyInfixData -> Typed.TypedTerm [Syntax.Type] -> Typed.TypedTerm Syntax.ApplyInfixData
 applyInfixDataWithTargs original newVal =
@@ -517,6 +558,7 @@ applyInfixDataWithTargs original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyInfixData"),
               Core.projectionFieldName = (Core.Name "args")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.ApplyInfixType
 applyInfixType :: Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.NameType -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.ApplyInfixType
 applyInfixType lhs op rhs =
@@ -532,6 +574,7 @@ applyInfixType lhs op rhs =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm rhs)}]}))
+
 -- | DSL accessor for the lhs field of hydra.scala.syntax.ApplyInfixType
 applyInfixTypeLhs :: Typed.TypedTerm Syntax.ApplyInfixType -> Typed.TypedTerm Syntax.Type
 applyInfixTypeLhs x =
@@ -540,6 +583,7 @@ applyInfixTypeLhs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyInfixType"),
         Core.projectionFieldName = (Core.Name "lhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the op field of hydra.scala.syntax.ApplyInfixType
 applyInfixTypeOp :: Typed.TypedTerm Syntax.ApplyInfixType -> Typed.TypedTerm Syntax.NameType
 applyInfixTypeOp x =
@@ -548,6 +592,7 @@ applyInfixTypeOp x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyInfixType"),
         Core.projectionFieldName = (Core.Name "op")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the rhs field of hydra.scala.syntax.ApplyInfixType
 applyInfixTypeRhs :: Typed.TypedTerm Syntax.ApplyInfixType -> Typed.TypedTerm Syntax.Type
 applyInfixTypeRhs x =
@@ -556,6 +601,7 @@ applyInfixTypeRhs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyInfixType"),
         Core.projectionFieldName = (Core.Name "rhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the lhs field of hydra.scala.syntax.ApplyInfixType
 applyInfixTypeWithLhs :: Typed.TypedTerm Syntax.ApplyInfixType -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.ApplyInfixType
 applyInfixTypeWithLhs original newVal =
@@ -579,6 +625,7 @@ applyInfixTypeWithLhs original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyInfixType"),
               Core.projectionFieldName = (Core.Name "rhs")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the op field of hydra.scala.syntax.ApplyInfixType
 applyInfixTypeWithOp :: Typed.TypedTerm Syntax.ApplyInfixType -> Typed.TypedTerm Syntax.NameType -> Typed.TypedTerm Syntax.ApplyInfixType
 applyInfixTypeWithOp original newVal =
@@ -602,6 +649,7 @@ applyInfixTypeWithOp original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyInfixType"),
               Core.projectionFieldName = (Core.Name "rhs")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the rhs field of hydra.scala.syntax.ApplyInfixType
 applyInfixTypeWithRhs :: Typed.TypedTerm Syntax.ApplyInfixType -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.ApplyInfixType
 applyInfixTypeWithRhs original newVal =
@@ -625,6 +673,7 @@ applyInfixTypeWithRhs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.ApplyType
 applyType :: Typed.TypedTerm Syntax.Type -> Typed.TypedTerm [Syntax.Type] -> Typed.TypedTerm Syntax.ApplyType
 applyType tpe args =
@@ -637,6 +686,7 @@ applyType tpe args =
         Core.Field {
           Core.fieldName = (Core.Name "args"),
           Core.fieldTerm = (Typed.unTypedTerm args)}]}))
+
 -- | DSL accessor for the args field of hydra.scala.syntax.ApplyType
 applyTypeArgs :: Typed.TypedTerm Syntax.ApplyType -> Typed.TypedTerm [Syntax.Type]
 applyTypeArgs x =
@@ -645,6 +695,7 @@ applyTypeArgs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyType"),
         Core.projectionFieldName = (Core.Name "args")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL constructor for hydra.scala.syntax.ApplyTypeData
 applyTypeData :: Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm [Syntax.Type] -> Typed.TypedTerm [Syntax.Data] -> Typed.TypedTerm Syntax.ApplyTypeData
 applyTypeData lhs op targs args =
@@ -663,6 +714,7 @@ applyTypeData lhs op targs args =
         Core.Field {
           Core.fieldName = (Core.Name "args"),
           Core.fieldTerm = (Typed.unTypedTerm args)}]}))
+
 -- | DSL accessor for the args field of hydra.scala.syntax.ApplyTypeData
 applyTypeDataArgs :: Typed.TypedTerm Syntax.ApplyTypeData -> Typed.TypedTerm [Syntax.Data]
 applyTypeDataArgs x =
@@ -671,6 +723,7 @@ applyTypeDataArgs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyTypeData"),
         Core.projectionFieldName = (Core.Name "args")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the lhs field of hydra.scala.syntax.ApplyTypeData
 applyTypeDataLhs :: Typed.TypedTerm Syntax.ApplyTypeData -> Typed.TypedTerm Syntax.Data
 applyTypeDataLhs x =
@@ -679,6 +732,7 @@ applyTypeDataLhs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyTypeData"),
         Core.projectionFieldName = (Core.Name "lhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the op field of hydra.scala.syntax.ApplyTypeData
 applyTypeDataOp :: Typed.TypedTerm Syntax.ApplyTypeData -> Typed.TypedTerm Syntax.NameData
 applyTypeDataOp x =
@@ -687,6 +741,7 @@ applyTypeDataOp x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyTypeData"),
         Core.projectionFieldName = (Core.Name "op")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the targs field of hydra.scala.syntax.ApplyTypeData
 applyTypeDataTargs :: Typed.TypedTerm Syntax.ApplyTypeData -> Typed.TypedTerm [Syntax.Type]
 applyTypeDataTargs x =
@@ -695,6 +750,7 @@ applyTypeDataTargs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyTypeData"),
         Core.projectionFieldName = (Core.Name "targs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the args field of hydra.scala.syntax.ApplyTypeData
 applyTypeDataWithArgs :: Typed.TypedTerm Syntax.ApplyTypeData -> Typed.TypedTerm [Syntax.Data] -> Typed.TypedTerm Syntax.ApplyTypeData
 applyTypeDataWithArgs original newVal =
@@ -725,6 +781,7 @@ applyTypeDataWithArgs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "args"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the lhs field of hydra.scala.syntax.ApplyTypeData
 applyTypeDataWithLhs :: Typed.TypedTerm Syntax.ApplyTypeData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.ApplyTypeData
 applyTypeDataWithLhs original newVal =
@@ -755,6 +812,7 @@ applyTypeDataWithLhs original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyTypeData"),
               Core.projectionFieldName = (Core.Name "args")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the op field of hydra.scala.syntax.ApplyTypeData
 applyTypeDataWithOp :: Typed.TypedTerm Syntax.ApplyTypeData -> Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.ApplyTypeData
 applyTypeDataWithOp original newVal =
@@ -785,6 +843,7 @@ applyTypeDataWithOp original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyTypeData"),
               Core.projectionFieldName = (Core.Name "args")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the targs field of hydra.scala.syntax.ApplyTypeData
 applyTypeDataWithTargs :: Typed.TypedTerm Syntax.ApplyTypeData -> Typed.TypedTerm [Syntax.Type] -> Typed.TypedTerm Syntax.ApplyTypeData
 applyTypeDataWithTargs original newVal =
@@ -815,6 +874,7 @@ applyTypeDataWithTargs original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyTypeData"),
               Core.projectionFieldName = (Core.Name "args")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL accessor for the tpe field of hydra.scala.syntax.ApplyType
 applyTypeTpe :: Typed.TypedTerm Syntax.ApplyType -> Typed.TypedTerm Syntax.Type
 applyTypeTpe x =
@@ -823,6 +883,7 @@ applyTypeTpe x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyType"),
         Core.projectionFieldName = (Core.Name "tpe")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the args field of hydra.scala.syntax.ApplyType
 applyTypeWithArgs :: Typed.TypedTerm Syntax.ApplyType -> Typed.TypedTerm [Syntax.Type] -> Typed.TypedTerm Syntax.ApplyType
 applyTypeWithArgs original newVal =
@@ -839,6 +900,7 @@ applyTypeWithArgs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "args"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the tpe field of hydra.scala.syntax.ApplyType
 applyTypeWithTpe :: Typed.TypedTerm Syntax.ApplyType -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.ApplyType
 applyTypeWithTpe original newVal =
@@ -855,6 +917,7 @@ applyTypeWithTpe original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyType"),
               Core.projectionFieldName = (Core.Name "args")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.ApplyUnaryData
 applyUnaryData :: Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.ApplyUnaryData
 applyUnaryData op arg =
@@ -867,6 +930,7 @@ applyUnaryData op arg =
         Core.Field {
           Core.fieldName = (Core.Name "arg"),
           Core.fieldTerm = (Typed.unTypedTerm arg)}]}))
+
 -- | DSL accessor for the arg field of hydra.scala.syntax.ApplyUnaryData
 applyUnaryDataArg :: Typed.TypedTerm Syntax.ApplyUnaryData -> Typed.TypedTerm Syntax.Data
 applyUnaryDataArg x =
@@ -875,6 +939,7 @@ applyUnaryDataArg x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyUnaryData"),
         Core.projectionFieldName = (Core.Name "arg")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the op field of hydra.scala.syntax.ApplyUnaryData
 applyUnaryDataOp :: Typed.TypedTerm Syntax.ApplyUnaryData -> Typed.TypedTerm Syntax.NameData
 applyUnaryDataOp x =
@@ -883,6 +948,7 @@ applyUnaryDataOp x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyUnaryData"),
         Core.projectionFieldName = (Core.Name "op")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the arg field of hydra.scala.syntax.ApplyUnaryData
 applyUnaryDataWithArg :: Typed.TypedTerm Syntax.ApplyUnaryData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.ApplyUnaryData
 applyUnaryDataWithArg original newVal =
@@ -899,6 +965,7 @@ applyUnaryDataWithArg original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "arg"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the op field of hydra.scala.syntax.ApplyUnaryData
 applyUnaryDataWithOp :: Typed.TypedTerm Syntax.ApplyUnaryData -> Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.ApplyUnaryData
 applyUnaryDataWithOp original newVal =
@@ -915,6 +982,7 @@ applyUnaryDataWithOp original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyUnaryData"),
               Core.projectionFieldName = (Core.Name "arg")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.ApplyUsingData
 applyUsingData :: Typed.TypedTerm Syntax.Data -> Typed.TypedTerm [Syntax.Data] -> Typed.TypedTerm Syntax.ApplyUsingData
 applyUsingData fun targs =
@@ -927,6 +995,7 @@ applyUsingData fun targs =
         Core.Field {
           Core.fieldName = (Core.Name "targs"),
           Core.fieldTerm = (Typed.unTypedTerm targs)}]}))
+
 -- | DSL accessor for the fun field of hydra.scala.syntax.ApplyUsingData
 applyUsingDataFun :: Typed.TypedTerm Syntax.ApplyUsingData -> Typed.TypedTerm Syntax.Data
 applyUsingDataFun x =
@@ -935,6 +1004,7 @@ applyUsingDataFun x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyUsingData"),
         Core.projectionFieldName = (Core.Name "fun")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the targs field of hydra.scala.syntax.ApplyUsingData
 applyUsingDataTargs :: Typed.TypedTerm Syntax.ApplyUsingData -> Typed.TypedTerm [Syntax.Data]
 applyUsingDataTargs x =
@@ -943,6 +1013,7 @@ applyUsingDataTargs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyUsingData"),
         Core.projectionFieldName = (Core.Name "targs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the fun field of hydra.scala.syntax.ApplyUsingData
 applyUsingDataWithFun :: Typed.TypedTerm Syntax.ApplyUsingData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.ApplyUsingData
 applyUsingDataWithFun original newVal =
@@ -959,6 +1030,7 @@ applyUsingDataWithFun original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ApplyUsingData"),
               Core.projectionFieldName = (Core.Name "targs")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the targs field of hydra.scala.syntax.ApplyUsingData
 applyUsingDataWithTargs :: Typed.TypedTerm Syntax.ApplyUsingData -> Typed.TypedTerm [Syntax.Data] -> Typed.TypedTerm Syntax.ApplyUsingData
 applyUsingDataWithTargs original newVal =
@@ -975,6 +1047,7 @@ applyUsingDataWithTargs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "targs"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.AscribeData
 ascribeData :: Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.AscribeData
 ascribeData expr tpe =
@@ -987,6 +1060,7 @@ ascribeData expr tpe =
         Core.Field {
           Core.fieldName = (Core.Name "tpe"),
           Core.fieldTerm = (Typed.unTypedTerm tpe)}]}))
+
 -- | DSL accessor for the expr field of hydra.scala.syntax.AscribeData
 ascribeDataExpr :: Typed.TypedTerm Syntax.AscribeData -> Typed.TypedTerm Syntax.Data
 ascribeDataExpr x =
@@ -995,6 +1069,7 @@ ascribeDataExpr x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.AscribeData"),
         Core.projectionFieldName = (Core.Name "expr")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the tpe field of hydra.scala.syntax.AscribeData
 ascribeDataTpe :: Typed.TypedTerm Syntax.AscribeData -> Typed.TypedTerm Syntax.Type
 ascribeDataTpe x =
@@ -1003,6 +1078,7 @@ ascribeDataTpe x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.AscribeData"),
         Core.projectionFieldName = (Core.Name "tpe")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the expr field of hydra.scala.syntax.AscribeData
 ascribeDataWithExpr :: Typed.TypedTerm Syntax.AscribeData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.AscribeData
 ascribeDataWithExpr original newVal =
@@ -1019,6 +1095,7 @@ ascribeDataWithExpr original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.AscribeData"),
               Core.projectionFieldName = (Core.Name "tpe")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the tpe field of hydra.scala.syntax.AscribeData
 ascribeDataWithTpe :: Typed.TypedTerm Syntax.AscribeData -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.AscribeData
 ascribeDataWithTpe original newVal =
@@ -1035,6 +1112,7 @@ ascribeDataWithTpe original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "tpe"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.AssignData
 assignData :: Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.AssignData
 assignData lhs rhs =
@@ -1047,6 +1125,7 @@ assignData lhs rhs =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm rhs)}]}))
+
 -- | DSL accessor for the lhs field of hydra.scala.syntax.AssignData
 assignDataLhs :: Typed.TypedTerm Syntax.AssignData -> Typed.TypedTerm Syntax.Data
 assignDataLhs x =
@@ -1055,6 +1134,7 @@ assignDataLhs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.AssignData"),
         Core.projectionFieldName = (Core.Name "lhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the rhs field of hydra.scala.syntax.AssignData
 assignDataRhs :: Typed.TypedTerm Syntax.AssignData -> Typed.TypedTerm Syntax.Data
 assignDataRhs x =
@@ -1063,6 +1143,7 @@ assignDataRhs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.AssignData"),
         Core.projectionFieldName = (Core.Name "rhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the lhs field of hydra.scala.syntax.AssignData
 assignDataWithLhs :: Typed.TypedTerm Syntax.AssignData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.AssignData
 assignDataWithLhs original newVal =
@@ -1079,6 +1160,7 @@ assignDataWithLhs original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.AssignData"),
               Core.projectionFieldName = (Core.Name "rhs")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the rhs field of hydra.scala.syntax.AssignData
 assignDataWithRhs :: Typed.TypedTerm Syntax.AssignData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.AssignData
 assignDataWithRhs original newVal =
@@ -1095,6 +1177,7 @@ assignDataWithRhs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.BindPat
 bindPat :: Typed.TypedTerm Syntax.Pat -> Typed.TypedTerm Syntax.Pat -> Typed.TypedTerm Syntax.BindPat
 bindPat lhs rhs =
@@ -1107,6 +1190,7 @@ bindPat lhs rhs =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm rhs)}]}))
+
 -- | DSL accessor for the lhs field of hydra.scala.syntax.BindPat
 bindPatLhs :: Typed.TypedTerm Syntax.BindPat -> Typed.TypedTerm Syntax.Pat
 bindPatLhs x =
@@ -1115,6 +1199,7 @@ bindPatLhs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.BindPat"),
         Core.projectionFieldName = (Core.Name "lhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the rhs field of hydra.scala.syntax.BindPat
 bindPatRhs :: Typed.TypedTerm Syntax.BindPat -> Typed.TypedTerm Syntax.Pat
 bindPatRhs x =
@@ -1123,6 +1208,7 @@ bindPatRhs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.BindPat"),
         Core.projectionFieldName = (Core.Name "rhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the lhs field of hydra.scala.syntax.BindPat
 bindPatWithLhs :: Typed.TypedTerm Syntax.BindPat -> Typed.TypedTerm Syntax.Pat -> Typed.TypedTerm Syntax.BindPat
 bindPatWithLhs original newVal =
@@ -1139,6 +1225,7 @@ bindPatWithLhs original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.BindPat"),
               Core.projectionFieldName = (Core.Name "rhs")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the rhs field of hydra.scala.syntax.BindPat
 bindPatWithRhs :: Typed.TypedTerm Syntax.BindPat -> Typed.TypedTerm Syntax.Pat -> Typed.TypedTerm Syntax.BindPat
 bindPatWithRhs original newVal =
@@ -1155,6 +1242,7 @@ bindPatWithRhs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.BlockData
 blockData :: Typed.TypedTerm [Syntax.Stat] -> Typed.TypedTerm Syntax.BlockData
 blockData stats =
@@ -1164,6 +1252,7 @@ blockData stats =
         Core.Field {
           Core.fieldName = (Core.Name "stats"),
           Core.fieldTerm = (Typed.unTypedTerm stats)}]}))
+
 -- | DSL accessor for the stats field of hydra.scala.syntax.BlockData
 blockDataStats :: Typed.TypedTerm Syntax.BlockData -> Typed.TypedTerm [Syntax.Stat]
 blockDataStats x =
@@ -1172,6 +1261,7 @@ blockDataStats x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.BlockData"),
         Core.projectionFieldName = (Core.Name "stats")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the stats field of hydra.scala.syntax.BlockData
 blockDataWithStats :: Typed.TypedTerm Syntax.BlockData -> Typed.TypedTerm [Syntax.Stat] -> Typed.TypedTerm Syntax.BlockData
 blockDataWithStats original newVal =
@@ -1181,6 +1271,7 @@ blockDataWithStats original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "stats"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.ByNameType
 byNameType :: Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.ByNameType
 byNameType tpe =
@@ -1190,6 +1281,7 @@ byNameType tpe =
         Core.Field {
           Core.fieldName = (Core.Name "tpe"),
           Core.fieldTerm = (Typed.unTypedTerm tpe)}]}))
+
 -- | DSL accessor for the tpe field of hydra.scala.syntax.ByNameType
 byNameTypeTpe :: Typed.TypedTerm Syntax.ByNameType -> Typed.TypedTerm Syntax.Type
 byNameTypeTpe x =
@@ -1198,6 +1290,7 @@ byNameTypeTpe x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ByNameType"),
         Core.projectionFieldName = (Core.Name "tpe")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the tpe field of hydra.scala.syntax.ByNameType
 byNameTypeWithTpe :: Typed.TypedTerm Syntax.ByNameType -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.ByNameType
 byNameTypeWithTpe original newVal =
@@ -1207,6 +1300,7 @@ byNameTypeWithTpe original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "tpe"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.Case
 case_ :: Typed.TypedTerm Syntax.Pat -> Typed.TypedTerm (Maybe Syntax.Data) -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.Case
 case_ pat cond body =
@@ -1222,6 +1316,7 @@ case_ pat cond body =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Typed.unTypedTerm body)}]}))
+
 -- | DSL accessor for the body field of hydra.scala.syntax.Case
 caseBody :: Typed.TypedTerm Syntax.Case -> Typed.TypedTerm Syntax.Data
 caseBody x =
@@ -1230,6 +1325,7 @@ caseBody x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Case"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the cond field of hydra.scala.syntax.Case
 caseCond :: Typed.TypedTerm Syntax.Case -> Typed.TypedTerm (Maybe Syntax.Data)
 caseCond x =
@@ -1238,6 +1334,7 @@ caseCond x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Case"),
         Core.projectionFieldName = (Core.Name "cond")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL constructor for hydra.scala.syntax.CaseGeneratorEnumerator
 caseGeneratorEnumerator :: Typed.TypedTerm Syntax.Pat -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.CaseGeneratorEnumerator
 caseGeneratorEnumerator pat rhs =
@@ -1250,6 +1347,7 @@ caseGeneratorEnumerator pat rhs =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm rhs)}]}))
+
 -- | DSL accessor for the pat field of hydra.scala.syntax.CaseGeneratorEnumerator
 caseGeneratorEnumeratorPat :: Typed.TypedTerm Syntax.CaseGeneratorEnumerator -> Typed.TypedTerm Syntax.Pat
 caseGeneratorEnumeratorPat x =
@@ -1258,6 +1356,7 @@ caseGeneratorEnumeratorPat x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.CaseGeneratorEnumerator"),
         Core.projectionFieldName = (Core.Name "pat")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the rhs field of hydra.scala.syntax.CaseGeneratorEnumerator
 caseGeneratorEnumeratorRhs :: Typed.TypedTerm Syntax.CaseGeneratorEnumerator -> Typed.TypedTerm Syntax.Data
 caseGeneratorEnumeratorRhs x =
@@ -1266,6 +1365,7 @@ caseGeneratorEnumeratorRhs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.CaseGeneratorEnumerator"),
         Core.projectionFieldName = (Core.Name "rhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the pat field of hydra.scala.syntax.CaseGeneratorEnumerator
 caseGeneratorEnumeratorWithPat :: Typed.TypedTerm Syntax.CaseGeneratorEnumerator -> Typed.TypedTerm Syntax.Pat -> Typed.TypedTerm Syntax.CaseGeneratorEnumerator
 caseGeneratorEnumeratorWithPat original newVal =
@@ -1282,6 +1382,7 @@ caseGeneratorEnumeratorWithPat original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.CaseGeneratorEnumerator"),
               Core.projectionFieldName = (Core.Name "rhs")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the rhs field of hydra.scala.syntax.CaseGeneratorEnumerator
 caseGeneratorEnumeratorWithRhs :: Typed.TypedTerm Syntax.CaseGeneratorEnumerator -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.CaseGeneratorEnumerator
 caseGeneratorEnumeratorWithRhs original newVal =
@@ -1298,6 +1399,7 @@ caseGeneratorEnumeratorWithRhs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL accessor for the pat field of hydra.scala.syntax.Case
 casePat :: Typed.TypedTerm Syntax.Case -> Typed.TypedTerm Syntax.Pat
 casePat x =
@@ -1306,6 +1408,7 @@ casePat x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Case"),
         Core.projectionFieldName = (Core.Name "pat")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL injection for the case variant of hydra.scala.syntax.CaseTree
 caseTreeCase :: Typed.TypedTerm Syntax.Case -> Typed.TypedTerm Syntax.CaseTree
 caseTreeCase x =
@@ -1314,6 +1417,7 @@ caseTreeCase x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "case"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the typeCase variant of hydra.scala.syntax.CaseTree
 caseTreeTypeCase :: Typed.TypedTerm Syntax.TypeCase -> Typed.TypedTerm Syntax.CaseTree
 caseTreeTypeCase x =
@@ -1322,6 +1426,7 @@ caseTreeTypeCase x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typeCase"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL updater for the body field of hydra.scala.syntax.Case
 caseWithBody :: Typed.TypedTerm Syntax.Case -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.Case
 caseWithBody original newVal =
@@ -1345,6 +1450,7 @@ caseWithBody original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the cond field of hydra.scala.syntax.Case
 caseWithCond :: Typed.TypedTerm Syntax.Case -> Typed.TypedTerm (Maybe Syntax.Data) -> Typed.TypedTerm Syntax.Case
 caseWithCond original newVal =
@@ -1368,6 +1474,7 @@ caseWithCond original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Case"),
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the pat field of hydra.scala.syntax.Case
 caseWithPat :: Typed.TypedTerm Syntax.Case -> Typed.TypedTerm Syntax.Pat -> Typed.TypedTerm Syntax.Case
 caseWithPat original newVal =
@@ -1391,6 +1498,7 @@ caseWithPat original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Case"),
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.ClassDefn
 classDefn :: Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.NameType -> Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm Syntax.PrimaryCtor -> Typed.TypedTerm Syntax.Template -> Typed.TypedTerm Syntax.ClassDefn
 classDefn mods name tparams ctor template =
@@ -1412,6 +1520,7 @@ classDefn mods name tparams ctor template =
         Core.Field {
           Core.fieldName = (Core.Name "template"),
           Core.fieldTerm = (Typed.unTypedTerm template)}]}))
+
 -- | DSL accessor for the ctor field of hydra.scala.syntax.ClassDefn
 classDefnCtor :: Typed.TypedTerm Syntax.ClassDefn -> Typed.TypedTerm Syntax.PrimaryCtor
 classDefnCtor x =
@@ -1420,6 +1529,7 @@ classDefnCtor x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ClassDefn"),
         Core.projectionFieldName = (Core.Name "ctor")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the mods field of hydra.scala.syntax.ClassDefn
 classDefnMods :: Typed.TypedTerm Syntax.ClassDefn -> Typed.TypedTerm [Syntax.Mod]
 classDefnMods x =
@@ -1428,6 +1538,7 @@ classDefnMods x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ClassDefn"),
         Core.projectionFieldName = (Core.Name "mods")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.ClassDefn
 classDefnName :: Typed.TypedTerm Syntax.ClassDefn -> Typed.TypedTerm Syntax.NameType
 classDefnName x =
@@ -1436,6 +1547,7 @@ classDefnName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ClassDefn"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the template field of hydra.scala.syntax.ClassDefn
 classDefnTemplate :: Typed.TypedTerm Syntax.ClassDefn -> Typed.TypedTerm Syntax.Template
 classDefnTemplate x =
@@ -1444,6 +1556,7 @@ classDefnTemplate x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ClassDefn"),
         Core.projectionFieldName = (Core.Name "template")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the tparams field of hydra.scala.syntax.ClassDefn
 classDefnTparams :: Typed.TypedTerm Syntax.ClassDefn -> Typed.TypedTerm [Syntax.ParamType]
 classDefnTparams x =
@@ -1452,6 +1565,7 @@ classDefnTparams x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ClassDefn"),
         Core.projectionFieldName = (Core.Name "tparams")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the ctor field of hydra.scala.syntax.ClassDefn
 classDefnWithCtor :: Typed.TypedTerm Syntax.ClassDefn -> Typed.TypedTerm Syntax.PrimaryCtor -> Typed.TypedTerm Syntax.ClassDefn
 classDefnWithCtor original newVal =
@@ -1489,6 +1603,7 @@ classDefnWithCtor original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ClassDefn"),
               Core.projectionFieldName = (Core.Name "template")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the mods field of hydra.scala.syntax.ClassDefn
 classDefnWithMods :: Typed.TypedTerm Syntax.ClassDefn -> Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.ClassDefn
 classDefnWithMods original newVal =
@@ -1526,6 +1641,7 @@ classDefnWithMods original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ClassDefn"),
               Core.projectionFieldName = (Core.Name "template")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.ClassDefn
 classDefnWithName :: Typed.TypedTerm Syntax.ClassDefn -> Typed.TypedTerm Syntax.NameType -> Typed.TypedTerm Syntax.ClassDefn
 classDefnWithName original newVal =
@@ -1563,6 +1679,7 @@ classDefnWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ClassDefn"),
               Core.projectionFieldName = (Core.Name "template")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the template field of hydra.scala.syntax.ClassDefn
 classDefnWithTemplate :: Typed.TypedTerm Syntax.ClassDefn -> Typed.TypedTerm Syntax.Template -> Typed.TypedTerm Syntax.ClassDefn
 classDefnWithTemplate original newVal =
@@ -1600,6 +1717,7 @@ classDefnWithTemplate original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "template"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the tparams field of hydra.scala.syntax.ClassDefn
 classDefnWithTparams :: Typed.TypedTerm Syntax.ClassDefn -> Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm Syntax.ClassDefn
 classDefnWithTparams original newVal =
@@ -1637,6 +1755,7 @@ classDefnWithTparams original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ClassDefn"),
               Core.projectionFieldName = (Core.Name "template")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.ContextFunctionData
 contextFunctionData :: Typed.TypedTerm [Syntax.ParamData] -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.ContextFunctionData
 contextFunctionData params body =
@@ -1649,6 +1768,7 @@ contextFunctionData params body =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Typed.unTypedTerm body)}]}))
+
 -- | DSL accessor for the body field of hydra.scala.syntax.ContextFunctionData
 contextFunctionDataBody :: Typed.TypedTerm Syntax.ContextFunctionData -> Typed.TypedTerm Syntax.Data
 contextFunctionDataBody x =
@@ -1657,6 +1777,7 @@ contextFunctionDataBody x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ContextFunctionData"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the params field of hydra.scala.syntax.ContextFunctionData
 contextFunctionDataParams :: Typed.TypedTerm Syntax.ContextFunctionData -> Typed.TypedTerm [Syntax.ParamData]
 contextFunctionDataParams x =
@@ -1665,6 +1786,7 @@ contextFunctionDataParams x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ContextFunctionData"),
         Core.projectionFieldName = (Core.Name "params")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the body field of hydra.scala.syntax.ContextFunctionData
 contextFunctionDataWithBody :: Typed.TypedTerm Syntax.ContextFunctionData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.ContextFunctionData
 contextFunctionDataWithBody original newVal =
@@ -1681,6 +1803,7 @@ contextFunctionDataWithBody original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the params field of hydra.scala.syntax.ContextFunctionData
 contextFunctionDataWithParams :: Typed.TypedTerm Syntax.ContextFunctionData -> Typed.TypedTerm [Syntax.ParamData] -> Typed.TypedTerm Syntax.ContextFunctionData
 contextFunctionDataWithParams original newVal =
@@ -1697,6 +1820,7 @@ contextFunctionDataWithParams original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ContextFunctionData"),
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.ContextFunctionType
 contextFunctionType :: Typed.TypedTerm [Syntax.Type] -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.ContextFunctionType
 contextFunctionType params res =
@@ -1709,6 +1833,7 @@ contextFunctionType params res =
         Core.Field {
           Core.fieldName = (Core.Name "res"),
           Core.fieldTerm = (Typed.unTypedTerm res)}]}))
+
 -- | DSL accessor for the params field of hydra.scala.syntax.ContextFunctionType
 contextFunctionTypeParams :: Typed.TypedTerm Syntax.ContextFunctionType -> Typed.TypedTerm [Syntax.Type]
 contextFunctionTypeParams x =
@@ -1717,6 +1842,7 @@ contextFunctionTypeParams x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ContextFunctionType"),
         Core.projectionFieldName = (Core.Name "params")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the res field of hydra.scala.syntax.ContextFunctionType
 contextFunctionTypeRes :: Typed.TypedTerm Syntax.ContextFunctionType -> Typed.TypedTerm Syntax.Type
 contextFunctionTypeRes x =
@@ -1725,6 +1851,7 @@ contextFunctionTypeRes x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ContextFunctionType"),
         Core.projectionFieldName = (Core.Name "res")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the params field of hydra.scala.syntax.ContextFunctionType
 contextFunctionTypeWithParams :: Typed.TypedTerm Syntax.ContextFunctionType -> Typed.TypedTerm [Syntax.Type] -> Typed.TypedTerm Syntax.ContextFunctionType
 contextFunctionTypeWithParams original newVal =
@@ -1741,6 +1868,7 @@ contextFunctionTypeWithParams original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ContextFunctionType"),
               Core.projectionFieldName = (Core.Name "res")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the res field of hydra.scala.syntax.ContextFunctionType
 contextFunctionTypeWithRes :: Typed.TypedTerm Syntax.ContextFunctionType -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.ContextFunctionType
 contextFunctionTypeWithRes original newVal =
@@ -1757,6 +1885,7 @@ contextFunctionTypeWithRes original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "res"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL injection for the primary variant of hydra.scala.syntax.Ctor
 ctorPrimary :: Typed.TypedTerm Syntax.PrimaryCtor -> Typed.TypedTerm Syntax.Ctor
 ctorPrimary x =
@@ -1765,6 +1894,7 @@ ctorPrimary x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primary"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the secondary variant of hydra.scala.syntax.Ctor
 ctorSecondary :: Typed.TypedTerm Syntax.SecondaryCtor -> Typed.TypedTerm Syntax.Ctor
 ctorSecondary x =
@@ -1773,6 +1903,7 @@ ctorSecondary x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "secondary"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the annotate variant of hydra.scala.syntax.Data
 dataAnnotate :: Typed.TypedTerm Syntax.AnnotateData -> Typed.TypedTerm Syntax.Data
 dataAnnotate x =
@@ -1781,6 +1912,7 @@ dataAnnotate x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotate"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the apply variant of hydra.scala.syntax.Data
 dataApply :: Typed.TypedTerm Syntax.ApplyData -> Typed.TypedTerm Syntax.Data
 dataApply x =
@@ -1789,6 +1921,7 @@ dataApply x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "apply"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the applyType variant of hydra.scala.syntax.Data
 dataApplyType :: Typed.TypedTerm Syntax.ApplyTypeData -> Typed.TypedTerm Syntax.Data
 dataApplyType x =
@@ -1797,6 +1930,7 @@ dataApplyType x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "applyType"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the applyUsing variant of hydra.scala.syntax.Data
 dataApplyUsing :: Typed.TypedTerm Syntax.ApplyUsingData -> Typed.TypedTerm Syntax.Data
 dataApplyUsing x =
@@ -1805,6 +1939,7 @@ dataApplyUsing x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "applyUsing"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the ascribe variant of hydra.scala.syntax.Data
 dataAscribe :: Typed.TypedTerm Syntax.AscribeData -> Typed.TypedTerm Syntax.Data
 dataAscribe x =
@@ -1813,6 +1948,7 @@ dataAscribe x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ascribe"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the assign variant of hydra.scala.syntax.Data
 dataAssign :: Typed.TypedTerm Syntax.AssignData -> Typed.TypedTerm Syntax.Data
 dataAssign x =
@@ -1821,6 +1957,7 @@ dataAssign x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "assign"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the block variant of hydra.scala.syntax.Data
 dataBlock :: Typed.TypedTerm Syntax.BlockData -> Typed.TypedTerm Syntax.Data
 dataBlock x =
@@ -1829,6 +1966,7 @@ dataBlock x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "block"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the contextFunction variant of hydra.scala.syntax.Data
 dataContextFunction :: Typed.TypedTerm Syntax.ContextFunctionData -> Typed.TypedTerm Syntax.Data
 dataContextFunction x =
@@ -1837,6 +1975,7 @@ dataContextFunction x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "contextFunction"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the do variant of hydra.scala.syntax.Data
 dataDo :: Typed.TypedTerm Syntax.DoData -> Typed.TypedTerm Syntax.Data
 dataDo x =
@@ -1845,6 +1984,7 @@ dataDo x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "do"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the endMarker variant of hydra.scala.syntax.Data
 dataEndMarker :: Typed.TypedTerm Syntax.EndMarkerData -> Typed.TypedTerm Syntax.Data
 dataEndMarker x =
@@ -1853,6 +1993,7 @@ dataEndMarker x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "endMarker"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the eta variant of hydra.scala.syntax.Data
 dataEta :: Typed.TypedTerm Syntax.EtaData -> Typed.TypedTerm Syntax.Data
 dataEta x =
@@ -1861,6 +2002,7 @@ dataEta x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "eta"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the for variant of hydra.scala.syntax.Data
 dataFor :: Typed.TypedTerm Syntax.ForData -> Typed.TypedTerm Syntax.Data
 dataFor x =
@@ -1869,6 +2011,7 @@ dataFor x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "for"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the forYield variant of hydra.scala.syntax.Data
 dataForYield :: Typed.TypedTerm Syntax.ForYieldData -> Typed.TypedTerm Syntax.Data
 dataForYield x =
@@ -1877,6 +2020,7 @@ dataForYield x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "forYield"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the function variant of hydra.scala.syntax.Data
 dataFunction :: Typed.TypedTerm Syntax.FunctionData -> Typed.TypedTerm Syntax.Data
 dataFunction x =
@@ -1885,6 +2029,7 @@ dataFunction x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "function"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the if variant of hydra.scala.syntax.Data
 dataIf :: Typed.TypedTerm Syntax.IfData -> Typed.TypedTerm Syntax.Data
 dataIf x =
@@ -1893,6 +2038,7 @@ dataIf x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "if"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the interpolate variant of hydra.scala.syntax.Data
 dataInterpolate :: Typed.TypedTerm Syntax.InterpolateData -> Typed.TypedTerm Syntax.Data
 dataInterpolate x =
@@ -1901,6 +2047,7 @@ dataInterpolate x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "interpolate"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the lit variant of hydra.scala.syntax.Data
 dataLit :: Typed.TypedTerm Syntax.Lit -> Typed.TypedTerm Syntax.Data
 dataLit x =
@@ -1909,6 +2056,7 @@ dataLit x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lit"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the match variant of hydra.scala.syntax.Data
 dataMatch :: Typed.TypedTerm Syntax.MatchData -> Typed.TypedTerm Syntax.Data
 dataMatch x =
@@ -1917,6 +2065,7 @@ dataMatch x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "match"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the object variant of hydra.scala.syntax.DataMember
 dataMemberObject :: Typed.TypedTerm Syntax.ObjectPkg -> Typed.TypedTerm Syntax.DataMember
 dataMemberObject x =
@@ -1925,6 +2074,7 @@ dataMemberObject x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "object"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the pkg variant of hydra.scala.syntax.DataMember
 dataMemberPkg :: Typed.TypedTerm Syntax.Pkg -> Typed.TypedTerm Syntax.DataMember
 dataMemberPkg x =
@@ -1933,6 +2083,7 @@ dataMemberPkg x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pkg"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the new variant of hydra.scala.syntax.Data
 dataNew :: Typed.TypedTerm Syntax.NewData -> Typed.TypedTerm Syntax.Data
 dataNew x =
@@ -1941,6 +2092,7 @@ dataNew x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "new"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the newAnonymous variant of hydra.scala.syntax.Data
 dataNewAnonymous :: Typed.TypedTerm Syntax.NewAnonymousData -> Typed.TypedTerm Syntax.Data
 dataNewAnonymous x =
@@ -1949,6 +2101,7 @@ dataNewAnonymous x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "newAnonymous"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the param variant of hydra.scala.syntax.Data
 dataParam :: Typed.TypedTerm Syntax.ParamData -> Typed.TypedTerm Syntax.Data
 dataParam x =
@@ -1957,6 +2110,7 @@ dataParam x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "param"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the partialFunction variant of hydra.scala.syntax.Data
 dataPartialFunction :: Typed.TypedTerm Syntax.PartialFunctionData -> Typed.TypedTerm Syntax.Data
 dataPartialFunction x =
@@ -1965,6 +2119,7 @@ dataPartialFunction x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "partialFunction"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the placeholder variant of hydra.scala.syntax.Data
 dataPlaceholder :: Typed.TypedTerm Syntax.Data
 dataPlaceholder =
@@ -1973,6 +2128,7 @@ dataPlaceholder =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "placeholder"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the polyFunction variant of hydra.scala.syntax.Data
 dataPolyFunction :: Typed.TypedTerm Syntax.PolyFunctionData -> Typed.TypedTerm Syntax.Data
 dataPolyFunction x =
@@ -1981,6 +2137,7 @@ dataPolyFunction x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "polyFunction"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the ref variant of hydra.scala.syntax.Data
 dataRef :: Typed.TypedTerm Syntax.RefData -> Typed.TypedTerm Syntax.Data
 dataRef x =
@@ -1989,6 +2146,7 @@ dataRef x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ref"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the repeated variant of hydra.scala.syntax.Data
 dataRepeated :: Typed.TypedTerm Syntax.RepeatedData -> Typed.TypedTerm Syntax.Data
 dataRepeated x =
@@ -1997,6 +2155,7 @@ dataRepeated x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "repeated"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the return variant of hydra.scala.syntax.Data
 dataReturn :: Typed.TypedTerm Syntax.ReturnData -> Typed.TypedTerm Syntax.Data
 dataReturn x =
@@ -2005,6 +2164,7 @@ dataReturn x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "return"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the throw variant of hydra.scala.syntax.Data
 dataThrow :: Typed.TypedTerm Syntax.ThrowData -> Typed.TypedTerm Syntax.Data
 dataThrow x =
@@ -2013,6 +2173,7 @@ dataThrow x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "throw"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the try variant of hydra.scala.syntax.Data
 dataTry :: Typed.TypedTerm Syntax.TryData -> Typed.TypedTerm Syntax.Data
 dataTry x =
@@ -2021,6 +2182,7 @@ dataTry x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "try"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the tryWithHandler variant of hydra.scala.syntax.Data
 dataTryWithHandler :: Typed.TypedTerm Syntax.TryWithHandlerData -> Typed.TypedTerm Syntax.Data
 dataTryWithHandler x =
@@ -2029,6 +2191,7 @@ dataTryWithHandler x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "tryWithHandler"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the tuple variant of hydra.scala.syntax.Data
 dataTuple :: Typed.TypedTerm Syntax.TupleData -> Typed.TypedTerm Syntax.Data
 dataTuple x =
@@ -2037,6 +2200,7 @@ dataTuple x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "tuple"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the while variant of hydra.scala.syntax.Data
 dataWhile :: Typed.TypedTerm Syntax.WhileData -> Typed.TypedTerm Syntax.Data
 dataWhile x =
@@ -2045,6 +2209,7 @@ dataWhile x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "while"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the def variant of hydra.scala.syntax.Decl
 declDef :: Typed.TypedTerm Syntax.DefDecl -> Typed.TypedTerm Syntax.Decl
 declDef x =
@@ -2053,6 +2218,7 @@ declDef x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "def"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the given variant of hydra.scala.syntax.Decl
 declGiven :: Typed.TypedTerm Syntax.GivenDecl -> Typed.TypedTerm Syntax.Decl
 declGiven x =
@@ -2061,6 +2227,7 @@ declGiven x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "given"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the type variant of hydra.scala.syntax.Decl
 declType :: Typed.TypedTerm Syntax.TypeDecl -> Typed.TypedTerm Syntax.Decl
 declType x =
@@ -2069,6 +2236,7 @@ declType x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "type"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the val variant of hydra.scala.syntax.Decl
 declVal :: Typed.TypedTerm Syntax.ValDecl -> Typed.TypedTerm Syntax.Decl
 declVal x =
@@ -2077,6 +2245,7 @@ declVal x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "val"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the var variant of hydra.scala.syntax.Decl
 declVar :: Typed.TypedTerm Syntax.VarDecl -> Typed.TypedTerm Syntax.Decl
 declVar x =
@@ -2085,6 +2254,7 @@ declVar x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "var"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL constructor for hydra.scala.syntax.DefDecl
 defDecl :: Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm [[Syntax.ParamData]] -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.DefDecl
 defDecl mods name tparams paramss decltpe =
@@ -2106,6 +2276,7 @@ defDecl mods name tparams paramss decltpe =
         Core.Field {
           Core.fieldName = (Core.Name "decltpe"),
           Core.fieldTerm = (Typed.unTypedTerm decltpe)}]}))
+
 -- | DSL accessor for the decltpe field of hydra.scala.syntax.DefDecl
 defDeclDecltpe :: Typed.TypedTerm Syntax.DefDecl -> Typed.TypedTerm Syntax.Type
 defDeclDecltpe x =
@@ -2114,6 +2285,7 @@ defDeclDecltpe x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.DefDecl"),
         Core.projectionFieldName = (Core.Name "decltpe")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the mods field of hydra.scala.syntax.DefDecl
 defDeclMods :: Typed.TypedTerm Syntax.DefDecl -> Typed.TypedTerm [Syntax.Mod]
 defDeclMods x =
@@ -2122,6 +2294,7 @@ defDeclMods x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.DefDecl"),
         Core.projectionFieldName = (Core.Name "mods")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.DefDecl
 defDeclName :: Typed.TypedTerm Syntax.DefDecl -> Typed.TypedTerm Syntax.NameData
 defDeclName x =
@@ -2130,6 +2303,7 @@ defDeclName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.DefDecl"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the paramss field of hydra.scala.syntax.DefDecl
 defDeclParamss :: Typed.TypedTerm Syntax.DefDecl -> Typed.TypedTerm [[Syntax.ParamData]]
 defDeclParamss x =
@@ -2138,6 +2312,7 @@ defDeclParamss x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.DefDecl"),
         Core.projectionFieldName = (Core.Name "paramss")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the tparams field of hydra.scala.syntax.DefDecl
 defDeclTparams :: Typed.TypedTerm Syntax.DefDecl -> Typed.TypedTerm [Syntax.ParamType]
 defDeclTparams x =
@@ -2146,6 +2321,7 @@ defDeclTparams x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.DefDecl"),
         Core.projectionFieldName = (Core.Name "tparams")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the decltpe field of hydra.scala.syntax.DefDecl
 defDeclWithDecltpe :: Typed.TypedTerm Syntax.DefDecl -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.DefDecl
 defDeclWithDecltpe original newVal =
@@ -2183,6 +2359,7 @@ defDeclWithDecltpe original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "decltpe"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the mods field of hydra.scala.syntax.DefDecl
 defDeclWithMods :: Typed.TypedTerm Syntax.DefDecl -> Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.DefDecl
 defDeclWithMods original newVal =
@@ -2220,6 +2397,7 @@ defDeclWithMods original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.DefDecl"),
               Core.projectionFieldName = (Core.Name "decltpe")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.DefDecl
 defDeclWithName :: Typed.TypedTerm Syntax.DefDecl -> Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.DefDecl
 defDeclWithName original newVal =
@@ -2257,6 +2435,7 @@ defDeclWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.DefDecl"),
               Core.projectionFieldName = (Core.Name "decltpe")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the paramss field of hydra.scala.syntax.DefDecl
 defDeclWithParamss :: Typed.TypedTerm Syntax.DefDecl -> Typed.TypedTerm [[Syntax.ParamData]] -> Typed.TypedTerm Syntax.DefDecl
 defDeclWithParamss original newVal =
@@ -2294,6 +2473,7 @@ defDeclWithParamss original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.DefDecl"),
               Core.projectionFieldName = (Core.Name "decltpe")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the tparams field of hydra.scala.syntax.DefDecl
 defDeclWithTparams :: Typed.TypedTerm Syntax.DefDecl -> Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm Syntax.DefDecl
 defDeclWithTparams original newVal =
@@ -2331,6 +2511,7 @@ defDeclWithTparams original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.DefDecl"),
               Core.projectionFieldName = (Core.Name "decltpe")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.DefDefn
 defDefn :: Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm [[Syntax.ParamData]] -> Typed.TypedTerm (Maybe Syntax.Type) -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.DefDefn
 defDefn mods name tparams paramss decltpe body =
@@ -2355,6 +2536,7 @@ defDefn mods name tparams paramss decltpe body =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Typed.unTypedTerm body)}]}))
+
 -- | DSL accessor for the body field of hydra.scala.syntax.DefDefn
 defDefnBody :: Typed.TypedTerm Syntax.DefDefn -> Typed.TypedTerm Syntax.Data
 defDefnBody x =
@@ -2363,6 +2545,7 @@ defDefnBody x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.DefDefn"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the decltpe field of hydra.scala.syntax.DefDefn
 defDefnDecltpe :: Typed.TypedTerm Syntax.DefDefn -> Typed.TypedTerm (Maybe Syntax.Type)
 defDefnDecltpe x =
@@ -2371,6 +2554,7 @@ defDefnDecltpe x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.DefDefn"),
         Core.projectionFieldName = (Core.Name "decltpe")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the mods field of hydra.scala.syntax.DefDefn
 defDefnMods :: Typed.TypedTerm Syntax.DefDefn -> Typed.TypedTerm [Syntax.Mod]
 defDefnMods x =
@@ -2379,6 +2563,7 @@ defDefnMods x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.DefDefn"),
         Core.projectionFieldName = (Core.Name "mods")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.DefDefn
 defDefnName :: Typed.TypedTerm Syntax.DefDefn -> Typed.TypedTerm Syntax.NameData
 defDefnName x =
@@ -2387,6 +2572,7 @@ defDefnName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.DefDefn"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the paramss field of hydra.scala.syntax.DefDefn
 defDefnParamss :: Typed.TypedTerm Syntax.DefDefn -> Typed.TypedTerm [[Syntax.ParamData]]
 defDefnParamss x =
@@ -2395,6 +2581,7 @@ defDefnParamss x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.DefDefn"),
         Core.projectionFieldName = (Core.Name "paramss")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the tparams field of hydra.scala.syntax.DefDefn
 defDefnTparams :: Typed.TypedTerm Syntax.DefDefn -> Typed.TypedTerm [Syntax.ParamType]
 defDefnTparams x =
@@ -2403,6 +2590,7 @@ defDefnTparams x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.DefDefn"),
         Core.projectionFieldName = (Core.Name "tparams")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the body field of hydra.scala.syntax.DefDefn
 defDefnWithBody :: Typed.TypedTerm Syntax.DefDefn -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.DefDefn
 defDefnWithBody original newVal =
@@ -2447,6 +2635,7 @@ defDefnWithBody original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the decltpe field of hydra.scala.syntax.DefDefn
 defDefnWithDecltpe :: Typed.TypedTerm Syntax.DefDefn -> Typed.TypedTerm (Maybe Syntax.Type) -> Typed.TypedTerm Syntax.DefDefn
 defDefnWithDecltpe original newVal =
@@ -2491,6 +2680,7 @@ defDefnWithDecltpe original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.DefDefn"),
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the mods field of hydra.scala.syntax.DefDefn
 defDefnWithMods :: Typed.TypedTerm Syntax.DefDefn -> Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.DefDefn
 defDefnWithMods original newVal =
@@ -2535,6 +2725,7 @@ defDefnWithMods original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.DefDefn"),
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.DefDefn
 defDefnWithName :: Typed.TypedTerm Syntax.DefDefn -> Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.DefDefn
 defDefnWithName original newVal =
@@ -2579,6 +2770,7 @@ defDefnWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.DefDefn"),
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the paramss field of hydra.scala.syntax.DefDefn
 defDefnWithParamss :: Typed.TypedTerm Syntax.DefDefn -> Typed.TypedTerm [[Syntax.ParamData]] -> Typed.TypedTerm Syntax.DefDefn
 defDefnWithParamss original newVal =
@@ -2623,6 +2815,7 @@ defDefnWithParamss original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.DefDefn"),
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the tparams field of hydra.scala.syntax.DefDefn
 defDefnWithTparams :: Typed.TypedTerm Syntax.DefDefn -> Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm Syntax.DefDefn
 defDefnWithTparams original newVal =
@@ -2667,6 +2860,7 @@ defDefnWithTparams original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.DefDefn"),
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL injection for the class variant of hydra.scala.syntax.Defn
 defnClass :: Typed.TypedTerm Syntax.ClassDefn -> Typed.TypedTerm Syntax.Defn
 defnClass x =
@@ -2675,6 +2869,7 @@ defnClass x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "class"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the def variant of hydra.scala.syntax.Defn
 defnDef :: Typed.TypedTerm Syntax.DefDefn -> Typed.TypedTerm Syntax.Defn
 defnDef x =
@@ -2683,6 +2878,7 @@ defnDef x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "def"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the enum variant of hydra.scala.syntax.Defn
 defnEnum :: Typed.TypedTerm Syntax.EnumDefn -> Typed.TypedTerm Syntax.Defn
 defnEnum x =
@@ -2691,6 +2887,7 @@ defnEnum x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "enum"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the enumCase variant of hydra.scala.syntax.Defn
 defnEnumCase :: Typed.TypedTerm Syntax.EnumCaseDefn -> Typed.TypedTerm Syntax.Defn
 defnEnumCase x =
@@ -2699,6 +2896,7 @@ defnEnumCase x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "enumCase"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the extensionGroup variant of hydra.scala.syntax.Defn
 defnExtensionGroup :: Typed.TypedTerm Syntax.ExtensionGroupDefn -> Typed.TypedTerm Syntax.Defn
 defnExtensionGroup x =
@@ -2707,6 +2905,7 @@ defnExtensionGroup x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "extensionGroup"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the given variant of hydra.scala.syntax.Defn
 defnGiven :: Typed.TypedTerm Syntax.GivenDefn -> Typed.TypedTerm Syntax.Defn
 defnGiven x =
@@ -2715,6 +2914,7 @@ defnGiven x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "given"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the givenAlias variant of hydra.scala.syntax.Defn
 defnGivenAlias :: Typed.TypedTerm Syntax.GivenAliasDefn -> Typed.TypedTerm Syntax.Defn
 defnGivenAlias x =
@@ -2723,6 +2923,7 @@ defnGivenAlias x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "givenAlias"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the object variant of hydra.scala.syntax.Defn
 defnObject :: Typed.TypedTerm Syntax.ObjectDefn -> Typed.TypedTerm Syntax.Defn
 defnObject x =
@@ -2731,6 +2932,7 @@ defnObject x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "object"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the repeatedEnumCase variant of hydra.scala.syntax.Defn
 defnRepeatedEnumCase :: Typed.TypedTerm Syntax.RepeatedEnumCaseDefn -> Typed.TypedTerm Syntax.Defn
 defnRepeatedEnumCase x =
@@ -2739,6 +2941,7 @@ defnRepeatedEnumCase x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "repeatedEnumCase"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the trait variant of hydra.scala.syntax.Defn
 defnTrait :: Typed.TypedTerm Syntax.TraitDefn -> Typed.TypedTerm Syntax.Defn
 defnTrait x =
@@ -2747,6 +2950,7 @@ defnTrait x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "trait"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the type variant of hydra.scala.syntax.Defn
 defnType :: Typed.TypedTerm Syntax.TypeDefn -> Typed.TypedTerm Syntax.Defn
 defnType x =
@@ -2755,6 +2959,7 @@ defnType x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "type"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the val variant of hydra.scala.syntax.Defn
 defnVal :: Typed.TypedTerm Syntax.ValDefn -> Typed.TypedTerm Syntax.Defn
 defnVal x =
@@ -2763,6 +2968,7 @@ defnVal x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "val"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the var variant of hydra.scala.syntax.Defn
 defnVar :: Typed.TypedTerm Syntax.VarDefn -> Typed.TypedTerm Syntax.Defn
 defnVar x =
@@ -2771,6 +2977,7 @@ defnVar x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "var"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL constructor for hydra.scala.syntax.DoData
 doData :: Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.DoData
 doData body expr =
@@ -2783,6 +2990,7 @@ doData body expr =
         Core.Field {
           Core.fieldName = (Core.Name "expr"),
           Core.fieldTerm = (Typed.unTypedTerm expr)}]}))
+
 -- | DSL accessor for the body field of hydra.scala.syntax.DoData
 doDataBody :: Typed.TypedTerm Syntax.DoData -> Typed.TypedTerm Syntax.Data
 doDataBody x =
@@ -2791,6 +2999,7 @@ doDataBody x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.DoData"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the expr field of hydra.scala.syntax.DoData
 doDataExpr :: Typed.TypedTerm Syntax.DoData -> Typed.TypedTerm Syntax.Data
 doDataExpr x =
@@ -2799,6 +3008,7 @@ doDataExpr x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.DoData"),
         Core.projectionFieldName = (Core.Name "expr")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the body field of hydra.scala.syntax.DoData
 doDataWithBody :: Typed.TypedTerm Syntax.DoData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.DoData
 doDataWithBody original newVal =
@@ -2815,6 +3025,7 @@ doDataWithBody original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.DoData"),
               Core.projectionFieldName = (Core.Name "expr")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the expr field of hydra.scala.syntax.DoData
 doDataWithExpr :: Typed.TypedTerm Syntax.DoData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.DoData
 doDataWithExpr original newVal =
@@ -2831,6 +3042,7 @@ doDataWithExpr original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "expr"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.EndMarkerData
 endMarkerData :: Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.EndMarkerData
 endMarkerData name =
@@ -2840,6 +3052,7 @@ endMarkerData name =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)}]}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.EndMarkerData
 endMarkerDataName :: Typed.TypedTerm Syntax.EndMarkerData -> Typed.TypedTerm Syntax.NameData
 endMarkerDataName x =
@@ -2848,6 +3061,7 @@ endMarkerDataName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.EndMarkerData"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.EndMarkerData
 endMarkerDataWithName :: Typed.TypedTerm Syntax.EndMarkerData -> Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.EndMarkerData
 endMarkerDataWithName original newVal =
@@ -2857,6 +3071,7 @@ endMarkerDataWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.EnumCaseDefn
 enumCaseDefn :: Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm Syntax.PrimaryCtor -> Typed.TypedTerm [Syntax.Init] -> Typed.TypedTerm Syntax.EnumCaseDefn
 enumCaseDefn mods name tparams ctor inits =
@@ -2878,6 +3093,7 @@ enumCaseDefn mods name tparams ctor inits =
         Core.Field {
           Core.fieldName = (Core.Name "inits"),
           Core.fieldTerm = (Typed.unTypedTerm inits)}]}))
+
 -- | DSL accessor for the ctor field of hydra.scala.syntax.EnumCaseDefn
 enumCaseDefnCtor :: Typed.TypedTerm Syntax.EnumCaseDefn -> Typed.TypedTerm Syntax.PrimaryCtor
 enumCaseDefnCtor x =
@@ -2886,6 +3102,7 @@ enumCaseDefnCtor x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.EnumCaseDefn"),
         Core.projectionFieldName = (Core.Name "ctor")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the inits field of hydra.scala.syntax.EnumCaseDefn
 enumCaseDefnInits :: Typed.TypedTerm Syntax.EnumCaseDefn -> Typed.TypedTerm [Syntax.Init]
 enumCaseDefnInits x =
@@ -2894,6 +3111,7 @@ enumCaseDefnInits x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.EnumCaseDefn"),
         Core.projectionFieldName = (Core.Name "inits")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the mods field of hydra.scala.syntax.EnumCaseDefn
 enumCaseDefnMods :: Typed.TypedTerm Syntax.EnumCaseDefn -> Typed.TypedTerm [Syntax.Mod]
 enumCaseDefnMods x =
@@ -2902,6 +3120,7 @@ enumCaseDefnMods x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.EnumCaseDefn"),
         Core.projectionFieldName = (Core.Name "mods")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.EnumCaseDefn
 enumCaseDefnName :: Typed.TypedTerm Syntax.EnumCaseDefn -> Typed.TypedTerm Syntax.NameData
 enumCaseDefnName x =
@@ -2910,6 +3129,7 @@ enumCaseDefnName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.EnumCaseDefn"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the tparams field of hydra.scala.syntax.EnumCaseDefn
 enumCaseDefnTparams :: Typed.TypedTerm Syntax.EnumCaseDefn -> Typed.TypedTerm [Syntax.ParamType]
 enumCaseDefnTparams x =
@@ -2918,6 +3138,7 @@ enumCaseDefnTparams x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.EnumCaseDefn"),
         Core.projectionFieldName = (Core.Name "tparams")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the ctor field of hydra.scala.syntax.EnumCaseDefn
 enumCaseDefnWithCtor :: Typed.TypedTerm Syntax.EnumCaseDefn -> Typed.TypedTerm Syntax.PrimaryCtor -> Typed.TypedTerm Syntax.EnumCaseDefn
 enumCaseDefnWithCtor original newVal =
@@ -2955,6 +3176,7 @@ enumCaseDefnWithCtor original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.EnumCaseDefn"),
               Core.projectionFieldName = (Core.Name "inits")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the inits field of hydra.scala.syntax.EnumCaseDefn
 enumCaseDefnWithInits :: Typed.TypedTerm Syntax.EnumCaseDefn -> Typed.TypedTerm [Syntax.Init] -> Typed.TypedTerm Syntax.EnumCaseDefn
 enumCaseDefnWithInits original newVal =
@@ -2992,6 +3214,7 @@ enumCaseDefnWithInits original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "inits"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the mods field of hydra.scala.syntax.EnumCaseDefn
 enumCaseDefnWithMods :: Typed.TypedTerm Syntax.EnumCaseDefn -> Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.EnumCaseDefn
 enumCaseDefnWithMods original newVal =
@@ -3029,6 +3252,7 @@ enumCaseDefnWithMods original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.EnumCaseDefn"),
               Core.projectionFieldName = (Core.Name "inits")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.EnumCaseDefn
 enumCaseDefnWithName :: Typed.TypedTerm Syntax.EnumCaseDefn -> Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.EnumCaseDefn
 enumCaseDefnWithName original newVal =
@@ -3066,6 +3290,7 @@ enumCaseDefnWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.EnumCaseDefn"),
               Core.projectionFieldName = (Core.Name "inits")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the tparams field of hydra.scala.syntax.EnumCaseDefn
 enumCaseDefnWithTparams :: Typed.TypedTerm Syntax.EnumCaseDefn -> Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm Syntax.EnumCaseDefn
 enumCaseDefnWithTparams original newVal =
@@ -3103,6 +3328,7 @@ enumCaseDefnWithTparams original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.EnumCaseDefn"),
               Core.projectionFieldName = (Core.Name "inits")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.EnumDefn
 enumDefn :: Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.NameType -> Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm Syntax.PrimaryCtor -> Typed.TypedTerm Syntax.Template -> Typed.TypedTerm Syntax.EnumDefn
 enumDefn mods name tparams ctor template =
@@ -3124,6 +3350,7 @@ enumDefn mods name tparams ctor template =
         Core.Field {
           Core.fieldName = (Core.Name "template"),
           Core.fieldTerm = (Typed.unTypedTerm template)}]}))
+
 -- | DSL accessor for the ctor field of hydra.scala.syntax.EnumDefn
 enumDefnCtor :: Typed.TypedTerm Syntax.EnumDefn -> Typed.TypedTerm Syntax.PrimaryCtor
 enumDefnCtor x =
@@ -3132,6 +3359,7 @@ enumDefnCtor x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.EnumDefn"),
         Core.projectionFieldName = (Core.Name "ctor")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the mods field of hydra.scala.syntax.EnumDefn
 enumDefnMods :: Typed.TypedTerm Syntax.EnumDefn -> Typed.TypedTerm [Syntax.Mod]
 enumDefnMods x =
@@ -3140,6 +3368,7 @@ enumDefnMods x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.EnumDefn"),
         Core.projectionFieldName = (Core.Name "mods")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.EnumDefn
 enumDefnName :: Typed.TypedTerm Syntax.EnumDefn -> Typed.TypedTerm Syntax.NameType
 enumDefnName x =
@@ -3148,6 +3377,7 @@ enumDefnName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.EnumDefn"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the template field of hydra.scala.syntax.EnumDefn
 enumDefnTemplate :: Typed.TypedTerm Syntax.EnumDefn -> Typed.TypedTerm Syntax.Template
 enumDefnTemplate x =
@@ -3156,6 +3386,7 @@ enumDefnTemplate x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.EnumDefn"),
         Core.projectionFieldName = (Core.Name "template")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the tparams field of hydra.scala.syntax.EnumDefn
 enumDefnTparams :: Typed.TypedTerm Syntax.EnumDefn -> Typed.TypedTerm [Syntax.ParamType]
 enumDefnTparams x =
@@ -3164,6 +3395,7 @@ enumDefnTparams x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.EnumDefn"),
         Core.projectionFieldName = (Core.Name "tparams")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the ctor field of hydra.scala.syntax.EnumDefn
 enumDefnWithCtor :: Typed.TypedTerm Syntax.EnumDefn -> Typed.TypedTerm Syntax.PrimaryCtor -> Typed.TypedTerm Syntax.EnumDefn
 enumDefnWithCtor original newVal =
@@ -3201,6 +3433,7 @@ enumDefnWithCtor original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.EnumDefn"),
               Core.projectionFieldName = (Core.Name "template")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the mods field of hydra.scala.syntax.EnumDefn
 enumDefnWithMods :: Typed.TypedTerm Syntax.EnumDefn -> Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.EnumDefn
 enumDefnWithMods original newVal =
@@ -3238,6 +3471,7 @@ enumDefnWithMods original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.EnumDefn"),
               Core.projectionFieldName = (Core.Name "template")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.EnumDefn
 enumDefnWithName :: Typed.TypedTerm Syntax.EnumDefn -> Typed.TypedTerm Syntax.NameType -> Typed.TypedTerm Syntax.EnumDefn
 enumDefnWithName original newVal =
@@ -3275,6 +3509,7 @@ enumDefnWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.EnumDefn"),
               Core.projectionFieldName = (Core.Name "template")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the template field of hydra.scala.syntax.EnumDefn
 enumDefnWithTemplate :: Typed.TypedTerm Syntax.EnumDefn -> Typed.TypedTerm Syntax.Template -> Typed.TypedTerm Syntax.EnumDefn
 enumDefnWithTemplate original newVal =
@@ -3312,6 +3547,7 @@ enumDefnWithTemplate original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "template"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the tparams field of hydra.scala.syntax.EnumDefn
 enumDefnWithTparams :: Typed.TypedTerm Syntax.EnumDefn -> Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm Syntax.EnumDefn
 enumDefnWithTparams original newVal =
@@ -3349,6 +3585,7 @@ enumDefnWithTparams original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.EnumDefn"),
               Core.projectionFieldName = (Core.Name "template")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL injection for the caseGenerator variant of hydra.scala.syntax.Enumerator
 enumeratorCaseGenerator :: Typed.TypedTerm Syntax.CaseGeneratorEnumerator -> Typed.TypedTerm Syntax.Enumerator
 enumeratorCaseGenerator x =
@@ -3357,6 +3594,7 @@ enumeratorCaseGenerator x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "caseGenerator"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the generator variant of hydra.scala.syntax.Enumerator
 enumeratorGenerator :: Typed.TypedTerm Syntax.GeneratorEnumerator -> Typed.TypedTerm Syntax.Enumerator
 enumeratorGenerator x =
@@ -3365,6 +3603,7 @@ enumeratorGenerator x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "generator"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the guard variant of hydra.scala.syntax.Enumerator
 enumeratorGuard :: Typed.TypedTerm Syntax.GuardEnumerator -> Typed.TypedTerm Syntax.Enumerator
 enumeratorGuard x =
@@ -3373,6 +3612,7 @@ enumeratorGuard x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "guard"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the val variant of hydra.scala.syntax.Enumerator
 enumeratorVal :: Typed.TypedTerm Syntax.ValEnumerator -> Typed.TypedTerm Syntax.Enumerator
 enumeratorVal x =
@@ -3381,6 +3621,7 @@ enumeratorVal x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "val"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL constructor for hydra.scala.syntax.EtaData
 etaData :: Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.EtaData
 etaData expr =
@@ -3390,6 +3631,7 @@ etaData expr =
         Core.Field {
           Core.fieldName = (Core.Name "expr"),
           Core.fieldTerm = (Typed.unTypedTerm expr)}]}))
+
 -- | DSL accessor for the expr field of hydra.scala.syntax.EtaData
 etaDataExpr :: Typed.TypedTerm Syntax.EtaData -> Typed.TypedTerm Syntax.Data
 etaDataExpr x =
@@ -3398,6 +3640,7 @@ etaDataExpr x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.EtaData"),
         Core.projectionFieldName = (Core.Name "expr")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the expr field of hydra.scala.syntax.EtaData
 etaDataWithExpr :: Typed.TypedTerm Syntax.EtaData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.EtaData
 etaDataWithExpr original newVal =
@@ -3407,6 +3650,7 @@ etaDataWithExpr original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "expr"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.ExistentialType
 existentialType :: Typed.TypedTerm Syntax.Type -> Typed.TypedTerm [Syntax.Stat] -> Typed.TypedTerm Syntax.ExistentialType
 existentialType tpe stats =
@@ -3419,6 +3663,7 @@ existentialType tpe stats =
         Core.Field {
           Core.fieldName = (Core.Name "stats"),
           Core.fieldTerm = (Typed.unTypedTerm stats)}]}))
+
 -- | DSL accessor for the stats field of hydra.scala.syntax.ExistentialType
 existentialTypeStats :: Typed.TypedTerm Syntax.ExistentialType -> Typed.TypedTerm [Syntax.Stat]
 existentialTypeStats x =
@@ -3427,6 +3672,7 @@ existentialTypeStats x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ExistentialType"),
         Core.projectionFieldName = (Core.Name "stats")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the tpe field of hydra.scala.syntax.ExistentialType
 existentialTypeTpe :: Typed.TypedTerm Syntax.ExistentialType -> Typed.TypedTerm Syntax.Type
 existentialTypeTpe x =
@@ -3435,6 +3681,7 @@ existentialTypeTpe x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ExistentialType"),
         Core.projectionFieldName = (Core.Name "tpe")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the stats field of hydra.scala.syntax.ExistentialType
 existentialTypeWithStats :: Typed.TypedTerm Syntax.ExistentialType -> Typed.TypedTerm [Syntax.Stat] -> Typed.TypedTerm Syntax.ExistentialType
 existentialTypeWithStats original newVal =
@@ -3451,6 +3698,7 @@ existentialTypeWithStats original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "stats"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the tpe field of hydra.scala.syntax.ExistentialType
 existentialTypeWithTpe :: Typed.TypedTerm Syntax.ExistentialType -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.ExistentialType
 existentialTypeWithTpe original newVal =
@@ -3467,6 +3715,7 @@ existentialTypeWithTpe original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ExistentialType"),
               Core.projectionFieldName = (Core.Name "stats")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.Export
 export :: Typed.TypedTerm [Syntax.Importer] -> Typed.TypedTerm Syntax.Export
 export importers =
@@ -3476,6 +3725,7 @@ export importers =
         Core.Field {
           Core.fieldName = (Core.Name "importers"),
           Core.fieldTerm = (Typed.unTypedTerm importers)}]}))
+
 -- | DSL accessor for the importers field of hydra.scala.syntax.Export
 exportImporters :: Typed.TypedTerm Syntax.Export -> Typed.TypedTerm [Syntax.Importer]
 exportImporters x =
@@ -3484,6 +3734,7 @@ exportImporters x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Export"),
         Core.projectionFieldName = (Core.Name "importers")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the importers field of hydra.scala.syntax.Export
 exportWithImporters :: Typed.TypedTerm Syntax.Export -> Typed.TypedTerm [Syntax.Importer] -> Typed.TypedTerm Syntax.Export
 exportWithImporters original newVal =
@@ -3493,6 +3744,7 @@ exportWithImporters original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "importers"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.ExtensionGroupDefn
 extensionGroupDefn :: Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm [[Syntax.ParamData]] -> Typed.TypedTerm Syntax.Stat -> Typed.TypedTerm Syntax.ExtensionGroupDefn
 extensionGroupDefn tparams parmss body =
@@ -3508,6 +3760,7 @@ extensionGroupDefn tparams parmss body =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Typed.unTypedTerm body)}]}))
+
 -- | DSL accessor for the body field of hydra.scala.syntax.ExtensionGroupDefn
 extensionGroupDefnBody :: Typed.TypedTerm Syntax.ExtensionGroupDefn -> Typed.TypedTerm Syntax.Stat
 extensionGroupDefnBody x =
@@ -3516,6 +3769,7 @@ extensionGroupDefnBody x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ExtensionGroupDefn"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the parmss field of hydra.scala.syntax.ExtensionGroupDefn
 extensionGroupDefnParmss :: Typed.TypedTerm Syntax.ExtensionGroupDefn -> Typed.TypedTerm [[Syntax.ParamData]]
 extensionGroupDefnParmss x =
@@ -3524,6 +3778,7 @@ extensionGroupDefnParmss x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ExtensionGroupDefn"),
         Core.projectionFieldName = (Core.Name "parmss")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the tparams field of hydra.scala.syntax.ExtensionGroupDefn
 extensionGroupDefnTparams :: Typed.TypedTerm Syntax.ExtensionGroupDefn -> Typed.TypedTerm [Syntax.ParamType]
 extensionGroupDefnTparams x =
@@ -3532,6 +3787,7 @@ extensionGroupDefnTparams x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ExtensionGroupDefn"),
         Core.projectionFieldName = (Core.Name "tparams")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the body field of hydra.scala.syntax.ExtensionGroupDefn
 extensionGroupDefnWithBody :: Typed.TypedTerm Syntax.ExtensionGroupDefn -> Typed.TypedTerm Syntax.Stat -> Typed.TypedTerm Syntax.ExtensionGroupDefn
 extensionGroupDefnWithBody original newVal =
@@ -3555,6 +3811,7 @@ extensionGroupDefnWithBody original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the parmss field of hydra.scala.syntax.ExtensionGroupDefn
 extensionGroupDefnWithParmss :: Typed.TypedTerm Syntax.ExtensionGroupDefn -> Typed.TypedTerm [[Syntax.ParamData]] -> Typed.TypedTerm Syntax.ExtensionGroupDefn
 extensionGroupDefnWithParmss original newVal =
@@ -3578,6 +3835,7 @@ extensionGroupDefnWithParmss original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ExtensionGroupDefn"),
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the tparams field of hydra.scala.syntax.ExtensionGroupDefn
 extensionGroupDefnWithTparams :: Typed.TypedTerm Syntax.ExtensionGroupDefn -> Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm Syntax.ExtensionGroupDefn
 extensionGroupDefnWithTparams original newVal =
@@ -3601,6 +3859,7 @@ extensionGroupDefnWithTparams original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ExtensionGroupDefn"),
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.ExtractInfixPat
 extractInfixPat :: Typed.TypedTerm Syntax.Pat -> Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm [Syntax.Pat] -> Typed.TypedTerm Syntax.ExtractInfixPat
 extractInfixPat lhs op rhs =
@@ -3616,6 +3875,7 @@ extractInfixPat lhs op rhs =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm rhs)}]}))
+
 -- | DSL accessor for the lhs field of hydra.scala.syntax.ExtractInfixPat
 extractInfixPatLhs :: Typed.TypedTerm Syntax.ExtractInfixPat -> Typed.TypedTerm Syntax.Pat
 extractInfixPatLhs x =
@@ -3624,6 +3884,7 @@ extractInfixPatLhs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ExtractInfixPat"),
         Core.projectionFieldName = (Core.Name "lhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the op field of hydra.scala.syntax.ExtractInfixPat
 extractInfixPatOp :: Typed.TypedTerm Syntax.ExtractInfixPat -> Typed.TypedTerm Syntax.NameData
 extractInfixPatOp x =
@@ -3632,6 +3893,7 @@ extractInfixPatOp x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ExtractInfixPat"),
         Core.projectionFieldName = (Core.Name "op")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the rhs field of hydra.scala.syntax.ExtractInfixPat
 extractInfixPatRhs :: Typed.TypedTerm Syntax.ExtractInfixPat -> Typed.TypedTerm [Syntax.Pat]
 extractInfixPatRhs x =
@@ -3640,6 +3902,7 @@ extractInfixPatRhs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ExtractInfixPat"),
         Core.projectionFieldName = (Core.Name "rhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the lhs field of hydra.scala.syntax.ExtractInfixPat
 extractInfixPatWithLhs :: Typed.TypedTerm Syntax.ExtractInfixPat -> Typed.TypedTerm Syntax.Pat -> Typed.TypedTerm Syntax.ExtractInfixPat
 extractInfixPatWithLhs original newVal =
@@ -3663,6 +3926,7 @@ extractInfixPatWithLhs original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ExtractInfixPat"),
               Core.projectionFieldName = (Core.Name "rhs")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the op field of hydra.scala.syntax.ExtractInfixPat
 extractInfixPatWithOp :: Typed.TypedTerm Syntax.ExtractInfixPat -> Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.ExtractInfixPat
 extractInfixPatWithOp original newVal =
@@ -3686,6 +3950,7 @@ extractInfixPatWithOp original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ExtractInfixPat"),
               Core.projectionFieldName = (Core.Name "rhs")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the rhs field of hydra.scala.syntax.ExtractInfixPat
 extractInfixPatWithRhs :: Typed.TypedTerm Syntax.ExtractInfixPat -> Typed.TypedTerm [Syntax.Pat] -> Typed.TypedTerm Syntax.ExtractInfixPat
 extractInfixPatWithRhs original newVal =
@@ -3709,6 +3974,7 @@ extractInfixPatWithRhs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.ExtractPat
 extractPat :: Typed.TypedTerm Syntax.Data -> Typed.TypedTerm [Syntax.Pat] -> Typed.TypedTerm Syntax.ExtractPat
 extractPat fun args =
@@ -3721,6 +3987,7 @@ extractPat fun args =
         Core.Field {
           Core.fieldName = (Core.Name "args"),
           Core.fieldTerm = (Typed.unTypedTerm args)}]}))
+
 -- | DSL accessor for the args field of hydra.scala.syntax.ExtractPat
 extractPatArgs :: Typed.TypedTerm Syntax.ExtractPat -> Typed.TypedTerm [Syntax.Pat]
 extractPatArgs x =
@@ -3729,6 +3996,7 @@ extractPatArgs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ExtractPat"),
         Core.projectionFieldName = (Core.Name "args")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the fun field of hydra.scala.syntax.ExtractPat
 extractPatFun :: Typed.TypedTerm Syntax.ExtractPat -> Typed.TypedTerm Syntax.Data
 extractPatFun x =
@@ -3737,6 +4005,7 @@ extractPatFun x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ExtractPat"),
         Core.projectionFieldName = (Core.Name "fun")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the args field of hydra.scala.syntax.ExtractPat
 extractPatWithArgs :: Typed.TypedTerm Syntax.ExtractPat -> Typed.TypedTerm [Syntax.Pat] -> Typed.TypedTerm Syntax.ExtractPat
 extractPatWithArgs original newVal =
@@ -3753,6 +4022,7 @@ extractPatWithArgs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "args"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the fun field of hydra.scala.syntax.ExtractPat
 extractPatWithFun :: Typed.TypedTerm Syntax.ExtractPat -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.ExtractPat
 extractPatWithFun original newVal =
@@ -3769,6 +4039,7 @@ extractPatWithFun original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ExtractPat"),
               Core.projectionFieldName = (Core.Name "args")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.ForData
 forData :: Typed.TypedTerm [Syntax.Enumerator] -> Typed.TypedTerm Syntax.ForData
 forData enums =
@@ -3778,6 +4049,7 @@ forData enums =
         Core.Field {
           Core.fieldName = (Core.Name "enums"),
           Core.fieldTerm = (Typed.unTypedTerm enums)}]}))
+
 -- | DSL accessor for the enums field of hydra.scala.syntax.ForData
 forDataEnums :: Typed.TypedTerm Syntax.ForData -> Typed.TypedTerm [Syntax.Enumerator]
 forDataEnums x =
@@ -3786,6 +4058,7 @@ forDataEnums x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ForData"),
         Core.projectionFieldName = (Core.Name "enums")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the enums field of hydra.scala.syntax.ForData
 forDataWithEnums :: Typed.TypedTerm Syntax.ForData -> Typed.TypedTerm [Syntax.Enumerator] -> Typed.TypedTerm Syntax.ForData
 forDataWithEnums original newVal =
@@ -3795,6 +4068,7 @@ forDataWithEnums original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "enums"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.ForYieldData
 forYieldData :: Typed.TypedTerm [Syntax.Enumerator] -> Typed.TypedTerm Syntax.ForYieldData
 forYieldData enums =
@@ -3804,6 +4078,7 @@ forYieldData enums =
         Core.Field {
           Core.fieldName = (Core.Name "enums"),
           Core.fieldTerm = (Typed.unTypedTerm enums)}]}))
+
 -- | DSL accessor for the enums field of hydra.scala.syntax.ForYieldData
 forYieldDataEnums :: Typed.TypedTerm Syntax.ForYieldData -> Typed.TypedTerm [Syntax.Enumerator]
 forYieldDataEnums x =
@@ -3812,6 +4087,7 @@ forYieldDataEnums x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ForYieldData"),
         Core.projectionFieldName = (Core.Name "enums")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the enums field of hydra.scala.syntax.ForYieldData
 forYieldDataWithEnums :: Typed.TypedTerm Syntax.ForYieldData -> Typed.TypedTerm [Syntax.Enumerator] -> Typed.TypedTerm Syntax.ForYieldData
 forYieldDataWithEnums original newVal =
@@ -3821,6 +4097,7 @@ forYieldDataWithEnums original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "enums"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.FunctionData
 functionData :: Typed.TypedTerm [Syntax.ParamData] -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.FunctionData
 functionData params body =
@@ -3833,6 +4110,7 @@ functionData params body =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Typed.unTypedTerm body)}]}))
+
 -- | DSL accessor for the body field of hydra.scala.syntax.FunctionData
 functionDataBody :: Typed.TypedTerm Syntax.FunctionData -> Typed.TypedTerm Syntax.Data
 functionDataBody x =
@@ -3841,6 +4119,7 @@ functionDataBody x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.FunctionData"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the params field of hydra.scala.syntax.FunctionData
 functionDataParams :: Typed.TypedTerm Syntax.FunctionData -> Typed.TypedTerm [Syntax.ParamData]
 functionDataParams x =
@@ -3849,6 +4128,7 @@ functionDataParams x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.FunctionData"),
         Core.projectionFieldName = (Core.Name "params")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the body field of hydra.scala.syntax.FunctionData
 functionDataWithBody :: Typed.TypedTerm Syntax.FunctionData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.FunctionData
 functionDataWithBody original newVal =
@@ -3865,6 +4145,7 @@ functionDataWithBody original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the params field of hydra.scala.syntax.FunctionData
 functionDataWithParams :: Typed.TypedTerm Syntax.FunctionData -> Typed.TypedTerm [Syntax.ParamData] -> Typed.TypedTerm Syntax.FunctionData
 functionDataWithParams original newVal =
@@ -3881,6 +4162,7 @@ functionDataWithParams original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.FunctionData"),
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.FunctionType
 functionType :: Typed.TypedTerm [Syntax.Type] -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.FunctionType
 functionType params res =
@@ -3893,6 +4175,7 @@ functionType params res =
         Core.Field {
           Core.fieldName = (Core.Name "res"),
           Core.fieldTerm = (Typed.unTypedTerm res)}]}))
+
 -- | DSL accessor for the params field of hydra.scala.syntax.FunctionType
 functionTypeParams :: Typed.TypedTerm Syntax.FunctionType -> Typed.TypedTerm [Syntax.Type]
 functionTypeParams x =
@@ -3901,6 +4184,7 @@ functionTypeParams x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.FunctionType"),
         Core.projectionFieldName = (Core.Name "params")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the res field of hydra.scala.syntax.FunctionType
 functionTypeRes :: Typed.TypedTerm Syntax.FunctionType -> Typed.TypedTerm Syntax.Type
 functionTypeRes x =
@@ -3909,6 +4193,7 @@ functionTypeRes x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.FunctionType"),
         Core.projectionFieldName = (Core.Name "res")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the params field of hydra.scala.syntax.FunctionType
 functionTypeWithParams :: Typed.TypedTerm Syntax.FunctionType -> Typed.TypedTerm [Syntax.Type] -> Typed.TypedTerm Syntax.FunctionType
 functionTypeWithParams original newVal =
@@ -3925,6 +4210,7 @@ functionTypeWithParams original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.FunctionType"),
               Core.projectionFieldName = (Core.Name "res")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the res field of hydra.scala.syntax.FunctionType
 functionTypeWithRes :: Typed.TypedTerm Syntax.FunctionType -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.FunctionType
 functionTypeWithRes original newVal =
@@ -3941,6 +4227,7 @@ functionTypeWithRes original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "res"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.GeneratorEnumerator
 generatorEnumerator :: Typed.TypedTerm Syntax.Pat -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.GeneratorEnumerator
 generatorEnumerator pat rhs =
@@ -3953,6 +4240,7 @@ generatorEnumerator pat rhs =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm rhs)}]}))
+
 -- | DSL accessor for the pat field of hydra.scala.syntax.GeneratorEnumerator
 generatorEnumeratorPat :: Typed.TypedTerm Syntax.GeneratorEnumerator -> Typed.TypedTerm Syntax.Pat
 generatorEnumeratorPat x =
@@ -3961,6 +4249,7 @@ generatorEnumeratorPat x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GeneratorEnumerator"),
         Core.projectionFieldName = (Core.Name "pat")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the rhs field of hydra.scala.syntax.GeneratorEnumerator
 generatorEnumeratorRhs :: Typed.TypedTerm Syntax.GeneratorEnumerator -> Typed.TypedTerm Syntax.Data
 generatorEnumeratorRhs x =
@@ -3969,6 +4258,7 @@ generatorEnumeratorRhs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GeneratorEnumerator"),
         Core.projectionFieldName = (Core.Name "rhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the pat field of hydra.scala.syntax.GeneratorEnumerator
 generatorEnumeratorWithPat :: Typed.TypedTerm Syntax.GeneratorEnumerator -> Typed.TypedTerm Syntax.Pat -> Typed.TypedTerm Syntax.GeneratorEnumerator
 generatorEnumeratorWithPat original newVal =
@@ -3985,6 +4275,7 @@ generatorEnumeratorWithPat original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GeneratorEnumerator"),
               Core.projectionFieldName = (Core.Name "rhs")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the rhs field of hydra.scala.syntax.GeneratorEnumerator
 generatorEnumeratorWithRhs :: Typed.TypedTerm Syntax.GeneratorEnumerator -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.GeneratorEnumerator
 generatorEnumeratorWithRhs original newVal =
@@ -4001,6 +4292,7 @@ generatorEnumeratorWithRhs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.GivenAliasDefn
 givenAliasDefn :: Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm [[Syntax.ParamType]] -> Typed.TypedTerm [[Syntax.ParamData]] -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.GivenAliasDefn
 givenAliasDefn mods name tparams sparams decltpe body =
@@ -4025,6 +4317,7 @@ givenAliasDefn mods name tparams sparams decltpe body =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Typed.unTypedTerm body)}]}))
+
 -- | DSL accessor for the body field of hydra.scala.syntax.GivenAliasDefn
 givenAliasDefnBody :: Typed.TypedTerm Syntax.GivenAliasDefn -> Typed.TypedTerm Syntax.Data
 givenAliasDefnBody x =
@@ -4033,6 +4326,7 @@ givenAliasDefnBody x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenAliasDefn"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the decltpe field of hydra.scala.syntax.GivenAliasDefn
 givenAliasDefnDecltpe :: Typed.TypedTerm Syntax.GivenAliasDefn -> Typed.TypedTerm Syntax.Type
 givenAliasDefnDecltpe x =
@@ -4041,6 +4335,7 @@ givenAliasDefnDecltpe x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenAliasDefn"),
         Core.projectionFieldName = (Core.Name "decltpe")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the mods field of hydra.scala.syntax.GivenAliasDefn
 givenAliasDefnMods :: Typed.TypedTerm Syntax.GivenAliasDefn -> Typed.TypedTerm [Syntax.Mod]
 givenAliasDefnMods x =
@@ -4049,6 +4344,7 @@ givenAliasDefnMods x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenAliasDefn"),
         Core.projectionFieldName = (Core.Name "mods")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.GivenAliasDefn
 givenAliasDefnName :: Typed.TypedTerm Syntax.GivenAliasDefn -> Typed.TypedTerm Syntax.Name
 givenAliasDefnName x =
@@ -4057,6 +4353,7 @@ givenAliasDefnName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenAliasDefn"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the sparams field of hydra.scala.syntax.GivenAliasDefn
 givenAliasDefnSparams :: Typed.TypedTerm Syntax.GivenAliasDefn -> Typed.TypedTerm [[Syntax.ParamData]]
 givenAliasDefnSparams x =
@@ -4065,6 +4362,7 @@ givenAliasDefnSparams x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenAliasDefn"),
         Core.projectionFieldName = (Core.Name "sparams")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the tparams field of hydra.scala.syntax.GivenAliasDefn
 givenAliasDefnTparams :: Typed.TypedTerm Syntax.GivenAliasDefn -> Typed.TypedTerm [[Syntax.ParamType]]
 givenAliasDefnTparams x =
@@ -4073,6 +4371,7 @@ givenAliasDefnTparams x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenAliasDefn"),
         Core.projectionFieldName = (Core.Name "tparams")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the body field of hydra.scala.syntax.GivenAliasDefn
 givenAliasDefnWithBody :: Typed.TypedTerm Syntax.GivenAliasDefn -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.GivenAliasDefn
 givenAliasDefnWithBody original newVal =
@@ -4117,6 +4416,7 @@ givenAliasDefnWithBody original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the decltpe field of hydra.scala.syntax.GivenAliasDefn
 givenAliasDefnWithDecltpe :: Typed.TypedTerm Syntax.GivenAliasDefn -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.GivenAliasDefn
 givenAliasDefnWithDecltpe original newVal =
@@ -4161,6 +4461,7 @@ givenAliasDefnWithDecltpe original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenAliasDefn"),
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the mods field of hydra.scala.syntax.GivenAliasDefn
 givenAliasDefnWithMods :: Typed.TypedTerm Syntax.GivenAliasDefn -> Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.GivenAliasDefn
 givenAliasDefnWithMods original newVal =
@@ -4205,6 +4506,7 @@ givenAliasDefnWithMods original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenAliasDefn"),
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.GivenAliasDefn
 givenAliasDefnWithName :: Typed.TypedTerm Syntax.GivenAliasDefn -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.GivenAliasDefn
 givenAliasDefnWithName original newVal =
@@ -4249,6 +4551,7 @@ givenAliasDefnWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenAliasDefn"),
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the sparams field of hydra.scala.syntax.GivenAliasDefn
 givenAliasDefnWithSparams :: Typed.TypedTerm Syntax.GivenAliasDefn -> Typed.TypedTerm [[Syntax.ParamData]] -> Typed.TypedTerm Syntax.GivenAliasDefn
 givenAliasDefnWithSparams original newVal =
@@ -4293,6 +4596,7 @@ givenAliasDefnWithSparams original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenAliasDefn"),
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the tparams field of hydra.scala.syntax.GivenAliasDefn
 givenAliasDefnWithTparams :: Typed.TypedTerm Syntax.GivenAliasDefn -> Typed.TypedTerm [[Syntax.ParamType]] -> Typed.TypedTerm Syntax.GivenAliasDefn
 givenAliasDefnWithTparams original newVal =
@@ -4337,6 +4641,7 @@ givenAliasDefnWithTparams original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenAliasDefn"),
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.GivenDecl
 givenDecl :: Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm [[Syntax.ParamData]] -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.GivenDecl
 givenDecl mods name tparams sparams decltpe =
@@ -4358,6 +4663,7 @@ givenDecl mods name tparams sparams decltpe =
         Core.Field {
           Core.fieldName = (Core.Name "decltpe"),
           Core.fieldTerm = (Typed.unTypedTerm decltpe)}]}))
+
 -- | DSL accessor for the decltpe field of hydra.scala.syntax.GivenDecl
 givenDeclDecltpe :: Typed.TypedTerm Syntax.GivenDecl -> Typed.TypedTerm Syntax.Type
 givenDeclDecltpe x =
@@ -4366,6 +4672,7 @@ givenDeclDecltpe x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenDecl"),
         Core.projectionFieldName = (Core.Name "decltpe")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the mods field of hydra.scala.syntax.GivenDecl
 givenDeclMods :: Typed.TypedTerm Syntax.GivenDecl -> Typed.TypedTerm [Syntax.Mod]
 givenDeclMods x =
@@ -4374,6 +4681,7 @@ givenDeclMods x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenDecl"),
         Core.projectionFieldName = (Core.Name "mods")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.GivenDecl
 givenDeclName :: Typed.TypedTerm Syntax.GivenDecl -> Typed.TypedTerm Syntax.NameData
 givenDeclName x =
@@ -4382,6 +4690,7 @@ givenDeclName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenDecl"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the sparams field of hydra.scala.syntax.GivenDecl
 givenDeclSparams :: Typed.TypedTerm Syntax.GivenDecl -> Typed.TypedTerm [[Syntax.ParamData]]
 givenDeclSparams x =
@@ -4390,6 +4699,7 @@ givenDeclSparams x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenDecl"),
         Core.projectionFieldName = (Core.Name "sparams")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the tparams field of hydra.scala.syntax.GivenDecl
 givenDeclTparams :: Typed.TypedTerm Syntax.GivenDecl -> Typed.TypedTerm [Syntax.ParamType]
 givenDeclTparams x =
@@ -4398,6 +4708,7 @@ givenDeclTparams x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenDecl"),
         Core.projectionFieldName = (Core.Name "tparams")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the decltpe field of hydra.scala.syntax.GivenDecl
 givenDeclWithDecltpe :: Typed.TypedTerm Syntax.GivenDecl -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.GivenDecl
 givenDeclWithDecltpe original newVal =
@@ -4435,6 +4746,7 @@ givenDeclWithDecltpe original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "decltpe"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the mods field of hydra.scala.syntax.GivenDecl
 givenDeclWithMods :: Typed.TypedTerm Syntax.GivenDecl -> Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.GivenDecl
 givenDeclWithMods original newVal =
@@ -4472,6 +4784,7 @@ givenDeclWithMods original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenDecl"),
               Core.projectionFieldName = (Core.Name "decltpe")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.GivenDecl
 givenDeclWithName :: Typed.TypedTerm Syntax.GivenDecl -> Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.GivenDecl
 givenDeclWithName original newVal =
@@ -4509,6 +4822,7 @@ givenDeclWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenDecl"),
               Core.projectionFieldName = (Core.Name "decltpe")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the sparams field of hydra.scala.syntax.GivenDecl
 givenDeclWithSparams :: Typed.TypedTerm Syntax.GivenDecl -> Typed.TypedTerm [[Syntax.ParamData]] -> Typed.TypedTerm Syntax.GivenDecl
 givenDeclWithSparams original newVal =
@@ -4546,6 +4860,7 @@ givenDeclWithSparams original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenDecl"),
               Core.projectionFieldName = (Core.Name "decltpe")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the tparams field of hydra.scala.syntax.GivenDecl
 givenDeclWithTparams :: Typed.TypedTerm Syntax.GivenDecl -> Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm Syntax.GivenDecl
 givenDeclWithTparams original newVal =
@@ -4583,6 +4898,7 @@ givenDeclWithTparams original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenDecl"),
               Core.projectionFieldName = (Core.Name "decltpe")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.GivenDefn
 givenDefn :: Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm [[Syntax.ParamType]] -> Typed.TypedTerm [[Syntax.ParamData]] -> Typed.TypedTerm Syntax.Template -> Typed.TypedTerm Syntax.GivenDefn
 givenDefn mods name tparams sparams templ =
@@ -4604,6 +4920,7 @@ givenDefn mods name tparams sparams templ =
         Core.Field {
           Core.fieldName = (Core.Name "templ"),
           Core.fieldTerm = (Typed.unTypedTerm templ)}]}))
+
 -- | DSL accessor for the mods field of hydra.scala.syntax.GivenDefn
 givenDefnMods :: Typed.TypedTerm Syntax.GivenDefn -> Typed.TypedTerm [Syntax.Mod]
 givenDefnMods x =
@@ -4612,6 +4929,7 @@ givenDefnMods x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenDefn"),
         Core.projectionFieldName = (Core.Name "mods")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.GivenDefn
 givenDefnName :: Typed.TypedTerm Syntax.GivenDefn -> Typed.TypedTerm Syntax.Name
 givenDefnName x =
@@ -4620,6 +4938,7 @@ givenDefnName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenDefn"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the sparams field of hydra.scala.syntax.GivenDefn
 givenDefnSparams :: Typed.TypedTerm Syntax.GivenDefn -> Typed.TypedTerm [[Syntax.ParamData]]
 givenDefnSparams x =
@@ -4628,6 +4947,7 @@ givenDefnSparams x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenDefn"),
         Core.projectionFieldName = (Core.Name "sparams")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the templ field of hydra.scala.syntax.GivenDefn
 givenDefnTempl :: Typed.TypedTerm Syntax.GivenDefn -> Typed.TypedTerm Syntax.Template
 givenDefnTempl x =
@@ -4636,6 +4956,7 @@ givenDefnTempl x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenDefn"),
         Core.projectionFieldName = (Core.Name "templ")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the tparams field of hydra.scala.syntax.GivenDefn
 givenDefnTparams :: Typed.TypedTerm Syntax.GivenDefn -> Typed.TypedTerm [[Syntax.ParamType]]
 givenDefnTparams x =
@@ -4644,6 +4965,7 @@ givenDefnTparams x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenDefn"),
         Core.projectionFieldName = (Core.Name "tparams")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the mods field of hydra.scala.syntax.GivenDefn
 givenDefnWithMods :: Typed.TypedTerm Syntax.GivenDefn -> Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.GivenDefn
 givenDefnWithMods original newVal =
@@ -4681,6 +5003,7 @@ givenDefnWithMods original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenDefn"),
               Core.projectionFieldName = (Core.Name "templ")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.GivenDefn
 givenDefnWithName :: Typed.TypedTerm Syntax.GivenDefn -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.GivenDefn
 givenDefnWithName original newVal =
@@ -4718,6 +5041,7 @@ givenDefnWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenDefn"),
               Core.projectionFieldName = (Core.Name "templ")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the sparams field of hydra.scala.syntax.GivenDefn
 givenDefnWithSparams :: Typed.TypedTerm Syntax.GivenDefn -> Typed.TypedTerm [[Syntax.ParamData]] -> Typed.TypedTerm Syntax.GivenDefn
 givenDefnWithSparams original newVal =
@@ -4755,6 +5079,7 @@ givenDefnWithSparams original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenDefn"),
               Core.projectionFieldName = (Core.Name "templ")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the templ field of hydra.scala.syntax.GivenDefn
 givenDefnWithTempl :: Typed.TypedTerm Syntax.GivenDefn -> Typed.TypedTerm Syntax.Template -> Typed.TypedTerm Syntax.GivenDefn
 givenDefnWithTempl original newVal =
@@ -4792,6 +5117,7 @@ givenDefnWithTempl original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "templ"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the tparams field of hydra.scala.syntax.GivenDefn
 givenDefnWithTparams :: Typed.TypedTerm Syntax.GivenDefn -> Typed.TypedTerm [[Syntax.ParamType]] -> Typed.TypedTerm Syntax.GivenDefn
 givenDefnWithTparams original newVal =
@@ -4829,6 +5155,7 @@ givenDefnWithTparams original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenDefn"),
               Core.projectionFieldName = (Core.Name "templ")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.GivenImportee
 givenImportee :: Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.GivenImportee
 givenImportee tpe =
@@ -4838,6 +5165,7 @@ givenImportee tpe =
         Core.Field {
           Core.fieldName = (Core.Name "tpe"),
           Core.fieldTerm = (Typed.unTypedTerm tpe)}]}))
+
 -- | DSL accessor for the tpe field of hydra.scala.syntax.GivenImportee
 givenImporteeTpe :: Typed.TypedTerm Syntax.GivenImportee -> Typed.TypedTerm Syntax.Type
 givenImporteeTpe x =
@@ -4846,6 +5174,7 @@ givenImporteeTpe x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenImportee"),
         Core.projectionFieldName = (Core.Name "tpe")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the tpe field of hydra.scala.syntax.GivenImportee
 givenImporteeWithTpe :: Typed.TypedTerm Syntax.GivenImportee -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.GivenImportee
 givenImporteeWithTpe original newVal =
@@ -4855,6 +5184,7 @@ givenImporteeWithTpe original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "tpe"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.GivenPat
 givenPat :: Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.GivenPat
 givenPat tpe =
@@ -4864,6 +5194,7 @@ givenPat tpe =
         Core.Field {
           Core.fieldName = (Core.Name "tpe"),
           Core.fieldTerm = (Typed.unTypedTerm tpe)}]}))
+
 -- | DSL accessor for the tpe field of hydra.scala.syntax.GivenPat
 givenPatTpe :: Typed.TypedTerm Syntax.GivenPat -> Typed.TypedTerm Syntax.Type
 givenPatTpe x =
@@ -4872,6 +5203,7 @@ givenPatTpe x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenPat"),
         Core.projectionFieldName = (Core.Name "tpe")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the tpe field of hydra.scala.syntax.GivenPat
 givenPatWithTpe :: Typed.TypedTerm Syntax.GivenPat -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.GivenPat
 givenPatWithTpe original newVal =
@@ -4881,6 +5213,7 @@ givenPatWithTpe original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "tpe"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.GuardEnumerator
 guardEnumerator :: Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.GuardEnumerator
 guardEnumerator cond =
@@ -4890,6 +5223,7 @@ guardEnumerator cond =
         Core.Field {
           Core.fieldName = (Core.Name "cond"),
           Core.fieldTerm = (Typed.unTypedTerm cond)}]}))
+
 -- | DSL accessor for the cond field of hydra.scala.syntax.GuardEnumerator
 guardEnumeratorCond :: Typed.TypedTerm Syntax.GuardEnumerator -> Typed.TypedTerm Syntax.Data
 guardEnumeratorCond x =
@@ -4898,6 +5232,7 @@ guardEnumeratorCond x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GuardEnumerator"),
         Core.projectionFieldName = (Core.Name "cond")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the cond field of hydra.scala.syntax.GuardEnumerator
 guardEnumeratorWithCond :: Typed.TypedTerm Syntax.GuardEnumerator -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.GuardEnumerator
 guardEnumeratorWithCond original newVal =
@@ -4907,6 +5242,7 @@ guardEnumeratorWithCond original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "cond"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.IfData
 ifData :: Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.IfData
 ifData cond thenp elsep =
@@ -4922,6 +5258,7 @@ ifData cond thenp elsep =
         Core.Field {
           Core.fieldName = (Core.Name "elsep"),
           Core.fieldTerm = (Typed.unTypedTerm elsep)}]}))
+
 -- | DSL accessor for the cond field of hydra.scala.syntax.IfData
 ifDataCond :: Typed.TypedTerm Syntax.IfData -> Typed.TypedTerm Syntax.Data
 ifDataCond x =
@@ -4930,6 +5267,7 @@ ifDataCond x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.IfData"),
         Core.projectionFieldName = (Core.Name "cond")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the elsep field of hydra.scala.syntax.IfData
 ifDataElsep :: Typed.TypedTerm Syntax.IfData -> Typed.TypedTerm Syntax.Data
 ifDataElsep x =
@@ -4938,6 +5276,7 @@ ifDataElsep x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.IfData"),
         Core.projectionFieldName = (Core.Name "elsep")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the thenp field of hydra.scala.syntax.IfData
 ifDataThenp :: Typed.TypedTerm Syntax.IfData -> Typed.TypedTerm Syntax.Data
 ifDataThenp x =
@@ -4946,6 +5285,7 @@ ifDataThenp x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.IfData"),
         Core.projectionFieldName = (Core.Name "thenp")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the cond field of hydra.scala.syntax.IfData
 ifDataWithCond :: Typed.TypedTerm Syntax.IfData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.IfData
 ifDataWithCond original newVal =
@@ -4969,6 +5309,7 @@ ifDataWithCond original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.IfData"),
               Core.projectionFieldName = (Core.Name "elsep")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the elsep field of hydra.scala.syntax.IfData
 ifDataWithElsep :: Typed.TypedTerm Syntax.IfData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.IfData
 ifDataWithElsep original newVal =
@@ -4992,6 +5333,7 @@ ifDataWithElsep original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "elsep"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the thenp field of hydra.scala.syntax.IfData
 ifDataWithThenp :: Typed.TypedTerm Syntax.IfData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.IfData
 ifDataWithThenp original newVal =
@@ -5015,6 +5357,7 @@ ifDataWithThenp original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.IfData"),
               Core.projectionFieldName = (Core.Name "elsep")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.ImplicitFunctionType
 implicitFunctionType :: Typed.TypedTerm [Syntax.Type] -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.ImplicitFunctionType
 implicitFunctionType params res =
@@ -5027,6 +5370,7 @@ implicitFunctionType params res =
         Core.Field {
           Core.fieldName = (Core.Name "res"),
           Core.fieldTerm = (Typed.unTypedTerm res)}]}))
+
 -- | DSL accessor for the params field of hydra.scala.syntax.ImplicitFunctionType
 implicitFunctionTypeParams :: Typed.TypedTerm Syntax.ImplicitFunctionType -> Typed.TypedTerm [Syntax.Type]
 implicitFunctionTypeParams x =
@@ -5035,6 +5379,7 @@ implicitFunctionTypeParams x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ImplicitFunctionType"),
         Core.projectionFieldName = (Core.Name "params")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the res field of hydra.scala.syntax.ImplicitFunctionType
 implicitFunctionTypeRes :: Typed.TypedTerm Syntax.ImplicitFunctionType -> Typed.TypedTerm Syntax.Type
 implicitFunctionTypeRes x =
@@ -5043,6 +5388,7 @@ implicitFunctionTypeRes x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ImplicitFunctionType"),
         Core.projectionFieldName = (Core.Name "res")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the params field of hydra.scala.syntax.ImplicitFunctionType
 implicitFunctionTypeWithParams :: Typed.TypedTerm Syntax.ImplicitFunctionType -> Typed.TypedTerm [Syntax.Type] -> Typed.TypedTerm Syntax.ImplicitFunctionType
 implicitFunctionTypeWithParams original newVal =
@@ -5059,6 +5405,7 @@ implicitFunctionTypeWithParams original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ImplicitFunctionType"),
               Core.projectionFieldName = (Core.Name "res")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the res field of hydra.scala.syntax.ImplicitFunctionType
 implicitFunctionTypeWithRes :: Typed.TypedTerm Syntax.ImplicitFunctionType -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.ImplicitFunctionType
 implicitFunctionTypeWithRes original newVal =
@@ -5075,6 +5422,7 @@ implicitFunctionTypeWithRes original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "res"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.Import
 import_ :: Typed.TypedTerm [Syntax.Importer] -> Typed.TypedTerm Syntax.Import
 import_ importers =
@@ -5084,6 +5432,7 @@ import_ importers =
         Core.Field {
           Core.fieldName = (Core.Name "importers"),
           Core.fieldTerm = (Typed.unTypedTerm importers)}]}))
+
 -- | DSL injection for the export variant of hydra.scala.syntax.ImportExportStat
 importExportStatExport :: Typed.TypedTerm Syntax.Export -> Typed.TypedTerm Syntax.ImportExportStat
 importExportStatExport x =
@@ -5092,6 +5441,7 @@ importExportStatExport x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "export"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the import variant of hydra.scala.syntax.ImportExportStat
 importExportStatImport :: Typed.TypedTerm Syntax.Import -> Typed.TypedTerm Syntax.ImportExportStat
 importExportStatImport x =
@@ -5100,6 +5450,7 @@ importExportStatImport x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "import"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL accessor for the importers field of hydra.scala.syntax.Import
 importImporters :: Typed.TypedTerm Syntax.Import -> Typed.TypedTerm [Syntax.Importer]
 importImporters x =
@@ -5108,6 +5459,7 @@ importImporters x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Import"),
         Core.projectionFieldName = (Core.Name "importers")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the importers field of hydra.scala.syntax.Import
 importWithImporters :: Typed.TypedTerm Syntax.Import -> Typed.TypedTerm [Syntax.Importer] -> Typed.TypedTerm Syntax.Import
 importWithImporters original newVal =
@@ -5117,6 +5469,7 @@ importWithImporters original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "importers"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL injection for the given variant of hydra.scala.syntax.Importee
 importeeGiven :: Typed.TypedTerm Syntax.GivenImportee -> Typed.TypedTerm Syntax.Importee
 importeeGiven x =
@@ -5125,6 +5478,7 @@ importeeGiven x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "given"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the givenAll variant of hydra.scala.syntax.Importee
 importeeGivenAll :: Typed.TypedTerm Syntax.Importee
 importeeGivenAll =
@@ -5133,6 +5487,7 @@ importeeGivenAll =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "givenAll"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the name variant of hydra.scala.syntax.Importee
 importeeName :: Typed.TypedTerm Syntax.NameImportee -> Typed.TypedTerm Syntax.Importee
 importeeName x =
@@ -5141,6 +5496,7 @@ importeeName x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "name"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the rename variant of hydra.scala.syntax.Importee
 importeeRename :: Typed.TypedTerm Syntax.RenameImportee -> Typed.TypedTerm Syntax.Importee
 importeeRename x =
@@ -5149,6 +5505,7 @@ importeeRename x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "rename"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the unimport variant of hydra.scala.syntax.Importee
 importeeUnimport :: Typed.TypedTerm Syntax.UnimportImportee -> Typed.TypedTerm Syntax.Importee
 importeeUnimport x =
@@ -5157,6 +5514,7 @@ importeeUnimport x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unimport"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the wildcard variant of hydra.scala.syntax.Importee
 importeeWildcard :: Typed.TypedTerm Syntax.Importee
 importeeWildcard =
@@ -5165,6 +5523,7 @@ importeeWildcard =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "wildcard"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL constructor for hydra.scala.syntax.Importer
 importer :: Typed.TypedTerm Syntax.RefData -> Typed.TypedTerm [Syntax.Importee] -> Typed.TypedTerm Syntax.Importer
 importer ref importees =
@@ -5177,6 +5536,7 @@ importer ref importees =
         Core.Field {
           Core.fieldName = (Core.Name "importees"),
           Core.fieldTerm = (Typed.unTypedTerm importees)}]}))
+
 -- | DSL accessor for the importees field of hydra.scala.syntax.Importer
 importerImportees :: Typed.TypedTerm Syntax.Importer -> Typed.TypedTerm [Syntax.Importee]
 importerImportees x =
@@ -5185,6 +5545,7 @@ importerImportees x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Importer"),
         Core.projectionFieldName = (Core.Name "importees")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the ref field of hydra.scala.syntax.Importer
 importerRef :: Typed.TypedTerm Syntax.Importer -> Typed.TypedTerm Syntax.RefData
 importerRef x =
@@ -5193,6 +5554,7 @@ importerRef x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Importer"),
         Core.projectionFieldName = (Core.Name "ref")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the importees field of hydra.scala.syntax.Importer
 importerWithImportees :: Typed.TypedTerm Syntax.Importer -> Typed.TypedTerm [Syntax.Importee] -> Typed.TypedTerm Syntax.Importer
 importerWithImportees original newVal =
@@ -5209,6 +5571,7 @@ importerWithImportees original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "importees"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the ref field of hydra.scala.syntax.Importer
 importerWithRef :: Typed.TypedTerm Syntax.Importer -> Typed.TypedTerm Syntax.RefData -> Typed.TypedTerm Syntax.Importer
 importerWithRef original newVal =
@@ -5225,6 +5588,7 @@ importerWithRef original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Importer"),
               Core.projectionFieldName = (Core.Name "importees")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.Init
 init :: Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm [[Syntax.Data]] -> Typed.TypedTerm Syntax.Init
 init tpe name argss =
@@ -5240,6 +5604,7 @@ init tpe name argss =
         Core.Field {
           Core.fieldName = (Core.Name "argss"),
           Core.fieldTerm = (Typed.unTypedTerm argss)}]}))
+
 -- | DSL accessor for the argss field of hydra.scala.syntax.Init
 initArgss :: Typed.TypedTerm Syntax.Init -> Typed.TypedTerm [[Syntax.Data]]
 initArgss x =
@@ -5248,6 +5613,7 @@ initArgss x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Init"),
         Core.projectionFieldName = (Core.Name "argss")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.Init
 initName :: Typed.TypedTerm Syntax.Init -> Typed.TypedTerm Syntax.Name
 initName x =
@@ -5256,6 +5622,7 @@ initName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Init"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the tpe field of hydra.scala.syntax.Init
 initTpe :: Typed.TypedTerm Syntax.Init -> Typed.TypedTerm Syntax.Type
 initTpe x =
@@ -5264,6 +5631,7 @@ initTpe x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Init"),
         Core.projectionFieldName = (Core.Name "tpe")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the argss field of hydra.scala.syntax.Init
 initWithArgss :: Typed.TypedTerm Syntax.Init -> Typed.TypedTerm [[Syntax.Data]] -> Typed.TypedTerm Syntax.Init
 initWithArgss original newVal =
@@ -5287,6 +5655,7 @@ initWithArgss original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "argss"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.Init
 initWithName :: Typed.TypedTerm Syntax.Init -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.Init
 initWithName original newVal =
@@ -5310,6 +5679,7 @@ initWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Init"),
               Core.projectionFieldName = (Core.Name "argss")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the tpe field of hydra.scala.syntax.Init
 initWithTpe :: Typed.TypedTerm Syntax.Init -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.Init
 initWithTpe original newVal =
@@ -5333,6 +5703,7 @@ initWithTpe original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Init"),
               Core.projectionFieldName = (Core.Name "argss")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.InterpolateData
 interpolateData :: Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm [Syntax.Lit] -> Typed.TypedTerm [Syntax.Data] -> Typed.TypedTerm Syntax.InterpolateData
 interpolateData prefix parts args =
@@ -5348,6 +5719,7 @@ interpolateData prefix parts args =
         Core.Field {
           Core.fieldName = (Core.Name "args"),
           Core.fieldTerm = (Typed.unTypedTerm args)}]}))
+
 -- | DSL accessor for the args field of hydra.scala.syntax.InterpolateData
 interpolateDataArgs :: Typed.TypedTerm Syntax.InterpolateData -> Typed.TypedTerm [Syntax.Data]
 interpolateDataArgs x =
@@ -5356,6 +5728,7 @@ interpolateDataArgs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.InterpolateData"),
         Core.projectionFieldName = (Core.Name "args")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the parts field of hydra.scala.syntax.InterpolateData
 interpolateDataParts :: Typed.TypedTerm Syntax.InterpolateData -> Typed.TypedTerm [Syntax.Lit]
 interpolateDataParts x =
@@ -5364,6 +5737,7 @@ interpolateDataParts x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.InterpolateData"),
         Core.projectionFieldName = (Core.Name "parts")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the prefix field of hydra.scala.syntax.InterpolateData
 interpolateDataPrefix :: Typed.TypedTerm Syntax.InterpolateData -> Typed.TypedTerm Syntax.NameData
 interpolateDataPrefix x =
@@ -5372,6 +5746,7 @@ interpolateDataPrefix x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.InterpolateData"),
         Core.projectionFieldName = (Core.Name "prefix")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the args field of hydra.scala.syntax.InterpolateData
 interpolateDataWithArgs :: Typed.TypedTerm Syntax.InterpolateData -> Typed.TypedTerm [Syntax.Data] -> Typed.TypedTerm Syntax.InterpolateData
 interpolateDataWithArgs original newVal =
@@ -5395,6 +5770,7 @@ interpolateDataWithArgs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "args"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the parts field of hydra.scala.syntax.InterpolateData
 interpolateDataWithParts :: Typed.TypedTerm Syntax.InterpolateData -> Typed.TypedTerm [Syntax.Lit] -> Typed.TypedTerm Syntax.InterpolateData
 interpolateDataWithParts original newVal =
@@ -5418,6 +5794,7 @@ interpolateDataWithParts original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.InterpolateData"),
               Core.projectionFieldName = (Core.Name "args")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the prefix field of hydra.scala.syntax.InterpolateData
 interpolateDataWithPrefix :: Typed.TypedTerm Syntax.InterpolateData -> Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.InterpolateData
 interpolateDataWithPrefix original newVal =
@@ -5441,6 +5818,7 @@ interpolateDataWithPrefix original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.InterpolateData"),
               Core.projectionFieldName = (Core.Name "args")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.InterpolatePat
 interpolatePat :: Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm [Syntax.Lit] -> Typed.TypedTerm Syntax.InterpolatePat
 interpolatePat prefix parts =
@@ -5453,6 +5831,7 @@ interpolatePat prefix parts =
         Core.Field {
           Core.fieldName = (Core.Name "parts"),
           Core.fieldTerm = (Typed.unTypedTerm parts)}]}))
+
 -- | DSL accessor for the parts field of hydra.scala.syntax.InterpolatePat
 interpolatePatParts :: Typed.TypedTerm Syntax.InterpolatePat -> Typed.TypedTerm [Syntax.Lit]
 interpolatePatParts x =
@@ -5461,6 +5840,7 @@ interpolatePatParts x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.InterpolatePat"),
         Core.projectionFieldName = (Core.Name "parts")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the prefix field of hydra.scala.syntax.InterpolatePat
 interpolatePatPrefix :: Typed.TypedTerm Syntax.InterpolatePat -> Typed.TypedTerm Syntax.NameData
 interpolatePatPrefix x =
@@ -5469,6 +5849,7 @@ interpolatePatPrefix x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.InterpolatePat"),
         Core.projectionFieldName = (Core.Name "prefix")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the parts field of hydra.scala.syntax.InterpolatePat
 interpolatePatWithParts :: Typed.TypedTerm Syntax.InterpolatePat -> Typed.TypedTerm [Syntax.Lit] -> Typed.TypedTerm Syntax.InterpolatePat
 interpolatePatWithParts original newVal =
@@ -5485,6 +5866,7 @@ interpolatePatWithParts original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "parts"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the prefix field of hydra.scala.syntax.InterpolatePat
 interpolatePatWithPrefix :: Typed.TypedTerm Syntax.InterpolatePat -> Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.InterpolatePat
 interpolatePatWithPrefix original newVal =
@@ -5501,6 +5883,7 @@ interpolatePatWithPrefix original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.InterpolatePat"),
               Core.projectionFieldName = (Core.Name "parts")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.LambdaType
 lambdaType :: Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.LambdaType
 lambdaType tparams tpe =
@@ -5513,6 +5896,7 @@ lambdaType tparams tpe =
         Core.Field {
           Core.fieldName = (Core.Name "tpe"),
           Core.fieldTerm = (Typed.unTypedTerm tpe)}]}))
+
 -- | DSL accessor for the tparams field of hydra.scala.syntax.LambdaType
 lambdaTypeTparams :: Typed.TypedTerm Syntax.LambdaType -> Typed.TypedTerm [Syntax.ParamType]
 lambdaTypeTparams x =
@@ -5521,6 +5905,7 @@ lambdaTypeTparams x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.LambdaType"),
         Core.projectionFieldName = (Core.Name "tparams")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the tpe field of hydra.scala.syntax.LambdaType
 lambdaTypeTpe :: Typed.TypedTerm Syntax.LambdaType -> Typed.TypedTerm Syntax.Type
 lambdaTypeTpe x =
@@ -5529,6 +5914,7 @@ lambdaTypeTpe x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.LambdaType"),
         Core.projectionFieldName = (Core.Name "tpe")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the tparams field of hydra.scala.syntax.LambdaType
 lambdaTypeWithTparams :: Typed.TypedTerm Syntax.LambdaType -> Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm Syntax.LambdaType
 lambdaTypeWithTparams original newVal =
@@ -5545,6 +5931,7 @@ lambdaTypeWithTparams original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.LambdaType"),
               Core.projectionFieldName = (Core.Name "tpe")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the tpe field of hydra.scala.syntax.LambdaType
 lambdaTypeWithTpe :: Typed.TypedTerm Syntax.LambdaType -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.LambdaType
 lambdaTypeWithTpe original newVal =
@@ -5561,6 +5948,7 @@ lambdaTypeWithTpe original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "tpe"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL injection for the boolean variant of hydra.scala.syntax.Lit
 litBoolean :: Typed.TypedTerm Bool -> Typed.TypedTerm Syntax.Lit
 litBoolean x =
@@ -5569,6 +5957,7 @@ litBoolean x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "boolean"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the byte variant of hydra.scala.syntax.Lit
 litByte :: Typed.TypedTerm I.Int8 -> Typed.TypedTerm Syntax.Lit
 litByte x =
@@ -5577,6 +5966,7 @@ litByte x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "byte"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the bytes variant of hydra.scala.syntax.Lit
 litBytes :: Typed.TypedTerm [Int] -> Typed.TypedTerm Syntax.Lit
 litBytes x =
@@ -5585,6 +5975,7 @@ litBytes x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bytes"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the char variant of hydra.scala.syntax.Lit
 litChar :: Typed.TypedTerm Int -> Typed.TypedTerm Syntax.Lit
 litChar x =
@@ -5593,6 +5984,7 @@ litChar x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "char"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the double variant of hydra.scala.syntax.Lit
 litDouble :: Typed.TypedTerm Double -> Typed.TypedTerm Syntax.Lit
 litDouble x =
@@ -5601,6 +5993,7 @@ litDouble x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "double"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the float variant of hydra.scala.syntax.Lit
 litFloat :: Typed.TypedTerm Float -> Typed.TypedTerm Syntax.Lit
 litFloat x =
@@ -5609,6 +6002,7 @@ litFloat x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the int variant of hydra.scala.syntax.Lit
 litInt :: Typed.TypedTerm Int -> Typed.TypedTerm Syntax.Lit
 litInt x =
@@ -5617,6 +6011,7 @@ litInt x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "int"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the long variant of hydra.scala.syntax.Lit
 litLong :: Typed.TypedTerm I.Int64 -> Typed.TypedTerm Syntax.Lit
 litLong x =
@@ -5625,6 +6020,7 @@ litLong x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "long"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the null variant of hydra.scala.syntax.Lit
 litNull :: Typed.TypedTerm Syntax.Lit
 litNull =
@@ -5633,6 +6029,7 @@ litNull =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "null"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the short variant of hydra.scala.syntax.Lit
 litShort :: Typed.TypedTerm I.Int16 -> Typed.TypedTerm Syntax.Lit
 litShort x =
@@ -5641,6 +6038,7 @@ litShort x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "short"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the string variant of hydra.scala.syntax.Lit
 litString :: Typed.TypedTerm String -> Typed.TypedTerm Syntax.Lit
 litString x =
@@ -5649,6 +6047,7 @@ litString x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the symbol variant of hydra.scala.syntax.Lit
 litSymbol :: Typed.TypedTerm Syntax.ScalaSymbol -> Typed.TypedTerm Syntax.Lit
 litSymbol x =
@@ -5657,6 +6056,7 @@ litSymbol x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "symbol"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the unit variant of hydra.scala.syntax.Lit
 litUnit :: Typed.TypedTerm Syntax.Lit
 litUnit =
@@ -5665,6 +6065,7 @@ litUnit =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unit"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL constructor for hydra.scala.syntax.MatchData
 matchData :: Typed.TypedTerm Syntax.Data -> Typed.TypedTerm [Syntax.Case] -> Typed.TypedTerm Syntax.MatchData
 matchData expr cases =
@@ -5677,6 +6078,7 @@ matchData expr cases =
         Core.Field {
           Core.fieldName = (Core.Name "cases"),
           Core.fieldTerm = (Typed.unTypedTerm cases)}]}))
+
 -- | DSL accessor for the cases field of hydra.scala.syntax.MatchData
 matchDataCases :: Typed.TypedTerm Syntax.MatchData -> Typed.TypedTerm [Syntax.Case]
 matchDataCases x =
@@ -5685,6 +6087,7 @@ matchDataCases x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MatchData"),
         Core.projectionFieldName = (Core.Name "cases")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the expr field of hydra.scala.syntax.MatchData
 matchDataExpr :: Typed.TypedTerm Syntax.MatchData -> Typed.TypedTerm Syntax.Data
 matchDataExpr x =
@@ -5693,6 +6096,7 @@ matchDataExpr x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MatchData"),
         Core.projectionFieldName = (Core.Name "expr")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the cases field of hydra.scala.syntax.MatchData
 matchDataWithCases :: Typed.TypedTerm Syntax.MatchData -> Typed.TypedTerm [Syntax.Case] -> Typed.TypedTerm Syntax.MatchData
 matchDataWithCases original newVal =
@@ -5709,6 +6113,7 @@ matchDataWithCases original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "cases"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the expr field of hydra.scala.syntax.MatchData
 matchDataWithExpr :: Typed.TypedTerm Syntax.MatchData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.MatchData
 matchDataWithExpr original newVal =
@@ -5725,6 +6130,7 @@ matchDataWithExpr original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MatchData"),
               Core.projectionFieldName = (Core.Name "cases")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.MatchType
 matchType :: Typed.TypedTerm Syntax.Type -> Typed.TypedTerm [Syntax.TypeCase] -> Typed.TypedTerm Syntax.MatchType
 matchType tpe cases =
@@ -5737,6 +6143,7 @@ matchType tpe cases =
         Core.Field {
           Core.fieldName = (Core.Name "cases"),
           Core.fieldTerm = (Typed.unTypedTerm cases)}]}))
+
 -- | DSL accessor for the cases field of hydra.scala.syntax.MatchType
 matchTypeCases :: Typed.TypedTerm Syntax.MatchType -> Typed.TypedTerm [Syntax.TypeCase]
 matchTypeCases x =
@@ -5745,6 +6152,7 @@ matchTypeCases x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MatchType"),
         Core.projectionFieldName = (Core.Name "cases")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the tpe field of hydra.scala.syntax.MatchType
 matchTypeTpe :: Typed.TypedTerm Syntax.MatchType -> Typed.TypedTerm Syntax.Type
 matchTypeTpe x =
@@ -5753,6 +6161,7 @@ matchTypeTpe x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MatchType"),
         Core.projectionFieldName = (Core.Name "tpe")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the cases field of hydra.scala.syntax.MatchType
 matchTypeWithCases :: Typed.TypedTerm Syntax.MatchType -> Typed.TypedTerm [Syntax.TypeCase] -> Typed.TypedTerm Syntax.MatchType
 matchTypeWithCases original newVal =
@@ -5769,6 +6178,7 @@ matchTypeWithCases original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "cases"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the tpe field of hydra.scala.syntax.MatchType
 matchTypeWithTpe :: Typed.TypedTerm Syntax.MatchType -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.MatchType
 matchTypeWithTpe original newVal =
@@ -5785,6 +6195,7 @@ matchTypeWithTpe original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MatchType"),
               Core.projectionFieldName = (Core.Name "cases")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL injection for the self variant of hydra.scala.syntax.Member
 memberSelf :: Typed.TypedTerm Syntax.Self -> Typed.TypedTerm Syntax.Member
 memberSelf x =
@@ -5793,6 +6204,7 @@ memberSelf x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "self"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the term variant of hydra.scala.syntax.Member
 memberTerm :: Typed.TypedTerm Syntax.DataMember -> Typed.TypedTerm Syntax.Member
 memberTerm x =
@@ -5801,6 +6213,7 @@ memberTerm x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "term"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the termParam variant of hydra.scala.syntax.Member
 memberTermParam :: Typed.TypedTerm Syntax.ParamData -> Typed.TypedTerm Syntax.Member
 memberTermParam x =
@@ -5809,6 +6222,7 @@ memberTermParam x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "termParam"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the type variant of hydra.scala.syntax.Member
 memberType :: Typed.TypedTerm Syntax.TypeMember -> Typed.TypedTerm Syntax.Member
 memberType x =
@@ -5817,6 +6231,7 @@ memberType x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "type"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the typeParam variant of hydra.scala.syntax.Member
 memberTypeParam :: Typed.TypedTerm Syntax.ParamType -> Typed.TypedTerm Syntax.Member
 memberTypeParam x =
@@ -5825,6 +6240,7 @@ memberTypeParam x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typeParam"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL constructor for hydra.scala.syntax.MethodType
 methodType :: Typed.TypedTerm [[Syntax.ParamData]] -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.MethodType
 methodType paramss tpe =
@@ -5837,6 +6253,7 @@ methodType paramss tpe =
         Core.Field {
           Core.fieldName = (Core.Name "tpe"),
           Core.fieldTerm = (Typed.unTypedTerm tpe)}]}))
+
 -- | DSL accessor for the paramss field of hydra.scala.syntax.MethodType
 methodTypeParamss :: Typed.TypedTerm Syntax.MethodType -> Typed.TypedTerm [[Syntax.ParamData]]
 methodTypeParamss x =
@@ -5845,6 +6262,7 @@ methodTypeParamss x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MethodType"),
         Core.projectionFieldName = (Core.Name "paramss")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the tpe field of hydra.scala.syntax.MethodType
 methodTypeTpe :: Typed.TypedTerm Syntax.MethodType -> Typed.TypedTerm Syntax.Type
 methodTypeTpe x =
@@ -5853,6 +6271,7 @@ methodTypeTpe x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MethodType"),
         Core.projectionFieldName = (Core.Name "tpe")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the paramss field of hydra.scala.syntax.MethodType
 methodTypeWithParamss :: Typed.TypedTerm Syntax.MethodType -> Typed.TypedTerm [[Syntax.ParamData]] -> Typed.TypedTerm Syntax.MethodType
 methodTypeWithParamss original newVal =
@@ -5869,6 +6288,7 @@ methodTypeWithParamss original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MethodType"),
               Core.projectionFieldName = (Core.Name "tpe")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the tpe field of hydra.scala.syntax.MethodType
 methodTypeWithTpe :: Typed.TypedTerm Syntax.MethodType -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.MethodType
 methodTypeWithTpe original newVal =
@@ -5885,6 +6305,7 @@ methodTypeWithTpe original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "tpe"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL injection for the abstract variant of hydra.scala.syntax.Mod
 modAbstract :: Typed.TypedTerm Syntax.Mod
 modAbstract =
@@ -5893,6 +6314,7 @@ modAbstract =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "abstract"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the annot variant of hydra.scala.syntax.Mod
 modAnnot :: Typed.TypedTerm Syntax.AnnotMod -> Typed.TypedTerm Syntax.Mod
 modAnnot x =
@@ -5901,6 +6323,7 @@ modAnnot x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annot"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the case variant of hydra.scala.syntax.Mod
 modCase :: Typed.TypedTerm Syntax.Mod
 modCase =
@@ -5909,6 +6332,7 @@ modCase =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "case"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the contravariant variant of hydra.scala.syntax.Mod
 modContravariant :: Typed.TypedTerm Syntax.Mod
 modContravariant =
@@ -5917,6 +6341,7 @@ modContravariant =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "contravariant"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the covariant variant of hydra.scala.syntax.Mod
 modCovariant :: Typed.TypedTerm Syntax.Mod
 modCovariant =
@@ -5925,6 +6350,7 @@ modCovariant =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "covariant"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the final variant of hydra.scala.syntax.Mod
 modFinal :: Typed.TypedTerm Syntax.Mod
 modFinal =
@@ -5933,6 +6359,7 @@ modFinal =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "final"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the implicit variant of hydra.scala.syntax.Mod
 modImplicit :: Typed.TypedTerm Syntax.Mod
 modImplicit =
@@ -5941,6 +6368,7 @@ modImplicit =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "implicit"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the infix variant of hydra.scala.syntax.Mod
 modInfix :: Typed.TypedTerm Syntax.Mod
 modInfix =
@@ -5949,6 +6377,7 @@ modInfix =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "infix"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the inline variant of hydra.scala.syntax.Mod
 modInline :: Typed.TypedTerm Syntax.Mod
 modInline =
@@ -5957,6 +6386,7 @@ modInline =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inline"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the lazy variant of hydra.scala.syntax.Mod
 modLazy :: Typed.TypedTerm Syntax.Mod
 modLazy =
@@ -5965,6 +6395,7 @@ modLazy =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lazy"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the opaque variant of hydra.scala.syntax.Mod
 modOpaque :: Typed.TypedTerm Syntax.Mod
 modOpaque =
@@ -5973,6 +6404,7 @@ modOpaque =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "opaque"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the open variant of hydra.scala.syntax.Mod
 modOpen :: Typed.TypedTerm Syntax.Mod
 modOpen =
@@ -5981,6 +6413,7 @@ modOpen =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "open"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the override variant of hydra.scala.syntax.Mod
 modOverride :: Typed.TypedTerm Syntax.Mod
 modOverride =
@@ -5989,6 +6422,7 @@ modOverride =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "override"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the private variant of hydra.scala.syntax.Mod
 modPrivate :: Typed.TypedTerm Syntax.PrivateMod -> Typed.TypedTerm Syntax.Mod
 modPrivate x =
@@ -5997,6 +6431,7 @@ modPrivate x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "private"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the protected variant of hydra.scala.syntax.Mod
 modProtected :: Typed.TypedTerm Syntax.ProtectedMod -> Typed.TypedTerm Syntax.Mod
 modProtected x =
@@ -6005,6 +6440,7 @@ modProtected x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "protected"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the sealed variant of hydra.scala.syntax.Mod
 modSealed :: Typed.TypedTerm Syntax.Mod
 modSealed =
@@ -6013,6 +6449,7 @@ modSealed =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sealed"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the super variant of hydra.scala.syntax.Mod
 modSuper :: Typed.TypedTerm Syntax.Mod
 modSuper =
@@ -6021,6 +6458,7 @@ modSuper =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "super"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the transparent variant of hydra.scala.syntax.Mod
 modTransparent :: Typed.TypedTerm Syntax.Mod
 modTransparent =
@@ -6029,6 +6467,7 @@ modTransparent =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "transparent"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the using variant of hydra.scala.syntax.Mod
 modUsing :: Typed.TypedTerm Syntax.Mod
 modUsing =
@@ -6037,6 +6476,7 @@ modUsing =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "using"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the valParam variant of hydra.scala.syntax.Mod
 modValParam :: Typed.TypedTerm Syntax.Mod
 modValParam =
@@ -6045,6 +6485,7 @@ modValParam =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "valParam"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the varParam variant of hydra.scala.syntax.Mod
 modVarParam :: Typed.TypedTerm Syntax.Mod
 modVarParam =
@@ -6053,6 +6494,7 @@ modVarParam =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "varParam"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the anonymous variant of hydra.scala.syntax.Name
 nameAnonymous :: Typed.TypedTerm Syntax.Name
 nameAnonymous =
@@ -6061,6 +6503,7 @@ nameAnonymous =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "anonymous"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL constructor for hydra.scala.syntax.NameData
 nameData :: Typed.TypedTerm Syntax.PredefString -> Typed.TypedTerm Syntax.NameData
 nameData value =
@@ -6070,6 +6513,7 @@ nameData value =
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Typed.unTypedTerm value)}]}))
+
 -- | DSL accessor for the value field of hydra.scala.syntax.NameData
 nameDataValue :: Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.PredefString
 nameDataValue x =
@@ -6078,6 +6522,7 @@ nameDataValue x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.NameData"),
         Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the value field of hydra.scala.syntax.NameData
 nameDataWithValue :: Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.PredefString -> Typed.TypedTerm Syntax.NameData
 nameDataWithValue original newVal =
@@ -6087,6 +6532,7 @@ nameDataWithValue original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.NameImportee
 nameImportee :: Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.NameImportee
 nameImportee name =
@@ -6096,6 +6542,7 @@ nameImportee name =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)}]}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.NameImportee
 nameImporteeName :: Typed.TypedTerm Syntax.NameImportee -> Typed.TypedTerm Syntax.Name
 nameImporteeName x =
@@ -6104,6 +6551,7 @@ nameImporteeName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.NameImportee"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.NameImportee
 nameImporteeWithName :: Typed.TypedTerm Syntax.NameImportee -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.NameImportee
 nameImporteeWithName original newVal =
@@ -6113,6 +6561,7 @@ nameImporteeWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL injection for the indeterminate variant of hydra.scala.syntax.Name
 nameIndeterminate :: Typed.TypedTerm Syntax.PredefString -> Typed.TypedTerm Syntax.Name
 nameIndeterminate x =
@@ -6121,6 +6570,7 @@ nameIndeterminate x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "indeterminate"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL constructor for hydra.scala.syntax.NameType
 nameType :: Typed.TypedTerm String -> Typed.TypedTerm Syntax.NameType
 nameType value =
@@ -6130,6 +6580,7 @@ nameType value =
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Typed.unTypedTerm value)}]}))
+
 -- | DSL accessor for the value field of hydra.scala.syntax.NameType
 nameTypeValue :: Typed.TypedTerm Syntax.NameType -> Typed.TypedTerm String
 nameTypeValue x =
@@ -6138,6 +6589,7 @@ nameTypeValue x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.NameType"),
         Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the value field of hydra.scala.syntax.NameType
 nameTypeWithValue :: Typed.TypedTerm Syntax.NameType -> Typed.TypedTerm String -> Typed.TypedTerm Syntax.NameType
 nameTypeWithValue original newVal =
@@ -6147,6 +6599,7 @@ nameTypeWithValue original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL injection for the value variant of hydra.scala.syntax.Name
 nameValue :: Typed.TypedTerm String -> Typed.TypedTerm Syntax.Name
 nameValue x =
@@ -6155,6 +6608,7 @@ nameValue x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "value"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL constructor for hydra.scala.syntax.NewAnonymousData
 newAnonymousData :: Typed.TypedTerm Syntax.Template -> Typed.TypedTerm Syntax.NewAnonymousData
 newAnonymousData templ =
@@ -6164,6 +6618,7 @@ newAnonymousData templ =
         Core.Field {
           Core.fieldName = (Core.Name "templ"),
           Core.fieldTerm = (Typed.unTypedTerm templ)}]}))
+
 -- | DSL accessor for the templ field of hydra.scala.syntax.NewAnonymousData
 newAnonymousDataTempl :: Typed.TypedTerm Syntax.NewAnonymousData -> Typed.TypedTerm Syntax.Template
 newAnonymousDataTempl x =
@@ -6172,6 +6627,7 @@ newAnonymousDataTempl x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.NewAnonymousData"),
         Core.projectionFieldName = (Core.Name "templ")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the templ field of hydra.scala.syntax.NewAnonymousData
 newAnonymousDataWithTempl :: Typed.TypedTerm Syntax.NewAnonymousData -> Typed.TypedTerm Syntax.Template -> Typed.TypedTerm Syntax.NewAnonymousData
 newAnonymousDataWithTempl original newVal =
@@ -6181,6 +6637,7 @@ newAnonymousDataWithTempl original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "templ"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.NewData
 newData :: Typed.TypedTerm Syntax.Init -> Typed.TypedTerm Syntax.NewData
 newData init =
@@ -6190,6 +6647,7 @@ newData init =
         Core.Field {
           Core.fieldName = (Core.Name "init"),
           Core.fieldTerm = (Typed.unTypedTerm init)}]}))
+
 -- | DSL accessor for the init field of hydra.scala.syntax.NewData
 newDataInit :: Typed.TypedTerm Syntax.NewData -> Typed.TypedTerm Syntax.Init
 newDataInit x =
@@ -6198,6 +6656,7 @@ newDataInit x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.NewData"),
         Core.projectionFieldName = (Core.Name "init")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the init field of hydra.scala.syntax.NewData
 newDataWithInit :: Typed.TypedTerm Syntax.NewData -> Typed.TypedTerm Syntax.Init -> Typed.TypedTerm Syntax.NewData
 newDataWithInit original newVal =
@@ -6207,6 +6666,7 @@ newDataWithInit original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "init"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.ObjectDefn
 objectDefn :: Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.ObjectDefn
 objectDefn name =
@@ -6216,6 +6676,7 @@ objectDefn name =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)}]}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.ObjectDefn
 objectDefnName :: Typed.TypedTerm Syntax.ObjectDefn -> Typed.TypedTerm Syntax.NameData
 objectDefnName x =
@@ -6224,6 +6685,7 @@ objectDefnName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ObjectDefn"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.ObjectDefn
 objectDefnWithName :: Typed.TypedTerm Syntax.ObjectDefn -> Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.ObjectDefn
 objectDefnWithName original newVal =
@@ -6233,6 +6695,7 @@ objectDefnWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.ObjectPkg
 objectPkg :: Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.Template -> Typed.TypedTerm Syntax.ObjectPkg
 objectPkg mods name template =
@@ -6248,6 +6711,7 @@ objectPkg mods name template =
         Core.Field {
           Core.fieldName = (Core.Name "template"),
           Core.fieldTerm = (Typed.unTypedTerm template)}]}))
+
 -- | DSL accessor for the mods field of hydra.scala.syntax.ObjectPkg
 objectPkgMods :: Typed.TypedTerm Syntax.ObjectPkg -> Typed.TypedTerm [Syntax.Mod]
 objectPkgMods x =
@@ -6256,6 +6720,7 @@ objectPkgMods x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ObjectPkg"),
         Core.projectionFieldName = (Core.Name "mods")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.ObjectPkg
 objectPkgName :: Typed.TypedTerm Syntax.ObjectPkg -> Typed.TypedTerm Syntax.NameData
 objectPkgName x =
@@ -6264,6 +6729,7 @@ objectPkgName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ObjectPkg"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the template field of hydra.scala.syntax.ObjectPkg
 objectPkgTemplate :: Typed.TypedTerm Syntax.ObjectPkg -> Typed.TypedTerm Syntax.Template
 objectPkgTemplate x =
@@ -6272,6 +6738,7 @@ objectPkgTemplate x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ObjectPkg"),
         Core.projectionFieldName = (Core.Name "template")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the mods field of hydra.scala.syntax.ObjectPkg
 objectPkgWithMods :: Typed.TypedTerm Syntax.ObjectPkg -> Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.ObjectPkg
 objectPkgWithMods original newVal =
@@ -6295,6 +6762,7 @@ objectPkgWithMods original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ObjectPkg"),
               Core.projectionFieldName = (Core.Name "template")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.ObjectPkg
 objectPkgWithName :: Typed.TypedTerm Syntax.ObjectPkg -> Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.ObjectPkg
 objectPkgWithName original newVal =
@@ -6318,6 +6786,7 @@ objectPkgWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ObjectPkg"),
               Core.projectionFieldName = (Core.Name "template")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the template field of hydra.scala.syntax.ObjectPkg
 objectPkgWithTemplate :: Typed.TypedTerm Syntax.ObjectPkg -> Typed.TypedTerm Syntax.Template -> Typed.TypedTerm Syntax.ObjectPkg
 objectPkgWithTemplate original newVal =
@@ -6341,6 +6810,7 @@ objectPkgWithTemplate original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "template"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.OrType
 orType :: Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.OrType
 orType lhs rhs =
@@ -6353,6 +6823,7 @@ orType lhs rhs =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm rhs)}]}))
+
 -- | DSL accessor for the lhs field of hydra.scala.syntax.OrType
 orTypeLhs :: Typed.TypedTerm Syntax.OrType -> Typed.TypedTerm Syntax.Type
 orTypeLhs x =
@@ -6361,6 +6832,7 @@ orTypeLhs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.OrType"),
         Core.projectionFieldName = (Core.Name "lhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the rhs field of hydra.scala.syntax.OrType
 orTypeRhs :: Typed.TypedTerm Syntax.OrType -> Typed.TypedTerm Syntax.Type
 orTypeRhs x =
@@ -6369,6 +6841,7 @@ orTypeRhs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.OrType"),
         Core.projectionFieldName = (Core.Name "rhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the lhs field of hydra.scala.syntax.OrType
 orTypeWithLhs :: Typed.TypedTerm Syntax.OrType -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.OrType
 orTypeWithLhs original newVal =
@@ -6385,6 +6858,7 @@ orTypeWithLhs original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.OrType"),
               Core.projectionFieldName = (Core.Name "rhs")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the rhs field of hydra.scala.syntax.OrType
 orTypeWithRhs :: Typed.TypedTerm Syntax.OrType -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.OrType
 orTypeWithRhs original newVal =
@@ -6401,6 +6875,7 @@ orTypeWithRhs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.ParamData
 paramData :: Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm (Maybe Syntax.Type) -> Typed.TypedTerm (Maybe Syntax.Data) -> Typed.TypedTerm Syntax.ParamData
 paramData mods name decltpe default_ =
@@ -6419,6 +6894,7 @@ paramData mods name decltpe default_ =
         Core.Field {
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Typed.unTypedTerm default_)}]}))
+
 -- | DSL accessor for the decltpe field of hydra.scala.syntax.ParamData
 paramDataDecltpe :: Typed.TypedTerm Syntax.ParamData -> Typed.TypedTerm (Maybe Syntax.Type)
 paramDataDecltpe x =
@@ -6427,6 +6903,7 @@ paramDataDecltpe x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ParamData"),
         Core.projectionFieldName = (Core.Name "decltpe")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the default field of hydra.scala.syntax.ParamData
 paramDataDefault :: Typed.TypedTerm Syntax.ParamData -> Typed.TypedTerm (Maybe Syntax.Data)
 paramDataDefault x =
@@ -6435,6 +6912,7 @@ paramDataDefault x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ParamData"),
         Core.projectionFieldName = (Core.Name "default")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the mods field of hydra.scala.syntax.ParamData
 paramDataMods :: Typed.TypedTerm Syntax.ParamData -> Typed.TypedTerm [Syntax.Mod]
 paramDataMods x =
@@ -6443,6 +6921,7 @@ paramDataMods x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ParamData"),
         Core.projectionFieldName = (Core.Name "mods")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.ParamData
 paramDataName :: Typed.TypedTerm Syntax.ParamData -> Typed.TypedTerm Syntax.Name
 paramDataName x =
@@ -6451,6 +6930,7 @@ paramDataName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ParamData"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the decltpe field of hydra.scala.syntax.ParamData
 paramDataWithDecltpe :: Typed.TypedTerm Syntax.ParamData -> Typed.TypedTerm (Maybe Syntax.Type) -> Typed.TypedTerm Syntax.ParamData
 paramDataWithDecltpe original newVal =
@@ -6481,6 +6961,7 @@ paramDataWithDecltpe original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ParamData"),
               Core.projectionFieldName = (Core.Name "default")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the default field of hydra.scala.syntax.ParamData
 paramDataWithDefault :: Typed.TypedTerm Syntax.ParamData -> Typed.TypedTerm (Maybe Syntax.Data) -> Typed.TypedTerm Syntax.ParamData
 paramDataWithDefault original newVal =
@@ -6511,6 +6992,7 @@ paramDataWithDefault original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the mods field of hydra.scala.syntax.ParamData
 paramDataWithMods :: Typed.TypedTerm Syntax.ParamData -> Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.ParamData
 paramDataWithMods original newVal =
@@ -6541,6 +7023,7 @@ paramDataWithMods original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ParamData"),
               Core.projectionFieldName = (Core.Name "default")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.ParamData
 paramDataWithName :: Typed.TypedTerm Syntax.ParamData -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.ParamData
 paramDataWithName original newVal =
@@ -6571,6 +7054,7 @@ paramDataWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ParamData"),
               Core.projectionFieldName = (Core.Name "default")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.ParamType
 paramType :: Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm [Syntax.TypeBounds] -> Typed.TypedTerm [Syntax.Type] -> Typed.TypedTerm [Syntax.Type] -> Typed.TypedTerm Syntax.ParamType
 paramType mods name tparams tbounds vbounds cbounds =
@@ -6595,6 +7079,7 @@ paramType mods name tparams tbounds vbounds cbounds =
         Core.Field {
           Core.fieldName = (Core.Name "cbounds"),
           Core.fieldTerm = (Typed.unTypedTerm cbounds)}]}))
+
 -- | DSL accessor for the cbounds field of hydra.scala.syntax.ParamType
 paramTypeCbounds :: Typed.TypedTerm Syntax.ParamType -> Typed.TypedTerm [Syntax.Type]
 paramTypeCbounds x =
@@ -6603,6 +7088,7 @@ paramTypeCbounds x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ParamType"),
         Core.projectionFieldName = (Core.Name "cbounds")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the mods field of hydra.scala.syntax.ParamType
 paramTypeMods :: Typed.TypedTerm Syntax.ParamType -> Typed.TypedTerm [Syntax.Mod]
 paramTypeMods x =
@@ -6611,6 +7097,7 @@ paramTypeMods x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ParamType"),
         Core.projectionFieldName = (Core.Name "mods")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.ParamType
 paramTypeName :: Typed.TypedTerm Syntax.ParamType -> Typed.TypedTerm Syntax.Name
 paramTypeName x =
@@ -6619,6 +7106,7 @@ paramTypeName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ParamType"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the tbounds field of hydra.scala.syntax.ParamType
 paramTypeTbounds :: Typed.TypedTerm Syntax.ParamType -> Typed.TypedTerm [Syntax.TypeBounds]
 paramTypeTbounds x =
@@ -6627,6 +7115,7 @@ paramTypeTbounds x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ParamType"),
         Core.projectionFieldName = (Core.Name "tbounds")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the tparams field of hydra.scala.syntax.ParamType
 paramTypeTparams :: Typed.TypedTerm Syntax.ParamType -> Typed.TypedTerm [Syntax.ParamType]
 paramTypeTparams x =
@@ -6635,6 +7124,7 @@ paramTypeTparams x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ParamType"),
         Core.projectionFieldName = (Core.Name "tparams")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the vbounds field of hydra.scala.syntax.ParamType
 paramTypeVbounds :: Typed.TypedTerm Syntax.ParamType -> Typed.TypedTerm [Syntax.Type]
 paramTypeVbounds x =
@@ -6643,6 +7133,7 @@ paramTypeVbounds x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ParamType"),
         Core.projectionFieldName = (Core.Name "vbounds")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the cbounds field of hydra.scala.syntax.ParamType
 paramTypeWithCbounds :: Typed.TypedTerm Syntax.ParamType -> Typed.TypedTerm [Syntax.Type] -> Typed.TypedTerm Syntax.ParamType
 paramTypeWithCbounds original newVal =
@@ -6687,6 +7178,7 @@ paramTypeWithCbounds original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "cbounds"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the mods field of hydra.scala.syntax.ParamType
 paramTypeWithMods :: Typed.TypedTerm Syntax.ParamType -> Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.ParamType
 paramTypeWithMods original newVal =
@@ -6731,6 +7223,7 @@ paramTypeWithMods original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ParamType"),
               Core.projectionFieldName = (Core.Name "cbounds")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.ParamType
 paramTypeWithName :: Typed.TypedTerm Syntax.ParamType -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.ParamType
 paramTypeWithName original newVal =
@@ -6775,6 +7268,7 @@ paramTypeWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ParamType"),
               Core.projectionFieldName = (Core.Name "cbounds")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the tbounds field of hydra.scala.syntax.ParamType
 paramTypeWithTbounds :: Typed.TypedTerm Syntax.ParamType -> Typed.TypedTerm [Syntax.TypeBounds] -> Typed.TypedTerm Syntax.ParamType
 paramTypeWithTbounds original newVal =
@@ -6819,6 +7313,7 @@ paramTypeWithTbounds original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ParamType"),
               Core.projectionFieldName = (Core.Name "cbounds")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the tparams field of hydra.scala.syntax.ParamType
 paramTypeWithTparams :: Typed.TypedTerm Syntax.ParamType -> Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm Syntax.ParamType
 paramTypeWithTparams original newVal =
@@ -6863,6 +7358,7 @@ paramTypeWithTparams original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ParamType"),
               Core.projectionFieldName = (Core.Name "cbounds")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the vbounds field of hydra.scala.syntax.ParamType
 paramTypeWithVbounds :: Typed.TypedTerm Syntax.ParamType -> Typed.TypedTerm [Syntax.Type] -> Typed.TypedTerm Syntax.ParamType
 paramTypeWithVbounds original newVal =
@@ -6907,6 +7403,7 @@ paramTypeWithVbounds original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ParamType"),
               Core.projectionFieldName = (Core.Name "cbounds")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.PartialFunctionData
 partialFunctionData :: Typed.TypedTerm [Syntax.Case] -> Typed.TypedTerm Syntax.PartialFunctionData
 partialFunctionData cases =
@@ -6916,6 +7413,7 @@ partialFunctionData cases =
         Core.Field {
           Core.fieldName = (Core.Name "cases"),
           Core.fieldTerm = (Typed.unTypedTerm cases)}]}))
+
 -- | DSL accessor for the cases field of hydra.scala.syntax.PartialFunctionData
 partialFunctionDataCases :: Typed.TypedTerm Syntax.PartialFunctionData -> Typed.TypedTerm [Syntax.Case]
 partialFunctionDataCases x =
@@ -6924,6 +7422,7 @@ partialFunctionDataCases x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.PartialFunctionData"),
         Core.projectionFieldName = (Core.Name "cases")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the cases field of hydra.scala.syntax.PartialFunctionData
 partialFunctionDataWithCases :: Typed.TypedTerm Syntax.PartialFunctionData -> Typed.TypedTerm [Syntax.Case] -> Typed.TypedTerm Syntax.PartialFunctionData
 partialFunctionDataWithCases original newVal =
@@ -6933,6 +7432,7 @@ partialFunctionDataWithCases original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "cases"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL injection for the alternative variant of hydra.scala.syntax.Pat
 patAlternative :: Typed.TypedTerm Syntax.AlternativePat -> Typed.TypedTerm Syntax.Pat
 patAlternative x =
@@ -6941,6 +7441,7 @@ patAlternative x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "alternative"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the bind variant of hydra.scala.syntax.Pat
 patBind :: Typed.TypedTerm Syntax.BindPat -> Typed.TypedTerm Syntax.Pat
 patBind x =
@@ -6949,6 +7450,7 @@ patBind x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bind"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the extract variant of hydra.scala.syntax.Pat
 patExtract :: Typed.TypedTerm Syntax.ExtractPat -> Typed.TypedTerm Syntax.Pat
 patExtract x =
@@ -6957,6 +7459,7 @@ patExtract x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "extract"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the extractInfix variant of hydra.scala.syntax.Pat
 patExtractInfix :: Typed.TypedTerm Syntax.ExtractInfixPat -> Typed.TypedTerm Syntax.Pat
 patExtractInfix x =
@@ -6965,6 +7468,7 @@ patExtractInfix x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "extractInfix"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the given variant of hydra.scala.syntax.Pat
 patGiven :: Typed.TypedTerm Syntax.GivenPat -> Typed.TypedTerm Syntax.Pat
 patGiven x =
@@ -6973,6 +7477,7 @@ patGiven x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "given"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the interpolate variant of hydra.scala.syntax.Pat
 patInterpolate :: Typed.TypedTerm Syntax.InterpolatePat -> Typed.TypedTerm Syntax.Pat
 patInterpolate x =
@@ -6981,6 +7486,7 @@ patInterpolate x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "interpolate"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the repeated variant of hydra.scala.syntax.Pat
 patRepeated :: Typed.TypedTerm Syntax.RepeatedPat -> Typed.TypedTerm Syntax.Pat
 patRepeated x =
@@ -6989,6 +7495,7 @@ patRepeated x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "repeated"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the seqWildcard variant of hydra.scala.syntax.Pat
 patSeqWildcard :: Typed.TypedTerm Syntax.Pat
 patSeqWildcard =
@@ -6997,6 +7504,7 @@ patSeqWildcard =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "seqWildcard"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the tuple variant of hydra.scala.syntax.Pat
 patTuple :: Typed.TypedTerm Syntax.TuplePat -> Typed.TypedTerm Syntax.Pat
 patTuple x =
@@ -7005,6 +7513,7 @@ patTuple x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "tuple"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the typed variant of hydra.scala.syntax.Pat
 patTyped :: Typed.TypedTerm Syntax.TypedPat -> Typed.TypedTerm Syntax.Pat
 patTyped x =
@@ -7013,6 +7522,7 @@ patTyped x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typed"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the var variant of hydra.scala.syntax.Pat
 patVar :: Typed.TypedTerm Syntax.VarPat -> Typed.TypedTerm Syntax.Pat
 patVar x =
@@ -7021,6 +7531,7 @@ patVar x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "var"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the wildcard variant of hydra.scala.syntax.Pat
 patWildcard :: Typed.TypedTerm Syntax.Pat
 patWildcard =
@@ -7029,6 +7540,7 @@ patWildcard =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "wildcard"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL constructor for hydra.scala.syntax.Pkg
 pkg :: Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.RefData -> Typed.TypedTerm [Syntax.Stat] -> Typed.TypedTerm Syntax.Pkg
 pkg name ref stats =
@@ -7044,6 +7556,7 @@ pkg name ref stats =
         Core.Field {
           Core.fieldName = (Core.Name "stats"),
           Core.fieldTerm = (Typed.unTypedTerm stats)}]}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.Pkg
 pkgName :: Typed.TypedTerm Syntax.Pkg -> Typed.TypedTerm Syntax.NameData
 pkgName x =
@@ -7052,6 +7565,7 @@ pkgName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Pkg"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the ref field of hydra.scala.syntax.Pkg
 pkgRef :: Typed.TypedTerm Syntax.Pkg -> Typed.TypedTerm Syntax.RefData
 pkgRef x =
@@ -7060,6 +7574,7 @@ pkgRef x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Pkg"),
         Core.projectionFieldName = (Core.Name "ref")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the stats field of hydra.scala.syntax.Pkg
 pkgStats :: Typed.TypedTerm Syntax.Pkg -> Typed.TypedTerm [Syntax.Stat]
 pkgStats x =
@@ -7068,6 +7583,7 @@ pkgStats x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Pkg"),
         Core.projectionFieldName = (Core.Name "stats")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.Pkg
 pkgWithName :: Typed.TypedTerm Syntax.Pkg -> Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.Pkg
 pkgWithName original newVal =
@@ -7091,6 +7607,7 @@ pkgWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Pkg"),
               Core.projectionFieldName = (Core.Name "stats")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the ref field of hydra.scala.syntax.Pkg
 pkgWithRef :: Typed.TypedTerm Syntax.Pkg -> Typed.TypedTerm Syntax.RefData -> Typed.TypedTerm Syntax.Pkg
 pkgWithRef original newVal =
@@ -7114,6 +7631,7 @@ pkgWithRef original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Pkg"),
               Core.projectionFieldName = (Core.Name "stats")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the stats field of hydra.scala.syntax.Pkg
 pkgWithStats :: Typed.TypedTerm Syntax.Pkg -> Typed.TypedTerm [Syntax.Stat] -> Typed.TypedTerm Syntax.Pkg
 pkgWithStats original newVal =
@@ -7137,6 +7655,7 @@ pkgWithStats original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "stats"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.PlaceholderType
 placeholderType :: Typed.TypedTerm Syntax.TypeBounds -> Typed.TypedTerm Syntax.PlaceholderType
 placeholderType bounds =
@@ -7146,6 +7665,7 @@ placeholderType bounds =
         Core.Field {
           Core.fieldName = (Core.Name "bounds"),
           Core.fieldTerm = (Typed.unTypedTerm bounds)}]}))
+
 -- | DSL accessor for the bounds field of hydra.scala.syntax.PlaceholderType
 placeholderTypeBounds :: Typed.TypedTerm Syntax.PlaceholderType -> Typed.TypedTerm Syntax.TypeBounds
 placeholderTypeBounds x =
@@ -7154,6 +7674,7 @@ placeholderTypeBounds x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.PlaceholderType"),
         Core.projectionFieldName = (Core.Name "bounds")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the bounds field of hydra.scala.syntax.PlaceholderType
 placeholderTypeWithBounds :: Typed.TypedTerm Syntax.PlaceholderType -> Typed.TypedTerm Syntax.TypeBounds -> Typed.TypedTerm Syntax.PlaceholderType
 placeholderTypeWithBounds original newVal =
@@ -7163,6 +7684,7 @@ placeholderTypeWithBounds original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "bounds"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.PolyFunctionData
 polyFunctionData :: Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.PolyFunctionData
 polyFunctionData tparams body =
@@ -7175,6 +7697,7 @@ polyFunctionData tparams body =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Typed.unTypedTerm body)}]}))
+
 -- | DSL accessor for the body field of hydra.scala.syntax.PolyFunctionData
 polyFunctionDataBody :: Typed.TypedTerm Syntax.PolyFunctionData -> Typed.TypedTerm Syntax.Data
 polyFunctionDataBody x =
@@ -7183,6 +7706,7 @@ polyFunctionDataBody x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.PolyFunctionData"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the tparams field of hydra.scala.syntax.PolyFunctionData
 polyFunctionDataTparams :: Typed.TypedTerm Syntax.PolyFunctionData -> Typed.TypedTerm [Syntax.ParamType]
 polyFunctionDataTparams x =
@@ -7191,6 +7715,7 @@ polyFunctionDataTparams x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.PolyFunctionData"),
         Core.projectionFieldName = (Core.Name "tparams")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the body field of hydra.scala.syntax.PolyFunctionData
 polyFunctionDataWithBody :: Typed.TypedTerm Syntax.PolyFunctionData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.PolyFunctionData
 polyFunctionDataWithBody original newVal =
@@ -7207,6 +7732,7 @@ polyFunctionDataWithBody original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the tparams field of hydra.scala.syntax.PolyFunctionData
 polyFunctionDataWithTparams :: Typed.TypedTerm Syntax.PolyFunctionData -> Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm Syntax.PolyFunctionData
 polyFunctionDataWithTparams original newVal =
@@ -7223,6 +7749,7 @@ polyFunctionDataWithTparams original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.PolyFunctionData"),
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.PolyFunctionType
 polyFunctionType :: Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.PolyFunctionType
 polyFunctionType tparams tpe =
@@ -7235,6 +7762,7 @@ polyFunctionType tparams tpe =
         Core.Field {
           Core.fieldName = (Core.Name "tpe"),
           Core.fieldTerm = (Typed.unTypedTerm tpe)}]}))
+
 -- | DSL accessor for the tparams field of hydra.scala.syntax.PolyFunctionType
 polyFunctionTypeTparams :: Typed.TypedTerm Syntax.PolyFunctionType -> Typed.TypedTerm [Syntax.ParamType]
 polyFunctionTypeTparams x =
@@ -7243,6 +7771,7 @@ polyFunctionTypeTparams x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.PolyFunctionType"),
         Core.projectionFieldName = (Core.Name "tparams")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the tpe field of hydra.scala.syntax.PolyFunctionType
 polyFunctionTypeTpe :: Typed.TypedTerm Syntax.PolyFunctionType -> Typed.TypedTerm Syntax.Type
 polyFunctionTypeTpe x =
@@ -7251,6 +7780,7 @@ polyFunctionTypeTpe x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.PolyFunctionType"),
         Core.projectionFieldName = (Core.Name "tpe")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the tparams field of hydra.scala.syntax.PolyFunctionType
 polyFunctionTypeWithTparams :: Typed.TypedTerm Syntax.PolyFunctionType -> Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm Syntax.PolyFunctionType
 polyFunctionTypeWithTparams original newVal =
@@ -7267,6 +7797,7 @@ polyFunctionTypeWithTparams original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.PolyFunctionType"),
               Core.projectionFieldName = (Core.Name "tpe")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the tpe field of hydra.scala.syntax.PolyFunctionType
 polyFunctionTypeWithTpe :: Typed.TypedTerm Syntax.PolyFunctionType -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.PolyFunctionType
 polyFunctionTypeWithTpe original newVal =
@@ -7283,12 +7814,14 @@ polyFunctionTypeWithTpe original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "tpe"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for the hydra.scala.syntax.PredefString wrapper
 predefString :: Typed.TypedTerm String -> Typed.TypedTerm Syntax.PredefString
 predefString x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.scala.syntax.PredefString"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
 -- | DSL constructor for hydra.scala.syntax.PrimaryCtor
 primaryCtor :: Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm [[Syntax.ParamData]] -> Typed.TypedTerm Syntax.PrimaryCtor
 primaryCtor mods name paramss =
@@ -7304,6 +7837,7 @@ primaryCtor mods name paramss =
         Core.Field {
           Core.fieldName = (Core.Name "paramss"),
           Core.fieldTerm = (Typed.unTypedTerm paramss)}]}))
+
 -- | DSL accessor for the mods field of hydra.scala.syntax.PrimaryCtor
 primaryCtorMods :: Typed.TypedTerm Syntax.PrimaryCtor -> Typed.TypedTerm [Syntax.Mod]
 primaryCtorMods x =
@@ -7312,6 +7846,7 @@ primaryCtorMods x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.PrimaryCtor"),
         Core.projectionFieldName = (Core.Name "mods")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.PrimaryCtor
 primaryCtorName :: Typed.TypedTerm Syntax.PrimaryCtor -> Typed.TypedTerm Syntax.Name
 primaryCtorName x =
@@ -7320,6 +7855,7 @@ primaryCtorName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.PrimaryCtor"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the paramss field of hydra.scala.syntax.PrimaryCtor
 primaryCtorParamss :: Typed.TypedTerm Syntax.PrimaryCtor -> Typed.TypedTerm [[Syntax.ParamData]]
 primaryCtorParamss x =
@@ -7328,6 +7864,7 @@ primaryCtorParamss x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.PrimaryCtor"),
         Core.projectionFieldName = (Core.Name "paramss")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the mods field of hydra.scala.syntax.PrimaryCtor
 primaryCtorWithMods :: Typed.TypedTerm Syntax.PrimaryCtor -> Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.PrimaryCtor
 primaryCtorWithMods original newVal =
@@ -7351,6 +7888,7 @@ primaryCtorWithMods original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.PrimaryCtor"),
               Core.projectionFieldName = (Core.Name "paramss")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.PrimaryCtor
 primaryCtorWithName :: Typed.TypedTerm Syntax.PrimaryCtor -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.PrimaryCtor
 primaryCtorWithName original newVal =
@@ -7374,6 +7912,7 @@ primaryCtorWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.PrimaryCtor"),
               Core.projectionFieldName = (Core.Name "paramss")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the paramss field of hydra.scala.syntax.PrimaryCtor
 primaryCtorWithParamss :: Typed.TypedTerm Syntax.PrimaryCtor -> Typed.TypedTerm [[Syntax.ParamData]] -> Typed.TypedTerm Syntax.PrimaryCtor
 primaryCtorWithParamss original newVal =
@@ -7397,6 +7936,7 @@ primaryCtorWithParamss original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "paramss"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.PrivateMod
 privateMod :: Typed.TypedTerm Syntax.Ref -> Typed.TypedTerm Syntax.PrivateMod
 privateMod within =
@@ -7406,6 +7946,7 @@ privateMod within =
         Core.Field {
           Core.fieldName = (Core.Name "within"),
           Core.fieldTerm = (Typed.unTypedTerm within)}]}))
+
 -- | DSL updater for the within field of hydra.scala.syntax.PrivateMod
 privateModWithWithin :: Typed.TypedTerm Syntax.PrivateMod -> Typed.TypedTerm Syntax.Ref -> Typed.TypedTerm Syntax.PrivateMod
 privateModWithWithin original newVal =
@@ -7415,6 +7956,7 @@ privateModWithWithin original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "within"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL accessor for the within field of hydra.scala.syntax.PrivateMod
 privateModWithin :: Typed.TypedTerm Syntax.PrivateMod -> Typed.TypedTerm Syntax.Ref
 privateModWithin x =
@@ -7423,6 +7965,7 @@ privateModWithin x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.PrivateMod"),
         Core.projectionFieldName = (Core.Name "within")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL constructor for hydra.scala.syntax.ProjectType
 projectType :: Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.NameType -> Typed.TypedTerm Syntax.ProjectType
 projectType qual name =
@@ -7435,6 +7978,7 @@ projectType qual name =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)}]}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.ProjectType
 projectTypeName :: Typed.TypedTerm Syntax.ProjectType -> Typed.TypedTerm Syntax.NameType
 projectTypeName x =
@@ -7443,6 +7987,7 @@ projectTypeName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ProjectType"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the qual field of hydra.scala.syntax.ProjectType
 projectTypeQual :: Typed.TypedTerm Syntax.ProjectType -> Typed.TypedTerm Syntax.Type
 projectTypeQual x =
@@ -7451,6 +7996,7 @@ projectTypeQual x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ProjectType"),
         Core.projectionFieldName = (Core.Name "qual")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.ProjectType
 projectTypeWithName :: Typed.TypedTerm Syntax.ProjectType -> Typed.TypedTerm Syntax.NameType -> Typed.TypedTerm Syntax.ProjectType
 projectTypeWithName original newVal =
@@ -7467,6 +8013,7 @@ projectTypeWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the qual field of hydra.scala.syntax.ProjectType
 projectTypeWithQual :: Typed.TypedTerm Syntax.ProjectType -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.ProjectType
 projectTypeWithQual original newVal =
@@ -7483,6 +8030,7 @@ projectTypeWithQual original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ProjectType"),
               Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.ProtectedMod
 protectedMod :: Typed.TypedTerm Syntax.Ref -> Typed.TypedTerm Syntax.ProtectedMod
 protectedMod within =
@@ -7492,6 +8040,7 @@ protectedMod within =
         Core.Field {
           Core.fieldName = (Core.Name "within"),
           Core.fieldTerm = (Typed.unTypedTerm within)}]}))
+
 -- | DSL updater for the within field of hydra.scala.syntax.ProtectedMod
 protectedModWithWithin :: Typed.TypedTerm Syntax.ProtectedMod -> Typed.TypedTerm Syntax.Ref -> Typed.TypedTerm Syntax.ProtectedMod
 protectedModWithWithin original newVal =
@@ -7501,6 +8050,7 @@ protectedModWithWithin original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "within"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL accessor for the within field of hydra.scala.syntax.ProtectedMod
 protectedModWithin :: Typed.TypedTerm Syntax.ProtectedMod -> Typed.TypedTerm Syntax.Ref
 protectedModWithin x =
@@ -7509,6 +8059,7 @@ protectedModWithin x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ProtectedMod"),
         Core.projectionFieldName = (Core.Name "within")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL injection for the anonymous variant of hydra.scala.syntax.RefData
 refDataAnonymous :: Typed.TypedTerm Syntax.AnonymousData -> Typed.TypedTerm Syntax.RefData
 refDataAnonymous x =
@@ -7517,6 +8068,7 @@ refDataAnonymous x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "anonymous"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the applyUnary variant of hydra.scala.syntax.RefData
 refDataApplyUnary :: Typed.TypedTerm Syntax.ApplyUnaryData -> Typed.TypedTerm Syntax.RefData
 refDataApplyUnary x =
@@ -7525,6 +8077,7 @@ refDataApplyUnary x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "applyUnary"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the name variant of hydra.scala.syntax.RefData
 refDataName :: Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.RefData
 refDataName x =
@@ -7533,6 +8086,7 @@ refDataName x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "name"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the select variant of hydra.scala.syntax.RefData
 refDataSelect :: Typed.TypedTerm Syntax.SelectData -> Typed.TypedTerm Syntax.RefData
 refDataSelect x =
@@ -7541,6 +8095,7 @@ refDataSelect x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "select"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the super variant of hydra.scala.syntax.RefData
 refDataSuper :: Typed.TypedTerm Syntax.SuperData -> Typed.TypedTerm Syntax.RefData
 refDataSuper x =
@@ -7549,6 +8104,7 @@ refDataSuper x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "super"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the this variant of hydra.scala.syntax.RefData
 refDataThis :: Typed.TypedTerm Syntax.ThisData -> Typed.TypedTerm Syntax.RefData
 refDataThis x =
@@ -7557,6 +8113,7 @@ refDataThis x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "this"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the init variant of hydra.scala.syntax.Ref
 refInit :: Typed.TypedTerm Syntax.Init -> Typed.TypedTerm Syntax.Ref
 refInit x =
@@ -7565,6 +8122,7 @@ refInit x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "init"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the name variant of hydra.scala.syntax.Ref
 refName :: Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.Ref
 refName x =
@@ -7573,6 +8131,7 @@ refName x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "name"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the name variant of hydra.scala.syntax.RefType
 refTypeName :: Typed.TypedTerm Syntax.NameType -> Typed.TypedTerm Syntax.RefType
 refTypeName x =
@@ -7581,6 +8140,7 @@ refTypeName x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "name"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the project variant of hydra.scala.syntax.RefType
 refTypeProject :: Typed.TypedTerm Syntax.ProjectType -> Typed.TypedTerm Syntax.RefType
 refTypeProject x =
@@ -7589,6 +8149,7 @@ refTypeProject x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "project"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the select variant of hydra.scala.syntax.RefType
 refTypeSelect :: Typed.TypedTerm Syntax.SelectType -> Typed.TypedTerm Syntax.RefType
 refTypeSelect x =
@@ -7597,6 +8158,7 @@ refTypeSelect x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "select"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the singleton variant of hydra.scala.syntax.RefType
 refTypeSingleton :: Typed.TypedTerm Syntax.SingletonType -> Typed.TypedTerm Syntax.RefType
 refTypeSingleton x =
@@ -7605,6 +8167,7 @@ refTypeSingleton x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "singleton"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL constructor for hydra.scala.syntax.RefineType
 refineType :: Typed.TypedTerm (Maybe Syntax.Type) -> Typed.TypedTerm [Syntax.Stat] -> Typed.TypedTerm Syntax.RefineType
 refineType tpe stats =
@@ -7617,6 +8180,7 @@ refineType tpe stats =
         Core.Field {
           Core.fieldName = (Core.Name "stats"),
           Core.fieldTerm = (Typed.unTypedTerm stats)}]}))
+
 -- | DSL accessor for the stats field of hydra.scala.syntax.RefineType
 refineTypeStats :: Typed.TypedTerm Syntax.RefineType -> Typed.TypedTerm [Syntax.Stat]
 refineTypeStats x =
@@ -7625,6 +8189,7 @@ refineTypeStats x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.RefineType"),
         Core.projectionFieldName = (Core.Name "stats")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the tpe field of hydra.scala.syntax.RefineType
 refineTypeTpe :: Typed.TypedTerm Syntax.RefineType -> Typed.TypedTerm (Maybe Syntax.Type)
 refineTypeTpe x =
@@ -7633,6 +8198,7 @@ refineTypeTpe x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.RefineType"),
         Core.projectionFieldName = (Core.Name "tpe")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the stats field of hydra.scala.syntax.RefineType
 refineTypeWithStats :: Typed.TypedTerm Syntax.RefineType -> Typed.TypedTerm [Syntax.Stat] -> Typed.TypedTerm Syntax.RefineType
 refineTypeWithStats original newVal =
@@ -7649,6 +8215,7 @@ refineTypeWithStats original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "stats"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the tpe field of hydra.scala.syntax.RefineType
 refineTypeWithTpe :: Typed.TypedTerm Syntax.RefineType -> Typed.TypedTerm (Maybe Syntax.Type) -> Typed.TypedTerm Syntax.RefineType
 refineTypeWithTpe original newVal =
@@ -7665,6 +8232,7 @@ refineTypeWithTpe original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.RefineType"),
               Core.projectionFieldName = (Core.Name "stats")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.RenameImportee
 renameImportee :: Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.RenameImportee
 renameImportee name rename =
@@ -7677,6 +8245,7 @@ renameImportee name rename =
         Core.Field {
           Core.fieldName = (Core.Name "rename"),
           Core.fieldTerm = (Typed.unTypedTerm rename)}]}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.RenameImportee
 renameImporteeName :: Typed.TypedTerm Syntax.RenameImportee -> Typed.TypedTerm Syntax.Name
 renameImporteeName x =
@@ -7685,6 +8254,7 @@ renameImporteeName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.RenameImportee"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the rename field of hydra.scala.syntax.RenameImportee
 renameImporteeRename :: Typed.TypedTerm Syntax.RenameImportee -> Typed.TypedTerm Syntax.Name
 renameImporteeRename x =
@@ -7693,6 +8263,7 @@ renameImporteeRename x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.RenameImportee"),
         Core.projectionFieldName = (Core.Name "rename")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.RenameImportee
 renameImporteeWithName :: Typed.TypedTerm Syntax.RenameImportee -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.RenameImportee
 renameImporteeWithName original newVal =
@@ -7709,6 +8280,7 @@ renameImporteeWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.RenameImportee"),
               Core.projectionFieldName = (Core.Name "rename")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the rename field of hydra.scala.syntax.RenameImportee
 renameImporteeWithRename :: Typed.TypedTerm Syntax.RenameImportee -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.RenameImportee
 renameImporteeWithRename original newVal =
@@ -7725,6 +8297,7 @@ renameImporteeWithRename original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "rename"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.RepeatedData
 repeatedData :: Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.RepeatedData
 repeatedData expr =
@@ -7734,6 +8307,7 @@ repeatedData expr =
         Core.Field {
           Core.fieldName = (Core.Name "expr"),
           Core.fieldTerm = (Typed.unTypedTerm expr)}]}))
+
 -- | DSL accessor for the expr field of hydra.scala.syntax.RepeatedData
 repeatedDataExpr :: Typed.TypedTerm Syntax.RepeatedData -> Typed.TypedTerm Syntax.Data
 repeatedDataExpr x =
@@ -7742,6 +8316,7 @@ repeatedDataExpr x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.RepeatedData"),
         Core.projectionFieldName = (Core.Name "expr")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the expr field of hydra.scala.syntax.RepeatedData
 repeatedDataWithExpr :: Typed.TypedTerm Syntax.RepeatedData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.RepeatedData
 repeatedDataWithExpr original newVal =
@@ -7751,6 +8326,7 @@ repeatedDataWithExpr original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "expr"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.RepeatedEnumCaseDefn
 repeatedEnumCaseDefn :: Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm [Syntax.NameData] -> Typed.TypedTerm Syntax.RepeatedEnumCaseDefn
 repeatedEnumCaseDefn mods cases =
@@ -7763,6 +8339,7 @@ repeatedEnumCaseDefn mods cases =
         Core.Field {
           Core.fieldName = (Core.Name "cases"),
           Core.fieldTerm = (Typed.unTypedTerm cases)}]}))
+
 -- | DSL accessor for the cases field of hydra.scala.syntax.RepeatedEnumCaseDefn
 repeatedEnumCaseDefnCases :: Typed.TypedTerm Syntax.RepeatedEnumCaseDefn -> Typed.TypedTerm [Syntax.NameData]
 repeatedEnumCaseDefnCases x =
@@ -7771,6 +8348,7 @@ repeatedEnumCaseDefnCases x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.RepeatedEnumCaseDefn"),
         Core.projectionFieldName = (Core.Name "cases")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the mods field of hydra.scala.syntax.RepeatedEnumCaseDefn
 repeatedEnumCaseDefnMods :: Typed.TypedTerm Syntax.RepeatedEnumCaseDefn -> Typed.TypedTerm [Syntax.Mod]
 repeatedEnumCaseDefnMods x =
@@ -7779,6 +8357,7 @@ repeatedEnumCaseDefnMods x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.RepeatedEnumCaseDefn"),
         Core.projectionFieldName = (Core.Name "mods")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the cases field of hydra.scala.syntax.RepeatedEnumCaseDefn
 repeatedEnumCaseDefnWithCases :: Typed.TypedTerm Syntax.RepeatedEnumCaseDefn -> Typed.TypedTerm [Syntax.NameData] -> Typed.TypedTerm Syntax.RepeatedEnumCaseDefn
 repeatedEnumCaseDefnWithCases original newVal =
@@ -7795,6 +8374,7 @@ repeatedEnumCaseDefnWithCases original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "cases"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the mods field of hydra.scala.syntax.RepeatedEnumCaseDefn
 repeatedEnumCaseDefnWithMods :: Typed.TypedTerm Syntax.RepeatedEnumCaseDefn -> Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.RepeatedEnumCaseDefn
 repeatedEnumCaseDefnWithMods original newVal =
@@ -7811,6 +8391,7 @@ repeatedEnumCaseDefnWithMods original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.RepeatedEnumCaseDefn"),
               Core.projectionFieldName = (Core.Name "cases")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.RepeatedPat
 repeatedPat :: Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.RepeatedPat
 repeatedPat name =
@@ -7820,6 +8401,7 @@ repeatedPat name =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)}]}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.RepeatedPat
 repeatedPatName :: Typed.TypedTerm Syntax.RepeatedPat -> Typed.TypedTerm Syntax.NameData
 repeatedPatName x =
@@ -7828,6 +8410,7 @@ repeatedPatName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.RepeatedPat"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.RepeatedPat
 repeatedPatWithName :: Typed.TypedTerm Syntax.RepeatedPat -> Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.RepeatedPat
 repeatedPatWithName original newVal =
@@ -7837,6 +8420,7 @@ repeatedPatWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.RepeatedType
 repeatedType :: Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.RepeatedType
 repeatedType tpe =
@@ -7846,6 +8430,7 @@ repeatedType tpe =
         Core.Field {
           Core.fieldName = (Core.Name "tpe"),
           Core.fieldTerm = (Typed.unTypedTerm tpe)}]}))
+
 -- | DSL accessor for the tpe field of hydra.scala.syntax.RepeatedType
 repeatedTypeTpe :: Typed.TypedTerm Syntax.RepeatedType -> Typed.TypedTerm Syntax.Type
 repeatedTypeTpe x =
@@ -7854,6 +8439,7 @@ repeatedTypeTpe x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.RepeatedType"),
         Core.projectionFieldName = (Core.Name "tpe")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the tpe field of hydra.scala.syntax.RepeatedType
 repeatedTypeWithTpe :: Typed.TypedTerm Syntax.RepeatedType -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.RepeatedType
 repeatedTypeWithTpe original newVal =
@@ -7863,6 +8449,7 @@ repeatedTypeWithTpe original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "tpe"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.ReturnData
 returnData :: Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.ReturnData
 returnData expr =
@@ -7872,6 +8459,7 @@ returnData expr =
         Core.Field {
           Core.fieldName = (Core.Name "expr"),
           Core.fieldTerm = (Typed.unTypedTerm expr)}]}))
+
 -- | DSL accessor for the expr field of hydra.scala.syntax.ReturnData
 returnDataExpr :: Typed.TypedTerm Syntax.ReturnData -> Typed.TypedTerm Syntax.Data
 returnDataExpr x =
@@ -7880,6 +8468,7 @@ returnDataExpr x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ReturnData"),
         Core.projectionFieldName = (Core.Name "expr")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the expr field of hydra.scala.syntax.ReturnData
 returnDataWithExpr :: Typed.TypedTerm Syntax.ReturnData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.ReturnData
 returnDataWithExpr original newVal =
@@ -7889,6 +8478,7 @@ returnDataWithExpr original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "expr"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.ScalaSymbol
 scalaSymbol :: Typed.TypedTerm String -> Typed.TypedTerm Syntax.ScalaSymbol
 scalaSymbol name =
@@ -7898,6 +8488,7 @@ scalaSymbol name =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)}]}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.ScalaSymbol
 scalaSymbolName :: Typed.TypedTerm Syntax.ScalaSymbol -> Typed.TypedTerm String
 scalaSymbolName x =
@@ -7906,6 +8497,7 @@ scalaSymbolName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ScalaSymbol"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.ScalaSymbol
 scalaSymbolWithName :: Typed.TypedTerm Syntax.ScalaSymbol -> Typed.TypedTerm String -> Typed.TypedTerm Syntax.ScalaSymbol
 scalaSymbolWithName original newVal =
@@ -7915,6 +8507,7 @@ scalaSymbolWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.SecondaryCtor
 secondaryCtor :: Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm [[Syntax.ParamData]] -> Typed.TypedTerm Syntax.Init -> Typed.TypedTerm [Syntax.Stat] -> Typed.TypedTerm Syntax.SecondaryCtor
 secondaryCtor mods name paramss init stats =
@@ -7936,6 +8529,7 @@ secondaryCtor mods name paramss init stats =
         Core.Field {
           Core.fieldName = (Core.Name "stats"),
           Core.fieldTerm = (Typed.unTypedTerm stats)}]}))
+
 -- | DSL accessor for the init field of hydra.scala.syntax.SecondaryCtor
 secondaryCtorInit :: Typed.TypedTerm Syntax.SecondaryCtor -> Typed.TypedTerm Syntax.Init
 secondaryCtorInit x =
@@ -7944,6 +8538,7 @@ secondaryCtorInit x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.SecondaryCtor"),
         Core.projectionFieldName = (Core.Name "init")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the mods field of hydra.scala.syntax.SecondaryCtor
 secondaryCtorMods :: Typed.TypedTerm Syntax.SecondaryCtor -> Typed.TypedTerm [Syntax.Mod]
 secondaryCtorMods x =
@@ -7952,6 +8547,7 @@ secondaryCtorMods x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.SecondaryCtor"),
         Core.projectionFieldName = (Core.Name "mods")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.SecondaryCtor
 secondaryCtorName :: Typed.TypedTerm Syntax.SecondaryCtor -> Typed.TypedTerm Syntax.Name
 secondaryCtorName x =
@@ -7960,6 +8556,7 @@ secondaryCtorName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.SecondaryCtor"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the paramss field of hydra.scala.syntax.SecondaryCtor
 secondaryCtorParamss :: Typed.TypedTerm Syntax.SecondaryCtor -> Typed.TypedTerm [[Syntax.ParamData]]
 secondaryCtorParamss x =
@@ -7968,6 +8565,7 @@ secondaryCtorParamss x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.SecondaryCtor"),
         Core.projectionFieldName = (Core.Name "paramss")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the stats field of hydra.scala.syntax.SecondaryCtor
 secondaryCtorStats :: Typed.TypedTerm Syntax.SecondaryCtor -> Typed.TypedTerm [Syntax.Stat]
 secondaryCtorStats x =
@@ -7976,6 +8574,7 @@ secondaryCtorStats x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.SecondaryCtor"),
         Core.projectionFieldName = (Core.Name "stats")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the init field of hydra.scala.syntax.SecondaryCtor
 secondaryCtorWithInit :: Typed.TypedTerm Syntax.SecondaryCtor -> Typed.TypedTerm Syntax.Init -> Typed.TypedTerm Syntax.SecondaryCtor
 secondaryCtorWithInit original newVal =
@@ -8013,6 +8612,7 @@ secondaryCtorWithInit original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.SecondaryCtor"),
               Core.projectionFieldName = (Core.Name "stats")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the mods field of hydra.scala.syntax.SecondaryCtor
 secondaryCtorWithMods :: Typed.TypedTerm Syntax.SecondaryCtor -> Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.SecondaryCtor
 secondaryCtorWithMods original newVal =
@@ -8050,6 +8650,7 @@ secondaryCtorWithMods original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.SecondaryCtor"),
               Core.projectionFieldName = (Core.Name "stats")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.SecondaryCtor
 secondaryCtorWithName :: Typed.TypedTerm Syntax.SecondaryCtor -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.SecondaryCtor
 secondaryCtorWithName original newVal =
@@ -8087,6 +8688,7 @@ secondaryCtorWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.SecondaryCtor"),
               Core.projectionFieldName = (Core.Name "stats")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the paramss field of hydra.scala.syntax.SecondaryCtor
 secondaryCtorWithParamss :: Typed.TypedTerm Syntax.SecondaryCtor -> Typed.TypedTerm [[Syntax.ParamData]] -> Typed.TypedTerm Syntax.SecondaryCtor
 secondaryCtorWithParamss original newVal =
@@ -8124,6 +8726,7 @@ secondaryCtorWithParamss original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.SecondaryCtor"),
               Core.projectionFieldName = (Core.Name "stats")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the stats field of hydra.scala.syntax.SecondaryCtor
 secondaryCtorWithStats :: Typed.TypedTerm Syntax.SecondaryCtor -> Typed.TypedTerm [Syntax.Stat] -> Typed.TypedTerm Syntax.SecondaryCtor
 secondaryCtorWithStats original newVal =
@@ -8161,6 +8764,7 @@ secondaryCtorWithStats original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "stats"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.SelectData
 selectData :: Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.SelectData
 selectData qual name =
@@ -8173,6 +8777,7 @@ selectData qual name =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)}]}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.SelectData
 selectDataName :: Typed.TypedTerm Syntax.SelectData -> Typed.TypedTerm Syntax.NameData
 selectDataName x =
@@ -8181,6 +8786,7 @@ selectDataName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.SelectData"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the qual field of hydra.scala.syntax.SelectData
 selectDataQual :: Typed.TypedTerm Syntax.SelectData -> Typed.TypedTerm Syntax.Data
 selectDataQual x =
@@ -8189,6 +8795,7 @@ selectDataQual x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.SelectData"),
         Core.projectionFieldName = (Core.Name "qual")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.SelectData
 selectDataWithName :: Typed.TypedTerm Syntax.SelectData -> Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.SelectData
 selectDataWithName original newVal =
@@ -8205,6 +8812,7 @@ selectDataWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the qual field of hydra.scala.syntax.SelectData
 selectDataWithQual :: Typed.TypedTerm Syntax.SelectData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.SelectData
 selectDataWithQual original newVal =
@@ -8221,6 +8829,7 @@ selectDataWithQual original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.SelectData"),
               Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.SelectType
 selectType :: Typed.TypedTerm Syntax.RefData -> Typed.TypedTerm Syntax.NameType -> Typed.TypedTerm Syntax.SelectType
 selectType qual name =
@@ -8233,6 +8842,7 @@ selectType qual name =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)}]}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.SelectType
 selectTypeName :: Typed.TypedTerm Syntax.SelectType -> Typed.TypedTerm Syntax.NameType
 selectTypeName x =
@@ -8241,6 +8851,7 @@ selectTypeName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.SelectType"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the qual field of hydra.scala.syntax.SelectType
 selectTypeQual :: Typed.TypedTerm Syntax.SelectType -> Typed.TypedTerm Syntax.RefData
 selectTypeQual x =
@@ -8249,6 +8860,7 @@ selectTypeQual x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.SelectType"),
         Core.projectionFieldName = (Core.Name "qual")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.SelectType
 selectTypeWithName :: Typed.TypedTerm Syntax.SelectType -> Typed.TypedTerm Syntax.NameType -> Typed.TypedTerm Syntax.SelectType
 selectTypeWithName original newVal =
@@ -8265,6 +8877,7 @@ selectTypeWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the qual field of hydra.scala.syntax.SelectType
 selectTypeWithQual :: Typed.TypedTerm Syntax.SelectType -> Typed.TypedTerm Syntax.RefData -> Typed.TypedTerm Syntax.SelectType
 selectTypeWithQual original newVal =
@@ -8281,12 +8894,14 @@ selectTypeWithQual original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.SelectType"),
               Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for the hydra.scala.syntax.Self wrapper
 self :: Typed.TypedTerm () -> Typed.TypedTerm Syntax.Self
 self x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.scala.syntax.Self"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
 -- | DSL constructor for hydra.scala.syntax.SingletonType
 singletonType :: Typed.TypedTerm Syntax.RefData -> Typed.TypedTerm Syntax.SingletonType
 singletonType ref =
@@ -8296,6 +8911,7 @@ singletonType ref =
         Core.Field {
           Core.fieldName = (Core.Name "ref"),
           Core.fieldTerm = (Typed.unTypedTerm ref)}]}))
+
 -- | DSL accessor for the ref field of hydra.scala.syntax.SingletonType
 singletonTypeRef :: Typed.TypedTerm Syntax.SingletonType -> Typed.TypedTerm Syntax.RefData
 singletonTypeRef x =
@@ -8304,6 +8920,7 @@ singletonTypeRef x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.SingletonType"),
         Core.projectionFieldName = (Core.Name "ref")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the ref field of hydra.scala.syntax.SingletonType
 singletonTypeWithRef :: Typed.TypedTerm Syntax.SingletonType -> Typed.TypedTerm Syntax.RefData -> Typed.TypedTerm Syntax.SingletonType
 singletonTypeWithRef original newVal =
@@ -8313,6 +8930,7 @@ singletonTypeWithRef original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "ref"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.Source
 source :: Typed.TypedTerm [Syntax.Stat] -> Typed.TypedTerm Syntax.Source
 source stats =
@@ -8322,6 +8940,7 @@ source stats =
         Core.Field {
           Core.fieldName = (Core.Name "stats"),
           Core.fieldTerm = (Typed.unTypedTerm stats)}]}))
+
 -- | DSL accessor for the stats field of hydra.scala.syntax.Source
 sourceStats :: Typed.TypedTerm Syntax.Source -> Typed.TypedTerm [Syntax.Stat]
 sourceStats x =
@@ -8330,6 +8949,7 @@ sourceStats x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Source"),
         Core.projectionFieldName = (Core.Name "stats")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the stats field of hydra.scala.syntax.Source
 sourceWithStats :: Typed.TypedTerm Syntax.Source -> Typed.TypedTerm [Syntax.Stat] -> Typed.TypedTerm Syntax.Source
 sourceWithStats original newVal =
@@ -8339,6 +8959,7 @@ sourceWithStats original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "stats"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL injection for the decl variant of hydra.scala.syntax.Stat
 statDecl :: Typed.TypedTerm Syntax.Decl -> Typed.TypedTerm Syntax.Stat
 statDecl x =
@@ -8347,6 +8968,7 @@ statDecl x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "decl"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the defn variant of hydra.scala.syntax.Stat
 statDefn :: Typed.TypedTerm Syntax.Defn -> Typed.TypedTerm Syntax.Stat
 statDefn x =
@@ -8355,6 +8977,7 @@ statDefn x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "defn"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the importExport variant of hydra.scala.syntax.Stat
 statImportExport :: Typed.TypedTerm Syntax.ImportExportStat -> Typed.TypedTerm Syntax.Stat
 statImportExport x =
@@ -8363,6 +8986,7 @@ statImportExport x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "importExport"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the term variant of hydra.scala.syntax.Stat
 statTerm :: Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.Stat
 statTerm x =
@@ -8371,6 +8995,7 @@ statTerm x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "term"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL constructor for hydra.scala.syntax.SuperData
 superData :: Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.SuperData
 superData thisp superp =
@@ -8383,6 +9008,7 @@ superData thisp superp =
         Core.Field {
           Core.fieldName = (Core.Name "superp"),
           Core.fieldTerm = (Typed.unTypedTerm superp)}]}))
+
 -- | DSL accessor for the superp field of hydra.scala.syntax.SuperData
 superDataSuperp :: Typed.TypedTerm Syntax.SuperData -> Typed.TypedTerm Syntax.Name
 superDataSuperp x =
@@ -8391,6 +9017,7 @@ superDataSuperp x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.SuperData"),
         Core.projectionFieldName = (Core.Name "superp")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the thisp field of hydra.scala.syntax.SuperData
 superDataThisp :: Typed.TypedTerm Syntax.SuperData -> Typed.TypedTerm Syntax.Name
 superDataThisp x =
@@ -8399,6 +9026,7 @@ superDataThisp x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.SuperData"),
         Core.projectionFieldName = (Core.Name "thisp")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the superp field of hydra.scala.syntax.SuperData
 superDataWithSuperp :: Typed.TypedTerm Syntax.SuperData -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.SuperData
 superDataWithSuperp original newVal =
@@ -8415,6 +9043,7 @@ superDataWithSuperp original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "superp"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the thisp field of hydra.scala.syntax.SuperData
 superDataWithThisp :: Typed.TypedTerm Syntax.SuperData -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.SuperData
 superDataWithThisp original newVal =
@@ -8431,6 +9060,7 @@ superDataWithThisp original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.SuperData"),
               Core.projectionFieldName = (Core.Name "superp")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.Template
 template :: Typed.TypedTerm [Syntax.Stat] -> Typed.TypedTerm [Syntax.Init] -> Typed.TypedTerm Syntax.Self -> Typed.TypedTerm [Syntax.Stat] -> Typed.TypedTerm Syntax.Template
 template early inits self stats =
@@ -8449,6 +9079,7 @@ template early inits self stats =
         Core.Field {
           Core.fieldName = (Core.Name "stats"),
           Core.fieldTerm = (Typed.unTypedTerm stats)}]}))
+
 -- | DSL accessor for the early field of hydra.scala.syntax.Template
 templateEarly :: Typed.TypedTerm Syntax.Template -> Typed.TypedTerm [Syntax.Stat]
 templateEarly x =
@@ -8457,6 +9088,7 @@ templateEarly x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Template"),
         Core.projectionFieldName = (Core.Name "early")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the inits field of hydra.scala.syntax.Template
 templateInits :: Typed.TypedTerm Syntax.Template -> Typed.TypedTerm [Syntax.Init]
 templateInits x =
@@ -8465,6 +9097,7 @@ templateInits x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Template"),
         Core.projectionFieldName = (Core.Name "inits")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the self field of hydra.scala.syntax.Template
 templateSelf :: Typed.TypedTerm Syntax.Template -> Typed.TypedTerm Syntax.Self
 templateSelf x =
@@ -8473,6 +9106,7 @@ templateSelf x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Template"),
         Core.projectionFieldName = (Core.Name "self")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the stats field of hydra.scala.syntax.Template
 templateStats :: Typed.TypedTerm Syntax.Template -> Typed.TypedTerm [Syntax.Stat]
 templateStats x =
@@ -8481,6 +9115,7 @@ templateStats x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Template"),
         Core.projectionFieldName = (Core.Name "stats")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the early field of hydra.scala.syntax.Template
 templateWithEarly :: Typed.TypedTerm Syntax.Template -> Typed.TypedTerm [Syntax.Stat] -> Typed.TypedTerm Syntax.Template
 templateWithEarly original newVal =
@@ -8511,6 +9146,7 @@ templateWithEarly original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Template"),
               Core.projectionFieldName = (Core.Name "stats")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the inits field of hydra.scala.syntax.Template
 templateWithInits :: Typed.TypedTerm Syntax.Template -> Typed.TypedTerm [Syntax.Init] -> Typed.TypedTerm Syntax.Template
 templateWithInits original newVal =
@@ -8541,6 +9177,7 @@ templateWithInits original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Template"),
               Core.projectionFieldName = (Core.Name "stats")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the self field of hydra.scala.syntax.Template
 templateWithSelf :: Typed.TypedTerm Syntax.Template -> Typed.TypedTerm Syntax.Self -> Typed.TypedTerm Syntax.Template
 templateWithSelf original newVal =
@@ -8571,6 +9208,7 @@ templateWithSelf original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.Template"),
               Core.projectionFieldName = (Core.Name "stats")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the stats field of hydra.scala.syntax.Template
 templateWithStats :: Typed.TypedTerm Syntax.Template -> Typed.TypedTerm [Syntax.Stat] -> Typed.TypedTerm Syntax.Template
 templateWithStats original newVal =
@@ -8601,12 +9239,14 @@ templateWithStats original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "stats"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for the hydra.scala.syntax.ThisData wrapper
 thisData :: Typed.TypedTerm () -> Typed.TypedTerm Syntax.ThisData
 thisData x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.scala.syntax.ThisData"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
 -- | DSL constructor for hydra.scala.syntax.ThrowData
 throwData :: Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.ThrowData
 throwData expr =
@@ -8616,6 +9256,7 @@ throwData expr =
         Core.Field {
           Core.fieldName = (Core.Name "expr"),
           Core.fieldTerm = (Typed.unTypedTerm expr)}]}))
+
 -- | DSL accessor for the expr field of hydra.scala.syntax.ThrowData
 throwDataExpr :: Typed.TypedTerm Syntax.ThrowData -> Typed.TypedTerm Syntax.Data
 throwDataExpr x =
@@ -8624,6 +9265,7 @@ throwDataExpr x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ThrowData"),
         Core.projectionFieldName = (Core.Name "expr")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the expr field of hydra.scala.syntax.ThrowData
 throwDataWithExpr :: Typed.TypedTerm Syntax.ThrowData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.ThrowData
 throwDataWithExpr original newVal =
@@ -8633,6 +9275,7 @@ throwDataWithExpr original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "expr"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.TraitDefn
 traitDefn :: Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.NameType -> Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm Syntax.PrimaryCtor -> Typed.TypedTerm Syntax.Template -> Typed.TypedTerm Syntax.TraitDefn
 traitDefn mods name tparams ctor template =
@@ -8654,6 +9297,7 @@ traitDefn mods name tparams ctor template =
         Core.Field {
           Core.fieldName = (Core.Name "template"),
           Core.fieldTerm = (Typed.unTypedTerm template)}]}))
+
 -- | DSL accessor for the ctor field of hydra.scala.syntax.TraitDefn
 traitDefnCtor :: Typed.TypedTerm Syntax.TraitDefn -> Typed.TypedTerm Syntax.PrimaryCtor
 traitDefnCtor x =
@@ -8662,6 +9306,7 @@ traitDefnCtor x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TraitDefn"),
         Core.projectionFieldName = (Core.Name "ctor")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the mods field of hydra.scala.syntax.TraitDefn
 traitDefnMods :: Typed.TypedTerm Syntax.TraitDefn -> Typed.TypedTerm [Syntax.Mod]
 traitDefnMods x =
@@ -8670,6 +9315,7 @@ traitDefnMods x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TraitDefn"),
         Core.projectionFieldName = (Core.Name "mods")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.TraitDefn
 traitDefnName :: Typed.TypedTerm Syntax.TraitDefn -> Typed.TypedTerm Syntax.NameType
 traitDefnName x =
@@ -8678,6 +9324,7 @@ traitDefnName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TraitDefn"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the template field of hydra.scala.syntax.TraitDefn
 traitDefnTemplate :: Typed.TypedTerm Syntax.TraitDefn -> Typed.TypedTerm Syntax.Template
 traitDefnTemplate x =
@@ -8686,6 +9333,7 @@ traitDefnTemplate x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TraitDefn"),
         Core.projectionFieldName = (Core.Name "template")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the tparams field of hydra.scala.syntax.TraitDefn
 traitDefnTparams :: Typed.TypedTerm Syntax.TraitDefn -> Typed.TypedTerm [Syntax.ParamType]
 traitDefnTparams x =
@@ -8694,6 +9342,7 @@ traitDefnTparams x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TraitDefn"),
         Core.projectionFieldName = (Core.Name "tparams")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the ctor field of hydra.scala.syntax.TraitDefn
 traitDefnWithCtor :: Typed.TypedTerm Syntax.TraitDefn -> Typed.TypedTerm Syntax.PrimaryCtor -> Typed.TypedTerm Syntax.TraitDefn
 traitDefnWithCtor original newVal =
@@ -8731,6 +9380,7 @@ traitDefnWithCtor original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TraitDefn"),
               Core.projectionFieldName = (Core.Name "template")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the mods field of hydra.scala.syntax.TraitDefn
 traitDefnWithMods :: Typed.TypedTerm Syntax.TraitDefn -> Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.TraitDefn
 traitDefnWithMods original newVal =
@@ -8768,6 +9418,7 @@ traitDefnWithMods original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TraitDefn"),
               Core.projectionFieldName = (Core.Name "template")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.TraitDefn
 traitDefnWithName :: Typed.TypedTerm Syntax.TraitDefn -> Typed.TypedTerm Syntax.NameType -> Typed.TypedTerm Syntax.TraitDefn
 traitDefnWithName original newVal =
@@ -8805,6 +9456,7 @@ traitDefnWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TraitDefn"),
               Core.projectionFieldName = (Core.Name "template")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the template field of hydra.scala.syntax.TraitDefn
 traitDefnWithTemplate :: Typed.TypedTerm Syntax.TraitDefn -> Typed.TypedTerm Syntax.Template -> Typed.TypedTerm Syntax.TraitDefn
 traitDefnWithTemplate original newVal =
@@ -8842,6 +9494,7 @@ traitDefnWithTemplate original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "template"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the tparams field of hydra.scala.syntax.TraitDefn
 traitDefnWithTparams :: Typed.TypedTerm Syntax.TraitDefn -> Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm Syntax.TraitDefn
 traitDefnWithTparams original newVal =
@@ -8879,6 +9532,7 @@ traitDefnWithTparams original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TraitDefn"),
               Core.projectionFieldName = (Core.Name "template")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL injection for the bounds variant of hydra.scala.syntax.Tree
 treeBounds :: Typed.TypedTerm Syntax.TypeBounds -> Typed.TypedTerm Syntax.Tree
 treeBounds x =
@@ -8887,6 +9541,7 @@ treeBounds x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bounds"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the caseTree variant of hydra.scala.syntax.Tree
 treeCaseTree :: Typed.TypedTerm Syntax.CaseTree -> Typed.TypedTerm Syntax.Tree
 treeCaseTree x =
@@ -8895,6 +9550,7 @@ treeCaseTree x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "caseTree"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the ctor variant of hydra.scala.syntax.Tree
 treeCtor :: Typed.TypedTerm Syntax.Ctor -> Typed.TypedTerm Syntax.Tree
 treeCtor x =
@@ -8903,6 +9559,7 @@ treeCtor x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ctor"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the enumerator variant of hydra.scala.syntax.Tree
 treeEnumerator :: Typed.TypedTerm Syntax.Enumerator -> Typed.TypedTerm Syntax.Tree
 treeEnumerator x =
@@ -8911,6 +9568,7 @@ treeEnumerator x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "enumerator"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the importee variant of hydra.scala.syntax.Tree
 treeImportee :: Typed.TypedTerm Syntax.Importee -> Typed.TypedTerm Syntax.Tree
 treeImportee x =
@@ -8919,6 +9577,7 @@ treeImportee x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "importee"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the importer variant of hydra.scala.syntax.Tree
 treeImporter :: Typed.TypedTerm Syntax.Importer -> Typed.TypedTerm Syntax.Tree
 treeImporter x =
@@ -8927,6 +9586,7 @@ treeImporter x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "importer"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the member variant of hydra.scala.syntax.Tree
 treeMember :: Typed.TypedTerm Syntax.Member -> Typed.TypedTerm Syntax.Tree
 treeMember x =
@@ -8935,6 +9595,7 @@ treeMember x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "member"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the mod variant of hydra.scala.syntax.Tree
 treeMod :: Typed.TypedTerm Syntax.Mod -> Typed.TypedTerm Syntax.Tree
 treeMod x =
@@ -8943,6 +9604,7 @@ treeMod x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "mod"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the pat variant of hydra.scala.syntax.Tree
 treePat :: Typed.TypedTerm Syntax.Pat -> Typed.TypedTerm Syntax.Tree
 treePat x =
@@ -8951,6 +9613,7 @@ treePat x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pat"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the ref variant of hydra.scala.syntax.Tree
 treeRef :: Typed.TypedTerm Syntax.Ref -> Typed.TypedTerm Syntax.Tree
 treeRef x =
@@ -8959,6 +9622,7 @@ treeRef x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ref"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the source variant of hydra.scala.syntax.Tree
 treeSource :: Typed.TypedTerm Syntax.Source -> Typed.TypedTerm Syntax.Tree
 treeSource x =
@@ -8967,6 +9631,7 @@ treeSource x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "source"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the stat variant of hydra.scala.syntax.Tree
 treeStat :: Typed.TypedTerm Syntax.Stat -> Typed.TypedTerm Syntax.Tree
 treeStat x =
@@ -8975,6 +9640,7 @@ treeStat x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "stat"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the template variant of hydra.scala.syntax.Tree
 treeTemplate :: Typed.TypedTerm Syntax.Template -> Typed.TypedTerm Syntax.Tree
 treeTemplate x =
@@ -8983,6 +9649,7 @@ treeTemplate x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "template"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the type variant of hydra.scala.syntax.Tree
 treeType :: Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.Tree
 treeType x =
@@ -8991,6 +9658,7 @@ treeType x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "type"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL constructor for hydra.scala.syntax.TryData
 tryData :: Typed.TypedTerm Syntax.Data -> Typed.TypedTerm [Syntax.Case] -> Typed.TypedTerm (Maybe Syntax.Data) -> Typed.TypedTerm Syntax.TryData
 tryData expr catchp finallyp =
@@ -9006,6 +9674,7 @@ tryData expr catchp finallyp =
         Core.Field {
           Core.fieldName = (Core.Name "finallyp"),
           Core.fieldTerm = (Typed.unTypedTerm finallyp)}]}))
+
 -- | DSL accessor for the catchp field of hydra.scala.syntax.TryData
 tryDataCatchp :: Typed.TypedTerm Syntax.TryData -> Typed.TypedTerm [Syntax.Case]
 tryDataCatchp x =
@@ -9014,6 +9683,7 @@ tryDataCatchp x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TryData"),
         Core.projectionFieldName = (Core.Name "catchp")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the expr field of hydra.scala.syntax.TryData
 tryDataExpr :: Typed.TypedTerm Syntax.TryData -> Typed.TypedTerm Syntax.Data
 tryDataExpr x =
@@ -9022,6 +9692,7 @@ tryDataExpr x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TryData"),
         Core.projectionFieldName = (Core.Name "expr")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the finallyp field of hydra.scala.syntax.TryData
 tryDataFinallyp :: Typed.TypedTerm Syntax.TryData -> Typed.TypedTerm (Maybe Syntax.Data)
 tryDataFinallyp x =
@@ -9030,6 +9701,7 @@ tryDataFinallyp x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TryData"),
         Core.projectionFieldName = (Core.Name "finallyp")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the catchp field of hydra.scala.syntax.TryData
 tryDataWithCatchp :: Typed.TypedTerm Syntax.TryData -> Typed.TypedTerm [Syntax.Case] -> Typed.TypedTerm Syntax.TryData
 tryDataWithCatchp original newVal =
@@ -9053,6 +9725,7 @@ tryDataWithCatchp original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TryData"),
               Core.projectionFieldName = (Core.Name "finallyp")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the expr field of hydra.scala.syntax.TryData
 tryDataWithExpr :: Typed.TypedTerm Syntax.TryData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.TryData
 tryDataWithExpr original newVal =
@@ -9076,6 +9749,7 @@ tryDataWithExpr original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TryData"),
               Core.projectionFieldName = (Core.Name "finallyp")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the finallyp field of hydra.scala.syntax.TryData
 tryDataWithFinallyp :: Typed.TypedTerm Syntax.TryData -> Typed.TypedTerm (Maybe Syntax.Data) -> Typed.TypedTerm Syntax.TryData
 tryDataWithFinallyp original newVal =
@@ -9099,6 +9773,7 @@ tryDataWithFinallyp original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "finallyp"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.TryWithHandlerData
 tryWithHandlerData :: Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm (Maybe Syntax.Data) -> Typed.TypedTerm Syntax.TryWithHandlerData
 tryWithHandlerData expr catchp finallyp =
@@ -9114,6 +9789,7 @@ tryWithHandlerData expr catchp finallyp =
         Core.Field {
           Core.fieldName = (Core.Name "finallyp"),
           Core.fieldTerm = (Typed.unTypedTerm finallyp)}]}))
+
 -- | DSL accessor for the catchp field of hydra.scala.syntax.TryWithHandlerData
 tryWithHandlerDataCatchp :: Typed.TypedTerm Syntax.TryWithHandlerData -> Typed.TypedTerm Syntax.Data
 tryWithHandlerDataCatchp x =
@@ -9122,6 +9798,7 @@ tryWithHandlerDataCatchp x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TryWithHandlerData"),
         Core.projectionFieldName = (Core.Name "catchp")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the expr field of hydra.scala.syntax.TryWithHandlerData
 tryWithHandlerDataExpr :: Typed.TypedTerm Syntax.TryWithHandlerData -> Typed.TypedTerm Syntax.Data
 tryWithHandlerDataExpr x =
@@ -9130,6 +9807,7 @@ tryWithHandlerDataExpr x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TryWithHandlerData"),
         Core.projectionFieldName = (Core.Name "expr")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the finallyp field of hydra.scala.syntax.TryWithHandlerData
 tryWithHandlerDataFinallyp :: Typed.TypedTerm Syntax.TryWithHandlerData -> Typed.TypedTerm (Maybe Syntax.Data)
 tryWithHandlerDataFinallyp x =
@@ -9138,6 +9816,7 @@ tryWithHandlerDataFinallyp x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TryWithHandlerData"),
         Core.projectionFieldName = (Core.Name "finallyp")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the catchp field of hydra.scala.syntax.TryWithHandlerData
 tryWithHandlerDataWithCatchp :: Typed.TypedTerm Syntax.TryWithHandlerData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.TryWithHandlerData
 tryWithHandlerDataWithCatchp original newVal =
@@ -9161,6 +9840,7 @@ tryWithHandlerDataWithCatchp original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TryWithHandlerData"),
               Core.projectionFieldName = (Core.Name "finallyp")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the expr field of hydra.scala.syntax.TryWithHandlerData
 tryWithHandlerDataWithExpr :: Typed.TypedTerm Syntax.TryWithHandlerData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.TryWithHandlerData
 tryWithHandlerDataWithExpr original newVal =
@@ -9184,6 +9864,7 @@ tryWithHandlerDataWithExpr original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TryWithHandlerData"),
               Core.projectionFieldName = (Core.Name "finallyp")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the finallyp field of hydra.scala.syntax.TryWithHandlerData
 tryWithHandlerDataWithFinallyp :: Typed.TypedTerm Syntax.TryWithHandlerData -> Typed.TypedTerm (Maybe Syntax.Data) -> Typed.TypedTerm Syntax.TryWithHandlerData
 tryWithHandlerDataWithFinallyp original newVal =
@@ -9207,6 +9888,7 @@ tryWithHandlerDataWithFinallyp original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "finallyp"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.TupleData
 tupleData :: Typed.TypedTerm [Syntax.Data] -> Typed.TypedTerm Syntax.TupleData
 tupleData args =
@@ -9216,6 +9898,7 @@ tupleData args =
         Core.Field {
           Core.fieldName = (Core.Name "args"),
           Core.fieldTerm = (Typed.unTypedTerm args)}]}))
+
 -- | DSL accessor for the args field of hydra.scala.syntax.TupleData
 tupleDataArgs :: Typed.TypedTerm Syntax.TupleData -> Typed.TypedTerm [Syntax.Data]
 tupleDataArgs x =
@@ -9224,6 +9907,7 @@ tupleDataArgs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TupleData"),
         Core.projectionFieldName = (Core.Name "args")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the args field of hydra.scala.syntax.TupleData
 tupleDataWithArgs :: Typed.TypedTerm Syntax.TupleData -> Typed.TypedTerm [Syntax.Data] -> Typed.TypedTerm Syntax.TupleData
 tupleDataWithArgs original newVal =
@@ -9233,6 +9917,7 @@ tupleDataWithArgs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "args"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.TuplePat
 tuplePat :: Typed.TypedTerm [Syntax.Pat] -> Typed.TypedTerm Syntax.TuplePat
 tuplePat args =
@@ -9242,6 +9927,7 @@ tuplePat args =
         Core.Field {
           Core.fieldName = (Core.Name "args"),
           Core.fieldTerm = (Typed.unTypedTerm args)}]}))
+
 -- | DSL accessor for the args field of hydra.scala.syntax.TuplePat
 tuplePatArgs :: Typed.TypedTerm Syntax.TuplePat -> Typed.TypedTerm [Syntax.Pat]
 tuplePatArgs x =
@@ -9250,6 +9936,7 @@ tuplePatArgs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TuplePat"),
         Core.projectionFieldName = (Core.Name "args")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the args field of hydra.scala.syntax.TuplePat
 tuplePatWithArgs :: Typed.TypedTerm Syntax.TuplePat -> Typed.TypedTerm [Syntax.Pat] -> Typed.TypedTerm Syntax.TuplePat
 tuplePatWithArgs original newVal =
@@ -9259,6 +9946,7 @@ tuplePatWithArgs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "args"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.TupleType
 tupleType :: Typed.TypedTerm [Syntax.Type] -> Typed.TypedTerm Syntax.TupleType
 tupleType args =
@@ -9268,6 +9956,7 @@ tupleType args =
         Core.Field {
           Core.fieldName = (Core.Name "args"),
           Core.fieldTerm = (Typed.unTypedTerm args)}]}))
+
 -- | DSL accessor for the args field of hydra.scala.syntax.TupleType
 tupleTypeArgs :: Typed.TypedTerm Syntax.TupleType -> Typed.TypedTerm [Syntax.Type]
 tupleTypeArgs x =
@@ -9276,6 +9965,7 @@ tupleTypeArgs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TupleType"),
         Core.projectionFieldName = (Core.Name "args")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the args field of hydra.scala.syntax.TupleType
 tupleTypeWithArgs :: Typed.TypedTerm Syntax.TupleType -> Typed.TypedTerm [Syntax.Type] -> Typed.TypedTerm Syntax.TupleType
 tupleTypeWithArgs original newVal =
@@ -9285,6 +9975,7 @@ tupleTypeWithArgs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "args"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL injection for the and variant of hydra.scala.syntax.Type
 typeAnd :: Typed.TypedTerm Syntax.AndType -> Typed.TypedTerm Syntax.Type
 typeAnd x =
@@ -9293,6 +9984,7 @@ typeAnd x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "and"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the annotate variant of hydra.scala.syntax.Type
 typeAnnotate :: Typed.TypedTerm Syntax.AnnotateType -> Typed.TypedTerm Syntax.Type
 typeAnnotate x =
@@ -9301,6 +9993,7 @@ typeAnnotate x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "annotate"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the anonymousName variant of hydra.scala.syntax.Type
 typeAnonymousName :: Typed.TypedTerm Syntax.AnonymousNameType -> Typed.TypedTerm Syntax.Type
 typeAnonymousName x =
@@ -9309,6 +10002,7 @@ typeAnonymousName x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "anonymousName"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the apply variant of hydra.scala.syntax.Type
 typeApply :: Typed.TypedTerm Syntax.ApplyType -> Typed.TypedTerm Syntax.Type
 typeApply x =
@@ -9317,6 +10011,7 @@ typeApply x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "apply"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the applyInfix variant of hydra.scala.syntax.Type
 typeApplyInfix :: Typed.TypedTerm Syntax.ApplyInfixType -> Typed.TypedTerm Syntax.Type
 typeApplyInfix x =
@@ -9325,6 +10020,7 @@ typeApplyInfix x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "applyInfix"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL constructor for hydra.scala.syntax.TypeBounds
 typeBounds :: Typed.TypedTerm (Maybe Syntax.Type) -> Typed.TypedTerm (Maybe Syntax.Type) -> Typed.TypedTerm Syntax.TypeBounds
 typeBounds lo hi =
@@ -9337,6 +10033,7 @@ typeBounds lo hi =
         Core.Field {
           Core.fieldName = (Core.Name "hi"),
           Core.fieldTerm = (Typed.unTypedTerm hi)}]}))
+
 -- | DSL accessor for the hi field of hydra.scala.syntax.TypeBounds
 typeBoundsHi :: Typed.TypedTerm Syntax.TypeBounds -> Typed.TypedTerm (Maybe Syntax.Type)
 typeBoundsHi x =
@@ -9345,6 +10042,7 @@ typeBoundsHi x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TypeBounds"),
         Core.projectionFieldName = (Core.Name "hi")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the lo field of hydra.scala.syntax.TypeBounds
 typeBoundsLo :: Typed.TypedTerm Syntax.TypeBounds -> Typed.TypedTerm (Maybe Syntax.Type)
 typeBoundsLo x =
@@ -9353,6 +10051,7 @@ typeBoundsLo x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TypeBounds"),
         Core.projectionFieldName = (Core.Name "lo")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the hi field of hydra.scala.syntax.TypeBounds
 typeBoundsWithHi :: Typed.TypedTerm Syntax.TypeBounds -> Typed.TypedTerm (Maybe Syntax.Type) -> Typed.TypedTerm Syntax.TypeBounds
 typeBoundsWithHi original newVal =
@@ -9369,6 +10068,7 @@ typeBoundsWithHi original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "hi"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the lo field of hydra.scala.syntax.TypeBounds
 typeBoundsWithLo :: Typed.TypedTerm Syntax.TypeBounds -> Typed.TypedTerm (Maybe Syntax.Type) -> Typed.TypedTerm Syntax.TypeBounds
 typeBoundsWithLo original newVal =
@@ -9385,6 +10085,7 @@ typeBoundsWithLo original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TypeBounds"),
               Core.projectionFieldName = (Core.Name "hi")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL injection for the byName variant of hydra.scala.syntax.Type
 typeByName :: Typed.TypedTerm Syntax.ByNameType -> Typed.TypedTerm Syntax.Type
 typeByName x =
@@ -9393,6 +10094,7 @@ typeByName x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "byName"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL constructor for hydra.scala.syntax.TypeCase
 typeCase :: Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.TypeCase
 typeCase pat body =
@@ -9405,6 +10107,7 @@ typeCase pat body =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Typed.unTypedTerm body)}]}))
+
 -- | DSL accessor for the body field of hydra.scala.syntax.TypeCase
 typeCaseBody :: Typed.TypedTerm Syntax.TypeCase -> Typed.TypedTerm Syntax.Type
 typeCaseBody x =
@@ -9413,6 +10116,7 @@ typeCaseBody x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TypeCase"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the pat field of hydra.scala.syntax.TypeCase
 typeCasePat :: Typed.TypedTerm Syntax.TypeCase -> Typed.TypedTerm Syntax.Type
 typeCasePat x =
@@ -9421,6 +10125,7 @@ typeCasePat x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TypeCase"),
         Core.projectionFieldName = (Core.Name "pat")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the body field of hydra.scala.syntax.TypeCase
 typeCaseWithBody :: Typed.TypedTerm Syntax.TypeCase -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.TypeCase
 typeCaseWithBody original newVal =
@@ -9437,6 +10142,7 @@ typeCaseWithBody original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the pat field of hydra.scala.syntax.TypeCase
 typeCaseWithPat :: Typed.TypedTerm Syntax.TypeCase -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.TypeCase
 typeCaseWithPat original newVal =
@@ -9453,6 +10159,7 @@ typeCaseWithPat original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TypeCase"),
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL injection for the contextFunction variant of hydra.scala.syntax.Type
 typeContextFunction :: Typed.TypedTerm Syntax.ContextFunctionType -> Typed.TypedTerm Syntax.Type
 typeContextFunction x =
@@ -9461,6 +10168,7 @@ typeContextFunction x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "contextFunction"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL constructor for hydra.scala.syntax.TypeDecl
 typeDecl :: Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.NameType -> Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm Syntax.TypeBounds -> Typed.TypedTerm Syntax.TypeDecl
 typeDecl mods name tparams bounds =
@@ -9479,6 +10187,7 @@ typeDecl mods name tparams bounds =
         Core.Field {
           Core.fieldName = (Core.Name "bounds"),
           Core.fieldTerm = (Typed.unTypedTerm bounds)}]}))
+
 -- | DSL accessor for the bounds field of hydra.scala.syntax.TypeDecl
 typeDeclBounds :: Typed.TypedTerm Syntax.TypeDecl -> Typed.TypedTerm Syntax.TypeBounds
 typeDeclBounds x =
@@ -9487,6 +10196,7 @@ typeDeclBounds x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TypeDecl"),
         Core.projectionFieldName = (Core.Name "bounds")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the mods field of hydra.scala.syntax.TypeDecl
 typeDeclMods :: Typed.TypedTerm Syntax.TypeDecl -> Typed.TypedTerm [Syntax.Mod]
 typeDeclMods x =
@@ -9495,6 +10205,7 @@ typeDeclMods x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TypeDecl"),
         Core.projectionFieldName = (Core.Name "mods")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.TypeDecl
 typeDeclName :: Typed.TypedTerm Syntax.TypeDecl -> Typed.TypedTerm Syntax.NameType
 typeDeclName x =
@@ -9503,6 +10214,7 @@ typeDeclName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TypeDecl"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the tparams field of hydra.scala.syntax.TypeDecl
 typeDeclTparams :: Typed.TypedTerm Syntax.TypeDecl -> Typed.TypedTerm [Syntax.ParamType]
 typeDeclTparams x =
@@ -9511,6 +10223,7 @@ typeDeclTparams x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TypeDecl"),
         Core.projectionFieldName = (Core.Name "tparams")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the bounds field of hydra.scala.syntax.TypeDecl
 typeDeclWithBounds :: Typed.TypedTerm Syntax.TypeDecl -> Typed.TypedTerm Syntax.TypeBounds -> Typed.TypedTerm Syntax.TypeDecl
 typeDeclWithBounds original newVal =
@@ -9541,6 +10254,7 @@ typeDeclWithBounds original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "bounds"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the mods field of hydra.scala.syntax.TypeDecl
 typeDeclWithMods :: Typed.TypedTerm Syntax.TypeDecl -> Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.TypeDecl
 typeDeclWithMods original newVal =
@@ -9571,6 +10285,7 @@ typeDeclWithMods original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TypeDecl"),
               Core.projectionFieldName = (Core.Name "bounds")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.TypeDecl
 typeDeclWithName :: Typed.TypedTerm Syntax.TypeDecl -> Typed.TypedTerm Syntax.NameType -> Typed.TypedTerm Syntax.TypeDecl
 typeDeclWithName original newVal =
@@ -9601,6 +10316,7 @@ typeDeclWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TypeDecl"),
               Core.projectionFieldName = (Core.Name "bounds")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the tparams field of hydra.scala.syntax.TypeDecl
 typeDeclWithTparams :: Typed.TypedTerm Syntax.TypeDecl -> Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm Syntax.TypeDecl
 typeDeclWithTparams original newVal =
@@ -9631,6 +10347,7 @@ typeDeclWithTparams original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TypeDecl"),
               Core.projectionFieldName = (Core.Name "bounds")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.TypeDefn
 typeDefn :: Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.NameType -> Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.TypeDefn
 typeDefn mods name tparams body =
@@ -9649,6 +10366,7 @@ typeDefn mods name tparams body =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Typed.unTypedTerm body)}]}))
+
 -- | DSL accessor for the body field of hydra.scala.syntax.TypeDefn
 typeDefnBody :: Typed.TypedTerm Syntax.TypeDefn -> Typed.TypedTerm Syntax.Type
 typeDefnBody x =
@@ -9657,6 +10375,7 @@ typeDefnBody x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TypeDefn"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the mods field of hydra.scala.syntax.TypeDefn
 typeDefnMods :: Typed.TypedTerm Syntax.TypeDefn -> Typed.TypedTerm [Syntax.Mod]
 typeDefnMods x =
@@ -9665,6 +10384,7 @@ typeDefnMods x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TypeDefn"),
         Core.projectionFieldName = (Core.Name "mods")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.TypeDefn
 typeDefnName :: Typed.TypedTerm Syntax.TypeDefn -> Typed.TypedTerm Syntax.NameType
 typeDefnName x =
@@ -9673,6 +10393,7 @@ typeDefnName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TypeDefn"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the tparams field of hydra.scala.syntax.TypeDefn
 typeDefnTparams :: Typed.TypedTerm Syntax.TypeDefn -> Typed.TypedTerm [Syntax.ParamType]
 typeDefnTparams x =
@@ -9681,6 +10402,7 @@ typeDefnTparams x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TypeDefn"),
         Core.projectionFieldName = (Core.Name "tparams")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the body field of hydra.scala.syntax.TypeDefn
 typeDefnWithBody :: Typed.TypedTerm Syntax.TypeDefn -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.TypeDefn
 typeDefnWithBody original newVal =
@@ -9711,6 +10433,7 @@ typeDefnWithBody original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the mods field of hydra.scala.syntax.TypeDefn
 typeDefnWithMods :: Typed.TypedTerm Syntax.TypeDefn -> Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.TypeDefn
 typeDefnWithMods original newVal =
@@ -9741,6 +10464,7 @@ typeDefnWithMods original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TypeDefn"),
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.TypeDefn
 typeDefnWithName :: Typed.TypedTerm Syntax.TypeDefn -> Typed.TypedTerm Syntax.NameType -> Typed.TypedTerm Syntax.TypeDefn
 typeDefnWithName original newVal =
@@ -9771,6 +10495,7 @@ typeDefnWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TypeDefn"),
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the tparams field of hydra.scala.syntax.TypeDefn
 typeDefnWithTparams :: Typed.TypedTerm Syntax.TypeDefn -> Typed.TypedTerm [Syntax.ParamType] -> Typed.TypedTerm Syntax.TypeDefn
 typeDefnWithTparams original newVal =
@@ -9801,6 +10526,7 @@ typeDefnWithTparams original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TypeDefn"),
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL injection for the existential variant of hydra.scala.syntax.Type
 typeExistential :: Typed.TypedTerm Syntax.ExistentialType -> Typed.TypedTerm Syntax.Type
 typeExistential x =
@@ -9809,6 +10535,7 @@ typeExistential x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "existential"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the function variant of hydra.scala.syntax.Type
 typeFunction :: Typed.TypedTerm Syntax.FunctionType -> Typed.TypedTerm Syntax.Type
 typeFunction x =
@@ -9817,6 +10544,7 @@ typeFunction x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "function"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the implicitFunction variant of hydra.scala.syntax.Type
 typeImplicitFunction :: Typed.TypedTerm Syntax.ImplicitFunctionType -> Typed.TypedTerm Syntax.Type
 typeImplicitFunction x =
@@ -9825,6 +10553,7 @@ typeImplicitFunction x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "implicitFunction"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the lambda variant of hydra.scala.syntax.Type
 typeLambda :: Typed.TypedTerm Syntax.LambdaType -> Typed.TypedTerm Syntax.Type
 typeLambda x =
@@ -9833,6 +10562,7 @@ typeLambda x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lambda"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the match variant of hydra.scala.syntax.Type
 typeMatch :: Typed.TypedTerm Syntax.MatchType -> Typed.TypedTerm Syntax.Type
 typeMatch x =
@@ -9841,6 +10571,7 @@ typeMatch x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "match"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL constructor for hydra.scala.syntax.TypeMember
 typeMember :: Typed.TypedTerm Syntax.NameType -> Typed.TypedTerm Syntax.TypeMember
 typeMember name =
@@ -9850,6 +10581,7 @@ typeMember name =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)}]}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.TypeMember
 typeMemberName :: Typed.TypedTerm Syntax.TypeMember -> Typed.TypedTerm Syntax.NameType
 typeMemberName x =
@@ -9858,6 +10590,7 @@ typeMemberName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TypeMember"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.TypeMember
 typeMemberWithName :: Typed.TypedTerm Syntax.TypeMember -> Typed.TypedTerm Syntax.NameType -> Typed.TypedTerm Syntax.TypeMember
 typeMemberWithName original newVal =
@@ -9867,6 +10600,7 @@ typeMemberWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL injection for the method variant of hydra.scala.syntax.Type
 typeMethod :: Typed.TypedTerm Syntax.MethodType -> Typed.TypedTerm Syntax.Type
 typeMethod x =
@@ -9875,6 +10609,7 @@ typeMethod x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "method"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the or variant of hydra.scala.syntax.Type
 typeOr :: Typed.TypedTerm Syntax.OrType -> Typed.TypedTerm Syntax.Type
 typeOr x =
@@ -9883,6 +10618,7 @@ typeOr x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "or"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the placeholder variant of hydra.scala.syntax.Type
 typePlaceholder :: Typed.TypedTerm Syntax.PlaceholderType -> Typed.TypedTerm Syntax.Type
 typePlaceholder x =
@@ -9891,6 +10627,7 @@ typePlaceholder x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "placeholder"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the polyFunction variant of hydra.scala.syntax.Type
 typePolyFunction :: Typed.TypedTerm Syntax.PolyFunctionType -> Typed.TypedTerm Syntax.Type
 typePolyFunction x =
@@ -9899,6 +10636,7 @@ typePolyFunction x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "polyFunction"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the ref variant of hydra.scala.syntax.Type
 typeRef :: Typed.TypedTerm Syntax.RefType -> Typed.TypedTerm Syntax.Type
 typeRef x =
@@ -9907,6 +10645,7 @@ typeRef x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ref"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the refine variant of hydra.scala.syntax.Type
 typeRefine :: Typed.TypedTerm Syntax.RefineType -> Typed.TypedTerm Syntax.Type
 typeRefine x =
@@ -9915,6 +10654,7 @@ typeRefine x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "refine"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the repeated variant of hydra.scala.syntax.Type
 typeRepeated :: Typed.TypedTerm Syntax.RepeatedType -> Typed.TypedTerm Syntax.Type
 typeRepeated x =
@@ -9923,6 +10663,7 @@ typeRepeated x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "repeated"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the tuple variant of hydra.scala.syntax.Type
 typeTuple :: Typed.TypedTerm Syntax.TupleType -> Typed.TypedTerm Syntax.Type
 typeTuple x =
@@ -9931,6 +10672,7 @@ typeTuple x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "tuple"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the typedParam variant of hydra.scala.syntax.Type
 typeTypedParam :: Typed.TypedTerm Syntax.TypedParamType -> Typed.TypedTerm Syntax.Type
 typeTypedParam x =
@@ -9939,6 +10681,7 @@ typeTypedParam x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "typedParam"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the var variant of hydra.scala.syntax.Type
 typeVar :: Typed.TypedTerm Syntax.VarType -> Typed.TypedTerm Syntax.Type
 typeVar x =
@@ -9947,6 +10690,7 @@ typeVar x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "var"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL injection for the with variant of hydra.scala.syntax.Type
 typeWith :: Typed.TypedTerm Syntax.WithType -> Typed.TypedTerm Syntax.Type
 typeWith x =
@@ -9955,6 +10699,7 @@ typeWith x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "with"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL constructor for hydra.scala.syntax.TypedParamType
 typedParamType :: Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.TypedParamType
 typedParamType name typ =
@@ -9967,6 +10712,7 @@ typedParamType name typ =
         Core.Field {
           Core.fieldName = (Core.Name "typ"),
           Core.fieldTerm = (Typed.unTypedTerm typ)}]}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.TypedParamType
 typedParamTypeName :: Typed.TypedTerm Syntax.TypedParamType -> Typed.TypedTerm Syntax.Name
 typedParamTypeName x =
@@ -9975,6 +10721,7 @@ typedParamTypeName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TypedParamType"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the typ field of hydra.scala.syntax.TypedParamType
 typedParamTypeTyp :: Typed.TypedTerm Syntax.TypedParamType -> Typed.TypedTerm Syntax.Type
 typedParamTypeTyp x =
@@ -9983,6 +10730,7 @@ typedParamTypeTyp x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TypedParamType"),
         Core.projectionFieldName = (Core.Name "typ")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.TypedParamType
 typedParamTypeWithName :: Typed.TypedTerm Syntax.TypedParamType -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.TypedParamType
 typedParamTypeWithName original newVal =
@@ -9999,6 +10747,7 @@ typedParamTypeWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TypedParamType"),
               Core.projectionFieldName = (Core.Name "typ")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the typ field of hydra.scala.syntax.TypedParamType
 typedParamTypeWithTyp :: Typed.TypedTerm Syntax.TypedParamType -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.TypedParamType
 typedParamTypeWithTyp original newVal =
@@ -10015,6 +10764,7 @@ typedParamTypeWithTyp original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "typ"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.TypedPat
 typedPat :: Typed.TypedTerm Syntax.Pat -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.TypedPat
 typedPat lhs rhs =
@@ -10027,6 +10777,7 @@ typedPat lhs rhs =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm rhs)}]}))
+
 -- | DSL accessor for the lhs field of hydra.scala.syntax.TypedPat
 typedPatLhs :: Typed.TypedTerm Syntax.TypedPat -> Typed.TypedTerm Syntax.Pat
 typedPatLhs x =
@@ -10035,6 +10786,7 @@ typedPatLhs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TypedPat"),
         Core.projectionFieldName = (Core.Name "lhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the rhs field of hydra.scala.syntax.TypedPat
 typedPatRhs :: Typed.TypedTerm Syntax.TypedPat -> Typed.TypedTerm Syntax.Type
 typedPatRhs x =
@@ -10043,6 +10795,7 @@ typedPatRhs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TypedPat"),
         Core.projectionFieldName = (Core.Name "rhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the lhs field of hydra.scala.syntax.TypedPat
 typedPatWithLhs :: Typed.TypedTerm Syntax.TypedPat -> Typed.TypedTerm Syntax.Pat -> Typed.TypedTerm Syntax.TypedPat
 typedPatWithLhs original newVal =
@@ -10059,6 +10812,7 @@ typedPatWithLhs original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.TypedPat"),
               Core.projectionFieldName = (Core.Name "rhs")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the rhs field of hydra.scala.syntax.TypedPat
 typedPatWithRhs :: Typed.TypedTerm Syntax.TypedPat -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.TypedPat
 typedPatWithRhs original newVal =
@@ -10075,36 +10829,42 @@ typedPatWithRhs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL accessor for the body of hydra.scala.syntax.AnonymousData
 unAnonymousData :: Typed.TypedTerm Syntax.AnonymousData -> Typed.TypedTerm ()
 unAnonymousData x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.scala.syntax.AnonymousData")),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the body of hydra.scala.syntax.AnonymousNameType
 unAnonymousNameType :: Typed.TypedTerm Syntax.AnonymousNameType -> Typed.TypedTerm ()
 unAnonymousNameType x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.scala.syntax.AnonymousNameType")),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the body of hydra.scala.syntax.PredefString
 unPredefString :: Typed.TypedTerm Syntax.PredefString -> Typed.TypedTerm String
 unPredefString x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.scala.syntax.PredefString")),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the body of hydra.scala.syntax.Self
 unSelf :: Typed.TypedTerm Syntax.Self -> Typed.TypedTerm ()
 unSelf x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.scala.syntax.Self")),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the body of hydra.scala.syntax.ThisData
 unThisData :: Typed.TypedTerm Syntax.ThisData -> Typed.TypedTerm ()
 unThisData x =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.scala.syntax.ThisData")),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL constructor for hydra.scala.syntax.UnimportImportee
 unimportImportee :: Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.UnimportImportee
 unimportImportee name =
@@ -10114,6 +10874,7 @@ unimportImportee name =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)}]}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.UnimportImportee
 unimportImporteeName :: Typed.TypedTerm Syntax.UnimportImportee -> Typed.TypedTerm Syntax.Name
 unimportImporteeName x =
@@ -10122,6 +10883,7 @@ unimportImporteeName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.UnimportImportee"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.UnimportImportee
 unimportImporteeWithName :: Typed.TypedTerm Syntax.UnimportImportee -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.UnimportImportee
 unimportImporteeWithName original newVal =
@@ -10131,6 +10893,7 @@ unimportImporteeWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.ValDecl
 valDecl :: Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm [Syntax.Pat] -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.ValDecl
 valDecl mods pats decltpe =
@@ -10146,6 +10909,7 @@ valDecl mods pats decltpe =
         Core.Field {
           Core.fieldName = (Core.Name "decltpe"),
           Core.fieldTerm = (Typed.unTypedTerm decltpe)}]}))
+
 -- | DSL accessor for the decltpe field of hydra.scala.syntax.ValDecl
 valDeclDecltpe :: Typed.TypedTerm Syntax.ValDecl -> Typed.TypedTerm Syntax.Type
 valDeclDecltpe x =
@@ -10154,6 +10918,7 @@ valDeclDecltpe x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ValDecl"),
         Core.projectionFieldName = (Core.Name "decltpe")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the mods field of hydra.scala.syntax.ValDecl
 valDeclMods :: Typed.TypedTerm Syntax.ValDecl -> Typed.TypedTerm [Syntax.Mod]
 valDeclMods x =
@@ -10162,6 +10927,7 @@ valDeclMods x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ValDecl"),
         Core.projectionFieldName = (Core.Name "mods")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the pats field of hydra.scala.syntax.ValDecl
 valDeclPats :: Typed.TypedTerm Syntax.ValDecl -> Typed.TypedTerm [Syntax.Pat]
 valDeclPats x =
@@ -10170,6 +10936,7 @@ valDeclPats x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ValDecl"),
         Core.projectionFieldName = (Core.Name "pats")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the decltpe field of hydra.scala.syntax.ValDecl
 valDeclWithDecltpe :: Typed.TypedTerm Syntax.ValDecl -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.ValDecl
 valDeclWithDecltpe original newVal =
@@ -10193,6 +10960,7 @@ valDeclWithDecltpe original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "decltpe"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the mods field of hydra.scala.syntax.ValDecl
 valDeclWithMods :: Typed.TypedTerm Syntax.ValDecl -> Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.ValDecl
 valDeclWithMods original newVal =
@@ -10216,6 +10984,7 @@ valDeclWithMods original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ValDecl"),
               Core.projectionFieldName = (Core.Name "decltpe")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the pats field of hydra.scala.syntax.ValDecl
 valDeclWithPats :: Typed.TypedTerm Syntax.ValDecl -> Typed.TypedTerm [Syntax.Pat] -> Typed.TypedTerm Syntax.ValDecl
 valDeclWithPats original newVal =
@@ -10239,6 +11008,7 @@ valDeclWithPats original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ValDecl"),
               Core.projectionFieldName = (Core.Name "decltpe")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.ValDefn
 valDefn :: Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm [Syntax.Pat] -> Typed.TypedTerm (Maybe Syntax.Type) -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.ValDefn
 valDefn mods pats decltpe rhs =
@@ -10257,6 +11027,7 @@ valDefn mods pats decltpe rhs =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm rhs)}]}))
+
 -- | DSL accessor for the decltpe field of hydra.scala.syntax.ValDefn
 valDefnDecltpe :: Typed.TypedTerm Syntax.ValDefn -> Typed.TypedTerm (Maybe Syntax.Type)
 valDefnDecltpe x =
@@ -10265,6 +11036,7 @@ valDefnDecltpe x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ValDefn"),
         Core.projectionFieldName = (Core.Name "decltpe")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the mods field of hydra.scala.syntax.ValDefn
 valDefnMods :: Typed.TypedTerm Syntax.ValDefn -> Typed.TypedTerm [Syntax.Mod]
 valDefnMods x =
@@ -10273,6 +11045,7 @@ valDefnMods x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ValDefn"),
         Core.projectionFieldName = (Core.Name "mods")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the pats field of hydra.scala.syntax.ValDefn
 valDefnPats :: Typed.TypedTerm Syntax.ValDefn -> Typed.TypedTerm [Syntax.Pat]
 valDefnPats x =
@@ -10281,6 +11054,7 @@ valDefnPats x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ValDefn"),
         Core.projectionFieldName = (Core.Name "pats")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the rhs field of hydra.scala.syntax.ValDefn
 valDefnRhs :: Typed.TypedTerm Syntax.ValDefn -> Typed.TypedTerm Syntax.Data
 valDefnRhs x =
@@ -10289,6 +11063,7 @@ valDefnRhs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ValDefn"),
         Core.projectionFieldName = (Core.Name "rhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the decltpe field of hydra.scala.syntax.ValDefn
 valDefnWithDecltpe :: Typed.TypedTerm Syntax.ValDefn -> Typed.TypedTerm (Maybe Syntax.Type) -> Typed.TypedTerm Syntax.ValDefn
 valDefnWithDecltpe original newVal =
@@ -10319,6 +11094,7 @@ valDefnWithDecltpe original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ValDefn"),
               Core.projectionFieldName = (Core.Name "rhs")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the mods field of hydra.scala.syntax.ValDefn
 valDefnWithMods :: Typed.TypedTerm Syntax.ValDefn -> Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.ValDefn
 valDefnWithMods original newVal =
@@ -10349,6 +11125,7 @@ valDefnWithMods original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ValDefn"),
               Core.projectionFieldName = (Core.Name "rhs")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the pats field of hydra.scala.syntax.ValDefn
 valDefnWithPats :: Typed.TypedTerm Syntax.ValDefn -> Typed.TypedTerm [Syntax.Pat] -> Typed.TypedTerm Syntax.ValDefn
 valDefnWithPats original newVal =
@@ -10379,6 +11156,7 @@ valDefnWithPats original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ValDefn"),
               Core.projectionFieldName = (Core.Name "rhs")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the rhs field of hydra.scala.syntax.ValDefn
 valDefnWithRhs :: Typed.TypedTerm Syntax.ValDefn -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.ValDefn
 valDefnWithRhs original newVal =
@@ -10409,6 +11187,7 @@ valDefnWithRhs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.ValEnumerator
 valEnumerator :: Typed.TypedTerm Syntax.Pat -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.ValEnumerator
 valEnumerator pat rhs =
@@ -10421,6 +11200,7 @@ valEnumerator pat rhs =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm rhs)}]}))
+
 -- | DSL accessor for the pat field of hydra.scala.syntax.ValEnumerator
 valEnumeratorPat :: Typed.TypedTerm Syntax.ValEnumerator -> Typed.TypedTerm Syntax.Pat
 valEnumeratorPat x =
@@ -10429,6 +11209,7 @@ valEnumeratorPat x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ValEnumerator"),
         Core.projectionFieldName = (Core.Name "pat")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the rhs field of hydra.scala.syntax.ValEnumerator
 valEnumeratorRhs :: Typed.TypedTerm Syntax.ValEnumerator -> Typed.TypedTerm Syntax.Data
 valEnumeratorRhs x =
@@ -10437,6 +11218,7 @@ valEnumeratorRhs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ValEnumerator"),
         Core.projectionFieldName = (Core.Name "rhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the pat field of hydra.scala.syntax.ValEnumerator
 valEnumeratorWithPat :: Typed.TypedTerm Syntax.ValEnumerator -> Typed.TypedTerm Syntax.Pat -> Typed.TypedTerm Syntax.ValEnumerator
 valEnumeratorWithPat original newVal =
@@ -10453,6 +11235,7 @@ valEnumeratorWithPat original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.ValEnumerator"),
               Core.projectionFieldName = (Core.Name "rhs")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the rhs field of hydra.scala.syntax.ValEnumerator
 valEnumeratorWithRhs :: Typed.TypedTerm Syntax.ValEnumerator -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.ValEnumerator
 valEnumeratorWithRhs original newVal =
@@ -10469,6 +11252,7 @@ valEnumeratorWithRhs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.VarDecl
 varDecl :: Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm [Syntax.Pat] -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.VarDecl
 varDecl mods pats decltpe =
@@ -10484,6 +11268,7 @@ varDecl mods pats decltpe =
         Core.Field {
           Core.fieldName = (Core.Name "decltpe"),
           Core.fieldTerm = (Typed.unTypedTerm decltpe)}]}))
+
 -- | DSL accessor for the decltpe field of hydra.scala.syntax.VarDecl
 varDeclDecltpe :: Typed.TypedTerm Syntax.VarDecl -> Typed.TypedTerm Syntax.Type
 varDeclDecltpe x =
@@ -10492,6 +11277,7 @@ varDeclDecltpe x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.VarDecl"),
         Core.projectionFieldName = (Core.Name "decltpe")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the mods field of hydra.scala.syntax.VarDecl
 varDeclMods :: Typed.TypedTerm Syntax.VarDecl -> Typed.TypedTerm [Syntax.Mod]
 varDeclMods x =
@@ -10500,6 +11286,7 @@ varDeclMods x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.VarDecl"),
         Core.projectionFieldName = (Core.Name "mods")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the pats field of hydra.scala.syntax.VarDecl
 varDeclPats :: Typed.TypedTerm Syntax.VarDecl -> Typed.TypedTerm [Syntax.Pat]
 varDeclPats x =
@@ -10508,6 +11295,7 @@ varDeclPats x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.VarDecl"),
         Core.projectionFieldName = (Core.Name "pats")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the decltpe field of hydra.scala.syntax.VarDecl
 varDeclWithDecltpe :: Typed.TypedTerm Syntax.VarDecl -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.VarDecl
 varDeclWithDecltpe original newVal =
@@ -10531,6 +11319,7 @@ varDeclWithDecltpe original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "decltpe"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the mods field of hydra.scala.syntax.VarDecl
 varDeclWithMods :: Typed.TypedTerm Syntax.VarDecl -> Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.VarDecl
 varDeclWithMods original newVal =
@@ -10554,6 +11343,7 @@ varDeclWithMods original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.VarDecl"),
               Core.projectionFieldName = (Core.Name "decltpe")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the pats field of hydra.scala.syntax.VarDecl
 varDeclWithPats :: Typed.TypedTerm Syntax.VarDecl -> Typed.TypedTerm [Syntax.Pat] -> Typed.TypedTerm Syntax.VarDecl
 varDeclWithPats original newVal =
@@ -10577,6 +11367,7 @@ varDeclWithPats original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.VarDecl"),
               Core.projectionFieldName = (Core.Name "decltpe")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.VarDefn
 varDefn :: Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm [Syntax.Pat] -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm (Maybe Syntax.Data) -> Typed.TypedTerm Syntax.VarDefn
 varDefn mods pats decltpe rhs =
@@ -10595,6 +11386,7 @@ varDefn mods pats decltpe rhs =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm rhs)}]}))
+
 -- | DSL accessor for the decltpe field of hydra.scala.syntax.VarDefn
 varDefnDecltpe :: Typed.TypedTerm Syntax.VarDefn -> Typed.TypedTerm Syntax.Type
 varDefnDecltpe x =
@@ -10603,6 +11395,7 @@ varDefnDecltpe x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.VarDefn"),
         Core.projectionFieldName = (Core.Name "decltpe")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the mods field of hydra.scala.syntax.VarDefn
 varDefnMods :: Typed.TypedTerm Syntax.VarDefn -> Typed.TypedTerm [Syntax.Mod]
 varDefnMods x =
@@ -10611,6 +11404,7 @@ varDefnMods x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.VarDefn"),
         Core.projectionFieldName = (Core.Name "mods")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the pats field of hydra.scala.syntax.VarDefn
 varDefnPats :: Typed.TypedTerm Syntax.VarDefn -> Typed.TypedTerm [Syntax.Pat]
 varDefnPats x =
@@ -10619,6 +11413,7 @@ varDefnPats x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.VarDefn"),
         Core.projectionFieldName = (Core.Name "pats")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the rhs field of hydra.scala.syntax.VarDefn
 varDefnRhs :: Typed.TypedTerm Syntax.VarDefn -> Typed.TypedTerm (Maybe Syntax.Data)
 varDefnRhs x =
@@ -10627,6 +11422,7 @@ varDefnRhs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.VarDefn"),
         Core.projectionFieldName = (Core.Name "rhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the decltpe field of hydra.scala.syntax.VarDefn
 varDefnWithDecltpe :: Typed.TypedTerm Syntax.VarDefn -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.VarDefn
 varDefnWithDecltpe original newVal =
@@ -10657,6 +11453,7 @@ varDefnWithDecltpe original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.VarDefn"),
               Core.projectionFieldName = (Core.Name "rhs")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the mods field of hydra.scala.syntax.VarDefn
 varDefnWithMods :: Typed.TypedTerm Syntax.VarDefn -> Typed.TypedTerm [Syntax.Mod] -> Typed.TypedTerm Syntax.VarDefn
 varDefnWithMods original newVal =
@@ -10687,6 +11484,7 @@ varDefnWithMods original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.VarDefn"),
               Core.projectionFieldName = (Core.Name "rhs")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the pats field of hydra.scala.syntax.VarDefn
 varDefnWithPats :: Typed.TypedTerm Syntax.VarDefn -> Typed.TypedTerm [Syntax.Pat] -> Typed.TypedTerm Syntax.VarDefn
 varDefnWithPats original newVal =
@@ -10717,6 +11515,7 @@ varDefnWithPats original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.VarDefn"),
               Core.projectionFieldName = (Core.Name "rhs")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the rhs field of hydra.scala.syntax.VarDefn
 varDefnWithRhs :: Typed.TypedTerm Syntax.VarDefn -> Typed.TypedTerm (Maybe Syntax.Data) -> Typed.TypedTerm Syntax.VarDefn
 varDefnWithRhs original newVal =
@@ -10747,6 +11546,7 @@ varDefnWithRhs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.VarPat
 varPat :: Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.VarPat
 varPat name =
@@ -10756,6 +11556,7 @@ varPat name =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)}]}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.VarPat
 varPatName :: Typed.TypedTerm Syntax.VarPat -> Typed.TypedTerm Syntax.NameData
 varPatName x =
@@ -10764,6 +11565,7 @@ varPatName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.VarPat"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.VarPat
 varPatWithName :: Typed.TypedTerm Syntax.VarPat -> Typed.TypedTerm Syntax.NameData -> Typed.TypedTerm Syntax.VarPat
 varPatWithName original newVal =
@@ -10773,6 +11575,7 @@ varPatWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.VarType
 varType :: Typed.TypedTerm Syntax.NameType -> Typed.TypedTerm Syntax.VarType
 varType name =
@@ -10782,6 +11585,7 @@ varType name =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)}]}))
+
 -- | DSL accessor for the name field of hydra.scala.syntax.VarType
 varTypeName :: Typed.TypedTerm Syntax.VarType -> Typed.TypedTerm Syntax.NameType
 varTypeName x =
@@ -10790,6 +11594,7 @@ varTypeName x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.VarType"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the name field of hydra.scala.syntax.VarType
 varTypeWithName :: Typed.TypedTerm Syntax.VarType -> Typed.TypedTerm Syntax.NameType -> Typed.TypedTerm Syntax.VarType
 varTypeWithName original newVal =
@@ -10799,6 +11604,7 @@ varTypeWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.scala.syntax.WhileData
 whileData :: Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.WhileData
 whileData expr body =
@@ -10811,6 +11617,7 @@ whileData expr body =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Typed.unTypedTerm body)}]}))
+
 -- | DSL accessor for the body field of hydra.scala.syntax.WhileData
 whileDataBody :: Typed.TypedTerm Syntax.WhileData -> Typed.TypedTerm Syntax.Data
 whileDataBody x =
@@ -10819,6 +11626,7 @@ whileDataBody x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.WhileData"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the expr field of hydra.scala.syntax.WhileData
 whileDataExpr :: Typed.TypedTerm Syntax.WhileData -> Typed.TypedTerm Syntax.Data
 whileDataExpr x =
@@ -10827,6 +11635,7 @@ whileDataExpr x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.WhileData"),
         Core.projectionFieldName = (Core.Name "expr")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the body field of hydra.scala.syntax.WhileData
 whileDataWithBody :: Typed.TypedTerm Syntax.WhileData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.WhileData
 whileDataWithBody original newVal =
@@ -10843,6 +11652,7 @@ whileDataWithBody original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the expr field of hydra.scala.syntax.WhileData
 whileDataWithExpr :: Typed.TypedTerm Syntax.WhileData -> Typed.TypedTerm Syntax.Data -> Typed.TypedTerm Syntax.WhileData
 whileDataWithExpr original newVal =
@@ -10859,6 +11669,7 @@ whileDataWithExpr original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.WhileData"),
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.scala.syntax.WithType
 withType :: Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.WithType
 withType lhs rhs =
@@ -10871,6 +11682,7 @@ withType lhs rhs =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm rhs)}]}))
+
 -- | DSL accessor for the lhs field of hydra.scala.syntax.WithType
 withTypeLhs :: Typed.TypedTerm Syntax.WithType -> Typed.TypedTerm Syntax.Type
 withTypeLhs x =
@@ -10879,6 +11691,7 @@ withTypeLhs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.WithType"),
         Core.projectionFieldName = (Core.Name "lhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the rhs field of hydra.scala.syntax.WithType
 withTypeRhs :: Typed.TypedTerm Syntax.WithType -> Typed.TypedTerm Syntax.Type
 withTypeRhs x =
@@ -10887,6 +11700,7 @@ withTypeRhs x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.WithType"),
         Core.projectionFieldName = (Core.Name "rhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the lhs field of hydra.scala.syntax.WithType
 withTypeWithLhs :: Typed.TypedTerm Syntax.WithType -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.WithType
 withTypeWithLhs original newVal =
@@ -10903,6 +11717,7 @@ withTypeWithLhs original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.WithType"),
               Core.projectionFieldName = (Core.Name "rhs")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the rhs field of hydra.scala.syntax.WithType
 withTypeWithRhs :: Typed.TypedTerm Syntax.WithType -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.WithType
 withTypeWithRhs original newVal =

@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | DSL functions for hydra.python.environment
 
 module Hydra.Dsl.Python.Environment where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Dsl.Graph as DslGraph
@@ -20,6 +22,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
+
 -- | DSL constructor for hydra.python.environment.PyGraph
 pyGraph :: Typed.TypedTerm Graph.Graph -> Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Environment.PyGraph
 pyGraph graph metadata =
@@ -32,6 +35,7 @@ pyGraph graph metadata =
         Core.Field {
           Core.fieldName = (Core.Name "metadata"),
           Core.fieldTerm = (Typed.unTypedTerm metadata)}]}))
+
 -- | DSL accessor for the graph field of hydra.python.environment.PyGraph
 pyGraphGraph :: Typed.TypedTerm Environment.PyGraph -> Typed.TypedTerm Graph.Graph
 pyGraphGraph x =
@@ -40,6 +44,7 @@ pyGraphGraph x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PyGraph"),
         Core.projectionFieldName = (Core.Name "graph")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the metadata field of hydra.python.environment.PyGraph
 pyGraphMetadata :: Typed.TypedTerm Environment.PyGraph -> Typed.TypedTerm Environment.PythonModuleMetadata
 pyGraphMetadata x =
@@ -48,6 +53,7 @@ pyGraphMetadata x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PyGraph"),
         Core.projectionFieldName = (Core.Name "metadata")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the graph field of hydra.python.environment.PyGraph
 pyGraphWithGraph :: Typed.TypedTerm Environment.PyGraph -> Typed.TypedTerm Graph.Graph -> Typed.TypedTerm Environment.PyGraph
 pyGraphWithGraph original newVal =
@@ -64,6 +70,7 @@ pyGraphWithGraph original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PyGraph"),
               Core.projectionFieldName = (Core.Name "metadata")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the metadata field of hydra.python.environment.PyGraph
 pyGraphWithMetadata :: Typed.TypedTerm Environment.PyGraph -> Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Environment.PyGraph
 pyGraphWithMetadata original newVal =
@@ -80,6 +87,7 @@ pyGraphWithMetadata original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "metadata"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL constructor for hydra.python.environment.PythonEnvironment
 pythonEnvironment :: Typed.TypedTerm (Util.ModuleNames Syntax.DottedName) -> Typed.TypedTerm ([Core.Name], (M.Map Core.Name Syntax.Name)) -> Typed.TypedTerm Graph.Graph -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Environment.PythonVersion -> Typed.TypedTerm Bool -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Environment.PythonEnvironment
 pythonEnvironment namespaces boundTypeVariables graph nullaryBindings version skipCasts inlineVariables =
@@ -107,6 +115,7 @@ pythonEnvironment namespaces boundTypeVariables graph nullaryBindings version sk
         Core.Field {
           Core.fieldName = (Core.Name "inlineVariables"),
           Core.fieldTerm = (Typed.unTypedTerm inlineVariables)}]}))
+
 -- | DSL accessor for the boundTypeVariables field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentBoundTypeVariables :: Typed.TypedTerm Environment.PythonEnvironment -> Typed.TypedTerm ([Core.Name], (M.Map Core.Name Syntax.Name))
 pythonEnvironmentBoundTypeVariables x =
@@ -115,6 +124,7 @@ pythonEnvironmentBoundTypeVariables x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
         Core.projectionFieldName = (Core.Name "boundTypeVariables")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the graph field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentGraph :: Typed.TypedTerm Environment.PythonEnvironment -> Typed.TypedTerm Graph.Graph
 pythonEnvironmentGraph x =
@@ -123,6 +133,7 @@ pythonEnvironmentGraph x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
         Core.projectionFieldName = (Core.Name "graph")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the inlineVariables field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentInlineVariables :: Typed.TypedTerm Environment.PythonEnvironment -> Typed.TypedTerm (S.Set Core.Name)
 pythonEnvironmentInlineVariables x =
@@ -131,6 +142,7 @@ pythonEnvironmentInlineVariables x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
         Core.projectionFieldName = (Core.Name "inlineVariables")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the namespaces field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentNamespaces :: Typed.TypedTerm Environment.PythonEnvironment -> Typed.TypedTerm (Util.ModuleNames Syntax.DottedName)
 pythonEnvironmentNamespaces x =
@@ -139,6 +151,7 @@ pythonEnvironmentNamespaces x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
         Core.projectionFieldName = (Core.Name "namespaces")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the nullaryBindings field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentNullaryBindings :: Typed.TypedTerm Environment.PythonEnvironment -> Typed.TypedTerm (S.Set Core.Name)
 pythonEnvironmentNullaryBindings x =
@@ -147,6 +160,7 @@ pythonEnvironmentNullaryBindings x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
         Core.projectionFieldName = (Core.Name "nullaryBindings")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the skipCasts field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentSkipCasts :: Typed.TypedTerm Environment.PythonEnvironment -> Typed.TypedTerm Bool
 pythonEnvironmentSkipCasts x =
@@ -155,6 +169,7 @@ pythonEnvironmentSkipCasts x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
         Core.projectionFieldName = (Core.Name "skipCasts")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the version field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentVersion :: Typed.TypedTerm Environment.PythonEnvironment -> Typed.TypedTerm Environment.PythonVersion
 pythonEnvironmentVersion x =
@@ -163,6 +178,7 @@ pythonEnvironmentVersion x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
         Core.projectionFieldName = (Core.Name "version")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the boundTypeVariables field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentWithBoundTypeVariables :: Typed.TypedTerm Environment.PythonEnvironment -> Typed.TypedTerm ([Core.Name], (M.Map Core.Name Syntax.Name)) -> Typed.TypedTerm Environment.PythonEnvironment
 pythonEnvironmentWithBoundTypeVariables original newVal =
@@ -214,6 +230,7 @@ pythonEnvironmentWithBoundTypeVariables original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
               Core.projectionFieldName = (Core.Name "inlineVariables")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the graph field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentWithGraph :: Typed.TypedTerm Environment.PythonEnvironment -> Typed.TypedTerm Graph.Graph -> Typed.TypedTerm Environment.PythonEnvironment
 pythonEnvironmentWithGraph original newVal =
@@ -265,6 +282,7 @@ pythonEnvironmentWithGraph original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
               Core.projectionFieldName = (Core.Name "inlineVariables")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the inlineVariables field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentWithInlineVariables :: Typed.TypedTerm Environment.PythonEnvironment -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Environment.PythonEnvironment
 pythonEnvironmentWithInlineVariables original newVal =
@@ -316,6 +334,7 @@ pythonEnvironmentWithInlineVariables original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "inlineVariables"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the namespaces field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentWithNamespaces :: Typed.TypedTerm Environment.PythonEnvironment -> Typed.TypedTerm (Util.ModuleNames Syntax.DottedName) -> Typed.TypedTerm Environment.PythonEnvironment
 pythonEnvironmentWithNamespaces original newVal =
@@ -367,6 +386,7 @@ pythonEnvironmentWithNamespaces original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
               Core.projectionFieldName = (Core.Name "inlineVariables")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the nullaryBindings field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentWithNullaryBindings :: Typed.TypedTerm Environment.PythonEnvironment -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Environment.PythonEnvironment
 pythonEnvironmentWithNullaryBindings original newVal =
@@ -418,6 +438,7 @@ pythonEnvironmentWithNullaryBindings original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
               Core.projectionFieldName = (Core.Name "inlineVariables")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the skipCasts field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentWithSkipCasts :: Typed.TypedTerm Environment.PythonEnvironment -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.PythonEnvironment
 pythonEnvironmentWithSkipCasts original newVal =
@@ -469,6 +490,7 @@ pythonEnvironmentWithSkipCasts original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
               Core.projectionFieldName = (Core.Name "inlineVariables")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the version field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentWithVersion :: Typed.TypedTerm Environment.PythonEnvironment -> Typed.TypedTerm Environment.PythonVersion -> Typed.TypedTerm Environment.PythonEnvironment
 pythonEnvironmentWithVersion original newVal =
@@ -520,6 +542,7 @@ pythonEnvironmentWithVersion original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
               Core.projectionFieldName = (Core.Name "inlineVariables")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL constructor for hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadata :: Typed.TypedTerm (Util.ModuleNames Syntax.DottedName) -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.PythonModuleMetadata
 pythonModuleMetadata namespaces typeVariables usesAnnotated usesCallable usesCast usesLruCache usesTypeAlias usesDataclass usesDecimal usesEither usesEnum usesFrozenDict usesFrozenList usesFrozenSet usesGeneric usesJust usesLeft usesMaybe usesName usesNode usesNothing usesRight usesTypeVar =
@@ -595,6 +618,7 @@ pythonModuleMetadata namespaces typeVariables usesAnnotated usesCallable usesCas
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeVar"),
           Core.fieldTerm = (Typed.unTypedTerm usesTypeVar)}]}))
+
 -- | DSL accessor for the namespaces field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataNamespaces :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm (Util.ModuleNames Syntax.DottedName)
 pythonModuleMetadataNamespaces x =
@@ -603,6 +627,7 @@ pythonModuleMetadataNamespaces x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionFieldName = (Core.Name "namespaces")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the typeVariables field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataTypeVariables :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm (S.Set Core.Name)
 pythonModuleMetadataTypeVariables x =
@@ -611,6 +636,7 @@ pythonModuleMetadataTypeVariables x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionFieldName = (Core.Name "typeVariables")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the usesAnnotated field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesAnnotated :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool
 pythonModuleMetadataUsesAnnotated x =
@@ -619,6 +645,7 @@ pythonModuleMetadataUsesAnnotated x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesAnnotated")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the usesCallable field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesCallable :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool
 pythonModuleMetadataUsesCallable x =
@@ -627,6 +654,7 @@ pythonModuleMetadataUsesCallable x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesCallable")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the usesCast field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesCast :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool
 pythonModuleMetadataUsesCast x =
@@ -635,6 +663,7 @@ pythonModuleMetadataUsesCast x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesCast")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the usesDataclass field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesDataclass :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool
 pythonModuleMetadataUsesDataclass x =
@@ -643,6 +672,7 @@ pythonModuleMetadataUsesDataclass x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesDataclass")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the usesDecimal field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesDecimal :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool
 pythonModuleMetadataUsesDecimal x =
@@ -651,6 +681,7 @@ pythonModuleMetadataUsesDecimal x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesDecimal")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the usesEither field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesEither :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool
 pythonModuleMetadataUsesEither x =
@@ -659,6 +690,7 @@ pythonModuleMetadataUsesEither x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesEither")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the usesEnum field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesEnum :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool
 pythonModuleMetadataUsesEnum x =
@@ -667,6 +699,7 @@ pythonModuleMetadataUsesEnum x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesEnum")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the usesFrozenDict field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesFrozenDict :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool
 pythonModuleMetadataUsesFrozenDict x =
@@ -675,6 +708,7 @@ pythonModuleMetadataUsesFrozenDict x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesFrozenDict")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the usesFrozenList field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesFrozenList :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool
 pythonModuleMetadataUsesFrozenList x =
@@ -683,6 +717,7 @@ pythonModuleMetadataUsesFrozenList x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesFrozenList")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the usesFrozenSet field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesFrozenSet :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool
 pythonModuleMetadataUsesFrozenSet x =
@@ -691,6 +726,7 @@ pythonModuleMetadataUsesFrozenSet x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesFrozenSet")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the usesGeneric field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesGeneric :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool
 pythonModuleMetadataUsesGeneric x =
@@ -699,6 +735,7 @@ pythonModuleMetadataUsesGeneric x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesGeneric")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the usesJust field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesJust :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool
 pythonModuleMetadataUsesJust x =
@@ -707,6 +744,7 @@ pythonModuleMetadataUsesJust x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesJust")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the usesLeft field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesLeft :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool
 pythonModuleMetadataUsesLeft x =
@@ -715,6 +753,7 @@ pythonModuleMetadataUsesLeft x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesLeft")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the usesLruCache field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesLruCache :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool
 pythonModuleMetadataUsesLruCache x =
@@ -723,6 +762,7 @@ pythonModuleMetadataUsesLruCache x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesLruCache")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the usesMaybe field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesMaybe :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool
 pythonModuleMetadataUsesMaybe x =
@@ -731,6 +771,7 @@ pythonModuleMetadataUsesMaybe x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesMaybe")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the usesName field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesName :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool
 pythonModuleMetadataUsesName x =
@@ -739,6 +780,7 @@ pythonModuleMetadataUsesName x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesName")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the usesNode field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesNode :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool
 pythonModuleMetadataUsesNode x =
@@ -747,6 +789,7 @@ pythonModuleMetadataUsesNode x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesNode")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the usesNothing field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesNothing :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool
 pythonModuleMetadataUsesNothing x =
@@ -755,6 +798,7 @@ pythonModuleMetadataUsesNothing x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesNothing")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the usesRight field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesRight :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool
 pythonModuleMetadataUsesRight x =
@@ -763,6 +807,7 @@ pythonModuleMetadataUsesRight x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesRight")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the usesTypeAlias field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesTypeAlias :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool
 pythonModuleMetadataUsesTypeAlias x =
@@ -771,6 +816,7 @@ pythonModuleMetadataUsesTypeAlias x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesTypeAlias")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the usesTypeVar field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesTypeVar :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool
 pythonModuleMetadataUsesTypeVar x =
@@ -779,6 +825,7 @@ pythonModuleMetadataUsesTypeVar x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesTypeVar")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the namespaces field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithNamespaces :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm (Util.ModuleNames Syntax.DottedName) -> Typed.TypedTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithNamespaces original newVal =
@@ -942,6 +989,7 @@ pythonModuleMetadataWithNamespaces original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the typeVariables field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithTypeVariables :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithTypeVariables original newVal =
@@ -1105,6 +1153,7 @@ pythonModuleMetadataWithTypeVariables original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the usesAnnotated field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesAnnotated :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesAnnotated original newVal =
@@ -1268,6 +1317,7 @@ pythonModuleMetadataWithUsesAnnotated original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the usesCallable field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesCallable :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesCallable original newVal =
@@ -1431,6 +1481,7 @@ pythonModuleMetadataWithUsesCallable original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the usesCast field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesCast :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesCast original newVal =
@@ -1594,6 +1645,7 @@ pythonModuleMetadataWithUsesCast original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the usesDataclass field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesDataclass :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesDataclass original newVal =
@@ -1757,6 +1809,7 @@ pythonModuleMetadataWithUsesDataclass original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the usesDecimal field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesDecimal :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesDecimal original newVal =
@@ -1920,6 +1973,7 @@ pythonModuleMetadataWithUsesDecimal original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the usesEither field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesEither :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesEither original newVal =
@@ -2083,6 +2137,7 @@ pythonModuleMetadataWithUsesEither original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the usesEnum field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesEnum :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesEnum original newVal =
@@ -2246,6 +2301,7 @@ pythonModuleMetadataWithUsesEnum original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the usesFrozenDict field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesFrozenDict :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesFrozenDict original newVal =
@@ -2409,6 +2465,7 @@ pythonModuleMetadataWithUsesFrozenDict original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the usesFrozenList field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesFrozenList :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesFrozenList original newVal =
@@ -2572,6 +2629,7 @@ pythonModuleMetadataWithUsesFrozenList original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the usesFrozenSet field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesFrozenSet :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesFrozenSet original newVal =
@@ -2735,6 +2793,7 @@ pythonModuleMetadataWithUsesFrozenSet original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the usesGeneric field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesGeneric :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesGeneric original newVal =
@@ -2898,6 +2957,7 @@ pythonModuleMetadataWithUsesGeneric original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the usesJust field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesJust :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesJust original newVal =
@@ -3061,6 +3121,7 @@ pythonModuleMetadataWithUsesJust original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the usesLeft field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesLeft :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesLeft original newVal =
@@ -3224,6 +3285,7 @@ pythonModuleMetadataWithUsesLeft original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the usesLruCache field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesLruCache :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesLruCache original newVal =
@@ -3387,6 +3449,7 @@ pythonModuleMetadataWithUsesLruCache original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the usesMaybe field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesMaybe :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesMaybe original newVal =
@@ -3550,6 +3613,7 @@ pythonModuleMetadataWithUsesMaybe original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the usesName field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesName :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesName original newVal =
@@ -3713,6 +3777,7 @@ pythonModuleMetadataWithUsesName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the usesNode field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesNode :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesNode original newVal =
@@ -3876,6 +3941,7 @@ pythonModuleMetadataWithUsesNode original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the usesNothing field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesNothing :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesNothing original newVal =
@@ -4039,6 +4105,7 @@ pythonModuleMetadataWithUsesNothing original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the usesRight field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesRight :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesRight original newVal =
@@ -4202,6 +4269,7 @@ pythonModuleMetadataWithUsesRight original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the usesTypeAlias field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesTypeAlias :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesTypeAlias original newVal =
@@ -4365,6 +4433,7 @@ pythonModuleMetadataWithUsesTypeAlias original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the usesTypeVar field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesTypeVar :: Typed.TypedTerm Environment.PythonModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesTypeVar original newVal =
@@ -4528,6 +4597,7 @@ pythonModuleMetadataWithUsesTypeVar original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeVar"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL injection for the python310 variant of hydra.python.environment.PythonVersion
 pythonVersionPython310 :: Typed.TypedTerm Environment.PythonVersion
 pythonVersionPython310 =
@@ -4536,6 +4606,7 @@ pythonVersionPython310 =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "python310"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the python312 variant of hydra.python.environment.PythonVersion
 pythonVersionPython312 :: Typed.TypedTerm Environment.PythonVersion
 pythonVersionPython312 =

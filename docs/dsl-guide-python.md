@@ -6,6 +6,7 @@ This guide explains Hydra's domain-specific language (DSL) utilities for constru
 This guide focuses on the Python DSLs.
 For the comprehensive Haskell DSL guide (including kernel development context), see [DSL Guide (Haskell)](dsl-guide.md).
 For the Java DSLs, see [DSL Guide (Java)](dsl-guide-java.md).
+For the Scala DSLs, see [DSL Guide (Scala)](dsl-guide-scala.md).
 
 ## Prerequisites
 
@@ -879,6 +880,7 @@ d2 = FrozenDict({**d, "key3": "value3"})
 
 - [DSL Guide (Haskell)](dsl-guide.md) - Comprehensive DSL guide for kernel development
 - [DSL Guide (Java)](dsl-guide-java.md) - Java DSL guide
+- [DSL Guide (Scala)](dsl-guide-scala.md) - Scala DSL guide
 - [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts) - Core Hydra concepts
 - [Implementation](implementation.md) - Implementation details and architecture
 - [Hydra-Python README](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-python) - Getting started

@@ -104,7 +104,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "parameter": "x",
-                                                  "domain": {"literal": {"integer": {"int32": {}}}},
+                                                  "domain": {"literal": {"integer": "int32"}},
                                                   "body": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Term",
@@ -132,7 +132,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "parameter": "m",
-                                                  "domain": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}},
+                                                  "domain": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": "int32"}}}},
                                                   "body": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Term",
@@ -152,13 +152,13 @@
                                                                               "typeApplication": {
                                                                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.bimap"}, "type": {"variable": "hydra.topology.Vertex"}}},
                                                                                 "type": {"variable": "hydra.core.Term"}}},
-                                                                            "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                            "type": {"literal": {"integer": "int32"}}}},
                                                                         "type": {"variable": "hydra.core.Term"}}},
                                                                     "argument": {"variable": "hydra.encode.topology.vertex"}}},
                                                                 "argument": {
                                                                   "lambda": {
                                                                     "parameter": "x",
-                                                                    "domain": {"literal": {"integer": {"int32": {}}}},
+                                                                    "domain": {"literal": {"integer": "int32"}},
                                                                     "body": {
                                                                       "inject": {
                                                                         "typeName": "hydra.core.Term",
@@ -187,7 +187,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "parameter": "m",
-                                                  "domain": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": {"int32": {}}}}}},
+                                                  "domain": {"map": {"keys": {"variable": "hydra.topology.Vertex"}, "values": {"literal": {"integer": "int32"}}}},
                                                   "body": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Term",
@@ -207,13 +207,13 @@
                                                                               "typeApplication": {
                                                                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.bimap"}, "type": {"variable": "hydra.topology.Vertex"}}},
                                                                                 "type": {"variable": "hydra.core.Term"}}},
-                                                                            "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                            "type": {"literal": {"integer": "int32"}}}},
                                                                         "type": {"variable": "hydra.core.Term"}}},
                                                                     "argument": {"variable": "hydra.encode.topology.vertex"}}},
                                                                 "argument": {
                                                                   "lambda": {
                                                                     "parameter": "x",
-                                                                    "domain": {"literal": {"integer": {"int32": {}}}},
+                                                                    "domain": {"literal": {"integer": "int32"}},
                                                                     "body": {
                                                                       "inject": {
                                                                         "typeName": "hydra.core.Term",
@@ -352,14 +352,14 @@
         "name": "hydra.encode.topology.vertex",
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}, "isLazy": false}],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.core.Term"}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "x",
-                "domain": {"literal": {"integer": {"int32": {}}}},
+                "domain": {"literal": {"integer": "int32"}},
                 "body": {
                   "inject": {
                     "typeName": "hydra.core.Term",

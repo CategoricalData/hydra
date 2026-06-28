@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | DSL functions for hydra.util
 
 module Hydra.Dsl.Util where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Dsl.Packaging as DslPackaging
@@ -11,6 +13,7 @@ import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
+
 -- | DSL injection for the camel variant of hydra.util.CaseConvention
 caseConventionCamel :: Typed.TypedTerm Util.CaseConvention
 caseConventionCamel =
@@ -19,6 +22,7 @@ caseConventionCamel =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "camel"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the lowerSnake variant of hydra.util.CaseConvention
 caseConventionLowerSnake :: Typed.TypedTerm Util.CaseConvention
 caseConventionLowerSnake =
@@ -27,6 +31,7 @@ caseConventionLowerSnake =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lowerSnake"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the pascal variant of hydra.util.CaseConvention
 caseConventionPascal :: Typed.TypedTerm Util.CaseConvention
 caseConventionPascal =
@@ -35,6 +40,7 @@ caseConventionPascal =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pascal"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the upperSnake variant of hydra.util.CaseConvention
 caseConventionUpperSnake :: Typed.TypedTerm Util.CaseConvention
 caseConventionUpperSnake =
@@ -43,6 +49,7 @@ caseConventionUpperSnake =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "upperSnake"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the equalTo variant of hydra.util.Comparison
 comparisonEqualTo :: Typed.TypedTerm Util.Comparison
 comparisonEqualTo =
@@ -51,6 +58,7 @@ comparisonEqualTo =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "equalTo"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the greaterThan variant of hydra.util.Comparison
 comparisonGreaterThan :: Typed.TypedTerm Util.Comparison
 comparisonGreaterThan =
@@ -59,6 +67,7 @@ comparisonGreaterThan =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "greaterThan"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the lessThan variant of hydra.util.Comparison
 comparisonLessThan :: Typed.TypedTerm Util.Comparison
 comparisonLessThan =
@@ -67,6 +76,7 @@ comparisonLessThan =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lessThan"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL constructor for hydra.util.ModuleNames
 moduleNames :: Typed.TypedTerm (Packaging.ModuleName, n) -> Typed.TypedTerm (M.Map Packaging.ModuleName n) -> Typed.TypedTerm (Util.ModuleNames n)
 moduleNames focus mapping =
@@ -79,6 +89,7 @@ moduleNames focus mapping =
         Core.Field {
           Core.fieldName = (Core.Name "mapping"),
           Core.fieldTerm = (Typed.unTypedTerm mapping)}]}))
+
 -- | DSL accessor for the focus field of hydra.util.ModuleNames
 moduleNamesFocus :: Typed.TypedTerm (Util.ModuleNames n) -> Typed.TypedTerm (Packaging.ModuleName, n)
 moduleNamesFocus x =
@@ -87,6 +98,7 @@ moduleNamesFocus x =
         Core.projectionTypeName = (Core.Name "hydra.util.ModuleNames"),
         Core.projectionFieldName = (Core.Name "focus")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the mapping field of hydra.util.ModuleNames
 moduleNamesMapping :: Typed.TypedTerm (Util.ModuleNames n) -> Typed.TypedTerm (M.Map Packaging.ModuleName n)
 moduleNamesMapping x =
@@ -95,6 +107,7 @@ moduleNamesMapping x =
         Core.projectionTypeName = (Core.Name "hydra.util.ModuleNames"),
         Core.projectionFieldName = (Core.Name "mapping")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the focus field of hydra.util.ModuleNames
 moduleNamesWithFocus :: Typed.TypedTerm (Util.ModuleNames n) -> Typed.TypedTerm (Packaging.ModuleName, n) -> Typed.TypedTerm (Util.ModuleNames n)
 moduleNamesWithFocus original newVal =
@@ -111,6 +124,7 @@ moduleNamesWithFocus original newVal =
               Core.projectionTypeName = (Core.Name "hydra.util.ModuleNames"),
               Core.projectionFieldName = (Core.Name "mapping")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the mapping field of hydra.util.ModuleNames
 moduleNamesWithMapping :: Typed.TypedTerm (Util.ModuleNames n) -> Typed.TypedTerm (M.Map Packaging.ModuleName n) -> Typed.TypedTerm (Util.ModuleNames n)
 moduleNamesWithMapping original newVal =
@@ -127,6 +141,7 @@ moduleNamesWithMapping original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "mapping"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL injection for the arbitrary variant of hydra.util.Precision
 precisionArbitrary :: Typed.TypedTerm Util.Precision
 precisionArbitrary =
@@ -135,6 +150,7 @@ precisionArbitrary =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "arbitrary"),
         Core.fieldTerm = Core.TermUnit}}))
+
 -- | DSL injection for the bits variant of hydra.util.Precision
 precisionBits :: Typed.TypedTerm Int -> Typed.TypedTerm Util.Precision
 precisionBits x =
@@ -143,6 +159,7 @@ precisionBits x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "bits"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
 -- | DSL constructor for hydra.util.QualifiedName
 qualifiedName :: Typed.TypedTerm (Maybe Packaging.ModuleName) -> Typed.TypedTerm String -> Typed.TypedTerm Util.QualifiedName
 qualifiedName moduleName local =
@@ -155,6 +172,7 @@ qualifiedName moduleName local =
         Core.Field {
           Core.fieldName = (Core.Name "local"),
           Core.fieldTerm = (Typed.unTypedTerm local)}]}))
+
 -- | DSL accessor for the local field of hydra.util.QualifiedName
 qualifiedNameLocal :: Typed.TypedTerm Util.QualifiedName -> Typed.TypedTerm String
 qualifiedNameLocal x =
@@ -163,6 +181,7 @@ qualifiedNameLocal x =
         Core.projectionTypeName = (Core.Name "hydra.util.QualifiedName"),
         Core.projectionFieldName = (Core.Name "local")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the moduleName field of hydra.util.QualifiedName
 qualifiedNameModuleName :: Typed.TypedTerm Util.QualifiedName -> Typed.TypedTerm (Maybe Packaging.ModuleName)
 qualifiedNameModuleName x =
@@ -171,6 +190,7 @@ qualifiedNameModuleName x =
         Core.projectionTypeName = (Core.Name "hydra.util.QualifiedName"),
         Core.projectionFieldName = (Core.Name "moduleName")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the local field of hydra.util.QualifiedName
 qualifiedNameWithLocal :: Typed.TypedTerm Util.QualifiedName -> Typed.TypedTerm String -> Typed.TypedTerm Util.QualifiedName
 qualifiedNameWithLocal original newVal =
@@ -187,6 +207,7 @@ qualifiedNameWithLocal original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "local"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
 -- | DSL updater for the moduleName field of hydra.util.QualifiedName
 qualifiedNameWithModuleName :: Typed.TypedTerm Util.QualifiedName -> Typed.TypedTerm (Maybe Packaging.ModuleName) -> Typed.TypedTerm Util.QualifiedName
 qualifiedNameWithModuleName original newVal =

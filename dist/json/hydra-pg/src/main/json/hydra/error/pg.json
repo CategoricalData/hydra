@@ -28,7 +28,7 @@
                     "name": "inVertexNotFound",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The in-vertex does not exist in the graph"}}}]}}}},
                   {
@@ -48,7 +48,7 @@
                     "name": "outVertexNotFound",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The out-vertex does not exist in the graph"}}}]}}}},
                   {
@@ -220,13 +220,13 @@
                     "name": "expectedType",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The expected type, as a string"}}}]}}}},
                   {
                     "name": "value",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The actual value, as a string"}}}]}}}}]},
               "annotation": {
                 "map": [

@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Test cases for module and package validation
 
 module Hydra.Test.Validate.Packaging where
+
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
@@ -39,6 +41,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | All test cases for hydra.validate.packaging
 allTests :: Testing.TestGroup
 allTests =
@@ -60,6 +63,7 @@ allTests =
         kernelPackageTests,
         profileBehaviourTests],
       Testing.testGroupCases = []}
+
 checkConflictingModuleNamesTests :: Testing.TestGroup
 checkConflictingModuleNamesTests =
     Testing.TestGroup {
@@ -174,6 +178,7 @@ checkConflictingModuleNamesTests =
               ErrorPackaging.conflictingModuleNameErrorSecond = (Packaging.ModuleName "hydra.foobar")}))) "valid" (\e -> ShowErrorPackaging.invalidPackageError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 checkConflictingVariantNamesTests :: Testing.TestGroup
 checkConflictingVariantNamesTests =
     Testing.TestGroup {
@@ -196,6 +201,7 @@ checkConflictingVariantNamesTests =
             Testing.universalTestCaseExpected = (\_ -> Optionals.cases Nothing "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 checkDefinitionDocumentationTests :: Testing.TestGroup
 checkDefinitionDocumentationTests =
     Testing.TestGroup {
@@ -263,6 +269,7 @@ checkDefinitionDocumentationTests =
               ErrorPackaging.missingDocumentationErrorName = (Core.Name "hydra.foo.bar")}))) "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 checkDefinitionModuleNamesTests :: Testing.TestGroup
 checkDefinitionModuleNamesTests =
     Testing.TestGroup {
@@ -333,6 +340,7 @@ checkDefinitionModuleNamesTests =
               ErrorPackaging.definitionNotInModuleNameErrorName = (Core.Name "hydra.baz.qux")}))) "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 checkDefinitionNameConventionTests :: Testing.TestGroup
 checkDefinitionNameConventionTests =
     Testing.TestGroup {
@@ -453,6 +461,7 @@ checkDefinitionNameConventionTests =
               ErrorPackaging.invalidDefinitionNameErrorExpectedConvention = Util.CaseConventionCamel}))) "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 checkDefinitionOrderingTests :: Testing.TestGroup
 checkDefinitionOrderingTests =
     Testing.TestGroup {
@@ -597,6 +606,7 @@ checkDefinitionOrderingTests =
               ErrorPackaging.definitionsOutOfOrderErrorFollowingName = (Core.Name "hydra.foo.IndentStyle")}))) "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 checkDuplicateDefinitionNamesTests :: Testing.TestGroup
 checkDuplicateDefinitionNamesTests =
     Testing.TestGroup {
@@ -683,6 +693,7 @@ checkDuplicateDefinitionNamesTests =
               ErrorPackaging.duplicateDefinitionNameErrorName = (Core.Name "hydra.foo.aaa")}))) "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 checkDuplicateModuleNamesTests :: Testing.TestGroup
 checkDuplicateModuleNamesTests =
     Testing.TestGroup {
@@ -772,6 +783,7 @@ checkDuplicateModuleNamesTests =
               ErrorPackaging.duplicateModuleNameErrorModuleName = (Packaging.ModuleName "hydra.foo")}))) "valid" (\e -> ShowErrorPackaging.invalidPackageError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 checkModuleNameConventionTests :: Testing.TestGroup
 checkModuleNameConventionTests =
     Testing.TestGroup {
@@ -856,6 +868,7 @@ checkModuleNameConventionTests =
               ErrorPackaging.invalidModuleNameConventionErrorModuleName = (Packaging.ModuleName "hydra.foo_bar")}))) "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 checkPackageNameConventionTests :: Testing.TestGroup
 checkPackageNameConventionTests =
     Testing.TestGroup {
@@ -941,6 +954,7 @@ checkPackageNameConventionTests =
               ErrorPackaging.invalidPackageNameErrorPackageName = (Packaging.PackageName "hydra.kernel")}))) "valid" (\e -> ShowErrorPackaging.invalidPackageError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 kernelModuleTests :: Testing.TestGroup
 kernelModuleTests =
     Testing.TestGroup {
@@ -1027,6 +1041,7 @@ kernelModuleTests =
               ErrorPackaging.definitionsOutOfOrderErrorFollowingName = (Core.Name "hydra.foo.aaa")}))) "valid" (\e -> ShowErrorPackaging.invalidModuleError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 kernelPackageTests :: Testing.TestGroup
 kernelPackageTests =
     Testing.TestGroup {
@@ -1134,6 +1149,7 @@ kernelPackageTests =
               ErrorPackaging.conflictingModuleNameErrorSecond = (Packaging.ModuleName "hydra.foo")}))) "valid" (\e -> ShowErrorPackaging.invalidPackageError e))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 profileBehaviourTests :: Testing.TestGroup
 profileBehaviourTests =
     Testing.TestGroup {

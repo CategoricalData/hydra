@@ -16,7 +16,7 @@
                     "name": "namespaces",
                     "type": {
                       "annotated": {
-                        "body": {"application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"literal": {"string": {}}}}},
+                        "body": {"application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"literal": "string"}}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ModuleName mapping for code generation"}}}]}}}},
                   {
@@ -26,7 +26,7 @@
                         "body": {
                           "pair": {
                             "first": {"list": {"variable": "hydra.core.Name"}},
-                            "second": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"literal": {"string": {}}}}}}},
+                            "second": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"literal": "string"}}}}},
                         "annotation": {
                           "map": [
                             {"key": {"variable": "description"}, "value": {"literal": {"string": "Type variables in scope, with their C++ names"}}}]}}}}]},

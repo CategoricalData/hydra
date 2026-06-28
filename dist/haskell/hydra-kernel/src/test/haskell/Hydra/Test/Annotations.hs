@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Test cases for hydra.annotations functions
 
 module Hydra.Test.Annotations where
+
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
@@ -14,6 +16,7 @@ import qualified Hydra.Test.TestGraph as TestGraph
 import qualified Hydra.Testing as Testing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Test cases for hydra.annotations functions
 allTests :: Testing.TestGroup
 allTests =

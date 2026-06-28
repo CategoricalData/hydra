@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term decoders for hydra.variants
 
 module Hydra.Decode.Variants where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Errors as Errors
@@ -17,6 +19,7 @@ import qualified Hydra.Util as Util
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Decoder for hydra.variants.LiteralVariant
 literalVariant :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Variants.LiteralVariant
 literalVariant cx raw =
@@ -38,6 +41,7 @@ literalVariant cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.variants.TermVariant
 termVariant :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Variants.TermVariant
 termVariant cx raw =
@@ -78,6 +82,7 @@ termVariant cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.variants.TypeVariant
 typeVariant :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Variants.TypeVariant
 typeVariant cx raw =

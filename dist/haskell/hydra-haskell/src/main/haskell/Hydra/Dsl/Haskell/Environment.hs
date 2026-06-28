@@ -1,12 +1,15 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | DSL functions for hydra.haskell.environment
 
 module Hydra.Dsl.Haskell.Environment where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Haskell.Environment as Environment
 import qualified Hydra.Typed as Typed
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | DSL constructor for hydra.haskell.environment.HaskellModuleMetadata
 haskellModuleMetadata :: Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.HaskellModuleMetadata
 haskellModuleMetadata usesByteString usesInt usesMap usesSet =
@@ -25,6 +28,7 @@ haskellModuleMetadata usesByteString usesInt usesMap usesSet =
         Core.Field {
           Core.fieldName = (Core.Name "usesSet"),
           Core.fieldTerm = (Typed.unTypedTerm usesSet)}]}))
+
 -- | DSL accessor for the usesByteString field of hydra.haskell.environment.HaskellModuleMetadata
 haskellModuleMetadataUsesByteString :: Typed.TypedTerm Environment.HaskellModuleMetadata -> Typed.TypedTerm Bool
 haskellModuleMetadataUsesByteString x =
@@ -33,6 +37,7 @@ haskellModuleMetadataUsesByteString x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesByteString")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the usesInt field of hydra.haskell.environment.HaskellModuleMetadata
 haskellModuleMetadataUsesInt :: Typed.TypedTerm Environment.HaskellModuleMetadata -> Typed.TypedTerm Bool
 haskellModuleMetadataUsesInt x =
@@ -41,6 +46,7 @@ haskellModuleMetadataUsesInt x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesInt")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the usesMap field of hydra.haskell.environment.HaskellModuleMetadata
 haskellModuleMetadataUsesMap :: Typed.TypedTerm Environment.HaskellModuleMetadata -> Typed.TypedTerm Bool
 haskellModuleMetadataUsesMap x =
@@ -49,6 +55,7 @@ haskellModuleMetadataUsesMap x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesMap")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL accessor for the usesSet field of hydra.haskell.environment.HaskellModuleMetadata
 haskellModuleMetadataUsesSet :: Typed.TypedTerm Environment.HaskellModuleMetadata -> Typed.TypedTerm Bool
 haskellModuleMetadataUsesSet x =
@@ -57,6 +64,7 @@ haskellModuleMetadataUsesSet x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
         Core.projectionFieldName = (Core.Name "usesSet")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
 -- | DSL updater for the usesByteString field of hydra.haskell.environment.HaskellModuleMetadata
 haskellModuleMetadataWithUsesByteString :: Typed.TypedTerm Environment.HaskellModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.HaskellModuleMetadata
 haskellModuleMetadataWithUsesByteString original newVal =
@@ -87,6 +95,7 @@ haskellModuleMetadataWithUsesByteString original newVal =
               Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesSet")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the usesInt field of hydra.haskell.environment.HaskellModuleMetadata
 haskellModuleMetadataWithUsesInt :: Typed.TypedTerm Environment.HaskellModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.HaskellModuleMetadata
 haskellModuleMetadataWithUsesInt original newVal =
@@ -117,6 +126,7 @@ haskellModuleMetadataWithUsesInt original newVal =
               Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesSet")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the usesMap field of hydra.haskell.environment.HaskellModuleMetadata
 haskellModuleMetadataWithUsesMap :: Typed.TypedTerm Environment.HaskellModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.HaskellModuleMetadata
 haskellModuleMetadataWithUsesMap original newVal =
@@ -147,6 +157,7 @@ haskellModuleMetadataWithUsesMap original newVal =
               Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
               Core.projectionFieldName = (Core.Name "usesSet")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
 -- | DSL updater for the usesSet field of hydra.haskell.environment.HaskellModuleMetadata
 haskellModuleMetadataWithUsesSet :: Typed.TypedTerm Environment.HaskellModuleMetadata -> Typed.TypedTerm Bool -> Typed.TypedTerm Environment.HaskellModuleMetadata
 haskellModuleMetadataWithUsesSet original newVal =

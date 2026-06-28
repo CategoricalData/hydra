@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Functions for generating domain-specific DSL modules from type modules
 
 module Hydra.Dsls where
+
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
@@ -49,6 +51,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Collect forall type variable names from a type
 collectForallVars :: Core.Type -> [Core.Name]
 collectForallVars typ =
@@ -56,6 +59,7 @@ collectForallVars typ =
       Core.TypeAnnotated v0 -> collectForallVars (Core.annotatedTypeBody v0)
       Core.TypeForall v0 -> Lists.cons (Core.forallTypeParameter v0) (collectForallVars (Core.forallTypeBody v0))
       _ -> []
+
 -- | Deduplicate bindings by appending numeric suffixes to duplicate names
 deduplicateBindings :: [Core.Binding] -> [Core.Binding]
 deduplicateBindings bindings =
@@ -67,6 +71,7 @@ deduplicateBindings bindings =
           Core.bindingName = uniqueName,
           Core.bindingTerm = (Core.bindingTerm b),
           Core.bindingTypeScheme = (Core.bindingTypeScheme b)}])) [] bindings
+
 -- | Generate a binding name for a DSL function from a type name
 dslBindingName :: Core.Name -> Core.Name
 dslBindingName n =
@@ -83,6 +88,7 @@ dslBindingName n =
                   "dsl"] nsParts)
         in (Core.Name (Strings.intercalate "." (Lists.concat2 dslNsParts [
           localPart]))))))
+
 -- | Generate a qualified DSL element name from a type name and local element name
 dslDefinitionName :: Core.Name -> String -> Core.Name
 dslDefinitionName typeName localName =
@@ -99,6 +105,7 @@ dslDefinitionName typeName localName =
                   "dsl"] nsParts))
         in (Core.Name (Strings.intercalate "." (Lists.concat2 dslNsParts [
           localName])))))
+
 -- | Transform a source module into a DSL module
 dslModule :: t0 -> Graph.Graph -> Packaging.Module -> Either Errors.Error (Maybe Packaging.Module)
 dslModule cx graph mod =
@@ -138,6 +145,7 @@ dslModule cx graph mod =
           Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionSignature = (Optionals.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b)),
           Packaging.termDefinitionBody = (Core.bindingTerm b)})) allBindings)})))))))
+
 -- | Generate a DSL module name from a source module name
 dslModuleName :: Packaging.ModuleName -> Packaging.ModuleName
 dslModuleName ns =
@@ -150,6 +158,7 @@ dslModuleName ns =
       in (Optionals.cases (Lists.uncons parts) prefixFull (\ht -> Logic.ifElse (Equality.equal (Pairs.first ht) "hydra") (Packaging.ModuleName (Strings.cat [
         "hydra.dsl.",
         (Strings.intercalate "." (Pairs.second ht))])) prefixFull))
+
 -- | Build a TypedTerm-wrapped TypeScheme (functions of phantom terms) from a TermSignature
 dslSignatureTypeScheme :: Typing.TermSignature -> Core.TypeScheme
 dslSignatureTypeScheme sig =
@@ -171,6 +180,7 @@ dslSignatureTypeScheme sig =
         Core.typeSchemeVariables = typeVars,
         Core.typeSchemeBody = funType,
         Core.typeSchemeConstraints = Nothing}
+
 -- | Build a TypeScheme with TypedTerm-wrapped parameter and result types
 dslTypeScheme :: Core.Type -> [Core.Type] -> Core.Type -> Core.TypeScheme
 dslTypeScheme origType paramTypes resultType =
@@ -190,10 +200,12 @@ dslTypeScheme origType paramTypes resultType =
         Core.typeSchemeVariables = typeVars,
         Core.typeSchemeBody = funType,
         Core.typeSchemeConstraints = Nothing}
+
 -- | Filter bindings to only DSL-eligible type definitions
 filterTypeBindings :: t0 -> t1 -> [Core.Binding] -> Either t2 [Core.Binding]
 filterTypeBindings cx graph bindings =
     Eithers.map Optionals.cat (Eithers.mapList (isDslEligibleBinding cx graph) (Lists.filter Annotations.isNativeType bindings))
+
 -- | Generate all DSL bindings for a type binding
 generateBindingsForType :: t0 -> Graph.Graph -> Core.Binding -> Either Errors.DecodingError [Core.Binding]
 generateBindingsForType cx graph b =
@@ -209,6 +221,7 @@ generateBindingsForType cx graph b =
           Core.TypeUnion v0 -> Lists.map (generateUnionInjector rawType typeName) v0
           Core.TypeWrap v0 -> generateWrappedTypeAccessors rawType typeName v0
           _ -> []))))
+
 -- | Generate a record field accessor function
 generateRecordAccessor :: Core.Type -> Core.Name -> Core.FieldType -> Core.Binding
 generateRecordAccessor origType typeName ft =
@@ -273,6 +286,7 @@ generateRecordAccessor origType typeName ft =
         Core.bindingName = accessorName,
         Core.bindingTerm = body,
         Core.bindingTypeScheme = (Just ts)}
+
 -- | Generate a record constructor function
 generateRecordConstructor :: Core.Type -> Core.Name -> [Core.FieldType] -> [Core.Binding]
 generateRecordConstructor origType typeName fieldTypes =
@@ -333,6 +347,7 @@ generateRecordConstructor origType typeName fieldTypes =
           Core.bindingName = (dslBindingName typeName),
           Core.bindingTerm = body,
           Core.bindingTypeScheme = (Just ts)}]
+
 -- | Generate a withXxx record field updater function
 generateRecordWithUpdater :: Core.Type -> Core.Name -> [Core.FieldType] -> Core.FieldType -> Core.Binding
 generateRecordWithUpdater origType typeName allFields targetField =
@@ -436,6 +451,7 @@ generateRecordWithUpdater origType typeName allFields targetField =
         Core.bindingName = updaterName,
         Core.bindingTerm = body,
         Core.bindingTypeScheme = (Just ts)}
+
 -- | Generate typed reference DSL bindings for a primitive (or signature-carrying term) definition
 generateRefBindings :: Packaging.Definition -> Either t0 [Core.Binding]
 generateRefBindings d =
@@ -446,6 +462,7 @@ generateRefBindings d =
       Packaging.DefinitionPrimitive v0 -> Right [
         generateSignatureRef (Packaging.primitiveDefinitionName v0) (Packaging.primitiveDefinitionSignature v0)]
       _ -> Right []
+
 -- | Generate a typed-reference DSL wrapper from a term/primitive name and signature
 generateSignatureRef :: Core.Name -> Typing.TermSignature -> Core.Binding
 generateSignatureRef refName sig =
@@ -498,6 +515,7 @@ generateSignatureRef refName sig =
         Core.bindingName = (dslDefinitionName refName (Names.localNameOf refName)),
         Core.bindingTerm = body,
         Core.bindingTypeScheme = (Just ts)}
+
 -- | Generate a union injection helper
 generateUnionInjector :: Core.Type -> Core.Name -> Core.FieldType -> Core.Binding
 generateUnionInjector origType typeName ft =
@@ -572,6 +590,7 @@ generateUnionInjector origType typeName ft =
         Core.bindingName = injectorName,
         Core.bindingTerm = body,
         Core.bindingTypeScheme = (Just ts)}
+
 -- | Generate wrap/unwrap accessors for a wrapped type
 generateWrappedTypeAccessors :: Core.Type -> Core.Name -> Core.Type -> [Core.Binding]
 generateWrappedTypeAccessors origType typeName innerType =
@@ -666,12 +685,14 @@ generateWrappedTypeAccessors origType typeName innerType =
           Core.bindingName = unwrapName,
           Core.bindingTerm = unwrapBody,
           Core.bindingTypeScheme = (Just unwrapTs)}]
+
 -- | Check if a binding is eligible for DSL generation
 isDslEligibleBinding :: t0 -> t1 -> Core.Binding -> Either t2 (Maybe Core.Binding)
 isDslEligibleBinding cx graph b =
 
       let ns = Names.moduleNameOf (Core.bindingName b)
       in (Logic.ifElse (Equality.equal (Optionals.cases ns "" Packaging.unModuleName) "hydra.typed") (Right Nothing) (Right (Just b)))
+
 -- | Build the nominal result type with type applications for forall variables
 nominalResultType :: Core.Name -> Core.Type -> Core.Type
 nominalResultType typeName origType =

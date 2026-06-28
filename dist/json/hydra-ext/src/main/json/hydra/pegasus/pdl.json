@@ -14,9 +14,7 @@
           "body": {
             "annotated": {
               "body": {
-                "record": [
-                  {"name": "doc", "type": {"optional": {"literal": {"string": {}}}}},
-                  {"name": "deprecated", "type": {"literal": {"boolean": {}}}}]},
+                "record": [{"name": "doc", "type": {"optional": {"literal": "string"}}}, {"name": "deprecated", "type": {"literal": "boolean"}}]},
               "annotation": {
                 "map": [
                   {
@@ -33,15 +31,14 @@
               {"name": "name", "type": {"variable": "hydra.pegasus.pdl.EnumFieldName"}},
               {"name": "annotations", "type": {"variable": "hydra.pegasus.pdl.Annotations"}}]}}}},
     {
-      "type": {"name": "hydra.pegasus.pdl.EnumFieldName", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+      "type": {"name": "hydra.pegasus.pdl.EnumFieldName", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
     {
       "type": {
         "name": "hydra.pegasus.pdl.EnumSchema",
         "body": {
           "variables": [],
           "body": {"record": [{"name": "fields", "type": {"list": {"variable": "hydra.pegasus.pdl.EnumField"}}}]}}}},
-    {
-      "type": {"name": "hydra.pegasus.pdl.FieldName", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+    {"type": {"name": "hydra.pegasus.pdl.FieldName", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
     {
       "type": {
         "name": "hydra.pegasus.pdl.NamedSchema",
@@ -62,11 +59,9 @@
               {"name": "record", "type": {"variable": "hydra.pegasus.pdl.RecordSchema"}},
               {"name": "enum", "type": {"variable": "hydra.pegasus.pdl.EnumSchema"}},
               {"name": "typeref", "type": {"variable": "hydra.pegasus.pdl.Schema"}}]}}}},
-    {"type": {"name": "hydra.pegasus.pdl.Name", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
-    {
-      "type": {"name": "hydra.pegasus.pdl.Namespace", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
-    {
-      "type": {"name": "hydra.pegasus.pdl.Package", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+    {"type": {"name": "hydra.pegasus.pdl.Name", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
+    {"type": {"name": "hydra.pegasus.pdl.Namespace", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
+    {"type": {"name": "hydra.pegasus.pdl.Package", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
     {
       "type": {
         "name": "hydra.pegasus.pdl.PrimitiveType",
@@ -74,15 +69,14 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "boolean", "type": {"unit": {}}},
-              {"name": "bytes", "type": {"unit": {}}},
-              {"name": "double", "type": {"unit": {}}},
-              {"name": "float", "type": {"unit": {}}},
-              {"name": "int", "type": {"unit": {}}},
-              {"name": "long", "type": {"unit": {}}},
-              {"name": "string", "type": {"unit": {}}}]}}}},
-    {
-      "type": {"name": "hydra.pegasus.pdl.PropertyKey", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+              {"name": "boolean", "type": "unit"},
+              {"name": "bytes", "type": "unit"},
+              {"name": "double", "type": "unit"},
+              {"name": "float", "type": "unit"},
+              {"name": "int", "type": "unit"},
+              {"name": "long", "type": "unit"},
+              {"name": "string", "type": "unit"}]}}}},
+    {"type": {"name": "hydra.pegasus.pdl.PropertyKey", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
     {
       "type": {
         "name": "hydra.pegasus.pdl.Property",
@@ -112,7 +106,7 @@
                 "record": [
                   {"name": "name", "type": {"variable": "hydra.pegasus.pdl.FieldName"}},
                   {"name": "value", "type": {"variable": "hydra.pegasus.pdl.Schema"}},
-                  {"name": "optional", "type": {"literal": {"boolean": {}}}},
+                  {"name": "optional", "type": {"literal": "boolean"}},
                   {"name": "default", "type": {"optional": {"variable": "hydra.json.model.Value"}}},
                   {"name": "annotations", "type": {"variable": "hydra.pegasus.pdl.Annotations"}}]},
               "annotation": {
@@ -144,11 +138,11 @@
           "body": {
             "union": [
               {"name": "array", "type": {"variable": "hydra.pegasus.pdl.Schema"}},
-              {"name": "fixed", "type": {"literal": {"integer": {"int32": {}}}}},
+              {"name": "fixed", "type": {"literal": {"integer": "int32"}}},
               {"name": "inline", "type": {"variable": "hydra.pegasus.pdl.NamedSchema"}},
               {"name": "map", "type": {"variable": "hydra.pegasus.pdl.Schema"}},
               {"name": "named", "type": {"variable": "hydra.pegasus.pdl.QualifiedName"}},
-              {"name": "null", "type": {"unit": {}}},
+              {"name": "null", "type": "unit"},
               {"name": "primitive", "type": {"variable": "hydra.pegasus.pdl.PrimitiveType"}},
               {"name": "union", "type": {"variable": "hydra.pegasus.pdl.UnionSchema"}}]}}}},
     {

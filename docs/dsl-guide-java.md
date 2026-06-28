@@ -20,6 +20,7 @@ This guide explains Hydra's domain-specific language (DSL) utilities for constru
 This guide focuses on the Java DSLs.
 For the comprehensive Haskell DSL guide (including kernel development context), see [DSL Guide (Haskell)](dsl-guide.md).
 For the Python DSLs, see [DSL Guide (Python)](dsl-guide-python.md).
+For the Scala DSLs, see [DSL Guide (Scala)](dsl-guide-scala.md).
 
 ## Prerequisites
 
@@ -810,6 +811,7 @@ All hand-written DSLs live under `overlay/java/hydra-kernel/src/main/java/hydra/
 
 - [DSL Guide (Haskell)](dsl-guide.md) - Comprehensive DSL guide for kernel development
 - [DSL Guide (Python)](dsl-guide-python.md) - Python DSL guide
+- [DSL Guide (Scala)](dsl-guide-scala.md) - Scala DSL guide
 - [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts) - Core Hydra concepts
 - [Implementation](implementation.md) - Implementation details and architecture
 - [Hydra-Java README](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-java) - Getting started

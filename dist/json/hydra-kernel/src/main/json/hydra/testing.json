@@ -16,7 +16,7 @@
                     "name": "actual",
                     "type": {
                       "annotated": {
-                        "body": {"function": {"domain": {"unit": {}}, "codomain": {"effect": {"literal": {"string": {}}}}}},
+                        "body": {"function": {"domain": "unit", "codomain": {"effect": {"literal": "string"}}}},
                         "annotation": {
                           "map": [
                             {
@@ -28,7 +28,7 @@
                     "name": "expected",
                     "type": {
                       "annotated": {
-                        "body": {"function": {"domain": {"unit": {}}, "codomain": {"literal": {"string": {}}}}},
+                        "body": {"function": {"domain": "unit", "codomain": {"literal": "string"}}},
                         "annotation": {
                           "map": [
                             {"key": {"variable": "description"}, "value": {"literal": {"string": "A thunk producing the expected result string."}}}]}}}}]},
@@ -46,7 +46,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A tag for test cases"}}}]}}}}}},
     {
       "type": {
@@ -92,7 +92,7 @@
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A short name for the test case"}}}]}}}},
                   {
                     "name": "case",
@@ -104,7 +104,7 @@
                     "name": "description",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {
                           "map": [
                             {
@@ -130,13 +130,13 @@
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A short name for the test group"}}}]}}}},
                   {
                     "name": "description",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {
                           "map": [
                             {
@@ -172,7 +172,7 @@
                     "name": "actual",
                     "type": {
                       "annotated": {
-                        "body": {"function": {"domain": {"unit": {}}, "codomain": {"literal": {"string": {}}}}},
+                        "body": {"function": {"domain": "unit", "codomain": {"literal": "string"}}},
                         "annotation": {
                           "map": [
                             {
@@ -184,7 +184,7 @@
                     "name": "expected",
                     "type": {
                       "annotated": {
-                        "body": {"function": {"domain": {"unit": {}}, "codomain": {"literal": {"string": {}}}}},
+                        "body": {"function": {"domain": "unit", "codomain": {"literal": "string"}}},
                         "annotation": {
                           "map": [
                             {"key": {"variable": "description"}, "value": {"literal": {"string": "A thunk producing the expected result string."}}}]}}}}]},

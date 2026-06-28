@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Primitives in the hydra.lib.strings module.
 
 module Hydra.Lib.Strings where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -31,6 +33,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 cat :: Packaging.PrimitiveDefinition
 cat =
     Packaging.PrimitiveDefinition {
@@ -56,6 +59,7 @@ cat =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 cat2 :: Packaging.PrimitiveDefinition
 cat2 =
     Packaging.PrimitiveDefinition {
@@ -86,6 +90,7 @@ cat2 =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 fromList :: Packaging.PrimitiveDefinition
 fromList =
     Packaging.PrimitiveDefinition {
@@ -112,6 +117,7 @@ fromList =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 intercalate :: Packaging.PrimitiveDefinition
 intercalate =
     Packaging.PrimitiveDefinition {
@@ -142,6 +148,7 @@ intercalate =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 length :: Packaging.PrimitiveDefinition
 length =
     Packaging.PrimitiveDefinition {
@@ -168,6 +175,7 @@ length =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 lines :: Packaging.PrimitiveDefinition
 lines =
     Packaging.PrimitiveDefinition {
@@ -194,6 +202,7 @@ lines =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 maybeCharAt :: Packaging.PrimitiveDefinition
 maybeCharAt =
     Packaging.PrimitiveDefinition {
@@ -224,6 +233,7 @@ maybeCharAt =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 null :: Packaging.PrimitiveDefinition
 null =
     Packaging.PrimitiveDefinition {
@@ -249,6 +259,7 @@ null =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 splitOn :: Packaging.PrimitiveDefinition
 splitOn =
     Packaging.PrimitiveDefinition {
@@ -280,6 +291,7 @@ splitOn =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 toList :: Packaging.PrimitiveDefinition
 toList =
     Packaging.PrimitiveDefinition {
@@ -305,6 +317,7 @@ toList =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 toLower :: Packaging.PrimitiveDefinition
 toLower =
     Packaging.PrimitiveDefinition {
@@ -332,6 +345,7 @@ toLower =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 toUpper :: Packaging.PrimitiveDefinition
 toUpper =
     Packaging.PrimitiveDefinition {
@@ -359,6 +373,7 @@ toUpper =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 unlines :: Packaging.PrimitiveDefinition
 unlines =
     Packaging.PrimitiveDefinition {

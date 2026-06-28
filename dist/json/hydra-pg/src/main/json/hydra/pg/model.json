@@ -60,10 +60,10 @@
             "annotated": {
               "body": {
                 "union": [
-                  {"name": "out", "type": {"unit": {}}},
-                  {"name": "in", "type": {"unit": {}}},
-                  {"name": "both", "type": {"unit": {}}},
-                  {"name": "undirected", "type": {"unit": {}}}]},
+                  {"name": "out", "type": "unit"},
+                  {"name": "in", "type": "unit"},
+                  {"name": "both", "type": "unit"},
+                  {"name": "undirected", "type": "unit"}]},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The direction of an edge or edge pattern"}}}]}}}}}},
     {
@@ -118,7 +118,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of an edge"}}}]}}}}}},
     {
       "type": {
@@ -208,7 +208,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"union": [{"name": "vertex", "type": {"unit": {}}}, {"name": "edge", "type": {"unit": {}}}]},
+              "body": {"union": [{"name": "vertex", "type": "unit"}, {"name": "edge", "type": "unit"}]},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The kind of an element: vertex or edge"}}}]}}}}}},
     {
@@ -418,7 +418,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A property key"}}}]}}}}}},
     {
       "type": {
@@ -448,7 +448,7 @@
                         "name": "required",
                         "type": {
                           "annotated": {
-                            "body": {"literal": {"boolean": {}}},
+                            "body": {"literal": "boolean"},
                             "annotation": {
                               "map": [
                                 {
@@ -494,7 +494,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
                   {

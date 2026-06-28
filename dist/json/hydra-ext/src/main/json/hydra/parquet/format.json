@@ -15,13 +15,13 @@
             "annotated": {
               "body": {
                 "union": [
-                  {"name": "boolean", "type": {"unit": {}}},
-                  {"name": "int32", "type": {"unit": {}}},
-                  {"name": "int64", "type": {"unit": {}}},
-                  {"name": "float", "type": {"unit": {}}},
-                  {"name": "double", "type": {"unit": {}}},
-                  {"name": "byteArray", "type": {"unit": {}}},
-                  {"name": "fixedLenByteArray", "type": {"unit": {}}}]},
+                  {"name": "boolean", "type": "unit"},
+                  {"name": "int32", "type": "unit"},
+                  {"name": "int64", "type": "unit"},
+                  {"name": "float", "type": "unit"},
+                  {"name": "double", "type": "unit"},
+                  {"name": "byteArray", "type": "unit"},
+                  {"name": "fixedLenByteArray", "type": "unit"}]},
               "annotation": {
                 "map": [
                   {
@@ -42,7 +42,7 @@
                     "name": "required",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -52,7 +52,7 @@
                     "name": "optional",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -62,7 +62,7 @@
                     "name": "repeated",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -78,13 +78,13 @@
             "annotated": {
               "body": {
                 "record": [
-                  {"name": "nullCount", "type": {"optional": {"literal": {"integer": {"uint64": {}}}}}},
-                  {"name": "distinctCount", "type": {"optional": {"literal": {"integer": {"uint64": {}}}}}},
+                  {"name": "nullCount", "type": {"optional": {"literal": {"integer": "uint64"}}}},
+                  {"name": "distinctCount", "type": {"optional": {"literal": {"integer": "uint64"}}}},
                   {
                     "name": "maxValue",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"binary": {}}}},
+                        "body": {"optional": {"literal": "binary"}},
                         "annotation": {
                           "map": [
                             {
@@ -96,7 +96,7 @@
                     "name": "minValue",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"binary": {}}}},
+                        "body": {"optional": {"literal": "binary"}},
                         "annotation": {
                           "map": [
                             {
@@ -118,8 +118,8 @@
             "annotated": {
               "body": {
                 "record": [
-                  {"name": "scale", "type": {"literal": {"integer": {"int32": {}}}}},
-                  {"name": "precision", "type": {"literal": {"integer": {"int32": {}}}}}]},
+                  {"name": "scale", "type": {"literal": {"integer": "int32"}}},
+                  {"name": "precision", "type": {"literal": {"integer": "int32"}}}]},
               "annotation": {
                 "map": [
                   {
@@ -132,11 +132,7 @@
         "name": "hydra.parquet.format.TimeUnit",
         "body": {
           "variables": [],
-          "body": {
-            "union": [
-              {"name": "millis", "type": {"unit": {}}},
-              {"name": "micros", "type": {"unit": {}}},
-              {"name": "nanos", "type": {"unit": {}}}]}}}},
+          "body": {"union": [{"name": "millis", "type": "unit"}, {"name": "micros", "type": "unit"}, {"name": "nanos", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.parquet.format.TimestampType",
@@ -146,7 +142,7 @@
             "annotated": {
               "body": {
                 "record": [
-                  {"name": "isAdjustedToUtc", "type": {"literal": {"boolean": {}}}},
+                  {"name": "isAdjustedToUtc", "type": {"literal": "boolean"}},
                   {"name": "unit", "type": {"variable": "hydra.parquet.format.TimeUnit"}}]},
               "annotation": {
                 "map": [
@@ -162,7 +158,7 @@
             "annotated": {
               "body": {
                 "record": [
-                  {"name": "isAdjustedToUtc", "type": {"literal": {"boolean": {}}}},
+                  {"name": "isAdjustedToUtc", "type": {"literal": "boolean"}},
                   {"name": "unit", "type": {"variable": "hydra.parquet.format.TimeUnit"}}]},
               "annotation": {
                 "map": [
@@ -178,9 +174,7 @@
           "body": {
             "annotated": {
               "body": {
-                "record": [
-                  {"name": "bitWidth", "type": {"literal": {"integer": {"uint8": {}}}}},
-                  {"name": "isSigned", "type": {"literal": {"boolean": {}}}}]},
+                "record": [{"name": "bitWidth", "type": {"literal": {"integer": "uint8"}}}, {"name": "isSigned", "type": {"literal": "boolean"}}]},
               "annotation": {
                 "map": [
                   {
@@ -201,25 +195,25 @@
                     "name": "string",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "use ConvertedType UTF8"}}}]}}}},
                   {
                     "name": "map",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "use ConvertedType MAP"}}}]}}}},
                   {
                     "name": "list",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "use ConvertedType LIST"}}}]}}}},
                   {
                     "name": "enum",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "use ConvertedType ENUM"}}}]}}}},
                   {
                     "name": "decimal",
@@ -235,7 +229,7 @@
                     "name": "date",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "use ConvertedType DATE"}}}]}}}},
                   {
                     "name": "time",
@@ -271,25 +265,25 @@
                     "name": "unknown",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "no compatible ConvertedType"}}}]}}}},
                   {
                     "name": "json",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "use ConvertedType JSON"}}}]}}}},
                   {
                     "name": "bson",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "use ConvertedType BSON"}}}]}}}},
                   {
                     "name": "uuid",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "no compatible ConvertedType"}}}]}}}}]},
               "annotation": {
                 "map": [
@@ -321,7 +315,7 @@
                     "name": "typeLength",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"integer": {"int32": {}}}}},
+                        "body": {"optional": {"literal": {"integer": "int32"}}},
                         "annotation": {
                           "map": [
                             {
@@ -345,13 +339,13 @@
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Name of the field in the schema"}}}]}}}},
                   {
                     "name": "numChildren",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"integer": {"int32": {}}}}},
+                        "body": {"optional": {"literal": {"integer": "int32"}}},
                         "annotation": {
                           "map": [
                             {
@@ -363,7 +357,7 @@
                     "name": "fieldId",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"integer": {"int32": {}}}}},
+                        "body": {"optional": {"literal": {"integer": "int32"}}},
                         "annotation": {
                           "map": [
                             {
@@ -402,7 +396,7 @@
                     "name": "plain",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -414,7 +408,7 @@
                     "name": "rle",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -426,7 +420,7 @@
                     "name": "bitPacked",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -438,7 +432,7 @@
                     "name": "deltaBinaryPacked",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -448,7 +442,7 @@
                     "name": "deltaLengthByteArray",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -460,7 +454,7 @@
                     "name": "deltaByteArray",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -472,7 +466,7 @@
                     "name": "rleDictionary",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -482,7 +476,7 @@
                     "name": "byteStreamSplit",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -506,27 +500,27 @@
             "annotated": {
               "body": {
                 "union": [
-                  {"name": "uncompressed", "type": {"unit": {}}},
-                  {"name": "snappy", "type": {"unit": {}}},
-                  {"name": "gzip", "type": {"unit": {}}},
-                  {"name": "lzo", "type": {"unit": {}}},
+                  {"name": "uncompressed", "type": "unit"},
+                  {"name": "snappy", "type": "unit"},
+                  {"name": "gzip", "type": "unit"},
+                  {"name": "lzo", "type": "unit"},
                   {
                     "name": "brotli",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Added in 2.4"}}}]}}}},
                   {
                     "name": "zstd",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Added in 2.4"}}}]}}}},
                   {
                     "name": "lz4Raw",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Added in 2.9"}}}]}}}}]},
               "annotation": {
                 "map": [
@@ -542,10 +536,10 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "dataPage", "type": {"unit": {}}},
-              {"name": "indexPage", "type": {"unit": {}}},
-              {"name": "dictionaryPage", "type": {"unit": {}}},
-              {"name": "dataPageV2", "type": {"unit": {}}}]}}}},
+              {"name": "dataPage", "type": "unit"},
+              {"name": "indexPage", "type": "unit"},
+              {"name": "dictionaryPage", "type": "unit"},
+              {"name": "dataPageV2", "type": "unit"}]}}}},
     {
       "type": {
         "name": "hydra.parquet.format.BoundaryOrder",
@@ -554,10 +548,7 @@
           "body": {
             "annotated": {
               "body": {
-                "union": [
-                  {"name": "unordered", "type": {"unit": {}}},
-                  {"name": "ascending", "type": {"unit": {}}},
-                  {"name": "descending", "type": {"unit": {}}}]},
+                "union": [{"name": "unordered", "type": "unit"}, {"name": "ascending", "type": "unit"}, {"name": "descending", "type": "unit"}]},
               "annotation": {
                 "map": [
                   {
@@ -578,7 +569,7 @@
                     "name": "numValues",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {
                           "map": [
                             {
@@ -625,7 +616,7 @@
                     "name": "numValues",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Number of values in the dictionary"}}}]}}}},
                   {
                     "name": "encoding",
@@ -637,7 +628,7 @@
                     "name": "isSorted",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"boolean": {}}}},
+                        "body": {"optional": {"literal": "boolean"}},
                         "annotation": {
                           "map": [
                             {
@@ -663,7 +654,7 @@
                     "name": "numValues",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {
                           "map": [
                             {
@@ -673,7 +664,7 @@
                     "name": "numNulls",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {
                           "map": [
                             {
@@ -685,7 +676,7 @@
                     "name": "numRows",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {
                           "map": [
                             {
@@ -701,19 +692,19 @@
                     "name": "definitionLevelsByteLength",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "length of the definition levels"}}}]}}}},
                   {
                     "name": "repetitionLevelsByteLength",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "length of the repetition levels"}}}]}}}},
                   {
                     "name": "isCompressed",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"boolean": {}}}},
+                        "body": {"optional": {"literal": "boolean"}},
                         "annotation": {
                           "map": [
                             {
@@ -749,7 +740,7 @@
                     "name": "block",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Block-based Bloom filter."}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The algorithm used in Bloom filter."}}}]}}}}}},
     {
@@ -765,7 +756,7 @@
                     "name": "xxhash",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "xxHash Strategy."}}}]}}}}]},
               "annotation": {
                 "map": [
@@ -781,7 +772,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"union": [{"name": "uncompressed", "type": {"unit": {}}}]},
+              "body": {"union": [{"name": "uncompressed", "type": "unit"}]},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The compression used in the Bloom filter."}}}]}}}}}},
     {
@@ -797,7 +788,7 @@
                     "name": "numBytes",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The size of bitset in bytes"}}}]}}}},
                   {
                     "name": "algorithm",
@@ -846,7 +837,7 @@
                 "name": "uncompressedPageSize",
                 "type": {
                   "annotated": {
-                    "body": {"literal": {"integer": {"int32": {}}}},
+                    "body": {"literal": {"integer": "int32"}},
                     "annotation": {
                       "map": [
                         {
@@ -856,7 +847,7 @@
                 "name": "compressedPageSize",
                 "type": {
                   "annotated": {
-                    "body": {"literal": {"integer": {"int32": {}}}},
+                    "body": {"literal": {"integer": "int32"}},
                     "annotation": {
                       "map": [
                         {
@@ -866,7 +857,7 @@
                 "name": "crc",
                 "type": {
                   "annotated": {
-                    "body": {"optional": {"literal": {"integer": {"int32": {}}}}},
+                    "body": {"optional": {"literal": {"integer": "int32"}}},
                     "annotation": {
                       "map": [
                         {
@@ -886,9 +877,7 @@
           "body": {
             "annotated": {
               "body": {
-                "record": [
-                  {"name": "key", "type": {"literal": {"string": {}}}},
-                  {"name": "value", "type": {"optional": {"literal": {"string": {}}}}}]},
+                "record": [{"name": "key", "type": {"literal": "string"}}, {"name": "value", "type": {"optional": {"literal": "string"}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Wrapper struct to store key values"}}}]}}}}}},
     {
       "type": {
@@ -903,14 +892,14 @@
                     "name": "columnIdx",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The column index (in this row group)"}}}]}}}},
                   {
                     "name": "descending",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {
                           "map": [
                             {
@@ -920,7 +909,7 @@
                     "name": "nullsFirst",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {
                           "map": [
                             {
@@ -953,7 +942,7 @@
                     "name": "count",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {
                           "map": [
                             {
@@ -991,7 +980,7 @@
                     "name": "pathInSchema",
                     "type": {
                       "annotated": {
-                        "body": {"list": {"literal": {"string": {}}}},
+                        "body": {"list": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Path in schema"}}}]}}}},
                   {
                     "name": "codec",
@@ -1003,13 +992,13 @@
                     "name": "numValues",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int64": {}}}},
+                        "body": {"literal": {"integer": "int64"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Number of values in this column"}}}]}}}},
                   {
                     "name": "totalUncompressedSize",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int64": {}}}},
+                        "body": {"literal": {"integer": "int64"}},
                         "annotation": {
                           "map": [
                             {
@@ -1019,7 +1008,7 @@
                     "name": "totalCompressedSize",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int64": {}}}},
+                        "body": {"literal": {"integer": "int64"}},
                         "annotation": {
                           "map": [
                             {
@@ -1037,7 +1026,7 @@
                     "name": "dataPageOffset",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int64": {}}}},
+                        "body": {"literal": {"integer": "int64"}},
                         "annotation": {
                           "map": [
                             {
@@ -1047,7 +1036,7 @@
                     "name": "indexPageOffset",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"integer": {"int64": {}}}}},
+                        "body": {"optional": {"literal": {"integer": "int64"}}},
                         "annotation": {
                           "map": [
                             {
@@ -1057,7 +1046,7 @@
                     "name": "dictionaryPageOffset",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"integer": {"int64": {}}}}},
+                        "body": {"optional": {"literal": {"integer": "int64"}}},
                         "annotation": {
                           "map": [
                             {
@@ -1086,7 +1075,7 @@
                     "name": "bloomFilterOffset",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"integer": {"int64": {}}}}},
+                        "body": {"optional": {"literal": {"integer": "int64"}}},
                         "annotation": {
                           "map": [
                             {
@@ -1105,13 +1094,13 @@
                 "name": "pathInSchema",
                 "type": {
                   "annotated": {
-                    "body": {"list": {"literal": {"string": {}}}},
+                    "body": {"list": {"literal": "string"}},
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Column path in schema"}}}]}}}},
               {
                 "name": "keyMetadata",
                 "type": {
                   "annotated": {
-                    "body": {"optional": {"literal": {"binary": {}}}},
+                    "body": {"optional": {"literal": "binary"}},
                     "annotation": {
                       "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Retrieval metadata of column encryption key"}}}]}}}}]}}}},
     {
@@ -1134,7 +1123,7 @@
                 "name": "filePath",
                 "type": {
                   "annotated": {
-                    "body": {"optional": {"literal": {"string": {}}}},
+                    "body": {"optional": {"literal": "string"}},
                     "annotation": {
                       "map": [
                         {
@@ -1146,7 +1135,7 @@
                 "name": "fileOffset",
                 "type": {
                   "annotated": {
-                    "body": {"literal": {"integer": {"int64": {}}}},
+                    "body": {"literal": {"integer": "int64"}},
                     "annotation": {
                       "map": [
                         {"key": {"variable": "description"}, "value": {"literal": {"string": "Byte offset in file_path to the ColumnMetaData"}}}]}}}},
@@ -1166,28 +1155,28 @@
                 "name": "offsetIndexOffset",
                 "type": {
                   "annotated": {
-                    "body": {"optional": {"literal": {"integer": {"int64": {}}}}},
+                    "body": {"optional": {"literal": {"integer": "int64"}}},
                     "annotation": {
                       "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "File offset of ColumnChunk's OffsetIndex"}}}]}}}},
               {
                 "name": "offsetIndexLength",
                 "type": {
                   "annotated": {
-                    "body": {"optional": {"literal": {"integer": {"int32": {}}}}},
+                    "body": {"optional": {"literal": {"integer": "int32"}}},
                     "annotation": {
                       "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Size of ColumnChunk's OffsetIndex, in bytes"}}}]}}}},
               {
                 "name": "columnIndexOffset",
                 "type": {
                   "annotated": {
-                    "body": {"optional": {"literal": {"integer": {"int64": {}}}}},
+                    "body": {"optional": {"literal": {"integer": "int64"}}},
                     "annotation": {
                       "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "File offset of ColumnChunk's ColumnIndex"}}}]}}}},
               {
                 "name": "columnIndexLength",
                 "type": {
                   "annotated": {
-                    "body": {"optional": {"literal": {"integer": {"int32": {}}}}},
+                    "body": {"optional": {"literal": {"integer": "int32"}}},
                     "annotation": {
                       "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Size of ColumnChunk's ColumnIndex, in bytes"}}}]}}}},
               {
@@ -1201,7 +1190,7 @@
                 "name": "encryptedColumnMetadata",
                 "type": {
                   "annotated": {
-                    "body": {"optional": {"literal": {"binary": {}}}},
+                    "body": {"optional": {"literal": "binary"}},
                     "annotation": {
                       "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encrypted column metadata for this chunk"}}}]}}}}]}}}},
     {
@@ -1227,7 +1216,7 @@
                 "name": "totalByteSize",
                 "type": {
                   "annotated": {
-                    "body": {"literal": {"integer": {"int64": {}}}},
+                    "body": {"literal": {"integer": "int64"}},
                     "annotation": {
                       "map": [
                         {
@@ -1237,7 +1226,7 @@
                 "name": "numRows",
                 "type": {
                   "annotated": {
-                    "body": {"literal": {"integer": {"int64": {}}}},
+                    "body": {"literal": {"integer": "int64"}},
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Number of rows in this row group"}}}]}}}},
               {
                 "name": "sortingColumns",
@@ -1255,7 +1244,7 @@
                 "name": "fileOffset",
                 "type": {
                   "annotated": {
-                    "body": {"optional": {"literal": {"integer": {"int64": {}}}}},
+                    "body": {"optional": {"literal": {"integer": "int64"}}},
                     "annotation": {
                       "map": [
                         {
@@ -1265,7 +1254,7 @@
                 "name": "totalCompressedSize",
                 "type": {
                   "annotated": {
-                    "body": {"optional": {"literal": {"integer": {"int64": {}}}}},
+                    "body": {"optional": {"literal": {"integer": "int64"}}},
                     "annotation": {
                       "map": [
                         {
@@ -1275,7 +1264,7 @@
                 "name": "ordinal",
                 "type": {
                   "annotated": {
-                    "body": {"optional": {"literal": {"integer": {"int16": {}}}}},
+                    "body": {"optional": {"literal": {"integer": "int16"}}},
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Row group ordinal in the file"}}}]}}}}]}}}},
     {
       "type": {
@@ -1290,7 +1279,7 @@
                     "name": "typeOrder",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -1316,13 +1305,13 @@
                 "name": "offset",
                 "type": {
                   "annotated": {
-                    "body": {"literal": {"integer": {"int64": {}}}},
+                    "body": {"literal": {"integer": "int64"}},
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Offset of the page in the file"}}}]}}}},
               {
                 "name": "compressedPageSize",
                 "type": {
                   "annotated": {
-                    "body": {"literal": {"integer": {"int32": {}}}},
+                    "body": {"literal": {"integer": "int32"}},
                     "annotation": {
                       "map": [
                         {
@@ -1332,7 +1321,7 @@
                 "name": "firstRowIndex",
                 "type": {
                   "annotated": {
-                    "body": {"literal": {"integer": {"int64": {}}}},
+                    "body": {"literal": {"integer": "int64"}},
                     "annotation": {
                       "map": [
                         {
@@ -1372,7 +1361,7 @@
                     "name": "nullPages",
                     "type": {
                       "annotated": {
-                        "body": {"list": {"literal": {"boolean": {}}}},
+                        "body": {"list": {"literal": "boolean"}},
                         "annotation": {
                           "map": [
                             {
@@ -1384,7 +1373,7 @@
                     "name": "minValues",
                     "type": {
                       "annotated": {
-                        "body": {"list": {"literal": {"binary": {}}}},
+                        "body": {"list": {"literal": "binary"}},
                         "annotation": {
                           "map": [
                             {
@@ -1392,7 +1381,7 @@
                               "value": {
                                 "literal": {
                                   "string": "minValues and maxValues are lists containing lower and upper bounds for the values of each page determined by the ColumnOrder of the column. These may be the actual minimum and maximum values found on a page, but can also be (more compact) values that do not exist on a page. For example, instead of storing \"Blart Versenwald III\", a writer may set min_values[i]=\"B\", max_values[i]=\"C\". Such more compact values must still be valid values within the column's logical type. Readers must make sure that list entries are populated before using them by inspecting null_pages."}}}]}}}},
-                  {"name": "maxValues", "type": {"list": {"literal": {"binary": {}}}}},
+                  {"name": "maxValues", "type": {"list": {"literal": "binary"}}},
                   {
                     "name": "boundaryOrder",
                     "type": {
@@ -1409,7 +1398,7 @@
                     "name": "nullCounts",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"list": {"literal": {"integer": {"int64": {}}}}}},
+                        "body": {"optional": {"list": {"literal": {"integer": "int64"}}}},
                         "annotation": {
                           "map": [
                             {
@@ -1432,20 +1421,20 @@
                 "name": "aadPrefix",
                 "type": {
                   "annotated": {
-                    "body": {"optional": {"literal": {"binary": {}}}},
+                    "body": {"optional": {"literal": "binary"}},
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "AAD prefix"}}}]}}}},
               {
                 "name": "aadFileUnique",
                 "type": {
                   "annotated": {
-                    "body": {"optional": {"literal": {"binary": {}}}},
+                    "body": {"optional": {"literal": "binary"}},
                     "annotation": {
                       "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Unique file identifier part of AAD suffix"}}}]}}}},
               {
                 "name": "supplyAadPrefix",
                 "type": {
                   "annotated": {
-                    "body": {"optional": {"literal": {"boolean": {}}}},
+                    "body": {"optional": {"literal": "boolean"}},
                     "annotation": {
                       "map": [
                         {
@@ -1462,20 +1451,20 @@
                 "name": "aadPrefix",
                 "type": {
                   "annotated": {
-                    "body": {"optional": {"literal": {"binary": {}}}},
+                    "body": {"optional": {"literal": "binary"}},
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "AAD prefix"}}}]}}}},
               {
                 "name": "aadFileUnique",
                 "type": {
                   "annotated": {
-                    "body": {"optional": {"literal": {"binary": {}}}},
+                    "body": {"optional": {"literal": "binary"}},
                     "annotation": {
                       "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Unique file identifier part of AAD suffix"}}}]}}}},
               {
                 "name": "supplyAadPrefix",
                 "type": {
                   "annotated": {
-                    "body": {"optional": {"literal": {"boolean": {}}}},
+                    "body": {"optional": {"literal": "boolean"}},
                     "annotation": {
                       "map": [
                         {
@@ -1503,7 +1492,7 @@
                     "name": "version",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Version of this file"}}}]}}}},
                   {
                     "name": "schema",
@@ -1521,7 +1510,7 @@
                     "name": "numRows",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int64": {}}}},
+                        "body": {"literal": {"integer": "int64"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Number of rows in this file"}}}]}}}},
                   {
                     "name": "rowGroups",
@@ -1539,7 +1528,7 @@
                     "name": "createdBy",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {
                           "map": [
                             {
@@ -1575,7 +1564,7 @@
                     "name": "footerSigningKeyMetadata",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"binary": {}}}},
+                        "body": {"optional": {"literal": "binary"}},
                         "annotation": {
                           "map": [
                             {
@@ -1608,7 +1597,7 @@
                     "name": "keyMetadata",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"binary": {}}}},
+                        "body": {"optional": {"literal": "binary"}},
                         "annotation": {
                           "map": [
                             {

@@ -100,7 +100,7 @@
                                                   "typeName": "hydra.core.Type",
                                                   "field": {
                                                     "name": "literal",
-                                                    "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}}]}},
+                                                    "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}}]}},
                                       {
                                         "record": {
                                           "typeName": "hydra.core.FieldType",
@@ -126,7 +126,7 @@
                                                   "typeName": "hydra.core.Type",
                                                   "field": {
                                                     "name": "literal",
-                                                    "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}}]}},
+                                                    "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}}]}},
                                       {
                                         "record": {
                                           "typeName": "hydra.core.FieldType",
@@ -159,7 +159,7 @@
                                       "typeName": "hydra.core.Type",
                                       "field": {
                                         "name": "literal",
-                                        "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}}}}}},
+                                        "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}}}}}},
                         "type": {"variable": "hydra.core.Name"}}},
                     "type": {"variable": "hydra.core.Type"}}},
                 {

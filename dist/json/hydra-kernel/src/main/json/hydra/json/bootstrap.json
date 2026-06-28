@@ -121,7 +121,7 @@
                                                                                                                                 "typeName": "hydra.core.Type",
                                                                                                                                 "field": {
                                                                                                                                   "name": "literal",
-                                                                                                                                  "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "boolean", "term": {"unit": {}}}}}}}}},
+                                                                                                                                  "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "boolean", "term": "unit"}}}}}}},
                                                                                                                           {
                                                                                                                             "name": "annotation",
                                                                                                                             "term": {
@@ -1813,13 +1813,13 @@
                                                   "typeName": "hydra.core.FieldType",
                                                   "fields": [
                                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "encode"}}}}},
-                                                    {"name": "type", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}}]}},
+                                                    {"name": "type", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}}]}},
                                               {
                                                 "record": {
                                                   "typeName": "hydra.core.FieldType",
                                                   "fields": [
                                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "decode"}}}}},
-                                                    {"name": "type", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}]}}}}},
+                                                    {"name": "type", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}}]}}]}}}}},
                                   {
                                     "name": "annotation",
                                     "term": {
@@ -2471,7 +2471,7 @@
                                                                                       "typeName": "hydra.core.Type",
                                                                                       "field": {
                                                                                         "name": "literal",
-                                                                                        "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "boolean", "term": {"unit": {}}}}}}}}}]}}}}}},
+                                                                                        "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "boolean", "term": "unit"}}}}}}}]}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -2563,7 +2563,7 @@
                                                               "record": {
                                                                 "typeName": "hydra.core.AnnotatedType",
                                                                 "fields": [
-                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -2609,7 +2609,7 @@
                                                               "record": {
                                                                 "typeName": "hydra.core.AnnotatedType",
                                                                 "fields": [
-                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -2655,7 +2655,7 @@
                                                               "record": {
                                                                 "typeName": "hydra.core.AnnotatedType",
                                                                 "fields": [
-                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -2736,7 +2736,7 @@
                                               "typeName": "hydra.core.Type",
                                               "field": {
                                                 "name": "literal",
-                                                "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}}}}},
+                                                "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}}}}},
                                   {
                                     "name": "annotation",
                                     "term": {
@@ -2938,7 +2938,7 @@
                                                               "record": {
                                                                 "typeName": "hydra.core.AnnotatedType",
                                                                 "fields": [
-                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -2976,7 +2976,7 @@
                                                               "record": {
                                                                 "typeName": "hydra.core.AnnotatedType",
                                                                 "fields": [
-                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -3091,7 +3091,7 @@
                                                                                   "typeName": "hydra.core.Type",
                                                                                   "field": {
                                                                                     "name": "literal",
-                                                                                    "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}},
+                                                                                    "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}},
                                                                             {
                                                                               "name": "right",
                                                                               "term": {
@@ -4725,7 +4725,7 @@
                                                               "record": {
                                                                 "typeName": "hydra.core.AnnotatedType",
                                                                 "fields": [
-                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -4765,7 +4765,7 @@
                                                               "record": {
                                                                 "typeName": "hydra.core.AnnotatedType",
                                                                 "fields": [
-                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -4863,7 +4863,7 @@
                                                                               "typeName": "hydra.core.LiteralType",
                                                                               "field": {
                                                                                 "name": "float",
-                                                                                "term": {"inject": {"typeName": "hydra.core.FloatType", "field": {"name": "float32", "term": {"unit": {}}}}}}}}}}}},
+                                                                                "term": {"inject": {"typeName": "hydra.core.FloatType", "field": {"name": "float32", "term": "unit"}}}}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -4915,7 +4915,7 @@
                                                                               "typeName": "hydra.core.LiteralType",
                                                                               "field": {
                                                                                 "name": "float",
-                                                                                "term": {"inject": {"typeName": "hydra.core.FloatType", "field": {"name": "float64", "term": {"unit": {}}}}}}}}}}}},
+                                                                                "term": {"inject": {"typeName": "hydra.core.FloatType", "field": {"name": "float64", "term": "unit"}}}}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -5427,7 +5427,7 @@
                                                               "record": {
                                                                 "typeName": "hydra.core.AnnotatedType",
                                                                 "fields": [
-                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -5467,7 +5467,7 @@
                                                               "record": {
                                                                 "typeName": "hydra.core.AnnotatedType",
                                                                 "fields": [
-                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -5507,7 +5507,7 @@
                                                               "record": {
                                                                 "typeName": "hydra.core.AnnotatedType",
                                                                 "fields": [
-                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -5547,7 +5547,7 @@
                                                               "record": {
                                                                 "typeName": "hydra.core.AnnotatedType",
                                                                 "fields": [
-                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -5587,7 +5587,7 @@
                                                               "record": {
                                                                 "typeName": "hydra.core.AnnotatedType",
                                                                 "fields": [
-                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -5627,7 +5627,7 @@
                                                               "record": {
                                                                 "typeName": "hydra.core.AnnotatedType",
                                                                 "fields": [
-                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -5667,7 +5667,7 @@
                                                               "record": {
                                                                 "typeName": "hydra.core.AnnotatedType",
                                                                 "fields": [
-                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -5707,7 +5707,7 @@
                                                               "record": {
                                                                 "typeName": "hydra.core.AnnotatedType",
                                                                 "fields": [
-                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -5747,7 +5747,7 @@
                                                               "record": {
                                                                 "typeName": "hydra.core.AnnotatedType",
                                                                 "fields": [
-                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -5843,7 +5843,7 @@
                                                                               "typeName": "hydra.core.LiteralType",
                                                                               "field": {
                                                                                 "name": "integer",
-                                                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "bigint", "term": {"unit": {}}}}}}}}}}}},
+                                                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "bigint", "term": "unit"}}}}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -5895,7 +5895,7 @@
                                                                               "typeName": "hydra.core.LiteralType",
                                                                               "field": {
                                                                                 "name": "integer",
-                                                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int8", "term": {"unit": {}}}}}}}}}}}},
+                                                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int8", "term": "unit"}}}}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -5947,7 +5947,7 @@
                                                                               "typeName": "hydra.core.LiteralType",
                                                                               "field": {
                                                                                 "name": "integer",
-                                                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int16", "term": {"unit": {}}}}}}}}}}}},
+                                                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int16", "term": "unit"}}}}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -5999,7 +5999,7 @@
                                                                               "typeName": "hydra.core.LiteralType",
                                                                               "field": {
                                                                                 "name": "integer",
-                                                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": {"unit": {}}}}}}}}}}}},
+                                                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": "unit"}}}}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -6051,7 +6051,7 @@
                                                                               "typeName": "hydra.core.LiteralType",
                                                                               "field": {
                                                                                 "name": "integer",
-                                                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int64", "term": {"unit": {}}}}}}}}}}}},
+                                                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int64", "term": "unit"}}}}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -6103,7 +6103,7 @@
                                                                               "typeName": "hydra.core.LiteralType",
                                                                               "field": {
                                                                                 "name": "integer",
-                                                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "uint8", "term": {"unit": {}}}}}}}}}}}},
+                                                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "uint8", "term": "unit"}}}}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -6155,7 +6155,7 @@
                                                                               "typeName": "hydra.core.LiteralType",
                                                                               "field": {
                                                                                 "name": "integer",
-                                                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "uint16", "term": {"unit": {}}}}}}}}}}}},
+                                                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "uint16", "term": "unit"}}}}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -6207,7 +6207,7 @@
                                                                               "typeName": "hydra.core.LiteralType",
                                                                               "field": {
                                                                                 "name": "integer",
-                                                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "uint32", "term": {"unit": {}}}}}}}}}}}},
+                                                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "uint32", "term": "unit"}}}}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -6259,7 +6259,7 @@
                                                                               "typeName": "hydra.core.LiteralType",
                                                                               "field": {
                                                                                 "name": "integer",
-                                                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "uint64", "term": {"unit": {}}}}}}}}}}}},
+                                                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "uint64", "term": "unit"}}}}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -6691,7 +6691,7 @@
                                                                         "typeName": "hydra.core.Type",
                                                                         "field": {
                                                                           "name": "literal",
-                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "binary", "term": {"unit": {}}}}}}}}},
+                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "binary", "term": "unit"}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -6736,7 +6736,7 @@
                                                                         "typeName": "hydra.core.Type",
                                                                         "field": {
                                                                           "name": "literal",
-                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "boolean", "term": {"unit": {}}}}}}}}},
+                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "boolean", "term": "unit"}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -6781,7 +6781,7 @@
                                                                         "typeName": "hydra.core.Type",
                                                                         "field": {
                                                                           "name": "literal",
-                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "decimal", "term": {"unit": {}}}}}}}}},
+                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "decimal", "term": "unit"}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -6920,7 +6920,7 @@
                                                                         "typeName": "hydra.core.Type",
                                                                         "field": {
                                                                           "name": "literal",
-                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}},
+                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -7004,7 +7004,7 @@
                                                               "record": {
                                                                 "typeName": "hydra.core.AnnotatedType",
                                                                 "fields": [
-                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -7044,7 +7044,7 @@
                                                               "record": {
                                                                 "typeName": "hydra.core.AnnotatedType",
                                                                 "fields": [
-                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -7084,7 +7084,7 @@
                                                               "record": {
                                                                 "typeName": "hydra.core.AnnotatedType",
                                                                 "fields": [
-                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -7218,7 +7218,7 @@
                                                               "record": {
                                                                 "typeName": "hydra.core.AnnotatedType",
                                                                 "fields": [
-                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -7433,7 +7433,7 @@
                                               "typeName": "hydra.core.Type",
                                               "field": {
                                                 "name": "literal",
-                                                "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}}}}},
+                                                "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}}}}},
                                   {
                                     "name": "annotation",
                                     "term": {
@@ -8777,7 +8777,7 @@
                                                               "record": {
                                                                 "typeName": "hydra.core.AnnotatedType",
                                                                 "fields": [
-                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -9656,7 +9656,7 @@
                                                               "record": {
                                                                 "typeName": "hydra.core.AnnotatedType",
                                                                 "fields": [
-                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -9743,7 +9743,7 @@
                                                               "record": {
                                                                 "typeName": "hydra.core.AnnotatedType",
                                                                 "fields": [
-                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -10701,7 +10701,7 @@
                                               "typeName": "hydra.core.Type",
                                               "field": {
                                                 "name": "literal",
-                                                "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}}}}},
+                                                "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}}}}},
                                   {
                                     "name": "annotation",
                                     "term": {
@@ -10739,7 +10739,7 @@
                               "record": {
                                 "typeName": "hydra.core.AnnotatedType",
                                 "fields": [
-                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}},
                                   {
                                     "name": "annotation",
                                     "term": {
@@ -12572,7 +12572,7 @@
                               "record": {
                                 "typeName": "hydra.core.AnnotatedType",
                                 "fields": [
-                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}},
                                   {
                                     "name": "annotation",
                                     "term": {
@@ -12622,7 +12622,7 @@
                                               "typeName": "hydra.core.Type",
                                               "field": {
                                                 "name": "literal",
-                                                "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}}}}},
+                                                "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}}}}},
                                   {
                                     "name": "annotation",
                                     "term": {
@@ -12737,7 +12737,7 @@
                                                                         "typeName": "hydra.core.Type",
                                                                         "field": {
                                                                           "name": "literal",
-                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}},
+                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -12810,7 +12810,7 @@
                                               "typeName": "hydra.core.Type",
                                               "field": {
                                                 "name": "literal",
-                                                "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}}}}},
+                                                "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}}}}},
                                   {
                                     "name": "annotation",
                                     "term": {
@@ -13169,7 +13169,7 @@
                                                                         "typeName": "hydra.core.Type",
                                                                         "field": {
                                                                           "name": "literal",
-                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}},
+                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -13216,7 +13216,7 @@
                                                                         "typeName": "hydra.core.Type",
                                                                         "field": {
                                                                           "name": "literal",
-                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}},
+                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -13405,7 +13405,7 @@
                                                                         "typeName": "hydra.core.Type",
                                                                         "field": {
                                                                           "name": "literal",
-                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}},
+                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -14239,7 +14239,7 @@
                                                                         "typeName": "hydra.core.Type",
                                                                         "field": {
                                                                           "name": "literal",
-                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}},
+                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -15527,7 +15527,7 @@
                                                                               "typeName": "hydra.core.Type",
                                                                               "field": {
                                                                                 "name": "literal",
-                                                                                "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}}}}},
+                                                                                "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -15581,7 +15581,7 @@
                                                                               "typeName": "hydra.core.Type",
                                                                               "field": {
                                                                                 "name": "literal",
-                                                                                "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}}}}},
+                                                                                "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -16517,7 +16517,7 @@
                                               "typeName": "hydra.core.Type",
                                               "field": {
                                                 "name": "literal",
-                                                "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}}}}},
+                                                "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}}}}},
                                   {
                                     "name": "annotation",
                                     "term": {
@@ -17019,7 +17019,7 @@
                                               "typeName": "hydra.core.Type",
                                               "field": {
                                                 "name": "literal",
-                                                "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}}}}},
+                                                "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}}}}},
                                   {
                                     "name": "annotation",
                                     "term": {
@@ -17239,7 +17239,7 @@
                                                                         "typeName": "hydra.core.Type",
                                                                         "field": {
                                                                           "name": "literal",
-                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "boolean", "term": {"unit": {}}}}}}}}},
+                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "boolean", "term": "unit"}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -17289,7 +17289,7 @@
                                                                         "typeName": "hydra.core.Type",
                                                                         "field": {
                                                                           "name": "literal",
-                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "boolean", "term": {"unit": {}}}}}}}}},
+                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "boolean", "term": "unit"}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -17867,7 +17867,7 @@
                                               "typeName": "hydra.core.Type",
                                               "field": {
                                                 "name": "literal",
-                                                "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}}}}},
+                                                "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}}}}},
                                   {
                                     "name": "annotation",
                                     "term": {
@@ -18086,7 +18086,7 @@
                                                               "record": {
                                                                 "typeName": "hydra.core.AnnotatedType",
                                                                 "fields": [
-                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -18753,7 +18753,7 @@
                                                                               "typeName": "hydra.core.LiteralType",
                                                                               "field": {
                                                                                 "name": "integer",
-                                                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": {"unit": {}}}}}}}}}}}},
+                                                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": "unit"}}}}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -19263,7 +19263,7 @@
                                                                               "typeName": "hydra.core.Type",
                                                                               "field": {
                                                                                 "name": "literal",
-                                                                                "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}}}}},
+                                                                                "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -19357,7 +19357,7 @@
                                                                         "typeName": "hydra.core.Type",
                                                                         "field": {
                                                                           "name": "literal",
-                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "boolean", "term": {"unit": {}}}}}}}}},
+                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "boolean", "term": "unit"}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -19463,7 +19463,7 @@
                                                                               "typeName": "hydra.core.Type",
                                                                               "field": {
                                                                                 "name": "literal",
-                                                                                "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}}}}},
+                                                                                "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -19875,7 +19875,7 @@
                                                                         "typeName": "hydra.core.Type",
                                                                         "field": {
                                                                           "name": "literal",
-                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}},
+                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -20066,7 +20066,7 @@
                                                                         "typeName": "hydra.core.Type",
                                                                         "field": {
                                                                           "name": "literal",
-                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}},
+                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -20359,25 +20359,25 @@
                                                   "typeName": "hydra.core.FieldType",
                                                   "fields": [
                                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "camel"}}}}},
-                                                    {"name": "type", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}}]}},
+                                                    {"name": "type", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}}]}},
                                               {
                                                 "record": {
                                                   "typeName": "hydra.core.FieldType",
                                                   "fields": [
                                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "pascal"}}}}},
-                                                    {"name": "type", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}}]}},
+                                                    {"name": "type", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}}]}},
                                               {
                                                 "record": {
                                                   "typeName": "hydra.core.FieldType",
                                                   "fields": [
                                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "lowerSnake"}}}}},
-                                                    {"name": "type", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}}]}},
+                                                    {"name": "type", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}}]}},
                                               {
                                                 "record": {
                                                   "typeName": "hydra.core.FieldType",
                                                   "fields": [
                                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "upperSnake"}}}}},
-                                                    {"name": "type", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}]}}}}},
+                                                    {"name": "type", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}}]}}]}}}}},
                                   {
                                     "name": "annotation",
                                     "term": {
@@ -20429,19 +20429,19 @@
                                                   "typeName": "hydra.core.FieldType",
                                                   "fields": [
                                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "lessThan"}}}}},
-                                                    {"name": "type", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}}]}},
+                                                    {"name": "type", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}}]}},
                                               {
                                                 "record": {
                                                   "typeName": "hydra.core.FieldType",
                                                   "fields": [
                                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "equalTo"}}}}},
-                                                    {"name": "type", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}}]}},
+                                                    {"name": "type", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}}]}},
                                               {
                                                 "record": {
                                                   "typeName": "hydra.core.FieldType",
                                                   "fields": [
                                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "greaterThan"}}}}},
-                                                    {"name": "type", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}}]}}]}}}}},
+                                                    {"name": "type", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}}]}}]}}}}},
                                   {
                                     "name": "annotation",
                                     "term": {
@@ -20692,7 +20692,7 @@
                                                               "record": {
                                                                 "typeName": "hydra.core.AnnotatedType",
                                                                 "fields": [
-                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": {"unit": {}}}}}},
+                                                                  {"name": "body", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -20742,7 +20742,7 @@
                                                                               "typeName": "hydra.core.LiteralType",
                                                                               "field": {
                                                                                 "name": "integer",
-                                                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": {"unit": {}}}}}}}}}}}},
+                                                                                "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": "unit"}}}}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -20889,7 +20889,7 @@
                                                                         "typeName": "hydra.core.Type",
                                                                         "field": {
                                                                           "name": "literal",
-                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": {"unit": {}}}}}}}}},
+                                                                          "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {

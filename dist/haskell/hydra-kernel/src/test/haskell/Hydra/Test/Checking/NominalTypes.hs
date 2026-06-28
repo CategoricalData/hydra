@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Nominal type checking test cases: records, unions, field access, injection, projection
 
 module Hydra.Test.Checking.NominalTypes where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -40,6 +42,7 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
+
 allTests :: Testing.TestGroup
 allTests =
     Testing.TestGroup {
@@ -51,6 +54,7 @@ allTests =
         wrappedTermsTests,
         eliminationsTests],
       Testing.testGroupCases = []}
+
 chainedUnwrappingTests :: Testing.TestGroup
 chainedUnwrappingTests =
     Testing.TestGroup {
@@ -98,6 +102,7 @@ chainedUnwrappingTests =
               Core.functionTypeCodomain = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 eliminationsTests :: Testing.TestGroup
 eliminationsTests =
     Testing.TestGroup {
@@ -108,6 +113,7 @@ eliminationsTests =
         unionEliminationsTests,
         wrapEliminationsTests],
       Testing.testGroupCases = []}
+
 higherOrderRecordProjectionsTests :: Testing.TestGroup
 higherOrderRecordProjectionsTests =
     Testing.TestGroup {
@@ -229,6 +235,7 @@ higherOrderRecordProjectionsTests =
             Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeList (Core.TypeVariable TestTypes.testTypePersonName)))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 higherOrderUnionEliminationsTests :: Testing.TestGroup
 higherOrderUnionEliminationsTests =
     Testing.TestGroup {
@@ -348,6 +355,7 @@ higherOrderUnionEliminationsTests =
               Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 monomorphicRecordsTests :: Testing.TestGroup
 monomorphicRecordsTests =
     Testing.TestGroup {
@@ -445,6 +453,7 @@ monomorphicRecordsTests =
                 Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "Person"))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 monomorphicUnwrappingTests :: Testing.TestGroup
 monomorphicUnwrappingTests =
     Testing.TestGroup {
@@ -461,6 +470,7 @@ monomorphicUnwrappingTests =
               Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 monomorphicWrappedTermsTests :: Testing.TestGroup
 monomorphicWrappedTermsTests =
     Testing.TestGroup {
@@ -499,6 +509,7 @@ monomorphicWrappedTermsTests =
               Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 multiParameterPolymorphicCaseStatementsTests :: Testing.TestGroup
 multiParameterPolymorphicCaseStatementsTests =
     Testing.TestGroup {
@@ -712,6 +723,7 @@ multiParameterPolymorphicCaseStatementsTests =
                 Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 multiParameterPolymorphicInjectionsTests :: Testing.TestGroup
 multiParameterPolymorphicInjectionsTests =
     Testing.TestGroup {
@@ -861,6 +873,7 @@ multiParameterPolymorphicInjectionsTests =
                                     Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t1"))}))}))}))}))}))}))}))}))}))}))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 multiParameterPolymorphicProjectionsTests :: Testing.TestGroup
 multiParameterPolymorphicProjectionsTests =
     Testing.TestGroup {
@@ -973,6 +986,7 @@ multiParameterPolymorphicProjectionsTests =
                         Core.functionTypeCodomain = (Core.TypeOptional (Core.TypeVariable (Core.Name "t2")))}))}))}))}))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 multiParameterPolymorphicRecordsTests :: Testing.TestGroup
 multiParameterPolymorphicRecordsTests =
     Testing.TestGroup {
@@ -1051,6 +1065,7 @@ multiParameterPolymorphicRecordsTests =
                       Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))}))}))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 multiParameterPolymorphicUnwrappersTests :: Testing.TestGroup
 multiParameterPolymorphicUnwrappersTests =
     Testing.TestGroup {
@@ -1168,6 +1183,7 @@ multiParameterPolymorphicUnwrappersTests =
                   Core.functionTypeCodomain = (Core.TypeOptional (Core.TypeVariable (Core.Name "t1")))}))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 multiParameterPolymorphicWrappersTests :: Testing.TestGroup
 multiParameterPolymorphicWrappersTests =
     Testing.TestGroup {
@@ -1307,6 +1323,7 @@ multiParameterPolymorphicWrappersTests =
                   Core.applicationTypeArgument = (Core.TypeList (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))))}))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 multipleUnwrapOperationsTests :: Testing.TestGroup
 multipleUnwrapOperationsTests =
     Testing.TestGroup {
@@ -1343,6 +1360,7 @@ multipleUnwrapOperationsTests =
                     Core.pairTypeSecond = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))}))}))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 multipleWrappingLevelsTests :: Testing.TestGroup
 multipleWrappingLevelsTests =
     Testing.TestGroup {
@@ -1376,6 +1394,7 @@ multipleWrappingLevelsTests =
               Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 nestedUnionEliminationsTests :: Testing.TestGroup
 nestedUnionEliminationsTests =
     Testing.TestGroup {
@@ -1468,6 +1487,7 @@ nestedUnionEliminationsTests =
               Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 nestedWrappedTermsTests :: Testing.TestGroup
 nestedWrappedTermsTests =
     Testing.TestGroup {
@@ -1516,6 +1536,7 @@ nestedWrappedTermsTests =
                 Core.mapTypeValues = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 polymorphicRecordProjectionsAppliedTests :: Testing.TestGroup
 polymorphicRecordProjectionsAppliedTests =
     Testing.TestGroup {
@@ -1580,6 +1601,7 @@ polymorphicRecordProjectionsAppliedTests =
             Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeLiteral Core.LiteralTypeString))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 polymorphicRecordProjectionsTests :: Testing.TestGroup
 polymorphicRecordProjectionsTests =
     Testing.TestGroup {
@@ -1649,6 +1671,7 @@ polymorphicRecordProjectionsTests =
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))})))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 polymorphicRecordsTests :: Testing.TestGroup
 polymorphicRecordsTests =
     Testing.TestGroup {
@@ -1755,6 +1778,7 @@ polymorphicRecordsTests =
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))}))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 polymorphicRecursiveUnionInjectionsTests :: Testing.TestGroup
 polymorphicRecursiveUnionInjectionsTests =
     Testing.TestGroup {
@@ -1803,6 +1827,7 @@ polymorphicRecursiveUnionInjectionsTests =
               Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 polymorphicUnionEliminationsTests :: Testing.TestGroup
 polymorphicUnionEliminationsTests =
     Testing.TestGroup {
@@ -1813,6 +1838,7 @@ polymorphicUnionEliminationsTests =
         usingUnionPolymorphicRecursiveTests,
         usingKernelTypesTests],
       Testing.testGroupCases = []}
+
 polymorphicUnionInjectionsTests :: Testing.TestGroup
 polymorphicUnionInjectionsTests =
     Testing.TestGroup {
@@ -1872,6 +1898,7 @@ polymorphicUnionInjectionsTests =
               Core.applicationTypeArgument = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 polymorphicUnionsFromLambdaTests :: Testing.TestGroup
 polymorphicUnionsFromLambdaTests =
     Testing.TestGroup {
@@ -1919,6 +1946,7 @@ polymorphicUnionsFromLambdaTests =
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))}))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 polymorphicUnwrappingTests :: Testing.TestGroup
 polymorphicUnwrappingTests =
     Testing.TestGroup {
@@ -1939,6 +1967,7 @@ polymorphicUnwrappingTests =
                 Core.functionTypeCodomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 polymorphicWrappedTermsTests :: Testing.TestGroup
 polymorphicWrappedTermsTests =
     Testing.TestGroup {
@@ -1991,6 +2020,7 @@ polymorphicWrappedTermsTests =
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))}))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 projectionsWithVariablesTests :: Testing.TestGroup
 projectionsWithVariablesTests =
     Testing.TestGroup {
@@ -2058,6 +2088,7 @@ projectionsWithVariablesTests =
                 Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 recordEliminationsTests :: Testing.TestGroup
 recordEliminationsTests =
     Testing.TestGroup {
@@ -2076,6 +2107,7 @@ recordEliminationsTests =
         recordProjectionsWithMutualRecursionTests,
         projectionsWithVariablesTests],
       Testing.testGroupCases = []}
+
 recordProjectionsAppliedToRecordsTests :: Testing.TestGroup
 recordProjectionsAppliedToRecordsTests =
     Testing.TestGroup {
@@ -2146,6 +2178,7 @@ recordProjectionsAppliedToRecordsTests =
             Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32)))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 recordProjectionsInComplexContextsTests :: Testing.TestGroup
 recordProjectionsInComplexContextsTests =
     Testing.TestGroup {
@@ -2219,6 +2252,7 @@ recordProjectionsInComplexContextsTests =
               Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)}))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 recordProjectionsWithMutualRecursionTests :: Testing.TestGroup
 recordProjectionsWithMutualRecursionTests =
     Testing.TestGroup {
@@ -2301,6 +2335,7 @@ recordProjectionsWithMutualRecursionTests =
                   Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))})))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 recordProjectionsWithVariablesTests :: Testing.TestGroup
 recordProjectionsWithVariablesTests =
     Testing.TestGroup {
@@ -2368,6 +2403,7 @@ recordProjectionsWithVariablesTests =
                 Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 recordsInComplexContextsTests :: Testing.TestGroup
 recordsInComplexContextsTests =
     Testing.TestGroup {
@@ -2459,6 +2495,7 @@ recordsInComplexContextsTests =
             Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeVariable (Core.Name "IntList")))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 recordsTests :: Testing.TestGroup
 recordsTests =
     Testing.TestGroup {
@@ -2470,6 +2507,7 @@ recordsTests =
         recordsInComplexContextsTests,
         multiParameterPolymorphicRecordsTests],
       Testing.testGroupCases = []}
+
 recursiveRecordProjectionsTests :: Testing.TestGroup
 recursiveRecordProjectionsTests =
     Testing.TestGroup {
@@ -2501,6 +2539,7 @@ recursiveRecordProjectionsTests =
               Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 recursiveUnionEliminationsTests :: Testing.TestGroup
 recursiveUnionEliminationsTests =
     Testing.TestGroup {
@@ -2551,6 +2590,7 @@ recursiveUnionEliminationsTests =
               Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 simplePolymorphicUnionTests :: Testing.TestGroup
 simplePolymorphicUnionTests =
     Testing.TestGroup {
@@ -2620,6 +2660,7 @@ simplePolymorphicUnionTests =
             Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeLiteral Core.LiteralTypeString))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 simpleRecordProjectionsTests :: Testing.TestGroup
 simpleRecordProjectionsTests =
     Testing.TestGroup {
@@ -2682,6 +2723,7 @@ simpleRecordProjectionsTests =
               Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat32))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 simpleUnionInjectionsTests :: Testing.TestGroup
 simpleUnionInjectionsTests =
     Testing.TestGroup {
@@ -2722,6 +2764,7 @@ simpleUnionInjectionsTests =
             Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeVariable TestTypes.testTypeComparisonName))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 simpleUnitVariantEliminationsTests :: Testing.TestGroup
 simpleUnitVariantEliminationsTests =
     Testing.TestGroup {
@@ -2823,6 +2866,7 @@ simpleUnitVariantEliminationsTests =
             Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeLiteral Core.LiteralTypeString))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 unionEliminationsInComplexContextsTests :: Testing.TestGroup
 unionEliminationsInComplexContextsTests =
     Testing.TestGroup {
@@ -2943,6 +2987,7 @@ unionEliminationsInComplexContextsTests =
             Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 unionEliminationsTests :: Testing.TestGroup
 unionEliminationsTests =
     Testing.TestGroup {
@@ -2959,6 +3004,7 @@ unionEliminationsTests =
         higherOrderUnionEliminationsTests,
         recursiveUnionEliminationsTests],
       Testing.testGroupCases = []}
+
 unionEliminationsWithDataTests :: Testing.TestGroup
 unionEliminationsWithDataTests =
     Testing.TestGroup {
@@ -3076,6 +3122,7 @@ unionEliminationsWithDataTests =
               Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 unionEliminationsWithDefaultsTests :: Testing.TestGroup
 unionEliminationsWithDefaultsTests =
     Testing.TestGroup {
@@ -3151,6 +3198,7 @@ unionEliminationsWithDefaultsTests =
               Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 unionInjectionsWithDataTests :: Testing.TestGroup
 unionInjectionsWithDataTests =
     Testing.TestGroup {
@@ -3202,6 +3250,7 @@ unionInjectionsWithDataTests =
             Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeVariable TestTypes.testTypeTimestampName))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 unionsInComplexContextsTests :: Testing.TestGroup
 unionsInComplexContextsTests =
     Testing.TestGroup {
@@ -3260,6 +3309,7 @@ unionsInComplexContextsTests =
               Core.applicationTypeArgument = (Core.TypeLiteral Core.LiteralTypeString)})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 unionsTests :: Testing.TestGroup
 unionsTests =
     Testing.TestGroup {
@@ -3274,6 +3324,7 @@ unionsTests =
         unionsInComplexContextsTests,
         multiParameterPolymorphicInjectionsTests],
       Testing.testGroupCases = []}
+
 unwrapEliminationsInApplicationsTests :: Testing.TestGroup
 unwrapEliminationsInApplicationsTests =
     Testing.TestGroup {
@@ -3305,6 +3356,7 @@ unwrapEliminationsInApplicationsTests =
             Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 unwrapInComplexContextsTests :: Testing.TestGroup
 unwrapInComplexContextsTests =
     Testing.TestGroup {
@@ -3358,6 +3410,7 @@ unwrapInComplexContextsTests =
               Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 usingKernelTypesTests :: Testing.TestGroup
 usingKernelTypesTests =
     Testing.TestGroup {
@@ -3430,6 +3483,7 @@ usingKernelTypesTests =
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = [
             Testing.Tag "disabled"]}]}
+
 usingUnionPolymorphicRecursiveTests :: Testing.TestGroup
 usingUnionPolymorphicRecursiveTests =
     Testing.TestGroup {
@@ -3561,6 +3615,7 @@ usingUnionPolymorphicRecursiveTests =
                 Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 wrapEliminationsTests :: Testing.TestGroup
 wrapEliminationsTests =
     Testing.TestGroup {
@@ -3575,6 +3630,7 @@ wrapEliminationsTests =
         chainedUnwrappingTests,
         multipleUnwrapOperationsTests],
       Testing.testGroupCases = []}
+
 wrappedTermsInComplexContextsTests :: Testing.TestGroup
 wrappedTermsInComplexContextsTests =
     Testing.TestGroup {
@@ -3628,6 +3684,7 @@ wrappedTermsInComplexContextsTests =
             Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeList (Core.TypeVariable TestTypes.testTypeStringAliasName)))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
+
 wrappedTermsTests :: Testing.TestGroup
 wrappedTermsTests =
     Testing.TestGroup {

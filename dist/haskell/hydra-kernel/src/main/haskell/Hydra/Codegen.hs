@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Pure code generation pipeline for bootstrapping Hydra across languages.
 
 module Hydra.Codegen where
+
 import qualified Hydra.Adapt as Adapt
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Ast as Ast
@@ -63,9 +65,11 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
+
 -- | Build a schema map (Name -> Type) from a graph's schema types
 buildSchemaMap :: Graph.Graph -> M.Map Core.Name Core.Type
 buildSchemaMap g = Maps.map (\ts -> Strip.deannotateType (Core.typeSchemeBody ts)) (Graph.graphSchemaTypes g)
+
 -- | Decode a single module from a JSON value
 decodeModuleFromJson :: Graph.Graph -> [Packaging.Module] -> Model.Value -> Either Errors.Error Packaging.Module
 decodeModuleFromJson bsGraph universeModules jsonVal =
@@ -74,6 +78,7 @@ decodeModuleFromJson bsGraph universeModules jsonVal =
           schemaMap = buildSchemaMap graph
           modType = Core.TypeVariable (Core.Name "hydra.packaging.Module")
       in (Eithers.either (\err -> Left (Errors.ErrorOther (Errors.OtherError err))) (\term -> Eithers.either (\decErr -> Left (Errors.ErrorDecoding decErr)) (\mod -> Right mod) (DecodePackaging.module_ graph term)) (Decode.fromJson schemaMap (Core.Name "hydra.packaging.Module") modType jsonVal))
+
 -- | Escape unescaped control characters inside JSON string literals
 escapeControlCharsInJson :: [Int] -> [Int]
 escapeControlCharsInJson input =
@@ -93,6 +98,7 @@ escapeControlCharsInJson input =
                         bs = Pairs.second uc
                     in (Logic.ifElse esc (Lists.cons b (go inStr False bs)) (Logic.ifElse (Logic.and (Equality.equal b 92) inStr) (Lists.cons b (go inStr True bs)) (Logic.ifElse (Equality.equal b 34) (Lists.cons b (go (Logic.not inStr) False bs)) (Logic.ifElse (Logic.and inStr (Equality.lt b 32)) (Lists.concat2 (escapeToUnicode b) (go inStr False bs)) (Lists.cons b (go inStr False bs)))))))
       in (go False False input)
+
 -- | Format a primitive for the lexicon
 formatPrimitive :: Graph.Primitive -> String
 formatPrimitive prim =
@@ -101,6 +107,7 @@ formatPrimitive prim =
           typ = Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition prim))
           typeStr = ShowCore.typeScheme typ
       in (Strings.cat2 (Strings.cat2 (Strings.cat2 "  " name) " : ") typeStr)
+
 -- | Format a term binding for the lexicon
 formatTermBinding :: Core.Binding -> String
 formatTermBinding binding =
@@ -108,10 +115,12 @@ formatTermBinding binding =
       let name = Core.unName (Core.bindingName binding)
           typeStr = Optionals.cases (Core.bindingTypeScheme binding) "?" (\scheme -> ShowCore.typeScheme scheme)
       in (Strings.cat2 (Strings.cat2 (Strings.cat2 "  " name) " : ") typeStr)
+
 -- | Format a type binding for the lexicon
 formatTypeBinding :: Graph.Graph -> Core.Binding -> Either Errors.Error String
 formatTypeBinding graph binding =
     Eithers.bind (Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\_a -> _a) (DecodeCore.type_ graph (Core.bindingTerm binding))) (\typ -> Right (Strings.cat2 (Strings.cat2 (Strings.cat2 "  " (Core.unName (Core.bindingName binding))) " = ") (ShowCore.type_ typ)))
+
 -- | Generate encoder or decoder modules for a list of type modules
 generateCoderModules :: (t0 -> Graph.Graph -> t1 -> Either t2 (Maybe t3)) -> Graph.Graph -> [Packaging.Module] -> [t1] -> t0 -> Either t2 [t3]
 generateCoderModules codec bsGraph universeModules typeModules cx =
@@ -147,6 +156,7 @@ generateCoderModules codec bsGraph universeModules typeModules cx =
           allElements = Lists.concat2 schemaElements dataElements
           graph = Lexical.elementsToGraph bsGraph schemaTypes allElements
       in (Eithers.map (\results -> Optionals.cat results) (Eithers.mapList (\m -> codec cx graph m) typeModules))
+
 -- | Generate the lexicon content from a graph
 generateLexicon :: Graph.Graph -> Either Errors.Error String
 generateLexicon graph =
@@ -163,6 +173,7 @@ generateLexicon graph =
         let termLines = Lists.map (\b -> formatTermBinding b) sortedTerms
             primitiveLines = Lists.map (\p -> formatPrimitive p) sortedPrimitives
         in (Right (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Primitives:\n" (Strings.unlines primitiveLines)) "\nTypes:\n") (Strings.unlines typeLines)) "\nTerms:\n") (Strings.unlines termLines)))))
+
 -- | Pure core of code generation: given a coder, language, infer flag, bootstrap graph, universe, and modules to generate, produce a list of (filePath, content) pairs. Emission flags doExpand/doHoistCaseStatements/doHoistPolymorphicLetBindings are derived from the absence of the matching LanguageFeature in lang.supportedFeatures: a target that lacks partialApplication needs eta expansion (doExpand=true), and so on.
 generateSourceFiles :: Ord t0 => ((Packaging.Module -> [Packaging.Definition] -> Typing.InferenceContext -> Graph.Graph -> Either Errors.Error (M.Map t0 t1)) -> Coders.Language -> Bool -> Graph.Graph -> [Packaging.Module] -> [Packaging.Module] -> Typing.InferenceContext -> Either Errors.Error [(t0, t1)])
 generateSourceFiles printDefinitions lang doInfer bsGraph universeModules modsToGenerate cx =
@@ -277,6 +288,7 @@ generateSourceFiles printDefinitions lang doInfer bsGraph universeModules modsTo
             let mod = Pairs.first p
                 defs = Pairs.second p
             in (Eithers.map (\m -> Maps.toList m) (printDefinitions mod (Lists.map (\d -> Packaging.DefinitionTerm d) defs) cx g1))) (Lists.zip refreshedMods dedupedDefLists))))))) (\termFiles -> Right (Lists.concat2 schemaFiles termFiles))))
+
 -- | Perform type inference and generate the lexicon for a set of modules
 inferAndGenerateLexicon :: Typing.InferenceContext -> Graph.Graph -> [Packaging.Module] -> Either Errors.Error String
 inferAndGenerateLexicon cx bsGraph kernelModules =
@@ -292,6 +304,7 @@ inferAndGenerateLexicon cx bsGraph kernelModules =
       in (Eithers.bind (Inference.inferGraphTypes cx dataElements g0) (\inferResultWithCx ->
         let g1 = Pairs.first (Pairs.first inferResultWithCx)
         in (generateLexicon g1)))
+
 -- | Perform type inference on modules and reconstruct with inferred types
 inferModules :: Typing.InferenceContext -> Graph.Graph -> [Packaging.Module] -> [Packaging.Module] -> Either Errors.Error [Packaging.Module]
 inferModules cx bsGraph universeMods targetMods =
@@ -308,6 +321,7 @@ inferModules cx bsGraph universeMods targetMods =
         let inferResult = Pairs.first inferResultWithCx
             inferredElements = Pairs.second inferResult
         in (Right (Lists.map (refreshModule inferredElements) targetMods))))
+
 -- | Infer types for target modules in the context of a typed universe
 inferModulesGiven :: Typing.InferenceContext -> Graph.Graph -> [Packaging.Module] -> [Packaging.Module] -> Either Errors.Error [Packaging.Module]
 inferModulesGiven cx bsGraph universeMods targetMods =
@@ -355,6 +369,7 @@ inferModulesGiven cx bsGraph universeMods targetMods =
             newlyInferredBindings = Pairs.second inferResult
             allInferredBindings = Lists.concat2 newlyInferredBindings untouchedTypedBindings
         in (Right (Lists.map (refreshModule allInferredBindings) targetMods))))
+
 -- | Lower Definition.primitive arms to Definition.term arms with term-encoded PrimitiveDefinition
 lowerPrimitiveDefinitions :: Packaging.Module -> Packaging.Module
 lowerPrimitiveDefinitions m =
@@ -396,6 +411,7 @@ lowerPrimitiveDefinitions m =
           Packaging.moduleMetadata = (Packaging.moduleMetadata m),
           Packaging.moduleDependencies = newDeps,
           Packaging.moduleDefinitions = newDefs}))
+
 -- | Compute transitive closure of dependencies for a set of modules
 moduleDepsTransitive :: M.Map Packaging.ModuleName Packaging.Module -> [Packaging.Module] -> [Packaging.Module]
 moduleDepsTransitive nsMap modules =
@@ -403,9 +419,11 @@ moduleDepsTransitive nsMap modules =
       let closure =
               Sets.union (transitiveDeps (\m -> Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies m)) nsMap modules) (Sets.fromList (Lists.map (\m -> Packaging.moduleName m) modules))
       in (Optionals.cat (Lists.map (\n -> Maps.lookup n nsMap) (Sets.toList closure)))
+
 -- | Convert a module name to a file path (e.g., hydra.core -> hydra/core)
 moduleNameToPath :: Packaging.ModuleName -> String
 moduleNameToPath ns = Strings.intercalate "/" (Strings.splitOn "." (Packaging.unModuleName ns))
+
 -- | Convert a Module to a JSON string
 moduleToJson :: M.Map Core.Name Core.Type -> Packaging.Module -> Either Errors.Error String
 moduleToJson schemaMap m =
@@ -413,6 +431,7 @@ moduleToJson schemaMap m =
       let term = EncodePackaging.module_ m
           modType = Core.TypeVariable (Core.Name "hydra.packaging.Module")
       in (Eithers.map (\json -> Writer.printJson json) (Eithers.bimap (\_e -> Errors.ErrorOther (Errors.OtherError _e)) (\_a -> _a) (Encode.toJson schemaMap (Core.Name "hydra.packaging.Module") modType term)))
+
 -- | Convert a generated Module into a Source module
 moduleToSourceModule :: Packaging.Module -> Packaging.Module
 moduleToSourceModule m =
@@ -442,6 +461,7 @@ moduleToSourceModule m =
             Packaging.moduleDependencyPackage = Nothing}],
         Packaging.moduleDefinitions = [
           moduleDef]}
+
 -- | Build a graph from universe modules and working modules, using an explicit bootstrap graph
 modulesToGraph :: Graph.Graph -> [Packaging.Module] -> [Packaging.Module] -> Graph.Graph
 modulesToGraph bsGraph universeModules modules =
@@ -493,6 +513,7 @@ modulesToGraph bsGraph universeModules modules =
         Graph.graphPrimitives = (Graph.graphPrimitives baseGraph),
         Graph.graphSchemaTypes = (Graph.graphSchemaTypes baseGraph),
         Graph.graphTypeVariables = (Graph.graphTypeVariables baseGraph)}
+
 -- | Rebuild a module's term definitions using freshly inferred bindings
 refreshModule :: [Core.Binding] -> Packaging.Module -> Packaging.Module
 refreshModule inferredElements m =
@@ -513,6 +534,7 @@ refreshModule inferredElements m =
           Packaging.termDefinitionSignature = (Optionals.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b)),
           Packaging.termDefinitionBody = (Core.bindingTerm b)})) (Lists.find (\b -> Equality.equal (Core.bindingName b) (Packaging.termDefinitionName v0)) inferredElements)
         Packaging.DefinitionPrimitive v0 -> Just (Packaging.DefinitionPrimitive v0)) (Packaging.moduleDefinitions m)))})
+
 -- | Compute transitive closure of module dependencies
 transitiveDeps :: (Packaging.Module -> [Packaging.ModuleName]) -> M.Map Packaging.ModuleName Packaging.Module -> [Packaging.Module] -> S.Set Packaging.ModuleName
 transitiveDeps getDeps nsMap startMods =

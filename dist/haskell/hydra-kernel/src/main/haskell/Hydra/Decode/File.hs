@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term decoders for hydra.file
 
 module Hydra.Decode.File where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Decode.Time as Time
@@ -18,6 +20,7 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Decoder for hydra.file.FileExtension
 fileExtension :: Graph.Graph -> Core.Term -> Either Errors.DecodingError File.FileExtension
 fileExtension cx raw =
@@ -28,6 +31,7 @@ fileExtension cx raw =
           _ -> Left (Errors.DecodingError "expected string literal")
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.file.FilePath
 filePath :: Graph.Graph -> Core.Term -> Either Errors.DecodingError File.FilePath
 filePath cx raw =
@@ -38,6 +42,7 @@ filePath cx raw =
           _ -> Left (Errors.DecodingError "expected string literal")
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.file.FileStatus
 fileStatus :: Graph.Graph -> Core.Term -> Either Errors.DecodingError File.FileStatus
 fileStatus cx raw =
@@ -57,6 +62,7 @@ fileStatus cx raw =
           File.fileStatusAccessTime = field_accessTime,
           File.fileStatusStatusChangeTime = field_statusChangeTime})))))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.file.FileStatus")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.file.FileType
 fileType :: Graph.Graph -> Core.Term -> Either Errors.DecodingError File.FileType
 fileType cx raw =

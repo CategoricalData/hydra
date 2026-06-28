@@ -49,8 +49,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"boolean": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -66,8 +66,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"boolean": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -82,8 +82,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"boolean": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -99,8 +99,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"boolean": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -116,8 +116,8 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": {"int32": {}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": "int32"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -133,7 +133,7 @@
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": {"int32": {}}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": "int32"}}}},
         "isPure": true,
         "isTotal": true}}]}

@@ -254,7 +254,7 @@
           "parameters": [
             {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
             {"name": "arg1", "type": {"set": {"variable": "x"}}, "isLazy": false}],
-          "result": {"type": {"literal": {"boolean": {}}}}},
+          "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -270,7 +270,7 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [{"name": "arg0", "type": {"set": {"variable": "x"}}, "isLazy": false}],
-          "result": {"type": {"literal": {"boolean": {}}}}},
+          "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -302,7 +302,7 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [{"name": "arg0", "type": {"set": {"variable": "x"}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": {"int32": {}}}}}},
+          "result": {"type": {"literal": {"integer": "int32"}}}},
         "isPure": true,
         "isTotal": true}},
     {

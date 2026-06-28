@@ -512,7 +512,7 @@
               "name": "arg0",
               "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"optional": {"variable": "x"}}}},
               "isLazy": false}],
-          "result": {"type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": {"boolean": {}}}}}}},
+          "result": {"type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "boolean"}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -554,7 +554,7 @@
               "name": "arg0",
               "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"optional": {"variable": "x"}}}},
               "isLazy": false}],
-          "result": {"type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": {"boolean": {}}}}}}},
+          "result": {"type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "boolean"}}}}},
         "body": {
           "annotated": {
             "body": {

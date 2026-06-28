@@ -38,7 +38,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.ConstantConditionError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -66,7 +66,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.DuplicateBindingError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -94,7 +94,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.DuplicateFieldError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -122,7 +122,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.DuplicateRecordTypeFieldNamesError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -153,7 +153,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.DuplicateUnionTypeFieldNamesError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -184,7 +184,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.EmptyCaseStatementError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -213,7 +213,7 @@
         "signature": {
           "typeParameters": [{"name": "t0", "constraints": []}],
           "parameters": [{"name": "arg0", "type": {"variable": "t0"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "typeLambda": {
             "parameter": "t0",
@@ -229,7 +229,7 @@
         "signature": {
           "typeParameters": [{"name": "t0", "constraints": []}],
           "parameters": [{"name": "arg0", "type": {"variable": "t0"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "typeLambda": {
             "parameter": "t0",
@@ -248,7 +248,7 @@
         "signature": {
           "typeParameters": [{"name": "t0", "constraints": []}],
           "parameters": [{"name": "arg0", "type": {"variable": "t0"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "typeLambda": {
             "parameter": "t0",
@@ -270,7 +270,7 @@
         "signature": {
           "typeParameters": [{"name": "t0", "constraints": []}],
           "parameters": [{"name": "arg0", "type": {"variable": "t0"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "typeLambda": {
             "parameter": "t0",
@@ -292,7 +292,7 @@
         "signature": {
           "typeParameters": [{"name": "t0", "constraints": []}],
           "parameters": [{"name": "arg0", "type": {"variable": "t0"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "typeLambda": {
             "parameter": "t0",
@@ -311,7 +311,7 @@
         "signature": {
           "typeParameters": [{"name": "t0", "constraints": []}],
           "parameters": [{"name": "arg0", "type": {"variable": "t0"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "typeLambda": {
             "parameter": "t0",
@@ -330,7 +330,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.InvalidForallParameterNameError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -361,7 +361,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.InvalidLambdaParameterNameError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -392,7 +392,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.InvalidLetBindingNameError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -423,7 +423,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.InvalidTermError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -506,7 +506,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.InvalidTypeError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -581,7 +581,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.InvalidTypeLambdaParameterNameError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -612,7 +612,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.InvalidTypeSchemeVariableNameError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -643,7 +643,7 @@
         "signature": {
           "typeParameters": [{"name": "t0", "constraints": []}],
           "parameters": [{"name": "arg0", "type": {"variable": "t0"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "typeLambda": {
             "parameter": "t0",
@@ -665,7 +665,7 @@
         "signature": {
           "typeParameters": [{"name": "t0", "constraints": []}],
           "parameters": [{"name": "arg0", "type": {"variable": "t0"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "typeLambda": {
             "parameter": "t0",
@@ -687,7 +687,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.NonComparableMapKeyTypeError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -718,7 +718,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.NonComparableSetElementTypeError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -749,7 +749,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.RedundantWrapUnwrapError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -778,7 +778,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.SelfApplicationError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -806,7 +806,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.SingleVariantUnionError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -835,7 +835,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.TermVariableShadowingError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -866,7 +866,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.TypeVariableShadowingInForallError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -897,7 +897,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.TypeVariableShadowingInTypeLambdaError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -928,7 +928,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.UndefinedFieldError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -973,7 +973,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.UndefinedTermVariableError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -1004,7 +1004,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.UndefinedTypeVariableError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -1035,7 +1035,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.UndefinedTypeVariableInBindingTypeError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -1066,7 +1066,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.UndefinedTypeVariableInLambdaDomainError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -1098,7 +1098,7 @@
           "typeParameters": [],
           "parameters": [
             {"name": "arg0", "type": {"variable": "hydra.error.core.UndefinedTypeVariableInTypeApplicationError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -1129,7 +1129,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.UnexpectedTermVariantError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -1176,7 +1176,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.UnexpectedTypeVariantError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -1223,7 +1223,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.UnknownPrimitiveNameError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -1254,7 +1254,7 @@
         "signature": {
           "typeParameters": [{"name": "t0", "constraints": []}],
           "parameters": [{"name": "arg0", "type": {"variable": "t0"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "typeLambda": {
             "parameter": "t0",
@@ -1276,7 +1276,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.core.UntypedTermVariableError"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -1307,7 +1307,7 @@
         "signature": {
           "typeParameters": [{"name": "t0", "constraints": []}],
           "parameters": [{"name": "arg0", "type": {"variable": "t0"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "typeLambda": {
             "parameter": "t0",

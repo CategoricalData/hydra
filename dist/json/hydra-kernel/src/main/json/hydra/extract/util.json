@@ -98,15 +98,14 @@
                                                   "application": {
                                                     "function": {
                                                       "application": {
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}},
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": "string"}}},
                                                         "argument": {"application": {"function": {"unwrap": "hydra.core.Name"}, "argument": {"variable": "fname"}}}}},
                                                     "argument": {"literal": {"string": "equalTo"}}}}}},
                                             "argument": {
                                               "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
-                                                    "body": {
-                                                      "either": {"right": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "equalTo", "term": {"unit": {}}}}}}},
+                                                    "body": {"either": {"right": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "equalTo", "term": "unit"}}}}},
                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                 "type": {"variable": "hydra.util.Comparison"}}}}},
                                         "argument": {
@@ -123,15 +122,14 @@
                                                       "application": {
                                                         "function": {
                                                           "application": {
-                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}},
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": "string"}}},
                                                             "argument": {"application": {"function": {"unwrap": "hydra.core.Name"}, "argument": {"variable": "fname"}}}}},
                                                         "argument": {"literal": {"string": "lessThan"}}}}}},
                                                 "argument": {
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {
-                                                          "either": {"right": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "lessThan", "term": {"unit": {}}}}}}},
+                                                        "body": {"either": {"right": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "lessThan", "term": "unit"}}}}},
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"variable": "hydra.util.Comparison"}}}}},
                                             "argument": {
@@ -148,7 +146,7 @@
                                                           "application": {
                                                             "function": {
                                                               "application": {
-                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}},
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": "string"}}},
                                                                 "argument": {"application": {"function": {"unwrap": "hydra.core.Name"}, "argument": {"variable": "fname"}}}}},
                                                             "argument": {"literal": {"string": "greaterThan"}}}}}},
                                                     "argument": {
@@ -156,7 +154,7 @@
                                                         "body": {
                                                           "typeApplication": {
                                                             "body": {
-                                                              "either": {"right": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "greaterThan", "term": {"unit": {}}}}}}},
+                                                              "either": {"right": {"inject": {"typeName": "hydra.util.Comparison", "field": {"name": "greaterThan", "term": "unit"}}}}},
                                                             "type": {"variable": "hydra.errors.Error"}}},
                                                         "type": {"variable": "hydra.util.Comparison"}}}}},
                                                 "argument": {

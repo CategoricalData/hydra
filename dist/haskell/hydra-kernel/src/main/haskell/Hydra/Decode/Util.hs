@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term decoders for hydra.util
 
 module Hydra.Decode.Util where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Decode.Packaging as Packaging
@@ -17,6 +19,7 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Decoder for hydra.util.CaseConvention
 caseConvention :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Util.CaseConvention
 caseConvention cx raw =
@@ -36,6 +39,7 @@ caseConvention cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.util.Comparison
 comparison :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Util.Comparison
 comparison cx raw =
@@ -54,6 +58,7 @@ comparison cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.util.ModuleNames
 moduleNames :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError n) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Util.ModuleNames n)
 moduleNames n cx raw =
@@ -64,6 +69,7 @@ moduleNames n cx raw =
           Util.moduleNamesFocus = field_focus,
           Util.moduleNamesMapping = field_mapping}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.util.ModuleNames")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.util.Precision
 precision :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Util.Precision
 precision cx raw =
@@ -89,6 +95,7 @@ precision cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.util.QualifiedName
 qualifiedName :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Util.QualifiedName
 qualifiedName cx raw =

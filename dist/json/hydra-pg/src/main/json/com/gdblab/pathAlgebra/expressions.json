@@ -178,7 +178,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Reference to a property graph"}}}]}}}}}},
     {
       "type": {
@@ -231,7 +231,7 @@
               "body": {
                 "record": [
                   {"name": "target", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathElement"}},
-                  {"name": "value", "type": {"literal": {"string": {}}}}]},
+                  {"name": "value", "type": {"literal": "string"}}]},
               "annotation": {
                 "map": [
                   {
@@ -247,7 +247,7 @@
               "body": {
                 "record": [
                   {"name": "target", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathElement"}},
-                  {"name": "property", "type": {"literal": {"string": {}}}},
+                  {"name": "property", "type": {"literal": "string"}},
                   {"name": "value", "type": {"variable": "com.gdblab.pathAlgebra.expressions.LiteralValue"}}]},
               "annotation": {
                 "map": [
@@ -262,7 +262,7 @@
               "body": {
                 "record": [
                   {"name": "target", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathElement"}},
-                  {"name": "property", "type": {"literal": {"string": {}}}},
+                  {"name": "property", "type": {"literal": "string"}},
                   {"name": "operator", "type": {"variable": "com.gdblab.pathAlgebra.expressions.ComparisonOperator"}},
                   {"name": "value", "type": {"variable": "com.gdblab.pathAlgebra.expressions.LiteralValue"}}]},
               "annotation": {
@@ -279,12 +279,12 @@
             "annotated": {
               "body": {
                 "union": [
-                  {"name": "equal", "type": {"unit": {}}},
-                  {"name": "notEqual", "type": {"unit": {}}},
-                  {"name": "lessThan", "type": {"unit": {}}},
-                  {"name": "lessThanOrEqual", "type": {"unit": {}}},
-                  {"name": "greaterThan", "type": {"unit": {}}},
-                  {"name": "greaterThanOrEqual", "type": {"unit": {}}}]},
+                  {"name": "equal", "type": "unit"},
+                  {"name": "notEqual", "type": "unit"},
+                  {"name": "lessThan", "type": "unit"},
+                  {"name": "lessThanOrEqual", "type": "unit"},
+                  {"name": "greaterThan", "type": "unit"},
+                  {"name": "greaterThanOrEqual", "type": "unit"}]},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Comparison operators for property conditions"}}}]}}}}}},
     {
@@ -296,10 +296,10 @@
             "annotated": {
               "body": {
                 "union": [
-                  {"name": "string", "type": {"literal": {"string": {}}}},
-                  {"name": "integer", "type": {"literal": {"integer": {"int32": {}}}}},
-                  {"name": "float", "type": {"literal": {"float": {"float64": {}}}}},
-                  {"name": "boolean", "type": {"literal": {"boolean": {}}}}]},
+                  {"name": "string", "type": {"literal": "string"}},
+                  {"name": "integer", "type": {"literal": {"integer": "int32"}}},
+                  {"name": "float", "type": {"literal": {"float": "float64"}}},
+                  {"name": "boolean", "type": {"literal": "boolean"}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Literal values for comparisons"}}}]}}}}}},
     {
       "type": {
@@ -308,7 +308,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"record": [{"name": "length", "type": {"literal": {"integer": {"int32": {}}}}}]},
+              "body": {"record": [{"name": "length", "type": {"literal": {"integer": "int32"}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Condition on path length: len() = i"}}}]}}}}}},
     {
       "type": {
@@ -319,10 +319,10 @@
             "annotated": {
               "body": {
                 "union": [
-                  {"name": "node", "type": {"literal": {"integer": {"int32": {}}}}},
-                  {"name": "edge", "type": {"literal": {"integer": {"int32": {}}}}},
-                  {"name": "first", "type": {"unit": {}}},
-                  {"name": "last", "type": {"unit": {}}}]},
+                  {"name": "node", "type": {"literal": {"integer": "int32"}}},
+                  {"name": "edge", "type": {"literal": {"integer": "int32"}}},
+                  {"name": "first", "type": "unit"},
+                  {"name": "last", "type": "unit"}]},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "References to elements within a path"}}}]}}}}}},
     {
@@ -395,11 +395,11 @@
             "annotated": {
               "body": {
                 "union": [
-                  {"name": "walk", "type": {"unit": {}}},
-                  {"name": "trail", "type": {"unit": {}}},
-                  {"name": "acyclic", "type": {"unit": {}}},
-                  {"name": "simple", "type": {"unit": {}}},
-                  {"name": "shortest", "type": {"unit": {}}}]},
+                  {"name": "walk", "type": "unit"},
+                  {"name": "trail", "type": "unit"},
+                  {"name": "acyclic", "type": "unit"},
+                  {"name": "simple", "type": "unit"},
+                  {"name": "shortest", "type": "unit"}]},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Path semantics for recursive operations"}}}]}}}}}},
     {
@@ -437,14 +437,14 @@
             "annotated": {
               "body": {
                 "union": [
-                  {"name": "none", "type": {"unit": {}}},
-                  {"name": "source", "type": {"unit": {}}},
-                  {"name": "target", "type": {"unit": {}}},
-                  {"name": "length", "type": {"unit": {}}},
-                  {"name": "sourceTarget", "type": {"unit": {}}},
-                  {"name": "sourceLength", "type": {"unit": {}}},
-                  {"name": "targetLength", "type": {"unit": {}}},
-                  {"name": "sourceTargetLength", "type": {"unit": {}}}]},
+                  {"name": "none", "type": "unit"},
+                  {"name": "source", "type": "unit"},
+                  {"name": "target", "type": "unit"},
+                  {"name": "length", "type": "unit"},
+                  {"name": "sourceTarget", "type": "unit"},
+                  {"name": "sourceLength", "type": "unit"},
+                  {"name": "targetLength", "type": "unit"},
+                  {"name": "sourceTargetLength", "type": "unit"}]},
               "annotation": {
                 "map": [
                   {
@@ -473,13 +473,13 @@
             "annotated": {
               "body": {
                 "union": [
-                  {"name": "partition", "type": {"unit": {}}},
-                  {"name": "group", "type": {"unit": {}}},
-                  {"name": "path", "type": {"unit": {}}},
-                  {"name": "partitionGroup", "type": {"unit": {}}},
-                  {"name": "partitionPath", "type": {"unit": {}}},
-                  {"name": "groupPath", "type": {"unit": {}}},
-                  {"name": "partitionGroupPath", "type": {"unit": {}}}]},
+                  {"name": "partition", "type": "unit"},
+                  {"name": "group", "type": "unit"},
+                  {"name": "path", "type": "unit"},
+                  {"name": "partitionGroup", "type": "unit"},
+                  {"name": "partitionPath", "type": "unit"},
+                  {"name": "groupPath", "type": "unit"},
+                  {"name": "partitionGroupPath", "type": "unit"}]},
               "annotation": {
                 "map": [
                   {
@@ -510,7 +510,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"union": [{"name": "all", "type": {"unit": {}}}, {"name": "limited", "type": {"literal": {"integer": {"int32": {}}}}}]},
+              "body": {"union": [{"name": "all", "type": "unit"}, {"name": "limited", "type": {"literal": {"integer": "int32"}}}]},
               "annotation": {
                 "map": [
                   {"key": {"variable": "description"}, "value": {"literal": {"string": "Projection specification: * or specific number"}}}]}}}}}},
@@ -537,7 +537,7 @@
             "annotated": {
               "body": {
                 "record": [
-                  {"name": "alias", "type": {"optional": {"literal": {"string": {}}}}},
+                  {"name": "alias", "type": {"optional": {"literal": "string"}}},
                   {"name": "source", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PropertySource"}}]},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Extract properties from path elements"}}}]}}}}}},
@@ -564,7 +564,7 @@
               "body": {
                 "record": [
                   {"name": "element", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathElement"}},
-                  {"name": "property", "type": {"literal": {"string": {}}}}]},
+                  {"name": "property", "type": {"literal": "string"}}]},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Reference to a node property: node.property"}}}]}}}}}},
     {
@@ -577,7 +577,7 @@
               "body": {
                 "record": [
                   {"name": "element", "type": {"variable": "com.gdblab.pathAlgebra.expressions.PathElement"}},
-                  {"name": "property", "type": {"literal": {"string": {}}}}]},
+                  {"name": "property", "type": {"literal": "string"}}]},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Reference to an edge property: edge.property"}}}]}}}}}},
     {
@@ -588,10 +588,7 @@
           "body": {
             "annotated": {
               "body": {
-                "union": [
-                  {"name": "length", "type": {"unit": {}}},
-                  {"name": "startNode", "type": {"unit": {}}},
-                  {"name": "endNode", "type": {"unit": {}}}]},
+                "union": [{"name": "length", "type": "unit"}, {"name": "startNode", "type": "unit"}, {"name": "endNode", "type": "unit"}]},
               "annotation": {
                 "map": [
                   {

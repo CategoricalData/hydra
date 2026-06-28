@@ -16,7 +16,7 @@
                     "name": "currentNamespace",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {
                           "map": [
                             {
@@ -28,7 +28,7 @@
                     "name": "constructorCounts",
                     "type": {
                       "annotated": {
-                        "body": {"map": {"keys": {"literal": {"string": {}}}, "values": {"literal": {"integer": {"int32": {}}}}}},
+                        "body": {"map": {"keys": {"literal": "string"}, "values": {"literal": {"integer": "int32"}}}},
                         "annotation": {
                           "map": [
                             {
@@ -40,7 +40,7 @@
                     "name": "ambiguousNames",
                     "type": {
                       "annotated": {
-                        "body": {"set": {"literal": {"string": {}}}},
+                        "body": {"set": {"literal": "string"}},
                         "annotation": {
                           "map": [
                             {
@@ -52,7 +52,7 @@
                     "name": "sanitizedAccessors",
                     "type": {
                       "annotated": {
-                        "body": {"set": {"literal": {"string": {}}}},
+                        "body": {"set": {"literal": "string"}},
                         "annotation": {
                           "map": [
                             {

@@ -59,7 +59,7 @@
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An optional name for the constraint"}}}]}}}},
                   {
                     "name": "body",
@@ -109,7 +109,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
                   {
@@ -161,25 +161,25 @@
                     "name": "months",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int64": {}}}},
+                        "body": {"literal": {"integer": "int64"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A number of months"}}}]}}}},
                   {
                     "name": "days",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int64": {}}}},
+                        "body": {"literal": {"integer": "int64"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A number of days"}}}]}}}},
                   {
                     "name": "seconds",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int64": {}}}},
+                        "body": {"literal": {"integer": "int64"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A number of seconds"}}}]}}}},
                   {
                     "name": "nanoseconds",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A number of nanoseconds of the second"}}}]}}}}]},
               "annotation": {
@@ -196,7 +196,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
                   {
@@ -243,19 +243,19 @@
                     "name": "year",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The year"}}}]}}}},
                   {
                     "name": "month",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The month of the year"}}}]}}}},
                   {
                     "name": "day",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The day of the month"}}}]}}}}]},
               "annotation": {
                 "map": [
@@ -303,25 +303,25 @@
                     "name": "hour",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The hour of the day"}}}]}}}},
                   {
                     "name": "minute",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The minute of the hour"}}}]}}}},
                   {
                     "name": "second",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The second of the minute"}}}]}}}},
                   {
                     "name": "nanosecond",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The nanosecond of the second"}}}]}}}}]},
               "annotation": {
                 "map": [
@@ -347,7 +347,7 @@
                             "body": {
                               "function": {
                                 "domain": {"variable": "v"},
-                                "codomain": {"either": {"left": {"literal": {"string": {}}}, "right": {"variable": "hydra.neo4j.model.ElementId"}}}}},
+                                "codomain": {"either": {"left": {"literal": "string"}, "right": {"variable": "hydra.neo4j.model.ElementId"}}}}},
                             "annotation": {
                               "map": [
                                 {
@@ -360,7 +360,7 @@
                             "body": {
                               "function": {
                                 "domain": {"variable": "hydra.neo4j.model.ElementId"},
-                                "codomain": {"either": {"left": {"literal": {"string": {}}}, "right": {"variable": "v"}}}}},
+                                "codomain": {"either": {"left": {"literal": "string"}, "right": {"variable": "v"}}}}},
                             "annotation": {
                               "map": [
                                 {
@@ -373,7 +373,7 @@
                             "body": {
                               "function": {
                                 "domain": {"variable": "v"},
-                                "codomain": {"either": {"left": {"literal": {"string": {}}}, "right": {"variable": "hydra.neo4j.model.Value"}}}}},
+                                "codomain": {"either": {"left": {"literal": "string"}, "right": {"variable": "hydra.neo4j.model.Value"}}}}},
                             "annotation": {
                               "map": [
                                 {
@@ -386,7 +386,7 @@
                             "body": {
                               "function": {
                                 "domain": {"variable": "hydra.neo4j.model.Value"},
-                                "codomain": {"either": {"left": {"literal": {"string": {}}}, "right": {"variable": "v"}}}}},
+                                "codomain": {"either": {"left": {"literal": "string"}, "right": {"variable": "v"}}}}},
                             "annotation": {
                               "map": [
                                 {
@@ -483,7 +483,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
                   {
@@ -574,21 +574,21 @@
                     "name": "x",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"float": {"float64": {}}}},
+                        "body": {"literal": {"float": "float64"}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The x coordinate (longitude under WGS-84)"}}}]}}}},
                   {
                     "name": "y",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"float": {"float64": {}}}},
+                        "body": {"literal": {"float": "float64"}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The y coordinate (latitude under WGS-84)"}}}]}}}},
                   {
                     "name": "z",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"float": {"float64": {}}}}},
+                        "body": {"optional": {"literal": {"float": "float64"}}},
                         "annotation": {
                           "map": [
                             {
@@ -769,7 +769,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
                   {
@@ -811,7 +811,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"integer": {"int32": {}}}}},
+              "body": {"wrap": {"literal": {"integer": "int32"}}},
               "annotation": {
                 "map": [
                   {
@@ -832,13 +832,13 @@
                     "name": "boolean",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A boolean value"}}}]}}}},
                   {
                     "name": "bytes",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"binary": {}}},
+                        "body": {"literal": "binary"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A byte array"}}}]}}}},
                   {
                     "name": "date",
@@ -862,13 +862,13 @@
                     "name": "float",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"float": {"float64": {}}}},
+                        "body": {"literal": {"float": "float64"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 64-bit floating-point number"}}}]}}}},
                   {
                     "name": "integer",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int64": {}}}},
+                        "body": {"literal": {"integer": "int64"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 64-bit integer"}}}]}}}},
                   {
                     "name": "list",
@@ -904,7 +904,7 @@
                     "name": "null",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A null value"}}}]}}}},
                   {
                     "name": "path",
@@ -928,7 +928,7 @@
                     "name": "string",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A string value"}}}]}}}},
                   {
                     "name": "time",
@@ -956,67 +956,67 @@
                     "name": "boolean",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The BOOLEAN type"}}}]}}}},
                   {
                     "name": "string",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The STRING type"}}}]}}}},
                   {
                     "name": "integer",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The INTEGER type"}}}]}}}},
                   {
                     "name": "float",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The FLOAT type"}}}]}}}},
                   {
                     "name": "date",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The DATE type"}}}]}}}},
                   {
                     "name": "localTime",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The LOCAL TIME type"}}}]}}}},
                   {
                     "name": "zonedTime",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The ZONED TIME type"}}}]}}}},
                   {
                     "name": "localDateTime",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The LOCAL DATETIME type"}}}]}}}},
                   {
                     "name": "zonedDateTime",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The ZONED DATETIME type"}}}]}}}},
                   {
                     "name": "duration",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The DURATION type"}}}]}}}},
                   {
                     "name": "point",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The POINT type"}}}]}}}},
                   {
                     "name": "list",
@@ -1067,7 +1067,7 @@
                     "name": "dimension",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The dimension (length) of the vector"}}}]}}}}]},
               "annotation": {
@@ -1082,7 +1082,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
                   {
@@ -1097,7 +1097,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"integer": {"int32": {}}}}},
+              "body": {"wrap": {"literal": {"integer": "int32"}}},
               "annotation": {
                 "map": [
                   {

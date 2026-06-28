@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Primitives in the hydra.lib.eithers module.
 
 module Hydra.Lib.Eithers where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -31,6 +33,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 bimap :: Packaging.PrimitiveDefinition
 bimap =
     Packaging.PrimitiveDefinition {
@@ -111,6 +114,7 @@ bimap =
                     Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
                     Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))))}))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "e"))}))}))}))})))}
+
 bind :: Packaging.PrimitiveDefinition
 bind =
     Packaging.PrimitiveDefinition {
@@ -174,6 +178,7 @@ bind =
                   Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "x"))))}))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "f"))})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "e"))}))}))})))}
+
 either :: Packaging.PrimitiveDefinition
 either =
     Packaging.PrimitiveDefinition {
@@ -225,6 +230,7 @@ either =
       Packaging.primitiveDefinitionIsPure = True,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 foldl :: Packaging.PrimitiveDefinition
 foldl =
     Packaging.PrimitiveDefinition {
@@ -310,6 +316,7 @@ foldl =
                             Core.applicationArgument = (Core.TermVariable (Core.Name "el"))}))}))}))}))}))})),
                 Core.applicationArgument = (Core.TermEither (Right (Core.TermVariable (Core.Name "acc0"))))})),
               Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}))}))})))}
+
 fromLeft :: Packaging.PrimitiveDefinition
 fromLeft =
     Packaging.PrimitiveDefinition {
@@ -366,6 +373,7 @@ fromLeft =
                 Core.lambdaDomain = Nothing,
                 Core.lambdaBody = (Core.TermVariable (Core.Name "def"))}))})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "e"))}))}))})))}
+
 fromRight :: Packaging.PrimitiveDefinition
 fromRight =
     Packaging.PrimitiveDefinition {
@@ -422,6 +430,7 @@ fromRight =
                 Core.lambdaDomain = Nothing,
                 Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "e"))}))}))})))}
+
 isLeft :: Packaging.PrimitiveDefinition
 isLeft =
     Packaging.PrimitiveDefinition {
@@ -470,6 +479,7 @@ isLeft =
               Core.lambdaDomain = Nothing,
               Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean False))}))})),
           Core.applicationArgument = (Core.TermVariable (Core.Name "e"))}))})))}
+
 isRight :: Packaging.PrimitiveDefinition
 isRight =
     Packaging.PrimitiveDefinition {
@@ -518,6 +528,7 @@ isRight =
               Core.lambdaDomain = Nothing,
               Core.lambdaBody = (Core.TermLiteral (Core.LiteralBoolean True))}))})),
           Core.applicationArgument = (Core.TermVariable (Core.Name "e"))}))})))}
+
 lefts :: Packaging.PrimitiveDefinition
 lefts =
     Packaging.PrimitiveDefinition {
@@ -582,6 +593,7 @@ lefts =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "e"))}))}))}))})),
             Core.applicationArgument = (Core.TermList [])})),
           Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))})))}
+
 map :: Packaging.PrimitiveDefinition
 map =
     Packaging.PrimitiveDefinition {
@@ -648,6 +660,7 @@ map =
                   Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))))}))})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "e"))}))}))})))}
+
 mapList :: Packaging.PrimitiveDefinition
 mapList =
     Packaging.PrimitiveDefinition {
@@ -731,6 +744,7 @@ mapList =
                           Core.applicationArgument = (Core.TermVariable (Core.Name "acc"))}))}))}))}))}))})),
               Core.applicationArgument = (Core.TermEither (Right (Core.TermList [])))})),
             Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}))})))}
+
 mapOptional :: Packaging.PrimitiveDefinition
 mapOptional =
     Packaging.PrimitiveDefinition {
@@ -800,6 +814,7 @@ mapOptional =
                 Core.applicationArgument = (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))}))}))})))}
+
 mapSet :: Packaging.PrimitiveDefinition
 mapSet =
     Packaging.PrimitiveDefinition {
@@ -894,6 +909,7 @@ mapSet =
               Core.applicationArgument = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.sets.toList")),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "s"))}))}))}))}))})))}
+
 partitionEithers :: Packaging.PrimitiveDefinition
 partitionEithers =
     Packaging.PrimitiveDefinition {
@@ -976,6 +992,7 @@ partitionEithers =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "e"))}))}))}))})),
             Core.applicationArgument = (Core.TermPair (Core.TermList [], (Core.TermList [])))})),
           Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))})))}
+
 rights :: Packaging.PrimitiveDefinition
 rights =
     Packaging.PrimitiveDefinition {

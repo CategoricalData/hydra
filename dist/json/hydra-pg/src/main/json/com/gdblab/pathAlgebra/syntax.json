@@ -7,16 +7,11 @@
   "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {
-      "type": {
-        "name": "com.gdblab.pathAlgebra.syntax.Number",
-        "body": {"variables": [], "body": {"literal": {"integer": {"bigint": {}}}}}}},
-    {"type": {"name": "com.gdblab.pathAlgebra.syntax.Text", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
-    {
-      "type": {"name": "com.gdblab.pathAlgebra.syntax.Label", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
-    {
-      "type": {"name": "com.gdblab.pathAlgebra.syntax.Variable", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
-    {
-      "type": {"name": "com.gdblab.pathAlgebra.syntax.PathName", "body": {"variables": [], "body": {"literal": {"string": {}}}}}},
+      "type": {"name": "com.gdblab.pathAlgebra.syntax.Number", "body": {"variables": [], "body": {"literal": {"integer": "bigint"}}}}},
+    {"type": {"name": "com.gdblab.pathAlgebra.syntax.Text", "body": {"variables": [], "body": {"literal": "string"}}}},
+    {"type": {"name": "com.gdblab.pathAlgebra.syntax.Label", "body": {"variables": [], "body": {"literal": "string"}}}},
+    {"type": {"name": "com.gdblab.pathAlgebra.syntax.Variable", "body": {"variables": [], "body": {"literal": "string"}}}},
+    {"type": {"name": "com.gdblab.pathAlgebra.syntax.PathName", "body": {"variables": [], "body": {"literal": "string"}}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.PathQuery",
@@ -45,27 +40,21 @@
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "all", "type": {"unit": {}}},
-              {"name": "limited", "type": {"variable": "com.gdblab.pathAlgebra.syntax.Number"}}]}}}},
+            "union": [{"name": "all", "type": "unit"}, {"name": "limited", "type": {"variable": "com.gdblab.pathAlgebra.syntax.Number"}}]}}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.GroupProj",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "all", "type": {"unit": {}}},
-              {"name": "limited", "type": {"variable": "com.gdblab.pathAlgebra.syntax.Number"}}]}}}},
+            "union": [{"name": "all", "type": "unit"}, {"name": "limited", "type": {"variable": "com.gdblab.pathAlgebra.syntax.Number"}}]}}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.PathProj",
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "all", "type": {"unit": {}}},
-              {"name": "limited", "type": {"variable": "com.gdblab.pathAlgebra.syntax.Number"}}]}}}},
+            "union": [{"name": "all", "type": "unit"}, {"name": "limited", "type": {"variable": "com.gdblab.pathAlgebra.syntax.Number"}}]}}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.RestrictorExt",
@@ -73,11 +62,11 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "walk", "type": {"unit": {}}},
-              {"name": "trail", "type": {"unit": {}}},
-              {"name": "simple", "type": {"unit": {}}},
-              {"name": "acyclic", "type": {"unit": {}}},
-              {"name": "shortest", "type": {"unit": {}}}]}}}},
+              {"name": "walk", "type": "unit"},
+              {"name": "trail", "type": "unit"},
+              {"name": "simple", "type": "unit"},
+              {"name": "acyclic", "type": "unit"},
+              {"name": "shortest", "type": "unit"}]}}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.OrderBy",
@@ -93,13 +82,13 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "partition", "type": {"unit": {}}},
-              {"name": "group", "type": {"unit": {}}},
-              {"name": "path", "type": {"unit": {}}},
-              {"name": "partitionGroup", "type": {"unit": {}}},
-              {"name": "partitionPath", "type": {"unit": {}}},
-              {"name": "groupPath", "type": {"unit": {}}},
-              {"name": "partitionGroupPath", "type": {"unit": {}}}]}}}},
+              {"name": "partition", "type": "unit"},
+              {"name": "group", "type": "unit"},
+              {"name": "path", "type": "unit"},
+              {"name": "partitionGroup", "type": "unit"},
+              {"name": "partitionPath", "type": "unit"},
+              {"name": "groupPath", "type": "unit"},
+              {"name": "partitionGroupPath", "type": "unit"}]}}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.GroupByOption",
@@ -107,13 +96,13 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "source", "type": {"unit": {}}},
-              {"name": "target", "type": {"unit": {}}},
-              {"name": "length", "type": {"unit": {}}},
-              {"name": "sourceTarget", "type": {"unit": {}}},
-              {"name": "sourceLength", "type": {"unit": {}}},
-              {"name": "targetLength", "type": {"unit": {}}},
-              {"name": "sourceTargetLength", "type": {"unit": {}}}]}}}},
+              {"name": "source", "type": "unit"},
+              {"name": "target", "type": "unit"},
+              {"name": "length", "type": "unit"},
+              {"name": "sourceTarget", "type": "unit"},
+              {"name": "sourceLength", "type": "unit"},
+              {"name": "targetLength", "type": "unit"},
+              {"name": "sourceTargetLength", "type": "unit"}]}}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.PathPattern",
@@ -147,10 +136,7 @@
         "body": {
           "variables": [],
           "body": {
-            "union": [
-              {"name": "outgoing", "type": {"unit": {}}},
-              {"name": "incoming", "type": {"unit": {}}},
-              {"name": "undirected", "type": {"unit": {}}}]}}}},
+            "union": [{"name": "outgoing", "type": "unit"}, {"name": "incoming", "type": "unit"}, {"name": "undirected", "type": "unit"}]}}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Rpq",
@@ -243,12 +229,12 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "equal", "type": {"unit": {}}},
-              {"name": "notEqual", "type": {"unit": {}}},
-              {"name": "lessThan", "type": {"unit": {}}},
-              {"name": "greaterThan", "type": {"unit": {}}},
-              {"name": "lessThanOrEqual", "type": {"unit": {}}},
-              {"name": "greaterThanOrEqual", "type": {"unit": {}}}]}}}},
+              {"name": "equal", "type": "unit"},
+              {"name": "notEqual", "type": "unit"},
+              {"name": "lessThan", "type": "unit"},
+              {"name": "greaterThan", "type": "unit"},
+              {"name": "lessThanOrEqual", "type": "unit"},
+              {"name": "greaterThanOrEqual", "type": "unit"}]}}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Function",
@@ -290,4 +276,4 @@
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.BoolOp",
-        "body": {"variables": [], "body": {"union": [{"name": "and", "type": {"unit": {}}}, {"name": "or", "type": {"unit": {}}}]}}}}]}
+        "body": {"variables": [], "body": {"union": [{"name": "and", "type": "unit"}, {"name": "or", "type": "unit"}]}}}}]}

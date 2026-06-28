@@ -1,13 +1,16 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Hydra's core data model, consisting of the fundamental hydra.core.Term type and all of its dependencies.
 
 module Hydra.Core where
+
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.Map as M
 import qualified Data.Set as S
+
 -- | A term together with an annotation
 data AnnotatedTerm =
   AnnotatedTerm {
@@ -16,9 +19,13 @@ data AnnotatedTerm =
     -- | The annotation as a single term. By convention this is a map term (Name -> Term) so that multiple independent annotations can coexist, but applications are free to use any term shape.
     annotatedTermAnnotation :: Term}
   deriving (Eq, Ord, Read, Show)
+
 _AnnotatedTerm = Name "hydra.core.AnnotatedTerm"
+
 _AnnotatedTerm_body = Name "body"
+
 _AnnotatedTerm_annotation = Name "annotation"
+
 -- | A type together with an annotation
 data AnnotatedType =
   AnnotatedType {
@@ -27,9 +34,13 @@ data AnnotatedType =
     -- | The annotation as a single term. By convention this is a map term (Name -> Term) so that multiple independent annotations can coexist, but applications are free to use any term shape.
     annotatedTypeAnnotation :: Term}
   deriving (Eq, Ord, Read, Show)
+
 _AnnotatedType = Name "hydra.core.AnnotatedType"
+
 _AnnotatedType_body = Name "body"
+
 _AnnotatedType_annotation = Name "annotation"
+
 -- | A term which applies a function to an argument
 data Application =
   Application {
@@ -38,9 +49,13 @@ data Application =
     -- | The right-hand side of the application
     applicationArgument :: Term}
   deriving (Eq, Ord, Read, Show)
+
 _Application = Name "hydra.core.Application"
+
 _Application_function = Name "function"
+
 _Application_argument = Name "argument"
+
 -- | The type-level analog of an application term
 data ApplicationType =
   ApplicationType {
@@ -49,9 +64,13 @@ data ApplicationType =
     -- | The right-hand side of the application
     applicationTypeArgument :: Type}
   deriving (Eq, Ord, Read, Show)
+
 _ApplicationType = Name "hydra.core.ApplicationType"
+
 _ApplicationType_function = Name "function"
+
 _ApplicationType_argument = Name "argument"
+
 -- | A field with an optional type scheme, used to bind variables to terms in a 'let' expression
 data Binding =
   Binding {
@@ -62,10 +81,15 @@ data Binding =
     -- | The optional type scheme of the bound term
     bindingTypeScheme :: (Maybe TypeScheme)}
   deriving (Eq, Ord, Read, Show)
+
 _Binding = Name "hydra.core.Binding"
+
 _Binding_name = Name "name"
+
 _Binding_term = Name "term"
+
 _Binding_typeScheme = Name "typeScheme"
+
 -- | A single alternative of a case statement (union elimination): the variant being matched, together with the term that handles it.
 data CaseAlternative =
   CaseAlternative {
@@ -74,9 +98,13 @@ data CaseAlternative =
     -- | The handler applied to the matched variant's payload
     caseAlternativeHandler :: Term}
   deriving (Eq, Ord, Read, Show)
+
 _CaseAlternative = Name "hydra.core.CaseAlternative"
+
 _CaseAlternative_name = Name "name"
+
 _CaseAlternative_handler = Name "handler"
+
 -- | A union elimination; a case statement
 data CaseStatement =
   CaseStatement {
@@ -87,10 +115,15 @@ data CaseStatement =
     -- | A list of case alternatives, one per union variant being handled
     caseStatementCases :: [CaseAlternative]}
   deriving (Eq, Ord, Read, Show)
+
 _CaseStatement = Name "hydra.core.CaseStatement"
+
 _CaseStatement_typeName = Name "typeName"
+
 _CaseStatement_default = Name "default"
+
 _CaseStatement_cases = Name "cases"
+
 -- | A type which provides a choice between a 'left' type and a 'right' type
 data EitherType =
   EitherType {
@@ -99,9 +132,13 @@ data EitherType =
     -- | The 'right' alternative
     eitherTypeRight :: Type}
   deriving (Eq, Ord, Read, Show)
+
 _EitherType = Name "hydra.core.EitherType"
+
 _EitherType_left = Name "left"
+
 _EitherType_right = Name "right"
+
 -- | A name/term pair
 data Field =
   Field {
@@ -110,9 +147,13 @@ data Field =
     -- | The value of the field
     fieldTerm :: Term}
   deriving (Eq, Ord, Read, Show)
+
 _Field = Name "hydra.core.Field"
+
 _Field_name = Name "name"
+
 _Field_term = Name "term"
+
 -- | A name/type pair
 data FieldType =
   FieldType {
@@ -121,9 +162,13 @@ data FieldType =
     -- | The type of the field
     fieldTypeType :: Type}
   deriving (Eq, Ord, Read, Show)
+
 _FieldType = Name "hydra.core.FieldType"
+
 _FieldType_name = Name "name"
+
 _FieldType_type = Name "type"
+
 -- | A floating-point type
 data FloatType =
   -- | A 32-bit floating-point type
@@ -131,9 +176,13 @@ data FloatType =
   -- | A 64-bit floating-point type
   FloatTypeFloat64
   deriving (Eq, Ord, Read, Show)
+
 _FloatType = Name "hydra.core.FloatType"
+
 _FloatType_float32 = Name "float32"
+
 _FloatType_float64 = Name "float64"
+
 -- | A floating-point literal value
 data FloatValue =
   -- | A 32-bit floating-point value
@@ -141,9 +190,13 @@ data FloatValue =
   -- | A 64-bit floating-point value
   FloatValueFloat64 Double
   deriving (Eq, Ord, Read, Show)
+
 _FloatValue = Name "hydra.core.FloatValue"
+
 _FloatValue_float32 = Name "float32"
+
 _FloatValue_float64 = Name "float64"
+
 -- | A universally quantified type; the System F equivalent of a type scheme, and the type-level equivalent of a lambda term.
 data ForallType =
   ForallType {
@@ -152,9 +205,13 @@ data ForallType =
     -- | The body of the lambda
     forallTypeBody :: Type}
   deriving (Eq, Ord, Read, Show)
+
 _ForallType = Name "hydra.core.ForallType"
+
 _ForallType_parameter = Name "parameter"
+
 _ForallType_body = Name "body"
+
 -- | A function type, also known as an arrow type
 data FunctionType =
   FunctionType {
@@ -163,9 +220,13 @@ data FunctionType =
     -- | The codomain (output) type of the function
     functionTypeCodomain :: Type}
   deriving (Eq, Ord, Read, Show)
+
 _FunctionType = Name "hydra.core.FunctionType"
+
 _FunctionType_domain = Name "domain"
+
 _FunctionType_codomain = Name "codomain"
+
 -- | An instance of a union type; i.e. a string-indexed generalization of inl() or inr()
 data Injection =
   Injection {
@@ -174,9 +235,13 @@ data Injection =
     -- | The field being injected, including its name and value
     injectionField :: Field}
   deriving (Eq, Ord, Read, Show)
+
 _Injection = Name "hydra.core.Injection"
+
 _Injection_typeName = Name "typeName"
+
 _Injection_field = Name "field"
+
 -- | An integer type
 data IntegerType =
   -- | An arbitrary-precision integer type
@@ -198,16 +263,27 @@ data IntegerType =
   -- | A 64-bit unsigned integer type
   IntegerTypeUint64
   deriving (Eq, Ord, Read, Show)
+
 _IntegerType = Name "hydra.core.IntegerType"
+
 _IntegerType_bigint = Name "bigint"
+
 _IntegerType_int8 = Name "int8"
+
 _IntegerType_int16 = Name "int16"
+
 _IntegerType_int32 = Name "int32"
+
 _IntegerType_int64 = Name "int64"
+
 _IntegerType_uint8 = Name "uint8"
+
 _IntegerType_uint16 = Name "uint16"
+
 _IntegerType_uint32 = Name "uint32"
+
 _IntegerType_uint64 = Name "uint64"
+
 -- | An integer literal value
 data IntegerValue =
   -- | An arbitrary-precision integer value
@@ -229,16 +305,27 @@ data IntegerValue =
   -- | A 64-bit unsigned integer value (unsigned long)
   IntegerValueUint64 Integer
   deriving (Eq, Ord, Read, Show)
+
 _IntegerValue = Name "hydra.core.IntegerValue"
+
 _IntegerValue_bigint = Name "bigint"
+
 _IntegerValue_int8 = Name "int8"
+
 _IntegerValue_int16 = Name "int16"
+
 _IntegerValue_int32 = Name "int32"
+
 _IntegerValue_int64 = Name "int64"
+
 _IntegerValue_uint8 = Name "uint8"
+
 _IntegerValue_uint16 = Name "uint16"
+
 _IntegerValue_uint32 = Name "uint32"
+
 _IntegerValue_uint64 = Name "uint64"
+
 -- | A function abstraction (lambda)
 data Lambda =
   Lambda {
@@ -249,10 +336,15 @@ data Lambda =
     -- | The body of the lambda
     lambdaBody :: Term}
   deriving (Eq, Ord, Read, Show)
+
 _Lambda = Name "hydra.core.Lambda"
+
 _Lambda_parameter = Name "parameter"
+
 _Lambda_domain = Name "domain"
+
 _Lambda_body = Name "body"
+
 -- | A set of (possibly recursive) 'let' bindings together with a body in which they are bound
 data Let =
   Let {
@@ -261,9 +353,13 @@ data Let =
     -- | The body term in which the variables are bound
     letBody :: Term}
   deriving (Eq, Ord, Read, Show)
+
 _Let = Name "hydra.core.Let"
+
 _Let_bindings = Name "bindings"
+
 _Let_body = Name "body"
+
 -- | A term constant; an instance of a literal type
 data Literal =
   -- | A binary literal
@@ -279,13 +375,21 @@ data Literal =
   -- | A string literal
   LiteralString String
   deriving (Eq, Ord, Read, Show)
+
 _Literal = Name "hydra.core.Literal"
+
 _Literal_binary = Name "binary"
+
 _Literal_boolean = Name "boolean"
+
 _Literal_decimal = Name "decimal"
+
 _Literal_float = Name "float"
+
 _Literal_integer = Name "integer"
+
 _Literal_string = Name "string"
+
 -- | Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants
 data LiteralType =
   -- | The type of a binary (byte string) value
@@ -301,13 +405,21 @@ data LiteralType =
   -- | The type of a string value
   LiteralTypeString
   deriving (Eq, Ord, Read, Show)
+
 _LiteralType = Name "hydra.core.LiteralType"
+
 _LiteralType_binary = Name "binary"
+
 _LiteralType_boolean = Name "boolean"
+
 _LiteralType_decimal = Name "decimal"
+
 _LiteralType_float = Name "float"
+
 _LiteralType_integer = Name "integer"
+
 _LiteralType_string = Name "string"
+
 -- | A map type
 data MapType =
   MapType {
@@ -316,15 +428,21 @@ data MapType =
     -- | The type of values in the map
     mapTypeValues :: Type}
   deriving (Eq, Ord, Read, Show)
+
 _MapType = Name "hydra.core.MapType"
+
 _MapType_keys = Name "keys"
+
 _MapType_values = Name "values"
+
 -- | A unique identifier in some context; a string-valued key
 newtype Name =
   Name {
     unName :: String}
   deriving (Eq, Ord, Read, Show)
+
 _Name = Name "hydra.core.Name"
+
 -- | A type which pairs a 'first' type and a 'second' type
 data PairType =
   PairType {
@@ -333,9 +451,13 @@ data PairType =
     -- | The second component of the pair
     pairTypeSecond :: Type}
   deriving (Eq, Ord, Read, Show)
+
 _PairType = Name "hydra.core.PairType"
+
 _PairType_first = Name "first"
+
 _PairType_second = Name "second"
+
 -- | A record elimination; a projection
 data Projection =
   Projection {
@@ -344,9 +466,13 @@ data Projection =
     -- | The name of the projected field
     projectionFieldName :: Name}
   deriving (Eq, Ord, Read, Show)
+
 _Projection = Name "hydra.core.Projection"
+
 _Projection_typeName = Name "typeName"
+
 _Projection_fieldName = Name "fieldName"
+
 -- | A record, or labeled tuple; a map of field names to terms
 data Record =
   Record {
@@ -355,9 +481,13 @@ data Record =
     -- | The fields of the record, as a list of name/term pairs
     recordFields :: [Field]}
   deriving (Eq, Ord, Read, Show)
+
 _Record = Name "hydra.core.Record"
+
 _Record_typeName = Name "typeName"
+
 _Record_fields = Name "fields"
+
 -- | A data term
 data Term =
   -- | A term annotated with metadata
@@ -403,28 +533,51 @@ data Term =
   -- | A wrapped term; an instance of a wrapper type (newtype)
   TermWrap WrappedTerm
   deriving (Eq, Ord, Read, Show)
+
 _Term = Name "hydra.core.Term"
+
 _Term_annotated = Name "annotated"
+
 _Term_application = Name "application"
+
 _Term_cases = Name "cases"
+
 _Term_either = Name "either"
+
 _Term_inject = Name "inject"
+
 _Term_lambda = Name "lambda"
+
 _Term_let = Name "let"
+
 _Term_list = Name "list"
+
 _Term_literal = Name "literal"
+
 _Term_map = Name "map"
+
 _Term_optional = Name "optional"
+
 _Term_pair = Name "pair"
+
 _Term_project = Name "project"
+
 _Term_record = Name "record"
+
 _Term_set = Name "set"
+
 _Term_typeApplication = Name "typeApplication"
+
 _Term_typeLambda = Name "typeLambda"
+
 _Term_unit = Name "unit"
+
 _Term_unwrap = Name "unwrap"
+
 _Term_variable = Name "variable"
+
 _Term_wrap = Name "wrap"
+
 -- | A data type
 data Type =
   -- | An annotated type
@@ -464,25 +617,45 @@ data Type =
   -- | A wrapped type (newtype). There is no corresponding `unwrap` variant at the type level: wrap is the introduction form, and a wrapper type's underlying body type is given by the `wrap` variant's argument.
   TypeWrap Type
   deriving (Eq, Ord, Read, Show)
+
 _Type = Name "hydra.core.Type"
+
 _Type_annotated = Name "annotated"
+
 _Type_application = Name "application"
+
 _Type_effect = Name "effect"
+
 _Type_either = Name "either"
+
 _Type_forall = Name "forall"
+
 _Type_function = Name "function"
+
 _Type_list = Name "list"
+
 _Type_literal = Name "literal"
+
 _Type_map = Name "map"
+
 _Type_optional = Name "optional"
+
 _Type_pair = Name "pair"
+
 _Type_record = Name "record"
+
 _Type_set = Name "set"
+
 _Type_union = Name "union"
+
 _Type_unit = Name "unit"
+
 _Type_variable = Name "variable"
+
 _Type_void = Name "void"
+
 _Type_wrap = Name "wrap"
+
 -- | A term applied to a type; a type application.
 data TypeApplicationTerm =
   TypeApplicationTerm {
@@ -491,16 +664,23 @@ data TypeApplicationTerm =
     -- | The type argument
     typeApplicationTermType :: Type}
   deriving (Eq, Ord, Read, Show)
+
 _TypeApplicationTerm = Name "hydra.core.TypeApplicationTerm"
+
 _TypeApplicationTerm_body = Name "body"
+
 _TypeApplicationTerm_type = Name "type"
+
 -- | A type class constraint on a type variable. Currently has only one variant, but designed to be forward-compatible with multi-parameter type classes and constraints on type expressions.
 data TypeClassConstraint =
   -- | A simple type class constraint, naming a single type class
   TypeClassConstraintSimple Name
   deriving (Eq, Ord, Read, Show)
+
 _TypeClassConstraint = Name "hydra.core.TypeClassConstraint"
+
 _TypeClassConstraint_simple = Name "simple"
+
 -- | A System F type abstraction term
 data TypeLambda =
   TypeLambda {
@@ -509,9 +689,13 @@ data TypeLambda =
     -- | The body of the abstraction
     typeLambdaBody :: Term}
   deriving (Eq, Ord, Read, Show)
+
 _TypeLambda = Name "hydra.core.TypeLambda"
+
 _TypeLambda_parameter = Name "parameter"
+
 _TypeLambda_body = Name "body"
+
 -- | A type expression together with free type variables occurring in the expression
 data TypeScheme =
   TypeScheme {
@@ -522,18 +706,26 @@ data TypeScheme =
     -- | Optional constraints on type variables, including typeclass constraints. The map keys are type variable names.
     typeSchemeConstraints :: (Maybe (M.Map Name TypeVariableConstraints))}
   deriving (Eq, Ord, Read, Show)
+
 _TypeScheme = Name "hydra.core.TypeScheme"
+
 _TypeScheme_variables = Name "variables"
+
 _TypeScheme_body = Name "body"
+
 _TypeScheme_constraints = Name "constraints"
+
 -- | Constraints associated with a type variable, including typeclass constraints
 data TypeVariableConstraints =
   TypeVariableConstraints {
     -- | The typeclass constraints on this type variable
     typeVariableConstraintsClasses :: [TypeClassConstraint]}
   deriving (Eq, Ord, Read, Show)
+
 _TypeVariableConstraints = Name "hydra.core.TypeVariableConstraints"
+
 _TypeVariableConstraints_classes = Name "classes"
+
 -- | A term wrapped in a type name
 data WrappedTerm =
   WrappedTerm {
@@ -542,6 +734,9 @@ data WrappedTerm =
     -- | The wrapped term
     wrappedTermBody :: Term}
   deriving (Eq, Ord, Read, Show)
+
 _WrappedTerm = Name "hydra.core.WrappedTerm"
+
 _WrappedTerm_typeName = Name "typeName"
+
 _WrappedTerm_body = Name "body"

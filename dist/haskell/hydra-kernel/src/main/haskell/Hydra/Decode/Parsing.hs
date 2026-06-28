@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term decoders for hydra.parsing
 
 module Hydra.Decode.Parsing where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Errors as Errors
@@ -17,6 +19,7 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Decoder for hydra.parsing.ParseError
 parseError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Parsing.ParseError
 parseError cx raw =
@@ -35,6 +38,7 @@ parseError cx raw =
           Parsing.parseErrorMessage = field_message,
           Parsing.parseErrorRemainder = field_remainder}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.parsing.ParseError")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.parsing.ParseResult
 parseResult :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError a) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Parsing.ParseResult a)
 parseResult a cx raw =
@@ -52,6 +56,7 @@ parseResult a cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.parsing.ParseSuccess
 parseSuccess :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError a) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Parsing.ParseSuccess a)
 parseSuccess a cx raw =

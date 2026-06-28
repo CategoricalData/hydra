@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term encoders for hydra.yaml.model
 
 module Hydra.Encode.Yaml.Model where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
@@ -9,6 +11,7 @@ import qualified Hydra.Overlay.Haskell.Lib.Maps as Maps
 import qualified Hydra.Yaml.Model as Model
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Encoder for hydra.yaml.model.Node
 node :: Model.Node -> Core.Term
 node x =
@@ -28,6 +31,7 @@ node x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "sequence"),
           Core.fieldTerm = (Core.TermList (Lists.map node v0))}})
+
 -- | Encoder for hydra.yaml.model.Scalar
 scalar :: Model.Scalar -> Core.Term
 scalar x =

@@ -65,14 +65,14 @@
                                     "name": "name_",
                                     "term": {
                                       "application": {"function": {"project": {"typeName": "hydra.testing.TestGroup", "fieldName": "name"}}, "argument": {"variable": "tg"}}},
-                                    "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}},
                                   {
                                     "name": "desc",
                                     "term": {
                                       "application": {
                                         "function": {"project": {"typeName": "hydra.testing.TestGroup", "fieldName": "description"}},
                                         "argument": {"variable": "tg"}}},
-                                    "typeScheme": {"variables": [], "body": {"optional": {"literal": {"string": {}}}}}},
+                                    "typeScheme": {"variables": [], "body": {"optional": {"literal": "string"}}}},
                                   {
                                     "name": "subgroups",
                                     "term": {
@@ -217,7 +217,7 @@
                                       "application": {
                                         "function": {"project": {"typeName": "hydra.testing.TestCaseWithMetadata", "fieldName": "name"}},
                                         "argument": {"variable": "tcm"}}},
-                                    "typeScheme": {"variables": [], "body": {"literal": {"string": {}}}}},
+                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}},
                                   {
                                     "name": "tcase",
                                     "term": {
@@ -231,7 +231,7 @@
                                       "application": {
                                         "function": {"project": {"typeName": "hydra.testing.TestCaseWithMetadata", "fieldName": "description"}},
                                         "argument": {"variable": "tcm"}}},
-                                    "typeScheme": {"variables": [], "body": {"optional": {"literal": {"string": {}}}}}},
+                                    "typeScheme": {"variables": [], "body": {"optional": {"literal": "string"}}}},
                                   {
                                     "name": "tags_",
                                     "term": {
@@ -277,7 +277,7 @@
           "parameters": [
             {"name": "arg0", "type": {"variable": "hydra.graph.Graph"}, "isLazy": false},
             {"name": "arg1", "type": {"variable": "hydra.core.Term"}, "isLazy": false}],
-          "result": {"type": {"either": {"left": {"literal": {"string": {}}}, "right": {"variable": "hydra.core.Term"}}}}},
+          "result": {"type": {"either": {"left": {"literal": "string"}, "right": {"variable": "hydra.core.Term"}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -302,7 +302,7 @@
                                           "typeApplication": {
                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bimap"}, "type": {"variable": "hydra.errors.Error"}}},
                                             "type": {"variable": "hydra.typing.InferenceResult"}}},
-                                        "type": {"literal": {"string": {}}}}},
+                                        "type": {"literal": "string"}}},
                                     "type": {"variable": "hydra.core.Term"}}},
                                 "argument": {
                                   "lambda": {

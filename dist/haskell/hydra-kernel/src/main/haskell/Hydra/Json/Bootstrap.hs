@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | A module which provides a minimal typing environment for decoding other modules from JSON. This avoids certain problems with generating entire source modules into target languages like Java, which is subject to method size limits for large modules like hydra.core.
 
 module Hydra.Json.Bootstrap where
+
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Error.Checking as Checking
@@ -16,6 +18,7 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
+
 -- | A bootstrap typing environment for decoding modules from JSON. Maps each kernel type name to its encoded type, used to seed JSON decoding before the full kernel graph is available.
 typesByName :: M.Map Core.Name Core.Type
 typesByName =

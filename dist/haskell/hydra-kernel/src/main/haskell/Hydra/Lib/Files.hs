@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Primitives in the hydra.lib.files module.
 
 module Hydra.Lib.Files where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -31,6 +33,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 appendFile :: Packaging.PrimitiveDefinition
 appendFile =
     Packaging.PrimitiveDefinition {
@@ -62,6 +65,7 @@ appendFile =
       Packaging.primitiveDefinitionIsPure = False,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 copy :: Packaging.PrimitiveDefinition
 copy =
     Packaging.PrimitiveDefinition {
@@ -98,6 +102,7 @@ copy =
       Packaging.primitiveDefinitionIsPure = False,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 createDirectory :: Packaging.PrimitiveDefinition
 createDirectory =
     Packaging.PrimitiveDefinition {
@@ -129,6 +134,7 @@ createDirectory =
       Packaging.primitiveDefinitionIsPure = False,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 exists :: Packaging.PrimitiveDefinition
 exists =
     Packaging.PrimitiveDefinition {
@@ -155,6 +161,7 @@ exists =
       Packaging.primitiveDefinitionIsPure = False,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 listDirectory :: Packaging.PrimitiveDefinition
 listDirectory =
     Packaging.PrimitiveDefinition {
@@ -181,6 +188,7 @@ listDirectory =
       Packaging.primitiveDefinitionIsPure = False,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 readFile :: Packaging.PrimitiveDefinition
 readFile =
     Packaging.PrimitiveDefinition {
@@ -207,6 +215,7 @@ readFile =
       Packaging.primitiveDefinitionIsPure = False,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 removeDirectory :: Packaging.PrimitiveDefinition
 removeDirectory =
     Packaging.PrimitiveDefinition {
@@ -238,6 +247,7 @@ removeDirectory =
       Packaging.primitiveDefinitionIsPure = False,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 removeFile :: Packaging.PrimitiveDefinition
 removeFile =
     Packaging.PrimitiveDefinition {
@@ -264,6 +274,7 @@ removeFile =
       Packaging.primitiveDefinitionIsPure = False,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 rename :: Packaging.PrimitiveDefinition
 rename =
     Packaging.PrimitiveDefinition {
@@ -295,6 +306,7 @@ rename =
       Packaging.primitiveDefinitionIsPure = False,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 status :: Packaging.PrimitiveDefinition
 status =
     Packaging.PrimitiveDefinition {
@@ -321,6 +333,7 @@ status =
       Packaging.primitiveDefinitionIsPure = False,
       Packaging.primitiveDefinitionIsTotal = True,
       Packaging.primitiveDefinitionDefaultImplementation = Nothing}
+
 writeFile :: Packaging.PrimitiveDefinition
 writeFile =
     Packaging.PrimitiveDefinition {

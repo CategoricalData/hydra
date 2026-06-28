@@ -3,8 +3,7 @@
   "metadata": {"description": "An RDF 1.1 syntax model", "comments": [], "seeAlso": []},
   "dependencies": [{"module": "hydra.core"}],
   "definitions": [
-    {
-      "type": {"name": "hydra.rdf.syntax.BlankNode", "body": {"variables": [], "body": {"wrap": {"literal": {"string": {}}}}}}},
+    {"type": {"name": "hydra.rdf.syntax.BlankNode", "body": {"variables": [], "body": {"wrap": {"literal": "string"}}}}},
     {
       "type": {
         "name": "hydra.rdf.syntax.RdfsClass",
@@ -12,7 +11,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"unit": {}}},
+              "body": {"wrap": "unit"},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Stand-in for rdfs:Class"}}}]}}}}}},
     {
       "type": {
@@ -45,7 +44,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An Internationalized Resource Identifier"}}}]}}}}}},
     {
@@ -73,8 +72,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {
-                "wrap": {"map": {"keys": {"optional": {"variable": "hydra.rdf.syntax.LanguageTag"}}, "values": {"literal": {"string": {}}}}}},
+              "body": {"wrap": {"map": {"keys": {"optional": {"variable": "hydra.rdf.syntax.LanguageTag"}}, "values": {"literal": "string"}}}},
               "annotation": {
                 "map": [
                   {
@@ -89,7 +87,7 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"literal": {"string": {}}}},
+              "body": {"wrap": {"literal": "string"}},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A BCP47 language tag"}}}]}}}}}},
     {
       "type": {
@@ -104,7 +102,7 @@
                     "name": "lexicalForm",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {
                           "map": [
                             {

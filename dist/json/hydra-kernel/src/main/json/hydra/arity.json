@@ -36,7 +36,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.graph.Primitive"}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": {"int32": {}}}}}},
+          "result": {"type": {"literal": {"integer": "int32"}}}},
         "body": {
           "annotated": {
             "body": {
@@ -67,7 +67,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.Term"}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": {"int32": {}}}}}},
+          "result": {"type": {"literal": {"integer": "int32"}}}},
         "body": {
           "annotated": {
             "body": {
@@ -92,7 +92,7 @@
                                     "function": {
                                       "lambda": {
                                         "parameter": "xapp",
-                                        "domain": {"literal": {"integer": {"int32": {}}}},
+                                        "domain": {"literal": {"integer": "int32"}},
                                         "body": {
                                           "application": {
                                             "function": {"application": {"function": {"variable": "hydra.lib.math.sub"}, "argument": {"variable": "xapp"}}},
@@ -117,7 +117,7 @@
                             "function": {
                               "lambda": {
                                 "parameter": "i",
-                                "domain": {"literal": {"integer": {"int32": {}}}},
+                                "domain": {"literal": {"integer": "int32"}},
                                 "body": {
                                   "application": {
                                     "function": {"application": {"function": {"variable": "hydra.lib.math.add"}, "argument": {"literal": {"integer": {"int32": 1}}}}},
@@ -153,7 +153,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.Type"}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": {"int32": {}}}}}},
+          "result": {"type": {"literal": {"integer": "int32"}}}},
         "body": {
           "annotated": {
             "body": {
@@ -232,7 +232,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.TypeScheme"}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": {"int32": {}}}}}},
+          "result": {"type": {"literal": {"integer": "int32"}}}},
         "body": {
           "annotated": {
             "body": {

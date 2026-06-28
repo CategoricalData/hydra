@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Functions for working with qualified names.
 
 module Hydra.Names where
+
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
@@ -46,6 +48,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
+
 -- | Pick a string label that does not collide with a reserved set, by appending a numeric suffix when necessary
 chooseUniqueLabel :: S.Set String -> String -> String
 chooseUniqueLabel reserved label =
@@ -55,6 +58,7 @@ chooseUniqueLabel reserved label =
                 let candidate = Logic.ifElse (Equality.equal index 1) label (Strings.cat2 label (Literals.showInt32 index))
                 in (Logic.ifElse (Sets.member candidate reserved) (tryLabel (Math.add index 1)) candidate)
       in (tryLabel 1)
+
 -- | Given a mapping of namespaces to prefixes, convert a name to a compact string representation
 compactName :: M.Map Packaging.ModuleName String -> Core.Name -> String
 compactName namespaces name =
@@ -66,6 +70,7 @@ compactName namespaces name =
         pre,
         ":",
         local])))
+
 -- | Generate a fresh type variable name, threading InferenceContext
 freshName :: Typing.InferenceContext -> (Core.Name, Typing.InferenceContext)
 freshName cx =
@@ -76,6 +81,7 @@ freshName cx =
         Typing.InferenceContext {
           Typing.inferenceContextFreshTypeVariableCount = (Math.add count 1),
           Typing.inferenceContextTrace = (Typing.inferenceContextTrace cx)})
+
 -- | Generate multiple fresh type variable names, threading InferenceContext
 freshNames :: Int -> Typing.InferenceContext -> ([Core.Name], Typing.InferenceContext)
 freshNames n cx =
@@ -89,18 +95,22 @@ freshNames n cx =
                     cx1 = Pairs.second result
                 in (Lists.concat2 names (Lists.pure name), cx1)
       in (Lists.foldl go ([], cx) (Lists.replicate n ()))
+
 -- | Extract the local part of a name
 localNameOf :: Core.Name -> String
 localNameOf arg_ = Util.qualifiedNameLocal (qualifyName arg_)
+
 -- | Extract the module name of a name, if any
 moduleNameOf :: Core.Name -> Maybe Packaging.ModuleName
 moduleNameOf arg_ = Util.qualifiedNameModuleName (qualifyName arg_)
+
 -- | Convert a module name to a file path with the given case convention and file extension
 moduleNameToFilePath :: Util.CaseConvention -> File.FileExtension -> Packaging.ModuleName -> String
 moduleNameToFilePath caseConv ext ns =
 
       let parts = Lists.map (Formatting.convertCase Util.CaseConventionCamel caseConv) (Strings.splitOn "." (Packaging.unModuleName ns))
       in (Strings.cat2 (Strings.cat2 (Strings.intercalate "/" parts) ".") (File.unFileExtension ext))
+
 -- | Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator
 nameToFilePath :: Util.CaseConvention -> Util.CaseConvention -> File.FileExtension -> Core.Name -> String
 nameToFilePath nsConv localConv ext name =
@@ -117,15 +127,18 @@ nameToFilePath nsConv localConv ext name =
         suffix,
         ".",
         (File.unFileExtension ext)])
+
 -- | Type variable naming convention follows Haskell: t0, t1, etc.
 normalTypeVariable :: Int -> Core.Name
 normalTypeVariable i = Core.Name (Strings.cat2 "t" (Literals.showInt32 i))
+
 -- | Prepend a SubtermStep to the InferenceContext's trace. The trace is accumulated backwards as inference descends through subterms; at error-emission time the list is reversed and wrapped into a SubtermPath stamped onto the error.
 pushSubtermStep :: Paths.SubtermStep -> Typing.InferenceContext -> Typing.InferenceContext
 pushSubtermStep step cx =
     Typing.InferenceContext {
       Typing.inferenceContextFreshTypeVariableCount = (Typing.inferenceContextFreshTypeVariableCount cx),
       Typing.inferenceContextTrace = (Lists.cons step (Typing.inferenceContextTrace cx))}
+
 -- | Construct a qualified (dot-separated) name
 qname :: Packaging.ModuleName -> String -> Core.Name
 qname ns name =
@@ -133,6 +146,7 @@ qname ns name =
       Packaging.unModuleName ns,
       ".",
       name])
+
 -- | Split a dot-separated name into a namespace and local name
 qualifyName :: Core.Name -> Util.QualifiedName
 qualifyName name =
@@ -148,12 +162,14 @@ qualifyName name =
           Util.qualifiedNameLocal = (Core.unName name)}) (Util.QualifiedName {
           Util.qualifiedNameModuleName = (Just (Packaging.ModuleName (Strings.intercalate "." (Lists.reverse restReversed)))),
           Util.qualifiedNameLocal = localName}))))
+
 -- | Restore the original trace from baseCx, while keeping the freshTypeVariableCount from newCx. Used between sibling sub-inferences (e.g. application LHS vs RHS) so that an error in the second sibling doesn't include the first sibling's trace path. Returns a new InferenceContext.
 restoreTrace :: Typing.InferenceContext -> Typing.InferenceContext -> Typing.InferenceContext
 restoreTrace baseCx newCx =
     Typing.InferenceContext {
       Typing.inferenceContextFreshTypeVariableCount = (Typing.inferenceContextFreshTypeVariableCount newCx),
       Typing.inferenceContextTrace = (Typing.inferenceContextTrace baseCx)}
+
 -- | Convert a qualified name to a dot-separated name
 unqualifyName :: Util.QualifiedName -> Core.Name
 unqualifyName qname =

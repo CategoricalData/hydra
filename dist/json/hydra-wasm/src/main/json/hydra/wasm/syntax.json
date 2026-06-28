@@ -19,7 +19,7 @@
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional module name"}}}]}}}},
                   {
                     "name": "fields",
@@ -101,7 +101,7 @@
                     "name": "start",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A start function index"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A field within a WebAssembly module"}}}]}}}}}},
     {
@@ -117,37 +117,37 @@
                     "name": "i32",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "32-bit integer"}}}]}}}},
                   {
                     "name": "i64",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "64-bit integer"}}}]}}}},
                   {
                     "name": "f32",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "32-bit float"}}}]}}}},
                   {
                     "name": "f64",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "64-bit float"}}}]}}}},
                   {
                     "name": "funcref",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Function reference"}}}]}}}},
                   {
                     "name": "externref",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "External reference"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A WebAssembly value type"}}}]}}}}}},
     {
@@ -185,7 +185,7 @@
                     "name": "index",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Reference by type index"}}}]}}}},
                   {
                     "name": "inline",
@@ -211,7 +211,7 @@
                     "name": "index",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional type index reference"}}}]}}}},
                   {
                     "name": "params",
@@ -247,7 +247,7 @@
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional type name"}}}]}}}},
                   {
                     "name": "type",
@@ -270,7 +270,7 @@
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional function name"}}}]}}}},
                   {
                     "name": "typeUse",
@@ -306,7 +306,7 @@
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional local name"}}}]}}}},
                   {
                     "name": "type",
@@ -330,7 +330,7 @@
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional parameter name"}}}]}}}},
                   {
                     "name": "type",
@@ -352,13 +352,13 @@
                     "name": "labels",
                     "type": {
                       "annotated": {
-                        "body": {"list": {"literal": {"string": {}}}},
+                        "body": {"list": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Branch target labels"}}}]}}}},
                   {
                     "name": "default",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Default branch target"}}}]}}}}]},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Arguments for a branch table instruction"}}}]}}}}}},
@@ -381,33 +381,33 @@
                     "name": "localGet",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Get local variable by name or index"}}}]}}}},
                   {
                     "name": "localSet",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Set local variable by name or index"}}}]}}}},
                   {
                     "name": "localTee",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Set local variable and keep value on stack"}}}]}}}},
                   {
                     "name": "globalGet",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Get global variable by name or index"}}}]}}}},
                   {
                     "name": "globalSet",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Set global variable by name or index"}}}]}}}},
                   {
@@ -461,7 +461,7 @@
                     "name": "convert",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {
                           "map": [
                             {
@@ -471,7 +471,7 @@
                     "name": "call",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Call a function by name or index"}}}]}}}},
                   {
                     "name": "callIndirect",
@@ -502,13 +502,13 @@
                     "name": "br",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Branch to a label"}}}]}}}},
                   {
                     "name": "brIf",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Conditional branch to a label"}}}]}}}},
                   {
                     "name": "brTable",
@@ -520,19 +520,19 @@
                     "name": "return",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Return from the current function"}}}]}}}},
                   {
                     "name": "drop",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Drop the top value from the stack"}}}]}}}},
                   {
                     "name": "select",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {"key": {"variable": "description"}, "value": {"literal": {"string": "Select one of two values based on a condition"}}}]}}}},
@@ -540,25 +540,25 @@
                     "name": "unreachable",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Trap immediately"}}}]}}}},
                   {
                     "name": "nop",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "No operation"}}}]}}}},
                   {
                     "name": "memorySize",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Get current memory size in pages"}}}]}}}},
                   {
                     "name": "memoryGrow",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Grow memory by a number of pages"}}}]}}}},
                   {
                     "name": "refNull",
@@ -570,13 +570,13 @@
                     "name": "refIsNull",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Test if a reference is null"}}}]}}}},
                   {
                     "name": "raw",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A raw WAT instruction string (escape hatch)"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A WebAssembly instruction"}}}]}}}}}},
@@ -593,7 +593,7 @@
                     "name": "label",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional block label"}}}]}}}},
                   {
                     "name": "blockType",
@@ -625,7 +625,7 @@
                     "name": "empty",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "No result"}}}]}}}},
                   {
                     "name": "value",
@@ -654,13 +654,13 @@
                     "name": "offset",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Memory offset in bytes"}}}]}}}},
                   {
                     "name": "align",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Alignment hint (power of 2)"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Memory access arguments"}}}]}}}}}},
     {
@@ -699,7 +699,7 @@
                     "name": "label",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional label for the if block"}}}]}}}},
                   {
                     "name": "blockType",
@@ -741,7 +741,7 @@
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {
                           "map": [
                             {
@@ -765,7 +765,7 @@
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional memory name"}}}]}}}},
                   {
                     "name": "limits",
@@ -788,7 +788,7 @@
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional data segment name"}}}]}}}},
                   {
                     "name": "mode",
@@ -804,7 +804,7 @@
                     "name": "bytes",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {
                           "map": [
                             {"key": {"variable": "description"}, "value": {"literal": {"string": "The data bytes (as a string of escaped bytes)"}}}]}}}}]},
@@ -833,7 +833,7 @@
                     "name": "passive",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -853,13 +853,13 @@
                     "name": "min",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Minimum size"}}}]}}}},
                   {
                     "name": "max",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"integer": {"int32": {}}}}},
+                        "body": {"optional": {"literal": {"integer": "int32"}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional maximum size"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Size limits for memories and tables"}}}]}}}}}},
     {
@@ -875,7 +875,7 @@
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional global name"}}}]}}}},
                   {
                     "name": "type",
@@ -911,7 +911,7 @@
                     "name": "mutable",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"boolean": {}}},
+                        "body": {"literal": "boolean"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the global is mutable"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A global variable type"}}}]}}}}}},
     {
@@ -927,7 +927,7 @@
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional table name"}}}]}}}},
                   {
                     "name": "refType",
@@ -956,7 +956,7 @@
                     "name": "table",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Table index"}}}]}}}},
                   {
                     "name": "offset",
@@ -978,7 +978,7 @@
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional element segment name"}}}]}}}},
                   {
                     "name": "mode",
@@ -1028,7 +1028,7 @@
                     "name": "passive",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -1038,7 +1038,7 @@
                     "name": "declarative",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {
                           "map": [
                             {
@@ -1058,13 +1058,13 @@
                     "name": "funcref",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Function reference"}}}]}}}},
                   {
                     "name": "externref",
                     "type": {
                       "annotated": {
-                        "body": {"unit": {}},
+                        "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "External reference"}}}]}}}}]},
               "annotation": {
                 "map": [
@@ -1084,13 +1084,13 @@
                     "name": "module",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The module name to import from"}}}]}}}},
                   {
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the imported entity"}}}]}}}},
                   {
                     "name": "desc",
@@ -1156,7 +1156,7 @@
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {
                           "map": [
                             {"key": {"variable": "description"}, "value": {"literal": {"string": "Optional local name for the imported function"}}}]}}}},
@@ -1180,7 +1180,7 @@
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional local name"}}}]}}}},
                   {
                     "name": "type",
@@ -1202,7 +1202,7 @@
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional local name"}}}]}}}},
                   {
                     "name": "limits",
@@ -1224,7 +1224,7 @@
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"literal": {"string": {}}}},
+                        "body": {"optional": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional local name"}}}]}}}},
                   {
                     "name": "refType",
@@ -1252,7 +1252,7 @@
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The exported name"}}}]}}}},
                   {
                     "name": "desc",
@@ -1274,25 +1274,25 @@
                     "name": "func",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Export a function by name or index"}}}]}}}},
                   {
                     "name": "memory",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Export a memory by name or index"}}}]}}}},
                   {
                     "name": "table",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Export a table by name or index"}}}]}}}},
                   {
                     "name": "global",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"string": {}}},
+                        "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Export a global by name or index"}}}]}}}}]},
               "annotation": {
                 "map": [
@@ -1312,24 +1312,24 @@
                     "name": "i32",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int32": {}}}},
+                        "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 32-bit integer constant"}}}]}}}},
                   {
                     "name": "i64",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"integer": {"int64": {}}}},
+                        "body": {"literal": {"integer": "int64"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 64-bit integer constant"}}}]}}}},
                   {
                     "name": "f32",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"float": {"float32": {}}}},
+                        "body": {"literal": {"float": "float32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 32-bit float constant"}}}]}}}},
                   {
                     "name": "f64",
                     "type": {
                       "annotated": {
-                        "body": {"literal": {"float": {"float64": {}}}},
+                        "body": {"literal": {"float": "float64"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 64-bit float constant"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A constant value instruction"}}}]}}}}}}]}

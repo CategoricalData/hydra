@@ -158,7 +158,7 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}, "isLazy": false},
+            {"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
             {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
@@ -177,7 +177,7 @@
           "parameters": [
             {
               "name": "arg0",
-              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"literal": {"boolean": {}}}}},
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"literal": "boolean"}}},
               "isLazy": false},
             {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
@@ -211,7 +211,7 @@
           "parameters": [
             {"name": "arg0", "type": {"variable": "x"}, "isLazy": false},
             {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
-          "result": {"type": {"literal": {"boolean": {}}}}},
+          "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -228,7 +228,7 @@
           "parameters": [
             {
               "name": "arg0",
-              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"literal": {"boolean": {}}}}},
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"literal": "boolean"}}},
               "isLazy": false},
             {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
@@ -282,7 +282,7 @@
           "parameters": [
             {
               "name": "arg0",
-              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"literal": {"boolean": {}}}}},
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"literal": "boolean"}}},
               "isLazy": false},
             {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"optional": {"variable": "x"}}}},
@@ -427,7 +427,7 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [{"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false}],
-          "result": {"type": {"literal": {"integer": {"int32": {}}}}}},
+          "result": {"type": {"literal": {"integer": "int32"}}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -459,7 +459,7 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}, "isLazy": false},
+            {"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
             {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"optional": {"variable": "x"}}}},
         "isPure": true,
@@ -551,7 +551,7 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [{"name": "arg0", "type": {"list": {"variable": "x"}}, "isLazy": false}],
-          "result": {"type": {"literal": {"boolean": {}}}}},
+          "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
     {
@@ -568,7 +568,7 @@
           "parameters": [
             {
               "name": "arg0",
-              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"literal": {"boolean": {}}}}},
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"literal": "boolean"}}},
               "isLazy": false},
             {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"pair": {"first": {"list": {"variable": "x"}}, "second": {"list": {"variable": "x"}}}}}},
@@ -642,7 +642,7 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}, "isLazy": false},
+            {"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
             {"name": "arg1", "type": {"variable": "x"}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
@@ -721,7 +721,7 @@
           "parameters": [
             {
               "name": "arg0",
-              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"literal": {"boolean": {}}}}},
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"literal": "boolean"}}},
               "isLazy": false},
             {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"pair": {"first": {"list": {"variable": "x"}}, "second": {"list": {"variable": "x"}}}}}},
@@ -791,7 +791,7 @@
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
-            {"name": "arg0", "type": {"literal": {"integer": {"int32": {}}}}, "isLazy": false},
+            {"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
             {"name": "arg1", "type": {"list": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "x"}}}},
         "isPure": true,
