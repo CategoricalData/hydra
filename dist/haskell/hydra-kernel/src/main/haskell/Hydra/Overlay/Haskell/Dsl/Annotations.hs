@@ -25,7 +25,7 @@ bounded :: Maybe Int -> Maybe Int -> Type -> Type
 bounded min max = annotMin . annotMax
   where
     annotMax t = Y.maybe t (`setMaxLength` t) max
-    annotMin t = Y.maybe t (`setMinLength` t) max
+    annotMin t = Y.maybe t (`setMinLength` t) min
 
 boundedList :: AsType a => Maybe Int -> Maybe Int -> a -> Type
 boundedList min max et = bounded min max $ Types.list (asType et)

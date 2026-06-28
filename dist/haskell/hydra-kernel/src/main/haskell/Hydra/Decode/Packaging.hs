@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Term decoders for hydra.packaging
 
 module Hydra.Decode.Packaging where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Decode.Typing as Typing
@@ -20,7 +18,6 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Decoder for hydra.packaging.Definition
 definition :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.Definition
 definition cx raw =
@@ -39,7 +36,6 @@ definition cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
-
 -- | Decoder for hydra.packaging.DefinitionReference
 definitionReference :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.DefinitionReference
 definitionReference cx raw =
@@ -60,7 +56,25 @@ definitionReference cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
-
+-- | Decoder for hydra.packaging.DependencyScope
+dependencyScope :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.DependencyScope
+dependencyScope cx raw =
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermInject v0 ->
+        let field = Core.injectionField v0
+            fname = Core.fieldName field
+            fterm = Core.fieldTerm field
+            variantMap =
+                    Maps.fromList [
+                      (Core.Name "api", (\input -> Eithers.map (\t -> Packaging.DependencyScopeApi) (ExtractCore.decodeUnit cx input))),
+                      (Core.Name "runtime", (\input -> Eithers.map (\t -> Packaging.DependencyScopeRuntime) (ExtractCore.decodeUnit cx input))),
+                      (Core.Name "test", (\input -> Eithers.map (\t -> Packaging.DependencyScopeTest) (ExtractCore.decodeUnit cx input))),
+                      (Core.Name "tool", (\input -> Eithers.map (\t -> Packaging.DependencyScopeTool) (ExtractCore.decodeUnit cx input)))]
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
+          "no such field ",
+          (Core.unName fname),
+          " in union"]))) (\f -> f fterm))
+      _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.packaging.EntityMetadata
 entityMetadata :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.EntityMetadata
 entityMetadata cx raw =
@@ -81,7 +95,6 @@ entityMetadata cx raw =
           Packaging.entityMetadataSeeAlso = field_seeAlso,
           Packaging.entityMetadataLifecycle = field_lifecycle}))))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.packaging.EntityMetadata")) (ExtractCore.stripWithDecodingError cx raw)
-
 -- | Decoder for hydra.packaging.EntityReference
 entityReference :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.EntityReference
 entityReference cx raw =
@@ -102,7 +115,6 @@ entityReference cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
-
 -- | Decoder for hydra.packaging.LifecycleInfo
 lifecycleInfo :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.LifecycleInfo
 lifecycleInfo cx raw =
@@ -113,7 +125,6 @@ lifecycleInfo cx raw =
           Packaging.lifecycleInfoAvailableSince = field_availableSince,
           Packaging.lifecycleInfoDeprecatedSince = field_deprecatedSince}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.packaging.LifecycleInfo")) (ExtractCore.stripWithDecodingError cx raw)
-
 -- | Decoder for hydra.packaging.Module
 module_ :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.Module
 module_ cx raw =
@@ -126,7 +137,6 @@ module_ cx raw =
           Packaging.moduleDependencies = field_dependencies,
           Packaging.moduleDefinitions = field_definitions}))))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.packaging.Module")) (ExtractCore.stripWithDecodingError cx raw)
-
 -- | Decoder for hydra.packaging.ModuleDependency
 moduleDependency :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.ModuleDependency
 moduleDependency cx raw =
@@ -137,7 +147,6 @@ moduleDependency cx raw =
           Packaging.moduleDependencyModule = field_module,
           Packaging.moduleDependencyPackage = field_package}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.packaging.ModuleDependency")) (ExtractCore.stripWithDecodingError cx raw)
-
 -- | Decoder for hydra.packaging.ModuleName
 moduleName :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.ModuleName
 moduleName cx raw =
@@ -148,7 +157,6 @@ moduleName cx raw =
           _ -> Left (Errors.DecodingError "expected string literal")
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
-
 -- | Decoder for hydra.packaging.Package
 package :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.Package
 package cx raw =
@@ -161,18 +169,17 @@ package cx raw =
           Packaging.packageDependencies = field_dependencies,
           Packaging.packageModules = field_modules}))))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.packaging.Package")) (ExtractCore.stripWithDecodingError cx raw)
-
 -- | Decoder for hydra.packaging.PackageDependency
 packageDependency :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.PackageDependency
 packageDependency cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermRecord v0 ->
         let fieldMap = ExtractCore.toFieldMap v0
-        in (Eithers.bind (ExtractCore.requireField "name" packageName fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "version" versionSpecifier fieldMap cx) (\field_version -> Right (Packaging.PackageDependency {
+        in (Eithers.bind (ExtractCore.requireField "name" packageName fieldMap cx) (\field_name -> Eithers.bind (ExtractCore.requireField "version" versionSpecifier fieldMap cx) (\field_version -> Eithers.bind (ExtractCore.requireField "scope" (ExtractCore.decodeMaybe dependencyScope) fieldMap cx) (\field_scope -> Right (Packaging.PackageDependency {
           Packaging.packageDependencyName = field_name,
-          Packaging.packageDependencyVersion = field_version}))))
+          Packaging.packageDependencyVersion = field_version,
+          Packaging.packageDependencyScope = field_scope})))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.packaging.PackageDependency")) (ExtractCore.stripWithDecodingError cx raw)
-
 -- | Decoder for hydra.packaging.PackageName
 packageName :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.PackageName
 packageName cx raw =
@@ -183,7 +190,6 @@ packageName cx raw =
           _ -> Left (Errors.DecodingError "expected string literal")
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
-
 -- | Decoder for hydra.packaging.PrimitiveDefinition
 primitiveDefinition :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.PrimitiveDefinition
 primitiveDefinition cx raw =
@@ -206,7 +212,6 @@ primitiveDefinition cx raw =
           Packaging.primitiveDefinitionIsTotal = field_isTotal,
           Packaging.primitiveDefinitionDefaultImplementation = field_defaultImplementation}))))))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.packaging.PrimitiveDefinition")) (ExtractCore.stripWithDecodingError cx raw)
-
 -- | Decoder for hydra.packaging.TermDefinition
 termDefinition :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.TermDefinition
 termDefinition cx raw =
@@ -219,7 +224,6 @@ termDefinition cx raw =
           Packaging.termDefinitionSignature = field_signature,
           Packaging.termDefinitionBody = field_body}))))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.packaging.TermDefinition")) (ExtractCore.stripWithDecodingError cx raw)
-
 -- | Decoder for hydra.packaging.TypeDefinition
 typeDefinition :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.TypeDefinition
 typeDefinition cx raw =
@@ -231,7 +235,6 @@ typeDefinition cx raw =
           Packaging.typeDefinitionMetadata = field_metadata,
           Packaging.typeDefinitionBody = field_body})))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.packaging.TypeDefinition")) (ExtractCore.stripWithDecodingError cx raw)
-
 -- | Decoder for hydra.packaging.Version
 version :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.Version
 version cx raw =
@@ -242,7 +245,16 @@ version cx raw =
           _ -> Left (Errors.DecodingError "expected string literal")
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
-
+-- | Decoder for hydra.packaging.VersionRange
+versionRange :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.VersionRange
+versionRange cx raw =
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermRecord v0 ->
+        let fieldMap = ExtractCore.toFieldMap v0
+        in (Eithers.bind (ExtractCore.requireField "lowerInclusive" (ExtractCore.decodeMaybe version) fieldMap cx) (\field_lowerInclusive -> Eithers.bind (ExtractCore.requireField "upperExclusive" (ExtractCore.decodeMaybe version) fieldMap cx) (\field_upperExclusive -> Right (Packaging.VersionRange {
+          Packaging.versionRangeLowerInclusive = field_lowerInclusive,
+          Packaging.versionRangeUpperExclusive = field_upperExclusive}))))
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.packaging.VersionRange")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.packaging.VersionSpecifier
 versionSpecifier :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.VersionSpecifier
 versionSpecifier cx raw =
@@ -253,7 +265,10 @@ versionSpecifier cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "any", (\input -> Eithers.map (\t -> Packaging.VersionSpecifierAny) (ExtractCore.decodeUnit cx input)))]
+                      (Core.Name "any", (\input -> Eithers.map (\t -> Packaging.VersionSpecifierAny) (ExtractCore.decodeUnit cx input))),
+                      (Core.Name "exact", (\input -> Eithers.map (\t -> Packaging.VersionSpecifierExact t) (version cx input))),
+                      (Core.Name "atLeast", (\input -> Eithers.map (\t -> Packaging.VersionSpecifierAtLeast t) (version cx input))),
+                      (Core.Name "range", (\input -> Eithers.map (\t -> Packaging.VersionSpecifierRange t) (versionRange cx input)))]
         in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),

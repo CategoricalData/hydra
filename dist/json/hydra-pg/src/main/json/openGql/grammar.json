@@ -31,7 +31,12 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "reset", "type": {"list": {"variable": "openGql.grammar.SessionResetCommand"}}},
+              {
+                "name": "reset",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "openGql.grammar.SessionResetCommand"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
               {"name": "setAndResetCommands", "type": {"variable": "openGql.grammar.SessionSetAndResetCommands"}}]}}}},
     {
       "type": {
@@ -40,7 +45,12 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "set", "type": {"list": {"variable": "openGql.grammar.SessionSetCommand"}}},
+              {
+                "name": "set",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "openGql.grammar.SessionSetCommand"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
               {"name": "reset", "type": {"list": {"variable": "openGql.grammar.SessionResetCommand"}}}]}}}},
     {
       "type": {
@@ -205,7 +215,12 @@
     {
       "type": {
         "name": "openGql.grammar.TransactionCharacteristics",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.TransactionMode"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.TransactionMode"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.TransactionMode",
@@ -245,7 +260,12 @@
     {
       "type": {
         "name": "openGql.grammar.BindingVariableDefinitionBlock",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.BindingVariableDefinition"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.BindingVariableDefinition"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.BindingVariableDefinition",
@@ -409,7 +429,12 @@
     {
       "type": {
         "name": "openGql.grammar.LinearCatalogModifyingStatement",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.SimpleCatalogModifyingStatement"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.SimpleCatalogModifyingStatement"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.SimpleCatalogModifyingStatement",
@@ -632,7 +657,12 @@
     {
       "type": {
         "name": "openGql.grammar.SimpleLinearDataAccessingStatement",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.SimpleDataAccessingStatement"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.SimpleDataAccessingStatement"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.SimpleDataAccessingStatement",
@@ -671,7 +701,12 @@
     {
       "type": {
         "name": "openGql.grammar.SetItemList",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.SetItem"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.SetItem"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.SetItem",
@@ -718,7 +753,12 @@
     {
       "type": {
         "name": "openGql.grammar.RemoveItemList",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.RemoveItem"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.RemoveItem"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.RemoveItem",
@@ -763,7 +803,12 @@
     {
       "type": {
         "name": "openGql.grammar.DeleteItemList",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.DeleteItem"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.DeleteItem"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.DeleteItem",
@@ -909,7 +954,12 @@
     {
       "type": {
         "name": "openGql.grammar.SimpleLinearQueryStatement",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.SimpleQueryStatement"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.SimpleQueryStatement"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.SimpleQueryStatement",
@@ -961,7 +1011,12 @@
     {
       "type": {
         "name": "openGql.grammar.MatchStatementBlock",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.MatchStatement"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.MatchStatement"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.CallQueryStatement",
@@ -982,7 +1037,12 @@
     {
       "type": {
         "name": "openGql.grammar.LetVariableDefinitionList",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.LetVariableDefinition"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.LetVariableDefinition"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.LetVariableDefinition",
@@ -1120,7 +1180,12 @@
     {
       "type": {
         "name": "openGql.grammar.ReturnItemList",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.ReturnItem"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.ReturnItem"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.ReturnItem",
@@ -1165,7 +1230,12 @@
     {
       "type": {
         "name": "openGql.grammar.SelectItemList",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.SelectItem"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.SelectItem"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.SelectItem",
@@ -1192,7 +1262,12 @@
     {
       "type": {
         "name": "openGql.grammar.SelectGraphMatchList",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.SelectGraphMatch"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.SelectGraphMatch"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.SelectGraphMatch",
@@ -1254,7 +1329,12 @@
     {
       "type": {
         "name": "openGql.grammar.BindingVariableReferenceList",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.BindingVariableReference"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.BindingVariableReference"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.NamedProcedureCall",
@@ -1268,7 +1348,12 @@
     {
       "type": {
         "name": "openGql.grammar.ProcedureArgumentList",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.ProcedureArgument"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.ProcedureArgument"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.ProcedureArgument",
@@ -1301,7 +1386,12 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "items", "type": {"list": {"variable": "openGql.grammar.GraphPatternYieldItem"}}},
+              {
+                "name": "items",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "openGql.grammar.GraphPatternYieldItem"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
               {"name": "noBindings", "type": "unit"}]}}}},
     {
       "type": {
@@ -1350,7 +1440,12 @@
     {
       "type": {
         "name": "openGql.grammar.PathPatternList",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.PathPattern"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.PathPattern"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.PathPattern",
@@ -1380,7 +1475,12 @@
     {
       "type": {
         "name": "openGql.grammar.InsertPathPatternList",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.InsertPathPattern"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.InsertPathPattern"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.InsertPathPattern",
@@ -1572,12 +1672,27 @@
           "body": {
             "union": [
               {"name": "term", "type": {"variable": "openGql.grammar.PathTerm"}},
-              {"name": "multisetAlternation", "type": {"list": {"variable": "openGql.grammar.PathTerm"}}},
-              {"name": "patternUnion", "type": {"list": {"variable": "openGql.grammar.PathTerm"}}}]}}}},
+              {
+                "name": "multisetAlternation",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "openGql.grammar.PathTerm"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
+              {
+                "name": "patternUnion",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "openGql.grammar.PathTerm"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.PathTerm",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.PathFactor"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.PathFactor"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.PathFactor",
@@ -1676,7 +1791,12 @@
     {
       "type": {
         "name": "openGql.grammar.PropertyKeyValuePairList",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.PropertyKeyValuePair"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.PropertyKeyValuePair"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.PropertyKeyValuePair",
@@ -1896,11 +2016,21 @@
     {
       "type": {
         "name": "openGql.grammar.SimplifiedPathUnion",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.SimplifiedTerm"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.SimplifiedTerm"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.SimplifiedMultisetAlternation",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.SimplifiedTerm"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.SimplifiedTerm"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.SimplifiedTerm",
@@ -2044,7 +2174,12 @@
     {
       "type": {
         "name": "openGql.grammar.YieldItemList",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.YieldItem"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.YieldItem"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.YieldItem",
@@ -2071,7 +2206,12 @@
           "variables": [],
           "body": {
             "union": [
-              {"name": "elements", "type": {"list": {"variable": "openGql.grammar.GroupingElement"}}},
+              {
+                "name": "elements",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "openGql.grammar.GroupingElement"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
               {"name": "emptySet", "type": "unit"}]}}}},
     {
       "type": {
@@ -2084,7 +2224,12 @@
     {
       "type": {
         "name": "openGql.grammar.SortSpecificationList",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.SortSpecification"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.SortSpecification"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.SortSpecification",
@@ -2197,7 +2342,12 @@
     {
       "type": {
         "name": "openGql.grammar.SimpleDirectoryPath",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.DirectoryName"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.DirectoryName"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.GraphReference",
@@ -2296,7 +2446,12 @@
           "body": {
             "union": [
               {"name": "schemaAndObjects", "type": {"variable": "openGql.grammar.SchemaAndObjects"}},
-              {"name": "objectsOnly", "type": {"list": {"variable": "openGql.grammar.ObjectName"}}}]}}}},
+              {
+                "name": "objectsOnly",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "openGql.grammar.ObjectName"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.SchemaAndObjects",
@@ -2318,7 +2473,12 @@
     {
       "type": {
         "name": "openGql.grammar.ElementTypeList",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.ElementTypeSpecification"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.ElementTypeSpecification"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.ElementTypeSpecification",
@@ -2705,7 +2865,12 @@
     {
       "type": {
         "name": "openGql.grammar.LabelSetSpecification",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.LabelName"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.LabelName"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.PropertyTypesSpecification",
@@ -2713,7 +2878,12 @@
     {
       "type": {
         "name": "openGql.grammar.PropertyTypeList",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.PropertyType"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.PropertyType"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.PropertyType",
@@ -2811,13 +2981,25 @@
           "body": {
             "record": [
               {"name": "anyValue", "type": {"optional": {"literal": "boolean"}}},
-              {"name": "valueTypes", "type": {"list": {"variable": "openGql.grammar.ValueType"}}}]}}}},
+              {
+                "name": "valueTypes",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "openGql.grammar.ValueType"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.ClosedDynamicUnionTypeAlt2",
         "body": {
           "variables": [],
-          "body": {"record": [{"name": "valueTypes", "type": {"list": {"variable": "openGql.grammar.ValueType"}}}]}}}},
+          "body": {
+            "record": [
+              {
+                "name": "valueTypes",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "openGql.grammar.ValueType"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]}}}},
     {"type": {"name": "openGql.grammar.Typed", "body": {"variables": [], "body": "unit"}}},
     {
       "type": {
@@ -3481,7 +3663,12 @@
     {
       "type": {
         "name": "openGql.grammar.FieldTypeList",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.FieldType"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.FieldType"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {"type": {"name": "openGql.grammar.NotNull", "body": {"variables": [], "body": "unit"}}},
     {
       "type": {
@@ -3666,13 +3853,27 @@
         "name": "openGql.grammar.AllDifferentPredicate",
         "body": {
           "variables": [],
-          "body": {"record": [{"name": "references", "type": {"list": {"variable": "openGql.grammar.ElementVariableReference"}}}]}}}},
+          "body": {
+            "record": [
+              {
+                "name": "references",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "openGql.grammar.ElementVariableReference"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.SamePredicate",
         "body": {
           "variables": [],
-          "body": {"record": [{"name": "references", "type": {"list": {"variable": "openGql.grammar.ElementVariableReference"}}}]}}}},
+          "body": {
+            "record": [
+              {
+                "name": "references",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "openGql.grammar.ElementVariableReference"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.PropertyExistsPredicate",
@@ -4012,7 +4213,12 @@
           "body": {
             "union": [
               {"name": "nullIf", "type": {"variable": "openGql.grammar.NullIfAbbreviation"}},
-              {"name": "coalesce", "type": {"list": {"variable": "openGql.grammar.ValueExpression"}}}]}}}},
+              {
+                "name": "coalesce",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "openGql.grammar.ValueExpression"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]}}}},
     {
       "type": {
         "name": "openGql.grammar.NullIfAbbreviation",
@@ -4039,7 +4245,12 @@
           "body": {
             "record": [
               {"name": "caseOperand", "type": {"variable": "openGql.grammar.CaseOperand"}},
-              {"name": "whenClauses", "type": {"list": {"variable": "openGql.grammar.SimpleWhenClause"}}},
+              {
+                "name": "whenClauses",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "openGql.grammar.SimpleWhenClause"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
               {"name": "elseClause", "type": {"optional": {"variable": "openGql.grammar.ElseClause"}}}]}}}},
     {
       "type": {
@@ -4048,7 +4259,12 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "whenClauses", "type": {"list": {"variable": "openGql.grammar.SearchedWhenClause"}}},
+              {
+                "name": "whenClauses",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "openGql.grammar.SearchedWhenClause"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
               {"name": "elseClause", "type": {"optional": {"variable": "openGql.grammar.ElseClause"}}}]}}}},
     {
       "type": {
@@ -4082,7 +4298,12 @@
     {
       "type": {
         "name": "openGql.grammar.WhenOperandList",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.WhenOperand"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.WhenOperand"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.WhenOperand",
@@ -4291,7 +4512,12 @@
     {
       "type": {
         "name": "openGql.grammar.ListElementList",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.ListElement"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.ListElement"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.ListElement",
@@ -4307,7 +4533,12 @@
     {
       "type": {
         "name": "openGql.grammar.FieldList",
-        "body": {"variables": [], "body": {"list": {"variable": "openGql.grammar.Field"}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"list": {"variable": "openGql.grammar.Field"}},
+              "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}},
     {
       "type": {
         "name": "openGql.grammar.Field",

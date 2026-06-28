@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Term encoders for hydra.packaging
 
 module Hydra.Encode.Packaging where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.Typing as Typing
@@ -12,7 +10,6 @@ import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Encoder for hydra.packaging.Definition
 definition :: Packaging.Definition -> Core.Term
 definition x =
@@ -32,7 +29,6 @@ definition x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "primitive"),
           Core.fieldTerm = (primitiveDefinition v0)}})
-
 -- | Encoder for hydra.packaging.DefinitionReference
 definitionReference :: Packaging.DefinitionReference -> Core.Term
 definitionReference x =
@@ -52,7 +48,30 @@ definitionReference x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "primitive"),
           Core.fieldTerm = (EncodeCore.name v0)}})
-
+-- | Encoder for hydra.packaging.DependencyScope
+dependencyScope :: Packaging.DependencyScope -> Core.Term
+dependencyScope x =
+    case x of
+      Packaging.DependencyScopeApi -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.packaging.DependencyScope"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "api"),
+          Core.fieldTerm = Core.TermUnit}})
+      Packaging.DependencyScopeRuntime -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.packaging.DependencyScope"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "runtime"),
+          Core.fieldTerm = Core.TermUnit}})
+      Packaging.DependencyScopeTest -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.packaging.DependencyScope"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "test"),
+          Core.fieldTerm = Core.TermUnit}})
+      Packaging.DependencyScopeTool -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.packaging.DependencyScope"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "tool"),
+          Core.fieldTerm = Core.TermUnit}})
 -- | Encoder for hydra.packaging.EntityMetadata
 entityMetadata :: Packaging.EntityMetadata -> Core.Term
 entityMetadata x =
@@ -71,7 +90,6 @@ entityMetadata x =
         Core.Field {
           Core.fieldName = (Core.Name "lifecycle"),
           Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map lifecycleInfo opt)) (Packaging.entityMetadataLifecycle x))}]})
-
 -- | Encoder for hydra.packaging.EntityReference
 entityReference :: Packaging.EntityReference -> Core.Term
 entityReference x =
@@ -91,7 +109,6 @@ entityReference x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "definition"),
           Core.fieldTerm = (definitionReference v0)}})
-
 -- | Encoder for hydra.packaging.LifecycleInfo
 lifecycleInfo :: Packaging.LifecycleInfo -> Core.Term
 lifecycleInfo x =
@@ -104,7 +121,6 @@ lifecycleInfo x =
         Core.Field {
           Core.fieldName = (Core.Name "deprecatedSince"),
           Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map version opt)) (Packaging.lifecycleInfoDeprecatedSince x))}]})
-
 -- | Encoder for hydra.packaging.Module
 module_ :: Packaging.Module -> Core.Term
 module_ x =
@@ -123,7 +139,6 @@ module_ x =
         Core.Field {
           Core.fieldName = (Core.Name "definitions"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map definition xs)) (Packaging.moduleDefinitions x))}]})
-
 -- | Encoder for hydra.packaging.ModuleDependency
 moduleDependency :: Packaging.ModuleDependency -> Core.Term
 moduleDependency x =
@@ -136,14 +151,12 @@ moduleDependency x =
         Core.Field {
           Core.fieldName = (Core.Name "package"),
           Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map packageName opt)) (Packaging.moduleDependencyPackage x))}]})
-
 -- | Encoder for hydra.packaging.ModuleName
 moduleName :: Packaging.ModuleName -> Core.Term
 moduleName x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.packaging.ModuleName"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Packaging.unModuleName x))})
-
 -- | Encoder for hydra.packaging.Package
 package :: Packaging.Package -> Core.Term
 package x =
@@ -162,7 +175,6 @@ package x =
         Core.Field {
           Core.fieldName = (Core.Name "modules"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map module_ xs)) (Packaging.packageModules x))}]})
-
 -- | Encoder for hydra.packaging.PackageDependency
 packageDependency :: Packaging.PackageDependency -> Core.Term
 packageDependency x =
@@ -174,15 +186,16 @@ packageDependency x =
           Core.fieldTerm = (packageName (Packaging.packageDependencyName x))},
         Core.Field {
           Core.fieldName = (Core.Name "version"),
-          Core.fieldTerm = (versionSpecifier (Packaging.packageDependencyVersion x))}]})
-
+          Core.fieldTerm = (versionSpecifier (Packaging.packageDependencyVersion x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "scope"),
+          Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map dependencyScope opt)) (Packaging.packageDependencyScope x))}]})
 -- | Encoder for hydra.packaging.PackageName
 packageName :: Packaging.PackageName -> Core.Term
 packageName x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.packaging.PackageName"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Packaging.unPackageName x))})
-
 -- | Encoder for hydra.packaging.PrimitiveDefinition
 primitiveDefinition :: Packaging.PrimitiveDefinition -> Core.Term
 primitiveDefinition x =
@@ -207,7 +220,6 @@ primitiveDefinition x =
         Core.Field {
           Core.fieldName = (Core.Name "defaultImplementation"),
           Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map EncodeCore.term opt)) (Packaging.primitiveDefinitionDefaultImplementation x))}]})
-
 -- | Encoder for hydra.packaging.TermDefinition
 termDefinition :: Packaging.TermDefinition -> Core.Term
 termDefinition x =
@@ -226,7 +238,6 @@ termDefinition x =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (EncodeCore.term (Packaging.termDefinitionBody x))}]})
-
 -- | Encoder for hydra.packaging.TypeDefinition
 typeDefinition :: Packaging.TypeDefinition -> Core.Term
 typeDefinition x =
@@ -242,14 +253,24 @@ typeDefinition x =
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (EncodeCore.typeScheme (Packaging.typeDefinitionBody x))}]})
-
 -- | Encoder for hydra.packaging.Version
 version :: Packaging.Version -> Core.Term
 version x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.packaging.Version"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Packaging.unVersion x))})
-
+-- | Encoder for hydra.packaging.VersionRange
+versionRange :: Packaging.VersionRange -> Core.Term
+versionRange x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.VersionRange"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "lowerInclusive"),
+          Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map version opt)) (Packaging.versionRangeLowerInclusive x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "upperExclusive"),
+          Core.fieldTerm = ((\opt -> Core.TermOptional (Optionals.map version opt)) (Packaging.versionRangeUpperExclusive x))}]})
 -- | Encoder for hydra.packaging.VersionSpecifier
 versionSpecifier :: Packaging.VersionSpecifier -> Core.Term
 versionSpecifier x =
@@ -259,3 +280,18 @@ versionSpecifier x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "any"),
           Core.fieldTerm = Core.TermUnit}})
+      Packaging.VersionSpecifierExact v0 -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.packaging.VersionSpecifier"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "exact"),
+          Core.fieldTerm = (version v0)}})
+      Packaging.VersionSpecifierAtLeast v0 -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.packaging.VersionSpecifier"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "atLeast"),
+          Core.fieldTerm = (version v0)}})
+      Packaging.VersionSpecifierRange v0 -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.packaging.VersionSpecifier"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "range"),
+          Core.fieldTerm = (versionRange v0)}})

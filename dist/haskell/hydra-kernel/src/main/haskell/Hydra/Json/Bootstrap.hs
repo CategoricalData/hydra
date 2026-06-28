@@ -2288,6 +2288,46 @@ typesByName =
               Core.TermVariable (Core.Name "description"),
               (Core.TermLiteral (Core.LiteralString "A typed reference to a definition: a type, a term, or a primitive, identified by name")))]))}))),
       (
+        Core.Name "hydra.packaging.DependencyScope",
+        (Core.TypeAnnotated (Core.AnnotatedType {
+          Core.annotatedTypeBody = (Core.TypeUnion [
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "api"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = Core.TypeUnit,
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "A dependency exported transitively to consumers of this package (e.g. Gradle `api`, Cabal `build-depends`): present at both compile time and runtime, and visible downstream")))]))}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "runtime"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = Core.TypeUnit,
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "A dependency required at runtime but not at compile time")))]))}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "test"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = Core.TypeUnit,
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "A dependency required only to compile and run the package's tests")))]))}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "tool"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = Core.TypeUnit,
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "A build-tool-only dependency, used to generate or process sources at build time but not present in the compiled artifact (e.g. an ANTLR tool jar or an annotation processor)")))]))}))}]),
+          Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+            (
+              Core.TermVariable (Core.Name "description"),
+              (Core.TermLiteral (Core.LiteralString "The scope in which a package dependency is required. Relevant mainly to dependencies on third-party (non-Hydra) artifacts, where build systems distinguish compile-time, runtime, test-only, and build-tool-only dependencies. Hydra inter-package dependencies normally leave the scope unspecified.")))]))}))),
+      (
         Core.Name "hydra.packaging.EntityMetadata",
         (Core.TypeAnnotated (Core.AnnotatedType {
           Core.annotatedTypeBody = (Core.TypeRecord [
@@ -2500,7 +2540,15 @@ typesByName =
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
                   (
                     Core.TermVariable (Core.Name "description"),
-                    (Core.TermLiteral (Core.LiteralString "The version-range constraint on the depended-on package")))]))}))}]),
+                    (Core.TermLiteral (Core.LiteralString "The version-range constraint on the depended-on package")))]))}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "scope"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeOptional (Core.TypeVariable (Core.Name "hydra.packaging.DependencyScope"))),
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "The scope in which the dependency is required, if specified. Normally absent for Hydra inter-package dependencies; specified for third-party dependencies whose build scope (compile/runtime/test/tool) is significant.")))]))}))}]),
           Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
             (
               Core.TermVariable (Core.Name "description"),
@@ -2512,7 +2560,7 @@ typesByName =
           Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
             (
               Core.TermVariable (Core.Name "description"),
-              (Core.TermLiteral (Core.LiteralString "The unique name of a package, e.g. \"hydra-kernel\" or \"hydra-python\"")))]))}))),
+              (Core.TermLiteral (Core.LiteralString "The unique name of a package, e.g. \"hydra-kernel\" or \"hydra-python\". For dependencies on third-party artifacts in ecosystems with a group/namespace component (notably Maven), the group and artifact are carried in a single name separated by a colon, e.g. \"org.eclipse.rdf4j:rdf4j-rio-ntriples\"; the consuming host splits on the colon to recover the group when emitting build configuration. Hydra package names contain no colon.")))]))}))),
       (
         Core.Name "hydra.packaging.PrimitiveDefinition",
         (Core.TypeAnnotated (Core.AnnotatedType {
@@ -2640,6 +2688,30 @@ typesByName =
               Core.TermVariable (Core.Name "description"),
               (Core.TermLiteral (Core.LiteralString "A version string, e.g. \"0.15\" or \"1.0.0\".")))]))}))),
       (
+        Core.Name "hydra.packaging.VersionRange",
+        (Core.TypeAnnotated (Core.AnnotatedType {
+          Core.annotatedTypeBody = (Core.TypeRecord [
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "lowerInclusive"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeOptional (Core.TypeVariable (Core.Name "hydra.packaging.Version"))),
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "The inclusive lower bound, if any (the minimum acceptable version).")))]))}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "upperExclusive"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeOptional (Core.TypeVariable (Core.Name "hydra.packaging.Version"))),
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "The exclusive upper bound, if any (versions strictly below this are acceptable).")))]))}))}]),
+          Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+            (
+              Core.TermVariable (Core.Name "description"),
+              (Core.TermLiteral (Core.LiteralString "A version range with an optional inclusive lower bound and an optional exclusive upper bound.")))]))}))),
+      (
         Core.Name "hydra.packaging.VersionSpecifier",
         (Core.TypeAnnotated (Core.AnnotatedType {
           Core.annotatedTypeBody = (Core.TypeUnion [
@@ -2648,11 +2720,35 @@ typesByName =
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                 Core.annotatedTypeBody = Core.TypeUnit,
                 Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
-                  (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Any version satisfies the dependency")))]))}))}]),
+                  (Core.TermVariable (Core.Name "description"), (Core.TermLiteral (Core.LiteralString "Any version satisfies the dependency")))]))}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "exact"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.packaging.Version")),
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "Exactly the given version satisfies the dependency; used to pin a specific release")))]))}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "atLeast"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.packaging.Version")),
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "Any version greater than or equal to the given version (e.g. PyPI \">=7.0\")")))]))}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "range"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.packaging.VersionRange")),
+                Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
+                  (
+                    Core.TermVariable (Core.Name "description"),
+                    (Core.TermLiteral (Core.LiteralString "A version range with an optional inclusive lower bound and optional exclusive upper bound (e.g. \">=3.7,<4.0\")")))]))}))}]),
           Core.annotatedTypeAnnotation = (Core.TermMap (M.fromList [
             (
               Core.TermVariable (Core.Name "description"),
-              (Core.TermLiteral (Core.LiteralString "A specifier constraining acceptable versions of a dependency. Currently only the `any` (unit) specifier is defined; future variants such as `exact`, `caret`, and `range` may be added without breaking consumers of the `any` form.")))]))}))),
+              (Core.TermLiteral (Core.LiteralString "A specifier constraining acceptable versions of a dependency. Build systems render each variant into their own syntax (e.g. a range becomes \">=3.7,<4.0\" for PyPI or \"[3.7,4.0)\" for Maven). Further variants such as `caret` may be added without breaking consumers of the existing forms.")))]))}))),
       (
         Core.Name "hydra.typing.FunctionStructure",
         (Core.TypeAnnotated (Core.AnnotatedType {

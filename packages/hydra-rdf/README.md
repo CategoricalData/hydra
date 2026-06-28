@@ -17,6 +17,12 @@ For background on how Hydra relates to RDF and SHACL, see the
 - **XML Schema syntax model.**
 - **N-Triples serializer** (`rdfGraphToNtriples`) — the only output format currently supported.
   Reading (parsing) of any RDF format is not yet supported.
+- **Eclipse RDF4j overlay** (`hydra.overlay.java.rdf.SerdeNative`) — a host-native Java integration that
+  serializes Hydra RDF graphs (`hydra.rdf.syntax.*`) via RDF4j's Rio writers (and supports the reverse).
+  Hand-written, host-specific code: it lives under `overlay/java/hydra-rdf/` and is copied onto the
+  generated distribution at assembly time (#511; formerly the separate `bindings/java/hydra-rdf4j`
+  artifact). Its third-party dependency (`org.eclipse.rdf4j:rdf4j-rio-ntriples`) is declared in
+  `overlay/java/hydra-rdf/build.json`.
 
 ## Demos
 

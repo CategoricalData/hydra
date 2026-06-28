@@ -32,24 +32,88 @@ AUTHOR_NAME = "Joshua Shinavier"
 AUTHOR_EMAIL = "josh@fortytwo.net"
 PYTHON_REQUIRES = ">=3.12"
 
-# Per-package external (non-Hydra) PyPI dependencies. Currently empty for
-# every package: cypher/gql/RDF native bindings live in bindings/ once that
-# subtree exists, so no third-party Python deps are pulled into the kernel
-# or its siblings.
-EXTERNAL_DEPS: dict[str, list[str]] = {}
+def load_overlay_build_config(repo_root: str, name: str) -> dict:
+    """Load overlay/python/<pkg>/build.json — the encoded
+    hydra.python.pyproject.PyProjectBuildConfiguration for this package (#511).
+    Returns {} when absent (most packages have no overlay build config).
+
+    INTERIM: reads the JSON directly. The build.json format is the canonical
+    encoding of hydra.python.pyproject.PyProjectBuildConfiguration; when the build
+    system is nativized (#416) this hand parse is replaced by a generated
+    hydra.decode.pyproject decoder. The on-disk format does not change.
+    """
+    path = os.path.join(repo_root, "overlay", "python", name, "build.json")
+    if not os.path.isfile(path):
+        return {}
+    with open(path) as f:
+        return json.load(f)
 
 
-def render_pyproject(name: str, description: str, version: str, deps: list[str], readme_rel: str | None) -> str:
+def _scope_tag(scope_obj) -> str:
+    """The single variant key of an encoded DependencyScope, or 'api' if absent."""
+    if not scope_obj:
+        return "api"
+    return next(iter(scope_obj.keys()))
+
+
+def _pep440(version_obj) -> str:
+    """Render an encoded VersionSpecifier to a PEP 440 version constraint suffix.
+    {"exact":"1.0"} -> "==1.0"; {"any":{}} -> ""; {"atLeast":"7.0"} -> ">=7.0";
+    {"range":{"lowerInclusive":"3.7","upperExclusive":"4.0"}} -> ">=3.7,<4.0"."""
+    if "exact" in version_obj:
+        return f"=={version_obj['exact']}"
+    if "atLeast" in version_obj:
+        return f">={version_obj['atLeast']}"
+    if "range" in version_obj:
+        r = version_obj["range"]
+        parts = []
+        if r.get("lowerInclusive"):
+            parts.append(f">={r['lowerInclusive']}")
+        if r.get("upperExclusive"):
+            parts.append(f"<{r['upperExclusive']}")
+        return ",".join(parts)
+    return ""  # any
+
+
+def _pyproject_requirement(dep: dict) -> str:
+    """An encoded hydra.packaging.PackageDependency -> a PEP 508 requirement string,
+    e.g. {"name":"gremlinpython","version":{"range":...}} -> "gremlinpython>=3.7,<4.0"."""
+    return dep["name"] + _pep440(dep.get("version", {}))
+
+
+def render_pyproject(name: str, description: str, version: str, deps: list[str],
+                     readme_rel: str | None, overlay: dict | None = None) -> str:
+    overlay = overlay or {}
+    # Partition overlay deps by scope: api/runtime -> [project.dependencies];
+    # test -> [project.optional-dependencies] test extra (#511).
+    runtime_extra: list[str] = []
+    test_extra: list[str] = []
+    for d in overlay.get("dependencies", []):
+        req = _pyproject_requirement(d)
+        if _scope_tag(d.get("scope")) == "test":
+            test_extra.append(req)
+        else:
+            runtime_extra.append(req)
+
     dep_lines = []
+    # Hydra inter-package deps (from package.json), pinned to the current version.
     for dep in deps:
         dep_lines.append(f'    "{dep} == {version}",')
-    for ext in EXTERNAL_DEPS.get(name, []):
-        dep_lines.append(f'    "{ext}",')
+    # Third-party runtime deps from the overlay build.json.
+    for req in runtime_extra:
+        dep_lines.append(f'    "{req}",')
 
     if dep_lines:
         deps_block = "dependencies = [\n" + "\n".join(dep_lines) + "\n]"
     else:
         deps_block = "dependencies = []"
+
+    # Optional (test) dependencies become a PEP 621 optional-dependencies extra.
+    if test_extra:
+        test_lines = "\n".join(f'    "{r}",' for r in test_extra)
+        deps_block += (
+            "\n\n[project.optional-dependencies]\n"
+            "test = [\n" + test_lines + "\n]")
 
     # Escape any double-quote characters in description so they don't break
     # the generated TOML string literal.
@@ -171,9 +235,11 @@ def main() -> int:
     for fname in ("LICENSE", "NOTICE"):
         shutil.copyfile(os.path.join(args.repo_root, fname), os.path.join(out_dir, fname))
 
+    overlay = load_overlay_build_config(args.repo_root, args.package)
+
     pyproject_path = os.path.join(out_dir, "pyproject.toml")
     with open(pyproject_path, "w") as f:
-        f.write(render_pyproject(pkg_name, description, version, deps, readme_rel))
+        f.write(render_pyproject(pkg_name, description, version, deps, readme_rel, overlay))
 
     print(f"  wrote {pyproject_path}")
     return 0

@@ -43,13 +43,12 @@ sourceSets {
     // (developer drivers + json-io coder stub). Compiles AFTER main so it
     // can see the kernel + every coder package on the classpath.
     //
-    // The cypher/gql/rdf bindings (formerly under heads/java/src/main/java/
-    // hydra/{cypher,gql,rdf}) and the AntlrReaderBase utility have been
-    // moved to bindings/java/hydra-{rdf4j,neo4j}/. The pg DSL helpers
-    // (Queries, Graphs, *Builder, Merging) have been moved to
-    // bindings/java/hydra-pg-dsl/. The validatepg/genpg demos that consume
-    // those have been removed from this rollup; once they have their own
-    // gradle subproject (e.g. demos/pg-rdf-demos/) they will be reinstated
+    // The cypher/gql/rdf integrations and the AntlrReaderBase utility, plus the
+    // pg DSL helpers (Queries, Graphs, *Builder, Merging), now live as host-native
+    // overlay source under overlay/java/hydra-{pg,rdf}/ (folded from the former
+    // bindings/java/* in #511; see docs/overlays.md). The validatepg/genpg demos
+    // that consume those have been removed from this rollup; once they have their
+    // own gradle subproject (e.g. demos/pg-rdf-demos/) they will be reinstated
     // there.
     headsExtras {
         java {
@@ -123,10 +122,11 @@ compileJava {
     options.forkOptions.memoryMaximumSize = '6g'
 }
 
-// Test-side excludes: tests that imported the cypher/rdf/pg code that has
-// moved to bindings/java/hydra-{neo4j,rdf4j,pg-dsl}/. The tests themselves
-// still live in heads/java/src/test/java/hydra/{cypher,pg}/ and need their
-// own move; those tests need a shared HydraTestBase placement decision first.
+// Test-side excludes: tests that imported the cypher/rdf/pg code now living as
+// overlay source under overlay/java/hydra-{pg,rdf}/ (folded from the former
+// bindings/java/* in #511; see docs/overlays.md). The tests themselves still live
+// in heads/java/src/test/java/hydra/{cypher,pg}/ and need their own move; those
+// tests need a shared HydraTestBase placement decision first.
 compileTestJava {
     exclude '**/hydra/cypher/**'
     exclude '**/hydra/pg/**'

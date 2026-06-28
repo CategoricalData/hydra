@@ -380,7 +380,8 @@ The core principles (see CLAUDE.md and the
    `heads/<host>/`. Per-package host code — both third-party adapters
    (rdf4j, ANTLR-generated parsers, TinkerPop, etc.) and pure host-language
    DSL helpers tied to a single Hydra package (e.g., Java fluent builders for
-   `hydra-pg`) — lives in `bindings/<host>/<artifact>/`. See
+   `hydra-pg`) — lives as overlay source in `overlay/<lang>/<pkg>/` (folded from
+   the former `bindings/` tree in #511; see [overlays.md](../overlays.md)). See
    [implementation.md, principle 7](../implementation.md#key-design-principles).
    The split keeps `heads/<host>/` minimal: language-independent Hydra runtime
    + stdlib + build tooling, with no per-package host code.
@@ -974,15 +975,17 @@ content). Directories that are *entirely hand-written* runtime trees, copied int
 `copy-kernel-runtime.sh`, do not need (and should not have) the stub. The
 following intentionally lack `extend_path`:
 
-- `hydra/lib/__init__.py` — docstring-only marker for the hand-written
+- `hydra/overlay/python/lib/__init__.py` — docstring-only marker for the hand-written
   primitive-implementation tree.
-- `hydra/dsl/meta/__init__.py` — empty marker for the hand-written meta-DSL.
-- `hydra/dsl/meta/lib/__init__.py` — empty marker for the hand-written meta-DSL
+- `hydra/overlay/python/dsl/meta/__init__.py` — empty marker for the hand-written meta-DSL.
+- `hydra/overlay/python/dsl/meta/lib/__init__.py` — empty marker for the hand-written meta-DSL
   library helpers.
-- `hydra/python/util/__init__.py` — explicit re-exports for the persistent-collection
+- `hydra/overlay/python/util/__init__.py` — explicit re-exports for the persistent-collection
   types (`ConsList`, `Lazy`, `PersistentMap`, `PersistentSet`).
 
-The check above flags these by design; they are not stale.
+(These moved under the `hydra.overlay.python.*` namespace in #501; earlier they were
+`hydra/lib`, `hydra/dsl/meta`, `hydra/python/util`.) The check above flags these by
+design; they are not stale.
 
 ---
 

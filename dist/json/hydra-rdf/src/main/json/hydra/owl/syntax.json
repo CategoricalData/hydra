@@ -224,7 +224,11 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"list": {"variable": "hydra.owl.syntax.DataRange"}}},
+              "body": {
+                "wrap": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.owl.syntax.DataRange"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2}}}}]}}}},
               "annotation": {
                 "map": [
                   {
@@ -237,7 +241,11 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"list": {"variable": "hydra.owl.syntax.DataRange"}}},
+              "body": {
+                "wrap": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.owl.syntax.DataRange"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2}}}}]}}}},
               "annotation": {
                 "map": [
                   {
@@ -263,7 +271,11 @@
           "variables": [],
           "body": {
             "annotated": {
-              "body": {"wrap": {"list": {"variable": "hydra.rdf.syntax.Literal"}}},
+              "body": {
+                "wrap": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.rdf.syntax.Literal"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
               "annotation": {
                 "map": [
                   {
@@ -279,7 +291,12 @@
               "body": {
                 "record": [
                   {"name": "datatype", "type": {"variable": "hydra.owl.syntax.Datatype"}},
-                  {"name": "constraints", "type": {"list": {"variable": "hydra.owl.syntax.DatatypeRestriction_Constraint"}}}]},
+                  {
+                    "name": "constraints",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.owl.syntax.DatatypeRestriction_Constraint"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]},
               "annotation": {
                 "map": [
                   {
@@ -341,11 +358,23 @@
     {
       "type": {
         "name": "hydra.owl.syntax.ObjectIntersectionOf",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.owl.syntax.ClassExpression"}}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "wrap": {
+              "annotated": {
+                "body": {"list": {"variable": "hydra.owl.syntax.ClassExpression"}},
+                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2}}}}]}}}}}}},
     {
       "type": {
         "name": "hydra.owl.syntax.ObjectUnionOf",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.owl.syntax.ClassExpression"}}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "wrap": {
+              "annotated": {
+                "body": {"list": {"variable": "hydra.owl.syntax.ClassExpression"}},
+                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2}}}}]}}}}}}},
     {
       "type": {
         "name": "hydra.owl.syntax.ObjectComplementOf",
@@ -353,7 +382,13 @@
     {
       "type": {
         "name": "hydra.owl.syntax.ObjectOneOf",
-        "body": {"variables": [], "body": {"wrap": {"list": {"variable": "hydra.owl.syntax.Individual"}}}}}},
+        "body": {
+          "variables": [],
+          "body": {
+            "wrap": {
+              "annotated": {
+                "body": {"list": {"variable": "hydra.owl.syntax.Individual"}},
+                "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}}}},
     {
       "type": {
         "name": "hydra.owl.syntax.ObjectSomeValuesFrom",
@@ -443,7 +478,12 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "property", "type": {"list": {"variable": "hydra.owl.syntax.DataPropertyExpression"}}},
+              {
+                "name": "property",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.owl.syntax.DataPropertyExpression"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
               {"name": "range", "type": {"variable": "hydra.owl.syntax.DataRange"}}]}}}},
     {
       "type": {
@@ -452,7 +492,12 @@
           "variables": [],
           "body": {
             "record": [
-              {"name": "property", "type": {"list": {"variable": "hydra.owl.syntax.DataPropertyExpression"}}},
+              {
+                "name": "property",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.owl.syntax.DataPropertyExpression"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
               {"name": "range", "type": {"variable": "hydra.owl.syntax.DataRange"}}]}}}},
     {
       "type": {
@@ -542,7 +587,12 @@
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "classes", "type": {"list": {"variable": "hydra.owl.syntax.ClassExpression"}}}]}}}},
+              {
+                "name": "classes",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.owl.syntax.ClassExpression"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2}}}}]}}}}]}}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DisjointClasses",
@@ -551,7 +601,12 @@
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "classes", "type": {"list": {"variable": "hydra.owl.syntax.ClassExpression"}}}]}}}},
+              {
+                "name": "classes",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.owl.syntax.ClassExpression"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2}}}}]}}}}]}}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DisjointUnion",
@@ -563,7 +618,12 @@
                 "record": [
                   {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
                   {"name": "class", "type": {"variable": "hydra.owl.syntax.Class"}},
-                  {"name": "classes", "type": {"list": {"variable": "hydra.owl.syntax.ClassExpression"}}}]},
+                  {
+                    "name": "classes",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.owl.syntax.ClassExpression"}},
+                        "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2}}}}]}}}}]},
               "annotation": {
                 "map": [
                   {
@@ -597,7 +657,12 @@
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "subProperty", "type": {"list": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}},
+              {
+                "name": "subProperty",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
               {"name": "superProperty", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}]}}}},
     {
       "type": {
@@ -607,7 +672,12 @@
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "properties", "type": {"list": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}}]}}}},
+              {
+                "name": "properties",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2}}}}]}}}}]}}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DisjointObjectProperties",
@@ -616,7 +686,12 @@
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "properties", "type": {"list": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}}}]}}}},
+              {
+                "name": "properties",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2}}}}]}}}}]}}}},
     {
       "type": {
         "name": "hydra.owl.syntax.ObjectPropertyDomain",
@@ -755,7 +830,12 @@
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "properties", "type": {"list": {"variable": "hydra.owl.syntax.DataPropertyExpression"}}}]}}}},
+              {
+                "name": "properties",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.owl.syntax.DataPropertyExpression"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2}}}}]}}}}]}}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DisjointDataProperties",
@@ -764,7 +844,12 @@
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "properties", "type": {"list": {"variable": "hydra.owl.syntax.DataPropertyExpression"}}}]}}}},
+              {
+                "name": "properties",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.owl.syntax.DataPropertyExpression"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2}}}}]}}}}]}}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DataPropertyDomain",
@@ -841,7 +926,12 @@
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "individuals", "type": {"list": {"variable": "hydra.owl.syntax.Individual"}}}]}}}},
+              {
+                "name": "individuals",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.owl.syntax.Individual"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2}}}}]}}}}]}}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DifferentIndividuals",
@@ -850,7 +940,12 @@
           "body": {
             "record": [
               {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
-              {"name": "individuals", "type": {"list": {"variable": "hydra.owl.syntax.Individual"}}}]}}}},
+              {
+                "name": "individuals",
+                "type": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.owl.syntax.Individual"}},
+                    "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 2}}}}]}}}}]}}}},
     {
       "type": {
         "name": "hydra.owl.syntax.ClassAssertion",
