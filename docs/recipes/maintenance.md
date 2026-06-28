@@ -974,15 +974,17 @@ content). Directories that are *entirely hand-written* runtime trees, copied int
 `copy-kernel-runtime.sh`, do not need (and should not have) the stub. The
 following intentionally lack `extend_path`:
 
-- `hydra/lib/__init__.py` — docstring-only marker for the hand-written
+- `hydra/overlay/python/lib/__init__.py` — docstring-only marker for the hand-written
   primitive-implementation tree.
-- `hydra/dsl/meta/__init__.py` — empty marker for the hand-written meta-DSL.
-- `hydra/dsl/meta/lib/__init__.py` — empty marker for the hand-written meta-DSL
+- `hydra/overlay/python/dsl/meta/__init__.py` — empty marker for the hand-written meta-DSL.
+- `hydra/overlay/python/dsl/meta/lib/__init__.py` — empty marker for the hand-written meta-DSL
   library helpers.
-- `hydra/python/util/__init__.py` — explicit re-exports for the persistent-collection
+- `hydra/overlay/python/util/__init__.py` — explicit re-exports for the persistent-collection
   types (`ConsList`, `Lazy`, `PersistentMap`, `PersistentSet`).
 
-The check above flags these by design; they are not stale.
+(These moved under the `hydra.overlay.python.*` namespace in #501; earlier they were
+`hydra/lib`, `hydra/dsl/meta`, `hydra/python/util`.) The check above flags these by
+design; they are not stale.
 
 ---
 

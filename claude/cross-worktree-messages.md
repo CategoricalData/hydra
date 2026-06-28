@@ -35,7 +35,12 @@ so either side can grep for it to confirm delivery.
 
 ## Sending
 
-1. Get explicit user permission before each send.
+1. Get explicit user permission before each send — **unless** the user has granted
+   autonomous-send authorization scoped to the current task. The user may say e.g.
+   "send and receive messages freely until #511 lands" or "coordinate with the workers
+   until this lands on main"; within that scope you send without per-message review.
+   The authorization is bounded by the stated scope (an issue resolving, changes landing
+   on main, a named task completing) — once the scope closes, revert to asking per send.
 2. Write the message to your own `claude-hydra-messages/outbox/<filename>.md`.
 3. Copy (not move) to the recipient's inbox:
    `cp outbox/<filename>.md ../<recipient>/claude-hydra-messages/inbox/<filename>.md`.
@@ -66,6 +71,26 @@ Never edit or delete existing files in the recipient's inbox — only create new
    `mv inbox/<filename>.md inbox/archive/<filename>.md`.
    Never delete messages — the archive is the audit trail
    ("why did you do X?" → "because of this message").
+
+## Polling cadence
+
+Every worker, at all times, checks its inbox on a regular cadence so messages from
+sibling sessions are seen promptly without burning cycles when the channel is quiet.
+
+Use **exponential backoff with reset**:
+
+- Poll after 1 minute. If nothing new arrived, poll again after 2 minutes, then 4,
+  then 8 — doubling each idle round.
+- **Cap the interval at 15 minutes** (the quarter-hour is the longest idle gap). Once
+  you reach it, keep polling every 15 minutes indefinitely; do not back off further.
+- **Reset the interval to 1 minute whenever you send OR receive a message.** Any
+  traffic in either direction signals an active conversation, so tighten the cadence
+  back up; it decays again only through consecutive idle polls.
+
+A "poll" is the receiving sequence above: list `inbox/*.md`, handle anything new, then
+schedule the next check at the current backoff interval. This cadence applies whether or
+not you are otherwise busy — a long-running build does not exempt you from checking the
+inbox on schedule.
 
 ## Crash recovery
 
