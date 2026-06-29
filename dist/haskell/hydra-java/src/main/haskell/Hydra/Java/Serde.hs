@@ -7,6 +7,7 @@ import qualified Hydra.Classes as Classes
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
+import qualified Hydra.Docs as Docs
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Error.Packaging as ErrorPackaging
@@ -21,12 +22,14 @@ import qualified Hydra.Overlay.Haskell.Lib.Literals as Literals
 import qualified Hydra.Overlay.Haskell.Lib.Logic as Logic
 import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Overlay.Haskell.Lib.Strings as Strings
+import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Query as Query
 import qualified Hydra.Relational as Relational
 import qualified Hydra.Serialization as Serialization
+import qualified Hydra.Show.Docs as ShowDocs
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Topology as Topology
@@ -560,6 +563,18 @@ interfaceModifierToExpr m =
       Syntax.InterfaceModifierStrictfp -> Serialization.cst "strictfp"
 interfaceTypeToExpr :: Syntax.InterfaceType -> Ast.Expr
 interfaceTypeToExpr it = classTypeToExpr (Syntax.unInterfaceType it)
+-- | Render a hydra.packaging.EntityReference as Javadoc link syntax
+javaDocEntityRef :: Packaging.EntityReference -> String
+javaDocEntityRef ref =
+    case ref of
+      Packaging.EntityReferenceDefinition v0 -> Strings.cat2 "{@link " (Strings.cat2 (case v0 of
+        Packaging.DefinitionReferencePrimitive v1 -> Names.localNameOf v1
+        Packaging.DefinitionReferenceTerm v1 -> Names.localNameOf v1
+        Packaging.DefinitionReferenceType v1 -> Names.localNameOf v1) "}")
+      Packaging.EntityReferenceModule v0 -> Packaging.unModuleName v0
+      Packaging.EntityReferencePackage v0 -> Packaging.unPackageName v0
+      Packaging.EntityReferenceTermExpr v0 -> Strings.cat2 "{@code " (Strings.cat2 v0 "}")
+      Packaging.EntityReferenceTypeExpr v0 -> Strings.cat2 "{@code " (Strings.cat2 v0 "}")
 javaFloatLiteralText :: String -> String
 javaFloatLiteralText s =
     Logic.ifElse (Equality.equal s "NaN") "Double.NaN" (Logic.ifElse (Equality.equal s "Infinity") "Double.POSITIVE_INFINITY" (Logic.ifElse (Equality.equal s "-Infinity") "Double.NEGATIVE_INFINITY" s))
@@ -1136,5 +1151,5 @@ wildcardToExpr w =
 withComments :: Maybe String -> Ast.Expr -> Ast.Expr
 withComments mc expr =
     Optionals.cases mc expr (\c -> Serialization.newlineSep [
-      Serialization.cst (Strings.cat2 "/**\n" (Strings.cat2 (Strings.intercalate "\n" (Lists.map (\l -> Logic.ifElse (Equality.equal l "") " *" (Strings.cat2 " * " l)) (Strings.lines (sanitizeJavaComment c)))) "\n */")),
+      Serialization.cst (Strings.cat2 "/**\n" (Strings.cat2 (Strings.intercalate "\n" (Lists.map (\l -> Logic.ifElse (Equality.equal l "") " *" (Strings.cat2 " * " l)) (Strings.lines (sanitizeJavaComment (ShowDocs.renderDocStringWith javaDocEntityRef c))))) "\n */")),
       expr])

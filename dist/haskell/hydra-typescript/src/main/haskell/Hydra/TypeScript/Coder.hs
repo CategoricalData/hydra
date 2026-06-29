@@ -8,6 +8,7 @@ import qualified Hydra.Arity as Arity
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.Docs as Docs
 import qualified Hydra.Environment as Environment
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
@@ -40,6 +41,7 @@ import qualified Hydra.Relational as Relational
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Serialization as Serialization
+import qualified Hydra.Show.Docs as ShowDocs
 import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Strip as Strip
 import qualified Hydra.System as System
@@ -643,7 +645,7 @@ lazyFlagsForPrimitive g name =
 mkDocComment :: Maybe String -> Maybe Syntax.DocumentationComment
 mkDocComment mdesc =
     Optionals.cases mdesc Nothing (\d -> Logic.ifElse (Equality.equal d "") Nothing (Just (Syntax.DocumentationComment {
-      Syntax.documentationCommentDescription = d,
+      Syntax.documentationCommentDescription = (ShowDocs.renderDocStringWith tsDocEntityRef d),
       Syntax.documentationCommentTags = []})))
 moduleToTypeScript :: Packaging.Module -> [Packaging.Definition] -> Typing.InferenceContext -> Graph.Graph -> Either Errors.Error (M.Map String String)
 moduleToTypeScript mod defs cx g =
@@ -879,6 +881,18 @@ tsCond test cons alt =
       Syntax.conditionalExpressionTest = test,
       Syntax.conditionalExpressionConsequent = cons,
       Syntax.conditionalExpressionAlternate = alt})
+-- | Render a 'EntityReference' as TSDoc link syntax
+tsDocEntityRef :: Packaging.EntityReference -> String
+tsDocEntityRef x =
+    case x of
+      Packaging.EntityReferenceDefinition v0 -> Strings.cat2 "{@link " (Strings.cat2 (case v0 of
+        Packaging.DefinitionReferencePrimitive v1 -> Names.localNameOf v1
+        Packaging.DefinitionReferenceTerm v1 -> Names.localNameOf v1
+        Packaging.DefinitionReferenceType v1 -> Names.localNameOf v1) "}")
+      Packaging.EntityReferenceModule v0 -> Packaging.unModuleName v0
+      Packaging.EntityReferencePackage v0 -> Packaging.unPackageName v0
+      Packaging.EntityReferenceTermExpr v0 -> Strings.cat2 "`" (Strings.cat2 v0 "`")
+      Packaging.EntityReferenceTypeExpr v0 -> Strings.cat2 "`" (Strings.cat2 v0 "`")
 tsEnvGetGraph :: t0 -> t0
 tsEnvGetGraph g = g
 tsEnvSetGraph :: t0 -> t1 -> t0

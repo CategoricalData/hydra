@@ -7,6 +7,7 @@ import qualified Hydra.Classes as Classes
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
+import qualified Hydra.Docs as Docs
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Error.Packaging as ErrorPackaging
@@ -19,6 +20,7 @@ import qualified Hydra.Overlay.Haskell.Lib.Literals as Literals
 import qualified Hydra.Overlay.Haskell.Lib.Logic as Logic
 import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Overlay.Haskell.Lib.Strings as Strings
+import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Paths as Paths
@@ -26,6 +28,7 @@ import qualified Hydra.Python.Syntax as Syntax
 import qualified Hydra.Query as Query
 import qualified Hydra.Relational as Relational
 import qualified Hydra.Serialization as Serialization
+import qualified Hydra.Show.Docs as ShowDocs
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Topology as Topology
@@ -676,6 +679,18 @@ primaryWithRhsToExpr pwr =
       in (Serialization.noSep [
         primaryToExpr prim,
         (primaryRhsToExpr rhs)])
+-- | Render a hydra.packaging.EntityReference as Sphinx/RST link syntax
+pythonDocEntityRef :: Packaging.EntityReference -> String
+pythonDocEntityRef ref =
+    case ref of
+      Packaging.EntityReferenceDefinition v0 -> case v0 of
+        Packaging.DefinitionReferencePrimitive v1 -> Strings.cat2 ":func:`" (Strings.cat2 (Names.localNameOf v1) "`")
+        Packaging.DefinitionReferenceTerm v1 -> Strings.cat2 ":func:`" (Strings.cat2 (Names.localNameOf v1) "`")
+        Packaging.DefinitionReferenceType v1 -> Strings.cat2 ":class:`" (Strings.cat2 (Names.localNameOf v1) "`")
+      Packaging.EntityReferenceModule v0 -> Packaging.unModuleName v0
+      Packaging.EntityReferencePackage v0 -> Packaging.unPackageName v0
+      Packaging.EntityReferenceTermExpr v0 -> Strings.cat2 "``" (Strings.cat2 v0 "``")
+      Packaging.EntityReferenceTypeExpr v0 -> Strings.cat2 "``" (Strings.cat2 v0 "``")
 pythonFloatLiteralText :: String -> String
 pythonFloatLiteralText s =
     Logic.ifElse (Equality.equal s "NaN") "float('nan')" (Logic.ifElse (Equality.equal s "Infinity") "float('inf')" (Logic.ifElse (Equality.equal s "-Infinity") "float('-inf')" s))
@@ -872,7 +887,7 @@ termToExpr t = factorToExpr (Syntax.termRhs t)
 -- | Convert a doc string to Python comment format. Empty source lines emit `#` (no trailing space) so blank comment lines don't carry trailing whitespace into the generated file.
 toPythonComments :: String -> String
 toPythonComments doc_ =
-    Logic.ifElse (Equality.equal doc_ "") "" (Strings.intercalate "\n" (Lists.map (\line -> Logic.ifElse (Equality.equal line "") "#" (Strings.cat2 "# " line)) (Strings.lines doc_)))
+    Logic.ifElse (Equality.equal doc_ "") "" (Strings.intercalate "\n" (Lists.map (\line -> Logic.ifElse (Equality.equal line "") "#" (Strings.cat2 "# " line)) (Strings.lines (ShowDocs.renderDocStringWith pythonDocEntityRef doc_))))
 -- | Serialize a Python tuple
 tupleToExpr :: Syntax.Tuple -> Ast.Expr
 tupleToExpr t =

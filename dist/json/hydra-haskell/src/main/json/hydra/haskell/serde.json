@@ -6,13 +6,16 @@
     "seeAlso": []},
   "dependencies": [
     {"module": "hydra.constants"},
+    {"module": "hydra.names"},
     {"module": "hydra.serialization"},
     {"module": "hydra.haskell.operators"},
+    {"module": "hydra.show.docs"},
     {"module": "hydra.haskell.syntax"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
     {"module": "hydra.core"},
+    {"module": "hydra.docs"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},
     {"module": "hydra.error.file"},
@@ -2546,6 +2549,107 @@
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a statement to an AST expression"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.haskell.serde.haddockEntityRef",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.packaging.EntityReference"}, "isLazy": false}],
+          "result": {"type": {"literal": {"string": {}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "cases": {
+                "typeName": "hydra.packaging.EntityReference",
+                "cases": [
+                  {
+                    "name": "definition",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "d",
+                        "domain": {"variable": "hydra.packaging.DefinitionReference"},
+                        "body": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "'"}}}},
+                            "argument": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {"variable": "hydra.lib.strings.cat2"},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "cases": {
+                                            "typeName": "hydra.packaging.DefinitionReference",
+                                            "cases": [
+                                              {
+                                                "name": "primitive",
+                                                "handler": {
+                                                  "lambda": {
+                                                    "parameter": "n",
+                                                    "domain": {"variable": "hydra.core.Name"},
+                                                    "body": {"application": {"function": {"variable": "hydra.names.localNameOf"}, "argument": {"variable": "n"}}}}}},
+                                              {
+                                                "name": "term",
+                                                "handler": {
+                                                  "lambda": {
+                                                    "parameter": "n",
+                                                    "domain": {"variable": "hydra.core.Name"},
+                                                    "body": {"application": {"function": {"variable": "hydra.names.localNameOf"}, "argument": {"variable": "n"}}}}}},
+                                              {
+                                                "name": "type",
+                                                "handler": {
+                                                  "lambda": {
+                                                    "parameter": "n",
+                                                    "domain": {"variable": "hydra.core.Name"},
+                                                    "body": {"application": {"function": {"variable": "hydra.names.localNameOf"}, "argument": {"variable": "n"}}}}}}]}},
+                                        "argument": {"variable": "d"}}}}},
+                                "argument": {"literal": {"string": "'"}}}}}}}}},
+                  {
+                    "name": "module",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "m",
+                        "domain": {"variable": "hydra.packaging.ModuleName"},
+                        "body": {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "m"}}}}}},
+                  {
+                    "name": "package",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "p",
+                        "domain": {"variable": "hydra.packaging.PackageName"},
+                        "body": {"application": {"function": {"unwrap": "hydra.packaging.PackageName"}, "argument": {"variable": "p"}}}}}},
+                  {
+                    "name": "termExpr",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "s",
+                        "domain": {"literal": {"string": {}}},
+                        "body": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "@"}}}},
+                            "argument": {
+                              "application": {
+                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "s"}}},
+                                "argument": {"literal": {"string": "@"}}}}}}}}},
+                  {
+                    "name": "typeExpr",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "s",
+                        "domain": {"literal": {"string": {}}},
+                        "body": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "@"}}}},
+                            "argument": {
+                              "application": {
+                                "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "s"}}},
+                                "argument": {"literal": {"string": "@"}}}}}}}}}]}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Render a {@type hydra.packaging.EntityReference} as Haddock link syntax"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.haskell.serde.toHaskellComments",
         "signature": {
           "typeParameters": [],
@@ -2591,14 +2695,23 @@
                                       "application": {
                                         "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "-- | "}}}},
                                         "argument": {"variable": "s"}}}}}}}}},
-                        "argument": {"application": {"function": {"variable": "hydra.lib.strings.lines"}, "argument": {"variable": "c"}}}}}}}}},
+                        "argument": {
+                          "application": {
+                            "function": {"variable": "hydra.lib.strings.lines"},
+                            "argument": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {"variable": "hydra.show.docs.renderDocStringWith"},
+                                    "argument": {"variable": "hydra.haskell.serde.haddockEntityRef"}}},
+                                "argument": {"variable": "c"}}}}}}}}}}},
             "annotation": {
               "map": [
                 {
                   "key": {"variable": "description"},
                   "value": {
                     "literal": {
-                      "string": "Convert a string to Haddock documentation comments. Empty source lines emit `-- |` (no trailing space) so blank doc lines don't carry trailing whitespace into the generated file."}}}]}}}}},
+                      "string": "Convert a string to Haddock documentation comments. Empty source lines emit `-- |` (no trailing space) so blank doc lines don't carry trailing whitespace into the generated file. {@tag rhs} escapes are rendered as Haddock links via haddockEntityRef."}}}]}}}}},
     {
       "term": {
         "name": "hydra.haskell.serde.toSimpleComments",

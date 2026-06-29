@@ -14,6 +14,11 @@ import qualified Data.Scientific as Sci
 definition :: Packaging.Definition -> Core.Term
 definition x =
     case x of
+      Packaging.DefinitionPrimitive v0 -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.packaging.Definition"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "primitive"),
+          Core.fieldTerm = (primitiveDefinition v0)}})
       Packaging.DefinitionTerm v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.packaging.Definition"),
         Core.injectionField = Core.Field {
@@ -24,29 +29,24 @@ definition x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (typeDefinition v0)}})
-      Packaging.DefinitionPrimitive v0 -> Core.TermInject (Core.Injection {
-        Core.injectionTypeName = (Core.Name "hydra.packaging.Definition"),
-        Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "primitive"),
-          Core.fieldTerm = (primitiveDefinition v0)}})
 -- | Encoder for hydra.packaging.DefinitionReference
 definitionReference :: Packaging.DefinitionReference -> Core.Term
 definitionReference x =
     case x of
-      Packaging.DefinitionReferenceType v0 -> Core.TermInject (Core.Injection {
+      Packaging.DefinitionReferencePrimitive v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.packaging.DefinitionReference"),
         Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "type"),
+          Core.fieldName = (Core.Name "primitive"),
           Core.fieldTerm = (EncodeCore.name v0)}})
       Packaging.DefinitionReferenceTerm v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.packaging.DefinitionReference"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (EncodeCore.name v0)}})
-      Packaging.DefinitionReferencePrimitive v0 -> Core.TermInject (Core.Injection {
+      Packaging.DefinitionReferenceType v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.packaging.DefinitionReference"),
         Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "primitive"),
+          Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (EncodeCore.name v0)}})
 -- | Encoder for hydra.packaging.EntityMetadata
 entityMetadata :: Packaging.EntityMetadata -> Core.Term
@@ -70,21 +70,31 @@ entityMetadata x =
 entityReference :: Packaging.EntityReference -> Core.Term
 entityReference x =
     case x of
-      Packaging.EntityReferencePackage v0 -> Core.TermInject (Core.Injection {
-        Core.injectionTypeName = (Core.Name "hydra.packaging.EntityReference"),
-        Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "package"),
-          Core.fieldTerm = (packageName v0)}})
-      Packaging.EntityReferenceModule v0 -> Core.TermInject (Core.Injection {
-        Core.injectionTypeName = (Core.Name "hydra.packaging.EntityReference"),
-        Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "module"),
-          Core.fieldTerm = (moduleName v0)}})
       Packaging.EntityReferenceDefinition v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.packaging.EntityReference"),
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "definition"),
           Core.fieldTerm = (definitionReference v0)}})
+      Packaging.EntityReferenceModule v0 -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.packaging.EntityReference"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "module"),
+          Core.fieldTerm = (moduleName v0)}})
+      Packaging.EntityReferencePackage v0 -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.packaging.EntityReference"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "package"),
+          Core.fieldTerm = (packageName v0)}})
+      Packaging.EntityReferenceTermExpr v0 -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.packaging.EntityReference"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "termExpr"),
+          Core.fieldTerm = (Core.TermLiteral (Core.LiteralString v0))}})
+      Packaging.EntityReferenceTypeExpr v0 -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.packaging.EntityReference"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "typeExpr"),
+          Core.fieldTerm = (Core.TermLiteral (Core.LiteralString v0))}})
 -- | Encoder for hydra.packaging.LifecycleInfo
 lifecycleInfo :: Packaging.LifecycleInfo -> Core.Term
 lifecycleInfo x =

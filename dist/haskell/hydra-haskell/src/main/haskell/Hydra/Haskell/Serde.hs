@@ -10,6 +10,7 @@ import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
+import qualified Hydra.Docs as Docs
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Error.File as ErrorFile
@@ -27,12 +28,14 @@ import qualified Hydra.Overlay.Haskell.Lib.Literals as Literals
 import qualified Hydra.Overlay.Haskell.Lib.Logic as Logic
 import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Overlay.Haskell.Lib.Strings as Strings
+import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Query as Query
 import qualified Hydra.Relational as Relational
 import qualified Hydra.Serialization as Serialization
+import qualified Hydra.Show.Docs as ShowDocs
 import qualified Hydra.System as System
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing
@@ -219,6 +222,18 @@ fieldToExpr field =
                 typeToExpr typ]))
       in (Optionals.cases mc body (\c -> Serialization.newlineSep (Lists.cons (Serialization.cst (toHaskellComments c)) [
         body])))
+-- | Render a 'EntityReference' as Haddock link syntax
+haddockEntityRef :: Packaging.EntityReference -> String
+haddockEntityRef x =
+    case x of
+      Packaging.EntityReferenceDefinition v0 -> Strings.cat2 "'" (Strings.cat2 (case v0 of
+        Packaging.DefinitionReferencePrimitive v1 -> Names.localNameOf v1
+        Packaging.DefinitionReferenceTerm v1 -> Names.localNameOf v1
+        Packaging.DefinitionReferenceType v1 -> Names.localNameOf v1) "'")
+      Packaging.EntityReferenceModule v0 -> Packaging.unModuleName v0
+      Packaging.EntityReferencePackage v0 -> Packaging.unPackageName v0
+      Packaging.EntityReferenceTermExpr v0 -> Strings.cat2 "@" (Strings.cat2 v0 "@")
+      Packaging.EntityReferenceTypeExpr v0 -> Strings.cat2 "@" (Strings.cat2 v0 "@")
 -- | Convert an if-then-else expression to an AST expression
 ifExpressionToExpr :: Syntax.IfExpression -> Ast.Expr
 ifExpressionToExpr ifExpr =
@@ -367,10 +382,10 @@ rightHandSideToExpr rhs = expressionToExpr (Syntax.unRightHandSide rhs)
 -- | Convert a statement to an AST expression
 statementToExpr :: Syntax.Statement -> Ast.Expr
 statementToExpr stmt = expressionToExpr (Syntax.unStatement stmt)
--- | Convert a string to Haddock documentation comments. Empty source lines emit `-- |` (no trailing space) so blank doc lines don't carry trailing whitespace into the generated file.
+-- | Convert a string to Haddock documentation comments. Empty source lines emit `-- |` (no trailing space) so blank doc lines don't carry trailing whitespace into the generated file. {@tag rhs} escapes are rendered as Haddock links via haddockEntityRef.
 toHaskellComments :: String -> String
 toHaskellComments c =
-    Strings.intercalate "\n" (Lists.map (\s -> Logic.ifElse (Equality.equal s "") "-- |" (Strings.cat2 "-- | " s)) (Strings.lines c))
+    Strings.intercalate "\n" (Lists.map (\s -> Logic.ifElse (Equality.equal s "") "-- |" (Strings.cat2 "-- | " s)) (Strings.lines (ShowDocs.renderDocStringWith haddockEntityRef c)))
 -- | Convert a string to simple line comments. Empty source lines emit `--` (no trailing space) for the same reason as toHaskellComments.
 toSimpleComments :: String -> String
 toSimpleComments c =

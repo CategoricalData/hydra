@@ -28,9 +28,9 @@ definition cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
+                      (Core.Name "primitive", (\input -> Eithers.map (\t -> Packaging.DefinitionPrimitive t) (primitiveDefinition cx input))),
                       (Core.Name "term", (\input -> Eithers.map (\t -> Packaging.DefinitionTerm t) (termDefinition cx input))),
-                      (Core.Name "type", (\input -> Eithers.map (\t -> Packaging.DefinitionType t) (typeDefinition cx input))),
-                      (Core.Name "primitive", (\input -> Eithers.map (\t -> Packaging.DefinitionPrimitive t) (primitiveDefinition cx input)))]
+                      (Core.Name "type", (\input -> Eithers.map (\t -> Packaging.DefinitionType t) (typeDefinition cx input)))]
         in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
@@ -46,11 +46,11 @@ definitionReference cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "type", (\input -> Eithers.map (\t -> Packaging.DefinitionReferenceType t) (DecodeCore.name cx input))),
-                      (Core.Name "term", (\input -> Eithers.map (\t -> Packaging.DefinitionReferenceTerm t) (DecodeCore.name cx input))),
                       (
                         Core.Name "primitive",
-                        (\input -> Eithers.map (\t -> Packaging.DefinitionReferencePrimitive t) (DecodeCore.name cx input)))]
+                        (\input -> Eithers.map (\t -> Packaging.DefinitionReferencePrimitive t) (DecodeCore.name cx input))),
+                      (Core.Name "term", (\input -> Eithers.map (\t -> Packaging.DefinitionReferenceTerm t) (DecodeCore.name cx input))),
+                      (Core.Name "type", (\input -> Eithers.map (\t -> Packaging.DefinitionReferenceType t) (DecodeCore.name cx input)))]
         in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
@@ -86,11 +86,25 @@ entityReference cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "package", (\input -> Eithers.map (\t -> Packaging.EntityReferencePackage t) (packageName cx input))),
-                      (Core.Name "module", (\input -> Eithers.map (\t -> Packaging.EntityReferenceModule t) (moduleName cx input))),
                       (
                         Core.Name "definition",
-                        (\input -> Eithers.map (\t -> Packaging.EntityReferenceDefinition t) (definitionReference cx input)))]
+                        (\input -> Eithers.map (\t -> Packaging.EntityReferenceDefinition t) (definitionReference cx input))),
+                      (Core.Name "module", (\input -> Eithers.map (\t -> Packaging.EntityReferenceModule t) (moduleName cx input))),
+                      (Core.Name "package", (\input -> Eithers.map (\t -> Packaging.EntityReferencePackage t) (packageName cx input))),
+                      (
+                        Core.Name "termExpr",
+                        (\input -> Eithers.map (\t -> Packaging.EntityReferenceTermExpr t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralString v2 -> Right v2
+                            _ -> Left (Errors.DecodingError "expected string literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
+                      (
+                        Core.Name "typeExpr",
+                        (\input -> Eithers.map (\t -> Packaging.EntityReferenceTypeExpr t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralString v2 -> Right v2
+                            _ -> Left (Errors.DecodingError "expected string literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
         in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),

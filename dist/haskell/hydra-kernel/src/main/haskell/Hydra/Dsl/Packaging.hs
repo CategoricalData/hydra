@@ -252,6 +252,22 @@ entityReferencePackage x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "package"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+-- | DSL injection for the termExpr variant of hydra.packaging.EntityReference
+entityReferenceTermExpr :: Typed.TypedTerm String -> Typed.TypedTerm Packaging.EntityReference
+entityReferenceTermExpr x =
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.packaging.EntityReference"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "termExpr"),
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
+-- | DSL injection for the typeExpr variant of hydra.packaging.EntityReference
+entityReferenceTypeExpr :: Typed.TypedTerm String -> Typed.TypedTerm Packaging.EntityReference
+entityReferenceTypeExpr x =
+    Typed.TypedTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.packaging.EntityReference"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "typeExpr"),
+        Core.fieldTerm = (Typed.unTypedTerm x)}}))
 -- | DSL constructor for hydra.packaging.LifecycleInfo
 lifecycleInfo :: Typed.TypedTerm (Maybe Packaging.Version) -> Typed.TypedTerm (Maybe Packaging.Version) -> Typed.TypedTerm Packaging.LifecycleInfo
 lifecycleInfo availableSince deprecatedSince =
