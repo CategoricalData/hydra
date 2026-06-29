@@ -538,6 +538,25 @@ attempt to rebuild triggered another wave of kernel-source changes. Trace
 the binary's expected shape by reading the relevant
 `Sources/Encode/<Type>.hs` and `Sources/Decode/<Type>.hs` at the merge base.
 
+### Stale per-module export cache can serve old-format JSON after a merge
+
+`verify-json-kernel`'s **per-module** cache
+(`heads/haskell/.stack-work/verify-json-kernel-per-module-cache.json`) is distinct from the
+universe-wide step cache (`verify-json-kernel-cache.txt`). After merging a branch that changed
+the JSON *format* (e.g. #520's compact unit-variant form), this per-module cache can register a
+high hit rate (e.g. "97 hits / 98 modules") and **skip regenerating** the decode/encode modules,
+leaving the committed `dist/json` in the old format. The Step 3 verify then triggers a reconcile
+(`update-json-kernel`) that re-infers in a narrow scope against that stale JSON and fails with a
+misleading `Type inference failed: no such binding: hydra.<module>.<name>` (seen:
+`hydra.decode.core.type`) — even though the binding genuinely exists. This is the rare case where a
+stale cache *does* surface as a correctness-looking failure, not a clean miss.
+
+Fix: clear the stale export/verify caches and re-sync so all modules regenerate honestly —
+`rm -f heads/haskell/.stack-work/{verify-json-kernel-per-module-cache.json,verify-json-kernel-cache.txt,java-python-json-cache.txt,bootstrap-from-json-cache.txt}`
+plus the `dist/json/**/build` digests. Keep `haskell-test-cache.txt` (the test build stays valid and
+is slow to rebuild). The full Step 2 export's success (it writes the JSON before Step 3 verify) is
+the tell that inference itself is fine and the failure is in the cache-skipped reconcile path.
+
 ### `stack build` may relink stale executables even with fresh `.hi` files
 
 Editing a file in `dist/.../Hydra/<Mod>.hs` and running `stack build`
