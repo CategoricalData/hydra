@@ -45,28 +45,28 @@ definition :: TypeDefinition
 definition = define "Definition" $
   doc "A definition, which may be either a term, type, or primitive definition" $
   T.union [
+    "primitive">:
+      doc "A primitive definition"
+      primitiveDefinition,
     "term">:
       doc "A term definition"
       termDefinition,
     "type">:
       doc "A type definition"
-      typeDefinition,
-    "primitive">:
-      doc "A primitive definition"
-      primitiveDefinition]
+      typeDefinition]
 
 definitionReference :: TypeDefinition
 definitionReference = define "DefinitionReference" $
   doc "A typed reference to a definition: a type, a term, or a primitive, identified by name" $
   T.union [
-    "type">:
-      doc "A reference to a type definition, by name"
+    "primitive">:
+      doc "A reference to a primitive definition, by name"
       Core.name,
     "term">:
       doc "A reference to a term definition, by name"
       Core.name,
-    "primitive">:
-      doc "A reference to a primitive definition, by name"
+    "type">:
+      doc "A reference to a type definition, by name"
       Core.name]
 
 entityMetadata :: TypeDefinition
@@ -91,17 +91,24 @@ entityMetadata = define "EntityMetadata" $
 
 entityReference :: TypeDefinition
 entityReference = define "EntityReference" $
-  doc "A typed reference to a packaging entity: a package, a module, or a definition" $
+  doc ("A typed reference to a Hydra entity: a package, a module, a definition (by name),"
+    ++ " or an inline type or term expression in Hydra textual syntax.") $
   T.union [
-    "package">:
-      doc "A reference to a package, by name"
-      packageName,
+    "definition">:
+      doc "A reference to a definition (type, term, or primitive), by name"
+      definitionReference,
     "module">:
       doc "A reference to a module, by name"
       moduleNameDef,
-    "definition">:
-      doc "A reference to a definition (type, term, or primitive)"
-      definitionReference]
+    "package">:
+      doc "A reference to a package, by name"
+      packageName,
+    "termExpr">:
+      doc "An inline term expression in Hydra textual syntax" $
+      T.string,
+    "typeExpr">:
+      doc "An inline type expression in Hydra textual syntax" $
+      T.string]
 
 lifecycleInfo :: TypeDefinition
 lifecycleInfo = define "LifecycleInfo" $

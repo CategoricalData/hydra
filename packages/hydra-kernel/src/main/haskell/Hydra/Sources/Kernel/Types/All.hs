@@ -7,6 +7,7 @@ import qualified Hydra.Sources.Kernel.Types.Paths        as Paths
 import qualified Hydra.Sources.Kernel.Types.Ast         as Ast
 import qualified Hydra.Sources.Kernel.Types.Coders      as Coders
 import qualified Hydra.Sources.Kernel.Types.Core        as Core
+import qualified Hydra.Sources.Kernel.Types.Docs        as Docs
 import qualified Hydra.Sources.Kernel.Types.Error.Checking as ErrorChecking
 import qualified Hydra.Sources.Kernel.Types.Error.Core     as ErrorCore
 import qualified Hydra.Sources.Kernel.Types.Error.File     as ErrorFile
@@ -38,6 +39,7 @@ kernelTypesModules = [
   Ast.module_,
   Coders.module_,
   Core.module_,
+  Docs.module_,
   ErrorChecking.module_,
   ErrorCore.module_,
   ErrorFile.module_,
