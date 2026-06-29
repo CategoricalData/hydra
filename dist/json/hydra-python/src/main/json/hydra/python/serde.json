@@ -5522,31 +5522,31 @@
         "name": "hydra.python.serde.pythonDocEntityRef",
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.docs.EntityReference"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.packaging.EntityReference"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "ref",
-                "domain": {"variable": "hydra.docs.EntityReference"},
+                "domain": {"variable": "hydra.packaging.EntityReference"},
                 "body": {
                   "application": {
                     "function": {
                       "cases": {
-                        "typeName": "hydra.docs.EntityReference",
+                        "typeName": "hydra.packaging.EntityReference",
                         "cases": [
                           {
                             "name": "definition",
                             "handler": {
                               "lambda": {
                                 "parameter": "d",
-                                "domain": {"variable": "hydra.docs.DefinitionReference"},
+                                "domain": {"variable": "hydra.packaging.DefinitionReference"},
                                 "body": {
                                   "application": {
                                     "function": {
                                       "cases": {
-                                        "typeName": "hydra.docs.DefinitionReference",
+                                        "typeName": "hydra.packaging.DefinitionReference",
                                         "cases": [
                                           {
                                             "name": "primitive",
@@ -5599,16 +5599,30 @@
                                     "argument": {"variable": "d"}}}}}},
                           {
                             "name": "module",
-                            "handler": {"lambda": {"parameter": "m", "domain": {"literal": {"string": {}}}, "body": {"variable": "m"}}}},
+                            "handler": {
+                              "lambda": {
+                                "parameter": "m",
+                                "domain": {"variable": "hydra.packaging.ModuleName"},
+                                "body": {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": ""}}}},
+                                    "argument": {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "m"}}}}}}}},
                           {
                             "name": "package",
-                            "handler": {"lambda": {"parameter": "p", "domain": {"literal": {"string": {}}}, "body": {"variable": "p"}}}},
+                            "handler": {
+                              "lambda": {
+                                "parameter": "p",
+                                "domain": {"variable": "hydra.packaging.PackageName"},
+                                "body": {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": ""}}}},
+                                    "argument": {"application": {"function": {"unwrap": "hydra.packaging.PackageName"}, "argument": {"variable": "p"}}}}}}}},
                           {
                             "name": "termExpr",
                             "handler": {
                               "lambda": {
                                 "parameter": "s",
-                                "domain": {"literal": {"string": {}}},
+                                "domain": {"literal": "string"},
                                 "body": {
                                   "application": {
                                     "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "``"}}}},
@@ -5621,7 +5635,7 @@
                             "handler": {
                               "lambda": {
                                 "parameter": "s",
-                                "domain": {"literal": {"string": {}}},
+                                "domain": {"literal": "string"},
                                 "body": {
                                   "application": {
                                     "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "``"}}}},
@@ -5634,7 +5648,7 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Render a hydra.docs.EntityReference as Sphinx/RST link syntax"}}}]}}}}},
+                  "value": {"literal": {"string": "Render a hydra.packaging.EntityReference as Sphinx/RST link syntax"}}}]}}}}},
     {
       "term": {
         "name": "hydra.python.serde.toPythonComments",

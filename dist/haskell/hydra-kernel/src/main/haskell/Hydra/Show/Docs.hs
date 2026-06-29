@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | String representations of hydra.docs types
 
 module Hydra.Show.Docs where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -35,6 +37,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Render a DefinitionReference as its fully-qualified name
 definitionReference :: Packaging.DefinitionReference -> String
 definitionReference x =
@@ -42,21 +45,26 @@ definitionReference x =
       Packaging.DefinitionReferencePrimitive v0 -> Core.unName v0
       Packaging.DefinitionReferenceTerm v0 -> Core.unName v0
       Packaging.DefinitionReferenceType v0 -> Core.unName v0
+
 -- | Render a single DocSegment back to its source string form
 docSegment :: Docs.DocSegment -> String
 docSegment seg = docSegmentWith entityReference seg
+
 -- | Render a single DocSegment using a custom 'EntityReference' renderer
 docSegmentWith :: (Packaging.EntityReference -> String) -> Docs.DocSegment -> String
 docSegmentWith render x =
     case x of
       Docs.DocSegmentRef v0 -> render v0
       Docs.DocSegmentText v0 -> v0
+
 -- | Render a list of DocSegments back to a plain documentation string
 docSegments :: [Docs.DocSegment] -> String
 docSegments segs = Strings.cat (Lists.map docSegment segs)
+
 -- | Render a list of DocSegments using a custom 'EntityReference' renderer
 docSegmentsWith :: (Packaging.EntityReference -> String) -> [Docs.DocSegment] -> String
 docSegmentsWith render segs = Strings.cat (Lists.map (docSegmentWith render) segs)
+
 -- | Render a 'EntityReference' as its {@tag rhs} tag string (without the surrounding braces)
 entityReference :: Packaging.EntityReference -> String
 entityReference x =
@@ -69,9 +77,11 @@ entityReference x =
       Packaging.EntityReferencePackage v0 -> Strings.cat2 "package " (Packaging.unPackageName v0)
       Packaging.EntityReferenceTermExpr v0 -> Strings.cat2 "term-expr " v0
       Packaging.EntityReferenceTypeExpr v0 -> Strings.cat2 "type-expr " v0
+
 -- | Parse a documentation string and re-render it, converting {@tag rhs} escapes through their canonical form
 renderDocString :: String -> String
 renderDocString s = renderDocStringWith entityReference s
+
 -- | Parse a documentation string and render it using a custom 'EntityReference' renderer. Text segments are passed through; ref segments are rendered by the provided function. Unrecognized {@...} blocks are passed through as text.
 renderDocStringWith :: (Packaging.EntityReference -> String) -> String -> String
 renderDocStringWith render s = docSegmentsWith render (ReadDocs.parseDocString s)

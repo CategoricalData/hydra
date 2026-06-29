@@ -12,7 +12,6 @@
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
     {"module": "hydra.core"},
-    {"module": "hydra.docs"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},
     {"module": "hydra.error.file"},

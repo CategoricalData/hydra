@@ -1,12 +1,15 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term encoders for hydra.docs
 
 module Hydra.Encode.Docs where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Docs as Docs
 import qualified Hydra.Encode.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Encoder for hydra.docs.DocSegment
 docSegment :: Docs.DocSegment -> Core.Term
 docSegment x =

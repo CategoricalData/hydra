@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Parser for Hydra documentation strings, producing DocSegment lists
 
 module Hydra.Read.Docs where
+
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
@@ -37,6 +39,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Parse the content between {@...} delimiters into an EntityReference. The input is the inner content (tag and optional rhs), e.g. "type hydra.core.Lambda". Returns nothing for unrecognized tags.
 parseDocAnnotation :: String -> Maybe Packaging.EntityReference
 parseDocAnnotation inner =
@@ -45,6 +48,7 @@ parseDocAnnotation inner =
           tag = Optionals.fromOptional "" (Lists.maybeHead parts)
           rhs = Strings.intercalate " " (Lists.drop 1 parts)
       in (Logic.ifElse (Equality.equal tag "primitive") (Just (Packaging.EntityReferenceDefinition (Packaging.DefinitionReferencePrimitive (Core.Name rhs)))) (Logic.ifElse (Equality.equal tag "term") (Just (Packaging.EntityReferenceDefinition (Packaging.DefinitionReferenceTerm (Core.Name rhs)))) (Logic.ifElse (Equality.equal tag "type") (Just (Packaging.EntityReferenceDefinition (Packaging.DefinitionReferenceType (Core.Name rhs)))) (Logic.ifElse (Equality.equal tag "module") (Just (Packaging.EntityReferenceModule (Packaging.ModuleName rhs))) (Logic.ifElse (Equality.equal tag "package") (Just (Packaging.EntityReferencePackage (Packaging.PackageName rhs))) (Logic.ifElse (Equality.equal tag "term-expr") (Just (Packaging.EntityReferenceTermExpr rhs)) (Logic.ifElse (Equality.equal tag "type-expr") (Just (Packaging.EntityReferenceTypeExpr rhs)) Nothing)))))))
+
 -- | Parse a documentation string into a list of 'DocSegment's. Recognized {@tag rhs} escapes become DocSegment.ref segments (wrapping a 'EntityReference'); all other text (including unrecognized {@...} blocks) becomes DocSegment.text segments. Adjacent text fragments are not merged.
 parseDocString :: String -> [Docs.DocSegment]
 parseDocString s =

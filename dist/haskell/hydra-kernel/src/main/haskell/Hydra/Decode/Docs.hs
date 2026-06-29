@@ -1,7 +1,9 @@
 -- Note: this is an automatically generated file. Do not edit.
+
 -- | Term decoders for hydra.docs
 
 module Hydra.Decode.Docs where
+
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Packaging as Packaging
 import qualified Hydra.Docs as Docs
@@ -17,6 +19,7 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
 -- | Decoder for hydra.docs.DocSegment
 docSegment :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Docs.DocSegment
 docSegment cx raw =

@@ -38,7 +38,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.packaging.DefinitionReference"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -77,7 +77,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.docs.DocSegment"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -104,16 +104,16 @@
           "parameters": [
             {
               "name": "arg0",
-              "type": {"function": {"domain": {"variable": "hydra.packaging.EntityReference"}, "codomain": {"literal": {"string": {}}}}},
+              "type": {"function": {"domain": {"variable": "hydra.packaging.EntityReference"}, "codomain": {"literal": "string"}}},
               "isLazy": false},
             {"name": "arg1", "type": {"variable": "hydra.docs.DocSegment"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "render",
-                "domain": {"function": {"domain": {"variable": "hydra.packaging.EntityReference"}, "codomain": {"literal": {"string": {}}}}},
+                "domain": {"function": {"domain": {"variable": "hydra.packaging.EntityReference"}, "codomain": {"literal": "string"}}},
                 "body": {
                   "cases": {
                     "typeName": "hydra.docs.DocSegment",
@@ -125,9 +125,7 @@
                             "parameter": "r",
                             "domain": {"variable": "hydra.packaging.EntityReference"},
                             "body": {"application": {"function": {"variable": "render"}, "argument": {"variable": "r"}}}}}},
-                      {
-                        "name": "text",
-                        "handler": {"lambda": {"parameter": "s", "domain": {"literal": {"string": {}}}, "body": {"variable": "s"}}}}]}}}},
+                      {"name": "text", "handler": {"lambda": {"parameter": "s", "domain": {"literal": "string"}, "body": {"variable": "s"}}}}]}}}},
             "annotation": {
               "map": [
                 {
@@ -139,7 +137,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"list": {"variable": "hydra.docs.DocSegment"}}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -156,7 +154,7 @@
                             "function": {
                               "typeApplication": {
                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.docs.DocSegment"}}},
-                                "type": {"literal": {"string": {}}}}},
+                                "type": {"literal": "string"}}},
                             "argument": {"variable": "hydra.show.docs.docSegment"}}},
                         "argument": {"variable": "segs"}}}}}}},
             "annotation": {
@@ -172,16 +170,16 @@
           "parameters": [
             {
               "name": "arg0",
-              "type": {"function": {"domain": {"variable": "hydra.packaging.EntityReference"}, "codomain": {"literal": {"string": {}}}}},
+              "type": {"function": {"domain": {"variable": "hydra.packaging.EntityReference"}, "codomain": {"literal": "string"}}},
               "isLazy": false},
             {"name": "arg1", "type": {"list": {"variable": "hydra.docs.DocSegment"}}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "render",
-                "domain": {"function": {"domain": {"variable": "hydra.packaging.EntityReference"}, "codomain": {"literal": {"string": {}}}}},
+                "domain": {"function": {"domain": {"variable": "hydra.packaging.EntityReference"}, "codomain": {"literal": "string"}}},
                 "body": {
                   "lambda": {
                     "parameter": "segs",
@@ -196,7 +194,7 @@
                                 "function": {
                                   "typeApplication": {
                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.docs.DocSegment"}}},
-                                    "type": {"literal": {"string": {}}}}},
+                                    "type": {"literal": "string"}}},
                                 "argument": {"application": {"function": {"variable": "hydra.show.docs.docSegmentWith"}, "argument": {"variable": "render"}}}}},
                             "argument": {"variable": "segs"}}}}}}}}},
             "annotation": {
@@ -210,7 +208,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.packaging.EntityReference"}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
@@ -273,7 +271,7 @@
                     "handler": {
                       "lambda": {
                         "parameter": "s",
-                        "domain": {"literal": {"string": {}}},
+                        "domain": {"literal": "string"},
                         "body": {
                           "application": {
                             "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "term-expr "}}}},
@@ -283,7 +281,7 @@
                     "handler": {
                       "lambda": {
                         "parameter": "s",
-                        "domain": {"literal": {"string": {}}},
+                        "domain": {"literal": "string"},
                         "body": {
                           "application": {
                             "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "type-expr "}}}},
@@ -300,14 +298,14 @@
         "name": "hydra.show.docs.renderDocString",
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"string": {}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "s",
-                "domain": {"literal": {"string": {}}},
+                "domain": {"literal": "string"},
                 "body": {
                   "application": {
                     "function": {
@@ -329,20 +327,20 @@
           "parameters": [
             {
               "name": "arg0",
-              "type": {"function": {"domain": {"variable": "hydra.packaging.EntityReference"}, "codomain": {"literal": {"string": {}}}}},
+              "type": {"function": {"domain": {"variable": "hydra.packaging.EntityReference"}, "codomain": {"literal": "string"}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"literal": {"string": {}}}, "isLazy": false}],
-          "result": {"type": {"literal": {"string": {}}}}},
+            {"name": "arg1", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "render",
-                "domain": {"function": {"domain": {"variable": "hydra.packaging.EntityReference"}, "codomain": {"literal": {"string": {}}}}},
+                "domain": {"function": {"domain": {"variable": "hydra.packaging.EntityReference"}, "codomain": {"literal": "string"}}},
                 "body": {
                   "lambda": {
                     "parameter": "s",
-                    "domain": {"literal": {"string": {}}},
+                    "domain": {"literal": "string"},
                     "body": {
                       "application": {
                         "function": {"application": {"function": {"variable": "hydra.show.docs.docSegmentsWith"}, "argument": {"variable": "render"}}},
