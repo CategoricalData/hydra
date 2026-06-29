@@ -66,7 +66,25 @@ An orchestrator script runs all three, compares their output, and displays a tim
 
 See the [ValidatePG README](../demos/validatepg/README.md) for setup and usage.
 
-## Neo4j validation (live graph validation via the Neo4j driver)
+## Neo4j validation — translingual, offline (Cypher in, identical verdicts in every language)
+
+The user brings a graph as **plain Neo4j Cypher** (a `CREATE` script, the same one they'd run in
+`cypher-shell`); the demo ingests it into Hydra's Neo4j model and validates it in Java, Python,
+Haskell, and TypeScript — each running `hydra.validate.neo4j.validateGraph` generated from a single
+Hydra source. The user never authors anything in Hydra. (The demo can also generate its own sample
+graphs from the Java DSL for a self-contained run.) Because every host reads identical data and runs
+a validator generated from one definition, the verdicts are identical across languages by
+construction; the orchestrator diffs the outputs to prove it.
+
+This is the capability a Neo4j client team cannot get today: schema validation that is **provably the
+same** across client languages, run **client-side and before the write**, with no server round trip.
+Their Java app and Python app would otherwise validate with separate, hand-maintained code that can
+silently drift. The demo needs no running Neo4j (it is fully offline); it covers property existence
+and type constraints plus overloaded relationship-type endpoint patterns.
+
+See the [JSON-artifact demo README](../demos/neo4j-validation/README-json.md) for the step-by-step.
+
+## Neo4j validation — live graph (validate a running database via the Neo4j driver)
 
 Validates a **live Neo4j graph** against a Hydra Neo4j graph type, running the same
 `hydra.validate.neo4j.validateGraph` in Java and Python. Each host connects to a running Neo4j

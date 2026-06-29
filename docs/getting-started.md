@@ -27,11 +27,11 @@ Hydra publishes one Maven artifact per package. Pick the ones you need; coordina
 | ArtifactId | Contains |
 |---|---|
 | `hydra-kernel` | Core types (`Literal`, `Type`, `Term`), `hydra.show.*`, `hydra.validate.core`, `hydra.error.core`, library stdlib. The minimum dependency. |
-| `hydra-pg` | Property-graph model (`hydra.pg.model.*`), validation (`hydra.validate.pg`), errors (`hydra.error.pg`). |
+| `hydra-pg` | Property-graph model (`hydra.pg.model.*`), validation (`hydra.validate.pg`), errors (`hydra.error.pg`); a Neo4j-aligned model (`hydra.neo4j.model`) with client-side validation (`hydra.validate.neo4j`) and a `hydra.pg.model` ↔ Neo4j mapping. |
 | `hydra-pg-dsl` | Hand-written Java fluent builders for constructing schemas and graphs (`hydra.pg.dsl.Graphs`, `hydra.pg.dsl.Queries`). |
 | `hydra-rdf` | RDF model + serdes. |
 | `hydra-rdf4j` | Binding to the rdf4j library. |
-| `hydra-neo4j` | Cypher and openGQL parsers via ANTLR. |
+| `hydra-neo4j` | Host-native Neo4j integration (Cypher/openGQL parsers via ANTLR); the translingual Neo4j model and validator live in `hydra-pg`. |
 | `hydra-java`, `hydra-python`, `hydra-scala`, `hydra-haskell`, `hydra-lisp`, `hydra-typescript` | Per-language coder packages, covering all nine official targets (the four Lisp dialects share `hydra-lisp`). Depend on these if your code needs to generate code in that target. First published as a complete set with 0.16.1. (`hydra-go` is a head bud — generated but not yet published.) |
 
 ### Gradle
