@@ -2696,8 +2696,8 @@ public class Serde {
                                             field("term",      lambda("n", apply(var("hydra.names.localNameOf"), var("n")))),
                                             field("type",      lambda("n", apply(var("hydra.names.localNameOf"), var("n"))))),
                                         string("}"))))),
-                        field("module",    lambda("m", apply(unwrap(ModuleName.TYPE_), var("m")))),
-                        field("package",   lambda("p", apply(unwrap(hydra.packaging.PackageName.TYPE_), var("p")))),
+                        field("module",    lambda("m", Strings.cat2(string(""), apply(unwrap(ModuleName.TYPE_), var("m"))))),
+                        field("package",   lambda("p", Strings.cat2(string(""), apply(unwrap(hydra.packaging.PackageName.TYPE_), var("p"))))),
                         field("termExpr", lambda("s", Strings.cat2(string("{@code "), Strings.cat2(var("s"), string("}"))))),
                         field("typeExpr", lambda("s", Strings.cat2(string("{@code "), Strings.cat2(var("s"), string("}")))))))));
 
