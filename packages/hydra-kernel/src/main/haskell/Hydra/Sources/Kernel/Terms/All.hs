@@ -53,6 +53,8 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting       as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Scoping         as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Serialization   as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Strip           as Strip
+import qualified Hydra.Sources.Kernel.Terms.Read.Docs        as ReadDocs
+import qualified Hydra.Sources.Kernel.Terms.Show.Docs        as ShowDocs
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths      as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core       as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors      as ShowError
@@ -126,6 +128,8 @@ kernelPrimaryTermsModules = [
   Scoping.module_,
   Serialization.module_,
   Strip.module_,
+  ReadDocs.module_,
+  ShowDocs.module_,
   ShowPaths.module_,
   ShowCore.module_,
   ShowError.module_,

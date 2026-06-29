@@ -63,6 +63,7 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Show.Docs      as ShowDocs
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
 import qualified Hydra.Sources.Kernel.Terms.Show.Variants      as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
@@ -92,7 +93,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Serialization.ns, HaskellOperators.ns] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesModuleNames)),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Names.ns, Serialization.ns, HaskellOperators.ns, ShowDocs.ns] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = Bootstrap.descriptionMetadata (Just ("Haskell operator precendence and associativity are drawn from:\n"
       <> "https://self-learning-java-tutorial.blogspot.com/2016/04/haskell-operator-precedence.html\n"
       <> "Other operators were investigated using GHCi, e.g. \":info (->)\"\n"
@@ -126,6 +127,7 @@ module_ = Module {
       toDefinition patternToExpr,
       toDefinition rightHandSideToExpr,
       toDefinition statementToExpr,
+      toDefinition haddockEntityRef,
       toDefinition toHaskellComments,
       toDefinition toSimpleComments,
       toDefinition typeSignatureToExpr,
@@ -528,16 +530,57 @@ statementToExpr = haskellSerdeDefinition "statementToExpr" $
   doc "Convert a statement to an AST expression" $
   lambda "stmt" $ expressionToExpr @@ (unwrap H._Statement @@ var "stmt")
 
+-- Name constants for hydra.packaging types used in Haskell-specific rendering
+_EntityReference_haskell :: Name
+_EntityReference_haskell = Name "hydra.packaging.EntityReference"
+_EntityReference_definition_haskell :: Name
+_EntityReference_definition_haskell = Name "definition"
+_EntityReference_module_haskell :: Name
+_EntityReference_module_haskell = Name "module"
+_EntityReference_package_haskell :: Name
+_EntityReference_package_haskell = Name "package"
+_EntityReference_term_expr_haskell :: Name
+_EntityReference_term_expr_haskell = Name "termExpr"
+_EntityReference_type_expr_haskell :: Name
+_EntityReference_type_expr_haskell = Name "typeExpr"
+_DefinitionReference_haskell :: Name
+_DefinitionReference_haskell = Name "hydra.packaging.DefinitionReference"
+_DefinitionReference_primitive_haskell :: Name
+_DefinitionReference_primitive_haskell = Name "primitive"
+_DefinitionReference_term_haskell :: Name
+_DefinitionReference_term_haskell = Name "term"
+_DefinitionReference_type_haskell :: Name
+_DefinitionReference_type_haskell = Name "type"
+
+haddockEntityRef :: TypedTermDefinition (Term -> String)
+haddockEntityRef = haskellSerdeDefinition "haddockEntityRef" $
+  doc "Render a {@type hydra.packaging.EntityReference} as Haddock link syntax" $
+  match _EntityReference_haskell Nothing [
+    _EntityReference_definition_haskell>>: lambda "d" $
+      Strings.cat2 (string "'")
+        (Strings.cat2
+          (match _DefinitionReference_haskell Nothing [
+            _DefinitionReference_primitive_haskell>>: lambda "n" $ Names.localNameOf @@ var "n",
+            _DefinitionReference_term_haskell>>:      lambda "n" $ Names.localNameOf @@ var "n",
+            _DefinitionReference_type_haskell>>:      lambda "n" $ Names.localNameOf @@ var "n"]
+            @@ var "d")
+          (string "'")),
+    _EntityReference_module_haskell>>:    lambda "m" $ unwrap _ModuleName @@ var "m",
+    _EntityReference_package_haskell>>:   lambda "p" $ unwrap _PackageName @@ var "p",
+    _EntityReference_term_expr_haskell>>: lambda "s" $ Strings.cat2 (string "@") (Strings.cat2 (var "s") (string "@")),
+    _EntityReference_type_expr_haskell>>: lambda "s" $ Strings.cat2 (string "@") (Strings.cat2 (var "s") (string "@"))]
+
 toHaskellComments :: TypedTermDefinition (String -> String)
 toHaskellComments = haskellSerdeDefinition "toHaskellComments" $
   doc ("Convert a string to Haddock documentation comments. Empty source lines"
     <> " emit `-- |` (no trailing space) so blank doc lines don't carry trailing"
-    <> " whitespace into the generated file.") $
+    <> " whitespace into the generated file."
+    <> " {@tag rhs} escapes are rendered as Haddock links via haddockEntityRef.") $
   lambda "c" $ Strings.intercalate (string "\n") $ Lists.map
     (lambda "s" $ Logic.ifElse (Equality.equal (var "s") (string ""))
       (string "-- |")
       (Strings.cat2 (string "-- | ") (var "s")))
-    (Strings.lines $ var "c")
+    (Strings.lines $ ShowDocs.renderDocStringWith @@ (asTerm haddockEntityRef) @@ var "c")
 
 toSimpleComments :: TypedTermDefinition (String -> String)
 toSimpleComments = haskellSerdeDefinition "toSimpleComments" $

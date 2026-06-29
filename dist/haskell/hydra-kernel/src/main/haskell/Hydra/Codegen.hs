@@ -13,6 +13,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Decode.Packaging as DecodePackaging
 import qualified Hydra.Decoding as Decoding
+import qualified Hydra.Docs as Docs
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Encode.Packaging as EncodePackaging
 import qualified Hydra.Encoding as Encoding

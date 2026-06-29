@@ -1,5 +1,4 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Haskell operator precendence and associativity are drawn from:
 -- | https://self-learning-java-tutorial.blogspot.com/2016/04/haskell-operator-precedence.html
 -- | Other operators were investigated using GHCi, e.g. ":info (->)"
@@ -7,11 +6,11 @@
 -- | https://stackoverflow.com/questions/7746894/are-there-pronounceable-names-for-common-haskell-operators
 
 module Hydra.Haskell.Serde where
-
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
+import qualified Hydra.Docs as Docs
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Error.File as ErrorFile
@@ -29,12 +28,14 @@ import qualified Hydra.Overlay.Haskell.Lib.Literals as Literals
 import qualified Hydra.Overlay.Haskell.Lib.Logic as Logic
 import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Overlay.Haskell.Lib.Strings as Strings
+import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Query as Query
 import qualified Hydra.Relational as Relational
 import qualified Hydra.Serialization as Serialization
+import qualified Hydra.Show.Docs as ShowDocs
 import qualified Hydra.System as System
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing
@@ -47,7 +48,6 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Convert a pattern-matching alternative to an AST expression
 alternativeToExpr :: Syntax.Alternative -> Ast.Expr
 alternativeToExpr alt =
@@ -55,12 +55,10 @@ alternativeToExpr alt =
       patternToExpr (Syntax.alternativePattern alt),
       (Serialization.cst "->"),
       (caseRhsToExpr (Syntax.alternativeRhs alt))]
-
 -- | Convert a function application expression to an AST expression
 applicationExpressionToExpr :: Syntax.ApplicationExpression -> Ast.Expr
 applicationExpressionToExpr app =
     Serialization.ifx Operators.appOp (expressionToExpr (Syntax.applicationExpressionFunction app)) (expressionToExpr (Syntax.applicationExpressionArgument app))
-
 -- | Convert an application pattern to an AST expression
 applicationPatternToExpr :: Syntax.ApplicationPattern -> Ast.Expr
 applicationPatternToExpr appPat =
@@ -68,7 +66,6 @@ applicationPatternToExpr appPat =
       let name = Syntax.applicationPatternName appPat
           pats = Syntax.applicationPatternArgs appPat
       in (Serialization.spaceSep (Lists.cons (nameToExpr name) (Lists.map patternToExpr pats)))
-
 -- | Convert a case expression to an AST expression
 caseExpressionToExpr :: Syntax.CaseExpression -> Ast.Expr
 caseExpressionToExpr caseExpr =
@@ -89,11 +86,9 @@ caseExpressionToExpr caseExpr =
                     (expressionToExpr cs)]
           rhs = Serialization.newlineSep (Lists.map alternativeToExpr alts)
       in (Serialization.ifx ofOp lhs rhs)
-
 -- | Convert a case right-hand side to an AST expression
 caseRhsToExpr :: Syntax.CaseRhs -> Ast.Expr
 caseRhsToExpr rhs = expressionToExpr (Syntax.unCaseRhs rhs)
-
 -- | Convert a class constraint to an AST expression
 classConstraintToExpr :: Syntax.ClassConstraint -> Ast.Expr
 classConstraintToExpr clsAsrt =
@@ -102,14 +97,12 @@ classConstraintToExpr clsAsrt =
           types = Syntax.classConstraintTypes clsAsrt
       in (Serialization.spaceSep (Lists.cons (nameToExpr name) [
         Serialization.commaSep Serialization.halfBlockStyle (Lists.map typeToExpr types)]))
-
 -- | Convert a type class constraint to an AST expression
 constraintToExpr :: Syntax.Constraint -> Ast.Expr
 constraintToExpr sert =
     case sert of
       Syntax.ConstraintClass v0 -> classConstraintToExpr v0
       Syntax.ConstraintTuple v0 -> Serialization.parenList False (Lists.map constraintToExpr v0)
-
 -- | Convert a data constructor to an AST expression
 constructorToExpr :: Syntax.Constructor -> Ast.Expr
 constructorToExpr cons =
@@ -132,14 +125,12 @@ constructorToExpr cons =
                         Serialization.curlyBracesList Nothing Serialization.halfBlockStyle (Lists.map fieldToExpr fields)]))
       in (Optionals.cases mc body (\c -> Serialization.newlineSep (Lists.cons (Serialization.cst (toHaskellComments c)) [
         body])))
-
 -- | Convert a data/newtype keyword to an AST expression
 dataKeywordToExpr :: Syntax.DataKeyword -> Ast.Expr
 dataKeywordToExpr kw =
     case kw of
       Syntax.DataKeywordData -> Serialization.cst "data"
       Syntax.DataKeywordNewtype -> Serialization.cst "newtype"
-
 -- | Convert a declaration head to an AST expression
 declarationHeadToExpr :: Syntax.DeclarationHead -> Ast.Expr
 declarationHeadToExpr hd =
@@ -150,7 +141,6 @@ declarationHeadToExpr hd =
         in (Serialization.spaceSep (Lists.cons (declarationHeadToExpr fun) [
           variableToExpr op]))
       Syntax.DeclarationHeadSimple v0 -> nameToExpr v0
-
 -- | Convert a declaration to an AST expression
 declarationToExpr :: Syntax.Declaration -> Ast.Expr
 declarationToExpr decl =
@@ -199,7 +189,6 @@ declarationToExpr decl =
                         valueBindingToExpr vb]))
       in (Optionals.cases mc body (\c -> Serialization.newlineSep (Lists.cons (Serialization.cst (toHaskellComments c)) [
         body])))
-
 -- | Convert a Haskell expression to an AST expression
 expressionToExpr :: Syntax.Expression -> Ast.Expr
 expressionToExpr expr =
@@ -222,7 +211,6 @@ expressionToExpr expr =
       Syntax.ExpressionList v0 -> Serialization.bracketList Serialization.halfBlockStyle (Lists.map expressionToExpr v0)
       Syntax.ExpressionTuple v0 -> Serialization.parenListAdaptive (Lists.map expressionToExpr v0)
       Syntax.ExpressionVariable v0 -> nameToExpr v0
-
 -- | Convert a field declaration to an AST expression
 fieldToExpr :: Syntax.Field -> Ast.Expr
 fieldToExpr field =
@@ -234,7 +222,18 @@ fieldToExpr field =
                 typeToExpr typ]))
       in (Optionals.cases mc body (\c -> Serialization.newlineSep (Lists.cons (Serialization.cst (toHaskellComments c)) [
         body])))
-
+-- | Render a 'EntityReference' as Haddock link syntax
+haddockEntityRef :: Packaging.EntityReference -> String
+haddockEntityRef x =
+    case x of
+      Packaging.EntityReferenceDefinition v0 -> Strings.cat2 "'" (Strings.cat2 (case v0 of
+        Packaging.DefinitionReferencePrimitive v1 -> Names.localNameOf v1
+        Packaging.DefinitionReferenceTerm v1 -> Names.localNameOf v1
+        Packaging.DefinitionReferenceType v1 -> Names.localNameOf v1) "'")
+      Packaging.EntityReferenceModule v0 -> Packaging.unModuleName v0
+      Packaging.EntityReferencePackage v0 -> Packaging.unPackageName v0
+      Packaging.EntityReferenceTermExpr v0 -> Strings.cat2 "@" (Strings.cat2 v0 "@")
+      Packaging.EntityReferenceTypeExpr v0 -> Strings.cat2 "@" (Strings.cat2 v0 "@")
 -- | Convert an if-then-else expression to an AST expression
 ifExpressionToExpr :: Syntax.IfExpression -> Ast.Expr
 ifExpressionToExpr ifExpr =
@@ -257,7 +256,6 @@ ifExpressionToExpr ifExpr =
                       expressionToExpr eelse])])
       in (Serialization.ifx ifOp (Serialization.spaceSep (Lists.cons (Serialization.cst "if") [
         expressionToExpr eif])) body)
-
 -- | Convert an import statement to an AST expression
 importToExpr :: Syntax.Import -> Ast.Expr
 importToExpr import_ =
@@ -279,7 +277,6 @@ importToExpr import_ =
                     (Optionals.map (\m -> Serialization.cst (Strings.cat2 "as " (Syntax.unModuleName m))) mod),
                     (Optionals.map hidingSec mspec)]
       in (Serialization.spaceSep parts)
-
 -- | Convert a lambda expression to an AST expression
 lambdaExpressionToExpr :: Syntax.LambdaExpression -> Ast.Expr
 lambdaExpressionToExpr lambdaExpr =
@@ -289,7 +286,6 @@ lambdaExpressionToExpr lambdaExpr =
           head = Serialization.spaceSep (Lists.map patternToExpr bindings)
           body = expressionToExpr inner
       in (Serialization.ifx Operators.lambdaOp (Serialization.prefix "\\" head) body)
-
 -- | Convert a literal value to an AST expression
 literalToExpr :: Syntax.Literal -> Ast.Expr
 literalToExpr lit =
@@ -310,14 +306,12 @@ literalToExpr lit =
         Syntax.LiteralInt v0 -> parensIfNeg (Equality.lt v0 0) (Literals.showInt32 v0)
         Syntax.LiteralInteger v0 -> parensIfNeg (Equality.lt v0 0) (Literals.showBigint v0)
         Syntax.LiteralString v0 -> Literals.showString v0))
-
 -- | Convert a local binding to an AST expression
 localBindingToExpr :: Syntax.LocalBinding -> Ast.Expr
 localBindingToExpr binding =
     case binding of
       Syntax.LocalBindingSignature v0 -> typeSignatureToExpr v0
       Syntax.LocalBindingValue v0 -> valueBindingToExpr v0
-
 -- | Convert a module head to an AST expression
 moduleHeadToExpr :: Syntax.ModuleHead -> Ast.Expr
 moduleHeadToExpr moduleHead =
@@ -330,7 +324,6 @@ moduleHeadToExpr moduleHead =
                     Serialization.cst "where"]))
       in (Optionals.cases mc head (\c -> Serialization.newlineSep (Lists.cons (Serialization.cst (toHaskellComments c)) (Lists.cons (Serialization.cst "") [
         head]))))
-
 -- | Convert a Haskell module to an AST expression
 moduleToExpr :: Syntax.Module -> Ast.Expr
 moduleToExpr module_ =
@@ -350,18 +343,15 @@ moduleToExpr module_ =
         headerLine,
         importLines,
         declLines]))
-
 -- | Convert a Haskell name to an AST expression
 nameToExpr :: Syntax.Name -> Ast.Expr
 nameToExpr name =
     Serialization.cst (case name of
       Syntax.NameImplicit v0 -> Strings.cat2 "?" (writeQualifiedName v0)
       Syntax.NameNormal v0 -> writeQualifiedName v0)
-
 -- | Convert an import/export specification to an AST expression
 namedImportExportToExpr :: Syntax.NamedImportExport -> Ast.Expr
 namedImportExportToExpr spec = nameToExpr (Syntax.namedImportExportName spec)
-
 -- | Convert a pattern to an AST expression
 patternToExpr :: Syntax.Pattern -> Ast.Expr
 patternToExpr pat =
@@ -372,7 +362,6 @@ patternToExpr pat =
       Syntax.PatternName v0 -> nameToExpr v0
       Syntax.PatternTuple v0 -> Serialization.parenListAdaptive (Lists.map patternToExpr v0)
       Syntax.PatternWildcard -> Serialization.cst "_"
-
 -- | Convert a record construction expression to an AST expression
 recordExpressionToExpr :: Syntax.RecordExpression -> Ast.Expr
 recordExpressionToExpr constructRecord =
@@ -387,25 +376,20 @@ recordExpressionToExpr constructRecord =
           body = Serialization.commaSep Serialization.halfBlockStyle (Lists.map fromUpdate updates)
       in (Serialization.spaceSep (Lists.cons (nameToExpr name) [
         Serialization.brackets Serialization.curlyBraces Serialization.halfBlockStyle body]))
-
 -- | Convert a right-hand side to an AST expression
 rightHandSideToExpr :: Syntax.RightHandSide -> Ast.Expr
 rightHandSideToExpr rhs = expressionToExpr (Syntax.unRightHandSide rhs)
-
 -- | Convert a statement to an AST expression
 statementToExpr :: Syntax.Statement -> Ast.Expr
 statementToExpr stmt = expressionToExpr (Syntax.unStatement stmt)
-
--- | Convert a string to Haddock documentation comments. Empty source lines emit `-- |` (no trailing space) so blank doc lines don't carry trailing whitespace into the generated file.
+-- | Convert a string to Haddock documentation comments. Empty source lines emit `-- |` (no trailing space) so blank doc lines don't carry trailing whitespace into the generated file. {@tag rhs} escapes are rendered as Haddock links via haddockEntityRef.
 toHaskellComments :: String -> String
 toHaskellComments c =
-    Strings.intercalate "\n" (Lists.map (\s -> Logic.ifElse (Equality.equal s "") "-- |" (Strings.cat2 "-- | " s)) (Strings.lines c))
-
+    Strings.intercalate "\n" (Lists.map (\s -> Logic.ifElse (Equality.equal s "") "-- |" (Strings.cat2 "-- | " s)) (Strings.lines (ShowDocs.renderDocStringWith haddockEntityRef c)))
 -- | Convert a string to simple line comments. Empty source lines emit `--` (no trailing space) for the same reason as toHaskellComments.
 toSimpleComments :: String -> String
 toSimpleComments c =
     Strings.intercalate "\n" (Lists.map (\s -> Logic.ifElse (Equality.equal s "") "--" (Strings.cat2 "-- " s)) (Strings.lines c))
-
 -- | Convert a type signature to an AST expression
 typeSignatureToExpr :: Syntax.TypeSignature -> Ast.Expr
 typeSignatureToExpr typeSig =
@@ -424,7 +408,6 @@ typeSignatureToExpr typeSig =
           nameExpr,
           (Serialization.cst "::")],
         (Serialization.tabIndent typeExpr)]))
-
 -- | Convert a Haskell type to an AST expression
 typeToExpr :: Syntax.Type -> Ast.Expr
 typeToExpr htype =
@@ -445,7 +428,6 @@ typeToExpr htype =
         typeToExpr v0]
       Syntax.TypeTuple v0 -> Serialization.parenListAdaptive (Lists.map typeToExpr v0)
       Syntax.TypeVariable v0 -> nameToExpr v0
-
 -- | Convert a value binding to an AST expression
 valueBindingToExpr :: Syntax.ValueBinding -> Ast.Expr
 valueBindingToExpr vb =
@@ -471,11 +453,9 @@ valueBindingToExpr vb =
           let bindings = Syntax.unLocalBindings localBindings
           in (Serialization.indentBlock (Lists.cons body [
             Serialization.indentBlock (Lists.cons (Serialization.cst "where") (Lists.map localBindingToExpr bindings))]))))
-
 -- | Convert a type variable to an AST expression
 variableToExpr :: Syntax.Variable -> Ast.Expr
 variableToExpr variable = nameToExpr (Syntax.unVariable variable)
-
 -- | Write a qualified name as a string
 writeQualifiedName :: Syntax.QualifiedName -> String
 writeQualifiedName qname =

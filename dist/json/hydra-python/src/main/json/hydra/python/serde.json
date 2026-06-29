@@ -3,7 +3,9 @@
   "metadata": {"description": "Python serializer: converts Python AST to concrete syntax", "comments": [], "seeAlso": []},
   "dependencies": [
     {"module": "hydra.constants"},
+    {"module": "hydra.names"},
     {"module": "hydra.serialization"},
+    {"module": "hydra.show.docs"},
     {"module": "hydra.python.syntax"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -5517,6 +5519,124 @@
                         "argument": {"variable": "s"}}}}}}}}}}},
     {
       "term": {
+        "name": "hydra.python.serde.pythonDocEntityRef",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.docs.EntityReference"}, "isLazy": false}],
+          "result": {"type": {"literal": {"string": {}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "ref",
+                "domain": {"variable": "hydra.docs.EntityReference"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.docs.EntityReference",
+                        "cases": [
+                          {
+                            "name": "definition",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "d",
+                                "domain": {"variable": "hydra.docs.DefinitionReference"},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "cases": {
+                                        "typeName": "hydra.docs.DefinitionReference",
+                                        "cases": [
+                                          {
+                                            "name": "primitive",
+                                            "handler": {
+                                              "lambda": {
+                                                "parameter": "n",
+                                                "domain": {"variable": "hydra.core.Name"},
+                                                "body": {
+                                                  "application": {
+                                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": ":func:`"}}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {"variable": "hydra.lib.strings.cat2"},
+                                                            "argument": {"application": {"function": {"variable": "hydra.names.localNameOf"}, "argument": {"variable": "n"}}}}},
+                                                        "argument": {"literal": {"string": "`"}}}}}}}}},
+                                          {
+                                            "name": "term",
+                                            "handler": {
+                                              "lambda": {
+                                                "parameter": "n",
+                                                "domain": {"variable": "hydra.core.Name"},
+                                                "body": {
+                                                  "application": {
+                                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": ":func:`"}}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {"variable": "hydra.lib.strings.cat2"},
+                                                            "argument": {"application": {"function": {"variable": "hydra.names.localNameOf"}, "argument": {"variable": "n"}}}}},
+                                                        "argument": {"literal": {"string": "`"}}}}}}}}},
+                                          {
+                                            "name": "type",
+                                            "handler": {
+                                              "lambda": {
+                                                "parameter": "n",
+                                                "domain": {"variable": "hydra.core.Name"},
+                                                "body": {
+                                                  "application": {
+                                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": ":class:`"}}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {"variable": "hydra.lib.strings.cat2"},
+                                                            "argument": {"application": {"function": {"variable": "hydra.names.localNameOf"}, "argument": {"variable": "n"}}}}},
+                                                        "argument": {"literal": {"string": "`"}}}}}}}}}]}},
+                                    "argument": {"variable": "d"}}}}}},
+                          {
+                            "name": "module",
+                            "handler": {"lambda": {"parameter": "m", "domain": {"literal": {"string": {}}}, "body": {"variable": "m"}}}},
+                          {
+                            "name": "package",
+                            "handler": {"lambda": {"parameter": "p", "domain": {"literal": {"string": {}}}, "body": {"variable": "p"}}}},
+                          {
+                            "name": "termExpr",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "s",
+                                "domain": {"literal": {"string": {}}},
+                                "body": {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "``"}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "s"}}},
+                                        "argument": {"literal": {"string": "``"}}}}}}}}},
+                          {
+                            "name": "typeExpr",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "s",
+                                "domain": {"literal": {"string": {}}},
+                                "body": {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "``"}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"variable": "s"}}},
+                                        "argument": {"literal": {"string": "``"}}}}}}}}}]}},
+                    "argument": {"variable": "ref"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Render a hydra.docs.EntityReference as Sphinx/RST link syntax"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.python.serde.toPythonComments",
         "signature": {
           "typeParameters": [],
@@ -5577,7 +5697,16 @@
                                           "application": {
                                             "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "# "}}}},
                                             "argument": {"variable": "line"}}}}}}}}},
-                            "argument": {"application": {"function": {"variable": "hydra.lib.strings.lines"}, "argument": {"variable": "doc_"}}}}}}}}}}},
+                            "argument": {
+                              "application": {
+                                "function": {"variable": "hydra.lib.strings.lines"},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"variable": "hydra.show.docs.renderDocStringWith"},
+                                        "argument": {"variable": "hydra.python.serde.pythonDocEntityRef"}}},
+                                    "argument": {"variable": "doc_"}}}}}}}}}}}}},
             "annotation": {
               "map": [
                 {

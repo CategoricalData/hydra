@@ -56,7 +56,9 @@ from hydra.sources.python._source_dsl import (
 #   [Constants.ns, Serialization.ns] L.++ (PySyntax.ns:KernelTypes.kernelTypesNamespaces)
 DEPENDENCIES = [
     unqualified_dep(ModuleName("hydra.constants")),
+    unqualified_dep(ModuleName("hydra.names")),
     unqualified_dep(ModuleName("hydra.serialization")),
+    unqualified_dep(ModuleName("hydra.show.docs")),
     unqualified_dep(ModuleName("hydra.python.syntax")),
 ] + KERNEL_TYPES_NAMESPACES
 
@@ -2370,6 +2372,35 @@ def _python_float_literal_text():
     )
 
 
+def _python_doc_entity_ref():
+    body = cases(
+        Name("hydra.packaging.EntityReference"), var("ref"), None_(),
+        [
+            field("definition",
+                lam("d",
+                    cases(
+                        Name("hydra.packaging.DefinitionReference"), var("d"), None_(),
+                        [
+                            field("primitive", lam("n", Strings.cat2(string(":func:`"), Strings.cat2(var("hydra.names.localNameOf")(var("n")), string("`"))))),
+                            field("term",      lam("n", Strings.cat2(string(":func:`"), Strings.cat2(var("hydra.names.localNameOf")(var("n")), string("`"))))),
+                            field("type",      lam("n", Strings.cat2(string(":class:`"), Strings.cat2(var("hydra.names.localNameOf")(var("n")), string("`"))))),
+                        ],
+                    ))),
+            field("module",    lam("m", unwrap(Name("hydra.packaging.ModuleName"))(var("m")))),
+            field("package",   lam("p", unwrap(Name("hydra.packaging.PackageName"))(var("p")))),
+            field("termExpr", lam("s", Strings.cat2(string("``"), Strings.cat2(var("s"), string("``"))))),
+            field("typeExpr", lam("s", Strings.cat2(string("``"), Strings.cat2(var("s"), string("``"))))),
+        ],
+    )
+    return _def(
+        "pythonDocEntityRef",
+        doc(
+            "Render a hydra.packaging.EntityReference as Sphinx/RST link syntax",
+            lam("ref", body),
+        ),
+    )
+
+
 def _to_python_comments():
     body = Logic.if_else(
         Equality.equal(var("doc_"), string("")),
@@ -2385,7 +2416,7 @@ def _to_python_comments():
                         Strings.cat2(string("# "), var("line")),
                     ),
                 ),
-                Strings.lines(var("doc_")),
+                Strings.lines(var("hydra.show.docs.renderDocStringWith")(var("hydra.python.serde.pythonDocEntityRef"))(var("doc_"))),
             ),
         ),
     )
@@ -2514,6 +2545,7 @@ def _build_module() -> Module:
             to_definition(_while_statement_to_expr()),
             to_definition(_escape_python_string()),
             to_definition(_python_float_literal_text()),
+            to_definition(_python_doc_entity_ref()),
             to_definition(_to_python_comments()),
         ),
     )

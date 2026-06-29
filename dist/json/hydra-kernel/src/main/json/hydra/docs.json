@@ -1,0 +1,39 @@
+{
+  "name": "hydra.docs",
+  "metadata": {
+    "description": "A model for Hydra documentation strings, including inline annotations and entity references",
+    "comments": [],
+    "seeAlso": []},
+  "dependencies": [{"module": "hydra.packaging"}],
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.docs.DocSegment",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "ref",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.packaging.EntityReference"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An inline reference to a Hydra entity"}}}]}}}},
+                  {
+                    "name": "text",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"string": {}}},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "A raw prose fragment, passed through verbatim"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A segment of a documentation string, either a raw text fragment or an inline entity reference. Documentation strings are parsed into a sequence of DocSegments for host-specific rendering."}}}]}}}}}}]}
