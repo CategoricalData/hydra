@@ -44,7 +44,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "parameter": "xs",
-                                                  "domain": {"list": {"literal": {"string": {}}}},
+                                                  "domain": {"list": {"literal": "string"}},
                                                   "body": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Term",
@@ -56,12 +56,12 @@
                                                               "application": {
                                                                 "function": {
                                                                   "typeApplication": {
-                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"string": {}}}}},
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": "string"}}},
                                                                     "type": {"variable": "hydra.core.Term"}}},
                                                                 "argument": {
                                                                   "lambda": {
                                                                     "parameter": "x",
-                                                                    "domain": {"literal": {"string": {}}},
+                                                                    "domain": {"literal": "string"},
                                                                     "body": {
                                                                       "inject": {
                                                                         "typeName": "hydra.core.Term",
@@ -163,7 +163,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "parameter": "xs",
-                                                  "domain": {"list": {"literal": {"string": {}}}},
+                                                  "domain": {"list": {"literal": "string"}},
                                                   "body": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Term",
@@ -175,12 +175,12 @@
                                                               "application": {
                                                                 "function": {
                                                                   "typeApplication": {
-                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"string": {}}}}},
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": "string"}}},
                                                                     "type": {"variable": "hydra.core.Term"}}},
                                                                 "argument": {
                                                                   "lambda": {
                                                                     "parameter": "x",
-                                                                    "domain": {"literal": {"string": {}}},
+                                                                    "domain": {"literal": "string"},
                                                                     "body": {
                                                                       "inject": {
                                                                         "typeName": "hydra.core.Term",
@@ -236,7 +236,7 @@
                                               "function": {
                                                 "lambda": {
                                                   "parameter": "xs",
-                                                  "domain": {"list": {"literal": {"string": {}}}},
+                                                  "domain": {"list": {"literal": "string"}},
                                                   "body": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Term",
@@ -248,12 +248,12 @@
                                                               "application": {
                                                                 "function": {
                                                                   "typeApplication": {
-                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"string": {}}}}},
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": "string"}}},
                                                                     "type": {"variable": "hydra.core.Term"}}},
                                                                 "argument": {
                                                                   "lambda": {
                                                                     "parameter": "x",
-                                                                    "domain": {"literal": {"string": {}}},
+                                                                    "domain": {"literal": "string"},
                                                                     "body": {
                                                                       "inject": {
                                                                         "typeName": "hydra.core.Term",
