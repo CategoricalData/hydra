@@ -427,7 +427,11 @@ def _encode_constant_for_field_name():
                 ["env", "tname", "fname"],
                 wrap(
                     _PY_NAME,
-                    formatting_convert_case(util_case_convention_camel, util_case_convention_upper_snake, Core.un_name(var("fname"))),
+                    formatting_convert_case(
+                        util_case_convention_camel,
+                        util_case_convention_upper_snake,
+                        Strings.intercalate(string("_"), Strings.split_on(string("-"), Core.un_name(var("fname")))),
+                    ),
                 ),
             ),
         ),
