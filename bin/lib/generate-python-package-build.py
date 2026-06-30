@@ -86,11 +86,20 @@ def render_pyproject(name: str, description: str, version: str, deps: list[str],
     overlay = overlay or {}
     # Partition overlay deps by scope: api/runtime -> [project.dependencies];
     # test -> [project.optional-dependencies] test extra (#511).
+    # A dep flagged "optional": true is a host-specific optional integration
+    # (e.g. the TinkerPop/Gremlin binding for hydra-pg); it goes to an
+    # [project.optional-dependencies] "optional" extra rather than the hard
+    # dependency list, so the #472 --no-index self-containment gate (which only
+    # verifies Hydra inter-package wheels resolve offline) does not try to pull
+    # the third-party package from a disabled index.
     runtime_extra: list[str] = []
     test_extra: list[str] = []
+    optional_extra: list[str] = []
     for d in overlay.get("dependencies", []):
         req = _pyproject_requirement(d)
-        if _scope_tag(d.get("scope")) == "test":
+        if d.get("optional"):
+            optional_extra.append(req)
+        elif _scope_tag(d.get("scope")) == "test":
             test_extra.append(req)
         else:
             runtime_extra.append(req)
@@ -108,12 +117,20 @@ def render_pyproject(name: str, description: str, version: str, deps: list[str],
     else:
         deps_block = "dependencies = []"
 
-    # Optional (test) dependencies become a PEP 621 optional-dependencies extra.
+    # Optional dependencies become PEP 621 optional-dependencies extras: a
+    # "test" extra for test-scoped deps and an "optional" extra for flagged
+    # host-specific integrations (e.g. gremlinpython for the hydra-pg Gremlin
+    # binding).
+    extras: list[tuple[str, list[str]]] = []
+    if optional_extra:
+        extras.append(("optional", optional_extra))
     if test_extra:
-        test_lines = "\n".join(f'    "{r}",' for r in test_extra)
-        deps_block += (
-            "\n\n[project.optional-dependencies]\n"
-            "test = [\n" + test_lines + "\n]")
+        extras.append(("test", test_extra))
+    if extras:
+        deps_block += "\n\n[project.optional-dependencies]"
+        for extra_name, reqs in extras:
+            extra_lines = "\n".join(f'    "{r}",' for r in reqs)
+            deps_block += f"\n{extra_name} = [\n" + extra_lines + "\n]"
 
     # Escape any double-quote characters in description so they don't break
     # the generated TOML string literal.
