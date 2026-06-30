@@ -6576,7 +6576,7 @@
                                 "domain": {"variable": "hydra.packaging.DefinitionReference"},
                                 "body": {
                                   "application": {
-                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "{@link "}}}},
+                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.cat2"}, "argument": {"literal": {"string": "{@code "}}}},
                                     "argument": {
                                       "application": {
                                         "function": {

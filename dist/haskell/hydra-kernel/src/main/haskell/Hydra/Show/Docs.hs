@@ -65,7 +65,7 @@ docSegments segs = Strings.cat (Lists.map docSegment segs)
 docSegmentsWith :: (Packaging.EntityReference -> String) -> [Docs.DocSegment] -> String
 docSegmentsWith render segs = Strings.cat (Lists.map (docSegmentWith render) segs)
 
--- | Render a 'EntityReference' as its {@tag rhs} tag string (without the surrounding braces)
+-- | Render a 'EntityReference' as its doc-escape tag string (without the surrounding braces)
 entityReference :: Packaging.EntityReference -> String
 entityReference x =
     case x of
@@ -78,10 +78,10 @@ entityReference x =
       Packaging.EntityReferenceTermExpr v0 -> Strings.cat2 "term-expr " v0
       Packaging.EntityReferenceTypeExpr v0 -> Strings.cat2 "type-expr " v0
 
--- | Parse a documentation string and re-render it, converting {@tag rhs} escapes through their canonical form
+-- | Parse a documentation string and re-render it, converting doc-escape tags through their canonical form
 renderDocString :: String -> String
 renderDocString s = renderDocStringWith entityReference s
 
--- | Parse a documentation string and render it using a custom 'EntityReference' renderer. Text segments are passed through; ref segments are rendered by the provided function. Unrecognized {@...} blocks are passed through as text.
+-- | Parse a documentation string and render it using a custom 'EntityReference' renderer. Text segments are passed through; ref segments are rendered by the provided function. Unrecognized doc-escape blocks are passed through as text.
 renderDocStringWith :: (Packaging.EntityReference -> String) -> String -> String
 renderDocStringWith render s = docSegmentsWith render (ReadDocs.parseDocString s)

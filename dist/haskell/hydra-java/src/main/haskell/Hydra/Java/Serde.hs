@@ -651,7 +651,7 @@ interfaceTypeToExpr it = classTypeToExpr (Syntax.unInterfaceType it)
 javaDocEntityRef :: Packaging.EntityReference -> String
 javaDocEntityRef ref =
     case ref of
-      Packaging.EntityReferenceDefinition v0 -> Strings.cat2 "{@link " (Strings.cat2 (case v0 of
+      Packaging.EntityReferenceDefinition v0 -> Strings.cat2 "{@code " (Strings.cat2 (case v0 of
         Packaging.DefinitionReferencePrimitive v1 -> Names.localNameOf v1
         Packaging.DefinitionReferenceTerm v1 -> Names.localNameOf v1
         Packaging.DefinitionReferenceType v1 -> Names.localNameOf v1) "}")

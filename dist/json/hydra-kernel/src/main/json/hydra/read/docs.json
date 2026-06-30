@@ -236,7 +236,7 @@
                   "key": {"variable": "description"},
                   "value": {
                     "literal": {
-                      "string": "Parse the content between {@...} delimiters into an EntityReference. The input is the inner content (tag and optional rhs), e.g. \"type hydra.core.Lambda\". Returns nothing for unrecognized tags."}}}]}}}}},
+                      "string": "Parse the content between the doc-escape delimiters into an EntityReference. The input is the inner content (tag and optional rhs), e.g. \"type hydra.core.Lambda\". Returns nothing for unrecognized tags."}}}]}}}}},
     {
       "term": {
         "name": "hydra.read.docs.parseDocString",
@@ -408,4 +408,4 @@
                   "key": {"variable": "description"},
                   "value": {
                     "literal": {
-                      "string": "Parse a documentation string into a list of {@type hydra.docs.DocSegment}s. Recognized {@tag rhs} escapes become DocSegment.ref segments (wrapping a {@type hydra.packaging.EntityReference}); all other text (including unrecognized {@...} blocks) becomes DocSegment.text segments. Adjacent text fragments are not merged."}}}]}}}}}]}
+                      "string": "Parse a documentation string into a list of {@type hydra.docs.DocSegment}s. Recognized doc-escape tags become DocSegment.ref segments (wrapping a {@type hydra.packaging.EntityReference}); all other text (including unrecognized doc-escape blocks) becomes DocSegment.text segments. Adjacent text fragments are not merged."}}}]}}}}}]}

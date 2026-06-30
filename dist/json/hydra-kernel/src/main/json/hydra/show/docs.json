@@ -292,7 +292,7 @@
                   "key": {"variable": "description"},
                   "value": {
                     "literal": {
-                      "string": "Render a {@type hydra.packaging.EntityReference} as its {@tag rhs} tag string (without the surrounding braces)"}}}]}}}}},
+                      "string": "Render a {@type hydra.packaging.EntityReference} as its doc-escape tag string (without the surrounding braces)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.show.docs.renderDocString",
@@ -318,7 +318,7 @@
                 {
                   "key": {"variable": "description"},
                   "value": {
-                    "literal": {"string": "Parse a documentation string and re-render it, converting {@tag rhs} escapes through their canonical form"}}}]}}}}},
+                    "literal": {"string": "Parse a documentation string and re-render it, converting doc-escape tags through their canonical form"}}}]}}}}},
     {
       "term": {
         "name": "hydra.show.docs.renderDocStringWith",
@@ -351,4 +351,4 @@
                   "key": {"variable": "description"},
                   "value": {
                     "literal": {
-                      "string": "Parse a documentation string and render it using a custom {@type hydra.packaging.EntityReference} renderer. Text segments are passed through; ref segments are rendered by the provided function. Unrecognized {@...} blocks are passed through as text."}}}]}}}}}]}
+                      "string": "Parse a documentation string and render it using a custom {@type hydra.packaging.EntityReference} renderer. Text segments are passed through; ref segments are rendered by the provided function. Unrecognized doc-escape blocks are passed through as text."}}}]}}}}}]}
