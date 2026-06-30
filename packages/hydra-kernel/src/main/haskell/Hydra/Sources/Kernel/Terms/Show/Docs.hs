@@ -73,14 +73,14 @@ module_ = Module {
 
 renderDocString :: TypedTermDefinition (String -> String)
 renderDocString = define "renderDocString" $
-  doc "Parse a documentation string and re-render it, converting {@tag rhs} escapes through their canonical form" $
+  doc "Parse a documentation string and re-render it, converting doc-escape tags through their canonical form" $
   lambda "s" $ renderDocStringWith @@ (asTerm entityReference) @@ var "s"
 
 renderDocStringWith :: TypedTermDefinition ((Term -> String) -> String -> String)
 renderDocStringWith = define "renderDocStringWith" $
   doc ("Parse a documentation string and render it using a custom {@type hydra.packaging.EntityReference} renderer."
     <> " Text segments are passed through; ref segments are rendered by the provided function."
-    <> " Unrecognized {@...} blocks are passed through as text.") $
+    <> " Unrecognized doc-escape blocks are passed through as text.") $
   lambda "render" $ lambda "s" $
   docSegmentsWith @@ var "render" @@ (ReadDocs.parseDocString @@ var "s")
 
@@ -152,7 +152,7 @@ docSegmentsWith = define "docSegmentsWith" $
 
 entityReference :: TypedTermDefinition (Term -> String)
 entityReference = define "entityReference" $
-  doc "Render a {@type hydra.packaging.EntityReference} as its {@tag rhs} tag string (without the surrounding braces)" $
+  doc "Render a {@type hydra.packaging.EntityReference} as its doc-escape tag string (without the surrounding braces)" $
   match _EntityReference Nothing [
     _EntityReference_definition>>: lambda "d" $ Strings.cat2
       (match _DefinitionReference Nothing [

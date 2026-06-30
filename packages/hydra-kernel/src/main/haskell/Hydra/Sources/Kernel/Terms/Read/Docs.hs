@@ -99,7 +99,7 @@ _DefinitionReference_type = Name "type"
 
 parseDocAnnotation :: TypedTermDefinition (String -> Maybe Term)
 parseDocAnnotation = define "parseDocAnnotation" $
-  doc ("Parse the content between {@...} delimiters into an EntityReference."
+  doc ("Parse the content between the doc-escape delimiters into an EntityReference."
     <> " The input is the inner content (tag and optional rhs), e.g. \"type hydra.core.Lambda\"."
     <> " Returns nothing for unrecognized tags.") $
   lambda "inner" $
@@ -129,8 +129,8 @@ parseDocAnnotation = define "parseDocAnnotation" $
 parseDocString :: TypedTermDefinition (String -> [Term])
 parseDocString = define "parseDocString" $
   doc ("Parse a documentation string into a list of {@type hydra.docs.DocSegment}s."
-    <> " Recognized {@tag rhs} escapes become DocSegment.ref segments (wrapping a {@type hydra.packaging.EntityReference});"
-    <> " all other text (including unrecognized {@...} blocks) becomes"
+    <> " Recognized doc-escape tags become DocSegment.ref segments (wrapping a {@type hydra.packaging.EntityReference});"
+    <> " all other text (including unrecognized doc-escape blocks) becomes"
     <> " DocSegment.text segments."
     <> " Adjacent text fragments are not merged.") $
   lambda "s" $

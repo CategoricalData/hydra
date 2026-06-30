@@ -2689,7 +2689,7 @@ public class Serde {
                         field("definition",
                             lambda("d",
                                 Strings.cat2(
-                                    string("{@link "),
+                                    string("{@code "),
                                     Strings.cat2(
                                         cases("hydra.packaging.DefinitionReference", var("d"),
                                             field("primitive", lambda("n", apply(var("hydra.names.localNameOf"), var("n")))),
