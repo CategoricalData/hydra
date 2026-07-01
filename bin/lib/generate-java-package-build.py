@@ -152,6 +152,13 @@ tasks.matching { it.name in ['compileTestJava', 'test', 'processTestResources'] 
         antlr_block = (
             "\n\n// ANTLR grammar generation (from hydra.gradle AntlrConfig, #511).\n"
             "compileJava.dependsOn generateGrammarSource\n"
+            # The antlr output dir is on the main source set, so every task that\n
+            # reads those sources (sourcesJar via withSourcesJar(), javadoc) must\n
+            # also depend on generateGrammarSource. Gradle 8+ treats a missing\n
+            # dependency as a fatal validation error ("uses this output ... without\n
+            # declaring an explicit or implicit dependency").\n
+            "sourcesJar.dependsOn generateGrammarSource\n"
+            "javadoc.dependsOn generateGrammarSource\n"
             "generateGrammarSource {\n"
             f"    arguments += [{args_groovy}]\n"
             f'    outputDirectory = file("$projectDir/{out_dir}")\n'
