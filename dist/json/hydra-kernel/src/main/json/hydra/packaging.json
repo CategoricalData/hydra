@@ -13,6 +13,12 @@
               "body": {
                 "union": [
                   {
+                    "name": "primitive",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.packaging.PrimitiveDefinition"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A primitive definition"}}}]}}}},
+                  {
                     "name": "term",
                     "type": {
                       "annotated": {
@@ -23,13 +29,7 @@
                     "type": {
                       "annotated": {
                         "body": {"variable": "hydra.packaging.TypeDefinition"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A type definition"}}}]}}}},
-                  {
-                    "name": "primitive",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "hydra.packaging.PrimitiveDefinition"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A primitive definition"}}}]}}}}]},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A type definition"}}}]}}}}]},
               "annotation": {
                 "map": [
                   {
@@ -45,12 +45,13 @@
               "body": {
                 "union": [
                   {
-                    "name": "type",
+                    "name": "primitive",
                     "type": {
                       "annotated": {
                         "body": {"variable": "hydra.core.Name"},
                         "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a type definition, by name"}}}]}}}},
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a primitive definition, by name"}}}]}}}},
                   {
                     "name": "term",
                     "type": {
@@ -59,13 +60,12 @@
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a term definition, by name"}}}]}}}},
                   {
-                    "name": "primitive",
+                    "name": "type",
                     "type": {
                       "annotated": {
                         "body": {"variable": "hydra.core.Name"},
                         "annotation": {
-                          "map": [
-                            {"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a primitive definition, by name"}}}]}}}}]},
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a type definition, by name"}}}]}}}}]},
               "annotation": {
                 "map": [
                   {
@@ -199,18 +199,6 @@
               "body": {
                 "union": [
                   {
-                    "name": "package",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "hydra.packaging.PackageName"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a package, by name"}}}]}}}},
-                  {
-                    "name": "module",
-                    "type": {
-                      "annotated": {
-                        "body": {"variable": "hydra.packaging.ModuleName"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a module, by name"}}}]}}}},
-                  {
                     "name": "definition",
                     "type": {
                       "annotated": {
@@ -219,12 +207,46 @@
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "A reference to a definition (type, term, or primitive)"}}}]}}}}]},
+                              "value": {"literal": {"string": "A reference to a definition (type, term, or primitive), by name"}}}]}}}},
+                  {
+                    "name": "module",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.packaging.ModuleName"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a module, by name"}}}]}}}},
+                  {
+                    "name": "package",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.packaging.PackageName"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a package, by name"}}}]}}}},
+                  {
+                    "name": "termExpr",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "An inline term expression in Hydra textual syntax"}}}]}}}},
+                  {
+                    "name": "typeExpr",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "An inline type expression in Hydra textual syntax"}}}]}}}}]},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A typed reference to a packaging entity: a package, a module, or a definition"}}}]}}}}}},
+                    "value": {
+                      "literal": {
+                        "string": "A typed reference to a Hydra entity: a package, a module, a definition (by name), or an inline type or term expression in Hydra textual syntax."}}}]}}}}}},
     {
       "type": {
         "name": "hydra.packaging.LifecycleInfo",

@@ -35,7 +35,11 @@ LICENSE_NAME = "The Apache License, Version 2.0"
 LICENSE_URL = "http://www.apache.org/licenses/LICENSE-2.0.txt"
 HOMEPAGE = "https://github.com/CategoricalData/hydra"
 SCM_CONNECTION = "scm:git://github.com/CategoricalData/hydra.git"
-GROUP_ID = "net.fortytwo.hydra"
+# #519: per-JVM-language Maven group, so the Java and Scala (and future Clojure)
+# artifact sets never collide on coordinates. Java publishes the unsuffixed
+# artifact ids under net.fortytwo.hydra.java; Scala publishes the same ids (with
+# sbt's _3 cross-version suffix) under net.fortytwo.hydra.scala.
+GROUP_ID = "net.fortytwo.hydra.java"
 
 # Map a hydra.gradle DependencyScope variant tag to the Gradle dependency
 # configuration that realizes it. (#511) The build.json carries scope as a

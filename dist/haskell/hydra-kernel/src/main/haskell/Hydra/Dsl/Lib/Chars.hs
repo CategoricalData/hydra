@@ -7,9 +7,11 @@ module Hydra.Dsl.Lib.Chars where
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
+import qualified Hydra.Docs as Docs
 import qualified Hydra.Dsl.Ast as DslAst
 import qualified Hydra.Dsl.Coders as DslCoders
 import qualified Hydra.Dsl.Core as DslCore
+import qualified Hydra.Dsl.Docs as DslDocs
 import qualified Hydra.Dsl.Error.Checking as ErrorChecking
 import qualified Hydra.Dsl.Error.Core as DslErrorCore
 import qualified Hydra.Dsl.Error.File as DslErrorFile

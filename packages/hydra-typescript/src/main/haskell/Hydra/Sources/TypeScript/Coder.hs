@@ -47,6 +47,7 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Scoping        as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
+import qualified Hydra.Sources.Kernel.Terms.Show.Docs      as ShowDocs
 import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Variables      as Variables
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
@@ -73,7 +74,7 @@ module_ = Module {
               [moduleName TypeScriptLanguageSource.module_,
                moduleName TypeScriptSerdeSource.module_,
                Analysis.ns, Annotations.ns, Arity.ns, Environment.ns, Formatting.ns, Lexical.ns,
-               Names.ns, Rewriting.ns, Serialization.ns, Sorting.ns, Strip.ns, Variables.ns]
+               Names.ns, Rewriting.ns, Serialization.ns, ShowDocs.ns, Sorting.ns, Strip.ns, Variables.ns]
               L.++ (TypeScriptSyntax.ns : KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = descriptionMetadata (Just "TypeScript code generator: emits TypeScript type declarations from Hydra modules")}
   where
@@ -135,6 +136,7 @@ module_ = Module {
       toDefinition tsParen,
       toDefinition tsPropSig,
       toDefinition tsPropSigWithDoc,
+      toDefinition tsDocEntityRef,
       toDefinition mkDocComment,
       toDefinition tsReadonlyMap,
       toDefinition tsReadonlySet,
@@ -1434,6 +1436,46 @@ importsToText = def "importsToText" $
 -- The TS-side primitive accepts either a value or a thunk and calls the
 -- thunk when needed (mirroring Python's `callable()` check).
 
+-- Name constants for hydra.packaging types used in TypeScript-specific rendering
+_EntityReference_ts :: Name
+_EntityReference_ts = Name "hydra.packaging.EntityReference"
+_EntityReference_definition_ts :: Name
+_EntityReference_definition_ts = Name "definition"
+_EntityReference_module_ts :: Name
+_EntityReference_module_ts = Name "module"
+_EntityReference_package_ts :: Name
+_EntityReference_package_ts = Name "package"
+_EntityReference_term_expr_ts :: Name
+_EntityReference_term_expr_ts = Name "termExpr"
+_EntityReference_type_expr_ts :: Name
+_EntityReference_type_expr_ts = Name "typeExpr"
+_DefinitionReference_ts :: Name
+_DefinitionReference_ts = Name "hydra.packaging.DefinitionReference"
+_DefinitionReference_primitive_ts :: Name
+_DefinitionReference_primitive_ts = Name "primitive"
+_DefinitionReference_term_ts :: Name
+_DefinitionReference_term_ts = Name "term"
+_DefinitionReference_type_ts :: Name
+_DefinitionReference_type_ts = Name "type"
+
+tsDocEntityRef :: TypedTermDefinition (Term -> String)
+tsDocEntityRef = def "tsDocEntityRef" $
+  doc "Render a {@type hydra.packaging.EntityReference} as TSDoc link syntax" $
+  match _EntityReference_ts Nothing [
+    _EntityReference_definition_ts>>: lambda "d" $
+      Strings.cat2 (string "{@link ")
+        (Strings.cat2
+          (match _DefinitionReference_ts Nothing [
+            _DefinitionReference_primitive_ts>>: lambda "n" $ Names.localNameOf @@ var "n",
+            _DefinitionReference_term_ts>>:      lambda "n" $ Names.localNameOf @@ var "n",
+            _DefinitionReference_type_ts>>:      lambda "n" $ Names.localNameOf @@ var "n"]
+            @@ var "d")
+          (string "}")),
+    _EntityReference_module_ts>>:    lambda "m" $ unwrap _ModuleName @@ var "m",
+    _EntityReference_package_ts>>:   lambda "p" $ unwrap _PackageName @@ var "p",
+    _EntityReference_term_expr_ts>>: lambda "s" $ Strings.cat2 (string "`") (Strings.cat2 (var "s") (string "`")),
+    _EntityReference_type_expr_ts>>: lambda "s" $ Strings.cat2 (string "`") (Strings.cat2 (var "s") (string "`"))]
+
 -- | Build a `DocumentationComment` from an optional description string.
 -- Returns Nothing when the description is missing or empty so callers can
 -- propagate "no doc" through the AST. Tags are always empty here; we only
@@ -1446,7 +1488,7 @@ mkDocComment = def "mkDocComment" $
     (lambda "d" $ Logic.ifElse (Equality.equal (var "d") (string ""))
       nothing
       (just (record TS._DocumentationComment [
-        TS._DocumentationComment_description>>: var "d",
+        TS._DocumentationComment_description>>: ShowDocs.renderDocStringWith @@ (asTerm tsDocEntityRef) @@ var "d",
         TS._DocumentationComment_tags>>: list ([] :: [TypedTerm TS.DocumentationTag])])))
 
 -- | Convert a Hydra module to a map from `.ts` file path to TypeScript source.

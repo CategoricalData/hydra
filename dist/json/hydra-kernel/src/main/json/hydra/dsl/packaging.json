@@ -11,6 +11,67 @@
   "definitions": [
     {
       "term": {
+        "name": "hydra.dsl.packaging.definitionPrimitive",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"variable": "hydra.packaging.PrimitiveDefinition"},
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A primitive definition"}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.packaging.Definition"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {
+                      "annotated": {
+                        "body": {"variable": "hydra.packaging.PrimitiveDefinition"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A primitive definition"}}}]}}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "inject",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Injection",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.Definition"}}}}},
+                                {
+                                  "name": "field",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.core.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "primitive"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the primitive variant of hydra.packaging.Definition"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.packaging.definitionTerm",
         "signature": {
           "typeParameters": [],
@@ -133,68 +194,7 @@
                   "value": {"literal": {"string": "DSL injection for the type variant of hydra.packaging.Definition"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.packaging.definitionPrimitive",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [
-            {
-              "name": "arg0",
-              "type": {
-                "application": {
-                  "function": {"variable": "hydra.typed.TypedTerm"},
-                  "argument": {
-                    "annotated": {
-                      "body": {"variable": "hydra.packaging.PrimitiveDefinition"},
-                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A primitive definition"}}}]}}}}},
-              "isLazy": false}],
-          "result": {
-            "type": {
-              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.packaging.Definition"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "x",
-                "domain": {
-                  "application": {
-                    "function": {"variable": "hydra.typed.TypedTerm"},
-                    "argument": {
-                      "annotated": {
-                        "body": {"variable": "hydra.packaging.PrimitiveDefinition"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A primitive definition"}}}]}}}}},
-                "body": {
-                  "wrap": {
-                    "typeName": "hydra.typed.TypedTerm",
-                    "body": {
-                      "inject": {
-                        "typeName": "hydra.core.Term",
-                        "field": {
-                          "name": "inject",
-                          "term": {
-                            "record": {
-                              "typeName": "hydra.core.Injection",
-                              "fields": [
-                                {
-                                  "name": "typeName",
-                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.Definition"}}}}},
-                                {
-                                  "name": "field",
-                                  "term": {
-                                    "record": {
-                                      "typeName": "hydra.core.Field",
-                                      "fields": [
-                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "primitive"}}}}},
-                                        {
-                                          "name": "term",
-                                          "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the primitive variant of hydra.packaging.Definition"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.packaging.definitionReferenceType",
+        "name": "hydra.dsl.packaging.definitionReferencePrimitive",
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -207,7 +207,8 @@
                     "annotated": {
                       "body": {"variable": "hydra.core.Name"},
                       "annotation": {
-                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a type definition, by name"}}}]}}}}},
+                        "map": [
+                          {"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a primitive definition, by name"}}}]}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -224,7 +225,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.core.Name"},
                         "annotation": {
-                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a type definition, by name"}}}]}}}}},
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a primitive definition, by name"}}}]}}}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.typed.TypedTerm",
@@ -246,7 +248,7 @@
                                     "record": {
                                       "typeName": "hydra.core.Field",
                                       "fields": [
-                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "type"}}}}},
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "primitive"}}}}},
                                         {
                                           "name": "term",
                                           "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
@@ -254,7 +256,7 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the type variant of hydra.packaging.DefinitionReference"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL injection for the primitive variant of hydra.packaging.DefinitionReference"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.packaging.definitionReferenceTerm",
@@ -320,7 +322,7 @@
                   "value": {"literal": {"string": "DSL injection for the term variant of hydra.packaging.DefinitionReference"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.packaging.definitionReferencePrimitive",
+        "name": "hydra.dsl.packaging.definitionReferenceType",
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -333,8 +335,7 @@
                     "annotated": {
                       "body": {"variable": "hydra.core.Name"},
                       "annotation": {
-                        "map": [
-                          {"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a primitive definition, by name"}}}]}}}}},
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a type definition, by name"}}}]}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -351,8 +352,7 @@
                       "annotated": {
                         "body": {"variable": "hydra.core.Name"},
                         "annotation": {
-                          "map": [
-                            {"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a primitive definition, by name"}}}]}}}}},
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a type definition, by name"}}}]}}}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.typed.TypedTerm",
@@ -374,7 +374,7 @@
                                     "record": {
                                       "typeName": "hydra.core.Field",
                                       "fields": [
-                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "primitive"}}}}},
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "type"}}}}},
                                         {
                                           "name": "term",
                                           "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
@@ -382,7 +382,7 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the primitive variant of hydra.packaging.DefinitionReference"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL injection for the type variant of hydra.packaging.DefinitionReference"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.packaging.dependencyScopeApi",
@@ -1722,7 +1722,7 @@
                   "value": {"literal": {"string": "DSL updater for the lifecycle field of hydra.packaging.EntityMetadata"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.packaging.entityReferencePackage",
+        "name": "hydra.dsl.packaging.entityReferenceDefinition",
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -1733,8 +1733,12 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"variable": "hydra.packaging.PackageName"},
-                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a package, by name"}}}]}}}}},
+                      "body": {"variable": "hydra.packaging.DefinitionReference"},
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "A reference to a definition (type, term, or primitive), by name"}}}]}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -1749,8 +1753,12 @@
                     "function": {"variable": "hydra.typed.TypedTerm"},
                     "argument": {
                       "annotated": {
-                        "body": {"variable": "hydra.packaging.PackageName"},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a package, by name"}}}]}}}}},
+                        "body": {"variable": "hydra.packaging.DefinitionReference"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A reference to a definition (type, term, or primitive), by name"}}}]}}}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.typed.TypedTerm",
@@ -1772,7 +1780,7 @@
                                     "record": {
                                       "typeName": "hydra.core.Field",
                                       "fields": [
-                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "package"}}}}},
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "definition"}}}}},
                                         {
                                           "name": "term",
                                           "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
@@ -1780,7 +1788,7 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the package variant of hydra.packaging.EntityReference"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL injection for the definition variant of hydra.packaging.EntityReference"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.packaging.entityReferenceModule",
@@ -1844,7 +1852,7 @@
                   "value": {"literal": {"string": "DSL injection for the module variant of hydra.packaging.EntityReference"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.packaging.entityReferenceDefinition",
+        "name": "hydra.dsl.packaging.entityReferencePackage",
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -1855,12 +1863,8 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"variable": "hydra.packaging.DefinitionReference"},
-                      "annotation": {
-                        "map": [
-                          {
-                            "key": {"variable": "description"},
-                            "value": {"literal": {"string": "A reference to a definition (type, term, or primitive)"}}}]}}}}},
+                      "body": {"variable": "hydra.packaging.PackageName"},
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a package, by name"}}}]}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -1875,12 +1879,8 @@
                     "function": {"variable": "hydra.typed.TypedTerm"},
                     "argument": {
                       "annotated": {
-                        "body": {"variable": "hydra.packaging.DefinitionReference"},
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "A reference to a definition (type, term, or primitive)"}}}]}}}}},
+                        "body": {"variable": "hydra.packaging.PackageName"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a package, by name"}}}]}}}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.typed.TypedTerm",
@@ -1902,7 +1902,7 @@
                                     "record": {
                                       "typeName": "hydra.core.Field",
                                       "fields": [
-                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "definition"}}}}},
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "package"}}}}},
                                         {
                                           "name": "term",
                                           "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
@@ -1910,7 +1910,145 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the definition variant of hydra.packaging.EntityReference"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL injection for the package variant of hydra.packaging.EntityReference"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.packaging.entityReferenceTermExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"literal": "string"},
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "An inline term expression in Hydra textual syntax"}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.packaging.EntityReference"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "An inline term expression in Hydra textual syntax"}}}]}}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "inject",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Injection",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.EntityReference"}}}}},
+                                {
+                                  "name": "field",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.core.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "termExpr"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the termExpr variant of hydra.packaging.EntityReference"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.packaging.entityReferenceTypeExpr",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"literal": "string"},
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "An inline type expression in Hydra textual syntax"}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.packaging.EntityReference"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "An inline type expression in Hydra textual syntax"}}}]}}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "inject",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Injection",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.packaging.EntityReference"}}}}},
+                                {
+                                  "name": "field",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.core.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "typeExpr"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the typeExpr variant of hydra.packaging.EntityReference"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.packaging.lifecycleInfo",

@@ -23,7 +23,7 @@
 
 module Main where
 
-import Hydra.Generation (writeModulesJson, writeModulesJsonPackageSplit, writeDslJsonPackageSplit, loadNativePackageModules, generateEncoderModules, generateDecoderModules)
+import Hydra.Generation (writeModulesJson, writeModulesJsonPackageSplit, writeDslJsonPackageSplit, loadNativePackageModules, loadNativePackageModuleNamesTagged, generateEncoderModules, generateDecoderModules)
 import Hydra.PackageRouting (RoutingMap, defaultDistJsonRoot, buildRoutingMap, namespaceToPackageIn)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules,
@@ -217,7 +217,15 @@ main = do
   let srcSet           = optSourceSet opts
       distRoot         = optDistJsonRoot opts
       includeJavaPython = optIncludeJavaPython opts
-      routingMap        = buildRoutingMap extRoutingInput
+
+  -- #511: native packages (hydra-jvm, hydra-java, hydra-python) are not in
+  -- extRoutingInput (their module sets are read from dist/json manifests at
+  -- runtime). Fold their routing rows in so cross-package by-name refs like
+  -- hydra.jvm.serde resolve under the fail-loud RoutingMap. Mirrors
+  -- update-json-main and digest-check; without this the on-demand
+  -- sync-packages.sh path aborts with "unrouted module: hydra.jvm.serde".
+  nativeRoutingInput <- loadNativePackageModuleNamesTagged distRoot
+  let routingMap        = buildRoutingMap (extRoutingInput ++ nativeRoutingInput)
 
   fullMainUniverse <- buildFullMainUniverse
 

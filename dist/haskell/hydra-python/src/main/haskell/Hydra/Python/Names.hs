@@ -47,7 +47,7 @@ import qualified Data.Map as M
 -- | Generate a constant name for a field definition
 encodeConstantForFieldName :: t0 -> t1 -> Core.Name -> Syntax.Name
 encodeConstantForFieldName env tname fname =
-    Syntax.Name (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionUpperSnake (Core.unName fname))
+    Syntax.Name (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionUpperSnake (Strings.intercalate "_" (Strings.splitOn "-" (Core.unName fname))))
 
 -- | Generate a constant name for a type definition
 encodeConstantForTypeName :: t0 -> t1 -> Syntax.Name

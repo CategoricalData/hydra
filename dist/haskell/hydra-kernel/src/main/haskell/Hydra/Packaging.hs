@@ -11,39 +11,39 @@ import qualified Data.Scientific as Sci
 
 -- | A definition, which may be either a term, type, or primitive definition
 data Definition =
+  -- | A primitive definition
+  DefinitionPrimitive PrimitiveDefinition |
   -- | A term definition
   DefinitionTerm TermDefinition |
   -- | A type definition
-  DefinitionType TypeDefinition |
-  -- | A primitive definition
-  DefinitionPrimitive PrimitiveDefinition
+  DefinitionType TypeDefinition
   deriving (Eq, Ord, Read, Show)
 
 _Definition = Core.Name "hydra.packaging.Definition"
+
+_Definition_primitive = Core.Name "primitive"
 
 _Definition_term = Core.Name "term"
 
 _Definition_type = Core.Name "type"
 
-_Definition_primitive = Core.Name "primitive"
-
 -- | A typed reference to a definition: a type, a term, or a primitive, identified by name
 data DefinitionReference =
-  -- | A reference to a type definition, by name
-  DefinitionReferenceType Core.Name |
+  -- | A reference to a primitive definition, by name
+  DefinitionReferencePrimitive Core.Name |
   -- | A reference to a term definition, by name
   DefinitionReferenceTerm Core.Name |
-  -- | A reference to a primitive definition, by name
-  DefinitionReferencePrimitive Core.Name
+  -- | A reference to a type definition, by name
+  DefinitionReferenceType Core.Name
   deriving (Eq, Ord, Read, Show)
 
 _DefinitionReference = Core.Name "hydra.packaging.DefinitionReference"
 
-_DefinitionReference_type = Core.Name "type"
+_DefinitionReference_primitive = Core.Name "primitive"
 
 _DefinitionReference_term = Core.Name "term"
 
-_DefinitionReference_primitive = Core.Name "primitive"
+_DefinitionReference_type = Core.Name "type"
 
 -- | The scope in which a package dependency is required. Relevant mainly to dependencies on third-party (non-Hydra) artifacts, where build systems distinguish compile-time, runtime, test-only, and build-tool-only dependencies. Hydra inter-package dependencies normally leave the scope unspecified.
 data DependencyScope =
@@ -90,23 +90,31 @@ _EntityMetadata_seeAlso = Core.Name "seeAlso"
 
 _EntityMetadata_lifecycle = Core.Name "lifecycle"
 
--- | A typed reference to a packaging entity: a package, a module, or a definition
+-- | A typed reference to a Hydra entity: a package, a module, a definition (by name), or an inline type or term expression in Hydra textual syntax.
 data EntityReference =
-  -- | A reference to a package, by name
-  EntityReferencePackage PackageName |
+  -- | A reference to a definition (type, term, or primitive), by name
+  EntityReferenceDefinition DefinitionReference |
   -- | A reference to a module, by name
   EntityReferenceModule ModuleName |
-  -- | A reference to a definition (type, term, or primitive)
-  EntityReferenceDefinition DefinitionReference
+  -- | A reference to a package, by name
+  EntityReferencePackage PackageName |
+  -- | An inline term expression in Hydra textual syntax
+  EntityReferenceTermExpr String |
+  -- | An inline type expression in Hydra textual syntax
+  EntityReferenceTypeExpr String
   deriving (Eq, Ord, Read, Show)
 
 _EntityReference = Core.Name "hydra.packaging.EntityReference"
 
-_EntityReference_package = Core.Name "package"
+_EntityReference_definition = Core.Name "definition"
 
 _EntityReference_module = Core.Name "module"
 
-_EntityReference_definition = Core.Name "definition"
+_EntityReference_package = Core.Name "package"
+
+_EntityReference_termExpr = Core.Name "termExpr"
+
+_EntityReference_typeExpr = Core.Name "typeExpr"
 
 -- | Version-lifecycle milestones for a packaging entity. Each milestone is independently optional; further milestones (e.g. stableSince, removedSince) may be added without changing dependent types.
 data LifecycleInfo =

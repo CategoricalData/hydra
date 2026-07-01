@@ -2681,6 +2681,26 @@ public class Serde {
                                         string("&amp;"),
                                         Strings.splitOn(string("&"), var("s"))))))))));
 
+    public static final Def javaDocEntityRef = def(
+        "javaDocEntityRef",
+        () -> doc("Render a hydra.packaging.EntityReference as Javadoc link syntax",
+                lambda("ref",
+                    cases("hydra.packaging.EntityReference", var("ref"),
+                        field("definition",
+                            lambda("d",
+                                Strings.cat2(
+                                    string("{@code "),
+                                    Strings.cat2(
+                                        cases("hydra.packaging.DefinitionReference", var("d"),
+                                            field("primitive", lambda("n", apply(var("hydra.names.localNameOf"), var("n")))),
+                                            field("term",      lambda("n", apply(var("hydra.names.localNameOf"), var("n")))),
+                                            field("type",      lambda("n", apply(var("hydra.names.localNameOf"), var("n"))))),
+                                        string("}"))))),
+                        field("module",    lambda("m", Strings.cat2(string(""), apply(unwrap(ModuleName.TYPE_), var("m"))))),
+                        field("package",   lambda("p", Strings.cat2(string(""), apply(unwrap(hydra.packaging.PackageName.TYPE_), var("p"))))),
+                        field("termExpr", lambda("s", Strings.cat2(string("{@code "), Strings.cat2(var("s"), string("}"))))),
+                        field("typeExpr", lambda("s", Strings.cat2(string("{@code "), Strings.cat2(var("s"), string("}")))))))));
+
     public static final Def shiftExpressionToExpr = def(
         "shiftExpressionToExpr",
         () -> lambda("e",
@@ -3354,7 +3374,11 @@ public class Serde {
                                                         Strings.lines(
                                                             apply(
                                                                 ref(Serde.sanitizeJavaComment),
-                                                                var("c"))))),
+                                                                apply(
+                                                                    apply(
+                                                                        var("hydra.show.docs.renderDocStringWith"),
+                                                                        ref(Serde.javaDocEntityRef)),
+                                                                    var("c")))))),
                                                 string("\n */")))),
                                     var("expr"))))))));
 
@@ -3496,6 +3520,7 @@ public class Serde {
             relationalExpressionToExpr,
             resultToExpr,
             returnStatementToExpr,
+            javaDocEntityRef,
             sanitizeJavaComment,
             shiftExpressionToExpr,
             simpleTypeNameToExpr,
@@ -3541,6 +3566,8 @@ public class Serde {
         new ModuleName("hydra.jvm.serde"),
         new ModuleName("hydra.constants"),
         new ModuleName("hydra.serialization"),
+        new ModuleName("hydra.names"),
+        new ModuleName("hydra.show.docs"),
         new ModuleName("hydra.java.syntax"),
         new ModuleName("hydra.paths"),
         new ModuleName("hydra.ast"),

@@ -64,7 +64,9 @@ PUBLISH_SET=(
     hydra-rdf
     hydra-pg
 )
-GROUP="net.fortytwo.hydra"
+# #519: Java artifacts publish under the per-language group net.fortytwo.hydra.java
+# (must match GROUP_ID in bin/lib/generate-java-package-build.py).
+GROUP="net.fortytwo.hydra.java"
 VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 
 # --- JDK 17+ guard. ----------------------------------------------------------

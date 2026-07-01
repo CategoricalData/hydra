@@ -36,7 +36,9 @@ DEVELOPER_EMAIL = "josh@fortytwo.net"
 LICENSE_NAME = "Apache-2.0"
 HOMEPAGE = "https://github.com/CategoricalData/hydra"
 SCM_CONNECTION = "scm:git@github.com:CategoricalData/hydra.git"
-GROUP_ID = "net.fortytwo.hydra"
+# #519: per-JVM-language Maven group (see generate-java-package-build.py). Scala
+# artifacts publish under net.fortytwo.hydra.scala, keeping sbt's _3 suffix.
+GROUP_ID = "net.fortytwo.hydra.scala"
 SCALA3_VERSION = "3.3.7"
 SBT_VERSION = "1.10.7"
 # sbt-sonatype 3.12+ supports the new Central Portal endpoint.
