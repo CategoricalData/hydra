@@ -15,6 +15,14 @@ they are documented here for completeness.
 
 ---
 
+## [0.17.1] - unreleased
+
+Development version. Opens the 0.17.x line — the first release built entirely against
+published 0.17.0 hosts (Hackage / PyPI / Maven Central), with the `hostOverrides` shims
+that were needed while 0.16.1 lacked the effect type and I/O primitives removed.
+
+---
+
 ## [0.17.0] - 2026-07-01
 
 Major themes: first-class support for effects and I/O in the kernel, TypeScript and

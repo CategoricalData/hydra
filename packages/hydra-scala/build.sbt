@@ -4,7 +4,7 @@ lazy val root = project
   .in(file("."))
   .settings(
     name := "Hydra-Scala",
-    version := "0.17.0",
+    version := "0.17.1",
     licenses := Seq("Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0")),
 
     scalaVersion := scala3Version,

@@ -71,9 +71,9 @@ sourceSets {
 }
 
 dependencies {
-    // Pulls net.fortytwo.hydra:hydra-kernel transitively (per the hydra-java
+    // Pulls net.fortytwo.hydra.java:hydra-kernel transitively (per the hydra-java
     // POM): kernel runtime + hydra.Codegen + hydra.dsl.java.* coder.
-    api "net.fortytwo.hydra:hydra-java:${hostVersion}"
+    api "net.fortytwo.hydra.java:hydra-java:${hostVersion}"
 }
 
 // Print the runtime classpath (compiled driver classes + the published host and
