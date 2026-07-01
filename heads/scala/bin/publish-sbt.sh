@@ -31,12 +31,15 @@
 # https://central.sonatype.com/publishing/deployments.
 #
 # Usage:
-#   publish-sbt.sh [--upload] [--package <pkg>]
+#   publish-sbt.sh [--upload] [--package <pkg>] [--skip <pkg[,pkg...]>]
 #
 #   (default)       dry run: check deps + build jars locally; NO upload.
 #   --upload        run `sbt publishSigned` per package (uploads pending
 #                   deployments to the Central Portal).
 #   --package <pkg> restrict to a single package (must be in the set).
+#   --skip <list>   comma-separated packages to skip (e.g. to resume a batch
+#                   after some coordinates already published — Maven Central
+#                   versions are immutable, so re-uploading one fails).
 #
 # Requirements:
 #   - sbt on PATH.
@@ -51,11 +54,13 @@ HYDRA_ROOT="$( cd "$HYDRA_SCALA_DIR/../.." && pwd )"
 
 DO_UPLOAD=false
 ONLY_PKG=""
+SKIP_PKGS=""
 
 while [ $# -gt 0 ]; do
     case "$1" in
         --upload) DO_UPLOAD=true; shift ;;
         --package) ONLY_PKG="$2"; shift 2 ;;
+        --skip) SKIP_PKGS=",$2,"; shift 2 ;;
         --help|-h)
             sed -n '2,/^$/p' "$0" | sed 's/^# \{0,1\}//'
             exit 0
@@ -151,6 +156,9 @@ echo ""
 # Mirrors the publishToMavenLocal pattern in publish-maven.sh.
 
 if [ "$DO_UPLOAD" = true ]; then
+    # publishLocal covers the FULL set (even --skip'd packages) so downstream
+    # siblings can always resolve their deps from the local ivy cache; --skip
+    # only affects the Central upload below.
     echo "=== Publishing to local ivy cache first (leaves first, for dep resolution) ==="
     for pkg in "${PUBLISH_SET[@]}"; do
         [ -n "$ONLY_PKG" ] && [ "$ONLY_PKG" != "$pkg" ] && continue
@@ -162,6 +170,7 @@ if [ "$DO_UPLOAD" = true ]; then
     echo "=== Uploading to Sonatype Central Portal (leaves first) ==="
     for pkg in "${PUBLISH_SET[@]}"; do
         [ -n "$ONLY_PKG" ] && [ "$ONLY_PKG" != "$pkg" ] && continue
+        [ -n "$SKIP_PKGS" ] && [ "${SKIP_PKGS#*,$pkg,}" != "$SKIP_PKGS" ] && { echo "  (skipping $pkg)"; continue; }
         # Clear any staging bundle left by a prior (possibly failed) run.
         # sbt-sonatype refuses to overwrite non-SNAPSHOT artifacts in
         # target/sonatype-staging/, which surfaces as "Attempting to overwrite"
@@ -183,6 +192,7 @@ else
     echo "=== [dry run] Publishing to local ivy cache first (leaves first) ==="
     for pkg in "${PUBLISH_SET[@]}"; do
         [ -n "$ONLY_PKG" ] && [ "$ONLY_PKG" != "$pkg" ] && continue
+        [ -n "$SKIP_PKGS" ] && [ "${SKIP_PKGS#*,$pkg,}" != "$SKIP_PKGS" ] && { echo "  (skipping $pkg)"; continue; }
         echo "--- publishLocal $pkg @ $VERSION ---"
         ( cd "$HYDRA_ROOT/dist/scala/$pkg" && sbt publishLocal )
         echo ""
@@ -190,6 +200,7 @@ else
     echo "=== [dry run] Verifying package artifacts build (no upload) ==="
     for pkg in "${PUBLISH_SET[@]}"; do
         [ -n "$ONLY_PKG" ] && [ "$ONLY_PKG" != "$pkg" ] && continue
+        [ -n "$SKIP_PKGS" ] && [ "${SKIP_PKGS#*,$pkg,}" != "$SKIP_PKGS" ] && { echo "  (skipping $pkg)"; continue; }
         echo "=== [dry run] sbt package  ($pkg @ $VERSION) ==="
         ( cd "$HYDRA_ROOT/dist/scala/$pkg" && sbt package )
         echo ""
