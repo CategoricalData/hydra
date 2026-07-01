@@ -3,7 +3,9 @@
 # order: leaves first.
 #
 # Scala analog of heads/java/bin/publish-maven.sh. The published artifacts
-# live under group net.fortytwo.hydra with Scala 3 cross-version suffix (_3).
+# live under group net.fortytwo.hydra.scala (the per-JVM-language group from
+# #519, distinct from the Java set's net.fortytwo.hydra.java) with the Scala 3
+# cross-version suffix (_3). The group is read from the generated build.sbt.
 # The publish set is:
 #   hydra-kernel -> hydra-haskell/hydra-java/hydra-python/hydra-lisp/
 #   hydra-typescript/hydra-rdf -> hydra-scala
