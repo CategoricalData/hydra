@@ -20,11 +20,14 @@
 #      local Maven repo (-Dmaven.repo.local=<tmp>), NOT into ~/.m2 (so a stale
 #      or published artifact can't mask a gap).
 #   2. Build a tiny throwaway consumer project that depends on
-#      net.fortytwo.hydra:hydra-kernel:<version> (+ the other publish-set
-#      coordinates) and resolves ONLY from that temp repo, OFFLINE. mavenCentral
-#      is not consulted, so a dependent whose POM references a sibling missing
-#      from the publish set fails loudly instead of silently pulling a published
-#      (possibly-broken) version.
+#      net.fortytwo.hydra.java:hydra-kernel:<version> (+ the other publish-set
+#      coordinates). Hydra coordinates resolve ONLY from that temp repo, so a
+#      dependent whose POM references a sibling missing from the publish set
+#      fails loudly instead of silently pulling a published (possibly-broken)
+#      version. Third-party transitive deps resolve from Maven Central (the temp
+#      repo holds only Hydra jars, so Central can never satisfy a Hydra
+#      coordinate); this keeps the gate about Hydra self-containment rather than
+#      third-party cache warmth.
 #   3. Compile a trivial source file that imports a public kernel type, proving
 #      the published jar actually carries the classes its API surface needs.
 #
@@ -124,16 +127,25 @@ for pkg in "${PUBLISH_SET[@]}"; do
 done
 echo ""
 
-# --- 2. Throwaway consumer resolving ONLY from the temp repo, offline. --------
+# --- 2. Throwaway consumer: Hydra from the temp repo, third-party from Central. --
 echo "=== Building an isolated consumer against the published coordinates ==="
 mkdir -p "$CONSUMER/src/main/java/probe"
 
-# settings.gradle: point the consumer's only repository at the temp repo.
+# settings.gradle: resolve Hydra packages ONLY from the temp repo (so the gate
+# proves each published Hydra jar carries its own classes), while third-party
+# transitive deps (gremlin, rdf4j, antlr, commons-text, ...) resolve from Maven
+# Central. The temp repo holds only Hydra jars+POMs, so no Hydra coordinate can
+# be satisfied from Central; Central only supplies the non-Hydra dependencies a
+# real consumer would also pull. This is why the consumer is not run --offline:
+# third-party availability is not what this gate tests, and pinning it to the
+# runner's warm ~/.gradle cache made the gate flake whenever a generated
+# build.gradle change invalidated the actions/cache key (#519).
 cat > "$CONSUMER/settings.gradle" <<GRADLE_SETTINGS
 dependencyResolutionManagement {
     repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
     repositories {
         maven { url = uri("${REPO}") }
+        mavenCentral()
     }
 }
 rootProject.name = "hydra-verify-consumer"
@@ -171,7 +183,7 @@ public final class Probe {
 }
 JAVA
 
-if ( cd "$CONSUMER" && "$GRADLE" --quiet --no-daemon --offline \
+if ( cd "$CONSUMER" && "$GRADLE" --quiet --no-daemon \
         -Dmaven.repo.local="$REPO" compileJava ); then
     echo ""
     echo "=== OK: published Java artifacts resolve + compile in isolation ==="
