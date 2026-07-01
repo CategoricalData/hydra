@@ -162,6 +162,12 @@ if [ "$DO_UPLOAD" = true ]; then
     echo "=== Uploading to Sonatype Central Portal (leaves first) ==="
     for pkg in "${PUBLISH_SET[@]}"; do
         [ -n "$ONLY_PKG" ] && [ "$ONLY_PKG" != "$pkg" ] && continue
+        # Clear any staging bundle left by a prior (possibly failed) run.
+        # sbt-sonatype refuses to overwrite non-SNAPSHOT artifacts in
+        # target/sonatype-staging/, which surfaces as "Attempting to overwrite"
+        # warnings and a BUNDLE_ZIP_ERROR; a clean dir avoids both.
+        rm -rf "$HYDRA_ROOT/dist/scala/$pkg/target/sonatype-staging" \
+               "$HYDRA_ROOT/dist/scala/$pkg"/target/*-bundle 2>/dev/null || true
         echo "=== sbt publishSigned  ($pkg @ $VERSION) ==="
         ( cd "$HYDRA_ROOT/dist/scala/$pkg" && sbt publishSigned sonatypeBundleRelease )
         echo ""
