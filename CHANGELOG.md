@@ -15,7 +15,7 @@ they are documented here for completeness.
 
 ---
 
-## [0.17.0] - 2026-06-30
+## [0.17.0] - 2026-07-01
 
 Major themes: first-class support for effects and I/O in the kernel, TypeScript and
 Scala reaching publishable parity with the other hosts, and continued maturation of
