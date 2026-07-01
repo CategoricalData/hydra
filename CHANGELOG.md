@@ -15,7 +15,7 @@ they are documented here for completeness.
 
 ---
 
-## [0.17.0] - 2026-06-21
+## [0.17.0] - 2026-06-30
 
 Major themes: first-class support for effects and I/O in the kernel, TypeScript and
 Scala reaching publishable parity with the other hosts, and continued maturation of
@@ -54,6 +54,32 @@ Java, Python, Scala, and the four Lisp dialects (Clojure, Common Lisp, Scheme, E
 Lisp), with TypeScript now joining as a complete host/target. Go remains a "head bud"
 (the coder still has emission bugs and the head's runtime is largely placeholder; it
 does not yet host the test suite).
+
+### New Features
+
+- Translingual cross-reference convention for `doc` strings: doc-escape tags render to
+  each host's native doc syntax (Javadoc, Haddock, Sphinx, TSDoc)
+  ([#433](https://github.com/CategoricalData/hydra/issues/433)).
+- Neo4j JSON-artifact validation demo, exercised across Java, Python, Haskell, and
+  TypeScript ([#510](https://github.com/CategoricalData/hydra/issues/510)).
+
+### Improvements
+
+- The Java/Maven publish set now covers every official Hydra target language, one coder
+  package per implementation family
+  ([#468](https://github.com/CategoricalData/hydra/issues/468)).
+- JVM Maven artifact groups are bifurcated to `net.fortytwo.hydra.java` and
+  `net.fortytwo.hydra.scala`, so the Java and Scala (and future Clojure) publish sets
+  never collide on coordinates
+  ([#519](https://github.com/CategoricalData/hydra/issues/519)).
+- Host-specific third-party integrations (the former `bindings/` tree) are folded into
+  `overlay/`, unifying hand-written host-native source under one tree
+  ([#511](https://github.com/CategoricalData/hydra/issues/511)).
+- The coder de-parameterizes context and error types, simplifying generated coder
+  signatures ([#518](https://github.com/CategoricalData/hydra/issues/518)).
+- TypeScript-to-Java generation now emits the `hydra.lib.*` aggregate namespace
+  interfaces (`Maps`, `Strings`, etc.)
+  ([#499](https://github.com/CategoricalData/hydra/issues/499)).
 
 ---
 
