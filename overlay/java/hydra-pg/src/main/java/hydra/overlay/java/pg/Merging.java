@@ -175,31 +175,19 @@ public class Merging {
     }
 
     /**
-     * Apply a StatelessCoder's encode function (via its Coder.encode, which takes InferenceContext).
+     * Apply a StatelessCoder's encode function (via its Coder.encode). The coder's
+     * failure type is already String, so the Either is returned directly.
      */
     private static <V> Either<String, V> applyCoderEncode(StatelessCoder<V, V> coder, V value) {
-        hydra.typing.InferenceContext cx = new hydra.typing.InferenceContext(
-            0, new ArrayList<>());
-        hydra.overlay.java.util.Either<hydra.errors.Error_, V> result = coder.encode.apply(cx).apply(value);
-        if (result.isRight()) {
-            return Either.right(((Either.Right<hydra.errors.Error_, V>) result).value);
-        } else {
-            return Either.left(hydra.show.Errors.error(((Either.Left<hydra.errors.Error_, V>) result).value));
-        }
+        return coder.encode.apply(value);
     }
 
     /**
-     * Apply a StatelessCoder's decode function (via its Coder.decode, which takes InferenceContext).
+     * Apply a StatelessCoder's decode function (via its Coder.decode). The coder's
+     * failure type is already String, so the Either is returned directly.
      */
     private static <V> Either<String, V> applyCoderDecode(StatelessCoder<V, V> coder, V value) {
-        hydra.typing.InferenceContext cx = new hydra.typing.InferenceContext(
-            0, new ArrayList<>());
-        hydra.overlay.java.util.Either<hydra.errors.Error_, V> result = coder.decode.apply(cx).apply(value);
-        if (result.isRight()) {
-            return Either.right(((Either.Right<hydra.errors.Error_, V>) result).value);
-        } else {
-            return Either.left(hydra.show.Errors.error(((Either.Left<hydra.errors.Error_, V>) result).value));
-        }
+        return coder.decode.apply(value);
     }
 
     private static <T, V> StatelessCoder<Vertex<V>, Vertex<V>> constructVertexCoder(
