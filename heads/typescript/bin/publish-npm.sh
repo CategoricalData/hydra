@@ -23,12 +23,16 @@
 # re-uploaded. Use --dry-run (default) to verify packaging before committing.
 #
 # Usage:
-#   publish-npm.sh [--out <dir>] [--upload] [--package <pkg>]
+#   publish-npm.sh [--out <dir>] [--upload] [--package <pkg>] [--otp <code>]
 #
 #   (default)      compile + pack into <out> (npm-tarballs/); no upload.
 #   --upload       after packing, `npm publish` each tarball in order.
 #                  Requires NPM_TOKEN env var or `npm login` session.
 #   --package <p>  restrict to one package (must still be in the publish set).
+#   --otp <code>   one-time 2FA code, passed to `npm publish --otp`. For an
+#                  account with 2FA-required publishing; a granular token with
+#                  "bypass 2FA" is more robust for the multi-package batch (a
+#                  single OTP code may expire across sequential publishes).
 #   --out <dir>    override output directory (default: <repo-root>/npm-tarballs).
 #
 # Access prerequisites:
@@ -46,12 +50,17 @@ HYDRA_ROOT="$( cd "$HYDRA_TS_HEAD/../.." && pwd )"
 OUT_DIR="$HYDRA_ROOT/npm-tarballs"
 DO_UPLOAD=false
 ONLY_PKG=""
+OTP=""
 
 while [ $# -gt 0 ]; do
     case "$1" in
         --out) OUT_DIR="$2"; shift 2 ;;
         --upload) DO_UPLOAD=true; shift ;;
         --package) ONLY_PKG="$2"; shift 2 ;;
+        # One-time password for accounts with 2FA-required publishing (an
+        # alternative to a granular token with "bypass 2FA"). Passed through to
+        # `npm publish --otp`. The code is short-lived, so publish promptly.
+        --otp) OTP="$2"; shift 2 ;;
         --help|-h) sed -n '2,/^$/p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
         *) echo "Unknown argument: $1" >&2; exit 1 ;;
     esac
@@ -201,6 +210,9 @@ else
     NPM_AUTH_ARGS=()
 fi
 
+OTP_ARGS=()
+[ -n "$OTP" ] && OTP_ARGS=(--otp="$OTP")
+
 for pkg in "${PUBLISH_SET[@]}"; do
     [ -n "$ONLY_PKG" ] && [ "$ONLY_PKG" != "$pkg" ] && continue
     tarball=$(ls "$OUT_DIR/${pkg}-${VERSION}.tgz" 2>/dev/null || true)
@@ -208,7 +220,8 @@ for pkg in "${PUBLISH_SET[@]}"; do
         echo "ERROR: tarball not found: $OUT_DIR/${pkg}-${VERSION}.tgz" >&2; exit 1
     }
     echo "--- publishing $pkg @ $VERSION ---"
-    npm publish "${NPM_AUTH_ARGS[@]+"${NPM_AUTH_ARGS[@]}"}" "$tarball" --access public
+    npm publish "${NPM_AUTH_ARGS[@]+"${NPM_AUTH_ARGS[@]}"}" \
+        "${OTP_ARGS[@]+"${OTP_ARGS[@]}"}" "$tarball" --access public
 done
 
 echo "=== Published ${#PUBLISH_SET[@]} packages to npm at $VERSION. ==="
