@@ -575,7 +575,7 @@ toHaskellComments = haskellSerdeDefinition "toHaskellComments" $
   doc ("Convert a string to Haddock documentation comments. Empty source lines"
     <> " emit `-- |` (no trailing space) so blank doc lines don't carry trailing"
     <> " whitespace into the generated file."
-    <> " {@tag rhs} escapes are rendered as Haddock links via haddockEntityRef.") $
+    <> " Doc-escape tags are rendered as Haddock links via haddockEntityRef.") $
   lambda "c" $ Strings.intercalate (string "\n") $ Lists.map
     (lambda "s" $ Logic.ifElse (Equality.equal (var "s") (string ""))
       (string "-- |")
