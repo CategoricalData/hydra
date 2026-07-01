@@ -7,8 +7,10 @@
 # #519, distinct from the Java set's net.fortytwo.hydra.java) with the Scala 3
 # cross-version suffix (_3). The group is read from the generated build.sbt.
 # The publish set is:
-#   hydra-kernel -> hydra-haskell/hydra-java/hydra-python/hydra-lisp/
-#   hydra-typescript/hydra-rdf -> hydra-scala
+#   hydra-kernel -> hydra-haskell/hydra-jvm/hydra-python/hydra-lisp/
+#   hydra-typescript/hydra-rdf; hydra-jvm -> hydra-java/hydra-scala
+# (hydra-jvm is the shared JVM base that hydra-java and hydra-scala depend on,
+# so it must be in the set for dependency closure.)
 # hydra-pg is excluded pending a fix to the generated pg-coder type error.
 # hydra-ext is also excluded (not in the standard sync matrix).
 #
@@ -71,6 +73,7 @@ VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 PUBLISH_SET=(
     hydra-kernel
     hydra-haskell
+    hydra-jvm
     hydra-java
     hydra-python
     hydra-scala
