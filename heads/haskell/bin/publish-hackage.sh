@@ -145,7 +145,10 @@ UPLOAD_FLAGS=()
 for pkg in "${PUBLISH_SET[@]}"; do
     tarball="$OUT_DIR/$pkg-$VERSION.tar.gz"
     echo "=== cabal upload ${UPLOAD_FLAGS[*]:-} $tarball ==="
-    cabal upload "${UPLOAD_FLAGS[@]}" "$tarball"
+    # Expand to nothing (not an empty-string arg) when UPLOAD_FLAGS is empty, so
+    # candidate uploads work under `set -u` (an empty array's [@] is otherwise an
+    # unbound-variable error).
+    cabal upload ${UPLOAD_FLAGS[@]+"${UPLOAD_FLAGS[@]}"} "$tarball"
     echo ""
 done
 
