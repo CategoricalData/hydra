@@ -412,7 +412,7 @@ rightHandSideToExpr rhs = expressionToExpr (Syntax.unRightHandSide rhs)
 statementToExpr :: Syntax.Statement -> Ast.Expr
 statementToExpr stmt = expressionToExpr (Syntax.unStatement stmt)
 
--- | Convert a string to Haddock documentation comments. Empty source lines emit `-- |` (no trailing space) so blank doc lines don't carry trailing whitespace into the generated file. {@tag rhs} escapes are rendered as Haddock links via haddockEntityRef.
+-- | Convert a string to Haddock documentation comments. Empty source lines emit `-- |` (no trailing space) so blank doc lines don't carry trailing whitespace into the generated file. Doc-escape tags are rendered as Haddock links via haddockEntityRef.
 toHaskellComments :: String -> String
 toHaskellComments c =
     Strings.intercalate "\n" (Lists.map (\s -> Logic.ifElse (Equality.equal s "") "-- |" (Strings.cat2 "-- | " s)) (Strings.lines (ShowDocs.renderDocStringWith haddockEntityRef c)))
