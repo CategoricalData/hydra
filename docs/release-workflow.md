@@ -674,6 +674,9 @@ The following are Python-specific release steps:
     stage, validate the whole upload path on [TestPyPI](https://test.pypi.org/) before the
     production upload. TestPyPI is a throwaway sandbox: it exercises authentication, metadata
     acceptance, and project naming end-to-end without consuming a real version number.
+    `publish-pypi.sh` has **no TestPyPI flag** — its `--upload` always targets production PyPI —
+    so the dry-run runs a direct `twine upload` against the TestPyPI repository URL, over the
+    same wheels the script already built into `wheels/`:
     ```bash
     heads/python/bin/publish-pypi.sh                          # build wheels+sdists into wheels/
     twine check wheels/*                                      # metadata pre-flight
@@ -682,6 +685,15 @@ The following are Python-specific release steps:
       twine upload --repository-url https://test.pypi.org/legacy/ wheels/*
     # If that succeeds, do the real upload:
     heads/python/bin/publish-pypi.sh --upload
+    ```
+    To dry-run only **select packages** (e.g. just the `hydra-kernel` leaf, or to re-try one
+    package after a TestPyPI version collision), pass explicit artifact paths instead of
+    `wheels/*` — TestPyPI keeps versions permanently within a run, so re-uploading the same
+    `<pkg>-<version>` there fails just as on production:
+    ```bash
+    TWINE_USERNAME=__token__ TWINE_PASSWORD='pypi-<TESTPYPI-token>' \
+      twine upload --repository-url https://test.pypi.org/legacy/ \
+      wheels/hydra_kernel-<version>*
     ```
     Caveats specific to TestPyPI:
     - **Separate credentials.** TestPyPI has its own accounts and API tokens, distinct from
