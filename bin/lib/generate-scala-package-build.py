@@ -84,6 +84,13 @@ ThisBuild / scalaVersion := "{SCALA3_VERSION}"
 // Use the literal host string; sonatypeCentralHost is a plugin constant that
 // is not in scope at ThisBuild evaluation time.
 ThisBuild / sonatypeCredentialHost := "central.sonatype.com"
+// `publishSigned` needs a target repository; sonatypePublishToBundle points it
+// at the sbt-sonatype bundle staging dir, which sonatypeBundleRelease then
+// submits to the Central Portal. Without this, publishSigned fails with
+// "Repository for publishing is not specified."
+ThisBuild / publishTo := sonatypePublishToBundle.value
+// Declare the version scheme so downstream eviction tooling is satisfied.
+ThisBuild / versionScheme := Some("early-semver")
 publish / skip := false
 
 lazy val root = (project in file("."))
