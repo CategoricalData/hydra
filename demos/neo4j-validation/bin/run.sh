@@ -122,7 +122,15 @@ if [ "$SEED" = "1" ]; then
   if ! command -v "$CS" >/dev/null 2>&1 && [ ! -x "$CS" ]; then
     echo "  cypher-shell not found (set --neo4j-home). Skipping seed."
   else
-    "$CS" -a "$URI" -u "$USER" -p "$PASSWORD" --file "$DEMO_DIR/fixture.cypher" \
+    # cypher-shell honors JAVA_HOME but Neo4j 5.x supports only JDK 17 or 21
+    # (not 19), so prefer an exact 17 or 21; fall back to any 17+ otherwise.
+    SEED_JH=""
+    if command -v /usr/libexec/java_home >/dev/null 2>&1; then
+      SEED_JH="$(/usr/libexec/java_home -v 17 2>/dev/null || /usr/libexec/java_home -v 21 2>/dev/null || true)"
+    fi
+    [ -z "$SEED_JH" ] && SEED_JH="$(java_home_17plus || true)"
+    SEED_JH="${SEED_JH:-${JAVA_HOME:-}}"
+    JAVA_HOME="$SEED_JH" "$CS" -a "$URI" -u "$USER" -p "$PASSWORD" --file "$DEMO_DIR/fixture.cypher" \
       && echo "  Seeded $DEMO_DIR/fixture.cypher"
   fi
   echo ""
@@ -144,18 +152,17 @@ run_java() {
 
   local out; out="$(mktemp -d)"
   local driver_cp; driver_cp="$(ls "$CACHE"/*.jar | tr '\n' ':')"
-  # Compile the kernel, only the Neo4j hydra-pg modules (the full hydra-pg pulls
-  # in hydra-rdf, which is not generated into Java here), and the demo.
-  local sources="$out/sources.txt"
-  {
-    find "$REPO_ROOT/dist/java/hydra-kernel/src/main/java" -name '*.java'
-    find "$REPO_ROOT/dist/java/hydra-pg/src/main/java/hydra/neo4j" -name '*.java'
-    find "$REPO_ROOT/dist/java/hydra-pg/src/main/java/hydra/error/neo4j" -name '*.java'
-    find "$REPO_ROOT/dist/java/hydra-pg/src/main/java/hydra/validate" -name 'Neo4j.java'
-    find "$REPO_ROOT/demos/src/main/java/hydra/demos/neo4jvalidation" -name '*.java'
-  } | sort -u > "$sources"
+  # Compile only the live-Neo4j demo entry point and let javac resolve its
+  # dependencies via -sourcepath. This pulls in exactly the kernel + hydra-pg
+  # modules the demo needs (hydra.neo4j.model, hydra.validate.Neo4j, ...) and
+  # avoids both the hydra-rdf-dependent parts of hydra-pg and the sibling
+  # JSON-artifact demo classes (which need hydra.Generation / hydra.json).
+  local sourcepath="$REPO_ROOT/dist/java/hydra-kernel/src/main/java"
+  sourcepath="$sourcepath:$REPO_ROOT/dist/java/hydra-pg/src/main/java"
+  sourcepath="$sourcepath:$REPO_ROOT/demos/src/main/java"
+  local entry="$REPO_ROOT/demos/src/main/java/hydra/demos/neo4jvalidation/Neo4jValidationDemo.java"
 
-  if ! "$jh/bin/javac" -cp "$driver_cp" -d "$out/classes" @"$sources" 2>"$out/javac.err"; then
+  if ! "$jh/bin/javac" -cp "$driver_cp" -sourcepath "$sourcepath" -d "$out/classes" "$entry" 2>"$out/javac.err"; then
     echo "  Java compile failed:"; sed 's/^/    /' "$out/javac.err" | head -20
     return
   fi

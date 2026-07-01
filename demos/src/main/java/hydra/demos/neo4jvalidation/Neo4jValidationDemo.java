@@ -235,8 +235,67 @@ public class Neo4jValidationDemo {
     }
 
     private static String describe(InvalidGraphError err) {
-        // A compact rendering of the structured error. The full structured value
+        // A readable rendering of the structured error. The full structured value
         // is available for programmatic use; this is just for display.
-        return err.toString();
+        return err.accept(new InvalidGraphError.Visitor<String>() {
+            @Override
+            public String visit(InvalidGraphError.Node n) {
+                String id = n.value.id.value;
+                return "node " + id + ": " + describeNode(n.value.error);
+            }
+            @Override
+            public String visit(InvalidGraphError.Relationship r) {
+                String id = r.value.id.value;
+                return "relationship " + id + ": " + describeRelationship(r.value.error);
+            }
+        });
+    }
+
+    private static String describeNode(hydra.error.neo4j.InvalidNodeError err) {
+        return err.accept(new hydra.error.neo4j.InvalidNodeError.PartialVisitor<String>() {
+            @Override
+            public String visit(hydra.error.neo4j.InvalidNodeError.MissingProperty m) {
+                return "missing required property `" + m.value.key.value + "`";
+            }
+            @Override
+            public String visit(hydra.error.neo4j.InvalidNodeError.WrongPropertyType w) {
+                return "property `" + w.value.key.value + "` has the wrong type (expected "
+                    + valueTypeName(w.value.expectedType) + ")";
+            }
+            @Override
+            public String otherwise(hydra.error.neo4j.InvalidNodeError other) {
+                return other.toString();
+            }
+        });
+    }
+
+    private static String describeRelationship(hydra.error.neo4j.InvalidRelationshipError err) {
+        return err.accept(new hydra.error.neo4j.InvalidRelationshipError.PartialVisitor<String>() {
+            @Override
+            public String visit(hydra.error.neo4j.InvalidRelationshipError.MissingProperty m) {
+                return "missing required property `" + m.value.key.value + "`";
+            }
+            @Override
+            public String visit(hydra.error.neo4j.InvalidRelationshipError.WrongPropertyType w) {
+                return "property `" + w.value.key.value + "` has the wrong type (expected "
+                    + valueTypeName(w.value.expectedType) + ")";
+            }
+            @Override
+            public String visit(hydra.error.neo4j.InvalidRelationshipError.NoMatchingPattern p) {
+                return "endpoints match no declared pattern for this relationship type";
+            }
+            @Override
+            public String otherwise(hydra.error.neo4j.InvalidRelationshipError other) {
+                return other.toString();
+            }
+        });
+    }
+
+    /** The simple name of a ValueType case (e.g. INTEGER, STRING) for display. */
+    private static String valueTypeName(ValueType vt) {
+        String n = vt.getClass().getSimpleName();
+        // Generated case classes use a trailing underscore for Java keywords (Integer_, String_).
+        if (n.endsWith("_")) n = n.substring(0, n.length() - 1);
+        return n.toUpperCase();
     }
 }
