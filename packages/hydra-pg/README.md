@@ -223,12 +223,15 @@ configuration).
 
 ## Demos
 
-Four demos exercise this package end-to-end:
+Five demos exercise this package end-to-end:
 
 - [demos/avro](https://github.com/CategoricalData/hydra/tree/main/demos/avro) — bidirectional Avro coder; one of its modes maps
   Avro data to a TinkerPop-annotated property graph and emits GraphSON.
 - [demos/genpg](https://github.com/CategoricalData/hydra/tree/main/demos/genpg) — generates a property graph from relational CSV data
   and emits it as either GraphSON or RDF/SHACL N-Triples.
+- [demos/neo4j-validation](https://github.com/CategoricalData/hydra/tree/main/demos/neo4j-validation) — translingual Neo4j validation:
+  a graph supplied as plain Cypher is validated against a Neo4j graph type identically in Java, Python, Haskell, and TypeScript
+  (offline JSON-artifact variant), or read from a live Neo4j over Bolt (live-server variant).
 - [demos/pg-formats](https://github.com/CategoricalData/hydra/tree/main/demos/pg-formats) — shows three views of the TinkerPop "Modern"
   reference graph: Hydra-PG JSON, GraphSON 3.0, and JSON Schema.
 - [demos/validatepg](https://github.com/CategoricalData/hydra/tree/main/demos/validatepg) — translingual property-graph validation,
