@@ -626,6 +626,42 @@
           (cons :schema_types hydra_overlay_common_lisp_lib_maps_empty)
           (cons :type_variables hydra_overlay_common_lisp_lib_sets_empty))))
 
+(defvar *use-default-impls*
+  (equal "1" (#+sbcl sb-ext:posix-getenv #+ccl ccl:getenv #+clisp ext:getenv "HYDRA_DEFAULT_IMPLS")))
+
+(defun patch-with-default-impls (graph)
+  "Replace native primitive implementations with reducer-based wrappers for any
+   primitive that has a primitiveDefinitionDefaultImplementation term."
+  (let* ((native-graph graph)
+         (cx (empty-context))
+         (prims-map (cdr (assoc :primitives graph)))
+         (prims-list (funcall hydra_overlay_common_lisp_lib_maps_to_list prims-map))
+         (patched-list
+           (mapcar (lambda (entry)
+                     (let* ((name (first entry))
+                            (prim (second entry))
+                            (di (hydra_packaging_primitive_definition-default_implementation
+                                  (hydra_graph_primitive-definition prim))))
+                       (if (and (consp di) (eq (car di) :none))
+                         entry
+                         (let ((impl-term (cadr di)))
+                           (list name
+                                 (make-hydra_graph_primitive
+                                   :definition (hydra_graph_primitive-definition prim)
+                                   :implementation
+                                   (lambda (g_)
+                                     (declare (ignore g_))
+                                     (lambda (args)
+                                       (let ((applied (reduce (lambda (f a)
+                                                                (list :application (make-hydra_core_application f a)))
+                                                              args :initial-value impl-term)))
+                                         (funcall (funcall (funcall (funcall hydra_reduction_reduce_term cx) native-graph) t) applied))))))))))
+                   prims-list))
+         (patched-map (funcall hydra_overlay_common_lisp_lib_maps_from_list patched-list))
+         (new-graph (copy-list graph)))
+    (setf (cdr (assoc :primitives new-graph)) patched-map)
+    new-graph))
+
 (defvar *test-graph* nil)
 (defvar *annotation-cache-installed* nil)
 (defun get-test-graph ()
@@ -674,10 +710,10 @@
                          (cdr (assoc :bound_terms base))))
           (let ((st-count (length (funcall hydra_overlay_common_lisp_lib_maps_to_list schema-types))))
             (format t "DEBUG: schema types: ~A~%" st-count))
-          (setf *test-graph* enhanced))
+          (setf *test-graph* (if *use-default-impls* (patch-with-default-impls enhanced) enhanced)))
         (error (e)
           (format t "WARNING: Could not enhance test graph: ~A~%" e)
-          (setf *test-graph* base)))))
+          (setf *test-graph* (if *use-default-impls* (patch-with-default-impls base) base))))))
   *test-graph*)
 
 (defun empty-context ()

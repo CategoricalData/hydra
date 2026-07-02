@@ -17,6 +17,15 @@ sys.path.insert(0, str(gen_main_path.resolve()))
 sys.path.insert(0, str(main_path.resolve()))
 
 
+def pytest_addoption(parser):
+    parser.addoption(
+        "--default-impls",
+        action="store_true",
+        default=False,
+        help="Use primitiveDefinitionDefaultImplementation instead of native implementations where available.",
+    )
+
+
 def pytest_configure(config):
     """Eagerly initialize test infrastructure before test collection."""
     try:

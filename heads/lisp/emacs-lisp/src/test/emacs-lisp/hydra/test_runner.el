@@ -472,6 +472,42 @@ skip silently."
 ;; Graph construction
 ;; ============================================================================
 
+(defvar hydra--use-default-impls
+  (equal "1" (getenv "HYDRA_DEFAULT_IMPLS")))
+
+(defun hydra--patch-with-default-impls (graph)
+  "Replace native primitive implementations with reducer-based wrappers for any
+   primitive that has a primitiveDefinitionDefaultImplementation term."
+  (let* ((native-graph graph)
+         (cx (hydra-empty-context))
+         (prims-map (cdr (assq :primitives graph)))
+         (prims-list (funcall hydra_overlay_emacs_lisp_lib_maps_to_list prims-map))
+         (patched-list
+           (mapcar (lambda (entry)
+                     (let* ((name (car entry))
+                            (prim (cadr entry))
+                            (di (hydra_packaging_primitive_definition-default_implementation
+                                  (hydra_graph_primitive-definition prim))))
+                       (if (and (consp di) (eq (car di) :none))
+                         entry
+                         (let ((impl-term (cadr di)))
+                           (list name
+                                 (make-hydra_graph_primitive
+                                   :definition (hydra_graph_primitive-definition prim)
+                                   :implementation
+                                   (lambda (_g)
+                                     (lambda (args)
+                                       (let ((applied (cl-reduce
+                                                        (lambda (f a)
+                                                          (list :application (make-hydra_core_application f a)))
+                                                        args :initial-value impl-term)))
+                                         (funcall (funcall (funcall (funcall hydra_reduction_reduce_term cx) native-graph) t) applied))))))))))
+                   prims-list))
+         (patched-map (funcall hydra_overlay_emacs_lisp_lib_maps_from_list patched-list))
+         (new-graph (copy-alist graph)))
+    (setcdr (assq :primitives new-graph) patched-map)
+    new-graph))
+
 (defvar hydra--test-graph nil)
 (defvar hydra--annotation-cache-installed nil)
 
@@ -545,10 +581,10 @@ skip silently."
             (setcdr (assq :bound_terms enhanced)
                     (funcall (funcall hydra_overlay_emacs_lisp_lib_maps_union test-terms-map)
                              (cdr (assq :bound_terms base))))
-            (setq hydra--test-graph enhanced))
+            (setq hydra--test-graph (if hydra--use-default-impls (hydra--patch-with-default-impls enhanced) enhanced)))
         (error
          (message "WARNING: Could not enhance test graph: %S" err)
-         (setq hydra--test-graph base))))))
+         (setq hydra--test-graph (if hydra--use-default-impls (hydra--patch-with-default-impls base) base)))))))
 
 (defun hydra-empty-context ()
   (funcall 'make-hydra_typing_inference_context 0 nil))

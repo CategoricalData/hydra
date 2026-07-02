@@ -48,12 +48,18 @@ public class TestSuiteRunner {
     private static final Map<String, Double> benchmarkResults = new ConcurrentHashMap<>();
     private static TestGroup rootTestGroup;
 
+    // When true, use primitiveDefinitionDefaultImplementation instead of native implementations.
+    // Activated via -Dhydra.defaultImpls=true (Gradle: -PhydraDefaultImpls) or HYDRA_DEFAULT_IMPLS=1 env var.
+    private static final boolean USE_DEFAULT_IMPLS =
+        "true".equals(System.getProperty("hydra.defaultImpls"))
+        || "1".equals(System.getenv("HYDRA_DEFAULT_IMPLS"));
+
     // Cached test infrastructure
     private static Graph testGraph;
 
     private static synchronized Graph getTestGraph() {
         if (testGraph == null) {
-            testGraph = buildTestGraph();
+            testGraph = buildTestGraph(USE_DEFAULT_IMPLS);
         }
         return testGraph;
     }
@@ -63,12 +69,46 @@ public class TestSuiteRunner {
     }
 
     /**
+     * Patch a primitives map so that each primitive with a defaultImplementation
+     * uses reduceTerm on that term instead of the native host implementation.
+     */
+    private static Map<Name, Primitive> patchWithDefaultImpls(
+            Map<Name, Primitive> primitives, Graph nativeGraph) {
+        Map<Name, Primitive> patched = new HashMap<>();
+        for (Map.Entry<Name, Primitive> entry : primitives.entrySet()) {
+            Primitive prim = entry.getValue();
+            hydra.overlay.java.util.Optional<hydra.core.Term> defImpl = prim.definition.defaultImplementation;
+            if (defImpl.isGiven()) {
+                hydra.core.Term implTerm = defImpl.fromGiven();
+                patched.put(entry.getKey(), prim.withImplementation(g -> args -> {
+                    hydra.core.Term applied = implTerm;
+                    for (hydra.core.Term arg : args) {
+                        applied = new hydra.core.Term.Application(new hydra.core.Application(applied, arg));
+                    }
+                    return hydra.Reduction.reduceTerm(emptyContext(), nativeGraph, true, applied);
+                }));
+            } else {
+                patched.put(entry.getKey(), prim);
+            }
+        }
+        return patched;
+    }
+
+    /**
      * Build the test graph with schema, test data, and primitives.
      * Mirrors the Haskell testGraph in TestUtils.hs.
      *
      * This is public because TestEnv.java delegates to it.
      */
     public static Graph buildTestGraph() {
+        return buildTestGraph(false);
+    }
+
+    /**
+     * Build the test graph. When useDefaultImpls is true, primitives with a
+     * defaultImplementation use it (via reduceTerm) instead of the native implementation.
+     */
+    public static Graph buildTestGraph(boolean useDefaultImpls) {
         // Build primitives map
         hydra.overlay.java.util.PersistentMap<Name, Primitive> primitives = hydra.overlay.java.util.PersistentMap.empty();
         for (PrimitiveFunction prim : Libraries.standardPrimitives()) {
@@ -136,7 +176,7 @@ public class TestSuiteRunner {
             persistentBoundTerms = persistentBoundTerms.insert(entry.getKey(), entry.getValue());
         }
 
-        return new Graph(
+        Graph nativeGraph = new Graph(
             persistentBoundTerms,
             hydra.overlay.java.util.PersistentMap.empty(), // boundTypes (TypeSchemes for term bindings — not populated for test graph)
             hydra.overlay.java.util.PersistentMap.empty(), // classConstraints
@@ -146,6 +186,10 @@ public class TestSuiteRunner {
             schemaTypes,
             hydra.overlay.java.util.PersistentSet.empty()  // typeVariables
         );
+
+        if (!useDefaultImpls) return nativeGraph;
+
+        return nativeGraph.withPrimitives(patchWithDefaultImpls(nativeGraph.primitives, nativeGraph));
     }
 
     private static void addConstantBinding(List<Binding> bindings, String name, Term value) {

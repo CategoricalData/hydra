@@ -183,7 +183,42 @@ def _empty_context() -> hydra.typing.InferenceContext:
     )
 
 
-def build_test_graph() -> hydra.graph.Graph:
+def _patch_graph_with_default_impls(graph: hydra.graph.Graph) -> hydra.graph.Graph:
+    """
+    Return a copy of the graph where each primitive that has a
+    primitiveDefinitionDefaultImplementation uses it (via reduce_term) instead
+    of the native host implementation.  Primitives without a default keep their
+    native implementation unchanged.
+    """
+    import hydra.reduction as reduction
+    from hydra.overlay.python.dsl.python import FrozenDict
+    from dataclasses import replace
+
+    native_graph = graph  # used as the fallback evaluation context
+
+    def make_default_impl(impl_term):
+        """Build a primitive implementation that evaluates impl_term applied to args."""
+        def default_impl(g, args):
+            # Apply impl_term to each argument left-to-right
+            applied = impl_term
+            for arg in args:
+                applied = hydra.core.TermApplication(hydra.core.Application(applied, arg))
+            cx = _empty_context()
+            return reduction.reduce_term(cx, native_graph, True, applied)
+        return default_impl
+
+    patched = {}
+    for name, prim in graph.primitives.items():
+        default_impl_term = prim.definition.default_implementation
+        if default_impl_term is not None:
+            patched[name] = replace(prim, implementation=make_default_impl(default_impl_term))
+        else:
+            patched[name] = prim
+
+    return replace(graph, primitives=FrozenDict(patched))
+
+
+def build_test_graph(use_default_impls: bool = False) -> hydra.graph.Graph:
     """
     Build the test graph with schema and primitives.
 
@@ -192,6 +227,11 @@ def build_test_graph() -> hydra.graph.Graph:
             (kernelElements ++ testElements)
         testGraph = elementsToGraph hydraCoreGraph (decodeSchemaTypes testSchemaGraph)
             (kernelTermBindings ++ dataBindings)
+
+    Args:
+        use_default_impls: If True, replace native primitive implementations with
+            reducer-based wrappers that evaluate primitiveDefinitionDefaultImplementation
+            where available (testing default implementations instead of native ones).
 
     Returns:
         Graph: The test graph
@@ -229,13 +269,24 @@ def build_test_graph() -> hydra.graph.Graph:
                      for name, term in test_terms_dict.items()]
 
     # Build the test graph with schema types and all term bindings
-    return hydra.lexical.elements_to_graph(
+    graph = hydra.lexical.elements_to_graph(
         bs_graph, schema_types, tuple(kernel_term_bindings + data_bindings))
+
+    if use_default_impls:
+        graph = _patch_graph_with_default_impls(graph)
+
+    return graph
 
 
 # Cache the test graph at module level.
 # This mirrors the Haskell approach where the graph is computed once and reused.
 _test_graph: Optional[hydra.graph.Graph] = None
+
+# When set to True (via --default-impls flag or HYDRA_DEFAULT_IMPLS=1 env var),
+# the test graph uses default primitive implementations instead of native ones.
+USE_DEFAULT_IMPLS: bool = (
+    "--default-impls" in sys.argv or os.environ.get("HYDRA_DEFAULT_IMPLS", "") == "1"
+)
 
 
 def get_test_graph() -> hydra.graph.Graph:
@@ -244,7 +295,7 @@ def get_test_graph() -> hydra.graph.Graph:
     if _test_graph is None:
         if BENCHMARK_OUTPUT and _init_start_ns == 0:
             _init_start_ns = time.perf_counter_ns()
-        _test_graph = build_test_graph()
+        _test_graph = build_test_graph(use_default_impls=USE_DEFAULT_IMPLS)
         # Record initialization time
         if BENCHMARK_OUTPUT and _init_start_ns > 0:
             elapsed_ns = time.perf_counter_ns() - _init_start_ns
