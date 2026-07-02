@@ -1471,6 +1471,7 @@ writeManifestJson basePath kernelModules kernelTypesModules mainModules testModu
             ("kernelModules", namespacesJson kernelModules),
             ("mainModules", namespacesJson mainModules),
             ("manifestFormatVersion", Json.ValueNumber 1),
+            ("moduleFormatVersion", Json.ValueNumber currentModuleFormatVersion),
             ("testModules", namespacesJson testModules)]
         jsonStr = JsonWriter.printJson jsonVal
         filePath = basePath FP.</> "manifest.json"
@@ -1526,6 +1527,7 @@ writePerPackageManifestsJson routingMap distJsonRoot dslSourceModules encodingSo
               ("mainEncodingModules", namespacesJson encForPkg),
               ("mainModules",    namespacesJson mainForPkg),
               ("manifestFormatVersion", Json.ValueNumber 1),
+              ("moduleFormatVersion", Json.ValueNumber currentModuleFormatVersion),
               ("package",        Json.ValueString pkg),
               ("testModules",    namespacesJson testForPkg)]
           jsonStr = JsonWriter.printJson jsonVal
@@ -1628,6 +1630,38 @@ readManifestFieldWithFallback basePath primaryField fallbackField = do
   where
     toNamespace (Json.ValueString s) = ModuleName s
     toNamespace _ = error $ "manifest.json: expected string in " ++ primaryField ++ "/" ++ fallbackField
+
+-- | The module wire-format version this build of the kernel reads and writes.
+-- Bump this when a change to the JSON encoding of Module/Term would make a
+-- parser for version N unable to correctly decode version N+1 output.
+-- See docs/json-format.md §Format versioning.
+currentModuleFormatVersion :: SC.Scientific
+currentModuleFormatVersion = 1
+
+-- | Extract moduleFormatVersion from a parsed manifest JSON value.
+-- Returns Nothing if the field is absent (legacy manifest) or has an unexpected type.
+parseManifestModuleFormatVersion :: Json.Value -> Maybe Int
+parseManifestModuleFormatVersion jsonVal = case jsonVal of
+    Json.ValueObject obj -> case lookup "moduleFormatVersion" obj of
+      Just (Json.ValueNumber n) -> Just (round n)
+      _                         -> Nothing
+    _ -> Nothing
+
+-- | Read the moduleFormatVersion from a package's manifest.json.
+-- Returns Nothing if the manifest is absent, unparseable, or predates the field
+-- (treat absence as version 1, the only version that has ever shipped).
+-- Returns Just n on success.
+readManifestModuleFormatVersion :: FilePath -> IO (Maybe Int)
+readManifestModuleFormatVersion basePath = do
+    let manifestPath = basePath FP.</> "manifest.json"
+    exists <- SD.doesFileExist manifestPath
+    if not exists
+      then return Nothing
+      else do
+        parseResult <- parseJsonFile manifestPath
+        case parseResult of
+          Left _        -> return Nothing
+          Right jsonVal -> return $ parseManifestModuleFormatVersion jsonVal
 
 -- | Load modules from JSON files for a list of namespaces.
 -- Uses the universe modules to build the graph for type resolution.

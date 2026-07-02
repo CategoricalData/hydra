@@ -265,6 +265,20 @@ main = do
   let kernelJsonDir = pkgMainDir "hydra-kernel"
   let testJsonDir   = distJsonRoot FP.</> "hydra-kernel" FP.</> "src" FP.</> "test" FP.</> "json"
 
+  -- Skew detection: read moduleFormatVersion from the kernel's shipped manifest.json
+  -- and fail loud if it disagrees with the version this binary expects. A mismatch
+  -- means the local kernel cannot safely decode the published package's data.
+  -- Absence of the field (packages built before this check) is treated as version 1.
+  let expectedFmtVer = round currentModuleFormatVersion :: Int
+  mKernelFmtVer <- readManifestModuleFormatVersion kernelJsonDir
+  case mKernelFmtVer of
+    Just v | v /= expectedFmtVer -> do
+      putStrLn $ "bootstrap-from-json: moduleFormatVersion mismatch for hydra-kernel:"
+        ++ " expected " ++ show expectedFmtVer ++ ", got " ++ show v
+        ++ ". Upgrade the local kernel or pin an older host version."
+      exitFailure
+    _ -> return ()
+
   -- Dependency order: baseline packages (hydra-kernel + hydra-haskell) are
   -- loaded individually in Step 1. Coder packages are loaded with
   -- --include-coders. Ext demo packages are loaded with --ext-only. Other
