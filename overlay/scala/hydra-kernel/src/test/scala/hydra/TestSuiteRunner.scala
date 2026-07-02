@@ -538,6 +538,26 @@ object TestSuiteRunner {
     types
   }
 
+  // When true, use primitiveDefinitionDefaultImplementation instead of native implementations.
+  // Activated via -Dhydra.defaultImpls=true or HYDRA_DEFAULT_IMPLS=1 env var.
+  private val useDefaultImpls: Boolean =
+    System.getProperty("hydra.defaultImpls") == "true" ||
+    System.getenv("HYDRA_DEFAULT_IMPLS") == "1"
+
+  private def patchWithDefaultImpls(primitives: Map[String, Primitive], nativeGraph: Graph): Map[String, Primitive] = {
+    primitives.map { case (name, prim) =>
+      prim.definition.defaultImplementation match {
+        case Some(implTerm) =>
+          name -> prim.copy(implementation = _ => args => {
+            val applied = args.foldLeft(implTerm)((f, a) =>
+              hydra.core.Term.application(hydra.core.Application(f, a)))
+            hydra.reduction.reduceTerm(())(nativeGraph)(true)(applied)
+          })
+        case None => name -> prim
+      }
+    }
+  }
+
   /**
    * Build the test graph with primitives, bound terms, and schema types.
    * Called from generated test code (testGraph.scala).
@@ -594,7 +614,7 @@ object TestSuiteRunner {
       boundTerms += (name -> hydra.encode.core.`type`(typ))
     }
 
-    Graph(
+    val nativeGraph = Graph(
       boundTerms = boundTerms.toMap,
       boundTypes = Map.empty,
       classConstraints = Map.empty,
@@ -603,5 +623,8 @@ object TestSuiteRunner {
       primitives = primitives,
       schemaTypes = schemaTypes,
       typeVariables = Set.empty)
+
+    if (!useDefaultImpls) nativeGraph
+    else nativeGraph.copy(primitives = patchWithDefaultImpls(primitives, nativeGraph))
   }
 }

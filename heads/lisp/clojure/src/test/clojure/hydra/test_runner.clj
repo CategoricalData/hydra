@@ -367,6 +367,34 @@
 
 (def test-graph (atom nil))
 
+;; When true, replace primitives that have a defaultImplementation with reducer-based wrappers.
+;; Activated via HYDRA_DEFAULT_IMPLS=1 env var.
+(def ^:private use-default-impls?
+  (= "1" (System/getenv "HYDRA_DEFAULT_IMPLS")))
+
+(defn- patch-with-default-impls [graph]
+  "Replace native primitive implementations with reducer-based wrappers for any
+   primitive that has a primitiveDefinitionDefaultImplementation term."
+  (let [native-graph graph
+        reduce-var (ns-resolve 'hydra.reduction 'hydra_reduction_reduce_term)
+        reduce-fn (when reduce-var @reduce-var)
+        cx {:functions () :annotations () :variable_types {}}
+        patched-prims
+        (into {} (map (fn [[name prim]]
+                        (let [def (:definition prim)
+                              di (:default_implementation def)]
+                          (if (maybe-nothing? di)
+                            [name prim]
+                            (let [impl-term (maybe-value di)]
+                              [name (assoc prim :implementation
+                                      (fn [_g] (fn [args]
+                                        (let [applied (reduce (fn [f a]
+                                                                (list :application (->hydra_core_application f a)))
+                                                              impl-term args)]
+                                          ((((reduce-fn cx) native-graph) true) applied)))))]))))
+                      (:primitives graph)))]
+    (assoc graph :primitives patched-prims)))
+
 (defn ensure-test-graph! []
   "Build and enhance the test graph with schema types (called after all namespaces loaded)."
   (when (nil? @test-graph)
@@ -400,8 +428,9 @@
               test-terms (into {} (map (fn [entry] [(first entry) (second entry)]) test-terms-alist))
               enhanced (-> base
                            (update :schema_types merge schema-types)
-                           (update :bound_terms merge test-terms))]
-          (reset! test-graph enhanced))
+                           (update :bound_terms merge test-terms))
+              final (if use-default-impls? (patch-with-default-impls enhanced) enhanced)]
+          (reset! test-graph final))
         (catch Throwable e
           (println "WARNING: Could not load test types:" (.getMessage e))
           (reset! test-graph base))))))

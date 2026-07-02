@@ -330,10 +330,52 @@
       schema-types
       '())))
 
+(define *use-default-impls*
+  (equal? "1" (get-environment-variable "HYDRA_DEFAULT_IMPLS")))
+
+(define (patch-with-default-impls graph)
+  (let* ((native-graph graph)
+         (cx (make-hydra_typing_inference_context 0 '()))
+         (apply-args (lambda (impl-term args)
+                       (let loop ((f impl-term) (as args))
+                         (if (null? as) f
+                             (loop (list 'application (make-hydra_core_application f (car as)))
+                                   (cdr as))))))
+         (prims-list (hydra_lib_maps_to_list (hydra_graph_graph-primitives native-graph)))
+         (patched-list
+           (map (lambda (entry)
+                  (let* ((name (car entry))
+                         (prim (cdr entry))
+                         (di (hydra_packaging_primitive_definition-default_implementation
+                               (hydra_graph_primitive-definition prim))))
+                    (if (and (pair? di) (eq? (car di) 'none))
+                      entry
+                      (let ((impl-term (cadr di)))
+                        (list name
+                              (make-hydra_graph_primitive
+                                (hydra_graph_primitive-definition prim)
+                                (lambda (_g)
+                                  (lambda (args)
+                                    (let ((applied (apply-args impl-term args)))
+                                      ((((hydra_reduction_reduce_term cx) native-graph) #t) applied))))))))))
+                prims-list))
+         (patched-map (hydra_lib_maps_from_list patched-list)))
+    (make-hydra_graph_graph
+      (hydra_graph_graph-bound_terms graph)
+      (hydra_graph_graph-bound_types graph)
+      (hydra_graph_graph-class_constraints graph)
+      (hydra_graph_graph-lambda_variables graph)
+      (hydra_graph_graph-metadata graph)
+      patched-map
+      (hydra_graph_graph-schema_types graph)
+      (hydra_graph_graph-type_variables graph))))
+
 (define *test-graph* #f)
 
 (define (get-test-graph)
-  (unless *test-graph* (set! *test-graph* (build-test-graph)))
+  (unless *test-graph*
+    (let ((g (build-test-graph)))
+      (set! *test-graph* (if *use-default-impls* (patch-with-default-impls g) g))))
   *test-graph*)
 
 (define (empty-context)

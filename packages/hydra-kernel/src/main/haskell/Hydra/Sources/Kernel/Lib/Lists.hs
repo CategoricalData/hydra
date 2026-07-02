@@ -310,11 +310,11 @@ span = defineWithDefault "span" "Split a list at the first element where the pre
   \ empty if all elements satisfy p).",
    "Total. Corresponds to Haskell's span :: (a -> Bool) -> [a] -> ([a], [a])."]
   ("p" ~> "xs" ~>
-    Lists.foldr
-      ("x" ~> "acc" ~> Logic.ifElse
-        (Logic.and (var "p" @@ var "x") (Lists.null (Pairs.second $ var "acc")))
-        (pair (Lists.cons (var "x") (Pairs.first $ var "acc")) (Pairs.second $ var "acc"))
-        (pair (list ([] :: [TypedTerm a])) (Lists.cons (var "x") (Pairs.second $ var "acc"))))
+    Lists.foldl
+      ("acc" ~> "x" ~> Logic.ifElse
+        (Logic.and (Lists.null (Pairs.second $ var "acc")) (var "p" @@ var "x"))
+        (pair (Lists.concat2 (Pairs.first $ var "acc") (list [var "x"])) (Pairs.second $ var "acc"))
+        (pair (Pairs.first $ var "acc") (Lists.concat2 (Pairs.second $ var "acc") (list [var "x"]))))
       (pair (list ([] :: [TypedTerm a])) (list ([] :: [TypedTerm a])))
       (var "xs"))
 
