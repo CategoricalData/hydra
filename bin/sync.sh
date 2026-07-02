@@ -116,7 +116,7 @@ haskell_host_mode() {
 }
 
 # Per-host mode for the Java coder DSL→JSON build (the coder compiles + runs
-# against the published net.fortytwo.hydra:hydra-java in "published" mode, or
+# against the published net.fortytwo.hydra.java:hydra-java in "published" mode, or
 # against the locally-generated dist/java kernel via the :compileHeadsExtrasJava
 # rollup in "local" mode). Same per-host override mechanism as python_host_mode:
 # hostOverrides:{"java":"local"} routes just the Java host local — needed when a

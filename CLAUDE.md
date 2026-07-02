@@ -28,7 +28,7 @@ The native sources are authoritative for the generated output: the main sync reg
 `bin/generate-hydra-python-from-python.sh`, `bin/generate-hydra-scala-from-scala.sh`), and the native
 drivers also synthesize the `hydra.dsl.{java,python,scala}.*` wrapper modules (previously written by the
 Haskell DSL pass). As of 0.16 the Java and Python drivers run against the **published host by default**
-(`net.fortytwo.hydra:hydra-java` from Maven / `hydra-python` from PyPI, version from `hydra.json`
+(`net.fortytwo.hydra.java:hydra-java` from Maven / `hydra-python` from PyPI, version from `hydra.json`
 `hostVersion`), with a `--local-host` bootstrap shim for backward-incompatible kernel changes — the #370
 "consume" path. The Scala driver currently runs only against the local host (no published-host probe
 yet). See [Consuming published hosts](docs/build-system.md#consuming-published-hosts) and

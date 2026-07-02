@@ -3,7 +3,7 @@
 // Compiles ONLY the hand-written hydra-java DSL authoring sources
 // (hydra.sources.java.*, hydra.overlay.java.dsl.meta.*, hydra.overlay.java.dsl.Helpers, ...) plus the
 // two driver files (hydra.Generation, hydra.UpdateJavaJson) against the PUBLISHED
-// Java host net.fortytwo.hydra:hydra-java:<hostVersion> resolved from Maven
+// Java host net.fortytwo.hydra.java:hydra-java:<hostVersion> resolved from Maven
 // Central — NOT against any local dist/java build. This is the default path the
 // regular sync uses to regenerate dist/json/hydra-java: edits to the DSL sources
 // in packages/hydra-java/src/main/java/ flow straight through without rebuilding
@@ -71,9 +71,10 @@ sourceSets {
 }
 
 dependencies {
-    // Pulls net.fortytwo.hydra:hydra-kernel transitively (per the hydra-java
+    // Pulls net.fortytwo.hydra.java:hydra-kernel transitively (per the hydra-java
     // POM): kernel runtime + hydra.Codegen + hydra.dsl.java.* coder.
-    api "net.fortytwo.hydra:hydra-java:${hostVersion}"
+    // Group net.fortytwo.hydra.java per #519 (bifurcated from net.fortytwo.hydra).
+    api "net.fortytwo.hydra.java:hydra-java:${hostVersion}"
 }
 
 // Print the runtime classpath (compiled driver classes + the published host and

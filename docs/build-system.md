@@ -629,7 +629,7 @@ is the `hydra-java` jar; for Python the `hydra-python` wheel; for Scala the loca
 sbt build (no published-host probe yet — Scala always runs in `--local-host` mode).
 
 - **Published-host mode (default).** The driver resolves
-  `net.fortytwo.hydra:hydra-java:<hostVersion>` from Maven Central (a standalone Gradle
+  `net.fortytwo.hydra.java:hydra-java:<hostVersion>` from Maven Central (a standalone Gradle
   project at `heads/java/json-driver/`) or `hydra-python==<hostVersion>` from PyPI (a managed
   venv at `heads/python/.venv-published-host/`, prepared by `bin/lib/python-published-host.sh`).
   `<hostVersion>` is resolved from `hydra.json` (`hostVersion` / `hostOverrides`) via

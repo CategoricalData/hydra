@@ -509,7 +509,7 @@ The following are Java-specific release steps:
     (the analog of a Hackage candidate — nothing is live until you click Publish).
   * **Stale `~/.m2` trap (important).** Across a pre-release cycle the version string
     (e.g. `0.16.0`) does not change, so a previously-built same-version jar can linger in
-    `~/.m2` and silently satisfy a downstream package's `api 'net.fortytwo.hydra:hydra-kernel:0.16.0'`
+    `~/.m2` and silently satisfy a downstream package's `api 'net.fortytwo.hydra.java:hydra-kernel:0.16.0'`
     dependency — making `hydra-rdf`/`hydra-pg`/`hydra-java` compile against an **old** kernel and
     fail with `cannot find symbol` for classes added/renamed mid-cycle (e.g. `hydra.typing.InferenceContext`,
     `hydra.util.Optional`). `/sync` regenerates the *source* in `dist/java/` but does not touch
@@ -538,7 +538,7 @@ dependency they care about; transitive resolution pulls the rest:
 
 ```gradle
 dependencies {
-    implementation 'net.fortytwo.hydra:hydra-pg:0.15.0'   // pulls hydra-rdf and hydra-kernel
+    implementation 'net.fortytwo.hydra.java:hydra-pg:0.15.0'   // pulls hydra-rdf and hydra-kernel
 }
 ```
 

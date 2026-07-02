@@ -38,9 +38,9 @@ Hydra publishes one Maven artifact per package. Pick the ones you need; coordina
 
 ```gradle
 dependencies {
-    implementation 'net.fortytwo.hydra:hydra-kernel:0.17.0'
-    implementation 'net.fortytwo.hydra:hydra-pg:0.17.0'
-    implementation 'net.fortytwo.hydra:hydra-pg-dsl:0.17.0'
+    implementation 'net.fortytwo.hydra.java:hydra-kernel:0.17.0'
+    implementation 'net.fortytwo.hydra.java:hydra-pg:0.17.0'
+    implementation 'net.fortytwo.hydra.java:hydra-pg-dsl:0.17.0'
 }
 ```
 
@@ -49,17 +49,17 @@ dependencies {
 ```xml
 <dependencies>
   <dependency>
-    <groupId>net.fortytwo.hydra</groupId>
+    <groupId>net.fortytwo.hydra.java</groupId>
     <artifactId>hydra-kernel</artifactId>
     <version>0.17.0</version>
   </dependency>
   <dependency>
-    <groupId>net.fortytwo.hydra</groupId>
+    <groupId>net.fortytwo.hydra.java</groupId>
     <artifactId>hydra-pg</artifactId>
     <version>0.17.0</version>
   </dependency>
   <dependency>
-    <groupId>net.fortytwo.hydra</groupId>
+    <groupId>net.fortytwo.hydra.java</groupId>
     <artifactId>hydra-pg-dsl</artifactId>
     <version>0.17.0</version>
   </dependency>

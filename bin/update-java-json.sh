@@ -10,7 +10,7 @@
 #
 #   --published-host  (DEFAULT)  Compile the DSL sources + driver against the
 #                                PUBLISHED Java host
-#                                net.fortytwo.hydra:hydra-java:<hostVersion>
+#                                net.fortytwo.hydra.java:hydra-java:<hostVersion>
 #                                (resolved from Maven via hydra.json's
 #                                hostVersion / hostOverrides) in the
 #                                standalone heads/java/json-driver project. No

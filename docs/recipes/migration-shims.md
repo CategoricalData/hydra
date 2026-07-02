@@ -2,7 +2,7 @@
 
 Since 0.16, the Hydra build consumes **published, versioned hosts** by default rather than building
 each host locally (issue [#370](https://github.com/CategoricalData/hydra/issues/370)).
-The Java DSL→JSON step runs against `net.fortytwo.hydra:hydra-java` from Maven Central; the Python step
+The Java DSL→JSON step runs against `net.fortytwo.hydra.java:hydra-java` from Maven Central; the Python step
 against `hydra-python` from PyPI; the version is pinned in `hydra.json`
 (see [The build system](../build-system.md#consuming-published-hosts)).
 
@@ -135,12 +135,19 @@ contributors) still resolves the broken published version. To make the new host 
 publish it locally and pin to it:
 
 - **Java** — publish to the local Maven repo (`~/.m2`), which the json-driver project already lists via
-  `mavenLocal()`:
+  `mavenLocal()`.
+  Use the convenience script (preferred):
 
   ```bash
-  # from the per-package dist build, publish the interim hydra-java + hydra-kernel
-  (cd dist/java/hydra-kernel && ./gradlew publishToMavenLocal)
-  (cd dist/java/hydra-java   && ./gradlew publishToMavenLocal)
+  bin/install-java-local-m2.sh          # installs hydra-kernel + hydra-java
+  bin/install-java-local-m2.sh --all    # installs full publish set
+  ```
+
+  Or manually (hydra-kernel first — hydra-java depends on it):
+
+  ```bash
+  (cd dist/java/hydra-kernel && gradle publishToMavenLocal -x test)
+  (cd dist/java/hydra-java   && gradle publishToMavenLocal -x test)
   ```
 
 - **Python** — build a wheel from the local `dist/python/hydra-python` and install it into the
