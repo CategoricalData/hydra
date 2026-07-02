@@ -38,11 +38,11 @@ def either(f: Callable[[A], C], g: Callable[[B], C], e: Either[A, B]) -> C:
             return g(val)
 
 
-def foldl(f: Callable[[A], Callable[[B], Either[C, A]]], acc: A, xs: frozenlist[B]) -> Either[C, A]:
+def foldl(f: Callable[[A, B], Either[C, A]], acc: A, xs: frozenlist[B]) -> Either[C, A]:
     """Left-fold over a list with an Either-returning function, short-circuiting on Left."""
     result = acc
     for x in xs:
-        match f(result)(x):
+        match f(result, x):
             case Left(err):
                 return Left(err)
             case Right(val):

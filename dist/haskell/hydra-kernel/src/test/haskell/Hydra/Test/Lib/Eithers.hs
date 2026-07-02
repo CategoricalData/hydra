@@ -42,6 +42,7 @@ import qualified Hydra.Validation as Validation
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+import qualified Data.Set as S
 
 -- | Test cases for hydra.lib.eithers primitives
 allTests :: Testing.TestGroup
@@ -188,6 +189,38 @@ allTests =
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (\_ -> (\n -> Literals.showInt32 n) (Eithers.either (\x -> Math.mul x 2) (\s -> Strings.length s) (Right "ab"))),
                 Testing.universalTestCaseExpected = (\_ -> (\n -> Literals.showInt32 n) 2)})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []}]},
+        Testing.TestGroup {
+          Testing.testGroupName = "foldl",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = [
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "fold succeeds on all elements",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> (\e -> ShowCore.either (\s -> Literals.showString s) (\n -> Literals.showInt32 n) e) (Eithers.foldl (\acc -> \el -> Logic.ifElse (Equality.equal el 0) (Left "zero") (Right (Math.add acc el))) 0 [
+                  1,
+                  2,
+                  3])),
+                Testing.universalTestCaseExpected = (\_ -> (\e -> ShowCore.either (\s -> Literals.showString s) (\n -> Literals.showInt32 n) e) (Right 6))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "fold short-circuits on failure",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> (\e -> ShowCore.either (\s -> Literals.showString s) (\n -> Literals.showInt32 n) e) (Eithers.foldl (\acc -> \el -> Logic.ifElse (Equality.equal el 0) (Left "zero") (Right (Math.add acc el))) 0 [
+                  1,
+                  0,
+                  3])),
+                Testing.universalTestCaseExpected = (\_ -> (\e -> ShowCore.either (\s -> Literals.showString s) (\n -> Literals.showInt32 n) e) (Left "zero"))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "fold empty list",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> (\e -> ShowCore.either (\s -> Literals.showString s) (\n -> Literals.showInt32 n) e) (Eithers.foldl (\acc -> \el -> Logic.ifElse (Equality.equal el 0) (Left "zero") (Right (Math.add acc el))) 0 [])),
+                Testing.universalTestCaseExpected = (\_ -> (\e -> ShowCore.either (\s -> Literals.showString s) (\n -> Literals.showInt32 n) e) (Right 0))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -413,6 +446,41 @@ allTests =
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (\_ -> (\e -> ShowCore.either (\s -> Literals.showString s) (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) e) (Eithers.mapOptional (\x -> Logic.ifElse (Equality.equal x 0) (Left "zero") (Right (Math.mul x 2))) Nothing)),
                 Testing.universalTestCaseExpected = (\_ -> (\e -> ShowCore.either (\s -> Literals.showString s) (\mx -> ShowCore.optional (\n -> Literals.showInt32 n) mx) e) (Right Nothing))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []}]},
+        Testing.TestGroup {
+          Testing.testGroupName = "mapSet",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = [
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "all succeed",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> (\e -> ShowCore.either (\n -> Literals.showInt32 n) (\s -> ShowCore.set (\n -> Literals.showInt32 n) s) e) (Eithers.mapSet (\x -> Logic.ifElse (Equality.equal x 0) (Left (-1)) (Right (Math.mul x 2))) (S.fromList [
+                  1,
+                  2,
+                  3]))),
+                Testing.universalTestCaseExpected = (\_ -> (\e -> ShowCore.either (\n -> Literals.showInt32 n) (\s -> ShowCore.set (\n -> Literals.showInt32 n) s) e) (Right (S.fromList [
+                  2,
+                  4,
+                  6])))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "one fails",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> (\e -> ShowCore.either (\n -> Literals.showInt32 n) (\s -> ShowCore.set (\n -> Literals.showInt32 n) s) e) (Eithers.mapSet (\x -> Logic.ifElse (Equality.equal x 0) (Left (-1)) (Right (Math.mul x 2))) (S.fromList [
+                  0,
+                  1,
+                  3]))),
+                Testing.universalTestCaseExpected = (\_ -> (\e -> ShowCore.either (\n -> Literals.showInt32 n) (\s -> ShowCore.set (\n -> Literals.showInt32 n) s) e) (Left (-1)))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "empty set",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> (\e -> ShowCore.either (\n -> Literals.showInt32 n) (\s -> ShowCore.set (\n -> Literals.showInt32 n) s) e) (Eithers.mapSet (\x -> Logic.ifElse (Equality.equal x 0) (Left (-1)) (Right (Math.mul x 2))) S.empty)),
+                Testing.universalTestCaseExpected = (\_ -> (\e -> ShowCore.either (\n -> Literals.showInt32 n) (\s -> ShowCore.set (\n -> Literals.showInt32 n) s) e) (Right S.empty))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}

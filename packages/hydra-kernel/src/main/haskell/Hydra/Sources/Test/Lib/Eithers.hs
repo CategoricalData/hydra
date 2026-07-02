@@ -17,6 +17,7 @@ import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
+import qualified Data.Set                     as S
 
 -- Additional imports specific to this file
 import Hydra.Testing
@@ -26,6 +27,7 @@ import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Logic as Logic
 import qualified Hydra.Dsl.Lib.Math as Math
 import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Dsl.Lib.Sets as Sets
 import qualified Hydra.Dsl.Lib.Strings as Strings
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
@@ -57,6 +59,12 @@ showEitherIntString = Phantoms.lambda "e" $ ShowCore.either_ @@ showInt32 @@ sho
 showEitherStringIntList :: TypedTerm (Either String [Int] -> String)
 showEitherStringIntList = Phantoms.lambda "e" $ ShowCore.either_ @@ showStr @@ showIntList @@ Phantoms.var "e"
 
+showEitherIntIntSet :: TypedTerm (Either Int (S.Set Int) -> String)
+showEitherIntIntSet = Phantoms.lambda "e" $ ShowCore.either_ @@ showInt32 @@ showIntSet @@ Phantoms.var "e"
+
+showEitherStringInt :: TypedTerm (Either String Int -> String)
+showEitherStringInt = Phantoms.lambda "e" $ ShowCore.either_ @@ showStr @@ showInt32 @@ Phantoms.var "e"
+
 showEitherStringMaybeInt :: TypedTerm (Either String (Maybe Int) -> String)
 showEitherStringMaybeInt = Phantoms.lambda "e" $ ShowCore.either_ @@ showStr @@ showMaybeInt @@ Phantoms.var "e"
 
@@ -65,6 +73,9 @@ showInt32 = Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")
 
 showIntList :: TypedTerm ([Int] -> String)
 showIntList = Phantoms.lambda "xs" $ ShowCore.list_ @@ showInt32 @@ Phantoms.var "xs"
+
+showIntSet :: TypedTerm (S.Set Int -> String)
+showIntSet = Phantoms.lambda "s" $ ShowCore.set_ @@ showInt32 @@ Phantoms.var "s"
 
 showMaybeInt :: TypedTerm (Maybe Int -> String)
 showMaybeInt = Phantoms.lambda "mx" $ ShowCore.optional_ @@ showInt32 @@ Phantoms.var "mx"
@@ -102,12 +113,14 @@ allTests = definitionInModule module_ "allTests" $
       eithersFromLeft,
       eithersFromRight,
       eithersEither,
+      eithersFoldl,
       eithersLefts,
       eithersRights,
       eithersPartitionEithers,
       eithersMap,
       eithersMapList,
-      eithersMapOptional]
+      eithersMapOptional,
+      eithersMapSet]
 
 eithersBimap :: TypedTerm TestGroup
 eithersBimap = subgroup "bimap" [
@@ -146,6 +159,20 @@ eithersEither = subgroup "either" [
         (Phantoms.lambda "s" $ Strings.length (Phantoms.var "s"))
         x)
       (Phantoms.int32 result)
+
+eithersFoldl :: TypedTerm TestGroup
+eithersFoldl = subgroup "foldl" [
+  test "fold succeeds on all elements" [1, 2, 3] (Phantoms.right (Phantoms.int32 6)),
+  test "fold short-circuits on failure" [1, 0, 3] (Phantoms.left (Phantoms.string "zero")),
+  test "fold empty list" [] (Phantoms.right (Phantoms.int32 0))]
+  where
+    stepFn = Phantoms.lambda "acc" $ Phantoms.lambda "el" $
+      Logic.ifElse (Equality.equal (Phantoms.var "el") (Phantoms.int32 0))
+        (Phantoms.left (Phantoms.string "zero"))
+        (Phantoms.right (Math.add (Phantoms.var "acc") (Phantoms.var "el")))
+    test name input expected = evalPair name showEitherStringInt
+      (Eithers.foldl stepFn (Phantoms.int32 0) (Phantoms.list (Phantoms.int32 <$> input)))
+      expected
 
 eithersFromLeft :: TypedTerm TestGroup
 eithersFromLeft = subgroup "fromLeft" [
@@ -231,6 +258,21 @@ eithersMapOptional = subgroup "mapOptional" [
         (Phantoms.right (Math.mul (Phantoms.var "x") (Phantoms.int32 2)))
     test name input expected = evalPair name showEitherStringMaybeInt
       (Eithers.mapOptional mapFn input)
+      expected
+
+eithersMapSet :: TypedTerm TestGroup
+eithersMapSet = subgroup "mapSet" [
+  test "all succeed" [1, 2, 3] (Phantoms.right (pIntSet [2, 4, 6])),
+  test "one fails" [1, 0, 3] (Phantoms.left (Phantoms.int32 (-1))),
+  test "empty set" [] (Phantoms.right (pIntSet []))]
+  where
+    pIntSet xs = Phantoms.set (Phantoms.int32 <$> xs)
+    mapFn = Phantoms.lambda "x" $
+      Logic.ifElse (Equality.equal (Phantoms.var "x") (Phantoms.int32 0))
+        (Phantoms.left (Phantoms.int32 (-1)))
+        (Phantoms.right (Math.mul (Phantoms.var "x") (Phantoms.int32 2)))
+    test name input expected = evalPair name showEitherIntIntSet
+      (Eithers.mapSet mapFn (pIntSet input))
       expected
 
 eithersPartitionEithers :: TypedTerm TestGroup
