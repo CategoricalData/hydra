@@ -25,7 +25,7 @@ import java.util.function.Function;
  * <p>These methods reference every target language's coder
  * ({@code hydra.{haskell,python,scala,typeScript,lisp}.Coder}), so they only
  * compile against the full local {@code dist/java} tree — NOT against a
- * Java-only published-host classpath ({@code net.fortytwo.hydra:hydra-java}).
+ * Java-only published-host classpath ({@code net.fortytwo.hydra.java:hydra-java}).
  * They were split out of {@link Generation} (#370) precisely so the DSL→JSON
  * driver in {@code Generation}/{@link UpdateJavaJson} can compile and run against
  * the published Java host alone, with no local cross-target build.</p>

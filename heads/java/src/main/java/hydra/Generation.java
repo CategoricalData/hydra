@@ -388,7 +388,7 @@ public class Generation {
     // moved to GenerationTargets (#370). They reference every target coder and so
     // only compile against the full local dist/java tree; keeping them out of
     // Generation lets the DSL->JSON driver here compile against the published
-    // Java host (net.fortytwo.hydra:hydra-java) alone.
+    // Java host (net.fortytwo.hydra.java:hydra-java) alone.
 
     /**
      * Convert a module name to a file path.
