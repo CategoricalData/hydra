@@ -17,16 +17,15 @@ dependencies (runtime + test); requires-python, the build backend, and namespace
 configuration are emitted uniformly by the generic per-package generator.
 """
 
-from hydra.core import Name, Type, TypeScheme
+from hydra.core import Type
 from hydra.overlay.python.dsl.python import Given, None_
 from hydra.packaging import (EntityMetadata,
     DefinitionType,
     Module,
     ModuleName,
-    TypeDefinition,
 )
 
-from hydra.sources.python._source_dsl import unqualified_dep
+from hydra.sources.python._source_dsl import make_type_def, type_ref, unqualified_dep
 import hydra.overlay.python.dsl.types as T
 
 
@@ -35,20 +34,15 @@ PACKAGING_NS = ModuleName("hydra.packaging")
 DEPENDENCIES = [unqualified_dep(PACKAGING_NS)]
 DESCRIPTION = "Build configuration for PEP 621 (pyproject.toml) Python distribution packages."
 
+# The rich field docs live on the Java hydra.gradle analog; this module leaves the
+# type structure undecorated (the Python type-codegen path does not tolerate a
+# doc-annotated TypeScheme body).
+_def = make_type_def(NS)
+
 
 def _packaging(local: str) -> Type:
     """Reference to a type in hydra.packaging: hydra.packaging.<local>."""
-    return T.variable(f"hydra.packaging.{local}")
-
-
-def _def(local_name: str, typ: Type) -> DefinitionType:
-    """A type definition. Mirrors syntax.py: wrap the bare type in a monomorphic
-    TypeScheme. The Python type-codegen path does not tolerate a doc-annotated
-    TypeScheme body (the rich field docs live on the Java hydra.gradle analog),
-    so this module leaves the type structure undecorated."""
-    name = Name(f"{NS.value}.{local_name}")
-    ts = TypeScheme((), typ, None_())
-    return DefinitionType(TypeDefinition(name, None_(), ts))
+    return type_ref(PACKAGING_NS, local)
 
 
 def _pyProjectBuildConfiguration() -> DefinitionType:

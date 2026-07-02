@@ -13,9 +13,10 @@ Conventions:
 
 from hydra.overlay.python.dsl.meta.phantoms import *  # noqa: F401,F403
 from hydra.overlay.python.dsl.python import None_
-from hydra.core import Name
-from hydra.packaging import ModuleDependency, ModuleName
+from hydra.core import Name, Type, TypeScheme
+from hydra.packaging import DefinitionType, ModuleDependency, ModuleName, TypeDefinition
 import hydra.dsl.python.syntax as PySyn
+import hydra.overlay.python.dsl.types as T
 
 
 def unqualified_dep(module: ModuleName) -> ModuleDependency:
@@ -61,6 +62,42 @@ def make_local(ns_str: str):
     """
     prefix = ns_str + "."
     return lambda local_name: var(prefix + local_name)
+
+
+def type_ref(ns: ModuleName, local: str) -> Type:
+    """A namespace-qualified TypeVariable reference: `<ns>.<local>`.
+
+    The type-level analogue of `make_local`'s `var("<ns>.<local>")`. Type-defining
+    source modules typically wrap this with a thinner per-namespace helper, e.g.:
+
+        def _py(local):  # in syntax.py
+            return type_ref(ModuleName("hydra.python.syntax"), local)
+    """
+    return T.variable(f"{ns.value}.{local}")
+
+
+def make_type_def(ns: ModuleName):
+    """Return a closure `(local_name, typ) -> DefinitionType` bound to `ns`.
+
+    The type-module analogue of `make_def` (which builds term `TypedBinding`s).
+    Wraps a bare `Type` in a monomorphic `TypeScheme` and names it `<ns>.<local>`.
+
+    Usage at the top of a type-defining source DSL module:
+
+        NS = ModuleName("hydra.python.syntax")
+        _def = make_type_def(NS)
+        ...
+        _def("Module", T.wrap(...))  # → DefinitionType(TypeDefinition(...))
+
+    Note: the Python type-codegen path does not tolerate a doc-annotated TypeScheme
+    body, so this leaves the type structure undecorated (field docs, where present,
+    live on the type itself rather than the scheme).
+    """
+    def _def(local_name: str, typ: Type) -> DefinitionType:
+        name = Name(f"{ns.value}.{local_name}")
+        ts = TypeScheme((), typ, None_())
+        return DefinitionType(TypeDefinition(name, None_(), ts))
+    return _def
 
 
 def ap(fun, *args):

@@ -4,16 +4,14 @@ Host-native DSL source (authoritative; the former Haskell copy was removed in #3
 Retrieved from https://docs.python.org/3/reference/grammar.html on 2024-12-22.
 """
 
-from hydra.core import Name, Type, TypeScheme
+from hydra.core import Type
 from hydra.overlay.python.dsl.python import Given, None_
-from hydra.packaging import (EntityMetadata, 
-    DefinitionType,
+from hydra.packaging import (EntityMetadata,
     Module,
     ModuleName,
-    TypeDefinition,
 )
 
-from hydra.sources.python._source_dsl import unqualified_dep
+from hydra.sources.python._source_dsl import make_type_def, type_ref, unqualified_dep
 import hydra.overlay.python.dsl.annotations as Annotations
 import hydra.overlay.python.dsl.types as T
 
@@ -25,16 +23,12 @@ DESCRIPTION = (
     "  https://docs.python.org/3.14/reference/grammar.html"
 )
 
+_def = make_type_def(NS)
+
 
 def _py(local: str) -> Type:
     """Reference to another type in this namespace: hydra.python.syntax.<local>."""
-    return T.variable(f"hydra.python.syntax.{local}")
-
-
-def _def(local_name: str, typ: Type) -> DefinitionType:
-    name = Name(f"{NS.value}.{local_name}")
-    ts = TypeScheme((), typ, None_())
-    return DefinitionType(TypeDefinition(name, None_(), ts))
+    return type_ref(NS, local)
 
 
 def _record(fields):
