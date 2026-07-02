@@ -259,6 +259,7 @@
     "hydra.variants",
     "hydra.yaml.model"],
   "manifestFormatVersion": 1,
+  "moduleFormatVersion": 1,
   "package": "hydra-kernel",
   "testModules": [
     "hydra.test.annotations",

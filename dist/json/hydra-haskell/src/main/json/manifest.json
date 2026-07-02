@@ -11,5 +11,6 @@
     "hydra.haskell.testing",
     "hydra.haskell.utils"],
   "manifestFormatVersion": 1,
+  "moduleFormatVersion": 1,
   "package": "hydra-haskell",
   "testModules": []}

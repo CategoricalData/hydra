@@ -42,5 +42,6 @@
     "hydra.validate.pg",
     "openGql.grammar"],
   "manifestFormatVersion": 1,
+  "moduleFormatVersion": 1,
   "package": "hydra-pg",
   "testModules": []}

@@ -8,5 +8,6 @@
     "hydra.typeScript.serde",
     "hydra.typeScript.syntax"],
   "manifestFormatVersion": 1,
+  "moduleFormatVersion": 1,
   "package": "hydra-typescript",
   "testModules": []}

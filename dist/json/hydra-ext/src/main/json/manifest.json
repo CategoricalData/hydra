@@ -84,5 +84,6 @@
     "hydra.yaml.language",
     "hydra.yaml.serde"],
   "manifestFormatVersion": 1,
+  "moduleFormatVersion": 1,
   "package": "hydra-ext",
   "testModules": []}
