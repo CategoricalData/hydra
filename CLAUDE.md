@@ -522,8 +522,19 @@ context usage. Keep it lean by following these principles:
   - **`docs/`**: contributor-facing procedural and implementation-level material — how to
     extend the kernel, regenerate code, debug a failing build, understand the build/cache
     system. Describes shipped behavior.
-  - **Outside the public documentation surface** (issues, branch plans, `docs/history/`):
-    sketches, in-flight proposals, exploration. Don't put any of these on the wiki.
+  - **`docs/history/`**: **actual** retrospective records only — post-mortems
+    of solved problems, one-shot investigations whose findings won't be revised.
+    Content must be settled, not in-flight.
+  - **Outside the public documentation surface** (GitHub issues, branch plans,
+    commit messages): sketches, in-flight proposals, exploration.
+- **Do NOT check provisional thinking into `docs/history/`.** A recurring
+  failure mode is drafting a 400-line survey mid-branch and committing it to
+  `docs/history/`, which freezes half-baked analysis into the repository
+  forever and makes it look authoritative to future readers. The right homes
+  for provisional thinking are: the ephemeral branch plan
+  (`<branch>-plan.md`, gitignored), a comment on the driving GitHub issue,
+  or the commit message that embodies the decision. `docs/history/` is for
+  retrospectives — after the fact, not during.
 - **Add to other docs first.** When new guidance is needed, put it in the most specific
   applicable document and add a link here only if the topic is common enough.
 - **Review before expanding.** Before adding content, check whether it's already reachable
