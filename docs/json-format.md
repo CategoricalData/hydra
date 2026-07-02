@@ -498,6 +498,7 @@ scanning the filesystem. Each array is sorted lexicographically by module name.
 | Field | Type | Meaning |
 |-------|------|---------|
 | `manifestFormatVersion` | integer | Schema version of this manifest file. Currently `1`. |
+| `moduleFormatVersion` | integer | JSON wire-format version used to encode every module file in this package. Currently `1`. External consumers and `bootstrap-from-json` compare this against the local kernel's expected version and fail loudly on mismatch. |
 | `package` | string | The package name (e.g. `hydra-rdf`). |
 | `mainModules` | array of string | Module names making up the package's main source set. |
 | `testModules` | array of string | Module names in the package's test source set (empty for most packages). |
@@ -510,6 +511,7 @@ Example (`mainModules` abbreviated):
   "dslModules": [],
   "mainModules": ["hydra.owl.syntax", "hydra.rdf.serde", "hydra.rdf.syntax"],
   "manifestFormatVersion": 1,
+  "moduleFormatVersion": 1,
   "package": "hydra-rdf",
   "testModules": []
 }
