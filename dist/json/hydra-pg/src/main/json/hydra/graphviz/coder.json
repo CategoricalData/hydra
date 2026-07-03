@@ -246,6 +246,9 @@
                   "key": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.lib.files"}}}},
                   "value": {"literal": {"string": "files"}}},
                 {
+                  "key": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.lib.hashing"}}}},
+                  "value": {"literal": {"string": "hashing"}}},
+                {
                   "key": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.lib.lists"}}}},
                   "value": {"literal": {"string": "lists"}}},
                 {
