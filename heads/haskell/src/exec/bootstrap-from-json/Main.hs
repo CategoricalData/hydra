@@ -68,7 +68,7 @@ import qualified Data.Set as S
 import Data.Time.Clock (getCurrentTime, diffUTCTime, UTCTime)
 import System.Directory (listDirectory, doesFileExist)
 import qualified System.Directory as SD
-import System.Environment (getArgs)
+import System.Environment (getArgs, lookupEnv)
 import System.Exit (exitFailure)
 import System.IO (hSetBuffering, BufferMode(NoBuffering), stdout)
 import qualified System.FilePath as FP
@@ -269,14 +269,27 @@ main = do
   -- and fail loud if it disagrees with the version this binary expects. A mismatch
   -- means the local kernel cannot safely decode the published package's data.
   -- Absence of the field (packages built before this check) is treated as version 1.
+  --
+  -- Shim exemption (#523/#415): a mode=shim build is a locally-built migration
+  -- shim, legitimately AHEAD of the last published host. Its artifacts carry a
+  -- moduleFormatVersion the published host doesn't know yet, so a skew here is
+  -- expected, not an error — exempt it. mode is read from HYDRA_GENERATION_MODE,
+  -- exported by the assembler alongside HYDRA_GENERATOR_STAMP (see
+  -- assemble-common.sh:export_generation_env). Absent/"published" ⇒ enforce.
+  generationMode <- lookupEnv "HYDRA_GENERATION_MODE"
+  let isShim = generationMode == Just "shim"
   let expectedFmtVer = round currentModuleFormatVersion :: Int
   mKernelFmtVer <- readManifestModuleFormatVersion kernelJsonDir
   case mKernelFmtVer of
-    Just v | v /= expectedFmtVer -> do
+    Just v | v /= expectedFmtVer && not isShim -> do
       putStrLn $ "bootstrap-from-json: moduleFormatVersion mismatch for hydra-kernel:"
         ++ " expected " ++ show expectedFmtVer ++ ", got " ++ show v
         ++ ". Upgrade the local kernel or pin an older host version."
       exitFailure
+    Just v | v /= expectedFmtVer && isShim ->
+      putStrLn $ "bootstrap-from-json: moduleFormatVersion skew for hydra-kernel"
+        ++ " (expected " ++ show expectedFmtVer ++ ", got " ++ show v
+        ++ ") — exempted (mode=shim, artifact legitimately ahead of last published host)."
     _ -> return ()
 
   -- Dependency order: baseline packages (hydra-kernel + hydra-haskell) are

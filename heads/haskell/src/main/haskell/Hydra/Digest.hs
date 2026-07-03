@@ -27,13 +27,19 @@ module Hydra.Digest (
     Digest(..),
     DigestEntry(..),
     DigestKind(..),
+    Generation(..),
+    GenerationMode(..),
     emptyDigest,
+    emptyGeneration,
     readDigestV2,
     writeDigestV2,
+    serializeDigestV2,
+    parseDigestV2,
     hashFileV2,
     digestsMatch,
     verifyOutputsExist,
     generatorStamp,
+    generationRecord,
     -- Shared orphan-reconcile helpers (used by digest-check and the JSON
     -- write path; see #393 / #405)
     listFilesRecursive,
@@ -524,12 +530,63 @@ data DigestEntry = DigestEntry
     , entryHash :: String  -- SHA-256 hex
     } deriving (Eq, Show)
 
+-- | Provenance class of a generated artifact (#413 / #523).
+--
+--   * 'ModePublished' — produced by a published, versioned host (the normal
+--     post-#370 path). 'genHydraVersion' carries the release version.
+--   * 'ModeShim' — produced by a locally-built migration shim (a
+--     backward-incompatible change the published host can't yet handle).
+--     'genHydraVersion' is omitted (a shim has no release); 'genRevision'
+--     is REQUIRED — the working-tree SHA is the shim's only precise identity.
+--
+-- The discriminator lets a debugger answer "did this come from a known
+-- release, or an unreleased local build?" and drives the #415 skew
+-- exemption: a 'ModeShim' artifact is legitimately ahead of the last
+-- published host's moduleFormatVersion.
+data GenerationMode = ModePublished | ModeShim
+    deriving (Eq, Ord, Show, Read)
+
+-- | Structured generation-provenance record (#413 / #523), replacing the
+-- flat generator stamp. Separates IDENTITY (gating) from PROVENANCE
+-- (informational).
+--
+-- INVARIANT (load-bearing): only 'genGeneratorId' gates freshness — it is
+-- the sole field consulted by 'digestsMatch' (via 'digestGenerator', which
+-- holds the same value). It is host-INDEPENDENT by design: self-hosting
+-- requires every host to produce byte-identical output, so the artifact's
+-- identity cannot depend on 'genHost'. Every OTHER field here is purely
+-- informational and MUST NOT gate: 'genTimestamp' varies across
+-- byte-identical rebuilds and 'genHost' varies across hosts that legitimately
+-- produce identical output, so gating on either would punish self-hosting.
+-- A second invariant ties the modes honest: @'genMode' == 'ModeShim'@ ⇒
+-- 'genRevision' is present (non-empty).
+--
+-- Field names match #413's table verbatim so a later promotion to a Hydra
+-- DSL type under @hydra.build.*@ (#416) is a mechanical lift.
+--
+-- 'genRevision' format: @<short-sha>@, with @-dirty@ appended when the
+-- worktree has uncommitted changes (e.g. @a6d4f26@ / @a6d4f26-dirty@).
+-- 'genTimestamp' format: ISO-8601 UTC.
+data Generation = Generation
+    { genGeneratorId  :: String            -- GATING: the cache key; = 'digestGenerator'
+    , genMode         :: GenerationMode    -- informational: published | shim
+    , genHost         :: String            -- informational: producing host ("haskell"|"java"|…)
+    , genHydraVersion :: Maybe String      -- informational: release version; omitted for shim
+    , genRevision     :: Maybe String      -- informational: <short-sha>[-dirty]; REQUIRED for shim
+    , genTimestamp    :: Maybe String       -- informational: ISO-8601 UTC; NON-deterministic
+    } deriving (Eq, Show)
+
+emptyGeneration :: Generation
+emptyGeneration = Generation "" ModePublished "" Nothing Nothing Nothing
+
 -- | A versioned digest for one sync step. Indexed by file path so that
 -- callers can mix file types freely.
 data Digest = Digest
     { digestInputs    :: M.Map FilePath DigestEntry
     , digestOutputs   :: M.Map FilePath DigestEntry
-    , digestGenerator :: String  -- generator stamp; see 'generatorStamp'
+    , digestGenerator :: String  -- generator stamp (= 'genGeneratorId'); see 'generatorStamp'.
+                                  -- This is the SOLE gating identity field (see 'digestsMatch').
+    , digestGeneration :: Generation  -- informational provenance (#413/#523); MUST NOT gate
     -- #347 transitive-invalidation fields, recorded at refresh time and
     -- compared at freshness-check time alongside per-namespace inputs:
     , digestRecordedSelfHash :: String  -- input package's selfHash
@@ -537,7 +594,7 @@ data Digest = Digest
     } deriving (Eq, Show)
 
 emptyDigest :: Digest
-emptyDigest = Digest M.empty M.empty "" "" M.empty
+emptyDigest = Digest M.empty M.empty "" emptyGeneration "" M.empty
 
 -- | Hash any file by content. Returns a DigestEntry with the given kind
 -- attached. Fails loudly if the file is missing — callers handle by
@@ -561,6 +618,60 @@ generatorStamp = do
     case mEnv of
       Right s | not (null s) -> return s
       _                      -> return "v0-unstamped"
+
+-- | Gather the full 'Generation' provenance record from the environment
+-- (#413 / #523). Extends the 'HYDRA_GENERATOR_STAMP' handshake: the shell
+-- assembler exports the informational fields alongside the gating stamp:
+--
+--   HYDRA_GENERATOR_STAMP          → 'genGeneratorId' (also 'digestGenerator')
+--   HYDRA_GENERATION_MODE          → 'genMode'         ("published" | "shim")
+--   HYDRA_GENERATION_HOST          → 'genHost'
+--   HYDRA_GENERATION_HYDRA_VERSION → 'genHydraVersion' (omitted when empty)
+--   HYDRA_GENERATION_REVISION      → 'genRevision'     (omitted when empty)
+--   HYDRA_GENERATION_TIMESTAMP     → 'genTimestamp'    (omitted when empty)
+--
+-- Fallbacks keep the legacy/unstamped path honest: unset MODE defaults to
+-- 'ModePublished'. The invariant @shim ⇒ revision present@ is enforced here:
+-- a 'ModeShim' record with no revision fails loudly rather than writing a
+-- dishonest artifact.
+generationRecord :: IO Generation
+generationRecord = do
+    gid  <- generatorStamp
+    -- Unset MODE defaults to published; any set value goes through the shared
+    -- 'stringToMode' (so "shim" ⇒ ModeShim, everything else ⇒ ModePublished).
+    mode <- fmap (maybe ModePublished stringToMode) (lookupEnv "HYDRA_GENERATION_MODE")
+    host <- fmap (Y.fromMaybe "") (lookupEnv "HYDRA_GENERATION_HOST")
+    ver  <- fmap nonEmpty (lookupEnv "HYDRA_GENERATION_HYDRA_VERSION")
+    rev  <- fmap nonEmpty (lookupEnv "HYDRA_GENERATION_REVISION")
+    ts   <- fmap nonEmpty (lookupEnv "HYDRA_GENERATION_TIMESTAMP")
+    CM.when (mode == ModeShim && Y.isNothing rev) $
+      error "generationRecord: mode=shim requires HYDRA_GENERATION_REVISION (invariant: shim ⇒ revision present)"
+    return Generation
+      { genGeneratorId  = gid
+      , genMode         = mode
+      , genHost         = host
+      , genHydraVersion = ver
+      , genRevision     = rev
+      , genTimestamp    = ts
+      }
+  where
+    lookupEnv k = do
+      r <- E.try (SE.getEnv k) :: IO (Either E.SomeException String)
+      return $ case r of
+        Right s -> Just s
+        Left _  -> Nothing
+    nonEmpty (Just s) | not (null s) = Just s
+    nonEmpty _                       = Nothing
+
+-- | Render a 'GenerationMode' to its wire string.
+modeToString :: GenerationMode -> String
+modeToString ModePublished = "published"
+modeToString ModeShim      = "shim"
+
+-- | Parse a wire string to a 'GenerationMode'; anything but "shim" → published.
+stringToMode :: String -> GenerationMode
+stringToMode "shim" = ModeShim
+stringToMode _      = ModePublished
 
 -- | Read a v2 digest from disk. Absent or malformed → emptyDigest.
 readDigestV2 :: FilePath -> IO Digest
@@ -586,21 +697,24 @@ writeDigestV2 path d = do
 --
 -- INVARIANT: this is an explicit ALLOWLIST of the fields that gate
 -- freshness. It must never become a whole-'Digest' equality (@a == b@) or
--- a hash of the serialized digest file. Any *informational* metadata we
--- add to the digest (e.g. a 'generation' record's host, timestamp, or
--- hydraVersion) must be OMITTED here, or it becomes gating. That would be
--- wrong: a timestamp varies across byte-identical rebuilds, and 'host'
--- varies across hosts that — by the self-hosting contract — produce
--- identical output, so gating on either causes spurious cache misses and
--- punishes self-hosting. A field gates iff it appears below; add a field
--- here only if it is deterministic AND content-determining.
+-- a hash of the serialized digest file. The 'digestGeneration' record's
+-- informational fields ('genMode', 'genHost', 'genHydraVersion',
+-- 'genRevision', 'genTimestamp') are DELIBERATELY absent below — only its
+-- 'genGeneratorId' gates, and that value already lives in 'digestGenerator'
+-- (compared here). Gating on any informational field would be wrong: a
+-- timestamp varies across byte-identical rebuilds, and 'genHost' varies
+-- across hosts that — by the self-hosting contract — produce identical
+-- output, so gating on either causes spurious cache misses and punishes
+-- self-hosting. A field gates iff it appears below; add a field here only
+-- if it is deterministic AND content-determining.
 digestsMatch :: Digest -> Digest -> Bool
 digestsMatch a b =
     digestInputs a == digestInputs b
       && digestOutputs a == digestOutputs b
-      && digestGenerator a == digestGenerator b
+      && digestGenerator a == digestGenerator b  -- gating id (= genGeneratorId)
       && digestRecordedSelfHash a == digestRecordedSelfHash b
       && digestRecordedDeps a == digestRecordedDeps b
+      -- NOTE: digestGeneration is intentionally NOT compared (informational).
 
 -- | For each output file recorded in the digest, verify the file
 -- exists on disk and hashes to the recorded value. Returns True iff
@@ -630,7 +744,15 @@ verifyOutputsExist d = do
 --   {
 --     "digestFormatVersion": 1,
 --     "moduleFormatVersion": 1,
---     "generator": "<stamp>",
+--     "generator": "<stamp>",            -- flat gating id (compat window; = generation.generatorId)
+--     "generation": {                    -- structured provenance (#413/#523)
+--       "generatorId": "<stamp>",        --   GATING (duplicates "generator")
+--       "mode": "published" | "shim",    --   informational
+--       "hydraVersion": "<ver>",         --   informational, optional (omitted for shim)
+--       "revision": "<sha>[-dirty]",     --   informational, optional (required for shim)
+--       "timestamp": "<iso8601-utc>",    --   informational, optional
+--       "host": "<lang>"                 --   informational
+--     },
 --     "inputs": {
 --       "<path>": { "kind": "DslSource", "hash": "<hex>" },
 --       ...
@@ -641,7 +763,9 @@ verifyOutputsExist d = do
 --     }
 --   }
 --
--- Parser is regex-based and recovers from formatting variations.
+-- Parser is regex-based and recovers from formatting variations. Both the
+-- flat "generator" and the "generation" object are read; a legacy digest with
+-- only the flat field still parses (its gating id maps to generation.generatorId).
 -- Unknown kinds round-trip as KindOther.
 ----------------------------------------------------------------------
 
@@ -650,8 +774,13 @@ serializeDigestV2 d = unlines $
     [ "{"
     , "  \"digestFormatVersion\": 1,"
     , "  \"moduleFormatVersion\": 1,"
+    -- Compat window: keep emitting the flat "generator" so a digest written
+    -- by this version still parses under the PREVIOUS reader (which only
+    -- knows the flat field). The new structured "generation" object carries
+    -- the same gating id plus informational provenance (#413/#523).
     , "  \"generator\": " ++ jsonString (digestGenerator d) ++ ","
     ]
+    ++ generationLines
     ++ selfHashLine
     ++ depHashLines
     ++ [ "  \"inputs\": {" ]
@@ -663,6 +792,25 @@ serializeDigestV2 d = unlines $
     , "}"
     ]
   where
+    -- The structured generation record (#413/#523). generatorId duplicates
+    -- the flat "generator" above (the gating id lives in both for the compat
+    -- window); mode/host are always emitted; hydraVersion/revision/timestamp
+    -- are optional (omitted when absent — e.g. hydraVersion for shim builds).
+    generationLines =
+      let g = digestGeneration d
+          optLine key = maybe [] (\v -> ["    " ++ jsonString key ++ ": " ++ jsonString v ++ ","])
+      in [ "  \"generation\": {"
+         , "    \"generatorId\": " ++ jsonString (genGeneratorId g) ++ ","
+         , "    \"mode\": " ++ jsonString (modeToString (genMode g)) ++ ","
+         ]
+         ++ optLine "hydraVersion" (genHydraVersion g)
+         ++ optLine "revision" (genRevision g)
+         ++ optLine "timestamp" (genTimestamp g)
+         -- host is the last member so it needs no trailing comma.
+         ++ [ "    \"host\": " ++ jsonString (genHost g)
+            , "  },"
+            ]
+
     -- #347 transitive fields: emit only when non-empty so legacy on-disk
     -- digests (no selfHash, no deps) and current ones round-trip cleanly.
     selfHashLine =
@@ -710,25 +858,42 @@ stringToKind _             = KindOther
 --   "<path>": { "kind": "<k>", "hash": "<h>" } in inputs/outputs sections
 parseDigestV2 :: String -> Digest
 parseDigestV2 s =
-    let -- Generator stamp is a top-level string.
-        genPat = "\"generator\"[[:space:]]*:[[:space:]]*\"([^\"]*)\"" :: String
-        gen    = case s RE.=~ genPat :: [[String]] of
-                   ((_:g:_):_) -> g
-                   _           -> ""
-        -- selfHash is also a top-level string (added by #347). Absent
-        -- on legacy digests; default to "".
-        selfPat = "\"selfHash\"[[:space:]]*:[[:space:]]*\"([^\"]*)\"" :: String
-        selfH   = case s RE.=~ selfPat :: [[String]] of
-                    ((_:h:_):_) -> h
-                    _           -> ""
-        -- depHash:<pkg> entries are flat top-level strings (the prefix
-        -- keeps them syntactically distinct from filepath inputs/outputs).
-        -- Restrict to the header region (before "inputs") so we don't
-        -- accidentally match anything appearing later.
+    let -- Restrict header-scoped scalar matches (generator, generation.*,
+        -- selfHash, depHash) to the region before "inputs" so a filepath in
+        -- inputs/outputs can never be mistaken for one of them.
         headerEnd = case findIndex "\"inputs\"" s of
                       Just i  -> i
                       Nothing -> length s
         header = take headerEnd s
+        -- A header-scoped scalar string field: capture the value of "<key>".
+        scalar key = case header RE.=~
+                          ("\"" ++ key ++ "\"[[:space:]]*:[[:space:]]*\"([^\"]*)\"" :: String)
+                          :: [[String]] of
+                       ((_:v:_):_) -> Just v
+                       _           -> Nothing
+        -- Generator stamp: prefer the structured generation.generatorId; fall
+        -- back to the flat "generator" for the compat window (digests written
+        -- by the pre-#523 version have only the flat field). Both map to the
+        -- same gating id, so an on-disk digest from either version stays green.
+        gen = Y.fromMaybe "" (scalar "generatorId" `orElse` scalar "generator")
+        -- The rest of the generation record (informational). mode defaults to
+        -- published when absent (legacy digests have no generation object).
+        -- NB: the read path deliberately does NOT re-validate the shim ⇒ revision
+        -- invariant — this parser is tolerant (recovers whatever is on disk); the
+        -- invariant is enforced write-side in 'generationRecord'.
+        generation = Generation
+          { genGeneratorId  = gen
+          , genMode         = maybe ModePublished stringToMode (scalar "mode")
+          , genHost         = Y.fromMaybe "" (scalar "host")
+          , genHydraVersion = scalar "hydraVersion"
+          , genRevision     = scalar "revision"
+          , genTimestamp    = scalar "timestamp"
+          }
+        -- selfHash is also a top-level string (added by #347). Absent
+        -- on legacy digests; default to "".
+        selfH   = Y.fromMaybe "" (scalar "selfHash")
+        -- depHash:<pkg> entries are flat top-level strings (the prefix
+        -- keeps them syntactically distinct from filepath inputs/outputs).
         depPat = "\"depHash:([^\"]+)\"[[:space:]]*:[[:space:]]*\"([^\"]*)\"" :: String
         depEntries = (header RE.=~ depPat) :: [[String]]
         deps    = M.fromList [(pkg, h) | (_:pkg:h:_) <- depEntries]
@@ -746,9 +911,13 @@ parseDigestV2 s =
         { digestInputs           = parseEntries inHalf
         , digestOutputs          = parseEntries outHalf
         , digestGenerator        = gen
+        , digestGeneration       = generation
         , digestRecordedSelfHash = selfH
         , digestRecordedDeps     = deps
         }
+  where
+    orElse (Just x) _ = Just x
+    orElse Nothing  y = y
 
 -- Split the digest text into the inputs region (everything up to and
 -- including the first `"outputs"` key) and the outputs region (after).
