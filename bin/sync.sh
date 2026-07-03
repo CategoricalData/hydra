@@ -302,7 +302,9 @@ if [ "$HASKELL_HOST_MODE" = "published" ]; then
         git -C "$HYDRA_ROOT" checkout -q -- \
             heads/haskell/package.yaml heads/haskell/stack.yaml 2>/dev/null || true
     }
-    trap _sync_restore_head_build_files EXIT
+    # bash EXIT traps replace rather than stack: re-include print_elapsed
+    # (registered above) so published mode keeps the elapsed-time summary.
+    trap '_sync_restore_head_build_files; print_elapsed' EXIT
 fi
 python3 "$HYDRA_ROOT/bin/lib/generate-head-haskell-build.py" --mode "$HASKELL_HOST_MODE"
 
