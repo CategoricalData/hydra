@@ -143,12 +143,15 @@ def register_files_primitives() -> dict[Name, Primitive]:
 
     primitives: dict[Name, Primitive] = {}
     primitives[def_files.append_file.name] = unsupported_effect_primitive(def_files.append_file)
+    primitives[def_files.copy.name] = unsupported_effect_primitive(def_files.copy)
     primitives[def_files.create_directory.name] = unsupported_effect_primitive(def_files.create_directory)
     primitives[def_files.exists.name] = unsupported_effect_primitive(def_files.exists)
     primitives[def_files.list_directory.name] = unsupported_effect_primitive(def_files.list_directory)
     primitives[def_files.read_file.name] = unsupported_effect_primitive(def_files.read_file)
+    primitives[def_files.remove_directory.name] = unsupported_effect_primitive(def_files.remove_directory)
     primitives[def_files.remove_file.name] = unsupported_effect_primitive(def_files.remove_file)
     primitives[def_files.rename.name] = unsupported_effect_primitive(def_files.rename)
+    primitives[def_files.status.name] = unsupported_effect_primitive(def_files.status)
     primitives[def_files.write_file.name] = unsupported_effect_primitive(def_files.write_file)
     return primitives
 

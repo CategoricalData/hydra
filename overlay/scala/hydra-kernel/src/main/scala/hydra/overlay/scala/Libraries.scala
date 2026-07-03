@@ -254,6 +254,7 @@ object Libraries:
   private def tEffect(t: Type): Type = Type.effect(t)
   private val tFilePath: Type = Type.variable("hydra.file.FilePath")
   private val tFileError: Type = Type.variable("hydra.error.file.FileError")
+  private val tFileStatus: Type = Type.variable("hydra.file.FileStatus")
   private val tCommand: Type = Type.variable("hydra.system.Command")
   private val tSystemError: Type = Type.variable("hydra.error.system.SystemError")
   private val tProcessResult: Type = Type.variable("hydra.system.ProcessResult")
@@ -1288,6 +1289,9 @@ object Libraries:
       // appendFile: FilePath -> binary -> effect<either<FileError, unit>>
       hydra.lib.files.appendFile.name -> mkPrim(hydra.lib.files.appendFile.name,
         tMono(tFun(tFilePath, tFun(tBinary, tEffect(tEither(tFileError, tUnit)))))),
+      // copy: boolean -> FilePath -> FilePath -> effect<either<FileError, unit>>
+      hydra.lib.files.copy.name -> mkPrim(hydra.lib.files.copy.name,
+        tMono(tFun(tBool, tFun(tFilePath, tFun(tFilePath, tEffect(tEither(tFileError, tUnit))))))),
       // createDirectory: boolean -> FilePath -> effect<either<FileError, unit>>
       hydra.lib.files.createDirectory.name -> mkPrim(hydra.lib.files.createDirectory.name,
         tMono(tFun(tBool, tFun(tFilePath, tEffect(tEither(tFileError, tUnit)))))),
@@ -1300,12 +1304,18 @@ object Libraries:
       // readFile: FilePath -> effect<either<FileError, binary>>
       hydra.lib.files.readFile.name -> mkPrim(hydra.lib.files.readFile.name,
         tMono(tFun(tFilePath, tEffect(tEither(tFileError, tBinary))))),
+      // removeDirectory: boolean -> FilePath -> effect<either<FileError, unit>>
+      hydra.lib.files.removeDirectory.name -> mkPrim(hydra.lib.files.removeDirectory.name,
+        tMono(tFun(tBool, tFun(tFilePath, tEffect(tEither(tFileError, tUnit)))))),
       // removeFile: FilePath -> effect<either<FileError, unit>>
       hydra.lib.files.removeFile.name -> mkPrim(hydra.lib.files.removeFile.name,
         tMono(tFun(tFilePath, tEffect(tEither(tFileError, tUnit))))),
       // rename: FilePath -> FilePath -> effect<either<FileError, unit>>
       hydra.lib.files.rename.name -> mkPrim(hydra.lib.files.rename.name,
         tMono(tFun(tFilePath, tFun(tFilePath, tEffect(tEither(tFileError, tUnit)))))),
+      // status: FilePath -> effect<either<FileError, FileStatus>>
+      hydra.lib.files.status.name -> mkPrim(hydra.lib.files.status.name,
+        tMono(tFun(tFilePath, tEffect(tEither(tFileError, tFileStatus))))),
       // writeFile: FilePath -> binary -> effect<either<FileError, unit>>
       hydra.lib.files.writeFile.name -> mkPrim(hydra.lib.files.writeFile.name,
         tMono(tFun(tFilePath, tFun(tBinary, tEffect(tEither(tFileError, tUnit)))))),

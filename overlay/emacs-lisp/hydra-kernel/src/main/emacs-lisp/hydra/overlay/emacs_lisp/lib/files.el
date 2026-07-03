@@ -70,6 +70,18 @@
           (write-region (string-as-unibyte (concat contents)) nil path t 'silent))
         nil))))
 
+;; copy :: Bool -> FilePath -> FilePath -> effect<Either<FileError, unit>>
+;; When recursive is true, source may be a directory whose entire tree is copied.
+(defvar hydra_overlay_emacs_lisp_lib_files_copy
+  (lambda (recursive)
+    (lambda (source)
+      (lambda (destination)
+        (hydra-files-with-error source
+          (if (and recursive (file-directory-p source))
+              (copy-directory source destination nil t nil)
+            (copy-file source destination t))
+          nil)))))
+
 ;; createDirectory :: Bool -> FilePath -> effect<Either<FileError, unit>>
 ;; recursive = mkdir -p (make-directory with PARENTS); non-recursive = plain mkdir, which signals
 ;; if the parent is missing (file-missing) or the directory already exists (file-already-exists).
@@ -108,6 +120,15 @@
         (insert-file-contents-literally path)
         (buffer-string)))))
 
+;; removeDirectory :: Bool -> FilePath -> effect<Either<FileError, unit>>
+;; When recursive is false this corresponds to POSIX rmdir: it fails unless empty.
+(defvar hydra_overlay_emacs_lisp_lib_files_remove_directory
+  (lambda (recursive)
+    (lambda (path)
+      (hydra-files-with-error path
+        (delete-directory path (and recursive t))
+        nil))))
+
 ;; removeFile :: FilePath -> effect<Either<FileError, unit>>
 (defvar hydra_overlay_emacs_lisp_lib_files_remove_file
   (lambda (path)
@@ -124,6 +145,37 @@
       (hydra-files-with-error source
         (rename-file source destination t)
         nil))))
+
+;; Emacs time value (any Lisp timestamp form: the legacy (HIGH LOW USEC PSEC) list,
+;; a (TICKS . HZ) cons, or a plain integer) -> hydra.time.Timespec. time-convert
+;; normalizes to a fixed nanosecond-denominator ratio regardless of Emacs version
+;; or the specific form file-attributes returns.
+(defun hydra-files-timespec (time)
+  (let* ((ns-pair (time-convert time 1000000000))
+         (ns-total (car ns-pair)))
+    (make-hydra_time_timespec
+     :seconds (floor ns-total 1000000000)
+     :nanoseconds (mod ns-total 1000000000))))
+
+;; status :: FilePath -> effect<Either<FileError, FileStatus>>
+;; Retrieve metadata about the file at path (POSIX stat). Symbolic links are followed
+;; (file-attributes on a symlink path with ID-FORMAT nil follows the link, matching stat()).
+(defvar hydra_overlay_emacs_lisp_lib_files_status
+  (lambda (path)
+    (hydra-files-with-error path
+      (let ((attrs (file-attributes path)))
+        (unless attrs
+          (signal 'file-missing (list "no such file or directory" path)))
+        (let ((file-type (nth 0 attrs)))
+          (make-hydra_file_file_status
+           :file_type (cond
+                       ((eq file-type t) (list :directory nil))
+                       ((stringp file-type) (list :link nil))
+                       (t (list :regular nil)))
+           :size (nth 7 attrs)
+           :modification_time (hydra-files-timespec (nth 5 attrs))
+           :access_time (list :given (hydra-files-timespec (nth 4 attrs)))
+           :status_change_time (list :given (hydra-files-timespec (nth 6 attrs)))))))))
 
 ;; writeFile :: FilePath -> binary -> effect<Either<FileError, unit>>
 (defvar hydra_overlay_emacs_lisp_lib_files_write_file

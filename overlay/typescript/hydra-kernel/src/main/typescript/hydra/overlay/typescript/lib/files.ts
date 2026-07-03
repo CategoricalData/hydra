@@ -12,7 +12,7 @@
 
 import * as fs from "node:fs";
 import type { Either } from "../../../runtime.js";
-import { Left, Right, Unit } from "../../../runtime.js";
+import { Left, Right, Unit, Given } from "../../../runtime.js";
 
 // Map a Node filesystem error to a FileError tagged variant by its `code`, mirroring
 // the Python errno classification in files.py:_classify.
@@ -42,6 +42,13 @@ export const appendFile = (path: any, contents: string): Either<any, any> =>
     return Unit;
   });
 
+// When recursive is true, source may be a directory whose entire tree is copied.
+export const copy = (recursive: boolean, source: any, destination: any): Either<any, any> =>
+  withFileError(source, () => {
+    fs.cpSync(source.value, destination.value, { recursive });
+    return Unit;
+  });
+
 export const createDirectory = (recursive: boolean, path: any): Either<any, any> =>
   withFileError(path, () => {
     fs.mkdirSync(path.value, { recursive });
@@ -58,6 +65,18 @@ export const listDirectory = (path: any): Either<any, readonly any[]> =>
 export const readFile = (path: any): Either<any, string> =>
   withFileError(path, () => fs.readFileSync(path.value).toString("base64"));
 
+// When recursive is false this corresponds to POSIX rmdir: it fails unless the directory
+// is empty (fs.rmdirSync has no recursive option in that mode, so we call it directly).
+export const removeDirectory = (recursive: boolean, path: any): Either<any, any> =>
+  withFileError(path, () => {
+    if (recursive) {
+      fs.rmSync(path.value, { recursive: true });
+    } else {
+      fs.rmdirSync(path.value);
+    }
+    return Unit;
+  });
+
 export const removeFile = (path: any): Either<any, any> =>
   withFileError(path, () => {
     fs.rmSync(path.value);
@@ -68,6 +87,35 @@ export const rename = (source: any, destination: any): Either<any, any> =>
   withFileError(source, () => {
     fs.renameSync(source.value, destination.value);
     return Unit;
+  });
+
+function fileType(stats: fs.Stats): any {
+  if (stats.isDirectory())     return { tag: "directory" };
+  if (stats.isSymbolicLink())  return { tag: "link" };
+  if (stats.isCharacterDevice()) return { tag: "character" };
+  if (stats.isBlockDevice())   return { tag: "block" };
+  if (stats.isFIFO())          return { tag: "fifo" };
+  if (stats.isSocket())        return { tag: "socket" };
+  return { tag: "regular" };
+}
+
+function timespec(ms: number): any {
+  const seconds = Math.floor(ms / 1000);
+  const nanoseconds = Math.round((ms - seconds * 1000) * 1_000_000);
+  return { seconds, nanoseconds };
+}
+
+// Retrieve metadata about the file at path (POSIX stat). Symbolic links are followed.
+export const status = (path: any): Either<any, any> =>
+  withFileError(path, () => {
+    const stats = fs.statSync(path.value);
+    return {
+      fileType: fileType(stats),
+      size: stats.size,
+      modificationTime: timespec(stats.mtimeMs),
+      accessTime: Given(timespec(stats.atimeMs)),
+      statusChangeTime: Given(timespec(stats.ctimeMs)),
+    };
   });
 
 // contents is binary (a base64-encoded string); decode to raw bytes before writing.

@@ -13,10 +13,13 @@ from collections.abc import Callable
 from typing import TypeVar
 import errno
 import os
+import shutil
+import stat
 
-from hydra.overlay.python.dsl.python import Either, Left, Right
+from hydra.overlay.python.dsl.python import Either, Given, Left, Right
 import hydra.file
 import hydra.error.file as file_error
+import hydra.time
 
 A = TypeVar("A")
 
@@ -53,6 +56,17 @@ def append_file(path: "hydra.file.FilePath", contents: bytes) -> Either["file_er
     return _with_file_error(path, go)
 
 
+def copy(recursive: bool, source: "hydra.file.FilePath", destination: "hydra.file.FilePath") -> Either["file_error.FileError", None]:
+    """Copy source to destination. If recursive, source may be a directory whose tree is copied."""
+    def go() -> None:
+        if recursive and os.path.isdir(source.value):
+            shutil.copytree(source.value, destination.value, dirs_exist_ok=True)
+        else:
+            shutil.copy2(source.value, destination.value)
+        return None
+    return _with_file_error(source, go)
+
+
 def create_directory(recursive: bool, path: "hydra.file.FilePath") -> Either["file_error.FileError", None]:
     """Create a directory. If recursive, create any missing parent directories as well."""
     def go() -> None:
@@ -83,6 +97,17 @@ def read_file(path: "hydra.file.FilePath") -> Either["file_error.FileError", byt
     return _with_file_error(path, go)
 
 
+def remove_directory(recursive: bool, path: "hydra.file.FilePath") -> Either["file_error.FileError", None]:
+    """Remove a directory. If recursive, remove its entire contents; otherwise it must be empty."""
+    def go() -> None:
+        if recursive:
+            shutil.rmtree(path.value)
+        else:
+            os.rmdir(path.value)
+        return None
+    return _with_file_error(path, go)
+
+
 def remove_file(path: "hydra.file.FilePath") -> Either["file_error.FileError", None]:
     """Remove a file."""
     def go() -> None:
@@ -97,6 +122,41 @@ def rename(source: "hydra.file.FilePath", destination: "hydra.file.FilePath") ->
         os.rename(source.value, destination.value)
         return None
     return _with_file_error(source, go)
+
+
+def _file_type(mode: int) -> "hydra.file.FileType":
+    if stat.S_ISDIR(mode):
+        return hydra.file.FileType.DIRECTORY
+    if stat.S_ISLNK(mode):
+        return hydra.file.FileType.LINK
+    if stat.S_ISCHR(mode):
+        return hydra.file.FileType.CHARACTER
+    if stat.S_ISBLK(mode):
+        return hydra.file.FileType.BLOCK
+    if stat.S_ISFIFO(mode):
+        return hydra.file.FileType.FIFO
+    if stat.S_ISSOCK(mode):
+        return hydra.file.FileType.SOCKET
+    return hydra.file.FileType.REGULAR
+
+
+def _timespec(seconds: float) -> "hydra.time.Timespec":
+    whole_seconds = int(seconds // 1)
+    nanoseconds = int(round((seconds - whole_seconds) * 1_000_000_000))
+    return hydra.time.Timespec(seconds=whole_seconds, nanoseconds=nanoseconds)
+
+
+def status(path: "hydra.file.FilePath") -> Either["file_error.FileError", "hydra.file.FileStatus"]:
+    """Retrieve metadata about the file at path (POSIX stat). Symbolic links are followed."""
+    def go() -> "hydra.file.FileStatus":
+        result = os.stat(path.value)
+        return hydra.file.FileStatus(
+            file_type=_file_type(result.st_mode),
+            size=result.st_size,
+            modification_time=_timespec(result.st_mtime),
+            access_time=Given(_timespec(result.st_atime)),
+            status_change_time=Given(_timespec(result.st_ctime)))
+    return _with_file_error(path, go)
 
 
 def write_file(path: "hydra.file.FilePath", contents: bytes) -> Either["file_error.FileError", None]:

@@ -179,12 +179,16 @@
         (bin (tc-binary))
         (fp (tc-named "hydra.file.FilePath"))
         (ferr (tc-named "hydra.error.file.FileError"))
+        (fstat (tc-named "hydra.file.FileStatus"))
         (unit (tc-unit)))
     (let ((eff (lambda (c) (tc-effect c))))
       (list
         (cons (prim-name hydra_lib_files_append_file)     (prim2 (prim-name hydra_lib_files_append_file)
                                                    hydra_overlay_common_lisp_lib_files_append_file
                                                    nil fp bin (funcall eff (tc-either ferr unit))))
+        (cons (prim-name hydra_lib_files_copy)            (prim3 (prim-name hydra_lib_files_copy)
+                                                   hydra_overlay_common_lisp_lib_files_copy
+                                                   nil bool fp fp (funcall eff (tc-either ferr unit))))
         (cons (prim-name hydra_lib_files_create_directory) (prim2 (prim-name hydra_lib_files_create_directory)
                                                    hydra_overlay_common_lisp_lib_files_create_directory
                                                    nil bool fp (funcall eff (tc-either ferr unit))))
@@ -197,12 +201,18 @@
         (cons (prim-name hydra_lib_files_read_file)       (prim1 (prim-name hydra_lib_files_read_file)
                                                    hydra_overlay_common_lisp_lib_files_read_file
                                                    nil fp (funcall eff (tc-either ferr bin))))
+        (cons (prim-name hydra_lib_files_remove_directory) (prim2 (prim-name hydra_lib_files_remove_directory)
+                                                   hydra_overlay_common_lisp_lib_files_remove_directory
+                                                   nil bool fp (funcall eff (tc-either ferr unit))))
         (cons (prim-name hydra_lib_files_remove_file)     (prim1 (prim-name hydra_lib_files_remove_file)
                                                    hydra_overlay_common_lisp_lib_files_remove_file
                                                    nil fp (funcall eff (tc-either ferr unit))))
         (cons (prim-name hydra_lib_files_rename)          (prim2 (prim-name hydra_lib_files_rename)
                                                    hydra_overlay_common_lisp_lib_files_rename
                                                    nil fp fp (funcall eff (tc-either ferr unit))))
+        (cons (prim-name hydra_lib_files_status)          (prim1 (prim-name hydra_lib_files_status)
+                                                   hydra_overlay_common_lisp_lib_files_status
+                                                   nil fp (funcall eff (tc-either ferr fstat))))
         (cons (prim-name hydra_lib_files_write_file)      (prim2 (prim-name hydra_lib_files_write_file)
                                                    hydra_overlay_common_lisp_lib_files_write_file
                                                    nil fp bin (funcall eff (tc-either ferr unit))))))))

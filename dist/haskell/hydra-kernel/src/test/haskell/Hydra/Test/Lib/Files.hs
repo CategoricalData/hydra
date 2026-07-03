@@ -37,6 +37,39 @@ allTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
+          Testing.testGroupName = "copy",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = [
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "copy duplicates a single file",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseEffectful (Testing.EffectfulTestCase {
+                Testing.effectfulTestCaseActual = (\_ -> Effects.bind (Files.writeFile (File.FilePath "/tmp/hydra-testing/cp-src.txt") (Literals.stringToBinary "Y29waWVk")) (\_w -> Effects.bind (Files.copy False (File.FilePath "/tmp/hydra-testing/cp-src.txt") (File.FilePath "/tmp/hydra-testing/cp-dst.txt")) (\_c -> Effects.map (\r -> Eithers.either (\_e -> "ERR") (\b -> Eithers.fromRight "<decode error>" (Text.decodeUtf8 b)) r) (Files.readFile (File.FilePath "/tmp/hydra-testing/cp-dst.txt"))))),
+                Testing.effectfulTestCaseExpected = (\_ -> "copied")})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "copy with recursive=true duplicates a directory tree",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseEffectful (Testing.EffectfulTestCase {
+                Testing.effectfulTestCaseActual = (\_ -> Effects.bind (Files.createDirectory False (File.FilePath "/tmp/hydra-testing/cp-dir")) (\_d -> Effects.bind (Files.writeFile (File.FilePath "/tmp/hydra-testing/cp-dir/inner.txt") (Literals.stringToBinary "bmVzdGVk")) (\_w -> Effects.bind (Files.copy True (File.FilePath "/tmp/hydra-testing/cp-dir") (File.FilePath "/tmp/hydra-testing/cp-dir-2")) (\_c -> Effects.map (\r -> Eithers.either (\_e -> "ERR") (\b -> Eithers.fromRight "<decode error>" (Text.decodeUtf8 b)) r) (Files.readFile (File.FilePath "/tmp/hydra-testing/cp-dir-2/inner.txt")))))),
+                Testing.effectfulTestCaseExpected = (\_ -> "nested")})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "copy with recursive=false on a directory yields an error",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseEffectful (Testing.EffectfulTestCase {
+                Testing.effectfulTestCaseActual = (\_ -> Effects.bind (Files.createDirectory False (File.FilePath "/tmp/hydra-testing/cp-src-dir")) (\_d -> Effects.map (\r -> Eithers.either (\_e -> "ERR") (\b -> "unexpected success") r) (Files.copy False (File.FilePath "/tmp/hydra-testing/cp-src-dir") (File.FilePath "/tmp/hydra-testing/cp-src-dir-copy")))),
+                Testing.effectfulTestCaseExpected = (\_ -> "ERR")})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "copy with recursive=true into an already-existing destination directory succeeds",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseEffectful (Testing.EffectfulTestCase {
+                Testing.effectfulTestCaseActual = (\_ -> Effects.bind (Files.createDirectory False (File.FilePath "/tmp/hydra-testing/cp-dir3")) (\_d1 -> Effects.bind (Files.writeFile (File.FilePath "/tmp/hydra-testing/cp-dir3/inner.txt") (Literals.stringToBinary "YWdhaW4=")) (\_w -> Effects.bind (Files.createDirectory False (File.FilePath "/tmp/hydra-testing/cp-dir3-dst")) (\_d2 -> Effects.bind (Files.copy True (File.FilePath "/tmp/hydra-testing/cp-dir3") (File.FilePath "/tmp/hydra-testing/cp-dir3-dst")) (\_c -> Effects.map (\r -> Eithers.either (\_e -> "ERR") (\b -> Eithers.fromRight "<decode error>" (Text.decodeUtf8 b)) r) (Files.readFile (File.FilePath "/tmp/hydra-testing/cp-dir3-dst/inner.txt"))))))),
+                Testing.effectfulTestCaseExpected = (\_ -> "again")})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []}]},
+        Testing.TestGroup {
           Testing.testGroupName = "createDirectory",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
@@ -92,6 +125,32 @@ allTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
+          Testing.testGroupName = "removeDirectory",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = [
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "removeDirectory with recursive=false removes an empty directory",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseEffectful (Testing.EffectfulTestCase {
+                Testing.effectfulTestCaseActual = (\_ -> Effects.bind (Files.createDirectory False (File.FilePath "/tmp/hydra-testing/rmdir-empty")) (\_d -> Effects.bind (Files.removeDirectory False (File.FilePath "/tmp/hydra-testing/rmdir-empty")) (\_r -> Effects.map (\r -> Eithers.either (\_e -> "ERR") (\b -> Literals.showBoolean b) r) (Files.exists (File.FilePath "/tmp/hydra-testing/rmdir-empty"))))),
+                Testing.effectfulTestCaseExpected = (\_ -> "false")})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "removeDirectory with recursive=false on a non-empty directory yields an error",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseEffectful (Testing.EffectfulTestCase {
+                Testing.effectfulTestCaseActual = (\_ -> Effects.bind (Files.createDirectory False (File.FilePath "/tmp/hydra-testing/rmdir-nonempty")) (\_d -> Effects.bind (Files.writeFile (File.FilePath "/tmp/hydra-testing/rmdir-nonempty/inner.txt") (Literals.stringToBinary "eA==")) (\_w -> Effects.map (\r -> Eithers.either (\_e -> "ERR") (\b -> "unexpected success") r) (Files.removeDirectory False (File.FilePath "/tmp/hydra-testing/rmdir-nonempty"))))),
+                Testing.effectfulTestCaseExpected = (\_ -> "ERR")})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "removeDirectory with recursive=true removes a populated directory",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseEffectful (Testing.EffectfulTestCase {
+                Testing.effectfulTestCaseActual = (\_ -> Effects.bind (Files.createDirectory False (File.FilePath "/tmp/hydra-testing/rmdir-full")) (\_d -> Effects.bind (Files.writeFile (File.FilePath "/tmp/hydra-testing/rmdir-full/inner.txt") (Literals.stringToBinary "eA==")) (\_w -> Effects.bind (Files.removeDirectory True (File.FilePath "/tmp/hydra-testing/rmdir-full")) (\_r -> Effects.map (\r -> Eithers.either (\_e -> "ERR") (\b -> Literals.showBoolean b) r) (Files.exists (File.FilePath "/tmp/hydra-testing/rmdir-full")))))),
+                Testing.effectfulTestCaseExpected = (\_ -> "false")})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []}]},
+        Testing.TestGroup {
           Testing.testGroupName = "removeFile",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],
@@ -113,6 +172,39 @@ allTests =
               Testing.testCaseWithMetadataCase = (Testing.TestCaseEffectful (Testing.EffectfulTestCase {
                 Testing.effectfulTestCaseActual = (\_ -> Effects.bind (Files.writeFile (File.FilePath "/tmp/hydra-testing/old.txt") (Literals.stringToBinary "bW92ZWQ=")) (\_w -> Effects.bind (Files.rename (File.FilePath "/tmp/hydra-testing/old.txt") (File.FilePath "/tmp/hydra-testing/new.txt")) (\_r -> Effects.map (\r -> Eithers.either (\_e -> "ERR") (\b -> Eithers.fromRight "<decode error>" (Text.decodeUtf8 b)) r) (Files.readFile (File.FilePath "/tmp/hydra-testing/new.txt"))))),
                 Testing.effectfulTestCaseExpected = (\_ -> "moved")})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []}]},
+        Testing.TestGroup {
+          Testing.testGroupName = "status",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = [
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "status reports the type and size of a regular file",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseEffectful (Testing.EffectfulTestCase {
+                Testing.effectfulTestCaseActual = (\_ -> Effects.bind (Files.writeFile (File.FilePath "/tmp/hydra-testing/stat.txt") (Literals.stringToBinary "MTIzNDU=")) (\_w -> Effects.map (\r -> Eithers.either (\_e -> "ERR") (\s -> Literals.showInt64 (File.fileStatusSize s)) r) (Files.status (File.FilePath "/tmp/hydra-testing/stat.txt")))),
+                Testing.effectfulTestCaseExpected = (\_ -> "5")})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "status reports directory as the file type",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseEffectful (Testing.EffectfulTestCase {
+                Testing.effectfulTestCaseActual = (\_ -> Effects.bind (Files.createDirectory False (File.FilePath "/tmp/hydra-testing/stat-dir")) (\_d -> Effects.map (\r -> Eithers.either (\_e -> "ERR") (\s -> case (File.fileStatusFileType s) of
+                  File.FileTypeBlock -> "block"
+                  File.FileTypeCharacter -> "character"
+                  File.FileTypeDirectory -> "directory"
+                  File.FileTypeFifo -> "fifo"
+                  File.FileTypeRegular -> "regular"
+                  File.FileTypeLink -> "link"
+                  File.FileTypeSocket -> "socket") r) (Files.status (File.FilePath "/tmp/hydra-testing/stat-dir")))),
+                Testing.effectfulTestCaseExpected = (\_ -> "directory")})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "status on a missing path yields an error",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseEffectful (Testing.EffectfulTestCase {
+                Testing.effectfulTestCaseActual = (\_ -> Effects.map (\r -> Eithers.either (\_e -> "ERR") (\s -> "unexpected success") r) (Files.status (File.FilePath "/tmp/hydra-testing/stat-missing.txt"))),
+                Testing.effectfulTestCaseExpected = (\_ -> "ERR")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}

@@ -58,12 +58,15 @@ allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Effectful test cases for hydra.lib.files primitives" $
     supergroup "hydra.lib.files primitives" [
       filesAppendFile,
+      filesCopy,
       filesCreateDirectory,
       filesExists,
       filesListDirectory,
       filesReadWrite,
+      filesRemoveDirectory,
       filesRemoveFile,
-      filesRename]
+      filesRename,
+      filesStatus]
 
 -- Fold an effect<either<FileError, T>> into an effect<string> via the eithers eliminator, with the
 -- right branch passed through a (T -> string) function and the left branch rendered as "ERR".
@@ -127,6 +130,50 @@ filesExists = subgroup "exists" [
             (primitive DefFiles.exists @@ path "there.txt")))
     (string "true")]
 
+-- copy: a file, then a directory tree.
+filesCopy :: TypedTerm TestGroup
+filesCopy = subgroup "copy" [
+  effectfulCase "copy duplicates a single file"
+    (primitive DefEffects.bind
+      @@ (primitive DefFiles.writeFile @@ path "cp-src.txt" @@ bytes "copied")
+      @@ (lambda "_w" $ primitive DefEffects.bind
+            @@ (primitive DefFiles.copy @@ false @@ path "cp-src.txt" @@ path "cp-dst.txt")
+            @@ (lambda "_c" $ foldEither
+                  (lambda "b" $ decodeBytes (var "b"))
+                  (primitive DefFiles.readFile @@ path "cp-dst.txt"))))
+    (string "copied"),
+  effectfulCase "copy with recursive=true duplicates a directory tree"
+    (primitive DefEffects.bind
+      @@ (primitive DefFiles.createDirectory @@ false @@ path "cp-dir")
+      @@ (lambda "_d" $ primitive DefEffects.bind
+            @@ (primitive DefFiles.writeFile @@ path "cp-dir/inner.txt" @@ bytes "nested")
+            @@ (lambda "_w" $ primitive DefEffects.bind
+                  @@ (primitive DefFiles.copy @@ true @@ path "cp-dir" @@ path "cp-dir-2")
+                  @@ (lambda "_c" $ foldEither
+                        (lambda "b" $ decodeBytes (var "b"))
+                        (primitive DefFiles.readFile @@ path "cp-dir-2/inner.txt")))))
+    (string "nested"),
+  effectfulCase "copy with recursive=false on a directory yields an error"
+    (primitive DefEffects.bind
+      @@ (primitive DefFiles.createDirectory @@ false @@ path "cp-src-dir")
+      @@ (lambda "_d" $ foldEither
+            (lambda "b" $ string "unexpected success")
+            (primitive DefFiles.copy @@ false @@ path "cp-src-dir" @@ path "cp-src-dir-copy")))
+    (string "ERR"),
+  effectfulCase "copy with recursive=true into an already-existing destination directory succeeds"
+    (primitive DefEffects.bind
+      @@ (primitive DefFiles.createDirectory @@ false @@ path "cp-dir3")
+      @@ (lambda "_d1" $ primitive DefEffects.bind
+            @@ (primitive DefFiles.writeFile @@ path "cp-dir3/inner.txt" @@ bytes "again")
+            @@ (lambda "_w" $ primitive DefEffects.bind
+                  @@ (primitive DefFiles.createDirectory @@ false @@ path "cp-dir3-dst")
+                  @@ (lambda "_d2" $ primitive DefEffects.bind
+                        @@ (primitive DefFiles.copy @@ true @@ path "cp-dir3" @@ path "cp-dir3-dst")
+                        @@ (lambda "_c" $ foldEither
+                              (lambda "b" $ decodeBytes (var "b"))
+                              (primitive DefFiles.readFile @@ path "cp-dir3-dst/inner.txt"))))))
+    (string "again")]
+
 -- createDirectory then exists.
 filesCreateDirectory :: TypedTerm TestGroup
 filesCreateDirectory = subgroup "createDirectory" [
@@ -148,6 +195,39 @@ filesListDirectory = subgroup "listDirectory" [
             (lambda "entries" $ primitive DefLiterals.showInt32 @@ (primitive DefLists.length @@ var "entries"))
             (primitive DefFiles.listDirectory @@ wrap File._FilePath (string testDir))))
     (string "1")]
+
+-- removeDirectory: an empty directory with recursive=false, then a populated one with recursive=true.
+filesRemoveDirectory :: TypedTerm TestGroup
+filesRemoveDirectory = subgroup "removeDirectory" [
+  effectfulCase "removeDirectory with recursive=false removes an empty directory"
+    (primitive DefEffects.bind
+      @@ (primitive DefFiles.createDirectory @@ false @@ path "rmdir-empty")
+      @@ (lambda "_d" $ primitive DefEffects.bind
+            @@ (primitive DefFiles.removeDirectory @@ false @@ path "rmdir-empty")
+            @@ (lambda "_r" $ foldEither
+                  (lambda "b" $ primitive DefLiterals.showBoolean @@ var "b")
+                  (primitive DefFiles.exists @@ path "rmdir-empty"))))
+    (string "false"),
+  effectfulCase "removeDirectory with recursive=false on a non-empty directory yields an error"
+    (primitive DefEffects.bind
+      @@ (primitive DefFiles.createDirectory @@ false @@ path "rmdir-nonempty")
+      @@ (lambda "_d" $ primitive DefEffects.bind
+            @@ (primitive DefFiles.writeFile @@ path "rmdir-nonempty/inner.txt" @@ bytes "x")
+            @@ (lambda "_w" $ foldEither
+                  (lambda "b" $ string "unexpected success")
+                  (primitive DefFiles.removeDirectory @@ false @@ path "rmdir-nonempty"))))
+    (string "ERR"),
+  effectfulCase "removeDirectory with recursive=true removes a populated directory"
+    (primitive DefEffects.bind
+      @@ (primitive DefFiles.createDirectory @@ false @@ path "rmdir-full")
+      @@ (lambda "_d" $ primitive DefEffects.bind
+            @@ (primitive DefFiles.writeFile @@ path "rmdir-full/inner.txt" @@ bytes "x")
+            @@ (lambda "_w" $ primitive DefEffects.bind
+                  @@ (primitive DefFiles.removeDirectory @@ true @@ path "rmdir-full")
+                  @@ (lambda "_r" $ foldEither
+                        (lambda "b" $ primitive DefLiterals.showBoolean @@ var "b")
+                        (primitive DefFiles.exists @@ path "rmdir-full")))))
+    (string "false")]
 
 -- removeFile then exists is false.
 filesRemoveFile :: TypedTerm TestGroup
@@ -174,3 +254,39 @@ filesRename = subgroup "rename" [
                   (lambda "b" $ decodeBytes (var "b"))
                   (primitive DefFiles.readFile @@ path "new.txt"))))
     (string "moved")]
+
+-- Render a hydra.file.FileType as a short string, for comparison in status test cases.
+showFileType :: TypedTerm (File.FileType -> String)
+showFileType = match File._FileType Nothing [
+  File._FileType_block >>: lambda "_x" (string "block"),
+  File._FileType_character >>: lambda "_x" (string "character"),
+  File._FileType_directory >>: lambda "_x" (string "directory"),
+  File._FileType_fifo >>: lambda "_x" (string "fifo"),
+  File._FileType_regular >>: lambda "_x" (string "regular"),
+  File._FileType_link >>: lambda "_x" (string "link"),
+  File._FileType_socket >>: lambda "_x" (string "socket")]
+
+-- status: file type and size for a regular file, file type for a directory.
+filesStatus :: TypedTerm TestGroup
+filesStatus = subgroup "status" [
+  effectfulCase "status reports the type and size of a regular file"
+    (primitive DefEffects.bind
+      @@ (primitive DefFiles.writeFile @@ path "stat.txt" @@ bytes "12345")
+      @@ (lambda "_w" $ foldEither
+            (lambda "s" $ primitive DefLiterals.showInt64 @@
+              (project File._FileStatus File._FileStatus_size @@ var "s"))
+            (primitive DefFiles.status @@ path "stat.txt")))
+    (string "5"),
+  effectfulCase "status reports directory as the file type"
+    (primitive DefEffects.bind
+      @@ (primitive DefFiles.createDirectory @@ false @@ path "stat-dir")
+      @@ (lambda "_d" $ foldEither
+            (lambda "s" $ showFileType @@
+              (project File._FileStatus File._FileStatus_fileType @@ var "s"))
+            (primitive DefFiles.status @@ path "stat-dir")))
+    (string "directory"),
+  effectfulCase "status on a missing path yields an error"
+    (foldEither
+      (lambda "s" $ string "unexpected success")
+      (primitive DefFiles.status @@ path "stat-missing.txt"))
+    (string "ERR")]
