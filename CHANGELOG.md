@@ -21,6 +21,34 @@ Development version. Opens the 0.17.x line — the first release built entirely 
 published 0.17.0 hosts (Hackage / PyPI / Maven Central), with the `hostOverrides` shims
 that were needed while 0.16.1 lacked the effect type and I/O primitives removed.
 
+### Fixed
+
+- **Lexicon generation** (`bin/regenerate-lexicon.sh`): the generator had been failing
+  silently since the encoder/decoder modules moved to in-memory synthesis
+  ([#448](https://github.com/CategoricalData/hydra/issues/448)) — the script masked the
+  failure and left a stale `docs/hydra-lexicon.txt` missing the four effectful primitive
+  libraries (`hydra.lib.{effects,files,system,text}`). The synthesized coder modules are
+  now included in the lexicon universe, the script fails loudly, and the regenerated
+  lexicon covers all 267 primitives across 17 library modules.
+- **`bin/prepare-release.sh`**: the non-blocking Java quality check invoked Gradle
+  subprojects (`:hydra-rdf4j:test` etc.) that were removed in
+  [#511](https://github.com/CategoricalData/hydra/issues/511), so it always warned without
+  checking anything; it now runs the `dist/java/hydra-pg` package tests (the current home
+  of the former binding tests).
+- **`.gitignore`**: the ignore rules for the overlaid hand-written Haskell runtime still
+  named pre-[#501](https://github.com/CategoricalData/hydra/issues/501) paths, so 41
+  duplicate copies under `dist/haskell/` had become tracked; the rules now match the
+  `Hydra/Overlay/` location and the duplicates are untracked.
+
+### Documentation
+
+- Corrected the 0.17.0 Maven coordinates throughout (Java artifacts publish under group
+  `net.fortytwo.hydra.java`, Scala under `net.fortytwo.hydra.scala`,
+  [#519](https://github.com/CategoricalData/hydra/issues/519)); added the npm and Scala
+  release channels to the README; added TypeScript/Scala/Lisp sections to Getting started;
+  repointed stale pre-#418/#501 DSL paths in the architecture docs; added GitHub issue and
+  PR templates.
+
 ---
 
 ## [0.17.0] - 2026-07-01
