@@ -11,9 +11,12 @@ This guide explains Hydra's domain-specific language (DSL) utilities for constru
 > Java coder sources at `packages/hydra-java/src/main/java/hydra/sources/` (post-#344). The **library
 > wrappers** are the *generated* modules `hydra.dsl.lib.*` (`Lists`, `Maps`, `Sets`, `Logic`, `Math_`,
 > `Optionals`, `Strings`, `Literals`, `Eithers`, `Pairs`, `Equality`, …), imported directly. The
-> domain-specific DSLs once sketched here (`Core`, `Graph`, `Compute`) were **never built and have been
-> removed from this guide**; authors reference kernel types via `Phantoms` + `Helpers` and the generated
-> `hydra.dsl.lib.*`. For full kernel-source authoring, use the Haskell DSL
+> hand-written *meta-level* domain DSLs once sketched here (a `hydra.dsl.meta.Core`/`Graph`/`Compute`
+> accessor layer) were **never built and have been removed from this guide**. Note this is distinct from
+> the *generated per-record constructor* DSLs `hydra.dsl.Core`/`hydra.dsl.Graph`/… (e.g.
+> `hydra.dsl.Core.lambda(...)`), which do exist and are covered under "Accessing kernel-type fields" below.
+> For typed field access in the coder sources, authors use `Phantoms` projections (`proj(...)`) + `Helpers`;
+> for primitive calls, the generated `hydra.dsl.lib.*`. For full kernel-source authoring, use the Haskell DSL
 > ([DSL Guide (Haskell)](dsl-guide.md)); the Java DSL covers Java-coder authoring only.
 
 **Note**: Hydra provides DSLs in all five implementation languages (Haskell, Java, Python, Scala, and Lisp).
@@ -51,7 +54,7 @@ Hydra-Java provides a layered DSL system for working with Hydra types and terms:
 | Layer | Module | Purpose |
 |-------|--------|---------|
 | **Direct DSLs** | `hydra.overlay.java.dsl.Types`, `hydra.overlay.java.dsl.Terms` | Raw construction of `Type` and `Term` instances |
-| **Phantom-typed DSL** | `hydra.overlay.java.dsl.meta.Phantoms` | Compile-time type safety via `TypedTerm<A>` phantom types |
+| **Phantom-typed DSL** | `hydra.overlay.java.dsl.meta.Phantoms` | `TypedTerm<A>` term construction; the phantom `A` documents intent (not a load-bearing check — see below) |
 | **Definition + helper layer** | `hydra.overlay.java.dsl.meta.Defs`, `hydra.overlay.java.dsl.Helpers` | `define`/`ref`, `typeref`/`typeDef`/`doc` for assembling modules |
 | **Library wrappers** | `hydra.dsl.lib.*` (generated) | Typed wrappers around Hydra primitives (lists, sets, maps, etc.) |
 
@@ -94,8 +97,17 @@ Term person = Terms.record(new Name("Person"),
 
 **Module**: `hydra.overlay.java.dsl.meta.Phantoms`
 
-Wraps raw `Term` construction with `TypedTerm<A>` phantom types for compile-time type safety.
-The phantom type parameter `A` tracks the Hydra type at the Java level.
+Wraps raw `Term` construction in a `TypedTerm<A>` whose phantom parameter `A` *names the intended*
+Hydra type at the Java level.
+
+> **On the phantom `A`:** it is documentation of intent, not a load-bearing type check. The DSL is a
+> meta-program that manipulates `Term` as data, so most builders are `<A> TypedTerm<A>` with `A`
+> unconstrained (it surfaces as `<?>`/`Object` at nearly every call site — see the many `TypedTerm<?>`
+> signatures in `Phantoms`). It gives near-zero compile-time safety today; treat it as a readable
+> annotation and **do not** write code that depends on `A` being accurate. This is a deliberate stance
+> (a usability review considered both making `A` real end-to-end and dropping it, and chose to leave the
+> signatures as-is): the meta-program never needs it, and threading real Hydra types through `A` would be
+> a large change for no functional gain.
 
 ```java
 import static hydra.overlay.java.dsl.meta.Phantoms.*;
@@ -105,9 +117,11 @@ TypedTerm<Integer> age = int32(30);
 TypedTerm<Object> identity = lambda("x", var("x"));
 ```
 
-For typed field access on kernel types, there is no separate "domain DSL" — author it with
-`Phantoms` projections (`proj(...)`) and the `hydra.overlay.java.dsl.Helpers` layer. See the
-host-native sources at `packages/hydra-java/src/main/java/hydra/sources/` for concrete examples.
+For typed field *access* on kernel types, there is no separate hand-written accessor "domain DSL" — the
+coder sources project with `Phantoms` (`proj(...)`) and the `hydra.overlay.java.dsl.Helpers` layer. (For
+*constructing* kernel records there are the generated `hydra.dsl.Core`/`Graph`/… constructor DSLs — see
+"Accessing kernel-type fields" below.) See the host-native sources at
+`packages/hydra-java/src/main/java/hydra/sources/` for concrete examples.
 
 ### 4. Library wrappers
 
