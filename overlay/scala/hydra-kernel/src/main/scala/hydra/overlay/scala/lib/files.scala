@@ -29,6 +29,20 @@ object files:
       ()
     }
 
+  /** Copy source to destination; when recursive, source may be a directory whose tree is copied. */
+  def copy(recursive: Boolean)(source: String)(destination: String): Either[FileError, Unit] =
+    withFileError(source) {
+      val sourcePath = Paths.get(source)
+      val destinationPath = Paths.get(destination)
+      if recursive && Files.isDirectory(sourcePath) then copyDirectoryRecursive(sourcePath, destinationPath)
+      else {
+        if Files.isDirectory(sourcePath) then
+          throw new _root_.java.nio.file.FileSystemException(source, null, "is a directory, but recursive is false")
+        Files.copy(sourcePath, destinationPath, _root_.java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+      }
+      ()
+    }
+
   /** Create a directory; when recursive, create missing parents (mkdir -p). */
   def createDirectory(recursive: Boolean)(path: String): Either[FileError, Unit] =
     withFileError(path) {
@@ -61,6 +75,13 @@ object files:
       java.util.Base64.getEncoder.encodeToString(Files.readAllBytes(Paths.get(path)))
     }
 
+  /** Remove a directory; when recursive, remove its entire contents (rm -r). */
+  def removeDirectory(recursive: Boolean)(path: String): Either[FileError, Unit] =
+    withFileError(path) {
+      if recursive then removeDirectoryRecursive(Paths.get(path)) else Files.delete(Paths.get(path))
+      ()
+    }
+
   /** Remove a file (POSIX unlink). */
   def removeFile(path: String): Either[FileError, Unit] =
     withFileError(path) {
@@ -75,6 +96,19 @@ object files:
       ()
     }
 
+  /** Retrieve metadata about the file at path (POSIX stat). Symbolic links are followed. */
+  def status(path: String): Either[FileError, hydra.file.FileStatus] =
+    withFileError(path) {
+      import java.nio.file.attribute.BasicFileAttributes
+      val attrs = Files.readAttributes(Paths.get(path), classOf[BasicFileAttributes])
+      hydra.file.FileStatus(
+        fileType(attrs),
+        attrs.size,
+        timespec(attrs.lastModifiedTime.toInstant),
+        Some(timespec(attrs.lastAccessTime.toInstant)),
+        None)
+    }
+
   /** Write binary contents (base64-encoded) as the complete contents of a file. */
   def writeFile(path: String)(contents: String): Either[FileError, Unit] =
     withFileError(path) {
@@ -83,6 +117,46 @@ object files:
     }
 
   // ---- Helpers (not primitives) ----
+
+  private def fileType(attrs: _root_.java.nio.file.attribute.BasicFileAttributes): hydra.file.FileType =
+    if attrs.isDirectory then hydra.file.FileType.directory
+    else if attrs.isSymbolicLink then hydra.file.FileType.link
+    else hydra.file.FileType.regular
+
+  private def timespec(instant: _root_.java.time.Instant): hydra.time.Timespec =
+    hydra.time.Timespec(instant.getEpochSecond, instant.getNano.toLong)
+
+  private def copyDirectoryRecursive(source: _root_.java.nio.file.Path, destination: _root_.java.nio.file.Path): Unit = {
+    import _root_.java.nio.file.{FileVisitResult, SimpleFileVisitor}
+    import _root_.java.nio.file.attribute.BasicFileAttributes
+    Files.walkFileTree(source, new SimpleFileVisitor[_root_.java.nio.file.Path] {
+      override def preVisitDirectory(dir: _root_.java.nio.file.Path, attrs: BasicFileAttributes): FileVisitResult = {
+        Files.createDirectories(destination.resolve(source.relativize(dir)))
+        FileVisitResult.CONTINUE
+      }
+      override def visitFile(file: _root_.java.nio.file.Path, attrs: BasicFileAttributes): FileVisitResult = {
+        Files.copy(file, destination.resolve(source.relativize(file)), _root_.java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+        FileVisitResult.CONTINUE
+      }
+    })
+    ()
+  }
+
+  private def removeDirectoryRecursive(path: _root_.java.nio.file.Path): Unit = {
+    import _root_.java.nio.file.{FileVisitResult, SimpleFileVisitor}
+    import _root_.java.nio.file.attribute.BasicFileAttributes
+    Files.walkFileTree(path, new SimpleFileVisitor[_root_.java.nio.file.Path] {
+      override def visitFile(file: _root_.java.nio.file.Path, attrs: BasicFileAttributes): FileVisitResult = {
+        Files.delete(file)
+        FileVisitResult.CONTINUE
+      }
+      override def postVisitDirectory(dir: _root_.java.nio.file.Path, exc: IOException): FileVisitResult = {
+        Files.delete(dir)
+        FileVisitResult.CONTINUE
+      }
+    })
+    ()
+  }
 
   /** Run a file-system action, translating any IOException into the appropriate FileError. */
   private def withFileError[T](path: String)(action: => T): Either[FileError, T] =

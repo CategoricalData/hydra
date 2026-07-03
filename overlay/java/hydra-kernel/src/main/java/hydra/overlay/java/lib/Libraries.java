@@ -119,12 +119,15 @@ public class Libraries {
     private static List<PrimitiveFunction> filesPrimitives() {
         return Arrays.asList(
                 new hydra.overlay.java.lib.files.AppendFile(),
+                new hydra.overlay.java.lib.files.Copy(),
                 new hydra.overlay.java.lib.files.CreateDirectory(),
                 new hydra.overlay.java.lib.files.Exists(),
                 new hydra.overlay.java.lib.files.ListDirectory(),
                 new hydra.overlay.java.lib.files.ReadFile(),
+                new hydra.overlay.java.lib.files.RemoveDirectory(),
                 new hydra.overlay.java.lib.files.RemoveFile(),
                 new hydra.overlay.java.lib.files.Rename(),
+                new hydra.overlay.java.lib.files.Status(),
                 new hydra.overlay.java.lib.files.WriteFile());
     }
 
