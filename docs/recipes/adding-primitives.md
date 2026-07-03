@@ -233,11 +233,11 @@ primitives exist, their signatures, and their default implementations.
 | Concern | Location |
 |---------|----------|
 | Universal primitive metadata (name, description, comments, type signature, purity flags, default implementation) | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/<Sub>.hs` |
-| Native Haskell implementation | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib/<Sub>.hs` (#418) |
-| Native Java implementation | `overlay/java/hydra-kernel/src/main/java/hydra/lib/<sub>/<FunctionName>.java` (#418) |
-| Native Python implementation | `overlay/python/hydra-kernel/src/main/python/hydra/python/lib/<sub>.py` (#473 — impls live at `hydra.<lang>.lib.*`) |
-| Host-side primitive registry (binds names to native impls) | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs` (Haskell, #473) and, per host, the registry in that host's runtime: `overlay/{java,python}/hydra-kernel/.../lib/Libraries.<ext>` for Java/Python (#418), `heads/<lang>/.../lib/Libraries.<ext>` for others |
-| Phantom-typed DSL wrappers (for writing Hydra source modules) | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Meta/Lib/<Sub>.hs` (#473) |
+| Native Haskell implementation | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib/<Sub>.hs` (post-#501 `hydra.overlay.haskell.*` namespace) |
+| Native Java implementation | `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib/<sub>/<FunctionName>.java` |
+| Native Python implementation | `overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/lib/<sub>.py` (#473 — impls live at `hydra.overlay.python.lib.*`) |
+| Host-side primitive registry (binds names to native impls) | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Libraries.hs` (Haskell, #473) and, per host, the registry in that host's overlay: `overlay/{java,python,scala,typescript}/hydra-kernel/.../overlay/<lang>/{lib,}/Libraries.<ext>`, and equivalent overlay paths for the four Lisp dialects |
+| Phantom-typed DSL wrappers (for writing Hydra source modules) | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/Typed/<Sub>.hs` (#473) |
 | Common test cases | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test/Lib/<Sub>.hs` |
 
 **Important:** the canonical metadata for every primitive — *including its name* — is the
@@ -377,7 +377,7 @@ bimap = defineWithDefault "bimap" "Map over both elements of a pair."
 The `TypeScheme`'s variable list must be in **declaration order** — the order
 the variables first appear in the body — **not alphabetical**. Hosts that
 re-register primitives by hand (e.g. `heads/typescript/.../lib/libraries.ts`,
-`overlay/java/hydra-kernel/.../lib/Libraries.java`) must follow the same order: kernel
+`overlay/java/hydra-kernel/.../overlay/java/lib/Libraries.java`) must follow the same order: kernel
 typeApps bind positionally to that list, and mis-ordering silently swaps
 domain and codomain in inferred lambda types. For example, `optionals.fromOptional :
 a → optional<a> → a` lists vars as `[a]`; a polymorphic primitive whose result
@@ -401,15 +401,15 @@ validator enforces this.
 
 #### Haskell
 
-Add the implementation in `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib/<Library>.hs` (#418):
+Add the implementation in `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib/<Library>.hs` (#418):
 
 ```haskell
--- Hydra/Haskell/Lib/Chars.hs
+-- Hydra/Overlay/Haskell/Lib/Chars.hs
 isAlphaNum :: Int -> Bool
 isAlphaNum = C.isAlphaNum . C.chr
 ```
 
-Then register it in `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs`:
+Then register it in `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Libraries.hs`:
 
 ```haskell
 hydraLibChars :: Library
@@ -497,7 +497,7 @@ default is used: each primitive is bound with `prim1` / `prim2` /
 #### Java
 
 Create the per-primitive class
-`overlay/java/hydra-kernel/src/main/java/hydra/lib/<library>/<FunctionName>.java` (#418):
+`overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib/<library>/<FunctionName>.java` (#418):
 
 ```java
 package hydra.lib.chars;
@@ -554,11 +554,11 @@ Note: the error type is `hydra.errors.Error_` (trailing underscore) — Hydra-si
 
 **Higher-order primitives in Java:** when the primitive takes function arguments,
 the `implementation()` method must use `Reduction.reduceTerm(cx, graph, eager, term)`
-to evaluate function applications. See `hydra/lib/lists/Foldr.java` for an example
-that iterates in reverse and reduces on each step.
+to evaluate function applications. See `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib/lists/Foldr.java`
+for an example that iterates in reverse and reduces on each step.
 
 Then register the new primitive in
-`overlay/java/hydra-kernel/src/main/java/hydra/lib/Libraries.java` (#418) by adding it to its
+`overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib/Libraries.java` (#418) by adding it to its
 category's list (`charsPrimitives()` in this case). The category will already
 be enumerated in `standardPrimitives()`.
 
@@ -580,7 +580,7 @@ expansion for you.
 
 #### Python
 
-Add the implementation in `overlay/python/hydra-kernel/src/main/python/hydra/lib/<library>.py` (#418):
+Add the implementation in `overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/lib/<library>.py` (#418):
 
 ```python
 def is_alpha_num(value: int) -> bool:
@@ -589,7 +589,7 @@ def is_alpha_num(value: int) -> bool:
 ```
 
 Then register it in the Python source registry at
-`overlay/python/hydra-kernel/src/main/python/hydra/sources/libraries.py` (#418). Each module name has
+`overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/sources/libraries.py` (#418). Each module name has
 its own `register_<sub>_primitives()` function that returns a
 `dict[Name, Primitive]`; add an entry there using `prims.prim1` /
 `prims.prim2` / `prims.prim3` to match the kernel signature:
@@ -617,7 +617,7 @@ function-typed arguments).
 ### 4. Add the DSL wrapper
 
 Add typed wrappers in
-`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Meta/Lib/<Library>.hs`:
+`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/Typed/<Library>.hs`:
 
 ```haskell
 -- Hydra/Dsl/Meta/Lib/Chars.hs
@@ -858,8 +858,8 @@ implementation notes:
 - **In native impls**, the function argument arrives as a Hydra `Term`. To
   apply it, the host uses its term-reduction machinery (Haskell:
   `Reduction.reduceTerm`; Java: `Reduction.reduceTerm()`). See
-  `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib/Lists.hs` for the Haskell pattern
-  and `overlay/java/hydra-kernel/src/main/java/hydra/lib/lists/Foldr.java` for the Java
+  `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib/Lists.hs` for the Haskell pattern
+  and `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib/lists/Foldr.java` for the Java
   pattern.
 
 - **In default implementations**, the function argument is just a TypedTerm —
@@ -879,9 +879,9 @@ The `hydra.lib.optionals` module name is a good case study: 12 primitives, most 
 which have default implementations in terms of `cases`. See:
 
 - Metadata: [Hydra/Sources/Kernel/Lib/Optionals.hs](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/Optionals.hs)
-- Haskell native impl: [Hydra/Haskell/Lib/Optionals.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib/Optionals.hs)
-- Haskell DSL wrapper: [Hydra/Dsl/Meta/Lib/Optionals.hs](https://github.com/CategoricalData/hydra/blob/main/heads/haskell/src/main/haskell/Hydra/Dsl/Meta/Lib/Optionals.hs)
-- Java native impls: [hydra/lib/optionals/](https://github.com/CategoricalData/hydra/tree/main/overlay/java/hydra-kernel/src/main/java/hydra/lib/optionals)
+- Haskell native impl: [Hydra/Overlay/Haskell/Lib/Optionals.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib/Optionals.hs)
+- Haskell phantom-typed DSL infrastructure: [Hydra/Overlay/Haskell/Dsl/Typed/](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/Typed)
+- Java native impls: [hydra/overlay/java/lib/optionals/](https://github.com/CategoricalData/hydra/tree/main/overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib/optionals)
 
 ## Further reading
 

@@ -31,15 +31,21 @@ implementations.
 **Cause**: A primitive class/function exists but isn't listed in the language's registration
 file.
 
-**Registration files** (check all of these when adding or debugging primitives):
+**Registration files** (check all of these when adding or debugging primitives).
+Post-#501 all overlay registration files live under `hydra.overlay.<lang>.*`
+(kernel-authored `hydra.*` code is exclusively translingual):
 
 | Language | Registration file |
 |----------|-------------------|
-| Haskell | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs` |
-| Java | `overlay/java/hydra-kernel/src/main/java/hydra/lib/Libraries.java` (relocated by #418) |
-| Python | `overlay/python/hydra-kernel/src/main/python/hydra/sources/libraries.py` (relocated by #418) |
-| Scala | `heads/scala/src/main/scala/hydra/lib/Libraries.scala` |
-| Lisp (Clojure) | `heads/lisp/clojure/src/main/clojure/hydra/lib/libraries.clj` |
+| Haskell | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Libraries.hs` |
+| Java | `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib/Libraries.java` |
+| Python | `overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/sources/libraries.py` |
+| Scala | `overlay/scala/hydra-kernel/src/main/scala/hydra/overlay/scala/Libraries.scala` |
+| TypeScript | `overlay/typescript/hydra-kernel/src/main/typescript/hydra/overlay/typescript/lib/libraries.ts` |
+| Clojure | `overlay/clojure/hydra-kernel/src/main/clojure/hydra/overlay/clojure/libraries.clj` |
+| Common Lisp | `overlay/common-lisp/hydra-kernel/src/main/common-lisp/hydra/overlay/common_lisp/lib/libraries.lisp` |
+| Scheme | `overlay/scheme/hydra-kernel/src/main/scheme/hydra/overlay/scheme/libraries.scm` |
+| Emacs Lisp | `overlay/emacs-lisp/hydra-kernel/src/main/emacs-lisp/hydra/overlay/emacs_lisp/lib/libraries.el` |
 
 **Fix**: Add the primitive to the appropriate `*Primitives()` method (Java) or equivalent
 in the registration file. See [adding primitives](recipes/adding-primitives.md) for the
@@ -77,8 +83,8 @@ When a primitive test fails in Java, the call chain is:
 **If step 4 fails**: check the `implementation()` method of the primitive class.
 The `implementation()` method must construct a term-level result, not execute native code.
 A stub that throws `UnsupportedOperationException` will cause runtime failures.
-See `overlay/java/hydra-kernel/src/main/java/hydra/lib/lists/Map.java` for a higher-order example
-using `hydra.dsl.Terms` helpers (`lambda`, `app`, `variable`, etc.).
+See `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib/lists/Map.java` for a higher-order example
+using `hydra.overlay.java.dsl.Terms` helpers (`lambda`, `app`, `variable`, etc.).
 
 ### Higher-order primitives
 
@@ -94,10 +100,10 @@ native implementation must accept and apply its function arguments correctly.
 
 | Purpose | Path |
 |---------|------|
-| Primitive registration | `overlay/java/hydra-kernel/src/main/java/hydra/lib/Libraries.java` (#418) |
-| Primitive classes | `overlay/java/hydra-kernel/src/main/java/hydra/lib/<library>/` (#418) |
-| DSL term builders | `overlay/java/hydra-kernel/src/main/java/hydra/dsl/Terms.java` (#418) |
-| Either utilities | `overlay/java/hydra-kernel/src/main/java/hydra/util/Either.java` (#418) |
+| Primitive registration | `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib/Libraries.java` |
+| Primitive classes | `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib/<library>/` |
+| DSL term builders | `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/dsl/Terms.java` |
+| Either utilities | `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/util/Either.java` |
 | Test runner | `heads/java/src/test/java/hydra/TestSuiteRunner.java` |
 | Reducer | `dist/java/hydra-kernel/src/main/java/hydra/reduction/Reduction.java` |
 
@@ -139,12 +145,12 @@ is high.
 
 ### "No such field: X" during code generation
 
-**Cause**: Missing entries in `Meta.hs` enums (`TermVariant`/`TypeVariant`). This happens
+**Cause**: Missing entries in the variant enums (`TermVariant`/`TypeVariant`), defined in
+`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Variants.hs`. This happens
 when a new type or term constructor is added to the kernel but not reflected in the variant
 enums.
 
-**Fix**: Update `TermVariant`/`TypeVariant` in the relevant `Meta.hs` source file, then
-rebuild and regenerate.
+**Fix**: Update `TermVariant`/`TypeVariant` in `Variants.hs`, then rebuild and regenerate.
 
 ### "Found N untyped binding(s) ..."
 
@@ -244,8 +250,9 @@ the Haskell-side `stack test` step. To validate a target's runtime, run
 that head's own test driver:
 
 - Python: `heads/python/bin/test-distribution.sh hydra-kernel`
-- Java: `./gradlew :packages:hydra-java:test`
+- Java: from `heads/java/`: `./gradlew :hydra-java:test`
 - Scala: `heads/scala/bin/test-distribution.sh hydra-kernel`
+- TypeScript: `heads/typescript/bin/test-distribution.sh hydra-kernel`
 - Lisp dialect: `packages/hydra-lisp/bin/run-tests.sh <dialect>`
 
 The full cross-host bootstrap demo (`bin/run-bootstrapping-demo.sh`) is a

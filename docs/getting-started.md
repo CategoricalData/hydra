@@ -24,15 +24,17 @@ There is no CLI to invoke; you are integrating Hydra into your own application.
 
 Hydra publishes one Maven artifact per package. Pick the ones you need; coordinates are under group `net.fortytwo.hydra`, all at the same version.
 
+Host-specific integrations (the Java rdf4j binding, ANTLR-based Cypher/openGQL parsers, TinkerPop/Gremlin
+bridges, and the Java PG DSL builders) are not separate artifacts — they ship inside the corresponding
+package's jar via the overlay system (see [docs/overlays.md](overlays.md) and the
+["Host-native overlays" section of the root README](../README.md#host-native-overlays)).
+
 | ArtifactId | Contains |
 |---|---|
 | `hydra-kernel` | Core types (`Literal`, `Type`, `Term`), `hydra.show.*`, `hydra.validate.core`, `hydra.error.core`, library stdlib. The minimum dependency. |
-| `hydra-pg` | Property-graph model (`hydra.pg.model.*`), validation (`hydra.validate.pg`), errors (`hydra.error.pg`); a Neo4j-aligned model (`hydra.neo4j.model`) with client-side validation (`hydra.validate.neo4j`) and a `hydra.pg.model` ↔ Neo4j mapping. |
-| `hydra-pg-dsl` | Hand-written Java fluent builders for constructing schemas and graphs (`hydra.pg.dsl.Graphs`, `hydra.pg.dsl.Queries`). |
-| `hydra-rdf` | RDF model + serdes. |
-| `hydra-rdf4j` | Binding to the rdf4j library. |
-| `hydra-neo4j` | Host-native Neo4j integration (Cypher/openGQL parsers via ANTLR); the translingual Neo4j model and validator live in `hydra-pg`. |
-| `hydra-java`, `hydra-python`, `hydra-scala`, `hydra-haskell`, `hydra-lisp`, `hydra-typescript` | Per-language coder packages, covering all nine official targets (the four Lisp dialects share `hydra-lisp`). Depend on these if your code needs to generate code in that target. First published as a complete set with 0.16.1. (`hydra-go` is a head bud — generated but not yet published.) |
+| `hydra-pg` | Property-graph model (`hydra.pg.model.*`), validation (`hydra.validate.pg`), errors (`hydra.error.pg`); the Java fluent builders in `hydra.pg.dsl.*` (from `overlay/java/hydra-pg`); a Neo4j-aligned model (`hydra.neo4j.model`) with client-side validation (`hydra.validate.neo4j`) and a `hydra.pg.model` ↔ Neo4j mapping; ANTLR-based openCypher/GQL parsers producing `hydra.pg.query.*`; and the TinkerPop/Gremlin bridge. |
+| `hydra-rdf` | RDF 1.1 model, SHACL, OWL 2, ShEx, and XML Schema syntax models; N-Triples serialization; the rdf4j binding (from `overlay/java/hydra-rdf`) for external I/O via Eclipse rdf4j Rio. |
+| `hydra-java`, `hydra-python`, `hydra-scala`, `hydra-haskell`, `hydra-lisp`, `hydra-typescript` | Per-language coder packages. Depend on these if your code needs to generate code in that target. (Coq, WASM, and Go coders are not currently published — Coq and WASM are in progress; Go is a "head bud" per the [Implementations](../README.md#implementations) table.) |
 
 ### Gradle
 
@@ -40,7 +42,6 @@ Hydra publishes one Maven artifact per package. Pick the ones you need; coordina
 dependencies {
     implementation 'net.fortytwo.hydra:hydra-kernel:0.17.0'
     implementation 'net.fortytwo.hydra:hydra-pg:0.17.0'
-    implementation 'net.fortytwo.hydra:hydra-pg-dsl:0.17.0'
 }
 ```
 
@@ -56,11 +57,6 @@ dependencies {
   <dependency>
     <groupId>net.fortytwo.hydra</groupId>
     <artifactId>hydra-pg</artifactId>
-    <version>0.17.0</version>
-  </dependency>
-  <dependency>
-    <groupId>net.fortytwo.hydra</groupId>
-    <artifactId>hydra-pg-dsl</artifactId>
     <version>0.17.0</version>
   </dependency>
 </dependencies>
@@ -121,8 +117,8 @@ read [HydraPop's `Validate.java`](https://github.com/CategoricalData/HydraPop/bl
 
 ## Python
 
-Hydra publishes one package per Hydra package (`hydra-kernel`, `hydra-pg`, `hydra-pg-dsl`, etc.) to both
-conda-forge and PyPI.
+Hydra publishes one package per Hydra package (`hydra-kernel`, `hydra-python`, `hydra-pg`, `hydra-rdf`)
+to both conda-forge and PyPI.
 
 ### conda
 
@@ -241,7 +237,7 @@ A handful of module names you'll touch most often as a library user:
 
 The full primitive lexicon is in
 [`docs/hydra-lexicon.txt`](https://github.com/CategoricalData/hydra/blob/main/docs/hydra-lexicon.txt)
-(241 primitives with their type signatures, organized into 13 `hydra.lib.<sub>` module names).
+(240 primitives with their type signatures, organized into 13 `hydra.lib.<sub>` module names).
 
 ---
 

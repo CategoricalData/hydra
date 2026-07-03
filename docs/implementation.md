@@ -706,7 +706,7 @@ Per host, two things are needed beyond the kernel metadata:
 
 2. **Host-side primitive registry** — binds names to native impls.
    The Haskell registry lives in
-   `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs` (#473):
+   `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Libraries.hs` (#473):
 
    ```haskell
    hydraLibMath :: Library
@@ -808,7 +808,7 @@ for the full mechanism and the catalog of which subtrees are overlaid per langua
 
 #### Java Generation
 
-Location: `overlay/java/hydra-kernel/src/main/java/hydra/lib/` (#418; was `heads/java/src/main/java/hydra/lib/`)
+Location: `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib/` (#501; formerly `hydra/lib/` before the `hydra.overlay.*` namespace was introduced)
 
 Each primitive becomes a class extending `PrimitiveFunction`:
 
@@ -839,7 +839,7 @@ public class Add extends PrimitiveFunction {
 
 #### Python Generation
 
-Location: `overlay/python/hydra-kernel/src/main/python/hydra/lib/` (#418; was `heads/python/src/main/python/hydra/lib/`)
+Location: `overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/lib/` (#501; formerly `hydra/lib/` before the `hydra.overlay.*` namespace was introduced)
 
 Pure Python implementations:
 
@@ -1696,7 +1696,7 @@ moved to `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/`. The rest of
 
 [`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib/`](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib) — Native Haskell implementations (relocated here from the head by #418)
 
-[`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs`](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs) — Host-side bindings (pairs each native impl with a name derived from its `PrimitiveDefinition` via `prim1`/`prim2`/`prim3`; relocated here + name-derivation by #473)
+[`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Libraries.hs`](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Libraries.hs) — Host-side bindings (pairs each native impl with a name derived from its `PrimitiveDefinition` via `prim1`/`prim2`/`prim3`; relocated here + name-derivation by #473)
 ```
 Sources/Kernel/Lib/
 ├── Math.hs

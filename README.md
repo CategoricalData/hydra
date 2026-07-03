@@ -54,10 +54,14 @@ Hydra is *mutually self-hosting*: starting from any one of its current implement
 the kernel can be regenerated into another host language, and that regenerated
 implementation can in turn regenerate the first — without dependency on the original
 source language.
-Seven implementations have this property today — Haskell (Hydra's original bootstrapping
-language), Java, Python, Scala, and three dialects of Lisp (Clojure, Scheme, and Common Lisp) —
+Eight implementations have this property today — Haskell (Hydra's original bootstrapping
+language), Java, Python, Scala, TypeScript, and four dialects of Lisp (Clojure, Scheme,
+Common Lisp, and Emacs Lisp) —
 and all of them pass the [common test suite](https://github.com/CategoricalData/hydra/wiki/Testing)
-under every bootstrapping path.
+under every bootstrapping path. TypeScript, Emacs Lisp, and (like Scala and Lisp) the JVM
+Lisp dialects self-host in the two load-bearing pillars — running as a codegen target and as a
+codegen host — but do not yet author Hydra DSL sources in their own language; only Haskell,
+Java, Python, and Scala do all three today.
 Additional ports are in active development; see the [Implementations](#implementations) table below
 for the full set.
 

@@ -83,8 +83,12 @@ the distribution from the overlay to satisfy this — see
 [Hand-written runtime in hydra-kernel](#hand-written-runtime-in-hydra-kernel).)
 
 Per #434 every head is being moved onto this uniform overlay/copy model. `overlay/haskell/`,
-`overlay/java/`, `overlay/python/`, and `overlay/typescript/` are populated; Scala, the four
-Lisp dialects, and Go are in progress.
+`overlay/java/`, `overlay/python/`, `overlay/typescript/`, `overlay/scala/`, `overlay/go/`,
+and the four Lisp-dialect overlays (`overlay/clojure/`, `overlay/scheme/`,
+`overlay/common-lisp/`, `overlay/emacs-lisp/`) are all populated for `hydra-kernel`. The
+downstream packages `hydra-pg` and `hydra-rdf` currently have overlays only for the hosts
+where their host-specific integrations live (`hydra-pg`: Java and Python; `hydra-rdf`: Java);
+extending overlay coverage to the other hosts is deferred.
 
 A consequence worth stating: while `heads/<lang>/` currently both *produces* distributions
 and *consumes* them (the Haskell head, for instance, compiles the `dist/haskell/*` trees

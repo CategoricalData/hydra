@@ -64,9 +64,12 @@ graphs with deep support for polymorphism.
   distribution package is generated modules plus copied overlay files. Two invariants: (1) **only the
   copy step reads `overlay/`** — nothing else may reference it; (2) **heads depend on `dist/`**, never on
   `overlay/` or on `heads/` for shipped runtime (generation drivers and a head's own test runners are not
-  shipped and stay in `heads/`). Structure: `overlay/<lang>/<package>/src/...`. Populated for Haskell,
-  Java, Python, TypeScript (`hydra-kernel` runtime + the Haskell `hydra` umbrella); Scala, the Lisp
-  dialects, and Go are being migrated (#434). Authored, not generated; never compiled in place. (#418, #434)
+  shipped and stay in `heads/`). Structure: `overlay/<lang>/<package>/src/...`. All nine hosts
+  have `overlay/<lang>/hydra-kernel/` populated (Haskell also has the `overlay/haskell/hydra`
+  umbrella). Downstream-package overlays exist only where host-specific integrations live:
+  `overlay/java/hydra-pg`, `overlay/python/hydra-pg`, `overlay/java/hydra-rdf`. Extending
+  downstream-package overlay coverage to other hosts is deferred (#434). Authored, not
+  generated; never compiled in place. (#418, #434)
   Overlay files use the `hydra.overlay.<lang>.*` namespace (#501), keeping a hard boundary:
   `hydra.*` is exclusively translingual (generated or derived from generated code);
   `hydra.overlay.<lang>.*` is exclusively host-native.
