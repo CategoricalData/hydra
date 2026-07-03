@@ -16,7 +16,6 @@ import qualified Hydra.Dsl.Packaging        as DPackaging
 import qualified Hydra.Overlay.Haskell.Dsl.Types              as Types
 import           Prelude hiding ((++))
 
-
 ns :: ModuleName
 ns = ModuleName "hydra.test.testTypes"
 
@@ -28,6 +27,23 @@ module_ = Module {
             moduleMetadata = descriptionMetadata ((Just "Type definitions for the test suite"))}
   where
     definitions = [
+      toDefinition compareStringsType,
+      toDefinition concatType,
+      toDefinition eitherStringOrInt8Type,
+      toDefinition eitherStringOrInt8TypeName,
+      toDefinition exampleProjectionType,
+      toDefinition listOfInt16sType,
+      toDefinition listOfInt8sType,
+      toDefinition listOfListsOfStringsType,
+      toDefinition listOfSetOfStringsType,
+      toDefinition listOfStringsType,
+      toDefinition mapOfStringsToIntsType,
+      toDefinition optionalInt16Type,
+      toDefinition optionalInt8Type,
+      toDefinition optionalStringType,
+      toDefinition setOfStringsType,
+      toDefinition stringOrIntName,
+      toDefinition stringOrIntType,
       toDefinition testTypeBuddyListA,
       toDefinition testTypeBuddyListAName,
       toDefinition testTypeBuddyListB,
@@ -48,6 +64,7 @@ module_ = Module {
       toDefinition testTypeLatLonPolyName,
       toDefinition testTypeList,
       toDefinition testTypeListName,
+      toDefinition testTypeName,
       toDefinition testTypeNumber,
       toDefinition testTypeNumberName,
       toDefinition testTypePerson,
@@ -71,26 +88,7 @@ module_ = Module {
       toDefinition testTypeUnionPolymorphicRecursive,
       toDefinition testTypeUnionPolymorphicRecursiveName,
       toDefinition testTypeUnit,
-      toDefinition testTypeUnitName,
-      -- Additional utility types
-      toDefinition concatType,
-      toDefinition compareStringsType,
-      toDefinition eitherStringOrInt8TypeName,
-      toDefinition eitherStringOrInt8Type,
-      toDefinition exampleProjectionType,
-      toDefinition listOfInt8sType,
-      toDefinition listOfInt16sType,
-      toDefinition listOfListsOfStringsType,
-      toDefinition listOfSetOfStringsType,
-      toDefinition listOfStringsType,
-      toDefinition mapOfStringsToIntsType,
-      toDefinition optionalInt8Type,
-      toDefinition optionalInt16Type,
-      toDefinition optionalStringType,
-      toDefinition setOfStringsType,
-      toDefinition stringOrIntName,
-      toDefinition stringOrIntType,
-      toDefinition testTypeName]
+      toDefinition testTypeUnitName]
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
@@ -99,6 +97,85 @@ defineType :: String -> TypedTerm Type -> TypedTermDefinition Type
 defineType name = define name . firstClassType
 
 -- Type definitions
+-- Helper to create fully qualified names within this module
+testTypesName :: String -> TypedTerm Name
+--testTypesName localName = name $ "test." <> localName -- TODO: restore the test namespace, which is distinct from the test sources namespace. There are still tests with raw references to test types, e.g. (var "Person").
+testTypesName localName = name localName
+
+-- Additional type utilities for tests
+
+compareStringsType :: TypedTermDefinition Type
+compareStringsType = defineType "compareStringsType" $
+  T.function T.string T.string
+
+concatType :: TypedTermDefinition Type
+concatType = defineType "concatType" $
+  T.function T.string $ T.function T.string T.string
+
+eitherStringOrInt8Type :: TypedTermDefinition Type
+eitherStringOrInt8Type = defineType "eitherStringOrInt8Type" $
+  T.union eitherStringOrInt8TypeName [
+    "left">: T.string,
+    "right">: Core.typeLiteral $ Core.literalTypeInteger Core.integerTypeInt8]
+
+eitherStringOrInt8TypeName :: TypedTermDefinition Name
+eitherStringOrInt8TypeName = define "eitherStringOrInt8TypeName" $
+  testTypesName "EitherStringOrInt8"
+
+exampleProjectionType :: TypedTermDefinition Type
+exampleProjectionType = defineType "exampleProjectionType" $
+  T.function (Core.typeVariable testTypePersonName) T.string
+
+listOfInt16sType :: TypedTermDefinition Type
+listOfInt16sType = defineType "listOfInt16sType" $
+  T.list T.int16
+
+listOfInt8sType :: TypedTermDefinition Type
+listOfInt8sType = defineType "listOfInt8sType" $
+  T.list (Core.typeLiteral $ Core.literalTypeInteger Core.integerTypeInt8)
+
+listOfListsOfStringsType :: TypedTermDefinition Type
+listOfListsOfStringsType = defineType "listOfListsOfStringsType" $
+  T.list $ T.list T.string
+
+listOfSetOfStringsType :: TypedTermDefinition Type
+listOfSetOfStringsType = defineType "listOfSetOfStringsType" $
+  T.list $ T.set T.string
+
+listOfStringsType :: TypedTermDefinition Type
+listOfStringsType = defineType "listOfStringsType" $
+  T.list T.string
+
+mapOfStringsToIntsType :: TypedTermDefinition Type
+mapOfStringsToIntsType = defineType "mapOfStringsToIntsType" $
+  T.map T.string T.int32
+
+optionalInt16Type :: TypedTermDefinition Type
+optionalInt16Type = defineType "optionalInt16Type" $
+  T.optional T.int16
+
+optionalInt8Type :: TypedTermDefinition Type
+optionalInt8Type = defineType "optionalInt8Type" $
+  T.optional (Core.typeLiteral $ Core.literalTypeInteger Core.integerTypeInt8)
+
+optionalStringType :: TypedTermDefinition Type
+optionalStringType = defineType "optionalStringType" $
+  T.optional T.string
+
+setOfStringsType :: TypedTermDefinition Type
+setOfStringsType = defineType "setOfStringsType" $
+  T.set T.string
+
+stringOrIntName :: TypedTermDefinition Name
+stringOrIntName = define "stringOrIntName" $
+  testTypesName "StringOrInt"
+
+stringOrIntType :: TypedTermDefinition Type
+stringOrIntType = defineType "stringOrIntType" $
+  T.union stringOrIntName [
+    "left">: T.string,
+    "right">: T.int32]
+
 testTypeBuddyListA :: TypedTermDefinition Type
 testTypeBuddyListA = defineType "testTypeBuddyListA" $
   T.forAll "a" $ T.record (testTypeBuddyListAName) [
@@ -203,6 +280,10 @@ testTypeList = defineType "testTypeList" $
 testTypeListName :: TypedTermDefinition Name
 testTypeListName = define "testTypeListName" $
   testTypesName "List"
+
+testTypeName :: TypedTermDefinition Name
+testTypeName = define "testTypeName" $
+  testTypesName "Test"
 
 testTypeNumber :: TypedTermDefinition Type
 testTypeNumber = defineType "testTypeNumber" $
@@ -321,85 +402,3 @@ testTypeUnitName :: TypedTermDefinition Name
 testTypeUnitName = define "testTypeUnitName" $
   testTypesName "Unit"
 
--- Helper to create fully qualified names within this module
-testTypesName :: String -> TypedTerm Name
---testTypesName localName = name $ "test." <> localName -- TODO: restore the test namespace, which is distinct from the test sources namespace. There are still tests with raw references to test types, e.g. (var "Person").
-testTypesName localName = name localName
-
--- Additional type utilities for tests
-
-compareStringsType :: TypedTermDefinition Type
-compareStringsType = defineType "compareStringsType" $
-  T.function T.string T.string
-
-concatType :: TypedTermDefinition Type
-concatType = defineType "concatType" $
-  T.function T.string $ T.function T.string T.string
-
-eitherStringOrInt8Type :: TypedTermDefinition Type
-eitherStringOrInt8Type = defineType "eitherStringOrInt8Type" $
-  T.union eitherStringOrInt8TypeName [
-    "left">: T.string,
-    "right">: Core.typeLiteral $ Core.literalTypeInteger Core.integerTypeInt8]
-
-eitherStringOrInt8TypeName :: TypedTermDefinition Name
-eitherStringOrInt8TypeName = define "eitherStringOrInt8TypeName" $
-  testTypesName "EitherStringOrInt8"
-
-exampleProjectionType :: TypedTermDefinition Type
-exampleProjectionType = defineType "exampleProjectionType" $
-  T.function (Core.typeVariable testTypePersonName) T.string
-
-listOfInt16sType :: TypedTermDefinition Type
-listOfInt16sType = defineType "listOfInt16sType" $
-  T.list T.int16
-
-listOfInt8sType :: TypedTermDefinition Type
-listOfInt8sType = defineType "listOfInt8sType" $
-  T.list (Core.typeLiteral $ Core.literalTypeInteger Core.integerTypeInt8)
-
-listOfListsOfStringsType :: TypedTermDefinition Type
-listOfListsOfStringsType = defineType "listOfListsOfStringsType" $
-  T.list $ T.list T.string
-
-listOfSetOfStringsType :: TypedTermDefinition Type
-listOfSetOfStringsType = defineType "listOfSetOfStringsType" $
-  T.list $ T.set T.string
-
-listOfStringsType :: TypedTermDefinition Type
-listOfStringsType = defineType "listOfStringsType" $
-  T.list T.string
-
-mapOfStringsToIntsType :: TypedTermDefinition Type
-mapOfStringsToIntsType = defineType "mapOfStringsToIntsType" $
-  T.map T.string T.int32
-
-optionalInt16Type :: TypedTermDefinition Type
-optionalInt16Type = defineType "optionalInt16Type" $
-  T.optional T.int16
-
-optionalInt8Type :: TypedTermDefinition Type
-optionalInt8Type = defineType "optionalInt8Type" $
-  T.optional (Core.typeLiteral $ Core.literalTypeInteger Core.integerTypeInt8)
-
-optionalStringType :: TypedTermDefinition Type
-optionalStringType = defineType "optionalStringType" $
-  T.optional T.string
-
-setOfStringsType :: TypedTermDefinition Type
-setOfStringsType = defineType "setOfStringsType" $
-  T.set T.string
-
-stringOrIntName :: TypedTermDefinition Name
-stringOrIntName = define "stringOrIntName" $
-  testTypesName "StringOrInt"
-
-stringOrIntType :: TypedTermDefinition Type
-stringOrIntType = defineType "stringOrIntType" $
-  T.union stringOrIntName [
-    "left">: T.string,
-    "right">: T.int32]
-
-testTypeName :: TypedTermDefinition Name
-testTypeName = define "testTypeName" $
-  testTypesName "Test"
