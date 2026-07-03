@@ -127,7 +127,11 @@ deps, plugins, and (for ANTLR) grammar-generation configuration.
 ## How overlays survive regeneration (prune protection)
 
 Because overlay files are *copied* (not generated), they are not in a package's recorded output
-digest. To keep regeneration from deleting them, the copy step records every overlay file in a
+digest. The copy step is `heads/<lang>/bin/copy-overlay.sh` for Java/Python (the #511
+generalization; `copy-kernel-runtime.sh` remains the kernel-only batch path),
+`copy-kernel-runtime.sh` for TypeScript/Scala/Go, `overlay-kernel-runtime.sh` for Haskell, and
+`lisp_copy_overlay` (in `heads/lisp/bin/common.sh`) for the Lisp dialects. To keep regeneration
+from deleting the copied files, the copy step records every overlay file in a
 **keep-paths manifest** (keyed by source-set directory), which is honored by both prune paths:
 
 - `bootstrap-from-json --prune-stale` (the full-regeneration prune), and

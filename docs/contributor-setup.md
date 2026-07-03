@@ -17,9 +17,9 @@ or GitHub authoring.
 
 | Tier | Covers | What you can run |
 |------|--------|------------------|
-| **Kernel** | Haskell host only | `stack test`, `heads/haskell/bin/sync-haskell.sh` (Phase 1) |
+| **Kernel** | Haskell host (plus system Python for build scripts) | `stack test`, `heads/haskell/bin/sync-haskell.sh` (Phase 1) |
 | **Triad** | Kernel + Java + Python | `/sync-default`, `/bootstrap` default, `/test` default |
-| **Full matrix** | Triad + Scala + four Lisp dialects | `/sync` (all × all), `/bootstrap all`, full 8 × 8 |
+| **Full matrix** | Triad + Scala + four Lisp dialects | `/sync` (all × all), `/bootstrap all`, all 8 fully-hosting languages |
 | **Go bud** | Optional Go target | `/sync-go` |
 | **Authoring** | Optional ops tools | Issue/PR interaction, releases |
 
@@ -131,7 +131,7 @@ Python 3 from Tier 1 covers both pipeline helpers and the Python target itself; 
 This regenerates the Haskell, Java, and Python distributions and runs the Haskell test suite.
 Target-language tests run via `./bin/test.sh` (default scope is the triad).
 
-## Tier 3 — Full matrix (8 × 8)
+## Tier 3 — Full matrix (8 fully-hosting languages)
 
 Required for `/sync` with `--hosts all --targets all`, `/bootstrap all`, and issue #409
 ("Everything-to-everything bootstrapping run").
@@ -199,7 +199,8 @@ Required for `/sync` with `--hosts all --targets all`, `/bootstrap all`, and iss
 ```
 
 The full matrix takes much longer than the triad — the issue #409 discussion estimates ~64× longer
-than the routine 3 × 3.
+than the routine 3 × 3. (`bin/sync.sh --hosts all --targets all` actually spans ten languages:
+Go and TypeScript also generate as kernel-only targets, but skip host rows and add little time.)
 
 ## Tier 4 — Go bud (optional)
 

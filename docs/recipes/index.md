@@ -76,6 +76,9 @@ capture what was tried, what worked, and what didn't.
 - **[Lazy fix design: Coder.hs edits](../history/lazy-fix-design.md)** — pre-edit design sketch for replacing
   the eager-walrus + `@lru_cache(1)` pattern with `hydra.python.util.Lazy` in the *legacy Haskell* Python
   coder. **Status: likely superseded** by the Python-native coder rewrite (#344). Kept pending review.
+- **[Design record: `hydra.pg.model` ↔ `hydra.neo4j.model` mapping](../history/design-pg-neo4j-mapping.md)** —
+  the design rationale behind the shipped `hydra.neo4j.pg` mapping (#510); the feature itself is documented
+  in the [hydra-pg README](../../packages/hydra-pg/README.md).
 
 ## About Recipes
 

@@ -255,7 +255,7 @@ A primitive's name is declared once, in its kernel `PrimitiveDefinition`. From t
 1. Code generation emits a per-host `hydra.lib.*` **def-module** for each kernel `Hydra/Sources/Kernel/Lib/<Sub>.hs`,
    carrying the `PrimitiveDefinition` (name + signature + metadata) as data. Defs live at `hydra.lib.<sub>`;
    the native implementations live alongside at `hydra.<lang>.lib.<sub>` (mirroring Haskell's
-   `Hydra.Haskell.Lib.*`).
+   `Hydra.Overlay.Haskell.Lib.*`).
 2. Every host's primitive registry **derives** each name from that def-module rather than hand-writing a
    string. In Haskell this is fully implicit: the DSL builders (`primitive`, `primN`, `primCase`,
    `standardLibrary`) accept a `PrimitiveDefinition` directly via the `ToPrimName` class, so you write
@@ -705,7 +705,7 @@ When adding a new primitive function:
   - [ ] Signature as a `TermSignature` (via `sig $ TypeScheme ...` or `lazySig [...] $ TypeScheme ...`)
   - [ ] **(If applicable)** Default implementation inline as the last argument to `defineWithDefault`
 - [ ] **Haskell**
-  - [ ] Native implementation in `Hydra.Haskell.Lib.<Library>`
+  - [ ] Native implementation in `Hydra.Overlay.Haskell.Lib.<Library>`
   - [ ] Registration via `primN Def<Library>.<fn> ...` in `Hydra.Dsl.Libraries`
   - [ ] DSL wrapper in `Hydra.Dsl.Meta.Lib.<Library>`
 - [ ] **Java**
