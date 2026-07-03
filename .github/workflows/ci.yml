@@ -35,6 +35,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # #541: cheap, toolchain-free gate that must run before anything else
+      # in this job. Guards against the #416 near-miss, where a .gitignore
+      # pattern silently untracked kernel JSON that manifest.json declared --
+      # present on disk in every worktree, invisible to every runtime test,
+      # and only a fresh clone (like this CI checkout) would fail to
+      # bootstrap. Needs only python3 + git, both preinstalled on the runner.
+      - name: Check manifest-declared module JSON is tracked in git (#541)
+        run: python3 bin/check-manifest-json-tracked.py
       - uses: haskell-actions/setup@v2
         with:
           enable-stack: true

@@ -942,6 +942,38 @@ see the `incremental_inference_wiring_pending` follow-up.
 
 ---
 
+## Checking manifest-declared module JSON is tracked in git
+
+Each `dist/json/<pkg>/src/main/json/manifest.json` declares the namespaces that make up
+that package: `mainModules`, `testModules`, `mainDslModules`/`dslModules`, and
+`mainEncodingModules`. A file present on disk but excluded from git by a `.gitignore`
+pattern is invisible to every runtime test (the file is right there locally) and only
+surfaces on a fresh clone — the failure mode behind #416, where a manifest declared
+modules whose kernel JSON existed in every worktree but was tracked in no commit.
+
+```bash
+bin/check-manifest-json-tracked.py
+```
+
+For each declared namespace, the script resolves the expected JSON path (dot-to-slash,
+routed to `src/main/json/` or, for `testModules`, `src/test/json/`; `mainDslModules`/
+`mainEncodingModules` entries resolve through the DSL/encoder/decoder wrapper-name
+derivation, since those keys list source namespaces rather than the generated file's own
+name) and asserts the file is tracked with `git ls-files --error-unmatch`, not merely
+present. It also lists tracked module JSON not declared by any manifest (orphans) as a
+WARN — deleting those is #405's job, not this check's.
+
+Exit is nonzero only for a `mainModules`/`testModules` entry that's missing or untracked,
+or a derived DSL/encoding wrapper that exists on disk but is untracked. A derived wrapper
+can legitimately be *absent* — the real generator drops any DSL/encoder/decoder module
+that synthesizes to zero definitions (e.g. a type made only of function-typed fields, or
+phantom/forall-only types) — so absence alone isn't flagged for those two keys.
+
+Runs as an early, toolchain-free step in CI (`.github/workflows/ci.yml`, `haskell` job),
+before the expensive `bin/sync.sh` regeneration.
+
+---
+
 ## Checking Python `__init__.py` freshness
 
 In 0.15, Python `__init__.py` files under `dist/python/hydra-kernel/` are
@@ -1254,6 +1286,7 @@ If no changes affect generated files or tests, skip the sync.
 | Test parity | After sync-all, after benchmarking runs |
 | `.cabal` exposed-modules | After deleting generated Haskell modules |
 | JSON kernel freshness | After kernel changes |
+| Manifest-declared JSON tracked in git | Every CI run (`haskell` job, early step); after adding a package or module |
 | Python `__init__.py` | After sync-python |
 | User documentation review | Periodically, before releases, after major refactoring |
 | Logical code review | Periodically; one slice per session; after extended LLM-driven edits to a region |
