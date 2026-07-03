@@ -67,6 +67,83 @@ compute_generator_stamp() {
     } | shasum -a 256 | awk '{print substr($1,1,16)}'
 }
 
+# Export the full generation-provenance environment (#413 / #523) for a
+# target language, to be read by 'digest-check refresh' via
+# Hydra.Digest.generationRecord. This is a SUPERSET of the old
+# `export HYDRA_GENERATOR_STAMP=$(compute_generator_stamp <lang>)` line and
+# REPLACES it at each assembler call site.
+#
+# Exports:
+#   HYDRA_GENERATOR_STAMP          — the gating id (compute_generator_stamp)
+#   HYDRA_GENERATION_MODE          — published | shim
+#   HYDRA_GENERATION_HOST          — the target host language
+#   HYDRA_GENERATION_HYDRA_VERSION — release version (published only; else empty)
+#   HYDRA_GENERATION_REVISION      — <short-sha>[-dirty] (required for shim)
+#   HYDRA_GENERATION_TIMESTAMP     — ISO-8601 UTC build time
+#
+# mode derivation: the gating stamp already branches published-vs-local inside
+# component_identity (host:<pkg>:<ver> for a published host, a content hash
+# otherwise). We reuse THAT SAME resolution for the kernel so mode agrees with
+# what actually gates: a `host:` pin ⇒ published; anything else ⇒ shim. This
+# keeps the informational gatherer honest without a second source of truth for
+# the published/local seam (#413: "compute generatorId from a separate path
+# than the informational gatherer, so they can't cross-contaminate" — the
+# gating VALUE stays compute_generator_stamp; only the mode DISCRIMINATOR is
+# read off component_identity here).
+#
+# Invariant enforced downstream in Haskell (generationRecord): shim ⇒ revision
+# present. We always compute a revision, so a shim build is never left without
+# one; publishing simply also records it (harmless, optional for published).
+export_generation_env() {
+    local lang="$1"
+    export HYDRA_GENERATOR_STAMP
+    HYDRA_GENERATOR_STAMP="$(compute_generator_stamp "$lang")"
+
+    # Resolve the kernel's identity the same way the stamp does. A published
+    # host yields `host:hydra-kernel:<ver>`; anything else is a local content
+    # hash ⇒ shim.
+    local kernel_id
+    kernel_id="$(component_identity hydra-kernel)"
+    local mode host_version
+    case "$kernel_id" in
+        host:hydra-kernel:*)
+            mode="published"
+            host_version="${kernel_id#host:hydra-kernel:}"
+            ;;
+        *)
+            mode="shim"
+            host_version=""
+            ;;
+    esac
+
+    # Working-tree revision: <short-sha>, plus -dirty when there are uncommitted
+    # changes to TRACKED files. This is the shim's only precise identity (#523).
+    # Computed even for published mode (harmless, optional there).
+    #
+    # Dirtiness is scoped with `git diff --quiet HEAD` (tracked modifications,
+    # staged + unstaged) rather than `git status --porcelain` (which also counts
+    # UNTRACKED files). That distinction is load-bearing: every real assembly
+    # writes untracked dist/** artifacts, so a whole-tree porcelain check would
+    # stamp EVERY build — including a clean release build — as "-dirty", which is
+    # exactly the provenance lie #523 exists to prevent. Only a genuine edit to a
+    # committed source file should downgrade a build to dirty.
+    local revision=""
+    local short_sha
+    short_sha="$(git -C "$HYDRA_ROOT_DIR" rev-parse --short HEAD 2>/dev/null || true)"
+    if [ -n "$short_sha" ]; then
+        revision="$short_sha"
+        if ! git -C "$HYDRA_ROOT_DIR" diff --quiet HEAD 2>/dev/null; then
+            revision="$revision-dirty"
+        fi
+    fi
+
+    export HYDRA_GENERATION_MODE="$mode"
+    export HYDRA_GENERATION_HOST="$lang"
+    export HYDRA_GENERATION_HYDRA_VERSION="$host_version"
+    export HYDRA_GENERATION_REVISION="$revision"
+    export HYDRA_GENERATION_TIMESTAMP="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+}
+
 # Identity of the Haskell generation DRIVER — the bootstrap-from-json exec plus the
 # generation orchestrator modules it links against (Hydra.Generation, Hydra.ExtGeneration,
 # Hydra.PackageRouting). This single Haskell binary emits EVERY target language, so a change
