@@ -31,6 +31,7 @@ import type { Either } from "../../../runtime.js";
 
 import * as extractCore from "../../../extract/core.js";
 import * as scoping from "../../../scoping.js";
+import { createHash } from "node:crypto";
 
 import * as libChars from "./chars.js";
 import * as libEquality from "./equality.js";
@@ -2054,6 +2055,24 @@ const textPrimitives = (): readonly Primitive[] => [
       })),
 ];
 
+// === lib.hashing ===
+
+// SHA-256 over raw bytes. In the interpreter path binary literals carry Uint8Array
+// payloads (see dBinary / tBinary), so these operate directly on the extracted bytes.
+// The generated-code runtime uses the base64 convention in lib/hashing.ts instead. For #524.
+const hashingPrimitives = (): readonly Primitive[] => [
+  prim("hydra.lib.hashing.sha256", scheme(tyFn(tyBinary, tyBinary), []),
+    (g, args) =>
+      bind(need(args, 0, "sha256"), (a0) =>
+        bind(dBinary(g, a0), (b) =>
+          right(tBinary(new Uint8Array(createHash("sha256").update(b).digest())))))),
+  prim("hydra.lib.hashing.sha256Hex", scheme(tyFn(tyBinary, tyString), []),
+    (g, args) =>
+      bind(need(args, 0, "sha256Hex"), (a0) =>
+        bind(dBinary(g, a0), (b) =>
+          right(tString(createHash("sha256").update(b).digest("hex")))))),
+];
+
 // === lib.eithers ===
 
 const eithersPrimitives = (): readonly Primitive[] => {
@@ -2207,6 +2226,7 @@ export const standardPrimitives = (): readonly Primitive[] => [
   ...eithersPrimitives(),
   ...equalityPrimitives(),
   ...filesPrimitives(),
+  ...hashingPrimitives(),
   ...listsPrimitives(),
   ...literalsPrimitives(),
   ...logicPrimitives(),
