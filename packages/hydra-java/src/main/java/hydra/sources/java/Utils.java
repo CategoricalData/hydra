@@ -169,6 +169,18 @@ public class Utils {
         return define(NS, localName, body);
     }
 
+    /**
+     * The {@link Aliases} fields in declaration order (mirrors the record in
+     * {@code Environment.aliases()}). Passed to {@link hydra.overlay.java.dsl.meta.Phantoms#recordWith}
+     * so a copy-with-update over an Aliases value need name only the fields it changes.
+     * Keep in sync with the Aliases type definition.
+     */
+    public static final List<Name> ALIASES_FIELDS = List.of(
+        Aliases.CURRENT_NAMESPACE, Aliases.PACKAGES, Aliases.BRANCH_VARS, Aliases.RECURSIVE_VARS,
+        Aliases.IN_SCOPE_TYPE_PARAMS, Aliases.POLYMORPHIC_LOCALS, Aliases.IN_SCOPE_JAVA_VARS,
+        Aliases.VAR_RENAMES, Aliases.LAMBDA_VARS, Aliases.TYPE_VAR_SUBST, Aliases.TRUSTED_TYPE_VARS,
+        Aliases.METHOD_CODOMAIN, Aliases.THUNKED_VARS);
+
     // ---- AUTO-PORTED defs (untyped; inference assigns schemes; see #344) ----
 
     public static final Def addExpressions = def(
@@ -214,48 +226,12 @@ public class Utils {
         () -> lambda(
                 "name",
                 "aliases",
-                record(Aliases.TYPE_,
-                    field(
-                        Aliases.CURRENT_NAMESPACE,
-                        proj(Aliases.TYPE_, Aliases.CURRENT_NAMESPACE, "aliases")),
-                    field(
-                        Aliases.PACKAGES,
-                        proj(Aliases.TYPE_, Aliases.PACKAGES, "aliases")),
-                    field(
-                        Aliases.BRANCH_VARS,
-                        proj(Aliases.TYPE_, Aliases.BRANCH_VARS, "aliases")),
-                    field(
-                        Aliases.RECURSIVE_VARS,
-                        proj(Aliases.TYPE_, Aliases.RECURSIVE_VARS, "aliases")),
-                    field(
-                        Aliases.IN_SCOPE_TYPE_PARAMS,
-                        proj(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS, "aliases")),
-                    field(
-                        Aliases.POLYMORPHIC_LOCALS,
-                        proj(Aliases.TYPE_, Aliases.POLYMORPHIC_LOCALS, "aliases")),
+                recordWith(Aliases.TYPE_, "aliases", ALIASES_FIELDS,
                     field(
                         Aliases.IN_SCOPE_JAVA_VARS,
                         Sets.insert(
                             var("name"),
-                            proj(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS, "aliases"))),
-                    field(
-                        Aliases.VAR_RENAMES,
-                        proj(Aliases.TYPE_, Aliases.VAR_RENAMES, "aliases")),
-                    field(
-                        Aliases.LAMBDA_VARS,
-                        proj(Aliases.TYPE_, Aliases.LAMBDA_VARS, "aliases")),
-                    field(
-                        Aliases.TYPE_VAR_SUBST,
-                        proj(Aliases.TYPE_, Aliases.TYPE_VAR_SUBST, "aliases")),
-                    field(
-                        Aliases.TRUSTED_TYPE_VARS,
-                        proj(Aliases.TYPE_, Aliases.TRUSTED_TYPE_VARS, "aliases")),
-                    field(
-                        Aliases.METHOD_CODOMAIN,
-                        proj(Aliases.TYPE_, Aliases.METHOD_CODOMAIN, "aliases")),
-                    field(
-                        Aliases.THUNKED_VARS,
-                        proj(Aliases.TYPE_, Aliases.THUNKED_VARS, "aliases")))));
+                            proj(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS, "aliases"))))));
 
     public static final Def addInScopeVars = def(
         "addInScopeVars",
@@ -361,49 +337,13 @@ public class Utils {
                 "original",
                 "renamed",
                 "aliases",
-                record(Aliases.TYPE_,
-                    field(
-                        Aliases.CURRENT_NAMESPACE,
-                        proj(Aliases.TYPE_, Aliases.CURRENT_NAMESPACE, "aliases")),
-                    field(
-                        Aliases.PACKAGES,
-                        proj(Aliases.TYPE_, Aliases.PACKAGES, "aliases")),
-                    field(
-                        Aliases.BRANCH_VARS,
-                        proj(Aliases.TYPE_, Aliases.BRANCH_VARS, "aliases")),
-                    field(
-                        Aliases.RECURSIVE_VARS,
-                        proj(Aliases.TYPE_, Aliases.RECURSIVE_VARS, "aliases")),
-                    field(
-                        Aliases.IN_SCOPE_TYPE_PARAMS,
-                        proj(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS, "aliases")),
-                    field(
-                        Aliases.POLYMORPHIC_LOCALS,
-                        proj(Aliases.TYPE_, Aliases.POLYMORPHIC_LOCALS, "aliases")),
-                    field(
-                        Aliases.IN_SCOPE_JAVA_VARS,
-                        proj(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS, "aliases")),
+                recordWith(Aliases.TYPE_, "aliases", ALIASES_FIELDS,
                     field(
                         Aliases.VAR_RENAMES,
                         Maps.insert(
                             var("original"),
                             var("renamed"),
-                            proj(Aliases.TYPE_, Aliases.VAR_RENAMES, "aliases"))),
-                    field(
-                        Aliases.LAMBDA_VARS,
-                        proj(Aliases.TYPE_, Aliases.LAMBDA_VARS, "aliases")),
-                    field(
-                        Aliases.TYPE_VAR_SUBST,
-                        proj(Aliases.TYPE_, Aliases.TYPE_VAR_SUBST, "aliases")),
-                    field(
-                        Aliases.TRUSTED_TYPE_VARS,
-                        proj(Aliases.TYPE_, Aliases.TRUSTED_TYPE_VARS, "aliases")),
-                    field(
-                        Aliases.METHOD_CODOMAIN,
-                        proj(Aliases.TYPE_, Aliases.METHOD_CODOMAIN, "aliases")),
-                    field(
-                        Aliases.THUNKED_VARS,
-                        proj(Aliases.TYPE_, Aliases.THUNKED_VARS, "aliases")))));
+                            proj(Aliases.TYPE_, Aliases.VAR_RENAMES, "aliases"))))));
 
     public static final Def fieldExpression = def(
         "fieldExpression",

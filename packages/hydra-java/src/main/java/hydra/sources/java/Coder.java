@@ -1172,47 +1172,17 @@ public class Coder {
                                                 list()))),
                                     var("flatBindings"))))),
     field("aliasesExtended",
-                        record(Aliases.TYPE_,
-                            field(
-                                Aliases.CURRENT_NAMESPACE,
-                                proj(Aliases.TYPE_, Aliases.CURRENT_NAMESPACE, "aliases")),
-                            field(
-                                Aliases.PACKAGES,
-                                proj(Aliases.TYPE_, Aliases.PACKAGES, "aliases")),
-                            field(
-                                Aliases.BRANCH_VARS,
-                                proj(Aliases.TYPE_, Aliases.BRANCH_VARS, "aliases")),
+                        recordWith(Aliases.TYPE_, "aliases", Utils.ALIASES_FIELDS,
                             field(
                                 Aliases.RECURSIVE_VARS,
                                 Sets.union(
                                     proj(Aliases.TYPE_, Aliases.RECURSIVE_VARS, "aliases"),
                                     var("recursiveVars"))),
                             field(
-                                Aliases.IN_SCOPE_TYPE_PARAMS,
-                                proj(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS, "aliases")),
-                            field(
-                                Aliases.POLYMORPHIC_LOCALS,
-                                proj(Aliases.TYPE_, Aliases.POLYMORPHIC_LOCALS, "aliases")),
-                            field(
                                 Aliases.IN_SCOPE_JAVA_VARS,
                                 Sets.union(
                                     proj(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS, "aliases"),
                                     var("bindingVars"))),
-                            field(
-                                Aliases.VAR_RENAMES,
-                                proj(Aliases.TYPE_, Aliases.VAR_RENAMES, "aliases")),
-                            field(
-                                Aliases.LAMBDA_VARS,
-                                proj(Aliases.TYPE_, Aliases.LAMBDA_VARS, "aliases")),
-                            field(
-                                Aliases.TYPE_VAR_SUBST,
-                                proj(Aliases.TYPE_, Aliases.TYPE_VAR_SUBST, "aliases")),
-                            field(
-                                Aliases.TRUSTED_TYPE_VARS,
-                                proj(Aliases.TYPE_, Aliases.TRUSTED_TYPE_VARS, "aliases")),
-                            field(
-                                Aliases.METHOD_CODOMAIN,
-                                proj(Aliases.TYPE_, Aliases.METHOD_CODOMAIN, "aliases")),
                             field(
                                 Aliases.THUNKED_VARS,
                                 Sets.union(
@@ -8400,48 +8370,12 @@ public class Coder {
                         record(JavaEnvironment.TYPE_,
                             field(
                                 JavaEnvironment.ALIASES,
-                                record(Aliases.TYPE_,
-                                    field(
-                                        Aliases.CURRENT_NAMESPACE,
-                                        proj(Aliases.TYPE_, Aliases.CURRENT_NAMESPACE, "aliases0")),
-                                    field(
-                                        Aliases.PACKAGES,
-                                        proj(Aliases.TYPE_, Aliases.PACKAGES, "aliases0")),
-                                    field(
-                                        Aliases.BRANCH_VARS,
-                                        proj(Aliases.TYPE_, Aliases.BRANCH_VARS, "aliases0")),
-                                    field(
-                                        Aliases.RECURSIVE_VARS,
-                                        proj(Aliases.TYPE_, Aliases.RECURSIVE_VARS, "aliases0")),
-                                    field(
-                                        Aliases.IN_SCOPE_TYPE_PARAMS,
-                                        proj(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS, "aliases0")),
-                                    field(
-                                        Aliases.POLYMORPHIC_LOCALS,
-                                        proj(Aliases.TYPE_, Aliases.POLYMORPHIC_LOCALS, "aliases0")),
-                                    field(
-                                        Aliases.IN_SCOPE_JAVA_VARS,
-                                        proj(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS, "aliases0")),
+                                recordWith(Aliases.TYPE_, "aliases0", Utils.ALIASES_FIELDS,
                                     field(
                                         Aliases.VAR_RENAMES,
                                         Maps.union(
                                             var("tcoVarRenames"),
-                                            proj(Aliases.TYPE_, Aliases.VAR_RENAMES, "aliases0"))),
-                                    field(
-                                        Aliases.LAMBDA_VARS,
-                                        proj(Aliases.TYPE_, Aliases.LAMBDA_VARS, "aliases0")),
-                                    field(
-                                        Aliases.TYPE_VAR_SUBST,
-                                        proj(Aliases.TYPE_, Aliases.TYPE_VAR_SUBST, "aliases0")),
-                                    field(
-                                        Aliases.TRUSTED_TYPE_VARS,
-                                        proj(Aliases.TYPE_, Aliases.TRUSTED_TYPE_VARS, "aliases0")),
-                                    field(
-                                        Aliases.METHOD_CODOMAIN,
-                                        proj(Aliases.TYPE_, Aliases.METHOD_CODOMAIN, "aliases0")),
-                                    field(
-                                        Aliases.THUNKED_VARS,
-                                        proj(Aliases.TYPE_, Aliases.THUNKED_VARS, "aliases0")))),
+                                            proj(Aliases.TYPE_, Aliases.VAR_RENAMES, "aliases0"))))),
                             field(
                                 JavaEnvironment.GRAPH,
                                 proj(JavaEnvironment.TYPE_, JavaEnvironment.GRAPH, "env0")))),
@@ -10845,46 +10779,13 @@ public class Coder {
                     record(JavaEnvironment.TYPE_,
                         field(
                             JavaEnvironment.ALIASES,
-                            record(Aliases.TYPE_,
-                                field(
-                                    Aliases.CURRENT_NAMESPACE,
-                                    proj(Aliases.TYPE_, Aliases.CURRENT_NAMESPACE, "aliases")),
-                                field(
-                                    Aliases.PACKAGES,
-                                    proj(Aliases.TYPE_, Aliases.PACKAGES, "aliases")),
+                            recordWith(Aliases.TYPE_, "aliases", Utils.ALIASES_FIELDS,
                                 field(
                                     Aliases.BRANCH_VARS,
                                     Sets.insert(
                                         var("name"),
                                         proj(Aliases.TYPE_, Aliases.BRANCH_VARS, "aliases"))),
-                                field(
-                                    Aliases.RECURSIVE_VARS,
-                                    proj(Aliases.TYPE_, Aliases.RECURSIVE_VARS, "aliases")),
-                                field(
-                                    Aliases.IN_SCOPE_TYPE_PARAMS,
-                                    proj(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS, "aliases")),
-                                field(
-                                    Aliases.POLYMORPHIC_LOCALS,
-                                    proj(Aliases.TYPE_, Aliases.POLYMORPHIC_LOCALS, "aliases")),
-                                field(
-                                    Aliases.IN_SCOPE_JAVA_VARS,
-                                    proj(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS, "aliases")),
-                                field(
-                                    Aliases.VAR_RENAMES,
-                                    proj(Aliases.TYPE_, Aliases.VAR_RENAMES, "aliases")),
-                                field(
-                                    Aliases.LAMBDA_VARS,
-                                    proj(Aliases.TYPE_, Aliases.LAMBDA_VARS, "aliases")),
-                                field(
-                                    Aliases.TYPE_VAR_SUBST,
-                                    proj(Aliases.TYPE_, Aliases.TYPE_VAR_SUBST, "aliases")),
-                                field(
-                                    Aliases.TRUSTED_TYPE_VARS,
-                                    proj(Aliases.TYPE_, Aliases.TRUSTED_TYPE_VARS, "aliases")),
-                                field(Aliases.METHOD_CODOMAIN, nothing()),
-                                field(
-                                    Aliases.THUNKED_VARS,
-                                    proj(Aliases.TYPE_, Aliases.THUNKED_VARS, "aliases")))),
+                                field(Aliases.METHOD_CODOMAIN, nothing()))),
                         field(
                             JavaEnvironment.GRAPH,
                             proj(JavaEnvironment.TYPE_, JavaEnvironment.GRAPH, "env"))))));
@@ -14263,48 +14164,12 @@ public class Coder {
                             field("aliases",
                                 proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env1")),
                             field("aliases2",
-                                record(Aliases.TYPE_,
-                                    field(
-                                        Aliases.CURRENT_NAMESPACE,
-                                        proj(Aliases.TYPE_, Aliases.CURRENT_NAMESPACE, "aliases")),
-                                    field(
-                                        Aliases.PACKAGES,
-                                        proj(Aliases.TYPE_, Aliases.PACKAGES, "aliases")),
-                                    field(
-                                        Aliases.BRANCH_VARS,
-                                        proj(Aliases.TYPE_, Aliases.BRANCH_VARS, "aliases")),
-                                    field(
-                                        Aliases.RECURSIVE_VARS,
-                                        proj(Aliases.TYPE_, Aliases.RECURSIVE_VARS, "aliases")),
-                                    field(
-                                        Aliases.IN_SCOPE_TYPE_PARAMS,
-                                        proj(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS, "aliases")),
-                                    field(
-                                        Aliases.POLYMORPHIC_LOCALS,
-                                        proj(Aliases.TYPE_, Aliases.POLYMORPHIC_LOCALS, "aliases")),
-                                    field(
-                                        Aliases.IN_SCOPE_JAVA_VARS,
-                                        proj(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS, "aliases")),
-                                    field(
-                                        Aliases.VAR_RENAMES,
-                                        proj(Aliases.TYPE_, Aliases.VAR_RENAMES, "aliases")),
+                                recordWith(Aliases.TYPE_, "aliases", Utils.ALIASES_FIELDS,
                                     field(
                                         Aliases.LAMBDA_VARS,
                                         Sets.insert(
                                             proj(Lambda.TYPE_, Lambda.PARAMETER, "lam"),
-                                            proj(Aliases.TYPE_, Aliases.LAMBDA_VARS, "aliases"))),
-                                    field(
-                                        Aliases.TYPE_VAR_SUBST,
-                                        proj(Aliases.TYPE_, Aliases.TYPE_VAR_SUBST, "aliases")),
-                                    field(
-                                        Aliases.TRUSTED_TYPE_VARS,
-                                        proj(Aliases.TYPE_, Aliases.TRUSTED_TYPE_VARS, "aliases")),
-                                    field(
-                                        Aliases.METHOD_CODOMAIN,
-                                        proj(Aliases.TYPE_, Aliases.METHOD_CODOMAIN, "aliases")),
-                                    field(
-                                        Aliases.THUNKED_VARS,
-                                        proj(Aliases.TYPE_, Aliases.THUNKED_VARS, "aliases")))),
+                                            proj(Aliases.TYPE_, Aliases.LAMBDA_VARS, "aliases"))))),
                             field("env2",
                                 record(JavaEnvironment.TYPE_,
                                     field(
