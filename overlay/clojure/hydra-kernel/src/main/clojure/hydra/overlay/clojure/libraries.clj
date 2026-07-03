@@ -664,6 +664,9 @@
     {(prim-name 'hydra.lib.files/hydra_lib_files_append_file) (p/prim2 (prim-name 'hydra.lib.files/hydra_lib_files_append_file)
                                      (fn [path contents] ((files/hydra_lib_files_append_file path) contents))
                                      [] fp bin (eff (p/tc-either ferr unit)))
+     (prim-name 'hydra.lib.files/hydra_lib_files_copy) (p/prim3 (prim-name 'hydra.lib.files/hydra_lib_files_copy)
+                                     (fn [recursive source destination] (((files/hydra_lib_files_copy recursive) source) destination))
+                                     [] bool fp fp (eff (p/tc-either ferr unit)))
      (prim-name 'hydra.lib.files/hydra_lib_files_create_directory) (p/prim2 (prim-name 'hydra.lib.files/hydra_lib_files_create_directory)
                                      (fn [recursive path] ((files/hydra_lib_files_create_directory recursive) path))
                                      [] bool fp (eff (p/tc-either ferr unit)))
@@ -676,12 +679,18 @@
      (prim-name 'hydra.lib.files/hydra_lib_files_read_file) (p/prim1 (prim-name 'hydra.lib.files/hydra_lib_files_read_file)
                                      files/hydra_lib_files_read_file
                                      [] fp (eff (p/tc-either ferr bin)))
+     (prim-name 'hydra.lib.files/hydra_lib_files_remove_directory) (p/prim2 (prim-name 'hydra.lib.files/hydra_lib_files_remove_directory)
+                                     (fn [recursive path] ((files/hydra_lib_files_remove_directory recursive) path))
+                                     [] bool fp (eff (p/tc-either ferr unit)))
      (prim-name 'hydra.lib.files/hydra_lib_files_remove_file) (p/prim1 (prim-name 'hydra.lib.files/hydra_lib_files_remove_file)
                                      files/hydra_lib_files_remove_file
                                      [] fp (eff (p/tc-either ferr unit)))
      (prim-name 'hydra.lib.files/hydra_lib_files_rename) (p/prim2 (prim-name 'hydra.lib.files/hydra_lib_files_rename)
                                      (fn [source destination] ((files/hydra_lib_files_rename source) destination))
                                      [] fp fp (eff (p/tc-either ferr unit)))
+     (prim-name 'hydra.lib.files/hydra_lib_files_status) (p/prim1 (prim-name 'hydra.lib.files/hydra_lib_files_status)
+                                     files/hydra_lib_files_status
+                                     [] fp (eff (p/tc-either ferr fstat)))
      (prim-name 'hydra.lib.files/hydra_lib_files_write_file) (p/prim2 (prim-name 'hydra.lib.files/hydra_lib_files_write_file)
                                      (fn [path contents] ((files/hydra_lib_files_write_file path) contents))
                                      [] fp bin (eff (p/tc-either ferr unit)))}))

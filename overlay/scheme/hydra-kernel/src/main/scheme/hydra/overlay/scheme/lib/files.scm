@@ -8,15 +8,20 @@
           (scheme file)
           (scheme write)
           (only (guile)
-                mkdir rename-file
-                opendir readdir closedir))
-  (export hydra_lib_files_append_file
+                mkdir rmdir rename-file copy-file resolve-module eval
+                opendir readdir closedir
+                stat stat:type stat:size stat:mtime stat:mtimensec
+                stat:atime stat:atimensec stat:ctime stat:ctimensec))
+  (export hydra_lib_files_copy
+          hydra_lib_files_append_file
           hydra_lib_files_create_directory
           hydra_lib_files_exists
           hydra_lib_files_list_directory
           hydra_lib_files_read_file
+          hydra_lib_files_remove_directory
           hydra_lib_files_remove_file
           hydra_lib_files_rename
+          hydra_lib_files_status
           hydra_lib_files_write_file)
   (begin
 
@@ -210,6 +215,50 @@
     (define (remove-a-file path)
       (delete-file path))
 
+    ;; The generated (hydra file) record constructor is a macro in the loaded env (see the analogous
+    ;; note in hydra.overlay.scheme.lib.system), so FileStatus is built by eval'ing the constructor
+    ;; form inside the owning module rather than calling it as a procedure.
+    (define (make-rec modname ctor . args)
+      (eval (cons ctor (map (lambda (a) (list 'quote a)) args)) (resolve-module modname)))
+
+    (define (path-is-directory? path)
+      (eq? (stat:type (stat path)) 'directory))
+
+    ;; Recursively copy a directory tree. destination may already exist (mirrors
+    ;; createDirectoryIfMissing in the Haskell reference, Hydra.Haskell.Lib.Files:112).
+    (define (copy-directory-recursive source destination)
+      (if (not (file-exists? destination)) (mkdir destination))
+      (for-each
+        (lambda (name)
+          (let ((src (string-append source "/" name))
+                (dst (string-append destination "/" name)))
+            (if (path-is-directory? src)
+                (copy-directory-recursive src dst)
+                (copy-file src dst))))
+        (list-dir source)))
+
+    ;; Recursively remove a directory tree.
+    (define (remove-directory-recursive path)
+      (for-each
+        (lambda (name)
+          (let ((full (string-append path "/" name)))
+            (if (path-is-directory? full)
+                (remove-directory-recursive full)
+                (delete-file full))))
+        (list-dir path))
+      (rmdir path))
+
+    ;; POSIX stat type symbol -> hydra.file.FileType union value.
+    (define (file-type type-sym)
+      (case type-sym
+        ((directory) (list 'directory '()))
+        ((symlink) (list 'link '()))
+        ((char-special) (list 'character '()))
+        ((block-special) (list 'block '()))
+        ((fifo) (list 'fifo '()))
+        ((socket) (list 'socket '()))
+        (else (list 'regular '()))))
+
     ;; ---- Primitives ----
 
     ;; appendFile :: FilePath -> binary -> effect<Either<FileError, unit>>
@@ -221,6 +270,21 @@
             (lambda ()
               (append-file-bytes path contents)
               '())))))
+
+    ;; copy :: Bool -> FilePath -> FilePath -> effect<Either<FileError, unit>>
+    ;; Copy source to destination; when recursive, source may be a directory whose tree is copied.
+    (define hydra_lib_files_copy
+      (lambda (recursive)
+        (lambda (source)
+          (lambda (destination)
+            (with-file-error source
+              (lambda ()
+                (let ((source-is-dir (path-is-directory? source)))
+                  (cond
+                    ((and recursive source-is-dir) (copy-directory-recursive source destination))
+                    (source-is-dir (error "is a directory, but recursive is false" source))
+                    (else (copy-file source destination))))
+                '()))))))
 
     ;; createDirectory :: Bool -> FilePath -> effect<Either<FileError, unit>>
     ;; Create a directory; when recursive, create missing parents (mkdir -p).
@@ -253,6 +317,18 @@
         (with-file-error path
           (lambda () (read-file-bytes path)))))
 
+    ;; removeDirectory :: Bool -> FilePath -> effect<Either<FileError, unit>>
+    ;; Remove a directory; when recursive, remove its entire contents (rm -r); otherwise POSIX rmdir.
+    (define hydra_lib_files_remove_directory
+      (lambda (recursive)
+        (lambda (path)
+          (with-file-error path
+            (lambda ()
+              (if recursive
+                  (remove-directory-recursive path)
+                  (rmdir path))
+              '())))))
+
     ;; removeFile :: FilePath -> effect<Either<FileError, unit>>
     ;; Remove a file (POSIX unlink).
     (define hydra_lib_files_remove_file
@@ -269,6 +345,20 @@
             (lambda ()
               (rename-path source destination)
               '())))))
+
+    ;; status :: FilePath -> effect<Either<FileError, FileStatus>>
+    ;; Retrieve metadata about the file at path (POSIX stat). Symbolic links are followed.
+    (define hydra_lib_files_status
+      (lambda (path)
+        (with-file-error path
+          (lambda ()
+            (let ((s (stat path)))
+              (make-rec '(hydra file) 'make-hydra_file_file_status
+                (file-type (stat:type s))
+                (stat:size s)
+                (make-rec '(hydra time) 'make-hydra_time_timespec (stat:mtime s) (stat:mtimensec s))
+                (list 'given (make-rec '(hydra time) 'make-hydra_time_timespec (stat:atime s) (stat:atimensec s)))
+                (list 'given (make-rec '(hydra time) 'make-hydra_time_timespec (stat:ctime s) (stat:ctimensec s)))))))))
 
     ;; writeFile :: FilePath -> binary -> effect<Either<FileError, unit>>
     ;; Replace the file at path with the raw bytes contents, creating it if necessary.

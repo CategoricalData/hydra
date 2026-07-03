@@ -1,8 +1,11 @@
 (ns hydra.overlay.clojure.lib.files
+  (:require [hydra.file :refer :all]
+            [hydra.time :refer :all])
   (:import [java.io IOException FileNotFoundException]
-           [java.nio.file Files Paths LinkOption OpenOption StandardOpenOption
+           [java.nio.file Files Paths LinkOption OpenOption StandardOpenOption StandardCopyOption
             AccessDeniedException FileAlreadyExistsException NoSuchFileException
-            NotDirectoryException InvalidPathException]))
+            NotDirectoryException InvalidPathException FileVisitResult SimpleFileVisitor]
+           [java.nio.file.attribute BasicFileAttributes]))
 
 ;; Clojure implementations of hydra.lib.files primitives (#494).
 ;;
@@ -58,6 +61,30 @@
 
 (defn- path-of [s] (Paths/get s (into-array String [])))
 
+;; Recursively copy a directory tree, mirroring the Haskell host's copyDirectoryRecursive.
+(defn- copy-directory-recursive [source destination]
+  (Files/walkFileTree source
+    (proxy [SimpleFileVisitor] []
+      (preVisitDirectory [dir attrs]
+        (Files/createDirectories (.resolve destination (.relativize source dir))
+          (into-array java.nio.file.attribute.FileAttribute []))
+        FileVisitResult/CONTINUE)
+      (visitFile [file attrs]
+        (Files/copy file (.resolve destination (.relativize source file))
+          (into-array java.nio.file.CopyOption [StandardCopyOption/REPLACE_EXISTING]))
+        FileVisitResult/CONTINUE))))
+
+;; Recursively remove a directory tree, mirroring the Haskell host's removeDirectoryRecursive.
+(defn- remove-directory-recursive [path]
+  (Files/walkFileTree path
+    (proxy [SimpleFileVisitor] []
+      (visitFile [file attrs]
+        (Files/delete file)
+        FileVisitResult/CONTINUE)
+      (postVisitDirectory [dir exc]
+        (Files/delete dir)
+        FileVisitResult/CONTINUE))))
+
 ;; ---- Primitives ----
 
 ;; appendFile :: FilePath -> binary -> effect<Either<FileError, unit>>
@@ -69,6 +96,22 @@
         (Files/write (path-of path) (binary->bytes contents)
           (into-array OpenOption [StandardOpenOption/CREATE StandardOpenOption/APPEND]))
         nil)))))
+
+;; copy :: Bool -> FilePath -> FilePath -> effect<Either<FileError, unit>>
+(def hydra_lib_files_copy
+  "Copy source to destination; when recursive, source may be a directory whose tree is copied."
+  (fn [recursive] (fn [source] (fn [destination]
+    (with-file-error source
+      (fn []
+        (let [source-path (path-of source)
+              destination-path (path-of destination)
+              source-is-dir (Files/isDirectory source-path (into-array LinkOption []))]
+          (cond
+            (and recursive source-is-dir) (copy-directory-recursive source-path destination-path)
+            source-is-dir (throw (java.nio.file.FileSystemException. source nil "is a directory, but recursive is false"))
+            :else (Files/copy source-path destination-path
+                    (into-array java.nio.file.CopyOption [StandardCopyOption/REPLACE_EXISTING])))
+          nil)))))))
 
 ;; createDirectory :: Bool -> FilePath -> effect<Either<FileError, unit>>
 (def hydra_lib_files_create_directory
@@ -112,6 +155,17 @@
     (with-file-error path
       (fn [] (bytes->binary (Files/readAllBytes (path-of path)))))))
 
+;; removeDirectory :: Bool -> FilePath -> effect<Either<FileError, unit>>
+(def hydra_lib_files_remove_directory
+  "Remove a directory; when recursive, remove its entire contents (rm -r)."
+  (fn [recursive] (fn [path]
+    (with-file-error path
+      (fn []
+        (if recursive
+          (remove-directory-recursive (path-of path))
+          (Files/delete (path-of path)))
+        nil)))))
+
 ;; removeFile :: FilePath -> effect<Either<FileError, unit>>
 (def hydra_lib_files_remove_file
   "Remove a file (POSIX unlink)."
@@ -128,6 +182,35 @@
         (Files/move (path-of source) (path-of destination)
           (into-array java.nio.file.CopyOption []))
         nil)))))
+
+;; Classify BasicFileAttributes into a hydra.file.FileType union value.
+(defn- file-type [^BasicFileAttributes attrs]
+  (cond
+    (.isDirectory attrs)     (list :directory nil)
+    (.isSymbolicLink attrs)  (list :link nil)
+    (.isRegularFile attrs)   (list :regular nil)
+    :else                    (list :regular nil)))
+
+;; java.time.Instant -> hydra.time.Timespec (a hydra_time_timespec defrecord {:seconds :nanoseconds}).
+(defn- timespec [^java.time.Instant instant]
+  (->hydra_time_timespec (.getEpochSecond instant) (long (.getNano instant))))
+
+;; status :: FilePath -> effect<Either<FileError, FileStatus>>
+;; Retrieve metadata about the file at path (POSIX stat). Symbolic links are followed.
+;; FileStatus is a hydra_file_file_status defrecord
+;; {:file_type :size :modification_time :access_time :status_change_time}.
+(def hydra_lib_files_status
+  "Retrieve metadata about the file at path (POSIX stat)."
+  (fn [path]
+    (with-file-error path
+      (fn []
+        (let [attrs (Files/readAttributes (path-of path) BasicFileAttributes (into-array LinkOption []))]
+          (->hydra_file_file_status
+            (file-type attrs)
+            (.size attrs)
+            (timespec (.toInstant (.lastModifiedTime attrs)))
+            (list :given (timespec (.toInstant (.lastAccessTime attrs))))
+            (list :none)))))))
 
 ;; writeFile :: FilePath -> binary -> effect<Either<FileError, unit>>
 (def hydra_lib_files_write_file
