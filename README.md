@@ -8,7 +8,8 @@ and to graph data models like RDF and labeled property graphs.
 Hydra has been used in production at Microsoft for data modeling, validation, and transforms;
 its predecessor [Dragon](https://www.uber.com/blog/dragon-schema-integration-at-uber-scale/)
 drove data integration and graph construction at Uber.
-Expressive enough to define and compile its own kernel,
+Expressive enough to define and compile its own kernel —
+the core types, functions, and tools which make up the language itself —
 Hydra is built on the [LambdaGraph](https://bit.ly/lg-kgc2024) data model,
 which establishes an isomorphism between labeled [hypergraphs](https://en.wikipedia.org/wiki/Hypergraph)
 and [typed lambda calculus](https://en.wikipedia.org/wiki/Typed_lambda_calculus):
@@ -21,7 +22,7 @@ in Hydra, programs are graphs, and graphs are programs
   using the host language you are most comfortable with, and the same logic becomes
   available in every other supported language, with test-driven guarantees of semantic equivalence.
   The Hydra kernel is the most thoroughly exercised example: a working programming language, with its
-  tests, ported across eight languages from a single source of truth.
+  tests, ported across nine languages from a single source of truth.
 * **Graph construction**. Hydra supports TinkerPop-style property graphs
   as well as [RDF](https://en.wikipedia.org/wiki/Resource_Description_Framework)
   and [SHACL](https://en.wikipedia.org/wiki/SHACL),
@@ -38,7 +39,7 @@ in Hydra, programs are graphs, and graphs are programs
   [RDF](https://www.w3.org/RDF) formats including N-Triples,
   [GraphQL](https://graphql.org/),
   and simple tabular data (CSV/TSV).
-* **Computational graphs**. As an ontology language, Hydra has deep support for [parametirc polymorphism](https://en.wikipedia.org/wiki/Parametric_polymorphism),
+* **Computational graphs**. As an ontology language, Hydra has deep support for [parametric polymorphism](https://en.wikipedia.org/wiki/Parametric_polymorphism),
   as well as embedding of computational elements within a graph
   (sometimes called *computational knowledge graphs*).
   This follows naturally from the programs-are-graphs framing.
@@ -49,12 +50,14 @@ in Hydra, programs are graphs, and graphs are programs
 Hydra's most distinctive properties come from its graph foundations, and from being a single programming language kernel that
 runs natively in multiple host languages. Its ability to translate any valid program -- including its own kernel --
 into any supported language distinguishes it from conventional polyglot tooling.
+(A *host* language is one in which Hydra runs natively, and in which you can write Hydra programs;
+a *target* language is one into which Hydra generates code. Every host is also a target.)
 
 Hydra is *mutually self-hosting*: starting from any one of its current implementations,
 the kernel can be regenerated into another host language, and that regenerated
 implementation can in turn regenerate the first — without dependency on the original
 source language.
-Eight implementations have this property today — Haskell (Hydra's original bootstrapping
+Nine implementations have this property today — Haskell (Hydra's original bootstrapping
 language), Java, Python, Scala, TypeScript, and four dialects of Lisp (Clojure, Scheme,
 Common Lisp, and Emacs Lisp) —
 and all of them pass the [common test suite](https://github.com/CategoricalData/hydra/wiki/Testing)
@@ -81,9 +84,11 @@ The latest Hydra release is **0.17.0**. Published artifacts:
 | Channel | Packages |
 |---|---|
 | Hackage (Haskell) | [`hydra`](https://hackage.haskell.org/package/hydra) (umbrella), [`hydra-kernel`](https://hackage.haskell.org/package/hydra-kernel), [`hydra-haskell`](https://hackage.haskell.org/package/hydra-haskell) |
-| Maven Central (Java) | [`hydra-kernel`](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-kernel), [`hydra-java`](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-java), [`hydra-pg`](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-pg), [`hydra-rdf`](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-rdf) |
+| Maven Central (Java, group `net.fortytwo.hydra.java`) | [`hydra-kernel`](https://central.sonatype.com/artifact/net.fortytwo.hydra.java/hydra-kernel), [`hydra-java`](https://central.sonatype.com/artifact/net.fortytwo.hydra.java/hydra-java), [`hydra-pg`](https://central.sonatype.com/artifact/net.fortytwo.hydra.java/hydra-pg), [`hydra-rdf`](https://central.sonatype.com/artifact/net.fortytwo.hydra.java/hydra-rdf) |
+| Maven Central (Scala 3, group `net.fortytwo.hydra.scala`) | [`hydra-kernel_3`](https://central.sonatype.com/artifact/net.fortytwo.hydra.scala/hydra-kernel_3), [`hydra-scala_3`](https://central.sonatype.com/artifact/net.fortytwo.hydra.scala/hydra-scala_3), [`hydra-rdf_3`](https://central.sonatype.com/artifact/net.fortytwo.hydra.scala/hydra-rdf_3), and six more |
 | PyPI (Python) | [`hydra-kernel`](https://pypi.org/project/hydra-kernel/), [`hydra-python`](https://pypi.org/project/hydra-python/), [`hydra-pg`](https://pypi.org/project/hydra-pg/), [`hydra-rdf`](https://pypi.org/project/hydra-rdf/) |
 | conda-forge (Python) | [`hydra-kernel`](https://prefix.dev/channels/conda-forge/packages/hydra-kernel), [`hydra-python`](https://prefix.dev/channels/conda-forge/packages/hydra-python), [`hydra-pg`](https://prefix.dev/channels/conda-forge/packages/hydra-pg), [`hydra-rdf`](https://prefix.dev/channels/conda-forge/packages/hydra-rdf) |
+| npm (TypeScript) | [`hydra-kernel`](https://www.npmjs.com/package/hydra-kernel), [`hydra-typescript`](https://www.npmjs.com/package/hydra-typescript), [`hydra-pg`](https://www.npmjs.com/package/hydra-pg), [`hydra-rdf`](https://www.npmjs.com/package/hydra-rdf) |
 
 All Hydra packages share a single version number;
 see the [CHANGELOG](CHANGELOG.md) for release history and the
@@ -115,7 +120,7 @@ entry to Hydra: you can pick the head you're most comfortable with and ignore th
 | [Common Lisp](packages/hydra-lisp/hydra-common-lisp/README.md) | Complete | ([Common Lisp](https://common-lisp.net/)) |
 | [Emacs Lisp](packages/hydra-lisp/hydra-emacs-lisp/README.md) | Complete | Passes the common test suite; still maturing as a self-hosting host. ([Emacs Lisp](https://www.gnu.org/software/emacs/manual/eintr.html)) |
 | [TypeScript](packages/hydra-typescript/README.md) | Complete | Self-hosts and passes the common test suite; published to npm. ([TypeScript](https://www.typescriptlang.org/)) |
-| [Go](packages/hydra-go/README.md) | In progress | ([Go](https://go.dev/)) |
+| [Go](packages/hydra-go/README.md) | In progress | A "head bud": kernel code generation works, but the hand-written Go runtime is still stubbed out, and Go does not yet host the test suite. ([Go](https://go.dev/)) |
 | [Rust](packages/hydra-ext/src/main/haskell/Hydra/Sources/Rust) | In progress | Coder lives in `hydra-ext`; the Rust head has not yet been split into its own package. ([Rust](https://www.rust-lang.org/)) |
 | [Coq](packages/hydra-coq/README.md) | In progress | Generation-only target; there is no Coq-side runtime. ([Coq](https://coq.inria.fr/)) |
 | [WebAssembly](packages/hydra-wasm/README.md) | In progress | ([WebAssembly](https://webassembly.org/)) |
@@ -150,6 +155,12 @@ See [docs/overlays.md](docs/overlays.md) for how the overlay system works.
 | Cypher / GQL parsers | `overlay/java/hydra-pg` ([README](packages/hydra-pg/README.md)) | ANTLR-based openCypher/GQL parsers, converting to `hydra.pg.query.*`. |
 | TinkerPop / Gremlin | `overlay/{java,python}/hydra-pg` ([README](packages/hydra-pg/README.md)) | Hydra ↔ Gremlin bytecode + pg ↔ TinkerGraph bridge. |
 | PG DSL builders | `overlay/java/hydra-pg` ([README](packages/hydra-pg/README.md)) | Java fluent builders (`Graphs`, `Queries`, `Merging`) for `hydra-pg`. |
+
+## Getting help
+
+Questions, ideas, or something not working?
+Join the [Hydra Discord](https://bit.ly/lg-discord) (the LambdaGraph community server)
+or [open a GitHub issue](https://github.com/CategoricalData/hydra/issues).
 
 ## Resources
 
@@ -191,4 +202,8 @@ See [docs/overlays.md](docs/overlays.md) for how the overlay system works.
   - **[Translingual programming demo](https://www.linkedin.com/posts/joshuashinavier_hydra-goes-translingual-the-hydra-graph-activity-7418695357901111296-injH)** from Data Day Texas.
   - **[Bootstrapping demo](https://www.linkedin.com/posts/joshuashinavier_graph-programming-in-any-language-hydra-activity-7436798538312851456-kvN0)** — mutual self-hosting across three languages.
   - **[Graph validation in any language](https://www.linkedin.com/posts/joshuashinavier_graph-validation-in-any-language-bringing-activity-7446966175328116736-H3iV)** — applying Hydra's validation logic identically across host languages.
+
+## License
+
+Hydra is open-source software licensed under the [Apache License 2.0](LICENSE).
 
