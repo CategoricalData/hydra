@@ -1,0 +1,73 @@
+-- Note: this is an automatically generated file. Do not edit.
+
+-- | Term decoders for hydra.parsing
+
+module Hydra.Decode.Parsing where
+
+import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Core as DecodeCore
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Extract.Core as ExtractCore
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Lexical as Lexical
+import qualified Hydra.Overlay.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Overlay.Haskell.Lib.Maps as Maps
+import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
+import qualified Hydra.Overlay.Haskell.Lib.Strings as Strings
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Util as Util
+import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
+
+-- | Decoder for hydra.parsing.ParseError
+parseError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Parsing.ParseError
+parseError cx raw =
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermRecord v0 ->
+        let fieldMap = ExtractCore.toFieldMap v0
+        in (Eithers.bind (ExtractCore.requireField "message" (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+          Core.TermLiteral v1 -> case v1 of
+            Core.LiteralString v2 -> Right v2
+            _ -> Left (Errors.DecodingError "expected string literal")
+          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_message -> Eithers.bind (ExtractCore.requireField "remainder" (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+          Core.TermLiteral v1 -> case v1 of
+            Core.LiteralString v2 -> Right v2
+            _ -> Left (Errors.DecodingError "expected string literal")
+          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_remainder -> Right (Parsing.ParseError {
+          Parsing.parseErrorMessage = field_message,
+          Parsing.parseErrorRemainder = field_remainder}))))
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.parsing.ParseError")) (ExtractCore.stripWithDecodingError cx raw)
+
+-- | Decoder for hydra.parsing.ParseResult
+parseResult :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError a) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Parsing.ParseResult a)
+parseResult a cx raw =
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermInject v0 ->
+        let field = Core.injectionField v0
+            fname = Core.fieldName field
+            fterm = Core.fieldTerm field
+            variantMap =
+                    Maps.fromList [
+                      (Core.Name "success", (\input -> Eithers.map (\t -> Parsing.ParseResultSuccess t) (parseSuccess a cx input))),
+                      (Core.Name "failure", (\input -> Eithers.map (\t -> Parsing.ParseResultFailure t) (parseError cx input)))]
+        in (Optionals.cases (Maps.lookup fname variantMap) (Left (Errors.DecodingError (Strings.cat [
+          "no such field ",
+          (Core.unName fname),
+          " in union"]))) (\f -> f fterm))
+      _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+
+-- | Decoder for hydra.parsing.ParseSuccess
+parseSuccess :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError a) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Parsing.ParseSuccess a)
+parseSuccess a cx raw =
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermRecord v0 ->
+        let fieldMap = ExtractCore.toFieldMap v0
+        in (Eithers.bind (ExtractCore.requireField "value" a fieldMap cx) (\field_value -> Eithers.bind (ExtractCore.requireField "remainder" (\cx2 -> \raw2 -> Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+          Core.TermLiteral v1 -> case v1 of
+            Core.LiteralString v2 -> Right v2
+            _ -> Left (Errors.DecodingError "expected string literal")
+          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_remainder -> Right (Parsing.ParseSuccess {
+          Parsing.parseSuccessValue = field_value,
+          Parsing.parseSuccessRemainder = field_remainder}))))
+      _ -> Left (Errors.DecodingError "expected a record of type hydra.parsing.ParseSuccess")) (ExtractCore.stripWithDecodingError cx raw)

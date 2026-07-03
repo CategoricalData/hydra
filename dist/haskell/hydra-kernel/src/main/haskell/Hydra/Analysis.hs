@@ -1,0 +1,333 @@
+-- Note: this is an automatically generated file. Do not edit.
+
+-- | Module dependency module name analysis
+
+module Hydra.Analysis where
+
+import qualified Hydra.Annotations as Annotations
+import qualified Hydra.Arity as Arity
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Checking as Checking
+import qualified Hydra.Coders as Coders
+import qualified Hydra.Constants as Constants
+import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Core as DecodeCore
+import qualified Hydra.Dependencies as Dependencies
+import qualified Hydra.Docs as Docs
+import qualified Hydra.Encode.Core as EncodeCore
+import qualified Hydra.Error.Checking as ErrorChecking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.File as ErrorFile
+import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Error.System as ErrorSystem
+import qualified Hydra.Errors as Errors
+import qualified Hydra.File as File
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as Model
+import qualified Hydra.Lexical as Lexical
+import qualified Hydra.Overlay.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Overlay.Haskell.Lib.Equality as Equality
+import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
+import qualified Hydra.Overlay.Haskell.Lib.Logic as Logic
+import qualified Hydra.Overlay.Haskell.Lib.Maps as Maps
+import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
+import qualified Hydra.Overlay.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Overlay.Haskell.Lib.Sets as Sets
+import qualified Hydra.Names as Names
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Predicates as Predicates
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
+import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Scoping as Scoping
+import qualified Hydra.Strip as Strip
+import qualified Hydra.System as System
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Time as Time
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variables as Variables
+import qualified Hydra.Variants as Variants
+import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
+import qualified Data.Set as S
+
+-- | Add names to existing module names mapping
+addNamesToModuleNames :: (Packaging.ModuleName -> t0) -> S.Set Core.Name -> Util.ModuleNames t0 -> Util.ModuleNames t0
+addNamesToModuleNames encodeModuleName names ns0 =
+
+      let nss = Sets.fromList (Optionals.cat (Lists.map Names.moduleNameOf (Sets.toList names)))
+          toPair = \ns -> (ns, (encodeModuleName ns))
+      in Util.ModuleNames {
+        Util.moduleNamesFocus = (Util.moduleNamesFocus ns0),
+        Util.moduleNamesMapping = (Maps.union (Util.moduleNamesMapping ns0) (Maps.fromList (Lists.map toPair (Sets.toList nss))))}
+
+-- | Analyze a function term, collecting lambdas, type lambdas, lets, and type applications
+analyzeFunctionTerm :: Typing.InferenceContext -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
+analyzeFunctionTerm cx getTC setTC env term =
+    analyzeFunctionTermWith cx (\g -> \b -> Logic.ifElse (Predicates.isComplexBinding g b) (Just (Core.TermLiteral (Core.LiteralBoolean True))) Nothing) getTC setTC env term
+
+-- | Analyze a function term with configurable binding metadata
+analyzeFunctionTermWith :: Typing.InferenceContext -> (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
+analyzeFunctionTermWith cx forBinding getTC setTC env term =
+    analyzeFunctionTermWithGather cx forBinding getTC setTC True env [] [] [] [] [] term
+
+-- | Final step of the function-term walk: type-apply the body and assemble the FunctionStructure
+analyzeFunctionTermWithFinish :: Typing.InferenceContext -> (t0 -> Graph.Graph) -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
+analyzeFunctionTermWithFinish cx getTC fEnv tparams args bindings doms tapps body =
+
+      let bodyWithTapps =
+              Lists.foldl (\trm -> \typ -> Core.TermTypeApplication (Core.TypeApplicationTerm {
+                Core.typeApplicationTermBody = trm,
+                Core.typeApplicationTermType = typ})) body tapps
+          mcod = Eithers.either (\_ -> Nothing) (\c -> Just c) (Checking.typeOfTerm cx (getTC fEnv) bodyWithTapps)
+      in (Right (Typing.FunctionStructure {
+        Typing.functionStructureTypeParams = (Lists.reverse tparams),
+        Typing.functionStructureParams = (Lists.reverse args),
+        Typing.functionStructureBindings = bindings,
+        Typing.functionStructureBody = bodyWithTapps,
+        Typing.functionStructureDomains = (Lists.reverse doms),
+        Typing.functionStructureCodomain = mcod,
+        Typing.functionStructureEnvironment = fEnv}))
+
+-- | Recursive step of the function-term walk: peel lambdas / type-lambdas / type-applications, accumulating params and bindings, then call analyzeFunctionTermWithFinish
+analyzeFunctionTermWithGather :: Typing.InferenceContext -> (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> Bool -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
+analyzeFunctionTermWithGather cx forBinding getTC setTC argMode gEnv tparams args bindings doms tapps t =
+    case (Strip.deannotateTerm t) of
+      Core.TermLambda v0 -> Logic.ifElse argMode (
+        let v = Core.lambdaParameter v0
+            dom = Optionals.cases (Core.lambdaDomain v0) (Core.TypeVariable (Core.Name "_")) (\x_ -> x_)
+            body = Core.lambdaBody v0
+            newEnv = setTC (Scoping.extendGraphForLambda (getTC gEnv) v0) gEnv
+        in (analyzeFunctionTermWithGather cx forBinding getTC setTC argMode newEnv tparams (Lists.cons v args) bindings (Lists.cons dom doms) tapps body)) (analyzeFunctionTermWithFinish cx getTC gEnv tparams args bindings doms tapps t)
+      Core.TermLet v0 ->
+        let newBindings = Core.letBindings v0
+            body = Core.letBody v0
+            newEnv = setTC (Scoping.extendGraphForLet forBinding (getTC gEnv) v0) gEnv
+        in (analyzeFunctionTermWithGather cx forBinding getTC setTC False newEnv tparams args (Lists.concat2 bindings newBindings) doms tapps body)
+      Core.TermTypeApplication v0 ->
+        let taBody = Core.typeApplicationTermBody v0
+            typ = Core.typeApplicationTermType v0
+        in (analyzeFunctionTermWithGather cx forBinding getTC setTC argMode gEnv tparams args bindings doms (Lists.cons typ tapps) taBody)
+      Core.TermTypeLambda v0 ->
+        let tvar = Core.typeLambdaParameter v0
+            tlBody = Core.typeLambdaBody v0
+            newEnv = setTC (Scoping.extendGraphForTypeLambda (getTC gEnv) v0) gEnv
+        in (analyzeFunctionTermWithGather cx forBinding getTC setTC argMode newEnv (Lists.cons tvar tparams) args bindings doms tapps tlBody)
+      _ -> analyzeFunctionTermWithFinish cx getTC gEnv tparams args bindings doms tapps t
+
+-- | Get dependency module names from definitions
+definitionDependencyModuleNames :: [Packaging.Definition] -> S.Set Packaging.ModuleName
+definitionDependencyModuleNames defs =
+
+      let defNames =
+              \def -> case def of
+                Packaging.DefinitionType v0 -> Dependencies.typeDependencyNames True (Core.typeSchemeBody (Packaging.typeDefinitionBody v0))
+                Packaging.DefinitionTerm v0 -> Dependencies.termDependencyNames True True True (Packaging.termDefinitionBody v0)
+                Packaging.DefinitionPrimitive v0 -> Dependencies.typeDependencyNames True (Core.typeSchemeBody (Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature v0)))
+          allNames = Sets.unions (Lists.map defNames defs)
+      in (Sets.fromList (Optionals.cat (Lists.map Names.moduleNameOf (Sets.toList allNames))))
+
+-- | Find dependency module names in all of a set of terms (Either version)
+dependencyModuleNames :: t0 -> Graph.Graph -> Bool -> Bool -> Bool -> Bool -> [Core.Binding] -> Either Errors.Error (S.Set Packaging.ModuleName)
+dependencyModuleNames cx graph binds withPrims withNoms withSchema els =
+
+      let depNames =
+              \el ->
+                let term = Core.bindingTerm el
+                    deannotatedTerm = Strip.deannotateTerm term
+                    dataNames = Dependencies.termDependencyNames binds withPrims withNoms term
+                    schemaNames =
+                            Logic.ifElse withSchema (Optionals.cases (Core.bindingTypeScheme el) Sets.empty (\ts -> Dependencies.typeDependencyNames True (Core.typeSchemeBody ts))) Sets.empty
+                in (Logic.ifElse (Predicates.isEncodedType deannotatedTerm) (Eithers.map (\typ -> Sets.unions [
+                  dataNames,
+                  schemaNames,
+                  (Dependencies.typeDependencyNames True typ)]) (Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\_a -> _a) (DecodeCore.type_ graph term))) (Logic.ifElse (Predicates.isEncodedTerm deannotatedTerm) (Eithers.map (\decodedTerm -> Sets.unions [
+                  dataNames,
+                  schemaNames,
+                  (Dependencies.termDependencyNames binds withPrims withNoms decodedTerm)]) (Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\_a -> _a) (DecodeCore.term graph term))) (Right (Sets.unions [
+                  dataNames,
+                  schemaNames]))))
+      in (Eithers.map (\namesList -> Sets.fromList (Optionals.cat (Lists.map Names.moduleNameOf (Sets.toList (Sets.unions namesList))))) (Eithers.mapList depNames els))
+
+-- | Gather applications from a term, returning (args, baseTerm)
+gatherApplications :: Core.Term -> ([Core.Term], Core.Term)
+gatherApplications term =
+
+      let go =
+              \args -> \t -> case (Strip.deannotateTerm t) of
+                Core.TermApplication v0 ->
+                  let lhs = Core.applicationFunction v0
+                      rhs = Core.applicationArgument v0
+                  in (go (Lists.cons rhs args) lhs)
+                _ -> (args, t)
+      in (go [] term)
+
+-- | Gather term arguments, stripping type-level constructs
+gatherArgs :: Core.Term -> [Core.Term] -> (Core.Term, [Core.Term])
+gatherArgs term args =
+    case (Strip.deannotateTerm term) of
+      Core.TermApplication v0 ->
+        let lhs = Core.applicationFunction v0
+            rhs = Core.applicationArgument v0
+        in (gatherArgs lhs (Lists.cons rhs args))
+      Core.TermTypeLambda v0 ->
+        let body = Core.typeLambdaBody v0
+        in (gatherArgs body args)
+      Core.TermTypeApplication v0 ->
+        let body = Core.typeApplicationTermBody v0
+        in (gatherArgs body args)
+      _ -> (term, args)
+
+-- | Gather term and type arguments from a term
+gatherArgsWithTypeApps :: Core.Term -> [Core.Term] -> [Core.Type] -> (Core.Term, ([Core.Term], [Core.Type]))
+gatherArgsWithTypeApps term args tyArgs =
+    case (Strip.deannotateTerm term) of
+      Core.TermApplication v0 ->
+        let lhs = Core.applicationFunction v0
+            rhs = Core.applicationArgument v0
+        in (gatherArgsWithTypeApps lhs (Lists.cons rhs args) tyArgs)
+      Core.TermTypeLambda v0 ->
+        let body = Core.typeLambdaBody v0
+        in (gatherArgsWithTypeApps body args tyArgs)
+      Core.TermTypeApplication v0 ->
+        let body = Core.typeApplicationTermBody v0
+            typ = Core.typeApplicationTermType v0
+        in (gatherArgsWithTypeApps body args (Lists.cons typ tyArgs))
+      _ -> (term, (args, tyArgs))
+
+-- | Check if a term body is self-tail-recursive with respect to a function name
+isSelfTailRecursive :: Core.Name -> Core.Term -> Bool
+isSelfTailRecursive funcName body =
+
+      let callsSelf = Logic.not (Variables.isFreeVariableInTerm funcName body)
+      in (Logic.ifElse callsSelf (isTailRecursiveInTailPosition funcName body) False)
+
+-- | Check if a term can be encoded as a simple assignment
+isSimpleAssignment :: Core.Term -> Bool
+isSimpleAssignment term =
+    case term of
+      Core.TermAnnotated v0 -> isSimpleAssignment (Core.annotatedTermBody v0)
+      Core.TermLambda _ -> False
+      Core.TermLet _ -> False
+      Core.TermTypeLambda _ -> False
+      Core.TermTypeApplication v0 -> isSimpleAssignment (Core.typeApplicationTermBody v0)
+      _ ->
+        let baseTerm = Pairs.first (gatherArgs term [])
+        in case baseTerm of
+          Core.TermCases _ -> False
+          _ -> True
+
+-- | Check that all self-references are in tail position
+isTailRecursiveInTailPosition :: Core.Name -> Core.Term -> Bool
+isTailRecursiveInTailPosition funcName term =
+
+      let stripped = Strip.deannotateAndDetypeTerm term
+      in case stripped of
+        Core.TermApplication _ ->
+          let gathered = gatherApplications stripped
+              gatherArgs = Pairs.first gathered
+              gatherFun = Pairs.second gathered
+              strippedFun = Strip.deannotateAndDetypeTerm gatherFun
+          in case strippedFun of
+            Core.TermVariable v1 -> Logic.ifElse (Equality.equal v1 funcName) (
+              let argsNoFunc = Lists.foldl (\ok -> \arg -> Logic.and ok (Variables.isFreeVariableInTerm funcName arg)) True gatherArgs
+                  argsNoLambda =
+                          Lists.foldl (\ok -> \arg -> Logic.and ok (Logic.not (Rewriting.foldOverTerm Coders.TraversalOrderPre (\found -> \t -> Logic.or found (case t of
+                            Core.TermLambda v2 ->
+                              let ignore = Core.lambdaBody v2
+                              in True
+                            _ -> False)) False arg))) True gatherArgs
+              in (Logic.and argsNoFunc argsNoLambda)) (Variables.isFreeVariableInTerm funcName term)
+            Core.TermCases v1 ->
+              let cases_ = Core.caseStatementCases v1
+                  dflt = Core.caseStatementDefault v1
+                  branchesOk =
+                          Lists.foldl (\ok -> \field -> Logic.and ok (isTailRecursiveInTailPosition funcName (Core.caseAlternativeHandler field))) True cases_
+                  dfltOk = Optionals.cases dflt True (\d -> isTailRecursiveInTailPosition funcName d)
+                  argsOk = Lists.foldl (\ok -> \arg -> Logic.and ok (Variables.isFreeVariableInTerm funcName arg)) True gatherArgs
+              in (Logic.and (Logic.and branchesOk dfltOk) argsOk)
+            _ -> Variables.isFreeVariableInTerm funcName term
+        Core.TermLambda v0 -> isTailRecursiveInTailPosition funcName (Core.lambdaBody v0)
+        Core.TermLet v0 ->
+          let bindingsOk =
+                  Lists.foldl (\ok -> \b -> Logic.and ok (Variables.isFreeVariableInTerm funcName (Core.bindingTerm b))) True (Core.letBindings v0)
+          in (Logic.and bindingsOk (isTailRecursiveInTailPosition funcName (Core.letBody v0)))
+        _ -> Variables.isFreeVariableInTerm funcName term
+
+-- | Check whether a module contains any binary literal values
+moduleContainsBinaryLiterals :: Packaging.Module -> Bool
+moduleContainsBinaryLiterals mod =
+
+      let checkTerm =
+              \found -> \term -> Logic.or found (case term of
+                Core.TermLiteral v0 -> case v0 of
+                  Core.LiteralBinary _ -> True
+                  _ -> False
+                _ -> False)
+          termContainsBinary = \term -> Rewriting.foldOverTerm Coders.TraversalOrderPre checkTerm False term
+          defTerms =
+                  Optionals.cat (Lists.map (\d -> case d of
+                    Packaging.DefinitionTerm v0 -> Just (Packaging.termDefinitionBody v0)
+                    _ -> Nothing) (Packaging.moduleDefinitions mod))
+      in (Lists.foldl (\acc -> \t -> Logic.or acc (termContainsBinary t)) False defTerms)
+
+-- | Check whether a module contains any decimal literal values
+moduleContainsDecimalLiterals :: Packaging.Module -> Bool
+moduleContainsDecimalLiterals mod =
+
+      let checkTerm =
+              \found -> \term -> Logic.or found (case term of
+                Core.TermLiteral v0 -> case v0 of
+                  Core.LiteralDecimal _ -> True
+                  _ -> False
+                _ -> False)
+          termContainsDecimal = \term -> Rewriting.foldOverTerm Coders.TraversalOrderPre checkTerm False term
+          defTerms =
+                  Optionals.cat (Lists.map (\d -> case d of
+                    Packaging.DefinitionTerm v0 -> Just (Packaging.termDefinitionBody v0)
+                    _ -> Nothing) (Packaging.moduleDefinitions mod))
+      in (Lists.foldl (\acc -> \t -> Logic.or acc (termContainsDecimal t)) False defTerms)
+
+-- | Find dependency module names in all elements of a module, excluding the module's own module name (Either version)
+moduleDependencyModuleNames :: t0 -> Graph.Graph -> Bool -> Bool -> Bool -> Bool -> Packaging.Module -> Either Errors.Error (S.Set Packaging.ModuleName)
+moduleDependencyModuleNames cx graph binds withPrims withNoms withSchema mod =
+
+      let allBindings =
+              Optionals.cat (Lists.map (\d -> case d of
+                Packaging.DefinitionType v0 -> Just ((\name -> \typ ->
+                  let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
+                      dataTerm =
+                              Annotations.normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
+                                Core.annotatedTermBody = (EncodeCore.type_ typ),
+                                Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
+                                  (Constants.keyType, schemaTerm)]))}))
+                  in Core.Binding {
+                    Core.bindingName = name,
+                    Core.bindingTerm = dataTerm,
+                    Core.bindingTypeScheme = (Just (Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+                      Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionBody v0)))
+                Packaging.DefinitionTerm v0 -> Just (Core.Binding {
+                  Core.bindingName = (Packaging.termDefinitionName v0),
+                  Core.bindingTerm = (Packaging.termDefinitionBody v0),
+                  Core.bindingTypeScheme = (Optionals.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature v0))})
+                _ -> Nothing) (Packaging.moduleDefinitions mod))
+      in (Eithers.map (\deps -> Sets.delete (Packaging.moduleName mod) deps) (dependencyModuleNames cx graph binds withPrims withNoms withSchema allBindings))
+
+-- | Create module names mapping for definitions
+moduleNamesForDefinitions :: (Packaging.ModuleName -> t0) -> Packaging.ModuleName -> [Packaging.Definition] -> Util.ModuleNames t0
+moduleNamesForDefinitions encodeModuleName focusNs defs =
+
+      let nss = Sets.delete focusNs (definitionDependencyModuleNames defs)
+          toPair = \ns -> (ns, (encodeModuleName ns))
+      in Util.ModuleNames {
+        Util.moduleNamesFocus = (toPair focusNs),
+        Util.moduleNamesMapping = (Maps.fromList (Lists.map toPair (Sets.toList nss)))}

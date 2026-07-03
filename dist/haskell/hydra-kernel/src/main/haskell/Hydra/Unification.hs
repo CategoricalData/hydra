@@ -1,0 +1,203 @@
+-- Note: this is an automatically generated file. Do not edit.
+
+-- | Utilities for type unification.
+
+module Hydra.Unification where
+
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
+import qualified Hydra.Core as Core
+import qualified Hydra.Docs as Docs
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.File as ErrorFile
+import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Error.System as ErrorSystem
+import qualified Hydra.Errors as Errors
+import qualified Hydra.File as File
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as Model
+import qualified Hydra.Overlay.Haskell.Lib.Eithers as Eithers
+import qualified Hydra.Overlay.Haskell.Lib.Equality as Equality
+import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
+import qualified Hydra.Overlay.Haskell.Lib.Logic as Logic
+import qualified Hydra.Overlay.Haskell.Lib.Maps as Maps
+import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
+import qualified Hydra.Overlay.Haskell.Lib.Pairs as Pairs
+import qualified Hydra.Overlay.Haskell.Lib.Strings as Strings
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
+import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Show.Core as ShowCore
+import qualified Hydra.Strip as Strip
+import qualified Hydra.Substitution as Substitution
+import qualified Hydra.System as System
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Time as Time
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
+import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
+import qualified Data.Map as M
+
+-- | Join two types, producing a list of type constraints.The comment is used to provide context for the constraints.
+joinTypes :: t0 -> Core.Type -> Core.Type -> String -> Either Errors.UnificationError [Typing.TypeConstraint]
+joinTypes cx left right comment =
+
+      let sleft = Strip.deannotateType left
+          sright = Strip.deannotateType right
+          joinOne =
+                  \l -> \r -> Typing.TypeConstraint {
+                    Typing.typeConstraintLeft = l,
+                    Typing.typeConstraintRight = r,
+                    Typing.typeConstraintComment = (Strings.cat2 "join types; " comment)}
+          cannotUnify =
+                  Left (Errors.UnificationError {
+                    Errors.unificationErrorLeftType = sleft,
+                    Errors.unificationErrorRightType = sright,
+                    Errors.unificationErrorMessage = (Strings.cat2 (Strings.cat2 (Strings.cat2 "cannot unify " (ShowCore.type_ sleft)) " with ") (ShowCore.type_ sright))})
+          assertEqual = Logic.ifElse (Equality.equal sleft sright) (Right []) cannotUnify
+          joinList =
+                  \lefts -> \rights -> Logic.ifElse (Equality.equal (Lists.length lefts) (Lists.length rights)) (Right (Lists.zipWith joinOne lefts rights)) cannotUnify
+          joinRowTypes =
+                  \left2 -> \right2 -> Logic.ifElse (Logic.and (Equality.equal (Lists.length (Lists.map Core.fieldTypeName left2)) (Lists.length (Lists.map Core.fieldTypeName right2))) (Lists.foldl (\acc -> \x -> Logic.and acc x) True (Lists.zipWith (\left3 -> \right3 -> Equality.equal (Core.unName left3) (Core.unName right3)) (Lists.map Core.fieldTypeName left2) (Lists.map Core.fieldTypeName right2)))) (joinList (Lists.map Core.fieldTypeType left2) (Lists.map Core.fieldTypeType right2)) cannotUnify
+      in case sleft of
+        Core.TypeApplication v0 -> case sright of
+          Core.TypeApplication v1 -> Right [
+            joinOne (Core.applicationTypeFunction v0) (Core.applicationTypeFunction v1),
+            (joinOne (Core.applicationTypeArgument v0) (Core.applicationTypeArgument v1))]
+          _ -> cannotUnify
+        Core.TypeEither v0 -> case sright of
+          Core.TypeEither v1 -> Right [
+            joinOne (Core.eitherTypeLeft v0) (Core.eitherTypeLeft v1),
+            (joinOne (Core.eitherTypeRight v0) (Core.eitherTypeRight v1))]
+          _ -> cannotUnify
+        Core.TypeEffect v0 -> case sright of
+          Core.TypeEffect v1 -> Right [
+            joinOne v0 v1]
+          _ -> cannotUnify
+        Core.TypeFunction v0 -> case sright of
+          Core.TypeFunction v1 -> Right [
+            joinOne (Core.functionTypeDomain v0) (Core.functionTypeDomain v1),
+            (joinOne (Core.functionTypeCodomain v0) (Core.functionTypeCodomain v1))]
+          _ -> cannotUnify
+        Core.TypeList v0 -> case sright of
+          Core.TypeList v1 -> Right [
+            joinOne v0 v1]
+          _ -> cannotUnify
+        Core.TypeLiteral _ -> assertEqual
+        Core.TypeMap v0 -> case sright of
+          Core.TypeMap v1 -> Right [
+            joinOne (Core.mapTypeKeys v0) (Core.mapTypeKeys v1),
+            (joinOne (Core.mapTypeValues v0) (Core.mapTypeValues v1))]
+          _ -> cannotUnify
+        Core.TypeOptional v0 -> case sright of
+          Core.TypeOptional v1 -> Right [
+            joinOne v0 v1]
+          _ -> cannotUnify
+        Core.TypePair v0 -> case sright of
+          Core.TypePair v1 -> Right [
+            joinOne (Core.pairTypeFirst v0) (Core.pairTypeFirst v1),
+            (joinOne (Core.pairTypeSecond v0) (Core.pairTypeSecond v1))]
+          _ -> cannotUnify
+        Core.TypeRecord v0 -> case sright of
+          Core.TypeRecord v1 -> joinRowTypes v0 v1
+          _ -> cannotUnify
+        Core.TypeSet v0 -> case sright of
+          Core.TypeSet v1 -> Right [
+            joinOne v0 v1]
+          _ -> cannotUnify
+        Core.TypeUnion v0 -> case sright of
+          Core.TypeUnion v1 -> joinRowTypes v0 v1
+          _ -> cannotUnify
+        Core.TypeUnit -> case sright of
+          Core.TypeUnit -> Right []
+          _ -> cannotUnify
+        Core.TypeVoid -> case sright of
+          Core.TypeVoid -> Right []
+          _ -> cannotUnify
+        Core.TypeWrap v0 -> case sright of
+          Core.TypeWrap v1 -> Right [
+            joinOne v0 v1]
+          _ -> cannotUnify
+        _ -> cannotUnify
+
+-- | Robinson's algorithm, following https://www.cs.cornell.edu/courses/cs6110/2017sp/lectures/lec23.pdf
+-- | Specifically this is an implementation of the following rules:
+-- |   * Unify({(x, t)} ∪ E) = {t/x} Unify(E{t/x}) if x ∉ FV(t)
+-- |   * Unify(∅) = I (the identity substitution x ↦ x)
+-- |   * Unify({(x, x)} ∪ E) = Unify(E)
+-- |   * Unify({(f(s1, ..., sn), f(t1, ..., tn))} ∪ E) = Unify({(s1, t1), ..., (sn, tn)} ∪ E))
+unifyTypeConstraints :: t0 -> M.Map Core.Name t1 -> [Typing.TypeConstraint] -> Either Errors.UnificationError Typing.TypeSubst
+unifyTypeConstraints cx schemaTypes constraints =
+
+      let withConstraint =
+              \c -> \rest ->
+                let sleft = Strip.deannotateType (Typing.typeConstraintLeft c)
+                    sright = Strip.deannotateType (Typing.typeConstraintRight c)
+                    comment = Typing.typeConstraintComment c
+                    bind =
+                            \v -> \t ->
+                              let subst = Substitution.singletonTypeSubst v t
+                                  withResult = \s -> Substitution.composeTypeSubst subst s
+                              in (Eithers.map withResult (unifyTypeConstraints cx schemaTypes (Substitution.substituteInConstraints subst rest)))
+                    tryBinding =
+                            \v -> \t -> Logic.ifElse (variableOccursInType v t) (Left (Errors.UnificationError {
+                              Errors.unificationErrorLeftType = sleft,
+                              Errors.unificationErrorRightType = sright,
+                              Errors.unificationErrorMessage = (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Variable " (Core.unName v)) " appears free in type ") (ShowCore.type_ t)) " (") comment) ")")})) (bind v t)
+                    noVars =
+
+                              let withConstraints = \constraints2 -> unifyTypeConstraints cx schemaTypes (Lists.concat2 constraints2 rest)
+                              in (Eithers.bind (joinTypes cx sleft sright comment) withConstraints)
+                    dflt =
+                            case sright of
+                              Core.TypeVariable v0 -> tryBinding v0 sleft
+                              _ -> noVars
+                in case sleft of
+                  Core.TypeVariable v0 -> case sright of
+                    Core.TypeVariable v1 -> Logic.ifElse (Equality.equal (Core.unName v0) (Core.unName v1)) (unifyTypeConstraints cx schemaTypes rest) (Logic.ifElse (Optionals.isGiven (Maps.lookup v0 schemaTypes)) (Logic.ifElse (Optionals.isGiven (Maps.lookup v1 schemaTypes)) (Left (Errors.UnificationError {
+                      Errors.unificationErrorLeftType = sleft,
+                      Errors.unificationErrorRightType = sright,
+                      Errors.unificationErrorMessage = (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Attempted to unify schema names " (Core.unName v0)) " and ") (Core.unName v1)) " (") comment) ")")})) (bind v1 sleft)) (bind v0 sright))
+                    _ -> tryBinding v0 sright
+                  _ -> dflt
+      in (Optionals.cases (Lists.uncons constraints) (Right Substitution.idTypeSubst) (\uc -> withConstraint (Pairs.first uc) (Pairs.second uc)))
+
+-- | Unify two lists of types pairwise, producing a single substitution that satisfies every pair. The lists must have the same length; the comment is attached to each generated constraint for diagnostics.
+unifyTypeLists :: t0 -> M.Map Core.Name t1 -> [Core.Type] -> [Core.Type] -> String -> Either Errors.UnificationError Typing.TypeSubst
+unifyTypeLists cx schemaTypes l r comment =
+
+      let toConstraint =
+              \l2 -> \r2 -> Typing.TypeConstraint {
+                Typing.typeConstraintLeft = l2,
+                Typing.typeConstraintRight = r2,
+                Typing.typeConstraintComment = comment}
+      in (unifyTypeConstraints cx schemaTypes (Lists.zipWith toConstraint l r))
+
+-- | Unify two types, producing a substitution that makes them equal (or an error). The comment is attached to the generated constraint for diagnostics.
+unifyTypes :: t0 -> M.Map Core.Name t1 -> Core.Type -> Core.Type -> String -> Either Errors.UnificationError Typing.TypeSubst
+unifyTypes cx schemaTypes l r comment =
+    unifyTypeConstraints cx schemaTypes [
+      Typing.TypeConstraint {
+        Typing.typeConstraintLeft = l,
+        Typing.typeConstraintRight = r,
+        Typing.typeConstraintComment = comment}]
+
+-- | Determine whether a type variable appears within a type expression.No distinction is made between free and bound type variables.
+variableOccursInType :: Core.Name -> Core.Type -> Bool
+variableOccursInType var typ0 =
+
+      let tryType =
+              \b -> \typ -> case typ of
+                Core.TypeVariable v0 -> Logic.or b (Equality.equal (Core.unName v0) (Core.unName var))
+                _ -> b
+      in (Rewriting.foldOverType Coders.TraversalOrderPre tryType False typ0)

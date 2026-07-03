@@ -1,0 +1,262 @@
+-- Note: this is an automatically generated file. Do not edit.
+
+-- | Reflection functions for working with term, type, and literal type variants, as well as numeric precision.
+
+module Hydra.Reflect where
+
+import qualified Hydra.Ast as Ast
+import qualified Hydra.Coders as Coders
+import qualified Hydra.Core as Core
+import qualified Hydra.Docs as Docs
+import qualified Hydra.Error.Checking as Checking
+import qualified Hydra.Error.Core as ErrorCore
+import qualified Hydra.Error.File as ErrorFile
+import qualified Hydra.Error.Packaging as ErrorPackaging
+import qualified Hydra.Error.System as ErrorSystem
+import qualified Hydra.Errors as Errors
+import qualified Hydra.File as File
+import qualified Hydra.Graph as Graph
+import qualified Hydra.Json.Model as Model
+import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Parsing as Parsing
+import qualified Hydra.Paths as Paths
+import qualified Hydra.Query as Query
+import qualified Hydra.Relational as Relational
+import qualified Hydra.System as System
+import qualified Hydra.Tabular as Tabular
+import qualified Hydra.Testing as Testing
+import qualified Hydra.Time as Time
+import qualified Hydra.Topology as Topology
+import qualified Hydra.Typed as Typed
+import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
+import qualified Hydra.Validation as Validation
+import qualified Hydra.Variants as Variants
+import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
+import qualified Data.Scientific as Sci
+
+-- | Find the precision of a given floating-point type
+floatTypePrecision :: Core.FloatType -> Util.Precision
+floatTypePrecision x =
+    case x of
+      Core.FloatTypeFloat32 -> Util.PrecisionBits 32
+      Core.FloatTypeFloat64 -> Util.PrecisionBits 64
+
+-- | All floating-point types in a canonical order
+floatTypes :: [Core.FloatType]
+floatTypes =
+    [
+      Core.FloatTypeFloat32,
+      Core.FloatTypeFloat64]
+
+-- | Find the float type for a given floating-point value
+floatValueType :: Core.FloatValue -> Core.FloatType
+floatValueType x =
+    case x of
+      Core.FloatValueFloat32 _ -> Core.FloatTypeFloat32
+      Core.FloatValueFloat64 _ -> Core.FloatTypeFloat64
+
+-- | Find whether a given integer type is signed (true) or unsigned (false)
+integerTypeIsSigned :: Core.IntegerType -> Bool
+integerTypeIsSigned x =
+    case x of
+      Core.IntegerTypeBigint -> True
+      Core.IntegerTypeInt8 -> True
+      Core.IntegerTypeInt16 -> True
+      Core.IntegerTypeInt32 -> True
+      Core.IntegerTypeInt64 -> True
+      Core.IntegerTypeUint8 -> False
+      Core.IntegerTypeUint16 -> False
+      Core.IntegerTypeUint32 -> False
+      Core.IntegerTypeUint64 -> False
+
+-- | Find the precision of a given integer type
+integerTypePrecision :: Core.IntegerType -> Util.Precision
+integerTypePrecision x =
+    case x of
+      Core.IntegerTypeBigint -> Util.PrecisionArbitrary
+      Core.IntegerTypeInt8 -> Util.PrecisionBits 8
+      Core.IntegerTypeInt16 -> Util.PrecisionBits 16
+      Core.IntegerTypeInt32 -> Util.PrecisionBits 32
+      Core.IntegerTypeInt64 -> Util.PrecisionBits 64
+      Core.IntegerTypeUint8 -> Util.PrecisionBits 8
+      Core.IntegerTypeUint16 -> Util.PrecisionBits 16
+      Core.IntegerTypeUint32 -> Util.PrecisionBits 32
+      Core.IntegerTypeUint64 -> Util.PrecisionBits 64
+
+-- | All integer types, in a canonical order
+integerTypes :: [Core.IntegerType]
+integerTypes =
+    [
+      Core.IntegerTypeBigint,
+      Core.IntegerTypeInt8,
+      Core.IntegerTypeInt16,
+      Core.IntegerTypeInt32,
+      Core.IntegerTypeInt64,
+      Core.IntegerTypeUint8,
+      Core.IntegerTypeUint16,
+      Core.IntegerTypeUint32,
+      Core.IntegerTypeUint64]
+
+-- | Find the integer type for a given integer value
+integerValueType :: Core.IntegerValue -> Core.IntegerType
+integerValueType x =
+    case x of
+      Core.IntegerValueBigint _ -> Core.IntegerTypeBigint
+      Core.IntegerValueInt8 _ -> Core.IntegerTypeInt8
+      Core.IntegerValueInt16 _ -> Core.IntegerTypeInt16
+      Core.IntegerValueInt32 _ -> Core.IntegerTypeInt32
+      Core.IntegerValueInt64 _ -> Core.IntegerTypeInt64
+      Core.IntegerValueUint8 _ -> Core.IntegerTypeUint8
+      Core.IntegerValueUint16 _ -> Core.IntegerTypeUint16
+      Core.IntegerValueUint32 _ -> Core.IntegerTypeUint32
+      Core.IntegerValueUint64 _ -> Core.IntegerTypeUint64
+
+-- | Find the literal type for a given literal value
+literalType :: Core.Literal -> Core.LiteralType
+literalType x =
+    case x of
+      Core.LiteralBinary _ -> Core.LiteralTypeBinary
+      Core.LiteralBoolean _ -> Core.LiteralTypeBoolean
+      Core.LiteralDecimal _ -> Core.LiteralTypeDecimal
+      Core.LiteralFloat v0 -> (\injected_ -> Core.LiteralTypeFloat injected_) (floatValueType v0)
+      Core.LiteralInteger v0 -> (\injected_ -> Core.LiteralTypeInteger injected_) (integerValueType v0)
+      Core.LiteralString _ -> Core.LiteralTypeString
+
+-- | Find the literal type inject (constructor) for a given literal value
+literalTypeVariant :: Core.LiteralType -> Variants.LiteralVariant
+literalTypeVariant x =
+    case x of
+      Core.LiteralTypeBinary -> Variants.LiteralVariantBinary
+      Core.LiteralTypeBoolean -> Variants.LiteralVariantBoolean
+      Core.LiteralTypeDecimal -> Variants.LiteralVariantDecimal
+      Core.LiteralTypeFloat _ -> Variants.LiteralVariantFloat
+      Core.LiteralTypeInteger _ -> Variants.LiteralVariantInteger
+      Core.LiteralTypeString -> Variants.LiteralVariantString
+
+-- | All literal types, in a canonical order
+literalTypes :: [Core.LiteralType]
+literalTypes =
+    Lists.concat [
+      [
+        Core.LiteralTypeBinary,
+        Core.LiteralTypeBoolean,
+        Core.LiteralTypeDecimal],
+      (Lists.map (\x -> Core.LiteralTypeFloat x) floatTypes),
+      (Lists.map (\x -> Core.LiteralTypeInteger x) integerTypes),
+      [
+        Core.LiteralTypeString]]
+
+-- | Find the literal inject (constructor) for a given literal value
+literalVariant :: Core.Literal -> Variants.LiteralVariant
+literalVariant arg_ = literalTypeVariant (literalType arg_)
+
+-- | All literal variants, in a canonical order
+literalVariants :: [Variants.LiteralVariant]
+literalVariants =
+    [
+      Variants.LiteralVariantBinary,
+      Variants.LiteralVariantBoolean,
+      Variants.LiteralVariantDecimal,
+      Variants.LiteralVariantFloat,
+      Variants.LiteralVariantInteger,
+      Variants.LiteralVariantString]
+
+-- | Find the term inject (constructor) for a given term
+termVariant :: Core.Term -> Variants.TermVariant
+termVariant x =
+    case x of
+      Core.TermAnnotated _ -> Variants.TermVariantAnnotated
+      Core.TermApplication _ -> Variants.TermVariantApplication
+      Core.TermCases _ -> Variants.TermVariantCases
+      Core.TermEither _ -> Variants.TermVariantEither
+      Core.TermLambda _ -> Variants.TermVariantLambda
+      Core.TermLet _ -> Variants.TermVariantLet
+      Core.TermList _ -> Variants.TermVariantList
+      Core.TermLiteral _ -> Variants.TermVariantLiteral
+      Core.TermMap _ -> Variants.TermVariantMap
+      Core.TermOptional _ -> Variants.TermVariantOptional
+      Core.TermPair _ -> Variants.TermVariantPair
+      Core.TermProject _ -> Variants.TermVariantProject
+      Core.TermRecord _ -> Variants.TermVariantRecord
+      Core.TermSet _ -> Variants.TermVariantSet
+      Core.TermTypeApplication _ -> Variants.TermVariantTypeApplication
+      Core.TermTypeLambda _ -> Variants.TermVariantTypeLambda
+      Core.TermInject _ -> Variants.TermVariantInject
+      Core.TermUnit -> Variants.TermVariantUnit
+      Core.TermUnwrap _ -> Variants.TermVariantUnwrap
+      Core.TermVariable _ -> Variants.TermVariantVariable
+      Core.TermWrap _ -> Variants.TermVariantWrap
+
+-- | All term (expression) variants, in a canonical order
+termVariants :: [Variants.TermVariant]
+termVariants =
+    [
+      Variants.TermVariantAnnotated,
+      Variants.TermVariantApplication,
+      Variants.TermVariantCases,
+      Variants.TermVariantEither,
+      Variants.TermVariantLambda,
+      Variants.TermVariantLet,
+      Variants.TermVariantList,
+      Variants.TermVariantLiteral,
+      Variants.TermVariantMap,
+      Variants.TermVariantOptional,
+      Variants.TermVariantPair,
+      Variants.TermVariantProject,
+      Variants.TermVariantRecord,
+      Variants.TermVariantSet,
+      Variants.TermVariantTypeLambda,
+      Variants.TermVariantTypeApplication,
+      Variants.TermVariantInject,
+      Variants.TermVariantUnit,
+      Variants.TermVariantUnwrap,
+      Variants.TermVariantVariable,
+      Variants.TermVariantWrap]
+
+-- | Find the type inject (constructor) for a given type
+typeVariant :: Core.Type -> Variants.TypeVariant
+typeVariant x =
+    case x of
+      Core.TypeAnnotated _ -> Variants.TypeVariantAnnotated
+      Core.TypeApplication _ -> Variants.TypeVariantApplication
+      Core.TypeEffect _ -> Variants.TypeVariantEffect
+      Core.TypeEither _ -> Variants.TypeVariantEither
+      Core.TypeForall _ -> Variants.TypeVariantForall
+      Core.TypeFunction _ -> Variants.TypeVariantFunction
+      Core.TypeList _ -> Variants.TypeVariantList
+      Core.TypeLiteral _ -> Variants.TypeVariantLiteral
+      Core.TypeMap _ -> Variants.TypeVariantMap
+      Core.TypeOptional _ -> Variants.TypeVariantOptional
+      Core.TypePair _ -> Variants.TypeVariantPair
+      Core.TypeRecord _ -> Variants.TypeVariantRecord
+      Core.TypeSet _ -> Variants.TypeVariantSet
+      Core.TypeUnion _ -> Variants.TypeVariantUnion
+      Core.TypeUnit -> Variants.TypeVariantUnit
+      Core.TypeVariable _ -> Variants.TypeVariantVariable
+      Core.TypeVoid -> Variants.TypeVariantVoid
+      Core.TypeWrap _ -> Variants.TypeVariantWrap
+
+-- | All type variants, in a canonical order
+typeVariants :: [Variants.TypeVariant]
+typeVariants =
+    [
+      Variants.TypeVariantAnnotated,
+      Variants.TypeVariantApplication,
+      Variants.TypeVariantEffect,
+      Variants.TypeVariantEither,
+      Variants.TypeVariantForall,
+      Variants.TypeVariantFunction,
+      Variants.TypeVariantList,
+      Variants.TypeVariantLiteral,
+      Variants.TypeVariantMap,
+      Variants.TypeVariantOptional,
+      Variants.TypeVariantPair,
+      Variants.TypeVariantRecord,
+      Variants.TypeVariantSet,
+      Variants.TypeVariantUnion,
+      Variants.TypeVariantUnit,
+      Variants.TypeVariantVariable,
+      Variants.TypeVariantVoid,
+      Variants.TypeVariantWrap]
