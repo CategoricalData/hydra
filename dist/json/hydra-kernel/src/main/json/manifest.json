@@ -100,6 +100,7 @@
     "hydra.annotations",
     "hydra.arity",
     "hydra.ast",
+    "hydra.build.routing",
     "hydra.checking",
     "hydra.classes",
     "hydra.codegen",
@@ -264,6 +265,7 @@
   "package": "hydra-kernel",
   "testModules": [
     "hydra.test.annotations",
+    "hydra.test.build.routing",
     "hydra.test.checking.advanced",
     "hydra.test.checking.algebraicTypes",
     "hydra.test.checking.all",
