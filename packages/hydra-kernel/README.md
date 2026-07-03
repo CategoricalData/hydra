@@ -116,7 +116,7 @@ The kernel is generated from these DSL sources via `bin/sync.sh`. After editing 
 file under `Hydra/Sources/Kernel/`, run:
 
 ```bash
-bin/sync-haskell.sh        # regenerate Haskell kernel, run stack test
+heads/haskell/bin/sync-haskell.sh   # regenerate Haskell kernel, run stack test
 bin/sync.sh                # regenerate every target language's kernel and tests
 ```
 

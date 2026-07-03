@@ -52,6 +52,13 @@ bin/sync.sh --hosts haskell --targets go
 Generated output lands in `dist/go/hydra-kernel/`. The `dist/go/` tree is **not**
 checked in (kernel and downstream packages alike) — regenerate as needed.
 
+## Testing
+
+`heads/go/bin/test-distribution.sh` runs `go build ./...` over the generated
+distribution as a compile smoke check. There are no `_test.go` files yet, so no
+assertions run — Go does not yet host the common test suite (see the status
+note above).
+
 ## See also
 
 - **[`hydra-kernel` README](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/README.md)**

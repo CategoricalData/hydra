@@ -119,7 +119,7 @@ Hydra's Python code is split across three locations
 
 - **Python kernel overlay** ([`overlay/python/hydra-kernel/src/main/python/`](https://github.com/CategoricalData/hydra/tree/main/overlay/python/hydra-kernel/src/main/python))
   — hand-written Python kernel runtime, overlaid onto `dist/python/hydra-kernel/`
-  by `bin/copy-kernel-runtime.sh` so the published `hydra-kernel` wheel is self-contained
+  by `heads/python/bin/copy-kernel-runtime.sh` so the published `hydra-kernel` wheel is self-contained
   - `hydra/lib/` — primitive function implementations
   - `hydra/dsl/` — DSL utilities (FrozenDict, Maybe, ...)
   - `hydra/python/util/` — `ConsList`, `Lazy`, `PersistentMap`, `PersistentSet`

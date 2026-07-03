@@ -30,8 +30,9 @@
 # use bin/sync-default.sh, which is a thin wrapper around this script.
 #
 # Languages for --hosts / --targets:
-#   haskell, java, python, scala, go, clojure, scheme, common-lisp, emacs-lisp.
-#   Aliases: 'all' expands to all nine; 'lisp' expands to the four Lisp
+#   haskell, java, python, scala, go, typescript, clojure, scheme,
+#   common-lisp, emacs-lisp.
+#   Aliases: 'all' expands to all ten; 'lisp' expands to the four Lisp
 #   dialects (clojure,common-lisp,emacs-lisp,scheme). Aliases can mix
 #   with explicit names, e.g. 'java,lisp'.
 #
