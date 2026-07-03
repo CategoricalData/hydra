@@ -200,7 +200,7 @@ docs/
 ├── dsl-guide-java.md                # Java DSL guide
 ├── dsl-guide-python.md              # Python DSL guide
 ├── getting-started.md               # Library-user setup per host
-├── hydra-lexicon.txt                # Kernel types + ~180 primitive signatures (generated)
+├── hydra-lexicon.txt                # Kernel types + ~270 primitive signatures (generated)
 ├── implementation.md                # Architecture and internals
 ├── import-conventions.md            # Haskell DSL import block conventions
 ├── json-format.md                   # JSON wire-format spec + stability guarantees
