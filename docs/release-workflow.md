@@ -360,7 +360,7 @@ The following are Haskell-specific release steps:
     `<pkg>-<version>.tar.gz` + `<pkg>-<version>-docs.tar.gz` per package).
     Each package is assembled by `heads/haskell/bin/assemble-haskell-distribution.sh`,
     which stages the generated `dist/haskell/<pkg>/` tree plus the hand-written
-    head modules it needs (for `hydra-kernel`, the `Hydra.Haskell.Lib.*` primitive
+    head modules it needs (for `hydra-kernel`, the `Hydra.Overlay.Haskell.Lib.*` primitive
     implementations and the `Hydra.Settings`/`Hydra.Kernel` entry points) into a
     self-contained tree and runs `stack sdist`. (This replaces the 0.15-era
     `assemble-hackage-sdist.sh`, which flattened everything into one tarball.)
@@ -424,7 +424,7 @@ Starting with 0.15, the Java release ships **per-package Maven artifacts** rathe
 `hydra-java` rollup.
 Each `dist/java/<pkg>/` directory is a self-contained, publishable Gradle build with a generated
 `build.gradle` and `settings.gradle`.
-The published artifacts under group `net.fortytwo.hydra` are:
+The published artifacts under group `net.fortytwo.hydra.java` (#519) are:
 
 | Artifact | Description | `api` dependencies |
 |----------|-------------|--------------------|
@@ -547,7 +547,7 @@ dependencies {
 Hydra-Scala is a **complete Hydra implementation** that passes all tests in the common test suite.
 It requires Scala 3.3 or later and sbt 1.10+.
 
-Starting with 0.17, the Scala release ships **per-package Maven artifacts** under group `net.fortytwo.hydra`,
+Starting with 0.17, the Scala release ships **per-package Maven artifacts** under group `net.fortytwo.hydra.scala` (#519),
 mirroring the Java publish set.
 Each `dist/scala/<pkg>/` directory is a self-contained, publishable sbt build with a generated
 `build.sbt` and `project/`.
@@ -605,11 +605,11 @@ The following are Scala-specific release steps:
 
 A Scala consumer adds e.g.:
 ```scala
-libraryDependencies += "net.fortytwo.hydra" % "hydra-kernel_3" % "0.17.0"
+libraryDependencies += "net.fortytwo.hydra.scala" % "hydra-kernel_3" % "0.17.0"
 ```
 or, using sbt's `%%` operator (which appends `_3` automatically):
 ```scala
-libraryDependencies += "net.fortytwo.hydra" %% "hydra-kernel" % "0.17.0"
+libraryDependencies += "net.fortytwo.hydra.scala" %% "hydra-kernel" % "0.17.0"
 ```
 
 ## Python releases
