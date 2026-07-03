@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Layer 2 assembler: produce a publishable Hackage sdist for one Hydra Haskell
-# distribution package (hydra-kernel, hydra-haskell, or the hydra umbrella).
+# distribution package (hydra-kernel, any generated coder package such as
+# hydra-haskell / hydra-coq / hydra-scala / …, or the hydra umbrella).
 #
 # This is the Haskell analog of heads/java/bin/assemble-distribution.sh. It
 # replaces the monolithic heads/haskell/bin/assemble-hackage-sdist.sh (#418):
@@ -33,7 +34,10 @@
 # Usage:
 #   assemble-haskell-distribution.sh <pkg> [--out <dir>] [--no-sdist]
 #
-# <pkg> is one of: hydra-kernel hydra-haskell hydra
+# <pkg> is any Hydra Haskell distribution package: hydra-kernel, the umbrella
+# hydra, or a generated coder (hydra-haskell hydra-coq hydra-typescript hydra-jvm
+# hydra-java hydra-python hydra-scala hydra-lisp hydra-go hydra-wasm hydra-rdf
+# hydra-pg hydra-ext hydra-bench).
 # --out      : where to place the produced tarball (default: build/hackage/)
 # --no-sdist : stage + generate build files only; skip `stack sdist` (for inspection)
 #
@@ -63,13 +67,20 @@ while [ $# -gt 0 ]; do
 done
 
 if [ -z "$PKG" ]; then
-    echo "ERROR: package name required (hydra-kernel | hydra-haskell | hydra)" >&2
+    echo "ERROR: package name required (a Hydra Haskell distribution package)" >&2
     exit 1
 fi
 
+# Publishable Haskell distribution packages. The generated coder packages plus
+# hydra-kernel (with its overlaid runtime) and the hand-written `hydra` umbrella.
+# Each is assembled UNIFORMLY from its complete dist/haskell/<pkg>/ tree, so no
+# per-package special-casing is needed below — only membership is checked here.
+# (#376: widened from the 0.16 trio hydra-kernel|hydra-haskell|hydra.)
 case "$PKG" in
-    hydra-kernel|hydra-haskell|hydra) ;;
-    *) echo "ERROR: unsupported package '$PKG' (expected hydra-kernel|hydra-haskell|hydra)" >&2; exit 1 ;;
+    hydra-kernel|hydra-haskell|hydra-coq|hydra-typescript|hydra-jvm|hydra-java|\
+    hydra-python|hydra-scala|hydra-lisp|hydra-go|hydra-wasm|hydra-rdf|hydra-pg|\
+    hydra-ext|hydra-bench|hydra) ;;
+    *) echo "ERROR: unsupported package '$PKG' (not a known Hydra Haskell distribution package)" >&2; exit 1 ;;
 esac
 
 VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
@@ -123,25 +134,12 @@ echo "Staging sources..."
 # Every package is assembled UNIFORMLY from its complete dist/haskell/<pkg>/ tree.
 # sync-haskell.sh has already made each dist tree complete: the generated output
 # plus, for hydra-kernel, the hand-written runtime overlaid from
-# overlay/hydra-kernel/, and for hydra, the umbrella module overlaid from
-# overlay/hydra/. So the assembler is a pure dist/ consumer with no special
-# cases — it just tarballs what sync produced.
-case "$PKG" in
-    hydra-kernel)
-        # Complete = generated kernel + the hand-written runtime sync merged in
-        # (Hydra.Kernel, Hydra.Overlay.Haskell.Lib.*, Hydra.Overlay.Haskell.Dsl.{Terms,
-        # Literals,Typed.Common}).
-        copy_tree "$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell"
-        ;;
-    hydra-haskell)
-        # The kernel runtime resolves via the hydra-kernel dependency, so this
-        # package is just its own generated coder dist tree.
-        copy_tree "$HYDRA_ROOT/dist/haskell/hydra-haskell/src/main/haskell"
-        ;;
-    hydra)
-        copy_tree "$HYDRA_ROOT/dist/haskell/hydra/src/main/haskell"
-        ;;
-esac
+# overlay/haskell/hydra-kernel/, and for hydra, the umbrella module overlaid from
+# overlay/haskell/hydra/. So the assembler is a pure dist/ consumer with no
+# special cases — it just tarballs what sync produced. Coder packages
+# (hydra-haskell, hydra-coq, …) resolve the kernel runtime via their hydra-kernel
+# dependency, so each is just its own generated coder dist tree.
+copy_tree "$HYDRA_ROOT/dist/haskell/$PKG/src/main/haskell"
 
 MODCOUNT="$(find "$MAIN_DST" -name '*.hs' | wc -l | tr -d ' ')"
 echo "  staged $MODCOUNT module(s)"

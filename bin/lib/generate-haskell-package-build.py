@@ -70,10 +70,85 @@ EXTERNAL_DEPS: dict[str, list[str]] = {
         "text                          >= 2.0.2 && < 2.2",     # Lib.Strings (Data.Text)
         "time                          >= 1.12.0 && < 1.13",   # Lib.Files (Data.Time.Clock[.POSIX], #494)
     ],
+    # The generated coder packages ship pure generated Haskell (no hand-written
+    # runtime), so their external footprint is small and uniform: base plus, for
+    # any coder that manipulates maps/sets or scientific literals, containers +
+    # scientific. Verified per package via import-closure over each
+    # dist/haskell/<pkg>/src/main/haskell tree (#376). The kernel dependency
+    # (added from packages/<pkg>/package.json) carries everything else transitively.
+    #
+    # base+containers+scientific — the common coder shape:
     "hydra-haskell": [
         "base                          >= 4.19.0 && < 4.22",
         "containers                    >= 0.6.7 && < 0.8",     # Data.Map, Data.Set
         "scientific                    >= 0.3.7 && < 0.4",     # Data.Scientific
+    ],
+    "hydra-coq": [
+        "base                          >= 4.19.0 && < 4.22",
+        "containers                    >= 0.6.7 && < 0.8",     # Data.Map, Data.Set
+        "scientific                    >= 0.3.7 && < 0.4",     # Data.Scientific
+    ],
+    "hydra-typescript": [
+        "base                          >= 4.19.0 && < 4.22",   # Data.Int
+        "containers                    >= 0.6.7 && < 0.8",     # Data.Map, Data.Set
+        "scientific                    >= 0.3.7 && < 0.4",     # Data.Scientific
+    ],
+    "hydra-java": [
+        "base                          >= 4.19.0 && < 4.22",
+        "containers                    >= 0.6.7 && < 0.8",     # Data.Map, Data.Set
+        "scientific                    >= 0.3.7 && < 0.4",     # Data.Scientific
+    ],
+    "hydra-python": [
+        "base                          >= 4.19.0 && < 4.22",
+        "containers                    >= 0.6.7 && < 0.8",     # Data.Map, Data.Set
+        "scientific                    >= 0.3.7 && < 0.4",     # Data.Scientific
+    ],
+    "hydra-scala": [
+        "base                          >= 4.19.0 && < 4.22",   # Data.Int
+        "containers                    >= 0.6.7 && < 0.8",     # Data.Map, Data.Set
+        "scientific                    >= 0.3.7 && < 0.4",     # Data.Scientific
+    ],
+    "hydra-rdf": [
+        "base                          >= 4.19.0 && < 4.22",   # Data.Int
+        "containers                    >= 0.6.7 && < 0.8",     # Data.Map, Data.Set
+        "scientific                    >= 0.3.7 && < 0.4",     # Data.Scientific
+    ],
+    "hydra-wasm": [
+        "base                          >= 4.19.0 && < 4.22",   # Data.Int
+        "containers                    >= 0.6.7 && < 0.8",     # Data.Map, Data.Set
+        "scientific                    >= 0.3.7 && < 0.4",     # Data.Scientific
+    ],
+    "hydra-lisp": [
+        "base                          >= 4.19.0 && < 4.22",
+        "containers                    >= 0.6.7 && < 0.8",     # Data.Set
+        "scientific                    >= 0.3.7 && < 0.4",     # Data.Scientific
+    ],
+    "hydra-go": [
+        "base                          >= 4.19.0 && < 4.22",
+        "containers                    >= 0.6.7 && < 0.8",     # Data.Set
+        "scientific                    >= 0.3.7 && < 0.4",     # Data.Scientific
+    ],
+    # base+containers+scientific+bytestring — coders that emit binary literals:
+    "hydra-ext": [
+        "base                          >= 4.19.0 && < 4.22",   # Data.Int
+        "bytestring                    >= 0.11.5 && < 0.13",   # Data.ByteString
+        "containers                    >= 0.6.7 && < 0.8",     # Data.Map, Data.Set
+        "scientific                    >= 0.3.7 && < 0.4",     # Data.Scientific
+    ],
+    "hydra-pg": [
+        "base                          >= 4.19.0 && < 4.22",   # Data.Int
+        "bytestring                    >= 0.11.5 && < 0.13",   # Data.ByteString
+        "containers                    >= 0.6.7 && < 0.8",     # Data.Map, Data.Set
+        "scientific                    >= 0.3.7 && < 0.4",     # Data.Scientific
+    ],
+    # base+scientific only:
+    "hydra-bench": [
+        "base                          >= 4.19.0 && < 4.22",
+        "scientific                    >= 0.3.7 && < 0.4",     # Data.Scientific
+    ],
+    # base only — hydra-jvm's generated tree has no non-Hydra imports:
+    "hydra-jvm": [
+        "base                          >= 4.19.0 && < 4.22",
     ],
     # The umbrella ships only re-export modules; it needs `base` and whatever
     # its re-export imports pull (transitively via the Hydra deps). base only.
@@ -86,6 +161,19 @@ EXTERNAL_DEPS: dict[str, list[str]] = {
 SYNOPSIS: dict[str, str] = {
     "hydra-kernel": "The Hydra kernel: core types, terms, inference, and DSL runtime",
     "hydra-haskell": "Hydra's Haskell coder: emit Haskell source from Hydra modules",
+    "hydra-coq": "Hydra's Coq coder: emit Coq/Gallina source from Hydra modules",
+    "hydra-typescript": "Hydra's TypeScript coder: emit TypeScript source from Hydra modules",
+    "hydra-jvm": "Shared JVM support for Hydra's Java, Scala, and Clojure coders",
+    "hydra-java": "Hydra's Java coder: emit Java source from Hydra modules",
+    "hydra-python": "Hydra's Python coder: emit Python source from Hydra modules",
+    "hydra-scala": "Hydra's Scala coder: emit Scala source from Hydra modules",
+    "hydra-lisp": "Hydra's Lisp coder: emit Clojure/Scheme/Common-Lisp/Emacs-Lisp source",
+    "hydra-go": "Hydra's Go coder: emit Go source from Hydra modules",
+    "hydra-wasm": "Hydra's WebAssembly coder: emit Wasm from Hydra modules",
+    "hydra-rdf": "Hydra's RDF/SHACL/OWL model and coder support",
+    "hydra-pg": "Hydra's property-graph (TinkerPop/Gremlin) model and coder support",
+    "hydra-ext": "Hydra extensions: additional coders and schema integrations",
+    "hydra-bench": "Hydra synthetic inference-benchmark workloads",
     "hydra": "Hydra: graphs are programs, and programs are graphs (umbrella package)",
 }
 
@@ -230,9 +318,15 @@ def main() -> int:
 
     pkg_name = meta.get("name") or args.package
     # Prefer a fuller hand-written description (keeps `cabal check` happy: it
-    # warns when description is not longer than synopsis) and fall back to the
-    # package.json description.
-    description = LONG_DESCRIPTION.get(pkg_name) or meta.get("description") or pkg_name
+    # warns when description is not longer than synopsis). For coder packages
+    # without a curated LONG_DESCRIPTION, compose the shared Hydra blurb with the
+    # package.json one-liner so the description is always meaningfully longer than
+    # the synopsis.
+    description = LONG_DESCRIPTION.get(pkg_name)
+    if not description:
+        pkg_desc = meta.get("description")
+        description = (HYDRA_BLURB + "\n" + pkg_desc) if pkg_desc else (
+            LONG_DESCRIPTION.get(pkg_name) or pkg_name)
     hydra_deps = list(meta.get("dependencies") or [])
 
     # hydra.json:currentVersion is the single source of truth (the standalone

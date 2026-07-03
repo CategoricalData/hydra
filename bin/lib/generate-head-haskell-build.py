@@ -52,13 +52,20 @@ HYDRA_PACKAGES = ROOT / "bin" / "lib" / "hydra-packages.py"
 # kernel, breaking them when the kernel term-level API changes (e.g. #436,
 # #500). The published-host model is for the translation *runtime* (exec
 # drivers), not the generated *output*. See issue #500.
-HACKAGE_CANDIDATES = [
-    "hydra-coq",
-    "hydra-typescript",
-    "hydra-scala",
-    "hydra-lisp",
-    "hydra-go",
-]
+#
+# EMPTY until #376 Part B (the standalone json-driver) lands. Reason: every
+# published coder sdist correctly declares `hydra-kernel == <ver>` as a
+# build-depends, but the head compiles hydra-kernel LOCALLY from the co-generated
+# dist/haskell/hydra-kernel (above / #500). Stack cannot reconcile "kernel demanded
+# from Hackage by a consumed coder" with "kernel supplied by a local source-dir"
+# (it would be a duplicate package), so ANY consumable entry here breaks the
+# published-host build plan (S-4804). This stayed latent while the coder packages
+# were unpublished (the probe returned nothing → empty consume set); publishing
+# them all at 0.17.0 (#376 Part A) activated the conflict. The json-driver
+# decouples this by compiling the coders in a SEPARATE project where the kernel
+# also comes from Hackage — only then can this list be repopulated. See the #376
+# plan / build-system.md.
+HACKAGE_CANDIDATES: list[str] = []
 
 GEN_HEADER = (
     "# Note: this is an automatically generated file (bin/lib/"
