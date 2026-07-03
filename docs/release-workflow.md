@@ -192,9 +192,12 @@ and produces the upload-ready artifacts in `release-artifacts/`:
 9. **Per-package Hackage sdists on case-sensitive filesystem** —
    the Hackage build infrastructure runs on Linux (case-sensitive ext4),
    while macOS HFS+/APFS hides duplicate-with-different-case directory clashes.
-   Hydra publishes per-package Hackage distributions — `hydra-kernel`,
-   `hydra-haskell`, and the `hydra` umbrella — rather than one monolithic
-   `hydra` sdist. This step assembles all three (leaves first) on a
+   Hydra publishes a per-package Hackage distribution for **every** Hydra Haskell
+   package (`hydra-kernel`, `hydra-haskell`, each generated coder — `hydra-coq`,
+   `hydra-scala`, `hydra-pg`, `hydra-rdf`, … — and the `hydra` umbrella), rather
+   than one monolithic `hydra` sdist. The set is derived from the `hydra.json`
+   registry (not hardcoded), so new packages publish automatically (#376). This
+   step assembles them all (leaves first) on a
    case-sensitive disk image (macOS) or plain temp dir (Linux) via
    `heads/haskell/bin/publish-hackage.sh`, extracts them into one
    `cabal.project`, and runs `cabal v2-build --dry-run` to catch GHC-28623
@@ -351,10 +354,13 @@ The following are Haskell-specific release steps:
   Starting with 0.16, Hydra publishes **per-package** Hackage distributions
   rather than one monolithic `hydra` package (#418), mirroring the per-package
   layout already used for Java (Maven Central) and Python (PyPI).
-  The 0.16.0 publish set is the trio `hydra-kernel`, `hydra-haskell`, and the
-  `hydra` umbrella (which re-exports the kernel surface plus `moduleToHaskell`);
-  later releases may add more packages (`hydra-pg`, `hydra-rdf`, the other
-  coders), always **dependency-closed**.
+  The publish set is **derived from the `hydra.json` registry** (deps-first topo
+  order) plus the hand-written `hydra` umbrella — so it always covers every Hydra
+  Haskell package and grows automatically as packages are added, with no hardcoded
+  list to fall out of sync (#376). It began as the 0.16.0 trio (`hydra-kernel`,
+  `hydra-haskell`, `hydra`); since 0.17.0 all generated coder packages
+  (`hydra-coq`, `hydra-scala`, `hydra-pg`, `hydra-rdf`, …) publish too. The set is
+  always **dependency-closed** (asserted before upload).
   * `bin/prepare-release.sh` already produced the upload-ready per-package sdists
     and Haddock-for-Hackage tarballs under `release-artifacts/` (one
     `<pkg>-<version>.tar.gz` + `<pkg>-<version>-docs.tar.gz` per package).
@@ -869,7 +875,7 @@ all scripts and Stack executables (including internal ones called by the sync sc
 | `assemble-distribution.sh` | `heads/<lang>/bin/` | Layer 2 per-package assembler. Takes `<pkg>`, writes `dist/<lang>/<pkg>/`. Called by `sync-packages.sh`. For `hydra-kernel`, also copies the hand-written runtime support; for every package, generates a per-package `build.gradle` (Java), `pyproject.toml` (Python), or `package.json` + `tsconfig.build.json` (TypeScript). |
 | `test-distribution.sh` | `heads/<lang>/bin/` | Layer 2.5 per-target tester. |
 | `copy-kernel-runtime.sh` | `heads/{java,python,typescript}/bin/` | Per-language helper invoked by `assemble-distribution.sh hydra-kernel` to overlay the hand-written kernel runtime from `overlay/<lang>/hydra-kernel/` into the kernel dist (#418). The overlay tree holds only runtime, so this is a dumb full-tree merge — no selective lists. (Multi-coder drivers, json-io stubs, and the per-language coder stay in `heads/<lang>/src`, not in the overlay.) |
-| `assemble-haskell-distribution.sh` | `heads/haskell/bin/` | Layer 2 per-package Haskell assembler (Haskell analog of `assemble-distribution.sh`). Takes `<pkg>` (`hydra-kernel`/`hydra-haskell`/`hydra`) and tarballs the already-complete `dist/haskell/<pkg>/` tree (made complete by `sync-haskell.sh`, which overlays the hand-written runtime from `overlay/haskell/`): generates `package.yaml` + `stack.yaml` and runs `stack sdist`. A uniform `dist/` consumer — no per-package special-casing. Replaces the 0.15 monolithic `assemble-hackage-sdist.sh`. |
+| `assemble-haskell-distribution.sh` | `heads/haskell/bin/` | Layer 2 per-package Haskell assembler (Haskell analog of `assemble-distribution.sh`). Takes any Hydra Haskell distribution package `<pkg>` (`hydra-kernel`, the `hydra` umbrella, or any generated coder — `hydra-coq`, `hydra-scala`, `hydra-pg`, …) and tarballs the already-complete `dist/haskell/<pkg>/` tree (made complete by `sync-haskell.sh`, which overlays the hand-written runtime from `overlay/haskell/`): generates `package.yaml` + `stack.yaml` and runs `stack sdist`. A uniform `dist/` consumer — no per-package special-casing. Replaces the 0.15 monolithic `assemble-hackage-sdist.sh`. |
 | `publish-hackage.sh` | `heads/haskell/bin/` | Assembles (and optionally uploads, `--upload`/`--publish`) the per-package Hackage distributions in leaves-first order. Asserts the publish set is dependency-closed before assembling. |
 | `publish-maven.sh` | `heads/java/bin/` | Builds (and optionally uploads, `--upload`) the per-package Maven Central distributions leaves-first. Guards JDK 17+ and credentials; refreshes `~/.m2` with freshly-built siblings to avoid the stale-same-version trap. `--allow-javadoc-errors` applies a transient init script for #449. |
 | `publish-pypi.sh` | `heads/python/bin/` | Builds (and optionally uploads, `--upload`) the per-package PyPI wheels + sdists. Prefers `uv build`, falls back to `python -m build`. Asserts dependency closure. Invokes `verify-distribution.sh` as a hard gate before any upload. |

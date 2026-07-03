@@ -348,8 +348,19 @@ SDIST_LOG="$LOG_DIR/hackage-sdist.log"
 SDIST_OK=true
 SDIST_WORK=""
 
-# The 0.16.0 publish set (must match heads/haskell/bin/publish-hackage.sh).
-HACKAGE_PKGS=(hydra-kernel hydra-haskell hydra)
+# The Hackage publish set, DERIVED from the hydra.json registry (deps-first topo
+# order) so it stays complete as packages are added — matching how
+# heads/haskell/bin/publish-hackage.sh derives PUBLISH_SET. No hardcoded list to
+# fall out of sync (the old trio-only hardcoding left the coder packages off
+# Hackage; #376). `topo` prints one space-separated line → word-split with read -ra.
+# The hand-written `hydra` umbrella is not in the registry, so append it last.
+read -ra _HACKAGE_TOPO < <("$HYDRA_ROOT/bin/lib/hydra-packages.py" topo \
+    $("$HYDRA_ROOT/bin/lib/hydra-packages.py" list))
+if [ "${#_HACKAGE_TOPO[@]}" -eq 0 ]; then
+    echo "  FAIL: could not derive Hackage publish set from hydra.json registry"
+    ERRORS=$((ERRORS + 1))
+fi
+HACKAGE_PKGS=("${_HACKAGE_TOPO[@]}" hydra)
 
 case "$(uname -s)" in
     Darwin)

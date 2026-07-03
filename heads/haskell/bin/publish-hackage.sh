@@ -51,10 +51,22 @@ done
 
 VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 
-# The 0.16.0 publish set, in LEAVES-FIRST topological order. To expand the set
-# (0.16.1+: add hydra-java, hydra-python, hydra-scala, hydra-lisp, hydra-pg,
-# hydra-rdf), append here in topo order — and ensure each one's deps precede it.
-PUBLISH_SET=(hydra-kernel hydra-haskell hydra)
+# The full publish set, in LEAVES-FIRST topological order (#376). DERIVED from the
+# hydra.json registry via `hydra-packages.py topo` (deps first) so it stays complete
+# automatically as packages are added — NO hardcoded list to fall out of sync (the
+# original 0.16 trio-only hardcoding is exactly what left the coder packages off
+# Hackage; #376). The hand-written `hydra` umbrella is not in the registry, so it is
+# appended last (it depends on kernel+haskell, both earlier in topo order). Guard 1
+# below still asserts dependency-closure, so any ordering error is caught before upload.
+# `topo` prints the packages on ONE space-separated line, so word-split with
+# `read -ra` (not `mapfile`, which is line-based and would yield a single element).
+read -ra _REGISTRY_TOPO < <("$HYDRA_ROOT/bin/lib/hydra-packages.py" topo \
+    $("$HYDRA_ROOT/bin/lib/hydra-packages.py" list))
+if [ "${#_REGISTRY_TOPO[@]}" -eq 0 ]; then
+    echo "ERROR: could not derive publish set from hydra.json registry" >&2
+    exit 1
+fi
+PUBLISH_SET=("${_REGISTRY_TOPO[@]}" hydra)
 HACKAGE_BASE="https://hackage.haskell.org/package"
 
 # --- Guard 1: dependency closure ---------------------------------------------
@@ -66,6 +78,18 @@ in_set() {
     local needle="$1"; local x
     for x in "${PUBLISH_SET[@]}"; do [ "$x" = "$needle" ] && return 0; done
     return 1
+}
+
+# A dependency is closure-satisfied if it is either in this upload batch OR
+# already published on Hackage at VERSION (#376: incremental re-publish — kernel/
+# haskell/umbrella are already live at 0.17.0, so the coder batch does not
+# re-upload them, yet they still satisfy the coders' dependency).
+already_published() {
+    local pkg="$1"
+    local code
+    code="$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 \
+        "$HACKAGE_BASE/$pkg-$VERSION" 2>/dev/null || echo 000)"
+    [ "$code" = "200" ]
 }
 
 pkg_hydra_deps() {
@@ -89,11 +113,13 @@ for pkg in "${PUBLISH_SET[@]}"; do
     for d in $deps; do
         if in_set "$d"; then
             echo "  OK: $pkg -> $d (in publish set)"
+        elif already_published "$d"; then
+            echo "  OK: $pkg -> $d (already on Hackage at $VERSION)"
         else
-            echo "  ERROR: $pkg depends on '$d' which is NOT in the publish set" >&2
-            echo "         Publishing $pkg would strand it on Hackage. Add '$d' to" >&2
-            echo "         PUBLISH_SET (and ensure it is mature enough to publish), or" >&2
-            echo "         remove the dependency." >&2
+            echo "  ERROR: $pkg depends on '$d' which is NEITHER in the publish set" >&2
+            echo "         NOR already published on Hackage at $VERSION." >&2
+            echo "         Publishing $pkg would strand it. Add '$d' to PUBLISH_SET" >&2
+            echo "         (and ensure it is mature enough to publish), or remove the dep." >&2
             CLOSURE_OK=false
         fi
     done
@@ -105,16 +131,35 @@ fi
 echo "  Publish set is dependency-closed."
 echo ""
 
+# --- Narrow to the packages actually needing upload --------------------------
+# Skip any package already live on Hackage at VERSION (#376 incremental publish):
+# re-uploading an existing published version errors, and it is not the goal here.
+TO_PUBLISH=()
+echo "=== Selecting packages to publish (skipping any already live at $VERSION) ==="
+for pkg in "${PUBLISH_SET[@]}"; do
+    if already_published "$pkg"; then
+        echo "  SKIP $pkg (already on Hackage at $VERSION)"
+    else
+        echo "  QUEUE $pkg"
+        TO_PUBLISH+=("$pkg")
+    fi
+done
+echo ""
+if [ "${#TO_PUBLISH[@]}" -eq 0 ]; then
+    echo "Nothing to publish — every package in the set is already live at $VERSION."
+    exit 0
+fi
+
 # --- Assemble each package (leaves first) ------------------------------------
 mkdir -p "$OUT_DIR"
 echo "=== Assembling sdists (leaves first) into $OUT_DIR ==="
-for pkg in "${PUBLISH_SET[@]}"; do
+for pkg in "${TO_PUBLISH[@]}"; do
     "$SCRIPT_DIR/assemble-haskell-distribution.sh" "$pkg" --out "$OUT_DIR"
 done
 echo ""
 
 echo "=== sdists produced (upload order) ==="
-for pkg in "${PUBLISH_SET[@]}"; do
+for pkg in "${TO_PUBLISH[@]}"; do
     tarball="$OUT_DIR/$pkg-$VERSION.tar.gz"
     if [ -f "$tarball" ]; then
         echo "  $tarball"
@@ -132,8 +177,8 @@ fi
 
 # --- Upload (leaves first) ---------------------------------------------------
 if [ "$DO_PUBLISH" = true ] && [ "${HYDRA_YES:-}" != "1" ]; then
-    echo "About to PUBLISH (irreversible) ${#PUBLISH_SET[@]} packages to Hackage at version $VERSION:"
-    printf '    %s\n' "${PUBLISH_SET[@]}"
+    echo "About to PUBLISH (irreversible) ${#TO_PUBLISH[@]} packages to Hackage at version $VERSION:"
+    printf '    %s\n' "${TO_PUBLISH[@]}"
     printf 'Type "publish" to proceed: '
     read -r confirm
     [ "$confirm" = "publish" ] || { echo "Aborted."; exit 1; }
@@ -142,7 +187,7 @@ fi
 UPLOAD_FLAGS=()
 [ "$DO_PUBLISH" = true ] && UPLOAD_FLAGS+=(--publish)
 
-for pkg in "${PUBLISH_SET[@]}"; do
+for pkg in "${TO_PUBLISH[@]}"; do
     tarball="$OUT_DIR/$pkg-$VERSION.tar.gz"
     echo "=== cabal upload ${UPLOAD_FLAGS[*]:-} $tarball ==="
     # Expand to nothing (not an empty-string arg) when UPLOAD_FLAGS is empty, so
@@ -153,16 +198,16 @@ for pkg in "${PUBLISH_SET[@]}"; do
 done
 
 if [ "$DO_PUBLISH" = true ]; then
-    echo "=== Published ${#PUBLISH_SET[@]} packages at $VERSION. ==="
+    echo "=== Published ${#TO_PUBLISH[@]} packages at $VERSION. ==="
     echo "Next: upload Haddock docs per package if desired (cabal upload --documentation)."
     echo "Published package pages:"
-    for pkg in "${PUBLISH_SET[@]}"; do
+    for pkg in "${TO_PUBLISH[@]}"; do
         echo "  $HACKAGE_BASE/$pkg-$VERSION"
     done
 else
-    echo "=== Uploaded ${#PUBLISH_SET[@]} candidates at $VERSION. ==="
+    echo "=== Uploaded ${#TO_PUBLISH[@]} candidates at $VERSION. ==="
     echo "Review candidate pages, then re-run with --publish to finalize:"
-    for pkg in "${PUBLISH_SET[@]}"; do
+    for pkg in "${TO_PUBLISH[@]}"; do
         echo "  $HACKAGE_BASE/$pkg-$VERSION/candidate"
     done
 fi
