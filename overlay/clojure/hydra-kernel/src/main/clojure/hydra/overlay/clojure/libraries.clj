@@ -5,6 +5,7 @@
             [hydra.overlay.clojure.lib.eithers :as eithers]
             [hydra.overlay.clojure.lib.equality :as equality]
             [hydra.overlay.clojure.lib.files :as files]
+            [hydra.overlay.clojure.lib.hashing :as hashing]
             [hydra.overlay.clojure.lib.lists :as lists]
             [hydra.overlay.clojure.lib.literals :as literals]
             [hydra.overlay.clojure.lib.logic :as logic]
@@ -702,6 +703,16 @@
 ;; UTF-8 codecs bridging Hydra strings and raw bytes. decodeUtf8 :: binary -> either<string, string>
 ;; (Left message on invalid UTF-8); encodeUtf8 :: string -> binary (total).
 
+(defn register-hashing []
+  (let [s (p/tc-string)
+        bin (p/tc-binary)]
+    {(prim-name 'hydra.lib.hashing/hydra_lib_hashing_sha256) (p/prim1 (prim-name 'hydra.lib.hashing/hydra_lib_hashing_sha256)
+                                     hashing/hydra_lib_hashing_sha256
+                                     [] bin bin)
+     (prim-name 'hydra.lib.hashing/hydra_lib_hashing_sha256_hex) (p/prim1 (prim-name 'hydra.lib.hashing/hydra_lib_hashing_sha256_hex)
+                                     hashing/hydra_lib_hashing_sha256_hex
+                                     [] bin s)}))
+
 (defn register-text []
   (let [s (p/tc-string)
         bin (p/tc-binary)]
@@ -809,6 +820,7 @@
    (register-eithers)
    (register-equality)
    (register-files)
+   (register-hashing)
    (register-lists)
    (register-literals)
    (register-logic)

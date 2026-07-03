@@ -40,9 +40,11 @@
 (def hydra_lib_literals_uint64_to_bigint (fn [x] (long x)))
 
 ;; Binary <-> String (base64)
+;; Binary is a vector of unsigned ints 0..255 (see files/text bytes->binary), so bytes >127 must
+;; go through unchecked-byte (plain `byte` throws "Value out of range" on 128..255). #524.
 (def hydra_lib_literals_binary_to_string
   (fn [bs]
-    (let [ba (byte-array (map byte bs))]
+    (let [ba (byte-array (map unchecked-byte bs))]
       (.encodeToString (Base64/getEncoder) ba))))
 
 (def hydra_lib_literals_string_to_binary

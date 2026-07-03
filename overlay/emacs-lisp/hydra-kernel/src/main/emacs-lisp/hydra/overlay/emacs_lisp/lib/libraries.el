@@ -15,7 +15,7 @@
 ;; hydra-load-file (which skips their require/provide and evals the defvars into the global namespace,
 ;; like the rest of the flat emacs-lisp runtime). The kernel they depend on is already loaded by the
 ;; time this registry loads (hydra-load-gen-main runs first).
-(dolist (sub '("chars" "effects" "eithers" "equality" "files" "lists" "literals" "logic" "maps"
+(dolist (sub '("chars" "effects" "eithers" "equality" "files" "hashing" "lists" "literals" "logic" "maps"
                "math" "optionals" "pairs" "regex" "sets" "strings" "system" "text"))
   (hydra-load-file (expand-file-name (concat "lib/" sub ".el") hydra-gen-main-dir)))
 
@@ -625,6 +625,18 @@ The def var is loaded globally by the dolist above; callers pass the bare def va
 ;; Text (#494)
 ;; ============================================================================
 
+(defun register-hashing ()
+  (let (
+        (s (tc-string))
+        (bin (tc-binary)))
+    (list
+      (cons (prim-name hydra_lib_hashing_sha256) (prim1 (prim-name hydra_lib_hashing_sha256)
+                                                 hydra_overlay_emacs_lisp_lib_hashing_sha256
+                                                 nil bin bin))
+      (cons (prim-name hydra_lib_hashing_sha256_hex) (prim1 (prim-name hydra_lib_hashing_sha256_hex)
+                                                 hydra_overlay_emacs_lisp_lib_hashing_sha256_hex
+                                                 nil bin s)))))
+
 (defun register-text ()
   (let (
         (s (tc-string))
@@ -846,6 +858,7 @@ The def var is loaded globally by the dolist above; callers pass the bare def va
     (register-eithers)
     (register-equality)
     (register-files)
+    (register-hashing)
     (register-lists)
     (register-literals)
     (register-logic)

@@ -19,7 +19,7 @@
 ;; auto-vivify an EMPTY :hydra.lib.<sub> package during gen-main load, so a find-package guard would
 ;; skip the real def-module and leave the def vars unbound. hydra-load-file populating an existing
 ;; (empty) package is fine.
-(dolist (sub '("chars" "effects" "eithers" "equality" "files" "lists" "literals" "logic" "maps"
+(dolist (sub '("chars" "effects" "eithers" "equality" "files" "hashing" "lists" "literals" "logic" "maps"
                "math" "optionals" "pairs" "regex" "sets" "strings" "system" "text"))
   (hydra-load-file (merge-pathnames (concatenate 'string "lib/" sub ".lisp")
                                     *hydra-gen-main-dir*)))
@@ -635,6 +635,18 @@
 ;; (Left message on invalid UTF-8); encodeUtf8 :: string -> binary (total). The real codecs live in
 ;; the relocated hydra.common_lisp.lib.text runtime (flat hydra_overlay_common_lisp_lib_text_*).
 
+(defun register-hashing ()
+  (let (
+        (s (tc-string))
+        (bin (tc-binary)))
+    (list
+      (cons (prim-name hydra_lib_hashing_sha256) (prim1 (prim-name hydra_lib_hashing_sha256)
+                                                 hydra_overlay_common_lisp_lib_hashing_sha256
+                                                 nil bin bin))
+      (cons (prim-name hydra_lib_hashing_sha256_hex) (prim1 (prim-name hydra_lib_hashing_sha256_hex)
+                                                 hydra_overlay_common_lisp_lib_hashing_sha256_hex
+                                                 nil bin s)))))
+
 (defun register-text ()
   (let (
         (s (tc-string))
@@ -856,6 +868,7 @@
     (register-eithers)
     (register-equality)
     (register-files)
+    (register-hashing)
     (register-lists)
     (register-literals)
     (register-logic)

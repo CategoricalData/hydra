@@ -5978,6 +5978,25 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
+                            "first": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.lib.hashing"}}}},
+                            "second": {
+                              "application": {
+                                "function": {"variable": "hydra.java.names.javaPackageName"},
+                                "argument": {
+                                  "list": [
+                                    {"literal": {"string": "hydra"}},
+                                    {"literal": {"string": "overlay"}},
+                                    {"literal": {"string": "java"}},
+                                    {"literal": {"string": "lib"}},
+                                    {"literal": {"string": "hashing"}}]}}}}},
+                        "type": {"variable": "hydra.packaging.ModuleName"}}},
+                    "type": {"variable": "hydra.java.syntax.PackageName"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
                             "first": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.lib.lists"}}}},
                             "second": {
                               "application": {

@@ -10,6 +10,7 @@
           (hydra overlay scheme lib eithers)
           (hydra overlay scheme lib equality)
           (hydra overlay scheme lib files)
+          (hydra overlay scheme lib hashing)
           (hydra overlay scheme lib lists)
           (hydra overlay scheme lib literals)
           (hydra overlay scheme lib logic)
@@ -30,6 +31,7 @@
           (prefix (hydra lib eithers) def:)
           (prefix (hydra lib equality) def:)
           (prefix (hydra lib files) def:)
+          (prefix (hydra lib hashing) def:)
           (prefix (hydra lib lists) def:)
           (prefix (hydra lib literals) def:)
           (prefix (hydra lib logic) def:)
@@ -660,6 +662,18 @@
     ;; UTF-8 codecs bridging Hydra strings and raw bytes. decodeUtf8 :: binary -> either<string, string>
     ;; (Left message on invalid UTF-8); encodeUtf8 :: string -> binary (total).
 
+    (define (register-hashing)
+      (let (
+            (s (tc-string))
+            (bin (tc-binary)))
+        (list
+          (cons (prim-name def:hydra_lib_hashing_sha256) (prim1 (prim-name def:hydra_lib_hashing_sha256)
+                                             hydra_lib_hashing_sha256
+                                             #f bin bin))
+          (cons (prim-name def:hydra_lib_hashing_sha256_hex) (prim1 (prim-name def:hydra_lib_hashing_sha256_hex)
+                                             hydra_lib_hashing_sha256_hex
+                                             #f bin s)))))
+
     (define (register-text)
       (let (
             (s (tc-string))
@@ -792,6 +806,7 @@
         (register-eithers)
         (register-equality)
         (register-files)
+        (register-hashing)
         (register-lists)
         (register-literals)
         (register-logic)

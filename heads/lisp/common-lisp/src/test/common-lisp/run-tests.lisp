@@ -109,6 +109,7 @@
              "overlay/common_lisp/lib/regex.lisp"
              "overlay/common_lisp/lib/effects.lisp"
              "overlay/common_lisp/lib/files.lisp"
+             "overlay/common_lisp/lib/hashing.lisp"
              "overlay/common_lisp/lib/text.lisp"))
   (load (hydra-dist-main-path f)))
 
@@ -229,6 +230,7 @@
              "lib/eithers.lisp"
              "lib/equality.lisp"
              "lib/files.lisp"
+             "lib/hashing.lisp"
              "lib/lists.lisp"
              "lib/literals.lisp"
              "lib/logic.lisp"

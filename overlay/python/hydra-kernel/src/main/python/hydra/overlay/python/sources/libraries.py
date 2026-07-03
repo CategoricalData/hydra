@@ -156,6 +156,27 @@ def register_files_primitives() -> dict[Name, Primitive]:
     return primitives
 
 
+def register_hashing_primitives() -> dict[Name, Primitive]:
+    """Register all hashing primitive functions (SHA-256). Pure and total. For #524."""
+    from hydra.overlay.python.lib import hashing
+    from hydra.lib import hashing as def_hashing
+
+    primitives: dict[Name, Primitive] = {}
+
+    # sha256 :: binary -> binary
+    primitives[def_hashing.sha256.name] = prims.prim1(
+        def_hashing.sha256.name, hashing.sha256, [],
+        prims.binary(), prims.binary()
+    )
+    # sha256Hex :: binary -> string
+    primitives[def_hashing.sha256_hex.name] = prims.prim1(
+        def_hashing.sha256_hex.name, hashing.sha256_hex, [],
+        prims.binary(), prims.string()
+    )
+
+    return primitives
+
+
 def register_system_primitives() -> dict[Name, Primitive]:
     """Register all system primitive functions. As effectful primitives, these have no term-level
     interpreter implementation; they are registered for name resolution and inference only, and are
@@ -1300,6 +1321,7 @@ def standard_library() -> dict[Name, Primitive]:
     primitives.update(register_eithers_primitives())
     primitives.update(register_equality_primitives())
     primitives.update(register_files_primitives())
+    primitives.update(register_hashing_primitives())
     primitives.update(register_lists_primitives())
     primitives.update(register_literals_primitives())
     primitives.update(register_logic_primitives())

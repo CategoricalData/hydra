@@ -243,7 +243,7 @@ end bootstrap
 object BootstrapHelpers:
 
   /** The hydra.lib.* sub-namespaces whose primitives get def-modules + impl relocation (#473). */
-  private val libSubs = Seq("chars", "eithers", "equality", "lists", "literals", "logic", "maps",
+  private val libSubs = Seq("chars", "eithers", "equality", "hashing", "lists", "literals", "logic", "maps",
     "math", "optionals", "pairs", "regex", "sets", "strings")
 
   private def isLibModule(m: hydra.packaging.Module): Boolean =
