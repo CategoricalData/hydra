@@ -22,6 +22,7 @@ import qualified Hydra.Sources.Test.Lib.Effects as Effects
 import qualified Hydra.Sources.Test.Lib.Eithers as Eithers
 import qualified Hydra.Sources.Test.Lib.Equality as Equality
 import qualified Hydra.Sources.Test.Lib.Files as Files
+import qualified Hydra.Sources.Test.Lib.Hashing as Hashing
 import qualified Hydra.Sources.Test.Lib.Lists as Lists
 import qualified Hydra.Sources.Test.Lib.Literals as Literals
 import qualified Hydra.Sources.Test.Lib.Logic as Logic
@@ -104,6 +105,7 @@ libPairs = [
   (Eithers.ns, Eithers.allTests),
   (Equality.ns, Equality.allTests),
   (Files.ns, Files.allTests),
+  (Hashing.ns, Hashing.allTests),
   (Lists.ns, Lists.allTests),
   (Literals.ns, Literals.allTests),
   (Logic.ns, Logic.allTests),
@@ -150,6 +152,7 @@ testSuiteModules :: [Module]
 testSuiteModules =
   -- Lib tests
   [Chars.module_, Effects.module_, Eithers.module_, Equality.module_, Files.module_,
+   Hashing.module_,
    Lists.module_, Literals.module_, Logic.module_, Maps.module_,
    Math.module_, Optionals.module_, Pairs.module_, Regex.module_, Sets.module_, Strings.module_,
    System.module_,

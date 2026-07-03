@@ -12,6 +12,7 @@ import qualified Hydra.Overlay.Haskell.Dsl.Types as Types
 import qualified Hydra.Overlay.Haskell.Lib.Chars as Chars
 import qualified Hydra.Overlay.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Overlay.Haskell.Lib.Equality as Equality
+import qualified Hydra.Overlay.Haskell.Lib.Hashing as Hashing
 import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
 import qualified Hydra.Overlay.Haskell.Lib.Literals as Literals
 import qualified Hydra.Overlay.Haskell.Lib.Logic as Logic
@@ -28,6 +29,7 @@ import qualified Hydra.Lib.Effects as DefEffects
 import qualified Hydra.Lib.Eithers as DefEithers
 import qualified Hydra.Lib.Equality as DefEquality
 import qualified Hydra.Lib.Files as DefFiles
+import qualified Hydra.Lib.Hashing as DefHashing
 import qualified Hydra.Lib.Lists as DefLists
 import qualified Hydra.Lib.Literals as DefLiterals
 import qualified Hydra.Lib.Logic as DefLogic
@@ -428,6 +430,11 @@ hydraLibSystem = standardLibrary [
     unsupportedEffectPrimitive DefSystem.getTime,
     unsupportedEffectPrimitive DefSystem.getWorkingDirectory]
 
+hydraLibHashing :: Library
+hydraLibHashing = standardLibrary [
+  prim1 DefHashing.sha256 Hashing.sha256 [] binary binary,
+  prim1 DefHashing.sha256Hex Hashing.sha256Hex [] binary string]
+
 hydraLibText :: Library
 hydraLibText = standardLibrary [
   prim1 DefText.decodeUtf8 Text.decodeUtf8 [] binary (Prims.either_ string string),
@@ -440,6 +447,7 @@ standardLibraries = [
   hydraLibEithers,
   hydraLibEquality,
   hydraLibFiles,
+  hydraLibHashing,
   hydraLibLists,
   hydraLibLiterals,
   hydraLibLogic,
