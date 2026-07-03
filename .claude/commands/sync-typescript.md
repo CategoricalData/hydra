@@ -29,8 +29,7 @@ bindings haven't landed.
 
 This script does **not** run the TypeScript test suite. To validate the
 generated code, run the TypeScript head's test entry point or do a
-`/bootstrap typescript`. (Pending #387: `/test typescript` will roll
-sync + tests into one step.)
+`/bootstrap typescript`. (Or use `/test typescript`, which rolls sync + tests into one step.)
 
 ## First-run gotcha
 

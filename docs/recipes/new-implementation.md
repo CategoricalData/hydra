@@ -344,7 +344,7 @@ though their behavior must be the same across implementations.
 - Metadata:
   [Hydra/Sources/Libraries.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Libraries.hs) (DSL)
 - Implementations:
-  [Hydra/Haskell/Lib](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib) (native Haskell)
+  [Hydra/Overlay/Haskell/Lib](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib) (native Haskell)
 
 **Java**:
 - Metadata + implementations:
@@ -493,7 +493,7 @@ generation but fails self-host (the symptom that motivated the #391 self-host fi
 
 Under #473, primitive **definitions** (`PrimitiveDefinition` metadata) live in the language-independent
 `hydra.lib.*` modules, while each host's native **implementations** live alongside at
-`hydra.<lang>.lib.*` (the analog of Haskell's `Hydra.Haskell.Lib.*`). The relocation is performed
+`hydra.<lang>.lib.*` (the analog of Haskell's `Hydra.Overlay.Haskell.Lib.*`). The relocation is performed
 **entirely by the generation driver**, not by any coder — so when your language hosts code generation
 (self-hosting), your host's bootstrap driver (e.g. `heads/<lang>/.../Bootstrap.*`, the analog of
 `heads/haskell/src/exec/bootstrap-from-json/Main.hs`) must do two things the Haskell driver does:

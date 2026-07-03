@@ -4,10 +4,10 @@ Java distribution package under dist/java/<pkg>/.
 
 Each emitted build is self-contained: from `dist/java/<pkg>/`, running
 `./gradlew build` resolves dependencies, compiles, runs tests, and produces a
-publishable JAR + POM. The POM declares `net.fortytwo.hydra:<pkg>:<version>`
+publishable JAR + POM. The POM declares `net.fortytwo.hydra.java:<pkg>:<version>`
 with `api`-scope dependencies on every Hydra package listed in
 `packages/<pkg>/package.json`'s `dependencies` array, so an external consumer
-that adds e.g. `net.fortytwo.hydra:hydra-rdf` to their project automatically
+that adds e.g. `net.fortytwo.hydra.java:hydra-rdf` to their project automatically
 pulls `hydra-kernel` transitively.
 
 Inputs:

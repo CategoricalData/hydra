@@ -28,7 +28,7 @@ The organizing principle of Hydra's build is a clean separation between **source
   `heads/` or sibling trees.
 - **Overlay sources** (`overlay/<lang>/<pkg>/`) are the hand-written, language-specific
   source that a distribution package needs but that is *not* generated — e.g. the Haskell
-  kernel runtime (`Hydra.Haskell.Lib.*`, the DSL term helpers, `Hydra.Settings`,
+  kernel runtime (`Hydra.Overlay.Haskell.Lib.*`, the DSL term helpers, `Hydra.Settings`,
   `Hydra.Kernel`) and the `hydra` umbrella module. The overlay tree is a top-level sibling of
   `packages/`, `dist/`, and `heads/`, mirroring the `dist/<lang>/<pkg>/` shape.
   Overlay sources are authored, not generated, and are never compiled in place — only after
@@ -167,13 +167,14 @@ Stack/cabal / Gradle / pip / npm consumers do not need to know about Hydra's
 
 The mechanism: a per-language **overlay** step copies the hand-written runtime
 into `dist/<lang>/hydra-kernel/src/main/<lang>/` during sync. The canonical source
-is always the top-level `overlay/<lang>/hydra-kernel/` tree — for Haskell, Java,
-Python, and TypeScript today, and for every head as #434 completes. For
-Java/Python/TypeScript it runs as **Step 0** of
+is always the top-level `overlay/<lang>/hydra-kernel/` tree — populated for every
+head (#434). For Java/Python it runs as **Step 0** of
 `heads/<lang>/bin/assemble-distribution.sh hydra-kernel`, which invokes
-`heads/<lang>/bin/copy-kernel-runtime.sh`; for Haskell it runs as a post-processing
-step of `sync-haskell.sh`. It runs only for `hydra-kernel` (plus, for Haskell, the
-`hydra` umbrella).
+`heads/<lang>/bin/copy-overlay.sh` (the #511 generalization of
+`copy-kernel-runtime.sh` to any package with an overlay tree;
+`copy-kernel-runtime.sh` remains the batch path used by `assemble-all.sh`).
+For TypeScript, Step 0 of assemble invokes `copy-kernel-runtime.sh` directly;
+for Haskell the overlay runs as a step of `sync-haskell.sh`.
 
 The copy is a *merge* into the generated tree, not a wholesale overwrite —
 several subdirectories (e.g. `hydra/json/`) contain both generated and
@@ -187,7 +188,7 @@ else), the Java/Python/Haskell copy scripts are dumb full-tree merges — no sel
 file lists or per-file exclusions. (TypeScript's `copy-kernel-runtime.sh` is the one
 exception: it copies a named set of files, because its `dist/.../hydra/` directory
 interleaves generated kernel modules — e.g. `core.ts` — with hand-written runtime
-— `runtime.ts`, `primitives.ts`, `lib/*.ts` — at the same path, so a blind merge
+— `runtime.ts`, `primitives.ts`, `bootstrap.ts` — at the same path, so a blind merge
 would risk clobbering generated output.) Files that are NOT kernel runtime
 (multi-coder drivers, test bases, json-io stubs, each language's own coder, and a
 head's own `*.test`/Spec runners) stay in `heads/<lang>/src` and are compiled by the
@@ -195,13 +196,13 @@ developer rollup, not copied.
 
 | Language | Canonical runtime home | Overlaid by | Approx. file count |
 |----------|------------------------|-------------|--------------------|
-| Haskell | `overlay/haskell/hydra-kernel/` (+ `overlay/haskell/hydra/` umbrella): `Hydra.Settings`, `Hydra.Kernel`, 13 `Hydra.Haskell.Lib.*`, `Hydra.Dsl.{Terms,Literals,Meta.Common}` | `sync-haskell.sh` (head compiles from the dist copy, not the overlay; copies gitignored) | 18 |
+| Haskell | `overlay/haskell/hydra-kernel/` (+ `overlay/haskell/hydra/` umbrella): `Hydra.Settings`, `Hydra.Kernel`, `Hydra.Overlay.Haskell.{Lib.*,Dsl.*,Libraries,Bootstrap,AsTerm,AsType}` (#501 namespace) | `sync-haskell.sh` (head compiles from the dist copy, not the overlay; copies gitignored) | ~45 |
 | Java | `overlay/java/hydra-kernel/`: `Adapters.java`, `Coders.java`, full `hydra/{util,lib,dsl,tools}/`, `hydra/json/{JsonEncoding,JsonDecoding}.java` | `copy-kernel-runtime.sh` (Step 0 of assemble) | ~282 |
 | Python | `overlay/python/hydra-kernel/`: `hydra/overlay/python/{lib,dsl,sources,util}/` + `tools.py`, `py.typed` (main, no `__init__.py` — PEP 420); `hydra/overlay/python/test_env.py` (test bridge). All overlay Python modules use the `hydra.overlay.python.*` namespace (#501). | `copy-kernel-runtime.sh` (Step 0 of assemble; copies overlay main + test) | ~41+3 |
 | TypeScript | `overlay/typescript/hydra-kernel/`: `hydra/{bootstrap,primitives,runtime}.ts`, `hydra/lib/*.ts` (main); `hydra/test/{testEnv,jsonBindings}.ts` (test) | `copy-kernel-runtime.sh` (Step 0 of assemble) | ~19 |
 | Go (head bud) | `overlay/go/hydra-kernel/`: `hydra/lib/*` primitive impls (only `lib/literals` implemented; rest are package stubs). Generated code imports these via the dist-local module path `hydra.dev/hydra/lib/...` | `copy-kernel-runtime.sh` (Step 3 of assemble, post-prune) | ~13 |
 | Lisp dialects (clojure, scheme, common-lisp, emacs-lisp) | `overlay/<dialect>/hydra-kernel/`: the loader/prims/lazy/prelude/json-reader runtime + `hydra/lib/*` registries + `hydra/<dialect>/lib/*` native impls (+ Scheme's `scheme/`/`srfi/` externals) + the test bridge. Copied by common.sh's `lisp_copy_overlay` (Step 3, kernel-only). Each dialect's test runner loads the runtime from `dist/`. Common Lisp's `struct-compat.lisp` is generated into dist by gen-compat.sh (not overlay). | ~17 (clojure) – ~42 (scheme) |
-| Scala | (#434 in progress) — runtime still under `heads/scala/src`, referenced via sbt's `unmanagedSourceDirectories`. Being relocated to `overlay/scala/` with build.sbt + bootstrap-demo repointed at `dist/`. | 0 → migrating |
+| Scala | `overlay/scala/hydra-kernel/`: `hydra/overlay/scala/{Libraries.scala,lib/*.scala,dsl/*.scala}` (#501 namespace, main); `hydra/{TestSuiteRunner,test/testEnv}.scala` (test). build.sbt lists the dist copy on `unmanagedSourceDirectories`. | `copy-kernel-runtime.sh` | ~25 |
 
 The canonical edit point is the `overlay/<lang>/` tree (Haskell/Java/Python/TypeScript) or,
 for the not-yet-migrated heads, `heads/<lang>/src`. Editing the copy in `dist/` is wrong for
@@ -229,7 +230,7 @@ strictly in order, but any phase can short-circuit independently.
 |-------|--------|--------|
 | 0. Stack build | `stack build` of every Haskell exec | Bootstraps `update-json-main`, `update-json-test`, `update-json-manifest`, `update-json-kernel`, `verify-json-kernel`, `bootstrap-from-json`, `digest-check` |
 | 1. DSL → JSON + Haskell kernel | `heads/haskell/bin/sync-haskell.sh` | `dist/json/**` and `dist/haskell/{hydra-kernel,hydra-haskell}/` |
-| 1.5. Java/Python coder-JSON auto-heal | `bin/lib/check-java-python-json-fresh.py` | On a staleness miss, re-exports `dist/json/hydra-{java,python}/` via `update-json-main --include-java-python` before Phase 2 reads it |
+| 1.5. Java/Python/JVM coder-JSON auto-heal | `bin/lib/check-java-python-json-fresh.py` | On a staleness miss, re-exports `dist/json/hydra-{java,python,jvm}/` via `update-json-main --include-java-python` before Phase 2 reads it (also seeds the `hydra-scala` input digest) |
 | 2. Coder Haskell dists | per-language assemblers | `dist/haskell/hydra-<lang>/` for every L in (hosts ∪ targets) |
 | 3. Kernel/pg/rdf into each target | per-target assemblers | `dist/<lang>/{hydra-kernel,hydra-pg,hydra-rdf}/` |
 | 4. Cross-host coders | per-host assemblers | `dist/<host>/hydra-<target>/` for every (host, target) with host ≠ haskell |
@@ -512,7 +513,7 @@ target's stamp; a single bad host can be pinned back via `hostOverrides`, which
 invalidates only that host's stamp. This is the cache half of
 [#370](https://github.com/CategoricalData/hydra/issues/370) (external versioned hosts):
 #347 wires the cache to key off published versions; #370 makes the build actually consume
-those published artifacts. As of 0.16 the **Java and Python DSL→JSON steps consume the
+those published artifacts. Since the published-host migration (#370, 0.16) the **Java and Python DSL→JSON steps consume the
 published host by default**, and the **Haskell host links the published `hydra-kernel` +
 `hydra-haskell` from Hackage** for its own compile — see
 [Consuming published hosts](#consuming-published-hosts) below.
@@ -581,7 +582,7 @@ For each generated file `dist/<lang>/<pkg>/.../foo.<ext>`:
 [#370](https://github.com/CategoricalData/hydra/issues/370) (external versioned hosts) has
 two halves: the *cache* half (#347, above — key invalidation off published versions) and the
 *consume* half (run the build against published artifacts instead of a locally-built host).
-As of 0.16 the consume half is implemented for **all three big hosts**:
+Since #370 (0.16) the consume half is implemented for **all three big hosts**:
 
 - **Java and Python** consume their published coder runtime in the DSL→JSON step that regenerates
   `dist/json/hydra-{java,python}/` (Maven `hydra-java` / PyPI `hydra-python`) — see below.
@@ -633,7 +634,7 @@ is the `hydra-java` jar; for Python the `hydra-python` wheel; for Scala the loca
 sbt build (no published-host probe yet — Scala always runs in `--local-host` mode).
 
 - **Published-host mode (default).** The driver resolves
-  `net.fortytwo.hydra:hydra-java:<hostVersion>` from Maven Central (a standalone Gradle
+  `net.fortytwo.hydra.java:hydra-java:<hostVersion>` from Maven Central (a standalone Gradle
   project at `heads/java/json-driver/`) or `hydra-python==<hostVersion>` from PyPI (a managed
   venv at `heads/python/.venv-published-host/`, prepared by `bin/lib/python-published-host.sh`).
   `<hostVersion>` is resolved from `hydra.json` (`hostVersion` / `hostOverrides`) via
@@ -647,9 +648,9 @@ sbt build (no published-host probe yet — Scala always runs in `--local-host` m
   Use this only for a backward-incompatible kernel change the last published host cannot handle
   yet: build a local interim host, publish it (to `mavenLocal` / the default pip index, or bump
   `hydra.json`), then the default published-host path picks it up. See
-  [hostOverrides](#component-identity).
+  [hostOverrides](#consuming-published-hosts).
 
-**The output is identical.** The published 0.16.0 host and a freshly-built local host produce
+**The output is identical.** The published host (currently 0.17.0) and a freshly-built local host produce
 byte-for-byte identical `dist/json/hydra-{java,python}` from the same DSL sources — this is the
 forward-compatibility contract (#369) that makes consuming a *previous* release's host safe.
 See [Self-bootstrapping and forward-compatibility](https://github.com/CategoricalData/hydra/wiki/Packaging#self-bootstrapping-and-forward-compatibility)

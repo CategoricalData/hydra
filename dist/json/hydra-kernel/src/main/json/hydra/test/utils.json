@@ -36,6 +36,151 @@
   "definitions": [
     {
       "term": {
+        "name": "hydra.test.utils.inferTerm",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "hydra.graph.Graph"}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.core.Term"}, "isLazy": false}],
+          "result": {"type": {"either": {"left": {"literal": "string"}, "right": {"variable": "hydra.core.Term"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "g",
+                "domain": {"variable": "hydra.graph.Graph"},
+                "body": {
+                  "lambda": {
+                    "parameter": "term",
+                    "domain": {"variable": "hydra.core.Term"},
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bimap"}, "type": {"variable": "hydra.errors.Error"}}},
+                                            "type": {"variable": "hydra.typing.InferenceResult"}}},
+                                        "type": {"literal": "string"}}},
+                                    "type": {"variable": "hydra.core.Term"}}},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "e",
+                                    "domain": {"variable": "hydra.errors.Error"},
+                                    "body": {"application": {"function": {"variable": "hydra.show.errors.error"}, "argument": {"variable": "e"}}}}}}},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "x",
+                                "domain": {"variable": "hydra.typing.InferenceResult"},
+                                "body": {
+                                  "application": {
+                                    "function": {"project": {"typeName": "hydra.typing.InferenceResult", "fieldName": "term"}},
+                                    "argument": {"variable": "x"}}}}}}},
+                        "argument": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {"variable": "hydra.inference.inferInGraphContext"},
+                                    "argument": {"variable": "hydra.lexical.emptyInferenceContext"}}},
+                                "argument": {"variable": "g"}}},
+                            "argument": {"variable": "term"}}}}}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Run type inference on a single term"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.test.utils.inferTestCase",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": []}, {"name": "t1", "constraints": []}],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "t0"}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.testing.TestCaseWithMetadata"}, "isLazy": false}],
+          "result": {"type": {"either": {"left": {"variable": "t1"}, "right": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}},
+        "body": {
+          "typeLambda": {
+            "parameter": "t0",
+            "body": {
+              "typeLambda": {
+                "parameter": "t1",
+                "body": {
+                  "annotated": {
+                    "body": {
+                      "lambda": {
+                        "parameter": "g",
+                        "domain": {"variable": "t0"},
+                        "body": {
+                          "lambda": {
+                            "parameter": "tcm",
+                            "domain": {"variable": "hydra.testing.TestCaseWithMetadata"},
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "name_",
+                                    "term": {
+                                      "application": {
+                                        "function": {"project": {"typeName": "hydra.testing.TestCaseWithMetadata", "fieldName": "name"}},
+                                        "argument": {"variable": "tcm"}}},
+                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                                  {
+                                    "name": "tcase",
+                                    "term": {
+                                      "application": {
+                                        "function": {"project": {"typeName": "hydra.testing.TestCaseWithMetadata", "fieldName": "case"}},
+                                        "argument": {"variable": "tcm"}}},
+                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.testing.TestCase"}}},
+                                  {
+                                    "name": "desc",
+                                    "term": {
+                                      "application": {
+                                        "function": {"project": {"typeName": "hydra.testing.TestCaseWithMetadata", "fieldName": "description"}},
+                                        "argument": {"variable": "tcm"}}},
+                                    "typeScheme": {"variables": [], "body": {"optional": {"literal": "string"}}}},
+                                  {
+                                    "name": "tags_",
+                                    "term": {
+                                      "application": {
+                                        "function": {"project": {"typeName": "hydra.testing.TestCaseWithMetadata", "fieldName": "tags"}},
+                                        "argument": {"variable": "tcm"}}},
+                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.testing.Tag"}}}}],
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"variable": "hydra.testing.TestCase"}}},
+                                                "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
+                                            "type": {"variable": "t1"}}},
+                                        "argument": {
+                                          "lambda": {
+                                            "parameter": "inferredCase",
+                                            "domain": {"variable": "hydra.testing.TestCase"},
+                                            "body": {
+                                              "record": {
+                                                "typeName": "hydra.testing.TestCaseWithMetadata",
+                                                "fields": [
+                                                  {"name": "name", "term": {"variable": "name_"}},
+                                                  {"name": "case", "term": {"variable": "inferredCase"}},
+                                                  {"name": "description", "term": {"variable": "desc"}},
+                                                  {"name": "tags", "term": {"variable": "tags_"}}]}}}}}},
+                                    "argument": {
+                                      "typeApplication": {
+                                        "body": {"typeApplication": {"body": {"either": {"right": {"variable": "tcase"}}}, "type": {"variable": "t1"}}},
+                                        "type": {"variable": "hydra.testing.TestCase"}}}}}}}}}}},
+                    "annotation": {
+                      "map": [
+                        {"key": {"variable": "description"}, "value": {"literal": {"string": "Run type inference on the terms in a test case"}}}]}}}}}}}}},
+    {
+      "term": {
         "name": "hydra.test.utils.inferTestGroupTerms",
         "signature": {
           "typeParameters": [{"name": "t0", "constraints": []}, {"name": "t1", "constraints": []}],
@@ -183,149 +328,4 @@
                       "map": [
                         {
                           "key": {"variable": "description"},
-                          "value": {"literal": {"string": "Run type inference on all terms in a TestGroup to ensure lambdas have domain types"}}}]}}}}}}}}},
-    {
-      "term": {
-        "name": "hydra.test.utils.inferTestCase",
-        "signature": {
-          "typeParameters": [{"name": "t0", "constraints": []}, {"name": "t1", "constraints": []}],
-          "parameters": [
-            {"name": "arg0", "type": {"variable": "t0"}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "hydra.testing.TestCaseWithMetadata"}, "isLazy": false}],
-          "result": {"type": {"either": {"left": {"variable": "t1"}, "right": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}},
-        "body": {
-          "typeLambda": {
-            "parameter": "t0",
-            "body": {
-              "typeLambda": {
-                "parameter": "t1",
-                "body": {
-                  "annotated": {
-                    "body": {
-                      "lambda": {
-                        "parameter": "g",
-                        "domain": {"variable": "t0"},
-                        "body": {
-                          "lambda": {
-                            "parameter": "tcm",
-                            "domain": {"variable": "hydra.testing.TestCaseWithMetadata"},
-                            "body": {
-                              "let": {
-                                "bindings": [
-                                  {
-                                    "name": "name_",
-                                    "term": {
-                                      "application": {
-                                        "function": {"project": {"typeName": "hydra.testing.TestCaseWithMetadata", "fieldName": "name"}},
-                                        "argument": {"variable": "tcm"}}},
-                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}},
-                                  {
-                                    "name": "tcase",
-                                    "term": {
-                                      "application": {
-                                        "function": {"project": {"typeName": "hydra.testing.TestCaseWithMetadata", "fieldName": "case"}},
-                                        "argument": {"variable": "tcm"}}},
-                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.testing.TestCase"}}},
-                                  {
-                                    "name": "desc",
-                                    "term": {
-                                      "application": {
-                                        "function": {"project": {"typeName": "hydra.testing.TestCaseWithMetadata", "fieldName": "description"}},
-                                        "argument": {"variable": "tcm"}}},
-                                    "typeScheme": {"variables": [], "body": {"optional": {"literal": "string"}}}},
-                                  {
-                                    "name": "tags_",
-                                    "term": {
-                                      "application": {
-                                        "function": {"project": {"typeName": "hydra.testing.TestCaseWithMetadata", "fieldName": "tags"}},
-                                        "argument": {"variable": "tcm"}}},
-                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.testing.Tag"}}}}],
-                                "body": {
-                                  "application": {
-                                    "function": {
-                                      "application": {
-                                        "function": {
-                                          "typeApplication": {
-                                            "body": {
-                                              "typeApplication": {
-                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.map"}, "type": {"variable": "hydra.testing.TestCase"}}},
-                                                "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
-                                            "type": {"variable": "t1"}}},
-                                        "argument": {
-                                          "lambda": {
-                                            "parameter": "inferredCase",
-                                            "domain": {"variable": "hydra.testing.TestCase"},
-                                            "body": {
-                                              "record": {
-                                                "typeName": "hydra.testing.TestCaseWithMetadata",
-                                                "fields": [
-                                                  {"name": "name", "term": {"variable": "name_"}},
-                                                  {"name": "case", "term": {"variable": "inferredCase"}},
-                                                  {"name": "description", "term": {"variable": "desc"}},
-                                                  {"name": "tags", "term": {"variable": "tags_"}}]}}}}}},
-                                    "argument": {
-                                      "typeApplication": {
-                                        "body": {"typeApplication": {"body": {"either": {"right": {"variable": "tcase"}}}, "type": {"variable": "t1"}}},
-                                        "type": {"variable": "hydra.testing.TestCase"}}}}}}}}}}},
-                    "annotation": {
-                      "map": [
-                        {"key": {"variable": "description"}, "value": {"literal": {"string": "Run type inference on the terms in a test case"}}}]}}}}}}}}},
-    {
-      "term": {
-        "name": "hydra.test.utils.inferTerm",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [
-            {"name": "arg0", "type": {"variable": "hydra.graph.Graph"}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "hydra.core.Term"}, "isLazy": false}],
-          "result": {"type": {"either": {"left": {"literal": "string"}, "right": {"variable": "hydra.core.Term"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "g",
-                "domain": {"variable": "hydra.graph.Graph"},
-                "body": {
-                  "lambda": {
-                    "parameter": "term",
-                    "domain": {"variable": "hydra.core.Term"},
-                    "body": {
-                      "application": {
-                        "function": {
-                          "application": {
-                            "function": {
-                              "application": {
-                                "function": {
-                                  "typeApplication": {
-                                    "body": {
-                                      "typeApplication": {
-                                        "body": {
-                                          "typeApplication": {
-                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bimap"}, "type": {"variable": "hydra.errors.Error"}}},
-                                            "type": {"variable": "hydra.typing.InferenceResult"}}},
-                                        "type": {"literal": "string"}}},
-                                    "type": {"variable": "hydra.core.Term"}}},
-                                "argument": {
-                                  "lambda": {
-                                    "parameter": "e",
-                                    "domain": {"variable": "hydra.errors.Error"},
-                                    "body": {"application": {"function": {"variable": "hydra.show.errors.error"}, "argument": {"variable": "e"}}}}}}},
-                            "argument": {
-                              "lambda": {
-                                "parameter": "x",
-                                "domain": {"variable": "hydra.typing.InferenceResult"},
-                                "body": {
-                                  "application": {
-                                    "function": {"project": {"typeName": "hydra.typing.InferenceResult", "fieldName": "term"}},
-                                    "argument": {"variable": "x"}}}}}}},
-                        "argument": {
-                          "application": {
-                            "function": {
-                              "application": {
-                                "function": {
-                                  "application": {
-                                    "function": {"variable": "hydra.inference.inferInGraphContext"},
-                                    "argument": {"variable": "hydra.lexical.emptyInferenceContext"}}},
-                                "argument": {"variable": "g"}}},
-                            "argument": {"variable": "term"}}}}}}}}},
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Run type inference on a single term"}}}]}}}}}]}
+                          "value": {"literal": {"string": "Run type inference on all terms in a TestGroup to ensure lambdas have domain types"}}}]}}}}}}}}}]}

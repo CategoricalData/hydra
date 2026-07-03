@@ -98,9 +98,9 @@ module_ = Module {
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Shared utility functions for test code generation codecs")}
   where
     definitions = [
-      toDefinition inferTestGroupTerms,
+      toDefinition inferTerm,
       toDefinition inferTestCase,
-      toDefinition inferTerm]
+      toDefinition inferTestGroupTerms]
 
 
 -- | Run type inference on a single term

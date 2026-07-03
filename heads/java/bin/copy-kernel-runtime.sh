@@ -3,8 +3,8 @@
 # published hydra-kernel Maven artifact is self-contained.
 #
 # The runtime's canonical home is the top-level overlay tree
-# overlay/java/hydra-kernel/src/main/java/ (a sibling of dist/, packages/, heads/,
-# bindings/ — see docs/build-system.md). It holds exactly the hand-written classes
+# overlay/java/hydra-kernel/src/main/java/ (a sibling of dist/, packages/,
+# heads/ — see docs/build-system.md). It holds exactly the hand-written classes
 # the kernel needs at runtime (hydra/{util,lib,dsl,tools}/, hydra/json/{JsonEncoding,
 # JsonDecoding}.java, and the top-level Adapters/Coders) — nothing else. Because the
 # overlay tree contains ONLY runtime, this is a dumb full-tree merge: no selective
@@ -16,7 +16,7 @@
 #     UpdateJavaJson (import every coder; live above the kernel layer)
 #   - HydraTestBase (pulls in JUnit; belongs in a test-utility artifact)
 #   - json/JsonIoCoder, json/JsonSerde (need com.cedarsoftware json-io; a future
-#     bindings/java/hydra-jsonio package)
+#     overlay/java package; formerly proposed as bindings/java/hydra-jsonio)
 #
 # The merge (cp -R contents) leaves generated siblings under hydra/<sub>/ untouched.
 #

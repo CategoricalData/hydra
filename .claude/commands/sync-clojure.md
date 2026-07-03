@@ -19,5 +19,4 @@ the Clojure dialect.
 
 This script does **not** run the Clojure test suite. To validate the
 generated code, run `packages/hydra-lisp/bin/run-tests.sh clojure` or
-do a `/bootstrap clojure`. (Pending #387: `/test clojure` will roll
-sync + tests into one step.)
+do a `/bootstrap clojure`. (Or use `/test clojure`, which rolls sync + tests into one step.)

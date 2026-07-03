@@ -16,8 +16,7 @@ bin/sync-scala.sh
 
 This script does **not** run the Scala test suite. To validate the
 generated code, run `heads/scala/bin/test-distribution.sh hydra-kernel`
-or do a `/bootstrap scala`. (Pending #387: `/test scala` will roll
-sync + tests into one step.)
+or do a `/bootstrap scala`. (Or use `/test scala`, which rolls sync + tests into one step.)
 
 > **Caveat.** This skill is narrow — `dist/scala/` will contain only
 > `hydra-{kernel,pg,rdf,scala}/` afterward, not `dist/scala/hydra-{haskell,java,python,lisp}/`.

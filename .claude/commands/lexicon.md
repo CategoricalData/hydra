@@ -1,5 +1,5 @@
 ---
-description: Refresh docs/hydra-lexicon.txt from the current Haskell kernel by running bin/regenerate-lexicon.sh. The lexicon is the canonical reference for kernel types + ~180 primitive signatures and the most important LLM context document. Run on demand and as part of the pre-release flow; not part of regular sync.
+description: Refresh docs/hydra-lexicon.txt from the current Haskell kernel by running bin/regenerate-lexicon.sh. The lexicon is the canonical reference for kernel types + ~270 primitive signatures and the most important LLM context document. Run on demand and as part of the pre-release flow; not part of regular sync.
 allowed-tools:
   - Bash(bin/regenerate-lexicon.sh)
   - Bash(git status*)

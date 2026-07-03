@@ -10,7 +10,7 @@ For library users the common use cases are:
 
 - **Typed property-graph construction and validation** (TinkerPop, Neo4j, Neptune)
 - **Schema-driven coders** between Avro, Protobuf, JSON Schema, GraphQL, PDL, RDF, etc.
-- **Code generation** of typed data structures from Hydra modules into Java / Python / Scala / Lisp dialects
+- **Code generation** of typed data structures from Hydra modules into Java / Python / Scala / TypeScript / Lisp dialects
 
 The library shape is the same on every host: depend on the package, import what you need, call functions.
 There is no CLI to invoke; you are integrating Hydra into your own application.
@@ -22,7 +22,7 @@ There is no CLI to invoke; you are integrating Hydra into your own application.
 
 ## Java
 
-Hydra publishes one Maven artifact per package. Pick the ones you need; coordinates are under group `net.fortytwo.hydra`, all at the same version.
+Hydra publishes one Maven artifact per package. Pick the ones you need; coordinates are under group `net.fortytwo.hydra.java`, all at the same version.
 
 Host-specific integrations (the Java rdf4j binding, ANTLR-based Cypher/openGQL parsers, TinkerPop/Gremlin
 bridges, and the Java PG DSL builders) are not separate artifacts — they ship inside the corresponding
@@ -34,14 +34,14 @@ package's jar via the overlay system (see [docs/overlays.md](overlays.md) and th
 | `hydra-kernel` | Core types (`Literal`, `Type`, `Term`), `hydra.show.*`, `hydra.validate.core`, `hydra.error.core`, library stdlib. The minimum dependency. |
 | `hydra-pg` | Property-graph model (`hydra.pg.model.*`), validation (`hydra.validate.pg`), errors (`hydra.error.pg`); the Java fluent builders in `hydra.pg.dsl.*` (from `overlay/java/hydra-pg`); a Neo4j-aligned model (`hydra.neo4j.model`) with client-side validation (`hydra.validate.neo4j`) and a `hydra.pg.model` ↔ Neo4j mapping; ANTLR-based openCypher/GQL parsers producing `hydra.pg.query.*`; and the TinkerPop/Gremlin bridge. |
 | `hydra-rdf` | RDF 1.1 model, SHACL, OWL 2, ShEx, and XML Schema syntax models; N-Triples serialization; the rdf4j binding (from `overlay/java/hydra-rdf`) for external I/O via Eclipse rdf4j Rio. |
-| `hydra-java`, `hydra-python`, `hydra-scala`, `hydra-haskell`, `hydra-lisp`, `hydra-typescript` | Per-language coder packages. Depend on these if your code needs to generate code in that target. (Coq, WASM, and Go coders are not currently published — Coq and WASM are in progress; Go is a "head bud" per the [Implementations](../README.md#implementations) table.) |
+| `hydra-java`, `hydra-python`, `hydra-scala`, `hydra-haskell`, `hydra-lisp`, `hydra-typescript` | Per-language coder packages. Depend on these if your code needs to generate code in that target. (Coq, WASM, and Go coders are not currently published — Coq and WASM are in progress; Go is a "head bud": kernel generation works, but the Go runtime is incomplete. See the [Implementations](../README.md#implementations) table.) |
 
 ### Gradle
 
 ```gradle
 dependencies {
-    implementation 'net.fortytwo.hydra:hydra-kernel:0.17.0'
-    implementation 'net.fortytwo.hydra:hydra-pg:0.17.0'
+    implementation 'net.fortytwo.hydra.java:hydra-kernel:0.17.0'
+    implementation 'net.fortytwo.hydra.java:hydra-pg:0.17.0'
 }
 ```
 
@@ -50,12 +50,12 @@ dependencies {
 ```xml
 <dependencies>
   <dependency>
-    <groupId>net.fortytwo.hydra</groupId>
+    <groupId>net.fortytwo.hydra.java</groupId>
     <artifactId>hydra-kernel</artifactId>
     <version>0.17.0</version>
   </dependency>
   <dependency>
-    <groupId>net.fortytwo.hydra</groupId>
+    <groupId>net.fortytwo.hydra.java</groupId>
     <artifactId>hydra-pg</artifactId>
     <version>0.17.0</version>
   </dependency>
@@ -217,6 +217,62 @@ main = case Validate.checkLiteral Core.LiteralTypeString (Core.LiteralString "he
 
 ---
 
+## TypeScript
+
+Hydra publishes `hydra-kernel`, `hydra-typescript`, `hydra-pg`, and `hydra-rdf` to
+[npm](https://www.npmjs.com/package/hydra-kernel). The packages are ESM (`"type": "module"`)
+with TypeScript type declarations included.
+
+```bash
+npm install hydra-kernel
+```
+
+The root export is the kernel's `hydra/core` module; every other module is available as a
+subpath export (e.g. `hydra-kernel/hydra/validate/core`, `hydra-kernel/hydra/lib/lists`).
+
+### Check a literal type
+
+Kernel types are plain tagged unions in TypeScript, so values can be constructed as object
+literals:
+
+```typescript
+import { checkLiteral } from "hydra-kernel/hydra/validate/core";
+import { isGiven } from "hydra-kernel/hydra/runtime";
+
+const expected = { tag: "string" };
+const value = { tag: "integer", value: { tag: "int32", value: 42 } };
+
+// Type mismatch returns Given(TypeMismatch(...)) -- typed error, not a string
+const result = checkLiteral(expected, value);
+console.log(isGiven(result)); // true
+```
+
+---
+
+## Scala
+
+Hydra publishes per-package Maven artifacts for Scala 3 under group `net.fortytwo.hydra.scala`
+(artifact ids carry sbt's `_3` cross-version suffix). In an sbt project:
+
+```scala
+libraryDependencies += "net.fortytwo.hydra.scala" %% "hydra-kernel" % "0.17.0"
+```
+
+The kernel modules have the same `hydra.*` shape as on the other hosts (`hydra.core`,
+`hydra.validate.core`, and so on). For writing Hydra programs and domain models in Scala,
+see the [Scala DSL guide](dsl-guide-scala.md).
+
+---
+
+## Lisp dialects (Clojure, Common Lisp, Emacs Lisp, Scheme)
+
+The four Lisp targets are complete implementations but are not yet published to a package
+registry (e.g. Clojars); consume them from the repository's generated `dist/<dialect>/` trees.
+See [packages/hydra-lisp/README.md](../packages/hydra-lisp/README.md) for build and test
+instructions per dialect.
+
+---
+
 ## What's in `hydra.*`?
 
 A handful of module names you'll touch most often as a library user:
@@ -237,13 +293,13 @@ A handful of module names you'll touch most often as a library user:
 
 The full primitive lexicon is in
 [`docs/hydra-lexicon.txt`](https://github.com/CategoricalData/hydra/blob/main/docs/hydra-lexicon.txt)
-(240 primitives with their type signatures, organized into 13 `hydra.lib.<sub>` module names).
+(267 primitives with their type signatures, organized into 17 `hydra.lib.<sub>` module names).
 
 ---
 
 ## Next steps
 
-- **Construct a typed schema**: see the per-language DSL guides ([Java](dsl-guide-java.md), [Python](dsl-guide-python.md), [Haskell](dsl-guide.md)).
+- **Construct a typed schema**: see the per-language DSL guides ([Java](dsl-guide-java.md), [Python](dsl-guide-python.md), [Scala](dsl-guide-scala.md), [Haskell](dsl-guide.md)).
 - **Convert schemas between formats**: see the coder documentation in `hydra-ext` (Avro ↔ Protobuf ↔ JSON Schema ↔ GraphQL, etc.).
 - **Generate code from a schema**: see [Generating code with Hydra](recipes/code-generation.md).
 - **Reference project**: [HydraPop](https://github.com/CategoricalData/HydraPop) — TinkerPop validation, Java + Python.

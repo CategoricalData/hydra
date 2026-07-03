@@ -15,6 +15,8 @@ import Hydra.Haskell.Language
 import Hydra.Generation
 import qualified Hydra.Sources.All as Sources
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
+import qualified Hydra.Sources.Kernel.Types.Packaging as PackagingTypes
+import qualified Hydra.Sources.Kernel.Types.Util as UtilTypes
 
 
 -- | Generate Haskell source files from modules.
@@ -97,5 +99,16 @@ writeDslHaskell basePath universeModules typeModules = do
 
 -- | Generate the lexicon to the standard location, using the Haskell-host kernel modules.
 -- Path is relative to heads/haskell/ (where the sync script runs stack ghci).
+-- The kernel terms modules reference encoder/decoder bindings (hydra.encode.core.*,
+-- hydra.decode.packaging.*, ...); since #448 those modules are synthesized in-memory
+-- rather than shipped as sources, so they must be synthesized here and added to the
+-- lexicon universe for inference to resolve the references. Synthesis covers all
+-- kernel type modules (+ JSON runtime types) because the synthesized coders
+-- reference each other transitively along type-field dependencies.
 writeLexiconToStandardPath :: IO ()
-writeLexiconToStandardPath = writeLexicon "../../docs/hydra-lexicon.txt" Sources.kernelModules
+writeLexiconToStandardPath = do
+    encoderMods <- generateEncoderModules Sources.kernelModules coderTypeModules
+    decoderMods <- generateDecoderModules Sources.kernelModules coderTypeModules
+    writeLexicon "../../docs/hydra-lexicon.txt" (Sources.kernelModules ++ encoderMods ++ decoderMods)
+  where
+    coderTypeModules = Sources.kernelTypesModules ++ Sources.jsonModules

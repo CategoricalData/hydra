@@ -77,16 +77,15 @@ docs/work/
 # Exception within the tracked dist/haskell/ tree (#418): the hand-written
 # distribution-package content that sync-haskell.sh OVERLAYS from its canonical
 # home under the top-level overlay/haskell/ tree is NOT committed — it would
-# duplicate the canonical source, and the whole dist/haskell/ tree leaves Git
-# after 0.16.0 anyway. The canonical copies under overlay/haskell/ ARE tracked.
+# duplicate the canonical source. (Removing dist/haskell/ from SCM entirely is
+# deferred; see #376.) The canonical copies under overlay/haskell/ ARE tracked.
 #   - hydra umbrella package (entirely copied)
 dist/haskell/hydra/
-#   - hydra-kernel hand-written runtime (copied from dist-packages/hydra-kernel/)
+#   - hydra-kernel hand-written runtime (copied from overlay/haskell/hydra-kernel/;
+#     relocated to the Hydra.Overlay.Haskell.* namespace in #501)
 dist/haskell/hydra-kernel/src/main/haskell/Hydra/Settings.hs
 dist/haskell/hydra-kernel/src/main/haskell/Hydra/Kernel.hs
-dist/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib/
-dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Literals.hs
-dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Meta/Common.hs
+dist/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/
 #   - hydra-kernel hand-written test bridge (overlaid from overlay/haskell/.../src/test/)
 dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/TestEnv.hs
 dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/DefaultImplGraph.hs

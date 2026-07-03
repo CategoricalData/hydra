@@ -72,7 +72,7 @@ For a new schema language or generation target:
    (Coder.hs, Language.hs, Serde.hs, Syntax.hs at minimum).
 2. Register them in `src/main/haskell/Hydra/Sources/Ext/Manifest.hs`'s
    `mainModules` list.
-3. Run `bin/sync-haskell.sh` to regenerate the JSON kernel and validate that
+3. Run `heads/haskell/bin/sync-haskell.sh` to regenerate the JSON kernel and validate that
    the new sources type-check against the rest of `hydra-ext`.
 
 For the broader process, see

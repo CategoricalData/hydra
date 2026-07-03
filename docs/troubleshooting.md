@@ -105,7 +105,7 @@ native implementation must accept and apply its function arguments correctly.
 | DSL term builders | `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/dsl/Terms.java` |
 | Either utilities | `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/util/Either.java` |
 | Test runner | `heads/java/src/test/java/hydra/TestSuiteRunner.java` |
-| Reducer | `dist/java/hydra-kernel/src/main/java/hydra/reduction/Reduction.java` |
+| Reducer | `dist/java/hydra-kernel/src/main/java/hydra/Reduction.java` |
 
 ## Haskell build issues
 

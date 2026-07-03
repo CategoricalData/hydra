@@ -204,8 +204,9 @@ All type modules follow a consistent structure:
 module Hydra.Sources.Kernel.Types.ModuleName where
 
 import Hydra.Kernel
-import Hydra.Dsl.Bootstrap
-import Hydra.Dsl.Types as Types
+import Hydra.Overlay.Haskell.Bootstrap
+import Hydra.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
+import qualified Hydra.Overlay.Haskell.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 module_ :: Module
@@ -328,11 +329,10 @@ The DSL system provides multiple levels of abstraction for different use cases.
 ### DSL module locations
 
 ```
-heads/haskell/src/main/haskell/Hydra/Dsl/                # Hand-written base DSLs
-heads/haskell/src/main/haskell/Hydra/Dsl/Meta/           # Hand-written meta DSL wrappers
-heads/haskell/src/main/haskell/Hydra/Dsl/Meta/Lib/       # Library DSLs (13 files)
+overlay/haskell/hydra-kernel/.../Hydra/Overlay/Haskell/Dsl/        # Hand-written base DSLs (#418/#501)
+overlay/haskell/hydra-kernel/.../Hydra/Overlay/Haskell/Dsl/Typed/  # Phantom-typed per-type DSLs
 dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/    # Generated DSLs (from hydra.dsls)
-heads/haskell/src/main/haskell/Hydra/                    # Generation drivers and sources
+heads/haskell/src/main/haskell/Hydra/                    # Generation drivers
 dist/haskell/hydra-<pkg>/src/main/haskell/Hydra/         # Generated per-package coder modules
                                                           #   (hydra-haskell, hydra-java, hydra-python,
                                                           #    hydra-scala, hydra-lisp, hydra-typescript,
@@ -413,50 +413,35 @@ as part of the sync pipeline.
 
 ### Hand-written DSL modules
 
-#### Base infrastructure (in `Hydra/Dsl/`)
+The hand-written DSL infrastructure lives in the Haskell overlay
+(`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/`, namespace
+`Hydra.Overlay.Haskell.*` — relocated from `heads/haskell/.../Hydra/Dsl/` in #418/#501):
+
+#### Base infrastructure (in `Hydra/Overlay/Haskell/Dsl/`)
 - **Terms.hs** - Plain DSL for terms (`apply`, `lambda`, `record`, `inject`)
 - **Types.hs** - Plain DSL for types (operators `-->`, `@@`)
-- **ShorthandTypes.hs** - Convenient aliases (`tInt32`, `tString`, `tList`)
-- **Bootstrap.hs** - Bootstrapping utilities
-- **Annotations.hs** - Annotation handling
-- **Grammars.hs** - Grammar and syntax definitions
+- **Prims.hs** - Primitive-function references
+- **Annotations.hs** - Annotation handling (`doc`)
 - **Literals.hs**, **LiteralTypes.hs** - Literal handling
+- **Tests.hs** - Test-case construction helpers
+- **Bootstrap.hs** (in `Hydra/Overlay/Haskell/`) - Bootstrapping utilities (`defineType`, the bootstrap graph)
 
-#### Meta DSL wrappers (in `Hydra/Dsl/Meta/`)
+#### Phantom-typed DSLs (in `Hydra/Overlay/Haskell/Dsl/Typed/`)
 
-These modules re-export the corresponding generated DSL module and add non-standard
-helpers such as `AsTerm`-flexible overrides, expression conversion pipelines, and
-compatibility shims.
+Typed wrappers over the plain DSLs, plus per-type helper modules:
 
-- **Meta/Core.hs** - Wraps `Hydra.Dsl.Core`; adds `AsTerm` overrides for `binding`, `injection`,
-  `typeVariable`; helpers like `equalName_`, `false`
-- **Meta/Graph.hs** - Wraps `Hydra.Dsl.Graph`; adds graph construction helpers
-- **Meta/Phantoms.hs** - Phantom-typed term construction (`TypedTerm a`), operators (`@@`, `~>`, `<~`)
-- **Meta/Terms.hs** - Phantom-typed term-encoded terms
-- **Meta/Types.hs** - Phantom-typed term-encoded types
-- **Meta/Variants.hs** - Wraps `Hydra.Dsl.Variants`; metadata variants and introspection
-- **Meta/Testing.hs** - Wraps `Hydra.Dsl.Testing`; test convenience helpers
+- **Typed/Phantoms.hs** - Phantom-typed term construction (`TypedTerm a`), operators (`@@`, `~>`, `<~`)
+- **Typed/Terms.hs**, **Typed/Types.hs** - Phantom-typed term- and type-encoded values
+- **Typed/Core.hs**, **Typed/Graph.hs**, **Typed/Testing.hs**, **Typed/Variants.hs**, etc. -
+  per-type construction helpers with `AsTerm`-flexible overrides
 
 ### Library DSLs
 
-Phantom-typed wrappers for standard library functions:
-
-```
-Hydra/Dsl/Meta/Lib/
-├── Lists.hs       # map, filter, fold, concat, etc.
-├── Maps.hs        # lookup, insert, keys, values, etc.
-├── Sets.hs        # union, intersection, member, etc.
-├── Strings.hs     # concat, split, toUpper, toLower, etc.
-├── Chars.hs       # isAlpha, isDigit, toUpper, toLower
-├── Math.hs        # add, sub, mul, div, sin, cos, sqrt, etc.
-├── Logic.hs       # and, or, not, ifElse
-├── Optionals.hs   # fromOptional, cases, isGiven, etc.
-├── Eithers.hs     # either, isLeft, rights, etc.
-├── Equality.hs    # equal, compare, gt, lt, etc.
-├── Pairs.hs       # fst, snd, curry, uncurry
-├── Regex.hs       # matches, find, replace, split
-└── Literals.hs    # Type conversions and parsing
-```
+Phantom-typed wrappers for the standard library primitives (`Hydra.Dsl.Lib.Lists`,
+`Hydra.Dsl.Lib.Maps`, `Hydra.Dsl.Lib.Strings`, ...) are **generated** into
+`dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Lib/` as part of the sync
+pipeline; they are no longer hand-written. A small deep-DSL exception
+(`Hydra/Overlay/Haskell/Dsl/Deep/Lib/Math.hs`) remains hand-written in the overlay.
 
 ### DSL operators
 
@@ -553,15 +538,17 @@ Primitive functions are the standard library of Hydra, providing built-in operat
 
 ### Organization
 
-Primitives are organized into **13 library modules** by category. Each module
+Primitives are organized into **17 library modules** by category. Each module
 lives in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/<Sub>.hs`
 and is **the** canonical registry for its module name:
 
 | Library | Count | Examples |
 |---------|-------|----------|
 | **hydra.lib.chars** | 6 | `isAlphaNum`, `isLower`, `toUpper` |
+| **hydra.lib.effects** | 8 | `pure`, `bind`, `map`, `mapList` |
 | **hydra.lib.eithers** | 15 | `either`, `isLeft`, `rights`, `bimap`, `bind` |
 | **hydra.lib.equality** | 9 | `equal`, `compare`, `gt`, `lt`, `max` |
+| **hydra.lib.files** | 11 | `readFile`, `writeFile`, `status` (effectful) |
 | **hydra.lib.lists** | 37 | `map`, `filter`, `foldl`, `concat`, `sort` |
 | **hydra.lib.literals** | 55 | Type conversions, parsing, showing |
 | **hydra.lib.logic** | 4 | `and`, `or`, `not`, `ifElse` |
@@ -572,8 +559,10 @@ and is **the** canonical registry for its module name:
 | **hydra.lib.regex** | 6 | `matches`, `find`, `findAll`, `replace`, `replaceAll`, `split` |
 | **hydra.lib.sets** | 14 | `union`, `intersection`, `member` |
 | **hydra.lib.strings** | 13 | `cat`, `splitOn`, `length`, `lines` |
+| **hydra.lib.system** | 6 | `execute`, `getEnvironment` (effectful) |
+| **hydra.lib.text** | 2 | `decodeUtf8`, `encodeUtf8` |
 
-**Total: 241 primitive functions** (post-#156).
+**Total: 267 primitive functions.**
 
 ### Three-level definition structure
 
@@ -655,9 +644,10 @@ carrier in #446, leaving the graph; this was sequenced with the `defaultImplemen
 
 The kernel modules `Hydra/Sources/Kernel/Lib/<Sub>.hs` declare every primitive
 as a `PrimitiveDefinition` (an arm of `Definition` alongside `term` and `type`),
-collectively forming **the** primitive registry. The 13 modules — `Chars`,
-`Eithers`, `Equality`, `Lists`, `Literals`, `Logic`, `Maps`, `Math`, `Optionals`,
-`Pairs`, `Regex`, `Sets`, `Strings` — declare 240 primitives total.
+collectively forming **the** primitive registry. The 17 modules — `Chars`,
+`Effects`, `Eithers`, `Equality`, `Files`, `Lists`, `Literals`, `Logic`, `Maps`,
+`Math`, `Optionals`, `Pairs`, `Regex`, `Sets`, `Strings`, `System`, `Text` —
+declare 267 primitives total.
 
 Example (`Hydra/Sources/Kernel/Lib/Logic.hs`):
 
@@ -697,7 +687,7 @@ Per host, two things are needed beyond the kernel metadata:
 
 1. **Native implementations** — for the big three, in the `overlay/<lang>/hydra-kernel/`
    tree (#418); e.g. Haskell at
-   `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib/Math.hs`:
+   `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib/Math.hs`:
 
    ```haskell
    add :: Int -> Int -> Int
@@ -1379,10 +1369,11 @@ All modules in `mainModules` — regardless of category — go through the same 
 pipeline: `writeHaskell` (or `writeJava`, `writePython`) compiles them from Hydra module
 definitions into executable code in the target language.
 
-The encoder/decoder source modules require a special staging step because they are *derived*
-from the type modules rather than hand-written. The sync script (`sync-haskell.sh`) handles
-this with an initial generation pass, followed by a source module generation step, followed
-by a second generation pass.
+The encoder/decoder modules are *derived* from the type modules rather than hand-written.
+Since [#448](https://github.com/CategoricalData/hydra/issues/448) they are synthesized
+in-memory at generation time (`generateEncoderModules` / `generateDecoderModules`) rather
+than staged as `Sources/{Encode,Decode}/*.hs` files on disk, so the sync no longer needs a
+separate source-module generation pass between two compile passes.
 
 Because these derived modules are produced mechanically from a known type, the synthesizer
 is the authority on their types. Each derived Source module contains a single `module_`
@@ -1395,21 +1386,17 @@ from the term's large encoded structure. Leaving the field as `Nothing` forces a
 typical CI runners. See [#367](https://github.com/CategoricalData/hydra/issues/367) for
 the case where this invariant was violated.
 
-Phases:
+The steps of `sync-haskell.sh` (Phase 1 of the top-level sync; see
+[build-system.md](build-system.md) for the full phase model):
 
-| Phase | What it does |
-|-------|--------------|
-| 1 | Compile `mainModules` into executable Haskell (initial pass) |
-| 2–3 | Generate universal test cases and eval lib |
-| 4 | Generate encoder/decoder source modules from `kernelTypesModules` |
-| 5 | Recompile `mainModules` into executable Haskell (picking up the new source modules) |
-| 6 | Export and verify JSON kernel |
-| 7 | Run tests |
-
-Phase 5 is necessary because the encoder/decoder source modules generated in phase 4 are
-part of `kernelTermsModules` and therefore `mainModules`. They need to be compiled into
-executable code just like every other module. A `stack build` between phases 4 and 5
-ensures the Haskell compiler picks up the newly generated source files.
+| Step | What it does |
+|------|--------------|
+| 1 | Build the required executables (`update-json-main`, `bootstrap-from-json`, ...) |
+| 2 | Export kernel + test modules to JSON (`dist/json/`) |
+| 3 | Verify the JSON kernel and write the manifest |
+| 4 | Generate Haskell from the JSON (`bootstrap-from-json`, with stale-output pruning) |
+| 5 | Post-processing (now a no-op — all patches eliminated by #307 — plus a re-overlay of the hand-written runtime) |
+| 6 | Run tests (`stack test`) |
 
 ### Key generation functions (from `Hydra.Generation`)
 
@@ -1417,12 +1404,13 @@ ensures the Haskell compiler picks up the newly generated source files.
   code in the target language. Signature: `FilePath -> [Module] -> [Module] -> IO ()`
   (output directory, universe modules for resolution, modules to generate).
 - `writeDecoderSourceHaskell` / `writeEncoderSourceHaskell` — Generate encoder/decoder
-  source modules (Hydra module definitions) from type modules. Used in phase 4.
+  source modules (Hydra module definitions) from type modules, on demand (no longer part
+  of the regular sync; see #448).
 - `writeDecoderHaskell` / `writeEncoderHaskell` — Convenience functions that generate
   encoder/decoder modules and immediately compile them to executable Haskell in one step.
 
 For detailed context on encoder/decoder modules, see
-[Issue #47: Per-Type Term Coders](https://github.com/CategoricalData/hydra/blob/main/docs/work/issues/issue-47-per-type-term-coders.md).
+[Issue #47: Per-type term coders](https://github.com/CategoricalData/hydra/issues/47).
 
 ### Incremental inference
 
@@ -1575,7 +1563,7 @@ stack build
 #### Step 5: Regenerate
 
 ```bash
-bin/sync-haskell.sh
+heads/haskell/bin/sync-haskell.sh
 # Regenerates DSL → JSON → Haskell (Phase 1 of the sync pipeline).
 # Replaces the retired hydra-ext-debug exec.
 ```
@@ -1671,30 +1659,27 @@ implementing native functions in `Lib/`, registering primitives, and creating DS
 
 ### DSL system
 
-[`heads/haskell/src/main/haskell/Hydra/Dsl/`](https://github.com/CategoricalData/hydra/tree/main/heads/haskell/src/main/haskell/Hydra/Dsl)
+[`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/`](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl)
 ```
 ├── Terms.hs             # Untyped term DSL
 ├── Types.hs             # Untyped type DSL
-├── Phantoms.hs          # Phantom-typed DSL
-├── Meta/Terms.hs        # Term-encoded terms
-├── Core.hs              # High-level constructors
-├── Bootstrap.hs         # Bootstrapping utilities
-└── Lib/                 # Library DSLs
-    ├── Lists.hs
-    ├── Eithers.hs
-    └── ...
+├── Prims.hs             # Primitive references
+├── Annotations.hs       # Annotation helpers (doc)
+├── Literals.hs          # Literal construction
+├── Typed/               # Phantom-typed DSLs (Phantoms.hs, Terms.hs, Types.hs,
+│                        #   plus per-type helpers: Core.hs, Graph.hs, Testing.hs, ...)
+└── Deep/Lib/Math.hs     # Hand-written deep-DSL exception
 ```
 
-(#418: three of these DSL-support modules — `Dsl/Terms.hs`, `Dsl/Literals.hs`, and
-`Dsl/Meta/Common.hs` — are part of the `hydra-kernel` distribution runtime and have
-moved to `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/`. The rest of
-`Hydra/Dsl/` remains head-only.)
+(#418/#501: the whole hand-written DSL tree is `hydra-kernel` distribution runtime and
+lives in the overlay under the `Hydra.Overlay.Haskell.*` namespace. Generated library
+DSLs — `Hydra.Dsl.Lib.*` — are emitted into `dist/haskell/hydra-kernel/.../Hydra/Dsl/Lib/`.)
 
 ### Primitive functions
 
 [`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib) — Canonical primitive registry (one `PrimitiveDefinition`-emitting module per `hydra.lib.<sub>` module name)
 
-[`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib/`](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Haskell/Lib) — Native Haskell implementations (relocated here from the head by #418)
+[`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib/`](https://github.com/CategoricalData/hydra/tree/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib) — Native Haskell implementations (relocated here from the head by #418; namespace per #501)
 
 [`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Libraries.hs`](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Libraries.hs) — Host-side bindings (pairs each native impl with a name derived from its `PrimitiveDefinition` via `prim1`/`prim2`/`prim3`; relocated here + name-derivation by #473)
 ```
@@ -1703,7 +1688,7 @@ Sources/Kernel/Lib/
 ├── Lists.hs
 └── ...
 
-overlay/haskell/hydra-kernel/.../Hydra/Haskell/Lib/
+overlay/haskell/hydra-kernel/.../Hydra/Overlay/Haskell/Lib/
 ├── Math.hs
 ├── Lists.hs
 └── ...

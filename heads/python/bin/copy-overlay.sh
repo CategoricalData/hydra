@@ -5,7 +5,7 @@
 # Generalized from the kernel-only copy-kernel-runtime.sh (#418) to ANY package
 # (#511): the Python analog of heads/java/bin/copy-overlay.sh. A package's
 # hand-written source lives in overlay/python/<pkg>/src/ (a sibling of dist/,
-# packages/, heads/, bindings/ — see docs/build-system.md); this is the ONLY
+# packages/, heads/ — see docs/build-system.md); this is the ONLY
 # reader of overlay/. No-op for packages with no overlay/python/<pkg>/ tree.
 #
 # The whole src/ tree is copied (main/python/, test/python/, ...) so the

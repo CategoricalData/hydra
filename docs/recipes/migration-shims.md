@@ -2,7 +2,7 @@
 
 Since 0.16, the Hydra build consumes **published, versioned hosts** by default rather than building
 each host locally (issue [#370](https://github.com/CategoricalData/hydra/issues/370)).
-The Java DSL→JSON step runs against `net.fortytwo.hydra:hydra-java` from Maven Central; the Python step
+The Java DSL→JSON step runs against `net.fortytwo.hydra.java:hydra-java` from Maven Central; the Python step
 against `hydra-python` from PyPI; the version is pinned in `hydra.json`
 (see [The build system](../build-system.md#consuming-published-hosts)).
 
