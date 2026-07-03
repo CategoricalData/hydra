@@ -29,7 +29,7 @@
 ;; def-modules (lib pass) and redirect generated consumer call-sites to hydra.<lang>.lib.* (redirect).
 ;; See project_473_self_host_lib_pass_gap.
 (def ^:private lib-subs
-  ["chars" "eithers" "equality" "lists" "literals" "logic" "maps"
+  ["chars" "eithers" "equality" "hashing" "lists" "literals" "logic" "maps"
    "math" "optionals" "pairs" "regex" "sets" "strings"])
 
 (defn- lib-module? [m]

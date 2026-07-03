@@ -53,6 +53,7 @@
 (dolist (f '("overlay/common_lisp/lib/chars.lisp" "overlay/common_lisp/lib/effects.lisp"
              "overlay/common_lisp/lib/eithers.lisp"
              "overlay/common_lisp/lib/equality.lisp" "overlay/common_lisp/lib/files.lisp"
+             "overlay/common_lisp/lib/hashing.lisp"
              "overlay/common_lisp/lib/lists.lisp"
              "overlay/common_lisp/lib/literals.lisp" "overlay/common_lisp/lib/logic.lisp"
              "overlay/common_lisp/lib/maps.lisp" "overlay/common_lisp/lib/math.lisp"

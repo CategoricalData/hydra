@@ -312,7 +312,7 @@
 ;; def-module DATA over the impl). Primitive NAME strings are dotted "hydra.lib..." and untouched by the
 ;; underscore rename. See project_473_self_host_lib_pass_gap.
 (defparameter *lib-subs*
-  '("chars" "eithers" "equality" "lists" "literals" "logic" "maps"
+  '("chars" "eithers" "equality" "hashing" "lists" "literals" "logic" "maps"
     "math" "optionals" "pairs" "regex" "sets" "strings"))
 
 (defun lib-module-p (m)
