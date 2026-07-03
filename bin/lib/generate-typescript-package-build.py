@@ -32,7 +32,7 @@ AUTHOR = "Joshua Shinavier and collaborators"
 ENGINES_NODE = ">=20"
 
 # Per-package external (non-Hydra) npm dependencies. Currently empty for all
-# packages: TinkerPop/RDF native bindings live in bindings/ once that subtree
+# packages: TinkerPop/RDF native integrations live in overlay/<lang>/<pkg>/ (#511)
 # exists, so no third-party npm deps are pulled into the published packages.
 EXTERNAL_DEPS: dict[str, list[str]] = {}
 

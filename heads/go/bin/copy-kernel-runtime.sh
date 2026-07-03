@@ -3,8 +3,8 @@
 # Go distribution package is self-contained (#434).
 #
 # The runtime's canonical home is the top-level overlay tree
-# overlay/go/hydra-kernel/src/main/go/ (a sibling of dist/, packages/, heads/,
-# bindings/ — see docs/build-system.md). It holds the hand-written hydra/lib/*
+# overlay/go/hydra-kernel/src/main/go/ (a sibling of dist/, packages/,
+# heads/ — see docs/build-system.md). It holds the hand-written hydra/lib/*
 # primitive implementations (today only lib/literals is implemented; the rest are
 # package stubs) — the Go coder emits the kernel modules (hydra/core, hydra/errors,
 # …) but NOT the hydra.lib.* primitive impls, exactly as for Java/Python. The

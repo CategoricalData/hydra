@@ -9,15 +9,14 @@
 # Haskell (Hackage: hydra-kernel/hydra-haskell/hydra), Java (Maven Central,
 # per-package), Scala (Maven Central, per-package, #491), Python (PyPI/conda)
 # — plus version sync, the JSON kernel, and lexicon freshness. Targets that are
-# NOT released yet (the Lisp dialects and the Java bindings under bindings/java/)
-# are run as non-blocking QUALITY CHECKS: a failure there is a WARNING, not an
-# ERROR. When one of those becomes a released artifact, promote its step from
-# WARNING to ERROR (gate).
+# NOT released yet (the Lisp dialects) are run as non-blocking QUALITY CHECKS:
+# a failure there is a WARNING, not an ERROR. When one of those becomes a
+# released artifact, promote its step from WARNING to ERROR (gate).
 #
 # Steps performed:
 #   1.  Version synchronization across all implementations                 [gate]
 #   2.  Haskell tests (hydra-test Stack target: hydra-kernel + hydra-ext)  [gate]
-#   3.  Java: hydra-java rollup tests [gate]; bindings build [quality check]
+#   3.  Java: hydra-java rollup tests [gate]; overlay (hydra-pg) tests [quality check]
 #   4.  Python tests [gate] + ruff code quality [quality check]
 #   5.  TypeScript tests (tsc --strict + vitest)                           [gate]
 #   6.  Scala build and tests                                    [quality check]
@@ -168,12 +167,11 @@ fi
 # --- Step 3: Java build and tests ---
 # RELEASE GATE: only the released Java artifacts are gated. The released set is
 # the hydra-java rollup (which covers hydra-kernel/hydra-java + the per-package
-# dist trees published to Maven Central). The bindings under bindings/java/
-# (hydra-rdf4j, hydra-neo4j, hydra-pg-dsl) are NOT released artifacts yet and have
-# no release solution, so building them is a non-blocking quality check, not a
-# gate. They are wired as subprojects of heads/java only for development; bare
-# `./gradlew test` would aggregate them. We gate on `:hydra-java:test`. When a
-# binding graduates to a released artifact, move it into the gate below. (#418)
+# dist trees published to Maven Central). We gate on `:hydra-java:test`.
+# The former bindings/java/ subprojects (hydra-rdf4j, hydra-neo4j, hydra-pg-dsl)
+# were folded into overlay/{java,python}/hydra-{pg,rdf} (#511) and now build —
+# with their surviving tests — as part of the dist/java/hydra-pg package build,
+# exercised below as a non-blocking quality check. (#418, #511)
 step 3 $TOTAL_STEPS "Running Java build and tests (released set)"
 echo ""
 
@@ -187,14 +185,15 @@ else
     ERRORS=$((ERRORS + 1))
 fi
 
-# Non-blocking quality check: the bindings (not yet released artifacts).
-if ./gradlew :hydra-rdf4j:test :hydra-neo4j:test :hydra-pg-dsl:test 2>&1 \
-     | tee "$LOG_DIR/java-bindings.log" >/dev/null; then
-    echo "  OK: Java bindings build/test passed (not a release gate)"
+# Non-blocking quality check: the dist/java/hydra-pg package build, which
+# carries the former binding code + tests (TinkerPop bridge etc.) via the
+# overlay system (#511).
+if ./gradlew -p "$HYDRA_ROOT/dist/java/hydra-pg" test 2>&1 \
+     | tee "$LOG_DIR/java-overlay.log" >/dev/null; then
+    echo "  OK: Java overlay (dist/java/hydra-pg) tests passed (not a release gate)"
 else
-    echo "  WARNING: Java bindings build/test failed — not a release gate, but"
-    echo "           see verify-logs/java-bindings.log (bindings have no release"
-    echo "           solution yet; tracked separately)"
+    echo "  WARNING: Java overlay (dist/java/hydra-pg) tests failed — not a"
+    echo "           release gate, but see verify-logs/java-overlay.log"
     WARNINGS=$((WARNINGS + 1))
 fi
 
