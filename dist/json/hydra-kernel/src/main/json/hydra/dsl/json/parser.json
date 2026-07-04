@@ -1,0 +1,572 @@
+{
+  "name": "hydra.dsl.json.parser",
+  "metadata": {"description": "DSL functions for hydra.json.parser", "comments": [], "seeAlso": []},
+  "dependencies": [
+    {"module": "hydra.json.parser"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.parsers"},
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.core"},
+    {"module": "hydra.docs"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.error.system"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.file"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.system"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.time"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"},
+    {"module": "hydra.dsl.parsers"},
+    {"module": "hydra.dsl.paths"},
+    {"module": "hydra.dsl.ast"},
+    {"module": "hydra.dsl.coders"},
+    {"module": "hydra.dsl.core"},
+    {"module": "hydra.dsl.docs"},
+    {"module": "hydra.dsl.error.checking"},
+    {"module": "hydra.dsl.error.core"},
+    {"module": "hydra.dsl.error.file"},
+    {"module": "hydra.dsl.error.packaging"},
+    {"module": "hydra.dsl.error.system"},
+    {"module": "hydra.dsl.errors"},
+    {"module": "hydra.dsl.file"},
+    {"module": "hydra.dsl.graph"},
+    {"module": "hydra.dsl.json.model"},
+    {"module": "hydra.dsl.packaging"},
+    {"module": "hydra.dsl.parsing"},
+    {"module": "hydra.dsl.query"},
+    {"module": "hydra.dsl.relational"},
+    {"module": "hydra.dsl.system"},
+    {"module": "hydra.dsl.tabular"},
+    {"module": "hydra.dsl.testing"},
+    {"module": "hydra.dsl.time"},
+    {"module": "hydra.dsl.topology"},
+    {"module": "hydra.dsl.typed"},
+    {"module": "hydra.dsl.typing"},
+    {"module": "hydra.dsl.util"},
+    {"module": "hydra.dsl.validation"},
+    {"module": "hydra.dsl.variants"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.json.parser.digit",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"literal": {"integer": "int32"}}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "variable",
+                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.parser.digit"}}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL reference to hydra.json.parser.digit"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.json.parser.digits",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"literal": "string"}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "variable",
+                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.parser.digits"}}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL reference to hydra.json.parser.digits"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.json.parser.jsonArray",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"variable": "hydra.json.model.Value"}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "variable",
+                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.parser.jsonArray"}}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL reference to hydra.json.parser.jsonArray"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.json.parser.jsonBool",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"variable": "hydra.json.model.Value"}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "variable",
+                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.parser.jsonBool"}}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL reference to hydra.json.parser.jsonBool"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.json.parser.jsonEscapeChar",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"literal": {"integer": "int32"}}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "variable",
+                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.parser.jsonEscapeChar"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL reference to hydra.json.parser.jsonEscapeChar"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.json.parser.jsonExponentPart",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"optional": {"literal": "string"}}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "variable",
+                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.parser.jsonExponentPart"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL reference to hydra.json.parser.jsonExponentPart"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.json.parser.jsonFractionPart",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"optional": {"literal": "string"}}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "variable",
+                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.parser.jsonFractionPart"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL reference to hydra.json.parser.jsonFractionPart"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.json.parser.jsonIntegerPart",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"literal": "string"}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "variable",
+                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.parser.jsonIntegerPart"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL reference to hydra.json.parser.jsonIntegerPart"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.json.parser.jsonKeyValue",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {
+                  "application": {
+                    "function": {"variable": "hydra.parsing.Parser"},
+                    "argument": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.json.model.Value"}}}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "variable",
+                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.parser.jsonKeyValue"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL reference to hydra.json.parser.jsonKeyValue"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.json.parser.jsonNull",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"variable": "hydra.json.model.Value"}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "variable",
+                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.parser.jsonNull"}}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL reference to hydra.json.parser.jsonNull"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.json.parser.jsonNumber",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"variable": "hydra.json.model.Value"}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "variable",
+                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.parser.jsonNumber"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL reference to hydra.json.parser.jsonNumber"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.json.parser.jsonObject",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"variable": "hydra.json.model.Value"}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "variable",
+                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.parser.jsonObject"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL reference to hydra.json.parser.jsonObject"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.json.parser.jsonString",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"variable": "hydra.json.model.Value"}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "variable",
+                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.parser.jsonString"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL reference to hydra.json.parser.jsonString"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.json.parser.jsonStringChar",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"literal": {"integer": "int32"}}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "variable",
+                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.parser.jsonStringChar"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL reference to hydra.json.parser.jsonStringChar"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.json.parser.jsonValue",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"variable": "hydra.json.model.Value"}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "variable",
+                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.parser.jsonValue"}}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL reference to hydra.json.parser.jsonValue"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.json.parser.parseJson",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {
+                  "application": {"function": {"variable": "hydra.parsing.ParseResult"}, "argument": {"variable": "hydra.json.model.Value"}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "arg0",
+                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.Term",
+                                      "field": {
+                                        "name": "variable",
+                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.parser.parseJson"}}}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "arg0"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL reference to hydra.json.parser.parseJson"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.json.parser.token",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"variable": "t0"}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"variable": "t0"}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "arg0",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"variable": "t0"}}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.Term",
+                                      "field": {
+                                        "name": "variable",
+                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.parser.token"}}}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "arg0"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL reference to hydra.json.parser.token"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.json.parser.whitespace",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": "unit"}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "variable",
+                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.json.parser.whitespace"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL reference to hydra.json.parser.whitespace"}}}]}}}}}]}
