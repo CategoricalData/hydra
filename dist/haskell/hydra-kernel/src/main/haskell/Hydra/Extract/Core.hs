@@ -92,18 +92,6 @@ booleanLiteral v =
         Errors.unexpectedShapeErrorExpected = "boolean",
         Errors.unexpectedShapeErrorActual = (ShowCore.literal v)})))
 
--- | Extract a specific case handler from a case statement term
-caseField :: Core.Name -> String -> Graph.Graph -> Core.Term -> Either Errors.Error Core.CaseAlternative
-caseField name n graph term =
-
-      let fieldName = Core.Name n
-      in (Eithers.bind (cases name graph term) (\cs ->
-        let matching =
-                Lists.find (\f -> Equality.equal (Core.unName (Core.caseAlternativeName f)) (Core.unName fieldName)) (Core.caseStatementCases cs)
-        in (Optionals.cases matching (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
-          Errors.unexpectedShapeErrorExpected = "matching case",
-          Errors.unexpectedShapeErrorActual = "no matching case"})))) (\mf -> Right mf))))
-
 -- | Extract case statement from a term
 cases :: Core.Name -> Graph.Graph -> Core.Term -> Either Errors.Error Core.CaseStatement
 cases name graph term0 =
@@ -176,13 +164,6 @@ decodeUnit g term =
     Eithers.bind (stripWithDecodingError g term) (\stripped -> case stripped of
       Core.TermUnit -> Right ()
       _ -> Left (Errors.DecodingError "expected a unit value"))
-
--- | Decode a wrapped value using the provided body decoder
-decodeWrapped :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError t0
-decodeWrapped bodyDecoder g term =
-    Eithers.bind (stripWithDecodingError g term) (\stripped -> case stripped of
-      Core.TermWrap v0 -> bodyDecoder g (Core.wrappedTermBody v0)
-      _ -> Left (Errors.DecodingError "expected wrapped value"))
 
 -- | Extract an either value from a term, applying functions to the left and right values
 eitherTerm :: (Core.Term -> Either Errors.Error t0) -> (Core.Term -> Either Errors.Error t1) -> Graph.Graph -> Core.Term -> Either Errors.Error (Either t0 t1)
@@ -387,13 +368,6 @@ list graph term =
       _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
         Errors.unexpectedShapeErrorExpected = "list",
         Errors.unexpectedShapeErrorActual = (ShowCore.term stripped)}))))
-
--- | Extract the first element of a list term
-listHead :: Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
-listHead graph term =
-    Eithers.bind (list graph term) (\l -> Optionals.cases (Lists.maybeHead l) (Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
-      Errors.unexpectedShapeErrorExpected = "non-empty list",
-      Errors.unexpectedShapeErrorActual = "empty list"})))) (\h -> Right h))
 
 -- | Extract a list of values from a term, mapping a function over each element
 listOf :: (Core.Term -> Either Errors.Error t0) -> Graph.Graph -> Core.Term -> Either Errors.Error [t0]
