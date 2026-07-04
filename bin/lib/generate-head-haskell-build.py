@@ -89,25 +89,39 @@ def consumed_from_hackage() -> dict[str, str]:
 
 
 def git_show_committed(path: Path) -> str:
-    """The committed (HEAD) contents of a tracked file = the local-mode form."""
+    """The committed (HEAD) contents of a tracked file = the local-mode form.
+
+    HEAD may itself carry a previously-generated header (#540 — a past run's
+    output was committed by mistake), so strip unconditionally rather than
+    only on the fallback path."""
     rel = path.relative_to(ROOT)
     r = subprocess.run(
         ["git", "-C", str(ROOT), "show", f"HEAD:{rel.as_posix()}"],
         capture_output=True, text=True)
-    if r.returncode != 0:
-        # Fall back to on-disk (e.g. uncommitted local-mode edits); strip a
-        # previously-generated header if present.
-        text = path.read_text()
-        return _strip_header(text)
-    return r.stdout
+    text = r.stdout if r.returncode == 0 else path.read_text()
+    return _strip_header(text)
 
 
 def _strip_header(text: str) -> str:
+    """Remove a leading GEN_HEADER block (and its trailing blank-line
+    separator), repeating in case more than one copy was accidentally
+    stacked (#540).
+
+    Fails loud if header-like content survives the exact-match strip: an
+    older/newer script version's header wording would evade this match and
+    silently re-stack on every run, reopening #540 through a different
+    door."""
+    header_lines = GEN_HEADER.splitlines(keepends=True)
     lines = text.splitlines(keepends=True)
-    while lines and lines[0].startswith("# Note: this is an automatically generated") \
-            or (lines and lines[0].startswith("# Regenerate via")) \
-            or (lines and lines[0].startswith("# The committed (local-mode)")):
-        lines.pop(0)
+    while lines[:len(header_lines)] == header_lines:
+        del lines[:len(header_lines)]
+        if lines and lines[0] == "\n":
+            lines.pop(0)
+    if lines and lines[0].startswith("# Note: this is an automatically generated"):
+        raise SystemExit(
+            "generate-head-haskell-build.py: header-like content in HEAD "
+            "does not match GEN_HEADER — wording drift; update _strip_header "
+            f"(#540). Offending line: {lines[0]!r}")
     return "".join(lines)
 
 
