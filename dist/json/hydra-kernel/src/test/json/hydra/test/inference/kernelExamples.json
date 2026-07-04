@@ -2032,10 +2032,7 @@
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {
                                         "name": "tags",
-                                        "term": {
-                                          "list": [
-                                            {"wrap": {"typeName": "hydra.testing.Tag", "body": {"literal": {"string": "disabledForMinimalInference"}}}},
-                                            {"wrap": {"typeName": "hydra.testing.Tag", "body": {"literal": {"string": "disabled"}}}}]}}]}}]}}]}}]}},
+                                        "term": {"list": [{"wrap": {"typeName": "hydra.testing.Tag", "body": {"literal": {"string": "disabledForMinimalInference"}}}}]}}]}}]}}]}}]}},
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}]}}}}]}

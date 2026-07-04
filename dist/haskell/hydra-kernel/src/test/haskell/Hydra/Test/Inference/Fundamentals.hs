@@ -725,68 +725,6 @@ testGroupForLet =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "#8",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> ShowCore.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
-                  Core.letBindings = [
-                    Core.Binding {
-                      Core.bindingName = (Core.Name "singleton"),
-                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
-                        Core.lambdaParameter = (Core.Name "x"),
-                        Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermList [
-                          Core.TermVariable (Core.Name "x")])})),
-                      Core.bindingTypeScheme = Nothing},
-                    Core.Binding {
-                      Core.bindingName = (Core.Name "f"),
-                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
-                        Core.lambdaParameter = (Core.Name "x"),
-                        Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-                          Core.lambdaParameter = (Core.Name "y"),
-                          Core.lambdaDomain = Nothing,
-                          Core.lambdaBody = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.cons")),
-                              Core.applicationArgument = (Core.TermPair (
-                                Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermVariable (Core.Name "singleton")),
-                                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}),
-                                (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermVariable (Core.Name "singleton")),
-                                  Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))))})),
-                            Core.applicationArgument = (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
-                                Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))}))})),
-                      Core.bindingTypeScheme = Nothing},
-                    Core.Binding {
-                      Core.bindingName = (Core.Name "g"),
-                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
-                        Core.lambdaParameter = (Core.Name "x"),
-                        Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-                          Core.lambdaParameter = (Core.Name "y"),
-                          Core.lambdaDomain = Nothing,
-                          Core.lambdaBody = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))})),
-                      Core.bindingTypeScheme = Nothing}],
-                  Core.letBody = (Core.TermVariable (Core.Name "f"))})))),
-                Testing.universalTestCaseExpected = (\_ -> ShowCore.typeScheme (Core.TypeScheme {
-                  Core.typeSchemeVariables = [
-                    Core.Name "t0"],
-                  Core.typeSchemeBody = (Core.TypeList (Core.TypePair (Core.PairType {
-                    Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                    Core.pairTypeSecond = (Core.TypeVariable (Core.Name "t0"))}))),
-                  Core.typeSchemeConstraints = Nothing}))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = [
-                Testing.Tag "disabled"]},
-            Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#9",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
                 Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> ShowCore.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
@@ -914,59 +852,6 @@ testGroupForLet =
                   Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
-            Testing.TestCaseWithMetadata {
-              Testing.testCaseWithMetadataName = "#3",
-              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> Strings.cat2 "INFERENCE ERROR: " "failed") (\result -> ShowCore.typeScheme (Pairs.second (Pairs.first result))) (Inference.inferTypeOf TestGraph.testContext TestGraph.testGraph (Core.TermLet (Core.Let {
-                  Core.letBindings = [
-                    Core.Binding {
-                      Core.bindingName = (Core.Name "f"),
-                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
-                        Core.lambdaParameter = (Core.Name "x"),
-                        Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-                          Core.lambdaParameter = (Core.Name "y"),
-                          Core.lambdaDomain = Nothing,
-                          Core.lambdaBody = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
-                              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
-                            Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})),
-                      Core.bindingTypeScheme = Nothing},
-                    Core.Binding {
-                      Core.bindingName = (Core.Name "g"),
-                      Core.bindingTerm = (Core.TermLambda (Core.Lambda {
-                        Core.lambdaParameter = (Core.Name "u"),
-                        Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = (Core.TermLambda (Core.Lambda {
-                          Core.lambdaParameter = (Core.Name "v"),
-                          Core.lambdaDomain = Nothing,
-                          Core.lambdaBody = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "v"))})),
-                            Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}))}))})),
-                      Core.bindingTypeScheme = Nothing}],
-                  Core.letBody = (Core.TermPair (Core.TermVariable (Core.Name "f"), (Core.TermVariable (Core.Name "g"))))})))),
-                Testing.universalTestCaseExpected = (\_ -> ShowCore.typeScheme (Core.TypeScheme {
-                  Core.typeSchemeVariables = [
-                    Core.Name "t0",
-                    (Core.Name "t1")],
-                  Core.typeSchemeBody = (Core.TypePair (Core.PairType {
-                    Core.pairTypeFirst = (Core.TypeFunction (Core.FunctionType {
-                      Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-                      Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                        Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t1"))}))})),
-                    Core.pairTypeSecond = (Core.TypeFunction (Core.FunctionType {
-                      Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
-                      Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "v0")),
-                        Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t1"))}))}))})),
-                  Core.typeSchemeConstraints = Nothing}))})),
-              Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = [
-                Testing.Tag "disabled"]},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#4",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
@@ -2134,11 +2019,10 @@ testGroupForPathologicalTerms =
                     Core.Name "t0"],
                   Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-                    Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t0"))})),
+                    Core.functionTypeCodomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))})),
                   Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = [
-                Testing.Tag "disabled"]},
+              Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "#4",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {

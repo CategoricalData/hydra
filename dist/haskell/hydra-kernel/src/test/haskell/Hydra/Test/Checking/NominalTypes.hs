@@ -3482,8 +3482,7 @@ usingKernelTypesTests =
                         Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.Error")),
                         Core.eitherTypeRight = (Core.TypeVariable (Core.Name "t0"))}))}))}))}))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "disabled"]}]}
+          Testing.testCaseWithMetadataTags = []}]}
 
 usingUnionPolymorphicRecursiveTests :: Testing.TestGroup
 usingUnionPolymorphicRecursiveTests =
