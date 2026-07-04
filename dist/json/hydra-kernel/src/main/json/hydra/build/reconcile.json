@@ -1,0 +1,539 @@
+{
+  "name": "hydra.build.reconcile",
+  "metadata": {"description": "The pure orphan-reconcile decision: which generated files to delete", "comments": [], "seeAlso": []},
+  "dependencies": [
+    {"module": "hydra.codegen"},
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.core"},
+    {"module": "hydra.docs"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.error.system"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.file"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.system"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.time"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.build.reconcile.extensionOf",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": "string"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "path",
+                "domain": {"literal": "string"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "segs",
+                        "term": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "/"}}}},
+                            "argument": {"variable": "path"}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": "string"}}},
+                                    "type": {"optional": {"literal": "string"}}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeLast"}, "type": {"literal": "string"}}},
+                                    "argument": {"variable": "segs"}}}}},
+                            "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}}},
+                        "argument": {
+                          "lambda": {
+                            "parameter": "fileName",
+                            "domain": {"literal": "string"},
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "dotParts",
+                                    "term": {
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "."}}}},
+                                        "argument": {"variable": "fileName"}}},
+                                    "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"optional": {"literal": "string"}}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.gt"}, "type": {"literal": {"integer": "int32"}}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"literal": "string"}}},
+                                                        "argument": {"variable": "dotParts"}}}}},
+                                                "argument": {"literal": {"integer": {"int32": 1}}}}}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.maybeLast"}, "type": {"literal": "string"}}},
+                                            "argument": {"variable": "dotParts"}}}}},
+                                    "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The extension of a relative path, or none if the filename has no '.'"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.reconcile.isUnderAnyPrefix",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"set": {"literal": "string"}}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "prefixes",
+                "domain": {"set": {"literal": "string"}},
+                "body": {
+                  "lambda": {
+                    "parameter": "path",
+                    "domain": {"literal": "string"},
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "pathSegs",
+                            "term": {
+                              "application": {
+                                "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "/"}}}},
+                                "argument": {"variable": "path"}}},
+                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                        "body": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.foldl"}, "type": {"literal": "boolean"}}},
+                                        "type": {"literal": "string"}}},
+                                    "argument": {
+                                      "lambda": {
+                                        "parameter": "acc",
+                                        "domain": {"literal": "boolean"},
+                                        "body": {
+                                          "lambda": {
+                                            "parameter": "prefix",
+                                            "domain": {"literal": "string"},
+                                            "body": {
+                                              "application": {
+                                                "function": {"application": {"function": {"variable": "hydra.lib.logic.or"}, "argument": {"variable": "acc"}}},
+                                                "argument": {
+                                                  "let": {
+                                                    "bindings": [
+                                                      {
+                                                        "name": "prefixSegs",
+                                                        "term": {
+                                                          "application": {
+                                                            "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "/"}}}},
+                                                            "argument": {"variable": "prefix"}}},
+                                                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                                                    "body": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"list": {"literal": "string"}}}},
+                                                            "argument": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "application": {
+                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.take"}, "type": {"literal": "string"}}},
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"literal": "string"}}},
+                                                                        "argument": {"variable": "prefixSegs"}}}}},
+                                                                "argument": {"variable": "pathSegs"}}}}},
+                                                        "argument": {"variable": "prefixSegs"}}}}}}}}}}}}},
+                                "argument": {"literal": {"boolean": false}}}},
+                            "argument": {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"literal": "string"}}},
+                                "argument": {"variable": "prefixes"}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Whether a relative path lies under at least one prefix, matched segment-wise"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.reconcile.keepPathsForModules",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"list": {"variable": "hydra.packaging.ModuleName"}}, "isLazy": false}],
+          "result": {"type": {"set": {"literal": "string"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "mods",
+                "domain": {"list": {"variable": "hydra.packaging.ModuleName"}},
+                "body": {
+                  "application": {
+                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": "string"}}},
+                    "argument": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                "type": {"literal": "string"}}},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "m",
+                                "domain": {"variable": "hydra.packaging.ModuleName"},
+                                "body": {
+                                  "application": {
+                                    "function": {"variable": "hydra.lib.strings.cat"},
+                                    "argument": {
+                                      "list": [
+                                        {"application": {"function": {"variable": "hydra.codegen.moduleNameToPath"}, "argument": {"variable": "m"}}},
+                                        {"literal": {"string": ".json"}}]}}}}}}},
+                        "argument": {"variable": "mods"}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The keep-set of relative JSON paths (moduleNameToPath(ns) ++ .json) for written modules"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.reconcile.matchesExts",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"optional": {"set": {"literal": "string"}}}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "restrictExts",
+                "domain": {"optional": {"set": {"literal": "string"}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "path",
+                    "domain": {"literal": "string"},
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"set": {"literal": "string"}}}},
+                                    "type": {"literal": "boolean"}}},
+                                "argument": {"variable": "restrictExts"}}},
+                            "argument": {"literal": {"boolean": true}}}},
+                        "argument": {
+                          "lambda": {
+                            "parameter": "exts",
+                            "domain": {"set": {"literal": "string"}},
+                            "body": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": "string"}}},
+                                            "type": {"literal": "boolean"}}},
+                                        "argument": {"application": {"function": {"variable": "hydra.build.reconcile.extensionOf"}, "argument": {"variable": "path"}}}}},
+                                    "argument": {"literal": {"boolean": false}}}},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "ext",
+                                    "domain": {"literal": "string"},
+                                    "body": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.member"}, "type": {"literal": "string"}}},
+                                            "argument": {"variable": "ext"}}},
+                                        "argument": {"variable": "exts"}}}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Whether a path's extension satisfies the optional extension restriction"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.reconcile.matchesPrefixes",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"optional": {"set": {"literal": "string"}}}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "restrictPrefixes",
+                "domain": {"optional": {"set": {"literal": "string"}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "path",
+                    "domain": {"literal": "string"},
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"set": {"literal": "string"}}}},
+                                    "type": {"literal": "boolean"}}},
+                                "argument": {"variable": "restrictPrefixes"}}},
+                            "argument": {"literal": {"boolean": true}}}},
+                        "argument": {
+                          "lambda": {
+                            "parameter": "prefixes",
+                            "domain": {"set": {"literal": "string"}},
+                            "body": {
+                              "application": {
+                                "function": {
+                                  "application": {"function": {"variable": "hydra.build.reconcile.isUnderAnyPrefix"}, "argument": {"variable": "prefixes"}}},
+                                "argument": {"variable": "path"}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Whether a path satisfies the optional prefix restriction"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.reconcile.ownedPrefixes",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"list": {"variable": "hydra.packaging.ModuleName"}}, "isLazy": false}],
+          "result": {"type": {"set": {"literal": "string"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "mods",
+                "domain": {"list": {"variable": "hydra.packaging.ModuleName"}},
+                "body": {
+                  "application": {
+                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": "string"}}},
+                    "argument": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.mapOptional"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                "type": {"literal": "string"}}},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "m",
+                                "domain": {"variable": "hydra.packaging.ModuleName"},
+                                "body": {
+                                  "application": {
+                                    "function": {"variable": "hydra.build.reconcile.secondLevelDir"},
+                                    "argument": {"application": {"function": {"variable": "hydra.codegen.moduleNameToPath"}, "argument": {"variable": "m"}}}}}}}}},
+                        "argument": {"variable": "mods"}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The owned second-level prefixes (e.g. hydra/java) derived from written module names"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.reconcile.reconcilePlan",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"set": {"literal": "string"}}, "isLazy": false},
+            {"name": "arg1", "type": {"set": {"literal": "string"}}, "isLazy": false},
+            {"name": "arg2", "type": {"optional": {"set": {"literal": "string"}}}, "isLazy": false},
+            {"name": "arg3", "type": {"optional": {"set": {"literal": "string"}}}, "isLazy": false},
+            {"name": "arg4", "type": {"list": {"literal": "string"}}, "isLazy": false}],
+          "result": {"type": {"list": {"literal": "string"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "keepSet",
+                "domain": {"set": {"literal": "string"}},
+                "body": {
+                  "lambda": {
+                    "parameter": "protectSet",
+                    "domain": {"set": {"literal": "string"}},
+                    "body": {
+                      "lambda": {
+                        "parameter": "restrictExts",
+                        "domain": {"optional": {"set": {"literal": "string"}}},
+                        "body": {
+                          "lambda": {
+                            "parameter": "restrictPrefixes",
+                            "domain": {"optional": {"set": {"literal": "string"}}},
+                            "body": {
+                              "lambda": {
+                                "parameter": "observed",
+                                "domain": {"list": {"literal": "string"}},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.filter"}, "type": {"literal": "string"}}},
+                                        "argument": {
+                                          "lambda": {
+                                            "parameter": "path",
+                                            "domain": {"literal": "string"},
+                                            "body": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"variable": "hydra.lib.logic.and"},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {"variable": "hydra.lib.logic.and"},
+                                                            "argument": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "application": {"function": {"variable": "hydra.build.reconcile.matchesExts"}, "argument": {"variable": "restrictExts"}}},
+                                                                "argument": {"variable": "path"}}}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {"function": {"variable": "hydra.build.reconcile.matchesPrefixes"}, "argument": {"variable": "restrictPrefixes"}}},
+                                                            "argument": {"variable": "path"}}}}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {"variable": "hydra.lib.logic.and"},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {"variable": "hydra.lib.logic.not"},
+                                                            "argument": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "application": {
+                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.member"}, "type": {"literal": "string"}}},
+                                                                    "argument": {"variable": "path"}}},
+                                                                "argument": {"variable": "keepSet"}}}}}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {"variable": "hydra.lib.logic.not"},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.member"}, "type": {"literal": "string"}}},
+                                                                "argument": {"variable": "path"}}},
+                                                            "argument": {"variable": "protectSet"}}}}}}}}}}}}},
+                                    "argument": {"variable": "observed"}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The pure orphan-reconcile plan: which observed paths to delete"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.reconcile.secondLevelDir",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": "string"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "path",
+                "domain": {"literal": "string"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "segs",
+                        "term": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "/"}}}},
+                            "argument": {"variable": "path"}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"optional": {"literal": "string"}}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.gte"}, "type": {"literal": {"integer": "int32"}}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"literal": "string"}}},
+                                            "argument": {"variable": "segs"}}}}},
+                                    "argument": {"literal": {"integer": {"int32": 2}}}}}}},
+                            "argument": {
+                              "optional": {
+                                "application": {
+                                  "function": {"application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": "/"}}}},
+                                  "argument": {
+                                    "application": {
+                                      "function": {
+                                        "application": {
+                                          "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.take"}, "type": {"literal": "string"}}},
+                                          "argument": {"literal": {"integer": {"int32": 2}}}}},
+                                      "argument": {"variable": "segs"}}}}}}}},
+                        "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "The second-level directory of a '/'-separated path (e.g. hydra/java/coder -> hydra/java), or none"}}}]}}}}}]}

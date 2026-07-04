@@ -17,7 +17,15 @@
 #   bin/test.sh lisp                     # expands to all four Lisp dialects
 #   bin/test.sh all                      # every target
 #   bin/test.sh --no-sync <targets>      # skip the pre-sync; tests only
+#   bin/test.sh --regressions            # run bin/test-regressions.sh instead (see #535)
 #   bin/test.sh --help
+#
+# --regressions runs the standalone prune/reconcile regression harnesses
+# (bin/test-regressions.sh) instead of the target-language triad. It is a
+# separate mode, not a target: it does not pre-sync via bin/sync.sh and does
+# not combine with a targets argument. Run it after a sync to also exercise
+# the harnesses that need a populated dist/json/ tree; they SKIP cleanly
+# without one.
 #
 # Cache behavior: each per-target test-distribution.sh has its own
 # dist/<lang>/test-cache.json keyed on generated sources + test infra.
@@ -44,10 +52,12 @@ usage() {
 # Parse args.
 DO_SYNC=1
 TARGETS_ARG=""
+REGRESSIONS=0
 
 while [ $# -gt 0 ]; do
     case "$1" in
         --no-sync) DO_SYNC=0; shift ;;
+        --regressions) REGRESSIONS=1; shift ;;
         --help|-h) usage; exit 0 ;;
         --*) echo "Unknown flag: $1" >&2; exit 2 ;;
         *)
@@ -60,6 +70,14 @@ while [ $# -gt 0 ]; do
             ;;
     esac
 done
+
+if [ "$REGRESSIONS" = "1" ]; then
+    if [ -n "$TARGETS_ARG" ]; then
+        echo "--regressions does not take a targets argument" >&2
+        exit 2
+    fi
+    exec "$SCRIPT_DIR/test-regressions.sh"
+fi
 
 # Expand the scope argument.
 #   (no arg)    -> haskell,java,python (the bootstrapping triad)
