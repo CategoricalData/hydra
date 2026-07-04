@@ -1222,6 +1222,38 @@ loadCleanFromJson routingMap distJsonRoot universeModules namespaces =
           ++ unModuleName ns ++ ": " ++ showError err
         Right m  -> return m
 
+-- | Replace each DSL source module containing term definitions WITHOUT
+-- signatures by its just-written dist/json counterpart, whose term definitions
+-- carry the main pass's inferred signatures. The compiled source-as-data
+-- modules always have termDefinitionSignature = Nothing (inference never runs
+-- on the in-memory values), so without this read-back the DSL synthesizer's
+-- term path (Hydra.Sources.Kernel.Terms.Dsls.generateRefBindings) would
+-- silently skip every term definition and emit an empty module. Reading the
+-- routed JSON back reuses the single main-pass inference — no re-inference,
+-- which would not fit in memory — and holds on cache-hit paths too, since the
+-- JSON on disk is current either way. Modules with no unsigned term
+-- definitions (type modules, primitive hydra.lib.* modules) pass through
+-- untouched. Fails if a reloaded module still lacks a term signature, rather
+-- than regressing to silent omission. (#467)
+reloadTermSignatureSources :: RoutingMap -> FilePath -> [Module] -> [Module] -> IO [Module]
+reloadTermSignatureSources routingMap distJsonRoot universeModules mods = CM.forM mods $ \m ->
+    if null (unsigned m)
+      then return m
+      else do
+        loaded <- loadCleanFromJson routingMap distJsonRoot universeModules [moduleName m]
+        case loaded of
+          [m'] -> if null (unsigned m')
+            then return m'
+            else fail $ "DSL read-back: term definitions still lack signatures in "
+              ++ unModuleName (moduleName m) ++ ": "
+              ++ L.intercalate ", " (unName <$> unsigned m')
+          _ -> fail $ "DSL read-back: expected exactly one module for "
+            ++ unModuleName (moduleName m)
+  where
+    unsigned m = [ termDefinitionName td
+                 | DefinitionTerm td <- moduleDefinitions m
+                 , Y.isNothing (termDefinitionSignature td) ]
+
 -- | If every universe module's DSL source hash matches the stored digest,
 -- and every target module's JSON file already exists, return the current
 -- digest (indicating a cache hit, so the caller can skip the slow path).
@@ -1300,7 +1332,8 @@ writeDslJson basePath universeModules typeModules = do
 -- See feature_347_merkle_trees for the broader transform-fingerprint story.
 writeDslJsonPackageSplit :: RoutingMap -> FilePath -> [Module] -> [Module] -> IO ()
 writeDslJsonPackageSplit routingMap distJsonRoot universeModules typeModules = do
-    dslMods <- generateDslModules universeModules typeModules
+    dslSources <- reloadTermSignatureSources routingMap distJsonRoot universeModules typeModules
+    dslMods <- generateDslModules universeModules dslSources
     let nonEmpty = filter (not . null . moduleDefinitions) dslMods
     writeModulesJsonPackageSplit routingMap False distJsonRoot universeModules nonEmpty
     mergeDslJsonIntoPerPackageDigests routingMap distJsonRoot nonEmpty
@@ -1343,7 +1376,8 @@ writeDslJsonPackageSplit routingMap distJsonRoot universeModules typeModules = d
 -- ONCE over the union of all derived kinds plus the already-written main modules.
 writeDerivedJsonPackageSplit :: RoutingMap -> FilePath -> [Module] -> [Module] -> [Module] -> IO ()
 writeDerivedJsonPackageSplit routingMap distJsonRoot universeModules dslSourceModules encodingSourceModules = do
-    dslMods <- generateDslModules universeModules dslSourceModules
+    dslSources <- reloadTermSignatureSources routingMap distJsonRoot universeModules dslSourceModules
+    dslMods <- generateDslModules universeModules dslSources
     encMods <- generateEncoderModules universeModules encodingSourceModules
     decMods <- generateDecoderModules universeModules encodingSourceModules
     let derived = filter (not . null . moduleDefinitions) (dslMods ++ encMods ++ decMods)
