@@ -84,10 +84,11 @@ Each iteration:
    [Handling pulled WIP commits](#handling-pulled-wip-commits)). Do not `/sync`
    or push past unresolved `WIP:` commits.
 2. **`/sync`** — the default full host × target sync.
-3. **`/test`** — the default triad (haskell/java/python) target-language test
-   validation. `/sync` only runs Haskell `stack test`; `/test` closes the gap by
-   running each target head's own suite against the freshly-synced `dist/`,
-   catching target-runtime breakage before it reaches CI.
+3. **`/test all`** — full all-hosts target-language test validation (user
+   directive 2026-07-04: `all` is the standard scope for every staging cycle,
+   not the triad). `/sync` only runs Haskell `stack test`; `/test all` closes
+   the gap by running every target head's own suite against the freshly-synced
+   `dist/`, catching target-runtime breakage before it reaches CI.
 4. **`/bootstrap`** — the default triad (haskell/java/python) bootstrap demo.
 5. **On failure in step 2, 3, or 4:** attempt a fix. If the correct fix is clear,
    apply it and re-run the failing step and everything after it (per the
