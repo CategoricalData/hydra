@@ -632,6 +632,14 @@ Term-level modules define Hydra functions using the Phantom-typed DSL.
 
 ### Pattern
 
+Definitions use the **fluent builder** — the blessed idiom across all Python coder sources:
+`_def("name").doc("...").lam("x").to(body)`. It reads top-to-bottom (name, doc, parameters, then body)
+instead of the inside-out `_def("name", doc("...", lambdas(["x"], body)))` nesting. The two forms are
+exactly equivalent — `.to(body)` composes `doc(desc, lambdas([params], body))`, omitting the `doc`/
+`lambdas` wrappers when none are given. `_def` (from `make_def(_PLACEHOLDER)`) accepts both the fluent
+`_def(name)` and the flat `_def(name, term)` form (the latter kept for parameterized helpers). Unlike
+Java, `.to(body)` is eager — Python builds each definition when its enclosing function runs.
+
 ```python
 import hydra.core
 import hydra.packaging
@@ -640,24 +648,24 @@ from hydra.overlay.python.dsl.python import Given, None_
 from hydra.typed import TypedBinding
 
 ns = hydra.packaging.ModuleName("my.namespace")
-
-def define(lname: str, term) -> TypedBinding:
-    return definition_in_namespace(ns, lname, term)
+_def = make_def(Module(ns, None_(), [], []))   # or the module placeholder for this source
 
 # Qualified self-reference helper
 def _self(lname: str):
     return var("my.namespace." + lname)
 
 # Simple function
-deannotate_term: TypedBinding = define("deannotateTerm",
-    doc("Remove annotations from a term",
-    lam("term",
-        cases(hydra.core.TERM__NAME, var("term"),
-            Given(var("term")),
-            [field(hydra.core.TERM__ANNOTATED__NAME,
-                lam("at",
-                    apply(_self("deannotateTerm"),
-                        Core.annotated_term_body(var("at")))))]))))
+def _deannotate_term():
+    return (_def("deannotateTerm")
+        .doc("Remove annotations from a term")
+        .lam("term")
+        .to(
+            cases(hydra.core.TERM__NAME, var("term"),
+                Given(var("term")),
+                [field(hydra.core.TERM__ANNOTATED__NAME,
+                    lam("at",
+                        apply(_self("deannotateTerm"),
+                            Core.annotated_term_body(var("at")))))])))
 ```
 
 ### Self-references in Python

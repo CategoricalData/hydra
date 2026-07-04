@@ -40,15 +40,67 @@ KERNEL_TYPES_NAMESPACES = [
 ]
 
 
+_MISSING = object()
+
+
+class _DefBuilder:
+    """Fluent builder for a term definition: `_def("name").doc("...").lam("x").to(body)`.
+
+    Reads top-to-bottom instead of the inside-out `_def("name", doc("...", lambdas(["x"], body)))`
+    nesting. `.to(body)` closes the builder and yields the same `TypedBinding` the flat form
+    would: it wraps `body` as `doc(description, lambdas([params], body))`, omitting the `doc`/
+    `lambdas` wrappers when none were specified. Unlike the Java builder there is no laziness —
+    each Python def is built when its enclosing function runs, so `.to` takes the already-built
+    term (mirroring the eager `make_def` two-arg form).
+    """
+
+    __slots__ = ("_placeholder", "_name", "_description", "_params")
+
+    def __init__(self, placeholder, local_name):
+        self._placeholder = placeholder
+        self._name = local_name
+        self._description = None
+        self._params = []
+
+    def doc(self, description):
+        """Attach a doc description, wrapping the body in `doc(description, ...)`."""
+        self._description = description
+        return self
+
+    def lam(self, param):
+        """Add one lambda parameter (applied outermost-first, matching `lambdas(["x", ...], ...)`)."""
+        self._params.append(param)
+        return self
+
+    def lams(self, *params):
+        """Add several lambda parameters in order (equivalent to chained `.lam` calls)."""
+        self._params.extend(params)
+        return self
+
+    def to(self, body):
+        """Close over the body and produce the `TypedBinding`."""
+        term = body if not self._params else lambdas(self._params, body)
+        if self._description is not None:
+            term = doc(self._description, term)
+        return definition_in_module(self._placeholder, self._name, term)
+
+
 def make_def(placeholder):
-    """Return a closure `(local_name, term) -> TypedBinding` bound to `placeholder`.
+    """Return a `_def` callable bound to `placeholder`, supporting two forms:
+
+    - Flat:   `_def(local_name, term) -> TypedBinding` (the original form).
+    - Fluent: `_def(local_name).doc("...").lam("x").to(body) -> TypedBinding`.
 
     Usage at the top of a source DSL module:
 
         _PLACEHOLDER = Module(...)
         _def = make_def(_PLACEHOLDER)
     """
-    return lambda local_name, term: definition_in_module(placeholder, local_name, term)
+    def _def(local_name, term=_MISSING):
+        if term is _MISSING:
+            return _DefBuilder(placeholder, local_name)
+        return definition_in_module(placeholder, local_name, term)
+    return _def
 
 
 def make_local(ns_str: str):

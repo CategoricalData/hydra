@@ -103,6 +103,68 @@ public final class Defs {
     }
 
     /**
+     * Begin a fluent definition: {@code define(NS, "name").doc("...").lam("x").lam("y").to(() -> body)}.
+     *
+     * <p>Reads top-to-bottom (declaration order) instead of the inside-out
+     * {@code define("name", () -> doc("...", lambda("x", lambda("y", body))))} nesting. The terminal
+     * {@link DefBuilder#to} yields the same {@link Def} the flat form would: it composes the recorded
+     * doc + lambda parameters around the body as {@code doc(description, lambda([params], body))},
+     * omitting the {@code doc}/{@code lambda} wrappers when none were specified. The body stays lazy
+     * (passed as a {@link Supplier}) so cross-referencing {@code Def} fields resolve regardless of
+     * source order, exactly as with {@link #define(ModuleName, String, Supplier)}.
+     */
+    public static DefBuilder define(ModuleName ns, String localName) {
+        return new DefBuilder(ns, localName);
+    }
+
+    /**
+     * Fluent builder for a {@link Def}. Records an optional doc description and zero or more lambda
+     * parameters, then {@link #to} closes over a lazy body to produce the {@code Def}. See
+     * {@link #define(ModuleName, String)}.
+     */
+    public static final class DefBuilder {
+        private final ModuleName ns;
+        private final String localName;
+        private String description;
+        private final ArrayList<String> params = new ArrayList<>();
+
+        DefBuilder(ModuleName ns, String localName) {
+            this.ns = ns;
+            this.localName = localName;
+        }
+
+        /** Attach a doc description, wrapping the eventual body in {@code doc(description, ...)}. */
+        public DefBuilder doc(String description) {
+            this.description = description;
+            return this;
+        }
+
+        /** Add one lambda parameter (applied outermost-first, matching {@code lambda("x", lambda("y", ...))}). */
+        public DefBuilder lam(String param) {
+            this.params.add(param);
+            return this;
+        }
+
+        /** Add several lambda parameters in order (equivalent to chained {@link #lam} calls). */
+        public DefBuilder lams(String... ps) {
+            for (String p : ps) {
+                this.params.add(p);
+            }
+            return this;
+        }
+
+        /** Close over the (lazy) body and produce the {@link Def}. */
+        public Def to(Supplier<TypedTerm<?>> body) {
+            List<String> ps = new ArrayList<>(params);
+            String desc = description;
+            return new Def(ns, localName, () -> {
+                TypedTerm<?> t = ps.isEmpty() ? body.get() : Phantoms.lambda(ps, body.get());
+                return desc == null ? t : Phantoms.doc(desc, t);
+            });
+        }
+    }
+
+    /**
      * Reference another {@link Def} by its fully-qualified name —
      * equivalent to {@code variable(d.name())}. Safe at any time,
      * including inside another {@code Def}'s body supplier (only

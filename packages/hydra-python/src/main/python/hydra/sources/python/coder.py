@@ -213,13 +213,9 @@ def _analyze_python_function():
         ["cx", "env", "term"],
         _kref.analysis_analyze_function_term_with(var("cx"), _local("pythonBindingMetadata"), _local("pythonEnvironmentGetGraph"), _local("pythonEnvironmentSetGraph"), var("env"), var("term")),
     )
-    return _def(
-        "analyzePythonFunction",
-        doc(
-            "Analyze a function term with Python-specific Graph management",
-            body,
-        ),
-    )
+    return (_def("analyzePythonFunction")
+        .doc("Analyze a function term with Python-specific Graph management")
+        .to(body))
 
 
 def _class_variant_pattern_with_capture():
@@ -261,12 +257,9 @@ def _class_variant_pattern_with_capture():
             ),
         ),
     )
-    return _def(
-        "classVariantPatternWithCapture",
-        doc(
-            "Create a class pattern for a variant with captured value", body
-        ),
-    )
+    return (_def("classVariantPatternWithCapture")
+        .doc("Create a class pattern for a variant with captured value")
+        .to(body))
 
 
 def _case_block_to_expr():
@@ -364,13 +357,9 @@ def _case_block_to_expr():
             ),
         ),
     )
-    return _def(
-        "caseBlockToExpr",
-        doc(
-            "Encode a single case (Field) into a CaseBlock for a match statement",
-            body,
-        ),
-    )
+    return (_def("caseBlockToExpr")
+        .doc("Encode a single case (Field) into a CaseBlock for a match statement")
+        .to(body))
 
 
 def _class_variant_pattern_unit():
@@ -382,13 +371,9 @@ def _class_variant_pattern_unit():
             )
         ),
     )
-    return _def(
-        "classVariantPatternUnit",
-        doc(
-            "Create a class pattern for a unit variant (no value captured)",
-            body,
-        ),
-    )
+    return (_def("classVariantPatternUnit")
+        .doc("Create a class pattern for a unit variant (no value captured)")
+        .to(body))
 
 
 def _cond_import_symbol():
@@ -400,13 +385,9 @@ def _cond_import_symbol():
             nothing(),
         ),
     )
-    return _def(
-        "condImportSymbol",
-        doc(
-            "Conditionally include a symbol name based on a boolean flag",
-            body,
-        ),
-    )
+    return (_def("condImportSymbol")
+        .doc("Conditionally include a symbol name based on a boolean flag")
+        .to(body))
 
 
 def _collect_type_variables():
@@ -459,10 +440,9 @@ def _collect_type_variables():
                     ),
                 )),
     )
-    return _def(
-        "collectTypeVariables",
-        doc("Collect type variables from a type", body),
-    )
+    return (_def("collectTypeVariables")
+        .doc("Collect type variables from a type")
+        .to(body))
 
 
 def _deconflict_variant_name():
@@ -512,12 +492,9 @@ def _deconflict_variant_name():
             ),
         ),
     )
-    return _def(
-        "deconflictVariantName",
-        doc(
-            "Deconflict a variant name to avoid collisions with type names", body
-        ),
-    )
+    return (_def("deconflictVariantName")
+        .doc("Deconflict a variant name to avoid collisions with type names")
+        .to(body))
 
 
 def _deduplicate_case_variables():
@@ -618,12 +595,9 @@ def _deduplicate_case_variables():
             Lists.reverse(Pairs.second(var("result"))),
         ),
     )
-    return _def(
-        "deduplicateCaseVariables",
-        doc(
-            "Rewrite case statements to avoid variable name collisions", body
-        ),
-    )
+    return (_def("deduplicateCaseVariables")
+        .doc("Rewrite case statements to avoid variable name collisions")
+        .to(body))
 
 
 def _dig_for_wrap():
@@ -646,10 +620,9 @@ def _dig_for_wrap():
                     ),
                 )),
     )
-    return _def(
-        "digForWrap",
-        doc("Recursively dig through forall types to find wrap types", body),
-    )
+    return (_def("digForWrap")
+        .doc("Recursively dig through forall types to find wrap types")
+        .to(body))
 
 
 def _eliminate_unit_var():
@@ -910,23 +883,16 @@ def _eliminate_unit_var():
             var("go")(var("term0")),
         ),
     )
-    return _def(
-        "eliminateUnitVar",
-        doc(
-            "Substitute unit for a variable in a term (for unit variant case handling)",
-            body,
-        ),
-    )
+    return (_def("eliminateUnitVar")
+        .doc("Substitute unit for a variable in a term (for unit variant case handling)")
+        .to(body))
 
 
 def _empty_metadata():
     body = lambdas(["ns"], _empty_meta_record(var("ns")))
-    return _def(
-        "emptyMetadata",
-        doc(
-            "Create an initial empty metadata record with given namespaces", body
-        ),
-    )
+    return (_def("emptyMetadata")
+        .doc("Create an initial empty metadata record with given namespaces")
+        .to(body))
 
 
 # Inner sub-terms of encodeApplication, extracted for readability. Each returns a DSL
@@ -1004,10 +970,9 @@ def _encode_application():
             ),
         ),
     )
-    return _def(
-        "encodeApplication",
-        doc("Encode a function application to a Python expression", body),
-    )
+    return (_def("encodeApplication")
+        .doc("Encode a function application to a Python expression")
+        .to(body))
 
 
 def _encode_application_inner():
@@ -1263,10 +1228,9 @@ def _encode_application_inner():
             field("variable", variable_branch)),
         ),
     )
-    return _def(
-        "encodeApplicationInner",
-        doc("Inner helper for encodeApplication", body),
-    )
+    return (_def("encodeApplicationInner")
+        .doc("Inner helper for encodeApplication")
+        .to(body))
 
 
 def _encode_application_type():
@@ -1326,10 +1290,9 @@ def _encode_application_type():
             ),
         ),
     )
-    return _def(
-        "encodeApplicationType",
-        doc("Encode an application type to Python expression", body),
-    )
+    return (_def("encodeApplicationType")
+        .doc("Encode an application type to Python expression")
+        .to(body))
 
 
 def _encode_binding_as():
@@ -1871,13 +1834,9 @@ def _encode_binding_as():
             Optionals.cases(var("mts"), no_ts_branch, has_ts_branch),
         ),
     )
-    return _def(
-        "encodeBindingAs",
-        doc(
-            "Encode a binding as a Python statement (function definition or assignment)",
-            body,
-        ),
-    )
+    return (_def("encodeBindingAs")
+        .doc("Encode a binding as a Python statement (function definition or assignment)")
+        .to(body))
 
 
 def _encode_binding_as_assignment():
@@ -1961,12 +1920,9 @@ def _encode_binding_as_assignment():
             ),
         ),
     )
-    return _def(
-        "encodeBindingAsAssignment",
-        doc(
-            "Encode a binding as a walrus operator assignment", body
-        ),
-    )
+    return (_def("encodeBindingAsAssignment")
+        .doc("Encode a binding as a walrus operator assignment")
+        .to(body))
 
 
 def _encode_bindings_as_defs():
@@ -1977,10 +1933,9 @@ def _encode_bindings_as_defs():
             var("bindings"),
         ),
     )
-    return _def(
-        "encodeBindingsAsDefs",
-        doc("Encode bindings as function definitions", body),
-    )
+    return (_def("encodeBindingsAsDefs")
+        .doc("Encode bindings as function definitions")
+        .to(body))
 
 
 def _encode_default_case_block():
@@ -2038,12 +1993,9 @@ def _encode_default_case_block():
             ),
         ),
     )
-    return _def(
-        "encodeDefaultCaseBlock",
-        doc(
-            "Encode the default (wildcard) case block for a match statement", body
-        ),
-    )
+    return (_def("encodeDefaultCaseBlock")
+        .doc("Encode the default (wildcard) case block for a match statement")
+        .to(body))
 
 
 def _encode_definition():
@@ -2137,10 +2089,9 @@ def _encode_definition():
             ],
         ),
     )
-    return _def(
-        "encodeDefinition",
-        doc("Encode a definition (term or type) to Python statements", body),
-    )
+    return (_def("encodeDefinition")
+        .doc("Encode a definition (term or type) to Python statements")
+        .to(body))
 
 
 def _encode_enum_value_assignment():
@@ -2191,12 +2142,9 @@ def _encode_enum_value_assignment():
             ),
         ),
     )
-    return _def(
-        "encodeEnumValueAssignment",
-        doc(
-            "Encode an enum value assignment statement with optional comment", body
-        ),
-    )
+    return (_def("encodeEnumValueAssignment")
+        .doc("Encode an enum value assignment statement with optional comment")
+        .to(body))
 
 
 def _encode_field():
@@ -2221,12 +2169,9 @@ def _encode_field():
             ),
         ),
     )
-    return _def(
-        "encodeField",
-        doc(
-            "Encode a field (name-value pair) to a Python (Name, Expression) pair", body
-        ),
-    )
+    return (_def("encodeField")
+        .doc("Encode a field (name-value pair) to a Python (Name, Expression) pair")
+        .to(body))
 
 
 def _encode_field_type():
@@ -2278,13 +2223,9 @@ def _encode_field_type():
             ),
         ),
     )
-    return _def(
-        "encodeFieldType",
-        doc(
-            "Encode a field type for record definitions (field: type annotation)",
-            body,
-        ),
-    )
+    return (_def("encodeFieldType")
+        .doc("Encode a field type for record definitions (field: type annotation)")
+        .to(body))
 
 
 def _encode_float_value():
@@ -2309,10 +2250,9 @@ def _encode_float_value():
             ],
         ),
     )
-    return _def(
-        "encodeFloatValue",
-        doc("Encode a float value to a Python expression", body),
-    )
+    return (_def("encodeFloatValue")
+        .doc("Encode a float value to a Python expression")
+        .to(body))
 
 
 def _encode_float_value_encode_float32():
@@ -2347,7 +2287,8 @@ def _encode_float_value_encode_float32():
             ),
         ),
     )
-    return _def("encodeFloatValue_encodeFloat32", body)
+    return (_def("encodeFloatValue_encodeFloat32")
+        .to(body))
 
 
 def _encode_float_value_encode_float64():
@@ -2388,7 +2329,8 @@ def _encode_float_value_encode_float64():
             ),
         ),
     )
-    return _def("encodeFloatValue_encodeFloat64", body)
+    return (_def("encodeFloatValue_encodeFloat64")
+        .to(body))
 
 
 def _encode_float_value_py_special_float():
@@ -2398,7 +2340,8 @@ def _encode_float_value_py_special_float():
                 [_kref.utils_single_quoted_string(var("value"))]
             )),
     )
-    return _def("encodeFloatValue_pySpecialFloat", body)
+    return (_def("encodeFloatValue_pySpecialFloat")
+        .to(body))
 
 
 def _encode_name_constants():
@@ -2446,12 +2389,9 @@ def _encode_name_constants():
             ),
         ),
     )
-    return _def(
-        "encodeNameConstants",
-        doc(
-            "Generate name constants for a type as class-level attributes", body
-        ),
-    )
+    return (_def("encodeNameConstants")
+        .doc("Generate name constants for a type as class-level attributes")
+        .to(body))
 
 
 def _encode_python_module():
@@ -2601,10 +2541,9 @@ def _encode_python_module():
             _local("withDefinitions")(var("env0"), var("defs"), lam("env", inner_body)),
         ),
     )
-    return _def(
-        "encodePythonModule",
-        doc("Encode a Hydra module to a Python module AST", body),
-    )
+    return (_def("encodePythonModule")
+        .doc("Encode a Hydra module to a Python module AST")
+        .to(body))
 
 
 def _field_snake(env, fname):
@@ -2642,10 +2581,9 @@ def _builder_setter_name():
             ),
         ),
     )
-    return _def(
-        "builderSetterName",
-        doc("Escape a builder setter name that would collide with build()/builder()/self", body),
-    )
+    return (_def("builderSetterName")
+        .doc("Escape a builder setter name that would collide with build()/builder()/self")
+        .to(body))
 
 
 def _self_param():
@@ -2824,10 +2762,9 @@ def _record_with_method():
             ),
         ),
     )
-    return _def(
-        "recordWithMethod",
-        doc("Build a per-field copy-update method (with_<field>) for a record", body),
-    )
+    return (_def("recordWithMethod")
+        .doc("Build a per-field copy-update method (with_<field>) for a record")
+        .to(body))
 
 
 def _record_builder_setter():
@@ -2862,10 +2799,9 @@ def _record_builder_setter():
             ),
         ),
     )
-    return _def(
-        "recordBuilderSetter",
-        doc("Build a fluent setter for the nested Builder of a record", body),
-    )
+    return (_def("recordBuilderSetter")
+        .doc("Build a fluent setter for the nested Builder of a record")
+        .to(body))
 
 
 def _record_builder_class():
@@ -2995,10 +2931,9 @@ def _record_builder_class():
             ),
         ),
     )
-    return _def(
-        "recordBuilderClass",
-        doc("Build a fluent builder (factory + nested Builder dataclass) for a record", body),
-    )
+    return (_def("recordBuilderClass")
+        .doc("Build a fluent builder (factory + nested Builder dataclass) for a record")
+        .to(body))
 
 
 def _encode_record_type():
@@ -3092,10 +3027,9 @@ def _encode_record_type():
             ),
         ),
     )
-    return _def(
-        "encodeRecordType",
-        doc("Encode a record type as a Python dataclass", body),
-    )
+    return (_def("encodeRecordType")
+        .doc("Encode a record type as a Python dataclass")
+        .to(body))
 
 
 def _encode_type_def_single():
@@ -3119,10 +3053,9 @@ def _encode_type_def_single():
             ),
         ),
     )
-    return _def(
-        "encodeTypeDefSingle",
-        doc("Encode a simple type alias definition", body),
-    )
+    return (_def("encodeTypeDefSingle")
+        .doc("Encode a simple type alias definition")
+        .to(body))
 
 
 def _encode_type_quoted():
@@ -3144,13 +3077,9 @@ def _encode_type_quoted():
             ),
         ),
     )
-    return _def(
-        "encodeTypeQuoted",
-        doc(
-            "Encode a type to a Python expression, quoting if the type has free variables",
-            body,
-        ),
-    )
+    return (_def("encodeTypeQuoted")
+        .doc("Encode a type to a Python expression, quoting if the type has free variables")
+        .to(body))
 
 
 def _encode_term_assignment():
@@ -3286,10 +3215,9 @@ def _encode_term_assignment():
             ),
         ),
     )
-    return _def(
-        "encodeTermAssignment",
-        doc("Encode a term assignment to a Python statement", body),
-    )
+    return (_def("encodeTermAssignment")
+        .doc("Encode a term assignment to a Python statement")
+        .to(body))
 
 
 def _encode_term_inline():
@@ -4010,10 +3938,9 @@ def _encode_term_inline():
             ),
         ),
     )
-    return _def(
-        "encodeTermInline",
-        doc("Encode a term to a Python expression (inline form)", body),
-    )
+    return (_def("encodeTermInline")
+        .doc("Encode a term to a Python expression (inline form)")
+        .to(body))
 
 
 def _encode_term_multiline():
@@ -4205,13 +4132,9 @@ def _encode_term_multiline():
             ),
         ),
     )
-    return _def(
-        "encodeTermMultiline",
-        doc(
-            "Encode a term to a list of statements with return as final statement",
-            body,
-        ),
-    )
+    return (_def("encodeTermMultiline")
+        .doc("Encode a term to a list of statements with return as final statement")
+        .to(body))
 
 
 def _encode_term_multiline_tco():
@@ -4471,13 +4394,9 @@ def _encode_term_multiline_tco():
             ),
         ),
     )
-    return _def(
-        "encodeTermMultilineTCO",
-        doc(
-            "Encode a term body for TCO: tail self-calls become param reassignment + continue",
-            body,
-        ),
-    )
+    return (_def("encodeTermMultilineTCO")
+        .doc("Encode a term body for TCO: tail self-calls become param reassignment + continue")
+        .to(body))
 
 
 def _encode_type():
@@ -4710,10 +4629,9 @@ def _encode_type():
             ),
         ),
     )
-    return _def(
-        "encodeType",
-        doc("Encode a Hydra type to a Python type expression", body),
-    )
+    return (_def("encodeType")
+        .doc("Encode a Hydra type to a Python type expression")
+        .to(body))
 
 
 def _encode_type_assignment():
@@ -4734,12 +4652,9 @@ def _encode_type_assignment():
             ),
         ),
     )
-    return _def(
-        "encodeTypeAssignment",
-        doc(
-            "Encode a type definition, dispatching based on type structure", body
-        ),
-    )
+    return (_def("encodeTypeAssignment")
+        .doc("Encode a type definition, dispatching based on type structure")
+        .to(body))
 
 
 def _encode_type_assignment_inner():
@@ -4807,12 +4722,9 @@ def _encode_type_assignment_inner():
                     )),
         ),
     )
-    return _def(
-        "encodeTypeAssignmentInner",
-        doc(
-            "Encode the inner type definition, unwrapping forall types", body
-        ),
-    )
+    return (_def("encodeTypeAssignmentInner")
+        .doc("Encode the inner type definition, unwrapping forall types")
+        .to(body))
 
 
 def _encode_union_elimination_inline():
@@ -4991,13 +4903,9 @@ def _encode_union_elimination_inline():
             ),
         ),
     )
-    return _def(
-        "encodeUnionEliminationInline",
-        doc(
-            "Encode a union elimination as an inline conditional chain (isinstance-based ternary)",
-            body,
-        ),
-    )
+    return (_def("encodeUnionEliminationInline")
+        .doc("Encode a union elimination as an inline conditional chain (isinstance-based ternary)")
+        .to(body))
 
 
 def _encode_union_field():
@@ -5090,10 +4998,9 @@ def _encode_union_field():
             ),
         ),
     )
-    return _def(
-        "encodeUnionField",
-        doc("Encode a union field as a variant class", body),
-    )
+    return (_def("encodeUnionField")
+        .doc("Encode a union field as a variant class")
+        .to(body))
 
 
 def _encode_union_field_alt():
@@ -5137,12 +5044,9 @@ def _encode_union_field_alt():
             ),
         ),
     )
-    return _def(
-        "encodeUnionFieldAlt",
-        doc(
-            "Encode a union field as a primary expression for | alternatives", body
-        ),
-    )
+    return (_def("encodeUnionFieldAlt")
+        .doc("Encode a union field as a primary expression for | alternatives")
+        .to(body))
 
 
 def _encode_forall_type():
@@ -5201,10 +5105,9 @@ def _encode_forall_type():
             ),
         ),
     )
-    return _def(
-        "encodeForallType",
-        doc("Encode a forall type to Python expression", body),
-    )
+    return (_def("encodeForallType")
+        .doc("Encode a forall type to Python expression")
+        .to(body))
 
 
 def _encode_function_type():
@@ -5287,10 +5190,9 @@ def _encode_function_type():
             ),
         ),
     )
-    return _def(
-        "encodeFunctionType",
-        doc("Encode a function type to Python Callable expression", body),
-    )
+    return (_def("encodeFunctionType")
+        .doc("Encode a function type to Python Callable expression")
+        .to(body))
 
 
 def _encode_integer_value():
@@ -5336,10 +5238,9 @@ def _encode_integer_value():
             ),
         ),
     )
-    return _def(
-        "encodeIntegerValue",
-        doc("Encode an integer value to a Python expression", body),
-    )
+    return (_def("encodeIntegerValue")
+        .doc("Encode an integer value to a Python expression")
+        .to(body))
 
 
 def _encode_literal():
@@ -5425,10 +5326,9 @@ def _encode_literal():
             ],
         ),
     )
-    return _def(
-        "encodeLiteral",
-        doc("Encode a literal value to a Python expression", body),
-    )
+    return (_def("encodeLiteral")
+        .doc("Encode a literal value to a Python expression")
+        .to(body))
 
 
 def _encode_literal_type():
@@ -5483,10 +5383,9 @@ def _encode_literal_type():
             ),
         ),
     )
-    return _def(
-        "encodeLiteralType",
-        doc("Encode a literal type to a Python type expression", body),
-    )
+    return (_def("encodeLiteralType")
+        .doc("Encode a literal type to a Python type expression")
+        .to(body))
 
 
 def _environment_type_parameters():
@@ -5505,12 +5404,9 @@ def _environment_type_parameters():
             Pairs.first(_env("boundTypeVariables", "env")),
         ),
     )
-    return _def(
-        "environmentTypeParameters",
-        doc(
-            "Get type parameters from environment as Python TypeParameters", body
-        ),
-    )
+    return (_def("environmentTypeParameters")
+        .doc("Get type parameters from environment as Python TypeParameters")
+        .to(body))
 
 
 def _extend_env_with_lambda_params():
@@ -5543,12 +5439,9 @@ def _extend_env_with_lambda_params():
             var("go")(var("env"), var("term")),
         ),
     )
-    return _def(
-        "extendEnvWithLambdaParams",
-        doc(
-            "Extend environment with lambda parameters from a term", body
-        ),
-    )
+    return (_def("extendEnvWithLambdaParams")
+        .doc("Extend environment with lambda parameters from a term")
+        .to(body))
 
 
 def _extend_env_with_type_var():
@@ -5593,12 +5486,9 @@ def _extend_env_with_type_var():
             ),
         ),
     )
-    return _def(
-        "extendEnvWithTypeVar",
-        doc(
-            "Extend a PythonEnvironment with a new bound type variable", body
-        ),
-    )
+    return (_def("extendEnvWithTypeVar")
+        .doc("Extend a PythonEnvironment with a new bound type variable")
+        .to(body))
 
 
 def _encode_union_type():
@@ -5705,13 +5595,9 @@ def _encode_union_type():
             union_branch,
         ),
     )
-    return _def(
-        "encodeUnionType",
-        doc(
-            "Encode a union type as an enum (for unit-only fields) or variant classes",
-            body,
-        ),
-    )
+    return (_def("encodeUnionType")
+        .doc("Encode a union type as an enum (for unit-only fields) or variant classes")
+        .to(body))
 
 
 def _encode_variable():
@@ -6073,12 +5959,9 @@ def _encode_variable():
             ),
         ),
     )
-    return _def(
-        "encodeVariable",
-        doc(
-            "Encode a variable reference to a Python expression", body
-        ),
-    )
+    return (_def("encodeVariable")
+        .doc("Encode a variable reference to a Python expression")
+        .to(body))
 
 
 def _encode_wrapped_type():
@@ -6138,12 +6021,9 @@ def _encode_wrapped_type():
             ),
         ),
     )
-    return _def(
-        "encodeWrappedType",
-        doc(
-            "Encode a wrapped type (newtype) to a Python class definition", body
-        ),
-    )
+    return (_def("encodeWrappedType")
+        .doc("Encode a wrapped type (newtype) to a Python class definition")
+        .to(body))
 
 
 def _enum_variant_pattern():
@@ -6162,10 +6042,9 @@ def _enum_variant_pattern():
             )
         ),
     )
-    return _def(
-        "enumVariantPattern",
-        doc("Create a value pattern for an enum variant", body),
-    )
+    return (_def("enumVariantPattern")
+        .doc("Create a value pattern for an enum variant")
+        .to(body))
 
 
 def _extend_meta_for_term():
@@ -6305,12 +6184,9 @@ def _extend_meta_for_term():
             _kref.rewriting_fold_over_term(Coders_dsl.traversal_order_pre, var("step"), var("meta0"), var("term")),
         ),
     )
-    return _def(
-        "extendMetaForTerm",
-        doc(
-            "Extend metadata based on a term (used during module encoding)", body
-        ),
-    )
+    return (_def("extendMetaForTerm")
+        .doc("Extend metadata based on a term (used during module encoding)")
+        .to(body))
 
 
 def _extend_meta_for_type():
@@ -6480,12 +6356,9 @@ def _extend_meta_for_type():
             ),
         ),
     )
-    return _def(
-        "extendMetaForType",
-        doc(
-            "Extend metadata based on a type (used during module encoding)", body
-        ),
-    )
+    return (_def("extendMetaForType")
+        .doc("Extend metadata based on a type (used during module encoding)")
+        .to(body))
 
 
 def _extend_meta_for_types():
@@ -6525,10 +6398,9 @@ def _extend_meta_for_types():
             ),
         ),
     )
-    return _def(
-        "extendMetaForTypes",
-        doc("Extend metadata for a list of types", body),
-    )
+    return (_def("extendMetaForTypes")
+        .doc("Extend metadata for a list of types")
+        .to(body))
 
 
 def _extract_case_elimination():
@@ -6539,10 +6411,9 @@ def _extract_case_elimination():
                     lam("cs", just(var("cs"))),
                 )),
     )
-    return _def(
-        "extractCaseElimination",
-        doc("Extract CaseStatement from a case elimination term", body),
-    )
+    return (_def("extractCaseElimination")
+        .doc("Extract CaseStatement from a case elimination term")
+        .to(body))
 
 
 def _fill_doms_from_signature():
@@ -6562,14 +6433,13 @@ def _fill_doms_from_signature():
             var("doms"),
         ),
     )
-    return _def(
-        "fillDomsFromSignature",
-        doc(
+    return (_def("fillDomsFromSignature")
+        .to(
+            doc(
             "Prefer signature parameter types over analysis-captured lambda domains "
             "when both are available in equal length (#488).",
             body,
-        ),
-    )
+        )))
 
 
 def _find_type_params():
@@ -6594,13 +6464,9 @@ def _find_type_params():
             ),
         ),
     )
-    return _def(
-        "findTypeParams",
-        doc(
-            "Find type parameters in a type that are bound in the environment",
-            body,
-        ),
-    )
+    return (_def("findTypeParams")
+        .doc("Find type parameters in a type that are bound in the environment")
+        .to(body))
 
 
 def _function_definition_to_expr():
@@ -6820,10 +6686,9 @@ def _function_definition_to_expr():
             ),
         ),
     )
-    return _def(
-        "functionDefinitionToExpr",
-        doc("Encode a function definition with parameters and body", body),
-    )
+    return (_def("functionDefinitionToExpr")
+        .doc("Encode a function definition with parameters and body")
+        .to(body))
 
 
 def _gather_lambdas():
@@ -6847,10 +6712,9 @@ def _gather_lambdas():
             var("go")(list_([]), var("term")),
         ),
     )
-    return _def(
-        "gatherLambdas",
-        doc("Extract lambdas and their bodies from a term", body),
-    )
+    return (_def("gatherLambdas")
+        .doc("Extract lambdas and their bodies from a term")
+        .to(body))
 
 
 def _gather_metadata():
@@ -6946,10 +6810,9 @@ def _gather_metadata():
             _local("setMetaUsesTypeVar")(var("result2"), Logic.not_(Sets.null(var("tvars")))),
         ),
     )
-    return _def(
-        "gatherMetadata",
-        doc("Gather metadata from definitions", body),
-    )
+    return (_def("gatherMetadata")
+        .doc("Gather metadata from definitions")
+        .to(body))
 
 
 def _generic_arg():
@@ -6971,10 +6834,9 @@ def _generic_arg():
             ),
         ),
     )
-    return _def(
-        "genericArg",
-        doc("Create Generic[...] argument expression for class definition", body),
-    )
+    return (_def("genericArg")
+        .doc("Create Generic[...] argument expression for class definition")
+        .to(body))
 
 
 def _initial_environment():
@@ -6994,10 +6856,9 @@ def _initial_environment():
             ],
         ),
     )
-    return _def(
-        "initialEnvironment",
-        doc("Create an initial Python environment for code generation", body),
-    )
+    return (_def("initialEnvironment")
+        .doc("Create an initial Python environment for code generation")
+        .to(body))
 
 
 def _initial_metadata():
@@ -7017,10 +6878,9 @@ def _initial_metadata():
             _empty_meta_record(var("emptyNs")),
         ),
     )
-    return _def(
-        "initialMetadata",
-        doc("Create initial empty metadata for a Python module", body),
-    )
+    return (_def("initialMetadata")
+        .doc("Create initial empty metadata for a Python module")
+        .to(body))
 
 
 def _is_case_statement_application():
@@ -7065,12 +6925,9 @@ def _is_case_statement_application():
             ),
         ),
     )
-    return _def(
-        "isCaseStatementApplication",
-        doc(
-            "Check if a term is a case statement applied to exactly one argument", body
-        ),
-    )
+    return (_def("isCaseStatementApplication")
+        .doc("Check if a term is a case statement applied to exactly one argument")
+        .to(body))
 
 
 def _is_cases_full():
@@ -7084,10 +6941,9 @@ def _is_cases_full():
             Logic.not_(Equality.lt(var("numCases"), var("numFields"))),
         ),
     )
-    return _def(
-        "isCasesFull",
-        doc("Check if union cases are fully covered", body),
-    )
+    return (_def("isCasesFull")
+        .doc("Check if union cases are fully covered")
+        .to(body))
 
 
 def _is_type_module_check():
@@ -7108,12 +6964,9 @@ def _is_type_module_check():
             )
         ),
     )
-    return _def(
-        "isTypeModuleCheck",
-        doc(
-            "Check whether a list of definitions contains any type definitions", body
-        ),
-    )
+    return (_def("isTypeModuleCheck")
+        .doc("Check whether a list of definitions contains any type definitions")
+        .to(body))
 
 
 def _is_type_variable_name():
@@ -7126,12 +6979,9 @@ def _is_type_variable_name():
             ),
         ),
     )
-    return _def(
-        "isTypeVariableName",
-        doc(
-            "Check if a name is a type variable (unqualified - no dots)", body
-        ),
-    )
+    return (_def("isTypeVariableName")
+        .doc("Check if a name is a type variable (unqualified - no dots)")
+        .to(body))
 
 
 def _is_variant_unit_type():
@@ -7165,10 +7015,9 @@ def _is_variant_unit_type():
             ),
         ),
     )
-    return _def(
-        "isVariantUnitType",
-        doc("Check if a variant field has unit type", body),
-    )
+    return (_def("isVariantUnitType")
+        .doc("Check if a variant field has unit type")
+        .to(body))
 
 
 def _dataclass_decorator():
@@ -7191,10 +7040,9 @@ def _dataclass_decorator():
     body = PySyn.named_expression_simple(
         _kref.utils_py_primary_to_py_expression(_kref.utils_primary_with_rhs(primary, rhs))
     )
-    return _def(
-        "dataclassDecorator",
-        doc("Create a @dataclass(frozen=True) decorator", body),
-    )
+    return (_def("dataclassDecorator")
+        .doc("Create a @dataclass(frozen=True) decorator")
+        .to(body))
 
 
 def _make_curried_lambda():
@@ -7218,13 +7066,9 @@ def _make_curried_lambda():
             Lists.reverse(var("params")),
         ),
     )
-    return _def(
-        "makeCurriedLambda",
-        doc(
-            "Create a curried lambda chain from a list of parameter names and a body",
-            body,
-        ),
-    )
+    return (_def("makeCurriedLambda")
+        .doc("Create a curried lambda chain from a list of parameter names and a body")
+        .to(body))
 
 
 def _make_py_graph():
@@ -7237,10 +7081,9 @@ def _make_py_graph():
             ],
         ),
     )
-    return _def(
-        "makePyGraph",
-        doc("Constructor for PyGraph record", body),
-    )
+    return (_def("makePyGraph")
+        .doc("Constructor for PyGraph record")
+        .to(body))
 
 
 def _make_simple_lambda():
@@ -7290,13 +7133,9 @@ def _make_simple_lambda():
             ),
         ),
     )
-    return _def(
-        "makeSimpleLambda",
-        doc(
-            "Wrap a bare reference to a polymorphic function in an uncurried lambda",
-            body,
-        ),
-    )
+    return (_def("makeSimpleLambda")
+        .doc("Wrap a bare reference to a polymorphic function in an uncurried lambda")
+        .to(body))
 
 
 def _make_thunk():
@@ -7304,13 +7143,9 @@ def _make_thunk():
         ["pbody"],
         _kref.utils_function_call(_kref.utils_py_expression_to_py_primary(_kref.utils_function_call(PySyn.primary_simple(PySyn.atom_name(_py_name("lru_cache"))), list_([_local("pyInt")(bigint(1))]))), list_([_local("wrapInNullaryLambda")(var("pbody"))])),
     )
-    return _def(
-        "makeThunk",
-        doc(
-            "Create a thunk (zero-argument lambda) wrapped with lru_cache(1) for memoization",
-            body,
-        ),
-    )
+    return (_def("makeThunk")
+        .doc("Create a thunk (zero-argument lambda) wrapped with lru_cache(1) for memoization")
+        .to(body))
 
 
 def _make_lazy():
@@ -7318,13 +7153,9 @@ def _make_lazy():
         ["pbody"],
         _kref.utils_function_call(PySyn.primary_simple(PySyn.atom_name(_py_name("Lazy"))), list_([_local("wrapInNullaryLambda")(var("pbody"))])),
     )
-    return _def(
-        "makeLazy",
-        doc(
-            "Wrap an expression in Lazy(lambda: ...) for one-shot lazy memoization",
-            body,
-        ),
-    )
+    return (_def("makeLazy")
+        .doc("Wrap an expression in Lazy(lambda: ...) for one-shot lazy memoization")
+        .to(body))
 
 
 def _make_uncurried_lambda():
@@ -7345,12 +7176,9 @@ def _make_uncurried_lambda():
             )
         ),
     )
-    return _def(
-        "makeUncurriedLambda",
-        doc(
-            "Create an uncurried lambda with multiple parameters", body
-        ),
-    )
+    return (_def("makeUncurriedLambda")
+        .doc("Create an uncurried lambda with multiple parameters")
+        .to(body))
 
 
 def _module_imports():
@@ -7371,10 +7199,9 @@ def _module_imports():
             ),
         ),
     )
-    return _def(
-        "moduleImports",
-        doc("Generate all import statements for a Python module", body),
-    )
+    return (_def("moduleImports")
+        .doc("Generate all import statements for a Python module")
+        .to(body))
 
 
 def _module_standard_imports():
@@ -7508,12 +7335,9 @@ def _module_standard_imports():
             ),
         ),
     )
-    return _def(
-        "moduleStandardImports",
-        doc(
-            "Generate standard import statements based on module metadata", body
-        ),
-    )
+    return (_def("moduleStandardImports")
+        .doc("Generate standard import statements based on module metadata")
+        .to(body))
 
 
 def _module_domain_imports():
@@ -7551,10 +7375,9 @@ def _module_domain_imports():
             ),
         ),
     )
-    return _def(
-        "moduleDomainImports",
-        doc("Generate domain import statements from namespace mappings", body),
-    )
+    return (_def("moduleDomainImports")
+        .doc("Generate domain import statements from namespace mappings")
+        .to(body))
 
 
 def _module_to_python():
@@ -7584,10 +7407,9 @@ def _module_to_python():
             ),
         ),
     )
-    return _def(
-        "moduleToPython",
-        doc("Convert a Hydra module to Python source files", body),
-    )
+    return (_def("moduleToPython")
+        .doc("Convert a Hydra module to Python source files")
+        .to(body))
 
 
 def _python_binding_metadata():
@@ -7604,13 +7426,9 @@ def _python_binding_metadata():
             nothing(),
         ),
     )
-    return _def(
-        "pythonBindingMetadata",
-        doc(
-            "Like bindingMetadata, but only for bindings that will actually be thunked",
-            body,
-        ),
-    )
+    return (_def("pythonBindingMetadata")
+        .doc("Like bindingMetadata, but only for bindings that will actually be thunked")
+        .to(body))
 
 
 def _lazy_dot_get():
@@ -7618,13 +7436,9 @@ def _lazy_dot_get():
         ["expr"],
         _kref.utils_function_call(_kref.utils_py_expression_to_py_primary(_kref.utils_project_from_expression(var("expr"), PySyn.name(string("get")))), list_([])),
     )
-    return _def(
-        "lazyDotGet",
-        doc(
-            "Wrap an expression in a .get() method call (for Lazy unwrap at use sites)",
-            body,
-        ),
-    )
+    return (_def("lazyDotGet")
+        .doc("Wrap an expression in a .get() method call (for Lazy unwrap at use sites)")
+        .to(body))
 
 
 def _lru_cache_decorator():
@@ -7636,29 +7450,23 @@ def _lru_cache_decorator():
     body = PySyn.named_expression_simple(
         _kref.utils_function_call(primary, one_arg)
     )
-    return _def(
-        "lruCacheDecorator",
-        doc(
-            "Decorator for @lru_cache(1) to memoize zero-argument function results",
-            body,
-        ),
-    )
+    return (_def("lruCacheDecorator")
+        .doc("Decorator for @lru_cache(1) to memoize zero-argument function results")
+        .to(body))
 
 
 def _py_graph_graph():
     body = lambdas(["pyg"], _pygraph("graph", "pyg"))
-    return _def(
-        "pyGraphGraph",
-        doc("Accessor for the graph field of PyGraph", body),
-    )
+    return (_def("pyGraphGraph")
+        .doc("Accessor for the graph field of PyGraph")
+        .to(body))
 
 
 def _py_graph_metadata():
     body = lambdas(["pyg"], _pygraph("metadata", "pyg"))
-    return _def(
-        "pyGraphMetadata",
-        doc("Accessor for the metadata field of PyGraph", body),
-    )
+    return (_def("pyGraphMetadata")
+        .doc("Accessor for the metadata field of PyGraph")
+        .to(body))
 
 
 def _py_int():
@@ -7666,18 +7474,16 @@ def _py_int():
         ["n"],
         _kref.utils_py_atom_to_py_expression(PySyn.atom_number(PySyn.number_integer(var("n")))),
     )
-    return _def(
-        "pyInt",
-        doc("Create integer literal expression", body),
-    )
+    return (_def("pyInt")
+        .doc("Create integer literal expression")
+        .to(body))
 
 
 def _python_environment_get_graph():
     body = lambdas(["env"], _env("graph", "env"))
-    return _def(
-        "pythonEnvironmentGetGraph",
-        doc("Get the Graph from a PythonEnvironment", body),
-    )
+    return (_def("pythonEnvironmentGetGraph")
+        .doc("Get the Graph from a PythonEnvironment")
+        .to(body))
 
 
 def _python_environment_set_graph():
@@ -7695,30 +7501,21 @@ def _python_environment_set_graph():
             ],
         ),
     )
-    return _def(
-        "pythonEnvironmentSetGraph",
-        doc("Set the Graph in a PythonEnvironment", body),
-    )
+    return (_def("pythonEnvironmentSetGraph")
+        .doc("Set the Graph in a PythonEnvironment")
+        .to(body))
 
 
 def _target_python_version():
-    return _def(
-        "targetPythonVersion",
-        doc(
-            "The target Python version for code generation",
-            _kref.utils_target_python_version,
-        ),
-    )
+    return (_def("targetPythonVersion")
+        .doc("The target Python version for code generation")
+        .to(_kref.utils_target_python_version))
 
 
 def _use_inline_type_params():
-    return _def(
-        "useInlineTypeParams",
-        doc(
-            "Legacy constant for backward compatibility; use useInlineTypeParamsFor in new code",
-            _local("useInlineTypeParamsFor")(_kref.utils_target_python_version),
-        ),
-    )
+    return (_def("useInlineTypeParams")
+        .doc("Legacy constant for backward compatibility; use useInlineTypeParamsFor in new code")
+        .to(_local("useInlineTypeParamsFor")(_kref.utils_target_python_version)))
 
 
 def _use_inline_type_params_for():
@@ -7730,10 +7527,9 @@ def _use_inline_type_params_for():
             ),
         ),
     )
-    return _def(
-        "useInlineTypeParamsFor",
-        doc("Version-aware inline type parameters", body),
-    )
+    return (_def("useInlineTypeParamsFor")
+        .doc("Version-aware inline type parameters")
+        .to(body))
 
 
 def _set_meta_namespaces():
@@ -7741,7 +7537,8 @@ def _set_meta_namespaces():
         ["ns", "m"],
         _meta_record_with_field_set("namespaces", var("ns"), m_var="m"),
     )
-    return _def("setMetaNamespaces", body)
+    return (_def("setMetaNamespaces")
+        .to(body))
 
 
 def _set_meta_type_variables():
@@ -7749,7 +7546,8 @@ def _set_meta_type_variables():
         ["m", "tvars"],
         _meta_record_with_field_set("typeVariables", var("tvars"), m_var="m"),
     )
-    return _def("setMetaTypeVariables", body)
+    return (_def("setMetaTypeVariables")
+        .to(body))
 
 
 # setMetaUses* family (22 defs that all share the same record structure;
@@ -7848,13 +7646,9 @@ def _should_thunk_binding():
             ),
         ),
     )
-    return _def(
-        "shouldThunkBinding",
-        doc(
-            "Determine if a binding should be thunked based on its complexity and triviality",
-            body,
-        ),
-    )
+    return (_def("shouldThunkBinding")
+        .doc("Determine if a binding should be thunked based on its complexity and triviality")
+        .to(body))
 
 
 def _standard_import_statement():
@@ -7894,10 +7688,9 @@ def _standard_import_statement():
             ),
         ),
     )
-    return _def(
-        "standardImportStatement",
-        doc("Generate a single from-import statement", body),
-    )
+    return (_def("standardImportStatement")
+        .doc("Generate a single from-import statement")
+        .to(body))
 
 
 def _term_arity_with_primitives():
@@ -7944,10 +7737,9 @@ def _term_arity_with_primitives():
                     ),
                 )),
     )
-    return _def(
-        "termArityWithPrimitives",
-        doc("Calculate term arity with proper primitive handling", body),
-    )
+    return (_def("termArityWithPrimitives")
+        .doc("Calculate term arity with proper primitive handling")
+        .to(body))
 
 
 def _tvar_statement():
@@ -7959,12 +7751,9 @@ def _tvar_statement():
                     ]
                 ))),
     )
-    return _def(
-        "tvarStatement",
-        doc(
-            "Create a TypeVar assignment statement for a type variable name", body
-        ),
-    )
+    return (_def("tvarStatement")
+        .doc("Create a TypeVar assignment statement for a type variable name")
+        .to(body))
 
 
 def _type_alias_statement_for():
@@ -7976,10 +7765,9 @@ def _type_alias_statement_for():
             _kref.utils_type_alias_statement310(var("name"), var("tparams"), var("mcomment"), var("tyexpr")),
         ),
     )
-    return _def(
-        "typeAliasStatementFor",
-        doc("Version-aware type alias statement generation", body),
-    )
+    return (_def("typeAliasStatementFor")
+        .doc("Version-aware type alias statement generation")
+        .to(body))
 
 
 def _union_type_statements_for():
@@ -7998,10 +7786,9 @@ def _union_type_statements_for():
             _kref.utils_union_type_class_statements310(var("name"), var("mcomment"), var("tyexpr"), var("extraStmts")),
         ),
     )
-    return _def(
-        "unionTypeStatementsFor",
-        doc("Version-aware union type statement generation", body),
-    )
+    return (_def("unionTypeStatementsFor")
+        .doc("Version-aware union type statement generation")
+        .to(body))
 
 
 def _unsupported_expression():
@@ -8013,13 +7800,9 @@ def _unsupported_expression():
                 ]
             )),
     )
-    return _def(
-        "unsupportedExpression",
-        doc(
-            "Create an expression that calls hydra.overlay.python.dsl.python.unsupported(message) at runtime",
-            body,
-        ),
-    )
+    return (_def("unsupportedExpression")
+        .doc("Create an expression that calls hydra.overlay.python.dsl.python.unsupported(message) at runtime")
+        .to(body))
 
 
 def _variant_args():
@@ -8036,10 +7819,9 @@ def _variant_args():
                 )
             )),
     )
-    return _def(
-        "variantArgs",
-        doc("Create args for variant (Node[type], Generic[tparams])", body),
-    )
+    return (_def("variantArgs")
+        .doc("Create args for variant (Node[type], Generic[tparams])")
+        .to(body))
 
 
 def _variant_closed_pattern():
@@ -8056,12 +7838,9 @@ def _variant_closed_pattern():
             ),
         ),
     )
-    return _def(
-        "variantClosedPattern",
-        doc(
-            "Create a ClosedPattern for a variant based on its characteristics", body
-        ),
-    )
+    return (_def("variantClosedPattern")
+        .doc("Create a ClosedPattern for a variant based on its characteristics")
+        .to(body))
 
 
 def _wildcard_case_block():
@@ -8073,21 +7852,16 @@ def _wildcard_case_block():
             _kref.utils_indented_block(nothing(), list_([list_([var("stmt")])])),
         ),
     )
-    return _def(
-        "wildcardCaseBlock",
-        doc("Create a wildcard case block with a given body statement", body),
-    )
+    return (_def("wildcardCaseBlock")
+        .doc("Create a wildcard case block with a given body statement")
+        .to(body))
 
 
 def _with_lambda():
     body = _kref.environment_with_lambda_context(_local("pythonEnvironmentGetGraph"), _local("pythonEnvironmentSetGraph"))
-    return _def(
-        "withLambda",
-        doc(
-            "Execute a computation with lambda context (adds lambda parameter to Graph)",
-            body,
-        ),
-    )
+    return (_def("withLambda")
+        .doc("Execute a computation with lambda context (adds lambda parameter to Graph)")
+        .to(body))
 
 
 def _with_definitions():
@@ -8148,21 +7922,16 @@ def _with_definitions():
             _local("withLet")(var("env"), var("dummyLet"), var("body")),
         ),
     )
-    return _def(
-        "withDefinitions",
-        doc("Execute a computation with definitions in scope", body),
-    )
+    return (_def("withDefinitions")
+        .doc("Execute a computation with definitions in scope")
+        .to(body))
 
 
 def _with_let():
     body = _kref.environment_with_let_context(_local("pythonEnvironmentGetGraph"), _local("pythonEnvironmentSetGraph"), _local("pythonBindingMetadata"))
-    return _def(
-        "withLet",
-        doc(
-            "Execute a computation with let context (adds let bindings to Graph)",
-            body,
-        ),
-    )
+    return (_def("withLet")
+        .doc("Execute a computation with let context (adds let bindings to Graph)")
+        .to(body))
 
 
 def _with_let_inline():
@@ -8221,20 +7990,16 @@ def _with_let_inline():
             _kref.environment_with_let_context(_local("pythonEnvironmentGetGraph"), _local("pythonEnvironmentSetGraph"), var("noMetadata"), var("env"), var("lt"), inner_lambda),
         ),
     )
-    return _def(
-        "withLetInline",
-        doc(
-            "Execute a computation with inline let context (for walrus operators)", body
-        ),
-    )
+    return (_def("withLetInline")
+        .doc("Execute a computation with inline let context (for walrus operators)")
+        .to(body))
 
 
 def _with_type_lambda():
     body = _kref.environment_with_type_lambda_context(_local("pythonEnvironmentGetGraph"), _local("pythonEnvironmentSetGraph"))
-    return _def(
-        "withTypeLambda",
-        doc("Execute a computation with type lambda context", body),
-    )
+    return (_def("withTypeLambda")
+        .doc("Execute a computation with type lambda context")
+        .to(body))
 
 
 def _lazy_flags_for_primitive():
@@ -8262,14 +8027,13 @@ def _lazy_flags_for_primitive():
             ),
         ),
     )
-    return _def(
-        "lazyFlagsForPrimitive",
-        doc(
+    return (_def("lazyFlagsForPrimitive")
+        .to(
+            doc(
             "Per-parameter isLazy flags of a primitive (by name), or empty if not a primitive. "
             "Single source of truth for which arguments coders thunk; replaces hard-coded name tables (issue #391).",
             body,
-        ),
-    )
+        )))
 
 
 def _wrap_lazy_arguments():
@@ -8295,13 +8059,9 @@ def _wrap_lazy_arguments():
             ),
         ),
     )
-    return _def(
-        "wrapLazyArguments",
-        doc(
-            "Wrap lazy-flagged arguments of a primitive call in nullary lambdas, per isLazy metadata (issue #391)",
-            body,
-        ),
-    )
+    return (_def("wrapLazyArguments")
+        .doc("Wrap lazy-flagged arguments of a primitive call in nullary lambdas, per isLazy metadata (issue #391)")
+        .to(body))
 
 
 def _wrap_in_nullary_lambda():
@@ -8311,13 +8071,9 @@ def _wrap_in_nullary_lambda():
             PySyn.lambda_(PyDsl.lambda_parameters_empty, var("expr"))
         ),
     )
-    return _def(
-        "wrapInNullaryLambda",
-        doc(
-            "Wrap a Python expression in a nullary lambda (thunk) for lazy evaluation",
-            body,
-        ),
-    )
+    return (_def("wrapInNullaryLambda")
+        .doc("Wrap a Python expression in a nullary lambda (thunk) for lazy evaluation")
+        .to(body))
 
 
 # ----------------------------------------------------------------------

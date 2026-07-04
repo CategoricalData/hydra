@@ -55,7 +55,7 @@ Hydra-Java provides a layered DSL system for working with Hydra types and terms:
 |-------|--------|---------|
 | **Direct DSLs** | `hydra.overlay.java.dsl.Types`, `hydra.overlay.java.dsl.Terms` | Raw construction of `Type` and `Term` instances |
 | **Phantom-typed DSL** | `hydra.overlay.java.dsl.meta.Phantoms` | `TypedTerm<A>` term construction; the phantom `A` documents intent (not a load-bearing check — see below) |
-| **Definition + helper layer** | `hydra.overlay.java.dsl.meta.Defs`, `hydra.overlay.java.dsl.Helpers` | `define`/`ref`, `typeref`/`typeDef`/`doc` for assembling modules |
+| **Definition + helper layer** | `hydra.overlay.java.dsl.meta.Defs`, `hydra.overlay.java.dsl.Helpers` | Fluent `define(NS,"name").doc(…).lam(…).to(…)` builder + `ref`; `typeref`/`typeDef`/`doc` for assembling modules |
 | **Library wrappers** | `hydra.dsl.lib.*` (generated) | Typed wrappers around Hydra primitives (lists, sets, maps, etc.) |
 
 The Direct DSLs are suitable for casual use: constructing test fixtures, prototyping, or building types.
@@ -583,6 +583,14 @@ Each function definition is a `TypedBinding<A>` (a phantom-typed name-term pair)
 
 ### Pattern
 
+Definitions use the **fluent builder** — the blessed idiom across all Java coder sources:
+`def("name").doc("...").lam("x").lam("y").to(() -> body)`. It reads top-to-bottom (name, doc,
+parameters, then body) instead of the inside-out `def("name", () -> doc("...", lambda("x", ...)))`
+nesting. The two forms are exactly equivalent — `.to(() -> body)` composes `doc(desc, lambda([params],
+body))`, omitting the `doc`/`lambda` wrappers when none are given — but the fluent form is what to write.
+The body passed to `.to(() -> ...)` stays lazy (a `Supplier`), so a definition may reference sibling
+`Def` fields declared later in the class.
+
 ```java
 import hydra.typed.*;
 import hydra.util.Maybe;
@@ -591,20 +599,26 @@ import static hydra.overlay.java.dsl.meta.Phantoms.*;
 public class MyFunctions {
     public static final ModuleName NS = new ModuleName("my.namespace");
 
+    // Flat form (still supported); the fluent def(String) below is preferred.
     private static Def def(String localName, Supplier<TypedTerm<?>> body) {
         return Defs.define(NS, localName, body);
     }
+    // Fluent form: def("name").doc("...").lam("x").to(() -> body)
+    private static Defs.DefBuilder def(String localName) {
+        return Defs.define(NS, localName);
+    }
 
     // Simple function: pattern match + extract body
-    TypedBinding<Object> deannotateTerm = define("deannotateTerm",
-        doc("Remove annotations from a term",
-        lambda("term",
+    public static final Def deannotateTerm = def("deannotateTerm")
+        .doc("Remove annotations from a term")
+        .lam("term")
+        .to(() ->
             cases(Term.TYPE_NAME, var("term"),
                 Maybe.just(var("term")),       // default: return unchanged
                 field(Term.FIELD_NAME_ANNOTATED,
                     lambda("at",
                         apply(var("deannotateTerm"),
-                            annotatedTermBody(var("at")))))))));
+                            annotatedTermBody(var("at")))))));
 }
 ```
 

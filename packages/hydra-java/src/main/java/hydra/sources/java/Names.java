@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static hydra.overlay.java.dsl.meta.Phantoms.*;
+import hydra.overlay.java.dsl.meta.Defs;
 import hydra.overlay.java.dsl.meta.Defs.Def;
 import static hydra.overlay.java.dsl.meta.Defs.define;
 import static hydra.overlay.java.dsl.meta.Defs.unqualifiedDeps;
@@ -52,104 +53,109 @@ public class Names {
         return define(NS, localName, body);
     }
 
+    /** Fluent form: {@code def("name").doc("...").lam("x").to(() -> body)}. See Defs.DefBuilder. */
+    private static Defs.DefBuilder def(String localName) {
+        return define(NS, localName);
+    }
+
     // ---- AUTO-PORTED defs (untyped; inference assigns schemes; see #344) ----
 
-    public static final Def acceptMethodName = def(
-        "acceptMethodName",
-        () -> string("accept"));
+    public static final Def acceptMethodName = def("acceptMethodName")
+        .to(() ->
+                string("accept"));
 
-    public static final Def applyMethodName = def(
-        "applyMethodName",
-        () -> string("apply"));
+    public static final Def applyMethodName = def("applyMethodName")
+        .to(() ->
+                string("apply"));
 
-    public static final Def compareToMethodName = def(
-        "compareToMethodName",
-        () -> string("compareTo"));
+    public static final Def compareToMethodName = def("compareToMethodName")
+        .to(() ->
+                string("compareTo"));
 
-    public static final Def equalsMethodName = def(
-        "equalsMethodName",
-        () -> string("equals"));
+    public static final Def equalsMethodName = def("equalsMethodName")
+        .to(() ->
+                string("equals"));
 
-    public static final Def getMethodName = def(
-        "getMethodName",
-        () -> string("get"));
+    public static final Def getMethodName = def("getMethodName")
+        .to(() ->
+                string("get"));
 
-    public static final Def hashCodeMethodName = def(
-        "hashCodeMethodName",
-        () -> string("hashCode"));
+    public static final Def hashCodeMethodName = def("hashCodeMethodName")
+        .to(() ->
+                string("hashCode"));
 
-    public static final Def hydraCorePackageName = def(
-        "hydraCorePackageName",
-        () -> doc("The hydra.core package name",
-                just(apply(ref(Names.javaPackageName), list(string("hydra"), string("core"))))));
+    public static final Def hydraCorePackageName = def("hydraCorePackageName")
+        .doc("The hydra.core package name")
+        .to(() ->
+                just(apply(ref(Names.javaPackageName), list(string("hydra"), string("core")))));
 
-    public static final Def hydraUtilPackageName = def(
-        "hydraUtilPackageName",
-        () -> doc("The hydra.overlay.java.util package name",
-                just(apply(ref(Names.javaPackageName), list(string("hydra"), string("overlay"), string("java"), string("util"))))));
+    public static final Def hydraUtilPackageName = def("hydraUtilPackageName")
+        .doc("The hydra.overlay.java.util package name")
+        .to(() ->
+                just(apply(ref(Names.javaPackageName), list(string("hydra"), string("overlay"), string("java"), string("util")))));
 
-    public static final Def instanceName = def(
-        "instanceName",
-        () -> string("instance"));
+    public static final Def instanceName = def("instanceName")
+        .to(() ->
+                string("instance"));
 
-    public static final Def javaLangPackageName = def(
-        "javaLangPackageName",
-        () -> doc("The java.lang package name",
-                just(apply(ref(Names.javaPackageName), list(string("java"), string("lang"))))));
+    public static final Def javaLangPackageName = def("javaLangPackageName")
+        .doc("The java.lang package name")
+        .to(() ->
+                just(apply(ref(Names.javaPackageName), list(string("java"), string("lang")))));
 
-    public static final Def javaPackageName = def(
-        "javaPackageName",
-        () -> doc("Construct a Java package name from a list of string parts",
-                lambda("parts",
-                    wrap(PackageName.TYPE_,
-                        Lists.map(
-                            lambda("p", wrap(Identifier.TYPE_, var("p"))),
-                            var("parts"))))));
+    public static final Def javaPackageName = def("javaPackageName")
+        .doc("Construct a Java package name from a list of string parts")
+        .lam("parts")
+        .to(() ->
+                wrap(PackageName.TYPE_,
+                    Lists.map(
+                        lambda("p", wrap(Identifier.TYPE_, var("p"))),
+                        var("parts"))));
 
-    public static final Def javaUtilFunctionPackageName = def(
-        "javaUtilFunctionPackageName",
-        () -> doc("The java.util.function package name",
+    public static final Def javaUtilFunctionPackageName = def("javaUtilFunctionPackageName")
+        .doc("The java.util.function package name")
+        .to(() ->
                 just(
                     apply(
                         ref(Names.javaPackageName),
-                        list(string("java"), string("util"), string("function"))))));
+                        list(string("java"), string("util"), string("function")))));
 
-    public static final Def javaUtilPackageName = def(
-        "javaUtilPackageName",
-        () -> doc("The java.util package name",
-                just(apply(ref(Names.javaPackageName), list(string("java"), string("util"))))));
+    public static final Def javaUtilPackageName = def("javaUtilPackageName")
+        .doc("The java.util package name")
+        .to(() ->
+                just(apply(ref(Names.javaPackageName), list(string("java"), string("util")))));
 
-    public static final Def otherInstanceName = def(
-        "otherInstanceName",
-        () -> string("other"));
+    public static final Def otherInstanceName = def("otherInstanceName")
+        .to(() ->
+                string("other"));
 
-    public static final Def otherwiseMethodName = def(
-        "otherwiseMethodName",
-        () -> string("otherwise"));
+    public static final Def otherwiseMethodName = def("otherwiseMethodName")
+        .to(() ->
+                string("otherwise"));
 
-    public static final Def partialVisitorName = def(
-        "partialVisitorName",
-        () -> string("PartialVisitor"));
+    public static final Def partialVisitorName = def("partialVisitorName")
+        .to(() ->
+                string("PartialVisitor"));
 
-    public static final Def setMethodName = def(
-        "setMethodName",
-        () -> string("set"));
+    public static final Def setMethodName = def("setMethodName")
+        .to(() ->
+                string("set"));
 
-    public static final Def valueFieldName = def(
-        "valueFieldName",
-        () -> string("value"));
+    public static final Def valueFieldName = def("valueFieldName")
+        .to(() ->
+                string("value"));
 
-    public static final Def visitMethodName = def(
-        "visitMethodName",
-        () -> string("visit"));
+    public static final Def visitMethodName = def("visitMethodName")
+        .to(() ->
+                string("visit"));
 
-    public static final Def visitorName = def(
-        "visitorName",
-        () -> string("Visitor"));
+    public static final Def visitorName = def("visitorName")
+        .to(() ->
+                string("Visitor"));
 
-    public static final Def visitorReturnParameter = def(
-        "visitorReturnParameter",
-        () -> string("R"));
+    public static final Def visitorReturnParameter = def("visitorReturnParameter")
+        .to(() ->
+                string("R"));
 
 
 

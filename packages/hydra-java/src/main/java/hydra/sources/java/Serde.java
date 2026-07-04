@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static hydra.overlay.java.dsl.meta.Phantoms.*;
+import hydra.overlay.java.dsl.meta.Defs;
 import hydra.overlay.java.dsl.meta.Defs.Def;
 import static hydra.overlay.java.dsl.meta.Defs.define;
 import static hydra.overlay.java.dsl.meta.Defs.unqualifiedDeps;
@@ -213,22 +214,27 @@ public class Serde {
         return define(NS, localName, body);
     }
 
+    /** Fluent form: {@code def("name").doc("...").lam("x").to(() -> body)}. See Defs.DefBuilder. */
+    private static Defs.DefBuilder def(String localName) {
+        return define(NS, localName);
+    }
+
     // ---- AUTO-PORTED defs (untyped; inference assigns schemes; see #344) ----
 
-    public static final Def additionalBoundToExpr = def(
-        "additionalBoundToExpr",
-        () -> lambda("ab",
+    public static final Def additionalBoundToExpr = def("additionalBoundToExpr")
+        .lam("ab")
+        .to(() ->
                 apply(
                     var("hydra.serialization.spaceSep"),
                     list(
                         apply(var("hydra.serialization.cst"), string("&")),
                         apply(
                             ref(Serde.interfaceTypeToExpr),
-                            apply(unwrap(AdditionalBound.TYPE_), var("ab")))))));
+                            apply(unwrap(AdditionalBound.TYPE_), var("ab"))))));
 
-    public static final Def additiveExpressionToExpr = def(
-        "additiveExpressionToExpr",
-        () -> lambda("e",
+    public static final Def additiveExpressionToExpr = def("additiveExpressionToExpr")
+        .lam("e")
+        .to(() ->
                 cases(AdditiveExpression.TYPE_,
                     var("e"),
                     field(
@@ -257,37 +263,37 @@ public class Serde {
                                     proj(AdditiveExpression_Binary.TYPE_, AdditiveExpression_Binary.LHS, "b")),
                                 apply(
                                     ref(Serde.multiplicativeExpressionToExpr),
-                                    proj(AdditiveExpression_Binary.TYPE_, AdditiveExpression_Binary.RHS, "b"))))))));
+                                    proj(AdditiveExpression_Binary.TYPE_, AdditiveExpression_Binary.RHS, "b")))))));
 
-    public static final Def ambiguousNameToExpr = def(
-        "ambiguousNameToExpr",
-        () -> lambda("an",
+    public static final Def ambiguousNameToExpr = def("ambiguousNameToExpr")
+        .lam("an")
+        .to(() ->
                 apply(
                     var("hydra.serialization.dotSep"),
                     Lists.map(
                         ref(Serde.identifierToExpr),
-                        apply(unwrap(AmbiguousName.TYPE_), var("an"))))));
+                        apply(unwrap(AmbiguousName.TYPE_), var("an")))));
 
-    public static final Def andExpressionToExpr = def(
-        "andExpressionToExpr",
-        () -> lambda("ae",
+    public static final Def andExpressionToExpr = def("andExpressionToExpr")
+        .lam("ae")
+        .to(() ->
                 apply(
                     var("hydra.serialization.infixWsList"),
                     string("&"),
                     Lists.map(
                         ref(Serde.equalityExpressionToExpr),
-                        apply(unwrap(AndExpression.TYPE_), var("ae"))))));
+                        apply(unwrap(AndExpression.TYPE_), var("ae")))));
 
-    public static final Def annotatedIdentifierToExpr = def(
-        "annotatedIdentifierToExpr",
-        () -> lambda("ai",
+    public static final Def annotatedIdentifierToExpr = def("annotatedIdentifierToExpr")
+        .lam("ai")
+        .to(() ->
                 apply(
                     ref(Serde.identifierToExpr),
-                    proj(AnnotatedIdentifier.TYPE_, AnnotatedIdentifier.IDENTIFIER, "ai"))));
+                    proj(AnnotatedIdentifier.TYPE_, AnnotatedIdentifier.IDENTIFIER, "ai")));
 
-    public static final Def annotationToExpr = def(
-        "annotationToExpr",
-        () -> lambda("ann",
+    public static final Def annotationToExpr = def("annotationToExpr")
+        .lam("ann")
+        .to(() ->
                 cases(Annotation.TYPE_,
                     var("ann"),
                     field(
@@ -298,20 +304,20 @@ public class Serde {
                         lambda("m", apply(ref(Serde.markerAnnotationToExpr), var("m")))),
                     field(
                         Annotation.SINGLE_ELEMENT,
-                        lambda("s", apply(ref(Serde.singleElementAnnotationToExpr), var("s")))))));
+                        lambda("s", apply(ref(Serde.singleElementAnnotationToExpr), var("s"))))));
 
-    public static final Def annotationTypeDeclarationToExpr = def(
-        "annotationTypeDeclarationToExpr",
-        () -> constant(
+    public static final Def annotationTypeDeclarationToExpr = def("annotationTypeDeclarationToExpr")
+        .to(() ->
+                constant(
                 apply(var("hydra.serialization.cst"), string("STUB:AnnotationInterfaceDeclaration"))));
 
-    public static final Def arrayAccessToExpr = def(
-        "arrayAccessToExpr",
-        () -> constant(apply(var("hydra.serialization.cst"), string("STUB:ArrayAccess"))));
+    public static final Def arrayAccessToExpr = def("arrayAccessToExpr")
+        .to(() ->
+                constant(apply(var("hydra.serialization.cst"), string("STUB:ArrayAccess"))));
 
-    public static final Def arrayCreationExpressionToExpr = def(
-        "arrayCreationExpressionToExpr",
-        () -> lambda("ace",
+    public static final Def arrayCreationExpressionToExpr = def("arrayCreationExpressionToExpr")
+        .lam("ace")
+        .to(() ->
                 cases(ArrayCreationExpression.TYPE_,
                     var("ace"),
                     field(
@@ -356,11 +362,11 @@ public class Serde {
                                     constant(
                                         apply(
                                             var("hydra.serialization.cst"),
-                                            string("STUB:ArrayCreationExpression"))))))))));
+                                            string("STUB:ArrayCreationExpression")))))))));
 
-    public static final Def arrayInitializerToExpr = def(
-        "arrayInitializerToExpr",
-        () -> lambda("ai",
+    public static final Def arrayInitializerToExpr = def("arrayInitializerToExpr")
+        .lam("ai")
+        .to(() ->
                 let("groups",
                     apply(unwrap(ArrayInitializer.TYPE_), var("ai")),
                     Optionals.fromOptional(
@@ -381,11 +387,11 @@ public class Serde {
                                                     var("firstGroup"))),
                                             apply(var("hydra.serialization.cst"), string("}")))),
                                     apply(var("hydra.serialization.cst"), string("{}")))),
-                            Lists.maybeHead(var("groups")))))));
+                            Lists.maybeHead(var("groups"))))));
 
-    public static final Def arrayTypeToExpr = def(
-        "arrayTypeToExpr",
-        () -> lambda("at",
+    public static final Def arrayTypeToExpr = def("arrayTypeToExpr")
+        .lam("at")
+        .to(() ->
                 let(
                     field("dims",
                         proj(ArrayType.TYPE_, ArrayType.DIMS, "at")),
@@ -407,15 +413,15 @@ public class Serde {
                                 lambda("tv", apply(ref(Serde.typeVariableToExpr), var("tv")))))),
                     apply(
                         var("hydra.serialization.noSep"),
-                        list(var("varExpr"), apply(ref(Serde.dimsToExpr), var("dims")))))));
+                        list(var("varExpr"), apply(ref(Serde.dimsToExpr), var("dims"))))));
 
-    public static final Def assertStatementToExpr = def(
-        "assertStatementToExpr",
-        () -> constant(apply(var("hydra.serialization.cst"), string("STUB:AssertStatement"))));
+    public static final Def assertStatementToExpr = def("assertStatementToExpr")
+        .to(() ->
+                constant(apply(var("hydra.serialization.cst"), string("STUB:AssertStatement"))));
 
-    public static final Def assignmentExpressionToExpr = def(
-        "assignmentExpressionToExpr",
-        () -> lambda("e",
+    public static final Def assignmentExpressionToExpr = def("assignmentExpressionToExpr")
+        .lam("e")
+        .to(() ->
                 cases(AssignmentExpression.TYPE_,
                     var("e"),
                     field(
@@ -423,11 +429,11 @@ public class Serde {
                         lambda("c", apply(ref(Serde.conditionalExpressionToExpr), var("c")))),
                     field(
                         AssignmentExpression.ASSIGNMENT,
-                        lambda("a", apply(ref(Serde.assignmentToExpr), var("a")))))));
+                        lambda("a", apply(ref(Serde.assignmentToExpr), var("a"))))));
 
-    public static final Def assignmentToExpr = def(
-        "assignmentToExpr",
-        () -> lambda("a",
+    public static final Def assignmentToExpr = def("assignmentToExpr")
+        .lam("a")
+        .to(() ->
                 let(
                     field("lhs",
                         proj(Assignment.TYPE_, Assignment.LHS, "a")),
@@ -466,11 +472,11 @@ public class Serde {
                         var("hydra.serialization.infixWs"),
                         var("ctop"),
                         apply(ref(Serde.leftHandSideToExpr), var("lhs")),
-                        apply(ref(Serde.expressionToExpr), var("rhs"))))));
+                        apply(ref(Serde.expressionToExpr), var("rhs")))));
 
-    public static final Def blockStatementToExpr = def(
-        "blockStatementToExpr",
-        () -> lambda("s",
+    public static final Def blockStatementToExpr = def("blockStatementToExpr")
+        .lam("s")
+        .to(() ->
                 cases(BlockStatement.TYPE_,
                     var("s"),
                     field(
@@ -496,11 +502,11 @@ public class Serde {
                                                 var("nid")))))))),
                     field(
                         BlockStatement.STATEMENT,
-                        lambda("s", apply(ref(Serde.statementToExpr), var("s")))))));
+                        lambda("s", apply(ref(Serde.statementToExpr), var("s"))))));
 
-    public static final Def blockToExpr = def(
-        "blockToExpr",
-        () -> lambda("b",
+    public static final Def blockToExpr = def("blockToExpr")
+        .lam("b")
+        .to(() ->
                 apply(
                     var("hydra.serialization.curlyBlock"),
                     var("hydra.serialization.fullBlockStyle"),
@@ -508,11 +514,11 @@ public class Serde {
                         var("hydra.serialization.newlineSep"),
                         Lists.map(
                             ref(Serde.blockStatementToExpr),
-                            apply(unwrap(Block.TYPE_), var("b")))))));
+                            apply(unwrap(Block.TYPE_), var("b"))))));
 
-    public static final Def breakStatementToExpr = def(
-        "breakStatementToExpr",
-        () -> lambda("bs",
+    public static final Def breakStatementToExpr = def("breakStatementToExpr")
+        .lam("bs")
+        .to(() ->
                 let("mlabel",
                     apply(unwrap(BreakStatement.TYPE_), var("bs")),
                     apply(
@@ -522,15 +528,15 @@ public class Serde {
                             Optionals.cat(
                                 list(
                                     just(apply(var("hydra.serialization.cst"), string("break"))),
-                                    Optionals.map(ref(Serde.identifierToExpr), var("mlabel")))))))));
+                                    Optionals.map(ref(Serde.identifierToExpr), var("mlabel"))))))));
 
-    public static final Def castExpressionLambdaToExpr = def(
-        "castExpressionLambdaToExpr",
-        () -> constant(apply(var("hydra.serialization.cst"), string("STUB:CastExpression_Lambda"))));
+    public static final Def castExpressionLambdaToExpr = def("castExpressionLambdaToExpr")
+        .to(() ->
+                constant(apply(var("hydra.serialization.cst"), string("STUB:CastExpression_Lambda"))));
 
-    public static final Def castExpressionNotPlusMinusToExpr = def(
-        "castExpressionNotPlusMinusToExpr",
-        () -> lambda("npm",
+    public static final Def castExpressionNotPlusMinusToExpr = def("castExpressionNotPlusMinusToExpr")
+        .lam("npm")
+        .to(() ->
                 let(
                     field("rb",
                         proj(CastExpression_NotPlusMinus.TYPE_, CastExpression_NotPlusMinus.REF_AND_BOUNDS, "npm")),
@@ -540,11 +546,11 @@ public class Serde {
                         var("hydra.serialization.spaceSep"),
                         list(
                             apply(ref(Serde.castExpressionRefAndBoundsToExpr), var("rb")),
-                            apply(ref(Serde.unaryExpressionToExpr), var("ex")))))));
+                            apply(ref(Serde.unaryExpressionToExpr), var("ex"))))));
 
-    public static final Def castExpressionPrimitiveToExpr = def(
-        "castExpressionPrimitiveToExpr",
-        () -> lambda("cp",
+    public static final Def castExpressionPrimitiveToExpr = def("castExpressionPrimitiveToExpr")
+        .lam("cp")
+        .to(() ->
                 let(
                     field("pt",
                         proj(CastExpression_Primitive.TYPE_, CastExpression_Primitive.TYPE, "cp")),
@@ -558,11 +564,11 @@ public class Serde {
                                 bool(false),
                                 list(
                                     apply(ref(Serde.primitiveTypeWithAnnotationsToExpr), var("pt")))),
-                            apply(ref(Serde.unaryExpressionToExpr), var("ex")))))));
+                            apply(ref(Serde.unaryExpressionToExpr), var("ex"))))));
 
-    public static final Def castExpressionRefAndBoundsToExpr = def(
-        "castExpressionRefAndBoundsToExpr",
-        () -> lambda("rab",
+    public static final Def castExpressionRefAndBoundsToExpr = def("castExpressionRefAndBoundsToExpr")
+        .lam("rab")
+        .to(() ->
                 let(
                     field("rt",
                         proj(CastExpression_RefAndBounds.TYPE_, CastExpression_RefAndBounds.TYPE, "rab")),
@@ -585,11 +591,11 @@ public class Serde {
                                                     var("hydra.serialization.spaceSep"),
                                                     Lists.map(
                                                         ref(Serde.additionalBoundToExpr),
-                                                        var("adds")))))))))))));
+                                                        var("adds"))))))))))));
 
-    public static final Def castExpressionToExpr = def(
-        "castExpressionToExpr",
-        () -> lambda("e",
+    public static final Def castExpressionToExpr = def("castExpressionToExpr")
+        .lam("e")
+        .to(() ->
                 cases(CastExpression.TYPE_,
                     var("e"),
                     field(
@@ -601,11 +607,11 @@ public class Serde {
                             apply(ref(Serde.castExpressionNotPlusMinusToExpr), var("npm")))),
                     field(
                         CastExpression.LAMBDA,
-                        lambda("l", apply(ref(Serde.castExpressionLambdaToExpr), var("l")))))));
+                        lambda("l", apply(ref(Serde.castExpressionLambdaToExpr), var("l"))))));
 
-    public static final Def classBodyDeclarationToExpr = def(
-        "classBodyDeclarationToExpr",
-        () -> lambda("d",
+    public static final Def classBodyDeclarationToExpr = def("classBodyDeclarationToExpr")
+        .lam("d")
+        .to(() ->
                 cases(ClassBodyDeclaration.TYPE_,
                     var("d"),
                     field(
@@ -619,11 +625,11 @@ public class Serde {
                         lambda("i", apply(ref(Serde.staticInitializerToExpr), var("i")))),
                     field(
                         ClassBodyDeclaration.CONSTRUCTOR_DECLARATION,
-                        lambda("d", apply(ref(Serde.constructorDeclarationToExpr), var("d")))))));
+                        lambda("d", apply(ref(Serde.constructorDeclarationToExpr), var("d"))))));
 
-    public static final Def classBodyDeclarationWithCommentsToExpr = def(
-        "classBodyDeclarationWithCommentsToExpr",
-        () -> lambda("cbdwc",
+    public static final Def classBodyDeclarationWithCommentsToExpr = def("classBodyDeclarationWithCommentsToExpr")
+        .lam("cbdwc")
+        .to(() ->
                 let(
                     field("d",
                         proj(ClassBodyDeclarationWithComments.TYPE_, ClassBodyDeclarationWithComments.VALUE, "cbdwc")),
@@ -632,11 +638,11 @@ public class Serde {
                     apply(
                         ref(Serde.withComments),
                         var("mc"),
-                        apply(ref(Serde.classBodyDeclarationToExpr), var("d"))))));
+                        apply(ref(Serde.classBodyDeclarationToExpr), var("d")))));
 
-    public static final Def classBodyToExpr = def(
-        "classBodyToExpr",
-        () -> lambda("cb",
+    public static final Def classBodyToExpr = def("classBodyToExpr")
+        .lam("cb")
+        .to(() ->
                 apply(
                     var("hydra.serialization.curlyBlock"),
                     var("hydra.serialization.fullBlockStyle"),
@@ -644,11 +650,11 @@ public class Serde {
                         var("hydra.serialization.doubleNewlineSep"),
                         Lists.map(
                             ref(Serde.classBodyDeclarationWithCommentsToExpr),
-                            apply(unwrap(ClassBody.TYPE_), var("cb")))))));
+                            apply(unwrap(ClassBody.TYPE_), var("cb"))))));
 
-    public static final Def classDeclarationToExpr = def(
-        "classDeclarationToExpr",
-        () -> lambda("d",
+    public static final Def classDeclarationToExpr = def("classDeclarationToExpr")
+        .lam("d")
+        .to(() ->
                 cases(ClassDeclaration.TYPE_,
                     var("d"),
                     field(
@@ -656,11 +662,11 @@ public class Serde {
                         lambda("nd", apply(ref(Serde.normalClassDeclarationToExpr), var("nd")))),
                     field(
                         ClassDeclaration.ENUM,
-                        lambda("ed", apply(ref(Serde.enumDeclarationToExpr), var("ed")))))));
+                        lambda("ed", apply(ref(Serde.enumDeclarationToExpr), var("ed"))))));
 
-    public static final Def classInstanceCreationExpressionQualifierToExpr = def(
-        "classInstanceCreationExpressionQualifierToExpr",
-        () -> lambda("q",
+    public static final Def classInstanceCreationExpressionQualifierToExpr = def("classInstanceCreationExpressionQualifierToExpr")
+        .lam("q")
+        .to(() ->
                 cases(ClassInstanceCreationExpression_Qualifier.TYPE_,
                     var("q"),
                     field(
@@ -668,11 +674,11 @@ public class Serde {
                         lambda("en", apply(ref(Serde.expressionNameToExpr), var("en")))),
                     field(
                         ClassInstanceCreationExpression_Qualifier.PRIMARY,
-                        lambda("p", apply(ref(Serde.primaryToExpr), var("p")))))));
+                        lambda("p", apply(ref(Serde.primaryToExpr), var("p"))))));
 
-    public static final Def classInstanceCreationExpressionToExpr = def(
-        "classInstanceCreationExpressionToExpr",
-        () -> lambda("cice",
+    public static final Def classInstanceCreationExpressionToExpr = def("classInstanceCreationExpressionToExpr")
+        .lam("cice")
+        .to(() ->
                 let(
                     field("mqual",
                         proj(ClassInstanceCreationExpression.TYPE_, ClassInstanceCreationExpression.QUALIFIER, "cice")),
@@ -687,15 +693,15 @@ public class Serde {
                                         var("q")),
                                     apply(
                                         ref(Serde.unqualifiedClassInstanceCreationExpressionToExpr),
-                                        var("e")))))))));
+                                        var("e"))))))));
 
-    public static final Def classLiteralToExpr = def(
-        "classLiteralToExpr",
-        () -> constant(apply(var("hydra.serialization.cst"), string("STUB:ClassLiteral"))));
+    public static final Def classLiteralToExpr = def("classLiteralToExpr")
+        .to(() ->
+                constant(apply(var("hydra.serialization.cst"), string("STUB:ClassLiteral"))));
 
-    public static final Def classMemberDeclarationToExpr = def(
-        "classMemberDeclarationToExpr",
-        () -> lambda("d",
+    public static final Def classMemberDeclarationToExpr = def("classMemberDeclarationToExpr")
+        .lam("d")
+        .to(() ->
                 cases(ClassMemberDeclaration.TYPE_,
                     var("d"),
                     field(
@@ -712,11 +718,11 @@ public class Serde {
                         lambda("id", apply(ref(Serde.interfaceDeclarationToExpr), var("id")))),
                     field(
                         ClassMemberDeclaration.NONE,
-                        constant(apply(var("hydra.serialization.cst"), string(";")))))));
+                        constant(apply(var("hydra.serialization.cst"), string(";"))))));
 
-    public static final Def classModifierToExpr = def(
-        "classModifierToExpr",
-        () -> lambda("m",
+    public static final Def classModifierToExpr = def("classModifierToExpr")
+        .lam("m")
+        .to(() ->
                 cases(ClassModifier.TYPE_,
                     var("m"),
                     field(
@@ -742,11 +748,11 @@ public class Serde {
                         constant(apply(var("hydra.serialization.cst"), string("final")))),
                     field(
                         ClassModifier.STRICTFP,
-                        constant(apply(var("hydra.serialization.cst"), string("strictfp")))))));
+                        constant(apply(var("hydra.serialization.cst"), string("strictfp"))))));
 
-    public static final Def classOrInterfaceTypeToExpr = def(
-        "classOrInterfaceTypeToExpr",
-        () -> lambda("cit",
+    public static final Def classOrInterfaceTypeToExpr = def("classOrInterfaceTypeToExpr")
+        .lam("cit")
+        .to(() ->
                 cases(ClassOrInterfaceType.TYPE_,
                     var("cit"),
                     field(
@@ -754,11 +760,11 @@ public class Serde {
                         lambda("ct", apply(ref(Serde.classTypeToExpr), var("ct")))),
                     field(
                         ClassOrInterfaceType.INTERFACE,
-                        lambda("it", apply(ref(Serde.interfaceTypeToExpr), var("it")))))));
+                        lambda("it", apply(ref(Serde.interfaceTypeToExpr), var("it"))))));
 
-    public static final Def classOrInterfaceTypeToInstantiateToExpr = def(
-        "classOrInterfaceTypeToInstantiateToExpr",
-        () -> lambda("coitti",
+    public static final Def classOrInterfaceTypeToInstantiateToExpr = def("classOrInterfaceTypeToInstantiateToExpr")
+        .lam("coitti")
+        .to(() ->
                 let(
                     field("ids",
                         proj(ClassOrInterfaceTypeToInstantiate.TYPE_, ClassOrInterfaceTypeToInstantiate.IDENTIFIERS, "coitti")),
@@ -772,11 +778,11 @@ public class Serde {
                                     apply(
                                         var("hydra.serialization.dotSep"),
                                         Lists.map(ref(Serde.annotatedIdentifierToExpr), var("ids")))),
-                                Optionals.map(ref(Serde.typeArgumentsOrDiamondToExpr), var("margs"))))))));
+                                Optionals.map(ref(Serde.typeArgumentsOrDiamondToExpr), var("margs")))))));
 
-    public static final Def classTypeToExpr = def(
-        "classTypeToExpr",
-        () -> lambda("ct",
+    public static final Def classTypeToExpr = def("classTypeToExpr")
+        .lam("ct")
+        .to(() ->
                 let(
                     field("anns",
                         proj(ClassType.TYPE_, ClassType.ANNOTATIONS, "ct")),
@@ -835,11 +841,11 @@ public class Serde {
                                         apply(
                                             var("hydra.serialization.angleBracesList"),
                                             var("hydra.serialization.inlineStyle"),
-                                            Lists.map(ref(Serde.typeArgumentToExpr), var("args")))))))))));
+                                            Lists.map(ref(Serde.typeArgumentToExpr), var("args"))))))))));
 
-    public static final Def compilationUnitToExpr = def(
-        "compilationUnitToExpr",
-        () -> lambda("u",
+    public static final Def compilationUnitToExpr = def("compilationUnitToExpr")
+        .lam("u")
+        .to(() ->
                 cases(CompilationUnit.TYPE_,
                     var("u"),
                     field(
@@ -886,35 +892,35 @@ public class Serde {
                                             var("warning"),
                                             var("pkgSec"),
                                             var("importsSec"),
-                                            var("typesSec"))))))))));
+                                            var("typesSec")))))))));
 
-    public static final Def conditionalAndExpressionToExpr = def(
-        "conditionalAndExpressionToExpr",
-        () -> lambda("cae",
+    public static final Def conditionalAndExpressionToExpr = def("conditionalAndExpressionToExpr")
+        .lam("cae")
+        .to(() ->
                 apply(
                     var("hydra.serialization.infixWsList"),
                     string("&&"),
                     Lists.map(
                         ref(Serde.inclusiveOrExpressionToExpr),
-                        apply(unwrap(ConditionalAndExpression.TYPE_), var("cae"))))));
+                        apply(unwrap(ConditionalAndExpression.TYPE_), var("cae")))));
 
-    public static final Def conditionalExpressionTernaryCondToExpr = def(
-        "conditionalExpressionTernaryCondToExpr",
-        () -> constant(
+    public static final Def conditionalExpressionTernaryCondToExpr = def("conditionalExpressionTernaryCondToExpr")
+        .to(() ->
+                constant(
                 apply(
                     var("hydra.serialization.cst"),
                     string("STUB:ConditionalExpression_TernaryCond"))));
 
-    public static final Def conditionalExpressionTernaryLambdaToExpr = def(
-        "conditionalExpressionTernaryLambdaToExpr",
-        () -> constant(
+    public static final Def conditionalExpressionTernaryLambdaToExpr = def("conditionalExpressionTernaryLambdaToExpr")
+        .to(() ->
+                constant(
                 apply(
                     var("hydra.serialization.cst"),
                     string("STUB:ConditionalExpression_TernaryLambda"))));
 
-    public static final Def conditionalExpressionToExpr = def(
-        "conditionalExpressionToExpr",
-        () -> lambda("c",
+    public static final Def conditionalExpressionToExpr = def("conditionalExpressionToExpr")
+        .lam("c")
+        .to(() ->
                 cases(ConditionalExpression.TYPE_,
                     var("c"),
                     field(
@@ -927,21 +933,21 @@ public class Serde {
                     field(
                         ConditionalExpression.TERNARY_LAMBDA,
                         lambda("tl",
-                            apply(ref(Serde.conditionalExpressionTernaryLambdaToExpr), var("tl")))))));
+                            apply(ref(Serde.conditionalExpressionTernaryLambdaToExpr), var("tl"))))));
 
-    public static final Def conditionalOrExpressionToExpr = def(
-        "conditionalOrExpressionToExpr",
-        () -> lambda("coe",
+    public static final Def conditionalOrExpressionToExpr = def("conditionalOrExpressionToExpr")
+        .lam("coe")
+        .to(() ->
                 apply(
                     var("hydra.serialization.infixWsList"),
                     string("||"),
                     Lists.map(
                         ref(Serde.conditionalAndExpressionToExpr),
-                        apply(unwrap(ConditionalOrExpression.TYPE_), var("coe"))))));
+                        apply(unwrap(ConditionalOrExpression.TYPE_), var("coe")))));
 
-    public static final Def constantDeclarationToExpr = def(
-        "constantDeclarationToExpr",
-        () -> lambda("cd",
+    public static final Def constantDeclarationToExpr = def("constantDeclarationToExpr")
+        .lam("cd")
+        .to(() ->
                 let(
                     field("mods",
                         proj(ConstantDeclaration.TYPE_, ConstantDeclaration.MODIFIERS, "cd")),
@@ -971,15 +977,15 @@ public class Serde {
                                             var("hydra.serialization.inlineStyle"),
                                             Lists.map(
                                                 ref(Serde.variableDeclaratorToExpr),
-                                                var("vars")))))))))));
+                                                var("vars"))))))))));
 
-    public static final Def constantModifierToExpr = def(
-        "constantModifierToExpr",
-        () -> constant(apply(var("hydra.serialization.cst"), string("STUB:ConstantModifier"))));
+    public static final Def constantModifierToExpr = def("constantModifierToExpr")
+        .to(() ->
+                constant(apply(var("hydra.serialization.cst"), string("STUB:ConstantModifier"))));
 
-    public static final Def constructorBodyToExpr = def(
-        "constructorBodyToExpr",
-        () -> lambda("cb",
+    public static final Def constructorBodyToExpr = def("constructorBodyToExpr")
+        .lam("cb")
+        .to(() ->
                 let(
                     field("minvoc",
                         proj(ConstructorBody.TYPE_, ConstructorBody.INVOCATION, "cb")),
@@ -998,11 +1004,11 @@ public class Serde {
                                     just(
                                         apply(
                                             var("hydra.serialization.newlineSep"),
-                                            Lists.map(ref(Serde.blockStatementToExpr), var("stmts")))))))))));
+                                            Lists.map(ref(Serde.blockStatementToExpr), var("stmts"))))))))));
 
-    public static final Def constructorDeclarationToExpr = def(
-        "constructorDeclarationToExpr",
-        () -> lambda("cd",
+    public static final Def constructorDeclarationToExpr = def("constructorDeclarationToExpr")
+        .lam("cd")
+        .to(() ->
                 let(
                     field("mods",
                         proj(ConstructorDeclaration.TYPE_, ConstructorDeclaration.MODIFIERS, "cd")),
@@ -1027,11 +1033,11 @@ public class Serde {
                                                 var("mods"))))),
                                 just(apply(ref(Serde.constructorDeclaratorToExpr), var("cons"))),
                                 Optionals.map(ref(Serde.throwsToExpr), var("mthrows")),
-                                just(apply(ref(Serde.constructorBodyToExpr), var("body")))))))));
+                                just(apply(ref(Serde.constructorBodyToExpr), var("body"))))))));
 
-    public static final Def constructorDeclaratorToExpr = def(
-        "constructorDeclaratorToExpr",
-        () -> lambda("cd",
+    public static final Def constructorDeclaratorToExpr = def("constructorDeclaratorToExpr")
+        .lam("cd")
+        .to(() ->
                 let(
                     field("tparams",
                         proj(ConstructorDeclarator.TYPE_, ConstructorDeclarator.PARAMETERS, "cd")),
@@ -1057,11 +1063,11 @@ public class Serde {
                                 just(
                                     apply(
                                         var("hydra.serialization.parenListAdaptive"),
-                                        Lists.map(ref(Serde.formalParameterToExpr), var("fparams"))))))))));
+                                        Lists.map(ref(Serde.formalParameterToExpr), var("fparams")))))))));
 
-    public static final Def constructorModifierToExpr = def(
-        "constructorModifierToExpr",
-        () -> lambda("m",
+    public static final Def constructorModifierToExpr = def("constructorModifierToExpr")
+        .lam("m")
+        .to(() ->
                 cases(ConstructorModifier.TYPE_,
                     var("m"),
                     field(
@@ -1075,11 +1081,11 @@ public class Serde {
                         constant(apply(var("hydra.serialization.cst"), string("protected")))),
                     field(
                         ConstructorModifier.PRIVATE,
-                        constant(apply(var("hydra.serialization.cst"), string("private")))))));
+                        constant(apply(var("hydra.serialization.cst"), string("private"))))));
 
-    public static final Def continueStatementToExpr = def(
-        "continueStatementToExpr",
-        () -> lambda("cs",
+    public static final Def continueStatementToExpr = def("continueStatementToExpr")
+        .lam("cs")
+        .to(() ->
                 let("mlabel",
                     apply(unwrap(ContinueStatement.TYPE_), var("cs")),
                     apply(
@@ -1089,24 +1095,24 @@ public class Serde {
                             Optionals.cat(
                                 list(
                                     just(apply(var("hydra.serialization.cst"), string("continue"))),
-                                    Optionals.map(ref(Serde.identifierToExpr), var("mlabel")))))))));
+                                    Optionals.map(ref(Serde.identifierToExpr), var("mlabel"))))))));
 
-    public static final Def dimsToExpr = def(
-        "dimsToExpr",
-        () -> lambda("d",
+    public static final Def dimsToExpr = def("dimsToExpr")
+        .lam("d")
+        .to(() ->
                 apply(
                     var("hydra.serialization.noSep"),
                     Lists.map(
                         constant(apply(var("hydra.serialization.cst"), string("[]"))),
-                        apply(unwrap(Dims.TYPE_), var("d"))))));
+                        apply(unwrap(Dims.TYPE_), var("d")))));
 
-    public static final Def doStatementToExpr = def(
-        "doStatementToExpr",
-        () -> constant(apply(var("hydra.serialization.cst"), string("STUB:DoStatement"))));
+    public static final Def doStatementToExpr = def("doStatementToExpr")
+        .to(() ->
+                constant(apply(var("hydra.serialization.cst"), string("STUB:DoStatement"))));
 
-    public static final Def elementValuePairToExpr = def(
-        "elementValuePairToExpr",
-        () -> lambda("evp",
+    public static final Def elementValuePairToExpr = def("elementValuePairToExpr")
+        .lam("evp")
+        .to(() ->
                 let(
                     field("k",
                         proj(ElementValuePair.TYPE_, ElementValuePair.KEY, "evp")),
@@ -1116,11 +1122,11 @@ public class Serde {
                         var("hydra.serialization.infixWs"),
                         string("="),
                         apply(ref(Serde.identifierToExpr), var("k")),
-                        apply(ref(Serde.elementValueToExpr), var("v"))))));
+                        apply(ref(Serde.elementValueToExpr), var("v")))));
 
-    public static final Def elementValueToExpr = def(
-        "elementValueToExpr",
-        () -> lambda("ev",
+    public static final Def elementValueToExpr = def("elementValueToExpr")
+        .lam("ev")
+        .to(() ->
                 cases(ElementValue.TYPE_,
                     var("ev"),
                     field(
@@ -1139,15 +1145,15 @@ public class Serde {
                                         var("evai")))))),
                     field(
                         ElementValue.ANNOTATION,
-                        lambda("ann", apply(ref(Serde.annotationToExpr), var("ann")))))));
+                        lambda("ann", apply(ref(Serde.annotationToExpr), var("ann"))))));
 
-    public static final Def enumDeclarationToExpr = def(
-        "enumDeclarationToExpr",
-        () -> constant(apply(var("hydra.serialization.cst"), string("STUB:EnumDeclaration"))));
+    public static final Def enumDeclarationToExpr = def("enumDeclarationToExpr")
+        .to(() ->
+                constant(apply(var("hydra.serialization.cst"), string("STUB:EnumDeclaration"))));
 
-    public static final Def equalityExpressionToExpr = def(
-        "equalityExpressionToExpr",
-        () -> lambda("e",
+    public static final Def equalityExpressionToExpr = def("equalityExpressionToExpr")
+        .lam("e")
+        .to(() ->
                 cases(EqualityExpression.TYPE_,
                     var("e"),
                     field(
@@ -1176,26 +1182,26 @@ public class Serde {
                                     proj(EqualityExpression_Binary.TYPE_, EqualityExpression_Binary.LHS, "b")),
                                 apply(
                                     ref(Serde.relationalExpressionToExpr),
-                                    proj(EqualityExpression_Binary.TYPE_, EqualityExpression_Binary.RHS, "b"))))))));
+                                    proj(EqualityExpression_Binary.TYPE_, EqualityExpression_Binary.RHS, "b")))))));
 
-    public static final Def exclusiveOrExpressionToExpr = def(
-        "exclusiveOrExpressionToExpr",
-        () -> lambda("eoe",
+    public static final Def exclusiveOrExpressionToExpr = def("exclusiveOrExpressionToExpr")
+        .lam("eoe")
+        .to(() ->
                 apply(
                     var("hydra.serialization.infixWsList"),
                     string("^"),
                     Lists.map(
                         ref(Serde.andExpressionToExpr),
-                        apply(unwrap(ExclusiveOrExpression.TYPE_), var("eoe"))))));
+                        apply(unwrap(ExclusiveOrExpression.TYPE_), var("eoe")))));
 
-    public static final Def explicitConstructorInvocationToExpr = def(
-        "explicitConstructorInvocationToExpr",
-        () -> constant(
+    public static final Def explicitConstructorInvocationToExpr = def("explicitConstructorInvocationToExpr")
+        .to(() ->
+                constant(
                 apply(var("hydra.serialization.cst"), string("STUB:ExplicitConstructorInvocation"))));
 
-    public static final Def expressionNameToExpr = def(
-        "expressionNameToExpr",
-        () -> lambda("en",
+    public static final Def expressionNameToExpr = def("expressionNameToExpr")
+        .lam("en")
+        .to(() ->
                 let(
                     field("mqual",
                         proj(ExpressionName.TYPE_, ExpressionName.QUALIFIER, "en")),
@@ -1206,20 +1212,20 @@ public class Serde {
                         Optionals.cat(
                             list(
                                 Optionals.map(ref(Serde.ambiguousNameToExpr), var("mqual")),
-                                just(apply(ref(Serde.identifierToExpr), var("id")))))))));
+                                just(apply(ref(Serde.identifierToExpr), var("id"))))))));
 
-    public static final Def expressionStatementToExpr = def(
-        "expressionStatementToExpr",
-        () -> lambda("es",
+    public static final Def expressionStatementToExpr = def("expressionStatementToExpr")
+        .lam("es")
+        .to(() ->
                 apply(
                     var("hydra.serialization.withSemi"),
                     apply(
                         ref(Serde.statementExpressionToExpr),
-                        apply(unwrap(ExpressionStatement.TYPE_), var("es"))))));
+                        apply(unwrap(ExpressionStatement.TYPE_), var("es")))));
 
-    public static final Def expressionToExpr = def(
-        "expressionToExpr",
-        () -> lambda("e",
+    public static final Def expressionToExpr = def("expressionToExpr")
+        .lam("e")
+        .to(() ->
                 cases(Expression.TYPE_,
                     var("e"),
                     field(
@@ -1227,11 +1233,11 @@ public class Serde {
                         lambda("l", apply(ref(Serde.lambdaExpressionToExpr), var("l")))),
                     field(
                         Expression.ASSIGNMENT,
-                        lambda("a", apply(ref(Serde.assignmentExpressionToExpr), var("a")))))));
+                        lambda("a", apply(ref(Serde.assignmentExpressionToExpr), var("a"))))));
 
-    public static final Def fieldAccessToExpr = def(
-        "fieldAccessToExpr",
-        () -> lambda("fa",
+    public static final Def fieldAccessToExpr = def("fieldAccessToExpr")
+        .lam("fa")
+        .to(() ->
                 let(
                     field("qual",
                         proj(FieldAccess.TYPE_, FieldAccess.QUALIFIER, "fa")),
@@ -1263,11 +1269,11 @@ public class Serde {
                                     list(
                                         apply(ref(Serde.typeNameToExpr), var("tn")),
                                         apply(var("hydra.serialization.cst"), string("super")),
-                                        apply(ref(Serde.identifierToExpr), var("id"))))))))));
+                                        apply(ref(Serde.identifierToExpr), var("id")))))))));
 
-    public static final Def fieldDeclarationToExpr = def(
-        "fieldDeclarationToExpr",
-        () -> lambda("fd",
+    public static final Def fieldDeclarationToExpr = def("fieldDeclarationToExpr")
+        .lam("fd")
+        .to(() ->
                 let(
                     field("mods",
                         proj(FieldDeclaration.TYPE_, FieldDeclaration.MODIFIERS, "fd")),
@@ -1297,11 +1303,11 @@ public class Serde {
                                             var("hydra.serialization.inlineStyle"),
                                             Lists.map(
                                                 ref(Serde.variableDeclaratorToExpr),
-                                                var("vars")))))))))));
+                                                var("vars"))))))))));
 
-    public static final Def fieldModifierToExpr = def(
-        "fieldModifierToExpr",
-        () -> lambda("m",
+    public static final Def fieldModifierToExpr = def("fieldModifierToExpr")
+        .lam("m")
+        .to(() ->
                 cases(FieldModifier.TYPE_,
                     var("m"),
                     field(
@@ -1327,21 +1333,21 @@ public class Serde {
                         constant(apply(var("hydra.serialization.cst"), string("transient")))),
                     field(
                         FieldModifier.VOLATILE,
-                        constant(apply(var("hydra.serialization.cst"), string("volatile")))))));
+                        constant(apply(var("hydra.serialization.cst"), string("volatile"))))));
 
-    public static final Def floatingPointLiteralToExpr = def(
-        "floatingPointLiteralToExpr",
-        () -> lambda("fl",
+    public static final Def floatingPointLiteralToExpr = def("floatingPointLiteralToExpr")
+        .lam("fl")
+        .to(() ->
                 apply(
                     var("hydra.serialization.cst"),
                     apply(
                         ref(Serde.javaFloatLiteralText),
                         Literals.showFloat64(
-                            apply(unwrap(FloatingPointLiteral.TYPE_), var("fl")))))));
+                            apply(unwrap(FloatingPointLiteral.TYPE_), var("fl"))))));
 
-    public static final Def floatingPointTypeToExpr = def(
-        "floatingPointTypeToExpr",
-        () -> lambda("ft",
+    public static final Def floatingPointTypeToExpr = def("floatingPointTypeToExpr")
+        .lam("ft")
+        .to(() ->
                 cases(FloatingPointType.TYPE_,
                     var("ft"),
                     field(
@@ -1349,15 +1355,15 @@ public class Serde {
                         constant(apply(var("hydra.serialization.cst"), string("float")))),
                     field(
                         FloatingPointType.DOUBLE,
-                        constant(apply(var("hydra.serialization.cst"), string("double")))))));
+                        constant(apply(var("hydra.serialization.cst"), string("double"))))));
 
-    public static final Def forStatementToExpr = def(
-        "forStatementToExpr",
-        () -> constant(apply(var("hydra.serialization.cst"), string("STUB:ForStatement"))));
+    public static final Def forStatementToExpr = def("forStatementToExpr")
+        .to(() ->
+                constant(apply(var("hydra.serialization.cst"), string("STUB:ForStatement"))));
 
-    public static final Def formalParameterSimpleToExpr = def(
-        "formalParameterSimpleToExpr",
-        () -> lambda("fps",
+    public static final Def formalParameterSimpleToExpr = def("formalParameterSimpleToExpr")
+        .lam("fps")
+        .to(() ->
                 let(
                     field("mods",
                         proj(FormalParameter_Simple.TYPE_, FormalParameter_Simple.MODIFIERS, "fps")),
@@ -1379,11 +1385,11 @@ public class Serde {
                                                 ref(Serde.variableModifierToExpr),
                                                 var("mods"))))),
                                 just(apply(ref(Serde.unannTypeToExpr), var("typ"))),
-                                just(apply(ref(Serde.variableDeclaratorIdToExpr), var("id")))))))));
+                                just(apply(ref(Serde.variableDeclaratorIdToExpr), var("id"))))))));
 
-    public static final Def formalParameterToExpr = def(
-        "formalParameterToExpr",
-        () -> lambda("p",
+    public static final Def formalParameterToExpr = def("formalParameterToExpr")
+        .lam("p")
+        .to(() ->
                 cases(FormalParameter.TYPE_,
                     var("p"),
                     field(
@@ -1391,22 +1397,22 @@ public class Serde {
                         lambda("s", apply(ref(Serde.formalParameterSimpleToExpr), var("s")))),
                     field(
                         FormalParameter.VARIABLE_ARITY,
-                        lambda("v", apply(ref(Serde.variableArityParameterToExpr), var("v")))))));
+                        lambda("v", apply(ref(Serde.variableArityParameterToExpr), var("v"))))));
 
-    public static final Def identifierToExpr = def(
-        "identifierToExpr",
-        () -> lambda("id",
+    public static final Def identifierToExpr = def("identifierToExpr")
+        .lam("id")
+        .to(() ->
                 apply(
                     var("hydra.serialization.cst"),
-                    apply(unwrap(Identifier.TYPE_), var("id")))));
+                    apply(unwrap(Identifier.TYPE_), var("id"))));
 
-    public static final Def ifThenElseStatementToExpr = def(
-        "ifThenElseStatementToExpr",
-        () -> constant(apply(var("hydra.serialization.cst"), string("STUB:IfThenElseStatement"))));
+    public static final Def ifThenElseStatementToExpr = def("ifThenElseStatementToExpr")
+        .to(() ->
+                constant(apply(var("hydra.serialization.cst"), string("STUB:IfThenElseStatement"))));
 
-    public static final Def ifThenStatementToExpr = def(
-        "ifThenStatementToExpr",
-        () -> lambda("its",
+    public static final Def ifThenStatementToExpr = def("ifThenStatementToExpr")
+        .lam("its")
+        .to(() ->
                 let(
                     field("cond",
                         proj(IfThenStatement.TYPE_, IfThenStatement.EXPRESSION, "its")),
@@ -1423,11 +1429,11 @@ public class Serde {
                             apply(
                                 var("hydra.serialization.curlyBlock"),
                                 var("hydra.serialization.fullBlockStyle"),
-                                apply(ref(Serde.statementToExpr), var("thn"))))))));
+                                apply(ref(Serde.statementToExpr), var("thn")))))));
 
-    public static final Def importDeclarationToExpr = def(
-        "importDeclarationToExpr",
-        () -> lambda("imp",
+    public static final Def importDeclarationToExpr = def("importDeclarationToExpr")
+        .lam("imp")
+        .to(() ->
                 cases(ImportDeclaration.TYPE_,
                     var("imp"),
                     field(
@@ -1461,25 +1467,25 @@ public class Serde {
                         constant(
                             apply(
                                 var("hydra.serialization.cst"),
-                                string("STUB:ImportDeclarationStaticImportOnDemand")))))));
+                                string("STUB:ImportDeclarationStaticImportOnDemand"))))));
 
-    public static final Def inclusiveOrExpressionToExpr = def(
-        "inclusiveOrExpressionToExpr",
-        () -> lambda("ioe",
+    public static final Def inclusiveOrExpressionToExpr = def("inclusiveOrExpressionToExpr")
+        .lam("ioe")
+        .to(() ->
                 apply(
                     var("hydra.serialization.infixWsList"),
                     string("|"),
                     Lists.map(
                         ref(Serde.exclusiveOrExpressionToExpr),
-                        apply(unwrap(InclusiveOrExpression.TYPE_), var("ioe"))))));
+                        apply(unwrap(InclusiveOrExpression.TYPE_), var("ioe")))));
 
-    public static final Def instanceInitializerToExpr = def(
-        "instanceInitializerToExpr",
-        () -> constant(apply(var("hydra.serialization.cst"), string("STUB:InstanceInitializer"))));
+    public static final Def instanceInitializerToExpr = def("instanceInitializerToExpr")
+        .to(() ->
+                constant(apply(var("hydra.serialization.cst"), string("STUB:InstanceInitializer"))));
 
-    public static final Def integerLiteralToExpr = def(
-        "integerLiteralToExpr",
-        () -> lambda("il",
+    public static final Def integerLiteralToExpr = def("integerLiteralToExpr")
+        .lam("il")
+        .to(() ->
                 let(
                     field("i",
                         apply(unwrap(IntegerLiteral.TYPE_), var("il"))),
@@ -1496,11 +1502,11 @@ public class Serde {
                             string(""))),
                     apply(
                         var("hydra.serialization.cst"),
-                        Strings.cat2(Literals.showBigint(var("i")), var("suffix"))))));
+                        Strings.cat2(Literals.showBigint(var("i")), var("suffix")))));
 
-    public static final Def integralTypeToExpr = def(
-        "integralTypeToExpr",
-        () -> lambda("t",
+    public static final Def integralTypeToExpr = def("integralTypeToExpr")
+        .lam("t")
+        .to(() ->
                 cases(IntegralType.TYPE_,
                     var("t"),
                     field(
@@ -1517,11 +1523,11 @@ public class Serde {
                         constant(apply(var("hydra.serialization.cst"), string("long")))),
                     field(
                         IntegralType.CHAR,
-                        constant(apply(var("hydra.serialization.cst"), string("char")))))));
+                        constant(apply(var("hydra.serialization.cst"), string("char"))))));
 
-    public static final Def interfaceBodyToExpr = def(
-        "interfaceBodyToExpr",
-        () -> lambda("ib",
+    public static final Def interfaceBodyToExpr = def("interfaceBodyToExpr")
+        .lam("ib")
+        .to(() ->
                 apply(
                     var("hydra.serialization.curlyBlock"),
                     var("hydra.serialization.fullBlockStyle"),
@@ -1529,11 +1535,11 @@ public class Serde {
                         var("hydra.serialization.doubleNewlineSep"),
                         Lists.map(
                             ref(Serde.interfaceMemberDeclarationWithCommentsToExpr),
-                            apply(unwrap(InterfaceBody.TYPE_), var("ib")))))));
+                            apply(unwrap(InterfaceBody.TYPE_), var("ib"))))));
 
-    public static final Def interfaceDeclarationToExpr = def(
-        "interfaceDeclarationToExpr",
-        () -> lambda("d",
+    public static final Def interfaceDeclarationToExpr = def("interfaceDeclarationToExpr")
+        .lam("d")
+        .to(() ->
                 cases(InterfaceDeclaration.TYPE_,
                     var("d"),
                     field(
@@ -1541,11 +1547,11 @@ public class Serde {
                         lambda("n", apply(ref(Serde.normalInterfaceDeclarationToExpr), var("n")))),
                     field(
                         InterfaceDeclaration.ANNOTATION_INTERFACE,
-                        lambda("a", apply(ref(Serde.annotationTypeDeclarationToExpr), var("a")))))));
+                        lambda("a", apply(ref(Serde.annotationTypeDeclarationToExpr), var("a"))))));
 
-    public static final Def interfaceMemberDeclarationToExpr = def(
-        "interfaceMemberDeclarationToExpr",
-        () -> lambda("d",
+    public static final Def interfaceMemberDeclarationToExpr = def("interfaceMemberDeclarationToExpr")
+        .lam("d")
+        .to(() ->
                 cases(InterfaceMemberDeclaration.TYPE_,
                     var("d"),
                     field(
@@ -1559,11 +1565,11 @@ public class Serde {
                         lambda("cd", apply(ref(Serde.classDeclarationToExpr), var("cd")))),
                     field(
                         InterfaceMemberDeclaration.INTERFACE,
-                        lambda("id", apply(ref(Serde.interfaceDeclarationToExpr), var("id")))))));
+                        lambda("id", apply(ref(Serde.interfaceDeclarationToExpr), var("id"))))));
 
-    public static final Def interfaceMemberDeclarationWithCommentsToExpr = def(
-        "interfaceMemberDeclarationWithCommentsToExpr",
-        () -> lambda("imdwc",
+    public static final Def interfaceMemberDeclarationWithCommentsToExpr = def("interfaceMemberDeclarationWithCommentsToExpr")
+        .lam("imdwc")
+        .to(() ->
                 let(
                     field("d",
                         proj(InterfaceMemberDeclarationWithComments.TYPE_, InterfaceMemberDeclarationWithComments.VALUE, "imdwc")),
@@ -1572,11 +1578,11 @@ public class Serde {
                     apply(
                         ref(Serde.withComments),
                         var("mc"),
-                        apply(ref(Serde.interfaceMemberDeclarationToExpr), var("d"))))));
+                        apply(ref(Serde.interfaceMemberDeclarationToExpr), var("d")))));
 
-    public static final Def interfaceMethodDeclarationToExpr = def(
-        "interfaceMethodDeclarationToExpr",
-        () -> lambda("imd",
+    public static final Def interfaceMethodDeclarationToExpr = def("interfaceMethodDeclarationToExpr")
+        .lam("imd")
+        .to(() ->
                 let(
                     field("mods",
                         proj(InterfaceMethodDeclaration.TYPE_, InterfaceMethodDeclaration.MODIFIERS, "imd")),
@@ -1598,11 +1604,11 @@ public class Serde {
                                                 ref(Serde.interfaceMethodModifierToExpr),
                                                 var("mods"))))),
                                 just(apply(ref(Serde.methodHeaderToExpr), var("header"))),
-                                just(apply(ref(Serde.methodBodyToExpr), var("body")))))))));
+                                just(apply(ref(Serde.methodBodyToExpr), var("body"))))))));
 
-    public static final Def interfaceMethodModifierToExpr = def(
-        "interfaceMethodModifierToExpr",
-        () -> lambda("m",
+    public static final Def interfaceMethodModifierToExpr = def("interfaceMethodModifierToExpr")
+        .lam("m")
+        .to(() ->
                 cases(InterfaceMethodModifier.TYPE_,
                     var("m"),
                     field(
@@ -1625,11 +1631,11 @@ public class Serde {
                         constant(apply(var("hydra.serialization.cst"), string("static")))),
                     field(
                         InterfaceMethodModifier.STRICTFP,
-                        constant(apply(var("hydra.serialization.cst"), string("strictfp")))))));
+                        constant(apply(var("hydra.serialization.cst"), string("strictfp"))))));
 
-    public static final Def interfaceModifierToExpr = def(
-        "interfaceModifierToExpr",
-        () -> lambda("m",
+    public static final Def interfaceModifierToExpr = def("interfaceModifierToExpr")
+        .lam("m")
+        .to(() ->
                 cases(InterfaceModifier.TYPE_,
                     var("m"),
                     field(
@@ -1652,18 +1658,18 @@ public class Serde {
                         constant(apply(var("hydra.serialization.cst"), string("static")))),
                     field(
                         InterfaceModifier.STRICTFP,
-                        constant(apply(var("hydra.serialization.cst"), string("strictfp")))))));
+                        constant(apply(var("hydra.serialization.cst"), string("strictfp"))))));
 
-    public static final Def interfaceTypeToExpr = def(
-        "interfaceTypeToExpr",
-        () -> lambda("it",
+    public static final Def interfaceTypeToExpr = def("interfaceTypeToExpr")
+        .lam("it")
+        .to(() ->
                 apply(
                     ref(Serde.classTypeToExpr),
-                    apply(unwrap(InterfaceType.TYPE_), var("it")))));
+                    apply(unwrap(InterfaceType.TYPE_), var("it"))));
 
-    public static final Def javaFloatLiteralText = def(
-        "javaFloatLiteralText",
-        () -> lambda("s",
+    public static final Def javaFloatLiteralText = def("javaFloatLiteralText")
+        .lam("s")
+        .to(() ->
                 Logic.ifElse(
                     Equality.equal(var("s"), string("NaN")),
                     string("Double.NaN"),
@@ -1673,15 +1679,15 @@ public class Serde {
                         Logic.ifElse(
                             Equality.equal(var("s"), string("-Infinity")),
                             string("Double.NEGATIVE_INFINITY"),
-                            var("s"))))));
+                            var("s")))));
 
-    public static final Def labeledStatementToExpr = def(
-        "labeledStatementToExpr",
-        () -> constant(apply(var("hydra.serialization.cst"), string("STUB:LabeledStatement"))));
+    public static final Def labeledStatementToExpr = def("labeledStatementToExpr")
+        .to(() ->
+                constant(apply(var("hydra.serialization.cst"), string("STUB:LabeledStatement"))));
 
-    public static final Def lambdaBodyToExpr = def(
-        "lambdaBodyToExpr",
-        () -> lambda("b",
+    public static final Def lambdaBodyToExpr = def("lambdaBodyToExpr")
+        .lam("b")
+        .to(() ->
                 cases(LambdaBody.TYPE_,
                     var("b"),
                     field(
@@ -1689,11 +1695,11 @@ public class Serde {
                         lambda("e", apply(ref(Serde.expressionToExpr), var("e")))),
                     field(
                         LambdaBody.BLOCK,
-                        lambda("b", apply(ref(Serde.blockToExpr), var("b")))))));
+                        lambda("b", apply(ref(Serde.blockToExpr), var("b"))))));
 
-    public static final Def lambdaExpressionToExpr = def(
-        "lambdaExpressionToExpr",
-        () -> lambda("le",
+    public static final Def lambdaExpressionToExpr = def("lambdaExpressionToExpr")
+        .lam("le")
+        .to(() ->
                 let(
                     field("params",
                         proj(LambdaExpression.TYPE_, LambdaExpression.PARAMETERS, "le")),
@@ -1703,11 +1709,11 @@ public class Serde {
                         var("hydra.serialization.infixWs"),
                         string("->"),
                         apply(ref(Serde.lambdaParametersToExpr), var("params")),
-                        apply(ref(Serde.lambdaBodyToExpr), var("body"))))));
+                        apply(ref(Serde.lambdaBodyToExpr), var("body")))));
 
-    public static final Def lambdaParametersToExpr = def(
-        "lambdaParametersToExpr",
-        () -> lambda("p",
+    public static final Def lambdaParametersToExpr = def("lambdaParametersToExpr")
+        .lam("p")
+        .to(() ->
                 cases(LambdaParameters.TYPE_,
                     var("p"),
                     field(
@@ -1719,11 +1725,11 @@ public class Serde {
                                 Lists.map(ref(Serde.lambdaParametersToExpr), var("l"))))),
                     field(
                         LambdaParameters.SINGLE,
-                        lambda("id", apply(ref(Serde.identifierToExpr), var("id")))))));
+                        lambda("id", apply(ref(Serde.identifierToExpr), var("id"))))));
 
-    public static final Def leftHandSideToExpr = def(
-        "leftHandSideToExpr",
-        () -> lambda("lhs",
+    public static final Def leftHandSideToExpr = def("leftHandSideToExpr")
+        .lam("lhs")
+        .to(() ->
                 cases(LeftHandSide.TYPE_,
                     var("lhs"),
                     field(
@@ -1734,11 +1740,11 @@ public class Serde {
                         lambda("fa", apply(ref(Serde.fieldAccessToExpr), var("fa")))),
                     field(
                         LeftHandSide.ARRAY_ACCESS,
-                        lambda("aa", apply(ref(Serde.arrayAccessToExpr), var("aa")))))));
+                        lambda("aa", apply(ref(Serde.arrayAccessToExpr), var("aa"))))));
 
-    public static final Def literalToExpr = def(
-        "literalToExpr",
-        () -> lambda("l",
+    public static final Def literalToExpr = def("literalToExpr")
+        .lam("l")
+        .to(() ->
                 cases(Literal.TYPE_,
                     var("l"),
                     field(
@@ -1797,11 +1803,11 @@ public class Serde {
                                             string("'"))))))),
                     field(
                         Literal.STRING,
-                        lambda("sl", apply(ref(Serde.stringLiteralToExpr), var("sl")))))));
+                        lambda("sl", apply(ref(Serde.stringLiteralToExpr), var("sl"))))));
 
-    public static final Def localNameToExpr = def(
-        "localNameToExpr",
-        () -> lambda("t",
+    public static final Def localNameToExpr = def("localNameToExpr")
+        .lam("t")
+        .to(() ->
                 cases(LocalVariableType.TYPE_,
                     var("t"),
                     field(
@@ -1809,22 +1815,22 @@ public class Serde {
                         lambda("ut", apply(ref(Serde.unannTypeToExpr), var("ut")))),
                     field(
                         LocalVariableType.VAR,
-                        constant(apply(var("hydra.serialization.cst"), string("var")))))));
+                        constant(apply(var("hydra.serialization.cst"), string("var"))))));
 
-    public static final Def localVariableDeclarationStatementToExpr = def(
-        "localVariableDeclarationStatementToExpr",
-        () -> lambda("lvds",
+    public static final Def localVariableDeclarationStatementToExpr = def("localVariableDeclarationStatementToExpr")
+        .lam("lvds")
+        .to(() ->
                 apply(
                     var("hydra.serialization.withSemi"),
                     apply(
                         ref(Serde.localVariableDeclarationToExpr),
                         apply(
                             unwrap(LocalVariableDeclarationStatement.TYPE_),
-                            var("lvds"))))));
+                            var("lvds")))));
 
-    public static final Def localVariableDeclarationToExpr = def(
-        "localVariableDeclarationToExpr",
-        () -> lambda("lvd",
+    public static final Def localVariableDeclarationToExpr = def("localVariableDeclarationToExpr")
+        .lam("lvd")
+        .to(() ->
                 let(
                     field("mods",
                         proj(LocalVariableDeclaration.TYPE_, LocalVariableDeclaration.MODIFIERS, "lvd")),
@@ -1850,21 +1856,21 @@ public class Serde {
                                     apply(
                                         var("hydra.serialization.commaSep"),
                                         var("hydra.serialization.inlineStyle"),
-                                        Lists.map(ref(Serde.variableDeclaratorToExpr), var("decls"))))))))));
+                                        Lists.map(ref(Serde.variableDeclaratorToExpr), var("decls")))))))));
 
-    public static final Def markerAnnotationToExpr = def(
-        "markerAnnotationToExpr",
-        () -> lambda("ma",
+    public static final Def markerAnnotationToExpr = def("markerAnnotationToExpr")
+        .lam("ma")
+        .to(() ->
                 apply(
                     var("hydra.serialization.prefix"),
                     string("@"),
                     apply(
                         ref(Serde.typeNameToExpr),
-                        apply(unwrap(MarkerAnnotation.TYPE_), var("ma"))))));
+                        apply(unwrap(MarkerAnnotation.TYPE_), var("ma")))));
 
-    public static final Def methodBodyToExpr = def(
-        "methodBodyToExpr",
-        () -> lambda("b",
+    public static final Def methodBodyToExpr = def("methodBodyToExpr")
+        .lam("b")
+        .to(() ->
                 cases(MethodBody.TYPE_,
                     var("b"),
                     field(
@@ -1872,11 +1878,11 @@ public class Serde {
                         lambda("block", apply(ref(Serde.blockToExpr), var("block")))),
                     field(
                         MethodBody.NONE,
-                        constant(apply(var("hydra.serialization.cst"), string(";")))))));
+                        constant(apply(var("hydra.serialization.cst"), string(";"))))));
 
-    public static final Def methodDeclarationToExpr = def(
-        "methodDeclarationToExpr",
-        () -> lambda("md",
+    public static final Def methodDeclarationToExpr = def("methodDeclarationToExpr")
+        .lam("md")
+        .to(() ->
                 let(
                     field("anns",
                         proj(MethodDeclaration.TYPE_, MethodDeclaration.ANNOTATIONS, "md")),
@@ -1913,11 +1919,11 @@ public class Serde {
                                         apply(
                                             var("hydra.serialization.newlineSep"),
                                             Lists.map(ref(Serde.annotationToExpr), var("anns"))))),
-                                just(var("headerAndBody"))))))));
+                                just(var("headerAndBody")))))));
 
-    public static final Def methodDeclaratorToExpr = def(
-        "methodDeclaratorToExpr",
-        () -> lambda("md",
+    public static final Def methodDeclaratorToExpr = def("methodDeclaratorToExpr")
+        .lam("md")
+        .to(() ->
                 let(
                     field("id",
                         proj(MethodDeclarator.TYPE_, MethodDeclarator.IDENTIFIER, "md")),
@@ -1929,11 +1935,11 @@ public class Serde {
                             apply(ref(Serde.identifierToExpr), var("id")),
                             apply(
                                 var("hydra.serialization.parenListAdaptive"),
-                                Lists.map(ref(Serde.formalParameterToExpr), var("params"))))))));
+                                Lists.map(ref(Serde.formalParameterToExpr), var("params")))))));
 
-    public static final Def methodHeaderToExpr = def(
-        "methodHeaderToExpr",
-        () -> lambda("mh",
+    public static final Def methodHeaderToExpr = def("methodHeaderToExpr")
+        .lam("mh")
+        .to(() ->
                 let(
                     field("params",
                         proj(MethodHeader.TYPE_, MethodHeader.PARAMETERS, "mh")),
@@ -1957,11 +1963,11 @@ public class Serde {
                                             Lists.map(ref(Serde.typeParameterToExpr), var("params"))))),
                                 just(apply(ref(Serde.resultToExpr), var("result"))),
                                 just(apply(ref(Serde.methodDeclaratorToExpr), var("decl"))),
-                                Optionals.map(ref(Serde.throwsToExpr), var("mthrows"))))))));
+                                Optionals.map(ref(Serde.throwsToExpr), var("mthrows")))))));
 
-    public static final Def methodInvocationToExpr = def(
-        "methodInvocationToExpr",
-        () -> lambda("mi",
+    public static final Def methodInvocationToExpr = def("methodInvocationToExpr")
+        .lam("mi")
+        .to(() ->
                 let(
                     field("header",
                         proj(MethodInvocation.TYPE_, MethodInvocation.HEADER, "mi")),
@@ -2061,11 +2067,11 @@ public class Serde {
                                                                 var("hydra.serialization.cst"),
                                                                 string("super")),
                                                             var("idSec"))))))))))),
-                    apply(var("hydra.serialization.noSep"), list(var("headerSec"), var("argSec"))))));
+                    apply(var("hydra.serialization.noSep"), list(var("headerSec"), var("argSec")))));
 
-    public static final Def methodModifierToExpr = def(
-        "methodModifierToExpr",
-        () -> lambda("m",
+    public static final Def methodModifierToExpr = def("methodModifierToExpr")
+        .lam("m")
+        .to(() ->
                 cases(MethodModifier.TYPE_,
                     var("m"),
                     field(
@@ -2097,22 +2103,22 @@ public class Serde {
                         constant(apply(var("hydra.serialization.cst"), string("native")))),
                     field(
                         MethodModifier.STRICTFP,
-                        constant(apply(var("hydra.serialization.cst"), string("strictfp")))))));
+                        constant(apply(var("hydra.serialization.cst"), string("strictfp"))))));
 
-    public static final Def methodNameToExpr = def(
-        "methodNameToExpr",
-        () -> lambda("mn",
+    public static final Def methodNameToExpr = def("methodNameToExpr")
+        .lam("mn")
+        .to(() ->
                 apply(
                     ref(Serde.identifierToExpr),
-                    apply(unwrap(MethodName.TYPE_), var("mn")))));
+                    apply(unwrap(MethodName.TYPE_), var("mn"))));
 
-    public static final Def methodReferenceToExpr = def(
-        "methodReferenceToExpr",
-        () -> constant(apply(var("hydra.serialization.cst"), string("STUB:MethodReference"))));
+    public static final Def methodReferenceToExpr = def("methodReferenceToExpr")
+        .to(() ->
+                constant(apply(var("hydra.serialization.cst"), string("STUB:MethodReference"))));
 
-    public static final Def multiplicativeExpressionToExpr = def(
-        "multiplicativeExpressionToExpr",
-        () -> lambda("e",
+    public static final Def multiplicativeExpressionToExpr = def("multiplicativeExpressionToExpr")
+        .lam("e")
+        .to(() ->
                 cases(MultiplicativeExpression.TYPE_,
                     var("e"),
                     field(
@@ -2153,11 +2159,11 @@ public class Serde {
                                     proj(MultiplicativeExpression_Binary.TYPE_, MultiplicativeExpression_Binary.LHS, "b")),
                                 apply(
                                     ref(Serde.unaryExpressionToExpr),
-                                    proj(MultiplicativeExpression_Binary.TYPE_, MultiplicativeExpression_Binary.RHS, "b"))))))));
+                                    proj(MultiplicativeExpression_Binary.TYPE_, MultiplicativeExpression_Binary.RHS, "b")))))));
 
-    public static final Def normalAnnotationToExpr = def(
-        "normalAnnotationToExpr",
-        () -> lambda("na",
+    public static final Def normalAnnotationToExpr = def("normalAnnotationToExpr")
+        .lam("na")
+        .to(() ->
                 let(
                     field("tname",
                         proj(NormalAnnotation.TYPE_, NormalAnnotation.TYPE_NAME, "na")),
@@ -2173,11 +2179,11 @@ public class Serde {
                                 apply(
                                     var("hydra.serialization.commaSep"),
                                     var("hydra.serialization.inlineStyle"),
-                                    Lists.map(ref(Serde.elementValuePairToExpr), var("pairs")))))))));
+                                    Lists.map(ref(Serde.elementValuePairToExpr), var("pairs"))))))));
 
-    public static final Def normalClassDeclarationToExpr = def(
-        "normalClassDeclarationToExpr",
-        () -> lambda("ncd",
+    public static final Def normalClassDeclarationToExpr = def("normalClassDeclarationToExpr")
+        .lam("ncd")
+        .to(() ->
                 let(
                     field("mods",
                         proj(NormalClassDeclaration.TYPE_, NormalClassDeclaration.MODIFIERS, "ncd")),
@@ -2248,11 +2254,11 @@ public class Serde {
                                                     Lists.map(
                                                         ref(Serde.interfaceTypeToExpr),
                                                         var("superi"))))))),
-                                just(apply(ref(Serde.classBodyToExpr), var("body")))))))));
+                                just(apply(ref(Serde.classBodyToExpr), var("body"))))))));
 
-    public static final Def normalInterfaceDeclarationToExpr = def(
-        "normalInterfaceDeclarationToExpr",
-        () -> lambda("nid",
+    public static final Def normalInterfaceDeclarationToExpr = def("normalInterfaceDeclarationToExpr")
+        .lam("nid")
+        .to(() ->
                 let(
                     field("mods",
                         proj(NormalInterfaceDeclaration.TYPE_, NormalInterfaceDeclaration.MODIFIERS, "nid")),
@@ -2313,11 +2319,11 @@ public class Serde {
                                                     Lists.map(
                                                         ref(Serde.interfaceTypeToExpr),
                                                         var("extends"))))))),
-                                just(apply(ref(Serde.interfaceBodyToExpr), var("body")))))))));
+                                just(apply(ref(Serde.interfaceBodyToExpr), var("body"))))))));
 
-    public static final Def numericTypeToExpr = def(
-        "numericTypeToExpr",
-        () -> lambda("nt",
+    public static final Def numericTypeToExpr = def("numericTypeToExpr")
+        .lam("nt")
+        .to(() ->
                 cases(NumericType.TYPE_,
                     var("nt"),
                     field(
@@ -2325,11 +2331,11 @@ public class Serde {
                         lambda("it", apply(ref(Serde.integralTypeToExpr), var("it")))),
                     field(
                         NumericType.FLOATING_POINT,
-                        lambda("ft", apply(ref(Serde.floatingPointTypeToExpr), var("ft")))))));
+                        lambda("ft", apply(ref(Serde.floatingPointTypeToExpr), var("ft"))))));
 
-    public static final Def packageDeclarationToExpr = def(
-        "packageDeclarationToExpr",
-        () -> lambda("pd",
+    public static final Def packageDeclarationToExpr = def("packageDeclarationToExpr")
+        .lam("pd")
+        .to(() ->
                 let(
                     field("mods",
                         proj(PackageDeclaration.TYPE_, PackageDeclaration.MODIFIERS, "pd")),
@@ -2366,44 +2372,44 @@ public class Serde {
                                                                 apply(
                                                                     unwrap(Identifier.TYPE_),
                                                                     var("id"))),
-                                                            var("ids"))))))))))))));
+                                                            var("ids")))))))))))));
 
-    public static final Def packageModifierToExpr = def(
-        "packageModifierToExpr",
-        () -> lambda("pm",
+    public static final Def packageModifierToExpr = def("packageModifierToExpr")
+        .lam("pm")
+        .to(() ->
                 apply(
                     ref(Serde.annotationToExpr),
-                    apply(unwrap(PackageModifier.TYPE_), var("pm")))));
+                    apply(unwrap(PackageModifier.TYPE_), var("pm"))));
 
-    public static final Def packageNameToExpr = def(
-        "packageNameToExpr",
-        () -> lambda("pn",
+    public static final Def packageNameToExpr = def("packageNameToExpr")
+        .lam("pn")
+        .to(() ->
                 apply(
                     var("hydra.serialization.dotSep"),
                     Lists.map(
                         ref(Serde.identifierToExpr),
-                        apply(unwrap(PackageName.TYPE_), var("pn"))))));
+                        apply(unwrap(PackageName.TYPE_), var("pn")))));
 
-    public static final Def packageOrTypeNameToExpr = def(
-        "packageOrTypeNameToExpr",
-        () -> lambda("potn",
+    public static final Def packageOrTypeNameToExpr = def("packageOrTypeNameToExpr")
+        .lam("potn")
+        .to(() ->
                 apply(
                     var("hydra.serialization.dotSep"),
                     Lists.map(
                         ref(Serde.identifierToExpr),
-                        apply(unwrap(PackageOrTypeName.TYPE_), var("potn"))))));
+                        apply(unwrap(PackageOrTypeName.TYPE_), var("potn")))));
 
-    public static final Def postDecrementExpressionToExpr = def(
-        "postDecrementExpressionToExpr",
-        () -> constant(apply(var("hydra.serialization.cst"), string("STUB:PostDecrementExpression"))));
+    public static final Def postDecrementExpressionToExpr = def("postDecrementExpressionToExpr")
+        .to(() ->
+                constant(apply(var("hydra.serialization.cst"), string("STUB:PostDecrementExpression"))));
 
-    public static final Def postIncrementExpressionToExpr = def(
-        "postIncrementExpressionToExpr",
-        () -> constant(apply(var("hydra.serialization.cst"), string("STUB:PostIncrementExpression"))));
+    public static final Def postIncrementExpressionToExpr = def("postIncrementExpressionToExpr")
+        .to(() ->
+                constant(apply(var("hydra.serialization.cst"), string("STUB:PostIncrementExpression"))));
 
-    public static final Def postfixExpressionToExpr = def(
-        "postfixExpressionToExpr",
-        () -> lambda("e",
+    public static final Def postfixExpressionToExpr = def("postfixExpressionToExpr")
+        .lam("e")
+        .to(() ->
                 cases(PostfixExpression.TYPE_,
                     var("e"),
                     field(
@@ -2417,19 +2423,19 @@ public class Serde {
                         lambda("pi", apply(ref(Serde.postIncrementExpressionToExpr), var("pi")))),
                     field(
                         PostfixExpression.POST_DECREMENT,
-                        lambda("pd", apply(ref(Serde.postDecrementExpressionToExpr), var("pd")))))));
+                        lambda("pd", apply(ref(Serde.postDecrementExpressionToExpr), var("pd"))))));
 
-    public static final Def preDecrementExpressionToExpr = def(
-        "preDecrementExpressionToExpr",
-        () -> constant(apply(var("hydra.serialization.cst"), string("STUB:PreDecrementExpression"))));
+    public static final Def preDecrementExpressionToExpr = def("preDecrementExpressionToExpr")
+        .to(() ->
+                constant(apply(var("hydra.serialization.cst"), string("STUB:PreDecrementExpression"))));
 
-    public static final Def preIncrementExpressionToExpr = def(
-        "preIncrementExpressionToExpr",
-        () -> constant(apply(var("hydra.serialization.cst"), string("STUB:PreIncrementExpression"))));
+    public static final Def preIncrementExpressionToExpr = def("preIncrementExpressionToExpr")
+        .to(() ->
+                constant(apply(var("hydra.serialization.cst"), string("STUB:PreIncrementExpression"))));
 
-    public static final Def primaryNoNewArrayExpressionExpressionToExpr = def(
-        "primaryNoNewArrayExpressionExpressionToExpr",
-        () -> lambda("p",
+    public static final Def primaryNoNewArrayExpressionExpressionToExpr = def("primaryNoNewArrayExpressionExpressionToExpr")
+        .lam("p")
+        .to(() ->
                 cases(PrimaryNoNewArrayExpression.TYPE_,
                     var("p"),
                     field(
@@ -2471,11 +2477,11 @@ public class Serde {
                         lambda("mi", apply(ref(Serde.methodInvocationToExpr), var("mi")))),
                     field(
                         PrimaryNoNewArrayExpression.METHOD_REFERENCE,
-                        lambda("mr", apply(ref(Serde.methodReferenceToExpr), var("mr")))))));
+                        lambda("mr", apply(ref(Serde.methodReferenceToExpr), var("mr"))))));
 
-    public static final Def primaryToExpr = def(
-        "primaryToExpr",
-        () -> lambda("p",
+    public static final Def primaryToExpr = def("primaryToExpr")
+        .lam("p")
+        .to(() ->
                 cases(Primary.TYPE_,
                     var("p"),
                     field(
@@ -2484,11 +2490,11 @@ public class Serde {
                             apply(ref(Serde.primaryNoNewArrayExpressionExpressionToExpr), var("n")))),
                     field(
                         Primary.ARRAY_CREATION,
-                        lambda("a", apply(ref(Serde.arrayCreationExpressionToExpr), var("a")))))));
+                        lambda("a", apply(ref(Serde.arrayCreationExpressionToExpr), var("a"))))));
 
-    public static final Def primitiveTypeToExpr = def(
-        "primitiveTypeToExpr",
-        () -> lambda("pt",
+    public static final Def primitiveTypeToExpr = def("primitiveTypeToExpr")
+        .lam("pt")
+        .to(() ->
                 cases(PrimitiveType.TYPE_,
                     var("pt"),
                     field(
@@ -2496,11 +2502,11 @@ public class Serde {
                         lambda("nt", apply(ref(Serde.numericTypeToExpr), var("nt")))),
                     field(
                         PrimitiveType.BOOLEAN,
-                        constant(apply(var("hydra.serialization.cst"), string("boolean")))))));
+                        constant(apply(var("hydra.serialization.cst"), string("boolean"))))));
 
-    public static final Def primitiveTypeWithAnnotationsToExpr = def(
-        "primitiveTypeWithAnnotationsToExpr",
-        () -> lambda("ptwa",
+    public static final Def primitiveTypeWithAnnotationsToExpr = def("primitiveTypeWithAnnotationsToExpr")
+        .lam("ptwa")
+        .to(() ->
                 let(
                     field("pt",
                         proj(PrimitiveTypeWithAnnotations.TYPE_, PrimitiveTypeWithAnnotations.TYPE, "ptwa")),
@@ -2517,15 +2523,15 @@ public class Serde {
                                         apply(
                                             var("hydra.serialization.spaceSep"),
                                             Lists.map(ref(Serde.annotationToExpr), var("anns"))))),
-                                just(apply(ref(Serde.primitiveTypeToExpr), var("pt")))))))));
+                                just(apply(ref(Serde.primitiveTypeToExpr), var("pt"))))))));
 
-    public static final Def receiverParameterToExpr = def(
-        "receiverParameterToExpr",
-        () -> constant(apply(var("hydra.serialization.cst"), string("STUB:ReceiverParameter"))));
+    public static final Def receiverParameterToExpr = def("receiverParameterToExpr")
+        .to(() ->
+                constant(apply(var("hydra.serialization.cst"), string("STUB:ReceiverParameter"))));
 
-    public static final Def referenceTypeToExpr = def(
-        "referenceTypeToExpr",
-        () -> lambda("rt",
+    public static final Def referenceTypeToExpr = def("referenceTypeToExpr")
+        .lam("rt")
+        .to(() ->
                 cases(ReferenceType.TYPE_,
                     var("rt"),
                     field(
@@ -2536,11 +2542,11 @@ public class Serde {
                         lambda("v", apply(ref(Serde.typeVariableToExpr), var("v")))),
                     field(
                         ReferenceType.ARRAY,
-                        lambda("at", apply(ref(Serde.arrayTypeToExpr), var("at")))))));
+                        lambda("at", apply(ref(Serde.arrayTypeToExpr), var("at"))))));
 
-    public static final Def relationalExpressionGreaterThanEqualToExpr = def(
-        "relationalExpressionGreaterThanEqualToExpr",
-        () -> lambda("gte",
+    public static final Def relationalExpressionGreaterThanEqualToExpr = def("relationalExpressionGreaterThanEqualToExpr")
+        .lam("gte")
+        .to(() ->
                 apply(
                     var("hydra.serialization.infixWs"),
                     string(">="),
@@ -2549,11 +2555,11 @@ public class Serde {
                         proj(RelationalExpression_GreaterThanEqual.TYPE_, RelationalExpression_GreaterThanEqual.LHS, "gte")),
                     apply(
                         ref(Serde.shiftExpressionToExpr),
-                        proj(RelationalExpression_GreaterThanEqual.TYPE_, RelationalExpression_GreaterThanEqual.RHS, "gte")))));
+                        proj(RelationalExpression_GreaterThanEqual.TYPE_, RelationalExpression_GreaterThanEqual.RHS, "gte"))));
 
-    public static final Def relationalExpressionGreaterThanToExpr = def(
-        "relationalExpressionGreaterThanToExpr",
-        () -> lambda("gt",
+    public static final Def relationalExpressionGreaterThanToExpr = def("relationalExpressionGreaterThanToExpr")
+        .lam("gt")
+        .to(() ->
                 apply(
                     var("hydra.serialization.infixWs"),
                     string(">"),
@@ -2562,11 +2568,11 @@ public class Serde {
                         proj(RelationalExpression_GreaterThan.TYPE_, RelationalExpression_GreaterThan.LHS, "gt")),
                     apply(
                         ref(Serde.shiftExpressionToExpr),
-                        proj(RelationalExpression_GreaterThan.TYPE_, RelationalExpression_GreaterThan.RHS, "gt")))));
+                        proj(RelationalExpression_GreaterThan.TYPE_, RelationalExpression_GreaterThan.RHS, "gt"))));
 
-    public static final Def relationalExpressionInstanceOfToExpr = def(
-        "relationalExpressionInstanceOfToExpr",
-        () -> lambda("io",
+    public static final Def relationalExpressionInstanceOfToExpr = def("relationalExpressionInstanceOfToExpr")
+        .lam("io")
+        .to(() ->
                 let("rhsExpr",
                     cases(InstanceofExpression_Rhs.TYPE_,
                         proj(InstanceofExpression.TYPE_, InstanceofExpression.RHS, "io"),
@@ -2582,11 +2588,11 @@ public class Serde {
                         apply(
                             ref(Serde.relationalExpressionToExpr),
                             proj(InstanceofExpression.TYPE_, InstanceofExpression.LHS, "io")),
-                        var("rhsExpr")))));
+                        var("rhsExpr"))));
 
-    public static final Def relationalExpressionLessThanEqualToExpr = def(
-        "relationalExpressionLessThanEqualToExpr",
-        () -> lambda("lte",
+    public static final Def relationalExpressionLessThanEqualToExpr = def("relationalExpressionLessThanEqualToExpr")
+        .lam("lte")
+        .to(() ->
                 apply(
                     var("hydra.serialization.infixWs"),
                     string("<="),
@@ -2595,11 +2601,11 @@ public class Serde {
                         proj(RelationalExpression_LessThanEqual.TYPE_, RelationalExpression_LessThanEqual.LHS, "lte")),
                     apply(
                         ref(Serde.shiftExpressionToExpr),
-                        proj(RelationalExpression_LessThanEqual.TYPE_, RelationalExpression_LessThanEqual.RHS, "lte")))));
+                        proj(RelationalExpression_LessThanEqual.TYPE_, RelationalExpression_LessThanEqual.RHS, "lte"))));
 
-    public static final Def relationalExpressionLessThanToExpr = def(
-        "relationalExpressionLessThanToExpr",
-        () -> lambda("lt",
+    public static final Def relationalExpressionLessThanToExpr = def("relationalExpressionLessThanToExpr")
+        .lam("lt")
+        .to(() ->
                 apply(
                     var("hydra.serialization.infixWs"),
                     string("<"),
@@ -2608,11 +2614,11 @@ public class Serde {
                         proj(RelationalExpression_LessThan.TYPE_, RelationalExpression_LessThan.LHS, "lt")),
                     apply(
                         ref(Serde.shiftExpressionToExpr),
-                        proj(RelationalExpression_LessThan.TYPE_, RelationalExpression_LessThan.RHS, "lt")))));
+                        proj(RelationalExpression_LessThan.TYPE_, RelationalExpression_LessThan.RHS, "lt"))));
 
-    public static final Def relationalExpressionToExpr = def(
-        "relationalExpressionToExpr",
-        () -> lambda("e",
+    public static final Def relationalExpressionToExpr = def("relationalExpressionToExpr")
+        .lam("e")
+        .to(() ->
                 cases(RelationalExpression.TYPE_,
                     var("e"),
                     field(
@@ -2637,11 +2643,11 @@ public class Serde {
                     field(
                         RelationalExpression.INSTANCEOF_EXPRESSION,
                         lambda("i",
-                            apply(ref(Serde.relationalExpressionInstanceOfToExpr), var("i")))))));
+                            apply(ref(Serde.relationalExpressionInstanceOfToExpr), var("i"))))));
 
-    public static final Def resultToExpr = def(
-        "resultToExpr",
-        () -> lambda("r",
+    public static final Def resultToExpr = def("resultToExpr")
+        .lam("r")
+        .to(() ->
                 cases(Result.TYPE_,
                     var("r"),
                     field(
@@ -2649,11 +2655,11 @@ public class Serde {
                         lambda("t", apply(ref(Serde.unannTypeToExpr), var("t")))),
                     field(
                         Result.VOID,
-                        constant(apply(var("hydra.serialization.cst"), string("void")))))));
+                        constant(apply(var("hydra.serialization.cst"), string("void"))))));
 
-    public static final Def returnStatementToExpr = def(
-        "returnStatementToExpr",
-        () -> lambda("rs",
+    public static final Def returnStatementToExpr = def("returnStatementToExpr")
+        .lam("rs")
+        .to(() ->
                 let("mex",
                     apply(unwrap(ReturnStatement.TYPE_), var("rs")),
                     apply(
@@ -2663,13 +2669,13 @@ public class Serde {
                             Optionals.cat(
                                 list(
                                     just(apply(var("hydra.serialization.cst"), string("return"))),
-                                    Optionals.map(ref(Serde.expressionToExpr), var("mex")))))))));
+                                    Optionals.map(ref(Serde.expressionToExpr), var("mex"))))))));
 
-    public static final Def sanitizeJavaComment = def(
-        "sanitizeJavaComment",
-        () -> doc("Sanitize a string for use in a Java comment",
-                lambda("s",
-                    Strings.intercalate(
+    public static final Def sanitizeJavaComment = def("sanitizeJavaComment")
+        .doc("Sanitize a string for use in a Java comment")
+        .lam("s")
+        .to(() ->
+                Strings.intercalate(
                         string("&gt;"),
                         Strings.splitOn(
                             string(">"),
@@ -2679,13 +2685,13 @@ public class Serde {
                                     string("<"),
                                     Strings.intercalate(
                                         string("&amp;"),
-                                        Strings.splitOn(string("&"), var("s"))))))))));
+                                        Strings.splitOn(string("&"), var("s"))))))));
 
-    public static final Def javaDocEntityRef = def(
-        "javaDocEntityRef",
-        () -> doc("Render a hydra.packaging.EntityReference as Javadoc link syntax",
-                lambda("ref",
-                    cases("hydra.packaging.EntityReference", var("ref"),
+    public static final Def javaDocEntityRef = def("javaDocEntityRef")
+        .doc("Render a hydra.packaging.EntityReference as Javadoc link syntax")
+        .lam("ref")
+        .to(() ->
+                cases("hydra.packaging.EntityReference", var("ref"),
                         field("definition",
                             lambda("d",
                                 Strings.cat2(
@@ -2699,11 +2705,11 @@ public class Serde {
                         field("module",    lambda("m", Strings.cat2(string(""), apply(unwrap(ModuleName.TYPE_), var("m"))))),
                         field("package",   lambda("p", Strings.cat2(string(""), apply(unwrap(hydra.packaging.PackageName.TYPE_), var("p"))))),
                         field("termExpr", lambda("s", Strings.cat2(string("{@code "), Strings.cat2(var("s"), string("}"))))),
-                        field("typeExpr", lambda("s", Strings.cat2(string("{@code "), Strings.cat2(var("s"), string("}")))))))));
+                        field("typeExpr", lambda("s", Strings.cat2(string("{@code "), Strings.cat2(var("s"), string("}")))))));
 
-    public static final Def shiftExpressionToExpr = def(
-        "shiftExpressionToExpr",
-        () -> lambda("e",
+    public static final Def shiftExpressionToExpr = def("shiftExpressionToExpr")
+        .lam("e")
+        .to(() ->
                 cases(ShiftExpression.TYPE_,
                     var("e"),
                     field(
@@ -2744,18 +2750,18 @@ public class Serde {
                                     proj(ShiftExpression_Binary.TYPE_, ShiftExpression_Binary.LHS, "b")),
                                 apply(
                                     ref(Serde.additiveExpressionToExpr),
-                                    proj(ShiftExpression_Binary.TYPE_, ShiftExpression_Binary.RHS, "b"))))))));
+                                    proj(ShiftExpression_Binary.TYPE_, ShiftExpression_Binary.RHS, "b")))))));
 
-    public static final Def simpleTypeNameToExpr = def(
-        "simpleTypeNameToExpr",
-        () -> lambda("stn",
+    public static final Def simpleTypeNameToExpr = def("simpleTypeNameToExpr")
+        .lam("stn")
+        .to(() ->
                 apply(
                     ref(Serde.typeIdentifierToExpr),
-                    apply(unwrap(SimpleTypeName.TYPE_), var("stn")))));
+                    apply(unwrap(SimpleTypeName.TYPE_), var("stn"))));
 
-    public static final Def singleElementAnnotationToExpr = def(
-        "singleElementAnnotationToExpr",
-        () -> lambda("sea",
+    public static final Def singleElementAnnotationToExpr = def("singleElementAnnotationToExpr")
+        .lam("sea")
+        .to(() ->
                 let(
                     field("tname",
                         proj(SingleElementAnnotation.TYPE_, SingleElementAnnotation.NAME, "sea")),
@@ -2774,25 +2780,24 @@ public class Serde {
                                         apply(
                                             var("hydra.serialization.parenList"),
                                             bool(false),
-                                            list(apply(ref(Serde.elementValueToExpr), var("v"))))))))))));
+                                            list(apply(ref(Serde.elementValueToExpr), var("v")))))))))));
 
-    public static final Def singleLineComment = def(
-        "singleLineComment",
-        () -> doc(
-                "Create a single-line Java comment. Empty text emits `//` (no trailing space) so blank line comments don't carry trailing whitespace.",
-                lambda("c",
-                    let("sanitized",
+    public static final Def singleLineComment = def("singleLineComment")
+        .doc("Create a single-line Java comment. Empty text emits `//` (no trailing space) so blank line comments don't carry trailing whitespace.")
+        .lam("c")
+        .to(() ->
+                let("sanitized",
                         apply(ref(Serde.sanitizeJavaComment), var("c")),
                         apply(
                             var("hydra.serialization.cst"),
                             Logic.ifElse(
                                 Equality.equal(var("sanitized"), string("")),
                                 string("//"),
-                                Strings.cat2(string("// "), var("sanitized"))))))));
+                                Strings.cat2(string("// "), var("sanitized"))))));
 
-    public static final Def statementExpressionToExpr = def(
-        "statementExpressionToExpr",
-        () -> lambda("e",
+    public static final Def statementExpressionToExpr = def("statementExpressionToExpr")
+        .lam("e")
+        .to(() ->
                 cases(StatementExpression.TYPE_,
                     var("e"),
                     field(
@@ -2816,11 +2821,11 @@ public class Serde {
                     field(
                         StatementExpression.CLASS_INSTANCE_CREATION,
                         lambda("cic",
-                            apply(ref(Serde.classInstanceCreationExpressionToExpr), var("cic")))))));
+                            apply(ref(Serde.classInstanceCreationExpressionToExpr), var("cic"))))));
 
-    public static final Def statementToExpr = def(
-        "statementToExpr",
-        () -> lambda("s",
+    public static final Def statementToExpr = def("statementToExpr")
+        .lam("s")
+        .to(() ->
                 cases(Statement.TYPE_,
                     var("s"),
                     field(
@@ -2841,11 +2846,11 @@ public class Serde {
                         lambda("w", apply(ref(Serde.whileStatementToExpr), var("w")))),
                     field(
                         Statement.FOR,
-                        lambda("f", apply(ref(Serde.forStatementToExpr), var("f")))))));
+                        lambda("f", apply(ref(Serde.forStatementToExpr), var("f"))))));
 
-    public static final Def statementWithoutTrailingSubstatementToExpr = def(
-        "statementWithoutTrailingSubstatementToExpr",
-        () -> lambda("s",
+    public static final Def statementWithoutTrailingSubstatementToExpr = def("statementWithoutTrailingSubstatementToExpr")
+        .lam("s")
+        .to(() ->
                 cases(StatementWithoutTrailingSubstatement.TYPE_,
                     var("s"),
                     field(
@@ -2883,17 +2888,17 @@ public class Serde {
                         lambda("t", apply(ref(Serde.throwStatementToExpr), var("t")))),
                     field(
                         StatementWithoutTrailingSubstatement.TRY,
-                        lambda("t", apply(ref(Serde.tryStatementToExpr), var("t")))))));
+                        lambda("t", apply(ref(Serde.tryStatementToExpr), var("t"))))));
 
-    public static final Def staticInitializerToExpr = def(
-        "staticInitializerToExpr",
-        () -> constant(apply(var("hydra.serialization.cst"), string("STUB:StaticInitializer"))));
+    public static final Def staticInitializerToExpr = def("staticInitializerToExpr")
+        .to(() ->
+                constant(apply(var("hydra.serialization.cst"), string("STUB:StaticInitializer"))));
 
-    public static final Def stringLiteralToExpr = def(
-        "stringLiteralToExpr",
-        () -> doc("Serialize a Java string literal with proper Unicode escaping.",
-                lambda("sl",
-                    let("s",
+    public static final Def stringLiteralToExpr = def("stringLiteralToExpr")
+        .doc("Serialize a Java string literal with proper Unicode escaping.")
+        .lam("sl")
+        .to(() ->
+                let("s",
                         apply(unwrap(StringLiteral.TYPE_), var("sl")),
                         apply(
                             var("hydra.serialization.cst"),
@@ -2901,19 +2906,19 @@ public class Serde {
                                 string("\""),
                                 Strings.cat2(
                                     apply(var("hydra.jvm.serde.escapeJavaString"), var("s")),
-                                    string("\""))))))));
+                                    string("\""))))));
 
-    public static final Def switchStatementToExpr = def(
-        "switchStatementToExpr",
-        () -> constant(apply(var("hydra.serialization.cst"), string("STUB:SwitchStatement"))));
+    public static final Def switchStatementToExpr = def("switchStatementToExpr")
+        .to(() ->
+                constant(apply(var("hydra.serialization.cst"), string("STUB:SwitchStatement"))));
 
-    public static final Def synchronizedStatementToExpr = def(
-        "synchronizedStatementToExpr",
-        () -> constant(apply(var("hydra.serialization.cst"), string("STUB:SynchronizedStatement"))));
+    public static final Def synchronizedStatementToExpr = def("synchronizedStatementToExpr")
+        .to(() ->
+                constant(apply(var("hydra.serialization.cst"), string("STUB:SynchronizedStatement"))));
 
-    public static final Def throwStatementToExpr = def(
-        "throwStatementToExpr",
-        () -> lambda("ts",
+    public static final Def throwStatementToExpr = def("throwStatementToExpr")
+        .lam("ts")
+        .to(() ->
                 apply(
                     var("hydra.serialization.withSemi"),
                     apply(
@@ -2922,19 +2927,19 @@ public class Serde {
                             apply(var("hydra.serialization.cst"), string("throw")),
                             apply(
                                 ref(Serde.expressionToExpr),
-                                apply(unwrap(ThrowStatement.TYPE_), var("ts"))))))));
+                                apply(unwrap(ThrowStatement.TYPE_), var("ts")))))));
 
-    public static final Def throwsToExpr = def(
-        "throwsToExpr",
-        () -> constant(apply(var("hydra.serialization.cst"), string("STUB:Throws"))));
+    public static final Def throwsToExpr = def("throwsToExpr")
+        .to(() ->
+                constant(apply(var("hydra.serialization.cst"), string("STUB:Throws"))));
 
-    public static final Def tryStatementToExpr = def(
-        "tryStatementToExpr",
-        () -> constant(apply(var("hydra.serialization.cst"), string("STUB:TryStatement"))));
+    public static final Def tryStatementToExpr = def("tryStatementToExpr")
+        .to(() ->
+                constant(apply(var("hydra.serialization.cst"), string("STUB:TryStatement"))));
 
-    public static final Def typeArgumentToExpr = def(
-        "typeArgumentToExpr",
-        () -> lambda("a",
+    public static final Def typeArgumentToExpr = def("typeArgumentToExpr")
+        .lam("a")
+        .to(() ->
                 cases(TypeArgument.TYPE_,
                     var("a"),
                     field(
@@ -2942,11 +2947,11 @@ public class Serde {
                         lambda("rt", apply(ref(Serde.referenceTypeToExpr), var("rt")))),
                     field(
                         TypeArgument.WILDCARD,
-                        lambda("w", apply(ref(Serde.wildcardToExpr), var("w")))))));
+                        lambda("w", apply(ref(Serde.wildcardToExpr), var("w"))))));
 
-    public static final Def typeArgumentsOrDiamondToExpr = def(
-        "typeArgumentsOrDiamondToExpr",
-        () -> lambda("targs",
+    public static final Def typeArgumentsOrDiamondToExpr = def("typeArgumentsOrDiamondToExpr")
+        .lam("targs")
+        .to(() ->
                 cases(TypeArgumentsOrDiamond.TYPE_,
                     var("targs"),
                     field(
@@ -2958,11 +2963,11 @@ public class Serde {
                                 Lists.map(ref(Serde.typeArgumentToExpr), var("args"))))),
                     field(
                         TypeArgumentsOrDiamond.DIAMOND,
-                        constant(apply(var("hydra.serialization.cst"), string("<>")))))));
+                        constant(apply(var("hydra.serialization.cst"), string("<>"))))));
 
-    public static final Def typeBoundToExpr = def(
-        "typeBoundToExpr",
-        () -> lambda("b",
+    public static final Def typeBoundToExpr = def("typeBoundToExpr")
+        .lam("b")
+        .to(() ->
                 cases(TypeBound.TYPE_,
                     var("b"),
                     field(
@@ -2985,11 +2990,11 @@ public class Serde {
                                             apply(ref(Serde.classOrInterfaceTypeToExpr), var("cit")),
                                             Lists.map(
                                                 ref(Serde.additionalBoundToExpr),
-                                                var("additional")))))))))));
+                                                var("additional"))))))))));
 
-    public static final Def typeDeclarationToExpr = def(
-        "typeDeclarationToExpr",
-        () -> lambda("d",
+    public static final Def typeDeclarationToExpr = def("typeDeclarationToExpr")
+        .lam("d")
+        .to(() ->
                 cases(TopLevelClassOrInterfaceDeclaration.TYPE_,
                     var("d"),
                     field(
@@ -3000,11 +3005,11 @@ public class Serde {
                         lambda("d", apply(ref(Serde.interfaceDeclarationToExpr), var("d")))),
                     field(
                         TopLevelClassOrInterfaceDeclaration.NONE,
-                        constant(apply(var("hydra.serialization.cst"), string(";")))))));
+                        constant(apply(var("hydra.serialization.cst"), string(";"))))));
 
-    public static final Def typeDeclarationWithCommentsToExpr = def(
-        "typeDeclarationWithCommentsToExpr",
-        () -> lambda("tdwc",
+    public static final Def typeDeclarationWithCommentsToExpr = def("typeDeclarationWithCommentsToExpr")
+        .lam("tdwc")
+        .to(() ->
                 let(
                     field("d",
                         proj(TopLevelClassOrInterfaceDeclarationWithComments.TYPE_, TopLevelClassOrInterfaceDeclarationWithComments.VALUE, "tdwc")),
@@ -3013,18 +3018,18 @@ public class Serde {
                     apply(
                         ref(Serde.withComments),
                         var("mc"),
-                        apply(ref(Serde.typeDeclarationToExpr), var("d"))))));
+                        apply(ref(Serde.typeDeclarationToExpr), var("d")))));
 
-    public static final Def typeIdentifierToExpr = def(
-        "typeIdentifierToExpr",
-        () -> lambda("tid",
+    public static final Def typeIdentifierToExpr = def("typeIdentifierToExpr")
+        .lam("tid")
+        .to(() ->
                 apply(
                     ref(Serde.identifierToExpr),
-                    apply(unwrap(TypeIdentifier.TYPE_), var("tid")))));
+                    apply(unwrap(TypeIdentifier.TYPE_), var("tid"))));
 
-    public static final Def typeNameToExpr = def(
-        "typeNameToExpr",
-        () -> lambda("tn",
+    public static final Def typeNameToExpr = def("typeNameToExpr")
+        .lam("tn")
+        .to(() ->
                 let(
                     field("id",
                         proj(TypeName.TYPE_, TypeName.IDENTIFIER, "tn")),
@@ -3035,18 +3040,18 @@ public class Serde {
                         Optionals.cat(
                             list(
                                 Optionals.map(ref(Serde.packageOrTypeNameToExpr), var("mqual")),
-                                just(apply(ref(Serde.typeIdentifierToExpr), var("id")))))))));
+                                just(apply(ref(Serde.typeIdentifierToExpr), var("id"))))))));
 
-    public static final Def typeParameterModifierToExpr = def(
-        "typeParameterModifierToExpr",
-        () -> lambda("tpm",
+    public static final Def typeParameterModifierToExpr = def("typeParameterModifierToExpr")
+        .lam("tpm")
+        .to(() ->
                 apply(
                     ref(Serde.annotationToExpr),
-                    apply(unwrap(TypeParameterModifier.TYPE_), var("tpm")))));
+                    apply(unwrap(TypeParameterModifier.TYPE_), var("tpm"))));
 
-    public static final Def typeParameterToExpr = def(
-        "typeParameterToExpr",
-        () -> lambda("tp",
+    public static final Def typeParameterToExpr = def("typeParameterToExpr")
+        .lam("tp")
+        .to(() ->
                 let(
                     field("mods",
                         proj(TypeParameter.TYPE_, TypeParameter.MODIFIERS, "tp")),
@@ -3077,11 +3082,11 @@ public class Serde {
                                                     var("hydra.serialization.cst"),
                                                     string("extends")),
                                                 apply(ref(Serde.typeBoundToExpr), var("b"))))),
-                                    var("bound"))))))));
+                                    var("bound")))))));
 
-    public static final Def typeToExpr = def(
-        "typeToExpr",
-        () -> lambda("t",
+    public static final Def typeToExpr = def("typeToExpr")
+        .lam("t")
+        .to(() ->
                 cases(hydra.java.syntax.Type.TYPE_,
                     var("t"),
                     field(
@@ -3090,11 +3095,11 @@ public class Serde {
                             apply(ref(Serde.primitiveTypeWithAnnotationsToExpr), var("pt")))),
                     field(
                         hydra.java.syntax.Type.REFERENCE,
-                        lambda("rt", apply(ref(Serde.referenceTypeToExpr), var("rt")))))));
+                        lambda("rt", apply(ref(Serde.referenceTypeToExpr), var("rt"))))));
 
-    public static final Def typeVariableToExpr = def(
-        "typeVariableToExpr",
-        () -> lambda("tv",
+    public static final Def typeVariableToExpr = def("typeVariableToExpr")
+        .lam("tv")
+        .to(() ->
                 let(
                     field("anns",
                         proj(TypeVariable.TYPE_, TypeVariable.ANNOTATIONS, "tv")),
@@ -3111,18 +3116,18 @@ public class Serde {
                                         apply(
                                             var("hydra.serialization.spaceSep"),
                                             Lists.map(ref(Serde.annotationToExpr), var("anns"))))),
-                                just(apply(ref(Serde.typeIdentifierToExpr), var("id")))))))));
+                                just(apply(ref(Serde.typeIdentifierToExpr), var("id"))))))));
 
-    public static final Def unannTypeToExpr = def(
-        "unannTypeToExpr",
-        () -> lambda("ut",
+    public static final Def unannTypeToExpr = def("unannTypeToExpr")
+        .lam("ut")
+        .to(() ->
                 apply(
                     ref(Serde.typeToExpr),
-                    apply(unwrap(UnannType.TYPE_), var("ut")))));
+                    apply(unwrap(UnannType.TYPE_), var("ut"))));
 
-    public static final Def unaryExpressionNotPlusMinusToExpr = def(
-        "unaryExpressionNotPlusMinusToExpr",
-        () -> lambda("e",
+    public static final Def unaryExpressionNotPlusMinusToExpr = def("unaryExpressionNotPlusMinusToExpr")
+        .lam("e")
+        .to(() ->
                 cases(UnaryExpressionNotPlusMinus.TYPE_,
                     var("e"),
                     field(
@@ -3146,11 +3151,11 @@ public class Serde {
                                     apply(ref(Serde.unaryExpressionToExpr), var("u")))))),
                     field(
                         UnaryExpressionNotPlusMinus.CAST,
-                        lambda("c", apply(ref(Serde.castExpressionToExpr), var("c")))))));
+                        lambda("c", apply(ref(Serde.castExpressionToExpr), var("c"))))));
 
-    public static final Def unaryExpressionToExpr = def(
-        "unaryExpressionToExpr",
-        () -> lambda("e",
+    public static final Def unaryExpressionToExpr = def("unaryExpressionToExpr")
+        .lam("e")
+        .to(() ->
                 cases(UnaryExpression.TYPE_,
                     var("e"),
                     field(
@@ -3177,11 +3182,11 @@ public class Serde {
                                     apply(ref(Serde.unaryExpressionToExpr), var("m")))))),
                     field(
                         UnaryExpression.OTHER,
-                        lambda("o", apply(ref(Serde.unaryExpressionNotPlusMinusToExpr), var("o")))))));
+                        lambda("o", apply(ref(Serde.unaryExpressionNotPlusMinusToExpr), var("o"))))));
 
-    public static final Def unqualifiedClassInstanceCreationExpressionToExpr = def(
-        "unqualifiedClassInstanceCreationExpressionToExpr",
-        () -> lambda("ucice",
+    public static final Def unqualifiedClassInstanceCreationExpressionToExpr = def("unqualifiedClassInstanceCreationExpressionToExpr")
+        .lam("ucice")
+        .to(() ->
                 let(
                     field("targs",
                         proj(UnqualifiedClassInstanceCreationExpression.TYPE_, UnqualifiedClassInstanceCreationExpression.TYPE_ARGUMENTS, "ucice")),
@@ -3215,15 +3220,15 @@ public class Serde {
                                                 var("hydra.serialization.parenList"),
                                                 bool(false),
                                                 Lists.map(ref(Serde.expressionToExpr), var("args")))))),
-                                Optionals.map(ref(Serde.classBodyToExpr), var("mbody"))))))));
+                                Optionals.map(ref(Serde.classBodyToExpr), var("mbody")))))));
 
-    public static final Def variableArityParameterToExpr = def(
-        "variableArityParameterToExpr",
-        () -> constant(apply(var("hydra.serialization.cst"), string("STUB:VariableArityParameter"))));
+    public static final Def variableArityParameterToExpr = def("variableArityParameterToExpr")
+        .to(() ->
+                constant(apply(var("hydra.serialization.cst"), string("STUB:VariableArityParameter"))));
 
-    public static final Def variableDeclaratorIdToExpr = def(
-        "variableDeclaratorIdToExpr",
-        () -> lambda("vdi",
+    public static final Def variableDeclaratorIdToExpr = def("variableDeclaratorIdToExpr")
+        .lam("vdi")
+        .to(() ->
                 let(
                     field("id",
                         proj(VariableDeclaratorId.TYPE_, VariableDeclaratorId.IDENTIFIER, "vdi")),
@@ -3234,11 +3239,11 @@ public class Serde {
                         Optionals.cat(
                             list(
                                 just(apply(ref(Serde.identifierToExpr), var("id"))),
-                                Optionals.map(ref(Serde.dimsToExpr), var("mdims"))))))));
+                                Optionals.map(ref(Serde.dimsToExpr), var("mdims")))))));
 
-    public static final Def variableDeclaratorToExpr = def(
-        "variableDeclaratorToExpr",
-        () -> lambda("vd",
+    public static final Def variableDeclaratorToExpr = def("variableDeclaratorToExpr")
+        .lam("vd")
+        .to(() ->
                 let(
                     field("id",
                         proj(VariableDeclarator.TYPE_, VariableDeclarator.ID, "vd")),
@@ -3251,11 +3256,11 @@ public class Serde {
                                 var("hydra.serialization.infixWs"),
                                 string("="),
                                 var("idSec"),
-                                apply(ref(Serde.variableInitializerToExpr), var("init"))))))));
+                                apply(ref(Serde.variableInitializerToExpr), var("init")))))));
 
-    public static final Def variableInitializerToExpr = def(
-        "variableInitializerToExpr",
-        () -> lambda("i",
+    public static final Def variableInitializerToExpr = def("variableInitializerToExpr")
+        .lam("i")
+        .to(() ->
                 cases(VariableInitializer.TYPE_,
                     var("i"),
                     field(
@@ -3263,11 +3268,11 @@ public class Serde {
                         lambda("e", apply(ref(Serde.expressionToExpr), var("e")))),
                     field(
                         VariableInitializer.ARRAY_INITIALIZER,
-                        lambda("ai", apply(ref(Serde.arrayInitializerToExpr), var("ai")))))));
+                        lambda("ai", apply(ref(Serde.arrayInitializerToExpr), var("ai"))))));
 
-    public static final Def variableModifierToExpr = def(
-        "variableModifierToExpr",
-        () -> lambda("m",
+    public static final Def variableModifierToExpr = def("variableModifierToExpr")
+        .lam("m")
+        .to(() ->
                 cases(VariableModifier.TYPE_,
                     var("m"),
                     field(
@@ -3275,11 +3280,11 @@ public class Serde {
                         lambda("ann", apply(ref(Serde.annotationToExpr), var("ann")))),
                     field(
                         VariableModifier.FINAL,
-                        constant(apply(var("hydra.serialization.cst"), string("final")))))));
+                        constant(apply(var("hydra.serialization.cst"), string("final"))))));
 
-    public static final Def whileStatementToExpr = def(
-        "whileStatementToExpr",
-        () -> lambda("ws",
+    public static final Def whileStatementToExpr = def("whileStatementToExpr")
+        .lam("ws")
+        .to(() ->
                 let(
                     field("mcond",
                         proj(WhileStatement.TYPE_, WhileStatement.COND, "ws")),
@@ -3298,11 +3303,11 @@ public class Serde {
                             apply(
                                 var("hydra.serialization.curlyBlock"),
                                 var("hydra.serialization.fullBlockStyle"),
-                                apply(ref(Serde.statementToExpr), var("body"))))))));
+                                apply(ref(Serde.statementToExpr), var("body")))))));
 
-    public static final Def wildcardBoundsToExpr = def(
-        "wildcardBoundsToExpr",
-        () -> lambda("b",
+    public static final Def wildcardBoundsToExpr = def("wildcardBoundsToExpr")
+        .lam("b")
+        .to(() ->
                 cases(WildcardBounds.TYPE_,
                     var("b"),
                     field(
@@ -3320,11 +3325,11 @@ public class Serde {
                                 var("hydra.serialization.spaceSep"),
                                 list(
                                     apply(var("hydra.serialization.cst"), string("super")),
-                                    apply(ref(Serde.referenceTypeToExpr), var("rt")))))))));
+                                    apply(ref(Serde.referenceTypeToExpr), var("rt"))))))));
 
-    public static final Def wildcardToExpr = def(
-        "wildcardToExpr",
-        () -> lambda("w",
+    public static final Def wildcardToExpr = def("wildcardToExpr")
+        .lam("w")
+        .to(() ->
                 let(
                     field("anns",
                         proj(Wildcard.TYPE_, Wildcard.ANNOTATIONS, "w")),
@@ -3343,16 +3348,13 @@ public class Serde {
                                             var("hydra.serialization.inlineStyle"),
                                             Lists.map(ref(Serde.annotationToExpr), var("anns"))))),
                                 just(apply(var("hydra.serialization.cst"), string("*"))),
-                                Optionals.map(ref(Serde.wildcardBoundsToExpr), var("mbounds"))))))));
+                                Optionals.map(ref(Serde.wildcardBoundsToExpr), var("mbounds")))))));
 
-    public static final Def withComments = def(
-        "withComments",
-        () -> doc(
-                "Wrap an expression with optional Javadoc comments. Blank lines inside the doc body emit ` *` (no trailing space) instead of ` * `.",
-                lambda(
-                    "mc",
-                    "expr",
-                    Optionals.cases(var("mc"), var("expr"), lambda("c",
+    public static final Def withComments = def("withComments")
+        .doc("Wrap an expression with optional Javadoc comments. Blank lines inside the doc body emit ` *` (no trailing space) instead of ` * `.")
+        .lam("mc").lam("expr")
+        .to(() ->
+                Optionals.cases(var("mc"), var("expr"), lambda("c",
                             apply(
                                 var("hydra.serialization.newlineSep"),
                                 list(
@@ -3380,7 +3382,7 @@ public class Serde {
                                                                         ref(Serde.javaDocEntityRef)),
                                                                     var("c")))))),
                                                 string("\n */")))),
-                                    var("expr"))))))));
+                                    var("expr"))))));
 
 
 

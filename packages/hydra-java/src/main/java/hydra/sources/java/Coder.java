@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static hydra.overlay.java.dsl.meta.Phantoms.*;
+import hydra.overlay.java.dsl.meta.Defs;
 import hydra.overlay.java.dsl.meta.Defs.Def;
 import static hydra.overlay.java.dsl.meta.Defs.define;
 import static hydra.overlay.java.dsl.meta.Defs.unqualifiedDeps;
@@ -180,15 +181,16 @@ public class Coder {
         return define(NS, localName, body);
     }
 
+    /** Fluent form: {@code def("name").doc("...").lam("x").to(() -> body)}. See Defs.DefBuilder. */
+    private static Defs.DefBuilder def(String localName) {
+        return define(NS, localName);
+    }
+
     // ---- AUTO-PORTED defs (untyped; inference assigns schemes; see #344) ----
 
-    public static final Def addComment = def(
-        "addComment",
-        () -> lambda(
-                "decl",
-                "field",
-                "cx",
-                "g",
+    public static final Def addComment = def("addComment")
+        .lam("decl").lam("field").lam("cx").lam("g")
+        .to(() ->
                 Eithers.map(
                     lambda("c",
                         record(ClassBodyDeclarationWithComments.TYPE_,
@@ -202,28 +204,22 @@ public class Coder {
                         var("hydra.annotations.commentsFromFieldType"),
                         var("cx"),
                         var("g"),
-                        var("field")))));
+                        var("field"))));
 
-    public static final Def analyzeJavaFunction = def(
-        "analyzeJavaFunction",
-        () -> lambda(
-                "env",
-                "term",
-                "cx",
-                "g",
+    public static final Def analyzeJavaFunction = def("analyzeJavaFunction")
+        .lam("env").lam("term").lam("cx").lam("g")
+        .to(() ->
                 apply(
                     var("hydra.analysis.analyzeFunctionTerm"),
                     var("cx"),
                     ref(Coder.javaEnvGetGraph),
                     ref(Coder.javaEnvSetGraph),
                     var("env"),
-                    var("term"))));
+                    var("term")));
 
-    public static final Def annotateBodyWithCod = def(
-        "annotateBodyWithCod",
-        () -> lambda(
-                "typ",
-                "term",
+    public static final Def annotateBodyWithCod = def("annotateBodyWithCod")
+        .lam("typ").lam("term")
+        .to(() ->
                 let("setAnn",
                     lambda("t",
                         apply(
@@ -267,16 +263,11 @@ public class Coder {
                                                 field(Application.FUNCTION, var("lhs")),
                                                 field(
                                                     Application.ARGUMENT,
-                                                    var("annotatedRhs"))))))))))));
+                                                    var("annotatedRhs")))))))))));
 
-    public static final Def annotateLambdaArgs = def(
-        "annotateLambdaArgs",
-        () -> lambda(
-                "cname",
-                "tApps",
-                "argTerms",
-                "cx",
-                "g",
+    public static final Def annotateLambdaArgs = def("annotateLambdaArgs")
+        .lam("cname").lam("tApps").lam("argTerms").lam("cx").lam("g")
+        .to(() ->
                 Logic.ifElse(
                     Lists.null_(var("tApps")),
                     right(var("argTerms")),
@@ -348,16 +339,11 @@ public class Coder {
                                                                 inject(Type.TYPE_,
                                                                     Type.VARIABLE,
                                                                     wrap(Name.TYPE_,
-                                                                        string("unused")))))))))))))))));
+                                                                        string("unused"))))))))))))))));
 
-    public static final Def applyCastIfSafe = def(
-        "applyCastIfSafe",
-        () -> lambda(
-                "aliases",
-                "castType",
-                "expr",
-                "cx",
-                "g",
+    public static final Def applyCastIfSafe = def("applyCastIfSafe")
+        .lam("aliases").lam("castType").lam("expr").lam("cx").lam("g")
+        .to(() ->
                 let(
                     field("trusted",
                         proj(Aliases.TYPE_, Aliases.TRUSTED_TYPE_VARS, "aliases")),
@@ -405,13 +391,11 @@ public class Coder {
                                                     apply(
                                                         ref(Utils.javaExpressionToJavaUnaryExpression),
                                                         var("expr"))))))))),
-                        right(var("expr"))))));
+                        right(var("expr")))));
 
-    public static final Def applyJavaArg = def(
-        "applyJavaArg",
-        () -> lambda(
-                "expr",
-                "jarg",
+    public static final Def applyJavaArg = def("applyJavaArg")
+        .lam("expr").lam("jarg")
+        .to(() ->
                 apply(
                     ref(Utils.javaMethodInvocationToJavaExpression),
                     apply(
@@ -423,28 +407,21 @@ public class Coder {
                                     var("expr")))),
                         wrap(Identifier.TYPE_,
                             ref(Names.applyMethodName)),
-                        list(var("jarg"))))));
+                        list(var("jarg")))));
 
-    public static final Def applyOvergenSubstToTermAnnotations = def(
-        "applyOvergenSubstToTermAnnotations",
-        () -> lambda(
-                "subst",
-                "term0",
-                "cx",
-                "g",
+    public static final Def applyOvergenSubstToTermAnnotations = def("applyOvergenSubstToTermAnnotations")
+        .lam("subst").lam("term0").lam("cx").lam("g")
+        .to(() ->
                 right(
                     apply(
                         ref(Coder.applyOvergenSubstToTermAnnotations_go),
                         var("subst"),
                         var("g"),
-                        var("term0")))));
+                        var("term0"))));
 
-    public static final Def applyOvergenSubstToTermAnnotations_go = def(
-        "applyOvergenSubstToTermAnnotations_go",
-        () -> lambda(
-                "subst",
-                "cx",
-                "term",
+    public static final Def applyOvergenSubstToTermAnnotations_go = def("applyOvergenSubstToTermAnnotations_go")
+        .lam("subst").lam("cx").lam("term")
+        .to(() ->
                 casesWithDefault(Term.TYPE_,
                     var("term"),
                     var("term"),
@@ -641,13 +618,11 @@ public class Coder {
                                             ref(Coder.applyOvergenSubstToTermAnnotations_go),
                                             var("subst"),
                                             var("cx"),
-                                            proj(TypeLambda.TYPE_, TypeLambda.BODY, "tl"))))))))));
+                                            proj(TypeLambda.TYPE_, TypeLambda.BODY, "tl")))))))));
 
-    public static final Def applySubstFull = def(
-        "applySubstFull",
-        () -> lambda(
-                "s",
-                "t",
+    public static final Def applySubstFull = def("applySubstFull")
+        .lam("s").lam("t")
+        .to(() ->
                 casesWithDefault(Type.TYPE_,
                     apply(var("hydra.strip.deannotateType"), var("t")),
                     var("t"),
@@ -784,25 +759,21 @@ public class Coder {
                                             Maps.delete(
                                                 proj(ForallType.TYPE_, ForallType.PARAMETER, "ft"),
                                                 var("s")),
-                                            proj(ForallType.TYPE_, ForallType.BODY, "ft"))))))))));
+                                            proj(ForallType.TYPE_, ForallType.BODY, "ft")))))))));
 
-    public static final Def applySubstSimple = def(
-        "applySubstSimple",
-        () -> lambda(
-                "subst",
-                "t",
+    public static final Def applySubstSimple = def("applySubstSimple")
+        .lam("subst").lam("t")
+        .to(() ->
                 casesWithDefault(Type.TYPE_,
                     apply(var("hydra.strip.deannotateType"), var("t")),
                     var("t"),
                     field(
                         Type.VARIABLE,
-                        lambda("v", Maps.findWithDefault(var("t"), var("v"), var("subst")))))));
+                        lambda("v", Maps.findWithDefault(var("t"), var("v"), var("subst"))))));
 
-    public static final Def arraysCompareExpr = def(
-        "arraysCompareExpr",
-        () -> lambda(
-                "otherVar",
-                "fname",
+    public static final Def arraysCompareExpr = def("arraysCompareExpr")
+        .lam("otherVar").lam("fname")
+        .to(() ->
                 let(
                     field("header",
                         inject(MethodInvocation_Header.TYPE_,
@@ -846,13 +817,11 @@ public class Coder {
                             field(MethodInvocation.HEADER, var("header")),
                             field(
                                 MethodInvocation.ARGUMENTS,
-                                list(var("arg1"), var("arg2"))))))));
+                                list(var("arg1"), var("arg2")))))));
 
-    public static final Def arraysEqualsClause = def(
-        "arraysEqualsClause",
-        () -> lambda(
-                "tmpName",
-                "fname",
+    public static final Def arraysEqualsClause = def("arraysEqualsClause")
+        .lam("tmpName").lam("fname")
+        .to(() ->
                 let(
                     field("thisArg",
                         apply(
@@ -895,15 +864,11 @@ public class Coder {
                                 field(MethodInvocation.HEADER, var("header")),
                                 field(
                                     MethodInvocation.ARGUMENTS,
-                                    list(var("thisArg"), var("otherArg")))))))));
+                                    list(var("thisArg"), var("otherArg"))))))));
 
-    public static final Def augmentVariantClass = def(
-        "augmentVariantClass",
-        () -> lambda(
-                "aliases",
-                "tparams",
-                "elName",
-                "cd",
+    public static final Def augmentVariantClass = def("augmentVariantClass")
+        .lam("aliases").lam("tparams").lam("elName").lam("cd")
+        .to(() ->
                 casesWithDefault(ClassDeclaration.TYPE_,
                     var("cd"),
                     var("cd"),
@@ -975,11 +940,11 @@ public class Coder {
                                             proj(NormalClassDeclaration.TYPE_, NormalClassDeclaration.PERMITS, "ncd")),
                                         field(
                                             NormalClassDeclaration.BODY,
-                                            var("newBody"))))))))));
+                                            var("newBody")))))))));
 
-    public static final Def bindingIsFunctionType = def(
-        "bindingIsFunctionType",
-        () -> lambda("b",
+    public static final Def bindingIsFunctionType = def("bindingIsFunctionType")
+        .lam("b")
+        .to(() ->
                 Optionals.cases(
                     proj(Binding.TYPE_, Binding.TYPE_SCHEME, "b"),
                     casesWithDefault(Term.TYPE_,
@@ -1006,11 +971,11 @@ public class Coder {
                                             var("hydra.strip.deannotateType"),
                                             proj(ForallType.TYPE_, ForallType.BODY, "fa")),
                                         bool(false),
-                                        field(Type.FUNCTION, constant(bool(true)))))))))));
+                                        field(Type.FUNCTION, constant(bool(true))))))))));
 
-    public static final Def bindingNameToFilePath = def(
-        "bindingNameToFilePath",
-        () -> lambda("name",
+    public static final Def bindingNameToFilePath = def("bindingNameToFilePath")
+        .lam("name")
+        .to(() ->
                 let(
                     field("qn",
                         apply(var("hydra.names.qualifyName"), var("name"))),
@@ -1038,15 +1003,11 @@ public class Coder {
                             CaseConvention.PASCAL,
                             unit()),
                         wrap(FileExtension.TYPE_, string("java")),
-                        var("unq")))));
+                        var("unq"))));
 
-    public static final Def bindingsToStatements = def(
-        "bindingsToStatements",
-        () -> lambda(
-                "env",
-                "bindings",
-                "cx",
-                "g0",
+    public static final Def bindingsToStatements = def("bindingsToStatements")
+        .lam("env").lam("bindings").lam("cx").lam("g0")
+        .to(() ->
                 let(
                     binds(    field("aliases",
                         proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env")),
@@ -1236,11 +1197,11 @@ public class Coder {
                                                             var("decls")))))))),
                                 var("sorted")),
                             lambda("groups",
-                                right(pair(Lists.concat(var("groups")), var("envExtended")))))))));
+                                right(pair(Lists.concat(var("groups")), var("envExtended"))))))));
 
-    public static final Def boundTypeVariables = def(
-        "boundTypeVariables",
-        () -> lambda("typ",
+    public static final Def boundTypeVariables = def("boundTypeVariables")
+        .lam("typ")
+        .to(() ->
                 casesWithDefault(Type.TYPE_,
                     var("typ"),
                     list(),
@@ -1257,14 +1218,11 @@ public class Coder {
                                 proj(ForallType.TYPE_, ForallType.PARAMETER, "ft"),
                                 apply(
                                     ref(Coder.boundTypeVariables),
-                                    proj(ForallType.TYPE_, ForallType.BODY, "ft"))))))));
+                                    proj(ForallType.TYPE_, ForallType.BODY, "ft")))))));
 
-    public static final Def buildArgSubst = def(
-        "buildArgSubst",
-        () -> lambda(
-                "schemeVarSet",
-                "schemeDoms",
-                "argTypes",
+    public static final Def buildArgSubst = def("buildArgSubst")
+        .lam("schemeVarSet").lam("schemeDoms").lam("argTypes")
+        .to(() ->
                 Maps.fromList(
                     Lists.bind(
                         Lists.zip(var("schemeDoms"), var("argTypes")),
@@ -1283,41 +1241,32 @@ public class Coder {
                                             Logic.ifElse(
                                                 Sets.member(var("v"), var("schemeVarSet")),
                                                 list(pair(var("v"), var("argType"))),
-                                                list()))))))))));
+                                                list())))))))));
 
-    public static final Def buildCurriedLambda = def(
-        "buildCurriedLambda",
-        () -> lambda(
-                "params",
-                "inner",
+    public static final Def buildCurriedLambda = def("buildCurriedLambda")
+        .lam("params").lam("inner")
+        .to(() ->
                 Lists.foldl(
                     lambda(
                         "acc",
                         "p",
                         apply(ref(Utils.javaLambda), var("p"), var("acc"))),
                     var("inner"),
-                    Lists.reverse(var("params")))));
+                    Lists.reverse(var("params"))));
 
-    public static final Def buildSubstFromAnnotations = def(
-        "buildSubstFromAnnotations",
-        () -> lambda(
-                "schemeVarSet",
-                "term",
-                "cx",
-                "g",
+    public static final Def buildSubstFromAnnotations = def("buildSubstFromAnnotations")
+        .lam("schemeVarSet").lam("term").lam("cx").lam("g")
+        .to(() ->
                 right(
                     apply(
                         ref(Coder.buildSubstFromAnnotations_go),
                         var("schemeVarSet"),
                         var("g"),
-                        var("term")))));
+                        var("term"))));
 
-    public static final Def buildSubstFromAnnotations_go = def(
-        "buildSubstFromAnnotations_go",
-        () -> lambda(
-                "schemeVarSet",
-                "g",
-                "term",
+    public static final Def buildSubstFromAnnotations_go = def("buildSubstFromAnnotations_go")
+        .lam("schemeVarSet").lam("g").lam("term")
+        .to(() ->
                 casesWithDefault(Term.TYPE_,
                     var("term"),
                     var("hydra.lib.maps.empty"),
@@ -1557,26 +1506,20 @@ public class Coder {
                                         var("schemeVarSet"),
                                         var("g"),
                                         var("t"))),
-                                var("e")))))));
+                                var("e"))))));
 
-    public static final Def buildTypeSubst = def(
-        "buildTypeSubst",
-        () -> lambda(
-                "schemeVarSet",
-                "schemeType",
-                "actualType",
+    public static final Def buildTypeSubst = def("buildTypeSubst")
+        .lam("schemeVarSet").lam("schemeType").lam("actualType")
+        .to(() ->
                 apply(
                     ref(Coder.buildTypeSubst_go),
                     var("schemeVarSet"),
                     apply(var("hydra.strip.deannotateType"), var("schemeType")),
-                    apply(var("hydra.strip.deannotateType"), var("actualType")))));
+                    apply(var("hydra.strip.deannotateType"), var("actualType"))));
 
-    public static final Def buildTypeSubst_go = def(
-        "buildTypeSubst_go",
-        () -> lambda(
-                "svs",
-                "st",
-                "at",
+    public static final Def buildTypeSubst_go = def("buildTypeSubst_go")
+        .lam("svs").lam("st").lam("at")
+        .to(() ->
                 let("goSub",
                     lambda(
                         "a",
@@ -1728,26 +1671,20 @@ public class Coder {
                                             apply(
                                                 var("goSub"),
                                                 proj(ForallType.TYPE_, ForallType.BODY, "sfa"),
-                                                proj(ForallType.TYPE_, ForallType.BODY, "afa")))))))))));
+                                                proj(ForallType.TYPE_, ForallType.BODY, "afa"))))))))));
 
-    public static final Def buildTypeVarSubst = def(
-        "buildTypeVarSubst",
-        () -> lambda(
-                "schemeVarSet",
-                "freshTyp",
-                "canonTyp",
+    public static final Def buildTypeVarSubst = def("buildTypeVarSubst")
+        .lam("schemeVarSet").lam("freshTyp").lam("canonTyp")
+        .to(() ->
                 apply(
                     ref(Coder.buildTypeVarSubst_go),
                     var("schemeVarSet"),
                     apply(var("hydra.strip.deannotateType"), var("freshTyp")),
-                    apply(var("hydra.strip.deannotateType"), var("canonTyp")))));
+                    apply(var("hydra.strip.deannotateType"), var("canonTyp"))));
 
-    public static final Def buildTypeVarSubst_go = def(
-        "buildTypeVarSubst_go",
-        () -> lambda(
-                "svs",
-                "ft",
-                "ct",
+    public static final Def buildTypeVarSubst_go = def("buildTypeVarSubst_go")
+        .lam("svs").lam("ft").lam("ct")
+        .to(() ->
                 let("goSub",
                     lambda(
                         "a",
@@ -1922,21 +1859,18 @@ public class Coder {
                                             apply(
                                                 var("goSub"),
                                                 proj(ForallType.TYPE_, ForallType.BODY, "ffa"),
-                                                proj(ForallType.TYPE_, ForallType.BODY, "cfa")))))))))));
+                                                proj(ForallType.TYPE_, ForallType.BODY, "cfa"))))))))));
 
-    public static final Def classModsPublic = def(
-        "classModsPublic",
-        () -> list(
+    public static final Def classModsPublic = def("classModsPublic")
+        .to(() ->
+                list(
                 inject(ClassModifier.TYPE_,
                     ClassModifier.PUBLIC,
                     unit())));
 
-    public static final Def classifyDataReference = def(
-        "classifyDataReference",
-        () -> lambda(
-                "name",
-                "cx",
-                "g",
+    public static final Def classifyDataReference = def("classifyDataReference")
+        .lam("name").lam("cx").lam("g")
+        .to(() ->
                 Eithers.bind(
                     right(apply(var("hydra.lexical.lookupBinding"), var("g"), var("name"))),
                     lambda("mel",
@@ -1963,13 +1897,11 @@ public class Coder {
                                             apply(
                                                 ref(Coder.classifyDataTerm),
                                                 var("ts"),
-                                                proj(Binding.TYPE_, Binding.TERM, "el")))))))))));
+                                                proj(Binding.TYPE_, Binding.TERM, "el"))))))))));
 
-    public static final Def classifyDataTerm = def(
-        "classifyDataTerm",
-        () -> lambda(
-                "ts",
-                "term",
+    public static final Def classifyDataTerm = def("classifyDataTerm")
+        .lam("ts").lam("term")
+        .to(() ->
                 Logic.ifElse(
                     apply(var("hydra.dependencies.isLambda"), var("term")),
                     let("n",
@@ -2002,11 +1934,11 @@ public class Coder {
                                         unit()))),
                             inject(JavaSymbolClass.TYPE_,
                                 JavaSymbolClass.NULLARY_FUNCTION,
-                                unit()))))));
+                                unit())))));
 
-    public static final Def classifyDataTerm_countLambdaParams = def(
-        "classifyDataTerm_countLambdaParams",
-        () -> lambda("t",
+    public static final Def classifyDataTerm_countLambdaParams = def("classifyDataTerm_countLambdaParams")
+        .lam("t")
+        .to(() ->
                 casesWithDefault(Term.TYPE_,
                     apply(var("hydra.strip.deannotateTerm"), var("t")),
                     int32(0),
@@ -2023,11 +1955,11 @@ public class Coder {
                         lambda("lt",
                             apply(
                                 ref(Coder.classifyDataTerm_countLambdaParams),
-                                proj(Let.TYPE_, Let.BODY, "lt")))))));
+                                proj(Let.TYPE_, Let.BODY, "lt"))))));
 
-    public static final Def classifyDataTerm_stripTypeLambdas = def(
-        "classifyDataTerm_stripTypeLambdas",
-        () -> lambda("t",
+    public static final Def classifyDataTerm_stripTypeLambdas = def("classifyDataTerm_stripTypeLambdas")
+        .lam("t")
+        .to(() ->
                 casesWithDefault(Term.TYPE_,
                     apply(var("hydra.strip.deannotateTerm"), var("t")),
                     var("t"),
@@ -2036,11 +1968,11 @@ public class Coder {
                         lambda("tl",
                             apply(
                                 ref(Coder.classifyDataTerm_stripTypeLambdas),
-                                proj(TypeLambda.TYPE_, TypeLambda.BODY, "tl")))))));
+                                proj(TypeLambda.TYPE_, TypeLambda.BODY, "tl"))))));
 
-    public static final Def cmpDeclStatement = def(
-        "cmpDeclStatement",
-        () -> lambda("aliases",
+    public static final Def cmpDeclStatement = def("cmpDeclStatement")
+        .lam("aliases")
+        .to(() ->
                 apply(
                     ref(Utils.variableDeclarationStatement),
                     var("aliases"),
@@ -2048,11 +1980,11 @@ public class Coder {
                     apply(ref(Utils.javaIdentifier), string("cmp")),
                     apply(
                         ref(Utils.javaIntExpression),
-                        bigint(java.math.BigInteger.valueOf(0L))))));
+                        bigint(java.math.BigInteger.valueOf(0L)))));
 
-    public static final Def cmpNotZeroExpr = def(
-        "cmpNotZeroExpr",
-        () -> let(
+    public static final Def cmpNotZeroExpr = def("cmpNotZeroExpr")
+        .to(() ->
+                let(
                 field("lhs",
                     apply(
                         ref(Utils.javaRelationalExpressionToJavaEqualityExpression),
@@ -2085,9 +2017,9 @@ public class Coder {
                             field(EqualityExpression_Binary.LHS, var("lhs")),
                             field(EqualityExpression_Binary.RHS, var("rhs")))))));
 
-    public static final Def collectForallParams = def(
-        "collectForallParams",
-        () -> lambda("t",
+    public static final Def collectForallParams = def("collectForallParams")
+        .lam("t")
+        .to(() ->
                 casesWithDefault(Type.TYPE_,
                     apply(var("hydra.strip.deannotateType"), var("t")),
                     list(),
@@ -2098,11 +2030,11 @@ public class Coder {
                                 proj(ForallType.TYPE_, ForallType.PARAMETER, "fa"),
                                 apply(
                                     ref(Coder.collectForallParams),
-                                    proj(ForallType.TYPE_, ForallType.BODY, "fa"))))))));
+                                    proj(ForallType.TYPE_, ForallType.BODY, "fa")))))));
 
-    public static final Def collectLambdaDomains = def(
-        "collectLambdaDomains",
-        () -> lambda("t",
+    public static final Def collectLambdaDomains = def("collectLambdaDomains")
+        .lam("t")
+        .to(() ->
                 casesWithDefault(Term.TYPE_,
                     apply(var("hydra.strip.deannotateTerm"), var("t")),
                     pair(list(), var("t")),
@@ -2119,13 +2051,11 @@ public class Coder {
                                             proj(Lambda.TYPE_, Lambda.BODY, "lam")),
                                         pair(
                                             Lists.cons(var("dom"), Pairs.first(var("rest"))),
-                                            Pairs.second(var("rest")))))))))));
+                                            Pairs.second(var("rest"))))))))));
 
-    public static final Def collectTypeApps = def(
-        "collectTypeApps",
-        () -> lambda(
-                "t",
-                "acc",
+    public static final Def collectTypeApps = def("collectTypeApps")
+        .lam("t").lam("acc")
+        .to(() ->
                 casesWithDefault(Term.TYPE_,
                     apply(var("hydra.strip.deannotateTerm"), var("t")),
                     pair(apply(var("hydra.strip.deannotateTerm"), var("t")), var("acc")),
@@ -2137,13 +2067,11 @@ public class Coder {
                                 proj(TypeApplicationTerm.TYPE_, TypeApplicationTerm.BODY, "ta"),
                                 Lists.cons(
                                     proj(TypeApplicationTerm.TYPE_, TypeApplicationTerm.TYPE, "ta"),
-                                    var("acc"))))))));
+                                    var("acc")))))));
 
-    public static final Def collectTypeApps0 = def(
-        "collectTypeApps0",
-        () -> lambda(
-                "t",
-                "acc",
+    public static final Def collectTypeApps0 = def("collectTypeApps0")
+        .lam("t").lam("acc")
+        .to(() ->
                 casesWithDefault(Term.TYPE_,
                     apply(var("hydra.strip.deannotateTerm"), var("t")),
                     pair(var("t"), var("acc")),
@@ -2155,18 +2083,18 @@ public class Coder {
                                 proj(TypeApplicationTerm.TYPE_, TypeApplicationTerm.BODY, "ta"),
                                 Lists.cons(
                                     proj(TypeApplicationTerm.TYPE_, TypeApplicationTerm.TYPE, "ta"),
-                                    var("acc"))))))));
+                                    var("acc")))))));
 
-    public static final Def collectTypeVars = def(
-        "collectTypeVars",
-        () -> lambda("typ",
+    public static final Def collectTypeVars = def("collectTypeVars")
+        .lam("typ")
+        .to(() ->
                 apply(
                     ref(Coder.collectTypeVars_go),
-                    apply(var("hydra.strip.deannotateType"), var("typ")))));
+                    apply(var("hydra.strip.deannotateType"), var("typ"))));
 
-    public static final Def collectTypeVars_go = def(
-        "collectTypeVars_go",
-        () -> lambda("t",
+    public static final Def collectTypeVars_go = def("collectTypeVars_go")
+        .lam("t")
+        .to(() ->
                 casesWithDefault(Type.TYPE_,
                     var("t"),
                     var("hydra.lib.sets.empty"),
@@ -2272,13 +2200,11 @@ public class Coder {
                                 ref(Coder.collectTypeVars_go),
                                 apply(
                                     var("hydra.strip.deannotateType"),
-                                    proj(ForallType.TYPE_, ForallType.BODY, "ft"))))))));
+                                    proj(ForallType.TYPE_, ForallType.BODY, "ft")))))));
 
-    public static final Def comparableCompareExpr = def(
-        "comparableCompareExpr",
-        () -> lambda(
-                "otherVar",
-                "fname",
+    public static final Def comparableCompareExpr = def("comparableCompareExpr")
+        .lam("otherVar").lam("fname")
+        .to(() ->
                 let(
                     field("thisField",
                         apply(
@@ -2298,13 +2224,11 @@ public class Coder {
                             ref(Utils.methodInvocationStatic),
                             wrap(Identifier.TYPE_, string("hydra.overlay.java.util.Comparing")),
                             wrap(Identifier.TYPE_, string("compare")),
-                            list(var("thisField"), var("otherField")))))));
+                            list(var("thisField"), var("otherField"))))));
 
-    public static final Def compareAndReturnStmts = def(
-        "compareAndReturnStmts",
-        () -> lambda(
-                "otherVar",
-                "f",
+    public static final Def compareAndReturnStmts = def("compareAndReturnStmts")
+        .lam("otherVar").lam("f")
+        .to(() ->
                 list(
                     inject(BlockStatement.TYPE_,
                         BlockStatement.STATEMENT,
@@ -2343,13 +2267,11 @@ public class Coder {
                                                         ExpressionName.IDENTIFIER,
                                                         apply(
                                                             ref(Utils.javaIdentifier),
-                                                            string("cmp"))))))))))))));
+                                                            string("cmp")))))))))))));
 
-    public static final Def compareFieldExpr = def(
-        "compareFieldExpr",
-        () -> lambda(
-                "otherVar",
-                "ft",
+    public static final Def compareFieldExpr = def("compareFieldExpr")
+        .lam("otherVar").lam("ft")
+        .to(() ->
                 let(
                     field("fname",
                         apply(
@@ -2363,14 +2285,11 @@ public class Coder {
                         Logic.ifElse(
                             apply(ref(Coder.isNonComparableType), var("ftype")),
                             apply(ref(Coder.hashCodeCompareExpr), var("otherVar"), var("fname")),
-                            apply(ref(Coder.comparableCompareExpr), var("otherVar"), var("fname")))))));
+                            apply(ref(Coder.comparableCompareExpr), var("otherVar"), var("fname"))))));
 
-    public static final Def compareToBody = def(
-        "compareToBody",
-        () -> lambda(
-                "aliases",
-                "otherVar",
-                "fields",
+    public static final Def compareToBody = def("compareToBody")
+        .lam("aliases").lam("otherVar").lam("fields")
+        .to(() ->
                 let("zeroStmts",
                     list(
                         inject(BlockStatement.TYPE_,
@@ -2430,13 +2349,11 @@ public class Coder {
                                                                         var("firstField"),
                                                                         Lists.maybeLast(
                                                                             var("restFields"))))))))))))),
-                            Lists.uncons(var("fields")))))));
+                            Lists.uncons(var("fields"))))));
 
-    public static final Def compareToZeroClause = def(
-        "compareToZeroClause",
-        () -> lambda(
-                "tmpName",
-                "fname",
+    public static final Def compareToZeroClause = def("compareToZeroClause")
+        .lam("tmpName").lam("fname")
+        .to(() ->
                 let(
                     field("compareToArg",
                         apply(
@@ -2496,17 +2413,11 @@ public class Coder {
                             EqualityExpression.EQUAL,
                             record(EqualityExpression_Binary.TYPE_,
                                 field(EqualityExpression_Binary.LHS, var("lhs")),
-                                field(EqualityExpression_Binary.RHS, var("rhs"))))))));
+                                field(EqualityExpression_Binary.RHS, var("rhs")))))));
 
-    public static final Def constantDecl = def(
-        "constantDecl",
-        () -> lambda(
-                "comment",
-                "javaName",
-                "aliases",
-                "name",
-                "cx",
-                "g",
+    public static final Def constantDecl = def("constantDecl")
+        .lam("comment").lam("javaName").lam("aliases").lam("name").lam("cx").lam("g")
+        .to(() ->
                 let(
                     field("mods",
                         list(
@@ -2577,16 +2488,11 @@ public class Coder {
                                                     ref(Utils.javaMemberField),
                                                     var("mods"),
                                                     var("jt"),
-                                                    var("var"))))))))))));
+                                                    var("var")))))))))));
 
-    public static final Def constantDeclForFieldType = def(
-        "constantDeclForFieldType",
-        () -> lambda(
-                "parentName",
-                "aliases",
-                "ftyp",
-                "cx",
-                "g",
+    public static final Def constantDeclForFieldType = def("constantDeclForFieldType")
+        .lam("parentName").lam("aliases").lam("ftyp").lam("cx").lam("g")
+        .to(() ->
                 let(
                     field("name",
                         proj(FieldType.TYPE_, FieldType.NAME, "ftyp")),
@@ -2617,15 +2523,11 @@ public class Coder {
                         var("aliases"),
                         var("name"),
                         var("cx"),
-                        var("g")))));
+                        var("g"))));
 
-    public static final Def constantDeclForTypeName = def(
-        "constantDeclForTypeName",
-        () -> lambda(
-                "aliases",
-                "name",
-                "cx",
-                "g",
+    public static final Def constantDeclForTypeName = def("constantDeclForTypeName")
+        .lam("aliases").lam("name").lam("cx").lam("g")
+        .to(() ->
                 let("comment",
                     Strings.cat(
                         list(
@@ -2639,13 +2541,11 @@ public class Coder {
                         var("aliases"),
                         var("name"),
                         var("cx"),
-                        var("g")))));
+                        var("g"))));
 
-    public static final Def constructElementsInterface = def(
-        "constructElementsInterface",
-        () -> lambda(
-                "mod",
-                "members",
+    public static final Def constructElementsInterface = def("constructElementsInterface")
+        .lam("mod").lam("members")
+        .to(() ->
                 let(
                     binds(    field("ns",
                         proj(Module.TYPE_, Module.NAME, "mod")),
@@ -2719,16 +2619,11 @@ public class Coder {
                                 field(OrdinaryCompilationUnit.IMPORTS, list()),
                                 field(
                                     OrdinaryCompilationUnit.TYPES,
-                                    list(var("decl")))))))));
+                                    list(var("decl"))))))));
 
-    public static final Def correctCastType = def(
-        "correctCastType",
-        () -> lambda(
-                "innerBody",
-                "typeArgs",
-                "fallback",
-                "cx",
-                "g",
+    public static final Def correctCastType = def("correctCastType")
+        .lam("innerBody").lam("typeArgs").lam("fallback").lam("cx").lam("g")
+        .to(() ->
                 casesWithDefault(Term.TYPE_,
                     apply(var("hydra.strip.deannotateTerm"), var("innerBody")),
                     right(var("fallback")),
@@ -2751,17 +2646,11 @@ public class Coder {
                                                 Optionals.fromOptional(
                                                     var("fallback"),
                                                     Lists.maybeAt(int32(1), var("typeArgs"))))))),
-                                right(var("fallback"))))))));
+                                right(var("fallback")))))));
 
-    public static final Def correctTypeApps = def(
-        "correctTypeApps",
-        () -> lambda(
-                "gr",
-                "name",
-                "args",
-                "fallbackTypeApps",
-                "cx",
-                "g",
+    public static final Def correctTypeApps = def("correctTypeApps")
+        .lam("gr").lam("name").lam("args").lam("fallbackTypeApps").lam("cx").lam("g")
+        .to(() ->
                 Eithers.bind(
                     right(apply(var("hydra.lexical.lookupBinding"), var("g"), var("name"))),
                     lambda("mel",
@@ -2865,17 +2754,11 @@ public class Coder {
                                                     var("schemeType"),
                                                     var("args"),
                                                     var("cx"),
-                                                    var("g"))))))))))));
+                                                    var("g")))))))))));
 
-    public static final Def correctTypeAppsWithArgs = def(
-        "correctTypeAppsWithArgs",
-        () -> lambda(
-                "schemeVars",
-                "fallbackTypeApps",
-                "schemeType",
-                "args",
-                "cx",
-                "g",
+    public static final Def correctTypeAppsWithArgs = def("correctTypeAppsWithArgs")
+        .lam("schemeVars").lam("fallbackTypeApps").lam("schemeType").lam("args").lam("cx").lam("g")
+        .to(() ->
                 let(
                     field("schemeVarSet",
                         Sets.fromList(var("schemeVars"))),
@@ -2958,11 +2841,11 @@ public class Coder {
                                                     ref(Coder.buildArgSubst),
                                                     var("schemeVarSet"),
                                                     var("schemeDoms"),
-                                                    var("argTypes"))))))))))));
+                                                    var("argTypes")))))))))));
 
-    public static final Def countFunctionParams = def(
-        "countFunctionParams",
-        () -> lambda("t",
+    public static final Def countFunctionParams = def("countFunctionParams")
+        .lam("t")
+        .to(() ->
                 casesWithDefault(Type.TYPE_,
                     apply(var("hydra.strip.deannotateType"), var("t")),
                     int32(0),
@@ -2973,11 +2856,11 @@ public class Coder {
                                 int32(1),
                                 apply(
                                     ref(Coder.countFunctionParams),
-                                    proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft"))))))));
+                                    proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft")))))));
 
-    public static final Def declarationForRecordType = def(
-        "declarationForRecordType",
-        () -> lambda(
+    public static final Def declarationForRecordType = def("declarationForRecordType")
+        .to(() ->
+                lambda(
                 params("isInner", "isSer", "aliases", "tparams", "elName", "fields", "cx", "g"),
                 apply(
                     ref(Coder.declarationForRecordType_prime),
@@ -2991,9 +2874,9 @@ public class Coder {
                     var("cx"),
                     var("g"))));
 
-    public static final Def declarationForRecordType_prime = def(
-        "declarationForRecordType'",
-        () -> lambda(
+    public static final Def declarationForRecordType_prime = def("declarationForRecordType'")
+        .to(() ->
+                lambda(
                 params("isInner", "isSer", "aliases", "tparams", "elName", "parentName", "fields", "cx", "g"),
                 Eithers.bind(
                     Eithers.mapList(
@@ -3270,16 +3153,9 @@ public class Coder {
                                                                                     var("ifaces"),
                                                                                     var("bodyDecls"))))))))))))))))))))));
 
-    public static final Def declarationForUnionType = def(
-        "declarationForUnionType",
-        () -> lambda(
-                "isSer",
-                "aliases",
-                "tparams",
-                "elName",
-                "fields",
-                "cx",
-                "g",
+    public static final Def declarationForUnionType = def("declarationForUnionType")
+        .lam("isSer").lam("aliases").lam("tparams").lam("elName").lam("fields").lam("cx").lam("g")
+        .to(() ->
                 Eithers.bind(
                     Eithers.mapList(
                         lambda("ft",
@@ -3802,11 +3678,11 @@ public class Coder {
                                                                         var("aliases"),
                                                                         var("tparams"),
                                                                         var("elName")),
-                                                                    var("bodyDecls"))))))))))))))));
+                                                                    var("bodyDecls")))))))))))))));
 
-    public static final Def decodeTypeFromTerm = def(
-        "decodeTypeFromTerm",
-        () -> lambda("term",
+    public static final Def decodeTypeFromTerm = def("decodeTypeFromTerm")
+        .lam("term")
+        .to(() ->
                 casesWithDefault(Term.TYPE_,
                     apply(var("hydra.strip.deannotateTerm"), var("term")),
                     nothing(),
@@ -4012,13 +3888,11 @@ public class Coder {
                                                                                     unit()))),
                                                                         nothing())))),
                                                         nothing())))))),
-                                nothing()))))));
+                                nothing())))));
 
-    public static final Def dedupBindings = def(
-        "dedupBindings",
-        () -> lambda(
-                "inScope",
-                "bs",
+    public static final Def dedupBindings = def("dedupBindings")
+        .lam("inScope").lam("bs")
+        .to(() ->
                 Optionals.fromOptional(
                     list(),
                     Optionals.map(
@@ -4076,14 +3950,11 @@ public class Coder {
                                             ref(Coder.dedupBindings),
                                             Sets.insert(var("name"), var("inScope")),
                                             var("rest")))))),
-                        Lists.uncons(var("bs"))))));
+                        Lists.uncons(var("bs")))));
 
-    public static final Def detectAccumulatorUnification = def(
-        "detectAccumulatorUnification",
-        () -> lambda(
-                "doms",
-                "cod",
-                "tparams",
+    public static final Def detectAccumulatorUnification = def("detectAccumulatorUnification")
+        .lam("doms").lam("cod").lam("tparams")
+        .to(() ->
                 let(
                     binds(    field("tparamSet",
                         Sets.fromList(var("tparams"))),
@@ -4155,14 +4026,11 @@ public class Coder {
                                 apply(ref(Coder.nameMapToTypeMap), var("selfRefSubst")),
                                 apply(ref(Coder.nameMapToTypeMap), var("codSubst"))),
                             var("danglingSubst")),
-                        apply(ref(Coder.nameMapToTypeMap), var("directRefSubst"))))));
+                        apply(ref(Coder.nameMapToTypeMap), var("directRefSubst")))));
 
-    public static final Def directRefSubstitution = def(
-        "directRefSubstitution",
-        () -> lambda(
-                "directInputVars",
-                "codVar",
-                "grouped",
+    public static final Def directRefSubstitution = def("directRefSubstitution")
+        .lam("directInputVars").lam("codVar").lam("grouped")
+        .to(() ->
                 Lists.foldl(
                     lambda(
                         "subst",
@@ -4175,16 +4043,11 @@ public class Coder {
                             Pairs.first(var("entry")),
                             Pairs.second(var("entry")))),
                     var("hydra.lib.maps.empty"),
-                    Maps.toList(var("grouped")))));
+                    Maps.toList(var("grouped"))));
 
-    public static final Def directRefSubstitution_processGroup = def(
-        "directRefSubstitution_processGroup",
-        () -> lambda(
-                "directInputVars",
-                "codVar",
-                "subst",
-                "inVar",
-                "outVars",
+    public static final Def directRefSubstitution_processGroup = def("directRefSubstitution_processGroup")
+        .lam("directInputVars").lam("codVar").lam("subst").lam("inVar").lam("outVars")
+        .to(() ->
                 let(
                     field("selfRefCount",
                         Lists.length(
@@ -4210,15 +4073,11 @@ public class Coder {
                             lambda("s", lambda("v", Maps.insert(var("v"), var("inVar"), var("s")))),
                             var("subst"),
                             var("safeNonSelfVars")),
-                        var("subst")))));
+                        var("subst"))));
 
-    public static final Def domTypeArgs = def(
-        "domTypeArgs",
-        () -> lambda(
-                "aliases",
-                "d",
-                "cx",
-                "g",
+    public static final Def domTypeArgs = def("domTypeArgs")
+        .lam("aliases").lam("d").lam("cx").lam("g")
+        .to(() ->
                 let("args",
                     apply(
                         ref(Coder.extractTypeApplicationArgs),
@@ -4247,15 +4106,11 @@ public class Coder {
                                                         TypeArgument.REFERENCE,
                                                         var("rt")))))))),
                             var("args")),
-                        right(apply(ref(Coder.javaTypeArgumentsForType), var("d")))))));
+                        right(apply(ref(Coder.javaTypeArgumentsForType), var("d"))))));
 
-    public static final Def elementJavaIdentifier = def(
-        "elementJavaIdentifier",
-        () -> lambda(
-                "isPrim",
-                "isMethod",
-                "aliases",
-                "name",
+    public static final Def elementJavaIdentifier = def("elementJavaIdentifier")
+        .lam("isPrim").lam("isMethod").lam("aliases").lam("name")
+        .to(() ->
                 let(
                     field("qn",
                         apply(var("hydra.names.qualifyName"), var("name"))),
@@ -4293,14 +4148,11 @@ public class Coder {
                                             var("sep")),
                                         apply(
                                             ref(Utils.sanitizeJavaName),
-                                            var("local"))))))))));
+                                            var("local")))))))));
 
-    public static final Def elementJavaIdentifier_qualify = def(
-        "elementJavaIdentifier_qualify",
-        () -> lambda(
-                "aliases",
-                "mns",
-                "s",
+    public static final Def elementJavaIdentifier_qualify = def("elementJavaIdentifier_qualify")
+        .lam("aliases").lam("mns").lam("s")
+        .to(() ->
                 apply(
                     unwrap(Identifier.TYPE_),
                     apply(
@@ -4310,11 +4162,11 @@ public class Coder {
                             var("hydra.names.unqualifyName"),
                             record(QualifiedName.TYPE_,
                                 field(QualifiedName.MODULE_NAME, var("mns")),
-                                field(QualifiedName.LOCAL, var("s"))))))));
+                                field(QualifiedName.LOCAL, var("s")))))));
 
-    public static final Def elementsClassName = def(
-        "elementsClassName",
-        () -> lambda("ns",
+    public static final Def elementsClassName = def("elementsClassName")
+        .lam("ns")
+        .to(() ->
                 let(
                     field("nsStr",
                         apply(unwrap(ModuleName.TYPE_), var("ns"))),
@@ -4325,11 +4177,11 @@ public class Coder {
                         var("hydra.java.language.reservedWords"),
                         apply(
                             var("hydra.formatting.capitalize"),
-                            Optionals.fromOptional(var("nsStr"), Lists.maybeLast(var("parts"))))))));
+                            Optionals.fromOptional(var("nsStr"), Lists.maybeLast(var("parts")))))));
 
-    public static final Def elementsQualifiedName = def(
-        "elementsQualifiedName",
-        () -> lambda("ns",
+    public static final Def elementsQualifiedName = def("elementsQualifiedName")
+        .lam("ns")
+        .to(() ->
                 apply(
                     var("hydra.names.unqualifyName"),
                     record(QualifiedName.TYPE_,
@@ -4338,15 +4190,11 @@ public class Coder {
                             apply(ref(Coder.namespaceParent), var("ns"))),
                         field(
                             QualifiedName.LOCAL,
-                            apply(ref(Coder.elementsClassName), var("ns")))))));
+                            apply(ref(Coder.elementsClassName), var("ns"))))));
 
-    public static final Def encodeApplication = def(
-        "encodeApplication",
-        () -> lambda(
-                "env",
-                "app",
-                "cx",
-                "g0",
+    public static final Def encodeApplication = def("encodeApplication")
+        .lam("env").lam("app").lam("cx").lam("g0")
+        .to(() ->
                 let(
                     field("aliases",
                         proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env")),
@@ -4612,12 +4460,11 @@ public class Coder {
                                                                                                                                 var("acc"),
                                                                                                                                 var("jarg")))))),
                                                                                                             var("initialCall"),
-                                                                                                            var("rargs"))))))))))))))))))))))))));
+                                                                                                            var("rargs")))))))))))))))))))))))));
 
-    public static final Def encodeApplication_fallback = def(
-        "encodeApplication_fallback",
-        () -> lambda(
-                params("env", "aliases", "gr", "typeApps", "lhs", "rhs", "cx", "g"),
+    public static final Def encodeApplication_fallback = def("encodeApplication_fallback")
+        .lams("env", "aliases", "gr", "typeApps", "lhs", "rhs", "cx", "g")
+        .to(() ->
                 Eithers.bind(
                     Eithers.bimap(
                         lambda("__de",
@@ -4804,15 +4651,11 @@ public class Coder {
                                                         constant(apply(var("elimBranch"), unit()))),
                                                     field(
                                                         Term.UNWRAP,
-                                                        constant(apply(var("elimBranch"), unit()))))))))))))));
+                                                        constant(apply(var("elimBranch"), unit())))))))))))));
 
-    public static final Def encodeDefinitions = def(
-        "encodeDefinitions",
-        () -> lambda(
-                "mod",
-                "defs",
-                "cx",
-                "g",
+    public static final Def encodeDefinitions = def("encodeDefinitions")
+        .lam("mod").lam("defs").lam("cx").lam("g")
+        .to(() ->
                 let(
                     field("aliases",
                         apply(ref(Utils.importAliasesForModule), var("mod"))),
@@ -4875,18 +4718,11 @@ public class Coder {
                                 lambda("termUnits",
                                     right(
                                         Maps.fromList(
-                                            Lists.concat2(var("typeUnits"), var("termUnits")))))))))));
+                                            Lists.concat2(var("typeUnits"), var("termUnits"))))))))));
 
-    public static final Def encodeElimination = def(
-        "encodeElimination",
-        () -> lambda(
-                "env",
-                "marg",
-                "dom",
-                "cod",
-                "elimTerm",
-                "cx",
-                "g",
+    public static final Def encodeElimination = def("encodeElimination")
+        .lam("env").lam("marg").lam("dom").lam("cod").lam("elimTerm").lam("cx").lam("g")
+        .to(() ->
                 let("aliases",
                     proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env"),
                     casesWithDefault(Term.TYPE_,
@@ -5215,17 +5051,11 @@ public class Coder {
                                                     ref(Utils.javaLambda),
                                                     var("wVar"),
                                                     apply(var("withArg"), var("wArg")))),
-                                            lambda("jarg", apply(var("withArg"), var("jarg"))))))))))));
+                                            lambda("jarg", apply(var("withArg"), var("jarg")))))))))));
 
-    public static final Def encodeFunction = def(
-        "encodeFunction",
-        () -> lambda(
-                "env",
-                "dom",
-                "cod",
-                "funTerm",
-                "cx",
-                "g",
+    public static final Def encodeFunction = def("encodeFunction")
+        .lam("env").lam("dom").lam("cod").lam("funTerm").lam("cx").lam("g")
+        .to(() ->
                 let(
                     field("aliases",
                         proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env")),
@@ -5442,16 +5272,11 @@ public class Coder {
                                                                                                     var("cod")))),
                                                                                         var("lam1"),
                                                                                         var("cx"),
-                                                                                        var("g")))))))))))))))))))));
+                                                                                        var("g"))))))))))))))))))));
 
-    public static final Def encodeFunctionFormTerm = def(
-        "encodeFunctionFormTerm",
-        () -> lambda(
-                "env",
-                "anns",
-                "term",
-                "cx",
-                "g",
+    public static final Def encodeFunctionFormTerm = def("encodeFunctionFormTerm")
+        .lam("env").lam("anns").lam("term").lam("cx").lam("g")
+        .to(() ->
                 let("combinedAnns",
                     Lists.foldl(
                         lambda("acc", lambda("m", Maps.union(var("acc"), var("m")))),
@@ -5499,17 +5324,11 @@ public class Coder {
                                                     proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft"),
                                                     var("term"),
                                                     var("cx"),
-                                                    var("g"))))))))))));
+                                                    var("g")))))))))));
 
-    public static final Def encodeFunctionPrimitiveByName = def(
-        "encodeFunctionPrimitiveByName",
-        () -> lambda(
-                "env",
-                "dom",
-                "cod",
-                "name",
-                "cx",
-                "g",
+    public static final Def encodeFunctionPrimitiveByName = def("encodeFunctionPrimitiveByName")
+        .lam("env").lam("dom").lam("cod").lam("name").lam("cx").lam("g")
+        .to(() ->
                 let(
                     field("aliases",
                         proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env")),
@@ -5606,11 +5425,11 @@ public class Coder {
                                                         var("rt"),
                                                         apply(
                                                             ref(Utils.javaExpressionToJavaUnaryExpression),
-                                                            var("curried"))))))))))))));
+                                                            var("curried")))))))))))));
 
-    public static final Def encodeLiteral = def(
-        "encodeLiteral",
-        () -> lambda("lit",
+    public static final Def encodeLiteral = def("encodeLiteral")
+        .lam("lit")
+        .to(() ->
                 cases(Literal.TYPE_,
                     var("lit"),
                     field(
@@ -5668,14 +5487,11 @@ public class Coder {
                         lambda("s",
                             apply(
                                 ref(Coder.encodeLiteral_litExp),
-                                apply(ref(Utils.javaString), var("s"))))))));
+                                apply(ref(Utils.javaString), var("s")))))));
 
-    public static final Def encodeLiteralType = def(
-        "encodeLiteralType",
-        () -> lambda(
-                "lt",
-                "cx",
-                "g",
+    public static final Def encodeLiteralType = def("encodeLiteralType")
+        .lam("lt").lam("cx").lam("g")
+        .to(() ->
                 cases(LiteralType.TYPE_,
                     var("lt"),
                     field(
@@ -5844,19 +5660,16 @@ public class Coder {
                                 ref(Coder.encodeLiteralType_simple),
                                 string("String"),
                                 var("cx"),
-                                var("g")))))));
+                                var("g"))))));
 
-    public static final Def encodeLiteralType_simple = def(
-        "encodeLiteralType_simple",
-        () -> lambda(
-                "n",
-                "cx",
-                "g",
-                right(apply(ref(Utils.javaRefType), list(), nothing(), var("n")))));
+    public static final Def encodeLiteralType_simple = def("encodeLiteralType_simple")
+        .lam("n").lam("cx").lam("g")
+        .to(() ->
+                right(apply(ref(Utils.javaRefType), list(), nothing(), var("n"))));
 
-    public static final Def encodeLiteral_encodeFloat = def(
-        "encodeLiteral_encodeFloat",
-        () -> lambda("f",
+    public static final Def encodeLiteral_encodeFloat = def("encodeLiteral_encodeFloat")
+        .lam("f")
+        .to(() ->
                 cases(FloatValue.TYPE_,
                     var("f"),
                     field(
@@ -5864,11 +5677,11 @@ public class Coder {
                         lambda("v", apply(ref(Coder.encodeLiteral_encodeFloat32), var("v")))),
                     field(
                         FloatValue.FLOAT64,
-                        lambda("v", apply(ref(Coder.encodeLiteral_encodeFloat64), var("v")))))));
+                        lambda("v", apply(ref(Coder.encodeLiteral_encodeFloat64), var("v"))))));
 
-    public static final Def encodeLiteral_encodeFloat32 = def(
-        "encodeLiteral_encodeFloat32",
-        () -> lambda("v",
+    public static final Def encodeLiteral_encodeFloat32 = def("encodeLiteral_encodeFloat32")
+        .lam("v")
+        .to(() ->
                 let("s",
                     Literals.showFloat32(var("v")),
                     Logic.ifElse(
@@ -5903,11 +5716,11 @@ public class Coder {
                                         inject(hydra.java.syntax.Literal.TYPE_,
                                             hydra.java.syntax.Literal.FLOATING_POINT,
                                             wrap(FloatingPointLiteral.TYPE_,
-                                                Literals.float32ToFloat64(var("v"))))))))))));
+                                                Literals.float32ToFloat64(var("v")))))))))));
 
-    public static final Def encodeLiteral_encodeFloat64 = def(
-        "encodeLiteral_encodeFloat64",
-        () -> lambda("v",
+    public static final Def encodeLiteral_encodeFloat64 = def("encodeLiteral_encodeFloat64")
+        .lam("v")
+        .to(() ->
                 let("s",
                     Literals.showFloat64(var("v")),
                     Logic.ifElse(
@@ -5936,11 +5749,11 @@ public class Coder {
                                         inject(hydra.java.syntax.Literal.TYPE_,
                                             hydra.java.syntax.Literal.FLOATING_POINT,
                                             wrap(FloatingPointLiteral.TYPE_,
-                                                var("v")))))))))));
+                                                var("v"))))))))));
 
-    public static final Def encodeLiteral_encodeInteger = def(
-        "encodeLiteral_encodeInteger",
-        () -> lambda("i",
+    public static final Def encodeLiteral_encodeInteger = def("encodeLiteral_encodeInteger")
+        .lam("i")
+        .to(() ->
                 cases(IntegerValue.TYPE_,
                     var("i"),
                     field(
@@ -6083,11 +5896,11 @@ public class Coder {
                                         inject(Literal.TYPE_,
                                             Literal.STRING,
                                             Literals.showBigint(Literals.uint64ToBigint(var("v")))))),
-                                nothing()))))));
+                                nothing())))));
 
-    public static final Def encodeLiteral_javaParseDouble = def(
-        "encodeLiteral_javaParseDouble",
-        () -> lambda("value",
+    public static final Def encodeLiteral_javaParseDouble = def("encodeLiteral_javaParseDouble")
+        .lam("value")
+        .to(() ->
                 apply(
                     ref(Utils.javaMethodInvocationToJavaExpression),
                     apply(
@@ -6099,13 +5912,11 @@ public class Coder {
                                 ref(Coder.encodeLiteral),
                                 inject(Literal.TYPE_,
                                     Literal.STRING,
-                                    var("value"))))))));
+                                    var("value")))))));
 
-    public static final Def encodeLiteral_javaSpecialFloatExpr = def(
-        "encodeLiteral_javaSpecialFloatExpr",
-        () -> lambda(
-                "className",
-                "fieldName",
+    public static final Def encodeLiteral_javaSpecialFloatExpr = def("encodeLiteral_javaSpecialFloatExpr")
+        .lam("className").lam("fieldName")
+        .to(() ->
                 apply(
                     ref(Utils.javaExpressionNameToJavaExpression),
                     record(ExpressionName.TYPE_,
@@ -6116,17 +5927,16 @@ public class Coder {
                                     list(wrap(Identifier.TYPE_, var("className")))))),
                         field(
                             ExpressionName.IDENTIFIER,
-                            wrap(Identifier.TYPE_, var("fieldName")))))));
+                            wrap(Identifier.TYPE_, var("fieldName"))))));
 
-    public static final Def encodeLiteral_litExp = def(
-        "encodeLiteral_litExp",
-        () -> lambda("l", apply(ref(Utils.javaLiteralToJavaExpression), var("l"))));
+    public static final Def encodeLiteral_litExp = def("encodeLiteral_litExp")
+        .lam("l")
+        .to(() ->
+                apply(ref(Utils.javaLiteralToJavaExpression), var("l")));
 
-    public static final Def encodeLiteral_primCast = def(
-        "encodeLiteral_primCast",
-        () -> lambda(
-                "pt",
-                "expr",
+    public static final Def encodeLiteral_primCast = def("encodeLiteral_primCast")
+        .lam("pt").lam("expr")
+        .to(() ->
                 apply(
                     ref(Utils.javaCastExpressionToJavaExpression),
                     apply(
@@ -6134,16 +5944,11 @@ public class Coder {
                         var("pt"),
                         apply(
                             ref(Utils.javaExpressionToJavaUnaryExpression),
-                            var("expr"))))));
+                            var("expr")))));
 
-    public static final Def encodeNullaryConstant = def(
-        "encodeNullaryConstant",
-        () -> lambda(
-                "env",
-                "typ",
-                "funTerm",
-                "cx",
-                "g",
+    public static final Def encodeNullaryConstant = def("encodeNullaryConstant")
+        .lam("env").lam("typ").lam("funTerm").lam("cx").lam("g")
+        .to(() ->
                 left(
                     inject(Error_.TYPE_,
                         Error_.OTHER,
@@ -6154,15 +5959,11 @@ public class Coder {
                                     string("nullary function"),
                                     Strings.cat2(
                                         string(" in "),
-                                        apply(var("hydra.show.core.term"), var("funTerm"))))))))));
+                                        apply(var("hydra.show.core.term"), var("funTerm")))))))));
 
-    public static final Def encodeNullaryConstant_typeArgsFromReturnType = def(
-        "encodeNullaryConstant_typeArgsFromReturnType",
-        () -> lambda(
-                "aliases",
-                "t",
-                "cx",
-                "g",
+    public static final Def encodeNullaryConstant_typeArgsFromReturnType = def("encodeNullaryConstant_typeArgsFromReturnType")
+        .lam("aliases").lam("t").lam("cx").lam("g")
+        .to(() ->
                 casesWithDefault(Type.TYPE_,
                     apply(var("hydra.strip.deannotateType"), var("t")),
                     right(list()),
@@ -6277,16 +6078,11 @@ public class Coder {
                                                                     inject(
                                                                         TypeArgument.TYPE_,
                                                                         TypeArgument.REFERENCE,
-                                                                        var("rv")))))))))))))))));
+                                                                        var("rv"))))))))))))))));
 
-    public static final Def encodeNullaryPrimitiveByName = def(
-        "encodeNullaryPrimitiveByName",
-        () -> lambda(
-                "env",
-                "typ",
-                "name",
-                "cx",
-                "g",
+    public static final Def encodeNullaryPrimitiveByName = def("encodeNullaryPrimitiveByName")
+        .lam("env").lam("typ").lam("name").lam("cx").lam("g")
+        .to(() ->
                 let("aliases",
                     proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env"),
                     Eithers.bind(
@@ -6351,15 +6147,11 @@ public class Coder {
                                                 var("className"),
                                                 var("methodName"),
                                                 var("targs"),
-                                                list()))))))))));
+                                                list())))))))));
 
-    public static final Def encodeTerm = def(
-        "encodeTerm",
-        () -> lambda(
-                "env",
-                "term",
-                "cx",
-                "g",
+    public static final Def encodeTerm = def("encodeTerm")
+        .lam("env").lam("term").lam("cx").lam("g")
+        .to(() ->
                 apply(
                     ref(Coder.encodeTermInternal),
                     var("env"),
@@ -6367,15 +6159,11 @@ public class Coder {
                     list(),
                     var("term"),
                     var("cx"),
-                    var("g"))));
+                    var("g")));
 
-    public static final Def encodeTermDefinition = def(
-        "encodeTermDefinition",
-        () -> lambda(
-                "env",
-                "tdef",
-                "cx",
-                "g",
+    public static final Def encodeTermDefinition = def("encodeTermDefinition")
+        .lam("env").lam("tdef").lam("cx").lam("g")
+        .to(() ->
                 let(
                     field("name",
                         proj(TermDefinition.TYPE_, TermDefinition.NAME, "tdef")),
@@ -6870,17 +6658,11 @@ public class Coder {
                                                                                                                             apply(
                                                                                                                                 ref(Coder.withInterfaceCommentString),
                                                                                                                                 var("doc"),
-                                                                                                                                var("imdMember")))))))))))))))))))))))))))))));
+                                                                                                                                var("imdMember"))))))))))))))))))))))))))))));
 
-    public static final Def encodeTermInternal = def(
-        "encodeTermInternal",
-        () -> lambda(
-                "env",
-                "anns",
-                "tyapps",
-                "term",
-                "cx",
-                "g0",
+    public static final Def encodeTermInternal = def("encodeTermInternal")
+        .lam("env").lam("anns").lam("tyapps").lam("term").lam("cx").lam("g0")
+        .to(() ->
                 let(
                     field("aliases",
                         proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env")),
@@ -8357,11 +8139,11 @@ public class Coder {
                                                                                                     var("body"),
                                                                                                     var("correctedTyp"),
                                                                                                     var("cx"),
-                                                                                                    var("g"))))))))))))))))))))))));
+                                                                                                    var("g")))))))))))))))))))))));
 
-    public static final Def encodeTermTCO = def(
-        "encodeTermTCO",
-        () -> lambda(
+    public static final Def encodeTermTCO = def("encodeTermTCO")
+        .to(() ->
+                lambda(
                 params("env0", "funcName", "paramNames", "tcoVarRenames", "tcoDepth", "term", "cx", "g"),
                 let(
                     binds(    field("aliases0",
@@ -8872,14 +8654,9 @@ public class Coder {
                                                                     var("letStmts"),
                                                                     var("tcoBodyStmts"))))))))))))))));
 
-    public static final Def encodeType = def(
-        "encodeType",
-        () -> lambda(
-                "aliases",
-                "boundVars",
-                "t",
-                "cx",
-                "g",
+    public static final Def encodeType = def("encodeType")
+        .lam("aliases").lam("boundVars").lam("t").lam("cx").lam("g")
+        .to(() ->
                 let(
                     field("inScopeTypeParams",
                         proj(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS, "aliases")),
@@ -9316,16 +9093,11 @@ public class Coder {
                                     inject(Error_.TYPE_,
                                         Error_.OTHER,
                                         wrap(OtherError.TYPE_,
-                                            string("unexpected anonymous wrap type"))))))))));
+                                            string("unexpected anonymous wrap type")))))))));
 
-    public static final Def encodeTypeDefinition = def(
-        "encodeTypeDefinition",
-        () -> lambda(
-                "pkg",
-                "aliases",
-                "tdef",
-                "cx",
-                "g",
+    public static final Def encodeTypeDefinition = def("encodeTypeDefinition")
+        .lam("pkg").lam("aliases").lam("tdef").lam("cx").lam("g")
+        .to(() ->
                 let(
                     field("name",
                         proj(TypeDefinition.TYPE_, TypeDefinition.NAME, "tdef")),
@@ -9393,17 +9165,11 @@ public class Coder {
                                                             var("imports")),
                                                         field(
                                                             OrdinaryCompilationUnit.TYPES,
-                                                            list(var("tdecl")))))))))))))));
+                                                            list(var("tdecl"))))))))))))));
 
-    public static final Def encodeType_resolveIfTypedef = def(
-        "encodeType_resolveIfTypedef",
-        () -> lambda(
-                "aliases",
-                "boundVars",
-                "inScopeTypeParams",
-                "name",
-                "cx",
-                "g",
+    public static final Def encodeType_resolveIfTypedef = def("encodeType_resolveIfTypedef")
+        .lam("aliases").lam("boundVars").lam("inScopeTypeParams").lam("name").lam("cx").lam("g")
+        .to(() ->
                 Logic.ifElse(
                     Logic.or(
                         Sets.member(var("name"), var("boundVars")),
@@ -9434,15 +9200,11 @@ public class Coder {
                                                 Type.RECORD,
                                                 constant(right(nothing()))),
                                             field(Type.UNION, constant(right(nothing()))),
-                                            field(Type.WRAP, constant(right(nothing()))))))))))));
+                                            field(Type.WRAP, constant(right(nothing())))))))))));
 
-    public static final Def encodeVariable = def(
-        "encodeVariable",
-        () -> lambda(
-                "env",
-                "name",
-                "cx",
-                "g",
+    public static final Def encodeVariable = def("encodeVariable")
+        .lam("env").lam("name").lam("cx").lam("g")
+        .to(() ->
                 let(
                     field("aliases",
                         proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env")),
@@ -9673,13 +9435,11 @@ public class Coder {
                                                                             bool(false),
                                                                             bool(true),
                                                                             var("aliases"),
-                                                                            var("name"))))))))))))))))));
+                                                                            var("name")))))))))))))))));
 
-    public static final Def encodeVariable_buildCurried = def(
-        "encodeVariable_buildCurried",
-        () -> lambda(
-                "params",
-                "inner",
+    public static final Def encodeVariable_buildCurried = def("encodeVariable_buildCurried")
+        .lam("params").lam("inner")
+        .to(() ->
                 Optionals.fromOptional(
                     var("inner"),
                     Optionals.map(
@@ -9691,16 +9451,11 @@ public class Coder {
                                     ref(Coder.encodeVariable_buildCurried),
                                     Pairs.second(var("p")),
                                     var("inner")))),
-                        Lists.uncons(var("params"))))));
+                        Lists.uncons(var("params")))));
 
-    public static final Def encodeVariable_hoistedLambdaCase = def(
-        "encodeVariable_hoistedLambdaCase",
-        () -> lambda(
-                "aliases",
-                "name",
-                "arity",
-                "cx",
-                "g",
+    public static final Def encodeVariable_hoistedLambdaCase = def("encodeVariable_hoistedLambdaCase")
+        .lam("aliases").lam("name").lam("arity").lam("cx").lam("g")
+        .to(() ->
                 let(
                     field("paramNames",
                         Lists.map(
@@ -9771,13 +9526,11 @@ public class Coder {
                                                                             var("rt"),
                                                                             apply(
                                                                                 ref(Utils.javaExpressionToJavaUnaryExpression),
-                                                                                var("lam")))))))))))))))))));
+                                                                                var("lam"))))))))))))))))));
 
-    public static final Def eqClause = def(
-        "eqClause",
-        () -> lambda(
-                "tmpName",
-                "ft",
+    public static final Def eqClause = def("eqClause")
+        .lam("tmpName").lam("ft")
+        .to(() ->
                 let(
                     field("fname",
                         apply(
@@ -9791,13 +9544,11 @@ public class Coder {
                         Logic.ifElse(
                             apply(ref(Coder.isBigNumericType), var("ftype")),
                             apply(ref(Coder.compareToZeroClause), var("tmpName"), var("fname")),
-                            apply(ref(Coder.equalsClause), var("tmpName"), var("fname")))))));
+                            apply(ref(Coder.equalsClause), var("tmpName"), var("fname"))))));
 
-    public static final Def equalsClause = def(
-        "equalsClause",
-        () -> lambda(
-                "tmpName",
-                "fname",
+    public static final Def equalsClause = def("equalsClause")
+        .lam("tmpName").lam("fname")
+        .to(() ->
                 let(
                     field("thisArg",
                         apply(
@@ -9840,13 +9591,11 @@ public class Coder {
                                 field(MethodInvocation.HEADER, var("header")),
                                 field(
                                     MethodInvocation.ARGUMENTS,
-                                    list(var("thisArg"), var("otherArg")))))))));
+                                    list(var("thisArg"), var("otherArg"))))))));
 
-    public static final Def extractArgType = def(
-        "extractArgType",
-        () -> lambda(
-                "_lhs",
-                "typ",
+    public static final Def extractArgType = def("extractArgType")
+        .lam("_lhs").lam("typ")
+        .to(() ->
                 casesWithDefault(Type.TYPE_,
                     var("typ"),
                     var("typ"),
@@ -9859,20 +9608,16 @@ public class Coder {
                                 field(
                                     Type.APPLICATION,
                                     constant(
-                                        proj(ApplicationType.TYPE_, ApplicationType.ARGUMENT, "at1")))))))));
+                                        proj(ApplicationType.TYPE_, ApplicationType.ARGUMENT, "at1"))))))));
 
-    public static final Def extractDirectReturn = def(
-        "extractDirectReturn",
-        () -> lambda(
-                "tparamSet",
-                "t",
-                apply(ref(Coder.extractDirectReturn_go), var("tparamSet"), var("t"))));
+    public static final Def extractDirectReturn = def("extractDirectReturn")
+        .lam("tparamSet").lam("t")
+        .to(() ->
+                apply(ref(Coder.extractDirectReturn_go), var("tparamSet"), var("t")));
 
-    public static final Def extractDirectReturn_go = def(
-        "extractDirectReturn_go",
-        () -> lambda(
-                "tparamSet",
-                "t",
+    public static final Def extractDirectReturn_go = def("extractDirectReturn_go")
+        .lam("tparamSet").lam("t")
+        .to(() ->
                 casesWithDefault(Type.TYPE_,
                     apply(var("hydra.strip.deannotateType"), var("t")),
                     list(),
@@ -9961,11 +9706,11 @@ public class Coder {
                                                 apply(
                                                     ref(Coder.extractDirectReturn_go),
                                                     var("tparamSet"),
-                                                    var("cod"))))))))))));
+                                                    var("cod")))))))))));
 
-    public static final Def extractInOutPair = def(
-        "extractInOutPair",
-        () -> lambda("t",
+    public static final Def extractInOutPair = def("extractInOutPair")
+        .lam("t")
+        .to(() ->
                 casesWithDefault(Type.TYPE_,
                     apply(var("hydra.strip.deannotateType"), var("t")),
                     list(),
@@ -10003,16 +9748,16 @@ public class Coder {
                                                                     list(
                                                                         pair(
                                                                             var("inVar"),
-                                                                            var("outVar"))))))))))))))))));
+                                                                            var("outVar")))))))))))))))));
 
-    public static final Def extractTypeApplicationArgs = def(
-        "extractTypeApplicationArgs",
-        () -> lambda("typ",
-                Lists.reverse(apply(ref(Coder.extractTypeApplicationArgs_go), var("typ")))));
+    public static final Def extractTypeApplicationArgs = def("extractTypeApplicationArgs")
+        .lam("typ")
+        .to(() ->
+                Lists.reverse(apply(ref(Coder.extractTypeApplicationArgs_go), var("typ"))));
 
-    public static final Def extractTypeApplicationArgs_go = def(
-        "extractTypeApplicationArgs_go",
-        () -> lambda("t",
+    public static final Def extractTypeApplicationArgs_go = def("extractTypeApplicationArgs_go")
+        .lam("t")
+        .to(() ->
                 casesWithDefault(Type.TYPE_,
                     var("t"),
                     list(),
@@ -10023,15 +9768,11 @@ public class Coder {
                                 proj(ApplicationType.TYPE_, ApplicationType.ARGUMENT, "at"),
                                 apply(
                                     ref(Coder.extractTypeApplicationArgs_go),
-                                    proj(ApplicationType.TYPE_, ApplicationType.FUNCTION, "at"))))))));
+                                    proj(ApplicationType.TYPE_, ApplicationType.FUNCTION, "at")))))));
 
-    public static final Def fieldTypeToFormalParam = def(
-        "fieldTypeToFormalParam",
-        () -> lambda(
-                "aliases",
-                "ft",
-                "cx",
-                "g",
+    public static final Def fieldTypeToFormalParam = def("fieldTypeToFormalParam")
+        .lam("aliases").lam("ft").lam("cx").lam("g")
+        .to(() ->
                 Eithers.bind(
                     apply(
                         ref(Coder.encodeType),
@@ -10045,26 +9786,20 @@ public class Coder {
                             apply(
                                 ref(Utils.javaTypeToJavaFormalParameter),
                                 var("jt"),
-                                proj(FieldType.TYPE_, FieldType.NAME, "ft")))))));
+                                proj(FieldType.TYPE_, FieldType.NAME, "ft"))))));
 
-    public static final Def filterByFlags = def(
-        "filterByFlags",
-        () -> lambda(
-                "xs",
-                "flags",
+    public static final Def filterByFlags = def("filterByFlags")
+        .lam("xs").lam("flags")
+        .to(() ->
                 Lists.map(
                     lambda("p", Pairs.first(var("p"))),
                     Lists.filter(
                         lambda("p", Pairs.second(var("p"))),
-                        Lists.zip(var("xs"), var("flags"))))));
+                        Lists.zip(var("xs"), var("flags")))));
 
-    public static final Def filterPhantomTypeArgs = def(
-        "filterPhantomTypeArgs",
-        () -> lambda(
-                "calleeName",
-                "allTypeArgs",
-                "cx",
-                "g",
+    public static final Def filterPhantomTypeArgs = def("filterPhantomTypeArgs")
+        .lam("calleeName").lam("allTypeArgs").lam("cx").lam("g")
+        .to(() ->
                 Eithers.bind(
                     right(apply(var("hydra.lexical.lookupBinding"), var("g"), var("calleeName"))),
                     lambda("mel",
@@ -10130,14 +9865,11 @@ public class Coder {
                                                         ref(Coder.filterPhantomTypeArgs_filterAndApply),
                                                         var("allTypeArgs"),
                                                         var("keepFlags"),
-                                                        var("overgenSubst")))))))))))));
+                                                        var("overgenSubst"))))))))))));
 
-    public static final Def filterPhantomTypeArgs_filterAndApply = def(
-        "filterPhantomTypeArgs_filterAndApply",
-        () -> lambda(
-                "allTypeArgs",
-                "keepFlags",
-                "overgenSubst",
+    public static final Def filterPhantomTypeArgs_filterAndApply = def("filterPhantomTypeArgs_filterAndApply")
+        .lam("allTypeArgs").lam("keepFlags").lam("overgenSubst")
+        .to(() ->
                 let("filtered",
                     Lists.map(
                         lambda("p", Pairs.first(var("p"))),
@@ -10153,13 +9885,11 @@ public class Coder {
                                     var("overgenSubst"),
                                     var("t"))),
                             var("filtered")),
-                        var("filtered")))));
+                        var("filtered"))));
 
-    public static final Def findMatchingLambdaVar = def(
-        "findMatchingLambdaVar",
-        () -> lambda(
-                "name",
-                "lambdaVars",
+    public static final Def findMatchingLambdaVar = def("findMatchingLambdaVar")
+        .lam("name").lam("lambdaVars")
+        .to(() ->
                 Logic.ifElse(
                     Sets.member(var("name"), var("lambdaVars")),
                     var("name"),
@@ -10182,11 +9912,11 @@ public class Coder {
                                 var("lambdaVars")),
                             wrap(Name.TYPE_,
                                 apply(var("hydra.names.localNameOf"), var("name"))),
-                            var("name"))))));
+                            var("name")))));
 
-    public static final Def findPairFirst = def(
-        "findPairFirst",
-        () -> lambda("t",
+    public static final Def findPairFirst = def("findPairFirst")
+        .lam("t")
+        .to(() ->
                 casesWithDefault(Type.TYPE_,
                     apply(var("hydra.strip.deannotateType"), var("t")),
                     nothing(),
@@ -10198,11 +9928,11 @@ public class Coder {
                                     var("hydra.strip.deannotateType"),
                                     proj(PairType.TYPE_, PairType.FIRST, "pt")),
                                 nothing(),
-                                field(Type.VARIABLE, lambda("v", just(var("v"))))))))));
+                                field(Type.VARIABLE, lambda("v", just(var("v")))))))));
 
-    public static final Def findSelfRefVar = def(
-        "findSelfRefVar",
-        () -> lambda("grouped",
+    public static final Def findSelfRefVar = def("findSelfRefVar")
+        .lam("grouped")
+        .to(() ->
                 let("selfRefs",
                     Lists.filter(
                         lambda("entry",
@@ -10210,11 +9940,11 @@ public class Coder {
                         Maps.toList(var("grouped"))),
                     Optionals.map(
                         lambda("entry", Pairs.first(var("entry"))),
-                        Lists.maybeHead(var("selfRefs"))))));
+                        Lists.maybeHead(var("selfRefs")))));
 
-    public static final Def first20Primes = def(
-        "first20Primes",
-        () -> list(
+    public static final Def first20Primes = def("first20Primes")
+        .to(() ->
+                list(
                 bigint(java.math.BigInteger.valueOf(2L)),
                 bigint(java.math.BigInteger.valueOf(3L)),
                 bigint(java.math.BigInteger.valueOf(5L)),
@@ -10236,11 +9966,9 @@ public class Coder {
                 bigint(java.math.BigInteger.valueOf(67L)),
                 bigint(java.math.BigInteger.valueOf(71L))));
 
-    public static final Def flattenApps = def(
-        "flattenApps",
-        () -> lambda(
-                "t",
-                "acc",
+    public static final Def flattenApps = def("flattenApps")
+        .lam("t").lam("acc")
+        .to(() ->
                 casesWithDefault(Term.TYPE_,
                     apply(var("hydra.strip.deannotateTerm"), var("t")),
                     pair(var("acc"), var("t")),
@@ -10252,11 +9980,11 @@ public class Coder {
                                 proj(Application.TYPE_, Application.FUNCTION, "app"),
                                 Lists.cons(
                                     proj(Application.TYPE_, Application.ARGUMENT, "app"),
-                                    var("acc"))))))));
+                                    var("acc")))))));
 
-    public static final Def flattenBindings = def(
-        "flattenBindings",
-        () -> lambda("bindings",
+    public static final Def flattenBindings = def("flattenBindings")
+        .lam("bindings")
+        .to(() ->
                 Lists.bind(
                     var("bindings"),
                     lambda("b",
@@ -10282,21 +10010,16 @@ public class Coder {
                                                     proj(Let.TYPE_, Let.BODY, "lt")),
                                                 field(
                                                     Binding.TYPE_SCHEME,
-                                                    proj(Binding.TYPE_, Binding.TYPE_SCHEME, "b"))))))))))));
+                                                    proj(Binding.TYPE_, Binding.TYPE_SCHEME, "b")))))))))));
 
-    public static final Def freshJavaName = def(
-        "freshJavaName",
-        () -> lambda(
-                "base",
-                "avoid",
-                apply(ref(Coder.freshJavaName_go), var("base"), var("avoid"), int32(2))));
+    public static final Def freshJavaName = def("freshJavaName")
+        .lam("base").lam("avoid")
+        .to(() ->
+                apply(ref(Coder.freshJavaName_go), var("base"), var("avoid"), int32(2)));
 
-    public static final Def freshJavaName_go = def(
-        "freshJavaName_go",
-        () -> lambda(
-                "base",
-                "avoid",
-                "i",
+    public static final Def freshJavaName_go = def("freshJavaName_go")
+        .lam("base").lam("avoid").lam("i")
+        .to(() ->
                 let("candidate",
                     wrap(Name.TYPE_,
                         Strings.cat2(
@@ -10309,18 +10032,11 @@ public class Coder {
                             var("base"),
                             var("avoid"),
                             Math_.add(var("i"), int32(1))),
-                        var("candidate")))));
+                        var("candidate"))));
 
-    public static final Def functionCall = def(
-        "functionCall",
-        () -> lambda(
-                "env",
-                "isPrim",
-                "name",
-                "args",
-                "typeApps",
-                "cx",
-                "g",
+    public static final Def functionCall = def("functionCall")
+        .lam("env").lam("isPrim").lam("name").lam("args").lam("typeApps").lam("cx").lam("g")
+        .to(() ->
                 let(
                     field("aliases",
                         proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env")),
@@ -10527,25 +10243,19 @@ public class Coder {
                                                                                 var("classId"),
                                                                                 var("methodId"),
                                                                                 var("jTypeArgs"),
-                                                                                var("jargs")))))))))))))))))));
+                                                                                var("jargs"))))))))))))))))));
 
-    public static final Def getCodomain = def(
-        "getCodomain",
-        () -> lambda(
-                "ann",
-                "cx",
-                "g",
+    public static final Def getCodomain = def("getCodomain")
+        .lam("ann").lam("cx").lam("g")
+        .to(() ->
                 Eithers.map(
                     lambda("ft",
                         proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft")),
-                    apply(ref(Coder.getFunctionType), var("ann"), var("cx"), var("g")))));
+                    apply(ref(Coder.getFunctionType), var("ann"), var("cx"), var("g"))));
 
-    public static final Def getFunctionType = def(
-        "getFunctionType",
-        () -> lambda(
-                "ann",
-                "cx",
-                "g",
+    public static final Def getFunctionType = def("getFunctionType")
+        .lam("ann").lam("cx").lam("g")
+        .to(() ->
                 Eithers.bind(
                     Eithers.bimap(
                         lambda("__de",
@@ -10573,11 +10283,11 @@ public class Coder {
                                                 Strings.cat2(
                                                     string("expected function type, got: "),
                                                     apply(var("hydra.show.core.type"), var("t")))))),
-                                    field(Type.FUNCTION, lambda("ft", right(var("ft")))))))))));
+                                    field(Type.FUNCTION, lambda("ft", right(var("ft"))))))))));
 
-    public static final Def groupPairsByFirst = def(
-        "groupPairsByFirst",
-        () -> lambda("pairs",
+    public static final Def groupPairsByFirst = def("groupPairsByFirst")
+        .lam("pairs")
+        .to(() ->
                 Lists.foldl(
                     lambda(
                         "m",
@@ -10593,13 +10303,11 @@ public class Coder {
                                 var("k"),
                                 var("m")))),
                     var("hydra.lib.maps.empty"),
-                    var("pairs"))));
+                    var("pairs")));
 
-    public static final Def hashCodeCompareExpr = def(
-        "hashCodeCompareExpr",
-        () -> lambda(
-                "otherVar",
-                "fname",
+    public static final Def hashCodeCompareExpr = def("hashCodeCompareExpr")
+        .lam("otherVar").lam("fname")
+        .to(() ->
                 let(
                     field("header",
                         inject(MethodInvocation_Header.TYPE_,
@@ -10687,13 +10395,11 @@ public class Coder {
                             field(MethodInvocation.HEADER, var("header")),
                             field(
                                 MethodInvocation.ARGUMENTS,
-                                list(var("thisHashCode"), var("otherHashCode"))))))));
+                                list(var("thisHashCode"), var("otherHashCode")))))));
 
-    public static final Def hashCodeMultPair = def(
-        "hashCodeMultPair",
-        () -> lambda(
-                "i",
-                "fname",
+    public static final Def hashCodeMultPair = def("hashCodeMultPair")
+        .lam("i").lam("fname")
+        .to(() ->
                 let(
                     field("fnameStr",
                         apply(unwrap(Name.TYPE_), var("fname"))),
@@ -10751,14 +10457,11 @@ public class Coder {
                         MultiplicativeExpression.TIMES,
                         record(MultiplicativeExpression_Binary.TYPE_,
                             field(MultiplicativeExpression_Binary.LHS, var("lhs")),
-                            field(MultiplicativeExpression_Binary.RHS, var("rhs")))))));
+                            field(MultiplicativeExpression_Binary.RHS, var("rhs"))))));
 
-    public static final Def innerClassRef = def(
-        "innerClassRef",
-        () -> lambda(
-                "aliases",
-                "name",
-                "local",
+    public static final Def innerClassRef = def("innerClassRef")
+        .lam("aliases").lam("name").lam("local")
+        .to(() ->
                 let("id",
                     apply(
                         unwrap(Identifier.TYPE_),
@@ -10767,13 +10470,11 @@ public class Coder {
                             var("aliases"),
                             var("name"))),
                     wrap(Identifier.TYPE_,
-                        Strings.cat2(Strings.cat2(var("id"), string(".")), var("local"))))));
+                        Strings.cat2(Strings.cat2(var("id"), string(".")), var("local")))));
 
-    public static final Def insertBranchVar = def(
-        "insertBranchVar",
-        () -> lambda(
-                "name",
-                "env",
+    public static final Def insertBranchVar = def("insertBranchVar")
+        .lam("name").lam("env")
+        .to(() ->
                 let("aliases",
                     proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env"),
                     record(JavaEnvironment.TYPE_,
@@ -10788,15 +10489,11 @@ public class Coder {
                                 field(Aliases.METHOD_CODOMAIN, nothing()))),
                         field(
                             JavaEnvironment.GRAPH,
-                            proj(JavaEnvironment.TYPE_, JavaEnvironment.GRAPH, "env"))))));
+                            proj(JavaEnvironment.TYPE_, JavaEnvironment.GRAPH, "env")))));
 
-    public static final Def interfaceTypes = def(
-        "interfaceTypes",
-        () -> lambda(
-                "isSer",
-                "aliases",
-                "tparams",
-                "elName",
+    public static final Def interfaceTypes = def("interfaceTypes")
+        .lam("isSer").lam("aliases").lam("tparams").lam("elName")
+        .to(() ->
                 let(
                     field("javaSerializableType",
                         wrap(InterfaceType.TYPE_,
@@ -10848,11 +10545,11 @@ public class Coder {
                     Logic.ifElse(
                         var("isSer"),
                         list(var("javaSerializableType"), var("javaComparableType")),
-                        list()))));
+                        list())));
 
-    public static final Def isBigNumericType = def(
-        "isBigNumericType",
-        () -> lambda("typ",
+    public static final Def isBigNumericType = def("isBigNumericType")
+        .lam("typ")
+        .to(() ->
                 casesWithDefault(Type.TYPE_,
                     apply(var("hydra.strip.deannotateType"), var("typ")),
                     bool(false),
@@ -10871,11 +10568,11 @@ public class Coder {
                                             bool(false),
                                             field(
                                                 IntegerType.BIGINT,
-                                                constant(bool(true))))))))))));
+                                                constant(bool(true)))))))))));
 
-    public static final Def isBinaryType = def(
-        "isBinaryType",
-        () -> lambda("typ",
+    public static final Def isBinaryType = def("isBinaryType")
+        .lam("typ")
+        .to(() ->
                 casesWithDefault(Type.TYPE_,
                     apply(var("hydra.strip.deannotateType"), var("typ")),
                     bool(false),
@@ -10885,15 +10582,11 @@ public class Coder {
                             casesWithDefault(LiteralType.TYPE_,
                                 var("lt"),
                                 bool(false),
-                                field(LiteralType.BINARY, constant(bool(true)))))))));
+                                field(LiteralType.BINARY, constant(bool(true))))))));
 
-    public static final Def isFieldUnitType = def(
-        "isFieldUnitType",
-        () -> lambda(
-                "typeName",
-                "fieldName",
-                "cx",
-                "g",
+    public static final Def isFieldUnitType = def("isFieldUnitType")
+        .lam("typeName").lam("fieldName").lam("cx").lam("g")
+        .to(() ->
                 let("schemaTypes",
                     proj(Graph.TYPE_, Graph.SCHEMA_TYPES, "g"),
                     Optionals.cases(
@@ -10922,13 +10615,11 @@ public class Coder {
                                                         var("hydra.predicates.isUnitType"),
                                                         apply(
                                                             var("hydra.strip.deannotateType"),
-                                                            proj(FieldType.TYPE_, FieldType.TYPE, "ft"))))))))))))));
+                                                            proj(FieldType.TYPE_, FieldType.TYPE, "ft")))))))))))));
 
-    public static final Def isLambdaBoundIn = def(
-        "isLambdaBoundIn",
-        () -> lambda(
-                "name",
-                "lambdaVars",
+    public static final Def isLambdaBoundIn = def("isLambdaBoundIn")
+        .lam("name").lam("lambdaVars")
+        .to(() ->
                 Logic.or(
                     Sets.member(var("name"), var("lambdaVars")),
                     Logic.or(
@@ -10948,34 +10639,34 @@ public class Coder {
                             Sets.member(
                                 wrap(Name.TYPE_,
                                     apply(var("hydra.names.localNameOf"), var("name"))),
-                                var("lambdaVars")))))));
+                                var("lambdaVars"))))));
 
-    public static final Def isLambdaBoundIn_isQualified = def(
-        "isLambdaBoundIn_isQualified",
-        () -> lambda("n",
+    public static final Def isLambdaBoundIn_isQualified = def("isLambdaBoundIn_isQualified")
+        .lam("n")
+        .to(() ->
                 Optionals.isGiven(
                     apply(
                         project(QualifiedName.TYPE_, QualifiedName.MODULE_NAME),
-                        apply(var("hydra.names.qualifyName"), var("n"))))));
+                        apply(var("hydra.names.qualifyName"), var("n")))));
 
-    public static final Def isLambdaBoundVariable = def(
-        "isLambdaBoundVariable",
-        () -> lambda("name",
+    public static final Def isLambdaBoundVariable = def("isLambdaBoundVariable")
+        .lam("name")
+        .to(() ->
                 let("v",
                     apply(unwrap(Name.TYPE_), var("name")),
-                    Equality.lte(Strings.length(var("v")), int32(4)))));
+                    Equality.lte(Strings.length(var("v")), int32(4))));
 
-    public static final Def isLocalVariable = def(
-        "isLocalVariable",
-        () -> lambda("name",
+    public static final Def isLocalVariable = def("isLocalVariable")
+        .lam("name")
+        .to(() ->
                 Optionals.isNone(
                     apply(
                         project(QualifiedName.TYPE_, QualifiedName.MODULE_NAME),
-                        apply(var("hydra.names.qualifyName"), var("name"))))));
+                        apply(var("hydra.names.qualifyName"), var("name")))));
 
-    public static final Def isNonComparableType = def(
-        "isNonComparableType",
-        () -> lambda("typ",
+    public static final Def isNonComparableType = def("isNonComparableType")
+        .lam("typ")
+        .to(() ->
                 casesWithDefault(Type.TYPE_,
                     apply(var("hydra.strip.deannotateType"), var("typ")),
                     bool(false),
@@ -10994,34 +10685,33 @@ public class Coder {
                         lambda("ft",
                             apply(
                                 ref(Coder.isNonComparableType),
-                                proj(ForallType.TYPE_, ForallType.BODY, "ft")))))));
+                                proj(ForallType.TYPE_, ForallType.BODY, "ft"))))));
 
-    public static final Def isRecursiveVariable = def(
-        "isRecursiveVariable",
-        () -> lambda(
-                "aliases",
-                "name",
+    public static final Def isRecursiveVariable = def("isRecursiveVariable")
+        .lam("aliases").lam("name")
+        .to(() ->
                 Sets.member(
                     var("name"),
-                    proj(Aliases.TYPE_, Aliases.RECURSIVE_VARS, "aliases"))));
+                    proj(Aliases.TYPE_, Aliases.RECURSIVE_VARS, "aliases")));
 
-    public static final Def isSerializableJavaType = def(
-        "isSerializableJavaType",
-        () -> lambda("typ", apply(var("hydra.predicates.isNominalType"), var("typ"))));
+    public static final Def isSerializableJavaType = def("isSerializableJavaType")
+        .lam("typ")
+        .to(() ->
+                apply(var("hydra.predicates.isNominalType"), var("typ")));
 
-    public static final Def isSimpleName = def(
-        "isSimpleName",
-        () -> lambda("name",
+    public static final Def isSimpleName = def("isSimpleName")
+        .lam("name")
+        .to(() ->
                 Equality.equal(
                     Lists.length(
                         Strings.splitOn(
                             string("."),
                             apply(unwrap(Name.TYPE_), var("name")))),
-                    int32(1))));
+                    int32(1)));
 
-    public static final Def isUnresolvedInferenceVar = def(
-        "isUnresolvedInferenceVar",
-        () -> lambda("name",
+    public static final Def isUnresolvedInferenceVar = def("isUnresolvedInferenceVar")
+        .lam("name")
+        .to(() ->
                 let("chars",
                     Strings.toList(apply(unwrap(Name.TYPE_), var("name"))),
                     Optionals.fromOptional(
@@ -11046,26 +10736,26 @@ public class Coder {
                                                                 ref(Coder.isUnresolvedInferenceVar_isDigit),
                                                                 var("c")))),
                                                     var("rest"))))))),
-                            Lists.uncons(var("chars")))))));
+                            Lists.uncons(var("chars"))))));
 
-    public static final Def isUnresolvedInferenceVar_isDigit = def(
-        "isUnresolvedInferenceVar_isDigit",
-        () -> lambda("c",
-                Logic.and(Equality.gte(var("c"), int32(48)), Equality.lte(var("c"), int32(57)))));
+    public static final Def isUnresolvedInferenceVar_isDigit = def("isUnresolvedInferenceVar_isDigit")
+        .lam("c")
+        .to(() ->
+                Logic.and(Equality.gte(var("c"), int32(48)), Equality.lte(var("c"), int32(57))));
 
-    public static final Def java11Features = def(
-        "java11Features",
-        () -> record(JavaFeatures.TYPE_,
+    public static final Def java11Features = def("java11Features")
+        .to(() ->
+                record(JavaFeatures.TYPE_,
                 field(JavaFeatures.SUPPORTS_DIAMOND_OPERATOR, bool(true))));
 
-    public static final Def java8Features = def(
-        "java8Features",
-        () -> record(JavaFeatures.TYPE_,
+    public static final Def java8Features = def("java8Features")
+        .to(() ->
+                record(JavaFeatures.TYPE_,
                 field(JavaFeatures.SUPPORTS_DIAMOND_OPERATOR, bool(false))));
 
-    public static final Def javaComparableRefType = def(
-        "javaComparableRefType",
-        () -> inject(ReferenceType.TYPE_,
+    public static final Def javaComparableRefType = def("javaComparableRefType")
+        .to(() ->
+                inject(ReferenceType.TYPE_,
                 ReferenceType.CLASS_OR_INTERFACE,
                 inject(ClassOrInterfaceType.TYPE_,
                     ClassOrInterfaceType.CLASS,
@@ -11083,36 +10773,32 @@ public class Coder {
                                 string("Comparable"))),
                         field(ClassType.ARGUMENTS, list())))));
 
-    public static final Def javaEnvGetGraph = def(
-        "javaEnvGetGraph",
-        () -> lambda("env",
-                proj(JavaEnvironment.TYPE_, JavaEnvironment.GRAPH, "env")));
+    public static final Def javaEnvGetGraph = def("javaEnvGetGraph")
+        .lam("env")
+        .to(() ->
+                proj(JavaEnvironment.TYPE_, JavaEnvironment.GRAPH, "env"));
 
-    public static final Def javaEnvSetGraph = def(
-        "javaEnvSetGraph",
-        () -> lambda(
-                "g",
-                "env",
+    public static final Def javaEnvSetGraph = def("javaEnvSetGraph")
+        .lam("g").lam("env")
+        .to(() ->
                 record(JavaEnvironment.TYPE_,
                     field(
                         JavaEnvironment.ALIASES,
                         proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env")),
-                    field(JavaEnvironment.GRAPH, var("g")))));
+                    field(JavaEnvironment.GRAPH, var("g"))));
 
-    public static final Def javaFeatures = def(
-        "javaFeatures",
-        () -> ref(Coder.java11Features));
+    public static final Def javaFeatures = def("javaFeatures")
+        .to(() ->
+                ref(Coder.java11Features));
 
-    public static final Def javaIdentifierToString = def(
-        "javaIdentifierToString",
-        () -> lambda("id", apply(unwrap(Identifier.TYPE_), var("id"))));
+    public static final Def javaIdentifierToString = def("javaIdentifierToString")
+        .lam("id")
+        .to(() ->
+                apply(unwrap(Identifier.TYPE_), var("id")));
 
-    public static final Def javaTypeArgumentsForNamedType = def(
-        "javaTypeArgumentsForNamedType",
-        () -> lambda(
-                "tname",
-                "cx",
-                "g",
+    public static final Def javaTypeArgumentsForNamedType = def("javaTypeArgumentsForNamedType")
+        .lam("tname").lam("cx").lam("g")
+        .to(() ->
                 Eithers.bind(
                     apply(var("hydra.resolution.requireType"), var("cx"), var("g"), var("tname")),
                     lambda("typ",
@@ -11122,19 +10808,19 @@ public class Coder {
                                     apply(
                                         ref(Utils.typeParameterToTypeArgument),
                                         var("tp_"))),
-                                apply(ref(Coder.javaTypeParametersForType), var("typ"))))))));
+                                apply(ref(Coder.javaTypeParametersForType), var("typ")))))));
 
-    public static final Def javaTypeArgumentsForType = def(
-        "javaTypeArgumentsForType",
-        () -> lambda("typ",
+    public static final Def javaTypeArgumentsForType = def("javaTypeArgumentsForType")
+        .lam("typ")
+        .to(() ->
                 Lists.reverse(
                     Lists.map(
                         ref(Utils.typeParameterToTypeArgument),
-                        apply(ref(Coder.javaTypeParametersForType), var("typ"))))));
+                        apply(ref(Coder.javaTypeParametersForType), var("typ")))));
 
-    public static final Def javaTypeParametersForType = def(
-        "javaTypeParametersForType",
-        () -> lambda("typ",
+    public static final Def javaTypeParametersForType = def("javaTypeParametersForType")
+        .lam("typ")
+        .to(() ->
                 let(
                     field("toParam",
                         lambda("name",
@@ -11152,11 +10838,11 @@ public class Coder {
                                 apply(var("hydra.variables.freeVariablesInType"), var("typ"))))),
                     field("vars",
                         Lists.nub(Lists.concat2(var("boundVars"), var("freeVars")))),
-                    Lists.map(var("toParam"), var("vars")))));
+                    Lists.map(var("toParam"), var("vars"))));
 
-    public static final Def javaTypeParametersForType_bvars = def(
-        "javaTypeParametersForType_bvars",
-        () -> lambda("t",
+    public static final Def javaTypeParametersForType_bvars = def("javaTypeParametersForType_bvars")
+        .lam("t")
+        .to(() ->
                 casesWithDefault(Type.TYPE_,
                     var("t"),
                     list(),
@@ -11167,15 +10853,11 @@ public class Coder {
                                 proj(ForallType.TYPE_, ForallType.PARAMETER, "ft"),
                                 apply(
                                     ref(Coder.javaTypeParametersForType_bvars),
-                                    proj(ForallType.TYPE_, ForallType.BODY, "ft"))))))));
+                                    proj(ForallType.TYPE_, ForallType.BODY, "ft")))))));
 
-    public static final Def moduleToJava = def(
-        "moduleToJava",
-        () -> lambda(
-                "mod",
-                "defs",
-                "cx",
-                "g",
+    public static final Def moduleToJava = def("moduleToJava")
+        .lam("mod").lam("defs").lam("cx").lam("g")
+        .to(() ->
                 Eithers.bind(
                     apply(
                         ref(Coder.encodeDefinitions),
@@ -11202,18 +10884,18 @@ public class Coder {
                                                         apply(
                                                             ref(Serde.compilationUnitToExpr),
                                                             var("unit"))))))),
-                                    Maps.toList(var("units")))))))));
+                                    Maps.toList(var("units"))))))));
 
-    public static final Def nameMapToTypeMap = def(
-        "nameMapToTypeMap",
-        () -> lambda("m",
+    public static final Def nameMapToTypeMap = def("nameMapToTypeMap")
+        .lam("m")
+        .to(() ->
                 Maps.map(
                     lambda("v", inject(Type.TYPE_, Type.VARIABLE, var("v"))),
-                    var("m"))));
+                    var("m")));
 
-    public static final Def namespaceParent = def(
-        "namespaceParent",
-        () -> lambda("ns",
+    public static final Def namespaceParent = def("namespaceParent")
+        .lam("ns")
+        .to(() ->
                 let(
                     field("parts",
                         Strings.splitOn(
@@ -11226,29 +10908,29 @@ public class Coder {
                         nothing(),
                         just(
                             wrap(ModuleName.TYPE_,
-                                Strings.intercalate(string("."), var("initParts"))))))));
+                                Strings.intercalate(string("."), var("initParts")))))));
 
-    public static final Def noComment = def(
-        "noComment",
-        () -> lambda("decl",
+    public static final Def noComment = def("noComment")
+        .lam("decl")
+        .to(() ->
                 record(ClassBodyDeclarationWithComments.TYPE_,
                     field(ClassBodyDeclarationWithComments.VALUE, var("decl")),
-                    field(ClassBodyDeclarationWithComments.COMMENTS, nothing()))));
+                    field(ClassBodyDeclarationWithComments.COMMENTS, nothing())));
 
-    public static final Def noInterfaceComment = def(
-        "noInterfaceComment",
-        () -> lambda("decl",
+    public static final Def noInterfaceComment = def("noInterfaceComment")
+        .lam("decl")
+        .to(() ->
                 record(InterfaceMemberDeclarationWithComments.TYPE_,
                     field(
                         InterfaceMemberDeclarationWithComments.VALUE,
                         var("decl")),
                     field(
                         InterfaceMemberDeclarationWithComments.COMMENTS,
-                        nothing()))));
+                        nothing())));
 
-    public static final Def otherwiseBranch = def(
-        "otherwiseBranch",
-        () -> lambda(
+    public static final Def otherwiseBranch = def("otherwiseBranch")
+        .to(() ->
+                lambda(
                 params("env", "aliases", "dom", "cod", "tname", "jcod", "targs", "d", "cx", "g"),
                 let(
                     field("jdom",
@@ -11343,11 +11025,9 @@ public class Coder {
                                                                     var("result"),
                                                                     just(var("allStmts")))))))))))))))));
 
-    public static final Def peelDomainTypes = def(
-        "peelDomainTypes",
-        () -> lambda(
-                "n",
-                "t",
+    public static final Def peelDomainTypes = def("peelDomainTypes")
+        .lam("n").lam("t")
+        .to(() ->
                 Logic.ifElse(
                     Equality.lte(var("n"), int32(0)),
                     pair(list(), var("t")),
@@ -11366,13 +11046,11 @@ public class Coder {
                                         Lists.cons(
                                             proj(FunctionType.TYPE_, FunctionType.DOMAIN, "ft"),
                                             Pairs.first(var("rest"))),
-                                        Pairs.second(var("rest"))))))))));
+                                        Pairs.second(var("rest")))))))));
 
-    public static final Def peelDomainsAndCod = def(
-        "peelDomainsAndCod",
-        () -> lambda(
-                "n",
-                "t",
+    public static final Def peelDomainsAndCod = def("peelDomainsAndCod")
+        .lam("n").lam("t")
+        .to(() ->
                 Logic.ifElse(
                     Equality.lte(var("n"), int32(0)),
                     pair(list(), var("t")),
@@ -11391,14 +11069,11 @@ public class Coder {
                                         Lists.cons(
                                             proj(FunctionType.TYPE_, FunctionType.DOMAIN, "ft"),
                                             Pairs.first(var("rest"))),
-                                        Pairs.second(var("rest"))))))))));
+                                        Pairs.second(var("rest")))))))));
 
-    public static final Def peelExpectedTypes = def(
-        "peelExpectedTypes",
-        () -> lambda(
-                "subst",
-                "n",
-                "t",
+    public static final Def peelExpectedTypes = def("peelExpectedTypes")
+        .lam("subst").lam("n").lam("t")
+        .to(() ->
                 Logic.ifElse(
                     Equality.equal(var("n"), int32(0)),
                     list(),
@@ -11417,13 +11092,11 @@ public class Coder {
                                         ref(Coder.peelExpectedTypes),
                                         var("subst"),
                                         Math_.sub(var("n"), int32(1)),
-                                        proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft")))))))));
+                                        proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft"))))))));
 
-    public static final Def propagateType = def(
-        "propagateType",
-        () -> lambda(
-                "typ",
-                "term",
+    public static final Def propagateType = def("propagateType")
+        .lam("typ").lam("term")
+        .to(() ->
                 let("setTypeAnn",
                     lambda("t",
                         apply(
@@ -11528,13 +11201,11 @@ public class Coder {
                                                 field(
                                                     Application.FUNCTION,
                                                     var("annotatedFun")),
-                                                field(Application.ARGUMENT, var("arg"))))))))))));
+                                                field(Application.ARGUMENT, var("arg")))))))))));
 
-    public static final Def propagateType_propagateIntoLambda = def(
-        "propagateType_propagateIntoLambda",
-        () -> lambda(
-                "cod",
-                "t",
+    public static final Def propagateType_propagateIntoLambda = def("propagateType_propagateIntoLambda")
+        .lam("cod").lam("t")
+        .to(() ->
                 casesWithDefault(Term.TYPE_,
                     var("t"),
                     var("t"),
@@ -11570,14 +11241,11 @@ public class Coder {
                                         apply(
                                             ref(Coder.propagateType),
                                             var("cod"),
-                                            proj(Lambda.TYPE_, Lambda.BODY, "lam"))))))))));
+                                            proj(Lambda.TYPE_, Lambda.BODY, "lam")))))))));
 
-    public static final Def propagateType_rebuildLet = def(
-        "propagateType_rebuildLet",
-        () -> lambda(
-                "t",
-                "bindings",
-                "newBody",
+    public static final Def propagateType_rebuildLet = def("propagateType_rebuildLet")
+        .lam("t").lam("bindings").lam("newBody")
+        .to(() ->
                 casesWithDefault(Term.TYPE_,
                     var("t"),
                     var("t"),
@@ -11604,14 +11272,11 @@ public class Coder {
                                 Term.LET,
                                 record(Let.TYPE_,
                                     field(Let.BINDINGS, var("bindings")),
-                                    field(Let.BODY, var("newBody")))))))));
+                                    field(Let.BODY, var("newBody"))))))));
 
-    public static final Def propagateTypesInAppChain = def(
-        "propagateTypesInAppChain",
-        () -> lambda(
-                "fixedCod",
-                "resultType",
-                "t",
+    public static final Def propagateTypesInAppChain = def("propagateTypesInAppChain")
+        .lam("fixedCod").lam("resultType").lam("t")
+        .to(() ->
                 let(
                     field("flattened",
                         apply(ref(Coder.flattenApps), var("t"), list())),
@@ -11723,14 +11388,11 @@ public class Coder {
                                                         var("annotatedLhs")),
                                                     field(
                                                         Application.ARGUMENT,
-                                                        var("rhs")))))))))))));
+                                                        var("rhs"))))))))))));
 
-    public static final Def rebuildApps = def(
-        "rebuildApps",
-        () -> lambda(
-                "f",
-                "args",
-                "fType",
+    public static final Def rebuildApps = def("rebuildApps")
+        .lam("f").lam("args").lam("fType")
+        .to(() ->
                 Logic.ifElse(
                     Lists.null_(var("args")),
                     var("f"),
@@ -11785,16 +11447,16 @@ public class Coder {
                                                     var("annotatedApp"),
                                                     var("rest"),
                                                     var("remainingType")))),
-                                        Lists.uncons(var("args"))))))))));
+                                        Lists.uncons(var("args")))))))));
 
     // Escapes a builder setter name that would collide with the generated builder() / build() methods.
     // The builder setter name for a field: the sanitized field name (reserved words like
     // `implements`/`static` get a trailing underscore via sanitizeJavaName, matching the private field
     // and parameter), plus an extra escape for `build`/`builder`, which would collide with the
     // generated build()/builder() methods but are not Java reserved words.
-    public static final Def builderSetterName = def(
-        "builderSetterName",
-        () -> lambda("fname",
+    public static final Def builderSetterName = def("builderSetterName")
+        .lam("fname")
+        .to(() ->
                 let("base",
                     apply(
                         ref(Utils.sanitizeJavaName),
@@ -11804,16 +11466,15 @@ public class Coder {
                             Equality.equal(var("base"), string("build")),
                             Equality.equal(var("base"), string("builder"))),
                         Strings.cat2(var("base"), string("_")),
-                        var("base")))));
+                        var("base"))));
 
     // Emits the per-record fluent builder: a static generic builder() factory plus a nested
     // 'public static final class Builder' with one mutable field and one fluent setter per record
     // field and a build() method that calls the record's all-args constructor. Generic type
     // parameters are threaded through so that Builder<V>, its setters, and build() are type-safe.
-    public static final Def recordBuilderClass = def(
-        "recordBuilderClass",
-        () -> lambda(
-                params("aliases", "tparams", "elName", "fields", "cx", "g"),
+    public static final Def recordBuilderClass = def("recordBuilderClass")
+        .lams("aliases", "tparams", "elName", "fields", "cx", "g")
+        .to(() ->
                 let(binds(                    // ReferenceTypes for the record's type parameters, e.g. [V] for Vertex<V>.
                     field("typeArgRefs",
                         Lists.map(
@@ -12064,15 +11725,11 @@ public class Coder {
                                         right(
                                             list(
                                                 var("factoryMethod"),
-                                                var("builderClassMember")))))))))));
+                                                var("builderClassMember"))))))))));
 
-    public static final Def recordCompareToMethod = def(
-        "recordCompareToMethod",
-        () -> lambda(
-                "aliases",
-                "tparams",
-                "elName",
-                "fields",
+    public static final Def recordCompareToMethod = def("recordCompareToMethod")
+        .lam("aliases").lam("tparams").lam("elName").lam("fields")
+        .to(() ->
                 let(
                     field("anns",
                         list(
@@ -12109,16 +11766,11 @@ public class Coder {
                                 ref(Coder.compareToBody),
                                 var("aliases"),
                                 ref(Names.otherInstanceName),
-                                var("fields")))))));
+                                var("fields"))))));
 
-    public static final Def recordConstructor = def(
-        "recordConstructor",
-        () -> lambda(
-                "aliases",
-                "elName",
-                "fields",
-                "cx",
-                "g",
+    public static final Def recordConstructor = def("recordConstructor")
+        .lam("aliases").lam("elName").lam("fields").lam("cx").lam("g")
+        .to(() ->
                 let("assignStmts",
                     Lists.map(
                         lambda("f",
@@ -12146,14 +11798,11 @@ public class Coder {
                                     var("elName"),
                                     bool(false),
                                     var("params"),
-                                    var("assignStmts"))))))));
+                                    var("assignStmts")))))));
 
-    public static final Def recordEqualsMethod = def(
-        "recordEqualsMethod",
-        () -> lambda(
-                "aliases",
-                "elName",
-                "fields",
+    public static final Def recordEqualsMethod = def("recordEqualsMethod")
+        .lam("aliases").lam("elName").lam("fields")
+        .to(() ->
                 let(
                     binds(    field("anns",
                         list(ref(Utils.overrideAnnotation))),
@@ -12276,11 +11925,11 @@ public class Coder {
                             list(
                                 var("instanceOfStmt"),
                                 var("castStmt"),
-                                var("returnAllFieldsEqual")))))));
+                                var("returnAllFieldsEqual"))))));
 
-    public static final Def recordHashCodeMethod = def(
-        "recordHashCodeMethod",
-        () -> lambda("fields",
+    public static final Def recordHashCodeMethod = def("recordHashCodeMethod")
+        .lam("fields")
+        .to(() ->
                 let(
                     field("anns",
                         list(ref(Utils.overrideAnnotation))),
@@ -12326,15 +11975,11 @@ public class Coder {
                         ref(Names.hashCodeMethodName),
                         list(),
                         var("result"),
-                        just(list(var("returnSum")))))));
+                        just(list(var("returnSum"))))));
 
-    public static final Def recordMemberVar = def(
-        "recordMemberVar",
-        () -> lambda(
-                "aliases",
-                "ft",
-                "cx",
-                "g",
+    public static final Def recordMemberVar = def("recordMemberVar")
+        .lam("aliases").lam("ft").lam("cx").lam("g")
+        .to(() ->
                 let(
                     field("mods",
                         list(
@@ -12364,17 +12009,11 @@ public class Coder {
                                     var("jt"),
                                     apply(
                                         ref(Utils.fieldNameToJavaVariableDeclarator),
-                                        var("fname")))))))));
+                                        var("fname"))))))));
 
-    public static final Def recordWithMethod = def(
-        "recordWithMethod",
-        () -> lambda(
-                "aliases",
-                "elName",
-                "fields",
-                "field",
-                "cx",
-                "g",
+    public static final Def recordWithMethod = def("recordWithMethod")
+        .lam("aliases").lam("elName").lam("fields").lam("field").lam("cx").lam("g")
+        .to(() ->
                 let(
                     field("mods",
                         list(
@@ -12446,14 +12085,11 @@ public class Coder {
                                     var("methodName"),
                                     list(var("param")),
                                     var("result"),
-                                    just(list(var("returnStmt"))))))))));
+                                    just(list(var("returnStmt")))))))));
 
-    public static final Def resolveTypeApps = def(
-        "resolveTypeApps",
-        () -> lambda(
-                "schemeVars",
-                "fallbackTypeApps",
-                "argSubst",
+    public static final Def resolveTypeApps = def("resolveTypeApps")
+        .lam("schemeVars").lam("fallbackTypeApps").lam("argSubst")
+        .to(() ->
                 let(
                     field("resolvedVars",
                         Sets.fromList(Maps.keys(var("argSubst")))),
@@ -12477,11 +12113,11 @@ public class Coder {
                                 inject(Type.TYPE_, Type.VARIABLE, var("v")),
                                 var("v"),
                                 var("fullSubst"))),
-                        var("schemeVars")))));
+                        var("schemeVars"))));
 
-    public static final Def selfRefSubstitution = def(
-        "selfRefSubstitution",
-        () -> lambda("grouped",
+    public static final Def selfRefSubstitution = def("selfRefSubstitution")
+        .lam("grouped")
+        .to(() ->
                 Lists.foldl(
                     lambda(
                         "subst",
@@ -12492,14 +12128,11 @@ public class Coder {
                             Pairs.first(var("entry")),
                             Pairs.second(var("entry")))),
                     var("hydra.lib.maps.empty"),
-                    Maps.toList(var("grouped")))));
+                    Maps.toList(var("grouped"))));
 
-    public static final Def selfRefSubstitution_processGroup = def(
-        "selfRefSubstitution_processGroup",
-        () -> lambda(
-                "subst",
-                "inVar",
-                "outVars",
+    public static final Def selfRefSubstitution_processGroup = def("selfRefSubstitution_processGroup")
+        .lam("subst").lam("inVar").lam("outVars")
+        .to(() ->
                 Logic.ifElse(
                     Lists.elem(var("inVar"), var("outVars")),
                     Lists.foldl(
@@ -12512,11 +12145,11 @@ public class Coder {
                                 Maps.insert(var("v"), var("inVar"), var("s")))),
                         var("subst"),
                         var("outVars")),
-                    var("subst"))));
+                    var("subst")));
 
-    public static final Def serializableTypes = def(
-        "serializableTypes",
-        () -> lambda("isSer",
+    public static final Def serializableTypes = def("serializableTypes")
+        .lam("isSer")
+        .to(() ->
                 let("javaSerializableType",
                     wrap(InterfaceType.TYPE_,
                         record(ClassType.TYPE_,
@@ -12532,11 +12165,11 @@ public class Coder {
                                     ref(Utils.javaTypeIdentifier),
                                     string("Serializable"))),
                             field(ClassType.ARGUMENTS, list()))),
-                    Logic.ifElse(var("isSer"), list(var("javaSerializableType")), list()))));
+                    Logic.ifElse(var("isSer"), list(var("javaSerializableType")), list())));
 
-    public static final Def splitConstantInitializer = def(
-        "splitConstantInitializer",
-        () -> lambda("member",
+    public static final Def splitConstantInitializer = def("splitConstantInitializer")
+        .lam("member")
+        .to(() ->
                 casesWithDefault(InterfaceMemberDeclaration.TYPE_,
                     var("member"),
                     list(var("member")),
@@ -12548,14 +12181,11 @@ public class Coder {
                                 apply(
                                     ref(Coder.splitConstantInitializer_splitVar),
                                     proj(ConstantDeclaration.TYPE_, ConstantDeclaration.MODIFIERS, "cd"),
-                                    proj(ConstantDeclaration.TYPE_, ConstantDeclaration.TYPE, "cd"))))))));
+                                    proj(ConstantDeclaration.TYPE_, ConstantDeclaration.TYPE, "cd")))))));
 
-    public static final Def splitConstantInitializer_splitVar = def(
-        "splitConstantInitializer_splitVar",
-        () -> lambda(
-                "mods",
-                "utype",
-                "vd",
+    public static final Def splitConstantInitializer_splitVar = def("splitConstantInitializer_splitVar")
+        .lam("mods").lam("utype").lam("vd")
+        .to(() ->
                 let(
                     field("vid",
                         proj(VariableDeclarator.TYPE_, VariableDeclarator.ID, "vd")),
@@ -12663,11 +12293,11 @@ public class Coder {
                                                     list(),
                                                     var("resultType"),
                                                     just(list(var("returnSt"))))),
-                                            list(var("field"), var("helper")))))))))));
+                                            list(var("field"), var("helper"))))))))));
 
-    public static final Def stripForalls = def(
-        "stripForalls",
-        () -> lambda("t",
+    public static final Def stripForalls = def("stripForalls")
+        .lam("t")
+        .to(() ->
                 casesWithDefault(Type.TYPE_,
                     apply(var("hydra.strip.deannotateType"), var("t")),
                     var("t"),
@@ -12676,23 +12306,19 @@ public class Coder {
                         lambda("fa",
                             apply(
                                 ref(Coder.stripForalls),
-                                proj(ForallType.TYPE_, ForallType.BODY, "fa")))))));
+                                proj(ForallType.TYPE_, ForallType.BODY, "fa"))))));
 
-    public static final Def substituteTypeVarsWithTypes = def(
-        "substituteTypeVarsWithTypes",
-        () -> lambda(
-                "subst",
-                "t",
+    public static final Def substituteTypeVarsWithTypes = def("substituteTypeVarsWithTypes")
+        .lam("subst").lam("t")
+        .to(() ->
                 apply(
                     ref(Coder.substituteTypeVarsWithTypes_go),
                     var("subst"),
-                    apply(var("hydra.strip.deannotateType"), var("t")))));
+                    apply(var("hydra.strip.deannotateType"), var("t"))));
 
-    public static final Def substituteTypeVarsWithTypes_go = def(
-        "substituteTypeVarsWithTypes_go",
-        () -> lambda(
-                "subst",
-                "t",
+    public static final Def substituteTypeVarsWithTypes_go = def("substituteTypeVarsWithTypes_go")
+        .lam("subst").lam("t")
+        .to(() ->
                 casesWithDefault(Type.TYPE_,
                     apply(var("hydra.strip.deannotateType"), var("t")),
                     var("t"),
@@ -12843,11 +12469,11 @@ public class Coder {
                                         apply(
                                             ref(Coder.substituteTypeVarsWithTypes_go),
                                             var("subst"),
-                                            proj(ForallType.TYPE_, ForallType.BODY, "ft"))))))))));
+                                            proj(ForallType.TYPE_, ForallType.BODY, "ft")))))))));
 
-    public static final Def tagCmpNotZeroExpr = def(
-        "tagCmpNotZeroExpr",
-        () -> let(
+    public static final Def tagCmpNotZeroExpr = def("tagCmpNotZeroExpr")
+        .to(() ->
+                let(
                 field("lhs",
                     apply(
                         ref(Utils.javaRelationalExpressionToJavaEqualityExpression),
@@ -12880,9 +12506,9 @@ public class Coder {
                             field(EqualityExpression_Binary.LHS, var("lhs")),
                             field(EqualityExpression_Binary.RHS, var("rhs")))))));
 
-    public static final Def tagCompareExpr = def(
-        "tagCompareExpr",
-        () -> let(
+    public static final Def tagCompareExpr = def("tagCompareExpr")
+        .to(() ->
+                let(
                 field("thisGetClass",
                     record(MethodInvocation.TYPE_,
                         field(
@@ -13011,9 +12637,9 @@ public class Coder {
     // methodInvocationStaticWithTypeArgs. This lets the coder emit e.g.
     // hydra.util.PersistentMap.<Name, Type>ofEntries(...) so javac is not forced
     // to infer K and V from deeply-nested varargs (issue #394).
-    public static final Def collectionTypeArgs = def(
-        "collectionTypeArgs",
-        () -> lambda(
+    public static final Def collectionTypeArgs = def("collectionTypeArgs")
+        .to(() ->
+                lambda(
                 params("label", "n", "aliases", "anns", "tyapps", "cx", "g"),
                 Logic.ifElse(
                     Logic.not(Lists.null_(var("tyapps"))),
@@ -13105,14 +12731,9 @@ public class Coder {
                                                                         var("rt")))))))),
                                             var("compTypes"))))))))));
 
-    public static final Def takeTypeArgs = def(
-        "takeTypeArgs",
-        () -> lambda(
-                "label",
-                "n",
-                "tyapps",
-                "cx",
-                "g",
+    public static final Def takeTypeArgs = def("takeTypeArgs")
+        .lam("label").lam("n").lam("tyapps").lam("cx").lam("g")
+        .to(() ->
                 Logic.ifElse(
                     Equality.lt(Lists.length(var("tyapps")), var("n")),
                     left(
@@ -13136,11 +12757,11 @@ public class Coder {
                                         inject(TypeArgument.TYPE_,
                                             TypeArgument.REFERENCE,
                                             var("rt")))))),
-                        Lists.take(var("n"), var("tyapps"))))));
+                        Lists.take(var("n"), var("tyapps")))));
 
-    public static final Def toClassDecl = def(
-        "toClassDecl",
-        () -> lambda(
+    public static final Def toClassDecl = def("toClassDecl")
+        .to(() ->
+                lambda(
                 params("isInner", "isSer", "aliases", "tparams", "elName", "t", "cx", "g"),
                 let("wrap",
                     lambda("t'",
@@ -13232,16 +12853,9 @@ public class Coder {
                                     var("cx"),
                                     var("g"))))))));
 
-    public static final Def toDeclInit = def(
-        "toDeclInit",
-        () -> lambda(
-                "aliasesExt",
-                "gExt",
-                "recursiveVars",
-                "flatBindings",
-                "name",
-                "cx",
-                "g",
+    public static final Def toDeclInit = def("toDeclInit")
+        .lam("aliasesExt").lam("gExt").lam("recursiveVars").lam("flatBindings").lam("name").lam("cx").lam("g")
+        .to(() ->
                 Logic.ifElse(
                     Sets.member(var("name"), var("recursiveVars")),
                     let(
@@ -13351,11 +12965,11 @@ public class Coder {
                                                                     var("artype"),
                                                                     var("id"),
                                                                     var("body"))))))))))))),
-                    right(nothing()))));
+                    right(nothing())));
 
-    public static final Def toDeclStatement = def(
-        "toDeclStatement",
-        () -> lambda(
+    public static final Def toDeclStatement = def("toDeclStatement")
+        .to(() ->
+                lambda(
                 params("envExt", "aliasesExt", "gExt", "recursiveVars", "thunkedVars", "flatBindings", "name", "cx", "g"),
                 let(
                     field("binding",
@@ -13510,9 +13124,9 @@ public class Coder {
                                                                 var("id"),
                                                                 var("rhs")))))))))))))));
 
-    public static final Def tryInferFunctionType = def(
-        "tryInferFunctionType",
-        () -> lambda("funTerm",
+    public static final Def tryInferFunctionType = def("tryInferFunctionType")
+        .lam("funTerm")
+        .to(() ->
                 casesWithDefault(Term.TYPE_,
                     apply(var("hydra.strip.deannotateTerm"), var("funTerm")),
                     nothing(),
@@ -13556,11 +13170,11 @@ public class Coder {
                                                         field(
                                                             FunctionType.CODOMAIN,
                                                             var("cod"))))),
-                                            var("mCod"))))))))));
+                                            var("mCod")))))))));
 
-    public static final Def typeAppFallbackCast = def(
-        "typeAppFallbackCast",
-        () -> lambda(
+    public static final Def typeAppFallbackCast = def("typeAppFallbackCast")
+        .to(() ->
+                lambda(
                 params("env", "aliases", "anns", "tyapps", "jatyp", "body", "typ", "cx", "g"),
                 let("annotatedBody",
                     apply(
@@ -13603,9 +13217,9 @@ public class Coder {
                                                             ref(Utils.javaExpressionToJavaUnaryExpression),
                                                             var("jbody"))))))))))))));
 
-    public static final Def typeAppNullaryOrHoisted = def(
-        "typeAppNullaryOrHoisted",
-        () -> lambda(
+    public static final Def typeAppNullaryOrHoisted = def("typeAppNullaryOrHoisted")
+        .to(() ->
+                lambda(
                 params("env", "aliases", "anns", "tyapps", "jatyp", "body", "correctedTyp", "varName", "cls", "allTypeArgs", "cx", "g"),
                 let(
                     field("qn",
@@ -13801,9 +13415,9 @@ public class Coder {
                                                                         var("paramNames"),
                                                                         var("call")))))))))))))))));
 
-    public static final Def typeArgsOrDiamond = def(
-        "typeArgsOrDiamond",
-        () -> lambda("args",
+    public static final Def typeArgsOrDiamond = def("typeArgsOrDiamond")
+        .lam("args")
+        .to(() ->
                 Logic.ifElse(
                     apply(
                         project(JavaFeatures.TYPE_, JavaFeatures.SUPPORTS_DIAMOND_OPERATOR),
@@ -13813,13 +13427,11 @@ public class Coder {
                         unit()),
                     inject(TypeArgumentsOrDiamond.TYPE_,
                         TypeArgumentsOrDiamond.ARGUMENTS,
-                        var("args")))));
+                        var("args"))));
 
-    public static final Def typesMatch = def(
-        "typesMatch",
-        () -> lambda(
-                "a",
-                "b",
+    public static final Def typesMatch = def("typesMatch")
+        .lam("a").lam("b")
+        .to(() ->
                 casesWithDefault(Type.TYPE_,
                     var("a"),
                     bool(true),
@@ -13840,11 +13452,11 @@ public class Coder {
                                 bool(true),
                                 field(
                                     Type.WRAP,
-                                    lambda("wb", Equality.equal(var("wa"), var("wb"))))))))));
+                                    lambda("wb", Equality.equal(var("wa"), var("wb")))))))));
 
-    public static final Def unwrapReturnType = def(
-        "unwrapReturnType",
-        () -> lambda("t",
+    public static final Def unwrapReturnType = def("unwrapReturnType")
+        .lam("t")
+        .to(() ->
                 casesWithDefault(Type.TYPE_,
                     apply(var("hydra.strip.deannotateType"), var("t")),
                     var("t"),
@@ -13859,16 +13471,11 @@ public class Coder {
                         lambda("at",
                             apply(
                                 ref(Coder.unwrapReturnType),
-                                proj(ApplicationType.TYPE_, ApplicationType.ARGUMENT, "at")))))));
+                                proj(ApplicationType.TYPE_, ApplicationType.ARGUMENT, "at"))))));
 
-    public static final Def variantCompareToMethod = def(
-        "variantCompareToMethod",
-        () -> lambda(
-                "aliases",
-                "tparams",
-                "parentName",
-                "variantName",
-                "fields",
+    public static final Def variantCompareToMethod = def("variantCompareToMethod")
+        .lam("aliases").lam("tparams").lam("parentName").lam("variantName").lam("fields")
+        .to(() ->
                 let(
                     binds(    field("anns",
                         list(
@@ -13987,11 +13594,11 @@ public class Coder {
                         ref(Names.compareToMethodName),
                         list(var("param")),
                         var("result"),
-                        just(var("body"))))));
+                        just(var("body")))));
 
-    public static final Def visitBranch = def(
-        "visitBranch",
-        () -> lambda(
+    public static final Def visitBranch = def("visitBranch")
+        .to(() ->
+                lambda(
                 params("env", "aliases", "dom", "tname", "jcod", "targs", "field", "cx", "g"),
                 let(
                     field("jdom",
@@ -14123,36 +13730,29 @@ public class Coder {
                                                                                             just(
                                                                                                 var("allStmts")))))))))))))))))))))));
 
-    public static final Def withCommentString = def(
-        "withCommentString",
-        () -> lambda(
-                "comment",
-                "decl",
+    public static final Def withCommentString = def("withCommentString")
+        .lam("comment").lam("decl")
+        .to(() ->
                 record(ClassBodyDeclarationWithComments.TYPE_,
                     field(ClassBodyDeclarationWithComments.VALUE, var("decl")),
                     field(
                         ClassBodyDeclarationWithComments.COMMENTS,
-                        just(var("comment"))))));
+                        just(var("comment")))));
 
-    public static final Def withInterfaceCommentString = def(
-        "withInterfaceCommentString",
-        () -> lambda(
-                "comment",
-                "decl",
+    public static final Def withInterfaceCommentString = def("withInterfaceCommentString")
+        .lam("comment").lam("decl")
+        .to(() ->
                 record(InterfaceMemberDeclarationWithComments.TYPE_,
                     field(
                         InterfaceMemberDeclarationWithComments.VALUE,
                         var("decl")),
                     field(
                         InterfaceMemberDeclarationWithComments.COMMENTS,
-                        just(var("comment"))))));
+                        just(var("comment")))));
 
-    public static final Def withLambda = def(
-        "withLambda",
-        () -> lambda(
-                "env",
-                "lam",
-                "k",
+    public static final Def withLambda = def("withLambda")
+        .lam("env").lam("lam").lam("k")
+        .to(() ->
                 apply(
                     var("hydra.environment.withLambdaContext"),
                     ref(Coder.javaEnvGetGraph),
@@ -14178,18 +13778,18 @@ public class Coder {
                                     field(
                                         JavaEnvironment.GRAPH,
                                         proj(JavaEnvironment.TYPE_, JavaEnvironment.GRAPH, "env1")))),
-                            apply(var("k"), var("env2")))))));
+                            apply(var("k"), var("env2"))))));
 
-    public static final Def withTypeLambda = def(
-        "withTypeLambda",
-        () -> apply(
+    public static final Def withTypeLambda = def("withTypeLambda")
+        .to(() ->
+                apply(
                 var("hydra.environment.withTypeLambdaContext"),
                 ref(Coder.javaEnvGetGraph),
                 ref(Coder.javaEnvSetGraph)));
 
-    public static final Def wrapInSupplierLambda = def(
-        "wrapInSupplierLambda",
-        () -> lambda("expr",
+    public static final Def wrapInSupplierLambda = def("wrapInSupplierLambda")
+        .lam("expr")
+        .to(() ->
                 inject(Expression.TYPE_,
                     Expression.LAMBDA,
                     record(LambdaExpression.TYPE_,
@@ -14202,18 +13802,16 @@ public class Coder {
                             LambdaExpression.BODY,
                             inject(LambdaBody.TYPE_,
                                 LambdaBody.EXPRESSION,
-                                var("expr")))))));
+                                var("expr"))))));
 
     // Look up a primitive by name and return its per-parameter laziness flags
     // (the isLazy flag of each signature parameter), in order. Empty if the name
     // is not a registered primitive. The single source of truth for which
     // arguments must be thunked, replacing the former hard-coded name table
     // (issue #391).
-    public static final Def lazyFlagsForPrimitive = def(
-        "lazyFlagsForPrimitive",
-        () -> lambda(
-                "g",
-                "name",
+    public static final Def lazyFlagsForPrimitive = def("lazyFlagsForPrimitive")
+        .lam("g").lam("name")
+        .to(() ->
                 Optionals.cases(
                     Maps.lookup(var("name"), proj(Graph.TYPE_, Graph.PRIMITIVES, "g")),
                     list(),
@@ -14222,7 +13820,7 @@ public class Coder {
                             lambda("p", proj(Parameter.TYPE_, Parameter.IS_LAZY, "p")),
                             proj(TermSignature.TYPE_, TermSignature.PARAMETERS,
                                 proj(PrimitiveDefinition.TYPE_, PrimitiveDefinition.SIGNATURE,
-                                    proj(Primitive.TYPE_, Primitive.DEFINITION, "prim"))))))));
+                                    proj(Primitive.TYPE_, Primitive.DEFINITION, "prim")))))));
 
     // For primitives requiring lazy evaluation, wrap the lazy-flagged arguments
     // in Supplier lambdas. Java eagerly evaluates all method arguments, so e.g.
@@ -14233,12 +13831,9 @@ public class Coder {
     // the primitive is fully applied (argc == parameter count) and has at least
     // one lazy parameter. The returned Optional String is the Java method-name
     // override: ifElse dispatches to `lazy`, the others to `applyLazy`.
-    public static final Def wrapLazyArguments = def(
-        "wrapLazyArguments",
-        () -> lambda(
-                "g",
-                "name",
-                "args",
+    public static final Def wrapLazyArguments = def("wrapLazyArguments")
+        .lam("g").lam("name").lam("args")
+        .to(() ->
                 let(
                     field("lazyFlags",
                         apply(ref(Coder.lazyFlagsForPrimitive), var("g"), var("name"))),
@@ -14263,7 +13858,7 @@ public class Coder {
                                 Equality.equal(var("name"), wrap(Name.TYPE_, string("hydra.lib.logic.ifElse"))),
                                 string("lazy"),
                                 string("applyLazy")))),
-                        pair(var("args"), nothing())))));
+                        pair(var("args"), nothing()))));
 
 
 
