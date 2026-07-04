@@ -304,7 +304,47 @@ inferAndGenerateLexicon cx bsGraph kernelModules =
                     _ -> Nothing) (Packaging.moduleDefinitions m))) kernelModules)
       in (Eithers.bind (Inference.inferGraphTypes cx dataElements g0) (\inferResultWithCx ->
         let g1 = Pairs.first (Pairs.first inferResultWithCx)
-        in (generateLexicon g1)))
+            schemaElements =
+                    Lists.concat (Lists.map (\m -> Optionals.cat (Lists.map (\d -> case d of
+                      Packaging.DefinitionType v0 -> Just ((\name -> \typ ->
+                        let schemaTerm = Core.TermVariable (Core.Name "hydra.core.Type")
+                            dataTerm =
+                                    Annotations.normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
+                                      Core.annotatedTermBody = (EncodeCore.type_ typ),
+                                      Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
+                                        (Constants.keyType, schemaTerm)]))}))
+                        in Core.Binding {
+                          Core.bindingName = name,
+                          Core.bindingTerm = dataTerm,
+                          Core.bindingTypeScheme = (Just (Core.TypeScheme {
+                            Core.typeSchemeVariables = [],
+                            Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
+                            Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionBody v0)))
+                      _ -> Nothing) (Packaging.moduleDefinitions m))) kernelModules)
+            typeBoundTerms = Maps.fromList (Lists.map (\b -> (Core.bindingName b, (Core.bindingTerm b))) schemaElements)
+            typeBoundTypes =
+                    Maps.fromList (Optionals.cat (Lists.map (\b -> Optionals.map (\ts -> (Core.bindingName b, ts)) (Core.bindingTypeScheme b)) schemaElements))
+            g2 =
+                    Graph.Graph {
+                      Graph.graphBoundTerms = (Maps.union typeBoundTerms (Graph.graphBoundTerms g1)),
+                      Graph.graphBoundTypes = (Graph.graphBoundTypes g1),
+                      Graph.graphClassConstraints = (Graph.graphClassConstraints g1),
+                      Graph.graphLambdaVariables = (Graph.graphLambdaVariables g1),
+                      Graph.graphMetadata = (Graph.graphMetadata g1),
+                      Graph.graphPrimitives = (Graph.graphPrimitives g1),
+                      Graph.graphSchemaTypes = (Graph.graphSchemaTypes g1),
+                      Graph.graphTypeVariables = (Graph.graphTypeVariables g1)}
+            g3 =
+                    Graph.Graph {
+                      Graph.graphBoundTerms = (Graph.graphBoundTerms g2),
+                      Graph.graphBoundTypes = (Maps.union typeBoundTypes (Graph.graphBoundTypes g2)),
+                      Graph.graphClassConstraints = (Graph.graphClassConstraints g2),
+                      Graph.graphLambdaVariables = (Graph.graphLambdaVariables g2),
+                      Graph.graphMetadata = (Graph.graphMetadata g2),
+                      Graph.graphPrimitives = (Graph.graphPrimitives g2),
+                      Graph.graphSchemaTypes = (Graph.graphSchemaTypes g2),
+                      Graph.graphTypeVariables = (Graph.graphTypeVariables g2)}
+        in (generateLexicon g3)))
 
 -- | Perform type inference on modules and reconstruct with inferred types
 inferModules :: Typing.InferenceContext -> Graph.Graph -> [Packaging.Module] -> [Packaging.Module] -> Either Errors.Error [Packaging.Module]
