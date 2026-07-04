@@ -118,10 +118,10 @@ public class Testing {
         return Packaging.unModuleName(tterm(ns.value));
     }
     private static TypedTerm<?> caseConventionLowerSnake() {
-        return injectUnit("hydra.util.CaseConvention", "lowerSnake");
+        return inject("hydra.util.CaseConvention", "lowerSnake");
     }
     private static TypedTerm<?> caseConventionPascal() {
-        return injectUnit("hydra.util.CaseConvention", "pascal");
+        return inject("hydra.util.CaseConvention", "pascal");
     }
     private static TypedTerm<?> rightTerm(TypedTerm<?> t) {
         return Phantoms.right(t);

@@ -46,7 +46,7 @@ public class Language {
      * that {@code hydra.dsl.variants.*} TypedTerm constants expand to in the
      * canonical JSON. */
     private static TypedTerm<?> variant(String typeName, String fieldName) {
-        return injectUnit(typeName, fieldName);
+        return inject(typeName, fieldName);
     }
     private static TypedTerm<?> literalVariant(String which) {
         return variant("hydra.variants.LiteralVariant", which);
@@ -93,11 +93,11 @@ public class Language {
     }
     /** Inject the named LanguageFeature variant (unit-tagged). */
     private static TypedTerm<?> codersLanguageFeature(String variant) {
-        return injectUnit("hydra.coders.LanguageFeature", variant);
+        return inject("hydra.coders.LanguageFeature", variant);
     }
     /** Inject the named CaseConvention variant (unit-tagged). */
     private static TypedTerm<?> codersCaseConvention(String variant) {
-        return injectUnit("hydra.util.CaseConvention", variant);
+        return inject("hydra.util.CaseConvention", variant);
     }
     /** Wrap a string as a FileExtension. */
     private static TypedTerm<?> codersFileExtension(String ext) {
