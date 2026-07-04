@@ -66,6 +66,7 @@ EXTERNAL_DEPS: dict[str, list[str]] = {
         "process                       >= 1.6.0 && < 1.7",     # Overlay.Haskell.Lib.System (System.Process, #498)
         "regex-tdfa                    >= 1.3.2 && < 1.4",     # Lib.Regex (Text.Regex.TDFA)
         "scientific                    >= 0.3.7 && < 0.4",     # Data.Scientific
+        "SHA                           >= 1.6.4 && < 1.7",     # Overlay.Haskell.Lib.Hashing (Data.Digest.Pure.SHA, #524)
         "split                         >= 0.2.3 && < 0.3",     # Lib.Lists (Data.List.Split)
         "text                          >= 2.0.2 && < 2.2",     # Lib.Strings (Data.Text)
         "time                          >= 1.12.0 && < 1.13",   # Lib.Files (Data.Time.Clock[.POSIX], #494)
