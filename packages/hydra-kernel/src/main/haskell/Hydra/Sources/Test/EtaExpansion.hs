@@ -394,7 +394,7 @@ allTests = define "allTests" $
             toLower])
 
     nonExpansionOfEliminations = testGroup (Phantoms.string "Non-expansion of eliminations which produce functions") Phantoms.nothing (Phantoms.list ([] :: [TypedTerm TestGroup])) (Phantoms.list [
-      noChangeDisabled "applied case statement"
+      noChange "applied case statement"
         (tylams ["t0"] $
           lambdaTyped "dir" (T.var "hydra.coders.CoderDirection") $
             lambdaTyped "coder" (T.applys (T.var "hydra.coders.Coder") (T.var <$> ["t0", "t0"])) $
@@ -423,20 +423,10 @@ etaExpandRef :: TypedTerm (InferenceContext -> Graph -> Term -> Either Error Ter
 etaExpandRef = TypedTerm $ TermVariable $ Name "hydra.reduction.etaExpandTypedTerm"
 
 noChange :: String -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
-noChange name term = testCase name term term
+noChange name term = noChangeWithTags name [] term
 
-noChangeDisabled :: String -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
-noChangeDisabled name term = testCaseWithMetadata (Phantoms.string name)
-  (testCaseUniversal $ universalTestCase
-    (retype $ Eithers.either
-      (Phantoms.lambda "e" (Strings.cat2 (Phantoms.string "ETA ERROR: ") (Phantoms.string "failed")))
-      (Phantoms.lambda "result" (showTermRef Phantoms.@@ Phantoms.var "result"))
-      (etaExpandRef Phantoms.@@ testContextRef Phantoms.@@ testGraphRef Phantoms.@@ term))
-    (retype $ showTermRef Phantoms.@@ term))
-  (Phantoms.nothing :: TypedTerm (Maybe String)) (Phantoms.list [tag . unTag $ tag_disabled])
-  where
-    retype :: TypedTerm x -> TypedTerm String
-    retype (TypedTerm x) = TypedTerm x
+noChangeWithTags :: String -> [Tag] -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
+noChangeWithTags name tags term = testCaseWithTags name tags term term
 
 cat = primitive $ DefStrings.cat
 foldl = primitive $ DefLists.foldl
@@ -445,7 +435,10 @@ toLower = primitive $ DefStrings.toLower
 --toLower = Core.termFunction $ Core.functionPrimitive $ Core.name (Phantoms.string "hydra.lib.strings.toLower")
 
 testCase :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
-testCase name input output = universalCase name
+testCase name = testCaseWithTags name []
+
+testCaseWithTags :: String -> [Tag] -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
+testCaseWithTags name tags input output = universalCaseWithTags name tags
     (retype $ Eithers.either
       (Phantoms.lambda "e" (Strings.cat2 (Phantoms.string "ETA ERROR: ") (Phantoms.string "failed")))
       (Phantoms.lambda "result" (showTermRef Phantoms.@@ Phantoms.var "result"))
