@@ -30,6 +30,7 @@ import qualified Hydra.Sources.Test.Lib.Maps as Maps
 import qualified Hydra.Sources.Test.Lib.Math as Math
 import qualified Hydra.Sources.Test.Lib.Optionals as Optionals
 import qualified Hydra.Sources.Test.Annotations as Annotations
+import qualified Hydra.Sources.Test.Build.Routing as BuildRouting
 import qualified Hydra.Sources.Test.Ordering as Ordering
 import qualified Hydra.Sources.Test.Lib.Pairs as Pairs
 import qualified Hydra.Sources.Test.Lib.Regex as Regex
@@ -121,6 +122,7 @@ libPairs = [
 otherPairs :: [(ModuleName, TypedTermDefinition TestGroup)]
 otherPairs = [
   (Annotations.ns, Annotations.allTests),
+  (BuildRouting.ns, BuildRouting.allTests),
   (CheckingAll.ns, CheckingAll.allTests),
   (Dependencies.ns, Dependencies.allTests),
   (Differentiation.ns, Differentiation.allTests),
@@ -159,7 +161,7 @@ testSuiteModules =
    -- Hoisting tests (including sub-modules)
    HoistingAll.module_, HoistingCases.module_, HoistingLet.module_,
    -- Other tests
-   Annotations.module_, Dependencies.module_, Differentiation.module_, EtaExpansion.module_, Formatting.module_,
+   Annotations.module_, BuildRouting.module_, Dependencies.module_, Differentiation.module_, EtaExpansion.module_, Formatting.module_,
    Generation.module_,
    JsonParser.module_, JsonRoundtrip.module_, JsonWriter.module_, JsonYaml.module_,
    Reduction.module_, Rewriting.module_, Serialization.module_, Sorting.module_,
