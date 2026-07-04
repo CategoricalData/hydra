@@ -96,7 +96,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns, moduleName Literals.module_, moduleName ExtractCore.module_] L.++ KernelTypes.kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns, Substitution.ns, moduleName Literals.module_, moduleName ExtractCore.module_] L.++ KernelTypes.kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "JSON encoding for Hydra terms. Converts Terms to JSON Values using Either for error handling.")}
   where
     definitions = [
@@ -185,10 +185,44 @@ toJson = define "toJson" $
   "types" ~> "tname" ~> "typ" ~> "term" ~>
   "stripped" <~ (Strip.deannotateType @@ var "typ") $
   "strippedTerm" <~ (Strip.deannotateTerm @@ var "term") $
+  -- Beta-reduce a type application by resolving the function side down to a Forall
+  -- (following Variable lookups and nested Applications as needed), then substituting
+  -- the argument for the bound parameter in the Forall's body.
+  "reduceApp" <~ ("app" ~>
+    "fn" <~ (Strip.deannotateType @@ (Core.applicationTypeFunction $ var "app")) $
+    "arg" <~ (Core.applicationTypeArgument $ var "app") $
+    cases _Type (var "fn")
+      (Just $ left $ Strings.cat $ list [
+        string "cannot apply a non-parametric type: ",
+        ShowCore.type_ @@ var "fn"]) [
+      _Type_application>>: "innerApp" ~>
+        Eithers.either
+          ("err" ~> left $ var "err")
+          ("reducedFn" ~> var "reduceApp" @@ (Core.applicationType (var "reducedFn") (var "arg")))
+          (var "reduceApp" @@ var "innerApp"),
+      _Type_forall>>: "ft" ~>
+        right $ Substitution.substInType
+          @@ (Substitution.singletonTypeSubst @@ (Core.forallTypeParameter $ var "ft") @@ var "arg")
+          @@ (Core.forallTypeBody $ var "ft"),
+      _Type_variable>>: "name" ~>
+        "lookedUp" <~ (Maps.lookup (var "name" :: TypedTerm Name) (var "types")) $
+        Optionals.cases (var "lookedUp") (left $ Strings.cat $ list [
+            string "unknown type variable: ",
+            Core.unName $ var "name"]) ("resolvedFn" ~> var "reduceApp" @@ (Core.applicationType (var "resolvedFn") (var "arg")))]) $
   cases _Type (var "stripped")
     (Just $ left $ Strings.cat $ list [
       string "unsupported type for JSON encoding: ",
       ShowCore.type_ @@ var "typ"]) [
+
+    -- Type applications (parametric type instantiation): beta-reduce, then encode
+    _Type_application>>: "at" ~>
+      Eithers.either
+        ("err" ~> left $ var "err")
+        ("reducedType" ~> toJson @@ var "types" @@ var "tname" @@ var "reducedType" @@ var "term")
+        (var "reduceApp" @@ var "at"),
+
+    -- Forall reached directly (not via an enclosing Application): encode against the body.
+    _Type_forall>>: "ft" ~> toJson @@ var "types" @@ var "tname" @@ (Core.forallTypeBody $ var "ft") @@ var "term",
 
     -- Literals
     _Type_literal>>: constant $
