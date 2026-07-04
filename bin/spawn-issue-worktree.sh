@@ -85,7 +85,7 @@ TS="$(date -u +%Y-%m-%dT%H-%M-%SZ)"
 cat > "$WT/claude-hydra-messages/inbox/${TS}-coordinator-assignment.md" <<EOF
 # Assignment: GitHub issue #${NUM}
 
-**From:** coordinator (feature_409_bootstrap_everything)
+**From:** coordinator (${COORDINATOR:-staging-gce})
 **Date:** $(date -u +%Y-%m-%d)
 **Issue:** https://github.com/CategoricalData/hydra/issues/${NUM}
 **Title:** ${TITLE}
@@ -126,7 +126,7 @@ The human will not see it in time. Instead, route the question through the
 coordinator:
 
 1. Write a message to the coordinator's inbox at
-   \`../feature_409_bootstrap_everything/claude-hydra-messages/inbox/\`
+   \`../${COORDINATOR:-staging-gce}/claude-hydra-messages/inbox/\`
    (filename format per claude/cross-worktree-messages.md). Include enough
    context for the coordinator to answer on the user's behalf.
 2. Then either (a) **make a best-guess choice, document it in the plan-doc,
