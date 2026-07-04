@@ -453,7 +453,7 @@ public class Bootstrap {
 
     // The hydra.lib.* sub-namespaces whose primitives get def-modules + impl relocation (#473).
     private static final List<String> LIB_SUBS = Arrays.asList(
-            "chars", "eithers", "equality", "lists", "literals", "logic", "maps",
+            "chars", "eithers", "equality", "hashing", "lists", "literals", "logic", "maps",
             "math", "optionals", "pairs", "regex", "sets", "strings");
 
     // The effectful lib sub-namespaces (#286) have native impls in Python only

@@ -30,8 +30,9 @@
 # use bin/sync-default.sh, which is a thin wrapper around this script.
 #
 # Languages for --hosts / --targets:
-#   haskell, java, python, scala, go, clojure, scheme, common-lisp, emacs-lisp.
-#   Aliases: 'all' expands to all nine; 'lisp' expands to the four Lisp
+#   haskell, java, python, scala, go, typescript, clojure, scheme,
+#   common-lisp, emacs-lisp.
+#   Aliases: 'all' expands to all ten; 'lisp' expands to the four Lisp
 #   dialects (clojure,common-lisp,emacs-lisp,scheme). Aliases can mix
 #   with explicit names, e.g. 'java,lisp'.
 #
@@ -302,7 +303,9 @@ if [ "$HASKELL_HOST_MODE" = "published" ]; then
         git -C "$HYDRA_ROOT" checkout -q -- \
             heads/haskell/package.yaml heads/haskell/stack.yaml 2>/dev/null || true
     }
-    trap _sync_restore_head_build_files EXIT
+    # bash EXIT traps replace rather than stack: re-include print_elapsed
+    # (registered above) so published mode keeps the elapsed-time summary.
+    trap '_sync_restore_head_build_files; print_elapsed' EXIT
 fi
 python3 "$HYDRA_ROOT/bin/lib/generate-head-haskell-build.py" --mode "$HASKELL_HOST_MODE"
 

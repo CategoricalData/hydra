@@ -537,6 +537,7 @@ public class Utils {
             overlayLibPair("eithers"),
             overlayLibPair("equality"),
             overlayLibPair("files"),
+            overlayLibPair("hashing"),
             overlayLibPair("lists"),
             overlayLibPair("literals"),
             overlayLibPair("logic"),

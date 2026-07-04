@@ -985,7 +985,7 @@ We created `hydra.hoisting` to separate these concerns.
 >   "interpreter-shape" defaults tree any more; either a primitive has a
 >   portable Hydra-term default at its public signature, or its registry
 >   entry is `primNoDef`.
-> - **Native Haskell impls**: `Hydra.Lib.*` → `Hydra.Haskell.Lib.*`.
+> - **Native Haskell impls**: `Hydra.Lib.*` → `Hydra.Overlay.Haskell.Lib.*` (#501).
 > - **Primitive registration helper**: `prim2Eval` and related `*Eval`
 >   helpers no longer exist; the same primitive now registers with
 >   plain `prim1` / `prim2` / `prim3` and pairs with a default impl

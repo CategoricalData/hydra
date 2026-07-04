@@ -35,7 +35,7 @@ from hydra.generation import (
 _CODER_PACKAGES = ["hydra-java", "hydra-python", "hydra-scala", "hydra-lisp"]
 
 # The hydra.lib.* sub-namespaces whose primitives get def-modules + impl relocation (#473).
-_LIB_SUBS = ["chars", "effects", "eithers", "equality", "files", "lists", "literals",
+_LIB_SUBS = ["chars", "effects", "eithers", "equality", "files", "hashing", "lists", "literals",
              "logic", "maps", "math", "optionals", "pairs", "regex", "sets", "strings", "system", "text"]
 
 # Lisp dialect arg -> (coder dialect name, file extension). Module-level so the #473 lib pass can

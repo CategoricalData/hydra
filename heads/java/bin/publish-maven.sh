@@ -3,7 +3,7 @@
 # order: leaves first.
 #
 # Java analog of heads/haskell/bin/publish-hackage.sh. The published artifacts
-# live under group net.fortytwo.hydra. The 0.16.1 Java publish set is:
+# live under group net.fortytwo.hydra.java (#519). The Java publish set is:
 #   hydra-kernel -> hydra-haskell/hydra-java/hydra-python/hydra-lisp/
 #   hydra-typescript/hydra-rdf -> hydra-scala/hydra-pg
 # (hydra-ext is intentionally excluded; see docs/release-workflow.md.)

@@ -43,6 +43,7 @@ public class Libraries {
                 eithersPrimitives(),
                 equalityPrimitives(),
                 filesPrimitives(),
+                hashingPrimitives(),
                 listsPrimitives(),
                 literalsPrimitives(),
                 logicPrimitives(),
@@ -129,6 +130,12 @@ public class Libraries {
                 new hydra.overlay.java.lib.files.Rename(),
                 new hydra.overlay.java.lib.files.Status(),
                 new hydra.overlay.java.lib.files.WriteFile());
+    }
+
+    private static List<PrimitiveFunction> hashingPrimitives() {
+        return Arrays.asList(
+                new hydra.overlay.java.lib.hashing.Sha256(),
+                new hydra.overlay.java.lib.hashing.Sha256Hex());
     }
 
     private static List<PrimitiveFunction> listsPrimitives() {

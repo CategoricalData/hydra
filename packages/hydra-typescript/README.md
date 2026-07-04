@@ -138,7 +138,7 @@ generic-binder syntax to introduce them.
 
 The hand-written runtime lives at
 `heads/typescript/src/main/typescript/hydra/runtime.ts`. It used to be
-named `core.ts`, but `bin/copy-kernel-runtime.sh` copies it into the
+named `core.ts`, but `heads/typescript/bin/copy-kernel-runtime.sh` copies it into the
 same dist directory as the GENERATED kernel `core.ts` — and the
 hand-written file silently overwrote the generated module, masking
 every kernel type export (`Term`, `Type`, `Literal`, …) at type-check

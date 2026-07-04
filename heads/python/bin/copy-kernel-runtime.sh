@@ -4,7 +4,7 @@
 #
 # The runtime's canonical home is the top-level overlay tree
 # overlay/python/hydra-kernel/src/main/python/ (a sibling of dist/, packages/,
-# heads/, bindings/ — see docs/build-system.md). It holds exactly the hand-written
+# heads/ — see docs/build-system.md). It holds exactly the hand-written
 # modules the kernel needs at runtime (hydra/{lib,dsl,sources}/ plus tools.py and
 # the py.typed markers) — nothing else. Because the overlay tree contains ONLY
 # runtime, this is a dumb full-tree merge: no selective file lists (#418). Compare

@@ -911,6 +911,14 @@ overlayJavaLibPackageAliases =
           "lib",
           "files"])),
       (
+        Packaging.ModuleName "hydra.lib.hashing",
+        (JavaNames.javaPackageName [
+          "hydra",
+          "overlay",
+          "java",
+          "lib",
+          "hashing"])),
+      (
         Packaging.ModuleName "hydra.lib.lists",
         (JavaNames.javaPackageName [
           "hydra",

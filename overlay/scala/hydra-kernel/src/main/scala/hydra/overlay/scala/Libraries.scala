@@ -1321,6 +1321,18 @@ object Libraries:
         tMono(tFun(tFilePath, tFun(tBinary, tEffect(tEither(tFileError, tUnit)))))),
     )
 
+  // ===== Hashing primitives (#524) =====
+
+  private def hashingPrimitives(): Map[String, Primitive] =
+    Map(
+      // sha256: binary -> binary
+      hydra.lib.hashing.sha256.name -> mkPrim(hydra.lib.hashing.sha256.name,
+        tMono(tFun(tBinary, tBinary))),
+      // sha256Hex: binary -> string
+      hydra.lib.hashing.sha256Hex.name -> mkPrim(hydra.lib.hashing.sha256Hex.name,
+        tMono(tFun(tBinary, tString))),
+    )
+
   // ===== System primitives (#498) =====
 
   private def systemPrimitives(): Map[String, Primitive] =
@@ -1365,6 +1377,7 @@ object Libraries:
     equalityPrimitives() ++
     eithersPrimitives() ++
     filesPrimitives() ++
+    hashingPrimitives() ++
     listsPrimitives() ++
     literalsPrimitives() ++
     logicPrimitives() ++

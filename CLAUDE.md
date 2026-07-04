@@ -11,11 +11,12 @@ It explores an isomorphism between typed lambda calculus and labeled hypergraphs
 **programs are graphs, and graphs are programs.**
 
 Hydra is self-hosting: the kernel is defined in Haskell-based DSLs and code-generated
-into eight host languages spanning five implementation families:
-Haskell, Java, Python, Scala, and Lisp (Clojure, Common Lisp, Emacs Lisp, Scheme — sharing one coder).
-All eight pass the common test suite as targets; Haskell, Java, Python, Scala, and the JVM/native
-Lisp dialects also self-host (Emacs Lisp is still maturing as a host — see README implementation
-status).
+into nine host languages spanning six implementation families:
+Haskell, Java, Python, Scala, TypeScript, and Lisp (Clojure, Common Lisp, Emacs Lisp, Scheme —
+sharing one coder).
+All nine pass the common test suite as targets; Haskell, Java, Python, Scala, TypeScript, and the
+JVM/native Lisp dialects also self-host (Emacs Lisp is still maturing as a host — see README
+implementation status).
 
 The Java, Python, and Scala coder DSL sources (`packages/hydra-{java,python,scala}/`) are
 authored in Java, Python, and Scala respectively (host-native), and are now the **sole** source of truth:
@@ -64,7 +65,7 @@ graphs with deep support for polymorphism.
   distribution package is generated modules plus copied overlay files. Two invariants: (1) **only the
   copy step reads `overlay/`** — nothing else may reference it; (2) **heads depend on `dist/`**, never on
   `overlay/` or on `heads/` for shipped runtime (generation drivers and a head's own test runners are not
-  shipped and stay in `heads/`). Structure: `overlay/<lang>/<package>/src/...`. All nine hosts
+  shipped and stay in `heads/`). Structure: `overlay/<lang>/<package>/src/...`. All ten hosts
   have `overlay/<lang>/hydra-kernel/` populated (Haskell also has the `overlay/haskell/hydra`
   umbrella). Downstream-package overlays exist only where host-specific integrations live:
   `overlay/java/hydra-pg`, `overlay/python/hydra-pg`, `overlay/java/hydra-rdf`. Extending
@@ -325,7 +326,7 @@ Primary entry point — the doc most likely to answer the question by task:
 |------|------------|
 | Set up a contributor environment (fresh checkout) | [docs/contributor-setup.md](docs/contributor-setup.md) — toolchain prerequisites tiered by scope; `bin/check-env.sh` probes what is installed |
 | Use Hydra as a library (library user, not contributor) | [docs/getting-started.md](docs/getting-started.md) — dependency coordinates and minimal-program walk-throughs per host |
-| Understand the kernel API | [docs/hydra-lexicon.txt](docs/hydra-lexicon.txt) — **most important LLM reference**, all kernel types + ~180 primitive signatures |
+| Understand the kernel API | [docs/hydra-lexicon.txt](docs/hydra-lexicon.txt) — **most important LLM reference**, all kernel types + ~270 primitive signatures |
 | Understand the build/sync/cache system | [docs/build-system.md](docs/build-system.md) — pipeline phases, cache layers, what invalidates what, and the published-host consume model (#370) for all three hosts |
 | Build when a published host can't (pin / local-host shim) | [docs/recipes/migration-shims.md](docs/recipes/migration-shims.md) — `hostOverrides` pinning vs `--local-host`; the per-host shims |
 | Understand the JSON wire format | [docs/json-format.md](docs/json-format.md) — tagged-union duality, optional-field rules, IEEE sentinels, integer threshold |

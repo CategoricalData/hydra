@@ -133,7 +133,7 @@ Hydra's Java code is split across three locations
 
 - **Java kernel overlay** ([`overlay/java/hydra-kernel/src/main/java/`](https://github.com/CategoricalData/hydra/tree/main/overlay/java/hydra-kernel/src/main/java))
   — hand-written Java kernel runtime, overlaid onto `dist/java/hydra-kernel/`
-  by `bin/copy-kernel-runtime.sh` so the published `hydra-kernel` Maven artifact
+  by `heads/java/bin/copy-kernel-runtime.sh` so the published `hydra-kernel` Maven artifact
   is self-contained
   - `hydra/lib/` — primitive function implementations
   - `hydra/dsl/` — Java DSL (Terms, Types, Expect, ...)

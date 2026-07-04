@@ -179,7 +179,7 @@ Check the output for "Skipping" messages to identify problematic modules.
 
 1. Ensure Haskell tests pass first
 2. Check for missing primitive implementations in `overlay/python/hydra-kernel/src/main/python/hydra/lib/`
-3. Review `docs/work/python-test-failures-analysis.md` for known issues
+3. See [troubleshooting.md](../troubleshooting.md) for known failure modes
 
 ## Related Documentation
 

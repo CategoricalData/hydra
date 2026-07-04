@@ -4,7 +4,7 @@
 #
 # The runtime's canonical home is the top-level overlay tree
 # overlay/scala/hydra-kernel/src/{main,test}/scala/ (a sibling of dist/, packages/,
-# heads/, bindings/ — see docs/build-system.md). It holds the hand-written
+# heads/ — see docs/build-system.md). It holds the hand-written
 # primitive registry (hydra/lib/Libraries.scala), the native primitive impls
 # (hydra/scala/lib/*.scala), and the test runner (hydra/TestSuiteRunner.scala,
 # hydra/test/testEnv.scala). The generation drivers (Bootstrap.scala,

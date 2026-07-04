@@ -19,5 +19,4 @@ nil — see `claude/pitfalls.md` for the gotcha.
 
 This script does **not** run the Emacs Lisp test suite. To validate
 the generated code, run `packages/hydra-lisp/bin/run-tests.sh emacs-lisp`
-or do a `/bootstrap emacs-lisp`. (Pending #387: `/test emacs-lisp`
-will roll sync + tests into one step.)
+or do a `/bootstrap emacs-lisp`. (Or use `/test emacs-lisp`, which rolls sync + tests into one step.)

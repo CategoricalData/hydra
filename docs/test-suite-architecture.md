@@ -76,9 +76,9 @@ Every test module follows this pattern:
 module Hydra.Sources.Test.MyTest where
 
 import Hydra.Kernel
-import qualified Hydra.Dsl.Meta.Testing as Testing
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing as Testing
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms as Phantoms
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 
 module_ :: Module
@@ -173,13 +173,13 @@ starts, and per-group timings collapse to 0 ms. See issue #311 for context.
 
 ### Constructing universal tests
 
-The DSL helper `Hydra.Dsl.Meta.Testing.universalTestCase` wraps each string
+The DSL helper `Hydra.Overlay.Haskell.Dsl.Typed.Testing.universalTestCase` wraps each string
 expression in a unit-lambda internally, so callers continue to pass plain
 `TypedTerm String` values:
 
 ```haskell
-import qualified Hydra.Dsl.Meta.Testing as Testing
-import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing as Testing
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms as Phantoms
 
 -- Typical test construction (string-equality comparison)
 Testing.universalCase "case name" actualExpr expectedExpr
@@ -191,13 +191,13 @@ Testing.infTest "case name" tags term typeScheme
 Testing.evalCase "case name" inputTerm outputTerm
 ```
 
-Every test helper in `Hydra.Dsl.Meta.Testing` (`universalCase`, `evalCase`,
+Every test helper in `Hydra.Overlay.Haskell.Dsl.Typed.Testing` (`universalCase`, `evalCase`,
 `evalCaseWithTags`, `infTest`, `infFailureTest`, `checkTest`, `noChange`,
 `evalPair`, `evalPairWithTags`, `stringEvalPair`, `alphaCase`, `typeRedCase`,
 `validateCoreTermCase`, `validateCoreTermCaseWithProfile`,
 `validatePackagingModuleCase`, `validatePackagingPackageCase`,
 `validatePackagingModuleCaseWithProfile`,
-`validatePackagingPackageCaseWithProfile`, `parserCase`) funnels through
+`validatePackagingPackageCaseWithProfile`, ) funnels through
 `universalTestCase` and benefits from the thunk wrap automatically.
 
 ### Host runner contract
@@ -275,7 +275,7 @@ translation is restricted to the native path.
 Because `actual`/`expected` hold a term of the field's value type, author them with builders
 that produce a term *of that type*:
 
-- **Value-typed builders** (`Hydra.Dsl.Meta.Phantoms`, `Hydra.Dsl.Meta.Literals` — e.g.
+- **Value-typed builders** (`Hydra.Overlay.Haskell.Dsl.Typed.Phantoms`, `Hydra.Dsl.Meta.Literals` — e.g.
   `Literals.string :: String -> TypedTerm String`, `Phantoms.primitive`, `Phantoms.@@`)
   produce a term of its own value type: `Literals.string "x"` is a `string`,
   `readFile (path "f")` is an `effect<string>`. Use these for the `actual`/`expected` fields.
@@ -321,13 +321,13 @@ splitOn @@ string "," @@ var "input"    -- Term
 record personType ["name">: string "Alice", "age">: int32 30]  -- Term
 ```
 
-### Meta-Level DSL (`Hydra.Dsl.Meta.Phantoms`, `Hydra.Dsl.Meta.Testing`)
+### Meta-Level DSL (`Hydra.Overlay.Haskell.Dsl.Typed.Phantoms`, `Hydra.Overlay.Haskell.Dsl.Typed.Testing`)
 
 Used for constructing **`TypedTerm a` values** - meta-representations of Hydra terms used in modules:
 
 ```haskell
-import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
-import qualified Hydra.Dsl.Meta.Testing as Testing
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms as Phantoms
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing as Testing
 
 -- These create TypedTerm values (meta-representations)
 Phantoms.string "name"                  -- TypedTerm String
@@ -432,7 +432,7 @@ libPairs = [
   (Eithers.ns, Eithers.allTests),
   (Lists.ns, Lists.allTests),
   (Strings.ns, Strings.allTests),
-  -- ... plus Equality, Flows, Literals, Logic, Maps, Math, Optionals, Pairs, Sets
+  -- ... plus Effects, Equality, Files, Literals, Logic, Maps, Math, Optionals, Pairs, Regex, Sets, System
   ]
 
 otherPairs :: [(ModuleName, TypedTermDefinition TestGroup)]
@@ -441,8 +441,9 @@ otherPairs = [
   (InferenceAll.ns, InferenceAll.allTests),
   (EtaExpansion.ns, EtaExpansion.allTests),
   (Formatting.ns, Formatting.allTests),
-  -- ... plus Annotations, Hoisting, Json.*, Monads, Reduction, Rewriting,
-  --   Serialization, Sorting, Substitution, Unification
+  -- ... plus Annotations, Dependencies, Differentiation, Generation, Hoisting,
+  --   Json.* (Parser, Roundtrip, Writer, Yaml), Ordering, Reduction, Rewriting,
+  --   Serialization, Sorting, Strip, Substitution, Unification, Validate, Variables
   ]
 
 testPairs = libPairs ++ otherPairs
@@ -461,7 +462,7 @@ TestSuite (common)
 │   ├── Fundamentals
 │   ├── Algebraic Types
 │   └── ...
-├── JSON tests (Coder, Parser, Roundtrip, Writer)
+├── JSON tests (Parser, Roundtrip, Writer, Yaml)
 ├── Eta Expansion
 ├── Formatting
 ├── Reduction, Rewriting, Hoisting

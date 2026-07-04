@@ -42,6 +42,7 @@ import qualified Hydra.Test.Lib.Effects as Effects
 import qualified Hydra.Test.Lib.Eithers as Eithers
 import qualified Hydra.Test.Lib.Equality as Equality
 import qualified Hydra.Test.Lib.Files as Files
+import qualified Hydra.Test.Lib.Hashing as Hashing
 import qualified Hydra.Test.Lib.Lists as Lists
 import qualified Hydra.Test.Lib.Literals as Literals
 import qualified Hydra.Test.Lib.Logic as Logic
@@ -86,6 +87,7 @@ allTests =
         Eithers.allTests,
         Equality.allTests,
         Files.allTests,
+        Hashing.allTests,
         Lists.allTests,
         Literals.allTests,
         Logic.allTests,
