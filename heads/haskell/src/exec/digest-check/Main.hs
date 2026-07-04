@@ -337,11 +337,13 @@ doRefresh opts = do
     return (rel, DigestEntry KindTargetFile h)
 
   gen <- generatorStamp
+  generation <- Hydra.Digest.generationRecord
 
   let d = Digest
         { digestInputs           = inputsAsMap
         , digestOutputs          = outputs
         , digestGenerator        = gen
+        , digestGeneration       = generation
         , digestRecordedSelfHash = Hydra.Digest.ppSelfHash inputPpd
         , digestRecordedDeps     = Hydra.Digest.ppDeps inputPpd
         }

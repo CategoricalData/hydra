@@ -272,7 +272,12 @@ see [claude/cross-worktree-messages.md](claude/cross-worktree-messages.md).
 
 When the coordinator session needs a sibling worker (typically to fix a
 GitHub issue or run a parallel task), it spawns one via
-`bin/spawn-issue-worktree.sh <issue-number> <slug>`. The script creates a
+`COORDINATOR=<coord-worktree> bin/spawn-issue-worktree.sh <issue-number>
+<slug>`. The `COORDINATOR` env var is required and names the worktree the
+new worker will address for ready-to-stage handoffs and coordination
+questions; it varies per machine and per epoch (the coordinator role
+shifts as sessions come and go), so there is no sensible hardcoded
+default — the operator sets it at spawn time. The script creates a
 worktree, seeds `.claude/`, opens a detached `tmux` session, and starts
 Claude inside it via `claude-remote`.
 

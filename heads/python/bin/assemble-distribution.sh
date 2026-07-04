@@ -64,7 +64,7 @@ source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 source "$HYDRA_ROOT_DIR/bin/lib/assemble-common.sh"
 
 # Per-target generator stamp; see assemble-common.sh and #347.
-export HYDRA_GENERATOR_STAMP=$(compute_generator_stamp python)
+export_generation_env python
 
 # Step 0: copy any hand-written Python overlay source for this package BEFORE
 # generation, recording the copied files in a keep-paths manifest so #357 prune

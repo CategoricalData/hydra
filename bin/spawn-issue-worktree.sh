@@ -2,9 +2,14 @@
 # Spawn a worktree + tmux session + Claude for a specific GitHub issue.
 #
 # Usage:
-#   bin/spawn-issue-worktree.sh <issue-number> <slug> [<issue-title>] [--force-respawn]
+#   COORDINATOR=<coord-worktree> bin/spawn-issue-worktree.sh <issue-number> <slug> [<issue-title>] [--force-respawn]
 # Example:
-#   bin/spawn-issue-worktree.sh 425 clojure_json_decode "Clojure host's JSON decoder rejects kernel JSON"
+#   COORDINATOR=staging-gce bin/spawn-issue-worktree.sh 425 clojure_json_decode "Clojure host's JSON decoder rejects kernel JSON"
+#
+# $COORDINATOR names the worktree whose inbox the new worker will address —
+# the entity that owns the ready-to-stage / question-answering relationship.
+# It varies per machine and per epoch (which session is currently coordinating);
+# there is no sensible hardcoded default, so the operator must set it.
 #
 # Refuses to spawn if worktrees/closed/ already contains a plan-doc for this
 # issue (a prior worker addressed it; the GitHub issue may need a status
@@ -15,7 +20,7 @@
 #   - branch:  bug_<NNN>_<slug>  (off origin/main)
 #   - worktree: ../bug_<NNN>_<slug>/
 #   - .claude/ seeded with hooks + permissions
-#   - claude-hydra-messages/inbox/ seeded with a briefing
+#   - claude-hydra-messages/inbox/ seeded with a briefing (addressed to $COORDINATOR)
 #   - tmux session: bug_<NNN>_<slug>   (detached, claude running)
 #
 # After spawn, attach with:
@@ -25,8 +30,14 @@
 
 set -euo pipefail
 
+if [ -z "${COORDINATOR:-}" ]; then
+    echo "error: \$COORDINATOR must be set (name the coordinator worktree, e.g. COORDINATOR=staging-gce)" >&2
+    echo "       See the file header for context — coordinator identity varies per machine and per epoch." >&2
+    exit 2
+fi
+
 if [ $# -lt 2 ]; then
-    echo "usage: $0 <issue-number> <slug> [<title>]" >&2
+    echo "usage: COORDINATOR=<coord-worktree> $0 <issue-number> <slug> [<title>]" >&2
     exit 2
 fi
 
@@ -85,7 +96,7 @@ TS="$(date -u +%Y-%m-%dT%H-%M-%SZ)"
 cat > "$WT/claude-hydra-messages/inbox/${TS}-coordinator-assignment.md" <<EOF
 # Assignment: GitHub issue #${NUM}
 
-**From:** coordinator (feature_409_bootstrap_everything)
+**From:** coordinator (${COORDINATOR})
 **Date:** $(date -u +%Y-%m-%d)
 **Issue:** https://github.com/CategoricalData/hydra/issues/${NUM}
 **Title:** ${TITLE}
@@ -126,7 +137,7 @@ The human will not see it in time. Instead, route the question through the
 coordinator:
 
 1. Write a message to the coordinator's inbox at
-   \`../feature_409_bootstrap_everything/claude-hydra-messages/inbox/\`
+   \`../${COORDINATOR}/claude-hydra-messages/inbox/\`
    (filename format per claude/cross-worktree-messages.md). Include enough
    context for the coordinator to answer on the user's behalf.
 2. Then either (a) **make a best-guess choice, document it in the plan-doc,
