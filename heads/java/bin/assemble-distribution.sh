@@ -66,7 +66,7 @@ source "$HYDRA_ROOT_DIR/bin/lib/assemble-common.sh"
 # Per-target generator stamp: invalidates output digests when the
 # Java-emit transform's sources change without the per-package JSON
 # inputs themselves changing. See assemble-common.sh and #347.
-export HYDRA_GENERATOR_STAMP=$(compute_generator_stamp java)
+export_generation_env java
 
 # Step 0: copy any hand-written overlay source for this package BEFORE
 # generation, recording the copied files in a keep-paths manifest so #357 prune

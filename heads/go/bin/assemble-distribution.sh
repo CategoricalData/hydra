@@ -54,7 +54,7 @@ HASKELL_BIN="$HYDRA_ROOT_DIR/heads/haskell/bin"
 source "$HYDRA_ROOT_DIR/bin/lib/assemble-common.sh"
 
 # Per-target generator stamp; see assemble-common.sh and #347.
-export HYDRA_GENERATOR_STAMP=$(compute_generator_stamp go)
+export_generation_env go
 
 # Step 1: Main modules.
 if assemble_check_fresh "$INPUT_DIGEST_MAIN" "$OUT_MAIN" "$OUTPUT_DIGEST_MAIN"; then
