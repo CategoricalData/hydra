@@ -25,6 +25,7 @@ import qualified Hydra.Relational as Relational
 import qualified Hydra.System as System
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Test.Annotations as Annotations
+import qualified Hydra.Test.Build.Routing as Routing
 import qualified Hydra.Test.Checking.All as CheckingAll
 import qualified Hydra.Test.Dependencies as Dependencies
 import qualified Hydra.Test.Differentiation as Differentiation
@@ -100,6 +101,7 @@ allTests =
         Strings.allTests,
         LibSystem.allTests,
         Annotations.allTests,
+        Routing.allTests,
         CheckingAll.allTests,
         Dependencies.allTests,
         Differentiation.allTests,
