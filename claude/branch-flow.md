@@ -12,6 +12,8 @@ feature_NNN  ──→  integration  ──→  staging  ──→  main  ──
 For the read/modify rules across worktrees, see CLAUDE.md ("Working with worktrees").
 For git-worktree mechanics (adding, removing, cherry-picks across worktrees),
 see [worktree-workflow.md](worktree-workflow.md).
+For the coordinator's view of spawning and finalizing the workers whose
+changes travel this ladder, see [coordinator-workflow.md](coordinator-workflow.md).
 
 ## Where work happens
 
