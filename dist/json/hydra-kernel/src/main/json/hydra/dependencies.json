@@ -2,6 +2,7 @@
   "name": "hydra.dependencies",
   "metadata": {"description": "Dependency extraction, binding sort, and let normalization", "comments": [], "seeAlso": []},
   "dependencies": [
+    {"module": "hydra.annotations"},
     {"module": "hydra.lexical"},
     {"module": "hydra.names"},
     {"module": "hydra.rewriting"},
@@ -2471,23 +2472,12 @@
                                     "domain": {"variable": "hydra.core.Term"},
                                     "body": {
                                       "application": {
-                                        "function": {
-                                          "cases": {
-                                            "typeName": "hydra.core.Term",
-                                            "default": {"literal": {"boolean": false}},
-                                            "cases": [
-                                              {
-                                                "name": "annotated",
-                                                "handler": {
-                                                  "lambda": {
-                                                    "parameter": "at",
-                                                    "domain": {"variable": "hydra.core.AnnotatedTerm"},
-                                                    "body": {
-                                                      "application": {
-                                                        "function": {"variable": "hasTypeAnnotation"},
-                                                        "argument": {
-                                                          "application": {"function": {"project": {"typeName": "hydra.core.AnnotatedTerm", "fieldName": "body"}}, "argument": {"variable": "at"}}}}}}}}]}},
-                                        "argument": {"variable": "term"}}}}},
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.isGiven"}, "type": {"variable": "hydra.core.Term"}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {
+                                              "application": {"function": {"variable": "hydra.annotations.getTermAnnotation"}, "argument": {"variable": "hydra.constants.keyType"}}},
+                                            "argument": {"variable": "term"}}}}}}},
                                 "typeScheme": {"variables": [], "body": {"function": {"domain": {"variable": "hydra.core.Term"}, "codomain": {"literal": "boolean"}}}}}],
                             "body": {
                               "let": {

@@ -83,7 +83,6 @@ module_ = Module {
      toDefinition binaryLiteral,
      toDefinition boolean,
      toDefinition booleanLiteral,
-     toDefinition caseField,
      toDefinition cases,
      toDefinition decimal,
      toDefinition decimalLiteral,
@@ -94,7 +93,6 @@ module_ = Module {
      toDefinition decodePair,
      toDefinition (decodeSet :: TypedTermDefinition ((Graph -> Term -> Either DecodingError Int) -> Graph -> Term -> Either DecodingError (S.Set Int))),
      toDefinition decodeUnit,
-     toDefinition decodeWrapped,
      toDefinition eitherTerm,
      toDefinition eitherType,
      toDefinition field,
@@ -121,7 +119,6 @@ module_ = Module {
      toDefinition let_,
      toDefinition letBinding,
      toDefinition list,
-     toDefinition listHead,
      toDefinition listOf,
      toDefinition listType,
      toDefinition literal,
@@ -202,18 +199,6 @@ booleanLiteral = define "booleanLiteral" $
     (Just (unexpected(Phantoms.string "boolean") (ShowCore.literal @@ var "v"))) [
     _Literal_boolean>>: "b" ~> right (var "b")]
 
--- TODO: nonstandard; move me
-caseField :: TypedTermDefinition (Name -> String -> Graph -> Term -> Prelude.Either Error CaseAlternative)
-caseField = define "caseField" $
-  doc "Extract a specific case handler from a case statement term" $
-  "name" ~> "n" ~> "graph" ~> "term" ~>
-  "fieldName" <~ Core.name (var "n") $
-  "cs" <<~ cases @@ var "name" @@ var "graph" @@ var "term" $
-  "matching" <~ (Lists.find
-    ("f" ~> Core.equalName_ (Core.caseAlternativeName (var "f")) (var "fieldName"))
-    (Core.caseStatementCases (var "cs"))) $
-  Optionals.cases (var "matching") (left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (Phantoms.string "matching case") (Phantoms.string "no matching case"))) ("mf" ~> right $ var "mf")
-
 formatError :: TypedTerm (Error -> String)
 formatError = "e" ~> ShowError.error_ @@ var "e"
 
@@ -224,9 +209,7 @@ unexpected :: TypedTerm String -> TypedTerm String -> TypedTerm (Prelude.Either 
 unexpected expected actual = left
   (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError expected actual)
 
--- TODO: nonstandard; move me
 
--- TODO: nonstandard; move me
 cases :: TypedTermDefinition (Name -> Graph -> Term -> Prelude.Either Error CaseStatement)
 cases = define "cases" $
   doc "Extract case statement from a term" $
@@ -241,7 +224,6 @@ cases = define "cases" $
           (Phantoms.string "case statement for type " ++ (Core.unName (var "name")))
           (ShowCore.term @@ var "term"))]
 
--- TODO: nonstandard; move me
 decimal :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error Sci.Scientific)
 decimal = define "decimal" $
   doc "Extract an arbitrary-precision decimal value from a term" $
@@ -255,7 +237,6 @@ decimalLiteral = define "decimalLiteral" $
     (Just (unexpected(Phantoms.string "decimal") (ShowCore.literal @@ var "v"))) [
     _Literal_decimal>>: "d" ~> right (var "d")]
 
--- TODO: nonstandard; move me
 -- | Decode an Either value using the provided left and right decoders
 decodeEither :: TypedTermDefinition ((Graph -> Term -> Either DecodingError a) -> (Graph -> Term -> Either DecodingError b) -> Graph -> Term -> Either DecodingError (Either a b))
 decodeEither = define "decodeEither" $
@@ -368,19 +349,6 @@ decodeUnit = define "decodeUnit" $
       (Just $ left $ Error.decodingError $ Phantoms.string "expected a unit value") [
       _Term_unit>>: constant $ right Phantoms.unit])
 
--- | Decode a wrapped value using the provided body decoder
-
--- | Decode a wrapped value using the provided body decoder
-decodeWrapped :: TypedTermDefinition ((Graph -> Term -> Either DecodingError a) -> Graph -> Term -> Either DecodingError a)
-decodeWrapped = define "decodeWrapped" $
-  doc "Decode a wrapped value using the provided body decoder" $
-  "bodyDecoder" ~> "g" ~> "term" ~>
-  Eithers.bind
-    (stripWithDecodingError @@ var "g" @@ var "term")
-    ("stripped" ~> Phantoms.cases _Term (var "stripped")
-      (Just $ left $ Error.decodingError $ Phantoms.string "expected wrapped value") [
-      _Term_wrap>>: "wt" ~>
-        var "bodyDecoder" @@ var "g" @@ (Core.wrappedTermBody (var "wt"))])
 
 -- | Require a field from a field map and decode it using the provided decoder
 -- Returns Left with a "missing field" error if the field is not present
@@ -407,7 +375,6 @@ eitherType = define "eitherType" $
   Phantoms.cases _Type (var "stripped")
     (Just (unexpected(Phantoms.string "either type") (ShowCore.type_ @@ var "typ"))) [
     _Type_either>>: "et" ~> right (var "et")]
--- TODO: nonstandard; move me
 field :: TypedTermDefinition (Name -> (Term -> Prelude.Either Error x) -> Graph -> [Field] -> Prelude.Either Error x)
 field = define "field" $
   doc "Extract a field value from a list of fields" $
@@ -477,9 +444,7 @@ functionType = define "functionType" $
     (Just (unexpected(Phantoms.string "function type") (ShowCore.type_ @@ var "typ"))) [
     _Type_function>>: "ft" ~> right (var "ft")]
 
--- TODO: nonstandard; move me
 
--- TODO: nonstandard; move me
 injection :: TypedTermDefinition (Name -> Graph -> Term -> Prelude.Either Error Field)
 injection = define "injection" $
   doc "Extract a field from a union term" $
@@ -576,14 +541,12 @@ lambda = define "lambda" $
     (Just (unexpected(Phantoms.string "lambda") (ShowCore.term @@ var "term"))) [
     _Term_lambda>>: "l" ~> right (var "l")]
 
--- TODO: nonstandard; move me
 
 lambdaBody :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error Term)
 lambdaBody = define "lambdaBody" $
   doc "Extract the body of a lambda term" $
   "graph" ~> "term" ~> Eithers.map (reify Core.lambdaBody) (lambda @@ var "graph" @@ var "term")
 
--- TODO: nonstandard; move me
 letBinding :: TypedTermDefinition (String -> Graph -> Term -> Prelude.Either Error Term)
 letBinding = define "letBinding" $
   doc "Extract a binding with the given name from a let term" $
@@ -616,13 +579,6 @@ list = define "list" $
   Phantoms.cases _Term (var "stripped")
     (Just (unexpected(Phantoms.string "list") (ShowCore.term @@ var "stripped"))) [
     _Term_list>>: "l" ~> right (var "l")]
-
-listHead :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error Term)
-listHead = define "listHead" $
-  doc "Extract the first element of a list term" $
-  "graph" ~> "term" ~>
-  "l" <<~ list @@ var "graph" @@ var "term" $
-  Optionals.cases (Lists.maybeHead $ var "l") (left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (Phantoms.string "non-empty list") (Phantoms.string "empty list"))) ("h" ~> right $ var "h")
 
 listOf :: TypedTermDefinition ((Term -> Prelude.Either Error x) -> Graph -> Term -> Prelude.Either Error [x])
 listOf = define "listOf" $
@@ -673,7 +629,6 @@ mapType = define "mapType" $
     (Just (unexpected(Phantoms.string "map type") (ShowCore.type_ @@ var "typ"))) [
     _Type_map>>: "mt" ~> right (var "mt")]
 
--- TODO: nonstandard; move me
 
 optionalTerm :: TypedTermDefinition ((Term -> Prelude.Either Error x) -> Graph -> Term -> Prelude.Either Error (Maybe x))
 optionalTerm = define "optionalTerm" $
@@ -695,7 +650,6 @@ optionalType = define "optionalType" $
     (Just (unexpected(Phantoms.string "optional type") (ShowCore.type_ @@ var "typ"))) [
     _Type_optional>>: "t" ~> right (var "t")]
 
--- TODO: nonstandard; move me
 nArgs :: TypedTermDefinition (Name -> Int -> [a] -> Prelude.Either Error ())
 nArgs = define "nArgs" $
   doc "Ensure a function has the expected number of arguments" $
@@ -721,9 +675,7 @@ pair = define "pair" $
       "vVal" <<~ var "vf" @@ (Pairs.second $ var "p") $
       right (Phantoms.pair (var "kVal") (var "vVal"))]
 
--- TODO: nonstandard; move me
 
--- TODO: nonstandard; move me
 record :: TypedTermDefinition (Name -> Graph -> Term -> Prelude.Either Error [Field])
 record = define "record" $
   doc "Extract a record's fields from a term" $
@@ -735,9 +687,7 @@ record = define "record" $
       (Phantoms.string "record of type " ++ (Core.unName (var "expected")))
       (Core.unName (Core.recordTypeName (var "record"))))
 
--- TODO: nonstandard; move me
 
--- TODO: nonstandard; move me
 recordType :: TypedTermDefinition (Name -> Type -> Prelude.Either Error [FieldType])
 recordType = define "recordType" $
   doc "Extract the field types from a record type" $
@@ -879,8 +829,6 @@ uint8Value = define "uint8Value" $
     (Just (unexpected(Phantoms.string "uint8") (ShowCore.integerValue @@ var "v"))) [
     _IntegerValue_uint8>>: "i" ~> right (var "i")]
 
--- TODO: nonstandard; move me
--- TODO: nonstandard; move me
 unionType :: TypedTermDefinition (Name -> Type -> Prelude.Either Error [FieldType])
 unionType = define "unionType" $
   doc "Extract the field types from a union type" $
@@ -903,8 +851,6 @@ unitVariant = define "unitVariant" $
   "ignored" <<~ unit @@ (Core.fieldTerm (var "field")) $
   right (Core.fieldName (var "field"))
 
--- TODO: nonstandard; move me
--- TODO: nonstandard; move me
 wrap :: TypedTermDefinition (Name -> Graph -> Term -> Prelude.Either Error Term)
 wrap = define "wrap" $
   doc "Extract the wrapped value from a wrapped term" $
@@ -921,8 +867,6 @@ wrap = define "wrap" $
           (Phantoms.string "wrapper of type " ++ (Core.unName (var "expected")))
           (Core.unName (Core.wrappedTermTypeName (var "wrappedTerm"))))]
 
--- TODO: nonstandard; move me
--- TODO: nonstandard; move me
 wrappedType :: TypedTermDefinition (Name -> Type -> Prelude.Either Error Type)
 wrappedType = define "wrappedType" $
   doc "Extract the wrapped type from a wrapper type" $

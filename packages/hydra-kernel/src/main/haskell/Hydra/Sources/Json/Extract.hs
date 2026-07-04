@@ -80,6 +80,7 @@ import qualified Data.Maybe                                as Y
 
 -- Additional imports
 import Hydra.Json.Model
+import qualified Hydra.Sources.Json.Writer as JsonWriter
 
 
 ns :: ModuleName
@@ -89,7 +90,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> (KernelTypes.kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([moduleName JsonWriter.module_] L.++ KernelTypes.kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Utilities for extracting values from JSON objects")}
   where
     definitions = [
@@ -157,7 +158,7 @@ require = define "require" $
   doc "Look up a required field in a JSON object, failing if not found" $
   lambdas ["fname", "m"] $ Optionals.cases (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String Value))) (left $ Strings.cat $ list [
       string "required attribute ",
-      showValue @@ var "fname",
+      showValue @@ (Json.valueString $ var "fname"),
       string " not found"]) (lambda "value" $ right $ var "value")
 
 requireArray :: TypedTermDefinition (String -> M.Map String Value -> Either String [Value])
@@ -181,8 +182,7 @@ requireString = define "requireString" $
     (require @@ var "fname" @@ var "m")
     (asTerm expectString)
 
--- TODO: implement this function, and deduplicate with hydra.json.coder.showValue
 showValue :: TypedTermDefinition (Value -> String)
 showValue = define "showValue" $
-  doc "Show a JSON value as a string (placeholder implementation)" $
-  lambda "value" $ string "TODO: implement showValue"
+  doc "Show a JSON value as a string" $
+  lambda "value" $ JsonWriter.printJson @@ var "value"
