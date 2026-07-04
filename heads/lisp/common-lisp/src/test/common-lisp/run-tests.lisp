@@ -287,6 +287,11 @@
              "json/yaml.lisp"))
   (load-test-file f))
 
+;; Build tests
+(dolist (f '("build/reconcile.lisp"
+             "build/routing.lisp"))
+  (load-test-file f))
+
 ;; Remaining test categories
 (load-test-file "dependencies.lisp")
 (load-test-file "differentiation.lisp")

@@ -11,9 +11,12 @@ This guide explains Hydra's domain-specific language (DSL) utilities for constru
 > Java coder sources at `packages/hydra-java/src/main/java/hydra/sources/` (post-#344). The **library
 > wrappers** are the *generated* modules `hydra.dsl.lib.*` (`Lists`, `Maps`, `Sets`, `Logic`, `Math_`,
 > `Optionals`, `Strings`, `Literals`, `Eithers`, `Pairs`, `Equality`, …), imported directly. The
-> domain-specific DSLs once sketched here (`Core`, `Graph`, `Compute`) were **never built and have been
-> removed from this guide**; authors reference kernel types via `Phantoms` + `Helpers` and the generated
-> `hydra.dsl.lib.*`. For full kernel-source authoring, use the Haskell DSL
+> hand-written *meta-level* domain DSLs once sketched here (a `hydra.dsl.meta.Core`/`Graph`/`Compute`
+> accessor layer) were **never built and have been removed from this guide**. Note this is distinct from
+> the *generated per-record constructor* DSLs `hydra.dsl.Core`/`hydra.dsl.Graph`/… (e.g.
+> `hydra.dsl.Core.lambda(...)`), which do exist and are covered under "Accessing kernel-type fields" below.
+> For typed field access in the coder sources, authors use `Phantoms` projections (`proj(...)`) + `Helpers`;
+> for primitive calls, the generated `hydra.dsl.lib.*`. For full kernel-source authoring, use the Haskell DSL
 > ([DSL Guide (Haskell)](dsl-guide.md)); the Java DSL covers Java-coder authoring only.
 
 **Note**: Hydra provides DSLs in all five implementation languages (Haskell, Java, Python, Scala, and Lisp).
@@ -51,8 +54,8 @@ Hydra-Java provides a layered DSL system for working with Hydra types and terms:
 | Layer | Module | Purpose |
 |-------|--------|---------|
 | **Direct DSLs** | `hydra.overlay.java.dsl.Types`, `hydra.overlay.java.dsl.Terms` | Raw construction of `Type` and `Term` instances |
-| **Phantom-typed DSL** | `hydra.overlay.java.dsl.meta.Phantoms` | Compile-time type safety via `TypedTerm<A>` phantom types |
-| **Definition + helper layer** | `hydra.overlay.java.dsl.meta.Defs`, `hydra.overlay.java.dsl.Helpers` | `define`/`ref`, `typeref`/`typeDef`/`doc` for assembling modules |
+| **Phantom-typed DSL** | `hydra.overlay.java.dsl.meta.Phantoms` | `TypedTerm<A>` term construction; the phantom `A` documents intent (not a load-bearing check — see below) |
+| **Definition + helper layer** | `hydra.overlay.java.dsl.meta.Defs`, `hydra.overlay.java.dsl.Helpers` | Fluent `define(NS,"name").doc(…).lam(…).to(…)` builder + `ref`; `typeref`/`typeDef`/`doc` for assembling modules |
 | **Library wrappers** | `hydra.dsl.lib.*` (generated) | Typed wrappers around Hydra primitives (lists, sets, maps, etc.) |
 
 The Direct DSLs are suitable for casual use: constructing test fixtures, prototyping, or building types.
@@ -94,8 +97,17 @@ Term person = Terms.record(new Name("Person"),
 
 **Module**: `hydra.overlay.java.dsl.meta.Phantoms`
 
-Wraps raw `Term` construction with `TypedTerm<A>` phantom types for compile-time type safety.
-The phantom type parameter `A` tracks the Hydra type at the Java level.
+Wraps raw `Term` construction in a `TypedTerm<A>` whose phantom parameter `A` *names the intended*
+Hydra type at the Java level.
+
+> **On the phantom `A`:** it is documentation of intent, not a load-bearing type check. The DSL is a
+> meta-program that manipulates `Term` as data, so most builders are `<A> TypedTerm<A>` with `A`
+> unconstrained (it surfaces as `<?>`/`Object` at nearly every call site — see the many `TypedTerm<?>`
+> signatures in `Phantoms`). It gives near-zero compile-time safety today; treat it as a readable
+> annotation and **do not** write code that depends on `A` being accurate. This is a deliberate stance
+> (a usability review considered both making `A` real end-to-end and dropping it, and chose to leave the
+> signatures as-is): the meta-program never needs it, and threading real Hydra types through `A` would be
+> a large change for no functional gain.
 
 ```java
 import static hydra.overlay.java.dsl.meta.Phantoms.*;
@@ -105,9 +117,11 @@ TypedTerm<Integer> age = int32(30);
 TypedTerm<Object> identity = lambda("x", var("x"));
 ```
 
-For typed field access on kernel types, there is no separate "domain DSL" — author it with
-`Phantoms` projections (`proj(...)`) and the `hydra.overlay.java.dsl.Helpers` layer. See the
-host-native sources at `packages/hydra-java/src/main/java/hydra/sources/` for concrete examples.
+For typed field *access* on kernel types, there is no separate hand-written accessor "domain DSL" — the
+coder sources project with `Phantoms` (`proj(...)`) and the `hydra.overlay.java.dsl.Helpers` layer. (For
+*constructing* kernel records there are the generated `hydra.dsl.Core`/`Graph`/… constructor DSLs — see
+"Accessing kernel-type fields" below.) See the host-native sources at
+`packages/hydra-java/src/main/java/hydra/sources/` for concrete examples.
 
 ### 4. Library wrappers
 
@@ -569,6 +583,14 @@ Each function definition is a `TypedBinding<A>` (a phantom-typed name-term pair)
 
 ### Pattern
 
+Definitions use the **fluent builder** — the blessed idiom across all Java coder sources:
+`def("name").doc("...").lam("x").lam("y").to(() -> body)`. It reads top-to-bottom (name, doc,
+parameters, then body) instead of the inside-out `def("name", () -> doc("...", lambda("x", ...)))`
+nesting. The two forms are exactly equivalent — `.to(() -> body)` composes `doc(desc, lambda([params],
+body))`, omitting the `doc`/`lambda` wrappers when none are given — but the fluent form is what to write.
+The body passed to `.to(() -> ...)` stays lazy (a `Supplier`), so a definition may reference sibling
+`Def` fields declared later in the class.
+
 ```java
 import hydra.typed.*;
 import hydra.util.Maybe;
@@ -577,20 +599,26 @@ import static hydra.overlay.java.dsl.meta.Phantoms.*;
 public class MyFunctions {
     public static final ModuleName NS = new ModuleName("my.namespace");
 
+    // Flat form (still supported); the fluent def(String) below is preferred.
     private static Def def(String localName, Supplier<TypedTerm<?>> body) {
         return Defs.define(NS, localName, body);
     }
+    // Fluent form: def("name").doc("...").lam("x").to(() -> body)
+    private static Defs.DefBuilder def(String localName) {
+        return Defs.define(NS, localName);
+    }
 
     // Simple function: pattern match + extract body
-    TypedBinding<Object> deannotateTerm = define("deannotateTerm",
-        doc("Remove annotations from a term",
-        lambda("term",
+    public static final Def deannotateTerm = def("deannotateTerm")
+        .doc("Remove annotations from a term")
+        .lam("term")
+        .to(() ->
             cases(Term.TYPE_NAME, var("term"),
                 Maybe.just(var("term")),       // default: return unchanged
                 field(Term.FIELD_NAME_ANNOTATED,
                     lambda("at",
                         apply(var("deannotateTerm"),
-                            annotatedTermBody(var("at")))))))));
+                            annotatedTermBody(var("at")))))));
 }
 ```
 

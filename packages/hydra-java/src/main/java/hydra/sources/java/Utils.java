@@ -31,6 +31,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static hydra.overlay.java.dsl.meta.Phantoms.*;
+import hydra.overlay.java.dsl.meta.Defs;
 import hydra.overlay.java.dsl.meta.Defs.Def;
 import static hydra.overlay.java.dsl.meta.Defs.define;
 import static hydra.overlay.java.dsl.meta.Defs.unqualifiedDeps;
@@ -169,11 +170,28 @@ public class Utils {
         return define(NS, localName, body);
     }
 
+    /** Fluent form: {@code def("name").doc("...").lam("x").to(() -> body)}. See Defs.DefBuilder. */
+    private static Defs.DefBuilder def(String localName) {
+        return define(NS, localName);
+    }
+
+    /**
+     * The {@link Aliases} fields in declaration order (mirrors the record in
+     * {@code Environment.aliases()}). Passed to {@link hydra.overlay.java.dsl.meta.Phantoms#recordWith}
+     * so a copy-with-update over an Aliases value need name only the fields it changes.
+     * Keep in sync with the Aliases type definition.
+     */
+    public static final List<Name> ALIASES_FIELDS = List.of(
+        Aliases.CURRENT_NAMESPACE, Aliases.PACKAGES, Aliases.BRANCH_VARS, Aliases.RECURSIVE_VARS,
+        Aliases.IN_SCOPE_TYPE_PARAMS, Aliases.POLYMORPHIC_LOCALS, Aliases.IN_SCOPE_JAVA_VARS,
+        Aliases.VAR_RENAMES, Aliases.LAMBDA_VARS, Aliases.TYPE_VAR_SUBST, Aliases.TRUSTED_TYPE_VARS,
+        Aliases.METHOD_CODOMAIN, Aliases.THUNKED_VARS);
+
     // ---- AUTO-PORTED defs (untyped; inference assigns schemes; see #344) ----
 
-    public static final Def addExpressions = def(
-        "addExpressions",
-        () -> lambda("exprs",
+    public static final Def addExpressions = def("addExpressions")
+        .lam("exprs")
+        .to(() ->
                 let("dummyMult",
                     inject(MultiplicativeExpression.TYPE_,
                         MultiplicativeExpression.UNARY,
@@ -207,72 +225,29 @@ public class Utils {
                         inject(AdditiveExpression.TYPE_,
                             AdditiveExpression.UNARY,
                             Optionals.fromOptional(var("dummyMult"), Lists.maybeHead(var("exprs")))),
-                        Lists.drop(int32(1), var("exprs"))))));
+                        Lists.drop(int32(1), var("exprs")))));
 
-    public static final Def addInScopeVar = def(
-        "addInScopeVar",
-        () -> lambda(
-                "name",
-                "aliases",
-                record(Aliases.TYPE_,
-                    field(
-                        Aliases.CURRENT_NAMESPACE,
-                        proj(Aliases.TYPE_, Aliases.CURRENT_NAMESPACE, "aliases")),
-                    field(
-                        Aliases.PACKAGES,
-                        proj(Aliases.TYPE_, Aliases.PACKAGES, "aliases")),
-                    field(
-                        Aliases.BRANCH_VARS,
-                        proj(Aliases.TYPE_, Aliases.BRANCH_VARS, "aliases")),
-                    field(
-                        Aliases.RECURSIVE_VARS,
-                        proj(Aliases.TYPE_, Aliases.RECURSIVE_VARS, "aliases")),
-                    field(
-                        Aliases.IN_SCOPE_TYPE_PARAMS,
-                        proj(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS, "aliases")),
-                    field(
-                        Aliases.POLYMORPHIC_LOCALS,
-                        proj(Aliases.TYPE_, Aliases.POLYMORPHIC_LOCALS, "aliases")),
+    public static final Def addInScopeVar = def("addInScopeVar")
+        .lam("name").lam("aliases")
+        .to(() ->
+                recordWith(Aliases.TYPE_, "aliases", ALIASES_FIELDS,
                     field(
                         Aliases.IN_SCOPE_JAVA_VARS,
                         Sets.insert(
                             var("name"),
-                            proj(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS, "aliases"))),
-                    field(
-                        Aliases.VAR_RENAMES,
-                        proj(Aliases.TYPE_, Aliases.VAR_RENAMES, "aliases")),
-                    field(
-                        Aliases.LAMBDA_VARS,
-                        proj(Aliases.TYPE_, Aliases.LAMBDA_VARS, "aliases")),
-                    field(
-                        Aliases.TYPE_VAR_SUBST,
-                        proj(Aliases.TYPE_, Aliases.TYPE_VAR_SUBST, "aliases")),
-                    field(
-                        Aliases.TRUSTED_TYPE_VARS,
-                        proj(Aliases.TYPE_, Aliases.TRUSTED_TYPE_VARS, "aliases")),
-                    field(
-                        Aliases.METHOD_CODOMAIN,
-                        proj(Aliases.TYPE_, Aliases.METHOD_CODOMAIN, "aliases")),
-                    field(
-                        Aliases.THUNKED_VARS,
-                        proj(Aliases.TYPE_, Aliases.THUNKED_VARS, "aliases")))));
+                            proj(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS, "aliases")))));
 
-    public static final Def addInScopeVars = def(
-        "addInScopeVars",
-        () -> lambda(
-                "names",
-                "aliases",
+    public static final Def addInScopeVars = def("addInScopeVars")
+        .lam("names").lam("aliases")
+        .to(() ->
                 Lists.foldl(
                     lambda("a", lambda("n", apply(ref(Utils.addInScopeVar), var("n"), var("a")))),
                     var("aliases"),
-                    var("names"))));
+                    var("names")));
 
-    public static final Def addJavaTypeParameter = def(
-        "addJavaTypeParameter",
-        () -> lambda(
-                "rt",
-                "t",
-                "cx",
+    public static final Def addJavaTypeParameter = def("addJavaTypeParameter")
+        .lam("rt").lam("t").lam("cx")
+        .to(() ->
                 cases(hydra.java.syntax.Type.TYPE_,
                     var("t"),
                     field(
@@ -353,72 +328,31 @@ public class Utils {
                                 inject(Error_.TYPE_,
                                     Error_.OTHER,
                                     wrap(OtherError.TYPE_,
-                                        string("expected a reference type")))))))));
+                                        string("expected a reference type"))))))));
 
-    public static final Def addVarRename = def(
-        "addVarRename",
-        () -> lambda(
-                "original",
-                "renamed",
-                "aliases",
-                record(Aliases.TYPE_,
-                    field(
-                        Aliases.CURRENT_NAMESPACE,
-                        proj(Aliases.TYPE_, Aliases.CURRENT_NAMESPACE, "aliases")),
-                    field(
-                        Aliases.PACKAGES,
-                        proj(Aliases.TYPE_, Aliases.PACKAGES, "aliases")),
-                    field(
-                        Aliases.BRANCH_VARS,
-                        proj(Aliases.TYPE_, Aliases.BRANCH_VARS, "aliases")),
-                    field(
-                        Aliases.RECURSIVE_VARS,
-                        proj(Aliases.TYPE_, Aliases.RECURSIVE_VARS, "aliases")),
-                    field(
-                        Aliases.IN_SCOPE_TYPE_PARAMS,
-                        proj(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS, "aliases")),
-                    field(
-                        Aliases.POLYMORPHIC_LOCALS,
-                        proj(Aliases.TYPE_, Aliases.POLYMORPHIC_LOCALS, "aliases")),
-                    field(
-                        Aliases.IN_SCOPE_JAVA_VARS,
-                        proj(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS, "aliases")),
+    public static final Def addVarRename = def("addVarRename")
+        .lam("original").lam("renamed").lam("aliases")
+        .to(() ->
+                recordWith(Aliases.TYPE_, "aliases", ALIASES_FIELDS,
                     field(
                         Aliases.VAR_RENAMES,
                         Maps.insert(
                             var("original"),
                             var("renamed"),
-                            proj(Aliases.TYPE_, Aliases.VAR_RENAMES, "aliases"))),
-                    field(
-                        Aliases.LAMBDA_VARS,
-                        proj(Aliases.TYPE_, Aliases.LAMBDA_VARS, "aliases")),
-                    field(
-                        Aliases.TYPE_VAR_SUBST,
-                        proj(Aliases.TYPE_, Aliases.TYPE_VAR_SUBST, "aliases")),
-                    field(
-                        Aliases.TRUSTED_TYPE_VARS,
-                        proj(Aliases.TYPE_, Aliases.TRUSTED_TYPE_VARS, "aliases")),
-                    field(
-                        Aliases.METHOD_CODOMAIN,
-                        proj(Aliases.TYPE_, Aliases.METHOD_CODOMAIN, "aliases")),
-                    field(
-                        Aliases.THUNKED_VARS,
-                        proj(Aliases.TYPE_, Aliases.THUNKED_VARS, "aliases")))));
+                            proj(Aliases.TYPE_, Aliases.VAR_RENAMES, "aliases")))));
 
-    public static final Def fieldExpression = def(
-        "fieldExpression",
-        () -> lambda(
-                "varId",
-                "fieldId",
+    public static final Def fieldExpression = def("fieldExpression")
+        .lam("varId").lam("fieldId")
+        .to(() ->
                 record(ExpressionName.TYPE_,
                     field(
                         ExpressionName.QUALIFIER,
                         just(wrap(AmbiguousName.TYPE_, list(var("varId"))))),
-                    field(ExpressionName.IDENTIFIER, var("fieldId")))));
+                    field(ExpressionName.IDENTIFIER, var("fieldId"))));
 
-    public static final Def fieldNameToJavaExpression = def(
-        "fieldNameToJavaExpression",
-        () -> lambda("fname",
+    public static final Def fieldNameToJavaExpression = def("fieldNameToJavaExpression")
+        .lam("fname")
+        .to(() ->
                 inject(Expression.TYPE_,
                     Expression.ASSIGNMENT,
                     inject(AssignmentExpression.TYPE_,
@@ -465,37 +399,35 @@ public class Utils {
                                                                                                         ref(Utils.javaIdentifierToJavaExpressionName),
                                                                                                         apply(
                                                                                                             ref(Utils.fieldNameToJavaIdentifier),
-                                                                                                            var("fname"))))))))))))))))))))))))));
+                                                                                                            var("fname")))))))))))))))))))))))));
 
-    public static final Def fieldNameToJavaIdentifier = def(
-        "fieldNameToJavaIdentifier",
-        () -> lambda("fname",
-                apply(ref(Utils.javaIdentifier), apply(unwrap(Name.TYPE_), var("fname")))));
+    public static final Def fieldNameToJavaIdentifier = def("fieldNameToJavaIdentifier")
+        .lam("fname")
+        .to(() ->
+                apply(ref(Utils.javaIdentifier), apply(unwrap(Name.TYPE_), var("fname"))));
 
-    public static final Def fieldNameToJavaVariableDeclarator = def(
-        "fieldNameToJavaVariableDeclarator",
-        () -> lambda("fname",
+    public static final Def fieldNameToJavaVariableDeclarator = def("fieldNameToJavaVariableDeclarator")
+        .lam("fname")
+        .to(() ->
                 apply(
                     ref(Utils.javaVariableDeclarator),
                     apply(
                         ref(Utils.javaIdentifier),
                         apply(unwrap(Name.TYPE_), var("fname"))),
-                    nothing())));
+                    nothing()));
 
-    public static final Def fieldNameToJavaVariableDeclaratorId = def(
-        "fieldNameToJavaVariableDeclaratorId",
-        () -> lambda("fname",
+    public static final Def fieldNameToJavaVariableDeclaratorId = def("fieldNameToJavaVariableDeclaratorId")
+        .lam("fname")
+        .to(() ->
                 apply(
                     ref(Utils.javaVariableDeclaratorId),
                     apply(
                         ref(Utils.javaIdentifier),
-                        apply(unwrap(Name.TYPE_), var("fname"))))));
+                        apply(unwrap(Name.TYPE_), var("fname")))));
 
-    public static final Def finalVarDeclarationStatement = def(
-        "finalVarDeclarationStatement",
-        () -> lambda(
-                "id",
-                "rhs",
+    public static final Def finalVarDeclarationStatement = def("finalVarDeclarationStatement")
+        .lam("id").lam("rhs")
+        .to(() ->
                 inject(BlockStatement.TYPE_,
                     BlockStatement.LOCAL_VARIABLE_DECLARATION,
                     wrap(LocalVariableDeclarationStatement.TYPE_,
@@ -520,7 +452,7 @@ public class Utils {
                                         just(
                                             inject(VariableInitializer.TYPE_,
                                                 VariableInitializer.EXPRESSION,
-                                                var("rhs")))))))))));
+                                                var("rhs"))))))))));
 
     private static TypedTerm overlayLibPair(String sub) {
         return pair(
@@ -529,9 +461,9 @@ public class Utils {
                 string("hydra"), string("overlay"), string("java"), string("lib"), string(sub))));
     }
 
-    public static final Def overlayJavaLibPackageAliases = def(
-        "overlayJavaLibPackageAliases",
-        () -> Maps.fromList(list(
+    public static final Def overlayJavaLibPackageAliases = def("overlayJavaLibPackageAliases")
+        .to(() ->
+                Maps.fromList(list(
             overlayLibPair("chars"),
             overlayLibPair("effects"),
             overlayLibPair("eithers"),
@@ -551,9 +483,9 @@ public class Utils {
             overlayLibPair("system"),
             overlayLibPair("text"))));
 
-    public static final Def importAliasesForModule = def(
-        "importAliasesForModule",
-        () -> lambda("mod",
+    public static final Def importAliasesForModule = def("importAliasesForModule")
+        .lam("mod")
+        .to(() ->
                 record(Aliases.TYPE_,
                     field(
                         Aliases.CURRENT_NAMESPACE,
@@ -581,17 +513,11 @@ public class Utils {
                         Aliases.TRUSTED_TYPE_VARS,
                         var("hydra.lib.sets.empty")),
                     field(Aliases.METHOD_CODOMAIN, nothing()),
-                    field(Aliases.THUNKED_VARS, var("hydra.lib.sets.empty")))));
+                    field(Aliases.THUNKED_VARS, var("hydra.lib.sets.empty"))));
 
-    public static final Def interfaceMethodDeclaration = def(
-        "interfaceMethodDeclaration",
-        () -> lambda(
-                "mods",
-                "tparams",
-                "methodName",
-                "params",
-                "result",
-                "stmts",
+    public static final Def interfaceMethodDeclaration = def("interfaceMethodDeclaration")
+        .lam("mods").lam("tparams").lam("methodName").lam("params").lam("result").lam("stmts")
+        .to(() ->
                 inject(InterfaceMemberDeclaration.TYPE_,
                     InterfaceMemberDeclaration.INTERFACE_METHOD,
                     record(InterfaceMethodDeclaration.TYPE_,
@@ -606,18 +532,18 @@ public class Utils {
                                 var("result"))),
                         field(
                             InterfaceMethodDeclaration.BODY,
-                            apply(ref(Utils.javaMethodBody), var("stmts")))))));
+                            apply(ref(Utils.javaMethodBody), var("stmts"))))));
 
-    public static final Def isEscaped = def(
-        "isEscaped",
-        () -> lambda("s",
+    public static final Def isEscaped = def("isEscaped")
+        .lam("s")
+        .to(() ->
                 Equality.equal(
                     Optionals.fromOptional(int32(0), Strings.maybeCharAt(int32(0), var("s"))),
-                    int32(36))));
+                    int32(36)));
 
-    public static final Def javaAdditiveExpressionToJavaExpression = def(
-        "javaAdditiveExpressionToJavaExpression",
-        () -> lambda("ae",
+    public static final Def javaAdditiveExpressionToJavaExpression = def("javaAdditiveExpressionToJavaExpression")
+        .lam("ae")
+        .to(() ->
                 inject(Expression.TYPE_,
                     Expression.ASSIGNMENT,
                     inject(AssignmentExpression.TYPE_,
@@ -645,13 +571,11 @@ public class Utils {
                                                                             inject(
                                                                                 ShiftExpression.TYPE_,
                                                                                 ShiftExpression.UNARY,
-                                                                                var("ae")))))))))))))))))));
+                                                                                var("ae"))))))))))))))))));
 
-    public static final Def javaArrayCreation = def(
-        "javaArrayCreation",
-        () -> lambda(
-                "primType",
-                "minit",
+    public static final Def javaArrayCreation = def("javaArrayCreation")
+        .lam("primType").lam("minit")
+        .to(() ->
                 let("init_",
                     Optionals.cases(
                         var("minit"),
@@ -676,11 +600,11 @@ public class Utils {
                                             list()),
                                         field(
                                             ArrayCreationExpressionWithInitializer_Primitive.ARRAY,
-                                            var("init_"))))))))));
+                                            var("init_")))))))));
 
-    public static final Def javaArrayInitializer = def(
-        "javaArrayInitializer",
-        () -> lambda("exprs",
+    public static final Def javaArrayInitializer = def("javaArrayInitializer")
+        .lam("exprs")
+        .to(() ->
                 wrap(ArrayInitializer.TYPE_,
                     list(
                         Lists.map(
@@ -688,13 +612,11 @@ public class Utils {
                                 inject(VariableInitializer.TYPE_,
                                     VariableInitializer.EXPRESSION,
                                     var("e"))),
-                            var("exprs"))))));
+                            var("exprs")))));
 
-    public static final Def javaAssignmentStatement = def(
-        "javaAssignmentStatement",
-        () -> lambda(
-                "lhs",
-                "rhs",
+    public static final Def javaAssignmentStatement = def("javaAssignmentStatement")
+        .lam("lhs").lam("rhs")
+        .to(() ->
                 inject(Statement.TYPE_,
                     Statement.WITHOUT_TRAILING,
                     inject(StatementWithoutTrailingSubstatement.TYPE_,
@@ -709,33 +631,33 @@ public class Utils {
                                         inject(AssignmentOperator.TYPE_,
                                             AssignmentOperator.SIMPLE,
                                             unit())),
-                                    field(Assignment.EXPRESSION, var("rhs")))))))));
+                                    field(Assignment.EXPRESSION, var("rhs"))))))));
 
-    public static final Def javaBoolean = def(
-        "javaBoolean",
-        () -> lambda("b",
-                inject(Literal.TYPE_, Literal.BOOLEAN, var("b"))));
+    public static final Def javaBoolean = def("javaBoolean")
+        .lam("b")
+        .to(() ->
+                inject(Literal.TYPE_, Literal.BOOLEAN, var("b")));
 
-    public static final Def javaBooleanExpression = def(
-        "javaBooleanExpression",
-        () -> lambda("b",
+    public static final Def javaBooleanExpression = def("javaBooleanExpression")
+        .lam("b")
+        .to(() ->
                 apply(
                     ref(Utils.javaPrimaryToJavaExpression),
                     apply(
                         ref(Utils.javaLiteralToJavaPrimary),
-                        apply(ref(Utils.javaBoolean), var("b"))))));
+                        apply(ref(Utils.javaBoolean), var("b")))));
 
-    public static final Def javaBooleanType = def(
-        "javaBooleanType",
-        () -> apply(
+    public static final Def javaBooleanType = def("javaBooleanType")
+        .to(() ->
+                apply(
                 ref(Utils.javaPrimitiveTypeToJavaType),
                 inject(PrimitiveType.TYPE_,
                     PrimitiveType.BOOLEAN,
                     unit())));
 
-    public static final Def javaBytePrimitiveType = def(
-        "javaBytePrimitiveType",
-        () -> record(PrimitiveTypeWithAnnotations.TYPE_,
+    public static final Def javaBytePrimitiveType = def("javaBytePrimitiveType")
+        .to(() ->
+                record(PrimitiveTypeWithAnnotations.TYPE_,
                 field(
                     PrimitiveTypeWithAnnotations.TYPE,
                     inject(PrimitiveType.TYPE_,
@@ -747,11 +669,9 @@ public class Utils {
                                 unit())))),
                 field(PrimitiveTypeWithAnnotations.ANNOTATIONS, list())));
 
-    public static final Def javaCastExpression = def(
-        "javaCastExpression",
-        () -> lambda(
-                "rt",
-                "expr",
+    public static final Def javaCastExpression = def("javaCastExpression")
+        .lam("rt").lam("expr")
+        .to(() ->
                 inject(CastExpression.TYPE_,
                     CastExpression.NOT_PLUS_MINUS,
                     record(CastExpression_NotPlusMinus.TYPE_,
@@ -760,11 +680,11 @@ public class Utils {
                             record(CastExpression_RefAndBounds.TYPE_,
                                 field(CastExpression_RefAndBounds.TYPE, var("rt")),
                                 field(CastExpression_RefAndBounds.BOUNDS, list()))),
-                        field(CastExpression_NotPlusMinus.EXPRESSION, var("expr"))))));
+                        field(CastExpression_NotPlusMinus.EXPRESSION, var("expr")))));
 
-    public static final Def javaCastExpressionToJavaExpression = def(
-        "javaCastExpressionToJavaExpression",
-        () -> lambda("ce",
+    public static final Def javaCastExpressionToJavaExpression = def("javaCastExpressionToJavaExpression")
+        .lam("ce")
+        .to(() ->
                 inject(Expression.TYPE_,
                     Expression.ASSIGNMENT,
                     inject(AssignmentExpression.TYPE_,
@@ -804,13 +724,11 @@ public class Utils {
                                                                                             inject(
                                                                                                 UnaryExpressionNotPlusMinus.TYPE_,
                                                                                                 UnaryExpressionNotPlusMinus.CAST,
-                                                                                                var("ce")))))))))))))))))))))));
+                                                                                                var("ce"))))))))))))))))))))));
 
-    public static final Def javaCastPrimitive = def(
-        "javaCastPrimitive",
-        () -> lambda(
-                "pt",
-                "expr",
+    public static final Def javaCastPrimitive = def("javaCastPrimitive")
+        .lam("pt").lam("expr")
+        .to(() ->
                 inject(CastExpression.TYPE_,
                     CastExpression.PRIMITIVE,
                     record(CastExpression_Primitive.TYPE_,
@@ -823,18 +741,11 @@ public class Utils {
                                 field(
                                     PrimitiveTypeWithAnnotations.ANNOTATIONS,
                                     list()))),
-                        field(CastExpression_Primitive.EXPRESSION, var("expr"))))));
+                        field(CastExpression_Primitive.EXPRESSION, var("expr")))));
 
-    public static final Def javaClassDeclaration = def(
-        "javaClassDeclaration",
-        () -> lambda(
-                "aliases",
-                "tparams",
-                "elName",
-                "mods",
-                "supname",
-                "impls",
-                "bodyDecls",
+    public static final Def javaClassDeclaration = def("javaClassDeclaration")
+        .lam("aliases").lam("tparams").lam("elName").lam("mods").lam("supname").lam("impls").lam("bodyDecls")
+        .to(() ->
                 let("extends_",
                     Optionals.map(
                         lambda("n",
@@ -861,14 +772,11 @@ public class Utils {
                             field(NormalClassDeclaration.PERMITS, list()),
                             field(
                                 NormalClassDeclaration.BODY,
-                                wrap(ClassBody.TYPE_, var("bodyDecls"))))))));
+                                wrap(ClassBody.TYPE_, var("bodyDecls")))))));
 
-    public static final Def javaClassType = def(
-        "javaClassType",
-        () -> lambda(
-                "args",
-                "pkg",
-                "id",
+    public static final Def javaClassType = def("javaClassType")
+        .lam("args").lam("pkg").lam("id")
+        .to(() ->
                 let(
                     field("qual",
                         Optionals.cases(
@@ -893,36 +801,33 @@ public class Utils {
                         field(
                             ClassType.IDENTIFIER,
                             apply(ref(Utils.javaTypeIdentifier), var("id"))),
-                        field(ClassType.ARGUMENTS, var("targs"))))));
+                        field(ClassType.ARGUMENTS, var("targs")))));
 
-    public static final Def javaClassTypeToJavaType = def(
-        "javaClassTypeToJavaType",
-        () -> lambda("ct",
+    public static final Def javaClassTypeToJavaType = def("javaClassTypeToJavaType")
+        .lam("ct")
+        .to(() ->
                 inject(hydra.java.syntax.Type.TYPE_,
                     hydra.java.syntax.Type.REFERENCE,
                     inject(ReferenceType.TYPE_,
                         ReferenceType.CLASS_OR_INTERFACE,
                         inject(ClassOrInterfaceType.TYPE_,
                             ClassOrInterfaceType.CLASS,
-                            var("ct"))))));
+                            var("ct")))));
 
-    public static final Def javaConditionalAndExpressionToJavaExpression = def(
-        "javaConditionalAndExpressionToJavaExpression",
-        () -> lambda("cae",
+    public static final Def javaConditionalAndExpressionToJavaExpression = def("javaConditionalAndExpressionToJavaExpression")
+        .lam("cae")
+        .to(() ->
                 inject(Expression.TYPE_,
                     Expression.ASSIGNMENT,
                     inject(AssignmentExpression.TYPE_,
                         AssignmentExpression.CONDITIONAL,
                         inject(ConditionalExpression.TYPE_,
                             ConditionalExpression.SIMPLE,
-                            wrap(ConditionalOrExpression.TYPE_, list(var("cae"))))))));
+                            wrap(ConditionalOrExpression.TYPE_, list(var("cae")))))));
 
-    public static final Def javaConstructorCall = def(
-        "javaConstructorCall",
-        () -> lambda(
-                "ci",
-                "args",
-                "mbody",
+    public static final Def javaConstructorCall = def("javaConstructorCall")
+        .lam("ci").lam("args").lam("mbody")
+        .to(() ->
                 inject(Expression.TYPE_,
                     Expression.ASSIGNMENT,
                     inject(AssignmentExpression.TYPE_,
@@ -991,13 +896,11 @@ public class Utils {
                                                                                                                             var("args")),
                                                                                                                         field(
                                                                                                                             UnqualifiedClassInstanceCreationExpression.BODY,
-                                                                                                                            var("mbody"))))))))))))))))))))))))))))));
+                                                                                                                            var("mbody")))))))))))))))))))))))))))));
 
-    public static final Def javaConstructorName = def(
-        "javaConstructorName",
-        () -> lambda(
-                "id",
-                "targs",
+    public static final Def javaConstructorName = def("javaConstructorName")
+        .lam("id").lam("targs")
+        .to(() ->
                 record(ClassOrInterfaceTypeToInstantiate.TYPE_,
                     field(
                         ClassOrInterfaceTypeToInstantiate.IDENTIFIERS,
@@ -1007,20 +910,17 @@ public class Utils {
                                 field(AnnotatedIdentifier.IDENTIFIER, var("id"))))),
                     field(
                         ClassOrInterfaceTypeToInstantiate.TYPE_ARGUMENTS,
-                        var("targs")))));
+                        var("targs"))));
 
-    public static final Def javaDeclName = def(
-        "javaDeclName",
-        () -> lambda("name",
+    public static final Def javaDeclName = def("javaDeclName")
+        .lam("name")
+        .to(() ->
                 wrap(TypeIdentifier.TYPE_,
-                    apply(ref(Utils.javaVariableName), var("name")))));
+                    apply(ref(Utils.javaVariableName), var("name"))));
 
-    public static final Def javaDoubleCastExpression = def(
-        "javaDoubleCastExpression",
-        () -> lambda(
-                "rawRt",
-                "targetRt",
-                "expr",
+    public static final Def javaDoubleCastExpression = def("javaDoubleCastExpression")
+        .lam("rawRt").lam("targetRt").lam("expr")
+        .to(() ->
                 let("firstCast",
                     apply(
                         ref(Utils.javaCastExpressionToJavaExpression),
@@ -1028,33 +928,30 @@ public class Utils {
                     apply(
                         ref(Utils.javaCastExpression),
                         var("targetRt"),
-                        apply(ref(Utils.javaExpressionToJavaUnaryExpression), var("firstCast"))))));
+                        apply(ref(Utils.javaExpressionToJavaUnaryExpression), var("firstCast")))));
 
-    public static final Def javaDoubleCastExpressionToJavaExpression = def(
-        "javaDoubleCastExpressionToJavaExpression",
-        () -> lambda(
-                "rawRt",
-                "targetRt",
-                "expr",
+    public static final Def javaDoubleCastExpressionToJavaExpression = def("javaDoubleCastExpressionToJavaExpression")
+        .lam("rawRt").lam("targetRt").lam("expr")
+        .to(() ->
                 apply(
                     ref(Utils.javaCastExpressionToJavaExpression),
                     apply(
                         ref(Utils.javaDoubleCastExpression),
                         var("rawRt"),
                         var("targetRt"),
-                        var("expr")))));
+                        var("expr"))));
 
-    public static final Def javaEmptyStatement = def(
-        "javaEmptyStatement",
-        () -> inject(Statement.TYPE_,
+    public static final Def javaEmptyStatement = def("javaEmptyStatement")
+        .to(() ->
+                inject(Statement.TYPE_,
                 Statement.WITHOUT_TRAILING,
                 inject(StatementWithoutTrailingSubstatement.TYPE_,
                     StatementWithoutTrailingSubstatement.EMPTY,
                     unit())));
 
-    public static final Def javaEqualityExpressionToJavaExpression = def(
-        "javaEqualityExpressionToJavaExpression",
-        () -> lambda("ee",
+    public static final Def javaEqualityExpressionToJavaExpression = def("javaEqualityExpressionToJavaExpression")
+        .lam("ee")
+        .to(() ->
                 inject(Expression.TYPE_,
                     Expression.ASSIGNMENT,
                     inject(AssignmentExpression.TYPE_,
@@ -1072,30 +969,28 @@ public class Utils {
                                                         list(
                                                             wrap(
                                                                 AndExpression.TYPE_,
-                                                                list(var("ee"))))))))))))))));
+                                                                list(var("ee")))))))))))))));
 
-    public static final Def javaEqualityExpressionToJavaInclusiveOrExpression = def(
-        "javaEqualityExpressionToJavaInclusiveOrExpression",
-        () -> lambda("ee",
+    public static final Def javaEqualityExpressionToJavaInclusiveOrExpression = def("javaEqualityExpressionToJavaInclusiveOrExpression")
+        .lam("ee")
+        .to(() ->
                 wrap(InclusiveOrExpression.TYPE_,
                     list(
                         wrap(ExclusiveOrExpression.TYPE_,
-                            list(wrap(AndExpression.TYPE_, list(var("ee")))))))));
+                            list(wrap(AndExpression.TYPE_, list(var("ee"))))))));
 
-    public static final Def javaEquals = def(
-        "javaEquals",
-        () -> lambda(
-                "lhs",
-                "rhs",
+    public static final Def javaEquals = def("javaEquals")
+        .lam("lhs").lam("rhs")
+        .to(() ->
                 inject(EqualityExpression.TYPE_,
                     EqualityExpression.EQUAL,
                     record(EqualityExpression_Binary.TYPE_,
                         field(EqualityExpression_Binary.LHS, var("lhs")),
-                        field(EqualityExpression_Binary.RHS, var("rhs"))))));
+                        field(EqualityExpression_Binary.RHS, var("rhs")))));
 
-    public static final Def javaEqualsNull = def(
-        "javaEqualsNull",
-        () -> lambda("lhs",
+    public static final Def javaEqualsNull = def("javaEqualsNull")
+        .lam("lhs")
+        .to(() ->
                 apply(
                     ref(Utils.javaEquals),
                     var("lhs"),
@@ -1103,11 +998,11 @@ public class Utils {
                         ref(Utils.javaLiteralToJavaRelationalExpression),
                         inject(Literal.TYPE_,
                             Literal.NULL,
-                            unit())))));
+                            unit()))));
 
-    public static final Def javaExpressionNameToJavaExpression = def(
-        "javaExpressionNameToJavaExpression",
-        () -> lambda("en",
+    public static final Def javaExpressionNameToJavaExpression = def("javaExpressionNameToJavaExpression")
+        .lam("en")
+        .to(() ->
                 inject(Expression.TYPE_,
                     Expression.ASSIGNMENT,
                     inject(AssignmentExpression.TYPE_,
@@ -1150,14 +1045,13 @@ public class Utils {
                                                                                                 inject(
                                                                                                     PostfixExpression.TYPE_,
                                                                                                     PostfixExpression.NAME,
-                                                                                                    var("en"))))))))))))))))))))))));
+                                                                                                    var("en")))))))))))))))))))))));
 
-    public static final Def javaExpressionToJavaPrimary = def(
-        "javaExpressionToJavaPrimary",
-        () -> doc(
-                "Convert an Expression to a Primary, avoiding unnecessary parentheses when the expression is already a simple primary chain",
-                lambda("e",
-                    let("fallback",
+    public static final Def javaExpressionToJavaPrimary = def("javaExpressionToJavaPrimary")
+        .doc("Convert an Expression to a Primary, avoiding unnecessary parentheses when the expression is already a simple primary chain")
+        .lam("e")
+        .to(() ->
+                let("fallback",
                         inject(Primary.TYPE_,
                             Primary.NO_NEW_ARRAY,
                             inject(PrimaryNoNewArrayExpression.TYPE_,
@@ -1295,11 +1189,11 @@ public class Utils {
                                                                                                                                                                                                                             PostfixExpression.PRIMARY,
                                                                                                                                                                                                                             lambda(
                                                                                                                                                                                                                                 "p",
-                                                                                                                                                                                                                                var("p")))))))))))))))))))))))))))))))))))))))))))))))))))))));
+                                                                                                                                                                                                                                var("p")))))))))))))))))))))))))))))))))))))))))))))))))))));
 
-    public static final Def javaExpressionToJavaUnaryExpression = def(
-        "javaExpressionToJavaUnaryExpression",
-        () -> lambda("e",
+    public static final Def javaExpressionToJavaUnaryExpression = def("javaExpressionToJavaUnaryExpression")
+        .lam("e")
+        .to(() ->
                 inject(UnaryExpression.TYPE_,
                     UnaryExpression.OTHER,
                     inject(UnaryExpressionNotPlusMinus.TYPE_,
@@ -1310,11 +1204,11 @@ public class Utils {
                                 Primary.NO_NEW_ARRAY,
                                 inject(PrimaryNoNewArrayExpression.TYPE_,
                                     PrimaryNoNewArrayExpression.PARENS,
-                                    var("e"))))))));
+                                    var("e")))))));
 
-    public static final Def javaFieldAccessToJavaExpression = def(
-        "javaFieldAccessToJavaExpression",
-        () -> lambda("fa",
+    public static final Def javaFieldAccessToJavaExpression = def("javaFieldAccessToJavaExpression")
+        .lam("fa")
+        .to(() ->
                 inject(Expression.TYPE_,
                     Expression.ASSIGNMENT,
                     inject(AssignmentExpression.TYPE_,
@@ -1363,17 +1257,17 @@ public class Utils {
                                                                                                         inject(
                                                                                                             PrimaryNoNewArrayExpression.TYPE_,
                                                                                                             PrimaryNoNewArrayExpression.FIELD_ACCESS,
-                                                                                                            var("fa"))))))))))))))))))))))))));
+                                                                                                            var("fa")))))))))))))))))))))))));
 
-    public static final Def javaIdentifier = def(
-        "javaIdentifier",
-        () -> lambda("s",
+    public static final Def javaIdentifier = def("javaIdentifier")
+        .lam("s")
+        .to(() ->
                 wrap(Identifier.TYPE_,
-                    apply(ref(Utils.sanitizeJavaName), var("s")))));
+                    apply(ref(Utils.sanitizeJavaName), var("s"))));
 
-    public static final Def javaIdentifierToJavaExpression = def(
-        "javaIdentifierToJavaExpression",
-        () -> lambda("id",
+    public static final Def javaIdentifierToJavaExpression = def("javaIdentifierToJavaExpression")
+        .lam("id")
+        .to(() ->
                 inject(Expression.TYPE_,
                     Expression.ASSIGNMENT,
                     inject(AssignmentExpression.TYPE_,
@@ -1423,18 +1317,18 @@ public class Utils {
                                                                                                             nothing()),
                                                                                                         field(
                                                                                                             ExpressionName.IDENTIFIER,
-                                                                                                            var("id"))))))))))))))))))))))))));
+                                                                                                            var("id")))))))))))))))))))))))));
 
-    public static final Def javaIdentifierToJavaExpressionName = def(
-        "javaIdentifierToJavaExpressionName",
-        () -> lambda("id",
+    public static final Def javaIdentifierToJavaExpressionName = def("javaIdentifierToJavaExpressionName")
+        .lam("id")
+        .to(() ->
                 record(ExpressionName.TYPE_,
                     field(ExpressionName.QUALIFIER, nothing()),
-                    field(ExpressionName.IDENTIFIER, var("id")))));
+                    field(ExpressionName.IDENTIFIER, var("id"))));
 
-    public static final Def javaIdentifierToJavaRelationalExpression = def(
-        "javaIdentifierToJavaRelationalExpression",
-        () -> lambda("id",
+    public static final Def javaIdentifierToJavaRelationalExpression = def("javaIdentifierToJavaRelationalExpression")
+        .lam("id")
+        .to(() ->
                 inject(RelationalExpression.TYPE_,
                     RelationalExpression.SIMPLE,
                     inject(ShiftExpression.TYPE_,
@@ -1455,11 +1349,11 @@ public class Utils {
                                                     nothing()),
                                                 field(
                                                     ExpressionName.IDENTIFIER,
-                                                    var("id"))))))))))));
+                                                    var("id")))))))))));
 
-    public static final Def javaIdentifierToJavaUnaryExpression = def(
-        "javaIdentifierToJavaUnaryExpression",
-        () -> lambda("id",
+    public static final Def javaIdentifierToJavaUnaryExpression = def("javaIdentifierToJavaUnaryExpression")
+        .lam("id")
+        .to(() ->
                 inject(UnaryExpression.TYPE_,
                     UnaryExpression.OTHER,
                     inject(UnaryExpressionNotPlusMinus.TYPE_,
@@ -1468,13 +1362,11 @@ public class Utils {
                             PostfixExpression.NAME,
                             record(ExpressionName.TYPE_,
                                 field(ExpressionName.QUALIFIER, nothing()),
-                                field(ExpressionName.IDENTIFIER, var("id"))))))));
+                                field(ExpressionName.IDENTIFIER, var("id")))))));
 
-    public static final Def javaInstanceOf = def(
-        "javaInstanceOf",
-        () -> lambda(
-                "lhs",
-                "rhs",
+    public static final Def javaInstanceOf = def("javaInstanceOf")
+        .lam("lhs").lam("rhs")
+        .to(() ->
                 inject(RelationalExpression.TYPE_,
                     RelationalExpression.INSTANCEOF_EXPRESSION,
                     record(InstanceofExpression.TYPE_,
@@ -1483,25 +1375,25 @@ public class Utils {
                             InstanceofExpression.RHS,
                             inject(InstanceofExpression_Rhs.TYPE_,
                                 InstanceofExpression_Rhs.REFERENCE_TYPE,
-                                var("rhs")))))));
+                                var("rhs"))))));
 
-    public static final Def javaInt = def(
-        "javaInt",
-        () -> lambda("i",
+    public static final Def javaInt = def("javaInt")
+        .lam("i")
+        .to(() ->
                 inject(Literal.TYPE_,
                     Literal.INTEGER,
-                    wrap(IntegerLiteral.TYPE_, var("i")))));
+                    wrap(IntegerLiteral.TYPE_, var("i"))));
 
-    public static final Def javaIntExpression = def(
-        "javaIntExpression",
-        () -> lambda("i",
+    public static final Def javaIntExpression = def("javaIntExpression")
+        .lam("i")
+        .to(() ->
                 apply(
                     ref(Utils.javaPrimaryToJavaExpression),
-                    apply(ref(Utils.javaLiteralToJavaPrimary), apply(ref(Utils.javaInt), var("i"))))));
+                    apply(ref(Utils.javaLiteralToJavaPrimary), apply(ref(Utils.javaInt), var("i")))));
 
-    public static final Def javaIntType = def(
-        "javaIntType",
-        () -> apply(
+    public static final Def javaIntType = def("javaIntType")
+        .to(() ->
+                apply(
                 ref(Utils.javaPrimitiveTypeToJavaType),
                 inject(PrimitiveType.TYPE_,
                     PrimitiveType.NUMERIC,
@@ -1511,22 +1403,20 @@ public class Utils {
                             IntegralType.INT,
                             unit())))));
 
-    public static final Def javaInterfaceDeclarationToJavaClassBodyDeclaration = def(
-        "javaInterfaceDeclarationToJavaClassBodyDeclaration",
-        () -> lambda("nid",
+    public static final Def javaInterfaceDeclarationToJavaClassBodyDeclaration = def("javaInterfaceDeclarationToJavaClassBodyDeclaration")
+        .lam("nid")
+        .to(() ->
                 inject(ClassBodyDeclaration.TYPE_,
                     ClassBodyDeclaration.CLASS_MEMBER,
                     inject(ClassMemberDeclaration.TYPE_,
                         ClassMemberDeclaration.INTERFACE,
                         inject(InterfaceDeclaration.TYPE_,
                             InterfaceDeclaration.NORMAL_INTERFACE,
-                            var("nid"))))));
+                            var("nid")))));
 
-    public static final Def javaLambda = def(
-        "javaLambda",
-        () -> lambda(
-                "v",
-                "body",
+    public static final Def javaLambda = def("javaLambda")
+        .lam("v").lam("body")
+        .to(() ->
                 inject(Expression.TYPE_,
                     Expression.LAMBDA,
                     record(LambdaExpression.TYPE_,
@@ -1539,13 +1429,11 @@ public class Utils {
                             LambdaExpression.BODY,
                             inject(LambdaBody.TYPE_,
                                 LambdaBody.EXPRESSION,
-                                var("body")))))));
+                                var("body"))))));
 
-    public static final Def javaLambdaFromBlock = def(
-        "javaLambdaFromBlock",
-        () -> lambda(
-                "v",
-                "block",
+    public static final Def javaLambdaFromBlock = def("javaLambdaFromBlock")
+        .lam("v").lam("block")
+        .to(() ->
                 inject(Expression.TYPE_,
                     Expression.LAMBDA,
                     record(LambdaExpression.TYPE_,
@@ -1558,11 +1446,11 @@ public class Utils {
                             LambdaExpression.BODY,
                             inject(LambdaBody.TYPE_,
                                 LambdaBody.BLOCK,
-                                var("block")))))));
+                                var("block"))))));
 
-    public static final Def javaLiteralToJavaExpression = def(
-        "javaLiteralToJavaExpression",
-        () -> lambda("lit",
+    public static final Def javaLiteralToJavaExpression = def("javaLiteralToJavaExpression")
+        .lam("lit")
+        .to(() ->
                 inject(Expression.TYPE_,
                     Expression.ASSIGNMENT,
                     inject(AssignmentExpression.TYPE_,
@@ -1611,11 +1499,11 @@ public class Utils {
                                                                                                         inject(
                                                                                                             PrimaryNoNewArrayExpression.TYPE_,
                                                                                                             PrimaryNoNewArrayExpression.LITERAL,
-                                                                                                            var("lit"))))))))))))))))))))))))));
+                                                                                                            var("lit")))))))))))))))))))))))));
 
-    public static final Def javaLiteralToJavaMultiplicativeExpression = def(
-        "javaLiteralToJavaMultiplicativeExpression",
-        () -> lambda("lit",
+    public static final Def javaLiteralToJavaMultiplicativeExpression = def("javaLiteralToJavaMultiplicativeExpression")
+        .lam("lit")
+        .to(() ->
                 inject(MultiplicativeExpression.TYPE_,
                     MultiplicativeExpression.UNARY,
                     inject(UnaryExpression.TYPE_,
@@ -1628,20 +1516,20 @@ public class Utils {
                                     Primary.NO_NEW_ARRAY,
                                     inject(PrimaryNoNewArrayExpression.TYPE_,
                                         PrimaryNoNewArrayExpression.LITERAL,
-                                        var("lit")))))))));
+                                        var("lit"))))))));
 
-    public static final Def javaLiteralToJavaPrimary = def(
-        "javaLiteralToJavaPrimary",
-        () -> lambda("lit",
+    public static final Def javaLiteralToJavaPrimary = def("javaLiteralToJavaPrimary")
+        .lam("lit")
+        .to(() ->
                 inject(Primary.TYPE_,
                     Primary.NO_NEW_ARRAY,
                     inject(PrimaryNoNewArrayExpression.TYPE_,
                         PrimaryNoNewArrayExpression.LITERAL,
-                        var("lit")))));
+                        var("lit"))));
 
-    public static final Def javaLiteralToJavaRelationalExpression = def(
-        "javaLiteralToJavaRelationalExpression",
-        () -> lambda("lit",
+    public static final Def javaLiteralToJavaRelationalExpression = def("javaLiteralToJavaRelationalExpression")
+        .lam("lit")
+        .to(() ->
                 inject(RelationalExpression.TYPE_,
                     RelationalExpression.SIMPLE,
                     inject(ShiftExpression.TYPE_,
@@ -1661,14 +1549,11 @@ public class Utils {
                                                 inject(
                                                     PrimaryNoNewArrayExpression.TYPE_,
                                                     PrimaryNoNewArrayExpression.LITERAL,
-                                                    var("lit"))))))))))));
+                                                    var("lit")))))))))));
 
-    public static final Def javaMemberField = def(
-        "javaMemberField",
-        () -> lambda(
-                "mods",
-                "jt",
-                "v",
+    public static final Def javaMemberField = def("javaMemberField")
+        .lam("mods").lam("jt").lam("v")
+        .to(() ->
                 inject(ClassBodyDeclaration.TYPE_,
                     ClassBodyDeclaration.CLASS_MEMBER,
                     inject(ClassMemberDeclaration.TYPE_,
@@ -1680,11 +1565,11 @@ public class Utils {
                                 wrap(UnannType.TYPE_, var("jt"))),
                             field(
                                 FieldDeclaration.VARIABLE_DECLARATORS,
-                                list(var("v"))))))));
+                                list(var("v")))))));
 
-    public static final Def javaMethodBody = def(
-        "javaMethodBody",
-        () -> lambda("mstmts",
+    public static final Def javaMethodBody = def("javaMethodBody")
+        .lam("mstmts")
+        .to(() ->
                 Optionals.cases(
                     var("mstmts"),
                     inject(MethodBody.TYPE_,
@@ -1693,24 +1578,20 @@ public class Utils {
                     lambda("stmts",
                         inject(MethodBody.TYPE_,
                             MethodBody.BLOCK,
-                            wrap(Block.TYPE_, var("stmts")))))));
+                            wrap(Block.TYPE_, var("stmts"))))));
 
-    public static final Def javaMethodDeclarationToJavaClassBodyDeclaration = def(
-        "javaMethodDeclarationToJavaClassBodyDeclaration",
-        () -> lambda("md",
+    public static final Def javaMethodDeclarationToJavaClassBodyDeclaration = def("javaMethodDeclarationToJavaClassBodyDeclaration")
+        .lam("md")
+        .to(() ->
                 inject(ClassBodyDeclaration.TYPE_,
                     ClassBodyDeclaration.CLASS_MEMBER,
                     inject(ClassMemberDeclaration.TYPE_,
                         ClassMemberDeclaration.METHOD,
-                        var("md")))));
+                        var("md"))));
 
-    public static final Def javaMethodHeader = def(
-        "javaMethodHeader",
-        () -> lambda(
-                "tparams",
-                "methodName",
-                "params",
-                "result",
+    public static final Def javaMethodHeader = def("javaMethodHeader")
+        .lam("tparams").lam("methodName").lam("params").lam("result")
+        .to(() ->
                 record(MethodHeader.TYPE_,
                     field(MethodHeader.PARAMETERS, var("tparams")),
                     field(MethodHeader.RESULT, var("result")),
@@ -1724,11 +1605,11 @@ public class Utils {
                             field(
                                 MethodDeclarator.FORMAL_PARAMETERS,
                                 var("params")))),
-                    field(MethodHeader.THROWS, nothing()))));
+                    field(MethodHeader.THROWS, nothing())));
 
-    public static final Def javaMethodInvocationToJavaExpression = def(
-        "javaMethodInvocationToJavaExpression",
-        () -> lambda("mi",
+    public static final Def javaMethodInvocationToJavaExpression = def("javaMethodInvocationToJavaExpression")
+        .lam("mi")
+        .to(() ->
                 inject(Expression.TYPE_,
                     Expression.ASSIGNMENT,
                     inject(AssignmentExpression.TYPE_,
@@ -1777,31 +1658,31 @@ public class Utils {
                                                                                                         inject(
                                                                                                             PrimaryNoNewArrayExpression.TYPE_,
                                                                                                             PrimaryNoNewArrayExpression.METHOD_INVOCATION,
-                                                                                                            var("mi"))))))))))))))))))))))))));
+                                                                                                            var("mi")))))))))))))))))))))))));
 
-    public static final Def javaMethodInvocationToJavaPostfixExpression = def(
-        "javaMethodInvocationToJavaPostfixExpression",
-        () -> lambda("mi",
+    public static final Def javaMethodInvocationToJavaPostfixExpression = def("javaMethodInvocationToJavaPostfixExpression")
+        .lam("mi")
+        .to(() ->
                 inject(PostfixExpression.TYPE_,
                     PostfixExpression.PRIMARY,
                     inject(Primary.TYPE_,
                         Primary.NO_NEW_ARRAY,
                         inject(PrimaryNoNewArrayExpression.TYPE_,
                             PrimaryNoNewArrayExpression.METHOD_INVOCATION,
-                            var("mi"))))));
+                            var("mi")))));
 
-    public static final Def javaMethodInvocationToJavaPrimary = def(
-        "javaMethodInvocationToJavaPrimary",
-        () -> lambda("mi",
+    public static final Def javaMethodInvocationToJavaPrimary = def("javaMethodInvocationToJavaPrimary")
+        .lam("mi")
+        .to(() ->
                 inject(Primary.TYPE_,
                     Primary.NO_NEW_ARRAY,
                     inject(PrimaryNoNewArrayExpression.TYPE_,
                         PrimaryNoNewArrayExpression.METHOD_INVOCATION,
-                        var("mi")))));
+                        var("mi"))));
 
-    public static final Def javaMethodInvocationToJavaStatement = def(
-        "javaMethodInvocationToJavaStatement",
-        () -> lambda("mi",
+    public static final Def javaMethodInvocationToJavaStatement = def("javaMethodInvocationToJavaStatement")
+        .lam("mi")
+        .to(() ->
                 inject(Statement.TYPE_,
                     Statement.WITHOUT_TRAILING,
                     inject(StatementWithoutTrailingSubstatement.TYPE_,
@@ -1809,22 +1690,22 @@ public class Utils {
                         wrap(ExpressionStatement.TYPE_,
                             inject(StatementExpression.TYPE_,
                                 StatementExpression.METHOD_INVOCATION,
-                                var("mi")))))));
+                                var("mi"))))));
 
-    public static final Def javaMultiplicativeExpressionToJavaRelationalExpression = def(
-        "javaMultiplicativeExpressionToJavaRelationalExpression",
-        () -> lambda("me",
+    public static final Def javaMultiplicativeExpressionToJavaRelationalExpression = def("javaMultiplicativeExpressionToJavaRelationalExpression")
+        .lam("me")
+        .to(() ->
                 inject(RelationalExpression.TYPE_,
                     RelationalExpression.SIMPLE,
                     inject(ShiftExpression.TYPE_,
                         ShiftExpression.UNARY,
                         inject(AdditiveExpression.TYPE_,
                             AdditiveExpression.UNARY,
-                            var("me"))))));
+                            var("me")))));
 
-    public static final Def javaPackageDeclaration = def(
-        "javaPackageDeclaration",
-        () -> lambda("ns",
+    public static final Def javaPackageDeclaration = def("javaPackageDeclaration")
+        .lam("ns")
+        .to(() ->
                 record(PackageDeclaration.TYPE_,
                     field(PackageDeclaration.MODIFIERS, list()),
                     field(
@@ -1833,11 +1714,11 @@ public class Utils {
                             lambda("s", wrap(Identifier.TYPE_, var("s"))),
                             Strings.splitOn(
                                 string("."),
-                                apply(unwrap(ModuleName.TYPE_), var("ns"))))))));
+                                apply(unwrap(ModuleName.TYPE_), var("ns")))))));
 
-    public static final Def javaPostfixExpressionToJavaEqualityExpression = def(
-        "javaPostfixExpressionToJavaEqualityExpression",
-        () -> lambda("pe",
+    public static final Def javaPostfixExpressionToJavaEqualityExpression = def("javaPostfixExpressionToJavaEqualityExpression")
+        .lam("pe")
+        .to(() ->
                 inject(EqualityExpression.TYPE_,
                     EqualityExpression.UNARY,
                     inject(RelationalExpression.TYPE_,
@@ -1852,11 +1733,11 @@ public class Utils {
                                         UnaryExpression.OTHER,
                                         inject(UnaryExpressionNotPlusMinus.TYPE_,
                                             UnaryExpressionNotPlusMinus.POSTFIX,
-                                            var("pe"))))))))));
+                                            var("pe")))))))));
 
-    public static final Def javaPostfixExpressionToJavaExpression = def(
-        "javaPostfixExpressionToJavaExpression",
-        () -> lambda("pe",
+    public static final Def javaPostfixExpressionToJavaExpression = def("javaPostfixExpressionToJavaExpression")
+        .lam("pe")
+        .to(() ->
                 inject(Expression.TYPE_,
                     Expression.ASSIGNMENT,
                     inject(AssignmentExpression.TYPE_,
@@ -1896,11 +1777,11 @@ public class Utils {
                                                                                             inject(
                                                                                                 UnaryExpressionNotPlusMinus.TYPE_,
                                                                                                 UnaryExpressionNotPlusMinus.POSTFIX,
-                                                                                                var("pe")))))))))))))))))))))));
+                                                                                                var("pe"))))))))))))))))))))));
 
-    public static final Def javaPostfixExpressionToJavaInclusiveOrExpression = def(
-        "javaPostfixExpressionToJavaInclusiveOrExpression",
-        () -> lambda("pe",
+    public static final Def javaPostfixExpressionToJavaInclusiveOrExpression = def("javaPostfixExpressionToJavaInclusiveOrExpression")
+        .lam("pe")
+        .to(() ->
                 wrap(InclusiveOrExpression.TYPE_,
                     list(
                         wrap(ExclusiveOrExpression.TYPE_,
@@ -1925,11 +1806,11 @@ public class Utils {
                                                                 inject(
                                                                     UnaryExpressionNotPlusMinus.TYPE_,
                                                                     UnaryExpressionNotPlusMinus.POSTFIX,
-                                                                    var("pe"))))))))))))))));
+                                                                    var("pe")))))))))))))));
 
-    public static final Def javaPostfixExpressionToJavaRelationalExpression = def(
-        "javaPostfixExpressionToJavaRelationalExpression",
-        () -> lambda("pe",
+    public static final Def javaPostfixExpressionToJavaRelationalExpression = def("javaPostfixExpressionToJavaRelationalExpression")
+        .lam("pe")
+        .to(() ->
                 inject(RelationalExpression.TYPE_,
                     RelationalExpression.SIMPLE,
                     inject(ShiftExpression.TYPE_,
@@ -1942,20 +1823,20 @@ public class Utils {
                                     UnaryExpression.OTHER,
                                     inject(UnaryExpressionNotPlusMinus.TYPE_,
                                         UnaryExpressionNotPlusMinus.POSTFIX,
-                                        var("pe")))))))));
+                                        var("pe"))))))));
 
-    public static final Def javaPostfixExpressionToJavaUnaryExpression = def(
-        "javaPostfixExpressionToJavaUnaryExpression",
-        () -> lambda("pe",
+    public static final Def javaPostfixExpressionToJavaUnaryExpression = def("javaPostfixExpressionToJavaUnaryExpression")
+        .lam("pe")
+        .to(() ->
                 inject(UnaryExpression.TYPE_,
                     UnaryExpression.OTHER,
                     inject(UnaryExpressionNotPlusMinus.TYPE_,
                         UnaryExpressionNotPlusMinus.POSTFIX,
-                        var("pe")))));
+                        var("pe"))));
 
-    public static final Def javaPrimaryToJavaExpression = def(
-        "javaPrimaryToJavaExpression",
-        () -> lambda("p",
+    public static final Def javaPrimaryToJavaExpression = def("javaPrimaryToJavaExpression")
+        .lam("p")
+        .to(() ->
                 inject(Expression.TYPE_,
                     Expression.ASSIGNMENT,
                     inject(AssignmentExpression.TYPE_,
@@ -1998,45 +1879,42 @@ public class Utils {
                                                                                                 inject(
                                                                                                     PostfixExpression.TYPE_,
                                                                                                     PostfixExpression.PRIMARY,
-                                                                                                    var("p"))))))))))))))))))))))));
+                                                                                                    var("p")))))))))))))))))))))));
 
-    public static final Def javaPrimaryToJavaUnaryExpression = def(
-        "javaPrimaryToJavaUnaryExpression",
-        () -> lambda("p",
+    public static final Def javaPrimaryToJavaUnaryExpression = def("javaPrimaryToJavaUnaryExpression")
+        .lam("p")
+        .to(() ->
                 inject(UnaryExpression.TYPE_,
                     UnaryExpression.OTHER,
                     inject(UnaryExpressionNotPlusMinus.TYPE_,
                         UnaryExpressionNotPlusMinus.POSTFIX,
                         inject(PostfixExpression.TYPE_,
                             PostfixExpression.PRIMARY,
-                            var("p"))))));
+                            var("p")))));
 
-    public static final Def javaPrimitiveTypeToJavaType = def(
-        "javaPrimitiveTypeToJavaType",
-        () -> lambda("pt",
+    public static final Def javaPrimitiveTypeToJavaType = def("javaPrimitiveTypeToJavaType")
+        .lam("pt")
+        .to(() ->
                 inject(hydra.java.syntax.Type.TYPE_,
                     hydra.java.syntax.Type.PRIMITIVE,
                     record(PrimitiveTypeWithAnnotations.TYPE_,
                         field(PrimitiveTypeWithAnnotations.TYPE, var("pt")),
-                        field(PrimitiveTypeWithAnnotations.ANNOTATIONS, list())))));
+                        field(PrimitiveTypeWithAnnotations.ANNOTATIONS, list()))));
 
-    public static final Def javaRefType = def(
-        "javaRefType",
-        () -> lambda(
-                "args",
-                "pkg",
-                "id",
+    public static final Def javaRefType = def("javaRefType")
+        .lam("args").lam("pkg").lam("id")
+        .to(() ->
                 inject(hydra.java.syntax.Type.TYPE_,
                     hydra.java.syntax.Type.REFERENCE,
                     inject(ReferenceType.TYPE_,
                         ReferenceType.CLASS_OR_INTERFACE,
                         inject(ClassOrInterfaceType.TYPE_,
                             ClassOrInterfaceType.CLASS,
-                            apply(ref(Utils.javaClassType), var("args"), var("pkg"), var("id")))))));
+                            apply(ref(Utils.javaClassType), var("args"), var("pkg"), var("id"))))));
 
-    public static final Def javaReferenceTypeToRawType = def(
-        "javaReferenceTypeToRawType",
-        () -> lambda("rt",
+    public static final Def javaReferenceTypeToRawType = def("javaReferenceTypeToRawType")
+        .lam("rt")
+        .to(() ->
                 casesWithDefault(ReferenceType.TYPE_,
                     var("rt"),
                     var("rt"),
@@ -2103,27 +1981,27 @@ public class Utils {
                                                                 var("id")),
                                                             field(
                                                                 ClassType.ARGUMENTS,
-                                                                list()))))))))))))));
+                                                                list())))))))))))));
 
-    public static final Def javaRelationalExpressionToJavaEqualityExpression = def(
-        "javaRelationalExpressionToJavaEqualityExpression",
-        () -> lambda("re",
+    public static final Def javaRelationalExpressionToJavaEqualityExpression = def("javaRelationalExpressionToJavaEqualityExpression")
+        .lam("re")
+        .to(() ->
                 inject(EqualityExpression.TYPE_,
                     EqualityExpression.UNARY,
-                    var("re"))));
+                    var("re")));
 
-    public static final Def javaRelationalExpressionToJavaExpression = def(
-        "javaRelationalExpressionToJavaExpression",
-        () -> lambda("re",
+    public static final Def javaRelationalExpressionToJavaExpression = def("javaRelationalExpressionToJavaExpression")
+        .lam("re")
+        .to(() ->
                 apply(
                     ref(Utils.javaEqualityExpressionToJavaExpression),
                     inject(EqualityExpression.TYPE_,
                         EqualityExpression.UNARY,
-                        var("re")))));
+                        var("re"))));
 
-    public static final Def javaRelationalExpressionToJavaUnaryExpression = def(
-        "javaRelationalExpressionToJavaUnaryExpression",
-        () -> lambda("re",
+    public static final Def javaRelationalExpressionToJavaUnaryExpression = def("javaRelationalExpressionToJavaUnaryExpression")
+        .lam("re")
+        .to(() ->
                 inject(UnaryExpression.TYPE_,
                     UnaryExpression.OTHER,
                     inject(UnaryExpressionNotPlusMinus.TYPE_,
@@ -2158,45 +2036,45 @@ public class Utils {
                                                                                         inject(
                                                                                             EqualityExpression.TYPE_,
                                                                                             EqualityExpression.UNARY,
-                                                                                            var("re"))))))))))))))))))))));
+                                                                                            var("re")))))))))))))))))))));
 
-    public static final Def javaReturnStatement = def(
-        "javaReturnStatement",
-        () -> lambda("mex",
+    public static final Def javaReturnStatement = def("javaReturnStatement")
+        .lam("mex")
+        .to(() ->
                 inject(Statement.TYPE_,
                     Statement.WITHOUT_TRAILING,
                     inject(StatementWithoutTrailingSubstatement.TYPE_,
                         StatementWithoutTrailingSubstatement.RETURN,
-                        wrap(ReturnStatement.TYPE_, var("mex"))))));
+                        wrap(ReturnStatement.TYPE_, var("mex")))));
 
-    public static final Def javaStatementsToBlock = def(
-        "javaStatementsToBlock",
-        () -> lambda("stmts",
+    public static final Def javaStatementsToBlock = def("javaStatementsToBlock")
+        .lam("stmts")
+        .to(() ->
                 wrap(Block.TYPE_,
                     Lists.map(
                         lambda("s",
                             inject(BlockStatement.TYPE_,
                                 BlockStatement.STATEMENT,
                                 var("s"))),
-                        var("stmts")))));
+                        var("stmts"))));
 
-    public static final Def javaString = def(
-        "javaString",
-        () -> lambda("s",
+    public static final Def javaString = def("javaString")
+        .lam("s")
+        .to(() ->
                 inject(Literal.TYPE_,
                     Literal.STRING,
-                    wrap(StringLiteral.TYPE_, var("s")))));
+                    wrap(StringLiteral.TYPE_, var("s"))));
 
-    public static final Def javaStringMultiplicativeExpression = def(
-        "javaStringMultiplicativeExpression",
-        () -> lambda("s",
+    public static final Def javaStringMultiplicativeExpression = def("javaStringMultiplicativeExpression")
+        .lam("s")
+        .to(() ->
                 apply(
                     ref(Utils.javaLiteralToJavaMultiplicativeExpression),
-                    apply(ref(Utils.javaString), var("s")))));
+                    apply(ref(Utils.javaString), var("s"))));
 
-    public static final Def javaThis = def(
-        "javaThis",
-        () -> inject(Expression.TYPE_,
+    public static final Def javaThis = def("javaThis")
+        .to(() ->
+                inject(Expression.TYPE_,
                 Expression.ASSIGNMENT,
                 inject(AssignmentExpression.TYPE_,
                     AssignmentExpression.CONDITIONAL,
@@ -2244,9 +2122,9 @@ public class Utils {
                                                                                                         PrimaryNoNewArrayExpression.THIS,
                                                                                                         unit()))))))))))))))))))))))));
 
-    public static final Def javaThrowIllegalArgumentException = def(
-        "javaThrowIllegalArgumentException",
-        () -> lambda("args",
+    public static final Def javaThrowIllegalArgumentException = def("javaThrowIllegalArgumentException")
+        .lam("args")
+        .to(() ->
                 apply(
                     ref(Utils.javaThrowStatement),
                     apply(
@@ -2257,11 +2135,11 @@ public class Utils {
                                 string("IllegalArgumentException")),
                             nothing()),
                         var("args"),
-                        nothing()))));
+                        nothing())));
 
-    public static final Def javaThrowIllegalStateException = def(
-        "javaThrowIllegalStateException",
-        () -> lambda("args",
+    public static final Def javaThrowIllegalStateException = def("javaThrowIllegalStateException")
+        .lam("args")
+        .to(() ->
                 apply(
                     ref(Utils.javaThrowStatement),
                     apply(
@@ -2272,22 +2150,20 @@ public class Utils {
                                 string("IllegalStateException")),
                             nothing()),
                         var("args"),
-                        nothing()))));
+                        nothing())));
 
-    public static final Def javaThrowStatement = def(
-        "javaThrowStatement",
-        () -> lambda("e",
+    public static final Def javaThrowStatement = def("javaThrowStatement")
+        .lam("e")
+        .to(() ->
                 inject(Statement.TYPE_,
                     Statement.WITHOUT_TRAILING,
                     inject(StatementWithoutTrailingSubstatement.TYPE_,
                         StatementWithoutTrailingSubstatement.THROW,
-                        wrap(ThrowStatement.TYPE_, var("e"))))));
+                        wrap(ThrowStatement.TYPE_, var("e")))));
 
-    public static final Def javaTypeFromTypeName = def(
-        "javaTypeFromTypeName",
-        () -> lambda(
-                "aliases",
-                "elName",
+    public static final Def javaTypeFromTypeName = def("javaTypeFromTypeName")
+        .lam("aliases").lam("elName")
+        .to(() ->
                 apply(
                     ref(Utils.javaTypeVariableToType),
                     record(TypeVariable.TYPE_,
@@ -2298,49 +2174,47 @@ public class Utils {
                                 ref(Utils.nameToJavaTypeIdentifier),
                                 var("aliases"),
                                 bool(false),
-                                var("elName")))))));
+                                var("elName"))))));
 
-    public static final Def javaTypeIdentifier = def(
-        "javaTypeIdentifier",
-        () -> lambda("s",
+    public static final Def javaTypeIdentifier = def("javaTypeIdentifier")
+        .lam("s")
+        .to(() ->
                 wrap(TypeIdentifier.TYPE_,
-                    wrap(Identifier.TYPE_, var("s")))));
+                    wrap(Identifier.TYPE_, var("s"))));
 
-    public static final Def javaTypeIdentifierToJavaTypeArgument = def(
-        "javaTypeIdentifierToJavaTypeArgument",
-        () -> lambda("id",
+    public static final Def javaTypeIdentifierToJavaTypeArgument = def("javaTypeIdentifierToJavaTypeArgument")
+        .lam("id")
+        .to(() ->
                 inject(TypeArgument.TYPE_,
                     TypeArgument.REFERENCE,
                     inject(ReferenceType.TYPE_,
                         ReferenceType.VARIABLE,
                         record(TypeVariable.TYPE_,
                             field(TypeVariable.ANNOTATIONS, list()),
-                            field(TypeVariable.IDENTIFIER, var("id")))))));
+                            field(TypeVariable.IDENTIFIER, var("id"))))));
 
-    public static final Def javaTypeName = def(
-        "javaTypeName",
-        () -> lambda("id",
+    public static final Def javaTypeName = def("javaTypeName")
+        .lam("id")
+        .to(() ->
                 record(TypeName.TYPE_,
                     field(
                         TypeName.IDENTIFIER,
                         wrap(TypeIdentifier.TYPE_, var("id"))),
-                    field(TypeName.QUALIFIER, nothing()))));
+                    field(TypeName.QUALIFIER, nothing())));
 
-    public static final Def javaTypeParameter = def(
-        "javaTypeParameter",
-        () -> lambda("v",
+    public static final Def javaTypeParameter = def("javaTypeParameter")
+        .lam("v")
+        .to(() ->
                 record(TypeParameter.TYPE_,
                     field(TypeParameter.MODIFIERS, list()),
                     field(
                         TypeParameter.IDENTIFIER,
                         apply(ref(Utils.javaTypeIdentifier), var("v"))),
-                    field(TypeParameter.BOUND, nothing()))));
+                    field(TypeParameter.BOUND, nothing())));
 
-    public static final Def javaTypeToJavaFormalParameter = def(
-        "javaTypeToJavaFormalParameter",
-        () -> lambda(
-                "jt",
-                "fname",
+    public static final Def javaTypeToJavaFormalParameter = def("javaTypeToJavaFormalParameter")
+        .lam("jt").lam("fname")
+        .to(() ->
                 inject(FormalParameter.TYPE_,
                     FormalParameter.SIMPLE,
                     record(FormalParameter_Simple.TYPE_,
@@ -2350,13 +2224,11 @@ public class Utils {
                             wrap(UnannType.TYPE_, var("jt"))),
                         field(
                             FormalParameter_Simple.ID,
-                            apply(ref(Utils.fieldNameToJavaVariableDeclaratorId), var("fname")))))));
+                            apply(ref(Utils.fieldNameToJavaVariableDeclaratorId), var("fname"))))));
 
-    public static final Def javaTypeToJavaReferenceType = def(
-        "javaTypeToJavaReferenceType",
-        () -> lambda(
-                "t",
-                "cx",
+    public static final Def javaTypeToJavaReferenceType = def("javaTypeToJavaReferenceType")
+        .lam("t").lam("cx")
+        .to(() ->
                 cases(hydra.java.syntax.Type.TYPE_,
                     var("t"),
                     field(hydra.java.syntax.Type.REFERENCE, lambda("rt", right(var("rt")))),
@@ -2367,18 +2239,18 @@ public class Utils {
                                 inject(Error_.TYPE_,
                                     Error_.OTHER,
                                     wrap(OtherError.TYPE_,
-                                        string("expected a Java reference type")))))))));
+                                        string("expected a Java reference type"))))))));
 
-    public static final Def javaTypeToJavaResult = def(
-        "javaTypeToJavaResult",
-        () -> lambda("jt",
+    public static final Def javaTypeToJavaResult = def("javaTypeToJavaResult")
+        .lam("jt")
+        .to(() ->
                 inject(Result.TYPE_,
                     Result.TYPE,
-                    wrap(UnannType.TYPE_, var("jt")))));
+                    wrap(UnannType.TYPE_, var("jt"))));
 
-    public static final Def javaTypeToJavaTypeArgument = def(
-        "javaTypeToJavaTypeArgument",
-        () -> lambda("t",
+    public static final Def javaTypeToJavaTypeArgument = def("javaTypeToJavaTypeArgument")
+        .lam("t")
+        .to(() ->
                 cases(hydra.java.syntax.Type.TYPE_,
                     var("t"),
                     field(
@@ -2394,11 +2266,11 @@ public class Utils {
                                 TypeArgument.WILDCARD,
                                 record(Wildcard.TYPE_,
                                     field(Wildcard.ANNOTATIONS, list()),
-                                    field(Wildcard.WILDCARD, nothing()))))))));
+                                    field(Wildcard.WILDCARD, nothing())))))));
 
-    public static final Def javaTypeVariable = def(
-        "javaTypeVariable",
-        () -> lambda("v",
+    public static final Def javaTypeVariable = def("javaTypeVariable")
+        .lam("v")
+        .to(() ->
                 inject(ReferenceType.TYPE_,
                     ReferenceType.VARIABLE,
                     record(TypeVariable.TYPE_,
@@ -2407,20 +2279,20 @@ public class Utils {
                             TypeVariable.IDENTIFIER,
                             apply(
                                 ref(Utils.javaTypeIdentifier),
-                                apply(var("hydra.formatting.capitalize"), var("v"))))))));
+                                apply(var("hydra.formatting.capitalize"), var("v")))))));
 
-    public static final Def javaTypeVariableToType = def(
-        "javaTypeVariableToType",
-        () -> lambda("tv",
+    public static final Def javaTypeVariableToType = def("javaTypeVariableToType")
+        .lam("tv")
+        .to(() ->
                 inject(hydra.java.syntax.Type.TYPE_,
                     hydra.java.syntax.Type.REFERENCE,
                     inject(ReferenceType.TYPE_,
                         ReferenceType.VARIABLE,
-                        var("tv")))));
+                        var("tv"))));
 
-    public static final Def javaUnaryExpressionToJavaExpression = def(
-        "javaUnaryExpressionToJavaExpression",
-        () -> lambda("ue",
+    public static final Def javaUnaryExpressionToJavaExpression = def("javaUnaryExpressionToJavaExpression")
+        .lam("ue")
+        .to(() ->
                 inject(Expression.TYPE_,
                     Expression.ASSIGNMENT,
                     inject(AssignmentExpression.TYPE_,
@@ -2454,11 +2326,11 @@ public class Utils {
                                                                                     inject(
                                                                                         MultiplicativeExpression.TYPE_,
                                                                                         MultiplicativeExpression.UNARY,
-                                                                                        var("ue")))))))))))))))))))));
+                                                                                        var("ue"))))))))))))))))))));
 
-    public static final Def javaUnaryExpressionToJavaRelationalExpression = def(
-        "javaUnaryExpressionToJavaRelationalExpression",
-        () -> lambda("ue",
+    public static final Def javaUnaryExpressionToJavaRelationalExpression = def("javaUnaryExpressionToJavaRelationalExpression")
+        .lam("ue")
+        .to(() ->
                 inject(RelationalExpression.TYPE_,
                     RelationalExpression.SIMPLE,
                     inject(ShiftExpression.TYPE_,
@@ -2467,51 +2339,42 @@ public class Utils {
                             AdditiveExpression.UNARY,
                             inject(MultiplicativeExpression.TYPE_,
                                 MultiplicativeExpression.UNARY,
-                                var("ue")))))));
+                                var("ue"))))));
 
-    public static final Def javaVariableDeclarator = def(
-        "javaVariableDeclarator",
-        () -> lambda(
-                "id",
-                "minit",
+    public static final Def javaVariableDeclarator = def("javaVariableDeclarator")
+        .lam("id").lam("minit")
+        .to(() ->
                 record(VariableDeclarator.TYPE_,
                     field(
                         VariableDeclarator.ID,
                         apply(ref(Utils.javaVariableDeclaratorId), var("id"))),
-                    field(VariableDeclarator.INITIALIZER, var("minit")))));
+                    field(VariableDeclarator.INITIALIZER, var("minit"))));
 
-    public static final Def javaVariableDeclaratorId = def(
-        "javaVariableDeclaratorId",
-        () -> lambda("id",
+    public static final Def javaVariableDeclaratorId = def("javaVariableDeclaratorId")
+        .lam("id")
+        .to(() ->
                 record(VariableDeclaratorId.TYPE_,
                     field(VariableDeclaratorId.IDENTIFIER, var("id")),
-                    field(VariableDeclaratorId.DIMS, nothing()))));
+                    field(VariableDeclaratorId.DIMS, nothing())));
 
-    public static final Def javaVariableName = def(
-        "javaVariableName",
-        () -> lambda("name",
-                apply(ref(Utils.javaIdentifier), apply(var("hydra.names.localNameOf"), var("name")))));
+    public static final Def javaVariableName = def("javaVariableName")
+        .lam("name")
+        .to(() ->
+                apply(ref(Utils.javaIdentifier), apply(var("hydra.names.localNameOf"), var("name"))));
 
-    public static final Def lookupJavaVarName = def(
-        "lookupJavaVarName",
-        () -> lambda(
-                "aliases",
-                "name",
+    public static final Def lookupJavaVarName = def("lookupJavaVarName")
+        .lam("aliases").lam("name")
+        .to(() ->
                 Optionals.cases(
                     Maps.lookup(
                         var("name"),
                         proj(Aliases.TYPE_, Aliases.VAR_RENAMES, "aliases")),
                     var("name"),
-                    lambda("renamed", var("renamed")))));
+                    lambda("renamed", var("renamed"))));
 
-    public static final Def makeConstructor = def(
-        "makeConstructor",
-        () -> lambda(
-                "aliases",
-                "elName",
-                "private",
-                "params",
-                "stmts",
+    public static final Def makeConstructor = def("makeConstructor")
+        .lam("aliases").lam("elName").lam("private").lam("params").lam("stmts")
+        .to(() ->
                 let(
                     field("nm",
                         wrap(SimpleTypeName.TYPE_,
@@ -2550,18 +2413,11 @@ public class Utils {
                             field(ConstructorDeclaration.MODIFIERS, var("mods")),
                             field(ConstructorDeclaration.CONSTRUCTOR, var("cons")),
                             field(ConstructorDeclaration.THROWS, nothing()),
-                            field(ConstructorDeclaration.BODY, var("body")))))));
+                            field(ConstructorDeclaration.BODY, var("body"))))));
 
-    public static final Def methodDeclaration = def(
-        "methodDeclaration",
-        () -> lambda(
-                "mods",
-                "tparams",
-                "anns",
-                "methodName",
-                "params",
-                "result",
-                "stmts",
+    public static final Def methodDeclaration = def("methodDeclaration")
+        .lam("mods").lam("tparams").lam("anns").lam("methodName").lam("params").lam("result").lam("stmts")
+        .to(() ->
                 apply(
                     ref(Utils.javaMethodDeclarationToJavaClassBodyDeclaration),
                     record(MethodDeclaration.TYPE_,
@@ -2577,14 +2433,11 @@ public class Utils {
                                 var("result"))),
                         field(
                             MethodDeclaration.BODY,
-                            apply(ref(Utils.javaMethodBody), var("stmts")))))));
+                            apply(ref(Utils.javaMethodBody), var("stmts"))))));
 
-    public static final Def methodInvocation = def(
-        "methodInvocation",
-        () -> lambda(
-                "lhs",
-                "methodName",
-                "args",
+    public static final Def methodInvocation = def("methodInvocation")
+        .lam("lhs").lam("methodName").lam("args")
+        .to(() ->
                 let("header",
                     Optionals.cases(
                         var("lhs"),
@@ -2617,23 +2470,20 @@ public class Utils {
                                         var("methodName")))))),
                     record(MethodInvocation.TYPE_,
                         field(MethodInvocation.HEADER, var("header")),
-                        field(MethodInvocation.ARGUMENTS, var("args"))))));
+                        field(MethodInvocation.ARGUMENTS, var("args")))));
 
-    public static final Def methodInvocationStatic = def(
-        "methodInvocationStatic",
-        () -> lambda(
-                "self",
-                "methodName",
-                "args",
+    public static final Def methodInvocationStatic = def("methodInvocationStatic")
+        .lam("self").lam("methodName").lam("args")
+        .to(() ->
                 apply(
                     ref(Utils.methodInvocation),
                     just(left(apply(ref(Utils.javaIdentifierToJavaExpressionName), var("self")))),
                     var("methodName"),
-                    var("args"))));
+                    var("args")));
 
-    public static final Def methodInvocationStaticWithTypeArgs = def(
-        "methodInvocationStaticWithTypeArgs",
-        () -> lambda(
+    public static final Def methodInvocationStaticWithTypeArgs = def("methodInvocationStaticWithTypeArgs")
+        .to(() ->
+                lambda(
                 "self",
                 "methodName",
                 "targs",
@@ -2670,14 +2520,9 @@ public class Utils {
                             field(MethodInvocation.HEADER, var("header")),
                             field(MethodInvocation.ARGUMENTS, var("args")))))));
 
-    public static final Def nameToJavaClassType = def(
-        "nameToJavaClassType",
-        () -> lambda(
-                "aliases",
-                "qualify",
-                "args",
-                "name",
-                "mlocal",
+    public static final Def nameToJavaClassType = def("nameToJavaClassType")
+        .lam("aliases").lam("qualify").lam("args").lam("name").lam("mlocal")
+        .to(() ->
                 let(
                     field("result",
                         apply(
@@ -2694,13 +2539,11 @@ public class Utils {
                         field(ClassType.ANNOTATIONS, list()),
                         field(ClassType.QUALIFIER, var("pkg")),
                         field(ClassType.IDENTIFIER, var("id")),
-                        field(ClassType.ARGUMENTS, var("args"))))));
+                        field(ClassType.ARGUMENTS, var("args")))));
 
-    public static final Def nameToJavaName = def(
-        "nameToJavaName",
-        () -> lambda(
-                "aliases",
-                "name",
+    public static final Def nameToJavaName = def("nameToJavaName")
+        .lam("aliases").lam("name")
+        .to(() ->
                 let(
                     field("qn",
                         apply(var("hydra.names.qualifyName"), var("name"))),
@@ -2743,16 +2586,11 @@ public class Utils {
                                             var("parts"),
                                             list(apply(ref(Utils.sanitizeJavaName), var("local"))))),
                                     wrap(Identifier.TYPE_,
-                                        Strings.intercalate(string("."), var("allParts"))))))))));
+                                        Strings.intercalate(string("."), var("allParts")))))))));
 
-    public static final Def nameToJavaReferenceType = def(
-        "nameToJavaReferenceType",
-        () -> lambda(
-                "aliases",
-                "qualify",
-                "args",
-                "name",
-                "mlocal",
+    public static final Def nameToJavaReferenceType = def("nameToJavaReferenceType")
+        .lam("aliases").lam("qualify").lam("args").lam("name").lam("mlocal")
+        .to(() ->
                 inject(ReferenceType.TYPE_,
                     ReferenceType.CLASS_OR_INTERFACE,
                     inject(ClassOrInterfaceType.TYPE_,
@@ -2763,29 +2601,22 @@ public class Utils {
                             var("qualify"),
                             var("args"),
                             var("name"),
-                            var("mlocal"))))));
+                            var("mlocal")))));
 
-    public static final Def nameToJavaTypeIdentifier = def(
-        "nameToJavaTypeIdentifier",
-        () -> lambda(
-                "aliases",
-                "qualify",
-                "name",
+    public static final Def nameToJavaTypeIdentifier = def("nameToJavaTypeIdentifier")
+        .lam("aliases").lam("qualify").lam("name")
+        .to(() ->
                 Pairs.first(
                     apply(
                         ref(Utils.nameToQualifiedJavaName),
                         var("aliases"),
                         var("qualify"),
                         var("name"),
-                        nothing()))));
+                        nothing())));
 
-    public static final Def nameToQualifiedJavaName = def(
-        "nameToQualifiedJavaName",
-        () -> lambda(
-                "aliases",
-                "qualify",
-                "name",
-                "mlocal",
+    public static final Def nameToQualifiedJavaName = def("nameToQualifiedJavaName")
+        .lam("aliases").lam("qualify").lam("name").lam("mlocal")
+        .to(() ->
                 let(
                     field("qn",
                         apply(var("hydra.names.qualifyName"), var("name"))),
@@ -2838,29 +2669,29 @@ public class Utils {
                                             apply(ref(Utils.sanitizeJavaName), var("local")),
                                             string(".")),
                                         apply(ref(Utils.sanitizeJavaName), var("l"))))))),
-                    pair(var("jid"), var("pkg")))));
+                    pair(var("jid"), var("pkg"))));
 
-    public static final Def overrideAnnotation = def(
-        "overrideAnnotation",
-        () -> inject(Annotation.TYPE_,
+    public static final Def overrideAnnotation = def("overrideAnnotation")
+        .to(() ->
+                inject(Annotation.TYPE_,
                 Annotation.MARKER,
                 wrap(MarkerAnnotation.TYPE_,
                     apply(
                         ref(Utils.javaTypeName),
                         wrap(Identifier.TYPE_, string("Override"))))));
 
-    public static final Def referenceTypeToResult = def(
-        "referenceTypeToResult",
-        () -> lambda("rt",
+    public static final Def referenceTypeToResult = def("referenceTypeToResult")
+        .lam("rt")
+        .to(() ->
                 apply(
                     ref(Utils.javaTypeToJavaResult),
                     inject(hydra.java.syntax.Type.TYPE_,
                         hydra.java.syntax.Type.REFERENCE,
-                        var("rt")))));
+                        var("rt"))));
 
-    public static final Def sanitizeJavaName = def(
-        "sanitizeJavaName",
-        () -> lambda("name",
+    public static final Def sanitizeJavaName = def("sanitizeJavaName")
+        .lam("name")
+        .to(() ->
                 Logic.ifElse(
                     apply(ref(Utils.isEscaped), var("name")),
                     apply(ref(Utils.unescape), var("name")),
@@ -2870,11 +2701,11 @@ public class Utils {
                         apply(
                             var("hydra.formatting.sanitizeWithUnderscores"),
                             var("hydra.java.language.reservedWords"),
-                            var("name"))))));
+                            var("name")))));
 
-    public static final Def suppressWarningsUncheckedAnnotation = def(
-        "suppressWarningsUncheckedAnnotation",
-        () -> inject(Annotation.TYPE_,
+    public static final Def suppressWarningsUncheckedAnnotation = def("suppressWarningsUncheckedAnnotation")
+        .to(() ->
+                inject(Annotation.TYPE_,
                 Annotation.SINGLE_ELEMENT,
                 record(SingleElementAnnotation.TYPE_,
                     field(
@@ -2904,11 +2735,9 @@ public class Utils {
                                                                     ref(Utils.javaString),
                                                                     string("unchecked"))))))))))))))));
 
-    public static final Def toAcceptMethod = def(
-        "toAcceptMethod",
-        () -> lambda(
-                "abstract",
-                "vtparams",
+    public static final Def toAcceptMethod = def("toAcceptMethod")
+        .lam("abstract").lam("vtparams")
+        .to(() ->
                 let(
                     binds(
     field("mods",
@@ -3001,11 +2830,11 @@ public class Utils {
                         ref(Names.acceptMethodName),
                         list(var("param")),
                         var("result"),
-                        var("body")))));
+                        var("body"))));
 
-    public static final Def toAssignStmt = def(
-        "toAssignStmt",
-        () -> lambda("fname",
+    public static final Def toAssignStmt = def("toAssignStmt")
+        .lam("fname")
+        .to(() ->
                 let(
                     field("id",
                         apply(ref(Utils.fieldNameToJavaIdentifier), var("fname"))),
@@ -3026,13 +2855,11 @@ public class Utils {
                                 field(FieldAccess.IDENTIFIER, var("id"))))),
                     field("rhs",
                         apply(ref(Utils.fieldNameToJavaExpression), var("fname"))),
-                    apply(ref(Utils.javaAssignmentStatement), var("lhs"), var("rhs")))));
+                    apply(ref(Utils.javaAssignmentStatement), var("lhs"), var("rhs"))));
 
-    public static final Def toJavaArrayType = def(
-        "toJavaArrayType",
-        () -> lambda(
-                "t",
-                "cx",
+    public static final Def toJavaArrayType = def("toJavaArrayType")
+        .lam("t").lam("cx")
+        .to(() ->
                 cases(hydra.java.syntax.Type.TYPE_,
                     var("t"),
                     field(
@@ -3099,44 +2926,43 @@ public class Utils {
                                 inject(Error_.TYPE_,
                                     Error_.OTHER,
                                     wrap(OtherError.TYPE_,
-                                        string("don't know how to make Java type into array type")))))))));
+                                        string("don't know how to make Java type into array type"))))))));
 
-    public static final Def typeParameterToReferenceType = def(
-        "typeParameterToReferenceType",
-        () -> lambda("tp",
+    public static final Def typeParameterToReferenceType = def("typeParameterToReferenceType")
+        .lam("tp")
+        .to(() ->
                 apply(
                     ref(Utils.javaTypeVariable),
                     apply(
                         unwrap(Identifier.TYPE_),
                         apply(
                             unwrap(TypeIdentifier.TYPE_),
-                            proj(TypeParameter.TYPE_, TypeParameter.IDENTIFIER, "tp"))))));
+                            proj(TypeParameter.TYPE_, TypeParameter.IDENTIFIER, "tp")))));
 
-    public static final Def typeParameterToTypeArgument = def(
-        "typeParameterToTypeArgument",
-        () -> lambda("tp",
+    public static final Def typeParameterToTypeArgument = def("typeParameterToTypeArgument")
+        .lam("tp")
+        .to(() ->
                 apply(
                     ref(Utils.javaTypeIdentifierToJavaTypeArgument),
-                    proj(TypeParameter.TYPE_, TypeParameter.IDENTIFIER, "tp"))));
+                    proj(TypeParameter.TYPE_, TypeParameter.IDENTIFIER, "tp")));
 
-    public static final Def unTypeParameter = def(
-        "unTypeParameter",
-        () -> lambda("tp",
+    public static final Def unTypeParameter = def("unTypeParameter")
+        .lam("tp")
+        .to(() ->
                 apply(
                     unwrap(Identifier.TYPE_),
                     apply(
                         unwrap(TypeIdentifier.TYPE_),
-                        proj(TypeParameter.TYPE_, TypeParameter.IDENTIFIER, "tp")))));
+                        proj(TypeParameter.TYPE_, TypeParameter.IDENTIFIER, "tp"))));
 
-    public static final Def unescape = def(
-        "unescape",
-        () -> lambda("s", Strings.fromList(Lists.drop(int32(1), Strings.toList(var("s"))))));
+    public static final Def unescape = def("unescape")
+        .lam("s")
+        .to(() ->
+                Strings.fromList(Lists.drop(int32(1), Strings.toList(var("s")))));
 
-    public static final Def uniqueVarName = def(
-        "uniqueVarName",
-        () -> lambda(
-                "aliases",
-                "name",
+    public static final Def uniqueVarName = def("uniqueVarName")
+        .lam("aliases").lam("name")
+        .to(() ->
                 Logic.ifElse(
                     Sets.member(
                         var("name"),
@@ -3146,14 +2972,11 @@ public class Utils {
                         var("aliases"),
                         apply(unwrap(Name.TYPE_), var("name")),
                         int32(2)),
-                    var("name"))));
+                    var("name")));
 
-    public static final Def uniqueVarName_go = def(
-        "uniqueVarName_go",
-        () -> lambda(
-                "aliases",
-                "base",
-                "n",
+    public static final Def uniqueVarName_go = def("uniqueVarName_go")
+        .lam("aliases").lam("base").lam("n")
+        .to(() ->
                 let("candidate",
                     wrap(Name.TYPE_,
                         Strings.cat2(var("base"), Literals.showInt32(var("n")))),
@@ -3166,13 +2989,11 @@ public class Utils {
                             var("aliases"),
                             var("base"),
                             Math_.add(var("n"), int32(1))),
-                        var("candidate")))));
+                        var("candidate"))));
 
-    public static final Def varDeclarationStatement = def(
-        "varDeclarationStatement",
-        () -> lambda(
-                "id",
-                "rhs",
+    public static final Def varDeclarationStatement = def("varDeclarationStatement")
+        .lam("id").lam("rhs")
+        .to(() ->
                 inject(BlockStatement.TYPE_,
                     BlockStatement.LOCAL_VARIABLE_DECLARATION,
                     wrap(LocalVariableDeclarationStatement.TYPE_,
@@ -3192,15 +3013,11 @@ public class Utils {
                                         just(
                                             inject(VariableInitializer.TYPE_,
                                                 VariableInitializer.EXPRESSION,
-                                                var("rhs")))))))))));
+                                                var("rhs"))))))))));
 
-    public static final Def variableDeclarationStatement = def(
-        "variableDeclarationStatement",
-        () -> lambda(
-                "aliases",
-                "jtype",
-                "id",
-                "rhs",
+    public static final Def variableDeclarationStatement = def("variableDeclarationStatement")
+        .lam("aliases").lam("jtype").lam("id").lam("rhs")
+        .to(() ->
                 let(
                     field("init_",
                         inject(VariableInitializer.TYPE_,
@@ -3220,25 +3037,22 @@ public class Utils {
                                         wrap(UnannType.TYPE_, var("jtype")))),
                                 field(
                                     LocalVariableDeclaration.DECLARATORS,
-                                    list(var("vdec")))))))));
+                                    list(var("vdec"))))))));
 
-    public static final Def variableToJavaIdentifier = def(
-        "variableToJavaIdentifier",
-        () -> lambda("name",
+    public static final Def variableToJavaIdentifier = def("variableToJavaIdentifier")
+        .lam("name")
+        .to(() ->
                 let("v",
                     apply(unwrap(Name.TYPE_), var("name")),
                     Logic.ifElse(
                         Equality.equal(var("v"), string("_")),
                         wrap(Identifier.TYPE_, string("ignored")),
                         wrap(Identifier.TYPE_,
-                            apply(ref(Utils.sanitizeJavaName), var("v")))))));
+                            apply(ref(Utils.sanitizeJavaName), var("v"))))));
 
-    public static final Def variantClassName = def(
-        "variantClassName",
-        () -> lambda(
-                "qualify",
-                "elName",
-                "fname",
+    public static final Def variantClassName = def("variantClassName")
+        .lam("qualify").lam("elName").lam("fname")
+        .to(() ->
                 let(
                     field("qn",
                         apply(var("hydra.names.qualifyName"), var("elName"))),
@@ -3262,11 +3076,11 @@ public class Utils {
                         var("hydra.names.unqualifyName"),
                         record(QualifiedName.TYPE_,
                             field(QualifiedName.MODULE_NAME, var("ns_")),
-                            field(QualifiedName.LOCAL, var("local1")))))));
+                            field(QualifiedName.LOCAL, var("local1"))))));
 
-    public static final Def visitorTypeVariable = def(
-        "visitorTypeVariable",
-        () -> apply(ref(Utils.javaTypeVariable), string("r")));
+    public static final Def visitorTypeVariable = def("visitorTypeVariable")
+        .to(() ->
+                apply(ref(Utils.javaTypeVariable), string("r")));
 
 
 

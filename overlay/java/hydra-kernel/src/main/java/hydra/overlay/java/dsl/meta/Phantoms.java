@@ -313,6 +313,37 @@ public final class Phantoms {
         return tterm(Terms.record(typeName.value, fields.toArray(new Field[0])));
     }
 
+    /**
+     * Copy-with-update: build a {@code record typeName} whose fields are, in the order of
+     * {@code allFields}, projected verbatim from {@code var(baseVar)} — except for those named
+     * in {@code overrides}, which supply their own value. Collapses the common "reconstruct the
+     * whole record to change one field" pattern (every unchanged field would otherwise be
+     * hand-written as {@code field(F, proj(typeName, F, baseVar))}).
+     *
+     * <p>An override may still reference the base for the field it replaces, e.g. to add to a
+     * collection field: {@code field(Aliases.VAR_RENAMES, Maps.insert(k, v, proj(Aliases.TYPE_,
+     * Aliases.VAR_RENAMES, "aliases")))}.</p>
+     *
+     * <p>{@code allFields} must list every field of the type in declaration order; pass the
+     * generated {@code <Type>} name constants (see e.g. {@code Environment.ALIASES_FIELDS}).</p>
+     */
+    public static <A> TypedTerm<A> recordWith(Name typeName, String baseVar, List<Name> allFields, Field... overrides) {
+        Map<String, Field> overrideByName = new LinkedHashMap<>();
+        for (Field ov : overrides) {
+            overrideByName.put(ov.name.value, ov);
+        }
+        List<Field> fields = new java.util.ArrayList<>(allFields.size());
+        for (Name f : allFields) {
+            Field ov = overrideByName.remove(f.value);
+            fields.add(ov != null ? ov : field(f, proj(typeName, f, baseVar)));
+        }
+        if (!overrideByName.isEmpty()) {
+            throw new IllegalArgumentException(
+                "recordWith override(s) not in allFields for " + typeName.value + ": " + overrideByName.keySet());
+        }
+        return record(typeName, fields);
+    }
+
     /** {@code inject TypeName fieldName value}. */
     public static <A> TypedTerm<A> inject(String typeName, String fieldName, TypedTerm<?> value) {
         return tterm(Terms.inject(typeName, fieldName, value.value));

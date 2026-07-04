@@ -153,13 +153,10 @@ def _annotated_rhs_to_expr():
             ],
         ),
     ]))
-    return _def(
-        "annotatedRhsToExpr",
-        doc(
-            "Serialize an annotated RHS",
-            lambdas(["arhs"], body),
-        ),
-    )
+    return (_def("annotatedRhsToExpr")
+        .doc("Serialize an annotated RHS")
+        .lam("arhs")
+        .to(body))
 
 
 def _annotated_statement_to_expr():
@@ -173,13 +170,10 @@ def _annotated_statement_to_expr():
             _local("statementToExpr")(var("stmt")),
         ])),
     )
-    return _def(
-        "annotatedStatementToExpr",
-        doc(
-            "Serialize an annotated statement (with optional doc comment)",
-            lambdas(["as_"], body),
-        ),
-    )
+    return (_def("annotatedStatementToExpr")
+        .doc("Serialize an annotated statement (with optional doc comment)")
+        .lam("as_")
+        .to(body))
 
 
 def _annotation_to_expr():
@@ -187,13 +181,10 @@ def _annotation_to_expr():
         _cst(":"),
         _local("expressionToExpr")(_unwrap("Annotation", "ann")),
     ]))
-    return _def(
-        "annotationToExpr",
-        doc(
-            "Serialize a type annotation",
-            lambdas(["ann"], body),
-        ),
-    )
+    return (_def("annotationToExpr")
+        .doc("Serialize a type annotation")
+        .lam("ann")
+        .to(body))
 
 
 def _args_to_expr():
@@ -209,13 +200,10 @@ def _args_to_expr():
             Lists.map(_local("kwargOrDoubleStarredToExpr"), var("kss")),
         ]))),
     )
-    return _def(
-        "argsToExpr",
-        doc(
-            "Serialize function arguments",
-            lambdas(["args"], body),
-        ),
-    )
+    return (_def("argsToExpr")
+        .doc("Serialize function arguments")
+        .lam("args")
+        .to(body))
 
 
 def _assignment_to_expr():
@@ -227,13 +215,10 @@ def _assignment_to_expr():
             field("aug", lam("_", _cst("... += ..."))),
         ],
     )
-    return _def(
-        "assignmentToExpr",
-        doc(
-            "Serialize an assignment",
-            lambdas(["a"], body),
-        ),
-    )
+    return (_def("assignmentToExpr")
+        .doc("Serialize an assignment")
+        .lam("a")
+        .to(body))
 
 
 def _assignment_expression_to_expr():
@@ -248,13 +233,10 @@ def _assignment_expression_to_expr():
             _local("expressionToExpr")(var("expr")),
         ])),
     )
-    return _def(
-        "assignmentExpressionToExpr",
-        doc(
-            "Serialize an assignment expression (walrus operator)",
-            lambdas(["ae"], body),
-        ),
-    )
+    return (_def("assignmentExpressionToExpr")
+        .doc("Serialize an assignment expression (walrus operator)")
+        .lam("ae")
+        .to(body))
 
 
 def _atom_to_expr():
@@ -279,24 +261,18 @@ def _atom_to_expr():
             field("tuple", lam("t", _local("tupleToExpr")(var("t")))),
         ],
     )
-    return _def(
-        "atomToExpr",
-        doc(
-            "Serialize a Python atom (literal or basic expression)",
-            lambdas(["atom"], body),
-        ),
-    )
+    return (_def("atomToExpr")
+        .doc("Serialize a Python atom (literal or basic expression)")
+        .lam("atom")
+        .to(body))
 
 
 def _attribute_to_expr():
     body = serialization_dot_sep(Lists.map(_local("nameToExpr"), _unwrap("Attribute", "attr")))
-    return _def(
-        "attributeToExpr",
-        doc(
-            "Serialize an attribute access",
-            lambdas(["attr"], body),
-        ),
-    )
+    return (_def("attributeToExpr")
+        .doc("Serialize an attribute access")
+        .lam("attr")
+        .to(body))
 
 
 def _await_primary_to_expr():
@@ -314,13 +290,10 @@ def _await_primary_to_expr():
             _local("primaryToExpr")(var("primary")),
         ),
     )
-    return _def(
-        "awaitPrimaryToExpr",
-        doc(
-            "Serialize an await primary expression",
-            lambdas(["ap"], body),
-        ),
-    )
+    return (_def("awaitPrimaryToExpr")
+        .doc("Serialize an await primary expression")
+        .lam("ap")
+        .to(body))
 
 
 def _bitwise_op_body(local_name, type_name, lhs_local, rhs_local, op_str):
@@ -343,39 +316,33 @@ def _bitwise_op_body(local_name, type_name, lhs_local, rhs_local, op_str):
 
 
 def _bitwise_and_to_expr():
-    return _def(
-        "bitwiseAndToExpr",
-        doc(
-            "Serialize a bitwise AND expression",
-            lambdas(["band"], _bitwise_op_body(
+    return (_def("bitwiseAndToExpr")
+        .doc("Serialize a bitwise AND expression")
+        .lam("band")
+        .to(
+            _bitwise_op_body(
                 "bitwiseAndToExpr", "BitwiseAnd", "band", "shiftExpressionToExpr", "&",
-            )),
-        ),
-    )
+            )))
 
 
 def _bitwise_or_to_expr():
-    return _def(
-        "bitwiseOrToExpr",
-        doc(
-            "Serialize a bitwise OR expression",
-            lambdas(["bor"], _bitwise_op_body(
+    return (_def("bitwiseOrToExpr")
+        .doc("Serialize a bitwise OR expression")
+        .lam("bor")
+        .to(
+            _bitwise_op_body(
                 "bitwiseOrToExpr", "BitwiseOr", "bor", "bitwiseXorToExpr", "|",
-            )),
-        ),
-    )
+            )))
 
 
 def _bitwise_xor_to_expr():
-    return _def(
-        "bitwiseXorToExpr",
-        doc(
-            "Serialize a bitwise XOR expression",
-            lambdas(["bxor"], _bitwise_op_body(
+    return (_def("bitwiseXorToExpr")
+        .doc("Serialize a bitwise XOR expression")
+        .lam("bxor")
+        .to(
+            _bitwise_op_body(
                 "bitwiseXorToExpr", "BitwiseXor", "bxor", "bitwiseAndToExpr", "^",
-            )),
-        ),
-    )
+            )))
 
 
 def _block_to_expr():
@@ -402,24 +369,18 @@ def _block_to_expr():
             ),
         ],
     )
-    return _def(
-        "blockToExpr",
-        doc(
-            "Serialize a block",
-            lambdas(["b"], body),
-        ),
-    )
+    return (_def("blockToExpr")
+        .doc("Serialize a block")
+        .lam("b")
+        .to(body))
 
 
 def _capture_pattern_to_expr():
     body = _local("patternCaptureTargetToExpr")(_unwrap("CapturePattern", "cp"))
-    return _def(
-        "capturePatternToExpr",
-        doc(
-            "Serialize a capture pattern",
-            lambdas(["cp"], body),
-        ),
-    )
+    return (_def("capturePatternToExpr")
+        .doc("Serialize a capture pattern")
+        .lam("cp")
+        .to(body))
 
 
 def _case_block_to_expr():
@@ -441,13 +402,10 @@ def _case_block_to_expr():
             _local("blockToExpr")(var("body")),
         ])),
     )
-    return _def(
-        "caseBlockToExpr",
-        doc(
-            "Serialize a case block",
-            lambdas(["cb"], body),
-        ),
-    )
+    return (_def("caseBlockToExpr")
+        .doc("Serialize a case block")
+        .lam("cb")
+        .to(body))
 
 
 def _class_definition_to_expr():
@@ -481,13 +439,10 @@ def _class_definition_to_expr():
             just(_local("blockToExpr")(var("body"))),
         ]))),
     )
-    return _def(
-        "classDefinitionToExpr",
-        doc(
-            "Serialize a class definition",
-            lambdas(["cd"], body),
-        ),
-    )
+    return (_def("classDefinitionToExpr")
+        .doc("Serialize a class definition")
+        .lam("cd")
+        .to(body))
 
 
 def _class_pattern_to_expr():
@@ -505,13 +460,10 @@ def _class_pattern_to_expr():
             just(_cst(")")),
         ]))),
     )
-    return _def(
-        "classPatternToExpr",
-        doc(
-            "Serialize a class pattern",
-            lambdas(["cp"], body),
-        ),
-    )
+    return (_def("classPatternToExpr")
+        .doc("Serialize a class pattern")
+        .lam("cp")
+        .to(body))
 
 
 def _closed_pattern_to_expr():
@@ -528,13 +480,10 @@ def _closed_pattern_to_expr():
             field("class", lam("c", _local("classPatternToExpr")(var("c")))),
         ],
     )
-    return _def(
-        "closedPatternToExpr",
-        doc(
-            "Serialize a closed pattern",
-            lambdas(["cp"], body),
-        ),
-    )
+    return (_def("closedPatternToExpr")
+        .doc("Serialize a closed pattern")
+        .lam("cp")
+        .to(body))
 
 
 def _compare_op_bitwise_or_pair_to_expr():
@@ -542,13 +491,10 @@ def _compare_op_bitwise_or_pair_to_expr():
         serialization_cst(_local("compareOpToString")(project(_ty("CompareOpBitwiseOrPair"), Name("operator"))(var("pair")))),
         _local("bitwiseOrToExpr")(project(_ty("CompareOpBitwiseOrPair"), Name("rhs"))(var("pair"))),
     ]))
-    return _def(
-        "compareOpBitwiseOrPairToExpr",
-        doc(
-            "Serialize a (compare-op, bitwise-or) pair as `<op> <rhs>`",
-            lambdas(["pair"], body),
-        ),
-    )
+    return (_def("compareOpBitwiseOrPairToExpr")
+        .doc("Serialize a (compare-op, bitwise-or) pair as `<op> <rhs>`")
+        .lam("pair")
+        .to(body))
 
 
 def _compare_op_to_string():
@@ -567,13 +513,10 @@ def _compare_op_to_string():
             field("is", constant(string("is"))),
         ],
     )
-    return _def(
-        "compareOpToString",
-        doc(
-            "Render a Python comparison operator to its source-code form",
-            lambdas(["op"], body),
-        ),
-    )
+    return (_def("compareOpToString")
+        .doc("Render a Python comparison operator to its source-code form")
+        .lam("op")
+        .to(body))
 
 
 def _comparison_to_expr():
@@ -593,13 +536,10 @@ def _comparison_to_expr():
             ),
         ),
     )
-    return _def(
-        "comparisonToExpr",
-        doc(
-            "Serialize a comparison expression: `<lhs>` if rhs is empty, otherwise `<lhs> <op1> <rhs1> <op2> <rhs2> ...`",
-            lambdas(["cmp"], body),
-        ),
-    )
+    return (_def("comparisonToExpr")
+        .doc("Serialize a comparison expression: `<lhs>` if rhs is empty, otherwise `<lhs> <op1> <rhs1> <op2> <rhs2> ...`")
+        .lam("cmp")
+        .to(body))
 
 
 def _compound_statement_to_expr():
@@ -616,13 +556,10 @@ def _compound_statement_to_expr():
             field("match", lam("m", _local("matchStatementToExpr")(var("m")))),
         ],
     )
-    return _def(
-        "compoundStatementToExpr",
-        doc(
-            "Serialize a compound (multi-line) Python statement",
-            lambdas(["cs"], body),
-        ),
-    )
+    return (_def("compoundStatementToExpr")
+        .doc("Serialize a compound (multi-line) Python statement")
+        .lam("cs")
+        .to(body))
 
 
 def _conditional_to_expr():
@@ -640,24 +577,18 @@ def _conditional_to_expr():
             _local("expressionToExpr")(var("elseExpr")),
         ])),
     )
-    return _def(
-        "conditionalToExpr",
-        doc(
-            "Serialize a conditional expression (ternary)",
-            lambdas(["c"], body),
-        ),
-    )
+    return (_def("conditionalToExpr")
+        .doc("Serialize a conditional expression (ternary)")
+        .lam("c")
+        .to(body))
 
 
 def _conjunction_to_expr():
     body = serialization_symbol_sep(string("and"), serialization_inline_style, Lists.map(_local("inversionToExpr"), _unwrap("Conjunction", "c")))
-    return _def(
-        "conjunctionToExpr",
-        doc(
-            "Serialize a conjunction (and expression)",
-            lambdas(["c"], body),
-        ),
-    )
+    return (_def("conjunctionToExpr")
+        .doc("Serialize a conjunction (and expression)")
+        .lam("c")
+        .to(body))
 
 
 def _decorators_to_expr():
@@ -671,35 +602,26 @@ def _decorators_to_expr():
             ),
             _unwrap("Decorators", "decs"),
         ))
-    return _def(
-        "decoratorsToExpr",
-        doc(
-            "Serialize decorators",
-            lambdas(["decs"], body),
-        ),
-    )
+    return (_def("decoratorsToExpr")
+        .doc("Serialize decorators")
+        .lam("decs")
+        .to(body))
 
 
 def _dict_to_expr():
     body = serialization_curly_braces_list(nothing(), serialization_half_block_style, Lists.map(_local("doubleStarredKvpairToExpr"), _unwrap("Dict", "d")))
-    return _def(
-        "dictToExpr",
-        doc(
-            "Serialize a Python dictionary",
-            lambdas(["d"], body),
-        ),
-    )
+    return (_def("dictToExpr")
+        .doc("Serialize a Python dictionary")
+        .lam("d")
+        .to(body))
 
 
 def _disjunction_to_expr():
     body = serialization_symbol_sep(string("or"), serialization_inline_style, Lists.map(_local("conjunctionToExpr"), _unwrap("Disjunction", "d")))
-    return _def(
-        "disjunctionToExpr",
-        doc(
-            "Serialize a disjunction (or expression)",
-            lambdas(["d"], body),
-        ),
-    )
+    return (_def("disjunctionToExpr")
+        .doc("Serialize a disjunction (or expression)")
+        .lam("d")
+        .to(body))
 
 
 def _dotted_as_name_to_expr():
@@ -719,13 +641,10 @@ def _dotted_as_name_to_expr():
             ),
         ]))),
     )
-    return _def(
-        "dottedAsNameToExpr",
-        doc(
-            "Serialize a dotted as name",
-            lambdas(["dan"], body),
-        ),
-    )
+    return (_def("dottedAsNameToExpr")
+        .doc("Serialize a dotted as name")
+        .lam("dan")
+        .to(body))
 
 
 def _dotted_name_to_expr():
@@ -736,13 +655,10 @@ def _dotted_name_to_expr():
                 _unwrap("DottedName", "dn"),
             ),
         ))
-    return _def(
-        "dottedNameToExpr",
-        doc(
-            "Serialize a dotted name (e.g., module.submodule)",
-            lambdas(["dn"], body),
-        ),
-    )
+    return (_def("dottedNameToExpr")
+        .doc("Serialize a dotted name (e.g., module.submodule)")
+        .lam("dn")
+        .to(body))
 
 
 def _double_starred_kvpair_to_expr():
@@ -756,13 +672,10 @@ def _double_starred_kvpair_to_expr():
             ])))),
         ],
     )
-    return _def(
-        "doubleStarredKvpairToExpr",
-        doc(
-            "Serialize a double-starred key-value pair",
-            lambdas(["dskv"], body),
-        ),
-    )
+    return (_def("doubleStarredKvpairToExpr")
+        .doc("Serialize a double-starred key-value pair")
+        .lam("dskv")
+        .to(body))
 
 
 def _expression_to_expr():
@@ -774,13 +687,10 @@ def _expression_to_expr():
             field("lambda", lam("l", _local("lambdaToExpr")(var("l")))),
         ],
     )
-    return _def(
-        "expressionToExpr",
-        doc(
-            "Serialize a Python expression",
-            lambdas(["expr"], body),
-        ),
-    )
+    return (_def("expressionToExpr")
+        .doc("Serialize a Python expression")
+        .lam("expr")
+        .to(body))
 
 
 def _factor_to_expr():
@@ -808,13 +718,10 @@ def _factor_to_expr():
             field("simple", lam("p", _local("powerToExpr")(var("p")))),
         ],
     )
-    return _def(
-        "factorToExpr",
-        doc(
-            "Serialize a factor expression",
-            lambdas(["f"], body),
-        ),
-    )
+    return (_def("factorToExpr")
+        .doc("Serialize a factor expression")
+        .lam("f")
+        .to(body))
 
 
 def _function_def_raw_to_expr():
@@ -872,13 +779,10 @@ def _function_def_raw_to_expr():
             _local("blockToExpr")(var("block")),
         ])),
     )
-    return _def(
-        "functionDefRawToExpr",
-        doc(
-            "Serialize a raw function definition",
-            lambdas(["fdr"], body),
-        ),
-    )
+    return (_def("functionDefRawToExpr")
+        .doc("Serialize a raw function definition")
+        .lam("fdr")
+        .to(body))
 
 
 def _function_definition_to_expr():
@@ -892,13 +796,10 @@ def _function_definition_to_expr():
             just(_local("functionDefRawToExpr")(var("raw"))),
         ]))),
     )
-    return _def(
-        "functionDefinitionToExpr",
-        doc(
-            "Serialize a function definition",
-            lambdas(["fd"], body),
-        ),
-    )
+    return (_def("functionDefinitionToExpr")
+        .doc("Serialize a function definition")
+        .lam("fd")
+        .to(body))
 
 
 def _group_to_expr():
@@ -909,13 +810,10 @@ def _group_to_expr():
             field("yield", lam("_", _cst("(yield ...)"))),
         ],
     )
-    return _def(
-        "groupToExpr",
-        doc(
-            "Serialize a parenthesized group",
-            lambdas(["g"], body),
-        ),
-    )
+    return (_def("groupToExpr")
+        .doc("Serialize a parenthesized group")
+        .lam("g")
+        .to(body))
 
 
 def _guard_to_expr():
@@ -923,13 +821,10 @@ def _guard_to_expr():
         _cst("if"),
         _local("namedExpressionToExpr")(_unwrap("Guard", "g")),
     ]))
-    return _def(
-        "guardToExpr",
-        doc(
-            "Serialize a guard clause",
-            lambdas(["g"], body),
-        ),
-    )
+    return (_def("guardToExpr")
+        .doc("Serialize a guard clause")
+        .lam("g")
+        .to(body))
 
 
 def _import_from_to_expr():
@@ -955,13 +850,10 @@ def _import_from_to_expr():
             _local("importFromTargetsToExpr")(var("targets")),
         ])),
     )
-    return _def(
-        "importFromToExpr",
-        doc(
-            "Serialize an import from statement",
-            lambdas(["if_"], body),
-        ),
-    )
+    return (_def("importFromToExpr")
+        .doc("Serialize an import from statement")
+        .lam("if_")
+        .to(body))
 
 
 def _import_from_as_name_to_expr():
@@ -983,13 +875,10 @@ def _import_from_as_name_to_expr():
             ),
         ),
     )
-    return _def(
-        "importFromAsNameToExpr",
-        doc(
-            "Serialize an import from as name",
-            lambdas(["ifan"], body),
-        ),
-    )
+    return (_def("importFromAsNameToExpr")
+        .doc("Serialize an import from as name")
+        .lam("ifan")
+        .to(body))
 
 
 def _import_from_targets_to_expr():
@@ -1015,13 +904,10 @@ def _import_from_targets_to_expr():
             field("star", constant(_cst("*"))),
         ],
     )
-    return _def(
-        "importFromTargetsToExpr",
-        doc(
-            "Serialize import from targets",
-            lambdas(["t"], body),
-        ),
-    )
+    return (_def("importFromTargetsToExpr")
+        .doc("Serialize import from targets")
+        .lam("t")
+        .to(body))
 
 
 def _import_name_to_expr():
@@ -1029,13 +915,10 @@ def _import_name_to_expr():
         _cst("import"),
         _comma_sep_inline(Lists.map(_local("dottedAsNameToExpr"), _unwrap("ImportName", "in_"))),
     ]))
-    return _def(
-        "importNameToExpr",
-        doc(
-            "Serialize an import name",
-            lambdas(["in_"], body),
-        ),
-    )
+    return (_def("importNameToExpr")
+        .doc("Serialize an import name")
+        .lam("in_")
+        .to(body))
 
 
 def _import_statement_to_expr():
@@ -1046,13 +929,10 @@ def _import_statement_to_expr():
             field("from", lam("f", _local("importFromToExpr")(var("f")))),
         ],
     )
-    return _def(
-        "importStatementToExpr",
-        doc(
-            "Serialize an import statement",
-            lambdas(["is_"], body),
-        ),
-    )
+    return (_def("importStatementToExpr")
+        .doc("Serialize an import statement")
+        .lam("is_")
+        .to(body))
 
 
 def _inversion_to_expr():
@@ -1068,13 +948,10 @@ def _inversion_to_expr():
             field("simple", lam("c", _local("comparisonToExpr")(var("c")))),
         ],
     )
-    return _def(
-        "inversionToExpr",
-        doc(
-            "Serialize an inversion (not expression)",
-            lambdas(["i"], body),
-        ),
-    )
+    return (_def("inversionToExpr")
+        .doc("Serialize an inversion (not expression)")
+        .lam("i")
+        .to(body))
 
 
 def _keyword_pattern_to_expr():
@@ -1089,24 +966,18 @@ def _keyword_pattern_to_expr():
             _local("patternToExpr")(var("pat")),
         ])),
     )
-    return _def(
-        "keywordPatternToExpr",
-        doc(
-            "Serialize a keyword pattern",
-            lambdas(["kp"], body),
-        ),
-    )
+    return (_def("keywordPatternToExpr")
+        .doc("Serialize a keyword pattern")
+        .lam("kp")
+        .to(body))
 
 
 def _keyword_patterns_to_expr():
     body = _comma_sep_inline(Lists.map(_local("keywordPatternToExpr"), _unwrap("KeywordPatterns", "kp")))
-    return _def(
-        "keywordPatternsToExpr",
-        doc(
-            "Serialize keyword patterns",
-            lambdas(["kp"], body),
-        ),
-    )
+    return (_def("keywordPatternsToExpr")
+        .doc("Serialize keyword patterns")
+        .lam("kp")
+        .to(body))
 
 
 def _kvpair_to_expr():
@@ -1123,13 +994,10 @@ def _kvpair_to_expr():
             _local("expressionToExpr")(var("v")),
         ])),
     )
-    return _def(
-        "kvpairToExpr",
-        doc(
-            "Serialize a key-value pair",
-            lambdas(["kv"], body),
-        ),
-    )
+    return (_def("kvpairToExpr")
+        .doc("Serialize a key-value pair")
+        .lam("kv")
+        .to(body))
 
 
 def _kwarg_to_expr():
@@ -1144,13 +1012,10 @@ def _kwarg_to_expr():
             _local("expressionToExpr")(var("expr")),
         ])),
     )
-    return _def(
-        "kwargToExpr",
-        doc(
-            "Serialize a keyword argument",
-            lambdas(["k"], body),
-        ),
-    )
+    return (_def("kwargToExpr")
+        .doc("Serialize a keyword argument")
+        .lam("k")
+        .to(body))
 
 
 def _kwarg_or_double_starred_to_expr():
@@ -1166,13 +1031,10 @@ def _kwarg_or_double_starred_to_expr():
             ),
         ],
     )
-    return _def(
-        "kwargOrDoubleStarredToExpr",
-        doc(
-            "Serialize a kwarg or double starred",
-            lambdas(["kds"], body),
-        ),
-    )
+    return (_def("kwargOrDoubleStarredToExpr")
+        .doc("Serialize a kwarg or double starred")
+        .lam("kds")
+        .to(body))
 
 
 def _kwarg_or_starred_to_expr():
@@ -1183,13 +1045,10 @@ def _kwarg_or_starred_to_expr():
             field("starred", lam("se", _local("starredExpressionToExpr")(var("se")))),
         ],
     )
-    return _def(
-        "kwargOrStarredToExpr",
-        doc(
-            "Serialize a kwarg or starred",
-            lambdas(["ks"], body),
-        ),
-    )
+    return (_def("kwargOrStarredToExpr")
+        .doc("Serialize a kwarg or starred")
+        .lam("ks")
+        .to(body))
 
 
 def _lambda_to_expr():
@@ -1207,24 +1066,18 @@ def _lambda_to_expr():
             _local("expressionToExpr")(var("body")),
         ]))),
     )
-    return _def(
-        "lambdaToExpr",
-        doc(
-            "Serialize a lambda expression",
-            lambdas(["l"], body),
-        ),
-    )
+    return (_def("lambdaToExpr")
+        .doc("Serialize a lambda expression")
+        .lam("l")
+        .to(body))
 
 
 def _lambda_param_no_default_to_expr():
     body = _local("nameToExpr")(_unwrap("LambdaParamNoDefault", "p"))
-    return _def(
-        "lambdaParamNoDefaultToExpr",
-        doc(
-            "Serialize a lambda parameter without default",
-            lambdas(["p"], body),
-        ),
-    )
+    return (_def("lambdaParamNoDefaultToExpr")
+        .doc("Serialize a lambda parameter without default")
+        .lam("p")
+        .to(body))
 
 
 def _lambda_parameters_to_expr():
@@ -1234,13 +1087,10 @@ def _lambda_parameters_to_expr():
         ],
         _comma_sep_inline(Lists.map(_local("lambdaParamNoDefaultToExpr"), var("nodef"))),
     )
-    return _def(
-        "lambdaParametersToExpr",
-        doc(
-            "Serialize lambda parameters",
-            lambdas(["lp"], body),
-        ),
-    )
+    return (_def("lambdaParametersToExpr")
+        .doc("Serialize lambda parameters")
+        .lam("lp")
+        .to(body))
 
 
 def _lambda_star_etc_to_expr():
@@ -1253,24 +1103,18 @@ def _lambda_star_etc_to_expr():
             field("kwds", lam("_", _cst("**..."))),
         ],
     )
-    return _def(
-        "lambdaStarEtcToExpr",
-        doc(
-            "Serialize lambda star etc",
-            lambdas(["lse"], body),
-        ),
-    )
+    return (_def("lambdaStarEtcToExpr")
+        .doc("Serialize lambda star etc")
+        .lam("lse")
+        .to(body))
 
 
 def _list_to_expr():
     body = serialization_bracket_list_adaptive(Lists.map(_local("starNamedExpressionToExpr"), _unwrap("List", "l")))
-    return _def(
-        "listToExpr",
-        doc(
-            "Serialize a Python list",
-            lambdas(["l"], body),
-        ),
-    )
+    return (_def("listToExpr")
+        .doc("Serialize a Python list")
+        .lam("l")
+        .to(body))
 
 
 def _match_statement_to_expr():
@@ -1290,13 +1134,10 @@ def _match_statement_to_expr():
             serialization_tab_indent_double_space(Lists.map(_local("caseBlockToExpr"), var("cases"))),
         ])),
     )
-    return _def(
-        "matchStatementToExpr",
-        doc(
-            "Serialize a match statement",
-            lambdas(["ms"], body),
-        ),
-    )
+    return (_def("matchStatementToExpr")
+        .doc("Serialize a match statement")
+        .lam("ms")
+        .to(body))
 
 
 def _module_to_expr():
@@ -1317,35 +1158,26 @@ def _module_to_expr():
         ],
         serialization_double_newline_sep(Lists.cons(var("warning"), var("groups"))),
     )
-    return _def(
-        "moduleToExpr",
-        doc(
-            "Serialize a Python module to an AST expression",
-            lambdas(["mod"], body),
-        ),
-    )
+    return (_def("moduleToExpr")
+        .doc("Serialize a Python module to an AST expression")
+        .lam("mod")
+        .to(body))
 
 
 def _name_to_expr():
     body = serialization_cst(_unwrap("Name", "n"))
-    return _def(
-        "nameToExpr",
-        doc(
-            "Serialize a Python name/identifier",
-            lambdas(["n"], body),
-        ),
-    )
+    return (_def("nameToExpr")
+        .doc("Serialize a Python name/identifier")
+        .lam("n")
+        .to(body))
 
 
 def _name_or_attribute_to_expr():
     body = serialization_dot_sep(Lists.map(_local("nameToExpr"), _unwrap("NameOrAttribute", "noa")))
-    return _def(
-        "nameOrAttributeToExpr",
-        doc(
-            "Serialize a name or attribute",
-            lambdas(["noa"], body),
-        ),
-    )
+    return (_def("nameOrAttributeToExpr")
+        .doc("Serialize a name or attribute")
+        .lam("noa")
+        .to(body))
 
 
 def _named_expression_to_expr():
@@ -1356,13 +1188,10 @@ def _named_expression_to_expr():
             field("assignment", lam("ae", _local("assignmentExpressionToExpr")(var("ae")))),
         ],
     )
-    return _def(
-        "namedExpressionToExpr",
-        doc(
-            "Serialize a named expression",
-            lambdas(["ne"], body),
-        ),
-    )
+    return (_def("namedExpressionToExpr")
+        .doc("Serialize a named expression")
+        .lam("ne")
+        .to(body))
 
 
 def _number_to_expr():
@@ -1383,24 +1212,18 @@ def _number_to_expr():
             ),
         ],
     )
-    return _def(
-        "numberToExpr",
-        doc(
-            "Serialize a Python number literal",
-            lambdas(["num"], body),
-        ),
-    )
+    return (_def("numberToExpr")
+        .doc("Serialize a Python number literal")
+        .lam("num")
+        .to(body))
 
 
 def _or_pattern_to_expr():
     body = serialization_symbol_sep(string("|"), serialization_inline_style, Lists.map(_local("closedPatternToExpr"), _unwrap("OrPattern", "op")))
-    return _def(
-        "orPatternToExpr",
-        doc(
-            "Serialize an or pattern",
-            lambdas(["op"], body),
-        ),
-    )
+    return (_def("orPatternToExpr")
+        .doc("Serialize an or pattern")
+        .lam("op")
+        .to(body))
 
 
 def _param_to_expr():
@@ -1414,24 +1237,18 @@ def _param_to_expr():
             Optionals.map(_local("annotationToExpr"), var("ann")),
         ]))),
     )
-    return _def(
-        "paramToExpr",
-        doc(
-            "Serialize a parameter",
-            lambdas(["p"], body),
-        ),
-    )
+    return (_def("paramToExpr")
+        .doc("Serialize a parameter")
+        .lam("p")
+        .to(body))
 
 
 def _param_no_default_to_expr():
     body = _local("paramToExpr")(_proj("ParamNoDefault", "param", "pnd"))
-    return _def(
-        "paramNoDefaultToExpr",
-        doc(
-            "Serialize a parameter without default",
-            lambdas(["pnd"], body),
-        ),
-    )
+    return (_def("paramNoDefaultToExpr")
+        .doc("Serialize a parameter without default")
+        .lam("pnd")
+        .to(body))
 
 
 def _param_no_default_parameters_to_expr():
@@ -1441,13 +1258,10 @@ def _param_no_default_parameters_to_expr():
         ],
         _comma_sep_adaptive(Lists.map(_local("paramNoDefaultToExpr"), var("nodef"))),
     )
-    return _def(
-        "paramNoDefaultParametersToExpr",
-        doc(
-            "Serialize parameters without defaults",
-            lambdas(["pndp"], body),
-        ),
-    )
+    return (_def("paramNoDefaultParametersToExpr")
+        .doc("Serialize parameters without defaults")
+        .lam("pndp")
+        .to(body))
 
 
 def _parameters_to_expr():
@@ -1459,13 +1273,10 @@ def _parameters_to_expr():
             field("slashWithDefault", lam("_", _cst("..."))),
         ],
     )
-    return _def(
-        "parametersToExpr",
-        doc(
-            "Serialize function parameters",
-            lambdas(["p"], body),
-        ),
-    )
+    return (_def("parametersToExpr")
+        .doc("Serialize function parameters")
+        .lam("p")
+        .to(body))
 
 
 def _pattern_to_expr():
@@ -1476,24 +1287,18 @@ def _pattern_to_expr():
             field("as", lam("_", _cst("... as ..."))),
         ],
     )
-    return _def(
-        "patternToExpr",
-        doc(
-            "Serialize a pattern",
-            lambdas(["p"], body),
-        ),
-    )
+    return (_def("patternToExpr")
+        .doc("Serialize a pattern")
+        .lam("p")
+        .to(body))
 
 
 def _pattern_capture_target_to_expr():
     body = _local("nameToExpr")(_unwrap("PatternCaptureTarget", "pct"))
-    return _def(
-        "patternCaptureTargetToExpr",
-        doc(
-            "Serialize a pattern capture target",
-            lambdas(["pct"], body),
-        ),
-    )
+    return (_def("patternCaptureTargetToExpr")
+        .doc("Serialize a pattern capture target")
+        .lam("pct")
+        .to(body))
 
 
 def _patterns_to_expr():
@@ -1504,13 +1309,10 @@ def _patterns_to_expr():
             field("sequence", lam("_", _cst("..."))),
         ],
     )
-    return _def(
-        "patternsToExpr",
-        doc(
-            "Serialize patterns",
-            lambdas(["ps"], body),
-        ),
-    )
+    return (_def("patternsToExpr")
+        .doc("Serialize patterns")
+        .lam("ps")
+        .to(body))
 
 
 def _pos_arg_to_expr():
@@ -1522,24 +1324,18 @@ def _pos_arg_to_expr():
             field("expression", lam("e", _local("expressionToExpr")(var("e")))),
         ],
     )
-    return _def(
-        "posArgToExpr",
-        doc(
-            "Serialize a positional argument",
-            lambdas(["pa"], body),
-        ),
-    )
+    return (_def("posArgToExpr")
+        .doc("Serialize a positional argument")
+        .lam("pa")
+        .to(body))
 
 
 def _positional_patterns_to_expr():
     body = _comma_sep_inline(Lists.map(_local("patternToExpr"), _unwrap("PositionalPatterns", "pp")))
-    return _def(
-        "positionalPatternsToExpr",
-        doc(
-            "Serialize positional patterns",
-            lambdas(["pp"], body),
-        ),
-    )
+    return (_def("positionalPatternsToExpr")
+        .doc("Serialize positional patterns")
+        .lam("pp")
+        .to(body))
 
 
 def _power_to_expr():
@@ -1559,13 +1355,10 @@ def _power_to_expr():
             ),
         ]))),
     )
-    return _def(
-        "powerToExpr",
-        doc(
-            "Serialize a power expression",
-            lambdas(["p"], body),
-        ),
-    )
+    return (_def("powerToExpr")
+        .doc("Serialize a power expression")
+        .lam("p")
+        .to(body))
 
 
 def _primary_to_expr():
@@ -1576,13 +1369,10 @@ def _primary_to_expr():
             field("compound", lam("pwr", _local("primaryWithRhsToExpr")(var("pwr")))),
         ],
     )
-    return _def(
-        "primaryToExpr",
-        doc(
-            "Serialize a primary expression",
-            lambdas(["p"], body),
-        ),
-    )
+    return (_def("primaryToExpr")
+        .doc("Serialize a primary expression")
+        .lam("p")
+        .to(body))
 
 
 def _primary_rhs_to_expr():
@@ -1612,13 +1402,10 @@ def _primary_rhs_to_expr():
             field("genexp", lam("_", _cst("[...]"))),
         ],
     )
-    return _def(
-        "primaryRhsToExpr",
-        doc(
-            "Serialize a primary RHS",
-            lambdas(["rhs"], body),
-        ),
-    )
+    return (_def("primaryRhsToExpr")
+        .doc("Serialize a primary RHS")
+        .lam("rhs")
+        .to(body))
 
 
 def _primary_with_rhs_to_expr():
@@ -1632,13 +1419,10 @@ def _primary_with_rhs_to_expr():
             _local("primaryRhsToExpr")(var("rhs")),
         ])),
     )
-    return _def(
-        "primaryWithRhsToExpr",
-        doc(
-            "Serialize a primary with RHS",
-            lambdas(["pwr"], body),
-        ),
-    )
+    return (_def("primaryWithRhsToExpr")
+        .doc("Serialize a primary with RHS")
+        .lam("pwr")
+        .to(body))
 
 
 def _raise_expression_to_expr():
@@ -1658,13 +1442,10 @@ def _raise_expression_to_expr():
             ),
         ]))),
     )
-    return _def(
-        "raiseExpressionToExpr",
-        doc(
-            "Serialize a raise expression",
-            lambdas(["re"], body),
-        ),
-    )
+    return (_def("raiseExpressionToExpr")
+        .doc("Serialize a raise expression")
+        .lam("re")
+        .to(body))
 
 
 def _raise_statement_to_expr():
@@ -1672,13 +1453,10 @@ def _raise_statement_to_expr():
         just(_cst("raise")),
         Optionals.map(_local("raiseExpressionToExpr"), _unwrap("RaiseStatement", "rs")),
     ])))
-    return _def(
-        "raiseStatementToExpr",
-        doc(
-            "Serialize a raise statement",
-            lambdas(["rs"], body),
-        ),
-    )
+    return (_def("raiseStatementToExpr")
+        .doc("Serialize a raise statement")
+        .lam("rs")
+        .to(body))
 
 
 def _relative_import_prefix_to_expr():
@@ -1689,13 +1467,10 @@ def _relative_import_prefix_to_expr():
             field("ellipsis", constant(_cst("..."))),
         ],
     )
-    return _def(
-        "relativeImportPrefixToExpr",
-        doc(
-            "Serialize a relative import prefix",
-            lambdas(["p"], body),
-        ),
-    )
+    return (_def("relativeImportPrefixToExpr")
+        .doc("Serialize a relative import prefix")
+        .lam("p")
+        .to(body))
 
 
 def _return_statement_to_expr():
@@ -1703,35 +1478,26 @@ def _return_statement_to_expr():
         _cst("return"),
         _comma_sep_inline(Lists.map(_local("starExpressionToExpr"), _unwrap("ReturnStatement", "rs"))),
     ]))
-    return _def(
-        "returnStatementToExpr",
-        doc(
-            "Serialize a return statement",
-            lambdas(["rs"], body),
-        ),
-    )
+    return (_def("returnStatementToExpr")
+        .doc("Serialize a return statement")
+        .lam("rs")
+        .to(body))
 
 
 def _set_to_expr():
     body = serialization_braces_list_adaptive(Lists.map(_local("starNamedExpressionToExpr"), _unwrap("Set", "s")))
-    return _def(
-        "setToExpr",
-        doc(
-            "Serialize a Python set",
-            lambdas(["s"], body),
-        ),
-    )
+    return (_def("setToExpr")
+        .doc("Serialize a Python set")
+        .lam("s")
+        .to(body))
 
 
 def _shift_expression_to_expr():
     body = _local("sumToExpr")(_proj("ShiftExpression", "rhs", "se"))
-    return _def(
-        "shiftExpressionToExpr",
-        doc(
-            "Serialize a shift expression",
-            lambdas(["se"], body),
-        ),
-    )
+    return (_def("shiftExpressionToExpr")
+        .doc("Serialize a shift expression")
+        .lam("se")
+        .to(body))
 
 
 def _simple_statement_to_expr():
@@ -1755,24 +1521,18 @@ def _simple_statement_to_expr():
             field("del", lam("_", _cst("del ..."))),
         ],
     )
-    return _def(
-        "simpleStatementToExpr",
-        doc(
-            "Serialize a simple (single-line) Python statement",
-            lambdas(["ss"], body),
-        ),
-    )
+    return (_def("simpleStatementToExpr")
+        .doc("Serialize a simple (single-line) Python statement")
+        .lam("ss")
+        .to(body))
 
 
 def _simple_type_parameter_to_expr():
     body = _local("nameToExpr")(_proj("SimpleTypeParameter", "name", "stp"))
-    return _def(
-        "simpleTypeParameterToExpr",
-        doc(
-            "Serialize a simple type parameter",
-            lambdas(["stp"], body),
-        ),
-    )
+    return (_def("simpleTypeParameterToExpr")
+        .doc("Serialize a simple type parameter")
+        .lam("stp")
+        .to(body))
 
 
 def _single_target_to_expr():
@@ -1784,13 +1544,10 @@ def _single_target_to_expr():
             field("subscriptAttributeTarget", lam("_", _cst("..."))),
         ],
     )
-    return _def(
-        "singleTargetToExpr",
-        doc(
-            "Serialize a single target",
-            lambdas(["st"], body),
-        ),
-    )
+    return (_def("singleTargetToExpr")
+        .doc("Serialize a single target")
+        .lam("st")
+        .to(body))
 
 
 def _slice_to_expr():
@@ -1801,13 +1558,10 @@ def _slice_to_expr():
             field("slice_", lam("_", _cst(":"))),
         ],
     )
-    return _def(
-        "sliceToExpr",
-        doc(
-            "Serialize a slice",
-            lambdas(["s"], body),
-        ),
-    )
+    return (_def("sliceToExpr")
+        .doc("Serialize a slice")
+        .lam("s")
+        .to(body))
 
 
 def _slice_or_starred_expression_to_expr():
@@ -1818,13 +1572,10 @@ def _slice_or_starred_expression_to_expr():
             field("starred", lam("se", _local("starredExpressionToExpr")(var("se")))),
         ],
     )
-    return _def(
-        "sliceOrStarredExpressionToExpr",
-        doc(
-            "Serialize a slice or starred expression",
-            lambdas(["s"], body),
-        ),
-    )
+    return (_def("sliceOrStarredExpressionToExpr")
+        .doc("Serialize a slice or starred expression")
+        .lam("s")
+        .to(body))
 
 
 def _slices_to_expr():
@@ -1838,13 +1589,10 @@ def _slices_to_expr():
             Lists.map(_local("sliceOrStarredExpressionToExpr"), var("tl")),
         )),
     )
-    return _def(
-        "slicesToExpr",
-        doc(
-            "Serialize slices",
-            lambdas(["s"], body),
-        ),
-    )
+    return (_def("slicesToExpr")
+        .doc("Serialize slices")
+        .lam("s")
+        .to(body))
 
 
 def _star_atom_to_expr():
@@ -1857,13 +1605,10 @@ def _star_atom_to_expr():
             field("starTargetsListSeq", lam("_", _cst("[...]"))),
         ],
     )
-    return _def(
-        "starAtomToExpr",
-        doc(
-            "Serialize a star atom",
-            lambdas(["sa"], body),
-        ),
-    )
+    return (_def("starAtomToExpr")
+        .doc("Serialize a star atom")
+        .lam("sa")
+        .to(body))
 
 
 def _star_expression_to_expr():
@@ -1879,13 +1624,10 @@ def _star_expression_to_expr():
             field("simple", lam("e", _local("expressionToExpr")(var("e")))),
         ],
     )
-    return _def(
-        "starExpressionToExpr",
-        doc(
-            "Serialize a star expression",
-            lambdas(["se"], body),
-        ),
-    )
+    return (_def("starExpressionToExpr")
+        .doc("Serialize a star expression")
+        .lam("se")
+        .to(body))
 
 
 def _star_named_expression_to_expr():
@@ -1901,13 +1643,10 @@ def _star_named_expression_to_expr():
             field("simple", lam("ne", _local("namedExpressionToExpr")(var("ne")))),
         ],
     )
-    return _def(
-        "starNamedExpressionToExpr",
-        doc(
-            "Serialize a star named expression",
-            lambdas(["sne"], body),
-        ),
-    )
+    return (_def("starNamedExpressionToExpr")
+        .doc("Serialize a star named expression")
+        .lam("sne")
+        .to(body))
 
 
 def _star_target_to_expr():
@@ -1923,13 +1662,10 @@ def _star_target_to_expr():
             ),
         ],
     )
-    return _def(
-        "starTargetToExpr",
-        doc(
-            "Serialize a star target",
-            lambdas(["st"], body),
-        ),
-    )
+    return (_def("starTargetToExpr")
+        .doc("Serialize a star target")
+        .lam("st")
+        .to(body))
 
 
 def _starred_expression_to_expr():
@@ -1937,13 +1673,10 @@ def _starred_expression_to_expr():
         _cst("*"),
         _local("expressionToExpr")(_unwrap("StarredExpression", "se")),
     ]))
-    return _def(
-        "starredExpressionToExpr",
-        doc(
-            "Serialize a starred expression",
-            lambdas(["se"], body),
-        ),
-    )
+    return (_def("starredExpressionToExpr")
+        .doc("Serialize a starred expression")
+        .lam("se")
+        .to(body))
 
 
 def _statement_to_expr():
@@ -1957,13 +1690,10 @@ def _statement_to_expr():
             field("compound", lam("c", _local("compoundStatementToExpr")(var("c")))),
         ],
     )
-    return _def(
-        "statementToExpr",
-        doc(
-            "Serialize a Python statement",
-            lambdas(["stmt"], body),
-        ),
-    )
+    return (_def("statementToExpr")
+        .doc("Serialize a Python statement")
+        .lam("stmt")
+        .to(body))
 
 
 def _string_prefix_to_text():
@@ -1976,13 +1706,10 @@ def _string_prefix_to_text():
             field("unicode", constant(string("u"))),
         ],
     )
-    return _def(
-        "stringPrefixToText",
-        doc(
-            "Serialize a Python string prefix to its source-form characters",
-            lambdas(["p"], body),
-        ),
-    )
+    return (_def("stringPrefixToText")
+        .doc("Serialize a Python string prefix to its source-form characters")
+        .lam("p")
+        .to(body))
 
 
 def _string_to_expr():
@@ -2018,13 +1745,10 @@ def _string_to_expr():
             ],
         ),
     )
-    return _def(
-        "stringToExpr",
-        doc(
-            "Serialize a Python string literal",
-            lambdas(["s"], body),
-        ),
-    )
+    return (_def("stringToExpr")
+        .doc("Serialize a Python string literal")
+        .lam("s")
+        .to(body))
 
 
 def _subject_expression_to_expr():
@@ -2035,24 +1759,18 @@ def _subject_expression_to_expr():
             field("tuple", lam("_", _cst("*..."))),
         ],
     )
-    return _def(
-        "subjectExpressionToExpr",
-        doc(
-            "Serialize a subject expression",
-            lambdas(["se"], body),
-        ),
-    )
+    return (_def("subjectExpressionToExpr")
+        .doc("Serialize a subject expression")
+        .lam("se")
+        .to(body))
 
 
 def _sum_to_expr():
     body = _local("termToExpr")(_proj("Sum", "rhs", "s"))
-    return _def(
-        "sumToExpr",
-        doc(
-            "Serialize a sum expression",
-            lambdas(["s"], body),
-        ),
-    )
+    return (_def("sumToExpr")
+        .doc("Serialize a sum expression")
+        .lam("s")
+        .to(body))
 
 
 def _t_primary_to_expr():
@@ -2066,13 +1784,10 @@ def _t_primary_to_expr():
             field("primaryAndArguments", lam("_", _cst("..."))),
         ],
     )
-    return _def(
-        "tPrimaryToExpr",
-        doc(
-            "Serialize a target-side primary expression",
-            lambdas(["tp"], body),
-        ),
-    )
+    return (_def("tPrimaryToExpr")
+        .doc("Serialize a target-side primary expression")
+        .lam("tp")
+        .to(body))
 
 
 def _t_primary_and_name_to_expr():
@@ -2087,13 +1802,10 @@ def _t_primary_and_name_to_expr():
             _local("nameToExpr")(var("name_")),
         ])),
     )
-    return _def(
-        "tPrimaryAndNameToExpr",
-        doc(
-            "Serialize a TPrimaryAndName as primary.name",
-            lambdas(["pn"], body),
-        ),
-    )
+    return (_def("tPrimaryAndNameToExpr")
+        .doc("Serialize a TPrimaryAndName as primary.name")
+        .lam("pn")
+        .to(body))
 
 
 def _target_with_star_atom_to_expr():
@@ -2105,24 +1817,18 @@ def _target_with_star_atom_to_expr():
             field("slices", lam("_", _cst("..."))),
         ],
     )
-    return _def(
-        "targetWithStarAtomToExpr",
-        doc(
-            "Serialize a target with star atom",
-            lambdas(["t"], body),
-        ),
-    )
+    return (_def("targetWithStarAtomToExpr")
+        .doc("Serialize a target with star atom")
+        .lam("t")
+        .to(body))
 
 
 def _term_to_expr():
     body = _local("factorToExpr")(_proj("Term", "rhs", "t"))
-    return _def(
-        "termToExpr",
-        doc(
-            "Serialize a term expression",
-            lambdas(["t"], body),
-        ),
-    )
+    return (_def("termToExpr")
+        .doc("Serialize a term expression")
+        .lam("t")
+        .to(body))
 
 
 def _tuple_to_expr():
@@ -2148,13 +1854,10 @@ def _tuple_to_expr():
             ),
         ),
     )
-    return _def(
-        "tupleToExpr",
-        doc(
-            "Serialize a Python tuple",
-            lambdas(["t"], body),
-        ),
-    )
+    return (_def("tupleToExpr")
+        .doc("Serialize a Python tuple")
+        .lam("t")
+        .to(body))
 
 
 def _type_alias_to_expr():
@@ -2181,13 +1884,10 @@ def _type_alias_to_expr():
             _local("expressionToExpr")(var("expr")),
         ])),
     )
-    return _def(
-        "typeAliasToExpr",
-        doc(
-            "Serialize a type alias",
-            lambdas(["ta"], body),
-        ),
-    )
+    return (_def("typeAliasToExpr")
+        .doc("Serialize a type alias")
+        .lam("ta")
+        .to(body))
 
 
 def _type_parameter_to_expr():
@@ -2199,13 +1899,10 @@ def _type_parameter_to_expr():
             field("doubleStar", lam("_", _cst("**..."))),
         ],
     )
-    return _def(
-        "typeParameterToExpr",
-        doc(
-            "Serialize a type parameter",
-            lambdas(["tp"], body),
-        ),
-    )
+    return (_def("typeParameterToExpr")
+        .doc("Serialize a type parameter")
+        .lam("tp")
+        .to(body))
 
 
 def _typed_assignment_to_expr():
@@ -2224,13 +1921,10 @@ def _typed_assignment_to_expr():
             Optionals.map(_local("annotatedRhsToExpr"), var("rhs")),
         ]))),
     )
-    return _def(
-        "typedAssignmentToExpr",
-        doc(
-            "Serialize a typed assignment",
-            lambdas(["ta"], body),
-        ),
-    )
+    return (_def("typedAssignmentToExpr")
+        .doc("Serialize a typed assignment")
+        .lam("ta")
+        .to(body))
 
 
 def _untyped_assignment_to_expr():
@@ -2244,24 +1938,18 @@ def _untyped_assignment_to_expr():
             list_([_local("annotatedRhsToExpr")(var("rhs"))]),
         ]))),
     )
-    return _def(
-        "untypedAssignmentToExpr",
-        doc(
-            "Serialize an untyped assignment",
-            lambdas(["ua"], body),
-        ),
-    )
+    return (_def("untypedAssignmentToExpr")
+        .doc("Serialize an untyped assignment")
+        .lam("ua")
+        .to(body))
 
 
 def _value_pattern_to_expr():
     body = _local("attributeToExpr")(_unwrap("ValuePattern", "vp"))
-    return _def(
-        "valuePatternToExpr",
-        doc(
-            "Serialize a value pattern",
-            lambdas(["vp"], body),
-        ),
-    )
+    return (_def("valuePatternToExpr")
+        .doc("Serialize a value pattern")
+        .lam("vp")
+        .to(body))
 
 
 def _while_statement_to_expr():
@@ -2291,13 +1979,10 @@ def _while_statement_to_expr():
             ),
         ]))),
     )
-    return _def(
-        "whileStatementToExpr",
-        doc(
-            "Serialize a while statement",
-            lambdas(["ws"], body),
-        ),
-    )
+    return (_def("whileStatementToExpr")
+        .doc("Serialize a while statement")
+        .lam("ws")
+        .to(body))
 
 
 def _escape_python_string():
@@ -2343,13 +2028,10 @@ def _escape_python_string():
         Strings.cat2(var("quote"),
             Strings.cat2(var("escaped"), var("quote"))),
     )
-    return _def(
-        "escapePythonString",
-        doc(
-            "Escape special characters in a Python string and wrap in quotes",
-            lambdas(["doubleQuoted", "s"], body),
-        ),
-    )
+    return (_def("escapePythonString")
+        .doc("Escape special characters in a Python string and wrap in quotes")
+        .lam("doubleQuoted").lam("s")
+        .to(body))
 
 
 def _python_float_literal_text():
@@ -2366,10 +2048,9 @@ def _python_float_literal_text():
             ),
         ),
     )
-    return _def(
-        "pythonFloatLiteralText",
-        lambdas(["s"], body),
-    )
+    return (_def("pythonFloatLiteralText")
+        .lam("s")
+        .to(body))
 
 
 def _python_doc_entity_ref():
@@ -2392,13 +2073,9 @@ def _python_doc_entity_ref():
             field("typeExpr", lam("s", Strings.cat2(string("``"), Strings.cat2(var("s"), string("``"))))),
         ],
     )
-    return _def(
-        "pythonDocEntityRef",
-        doc(
-            "Render a hydra.packaging.EntityReference as Sphinx/RST link syntax",
-            lam("ref", body),
-        ),
-    )
+    return (_def("pythonDocEntityRef")
+        .doc("Render a hydra.packaging.EntityReference as Sphinx/RST link syntax")
+        .to(lam("ref", body)))
 
 
 def _to_python_comments():
@@ -2420,15 +2097,14 @@ def _to_python_comments():
             ),
         ),
     )
-    return _def(
-        "toPythonComments",
-        doc(
+    return (_def("toPythonComments")
+        .to(
+            doc(
             "Convert a doc string to Python comment format. Empty source lines"
             " emit `#` (no trailing space) so blank comment lines don't carry"
             " trailing whitespace into the generated file.",
             lambdas(["doc_"], body),
-        ),
-    )
+        )))
 
 
 def _build_module() -> Module:

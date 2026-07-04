@@ -100,13 +100,10 @@ def _build_python_test_module():
             string("\n"),
         ])),
     )
-    return _def(
-        "buildPythonTestModule",
-        doc(
-            "Build the complete Python test module content",
-            lambdas(["testModule", "testGroup", "testBody"], body),
-        ),
-    )
+    return (_def("buildPythonTestModule")
+        .doc("Build the complete Python test module content")
+        .lam("testModule").lam("testGroup").lam("testBody")
+        .to(body))
 
 
 def _format_python_test_name():
@@ -125,13 +122,10 @@ def _format_python_test_name():
             Strings.to_list(var("name")),
         )),
     )
-    return _def(
-        "formatPythonTestName",
-        doc(
-            "Format a test name for Python (snake_case with test_ prefix)",
-            lambdas(["name"], body),
-        ),
-    )
+    return (_def("formatPythonTestName")
+        .doc("Format a test name for Python (snake_case with test_ prefix)")
+        .lam("name")
+        .to(body))
 
 
 def _generate_python_test_case():
@@ -196,27 +190,18 @@ def _generate_python_test_case():
             ],
         ),
     )
-    return _def(
-        "generatePythonTestCase",
-        doc(
-            "Generate a single pytest test case from a test case with metadata",
-            lambdas(["groupPath", "tcm"], body),
-        ),
-    )
+    return (_def("generatePythonTestCase")
+        .doc("Generate a single pytest test case from a test case with metadata")
+        .lam("groupPath").lam("tcm")
+        .to(body))
 
 
 def _generate_python_test_file():
     """Generate a Python test file for a test group."""
-    return _def(
-        "generatePythonTestFile",
-        doc(
-            "Generate a Python test file for a test group",
-            lambdas(
-                ["testModule", "testGroup", "_g"],
-                _local("generateTestFileWithPythonCodec")(var("testModule"), var("testGroup")),
-            ),
-        ),
-    )
+    return (_def("generatePythonTestFile")
+        .doc("Generate a Python test file for a test group")
+        .lam("testModule").lam("testGroup").lam("_g")
+        .to(_local("generateTestFileWithPythonCodec")(var("testModule"), var("testGroup"))))
 
 
 def _generate_python_test_group_hierarchy():
@@ -304,13 +289,10 @@ def _generate_python_test_group_hierarchy():
         ],
         test_case_lines_bind_body,
     )
-    return _def(
-        "generatePythonTestGroupHierarchy",
-        doc(
-            "Generate test hierarchy for Python with nested subgroups",
-            lambdas(["groupPath", "testGroup"], body),
-        ),
-    )
+    return (_def("generatePythonTestGroupHierarchy")
+        .doc("Generate test hierarchy for Python with nested subgroups")
+        .lam("groupPath").lam("testGroup")
+        .to(body))
 
 
 def _generate_test_file_with_python_codec():
@@ -359,13 +341,10 @@ def _generate_test_file_with_python_codec():
         lam("testBody", test_body_body),
         _local("generatePythonTestGroupHierarchy")(list_([]), var("testGroup")),
     )
-    return _def(
-        "generateTestFileWithPythonCodec",
-        doc(
-            "Generate a complete test file for Python",
-            lambdas(["testModule", "testGroup"], body),
-        ),
-    )
+    return (_def("generateTestFileWithPythonCodec")
+        .doc("Generate a complete test file for Python")
+        .lam("testModule").lam("testGroup")
+        .to(body))
 
 
 # ----------------------------------------------------------------------

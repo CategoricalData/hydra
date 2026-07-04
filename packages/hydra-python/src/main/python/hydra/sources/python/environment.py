@@ -3,16 +3,14 @@
 Host-native DSL source (authoritative; the former Haskell copy was removed in #346).
 """
 
-from hydra.core import Name, Type, TypeScheme
+from hydra.core import Type
 from hydra.overlay.python.dsl.python import Given, None_
-from hydra.packaging import (EntityMetadata, 
-    DefinitionType,
+from hydra.packaging import (EntityMetadata,
     Module,
     ModuleName,
-    TypeDefinition,
 )
 
-from hydra.sources.python._source_dsl import unqualified_dep
+from hydra.sources.python._source_dsl import make_type_def, type_ref, unqualified_dep
 import hydra.overlay.python.dsl.annotations as Annotations
 import hydra.overlay.python.dsl.types as T
 
@@ -28,37 +26,27 @@ DEPENDENCIES = [
     unqualified_dep(ModuleName("hydra.typing")),
 ]
 
-
-def _typeref(ns: ModuleName, local: str) -> Type:
-    """Construct a TypeVariable reference: <ns>.<local>."""
-    return T.variable(f"{ns.value}.{local}")
+_def = make_type_def(NS)
 
 
 def _env(local: str) -> Type:
-    return _typeref(NS, local)
+    return type_ref(NS, local)
 
 
 def _syntax(local: str) -> Type:
-    return _typeref(ModuleName("hydra.python.syntax"), local)
+    return type_ref(ModuleName("hydra.python.syntax"), local)
 
 
 def _core(local: str) -> Type:
-    return _typeref(ModuleName("hydra.core"), local)
+    return type_ref(ModuleName("hydra.core"), local)
 
 
 def _graph(local: str) -> Type:
-    return _typeref(ModuleName("hydra.graph"), local)
+    return type_ref(ModuleName("hydra.graph"), local)
 
 
 def _util(local: str) -> Type:
-    return _typeref(ModuleName("hydra.util"), local)
-
-
-def _def(local_name: str, typ: Type) -> DefinitionType:
-    """Build a DefinitionType for a named type definition."""
-    name = Name(f"{NS.value}.{local_name}")
-    ts = TypeScheme((), typ, None_())
-    return DefinitionType(TypeDefinition(name, None_(), ts))
+    return type_ref(ModuleName("hydra.util"), local)
 
 
 # ----------------------------------------------------------------------

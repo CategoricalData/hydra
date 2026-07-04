@@ -96,27 +96,17 @@ def _ref_python_reserved_words():
 
 def _encode_enum_value():
     """encodeName @@ false @@ caseConventionUpperSnake"""
-    return _def(
-        "encodeEnumValue",
-        doc(
-            "Encode a name as a Python enum value (UPPER_SNAKE case)",
-            _local("encodeName")(false(), util_case_convention_upper_snake),
-        ),
-    )
+    return (_def("encodeEnumValue")
+        .doc("Encode a name as a Python enum value (UPPER_SNAKE case)")
+        .to(_local("encodeName")(false(), util_case_convention_upper_snake)))
 
 
 def _encode_field_name():
     """lambdas [env, fname] $ encodeName @@ false @@ lowerSnake @@ env @@ fname"""
-    return _def(
-        "encodeFieldName",
-        doc(
-            "Encode a name as a Python field name (lower_snake case)",
-            lambdas(
-                ["env", "fname"],
-                _local("encodeName")(false(), util_case_convention_lower_snake, var("env"), var("fname")),
-            ),
-        ),
-    )
+    return (_def("encodeFieldName")
+        .doc("Encode a name as a Python field name (lower_snake case)")
+        .lam("env").lam("fname")
+        .to(_local("encodeName")(false(), util_case_convention_lower_snake, var("env"), var("fname"))))
 
 
 def _encode_name():
@@ -187,13 +177,10 @@ def _encode_name():
             wrap(_PY_NAME, var("pyLocal")),
         ),
     )
-    return _def(
-        "encodeName",
-        doc(
-            "Encode a Hydra name as a Python name",
-            lambdas(["isQualified", "conv", "env", "name"], body),
-        ),
-    )
+    return (_def("encodeName")
+        .doc("Encode a Hydra name as a Python name")
+        .lam("isQualified").lam("conv").lam("env").lam("name")
+        .to(body))
 
 
 def _encode_name_qualified():
@@ -262,21 +249,17 @@ def _encode_name_qualified():
             ), # Bound type variable
             lam("n", var("n")),),
     )
-    return _def(
-        "encodeNameQualified",
-        doc(
-            "Encode a name as a fully qualified Python name",
-            lambdas(["env", "name"], body),
-        ),
-    )
+    return (_def("encodeNameQualified")
+        .doc("Encode a name as a fully qualified Python name")
+        .lam("env").lam("name")
+        .to(body))
 
 
 def _encode_namespace():
     """Encode a namespace as a Python dotted name."""
-    return _def(
-        "encodeNamespace",
-        doc(
-            "Encode a namespace as a Python dotted name",
+    return (_def("encodeNamespace")
+        .doc("Encode a namespace as a Python dotted name")
+        .to(
             lam(
                 "nsVal",
                 wrap(
@@ -295,9 +278,7 @@ def _encode_namespace():
                         ),
                     ),
                 ),
-            ),
-        ),
-    )
+            )))
 
 
 def _encode_namespace_string_with_overrides():
@@ -309,27 +290,23 @@ def _encode_namespace_string_with_overrides():
             Strings.split_on(string("."), packaging_un_module_name(var("nsVal"))),
         ),
     )
-    return _def(
-        "encodeNamespaceStringWithOverrides",
-        doc(
-            "Convert a ModuleName to its Python dotted import string, routing overlay modules to hydra.overlay.python.*",
+    return (_def("encodeNamespaceStringWithOverrides")
+        .doc("Convert a ModuleName to its Python dotted import string, routing overlay modules to hydra.overlay.python.*")
+        .to(
             lam(
                 "nsVal",
                 Optionals.from_optional(
                     default_encoding,
                     Maps.lookup(var("nsVal"), _local("overlayPythonModuleAliases")),
                 ),
-            ),
-        ),
-    )
+            )))
 
 
 def _encode_namespace_with_overrides():
     """Encode a namespace as DottedName, substituting overlay paths for known host-specific modules."""
-    return _def(
-        "encodeNamespaceWithOverrides",
-        doc(
-            "Encode a namespace as a Python dotted name, routing overlay modules to their hydra.overlay.python.* paths",
+    return (_def("encodeNamespaceWithOverrides")
+        .doc("Encode a namespace as a Python dotted name, routing overlay modules to their hydra.overlay.python.* paths")
+        .to(
             lam(
                 "nsVal",
                 wrap(
@@ -342,19 +319,16 @@ def _encode_namespace_with_overrides():
                         ),
                     ),
                 ),
-            ),
-        ),
-    )
+            )))
 
 
 def _overlay_python_module_aliases():
     """Map from DSL module names to their hydra.overlay.python.* import strings."""
     def _module_name(s):
         return wrap(Name("hydra.packaging.ModuleName"), string(s))
-    return _def(
-        "overlayPythonModuleAliases",
-        doc(
-            "Alias map routing DSL-declared module names to their hydra.overlay.python.* import strings",
+    return (_def("overlayPythonModuleAliases")
+        .doc("Alias map routing DSL-declared module names to their hydra.overlay.python.* import strings")
+        .to(
             Maps.from_list(
                 list_([
                     pair(
@@ -362,94 +336,66 @@ def _overlay_python_module_aliases():
                         string("hydra.overlay.python.test_env"),
                     ),
                 ])
-            ),
-        ),
-    )
+            )))
 
 
 def _encode_type_variable():
     """lambda name $ wrap PyName $ capitalize (unName name)"""
-    return _def(
-        "encodeTypeVariable",
-        doc(
-            "Encode a type variable name (capitalized)",
+    return (_def("encodeTypeVariable")
+        .doc("Encode a type variable name (capitalized)")
+        .to(
             lam(
                 "name",
                 wrap(
                     _PY_NAME,
                     formatting_capitalize(Core.un_name(var("name"))),
                 ),
-            ),
-        ),
-    )
+            )))
 
 
 def _sanitize_python_name():
     """sanitizeWithUnderscores @@ pythonReservedWords"""
-    return _def(
-        "sanitizePythonName",
-        doc(
-            "Sanitize a string to be a valid Python name",
-            formatting_sanitize_with_underscores(_ref_python_reserved_words()),
-        ),
-    )
+    return (_def("sanitizePythonName")
+        .doc("Sanitize a string to be a valid Python name")
+        .to(formatting_sanitize_with_underscores(_ref_python_reserved_words())))
 
 
 def _term_variable_reference():
     """variableReference @@ caseConventionLowerSnake @@ false"""
-    return _def(
-        "termVariableReference",
-        doc(
-            "Reference a term variable as a Python expression",
-            _local("variableReference")(util_case_convention_lower_snake, false()),
-        ),
-    )
+    return (_def("termVariableReference")
+        .doc("Reference a term variable as a Python expression")
+        .to(_local("variableReference")(util_case_convention_lower_snake, false())))
 
 
 def _type_variable_reference():
     """variableReference @@ caseConventionPascal @@ false"""
-    return _def(
-        "typeVariableReference",
-        doc(
-            "Reference a type variable as a Python expression",
-            _local("variableReference")(util_case_convention_pascal, false()),
-        ),
-    )
+    return (_def("typeVariableReference")
+        .doc("Reference a type variable as a Python expression")
+        .to(_local("variableReference")(util_case_convention_pascal, false())))
 
 
 def _encode_constant_for_field_name():
     """Generate a constant name for a field definition."""
-    return _def(
-        "encodeConstantForFieldName",
-        doc(
-            "Generate a constant name for a field definition",
-            lambdas(
-                ["env", "tname", "fname"],
-                wrap(
+    return (_def("encodeConstantForFieldName")
+        .doc("Generate a constant name for a field definition")
+        .lam("env").lam("tname").lam("fname")
+        .to(
+            wrap(
                     _PY_NAME,
                     formatting_convert_case(
                         util_case_convention_camel,
                         util_case_convention_upper_snake,
                         Strings.intercalate(string("_"), Strings.split_on(string("-"), Core.un_name(var("fname")))),
                     ),
-                ),
-            ),
-        ),
-    )
+                )))
 
 
 def _encode_constant_for_type_name():
     """Generate a constant name for a type definition (always TYPE_)."""
-    return _def(
-        "encodeConstantForTypeName",
-        doc(
-            "Generate a constant name for a type definition",
-            lambdas(
-                ["env", "tname"],
-                wrap(_PY_NAME, string("TYPE_")),
-            ),
-        ),
-    )
+    return (_def("encodeConstantForTypeName")
+        .doc("Generate a constant name for a type definition")
+        .lam("env").lam("tname")
+        .to(wrap(_PY_NAME, string("TYPE_"))))
 
 
 def _variable_reference():
@@ -492,43 +438,31 @@ def _variable_reference():
             var("unquoted"),
         ),
     )
-    return _def(
-        "variableReference",
-        doc(
-            "Reference a variable as a Python expression",
-            lambdas(["conv", "quoted", "env", "name"], body),
-        ),
-    )
+    return (_def("variableReference")
+        .doc("Reference a variable as a Python expression")
+        .lam("conv").lam("quoted").lam("env").lam("name")
+        .to(body))
 
 
 def _variant_name():
     """Generate a variant name by combining type name and field name."""
-    return _def(
-        "variantName",
-        doc(
-            "Generate a variant name from type name and field name",
-            lambdas(
-                ["isQualified", "env", "tname", "fname"],
-                _local("encodeName")(var("isQualified"), util_case_convention_pascal, var("env"), wrap("hydra.core.Name",
+    return (_def("variantName")
+        .doc("Generate a variant name from type name and field name")
+        .lam("isQualified").lam("env").lam("tname").lam("fname")
+        .to(
+            _local("encodeName")(var("isQualified"), util_case_convention_pascal, var("env"), wrap("hydra.core.Name",
                         Strings.cat2(
                             Core.un_name(var("tname")),
                             formatting_capitalize(Core.un_name(var("fname"))),
                         ),
-                    )),
-            ),
-        ),
-    )
+                    ))))
 
 
 def _use_future_annotations():
     """Whether to use __future__ annotations for forward references."""
-    return _def(
-        "useFutureAnnotations",
-        doc(
-            "Whether to use __future__ annotations for forward references",
-            true(),
-        ),
-    )
+    return (_def("useFutureAnnotations")
+        .doc("Whether to use __future__ annotations for forward references")
+        .to(true()))
 
 
 # ----------------------------------------------------------------------

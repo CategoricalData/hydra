@@ -91,13 +91,10 @@ def _annotated_expression():
                         _local("doubleQuotedString")(var("c")),
                     ]))),
         ),)
-    return _def(
-        "annotatedExpression",
-        doc(
-            "Annotate an expression with an optional comment using Annotated[]",
-            lambdas(["mcomment", "expr"], body),
-        ),
-    )
+    return (_def("annotatedExpression")
+        .doc("Annotate an expression with an optional comment using Annotated[]")
+        .lam("mcomment").lam("expr")
+        .to(body))
 
 
 def _annotated_statement():
@@ -107,13 +104,10 @@ def _annotated_statement():
                 PySyn.annotated_statement(var("c"), var("stmt")),
             ),
         ),)
-    return _def(
-        "annotatedStatement",
-        doc(
-            "Annotate a statement with an optional comment",
-            lambdas(["mcomment", "stmt"], body),
-        ),
-    )
+    return (_def("annotatedStatement")
+        .doc("Annotate a statement with an optional comment")
+        .lam("mcomment").lam("stmt")
+        .to(body))
 
 
 def _assignment():
@@ -123,46 +117,34 @@ def _assignment():
                 var("rhs"),
             ),
         ))
-    return _def(
-        "assignment",
-        doc(
-            "Create an assignment statement from name and annotated rhs",
-            lambdas(["name", "rhs"], body),
-        ),
-    )
+    return (_def("assignment")
+        .doc("Create an assignment statement from name and annotated rhs")
+        .lam("name").lam("rhs")
+        .to(body))
 
 
 def _assignment_statement():
     body = _local("assignment")(var("name"), _local("pyExpressionToPyAnnotatedRhs")(var("expr")))
-    return _def(
-        "assignmentStatement",
-        doc(
-            "Create an assignment statement from name and expression",
-            lambdas(["name", "expr"], body),
-        ),
-    )
+    return (_def("assignmentStatement")
+        .doc("Create an assignment statement from name and expression")
+        .lam("name").lam("expr")
+        .to(body))
 
 
 def _cast_to():
     body = _local("functionCall")(_local("pyNameToPyPrimary")(_py_name("cast")), list_([var("pytype"), var("pyexpr")]))
-    return _def(
-        "castTo",
-        doc(
-            "Create a cast expression: cast(type, expr)",
-            lambdas(["pytype", "pyexpr"], body),
-        ),
-    )
+    return (_def("castTo")
+        .doc("Create a cast expression: cast(type, expr)")
+        .lam("pytype").lam("pyexpr")
+        .to(body))
 
 
 def _comment_statement():
     body = _local("pyExpressionToPyStatement")(_local("tripleQuotedString")(var("s")))
-    return _def(
-        "commentStatement",
-        doc(
-            "Create a comment statement (triple-quoted string)",
-            lambdas(["s"], body),
-        ),
-    )
+    return (_def("commentStatement")
+        .doc("Create a comment statement (triple-quoted string)")
+        .lam("s")
+        .to(body))
 
 
 def _short_circuit_to_nothing(predicates_and_else):
@@ -219,13 +201,10 @@ def _decode_py_comparison_to_py_await_primary():
             ),
         ]),
     )
-    return _def(
-        "decodePyComparisonToPyAwaitPrimary",
-        doc(
-            "Decode a Comparison to a Primary if possible",
-            lambdas(["c"], body),
-        ),
-    )
+    return (_def("decodePyComparisonToPyAwaitPrimary")
+        .doc("Decode a Comparison to a Primary if possible")
+        .lam("c")
+        .to(body))
 
 
 def _decode_py_conjunction_to_py_primary():
@@ -242,13 +221,10 @@ def _decode_py_conjunction_to_py_primary():
             nothing(),
         ),
     )
-    return _def(
-        "decodePyConjunctionToPyPrimary",
-        doc(
-            "Decode a Conjunction to a Primary if possible",
-            lambdas(["c"], body),
-        ),
-    )
+    return (_def("decodePyConjunctionToPyPrimary")
+        .doc("Decode a Conjunction to a Primary if possible")
+        .lam("c")
+        .to(body))
 
 
 def _decode_py_expression_to_py_primary():
@@ -286,13 +262,10 @@ def _decode_py_expression_to_py_primary():
         ),
         var("e"),
     )
-    return _def(
-        "decodePyExpressionToPyPrimary",
-        doc(
-            "Decode an Expression to a Primary if possible",
-            lambdas(["e"], body),
-        ),
-    )
+    return (_def("decodePyExpressionToPyPrimary")
+        .doc("Decode an Expression to a Primary if possible")
+        .lam("e")
+        .to(body))
 
 
 def _decode_py_inversion_to_py_primary():
@@ -310,13 +283,10 @@ def _decode_py_inversion_to_py_primary():
         ),
         var("i"),
     )
-    return _def(
-        "decodePyInversionToPyPrimary",
-        doc(
-            "Decode an Inversion to a Primary if possible",
-            lambdas(["i"], body),
-        ),
-    )
+    return (_def("decodePyInversionToPyPrimary")
+        .doc("Decode an Inversion to a Primary if possible")
+        .lam("i")
+        .to(body))
 
 
 def _decode_py_power_to_py_primary():
@@ -332,13 +302,10 @@ def _decode_py_power_to_py_primary():
             just(var("prim")),
         ),
     )
-    return _def(
-        "decodePyPowerToPyPrimary",
-        doc(
-            "Decode a Power to a Primary if possible",
-            lambdas(["p"], body),
-        ),
-    )
+    return (_def("decodePyPowerToPyPrimary")
+        .doc("Decode a Power to a Primary if possible")
+        .lam("p")
+        .to(body))
 
 
 def _dotted_assignment_statement():
@@ -370,24 +337,18 @@ def _dotted_assignment_statement():
                 ),
             )),
     )
-    return _def(
-        "dottedAssignmentStatement",
-        doc(
-            "Create a dotted assignment statement: obj.attr = expr",
-            lambdas(["obj", "attr", "expr"], body),
-        ),
-    )
+    return (_def("dottedAssignmentStatement")
+        .doc("Create a dotted assignment statement: obj.attr = expr")
+        .lam("obj").lam("attr").lam("expr")
+        .to(body))
 
 
 def _double_quoted_string():
     body = _local("stringToPyExpression")(PySyn.quote_style_double, var("s"))
-    return _def(
-        "doubleQuotedString",
-        doc(
-            "Create a double-quoted string expression",
-            lambdas(["s"], body),
-        ),
-    )
+    return (_def("doubleQuotedString")
+        .doc("Create a double-quoted string expression")
+        .lam("s")
+        .to(body))
 
 
 def _find_namespaces():
@@ -418,24 +379,18 @@ def _find_namespaces():
             ),
         ),
     )
-    return _def(
-        "findNamespaces",
-        doc(
-            "Find all namespaces referenced by a list of definitions, plus the core namespace",
-            lambdas(["focusNs", "defs"], body),
-        ),
-    )
+    return (_def("findNamespaces")
+        .doc("Find all namespaces referenced by a list of definitions, plus the core namespace")
+        .lam("focusNs").lam("defs")
+        .to(body))
 
 
 def _function_call():
     body = _local("pyPrimaryToPyExpression")(_local("primaryWithRhs")(var("func"), PySyn.primary_rhs_call(_local("pyExpressionsToPyArgs")(var("args")))))
-    return _def(
-        "functionCall",
-        doc(
-            "Create a function call expression",
-            lambdas(["func", "args"], body),
-        ),
-    )
+    return (_def("functionCall")
+        .doc("Create a function call expression")
+        .lam("func").lam("args")
+        .to(body))
 
 
 def _get_item_params():
@@ -445,7 +400,8 @@ def _get_item_params():
             PyDsl.param_no_default_simple(PyDsl.param_simple(_py_name("item"))),
         ])),
     )
-    return _def("getItemParams", body)
+    return (_def("getItemParams")
+        .to(body))
 
 
 def _indented_block():
@@ -476,24 +432,18 @@ def _indented_block():
             PySyn.block_indented(var("groups")),
         ),
     )
-    return _def(
-        "indentedBlock",
-        doc(
-            "Create an indented block with optional comment",
-            lambdas(["mcomment", "stmts"], body),
-        ),
-    )
+    return (_def("indentedBlock")
+        .doc("Create an indented block with optional comment")
+        .lam("mcomment").lam("stmts")
+        .to(body))
 
 
 def _name_and_params():
     body = _local("primaryAndParams")(_local("pyNameToPyPrimary")(var("pyName")), var("params"))
-    return _def(
-        "nameAndParams",
-        doc(
-            "Create a name with parameters",
-            lambdas(["pyName", "params"], body),
-        ),
-    )
+    return (_def("nameAndParams")
+        .doc("Create a name with parameters")
+        .lam("pyName").lam("params")
+        .to(body))
 
 
 def _newtype_statement():
@@ -501,13 +451,10 @@ def _newtype_statement():
                     _local("doubleQuotedString")(PySyn.un_name(var("name"))),
                     var("expr"),
                 ]))))
-    return _def(
-        "newtypeStatement",
-        doc(
-            "Create a NewType statement",
-            lambdas(["name", "mcomment", "expr"], body),
-        ),
-    )
+    return (_def("newtypeStatement")
+        .doc("Create a NewType statement")
+        .lam("name").lam("mcomment").lam("expr")
+        .to(body))
 
 
 def _or_expression():
@@ -538,24 +485,18 @@ def _or_expression():
         ],
         _local("pyBitwiseOrToPyExpression")(var("build")(nothing(), var("prims"))),
     )
-    return _def(
-        "orExpression",
-        doc(
-            "Build an or-expression from multiple primaries",
-            lambdas(["prims"], body),
-        ),
-    )
+    return (_def("orExpression")
+        .doc("Build an or-expression from multiple primaries")
+        .lam("prims")
+        .to(body))
 
 
 def _primary_and_params():
     body = _local("pyPrimaryToPyExpression")(_local("primaryWithExpressionSlices")(var("prim"), var("params")))
-    return _def(
-        "primaryAndParams",
-        doc(
-            "Create a primary with parameters (subscript)",
-            lambdas(["prim", "params"], body),
-        ),
-    )
+    return (_def("primaryAndParams")
+        .doc("Create a primary with parameters (subscript)")
+        .lam("prim").lam("params")
+        .to(body))
 
 
 def _primary_with_expression_slices():
@@ -577,37 +518,28 @@ def _primary_with_expression_slices():
             Lists.uncons(var("exprs")),
         ),
     )
-    return _def(
-        "primaryWithExpressionSlices",
-        doc(
-            "Create a Primary with expression slices",
-            lambdas(["prim", "exprs"], body),
-        ),
-    )
+    return (_def("primaryWithExpressionSlices")
+        .doc("Create a Primary with expression slices")
+        .lam("prim").lam("exprs")
+        .to(body))
 
 
 def _primary_with_rhs():
     body = PySyn.primary_compound(
         PySyn.primary_with_rhs(var("prim"), var("rhs")),
     )
-    return _def(
-        "primaryWithRhs",
-        doc(
-            "Combine a Primary with a PrimaryRhs",
-            lambdas(["prim", "rhs"], body),
-        ),
-    )
+    return (_def("primaryWithRhs")
+        .doc("Combine a Primary with a PrimaryRhs")
+        .lam("prim").lam("rhs")
+        .to(body))
 
 
 def _primary_with_slices():
     body = _local("primaryWithRhs")(var("prim"), PySyn.primary_rhs_slices(PySyn.slices(var("first"), var("rest"))))
-    return _def(
-        "primaryWithSlices",
-        doc(
-            "Create a Primary with slices",
-            lambdas(["prim", "first", "rest"], body),
-        ),
-    )
+    return (_def("primaryWithSlices")
+        .doc("Create a Primary with slices")
+        .lam("prim").lam("first").lam("rest")
+        .to(body))
 
 
 def _project_from_expression():
@@ -626,35 +558,26 @@ def _project_from_expression():
                 ),
             )),
     )
-    return _def(
-        "projectFromExpression",
-        doc(
-            "Project a field from an expression",
-            lambdas(["exp", "name"], body),
-        ),
-    )
+    return (_def("projectFromExpression")
+        .doc("Project a field from an expression")
+        .lam("exp").lam("name")
+        .to(body))
 
 
 def _py_assignment_to_py_statement():
     body = _local("pySimpleStatementToPyStatement")(PySyn.simple_statement_assignment(var("a")))
-    return _def(
-        "pyAssignmentToPyStatement",
-        doc(
-            "Convert an Assignment to a Statement",
-            lambdas(["a"], body),
-        ),
-    )
+    return (_def("pyAssignmentToPyStatement")
+        .doc("Convert an Assignment to a Statement")
+        .lam("a")
+        .to(body))
 
 
 def _py_atom_to_py_expression():
     body = _local("pyPrimaryToPyExpression")(PySyn.primary_simple(var("atom")))
-    return _def(
-        "pyAtomToPyExpression",
-        doc(
-            "Convert an Atom to an Expression",
-            lambdas(["atom"], body),
-        ),
-    )
+    return (_def("pyAtomToPyExpression")
+        .doc("Convert an Atom to an Expression")
+        .lam("atom")
+        .to(body))
 
 
 def _py_bitwise_or_to_py_conjunction():
@@ -663,61 +586,46 @@ def _py_bitwise_or_to_py_conjunction():
             PySyn.comparison(var("bor"), list_([])),
         ),
     ]))
-    return _def(
-        "pyBitwiseOrToPyConjunction",
-        doc(
-            "Convert a BitwiseOr to a Conjunction",
-            lambdas(["bor"], body),
-        ),
-    )
+    return (_def("pyBitwiseOrToPyConjunction")
+        .doc("Convert a BitwiseOr to a Conjunction")
+        .lam("bor")
+        .to(body))
 
 
 def _py_bitwise_or_to_py_expression():
     body = _local("pyConjunctionToPyExpression")(_local("pyBitwiseOrToPyConjunction")(var("bor")))
-    return _def(
-        "pyBitwiseOrToPyExpression",
-        doc(
-            "Convert a BitwiseOr to an Expression",
-            lambdas(["bor"], body),
-        ),
-    )
+    return (_def("pyBitwiseOrToPyExpression")
+        .doc("Convert a BitwiseOr to an Expression")
+        .lam("bor")
+        .to(body))
 
 
 def _py_class_definition_to_py_statement():
     body = PySyn.statement_compound(PySyn.compound_statement_class_def(var("cd")))
-    return _def(
-        "pyClassDefinitionToPyStatement",
-        doc(
-            "Convert a ClassDefinition to a Statement",
-            lambdas(["cd"], body),
-        ),
-    )
+    return (_def("pyClassDefinitionToPyStatement")
+        .doc("Convert a ClassDefinition to a Statement")
+        .lam("cd")
+        .to(body))
 
 
 def _py_closed_pattern_to_py_patterns():
     body = PySyn.patterns_pattern(
         PySyn.pattern_or(PySyn.or_pattern(list_([var("p")]))),
     )
-    return _def(
-        "pyClosedPatternToPyPatterns",
-        doc(
-            "Convert a ClosedPattern to Patterns",
-            lambdas(["p"], body),
-        ),
-    )
+    return (_def("pyClosedPatternToPyPatterns")
+        .doc("Convert a ClosedPattern to Patterns")
+        .lam("p")
+        .to(body))
 
 
 def _py_conjunction_to_py_expression():
     body = PySyn.expression_simple(
         PySyn.disjunction(list_([var("conj")])),
     )
-    return _def(
-        "pyConjunctionToPyExpression",
-        doc(
-            "Convert a Conjunction to an Expression",
-            lambdas(["conj"], body),
-        ),
-    )
+    return (_def("pyConjunctionToPyExpression")
+        .doc("Convert a Conjunction to an Expression")
+        .lam("conj")
+        .to(body))
 
 
 def _py_expression_to_bitwise_or():
@@ -728,13 +636,10 @@ def _py_expression_to_bitwise_or():
             ),
         ),
     )
-    return _def(
-        "pyExpressionToBitwiseOr",
-        doc(
-            "Convert an Expression to a BitwiseOr, wrapping in parens if needed",
-            lambdas(["e"], body),
-        ),
-    )
+    return (_def("pyExpressionToBitwiseOr")
+        .doc("Convert an Expression to a BitwiseOr, wrapping in parens if needed")
+        .lam("e")
+        .to(body))
 
 
 def _py_expression_to_disjunction():
@@ -748,26 +653,20 @@ def _py_expression_to_disjunction():
             field("simple",
                 lam("disj", var("disj")),
             ))
-    return _def(
-        "pyExpressionToDisjunction",
-        doc(
-            "Convert an Expression to a Disjunction, wrapping in parens if needed",
-            lambdas(["e"], body),
-        ),
-    )
+    return (_def("pyExpressionToDisjunction")
+        .doc("Convert an Expression to a Disjunction, wrapping in parens if needed")
+        .lam("e")
+        .to(body))
 
 
 def _py_expression_to_py_annotated_rhs():
     body = PySyn.annotated_rhs_star(
         list_([PySyn.star_expression_simple(var("expr"))]),
     )
-    return _def(
-        "pyExpressionToPyAnnotatedRhs",
-        doc(
-            "Convert an Expression to an AnnotatedRhs",
-            lambdas(["expr"], body),
-        ),
-    )
+    return (_def("pyExpressionToPyAnnotatedRhs")
+        .doc("Convert an Expression to an AnnotatedRhs")
+        .lam("expr")
+        .to(body))
 
 
 def _py_expression_to_py_primary():
@@ -776,61 +675,46 @@ def _py_expression_to_py_primary():
                 PySyn.group_expression(PySyn.named_expression_simple(var("e"))),
             ),
         ), lam("prim", var("prim")),)
-    return _def(
-        "pyExpressionToPyPrimary",
-        doc(
-            "Extracts the primary from an expression, or wraps it in parentheses if the expression does not contain a primary",
-            lambdas(["e"], body),
-        ),
-    )
+    return (_def("pyExpressionToPyPrimary")
+        .doc("Extracts the primary from an expression, or wraps it in parentheses if the expression does not contain a primary")
+        .lam("e")
+        .to(body))
 
 
 def _py_expression_to_py_simple_statement():
     body = PySyn.simple_statement_star_expressions(
         list_([PySyn.star_expression_simple(var("expr"))]),
     )
-    return _def(
-        "pyExpressionToPySimpleStatement",
-        doc(
-            "Convert an Expression to a SimpleStatement (as star expressions)",
-            lambdas(["expr"], body),
-        ),
-    )
+    return (_def("pyExpressionToPySimpleStatement")
+        .doc("Convert an Expression to a SimpleStatement (as star expressions)")
+        .lam("expr")
+        .to(body))
 
 
 def _py_expression_to_py_slice():
     body = PySyn.slice_named(PySyn.named_expression_simple(var("expr")))
-    return _def(
-        "pyExpressionToPySlice",
-        doc(
-            "Convert an Expression to a Slice",
-            lambdas(["expr"], body),
-        ),
-    )
+    return (_def("pyExpressionToPySlice")
+        .doc("Convert an Expression to a Slice")
+        .lam("expr")
+        .to(body))
 
 
 def _py_expression_to_py_star_named_expression():
     body = PySyn.star_named_expression_simple(
         PySyn.named_expression_simple(var("expr")),
     )
-    return _def(
-        "pyExpressionToPyStarNamedExpression",
-        doc(
-            "Convert an Expression to a StarNamedExpression",
-            lambdas(["expr"], body),
-        ),
-    )
+    return (_def("pyExpressionToPyStarNamedExpression")
+        .doc("Convert an Expression to a StarNamedExpression")
+        .lam("expr")
+        .to(body))
 
 
 def _py_expression_to_py_statement():
     body = _local("pySimpleStatementToPyStatement")(_local("pyExpressionToPySimpleStatement")(var("expr")))
-    return _def(
-        "pyExpressionToPyStatement",
-        doc(
-            "Convert an Expression to a Statement",
-            lambdas(["expr"], body),
-        ),
-    )
+    return (_def("pyExpressionToPyStatement")
+        .doc("Convert an Expression to a Statement")
+        .lam("expr")
+        .to(body))
 
 
 def _py_expressions_to_py_args():
@@ -840,163 +724,120 @@ def _py_expressions_to_py_args():
             var("exprs"),
         ),
     )
-    return _def(
-        "pyExpressionsToPyArgs",
-        doc(
-            "Convert a list of Expressions to Args",
-            lambdas(["exprs"], body),
-        ),
-    )
+    return (_def("pyExpressionsToPyArgs")
+        .doc("Convert a list of Expressions to Args")
+        .lam("exprs")
+        .to(body))
 
 
 def _py_list():
     body = PyDsl.py_list(
         Lists.map(_local("pyExpressionToPyStarNamedExpression"), var("exprs")),
     )
-    return _def(
-        "pyList",
-        doc(
-            "Create a Python list from expressions",
-            lambdas(["exprs"], body),
-        ),
-    )
+    return (_def("pyList")
+        .doc("Create a Python list from expressions")
+        .lam("exprs")
+        .to(body))
 
 
 def _py_name_to_py_expression():
     body = _local("pyPrimaryToPyExpression")(_local("pyNameToPyPrimary")(var("name")))
-    return _def(
-        "pyNameToPyExpression",
-        doc(
-            "Convert a Name to an Expression",
-            lambdas(["name"], body),
-        ),
-    )
+    return (_def("pyNameToPyExpression")
+        .doc("Convert a Name to an Expression")
+        .lam("name")
+        .to(body))
 
 
 def _py_name_to_py_named_expression():
     body = PySyn.named_expression_simple(
         _local("pyNameToPyExpression")(var("name")),
     )
-    return _def(
-        "pyNameToPyNamedExpression",
-        doc(
-            "Convert a Name to a NamedExpression",
-            lambdas(["name"], body),
-        ),
-    )
+    return (_def("pyNameToPyNamedExpression")
+        .doc("Convert a Name to a NamedExpression")
+        .lam("name")
+        .to(body))
 
 
 def _py_name_to_py_primary():
     body = PySyn.primary_simple(PySyn.atom_name(var("name")))
-    return _def(
-        "pyNameToPyPrimary",
-        doc(
-            "Convert a Name to a Primary (simple atom)",
-            lambdas(["name"], body),
-        ),
-    )
+    return (_def("pyNameToPyPrimary")
+        .doc("Convert a Name to a Primary (simple atom)")
+        .lam("name")
+        .to(body))
 
 
 def _py_name_to_py_star_target():
     body = PySyn.star_target_unstarred(
         PySyn.target_with_star_atom_atom(PySyn.star_atom_name(var("name"))),
     )
-    return _def(
-        "pyNameToPyStarTarget",
-        doc(
-            "Convert a Name to a StarTarget",
-            lambdas(["name"], body),
-        ),
-    )
+    return (_def("pyNameToPyStarTarget")
+        .doc("Convert a Name to a StarTarget")
+        .lam("name")
+        .to(body))
 
 
 def _py_name_to_py_type_parameter():
     body = PySyn.type_parameter_simple(
         PyDsl.simple_type_parameter_simple(var("name")),
     )
-    return _def(
-        "pyNameToPyTypeParameter",
-        doc(
-            "Convert a Name to a TypeParameter",
-            lambdas(["name"], body),
-        ),
-    )
+    return (_def("pyNameToPyTypeParameter")
+        .doc("Convert a Name to a TypeParameter")
+        .lam("name")
+        .to(body))
 
 
 def _py_none():
-    return _def(
-        "pyNone",
-        doc(
-            "The Python None value as a Name",
-            _py_name("None"),
-        ),
-    )
+    return (_def("pyNone")
+        .doc("The Python None value as a Name")
+        .to(_py_name("None")))
 
 
 def _py_primary_to_py_bitwise_or():
     body = PyDsl.py_primary_to_py_bitwise_or(var("prim"))
-    return _def(
-        "pyPrimaryToPyBitwiseOr",
-        doc(
-            "Convert a Primary to a BitwiseOr",
-            lambdas(["prim"], body),
-        ),
-    )
+    return (_def("pyPrimaryToPyBitwiseOr")
+        .doc("Convert a Primary to a BitwiseOr")
+        .lam("prim")
+        .to(body))
 
 
 def _py_primary_to_py_bitwise_xor():
     body = PyDsl.py_primary_to_py_bitwise_xor(var("prim"))
-    return _def(
-        "pyPrimaryToPyBitwiseXor",
-        doc(
-            "Convert a Primary to a BitwiseXor",
-            lambdas(["prim"], body),
-        ),
-    )
+    return (_def("pyPrimaryToPyBitwiseXor")
+        .doc("Convert a Primary to a BitwiseXor")
+        .lam("prim")
+        .to(body))
 
 
 def _py_primary_to_py_conjunction():
     body = _local("pyBitwiseOrToPyConjunction")(_local("pyPrimaryToPyBitwiseOr")(var("prim")))
-    return _def(
-        "pyPrimaryToPyConjunction",
-        doc(
-            "Convert a Primary to a Conjunction",
-            lambdas(["prim"], body),
-        ),
-    )
+    return (_def("pyPrimaryToPyConjunction")
+        .doc("Convert a Primary to a Conjunction")
+        .lam("prim")
+        .to(body))
 
 
 def _py_primary_to_py_expression():
     body = _local("pyConjunctionToPyExpression")(_local("pyPrimaryToPyConjunction")(var("prim")))
-    return _def(
-        "pyPrimaryToPyExpression",
-        doc(
-            "Convert a Primary to an Expression",
-            lambdas(["prim"], body),
-        ),
-    )
+    return (_def("pyPrimaryToPyExpression")
+        .doc("Convert a Primary to an Expression")
+        .lam("prim")
+        .to(body))
 
 
 def _py_primary_to_py_slice():
     body = _local("pyExpressionToPySlice")(_local("pyPrimaryToPyExpression")(var("prim")))
-    return _def(
-        "pyPrimaryToPySlice",
-        doc(
-            "Convert a Primary to a Slice",
-            lambdas(["prim"], body),
-        ),
-    )
+    return (_def("pyPrimaryToPySlice")
+        .doc("Convert a Primary to a Slice")
+        .lam("prim")
+        .to(body))
 
 
 def _py_simple_statement_to_py_statement():
     body = PySyn.statement_simple(list_([var("s")]))
-    return _def(
-        "pySimpleStatementToPyStatement",
-        doc(
-            "Convert a SimpleStatement to a Statement",
-            lambdas(["s"], body),
-        ),
-    )
+    return (_def("pySimpleStatementToPyStatement")
+        .doc("Convert a SimpleStatement to a Statement")
+        .lam("s")
+        .to(body))
 
 
 def _raise_assertion_error():
@@ -1008,13 +849,10 @@ def _raise_assertion_error():
                 ),
             )),
         ))
-    return _def(
-        "raiseAssertionError",
-        doc(
-            "Create a raise AssertionError statement",
-            lambdas(["msg"], body),
-        ),
-    )
+    return (_def("raiseAssertionError")
+        .doc("Create a raise AssertionError statement")
+        .lam("msg")
+        .to(body))
 
 
 def _raise_type_error():
@@ -1026,13 +864,10 @@ def _raise_type_error():
                 ),
             )),
         ))
-    return _def(
-        "raiseTypeError",
-        doc(
-            "Create a raise TypeError statement",
-            lambdas(["msg"], body),
-        ),
-    )
+    return (_def("raiseTypeError")
+        .doc("Create a raise TypeError statement")
+        .lam("msg")
+        .to(body))
 
 
 def _return_single():
@@ -1041,13 +876,10 @@ def _return_single():
                 PySyn.star_expression_simple(var("expr")),
             ])),
         ))
-    return _def(
-        "returnSingle",
-        doc(
-            "Create a return statement with a single expression",
-            lambdas(["expr"], body),
-        ),
-    )
+    return (_def("returnSingle")
+        .doc("Create a return statement with a single expression")
+        .lam("expr")
+        .to(body))
 
 
 def _self_only_params():
@@ -1056,7 +888,8 @@ def _self_only_params():
             PyDsl.param_no_default_simple(PyDsl.param_simple(_py_name("self"))),
         ])),
     )
-    return _def("selfOnlyParams", body)
+    return (_def("selfOnlyParams")
+        .to(body))
 
 
 def _self_other_params():
@@ -1066,42 +899,33 @@ def _self_other_params():
             PyDsl.param_no_default_simple(PyDsl.param_simple(_py_name("other"))),
         ])),
     )
-    return _def("selfOtherParams", body)
+    return (_def("selfOtherParams")
+        .to(body))
 
 
 def _single_quoted_string():
     body = _local("stringToPyExpression")(PySyn.quote_style_single, var("s"))
-    return _def(
-        "singleQuotedString",
-        doc(
-            "Create a single-quoted string expression",
-            lambdas(["s"], body),
-        ),
-    )
+    return (_def("singleQuotedString")
+        .doc("Create a single-quoted string expression")
+        .lam("s")
+        .to(body))
 
 
 def _string_to_py_expression():
     body = _local("pyAtomToPyExpression")(PySyn.atom_string(PyDsl.string_(var("s"), var("style"))))
-    return _def(
-        "stringToPyExpression",
-        doc(
-            "Create a string expression with a given quote style",
-            lambdas(["style", "s"], body),
-        ),
-    )
+    return (_def("stringToPyExpression")
+        .doc("Create a string expression with a given quote style")
+        .lam("style").lam("s")
+        .to(body))
 
 
 def _target_python_version():
     body = inject_unit("hydra.python.environment.PythonVersion",
         Name("python310"),
     )
-    return _def(
-        "targetPythonVersion",
-        doc(
-            "Current target Python version for code generation",
-            body,
-        ),
-    )
+    return (_def("targetPythonVersion")
+        .doc("Current target Python version for code generation")
+        .to(body))
 
 
 def _triple_quoted_string():
@@ -1114,15 +938,14 @@ def _triple_quoted_string():
             )
         )
     )
-    return _def(
-        "tripleQuotedString",
-        doc(
+    return (_def("tripleQuotedString")
+        .to(
+            doc(
             "Create a raw triple-double-quoted string expression (Python docstring convention). "
             "Raw-prefixed so embedded backslashes (e.g. lambda notation `\\x.e`) aren't interpreted "
             "as escape sequences by Python's string parser.",
             lambdas(["s"], body),
-        ),
-    )
+        )))
 
 
 def _type_alias_statement():
@@ -1133,13 +956,10 @@ def _type_alias_statement():
                     var("tyexpr"),
                 ),
             )))
-    return _def(
-        "typeAliasStatement",
-        doc(
-            "Generate a type alias statement using PEP 695 syntax (Python 3.12+)",
-            lambdas(["name", "tparams", "mcomment", "tyexpr"], body),
-        ),
-    )
+    return (_def("typeAliasStatement")
+        .doc("Generate a type alias statement using PEP 695 syntax (Python 3.12+)")
+        .lam("name").lam("tparams").lam("mcomment").lam("tyexpr")
+        .to(body))
 
 
 def _type_alias_statement_310():
@@ -1159,13 +979,10 @@ def _type_alias_statement_310():
                     ),
                 ))),
     )
-    return _def(
-        "typeAliasStatement310",
-        doc(
-            "Generate a type alias statement using Python 3.10-compatible syntax: Name: TypeAlias = \"TypeExpression\"",
-            lambdas(["name", "_tparams", "mcomment", "tyexpr"], inner),
-        ),
-    )
+    return (_def("typeAliasStatement310")
+        .doc("Generate a type alias statement using Python 3.10-compatible syntax: Name: TypeAlias = \"TypeExpression\"")
+        .lam("name").lam("_tparams").lam("mcomment").lam("tyexpr")
+        .to(inner))
 
 
 def _union_type_class_statements_310():
@@ -1250,13 +1067,10 @@ def _union_type_class_statements_310():
             var("unionClass"),
         ]),
     )
-    return _def(
-        "unionTypeClassStatements310",
-        doc(
-            "Generate a subscriptable union class for Python 3.10",
-            lambdas(["name", "mcomment", "tyexpr", "extraStmts"], body),
-        ),
-    )
+    return (_def("unionTypeClassStatements310")
+        .doc("Generate a subscriptable union class for Python 3.10")
+        .lam("name").lam("mcomment").lam("tyexpr").lam("extraStmts")
+        .to(body))
 
 
 def _py_name_concat3(prefix_str, var_name, suffix_str):
@@ -1336,13 +1150,10 @@ def _unit_variant_methods():
             var("hashMethod"),
         ]),
     )
-    return _def(
-        "unitVariantMethods",
-        doc(
-            "Generate __slots__, __eq__, and __hash__ methods for unit-typed union variants",
-            lambdas(["className"], body),
-        ),
-    )
+    return (_def("unitVariantMethods")
+        .doc("Generate __slots__, __eq__, and __hash__ methods for unit-typed union variants")
+        .lam("className")
+        .to(body))
 
 
 def _build_module() -> Module:
