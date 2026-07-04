@@ -28,11 +28,50 @@
 import type { InferenceContext } from "../../../../main/typescript/hydra/typing.js";
 import type { Graph, Primitive } from "../../../../main/typescript/hydra/graph.js";
 import type { Name, Term, Type, TypeScheme } from "../../../../main/typescript/hydra/core.js";
+import type { Error as HydraError } from "../../../../main/typescript/hydra/errors.js";
+import type { Either } from "../../../../main/typescript/hydra/runtime.js";
 import * as maps from "../../../../main/typescript/hydra/overlay/typescript/lib/maps.js";
 import * as sets from "../../../../main/typescript/hydra/overlay/typescript/lib/sets.js";
+import * as lexical from "../../../../main/typescript/hydra/lexical.js";
+import { reduceTerm } from "../../../../main/typescript/hydra/reduction.js";
 
 import { standardPrimitives } from "../../../../main/typescript/hydra/overlay/typescript/lib/libraries.js";
 import { loadAll } from "./jsonBindings.js";
+
+// When true, use each primitive's defaultImplementation (via reduceTerm) instead of its
+// native implementation. Activated via HYDRA_DEFAULT_IMPLS=1. Mirrors the same flag in the
+// Java/Python/Scala test runners; see overlay/scala/hydra-kernel/src/test/scala/hydra/TestSuiteRunner.scala.
+const USE_DEFAULT_IMPLS: boolean = process.env.HYDRA_DEFAULT_IMPLS === "1";
+
+const emptyContext: InferenceContext = lexical.emptyInferenceContext as InferenceContext;
+
+// Patch a primitives map so that each primitive with a defaultImplementation uses
+// reduceTerm on that term instead of the native implementation. Mirrors Scala's
+// patchWithDefaultImpls (overlay/scala/hydra-kernel/src/test/scala/hydra/TestSuiteRunner.scala).
+const patchWithDefaultImpls = (
+  primitives: ReadonlyMap<Name, Primitive>,
+  nativeGraph: Graph,
+): ReadonlyMap<Name, Primitive> =>
+  maps.fromList(
+    maps.toList(primitives).map(([name, prim]) => {
+      const defImpl = prim.definition.defaultImplementation;
+      if (defImpl.tag === "none") return [name, prim] as const;
+      const implTerm = defImpl.value;
+      const patched: Primitive = {
+        ...prim,
+        implementation: (_g: Graph, args: readonly Term[]) => {
+          const applied = args.reduce<Term>(
+            (fn, arg) => ({ tag: "application", value: { function_: fn, argument: arg } } as never),
+            implTerm,
+          );
+          return (reduceTerm as never as (
+            cx: InferenceContext, g: Graph, eager: boolean, t: Term,
+          ) => Either<HydraError, Term>)(emptyContext, nativeGraph, true, applied);
+        },
+      };
+      return [name, patched] as const;
+    }),
+  );
 
 // An empty InferenceContext value. No side effects.
 export const testContext: InferenceContext = {
@@ -113,7 +152,7 @@ const buildGraph = (testTypes: ReadonlyMap<Name, Type>, testTerms: ReadonlyMap<N
     maps.union(wrappedTestTypes, _cachedKernelTypes);
   // boundTerms: per-test overrides + kernel JSON bindings.
   const mergedTerms: ReadonlyMap<Name, Term> = maps.union(testTerms, _cachedKernelTerms);
-  return {
+  const nativeGraph: Graph = {
     boundTerms: mergedTerms,
     boundTypes: wrappedTestTypes,
     classConstraints: maps.empty,
@@ -123,6 +162,8 @@ const buildGraph = (testTypes: ReadonlyMap<Name, Type>, testTerms: ReadonlyMap<N
     schemaTypes: schemaTypes,
     typeVariables: sets.empty,
   };
+  if (!USE_DEFAULT_IMPLS) return nativeGraph;
+  return { ...nativeGraph, primitives: patchWithDefaultImpls(_cachedPrimitives, nativeGraph) };
 };
 
 // Test graph: a flat (uncurried) function matching the coder's flat-args

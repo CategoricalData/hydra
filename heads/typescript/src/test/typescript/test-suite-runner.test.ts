@@ -8,6 +8,14 @@
 //
 // The runner is the TypeScript-side equivalent of
 // `heads/python/src/test/python/test_suite_runner.py`.
+//
+// HYDRA_DEFAULT_IMPLS=1: unlike Java/Python/Scala, this runner has no env check of its
+// own to add — the primitive-evaluating cases under `allTests` (reduction/*, from
+// `evalCase`/`primCase` in the DSL) close over a single `Graph` built by
+// `hydra.test.testEnv.testGraph(...)` at module-load time (before any test runs). That
+// function (overlay/typescript/hydra-kernel/src/test/typescript/hydra/test/testEnv.ts)
+// is what reads HYDRA_DEFAULT_IMPLS and patches primitives with their defaultImplementation.
+// Setting the env var before running this suite is sufficient; no flag threads through here.
 
 import { describe, expect, it } from "vitest";
 import { mkdirSync, rmSync } from "node:fs";
