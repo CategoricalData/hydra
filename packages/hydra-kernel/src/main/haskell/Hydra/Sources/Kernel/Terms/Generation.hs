@@ -412,7 +412,18 @@ inferAndGenerateLexicon = define "inferAndGenerateLexicon" $
   "dataElements" <~ Lists.concat (Lists.map ("m" ~> moduleTermBindings (var "m")) (var "kernelModules")) $
   "inferResultWithCx" <<~ Inference.inferGraphTypes @@ var "cx" @@ var "dataElements" @@ var "g0" $
   "g1" <~ Pairs.first (Pairs.first $ var "inferResultWithCx") $
-  generateLexicon @@ var "g1"
+  -- Type definitions never go through inference (only dataElements does), so g1's
+  -- boundTerms/boundTypes only have term bindings. Add the type bindings too, so
+  -- generateLexicon's isNativeType partition (over graphToBindings, which reconstructs
+  -- Bindings from boundTerms + boundTypes) has a non-empty Types side. Mirrors the
+  -- schemaElements ++ dataElements merge that generateCoderModules already does for
+  -- the same underlying problem.
+  "schemaElements" <~ Lists.concat (Lists.map ("m" ~> moduleTypeBindings (var "m")) (var "kernelModules")) $
+  "typeBoundTerms" <~ (Maps.fromList (Lists.map ("b" ~> pair (Core.bindingName (var "b")) (Core.bindingTerm (var "b"))) (var "schemaElements")) :: TypedTerm (M.Map Name Term)) $
+  "typeBoundTypes" <~ (Maps.fromList (Optionals.cat (Lists.map ("b" ~> Optionals.map ("ts" ~> pair (Core.bindingName (var "b")) (var "ts")) (Core.bindingTypeScheme (var "b"))) (var "schemaElements"))) :: TypedTerm (M.Map Name TypeScheme)) $
+  "g2" <~ Graph.graphWithBoundTerms (var "g1") (Maps.union (var "typeBoundTerms") (Graph.graphBoundTerms (var "g1"))) $
+  "g3" <~ Graph.graphWithBoundTypes (var "g2") (Maps.union (var "typeBoundTypes") (Graph.graphBoundTypes (var "g2"))) $
+  generateLexicon @@ var "g3"
 
 -- | Escape unescaped control characters (< 0x20) inside JSON string literals.
 -- Operates on a list of int32 character codes (bytes).
