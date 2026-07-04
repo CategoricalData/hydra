@@ -291,6 +291,19 @@
           (let ((vh1 (ensure-vhash m1))
                 (vh2 (ensure-vhash m2)))
             ;; Start from m2, then cons m1's entries on top so they shadow.
-            (vhash-fold (lambda (k v acc) (vhash-cons k v acc))
-                        vh2
-                        vh1)))))))
+            ;; vhash-fold visits vh1's PHYSICAL entries newest-first, including
+            ;; entries already shadowed by later insertions (from_list never
+            ;; removes them). Re-consing a shadowed entry would land it on top
+            ;; of the key's authoritative binding and flip m1's last-wins
+            ;; semantics (caught by the buildRoutingMap later-package-wins
+            ;; test, #416). Cons only each key's first-visited (= visible)
+            ;; binding; skip the stale duplicates.
+            (cdr (vhash-fold
+                   (lambda (k v acc)
+                     (let ((seen (car acc)) (out (cdr acc)))
+                       (if (vhash-assoc k seen)
+                           acc
+                           (cons (vhash-cons k #t seen)
+                                 (vhash-cons k v out)))))
+                   (cons vlist-null vh2)
+                   vh1))))))))
