@@ -258,6 +258,14 @@ that head's own test driver:
 The full cross-host bootstrap demo (`bin/run-bootstrapping-demo.sh`) is a
 heavier validation that exercises cross-host code generation plus tests.
 
+### Regression harnesses for prune/reconcile bugs
+
+A handful of specific prune/reconcile bugs (#393, #405, #469, #357) each have
+a standalone bash regression harness under `bin/test-*.sh` guarding against
+recurrence. Run all four with `bin/test.sh --regressions` (or directly via
+`bin/test-regressions.sh`); they also run in CI as part of the Haskell job,
+after the sync step. See `bin/test-regressions.sh` for the list.
+
 ### `verify-json-kernel` reports `element count differs: N vs M`
 
 As of [#392](https://github.com/CategoricalData/hydra/issues/392), the sync
