@@ -2,7 +2,8 @@
 
 This guide explains Hydra's domain-specific languages (DSLs) for constructing types and terms in Haskell.
 
-**Note**: Hydra provides DSLs in all five implementation languages (Haskell, Java, Python, Scala, and Lisp).
+**Note**: Hydra provides DSLs in each of its implementation languages; generated DSL modules are
+emitted for every target, and hand-written authoring DSLs exist for Haskell, Java, Python, and Scala.
 This guide focuses on the Haskell DSLs.
 Haskell is Hydra's bootstrapping language—the Hydra kernel itself is written in Haskell—so this guide is
 particularly intended for Hydra developers working on the kernel or extending Hydra's core functionality.
@@ -44,8 +45,8 @@ For host-native DSL usage, see:
 
 ## Introduction
 
-Hydra provides DSLs in all five implementation languages (Haskell, Java, Python, Scala, and Lisp) for working
-with its core data structures (types and terms).
+Hydra provides DSLs in each of its implementation languages for working with its core data
+structures (types and terms).
 The Haskell DSLs, described in this guide, make it easier to write Hydra programs by providing:
 
 - Concise syntax for common operations
@@ -86,10 +87,10 @@ Here are examples showing the basics. Note that type and term modules are typica
 ```haskell
 -- Type module (kernel style)
 import           Hydra.Kernel
-import           Hydra.Dsl.Annotations (doc)
-import           Hydra.Dsl.Bootstrap
-import           Hydra.Dsl.Types ((>:), (@@), (~>))
-import qualified Hydra.Dsl.Types as T
+import           Hydra.Overlay.Haskell.Dsl.Annotations (doc)
+import           Hydra.Overlay.Haskell.Bootstrap
+import           Hydra.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
+import qualified Hydra.Overlay.Haskell.Dsl.Types as T
 
 -- Define a record type definition
 person :: TypeDefinition
@@ -113,7 +114,7 @@ are imported unqualified for cleaner syntax. Other type definitions can be refer
 
 ```haskell
 -- Term module
-import Hydra.Dsl.Terms
+import Hydra.Overlay.Haskell.Dsl.Terms
 
 -- Construct a record term (referencing the Person type by name)
 arthur :: Term
@@ -138,13 +139,13 @@ Hydra has five DSL variants, each serving a specific purpose:
 
 ### 1. Direct DSLs
 
-**Modules**: `Hydra.Dsl.Terms`, `Hydra.Dsl.Types`
+**Modules**: `Hydra.Overlay.Haskell.Dsl.Terms`, `Hydra.Overlay.Haskell.Dsl.Types`
 
 **Purpose**: Direct construction of Hydra domain objects (like `Type` and `Term` instances)
 
 **Example**:
 ```haskell
-import Hydra.Dsl.Terms
+import Hydra.Overlay.Haskell.Dsl.Terms
 
 myFunction :: Term
 myFunction = lambda "x" (int32 42)
@@ -155,13 +156,13 @@ All kernel type modules use the direct Types DSL to construct `Type` instances.
 
 ### 2. Phantom-typed DSL
 
-**Modules**: `Hydra.Dsl.Meta.Phantoms`
+**Modules**: `Hydra.Overlay.Haskell.Dsl.Typed.Phantoms`
 
 **Purpose**: Type-safe construction of terms with Haskell compile-time checking
 
 **Example**:
 ```haskell
-import Hydra.Dsl.Meta.Phantoms
+import Hydra.Overlay.Haskell.Dsl.Typed.Phantoms
 
 -- Type signature enforces this is a function!
 myFunction :: TypedTerm (a -> Int)
@@ -174,13 +175,13 @@ This isn't needed for types because we don't have "types of different types".
 
 ### 3. Meta DSLs
 
-**Modules**: `Hydra.Dsl.Meta.Terms`, `Hydra.Dsl.Meta.Types`
+**Modules**: `Hydra.Overlay.Haskell.Dsl.Typed.Terms`, `Hydra.Overlay.Haskell.Dsl.Typed.Types`
 
 **Purpose**: Specifying programs that build terms or types
 
 **Basic example**:
 ```haskell
-import Hydra.Dsl.Meta.Terms
+import Hydra.Overlay.Haskell.Dsl.Typed.Terms
 
 -- Creates a Term that represents a lambda
 myFunction :: TypedTerm Term
@@ -189,7 +190,7 @@ myFunction = lambda "x" (int32 42)
 
 **More compelling example** (from `Hydra/Sources/Test`):
 ```haskell
-import Hydra.Dsl.Meta.Terms
+import Hydra.Overlay.Haskell.Dsl.Typed.Terms
 
 -- Build a test group (a Term) that contains test cases (also Terms)
 -- Each test case has input and output Terms
@@ -231,10 +232,19 @@ myFunction = TermFunction $ FunctionLambda $
 
 ### 5. Generated DSL modules
 
-**Modules**: `Hydra.Dsl.Core`, `Hydra.Dsl.Coders`, `Hydra.Dsl.Ast`, etc.
+Hydra generates a DSL surface for each of the three kinds of module definition: types, primitives,
+and term-level functions (#467).
+All are synthesized by the `hydra.dsls` module from the per-package JSON and regenerated into every
+target language on sync; none are hand-written.
+In Java they appear as static methods on interfaces under `hydra.dsl.*`; in Python, as functions in
+`hydra.dsl.*` modules; the same pattern holds for the other targets.
+
+#### Type-module DSLs
+
+**Modules**: `Hydra.Dsl.Core`, `Hydra.Dsl.Coders`, `Hydra.Dsl.Ast`, etc. — one per type-defining
+module.
 
 **Purpose**: Auto-generated phantom-typed constructors, accessors, and updaters for all Hydra types.
-These are produced by the `hydra.dsls` module from type definitions.
 
 **Example**:
 ```haskell
@@ -254,13 +264,56 @@ withNewBody = Core.annotatedTermWithBody
 ```
 
 **When to use**: When working with Hydra types in the phantom-typed DSL. These modules
-provide the standard constructors and accessors. Hand-written `Hydra.Dsl.Meta.*` wrapper
-modules re-export these and add custom helpers; prefer importing via the wrapper
-(e.g., `Hydra.Dsl.Meta.Core`) when one exists.
+provide the standard constructors and accessors. Hand-written wrapper modules under
+`Hydra.Overlay.Haskell.Dsl.Typed.*` re-export these and add custom helpers; prefer importing
+via the wrapper (e.g., `Hydra.Overlay.Haskell.Dsl.Typed.Core`) when one exists.
 
-Generated DSL modules are available in all five languages (Haskell, Java, Python, Scala, and Lisp)
-and are kept in sync by the `sync-all` pipeline. In Java, they appear as static methods
-in classes under `hydra.dsl.*`; in Python, as functions in `hydra.dsl.*` modules.
+#### Primitive-module DSLs
+
+**Modules**: `Hydra.Dsl.Lib.Lists`, `Hydra.Dsl.Lib.Maps`, `Hydra.Dsl.Lib.Strings`, etc. — one per
+`hydra.lib.*` primitive library.
+
+**Purpose**: One typed, arity-aware reference builder per primitive, derived from the primitive's
+declared signature.
+For example, `Hydra.Dsl.Lib.Lists.cons :: TypedTerm x -> TypedTerm [x] -> TypedTerm [x]` builds the
+term `hydra.lib.lists.cons @@ x @@ xs`.
+The wrappers are functions *of* phantom-typed terms, not phantom-typed function terms.
+
+These generated modules replaced the hand-written wrappers (Haskell `Hydra.Dsl.Lib.*`, Java and
+Python `hydra.dsl.meta.lib.*`) in 0.17.
+The motivation (#467): the wrappers re-encoded information the system already has (each primitive's
+name and signature), and generating them means a newly added primitive — or, in the future, a
+user-defined one — gets its DSL surface in every language for free.
+Two behavioral differences from the old hand-written wrappers: the generated wrappers carry the
+primitive's type-class constraints (e.g. `Ord` for map and set keys), so polymorphic call sites may
+need concrete type annotations, and they do not auto-lift definitions (`AsTerm` is Haskell-only
+authoring sugar), so a definition passed as a first-class argument needs an explicit `asTerm`.
+
+#### Term-module DSLs
+
+**Modules**: `Hydra.Dsl.Strip`, `Hydra.Dsl.Serialization`, `Hydra.Dsl.Names`, etc. — one per curated
+term-defining module.
+
+**Purpose**: One rename-safe, typed reference per term definition, derived from the definition's
+inferred signature.
+For example, `Hydra.Dsl.Strip.deannotateType :: TypedTerm Type -> TypedTerm Type` builds a reference
+to `hydra.strip.deannotateType`; polymorphic definitions carry their type parameters.
+
+Haskell's in-repo authoring layer does *not* use these: a kernel definition is already a Haskell
+symbol (`Strip.deannotateType` imported from `Hydra.Sources.Kernel.Terms.Strip` *is* the
+definition), so the module system provides rename-safe references natively.
+The term-module DSLs exist for the consumers that lack that free path:
+
+- **Host-native DSL sources in other languages** (Java, Python, Scala, ...), where the only
+  alternative is a stringly-typed `var("hydra.strip.deannotateType")` that no rename catches and
+  that fails only at inference time.
+- **Haskell applications authoring against the shipped `hydra-kernel`**, which ships the runtime and
+  authoring helpers but not the `Hydra.Sources.*` layer.
+
+Emission is demand-driven rather than exhaustive: each package curates the term modules that project
+a DSL via its Manifest's `mainDslModules` (for the kernel, the `dslTermModules` list in
+`Hydra.Sources.Kernel.Manifest`).
+Add a module there to start generating references for it.
 
 ## When to use each variant
 
@@ -271,10 +324,12 @@ in classes under `hydra.dsl.*`; in Python, as functions in `hydra.dsl.*` modules
 | Writing Hydra kernel sources | Meta DSLs + Generated DSLs | Used throughout `Hydra/Sources/`; generated DSLs provide constructors/accessors |
 | Code generation and metaprogramming | Meta DSLs | "Code as data" approach |
 | Working with Hydra types (records, unions) | Generated DSL modules | Type-safe constructors, accessors, updaters |
+| Calling primitives from DSL sources | Generated `Hydra.Dsl.Lib.*` | Typed wrappers derived from each primitive's signature |
+| Referencing kernel functions outside the authoring layer | Generated term-module DSLs | Rename-safe typed references for non-Haskell hosts and shipped-kernel apps |
 | Runtime AST manipulation | Generated code | Direct access to data structures |
 
 **Rule of thumb**:
-- **Type modules**: Use the direct Types DSL (`qualified Hydra.Dsl.Types as T`)
+- **Type modules**: Use the direct Types DSL (`qualified Hydra.Overlay.Haskell.Dsl.Types as T`)
   with unqualified operators (`>:`, `@@`, `~>`)
 - **Term modules**: Use the phantom-typed DSL for type safety, or Meta DSLs for kernel work
 - **Metaprogramming**: Use the Meta DSLs to treat Hydra programs as data
@@ -349,23 +404,23 @@ Most Hydra source files define either types or terms, not both.
 
 For term modules:
 ```haskell
-import Hydra.Dsl.Terms
+import Hydra.Overlay.Haskell.Dsl.Terms
 ```
 
 For type modules (kernel type definitions):
 ```haskell
 import           Hydra.Kernel
-import           Hydra.Dsl.Annotations (doc)
-import           Hydra.Dsl.Bootstrap
-import           Hydra.Dsl.Types ((>:), (@@), (~>))
-import qualified Hydra.Dsl.Types as T
+import           Hydra.Overlay.Haskell.Dsl.Annotations (doc)
+import           Hydra.Overlay.Haskell.Bootstrap
+import           Hydra.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
+import qualified Hydra.Overlay.Haskell.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 ```
 
 In tests or mixed modules (less common):
 ```haskell
-import Hydra.Dsl.Terms
-import qualified Hydra.Dsl.Types as T
+import Hydra.Overlay.Haskell.Dsl.Terms
+import qualified Hydra.Overlay.Haskell.Dsl.Types as T
 ```
 
 **Note on qualification**: Term constructs are imported unqualified and used without a prefix.
@@ -409,7 +464,7 @@ lambdaTyped "x" T.int32 (var "x")
 apply (var "f") (int32 5)
 
 -- Or using the operator
-import Hydra.Dsl.Terms ((@@))
+import Hydra.Overlay.Haskell.Dsl.Terms ((@@))
 var "f" @@ int32 5
 ```
 
@@ -490,7 +545,7 @@ TypedTerm (Int -> String)  -- A Hydra term representing a function
 ### Imports
 
 ```haskell
-import Hydra.Dsl.Meta.Phantoms
+import Hydra.Overlay.Haskell.Dsl.Typed.Phantoms
 ```
 
 ### Type-safe functions
@@ -533,7 +588,7 @@ produce (var "result")
 primitive2 DefMath.add (int32 2) (int32 3)
 
 -- Common primitives are wrapped for convenience
-import Hydra.Dsl.Meta.Lib.Math as Math
+import Hydra.Dsl.Lib.Math as Math
 Math.add (int32 2) (int32 3)
 ```
 
@@ -543,7 +598,7 @@ Math.add (int32 2) (int32 3)
 while user-defined functions require explicit application with `@@`:
 
 ```haskell
-import Hydra.Dsl.Meta.Lib.Math as Math
+import Hydra.Dsl.Lib.Math as Math
 
 -- Built-in functions: simplified syntax
 result1 = Math.add (int32 1) (int32 2)
@@ -597,7 +652,7 @@ Here's a real example from Hydra's test suite:
 
 ```haskell
 -- From Hydra/Sources/Test/Lib/Strings.hs
-import Hydra.Dsl.Tests  -- Includes the meta Terms DSL
+import Hydra.Overlay.Haskell.Dsl.Tests  -- Includes the meta Terms DSL
 
 stringsCat :: TestGroup
 stringsCat = TestGroup "cat" Nothing [] [
@@ -638,31 +693,31 @@ letting you write programs that generate Hydra code.
 
 For term modules (most common in kernel sources):
 ```haskell
-import Hydra.Dsl.Meta.Terms
+import Hydra.Overlay.Haskell.Dsl.Typed.Terms
 ```
 
 For type modules:
 ```haskell
-import qualified Hydra.Dsl.Meta.Types as T
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types as T
 ```
 
 In mixed modules (less common):
 ```haskell
-import Hydra.Dsl.Meta.Terms
-import qualified Hydra.Dsl.Meta.Types as T
+import Hydra.Overlay.Haskell.Dsl.Typed.Terms
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types as T
 ```
 
 ### Defining types in modules
 
-When you define types in Hydra kernel modules, you use `defineType` (from `Hydra.Dsl.Bootstrap`)
+When you define types in Hydra kernel modules, you use `defineType` (from `Hydra.Overlay.Haskell.Bootstrap`)
 to create type definitions. These definitions can reference each other directly.
 
 ```haskell
 import           Hydra.Kernel
-import           Hydra.Dsl.Annotations (doc)
-import           Hydra.Dsl.Bootstrap
-import           Hydra.Dsl.Types ((>:), (@@), (~>))
-import qualified Hydra.Dsl.Types as T
+import           Hydra.Overlay.Haskell.Dsl.Annotations (doc)
+import           Hydra.Overlay.Haskell.Bootstrap
+import           Hydra.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
+import qualified Hydra.Overlay.Haskell.Dsl.Types as T
 
 -- Define a module-scoped 'define' helper
 ns :: ModuleName
@@ -695,7 +750,7 @@ These constants can then be used in term modules:
 
 ```haskell
 -- In a term module (after the Person type is defined and generated)
-import Hydra.Dsl.Meta.Phantoms
+import Hydra.Overlay.Haskell.Dsl.Typed.Phantoms
 
 trillian :: Term
 trillian = record _Person [
@@ -745,14 +800,14 @@ The entire Hydra kernel is defined using the meta DSLs.
 (see [Sources/Kernel/Types](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types)):
 - `Hydra/Sources/Kernel/Types/Core.hs` - Core type definitions (Type, Term, etc.)
 - `Hydra/Sources/Kernel/Types/Graph.hs` - Graph and module types
-- These modules import `qualified Hydra.Dsl.Types as T` along with unqualified operators `(>:)`, `(@@)`, `(~>)`
+- These modules import `qualified Hydra.Overlay.Haskell.Dsl.Types as T` along with unqualified operators `(>:)`, `(@@)`, `(~>)`
 
 **Term modules**
 (see [Sources/Kernel/Terms](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms)):
 - `Hydra/Sources/Kernel/Terms/Inference.hs` - Type inference algorithm
 - `Hydra/Sources/Kernel/Terms/Reduction.hs` - Term reduction logic
 - `overlay/.../Hydra/Dsl/Libraries.hs` - host-side primitive registry (names derived from PrimitiveDefinitions)
-- These modules import `Hydra.Dsl.Meta.Terms` (unqualified)
+- These modules import `Hydra.Overlay.Haskell.Dsl.Typed.Terms` (unqualified)
 
 ## Operator reference
 
@@ -833,7 +888,7 @@ add = "x" ~> "y" ~>
   primitive2 DefMath.add (var "x") (var "y")
 
 -- Or using library functions
-import Hydra.Dsl.Meta.Lib.Math as Math
+import Hydra.Dsl.Lib.Math as Math
 add = "x" ~> "y" ~> Math.add (var "x") (var "y")
 ```
 
@@ -892,8 +947,8 @@ zaphod = record _Person [
 ### Pattern 6: List operations
 
 ```haskell
-import Hydra.Dsl.Terms
-import Hydra.Dsl.Meta.Lib.Lists as Lists
+import Hydra.Overlay.Haskell.Dsl.Terms
+import Hydra.Dsl.Lib.Lists as Lists
 
 -- Map over a list
 doubleList = Lists.map (lambda "x" (Math.mul (var "x") (int32 2))) myList
@@ -906,11 +961,11 @@ sum = Lists.foldl (lambda "acc" (lambda "x" (Math.add (var "acc") (var "x")))) (
 ```
 
 **Note on naming conflicts**: In this example, `Lists.map` is qualified because the `Lists` library is imported.
-If you also need `Hydra.Dsl.Terms.map` (for constructing Map terms), you would use `Terms.map` to disambiguate:
+If you also need `Hydra.Overlay.Haskell.Dsl.Terms.map` (for constructing Map terms), you would use `Terms.map` to disambiguate:
 
 ```haskell
-import Hydra.Dsl.Terms as Terms
-import Hydra.Dsl.Meta.Lib.Lists as Lists
+import Hydra.Overlay.Haskell.Dsl.Terms as Terms
+import Hydra.Dsl.Lib.Lists as Lists
 
 -- Use Terms.map when constructing a Map term
 myMap = Terms.map (M.fromList [...])
@@ -921,11 +976,11 @@ myList = Lists.map (lambda "x" (var "x")) someList
 
 ### Pattern 7: Documenting definitions
 
-The `doc` combinator (from `Hydra.Dsl.Annotations` or `Hydra.Dsl.Meta.Phantoms`)
+The `doc` combinator (from `Hydra.Overlay.Haskell.Dsl.Annotations` or `Hydra.Overlay.Haskell.Dsl.Typed.Phantoms`)
 attaches a human-readable description to a term or type binding.
 
 ```haskell
-import Hydra.Dsl.Annotations (doc)
+import Hydra.Overlay.Haskell.Dsl.Annotations (doc)
 
 myFunction :: TypedTermDefinition (Int -> Int)
 myFunction = define "myFunction" $
@@ -963,7 +1018,7 @@ outermost layer, satisfying the same validator check as host-level `doc`.
 ### Basic types
 
 ```haskell
-import qualified Hydra.Dsl.Types as T
+import qualified Hydra.Overlay.Haskell.Dsl.Types as T
 
 -- Literal types
 T.int32
@@ -1100,7 +1155,7 @@ explicit parameter.
 ### Basic Either operations
 
 ```haskell
-import Hydra.Dsl.Meta.Lib.Eithers as Eithers
+import Hydra.Dsl.Lib.Eithers as Eithers
 
 -- Success value
 right (int32 42)
@@ -1137,7 +1192,7 @@ Hydra provides many primitive functions organized into libraries.
 ### Math operations
 
 ```haskell
-import Hydra.Dsl.Meta.Lib.Math as Math
+import Hydra.Dsl.Lib.Math as Math
 
 Math.add (int32 2) (int32 3)        -- Addition
 Math.sub (int32 5) (int32 2)        -- Subtraction
@@ -1150,7 +1205,7 @@ Math.abs (int32 (-5))               -- Absolute value
 ### String operations
 
 ```haskell
-import Hydra.Dsl.Meta.Lib.Strings as Strings
+import Hydra.Dsl.Lib.Strings as Strings
 
 Strings.concat (string "Hello, ") (string "world!")
 Strings.length (string "hello")
@@ -1162,7 +1217,7 @@ Strings.substring (int32 0) (int32 5) (string "Hello, world!")
 ### List operations
 
 ```haskell
-import Hydra.Dsl.Meta.Lib.Lists as Lists
+import Hydra.Dsl.Lib.Lists as Lists
 
 Lists.map (lambda "x" (Math.add (var "x") (int32 1))) myList
 Lists.filter (lambda "x" (Math.gt (var "x") (int32 0))) myList
@@ -1178,7 +1233,7 @@ Lists.length myList
 ### Map operations
 
 ```haskell
-import Hydra.Dsl.Meta.Lib.Maps as Maps
+import Hydra.Dsl.Lib.Maps as Maps
 
 Maps.empty
 Maps.insert key value myMap
@@ -1192,7 +1247,7 @@ Maps.fromList (list [tuple2 key1 val1, tuple2 key2 val2])
 ### Optional operations
 
 ```haskell
-import Hydra.Dsl.Meta.Lib.Optionals as Optionals
+import Hydra.Dsl.Lib.Optionals as Optionals
 
 Optionals.isGiven optionalValue
 Optionals.isNone optionalValue
@@ -1204,12 +1259,12 @@ Optionals.map (lambda "x" (Math.add (var "x") (int32 1))) optionalValue
 ### Equality and comparison
 
 ```haskell
-import Hydra.Dsl.Meta.Lib.Equality as Eq
+import Hydra.Dsl.Lib.Equality as Eq
 
 Eq.eq value1 value2                 -- Equality
 Eq.ne value1 value2                 -- Inequality
 
-import Hydra.Dsl.Meta.Lib.Logic as Logic
+import Hydra.Dsl.Lib.Logic as Logic
 
 Logic.and (boolean True) (boolean False)
 Logic.or (boolean True) (boolean False)
@@ -1268,7 +1323,7 @@ myFunc = lambda "x" (var "x")
 **Solution**: Import the DSL module
 
 ```haskell
-import Hydra.Dsl.Meta.Phantoms
+import Hydra.Overlay.Haskell.Dsl.Typed.Phantoms
 
 myFunc = lambda "x" (var "x")
 ```
@@ -1285,7 +1340,7 @@ result = int32 2 + int32 3
 **Solution**: Use Hydra's primitive functions
 
 ```haskell
-import Hydra.Dsl.Meta.Lib.Math as Math
+import Hydra.Dsl.Lib.Math as Math
 
 result = Math.add (int32 2) (int32 3)
 ```
@@ -1294,8 +1349,8 @@ result = Math.add (int32 2) (int32 3)
 
 **Problem**: The `>>:` operator is defined in two places with different types:
 
-- `Hydra.Dsl.Meta.Phantoms`: `Name -> t -> Field` (for `cases`/`match` branches)
-- `Hydra.Dsl.Meta.Base`: `Name -> a -> (TypedTerm Name, a)` (for record field definitions)
+- `Hydra.Overlay.Haskell.Dsl.Typed.Phantoms`: `Name -> t -> Field` (for `cases`/`match` branches)
+- `Hydra.Overlay.Haskell.Dsl.Typed.Base`: `Name -> a -> (TypedTerm Name, a)` (for record field definitions)
 
 If `Phantoms` is imported qualified (as in test source files), the unqualified `>>:` resolves to the
 `Base` version, which produces a tuple. Passing these tuples to `Phantoms.cases` causes a type error:
@@ -1462,8 +1517,8 @@ myPerson = Person {
 For computations that can fail:
 
 ```haskell
-import Hydra.Dsl.Meta.Lib.Logic as Logic
-import Hydra.Dsl.Meta.Lib.Eithers as Eithers
+import Hydra.Dsl.Lib.Logic as Logic
+import Hydra.Dsl.Lib.Eithers as Eithers
 
 safeDivide :: TypedTerm (Int -> Int -> Either String Int)
 safeDivide = "x" ~> "y" ~>
@@ -1488,7 +1543,7 @@ a common source of errors.
 
 ### DSL helpers (direct Haskell application)
 
-Functions from `Hydra.Dsl.Meta.Lib.*` and `Hydra.Dsl.Meta.Phantoms` are Haskell functions
+Functions from `Hydra.Dsl.Lib.*` and `Hydra.Overlay.Haskell.Dsl.Typed.Phantoms` are Haskell functions
 on `TypedTerm` values. They take arguments directly via Haskell function application -- no `@@`
 needed. This includes all primitive function wrappers (`Lists.concat`, `Strings.cat`,
 `Optionals.cases`, `Logic.ifElse`, etc.) and DSL combinators (`list`, `lambda`, `cases`,
