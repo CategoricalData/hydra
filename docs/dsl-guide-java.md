@@ -57,6 +57,7 @@ Hydra-Java provides a layered DSL system for working with Hydra types and terms:
 | **Phantom-typed DSL** | `hydra.overlay.java.dsl.meta.Phantoms` | `TypedTerm<A>` term construction; the phantom `A` documents intent (not a load-bearing check — see below) |
 | **Definition + helper layer** | `hydra.overlay.java.dsl.meta.Defs`, `hydra.overlay.java.dsl.Helpers` | Fluent `define(NS,"name").doc(…).lam(…).to(…)` builder + `ref`; `typeref`/`typeDef`/`doc` for assembling modules |
 | **Library wrappers** | `hydra.dsl.lib.*` (generated) | Typed wrappers around Hydra primitives (lists, sets, maps, etc.) |
+| **Term references** | `hydra.dsl.Strip`, `hydra.dsl.Serialization`, ... (generated) | Typed, rename-safe references to kernel functions (#467) |
 
 The Direct DSLs are suitable for casual use: constructing test fixtures, prototyping, or building types.
 The Phantom-typed DSL plus the definition/helper layer are used for writing Hydra kernel source code in
@@ -138,6 +139,25 @@ TypedTerm<java.util.List<B>> ys = Lists.map(f, xs);
 
 These modules are **generated** (one per `hydra.lib.*` library) and imported directly; they are not
 hand-written. See [Library wrappers](#library-wrappers) below for the full list.
+
+### 5. Term references
+
+The generated `hydra.dsl.<Module>` interfaces provide one typed, rename-safe reference per kernel
+term definition (#467), derived from the definition's inferred signature.
+They replace stringly-typed `var("hydra....")` references, which no rename catches and which fail
+only at inference time.
+
+```java
+import hydra.dsl.Strip;
+import hydra.dsl.Serialization;
+
+TypedTerm<Type> stripped = Strip.deannotateType(typ);   // hydra.strip.deannotateType, rename-safe
+```
+
+One interface is generated per curated term module — the demand set covers the modules the coder
+sources reference (`Strip`, `Serialization`, `Annotations`, `Names`, `Formatting`, `Constants`, and
+more; curated via the kernel Manifest's `dslTermModules`).
+Prefer these over inline `var("hydra....")` strings in new code.
 
 ## When to use each variant
 
@@ -833,6 +853,7 @@ All hand-written DSLs live under `overlay/java/hydra-kernel/src/main/java/hydra/
 | `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/dsl/Types.java` | Direct Types DSL |
 | `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/dsl/Terms.java` | Direct Terms DSL |
 | `hydra.dsl.lib.*` (generated; e.g. `hydra.dsl.lib.Lists`/`Maps`/`Sets`/`Logic`/`Math_`/`Optionals`/`Strings`) | Library wrappers — generated, imported directly |
+| `hydra.dsl.*` term references (generated; e.g. `hydra.dsl.Strip`/`Serialization`/`Names`) | Typed, rename-safe references to kernel functions (#467) |
 | `packages/hydra-java/src/main/java/hydra/sources/` | Live host-native Java coder DSL sources (reference for current Phantoms idiom) |
 
 ## Related Documentation

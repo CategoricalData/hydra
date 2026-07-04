@@ -237,7 +237,7 @@ primitives exist, their signatures, and their default implementations.
 | Native Java implementation | `overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib/<sub>/<FunctionName>.java` |
 | Native Python implementation | `overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/lib/<sub>.py` (#473 — impls live at `hydra.overlay.python.lib.*`) |
 | Host-side primitive registry (binds names to native impls) | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Libraries.hs` (Haskell, #473) and, per host, the registry in that host's overlay: `overlay/{java,python,scala,typescript}/hydra-kernel/.../overlay/<lang>/{lib,}/Libraries.<ext>`, and equivalent overlay paths for the four Lisp dialects |
-| Phantom-typed DSL wrappers (for writing Hydra source modules) | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/Typed/<Sub>.hs` (#473) |
+| Phantom-typed DSL wrappers (for writing Hydra source modules) | **Generated** (#467): `hydra.dsl.lib.<sub>` in every target, e.g. `dist/haskell/.../Hydra/Dsl/Lib/<Sub>.hs` — no hand-written wrapper |
 | Common test cases | `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test/Lib/<Sub>.hs` |
 
 **Important:** the canonical metadata for every primitive — *including its name* — is the
@@ -614,38 +614,24 @@ argument and result `TermCoder`s. See the existing entries for examples of
 polymorphic primitives and higher-order patterns (`fun(dom, cod)` for
 function-typed arguments).
 
-### 4. Add the DSL wrapper
+### 4. DSL wrappers are generated — no manual step
 
-Add typed wrappers in
-`overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/Typed/<Library>.hs`:
+The typed DSL wrapper for each primitive is *generated*, not hand-written (#467).
+Because the `hydra.lib.*` modules are part of the kernel's `mainDslModules` set, the sync emits one
+`hydra.dsl.lib.<library>` module per library into every target language
+(Haskell `Hydra.Dsl.Lib.Chars`, Java `hydra.dsl.lib.Chars`, Python `hydra.dsl.lib.chars`, ...).
+Each primitive projects to a typed, arity-aware reference builder derived from its declared
+signature, e.g. `Hydra.Dsl.Lib.Chars.isAlphaNum :: TypedTerm Int -> TypedTerm Bool`.
 
-```haskell
--- Hydra/Dsl/Meta/Lib/Chars.hs
-module Hydra.Dsl.Meta.Lib.Chars where
+So once the primitive definition (step 1) is in place, the wrapper appears automatically on the next
+sync; there is nothing to write.
+Hydra source modules call these generated wrappers to construct phantom-typed applications of the
+primitive.
 
-import Hydra.Typed
-import Hydra.Dsl.Meta.Phantoms
-import qualified Hydra.Dsl.Terms as Terms
-import qualified Hydra.Dsl.Prims as Prims
-import qualified Hydra.Lib.Chars as DefChars
-
-isAlphaNum :: TypedTerm Int -> TypedTerm Bool
-isAlphaNum = primitive1 DefChars.isAlphaNum
-
-toLower :: TypedTerm Int -> TypedTerm Int
-toLower = primitive1 DefChars.toLower
-```
-
-These wrappers are what Hydra source modules (kernel and per-host DSL)
-call to construct phantom-typed term applications referencing the
-primitive by name. The phantom type must match the primitive's
-signature.
-
-**Guidelines:**
-- Use phantom types (`TypedTerm`) for type safety.
-- Use `primitive1` for unary, `primitive2` for binary, `primitive3` for ternary.
-- Pass the generated `PrimitiveDefinition` directly — `primitive1 DefChars.isAlphaNum`
-  (import the def-module as `Hydra.Lib.Chars`); the name is taken from it via `ToPrimName`.
+Two things to know at call sites (see the [DSL guide](../dsl-guide.md) for detail):
+- Generated wrappers carry the primitive's type-class constraints (e.g. `Ord` for map/set keys), so
+  polymorphic call sites may need concrete type annotations.
+- They do not auto-lift definitions; a definition passed as a first-class argument needs `asTerm`.
 
 ### 5. Add common test cases
 

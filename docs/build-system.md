@@ -124,6 +124,16 @@ express the same language in the host of their choice — Haskell today for
 `hydra-kernel`, Java for `hydra-java` and `hydra-jvm`, Python for `hydra-python`,
 with more diversification expected over time.
 
+Alongside the authored modules, the JSON write pass emits **derived modules** for each package:
+generated DSL wrappers (`hydra.dsl.<x>` — type constructors/accessors, primitive-library wrappers
+`hydra.dsl.lib.<x>`, and term-definition references; see the
+[DSL guide](dsl-guide.md#5-generated-dsl-modules)) plus term encoders and decoders
+(`hydra.encode.<x>` / `hydra.decode.<x>`).
+Which source modules project a DSL is curated per package via the Manifest's `mainDslModules` list.
+Term-definition references need inferred signatures, which the compiled in-memory modules lack;
+the DSL pass reads them back from the main pass's just-written JSON rather than re-running
+inference (#467).
+
 A complete sync of the matrix walks these in five phases (see
 [Phases](#phases-of-binsyncsh) below).
 
