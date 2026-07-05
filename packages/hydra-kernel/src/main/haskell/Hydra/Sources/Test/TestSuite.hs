@@ -64,6 +64,7 @@ import qualified Hydra.Sources.Test.Json.Yaml as JsonYaml
 import qualified Hydra.Sources.Test.Hoisting.All as HoistingAll
 import qualified Hydra.Sources.Test.Hoisting.Cases as HoistingCases
 import qualified Hydra.Sources.Test.Hoisting.Let as HoistingLet
+import qualified Hydra.Sources.Test.Build.Modules as BuildModules
 import qualified Hydra.Sources.Test.Dependencies as Dependencies
 import qualified Hydra.Sources.Test.Differentiation as Differentiation
 import qualified Hydra.Sources.Test.Reduction as Reduction
@@ -123,6 +124,7 @@ libPairs = [
 otherPairs :: [(ModuleName, TypedTermDefinition TestGroup)]
 otherPairs = [
   (Annotations.ns, Annotations.allTests),
+  (BuildModules.ns, BuildModules.allTests),
   (BuildReconcile.ns, BuildReconcile.allTests),
   (BuildRouting.ns, BuildRouting.allTests),
   (CheckingAll.ns, CheckingAll.allTests),
@@ -163,7 +165,7 @@ testSuiteModules =
    -- Hoisting tests (including sub-modules)
    HoistingAll.module_, HoistingCases.module_, HoistingLet.module_,
    -- Other tests
-   Annotations.module_, BuildReconcile.module_, BuildRouting.module_, Dependencies.module_, Differentiation.module_, EtaExpansion.module_, Formatting.module_,
+   Annotations.module_, BuildModules.module_, BuildReconcile.module_, BuildRouting.module_, Dependencies.module_, Differentiation.module_, EtaExpansion.module_, Formatting.module_,
    Generation.module_,
    JsonParser.module_, JsonRoundtrip.module_, JsonWriter.module_, JsonYaml.module_,
    Reduction.module_, Rewriting.module_, Serialization.module_, Sorting.module_,

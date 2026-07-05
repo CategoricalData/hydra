@@ -629,6 +629,7 @@ bootstrap-demo-only).")
                   "test/lib/strings.el"
                   "test/lib/system.el"
                   "test/annotations.el"
+                  "test/build/modules.el"
                   "test/build/reconcile.el"
                   "test/build/routing.el"
                   "test/checking/advanced.el"
