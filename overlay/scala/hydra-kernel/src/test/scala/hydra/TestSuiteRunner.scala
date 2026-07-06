@@ -449,25 +449,22 @@ object TestSuiteRunner {
     val contextName = "hydra.typing.InferenceContext"
     val errorName = "hydra.errors.Error"
     def eitherError(v: hydra.core.Type): hydra.core.Type =
-      Type.either(EitherType(Type.variable(errorName), v))
+      Type.either(EitherType(Type.variable("e"), v))
 
-    // Coder: forall v1 v2. {encode: ..., decode: ...}
+    // Coder: forall v1 v2 e. {encode: v1 -> Either e v2, decode: v2 -> Either e v1}
     val encodeType = Type.function(FunctionType(
-      Type.variable(contextName),
-      Type.function(FunctionType(
-        Type.variable("v1"),
-        eitherError(Type.variable("v2"))))))
+      Type.variable("v1"),
+      eitherError(Type.variable("v2"))))
     val decodeType = Type.function(FunctionType(
-      Type.variable(contextName),
-      Type.function(FunctionType(
-        Type.variable("v2"),
-        eitherError(Type.variable("v1"))))))
+      Type.variable("v2"),
+      eitherError(Type.variable("v1"))))
     val coderBody = Type.record(Seq(
       FieldType("encode", encodeType),
       FieldType("decode", decodeType)))
     types += ("hydra.coders.Coder" ->
       Type.forall(ForallType("v1",
-        Type.forall(ForallType("v2", coderBody)))))
+        Type.forall(ForallType("v2",
+          Type.forall(ForallType("e", coderBody)))))))
 
     // InferenceContext
     types += (contextName ->
