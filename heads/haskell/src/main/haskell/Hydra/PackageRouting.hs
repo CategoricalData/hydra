@@ -43,6 +43,7 @@ module Hydra.PackageRouting (
   RoutingMap,
   buildRoutingMap,
   namespaceToPackageIn,
+  namespaceToPackageMaybeIn,
   namespaceToPackageJsonDirIn,
   namespaceToPackageTestJsonDirIn,
   groupByPackageIn,
@@ -132,6 +133,13 @@ namespaceToPackageIn (RoutingMap m) ns = case M.lookup ns m of
   Nothing -> error $ "unrouted module: " ++ unModuleName ns
     ++ " is not declared in any package's manifest (RoutingMap). Add it to the"
     ++ " owning package's Manifest.mainModules."
+
+-- | Total variant of 'namespaceToPackageIn': returns Nothing for an unrouted
+-- namespace instead of erroring. Used where a namespace may legitimately be
+-- absent from the routing map (e.g. projecting a module's declared
+-- dependencies, some of which are outside the current inference universe).
+namespaceToPackageMaybeIn :: RoutingMap -> ModuleName -> Maybe String
+namespaceToPackageMaybeIn (RoutingMap m) ns = M.lookup ns m
 
 -- | Given a dist-json root and a module name, compute the directory under
 -- which that module's JSON file should be written.

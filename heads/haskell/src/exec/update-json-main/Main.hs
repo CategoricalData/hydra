@@ -28,6 +28,7 @@ import Hydra.Sources.Ext (
   hydraCoqModules, hydraGoModules, hydraJvmModules, hydraJavaModules, hydraTypeScriptModules,
   hydraPythonModules, hydraScalaModules, hydraLispModules,
   hydraPgModules, hydraRdfModules, hydraWasmModules,
+  hydraBuildModules,
   hydraExtPackageModules,
   allDslModules, allEncodingModules, extRoutingInput)
 
@@ -98,6 +99,7 @@ main = do
         , hydraPgModules
         , hydraRdfModules
         , hydraWasmModules
+        , hydraBuildModules
         , hydraExtPackageModules
         , [GenPGTransform.module_]
         ]
