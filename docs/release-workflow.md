@@ -94,6 +94,13 @@ The canonical version lives in `hydra.json` at the repository root as the
   `hostOverrides` map and are hand-edited. This field is independent of the
   release flow and is normally left alone during a release.
 
+  One release-time interaction: when a release introduces new public generated modules
+  (e.g. 0.17.1's `hydra.dsl.<term-module>` reference DSLs, #467), they become consumable
+  from published artifacts only once that release publishes.
+  Any `hostOverrides` local pins taken out during the development window (e.g. the
+  #524/#467 java/python pins) should be reverted as part of the release, after the
+  published artifacts are confirmed visible in their registries.
+
 ### Bumping the version
 
 ```bash

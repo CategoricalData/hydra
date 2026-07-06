@@ -29,7 +29,7 @@ NS = ModuleName("hydra.python.serde")
 from hydra.sources.python._source_dsl import (
     KERNEL_TYPES_NAMESPACES,
     make_def,
-    make_local,
+    make_local_str,
     proj as _proj_fq,
     unqualified_dep,
 )
@@ -58,7 +58,7 @@ _PLACEHOLDER = Module(
 
 
 _def = make_def(_PLACEHOLDER)
-_local = make_local("hydra.python.serde")
+_local = make_local_str("hydra.python.serde")
 
 
 def _flat_let(bindings, body):

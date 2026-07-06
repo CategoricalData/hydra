@@ -34,7 +34,7 @@ from hydra.sources.python._source_dsl import (
 
     KERNEL_TYPES_NAMESPACES,
     make_def,
-    make_local,
+    make_local_str,
     unqualified_dep,
 )
 
@@ -66,7 +66,7 @@ _PLACEHOLDER = Module(
 
 
 _def = make_def(_PLACEHOLDER)
-_local = make_local("hydra.python.utils")
+_local = make_local_str("hydra.python.utils")
 # Frequently used names
 _PY_NAME = Name("hydra.python.syntax.Name")
 
