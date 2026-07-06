@@ -127,7 +127,7 @@ At the beginning of every new session, follow these steps **before doing any oth
    full prerequisite list.
 
 4. **Tag every meaningful reply with the branch identifier.** Multiple
-   Claude sessions across parallel worktrees produce visually identical
+   agent sessions across parallel worktrees produce visually identical
    output; the tag tells the user which session a reply came from.
    Format: derive the tag from the branch name:
    - `feature_NNN_*` or `bug_NNN_*` → `[#NNN]` (e.g., `[#347]`, `[#283]`).
@@ -210,7 +210,7 @@ Before ending a session:
 ## Project structure
 
 The Hydra repository uses a **bare repo plus worktrees** layout so that
-multiple Claude sessions (and humans) can work on different feature branches
+multiple agent sessions (and humans) can work on different feature branches
 in parallel without stepping on each other.
 Top level: `hydra/hydra.git/` (bare repo), `hydra/worktrees/<branch>/` (one per active branch),
 `hydra/wiki/` (separate Git repo for the GitHub wiki).
@@ -242,7 +242,7 @@ between worktrees), see [claude/worktree-workflow.md](claude/worktree-workflow.m
 ### Branch promotion flow
 
 Hydra uses a four-tier ladder: `feature → integration → staging → main`.
-Feature worktrees have active Claude sessions and own conflict resolution
+Feature worktrees have active agent sessions and own conflict resolution
 (pull *integration* into the feature branch first, resolve there, then merge
 upward). `integration` and `main` are passive, typically with no attached
 session. `staging` is the only intermediate tier with active checks — its
@@ -258,7 +258,7 @@ session's sync → test → bootstrap → push → monitor-CI loop, see
 
 ### Cross-worktree communication
 
-Sibling Claude sessions can message each other through a per-worktree
+Sibling agent sessions can message each other through a per-worktree
 `claude-hydra-messages/` directory (gitignored).
 At session startup, list `claude-hydra-messages/inbox/*.md` and
 `claude-hydra-messages/outbox/*.md` — anything in outbox is an incomplete
@@ -268,16 +268,23 @@ Get explicit user permission before each send.
 For the full protocol (filename format, send/receive sequence, crash recovery),
 see [claude/cross-worktree-messages.md](claude/cross-worktree-messages.md).
 
-### Spawning and managing worker sessions
+### Spawning and managing agent sessions
 
-When the coordinator session needs a sibling worker (typically to fix a
+When a coordinating session needs a sibling agent (typically to fix a
 GitHub issue or run a parallel task), it spawns one and drives it through
 a full lifecycle — spawn → review → rebase/squash/verify → pause →
 (reopen if needed) → finalize. The spawn command, the model-selection
 policy, and each lifecycle step are documented in
 [`claude/coordinator-workflow.md`](claude/coordinator-workflow.md) (the
-coordinator-side companion to [`sub-claude-handoff.md`](sub-claude-handoff.md),
-which is the worker's view).
+coordinator-side companion to
+[`claude/agent-handoff.md`](claude/agent-handoff.md), which is the assigned
+agent's view).
+
+The overall model — how the agent parent-child hierarchy mirrors the GitHub
+issue tree, the two homes for all work (issue-tree vs. staging), the two agent
+kinds (issue vs. staging) with coordinator as a responsibility, model selection
+per role, the mandatory-parent rule, and cross-machine staging coordination —
+is in [`claude/agent-hierarchy.md`](claude/agent-hierarchy.md).
 
 ### Sync workflow
 
@@ -341,7 +348,8 @@ Primary entry point — the doc most likely to answer the question by task:
 | Python-host perf history | [docs/history/python-host-perf-investigation.md](docs/history/python-host-perf-investigation.md) |
 | Running benchmarks (kernel + inference) | [docs/recipes/running-benchmarks.md](docs/recipes/running-benchmarks.md) |
 | Inference scaling analysis | [docs/history/inference-bench-complexity-analysis.md](docs/history/inference-bench-complexity-analysis.md) |
-| Coordinate/spawn/finalize workers (coordinator session) | [claude/coordinator-workflow.md](claude/coordinator-workflow.md) — spawn command, model policy, worker lifecycle; companion to [sub-claude-handoff.md](sub-claude-handoff.md) |
+| Agent + issue hierarchy (roles, parentage, proposals, two homes, cross-machine staging) | [claude/agent-hierarchy.md](claude/agent-hierarchy.md) — the organizing model that coordinator-workflow + branch-flow implement |
+| Coordinate/spawn/finalize agents (coordinator responsibility) | [claude/coordinator-workflow.md](claude/coordinator-workflow.md) — spawn command, model policy, agent lifecycle; companion to [claude/agent-handoff.md](claude/agent-handoff.md) (the assigned agent's view) |
 | Branch promotion + staging cycle | [claude/branch-flow.md](claude/branch-flow.md) |
 
 ---
@@ -441,7 +449,7 @@ Ordered roughly by violation frequency — the first few are the ones every sess
    reply, and wait. "Draft the issue" or "write it up" means *show me*, not *file it* —
    filing is a separate, explicit go-ahead. This applies to any action touching shared
    project state. See `feedback_no_unauthorized_github_actions.md`.
-6. **Never kill processes you do not own.** Other Claude sessions (or the user)
+6. **Never kill processes you do not own.** Other agent sessions (or the user)
    may be running long builds, syncs, or tests in parallel.
    Never use broad `pgrep -f` patterns like `sync-all`, `sync-haskell`, `stack`, etc.
    to find and kill processes —
