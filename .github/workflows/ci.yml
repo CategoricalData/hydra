@@ -340,6 +340,13 @@ jobs:
           path: dist/scala/
       - run: sbt test
         working-directory: packages/hydra-scala
+      # Self-containment gate: publish the per-package artifacts to a temp Ivy
+      # repo and resolve them from an offline consumer, so a published jar that
+      # is missing classes its API needs (or whose POM references a sibling not
+      # in the publish set) fails here — the Scala analog of #472/#519 — before
+      # it reaches Maven Central. See #537.
+      - name: Verify Scala distribution self-containment
+        run: heads/scala/bin/verify-distribution.sh
 
   common-lisp:
     name: Common Lisp tests
