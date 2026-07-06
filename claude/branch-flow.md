@@ -12,19 +12,25 @@ feature_NNN  ──→  integration  ──→  staging  ──→  main  ──
 For the read/modify rules across worktrees, see CLAUDE.md ("Working with worktrees").
 For git-worktree mechanics (adding, removing, cherry-picks across worktrees),
 see [worktree-workflow.md](worktree-workflow.md).
-For the coordinator's view of spawning and finalizing the workers whose
+For the coordinator's view of spawning and finalizing the agents whose
 changes travel this ladder, see [coordinator-workflow.md](coordinator-workflow.md).
+For how staging fits the broader agent/issue hierarchy — the two homes for all
+work, the per-machine staging model, and cross-machine push coordination — see
+[agent-hierarchy.md](agent-hierarchy.md).
 
 ## Where work happens
 
-- **Feature worktrees** are where Claude sessions live and where conflicts are
+- **Feature worktrees** are where agent sessions live and where conflicts are
   resolved. They are the only tier with active, ongoing work.
-- **integration** is a passive collector. It typically has no Claude session
+- **integration** is a passive collector. It typically has no agent session
   attached. It receives merges from feature branches and forwards them to staging.
-- **staging** is the only intermediate tier with an attached Claude session.
+- **staging** is the only intermediate tier with an attached agent session.
   After integration's batch arrives, the staging session runs `/sync`, `/test`,
   `/bootstrap`, and any optional checks the user specifies. Only after those pass
-  does the batch advance to main.
+  does the batch advance to main. Staging also owns a set of **top-level
+  non-issue duties** (orphan-issue triage, cross-machine coordination, fleet
+  reconciliation) — its second half, distinct from promotion; see
+  [Staging's non-issue duties](#stagings-non-issue-duties).
 - **main** is a local stable mirror. No active session. It receives only from
   staging. The user pulls into local main first (so feature branches can pull
   from it to refresh their base), then pushes to `origin/main`.
@@ -36,14 +42,14 @@ belongs in the *feature* worktree, not in integration. Sequence:
 
 1. In the feature worktree, pull `integration` into the feature branch
    (`git pull . integration` or `git merge integration`).
-2. Resolve any conflicts there, using the Claude session attached to the
+2. Resolve any conflicts there, using the agent session attached to the
    feature worktree.
 3. Once the feature branch is clean and merges into integration would be
    conflict-free, perform the merge into integration's worktree.
 
-This keeps the active Claude session in the loop and keeps integration passive.
+This keeps the active agent session in the loop and keeps integration passive.
 The same principle applies one level up: staging pulls from integration in the
-staging worktree, with the staging Claude session resolving any conflicts.
+staging worktree, with the staging agent session resolving any conflicts.
 
 ## Cadence
 
@@ -155,3 +161,39 @@ the same WIP commits leak again on the next pull.
 Treat the cycle's WIP remediation as unfinished until both parts are done (or the
 user explicitly defers the source-side cleanup). Record any deferred source
 cleanup in the branch plan so it isn't lost.
+
+## Staging's non-issue duties
+
+The [Staging workflow](#staging-workflow) above is staging's *promotion* half.
+Staging also owns the **top-level, non-issue work** that isn't associated with
+any particular GitHub issue — the second of the [two homes for all
+work](agent-hierarchy.md#two-homes-for-all-work). Keeping this here (rather than
+letting it default to whoever happens to run staging) is what separates staging's
+promotion role from issue-coordination: issue-work goes to the issue-tree agent
+hierarchy; top-level non-issue work stays with staging.
+
+There is **one staging agent per machine**, and all of them push to the same
+`origin/main`, so several of these duties are inherently cross-machine.
+
+1. **Orphan-issue scan.** Periodically list non-`release_*` issues that have no
+   parent and prompt the user to assign one. Every non-release issue should have
+   a parent; humans occasionally file one without, and this is the backstop that
+   catches them (and any that an agent filed without the mandatory parent). This is
+   draft-and-show — **never re-parent an issue without explicit user approval.**
+   Run [`bin/scan-orphan-issues.sh`](../bin/scan-orphan-issues.sh) — it lists
+   every open issue with no parent, excluding the `release_*` roots (read-only;
+   it never files or re-parents). Surface its output to the user for parent
+   assignment.
+2. **Cross-machine merge-queue coordination.** Before dispatching a red-CI fix or
+   pushing a batch, check whether another machine's staging already has it in
+   flight, and announce your own. See
+   [agent-hierarchy.md § Cross-machine staging coordination](agent-hierarchy.md#cross-machine-staging-coordination)
+   for the full protocol (contended `origin/main`, the announcement channel, push
+   serialization, red-main ownership tie-break).
+3. **Periodic fleet reconciliation.** On a regular cadence, sweep for orphaned
+   worktrees and left-behind (merged-but-not-finalized) agents. A single staging
+   agent sees only its own machine's worktrees, so reconciliation is
+   cross-machine: each staging agent reports its fleet's disposition and a
+   designated one (or the release coordinator) collates. **Never finalize another
+   machine's agent** — a worktree showing "merged + 0 commits ahead" can be an
+   active agent with uncommitted WIP that only the owning machine can see.
