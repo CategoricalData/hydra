@@ -491,29 +491,29 @@ public class Utils {
                         Aliases.CURRENT_NAMESPACE,
                         proj(Module.TYPE_, Module.NAME, "mod")),
                     field(Aliases.PACKAGES, ref(overlayJavaLibPackageAliases)),
-                    field(Aliases.BRANCH_VARS, var("hydra.lib.sets.empty")),
+                    field(Aliases.BRANCH_VARS, hydra.dsl.lib.Sets.empty()),
                     field(
                         Aliases.RECURSIVE_VARS,
-                        var("hydra.lib.sets.empty")),
+                        hydra.dsl.lib.Sets.empty()),
                     field(
                         Aliases.IN_SCOPE_TYPE_PARAMS,
-                        var("hydra.lib.sets.empty")),
+                        hydra.dsl.lib.Sets.empty()),
                     field(
                         Aliases.POLYMORPHIC_LOCALS,
-                        var("hydra.lib.sets.empty")),
+                        hydra.dsl.lib.Sets.empty()),
                     field(
                         Aliases.IN_SCOPE_JAVA_VARS,
-                        var("hydra.lib.sets.empty")),
-                    field(Aliases.VAR_RENAMES, var("hydra.lib.maps.empty")),
-                    field(Aliases.LAMBDA_VARS, var("hydra.lib.sets.empty")),
+                        hydra.dsl.lib.Sets.empty()),
+                    field(Aliases.VAR_RENAMES, hydra.dsl.lib.Maps.empty()),
+                    field(Aliases.LAMBDA_VARS, hydra.dsl.lib.Sets.empty()),
                     field(
                         Aliases.TYPE_VAR_SUBST,
-                        var("hydra.lib.maps.empty")),
+                        hydra.dsl.lib.Maps.empty()),
                     field(
                         Aliases.TRUSTED_TYPE_VARS,
-                        var("hydra.lib.sets.empty")),
+                        hydra.dsl.lib.Sets.empty()),
                     field(Aliases.METHOD_CODOMAIN, nothing()),
-                    field(Aliases.THUNKED_VARS, var("hydra.lib.sets.empty"))));
+                    field(Aliases.THUNKED_VARS, hydra.dsl.lib.Sets.empty())));
 
     public static final Def interfaceMethodDeclaration = def("interfaceMethodDeclaration")
         .lam("mods").lam("tparams").lam("methodName").lam("params").lam("result").lam("stmts")
@@ -2279,7 +2279,7 @@ public class Utils {
                             TypeVariable.IDENTIFIER,
                             apply(
                                 ref(Utils.javaTypeIdentifier),
-                                apply(var("hydra.formatting.capitalize"), var("v")))))));
+                                hydra.dsl.Formatting.capitalize( var("v")))))));
 
     public static final Def javaTypeVariableToType = def("javaTypeVariableToType")
         .lam("tv")
@@ -2360,7 +2360,7 @@ public class Utils {
     public static final Def javaVariableName = def("javaVariableName")
         .lam("name")
         .to(() ->
-                apply(ref(Utils.javaIdentifier), apply(var("hydra.names.localNameOf"), var("name"))));
+                apply(ref(Utils.javaIdentifier), hydra.dsl.Names.localNameOf( var("name"))));
 
     public static final Def lookupJavaVarName = def("lookupJavaVarName")
         .lam("aliases").lam("name")
@@ -2546,7 +2546,7 @@ public class Utils {
         .to(() ->
                 let(
                     field("qn",
-                        apply(var("hydra.names.qualifyName"), var("name"))),
+                        hydra.dsl.Names.qualifyName( var("name"))),
                     field("ns_",
                         proj(QualifiedName.TYPE_, QualifiedName.MODULE_NAME, "qn")),
                     field("local",
@@ -2619,7 +2619,7 @@ public class Utils {
         .to(() ->
                 let(
                     field("qn",
-                        apply(var("hydra.names.qualifyName"), var("name"))),
+                        hydra.dsl.Names.qualifyName( var("name"))),
                     field("ns_",
                         proj(QualifiedName.TYPE_, QualifiedName.MODULE_NAME, "qn")),
                     field("local",
@@ -2698,8 +2698,7 @@ public class Utils {
                     Logic.ifElse(
                         Equality.equal(var("name"), string("_")),
                         string("ignored"),
-                        apply(
-                            var("hydra.formatting.sanitizeWithUnderscores"),
+                        hydra.dsl.Formatting.sanitizeWithUnderscores(
                             var("hydra.java.language.reservedWords"),
                             var("name")))));
 
@@ -3055,14 +3054,13 @@ public class Utils {
         .to(() ->
                 let(
                     field("qn",
-                        apply(var("hydra.names.qualifyName"), var("elName"))),
+                        hydra.dsl.Names.qualifyName( var("elName"))),
                     field("ns_",
                         proj(QualifiedName.TYPE_, QualifiedName.MODULE_NAME, "qn")),
                     field("local",
                         proj(QualifiedName.TYPE_, QualifiedName.LOCAL, "qn")),
                     field("flocal",
-                        apply(
-                            var("hydra.formatting.capitalize"),
+                        hydra.dsl.Formatting.capitalize(
                             apply(unwrap(Name.TYPE_), var("fname")))),
                     field("local1",
                         Logic.ifElse(
@@ -3072,8 +3070,7 @@ public class Utils {
                                 Equality.equal(var("flocal"), var("local")),
                                 Strings.cat2(var("flocal"), string("_")),
                                 var("flocal")))),
-                    apply(
-                        var("hydra.names.unqualifyName"),
+                    hydra.dsl.Names.unqualifyName(
                         record(QualifiedName.TYPE_,
                             field(QualifiedName.MODULE_NAME, var("ns_")),
                             field(QualifiedName.LOCAL, var("local1"))))));
