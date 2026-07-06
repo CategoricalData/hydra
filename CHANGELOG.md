@@ -21,6 +21,23 @@ Development version. Opens the 0.17.x line — the first release built entirely 
 published 0.17.0 hosts (Hackage / PyPI / Maven Central), with the `hostOverrides` shims
 that were needed while 0.16.1 lacked the effect type and I/O primitives removed.
 
+### New features
+
+- **Generated term-reference DSLs** ([#467](https://github.com/CategoricalData/hydra/issues/467)):
+  kernel *term* modules now project generated DSL surfaces, completing the story begun with
+  type-module DSLs and the generated primitive wrappers (`hydra.dsl.lib.*`, 0.17.0). A
+  signature read-back in the DSL pass reuses the main pass's inference, and a demand-curated
+  set of 19 kernel term modules (plus the json/test/extract modules) emits one typed,
+  rename-safe reference per definition into every target language — e.g. Haskell
+  `Hydra.Dsl.Strip.deannotateType`, Java `hydra.dsl.Strip.deannotateType(...)`, Python
+  `hydra.dsl.strip.deannotate_type(...)`. The Java and Python coder sources were pivoted onto
+  the generated references, retiring ~700 stringly-typed inline `var("hydra....")` references
+  and shrinking Python's hand registry to the non-generatable remainder (byte-identical
+  generated output before and after). Follow-ups:
+  [#555](https://github.com/CategoricalData/hydra/issues/555) (typed references to derived
+  encode/decode/show functions via `TypedName`),
+  [#556](https://github.com/CategoricalData/hydra/issues/556) (non-kernel packages).
+
 ### Fixed
 
 - **Lexicon generation** (`bin/regenerate-lexicon.sh`): the generator had been failing
