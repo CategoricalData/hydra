@@ -1446,6 +1446,42 @@ so most callers never see the encoded shape directly. Test cases that
 inspect annotation Terms via `cases _Term ...` do need to know the
 encoded form — see `Hydra.Sources.Test.Annotations` for examples.
 
+#### Limitation: `metaref`/`@@` chains into a polymorphic parameter (#550)
+
+`metaref :: TypedTermDefinition a -> TypedTerm Term` erases a definition's
+phantom type to `Term`, and chaining `metaref def @@ arg1 @@ arg2 @@ ...`
+(using the polymorphic `Phantoms.@@ :: (AsTerm f (a -> b), AsTerm g a) => f
+-> g -> TypedTerm b`) leaves each intermediate result's phantom type as a
+flexible metavariable. This composes fine when the chain's result feeds a
+*monomorphic* parameter (e.g. a helper typed `TypedTerm Term -> TypedTerm
+Term -> ...`), but fails with an `AsTerm`/functional-dependency ambiguity
+error when it feeds a parameter that is itself `AsTerm`-polymorphic, such
+as `Phantoms.pair :: (AsTerm t1 a, AsTerm t2 b) => t1 -> t2 -> TypedTerm (a,
+b)` — GHC has two independent open constraints to solve at once and neither
+side supplies enough concrete type information. This is the same class of
+inference fragility as the `rewriteDef` combinator removed in `6ed3de4fd4`.
+
+**Workaround**: build the term with `annots` (monomorphic, no `AsTerm`
+chain) instead of `metaref` + `@@`, and pull annotation keys via `asTerm`
+(not `metaref`) — a `TypedTermDefinition Name` like `Constants.keyType`
+already yields `TypedTerm Name` directly through the plain `AsTerm
+(TypedTermDefinition a) a` instance, with no erasure to `Term` and back:
+
+```haskell
+-- Fails: metaref erases to Term; chaining @@ leaves b flexible, so
+-- Phantoms.pair's two AsTerm constraints can't both resolve.
+badPair = Phantoms.pair (nm "a")
+  (metaref Annotations.setTermAnnotation @@ Constants.keyType @@ someType @@ subject)
+
+-- Works: annots is monomorphic; asTerm keeps keyType's phantom type as Name.
+goodPair = Phantoms.pair (nm "a")
+  (annots (Phantoms.map (M.fromList [(Phantoms.asTerm Constants.keyType, someTypeTerm)]))
+          subject)
+```
+
+See `Hydra.Sources.Test.Dependencies` (`sortBindingsCase "type-annotated
+binding is dependency-free"`) for a full worked example.
+
 ### Module definitions
 
 Create Hydra modules:
