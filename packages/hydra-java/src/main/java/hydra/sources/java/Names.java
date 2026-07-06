@@ -157,14 +157,6 @@ public class Names {
         .to(() ->
                 string("R"));
 
-
-
-
-
-
-
-
-
     private static final List<Definition> DEFINITIONS = definitionsOf(
             acceptMethodName,
             applyMethodName,

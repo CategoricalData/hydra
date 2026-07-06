@@ -1,5 +1,9 @@
 package hydra.sources.java;
 import hydra.core.Field;
+import hydra.overlay.java.dsl.meta.Defs;
+import hydra.overlay.java.dsl.meta.Defs.Def;
+import static hydra.overlay.java.dsl.meta.Defs.define;
+import static hydra.overlay.java.dsl.meta.Defs.definitionsOf;
 import static hydra.overlay.java.dsl.meta.Defs.unqualifiedDeps;
 import hydra.core.Name;
 import hydra.core.Type;
@@ -27,11 +31,10 @@ import hydra.packaging.ModuleDependency;
 import hydra.typed.TypedTerm;
 import hydra.overlay.java.util.Optional;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static hydra.overlay.java.dsl.meta.Phantoms.*;
-import static hydra.overlay.java.dsl.Helpers.termDef;
 
 /**
  * Language constraints and reserved words for Java.
@@ -41,6 +44,15 @@ import static hydra.overlay.java.dsl.Helpers.termDef;
  */
 public class Language {
     public static final ModuleName NS = new ModuleName("hydra.java.language");
+
+    private static Def def(String localName, Supplier<TypedTerm<?>> body) {
+        return define(NS, localName, body);
+    }
+
+    /** Fluent form: {@code def("name").doc("...").lam("x").to(() -> body)}. See Defs.DefBuilder. */
+    private static Defs.DefBuilder def(String localName) {
+        return define(NS, localName);
+    }
 
     /** Build an injection of a unit-tagged variant. Mirrors the inlined form
      * that {@code hydra.dsl.variants.*} TypedTerm constants expand to in the
@@ -139,20 +151,19 @@ public class Language {
         return Sets.fromList((TypedTerm<java.util.List<Object>>) (TypedTerm<?>) listTerm);
     }
 
-    private static Definition javaMaxTupleLength() {
-        return termDef(NS, "javaMaxTupleLength", doc(
-                "The maximum supported length of a tuple in Hydra-Java. "
-                    + "Note: if this constant is changed, also change Tuples.java correspondingly",
-                int32(9)).value);
-    }
+    public static final Def javaMaxTupleLength = def("javaMaxTupleLength")
+        .doc("The maximum supported length of a tuple in Hydra-Java. "
+            + "Note: if this constant is changed, also change Tuples.java correspondingly")
+        .to(() ->
+                int32(9));
 
     /** The {@code javaLanguage} definition: a {@code Language} record value. */
-    private static Definition javaLanguage() {
-        // Mirror Haskell `lets [...] $ Coders.language ...`.
-        TypedTerm<?> body = doc(
-            "Language constraints for Java",
+    // Mirror Haskell `lets [...] $ Coders.language ...`.
+    public static final Def javaLanguage = def("javaLanguage")
+        .doc("Language constraints for Java")
+        .to(() ->
             let(
-                Arrays.<hydra.core.Field>asList(
+                binds(
                     field("literalVariants", setsFromList(
                         "hydra.variants.LiteralVariant",
                         list(
@@ -239,8 +250,6 @@ public class Language {
                         codersCaseConvention("camel"),     codersCaseConvention("camel"),
                         codersCaseConvention("pascal"),    codersCaseConvention("pascal")),
                     codersFileExtension("java"))));
-        return termDef(NS, "javaLanguage", body.value);
-    }
 
     private static TypedTerm<?> stringList(String... strs) {
         TypedTerm<?>[] terms = new TypedTerm<?>[strs.length];
@@ -250,7 +259,9 @@ public class Language {
         return list(terms);
     }
 
-    private static Definition reservedWords() {
+    public static final Def reservedWords = def("reservedWords")
+        .doc("A set of reserved words in Java")
+        .to(() -> {
         TypedTerm<?> specialNames = doc(
             "Special names reserved for use by Hydra",
             stringList("Elements"));
@@ -288,10 +299,9 @@ public class Language {
                 "throw", "throws", "transient", "try", "void", "volatile", "while"));
         TypedTerm<?> literals = stringList("false", "null", "true");
 
-        TypedTerm<?> body = doc(
-            "A set of reserved words in Java",
+        return
             let(
-                Arrays.<hydra.core.Field>asList(
+                binds(
                     field("specialNames", specialNames),
                     field("classNames", classNames),
                     field("keywords", keywords),
@@ -300,14 +310,13 @@ public class Language {
                         var("specialNames"),
                         var("classNames"),
                         var("keywords"),
-                        var("literals"))))));
-        return termDef(NS, "reservedWords", body.value);
-    }
+                        var("literals")))));
+        });
 
-    private static final List<Definition> DEFINITIONS = Arrays.asList(
-        javaMaxTupleLength(),
-        javaLanguage(),
-        reservedWords());
+    private static final List<Definition> DEFINITIONS = definitionsOf(
+        javaMaxTupleLength,
+        javaLanguage,
+        reservedWords);
 
     // Haskell: moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces
     private static final List<ModuleDependency> DEPENDENCIES = unqualifiedDeps(
