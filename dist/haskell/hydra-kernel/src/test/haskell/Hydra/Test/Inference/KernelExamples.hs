@@ -313,6 +313,5 @@ testGroupForNestedLet =
                   Core.typeSchemeConstraints = Nothing}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
-                Testing.Tag "disabledForMinimalInference",
-                (Testing.Tag "disabled")]}]}],
+                Testing.Tag "disabledForMinimalInference"]}]}],
       Testing.testGroupCases = []}

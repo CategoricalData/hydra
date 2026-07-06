@@ -200,15 +200,17 @@ testGroupForLet = define "testGroupForLet" $
           "list">: lambda "x" $ list [var "x"]]
           $ pair (var "list" @@ int32 42) (var "list" @@ string "foo"))
         (T.pair (T.list T.int32) (T.list T.string)),
-      expectPoly 8 [tag_disabled]
-        (lets [
-          "singleton">: lambda "x" $ list [var "x"],
-          "f">: lambda "x" $ lambda "y" $ primitive DefLists.cons
-            @@ (pair (var "singleton" @@ var "x") (var "singleton" @@ var "y"))
-            @@ (var "g" @@ var "x" @@ var "y"),
-          "g">: lambda "x" $ lambda "y" $ var "f" @@ int32 42 @@ var "y"]
-          $ var "f")
-        ["t0"] (T.list $ T.pair T.int32 (T.var "t0")),
+      -- Polymorphic mutual recursion is unsupported in Hydra (known limitation). Correct expected
+      -- type (per hydra.inference) is (forall t0. (int32 → t0 → list<(list<int32>, list<t0>)>)).
+      -- expectPoly 8 []
+      --   (lets [
+      --     "singleton">: lambda "x" $ list [var "x"],
+      --     "f">: lambda "x" $ lambda "y" $ primitive DefLists.cons
+      --       @@ (pair (var "singleton" @@ var "x") (var "singleton" @@ var "y"))
+      --       @@ (var "g" @@ var "x" @@ var "y"),
+      --     "g">: lambda "x" $ lambda "y" $ var "f" @@ int32 42 @@ var "y"]
+      --     $ var "f")
+      --   ["t0"] (T.functionMany [T.int32, T.var "t0", T.list $ T.pair (T.list T.int32) (T.list $ T.var "t0")]),
       expectMono 9 [tag_disabledForMinimalInference]
         (lets [
           "id">: lambda "x" $ var "x",
@@ -237,14 +239,16 @@ testGroupForLet = define "testGroupForLet" $
           "y">: var "x"] $
           pair (var "x") (var "y"))
         ["t0", "t1"] (T.pair (T.var "t0") (T.var "t1")),
-      expectPoly 3 [tag_disabled]
-        (lets [
-          "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ var "x"),
-          "g">: lambda "u" $ lambda "v" (var "f" @@ var "v" @@ int32 0)]
-          $ pair (var "f") (var "g"))
-        ["t0", "t1"] (T.pair
-          (T.functionMany [T.var "t0", T.int32, T.var "t1"])
-          (T.functionMany [T.int32, T.var "v0", T.var "t1"])),
+      -- Polymorphic mutual recursion is unsupported in Hydra (known limitation). Correct expected
+      -- type is (forall t0,t1. ((t0 → int32 → t1), (int32 → t0 → t1))); v0 in the original was a typo for t0.
+      -- expectPoly 3 [tag_disabled]
+      --   (lets [
+      --     "f">: lambda "x" $ lambda "y" (var "g" @@ int32 0 @@ var "x"),
+      --     "g">: lambda "u" $ lambda "v" (var "f" @@ var "v" @@ int32 0)]
+      --     $ pair (var "f") (var "g"))
+      --   ["t0", "t1"] (T.pair
+      --     (T.functionMany [T.var "t0", T.int32, T.var "t1"])
+      --     (T.functionMany [T.int32, T.var "t0", T.var "t1"])),
       expectMono 4 []
         -- letrec + = (\x . (\y . (S (+ (P x) y)))) in (+ (S (S 0)) (S 0))
         (lets [
@@ -522,11 +526,11 @@ testGroupForPathologicalTerms = define "testGroupForPathologicalTerms" $
           "self">: primitive DefLists.cons @@ var "x" @@ var "self"]
           $ var "self")
         ["t0"] (T.function (T.var "t0") (T.list $ T.var "t0")),
-      expectPoly 3  [tag_disabled]
+      expectPoly 3  []
         (lets [
           "self">: lambda "e" $ primitive DefLists.cons @@ var "e" @@ (var "self" @@ var "e")]
           $ lambda "x" $ var "self" @@ var "x")
-        ["t0"] (T.function (T.var "t0") (T.var "t0")),
+        ["t0"] (T.function (T.var "t0") (T.list $ T.var "t0")),
       expectMono 4  []
         (lets [
           "build">: lambda "x" $ primitive DefLists.cons @@ var "x" @@ (var "build" @@

@@ -39,6 +39,7 @@ type Int32 = I.Int32
 
 tag_disabled = Tag "disabled"
 tag_disabledForMinimalInference = Tag "disabledForMinimalInference"
+tag_disabledForScala = Tag "disabledForScala"
 
 alphaConvertRef :: TypedTerm (Name -> Name -> Term -> Term)
 alphaConvertRef = TypedTerm $ TermVariable $ Name "hydra.reduction.alphaConvert"
@@ -270,9 +271,12 @@ typeSchemeToFTypeRef :: TypedTerm (TypeScheme -> Type)
 typeSchemeToFTypeRef = TypedTerm $ TermVariable $ Name "hydra.scoping.typeSchemeToFType"
 
 universalCase :: String -> TypedTerm a -> TypedTerm b -> TypedTerm TestCaseWithMetadata
-universalCase cname actual expected = testCaseWithMetadata (Phantoms.string cname)
+universalCase cname actual expected = universalCaseWithTags cname [] actual expected
+
+universalCaseWithTags :: String -> [Tag] -> TypedTerm a -> TypedTerm b -> TypedTerm TestCaseWithMetadata
+universalCaseWithTags cname tags actual expected = testCaseWithMetadata (Phantoms.string cname)
   (testCaseUniversal $ universalTestCase (retype actual) (retype expected))
-  nothing noTags
+  nothing (Phantoms.list $ tag . unTag <$> tags)
   where
     retype :: TypedTerm x -> TypedTerm String
     retype (TypedTerm t) = TypedTerm t

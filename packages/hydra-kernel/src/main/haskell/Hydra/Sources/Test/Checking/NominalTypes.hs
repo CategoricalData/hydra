@@ -1177,7 +1177,7 @@ unionEliminationsWithDefaultsTests = define "unionEliminationsWithDefaultsTests"
 usingKernelTypesTests :: TypedTermDefinition TestGroup
 usingKernelTypesTests = define "usingKernelTypesTests" $
   subgroup "Using kernel types" [
-  checkTest "case statement on CoderDirection applied to argument" [tag_disabled]
+  checkTest "case statement on CoderDirection applied to argument" []
     (lambda "dir" $
       lambda "coder" $
         match (name "hydra.coders.CoderDirection")

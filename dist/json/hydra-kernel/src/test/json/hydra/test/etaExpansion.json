@@ -14938,7 +14938,7 @@
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {
                                             "name": "tags",
-                                            "term": {"list": [{"wrap": {"typeName": "hydra.testing.Tag", "body": {"literal": {"string": "disabled"}}}}]}}]}},
+                                            "term": {"list": [{"wrap": {"typeName": "hydra.testing.Tag", "body": {"literal": {"string": "disabledForScala"}}}}]}}]}},
                                     {
                                       "record": {
                                         "typeName": "hydra.testing.TestCaseWithMetadata",
