@@ -127,7 +127,7 @@ coder sources project with `Phantoms` (`proj(...)`) and the `hydra.overlay.java.
 ### 4. Library wrappers
 
 The generated `hydra.dsl.lib.*` modules provide typed wrappers around Hydra primitive functions,
-so a primitive call reads as a normal method call rather than a raw `primitive2(...)`.
+so a primitive call reads as a normal method call rather than a raw `apply(var("hydra.lib..."), ...)`.
 
 ```java
 import hydra.dsl.lib.Sets;
@@ -167,7 +167,7 @@ Prefer these over inline `var("hydra....")` strings in new code.
 | Simple term construction | Direct Terms DSL | Quick and straightforward |
 | Writing kernel source code | Phantom-typed DSL + `Helpers` | Type safety + module-assembly helpers |
 | Field access on kernel types | `Phantoms.proj(...)` | Typed projection onto a variable |
-| Primitive function calls | Library wrappers | `Sets.union(a, b)` instead of raw `primitive2(...)` |
+| Primitive function calls | Library wrappers | `Sets.union(a, b)` instead of raw `apply(var(...), ...)` |
 
 **Rule of thumb**:
 - **Type modules** (defining data types): Use `hydra.overlay.java.dsl.Types` with `Types.record()`, `Types.union()`, `Types.wrap()`
@@ -318,8 +318,9 @@ TypedTerm<Boolean> no = false_();
 TypedTerm<Object> id = lambda("x", var("x"));
 
 // Lambda (multiple parameters — curried)
+// Primitive calls use the generated hydra.dsl.lib.* wrappers (see "Library wrappers")
 TypedTerm<Object> add = lambdas(List.of("x", "y"),
-    primitive2(new Name("hydra.lib.math.add"), var("x"), var("y")));
+    Math_.add(var("x"), var("y")));
 
 // Function application
 TypedTerm<Object> result = apply(var("f"), int32(5));
@@ -356,39 +357,47 @@ TypedTerm<Object> err = left(string("error"));
 
 ```java
 // Construct a record (requires type name + fields)
-TypedTerm<Object> person = record(Person.TYPE_NAME,
-    field(Person.FIELD_NAME_NAME, string("Alice")),
-    field(Person.FIELD_NAME_AGE, int32(30)));
+// Generated kernel classes emit a `TYPE_` constant plus one bare-name constant per field.
+import hydra.core.AnnotatedTerm;
+
+TypedTerm<Object> annotated = record(AnnotatedTerm.TYPE_,
+    field(AnnotatedTerm.BODY, var("body")),
+    field(AnnotatedTerm.ANNOTATION, var("ann")));
 ```
 
 ### Union injection
 
 ```java
-// Inject into a union type
-TypedTerm<Object> circle = inject(Shape.TYPE_NAME, Shape.FIELD_NAME_CIRCLE,
-    float64(3.14));
+import hydra.core.FloatType;
+import hydra.core.Literal;
 
-// Unit injection (for enum-like variants)
-TypedTerm<Object> none = injectUnit(FloatType.TYPE_NAME, FloatType.FIELD_NAME_FLOAT32);
+// Inject into a union type
+TypedTerm<Object> f = inject(Literal.TYPE_, Literal.FLOAT,
+    var("floatValue"));
+
+// Unit injection (for enum-like variants): the 2-arg inject overload supplies unit
+TypedTerm<Object> f32 = inject(FloatType.TYPE_, FloatType.FLOAT32);
 ```
 
 ### Pattern matching (`cases`/`match`)
 
 ```java
+import hydra.core.Term;
+
 // match creates a case elimination (unapplied)
-TypedTerm<Object> matcher = match(Term.TYPE_NAME,
-    Maybe.just(var("default")),         // default case
-    field(Term.FIELD_NAME_LITERAL,      // case: literal
+TypedTerm<Object> matcher = match(Term.TYPE_,
+    Maybe.just(var("default")),   // default case
+    field(Term.LITERAL,           // case: literal
         lambda("lit", string("found a literal"))),
-    field(Term.FIELD_NAME_VARIABLE,     // case: variable
+    field(Term.VARIABLE,          // case: variable
         lambda("v", string("found a variable"))));
 
 // cases applies the match to an argument
-TypedTerm<Object> result = cases(Term.TYPE_NAME, var("myTerm"),
-    Maybe.nothing(),                    // no default
-    field(Term.FIELD_NAME_LITERAL,
+TypedTerm<Object> result = cases(Term.TYPE_, var("myTerm"),
+    Maybe.nothing(),              // no default
+    field(Term.LITERAL,
         lambda("lit", var("lit"))),
-    field(Term.FIELD_NAME_VARIABLE,
+    field(Term.VARIABLE,
         lambda("v", var("v"))));
 ```
 
@@ -410,18 +419,18 @@ TypedTerm<Object> expr2 = lets(List.of(
 
 ```java
 // Create a field accessor function
-TypedTerm<Object> getName = project(Person.TYPE_NAME, Person.FIELD_NAME_NAME);
+TypedTerm<Object> getBody = project(AnnotatedTerm.TYPE_, AnnotatedTerm.BODY);
 
 // Apply it
-TypedTerm<Object> name = apply(getName, var("person"));
+TypedTerm<Object> body = apply(getBody, var("annotated"));
 ```
 
 The combined "project a field, then apply to a named variable" pattern
 is so common that `Phantoms` provides a `proj` shortcut:
 
 ```java
-// Equivalent to: apply(project(Person.TYPE_NAME, Person.FIELD_NAME), var("person"))
-TypedTerm<Object> name = proj(Person.TYPE_NAME, Person.FIELD_NAME, "person");
+// Equivalent to: apply(project(AnnotatedTerm.TYPE_, AnnotatedTerm.BODY), var("annotated"))
+TypedTerm<Object> body = proj(AnnotatedTerm.TYPE_, AnnotatedTerm.BODY, "annotated");
 ```
 
 Overloads accept `String` or `Name` for the type/field arguments, and
@@ -451,21 +460,29 @@ containing module, since the inferencer processes them in a shared context.
 
 ```java
 // Wrap a value (create a newtype instance)
-TypedTerm<Object> hydraName = wrap(Name.TYPE_NAME, string("myName"));
+TypedTerm<Object> hydraName = wrap(Name.TYPE_, string("myName"));
 
 // Unwrap function
-TypedTerm<Object> unwrapper = unwrap(Name.TYPE_NAME);
+TypedTerm<Object> unwrapper = unwrap(Name.TYPE_);
 ```
 
 ### Primitive functions
 
-```java
-// Reference a primitive
-TypedTerm<Object> addPrim = primitive(new Name("hydra.lib.math.add"));
+Primitive calls go through the generated `hydra.dsl.lib.*` wrappers — there are no
+`primitive`/`primitive1`/`primitive2` helpers. Each wrapper method is typed and rename-safe:
 
-// Apply primitives with 1, 2, or 3 arguments
-TypedTerm<Object> len = primitive1(new Name("hydra.lib.strings.length"), var("s"));
-TypedTerm<Object> sum = primitive2(new Name("hydra.lib.math.add"), var("x"), var("y"));
+```java
+import hydra.dsl.lib.Strings;
+import hydra.dsl.lib.Math_;   // math.* wrapper; escaped to avoid clashing with java.lang.Math
+
+TypedTerm<Integer> len = Strings.length(var("s"));
+TypedTerm<Integer> sum = Math_.add(var("x"), var("y"));
+```
+
+If no wrapper exists yet for a primitive, reference it by name and apply directly:
+
+```java
+TypedTerm<Object> sum = apply(var("hydra.lib.math.add"), var("x"), var("y"));
 ```
 
 ### Documentation
@@ -485,9 +502,9 @@ variable):
 import static hydra.overlay.java.dsl.meta.Phantoms.*;
 
 // Lambda.body of the term bound to "lam"
-TypedTerm<Object> body = proj(Lambda.TYPE_NAME, Lambda.FIELD_NAME_BODY, "lam");
+TypedTerm<Object> body = proj(Lambda.TYPE_, Lambda.BODY, "lam");
 // AnnotatedTerm.annotation of the term bound to "at"
-TypedTerm<Object> ann = proj(AnnotatedTerm.TYPE_NAME, AnnotatedTerm.FIELD_NAME_ANNOTATION, "at");
+TypedTerm<Object> ann = proj(AnnotatedTerm.TYPE_, AnnotatedTerm.ANNOTATION, "at");
 ```
 
 For constructing kernel records, use the `Terms.record(...)` / `Phantoms` constructors directly, or the
@@ -496,20 +513,21 @@ generated `hydra.dsl.*` constructor DSLs (e.g. `hydra.dsl.Core.lambda(...)`). Th
 
 ### Generated name constants
 
-Generated Hydra types provide `TYPE_NAME` and `FIELD_NAME_*` constants:
+Generated Hydra types provide a `TYPE_` constant (the type's `Name`) plus one bare-name constant
+per field or variant (the field/variant's local `Name`):
 
 ```java
 // From hydra.core.Term (generated)
-Term.TYPE_NAME                // Name("hydra.core.Term")
-Term.FIELD_NAME_LITERAL       // Name("literal")
-Term.FIELD_NAME_VARIABLE      // Name("variable")
-Term.FIELD_NAME_APPLICATION    // Name("application")
+Term.TYPE_          // Name("hydra.core.Term")
+Term.LITERAL        // Name("literal")
+Term.VARIABLE       // Name("variable")
+Term.APPLICATION    // Name("application")
 // ... etc.
 
 // From hydra.core.Lambda (generated)
-Lambda.TYPE_NAME              // Name("hydra.core.Lambda")
-Lambda.FIELD_NAME_PARAMETER   // Name("parameter")
-Lambda.FIELD_NAME_BODY        // Name("body")
+Lambda.TYPE_        // Name("hydra.core.Lambda")
+Lambda.PARAMETER    // Name("parameter")
+Lambda.BODY         // Name("body")
 ```
 
 Always use these constants rather than constructing `Name` instances manually.
@@ -519,7 +537,7 @@ This ensures correctness and enables refactoring.
 
 Library wrappers provide phantom-typed interfaces to Hydra's primitive functions. They are
 **generated** — one `hydra.dsl.lib.<Library>` module per `hydra.lib.*` library — so you import and call
-them directly rather than hand-rolling `primitive2(...)` wrappers:
+them directly rather than hand-rolling raw primitive applications:
 
 ```java
 import hydra.dsl.lib.Sets;
@@ -633,9 +651,9 @@ public class MyFunctions {
         .doc("Remove annotations from a term")
         .lam("term")
         .to(() ->
-            cases(Term.TYPE_NAME, var("term"),
+            cases(Term.TYPE_, var("term"),
                 Maybe.just(var("term")),       // default: return unchanged
-                field(Term.FIELD_NAME_ANNOTATED,
+                field(Term.ANNOTATED,
                     lambda("at",
                         apply(var("deannotateTerm"),
                             annotatedTermBody(var("at")))))));
@@ -669,9 +687,9 @@ Match on a union type, handle one variant, pass others through:
 
 ```java
 TypedTerm<Object> fn = lambda("term",
-    cases(Term.TYPE_NAME, var("term"),
+    cases(Term.TYPE_, var("term"),
         Maybe.just(var("term")),                    // default: identity
-        field(Term.FIELD_NAME_ANNOTATED,            // handle one case
+        field(Term.ANNOTATED,                       // handle one case
             lambda("at", annotatedTermBody(var("at"))))));
 ```
 
@@ -683,9 +701,9 @@ Bind a local transform, pass it to a rewriting function:
 TypedTerm<Object> fn = lambda("typ",
     let1("f",
         lambda("recurse", lambda("t",
-            cases(Type.TYPE_NAME, var("t"),
+            cases(Type.TYPE_, var("t"),
                 Maybe.just(apply(var("recurse"), var("t"))),
-                field(Type.FIELD_NAME_ANNOTATED,
+                field(Type.ANNOTATED,
                     lambda("at",
                         apply(var("recurse"),
                             annotatedTypeBody(var("at")))))))),
@@ -705,7 +723,7 @@ TypedTerm<Object> vars = let1("dfltVars",
         setsEmpty(),
         apply(var("subterms"), var("term"))),
     // then match on specific cases...
-    cases(Term.TYPE_NAME, var("term"),
+    cases(Term.TYPE_, var("term"),
         Maybe.just(var("dfltVars")),
         // ...
     ));
@@ -717,18 +735,15 @@ Check whether a variable is shadowed before rewriting:
 
 ```java
 TypedTerm<Object> replaceFn = lambda("recurse", lambda("t",
-    cases(Term.TYPE_NAME, var("t"),
+    cases(Term.TYPE_, var("t"),
         Maybe.just(apply(var("recurse"), var("t"))),
-        field(Term.FIELD_NAME_FUNCTION,
-            match(Function.TYPE_NAME,
-                Maybe.just(apply(var("recurse"), var("t"))),
-                field(Function.FIELD_NAME_LAMBDA,
-                    lambda("l",
-                        // Stop if lambda shadows our variable
-                        apply(apply(var("ifElse"),
-                            equalName(lambdaParameter(var("l")), var("name"))),
-                            var("t"),
-                            apply(var("recurse"), var("t"))))))))));
+        field(Term.LAMBDA,
+            lambda("l",
+                // Stop if lambda shadows our variable
+                apply(apply(var("ifElse"),
+                    equalName(lambdaParameter(var("l")), var("name"))),
+                    var("t"),
+                    apply(var("recurse"), var("t"))))))));
 ```
 
 ## Working with generated code
@@ -736,7 +751,7 @@ TypedTerm<Object> replaceFn = lambda("recurse", lambda("t",
 Generated Java classes for Hydra types provide:
 
 1. **Visitor pattern** for union types (`accept`, `Visitor<R>`, `PartialVisitor<R>`)
-2. **Static name constants** (`TYPE_NAME`, `FIELD_NAME_*`)
+2. **Static name constants** (`TYPE_`, plus one bare-name constant per field/variant)
 3. **Serializable** implementations
 4. **Comparable** implementations
 5. **Fluent builders** and **copy-update methods** for record types (see below)
@@ -746,9 +761,9 @@ Generated Java classes for Hydra types provide:
 ```java
 // hydra.core.Term (generated)
 public abstract class Term implements Serializable, Comparable<Term> {
-    public static final Name TYPE_NAME = new Name("hydra.core.Term");
-    public static final Name FIELD_NAME_LITERAL = new Name("literal");
-    public static final Name FIELD_NAME_VARIABLE = new Name("variable");
+    public static final Name TYPE_ = new Name("hydra.core.Term");
+    public static final Name LITERAL = new Name("literal");
+    public static final Name VARIABLE = new Name("variable");
     // ...
 
     public static final class Literal extends Term { ... }
