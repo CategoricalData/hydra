@@ -17,7 +17,7 @@
 # --force-respawn if the prior fix was genuinely incomplete.
 #
 # Creates:
-#   - branch:  bug_<NNN>_<slug>  (off origin/main)
+#   - branch:  <type>_<NNN>_<slug>  (off origin/main; type defaults to "bug", override with TYPE=feature|task|release)
 #   - worktree: ../bug_<NNN>_<slug>/
 #   - .claude/ seeded with hooks + permissions
 #   - claude-hydra-messages/inbox/ seeded with a briefing (addressed to $COORDINATOR)
@@ -47,7 +47,11 @@ TITLE="${3:-(issue title not given — fetch with: gh issue view $NUM)}"
 
 ROOT="${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
 WORKTREES_DIR="$(cd "$ROOT/.." && pwd)"
-BRANCH="bug_${NUM}_${SLUG}"
+# Branch prefix defaults to "bug"; override with TYPE=feature|task|release etc.
+# (aligned with the issue-type taxonomy — release_NNN_* workers coordinate an
+# issue subtree rather than fixing a single issue).
+TYPE="${TYPE:-bug}"
+BRANCH="${TYPE}_${NUM}_${SLUG}"
 WT="$WORKTREES_DIR/$BRANCH"
 
 if [ -e "$WT" ]; then
@@ -61,7 +65,7 @@ fi
 # plan and the GitHub issue state before deciding to override with --force.
 CLOSED_DIR="$WORKTREES_DIR/closed"
 if [ -d "$CLOSED_DIR" ]; then
-    PRIOR=$(ls "$CLOSED_DIR" 2>/dev/null | grep "^bug_${NUM}_" || true)
+    PRIOR=$(ls "$CLOSED_DIR" 2>/dev/null | grep "^${TYPE}_${NUM}_" || true)
     if [ -n "$PRIOR" ]; then
         echo "error: issue #${NUM} already has an archived plan-doc in worktrees/closed/:" >&2
         echo "$PRIOR" | sed 's/^/  /' >&2
@@ -112,7 +116,7 @@ to investigating and fixing it.
 1. Run the CLAUDE.md startup procedure (you should be doing that anyway).
 2. Read the issue body via \`gh issue view ${NUM}\`. Investigate the symptom
    and propose a root cause.
-3. Write your plan to \`bug_${NUM}_${SLUG}-plan.md\` at the worktree root.
+3. Write your plan to \`${BRANCH}-plan.md\` at the worktree root.
 4. Iterate: commit small, push often, draft a PR when ready for review.
 
 ## Coordination
@@ -163,25 +167,25 @@ go in the plan-doc's "Findings" section for future filing, not this PR.
 Good luck. Ping back when you've got a plan or hit a blocker.
 EOF
 
-echo "Starting tmux session 'bug_${NUM}_${SLUG}'..."
-tmux new-session -d -s "bug_${NUM}_${SLUG}" -c "$WT"
+echo "Starting tmux session '${BRANCH}'..."
+tmux new-session -d -s "${BRANCH}" -c "$WT"
 
 # Pin the window/pane title to the session name so the iTerm2/terminal tab
 # always shows the worktree identity. Without this, Claude's TUI emits OSC
 # escape sequences that retitle the window with the current task, making it
 # hard to find a specific session among many tabs.
-tmux set-window-option -t "bug_${NUM}_${SLUG}" automatic-rename off
-tmux set-window-option -t "bug_${NUM}_${SLUG}" allow-rename off
-tmux rename-window   -t "bug_${NUM}_${SLUG}" "bug_${NUM}_${SLUG}"
+tmux set-window-option -t "${BRANCH}" automatic-rename off
+tmux set-window-option -t "${BRANCH}" allow-rename off
+tmux rename-window   -t "${BRANCH}" "${BRANCH}"
 # Also set the pane title via OSC; tmux relays this to terminals that
 # respect pane-titles (iTerm2 with set -g set-titles on).
-tmux select-pane     -t "bug_${NUM}_${SLUG}" -T "bug_${NUM}_${SLUG}"
+tmux select-pane     -t "${BRANCH}" -T "${BRANCH}"
 
 # Default to opusplan for bug_/task_ workers — they spend most of their wall
 # time on mechanical sync/regen/verify, which Sonnet handles fine. Override
 # via SPAWN_MODEL=opus (or any other model alias) for genuinely hard bugs.
 SPAWN_MODEL="${SPAWN_MODEL:-opusplan}"
-tmux send-keys -t "bug_${NUM}_${SLUG}" "claude-remote -b -m ${SPAWN_MODEL}" Enter
+tmux send-keys -t "${BRANCH}" "claude-remote -b -m ${SPAWN_MODEL}" Enter
 
 # Give claude time to spin up its TUI before sending the trigger prompt.
 # 8s is comfortable headroom for Claude Code v2.1's startup. We then send
@@ -191,16 +195,16 @@ tmux send-keys -t "bug_${NUM}_${SLUG}" "claude-remote -b -m ${SPAWN_MODEL}" Ente
 # hit Enter manually to actually submit it. The second Enter is insurance:
 # a no-op if the prompt was already submitted, the missing submit otherwise.
 sleep 8
-tmux send-keys -t "bug_${NUM}_${SLUG}" "Please complete the CLAUDE.md startup procedure and address any pending inbox messages." Enter
+tmux send-keys -t "${BRANCH}" "Please complete the CLAUDE.md startup procedure and address any pending inbox messages." Enter
 sleep 3
-tmux send-keys -t "bug_${NUM}_${SLUG}" Enter
+tmux send-keys -t "${BRANCH}" Enter
 
 echo ""
 echo "============================================================"
-echo "Spawned bug_${NUM}_${SLUG}:"
+echo "Spawned ${BRANCH}:"
 echo "  worktree: $WT"
 echo "  branch:   $BRANCH"
-echo "  tmux:     tmux attach -t bug_${NUM}_${SLUG}"
+echo "  tmux:     tmux attach -t ${BRANCH}"
 echo ""
 echo "Watch attention markers from coordinator:"
 echo "  ls -la ~/.cache/claude-attention/"
