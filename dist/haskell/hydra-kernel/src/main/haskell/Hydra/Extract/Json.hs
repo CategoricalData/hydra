@@ -17,6 +17,7 @@ import qualified Hydra.Errors as Errors
 import qualified Hydra.File as File
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
+import qualified Hydra.Json.Writer as Writer
 import qualified Hydra.Overlay.Haskell.Lib.Eithers as Eithers
 import qualified Hydra.Overlay.Haskell.Lib.Maps as Maps
 import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
@@ -81,25 +82,25 @@ optString :: Ord t0 => (t0 -> M.Map t0 Model.Value -> Either String (Maybe Strin
 optString fname m = Optionals.cases (opt fname m) (Right Nothing) (\s -> Eithers.map (\x -> Just x) (expectString s))
 
 -- | Look up a required field in a JSON object, failing if not found
-require :: Ord t0 => (t0 -> M.Map t0 t1 -> Either String t1)
+require :: String -> M.Map String t0 -> Either String t0
 require fname m =
     Optionals.cases (Maps.lookup fname m) (Left (Strings.cat [
       "required attribute ",
-      (showValue fname),
+      (showValue (Model.ValueString fname)),
       " not found"])) (\value -> Right value)
 
 -- | Look up a required array field in a JSON object
-requireArray :: Ord t0 => (t0 -> M.Map t0 Model.Value -> Either String [Model.Value])
+requireArray :: String -> M.Map String Model.Value -> Either String [Model.Value]
 requireArray fname m = Eithers.bind (require fname m) expectArray
 
 -- | Look up a required number field in a JSON object
-requireNumber :: Ord t0 => (t0 -> M.Map t0 Model.Value -> Either String Sci.Scientific)
+requireNumber :: String -> M.Map String Model.Value -> Either String Sci.Scientific
 requireNumber fname m = Eithers.bind (require fname m) expectNumber
 
 -- | Look up a required string field in a JSON object
-requireString :: Ord t0 => (t0 -> M.Map t0 Model.Value -> Either String String)
+requireString :: String -> M.Map String Model.Value -> Either String String
 requireString fname m = Eithers.bind (require fname m) expectString
 
--- | Show a JSON value as a string (placeholder implementation)
-showValue :: t0 -> String
-showValue value = "TODO: implement showValue"
+-- | Show a JSON value as a string
+showValue :: Model.Value -> String
+showValue value = Writer.printJson value

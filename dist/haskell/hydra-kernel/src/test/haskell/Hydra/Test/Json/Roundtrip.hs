@@ -567,6 +567,129 @@ allTests =
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
+          Testing.testGroupName = "parametric types",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = [
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "type application of a polymorphic record",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson (Maps.fromList [
+                  (
+                    Core.Name "Relationship",
+                    (Core.TypeForall (Core.ForallType {
+                      Core.forallTypeParameter = (Core.Name "a"),
+                      Core.forallTypeBody = (Core.TypeRecord [
+                        Core.FieldType {
+                          Core.fieldTypeName = (Core.Name "target"),
+                          Core.fieldTypeType = (Core.TypeVariable (Core.Name "a"))},
+                        Core.FieldType {
+                          Core.fieldTypeName = (Core.Name "note"),
+                          Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)}])})))]) (Core.Name "test") (Core.TypeApplication (Core.ApplicationType {
+                  Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "Relationship")),
+                  Core.applicationTypeArgument = (Core.TypeLiteral Core.LiteralTypeString)})) json)) (Encode.toJson (Maps.fromList [
+                  (
+                    Core.Name "Relationship",
+                    (Core.TypeForall (Core.ForallType {
+                      Core.forallTypeParameter = (Core.Name "a"),
+                      Core.forallTypeBody = (Core.TypeRecord [
+                        Core.FieldType {
+                          Core.fieldTypeName = (Core.Name "target"),
+                          Core.fieldTypeType = (Core.TypeVariable (Core.Name "a"))},
+                        Core.FieldType {
+                          Core.fieldTypeName = (Core.Name "note"),
+                          Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)}])})))]) (Core.Name "test") (Core.TypeApplication (Core.ApplicationType {
+                  Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "Relationship")),
+                  Core.applicationTypeArgument = (Core.TypeLiteral Core.LiteralTypeString)})) (Core.TermRecord (Core.Record {
+                  Core.recordTypeName = (Core.Name "test"),
+                  Core.recordFields = [
+                    Core.Field {
+                      Core.fieldName = (Core.Name "target"),
+                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "example.AtomId"))},
+                    Core.Field {
+                      Core.fieldName = (Core.Name "note"),
+                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "authored by"))}]})))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermRecord (Core.Record {
+                  Core.recordTypeName = (Core.Name "test"),
+                  Core.recordFields = [
+                    Core.Field {
+                      Core.fieldName = (Core.Name "target"),
+                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "example.AtomId"))},
+                    Core.Field {
+                      Core.fieldName = (Core.Name "note"),
+                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "authored by"))}]})))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "list of a type application",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> e) (\json -> Eithers.either (\e -> e) (\decoded -> ShowCore.term decoded) (Decode.fromJson (Maps.fromList [
+                  (
+                    Core.Name "Relationship",
+                    (Core.TypeForall (Core.ForallType {
+                      Core.forallTypeParameter = (Core.Name "a"),
+                      Core.forallTypeBody = (Core.TypeRecord [
+                        Core.FieldType {
+                          Core.fieldTypeName = (Core.Name "target"),
+                          Core.fieldTypeType = (Core.TypeVariable (Core.Name "a"))},
+                        Core.FieldType {
+                          Core.fieldTypeName = (Core.Name "note"),
+                          Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)}])})))]) (Core.Name "test") (Core.TypeList (Core.TypeApplication (Core.ApplicationType {
+                  Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "Relationship")),
+                  Core.applicationTypeArgument = (Core.TypeLiteral Core.LiteralTypeString)}))) json)) (Encode.toJson (Maps.fromList [
+                  (
+                    Core.Name "Relationship",
+                    (Core.TypeForall (Core.ForallType {
+                      Core.forallTypeParameter = (Core.Name "a"),
+                      Core.forallTypeBody = (Core.TypeRecord [
+                        Core.FieldType {
+                          Core.fieldTypeName = (Core.Name "target"),
+                          Core.fieldTypeType = (Core.TypeVariable (Core.Name "a"))},
+                        Core.FieldType {
+                          Core.fieldTypeName = (Core.Name "note"),
+                          Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)}])})))]) (Core.Name "test") (Core.TypeList (Core.TypeApplication (Core.ApplicationType {
+                  Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "Relationship")),
+                  Core.applicationTypeArgument = (Core.TypeLiteral Core.LiteralTypeString)}))) (Core.TermList [
+                  Core.TermRecord (Core.Record {
+                    Core.recordTypeName = (Core.Name "test"),
+                    Core.recordFields = [
+                      Core.Field {
+                        Core.fieldName = (Core.Name "target"),
+                        Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "example.AtomId1"))},
+                      Core.Field {
+                        Core.fieldName = (Core.Name "note"),
+                        Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "authored by"))}]}),
+                  (Core.TermRecord (Core.Record {
+                    Core.recordTypeName = (Core.Name "test"),
+                    Core.recordFields = [
+                      Core.Field {
+                        Core.fieldName = (Core.Name "target"),
+                        Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "example.AtomId2"))},
+                      Core.Field {
+                        Core.fieldName = (Core.Name "note"),
+                        Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "cites"))}]}))]))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermList [
+                  Core.TermRecord (Core.Record {
+                    Core.recordTypeName = (Core.Name "test"),
+                    Core.recordFields = [
+                      Core.Field {
+                        Core.fieldName = (Core.Name "target"),
+                        Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "example.AtomId1"))},
+                      Core.Field {
+                        Core.fieldName = (Core.Name "note"),
+                        Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "authored by"))}]}),
+                  (Core.TermRecord (Core.Record {
+                    Core.recordTypeName = (Core.Name "test"),
+                    Core.recordFields = [
+                      Core.Field {
+                        Core.fieldName = (Core.Name "target"),
+                        Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "example.AtomId2"))},
+                      Core.Field {
+                        Core.fieldName = (Core.Name "note"),
+                        Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "cites"))}]}))]))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []}]},
+        Testing.TestGroup {
           Testing.testGroupName = "union types",
           Testing.testGroupDescription = Nothing,
           Testing.testGroupSubgroups = [],

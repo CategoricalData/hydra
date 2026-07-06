@@ -288,7 +288,8 @@
   (load-test-file f))
 
 ;; Build tests
-(dolist (f '("build/reconcile.lisp"
+(dolist (f '("build/modules.lisp"
+             "build/reconcile.lisp"
              "build/routing.lisp"))
   (load-test-file f))
 

@@ -306,7 +306,6 @@ rewriteAndFoldTerm = define "rewriteAndFoldTerm" $
         @@ ("t" ~> Core.termWrap $ Core.wrappedTerm (Core.wrappedTermTypeName $ var "wt") (var "t"))
         @@ var "val0"
         @@ (Core.wrappedTermBody $ var "wt")]) $
---  rewrite @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse" @@ var "term0"
 
@@ -690,7 +689,6 @@ rewriteTerm = define "rewriteTerm" $
       _Term_wrap>>: "wt" ~> Core.termWrap $ Core.wrappedTerm
         (Core.wrappedTermTypeName $ var "wt")
         (var "recurse" @@ (Core.wrappedTermBody $ var "wt"))]) $
---  rewrite @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse" @@ var "term0"
 
@@ -1035,7 +1033,6 @@ rewriteType = define "rewriteType" $
       _Type_void>>: constant Core.typeVoid,
       _Type_wrap>>: "wt" ~> Core.typeWrap $
         var "recurse" @@ var "wt"]) $
---  rewrite @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse" @@ var "typ0"
 

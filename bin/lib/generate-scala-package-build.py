@@ -7,7 +7,7 @@ Each emitted build is self-contained: from `dist/scala/<pkg>/`, running
 sbt-sonatype + sbt-pgp wired in via project/plugins.sbt) uploads to the
 Sonatype Central Portal.
 
-The emitted POM declares `net.fortytwo.hydra:<pkg>_3:<version>` (Scala 3
+The emitted POM declares `net.fortytwo.hydra.scala:<pkg>_3:<version>` (Scala 3
 cross-version suffix) with `compile`-scope dependencies on every Hydra
 package listed in `packages/<pkg>/package.json`'s `dependencies` array.
 

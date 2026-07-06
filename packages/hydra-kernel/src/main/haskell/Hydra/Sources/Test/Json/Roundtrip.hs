@@ -65,6 +65,7 @@ allTests = define "allTests" $
       collectionRoundtripGroup,
       optionalRoundtripGroup,
       recordRoundtripGroup,
+      parametricTypeRoundtripGroup,
       unionRoundtripGroup,
       wireShapeGroup]
 
@@ -93,6 +94,21 @@ wireShapeTest testName typ term expectedJson = universalCase testName
     (Phantoms.lambda "json" $ JsonWriter.printJson @@ Phantoms.var "json")
     (EncodeModule.toJson @@ Maps.empty @@ Core.name (Phantoms.string "test") @@ typ @@ term))
   (Phantoms.string expectedJson)
+
+-- Like roundtripTest, but with a caller-supplied type lookup table instead of an empty
+-- one. Needed to exercise Type.Variable / Type.Application / Type.Forall, which resolve
+-- named types via the table.
+roundtripTestWithTypes :: String -> TypedTerm (M.Map Name Type) -> TypedTerm Type -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
+roundtripTestWithTypes testName types typ term = universalCase testName
+  (Eithers.either
+    (Phantoms.lambda "e" $ Phantoms.var "e")
+    (Phantoms.lambda "json" $
+      Eithers.either
+        (Phantoms.lambda "e" $ Phantoms.var "e")
+        (Phantoms.lambda "decoded" $ ShowCore.term @@ Phantoms.var "decoded")
+        (JsonDecode.fromJson @@ types @@ Core.name (Phantoms.string "test") @@ typ @@ Phantoms.var "json"))
+    (EncodeModule.toJson @@ types @@ Core.name (Phantoms.string "test") @@ typ @@ term))
+  (ShowCore.term @@ term)
 
 ----------------------------------------
 -- Literal types
@@ -254,6 +270,48 @@ recordRoundtripGroup = subgroup "record types" [
       (record (name "test") [
         "name">: string "test",
         "value">: optional (just $ optional (just $ int32 42))])]
+
+----------------------------------------
+-- Parametric types (Type.Application / Type.Forall) -- regression for #531
+----------------------------------------
+
+-- | A polymorphic record type: forall a. { target: a, note: string }
+relationshipTypeName :: TypedTerm Name
+relationshipTypeName = name "Relationship"
+
+relationshipType :: TypedTerm Type
+relationshipType = T.forAll "a" $ T.record (name "Relationship") [
+  "target">: T.variable "a",
+  "note">: T.string]
+
+relationshipTypes :: TypedTerm (M.Map Name Type)
+relationshipTypes = Maps.fromList $ Phantoms.list [
+  Phantoms.pair relationshipTypeName relationshipType]
+
+parametricTypeRoundtripGroup :: TypedTerm TestGroup
+parametricTypeRoundtripGroup = subgroup "parametric types" [
+    -- A field typed as a direct instantiation of a polymorphic type: (Relationship @ string).
+    -- Note: like every other roundtripTest[WithTypes] case, the decoded record is tagged with
+    -- the harness's fixed top-level type name ("test"), not the resolved type's own name.
+    roundtripTestWithTypes "type application of a polymorphic record"
+      relationshipTypes
+      (T.apply (T.variable "Relationship") T.string)
+      (record (name "test") [
+        "target">: string "example.AtomId",
+        "note">: string "authored by"]),
+
+    -- The instantiation nested inside a list, matching the issue's repro shape
+    -- (a list field whose element type is a type application)
+    roundtripTestWithTypes "list of a type application"
+      relationshipTypes
+      (T.list $ T.apply (T.variable "Relationship") T.string)
+      (list [
+        record (name "test") [
+          "target">: string "example.AtomId1",
+          "note">: string "authored by"],
+        record (name "test") [
+          "target">: string "example.AtomId2",
+          "note">: string "cites"]])]
 
 ----------------------------------------
 -- Union types (compact string form for unit-valued variants)

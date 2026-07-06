@@ -1,7 +1,3 @@
-# Note: this is an automatically generated file (bin/lib/generate-head-haskell-build.py, #370). Do not edit.
-# Regenerate via heads/haskell/bin/sync-haskell.sh [--published-host|--local-host].
-# The committed (local-mode) form is the hand-maintained source of truth.
-
 resolver: lts-24.7
 
 system-ghc: true

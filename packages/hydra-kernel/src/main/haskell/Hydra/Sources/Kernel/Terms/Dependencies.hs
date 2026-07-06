@@ -21,6 +21,7 @@ import Hydra.Kernel hiding (
   typeNamesInType)
 import qualified Hydra.Dsl.Paths        as Paths
 import qualified Hydra.Overlay.Haskell.Dsl.Annotations       as Annotations
+import qualified Hydra.Sources.Kernel.Terms.Annotations as KernelAnnotations
 import qualified Hydra.Dsl.Ast          as Ast
 import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Coders       as Coders
@@ -67,6 +68,7 @@ import qualified Data.Map                    as M
 import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
+import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
@@ -85,7 +87,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns, Names.ns, Rewriting.ns, Sorting.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([KernelAnnotations.ns, Lexical.ns, Names.ns, Rewriting.ns, Sorting.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just ("Dependency extraction, binding sort, and let normalization"))}
   where
    definitions = [
@@ -372,11 +374,8 @@ topologicalSortBindingMap = define "topologicalSortBindingMap" $
   "bindingMap" ~>
   "bindings" <~ Maps.toList (var "bindingMap" :: TypedTerm (M.Map Name Term)) $
   "keys" <~ (Sets.fromList (Lists.map (reify Pairs.first) (var "bindings")) :: TypedTerm (S.Set Name)) $
-  -- TODO: this function currently serves no purpose; it always yields false
   "hasTypeAnnotation" <~ ("term" ~>
-    cases _Term (var "term")
-      (Just false) [
-      _Term_annotated>>: "at" ~> var "hasTypeAnnotation" @@ (Core.annotatedTermBody $ var "at")]) $
+    Optionals.isGiven (KernelAnnotations.getTermAnnotation @@ Constants.keyType @@ var "term")) $
   "depsOf" <~ ("nameAndTerm" ~>
     "name" <~ Pairs.first (var "nameAndTerm") $
     "term" <~ Pairs.second (var "nameAndTerm") $

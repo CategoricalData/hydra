@@ -515,7 +515,7 @@ The following are Java-specific release steps:
     (the analog of a Hackage candidate — nothing is live until you click Publish).
   * **Stale `~/.m2` trap (important).** Across a pre-release cycle the version string
     (e.g. `0.16.0`) does not change, so a previously-built same-version jar can linger in
-    `~/.m2` and silently satisfy a downstream package's `api 'net.fortytwo.hydra:hydra-kernel:0.16.0'`
+    `~/.m2` and silently satisfy a downstream package's `api 'net.fortytwo.hydra.java:hydra-kernel:0.16.0'`
     dependency — making `hydra-rdf`/`hydra-pg`/`hydra-java` compile against an **old** kernel and
     fail with `cannot find symbol` for classes added/renamed mid-cycle (e.g. `hydra.typing.InferenceContext`,
     `hydra.util.Optional`). `/sync` regenerates the *source* in `dist/java/` but does not touch
@@ -544,7 +544,7 @@ dependency they care about; transitive resolution pulls the rest:
 
 ```gradle
 dependencies {
-    implementation 'net.fortytwo.hydra:hydra-pg:0.15.0'   // pulls hydra-rdf and hydra-kernel
+    implementation 'net.fortytwo.hydra.java:hydra-pg:0.17.0'   // pulls hydra-rdf and hydra-kernel
 }
 ```
 
@@ -608,6 +608,11 @@ The following are Scala-specific release steps:
 * Go to [Deployments](https://central.sonatype.com/publishing/deployments) in the Central Portal.
   Find the nine deployments, verify they have passed validation, then click "Publish" on each
   (leaves first).
+* **Self-containment gate (#537):** `heads/scala/bin/verify-distribution.sh` publishes the publish
+  set to a temp Ivy repo (`sbt --ivy <tmp>`) and builds a throwaway sbt consumer against the
+  published `_3` coordinates, proving each jar carries the classes its API needs in isolation from
+  the worktree. Run automatically in CI and as a hard gate in `prepare-release.sh` (Step 13); see
+  the `verify-distribution.sh` row in the script reference table below.
 
 A Scala consumer adds e.g.:
 ```scala
@@ -880,12 +885,12 @@ all scripts and Stack executables (including internal ones called by the sync sc
 | `publish-maven.sh` | `heads/java/bin/` | Builds (and optionally uploads, `--upload`) the per-package Maven Central distributions leaves-first. Guards JDK 17+ and credentials; refreshes `~/.m2` with freshly-built siblings to avoid the stale-same-version trap. `--allow-javadoc-errors` applies a transient init script for #449. |
 | `publish-pypi.sh` | `heads/python/bin/` | Builds (and optionally uploads, `--upload`) the per-package PyPI wheels + sdists. Prefers `uv build`, falls back to `python -m build`. Asserts dependency closure. Invokes `verify-distribution.sh` as a hard gate before any upload. |
 | `publish-npm.sh` | `heads/typescript/bin/` | Compiles TypeScript sources to JS + `.d.ts` via `tsc`, packs via `npm pack`, smoke-tests the tarballs, and (with `--upload`) publishes to npm in leaves-first order. Asserts dependency closure. Requires `NPM_TOKEN` or an active `npm login` session for `--upload`. |
-| `verify-distribution.sh` | `heads/{haskell,python,java,typescript}/bin/` | **Per-host self-containment gate (uniform name across heads).** Builds the host's publish-set packages from the `dist/` tree alone and proves they are self-contained when consumed as published artifacts, in isolation from the worktree. **Python:** builds the wheels (or `--wheels <dir>`), installs them into a fresh venv with `--no-index`, imports the top-level kernel modules from a neutral cwd (catches #472). **Haskell:** stages the per-package distributions into one multi-package stack project and `stack build`s them, so dependents' `== <version>` pins resolve against the local staged siblings (catches the #473 cold-build class). **Java:** publishes the per-package jars to a temp Maven repo and resolves them from an offline consumer, so a jar missing classes its API needs (or a POM referencing a sibling not in the publish set) fails; hard-fails when no JDK 17+ is present. **TypeScript:** compiles, packs, installs the tarballs into an isolated node_modules (no registry), and imports the kernel core module. Run by CI per host and as a hard gate in `prepare-release.sh` (Step 13) + `publish-pypi.sh`. |
+| `verify-distribution.sh` | `heads/{haskell,python,java,scala,typescript}/bin/` | **Per-host self-containment gate (uniform name across heads).** Builds the host's publish-set packages from the `dist/` tree alone and proves they are self-contained when consumed as published artifacts, in isolation from the worktree. **Python:** builds the wheels (or `--wheels <dir>`), installs them into a fresh venv with `--no-index`, imports the top-level kernel modules from a neutral cwd (catches #472). **Haskell:** stages the per-package distributions into one multi-package stack project and `stack build`s them, so dependents' `== <version>` pins resolve against the local staged siblings (catches the #473 cold-build class). **Java:** publishes the per-package jars to a temp Maven repo and resolves them from an offline consumer, so a jar missing classes its API needs (or a POM referencing a sibling not in the publish set) fails; hard-fails when no JDK 17+ is present. **Scala:** publishes the per-package artifacts to a temp Ivy repo (`sbt --ivy <tmp>`) and resolves them from an offline sbt consumer against the `_3` cross-version coordinates, same failure mode as Java's gate (#537). **TypeScript:** compiles, packs, installs the tarballs into an isolated node_modules (no registry), and imports the kernel core module. Run by CI per host and as a hard gate in `prepare-release.sh` (Step 13) + `publish-pypi.sh`. |
 | `generate-haskell-package-build.py` | `bin/lib/` | Emits a standalone `dist/haskell/<pkg>/package.yaml` (+ `stack.yaml`) from `packages/<pkg>/package.json` (or a built-in spec for the `hydra` umbrella) and `hydra.json:currentVersion`. Inter-Hydra deps emit as exact pins `<dep> == <version>`. |
 | `publish-sbt.sh` | `heads/scala/bin/` | Builds (and optionally uploads, `--upload`) the per-package Scala Maven Central jars leaves-first via sbt-sonatype. Guards credentials and GPG key; refreshes `~/.ivy2/local` with freshly-built siblings. |
-| `generate-java-package-build.py` | `bin/lib/` | Emits a standalone `dist/java/<pkg>/build.gradle` + `settings.gradle` from `packages/<pkg>/package.json` and `hydra.json:currentVersion`. Inter-Hydra deps emit as `api 'net.fortytwo.hydra:<dep>:<version>'`. |
+| `generate-java-package-build.py` | `bin/lib/` | Emits a standalone `dist/java/<pkg>/build.gradle` + `settings.gradle` from `packages/<pkg>/package.json` and `hydra.json:currentVersion`. Inter-Hydra deps emit as `api 'net.fortytwo.hydra.java:<dep>:<version>'`. |
 | `generate-python-package-build.py` | `bin/lib/` | Emits a standalone `dist/python/<pkg>/pyproject.toml` from `packages/<pkg>/package.json` and `hydra.json:currentVersion`. Inter-Hydra deps emit as `"<dep> == <version>"`. |
-| `generate-scala-package-build.py` | `bin/lib/` | Emits a standalone `dist/scala/<pkg>/build.sbt` + `project/plugins.sbt` + `project/build.properties` from `packages/<pkg>/package.json` and `hydra.json:currentVersion`. Inter-Hydra deps emit as `"net.fortytwo.hydra" %% "<dep>" % version`. |
+| `generate-scala-package-build.py` | `bin/lib/` | Emits a standalone `dist/scala/<pkg>/build.sbt` + `project/plugins.sbt` + `project/build.properties` from `packages/<pkg>/package.json` and `hydra.json:currentVersion`. Inter-Hydra deps emit as `"net.fortytwo.hydra.scala" % "<dep>_3" % version`. |
 | `generate-typescript-package-build.py` | `bin/lib/` | Emits a standalone `dist/typescript/<pkg>/package.json` + `tsconfig.build.json` from `packages/<pkg>/package.json` and `hydra.json:currentVersion`. Inter-Hydra deps emit as `"<dep>": "<version>"` in the npm `dependencies` map. (#492) |
 | `transform-json-to-<lang>.sh` | `heads/haskell/bin/` | Layer 1 transform. Thin wrapper over `bootstrap-from-json` for one (pkg, source-set). |
 | `transform-haskell-dsl-to-json.sh` | `heads/haskell/bin/` | Layer 1 transform. Supports `--package <pkg>` (one package) or `--all` (batch mode, one universe load). |

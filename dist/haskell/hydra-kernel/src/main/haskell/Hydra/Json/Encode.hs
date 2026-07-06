@@ -36,6 +36,7 @@ import qualified Hydra.Query as Query
 import qualified Hydra.Relational as Relational
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Substitution as Substitution
 import qualified Hydra.System as System
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing
@@ -97,7 +98,28 @@ toJson types tname typ term =
 
       let stripped = Strip.deannotateType typ
           strippedTerm = Strip.deannotateTerm term
+          reduceApp =
+                  \app ->
+                    let fn = Strip.deannotateType (Core.applicationTypeFunction app)
+                        arg = Core.applicationTypeArgument app
+                    in case fn of
+                      Core.TypeApplication v0 -> Eithers.either (\err -> Left err) (\reducedFn -> reduceApp (Core.ApplicationType {
+                        Core.applicationTypeFunction = reducedFn,
+                        Core.applicationTypeArgument = arg})) (reduceApp v0)
+                      Core.TypeForall v0 -> Right (Substitution.substInType (Substitution.singletonTypeSubst (Core.forallTypeParameter v0) arg) (Core.forallTypeBody v0))
+                      Core.TypeVariable v0 ->
+                        let lookedUp = Maps.lookup v0 types
+                        in (Optionals.cases lookedUp (Left (Strings.cat [
+                          "unknown type variable: ",
+                          (Core.unName v0)])) (\resolvedFn -> reduceApp (Core.ApplicationType {
+                          Core.applicationTypeFunction = resolvedFn,
+                          Core.applicationTypeArgument = arg})))
+                      _ -> Left (Strings.cat [
+                        "cannot apply a non-parametric type: ",
+                        (ShowCore.type_ fn)])
       in case stripped of
+        Core.TypeApplication v0 -> Eithers.either (\err -> Left err) (\reducedType -> toJson types tname reducedType term) (reduceApp v0)
+        Core.TypeForall v0 -> toJson types tname (Core.forallTypeBody v0) term
         Core.TypeLiteral _ -> case strippedTerm of
           Core.TermLiteral v1 -> encodeLiteral v1
           _ -> Left "expected literal term"

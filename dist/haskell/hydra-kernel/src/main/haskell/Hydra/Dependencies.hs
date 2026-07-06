@@ -4,8 +4,10 @@
 
 module Hydra.Dependencies where
 
+import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
+import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
 import qualified Hydra.Docs as Docs
 import qualified Hydra.Error.Checking as Checking
@@ -311,10 +313,7 @@ topologicalSortBindingMap bindingMap =
 
       let bindings = Maps.toList bindingMap
           keys = Sets.fromList (Lists.map Pairs.first bindings)
-          hasTypeAnnotation =
-                  \term -> case term of
-                    Core.TermAnnotated v0 -> hasTypeAnnotation (Core.annotatedTermBody v0)
-                    _ -> False
+          hasTypeAnnotation = \term -> Optionals.isGiven (Annotations.getTermAnnotation Constants.keyType term)
           depsOf =
                   \nameAndTerm ->
                     let name = Pairs.first nameAndTerm
