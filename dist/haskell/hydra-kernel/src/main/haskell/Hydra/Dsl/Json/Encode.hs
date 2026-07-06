@@ -54,6 +54,7 @@ import qualified Hydra.Paths as Paths
 import qualified Hydra.Query as Query
 import qualified Hydra.Relational as Relational
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Substitution as Substitution
 import qualified Hydra.System as System
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Testing as Testing

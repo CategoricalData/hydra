@@ -4,11 +4,13 @@
 
 module Hydra.Dsl.Dependencies where
 
+import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Dependencies as Dependencies
 import qualified Hydra.Docs as Docs
+import qualified Hydra.Dsl.Annotations as DslAnnotations
 import qualified Hydra.Dsl.Ast as DslAst
 import qualified Hydra.Dsl.Coders as DslCoders
 import qualified Hydra.Dsl.Core as DslCore

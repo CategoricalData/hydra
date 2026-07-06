@@ -4,6 +4,7 @@
   "dependencies": [
     {"module": "hydra.extract.json"},
     {"module": "hydra.typed"},
+    {"module": "hydra.json.writer"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
@@ -31,6 +32,7 @@
     {"module": "hydra.util"},
     {"module": "hydra.validation"},
     {"module": "hydra.variants"},
+    {"module": "hydra.dsl.json.writer"},
     {"module": "hydra.dsl.paths"},
     {"module": "hydra.dsl.ast"},
     {"module": "hydra.dsl.coders"},
@@ -483,37 +485,37 @@
       "term": {
         "name": "hydra.dsl.extract.json.require",
         "signature": {
-          "typeParameters": [{"name": "t0", "constraints": []}, {"name": "t1", "constraints": []}],
+          "typeParameters": [{"name": "t0", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
-              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "t0"}}},
+              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
               "isLazy": false},
             {
               "name": "arg1",
               "type": {
                 "application": {
                   "function": {"variable": "hydra.typed.TypedTerm"},
-                  "argument": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "t1"}}}}},
+                  "argument": {"map": {"keys": {"literal": "string"}, "values": {"variable": "t0"}}}}},
               "isLazy": false}],
           "result": {
             "type": {
               "application": {
                 "function": {"variable": "hydra.typed.TypedTerm"},
-                "argument": {"either": {"left": {"literal": "string"}, "right": {"variable": "t1"}}}}}}},
+                "argument": {"either": {"left": {"literal": "string"}, "right": {"variable": "t0"}}}}}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "arg0",
-                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "t0"}}},
+                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
                 "body": {
                   "lambda": {
                     "parameter": "arg1",
                     "domain": {
                       "application": {
                         "function": {"variable": "hydra.typed.TypedTerm"},
-                        "argument": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "t1"}}}}},
+                        "argument": {"map": {"keys": {"literal": "string"}, "values": {"variable": "t0"}}}}},
                     "body": {
                       "wrap": {
                         "typeName": "hydra.typed.TypedTerm",
@@ -557,18 +559,18 @@
       "term": {
         "name": "hydra.dsl.extract.json.requireArray",
         "signature": {
-          "typeParameters": [{"name": "t0", "constraints": []}],
+          "typeParameters": [],
           "parameters": [
             {
               "name": "arg0",
-              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "t0"}}},
+              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
               "isLazy": false},
             {
               "name": "arg1",
               "type": {
                 "application": {
                   "function": {"variable": "hydra.typed.TypedTerm"},
-                  "argument": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "hydra.json.model.Value"}}}}},
+                  "argument": {"map": {"keys": {"literal": "string"}, "values": {"variable": "hydra.json.model.Value"}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -580,14 +582,14 @@
             "body": {
               "lambda": {
                 "parameter": "arg0",
-                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "t0"}}},
+                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
                 "body": {
                   "lambda": {
                     "parameter": "arg1",
                     "domain": {
                       "application": {
                         "function": {"variable": "hydra.typed.TypedTerm"},
-                        "argument": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "hydra.json.model.Value"}}}}},
+                        "argument": {"map": {"keys": {"literal": "string"}, "values": {"variable": "hydra.json.model.Value"}}}}},
                     "body": {
                       "wrap": {
                         "typeName": "hydra.typed.TypedTerm",
@@ -634,18 +636,18 @@
       "term": {
         "name": "hydra.dsl.extract.json.requireNumber",
         "signature": {
-          "typeParameters": [{"name": "t0", "constraints": []}],
+          "typeParameters": [],
           "parameters": [
             {
               "name": "arg0",
-              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "t0"}}},
+              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
               "isLazy": false},
             {
               "name": "arg1",
               "type": {
                 "application": {
                   "function": {"variable": "hydra.typed.TypedTerm"},
-                  "argument": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "hydra.json.model.Value"}}}}},
+                  "argument": {"map": {"keys": {"literal": "string"}, "values": {"variable": "hydra.json.model.Value"}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -657,14 +659,14 @@
             "body": {
               "lambda": {
                 "parameter": "arg0",
-                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "t0"}}},
+                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
                 "body": {
                   "lambda": {
                     "parameter": "arg1",
                     "domain": {
                       "application": {
                         "function": {"variable": "hydra.typed.TypedTerm"},
-                        "argument": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "hydra.json.model.Value"}}}}},
+                        "argument": {"map": {"keys": {"literal": "string"}, "values": {"variable": "hydra.json.model.Value"}}}}},
                     "body": {
                       "wrap": {
                         "typeName": "hydra.typed.TypedTerm",
@@ -711,18 +713,18 @@
       "term": {
         "name": "hydra.dsl.extract.json.requireString",
         "signature": {
-          "typeParameters": [{"name": "t0", "constraints": []}],
+          "typeParameters": [],
           "parameters": [
             {
               "name": "arg0",
-              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "t0"}}},
+              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
               "isLazy": false},
             {
               "name": "arg1",
               "type": {
                 "application": {
                   "function": {"variable": "hydra.typed.TypedTerm"},
-                  "argument": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "hydra.json.model.Value"}}}}},
+                  "argument": {"map": {"keys": {"literal": "string"}, "values": {"variable": "hydra.json.model.Value"}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -734,14 +736,14 @@
             "body": {
               "lambda": {
                 "parameter": "arg0",
-                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "t0"}}},
+                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}},
                 "body": {
                   "lambda": {
                     "parameter": "arg1",
                     "domain": {
                       "application": {
                         "function": {"variable": "hydra.typed.TypedTerm"},
-                        "argument": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "hydra.json.model.Value"}}}}},
+                        "argument": {"map": {"keys": {"literal": "string"}, "values": {"variable": "hydra.json.model.Value"}}}}},
                     "body": {
                       "wrap": {
                         "typeName": "hydra.typed.TypedTerm",
@@ -788,11 +790,11 @@
       "term": {
         "name": "hydra.dsl.extract.json.showValue",
         "signature": {
-          "typeParameters": [{"name": "t0", "constraints": []}],
+          "typeParameters": [],
           "parameters": [
             {
               "name": "arg0",
-              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "t0"}}},
+              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.json.model.Value"}}},
               "isLazy": false}],
           "result": {"type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "string"}}}}},
         "body": {
@@ -800,7 +802,7 @@
             "body": {
               "lambda": {
                 "parameter": "arg0",
-                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "t0"}}},
+                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.json.model.Value"}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.typed.TypedTerm",

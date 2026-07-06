@@ -21,6 +21,7 @@ import qualified Hydra.Dsl.Errors as DslErrors
 import qualified Hydra.Dsl.File as DslFile
 import qualified Hydra.Dsl.Graph as DslGraph
 import qualified Hydra.Dsl.Json.Model as JsonModel
+import qualified Hydra.Dsl.Json.Writer as JsonWriter
 import qualified Hydra.Dsl.Packaging as DslPackaging
 import qualified Hydra.Dsl.Parsing as DslParsing
 import qualified Hydra.Dsl.Paths as DslPaths
@@ -45,6 +46,7 @@ import qualified Hydra.Extract.Json as Json
 import qualified Hydra.File as File
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
+import qualified Hydra.Json.Writer as Writer
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Paths as Paths
@@ -120,7 +122,7 @@ optString arg0 arg1 =
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
 
 -- | DSL reference to hydra.extract.json.require
-require :: Ord t0 => (Typed.TypedTerm t0 -> Typed.TypedTerm (M.Map t0 t1) -> Typed.TypedTerm (Either String t1))
+require :: Typed.TypedTerm String -> Typed.TypedTerm (M.Map String t0) -> Typed.TypedTerm (Either String t0)
 require arg0 arg1 =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -129,7 +131,7 @@ require arg0 arg1 =
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
 
 -- | DSL reference to hydra.extract.json.requireArray
-requireArray :: Ord t0 => (Typed.TypedTerm t0 -> Typed.TypedTerm (M.Map t0 Model.Value) -> Typed.TypedTerm (Either String [Model.Value]))
+requireArray :: Typed.TypedTerm String -> Typed.TypedTerm (M.Map String Model.Value) -> Typed.TypedTerm (Either String [Model.Value])
 requireArray arg0 arg1 =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -138,7 +140,7 @@ requireArray arg0 arg1 =
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
 
 -- | DSL reference to hydra.extract.json.requireNumber
-requireNumber :: Ord t0 => (Typed.TypedTerm t0 -> Typed.TypedTerm (M.Map t0 Model.Value) -> Typed.TypedTerm (Either String Sci.Scientific))
+requireNumber :: Typed.TypedTerm String -> Typed.TypedTerm (M.Map String Model.Value) -> Typed.TypedTerm (Either String Sci.Scientific)
 requireNumber arg0 arg1 =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -147,7 +149,7 @@ requireNumber arg0 arg1 =
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
 
 -- | DSL reference to hydra.extract.json.requireString
-requireString :: Ord t0 => (Typed.TypedTerm t0 -> Typed.TypedTerm (M.Map t0 Model.Value) -> Typed.TypedTerm (Either String String))
+requireString :: Typed.TypedTerm String -> Typed.TypedTerm (M.Map String Model.Value) -> Typed.TypedTerm (Either String String)
 requireString arg0 arg1 =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -156,7 +158,7 @@ requireString arg0 arg1 =
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
 
 -- | DSL reference to hydra.extract.json.showValue
-showValue :: Typed.TypedTerm t0 -> Typed.TypedTerm String
+showValue :: Typed.TypedTerm Model.Value -> Typed.TypedTerm String
 showValue arg0 =
     Typed.TypedTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.json.showValue")),
