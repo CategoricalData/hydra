@@ -17,9 +17,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 
-# hydra.build.routing and its dependencies (Dsls, Encoding, Decoding, Packaging,
-# Errors, ...) all live in the generated hydra-kernel package.
+# hydra.build.routing moved to the hydra-build package (#546); its dependencies
+# (Dsls, Encoding, Decoding, Packaging, Errors, ...) remain in hydra-kernel. Both
+# generated trees are needed on the path.
 sys.path.insert(0, str(ROOT / "dist" / "python" / "hydra-kernel" / "src" / "main" / "python"))
+sys.path.insert(0, str(ROOT / "dist" / "python" / "hydra-build" / "src" / "main" / "python"))
 # The legacy _PACKAGE_PREFIXES table lives in the hand-written Python driver.
 sys.path.insert(0, str(ROOT / "heads" / "python" / "src" / "main" / "python"))
 
@@ -45,6 +47,15 @@ EXPECTED_DIVERGENCES = {
     "hydra.validate.neo4j": "hydra-pg",
     "hydra.gradle": "hydra-java",
     "hydra.jvm.serde": "hydra-jvm",
+    # #546: build modules extracted from hydra-kernel into hydra-build; the legacy
+    # table has no hydra.build. prefix so it falls back to hydra-kernel, while the
+    # manifest routes them to hydra-build.
+    "hydra.build.modules": "hydra-build",
+    "hydra.build.reconcile": "hydra-build",
+    "hydra.build.routing": "hydra-build",
+    "hydra.test.build.modules": "hydra-build",
+    "hydra.test.build.reconcile": "hydra-build",
+    "hydra.test.build.routing": "hydra-build",
 }
 
 
