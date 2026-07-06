@@ -21,6 +21,7 @@
     "hydra-coq",
     "hydra-typescript",
     "hydra-wasm",
+    "hydra-build",
     "hydra-pg",
     "hydra-rdf",
     "hydra-ext",
