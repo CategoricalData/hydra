@@ -127,6 +127,14 @@ checkWithType "apply function to function" []
 For the final expected type parameter, use `Type` directly.
 The test framework converts TypeSchemes to Types using `typeSchemeToFType`.
 
+**String-rendering requirement for `universalCase`**: `universalCase actual expected`
+requires both operands to be **String-typed** — its retype is a meta-level cast only,
+and non-String operands fail at test-module inference (e.g. `cannot unify string with
+list<t>`) or, for `binary`, at the sum-type projection. Render values to String first:
+use the ShowCore helpers (`list_`, `optional_`, ...) for structured values (see
+`Test/Dependencies` and `Test/Sorting` for the idiom), `Literals.binaryToString`
+(base64) for binary, or `stringEvalPair`/`evalPair` with an explicit show function.
+
 ### 4. Build and test
 
 Build the Haskell code:
