@@ -6,6 +6,7 @@ module Hydra.Test.Dependencies where
 
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
+import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
 import qualified Hydra.Dependencies as Dependencies
 import qualified Hydra.Docs as Docs
@@ -1141,6 +1142,39 @@ allTests =
                         (Core.TermVariable (Core.Name "c"))]))],
                   [
                     (Core.Name "d", (Core.TermLiteral (Core.LiteralString "bar")))]])})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "type-annotated binding is dependency-free",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.list (\group -> ShowCore.list (\pair -> Strings.cat [
+                  "(",
+                  (Core.unName (Pairs.first pair)),
+                  ", ",
+                  (ShowCore.term (Pairs.second pair)),
+                  ")"]) group) (Dependencies.topologicalSortBindingMap (Maps.fromList [
+                  (
+                    Core.Name "a",
+                    (Core.TermAnnotated (Core.AnnotatedTerm {
+                      Core.annotatedTermBody = (Core.TermVariable (Core.Name "b")),
+                      Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) (M.fromList [
+                        (Constants.keyType, (Core.TermLiteral (Core.LiteralString "someType")))])))}))),
+                  (Core.Name "b", (Core.TermLiteral (Core.LiteralString "bar")))]))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.list (\group -> ShowCore.list (\pair -> Strings.cat [
+                  "(",
+                  (Core.unName (Pairs.first pair)),
+                  ", ",
+                  (ShowCore.term (Pairs.second pair)),
+                  ")"]) group) [
+                  [
+                    (
+                      Core.Name "a",
+                      (Core.TermAnnotated (Core.AnnotatedTerm {
+                        Core.annotatedTermBody = (Core.TermVariable (Core.Name "b")),
+                        Core.annotatedTermAnnotation = (Core.TermMap (Maps.mapKeys (\n -> Core.TermVariable n) (M.fromList [
+                          (Constants.keyType, (Core.TermLiteral (Core.LiteralString "someType")))])))})))],
+                  [
+                    (Core.Name "b", (Core.TermLiteral (Core.LiteralString "bar")))]])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
