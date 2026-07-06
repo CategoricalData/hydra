@@ -60,19 +60,20 @@ in `dist/json/`.
 
 - **Imports**: every Scala DSL file imports `hydra.overlay.scala.dsl.Phantoms.{...}`
   selectively (renaming `var` to `v` since `var` is a Scala reserved word) and brings in
-  `applyP`, `applyN`, `lambda`, `let`, `field`, `string`, `int32`, `bool`, `list`, `nothing`,
+  `applyP`, `lambda`, `let`, `field`, `string`, `int32`, `bool`, `list`, `nothing`,
   `just`, `doc`, `constant`, `cases`, `casesWithDefault`, `project`, `unwrap`, `wrap`,
   `inject`.
 - **`var` reference**: use the imported alias `v("name")` to construct a `TypedTerm` variable
   reference. Equivalent to the Haskell `var "name"`.
 - **Function application**: use `applyP("hydra.lib.foo.bar", arg1, arg2, …)` for primitive
   application (eta-expanded by the Scala codegen). For curried application of a `TypedTerm`
-  function value, use `applyN(fn, arg1, arg2)`.
+  function value, use `Phantoms.apply(fn, arg1, arg2, …)` (variadic; folds a curried apply
+  chain).
 - **Let bindings**: prefer the multi-binding form
   `let(Seq(field("a", expr1), field("b", expr2), …), body)`. Hydra's let is letrec by default,
   so a binding's value can reference its own name and its siblings'.
 - **Recursive helpers**: bind via `field("collectFoo", lambda("t", lambda("acc", …)))` and
-  call them with `applyN(v("collectFoo"), …)`. The recursive call goes through `v(name)`
+  call them with `Phantoms.apply(v("collectFoo"), …)`. The recursive call goes through `v(name)`
   rather than the Scala `private val` so the Hydra inference engine sees a single
   let-bound recursive function.
 - **Pattern matching on a union**: use `casesWithDefault("hydra.core.X", arg, defaultBranch,
@@ -88,6 +89,42 @@ The phantom type alias is `type TypedTerm[A] = hydra.core.Term`. Some kernel API
 unify with `Term`. Use `Phantoms.metaBool(b)` instead: it constructs the meta-encoded
 `Inject(Term, "literal", Inject(Literal, "boolean", boolean(b)))` whose outer typeName is
 `hydra.core.Term`, matching the Haskell DSL's `MetaTerms.true`.
+
+## Projection (field access)
+
+`project(typeName, fieldName)` builds an unapplied field accessor; apply it to a term to read a
+field. The common "project then apply to a variable" pattern has two shortcuts in `Phantoms`
+(mirroring the Java/Python guides):
+
+```scala
+// Unapplied accessor, then apply it explicitly:
+Phantoms.apply(project("hydra.core.TypeScheme", "body"), v("ts"))
+
+// proj(typeName, fieldName, varName) — accessor applied to var(varName):
+Phantoms.proj("hydra.core.TypeScheme", "body", "ts")
+
+// projTerm(typeName, fieldName, term) — accessor applied to an arbitrary TypedTerm:
+Phantoms.projTerm("hydra.core.TypeScheme", "body", someTerm)
+```
+
+`proj`/`projTerm` are defined in `Phantoms.scala` but are not yet used by the current Scala coder
+sources (which spell out `project(...)` + `apply(...)`); prefer `proj`/`projTerm` in new code.
+
+## Differences from the Java and Python guides
+
+The Scala DSL deliberately omits several idioms that Java and Python provide, because Scala's own
+language features already cover them or because the ergonomic helpers have not been ported yet
+(tracked in #553):
+
+- **No fluent def builder.** Scala uses the flat `Phantoms` def method (`` `def`(NS, name,
+  doc(..., body)) ``); `lazy val` already solves definition-ordering, so the inside-out nesting is
+  the only remaining cost.
+- **No `recordWith` copy-with-update.** No current Scala site needs it; port opportunistically.
+- **No typed local-ref helper.** Self/cross-module references are fully-spelled FQN strings
+  (`applyP("hydra.scala.<module>.<name>", …)` / `v("hydra....")`), not typed `ref(Def)` (Java) or
+  `_local(...)` (Python). A `makeLocal(ns)` analogue is the headline item of #553.
+- **Laziness model.** Java defers bodies with `Supplier`, Python is eager, Scala uses `lazy val` —
+  see each guide's Conventions section.
 
 ## Generation pipeline
 
