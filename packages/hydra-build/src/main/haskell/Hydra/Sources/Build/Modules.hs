@@ -1,4 +1,4 @@
-module Hydra.Sources.Kernel.Terms.Build.Modules where
+module Hydra.Sources.Build.Modules where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel

@@ -299,7 +299,10 @@ main = do
   -- auto-loaded based on --package or --all-packages — see Step 2c.
   let coderPackages   = ["hydra-jvm", "hydra-java", "hydra-python", "hydra-scala", "hydra-lisp", "hydra-typescript", "hydra-go"]
   let extDemoPackages = ["hydra-pg", "hydra-rdf"]
-  let extPackages     = ["hydra-coq", "hydra-ext", "hydra-wasm", "hydra-bench"]
+  -- #546: hydra-build ships the promoted build system. Included as an ext
+  -- package so its main modules load into the universe and route correctly, and
+  -- so allRoutingPackages covers its manifest (main + test) for the routing map.
+  let extPackages     = ["hydra-coq", "hydra-ext", "hydra-wasm", "hydra-bench", "hydra-build"]
 
   -- Derived routing map (#474). Built from every known package's manifest
   -- (its declared mainModules + testModules + derivedMainModules), so a
@@ -438,9 +441,16 @@ main = do
         "hydra-pg"  -> ["hydra-pg", "hydra-rdf"]
         "hydra-ext" -> ["hydra-ext", "hydra-rdf"]
         _           -> [p]
+  -- #546: hydra-build is always loaded when generating the full tree, even
+  -- without an explicit --package. Unlike the other ext packages (assembled
+  -- individually via --package), hydra-build's main modules (hydra.build.*) are
+  -- a transitive dependency of the always-emitted kernel test suite
+  -- (hydra.test.testSuite -> hydra.test.build.* -> hydra.build.*, Option A /
+  -- #546/#547), so they must be present for the kernel test tree to compile.
   let extPackagesToLoad
         | optExtOnly opts                           = extDemoPackages
         | Just p <- optPackage opts, p `elem` allExtPackages = packageDeps p
+        | optAllPackages opts                       = ["hydra-build"]
         | otherwise                                 = []
 
   dslMods <- if optIncludeDsls opts
@@ -933,8 +943,20 @@ main = do
   testFileCount <- if optIncludeTests opts
     then do
       putStrLn "Loading test modules from JSON..."
-      testNamespaces <- readManifestField kernelJsonDir "testModules"
-      testModsAll <- loadModulesFromJson testJsonDir kernelModules testNamespaces
+      -- #546: test modules are no longer kernel-only. Load each routing
+      -- package's declared testModules from its OWN src/test/json tree (the
+      -- kernel test JSON is at hydra-kernel/src/test/json; hydra-build's at
+      -- hydra-build/src/test/json, etc.). hydra-build is the first non-kernel
+      -- package to ship test modules, but the loop is general. The kernel's
+      -- generated hydra.test.testSuite imports every package's test modules
+      -- (Option A, #546/#547), so all must be loaded and emitted here.
+      let pkgTestDir pkg = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "test" FP.</> "json"
+      testModsAll <- fmap concat $ CM.forM allRoutingPackages $ \pkg -> do
+        let pkgDir = pkgMainDir pkg
+        testNs <- readManifestFieldOrEmpty pkgDir "testModules"
+        if Prelude.null testNs
+          then return []
+          else loadModulesFromJson (pkgTestDir pkg) kernelModules testNs
       putStrLn $ "  Loaded " ++ show (length testModsAll) ++ " test modules"
 
       -- Layer 1 per-package scoping for tests: if --package <pkg> is set,

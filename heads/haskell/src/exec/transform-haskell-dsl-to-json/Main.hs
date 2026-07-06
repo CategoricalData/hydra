@@ -31,6 +31,7 @@ import Hydra.Sources.Ext (
   hydraCoqModules, hydraGoModules, hydraJvmModules, hydraJavaModules, hydraTypeScriptModules,
   hydraPythonModules, hydraScalaModules, hydraLispModules,
   hydraPgModules, hydraRdfModules, hydraWasmModules,
+  hydraBuildModules, hydraBuildTestModules,
   hydraExtPackageModules, allEncodingModules,
   extRoutingInput)
 import Hydra.Sources.Test.All (testModules)
@@ -93,6 +94,7 @@ buildFullMainUniverse = do
         , hydraPgModules
         , hydraRdfModules
         , hydraWasmModules
+        , hydraBuildModules
         , hydraExtPackageModules
         , [GenPGTransform.module_]
         ]
@@ -144,10 +146,11 @@ usage = unlines
   , "                           Packages: hydra-kernel, hydra-haskell,"
   , "                           hydra-java, hydra-python, hydra-scala,"
   , "                           hydra-lisp, hydra-coq, hydra-typescript,"
-  , "                           hydra-pg, hydra-rdf, hydra-ext, hydra-wasm."
+  , "                           hydra-build, hydra-pg, hydra-rdf, hydra-ext,"
+  , "                           hydra-wasm."
   , "  --all                    Batch mode: transform every package."
   , "  --source-set <main|test> Source set to transform (default: main)."
-  , "                           'test' is only non-empty for hydra-kernel today."
+  , "                           'test' is non-empty for hydra-kernel and hydra-build."
   , "  --dist-json-root <dir>   Output root (default: ../../dist/json)."
   , "  --include-java-python    Force-write term-level JSON for hydra-java and"
   , "                           hydra-python. By default (#344) the native"
@@ -171,16 +174,19 @@ allPackages =
   , "hydra-coq"
   , "hydra-typescript"
   , "hydra-wasm"
+  , "hydra-build"
   , "hydra-pg"
   , "hydra-rdf"
   , "hydra-ext"
   ]
 
 
--- | Return the test modules owned by the given package. Today, only the
--- kernel has any test modules; other packages return [].
+-- | Return the test modules owned by the given package. hydra-kernel and
+-- hydra-build are the only packages with test modules today (hydra-build is
+-- the first non-kernel package to have any — #546); other packages return [].
 packageTestModules :: String -> [Kernel.Module]
 packageTestModules "hydra-kernel" = testModules
+packageTestModules "hydra-build"  = hydraBuildTestModules
 packageTestModules _              = []
 
 

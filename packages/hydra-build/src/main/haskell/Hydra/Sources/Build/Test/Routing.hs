@@ -1,5 +1,5 @@
 -- | Test cases for hydra.build.routing: manifest-derived, fail-loud module-to-package routing
-module Hydra.Sources.Test.Build.Routing where
+module Hydra.Sources.Build.Test.Routing where
 
 -- Standard imports for shallow DSL tests
 import Hydra.Kernel
@@ -13,7 +13,7 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 import Hydra.Testing
-import qualified Hydra.Sources.Kernel.Terms.Build.Routing as Routing
+import qualified Hydra.Sources.Build.Routing as Routing
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
 import qualified Hydra.Dsl.Lib.Eithers  as Eithers

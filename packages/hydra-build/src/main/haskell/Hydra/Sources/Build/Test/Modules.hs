@@ -7,7 +7,7 @@
 -- runner reduces both string-typed thunks and compares. Rendering to String is
 -- required — universalCase's fields are String-typed, so raw list/module/optional
 -- terms cannot be passed directly.
-module Hydra.Sources.Test.Build.Modules where
+module Hydra.Sources.Build.Test.Modules where
 
 -- Standard imports for tests
 import Hydra.Kernel
@@ -25,7 +25,7 @@ import qualified Hydra.Dsl.Lib.Optionals      as Optionals
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
-import qualified Hydra.Sources.Kernel.Terms.Build.Modules as BuildModules
+import qualified Hydra.Sources.Build.Modules as BuildModules
 import qualified Hydra.Sources.Kernel.Terms.Scoping       as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Show.Core     as ShowCore
 

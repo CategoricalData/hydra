@@ -7,7 +7,7 @@
 --     owned second-level dirs. Only .json files under an owned prefix are eligible.
 --   * Haskell whole-tree: restrictExts = none, restrictPrefixes = none, protectSet =
 --     {"manifest.json"}. Every observed file not kept and not protected is an orphan.
-module Hydra.Sources.Test.Build.Reconcile where
+module Hydra.Sources.Build.Test.Reconcile where
 
 -- Standard imports for shallow DSL tests
 import Hydra.Kernel
@@ -22,7 +22,7 @@ import qualified Data.Map                     as M
 import qualified Data.Set                     as S
 
 import Hydra.Testing
-import qualified Hydra.Sources.Kernel.Terms.Build.Reconcile as Reconcile
+import qualified Hydra.Sources.Build.Reconcile as Reconcile
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Dsl.Lib.Literals as Literals
 import qualified Hydra.Dsl.Lib.Sets     as Sets

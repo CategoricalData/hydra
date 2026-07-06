@@ -522,7 +522,7 @@ done
 # imports hydra.rdf.syntax.*, so dist/java/hydra-rdf/ must be populated
 # before the Java host compiles.
 
-banner1 "Phase 3: hydra-kernel + hydra-pg + hydra-rdf into each language"
+banner1 "Phase 3: hydra-kernel + hydra-build + hydra-pg + hydra-rdf into each language"
 echo ""
 for L in $LANG_UNION; do
     if [ "$L" = "haskell" ]; then continue; fi
@@ -533,7 +533,7 @@ for L in $LANG_UNION; do
         "$HYDRA_ROOT/heads/$L/bin/assemble-distribution.sh" hydra-kernel
         continue
     fi
-    for pkg in hydra-kernel hydra-rdf hydra-pg; do
+    for pkg in hydra-kernel hydra-build hydra-rdf hydra-pg; do
         echo ""
         echo "--- $pkg -> $L ---"
         case "$L" in

@@ -1,5 +1,5 @@
 
-module Hydra.Sources.Kernel.Terms.Build.Reconcile where
+module Hydra.Sources.Build.Reconcile where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel

@@ -147,6 +147,14 @@ EXTERNAL_DEPS: dict[str, list[str]] = {
         "base                          >= 4.19.0 && < 4.22",
         "scientific                    >= 0.3.7 && < 0.4",     # Data.Scientific
     ],
+    # hydra-build: the build system promoted into Hydra (#546). Pure generated
+    # Haskell (routing/reconcile/modules) — the common coder shape: base plus
+    # containers (Data.Map/Set in the routing map) and scientific.
+    "hydra-build": [
+        "base                          >= 4.19.0 && < 4.22",
+        "containers                    >= 0.6.7 && < 0.8",     # Data.Map, Data.Set
+        "scientific                    >= 0.3.7 && < 0.4",     # Data.Scientific
+    ],
     # base only — hydra-jvm's generated tree has no non-Hydra imports:
     "hydra-jvm": [
         "base                          >= 4.19.0 && < 4.22",
@@ -173,6 +181,7 @@ SYNOPSIS: dict[str, str] = {
     "hydra-wasm": "Hydra's WebAssembly coder: emit Wasm from Hydra modules",
     "hydra-rdf": "Hydra's RDF/SHACL/OWL model and coder support",
     "hydra-pg": "Hydra's property-graph (TinkerPop/Gremlin) model and coder support",
+    "hydra-build": "Hydra's build system, promoted into Hydra",
     "hydra-ext": "Hydra extensions: additional coders and schema integrations",
     "hydra-bench": "Hydra synthetic inference-benchmark workloads",
     "hydra": "Hydra: graphs are programs, and programs are graphs (umbrella package)",
@@ -199,6 +208,13 @@ LONG_DESCRIPTION: dict[str, str] = {
         "This package is Hydra's Haskell coder: it translates Hydra modules into Haskell source.\n"
         "The top-level entry point is moduleToHaskell (and moduleToHaskellModule for the structured\n"
         "AST). It builds on hydra-kernel."
+    ),
+    "hydra-build": (
+        HYDRA_BLURB + "\n"
+        "This package is Hydra's build system, promoted into Hydra itself: the manifest-derived\n"
+        "module-to-package router, kernel/host reconciliation utilities, and pure module-list\n"
+        "helpers, expressed as Hydra modules and generated into every self-hosting dialect. It\n"
+        "builds on hydra-kernel."
     ),
 }
 

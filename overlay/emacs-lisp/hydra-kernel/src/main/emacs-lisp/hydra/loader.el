@@ -24,6 +24,16 @@
   (expand-file-name "../../../gen-test/emacs-lisp/hydra/" hydra-loader-dir)
   "Directory containing generated test modules.")
 
+;; #546: the hydra-build package's generated main + test trees. Set by
+;; run-tests.el (repo layout points them at dist/emacs-lisp/hydra-build/...;
+;; the bootstrap-demo flat layout reuses the shared kernel tree). Declared here
+;; so the loader and run-tests share the binding under lexical scoping.
+(defvar hydra-build-gen-main-dir nil
+  "Directory containing hydra-build's generated main modules (hydra.build.*).")
+
+(defvar hydra-build-gen-test-dir nil
+  "Directory containing hydra-build's generated test modules (hydra.test.build.*).")
+
 ;; ============================================================================
 ;; cl-defstruct compatibility — override to use alist-based constructors
 ;; ============================================================================
@@ -573,9 +583,12 @@ the rewriting hydra-load-file, so (hydra-load-gen-main) must always skip them.
 Skipped unconditionally (the per-caller `hydra-skip-gen-main-files' set is
 bootstrap-demo-only).")
 
-(defun hydra-load-gen-main ()
-  "Load all generated main modules, then byte-compile for performance."
-  (let* ((base hydra-gen-main-dir)
+(defun hydra-load-gen-main (&optional main-dir)
+  "Load all generated main modules from MAIN-DIR (default `hydra-gen-main-dir',
+the hydra-kernel main tree), then byte-compile for performance. Pass a
+different tree — e.g. the hydra-build main dir (#546) — to load an additional
+package's generated modules with the same ordering/exclusion rules."
+  (let* ((base (or main-dir hydra-gen-main-dir))
          (all-files (hydra-collect-el-files base))
          (remaining (cl-remove-if (lambda (f) (or (member f hydra-gen-main-file-order)
                                                    (member f hydra-handwritten-top-level-files)
@@ -629,9 +642,10 @@ bootstrap-demo-only).")
                   "test/lib/strings.el"
                   "test/lib/system.el"
                   "test/annotations.el"
-                  "test/build/modules.el"
-                  "test/build/reconcile.el"
-                  "test/build/routing.el"
+                  ;; #546: test/build/*.el moved to the hydra-build package's
+                  ;; test tree; they are loaded separately by run-tests.el via
+                  ;; hydra-load-gen-build-test (from hydra-build-gen-test-dir),
+                  ;; not from the kernel test tree here.
                   "test/checking/advanced.el"
                   "test/checking/algebraic_types.el"
                   "test/checking/collections.el"
