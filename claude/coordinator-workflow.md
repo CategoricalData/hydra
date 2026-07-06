@@ -130,6 +130,61 @@ then reset. If no, and its context is large with real work remaining, reset
 it. The branch plan being a faithful cold-resume brief is the invariant that
 makes both context hygiene and the pause/reopen steps safe.
 
+## Periodic fleet reconciliation (no orphans)
+
+Workers get left behind — most often a worker whose change *landed* but whose
+finalize (archive plan → end session → remove worktree) never ran, because
+the landing happened during a busy stretch. Left unattended, these accumulate
+as live Claude sessions burning resources for work that shipped days ago, and
+as untracked worktrees/branches. Finalizing recent workers promptly is not
+enough; you must also **periodically sweep for the ones that slipped**.
+
+**The sweep** — for every worktree you might own:
+1. Is its branch an ancestor of `origin/main` (merged)? `git merge-base
+   --is-ancestor <branch> origin/main`.
+2. Does it still have a live tmux/Claude session? `tmux has-session`.
+3. How many commits ahead of main? `git rev-list --count origin/main..<branch>`.
+
+A worktree that is **merged + still has a live session + 0 commits ahead** is
+the classic left-behind-finalize case → finalize it. But two traps:
+- **0-commits-ahead does NOT mean orphaned.** An *active* worker with
+  uncommitted in-tree WIP also shows 0 ahead. Check last session activity
+  before concluding a merged/0-ahead worktree is finished — a recently-active
+  one is working, not done.
+- **Only finalize workers you own.** A coordinator must not finalize another
+  coordinator's workers, intentionally-parked worktrees, or release/detached
+  worktrees.
+
+### Cross-coordinator reconciliation
+
+When more than one coordinator (or a coordinator + the staging session) owns
+workers, a one-sided sweep can't guarantee zero orphans — you can't finalize
+what you don't own, and you can misread another owner's active worker as an
+orphan. So reconcile *cooperatively*:
+
+1. **Build the authoritative table** from the sweep above across ALL
+   worktrees (merged? live? commits-ahead?), tagged by your best guess of
+   owner and lifecycle state.
+2. **Finalize your own** left-behinds first.
+3. **Send the other coordinator ONE reconciliation message** — not a bare
+   list. Structure it: (a) *your* fleet, all accounted for; (b) *their*
+   fleet with your read in brackets, split into ACTIVE (do-not-touch),
+   FINALIZE-CANDIDATES (merged + session up + issue resolved), and
+   OTHER/non-worker (release, detached). Explicitly name the active ones so a
+   sweep can't kill a live worker.
+4. **Ask them to reply with dispositions** — what they finalize, what they
+   *intentionally keep* (with the reason: a paused-pending-user-review
+   worktree, a deferred-work branch, a dormant collector), and what is
+   criterion-gated (landed but waiting on CI-green). The reply, not your
+   list, is what closes the reconciliation.
+
+The goal state: every worktree is provably one of — an active worker, a
+deliberately-parked worker (with a documented reason), a finalize queued on a
+stated criterion, or already finalized. Nothing is merely "still there."
+Expect to correct each other: the owner of a worker always knows its true
+state better than another coordinator's scan (0-ahead misreads active WIP as
+done; a "leftover"-looking worktree may be a load-bearing review artifact).
+
 ## Why the coordinator holds the human-gated actions
 
 Workers never push to `main`, never create/close/comment on GitHub issues,
