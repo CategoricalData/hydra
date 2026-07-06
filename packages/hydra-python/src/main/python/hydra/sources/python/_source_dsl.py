@@ -103,17 +103,19 @@ def make_def(placeholder):
     return _def
 
 
-def make_local(ns_str: str):
+def make_local_str(ns_str: str):
     """Return a closure `(local_name) -> TypedTerm` that builds a `var("<ns>.<local>")`.
+
+    A string-argument convenience wrapper over phantoms' `make_local(ns: ModuleName)`
+    (distinct name to avoid shadowing it; the two share one implementation).
 
     Usage at the top of a source DSL module:
 
-        _local = make_local("hydra.python.coder")
+        _local = make_local_str("hydra.python.coder")
         ...
         _local("encodeTerm")  # → var("hydra.python.coder.encodeTerm")
     """
-    prefix = ns_str + "."
-    return lambda local_name: var(prefix + local_name)
+    return make_local(ModuleName(ns_str))
 
 
 def type_ref(ns: ModuleName, local: str) -> Type:

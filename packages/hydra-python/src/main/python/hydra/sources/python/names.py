@@ -48,7 +48,7 @@ from hydra.sources.python._source_dsl import (
 
     KERNEL_TYPES_NAMESPACES,
     make_def,
-    make_local,
+    make_local_str,
     unqualified_dep,
 )
 DEPENDENCIES = [
@@ -78,7 +78,7 @@ _PLACEHOLDER = Module(
 
 
 _def = make_def(_PLACEHOLDER)
-_local = make_local("hydra.python.names")
+_local = make_local_str("hydra.python.names")
 # Frequently used names — define once for reuse.
 _PY_NAME = Name("hydra.python.syntax.Name")
 _PY_DOTTED_NAME = Name("hydra.python.syntax.DottedName")
