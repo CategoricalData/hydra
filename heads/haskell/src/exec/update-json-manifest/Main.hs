@@ -15,6 +15,7 @@ import Hydra.Sources.Ext (
   hydraCoqModules, hydraGoModules, hydraJvmModules, hydraJavaModules, hydraTypeScriptModules,
   hydraPythonModules, hydraScalaModules, hydraLispModules,
   hydraPgModules, hydraRdfModules, hydraWasmModules,
+  hydraBuildModules, hydraBuildTestModules,
   hydraExtPackageModules,
   allDslModules, allEncodingModules, extRoutingInput)
 import Hydra.Sources.Test.All (testModules)
@@ -65,6 +66,7 @@ main = do
         , hydraPgModules
         , hydraRdfModules
         , hydraWasmModules
+        , hydraBuildModules
         , hydraExtPackageModules
         , [GenPGTransform.module_]
         ]
@@ -79,6 +81,11 @@ main = do
       encSrcMods = allEncodingModules
 
   let routingMap = buildRoutingMap extRoutingInput
-  writePerPackageManifestsJson routingMap defaultDistJsonRoot dslSrcMods encSrcMods mainUniverse testModules
+  -- testModules folds in hydra-build's test modules (#546): they route to
+  -- hydra-build's manifest via routingMap, which now maps hydra.test.build.*
+  -- to hydra-build (see Ext.extRoutingInput). hydra-build is the first
+  -- non-kernel package to contribute testModules here.
+  let allTestModules = testModules ++ hydraBuildTestModules
+  writePerPackageManifestsJson routingMap defaultDistJsonRoot dslSrcMods encSrcMods mainUniverse allTestModules
   putStrLn ""
   putStrLn "=== Done! ==="

@@ -17,6 +17,19 @@
   (setq hydra-gen-main-dir (expand-file-name "src/main/emacs-lisp/hydra/" dist-base))
   (setq hydra-gen-test-dir (expand-file-name "src/test/emacs-lisp/hydra/" dist-base))
 
+  ;; #546: the hydra.build.* main + hydra.test.build.* test modules moved to the
+  ;; hydra-build package's own dist tree. In the repo layout they live under
+  ;; dist/emacs-lisp/hydra-build/...; in the bootstrap-demo flat layout
+  ;; (HYDRA_LISP_DIST_BASE set) all packages share one tree, so reuse it.
+  (if (and env-base (> (length env-base) 0))
+      (progn
+        (setq hydra-build-gen-main-dir hydra-gen-main-dir)
+        (setq hydra-build-gen-test-dir hydra-gen-test-dir))
+    (let ((build-base (expand-file-name "../../../dist/emacs-lisp/hydra-build/"
+                                        (file-name-directory load-file-name))))
+      (setq hydra-build-gen-main-dir (expand-file-name "src/main/emacs-lisp/hydra/" build-base))
+      (setq hydra-build-gen-test-dir (expand-file-name "src/test/emacs-lisp/hydra/" build-base))))
+
   ;; Load the loader from the dist copy (it in turn loads lazy.el from its own
   ;; dir, which is now the dist tree).
   (load (expand-file-name "loader.el" hydra-gen-main-dir) nil t)
@@ -31,6 +44,11 @@
 
 ;; Load gen-main
 (hydra-load-gen-main)
+;; #546: load hydra-build's main modules (hydra.build.*) from its own dist tree
+;; (a no-op re-scan of the same tree in the bootstrap-demo flat layout).
+(when (and hydra-build-gen-main-dir
+           (not (string= hydra-build-gen-main-dir hydra-gen-main-dir)))
+  (hydra-load-gen-main hydra-build-gen-main-dir))
 (hydra-set-function-bindings)
 
 ;; Load prims and libraries
@@ -75,6 +93,22 @@
 (hydra-ensure-test-graph)
 (setq hydra_test_test_graph_test_graph hydra--test-graph)
 (setq hydra_test_test_graph_test_context (hydra-empty-context))
+
+;; #546: load hydra-build's test modules (hydra.test.build.*) from its own dist
+;; test tree BEFORE hydra-load-gen-test. The kernel loader list no longer names
+;; test/build/*.el, but the generated kernel test suite aggregate
+;; (test/test_suite.el, loaded inside hydra-load-gen-test) references
+;; hydra_test_build_*_all_tests, so those symbols must already be defined. In
+;; the bootstrap-demo flat layout this reuses the shared tree, already covered above.
+(when (and hydra-build-gen-test-dir
+           (not (string= hydra-build-gen-test-dir hydra-gen-test-dir)))
+  (let ((base hydra-build-gen-test-dir))
+    (dolist (f '("test/build/modules.el"
+                 "test/build/reconcile.el"
+                 "test/build/routing.el"))
+      (let ((path (expand-file-name f base)))
+        (when (file-exists-p path) (hydra-load-file path)))))
+  (hydra-set-function-bindings))
 
 ;; Load remaining gen-test modules (test cases that reference the graph)
 (hydra-load-gen-test)

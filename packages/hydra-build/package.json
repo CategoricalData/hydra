@@ -1,0 +1,8 @@
+{
+  "packageFormatVersion": 1,
+  "name": "hydra-build",
+  "description": "Hydra's build system, promoted into Hydra",
+  "sourceLanguage": "haskell",
+  "targetLanguages": ["haskell", "java", "python", "scala", "typescript", "clojure", "common-lisp", "emacs-lisp", "scheme"],
+  "dependencies": ["hydra-kernel"]
+}

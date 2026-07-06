@@ -147,6 +147,11 @@ pythonpath = [
     "../../dist/python/hydra-lisp/src/main/python",
     "../../dist/python/hydra-pg/src/main/python",
     "../../dist/python/hydra-rdf/src/main/python",
+    # #546: hydra-build's generated main (hydra.build.*) + test (hydra.test.build.*)
+    # modules. The kernel test_suite aggregate references the build test groups
+    # (Option A), which import the build main modules, so both are on the path.
+    "../../dist/python/hydra-build/src/main/python",
+    "../../dist/python/hydra-build/src/test/python",
     "../../dist/python/hydra-kernel/src/test/python",
     "src/test/python"
 ]

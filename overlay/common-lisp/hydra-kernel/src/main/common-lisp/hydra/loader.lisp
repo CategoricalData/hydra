@@ -626,8 +626,12 @@
    hydra-defstruct rewriter cannot process. Skipped unconditionally (the
    per-caller *hydra-skip-gen-main-files* set is bootstrap-demo-only).")
 
-(defun hydra-load-gen-main ()
-  "Load all generated main modules. Uses retry loop to handle forward references."
+(defun hydra-load-gen-main (&optional (main-dir *hydra-gen-main-dir*))
+  "Load all generated main modules from MAIN-DIR (default *hydra-gen-main-dir*,
+the hydra-kernel main tree). Pass a different tree — e.g. the hydra-build main
+dir (#546) — to load an additional package's generated modules with the same
+priority-ordered, forward-reference retry loading. Uses retry loop to handle
+forward references."
   ;; Resolve `..` segments in base via probe-file. Without this, SBCL's
   ;; `directory` recursion through a path containing `../` enumerates
   ;; only a partial subdir set, silently dropping files like
@@ -635,7 +639,7 @@
   ;; and only surfaces under the run-tests harness (which sets cwd
   ;; elsewhere) — calling hydra-load-gen-main standalone happens to work.
   (let* ((dir-only (make-pathname :name nil :type nil
-                                  :defaults *hydra-gen-main-dir*))
+                                  :defaults main-dir))
          (base (or (probe-file dir-only) dir-only))
          ;; Priority files: load these first for best dependency order
          (priority '("core.lisp" "error/core.lisp" "error/checking.lisp" "error/packaging.lisp"

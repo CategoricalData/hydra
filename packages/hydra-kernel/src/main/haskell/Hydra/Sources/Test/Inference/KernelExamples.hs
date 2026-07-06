@@ -92,7 +92,7 @@ testGroupForNestedLet = define "testGroupForNestedLet" $
     -- This tests whether union elimination with a default case causes
     -- inference to over-generalize the pair-first type variable.
     subgroup "Recursive let with pair return (case on Type)" [
-      expectMono 3 [tag_disabledForMinimalInference, tag_disabled]
+      expectMono 3 [tag_disabledForMinimalInference]
         (lambda "typ" $ lets [
           "go">:
             lambda "depth" $ lambda "subst" $ lambda "t" $

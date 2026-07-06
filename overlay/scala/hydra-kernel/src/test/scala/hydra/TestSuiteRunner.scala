@@ -58,7 +58,7 @@ class TestSuiteRunner extends AnyFunSuite with BeforeAndAfterAll {
   }
 
   private def shouldSkip(tc: TestCaseWithMetadata): Boolean =
-    tc.tags.contains("disabled") || tc.tags.contains("disabledForPython")
+    tc.tags.contains("disabled") || tc.tags.contains("disabledForPython") || tc.tags.contains("disabledForScala")
 
   private def registerTestCase(name: String, tc: TestCaseWithMetadata): Unit = {
     tc.`case` match {
@@ -157,7 +157,7 @@ class TestSuiteRunner extends AnyFunSuite with BeforeAndAfterAll {
     var passed = 0
     var skipped = 0
     for (c <- g.cases) {
-      if (c.tags.contains("disabled") || c.tags.contains("disabledForPython")) skipped += 1
+      if (c.tags.contains("disabled") || c.tags.contains("disabledForPython") || c.tags.contains("disabledForScala")) skipped += 1
       else passed += 1
     }
     for (sub <- g.subgroups) {
@@ -465,7 +465,7 @@ object TestSuiteRunner {
     val coderBody = Type.record(Seq(
       FieldType("encode", encodeType),
       FieldType("decode", decodeType)))
-    types += ("hydra.util.Coder" ->
+    types += ("hydra.coders.Coder" ->
       Type.forall(ForallType("v1",
         Type.forall(ForallType("v2", coderBody)))))
 

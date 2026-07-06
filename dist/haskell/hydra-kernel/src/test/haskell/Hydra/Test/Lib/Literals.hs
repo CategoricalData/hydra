@@ -1683,8 +1683,7 @@ allTests =
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "123456789012345678901234567890"))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermOptional (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueBigint 123456789012345678901234567890))))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = [
-                Testing.Tag "disabled"]},
+              Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "invalid",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {

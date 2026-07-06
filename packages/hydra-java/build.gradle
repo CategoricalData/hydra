@@ -26,6 +26,11 @@ sourceSets {
             srcDirs += file("$projectDir/../../dist/java/hydra-scala/src/main/java")
             srcDirs += file("$projectDir/../../dist/java/hydra-lisp/src/main/java")
             srcDirs += file("$projectDir/../../dist/java/hydra-typescript/src/main/java")
+            // hydra-build (#546): the build system promoted into Hydra. Included in
+            // the rollup (unlike pg/rdf/ext) because CharacterizeBuildRoutingTest in
+            // heads/java/src/test consumes hydra.build.Routing directly. It moved out
+            // of the kernel, so its dist/java tree must be added here explicitly.
+            srcDirs += file("$projectDir/../../dist/java/hydra-build/src/main/java")
             // Java-language DSL sources for hydra-jvm and hydra-java (#505, #344).
             // Each class under hydra/sources/{jvm,java}/* exposes a static
             // module_ : Module field; the UpdateJavaJson driver discovers them via
@@ -70,6 +75,10 @@ sourceSets {
         java {
             srcDirs += file("$projectDir/../../heads/java/src/test/java")
             srcDirs += file("$projectDir/../../dist/java/hydra-kernel/src/test/java")
+            // hydra-build (#546): the hydra.test.build.* classes moved here from the
+            // kernel test tree. Kept on the test compile path so the build tests
+            // remain available to the runner.
+            srcDirs += file("$projectDir/../../dist/java/hydra-build/src/test/java")
         }
         compileClasspath += sourceSets.headsExtras.output
         runtimeClasspath += sourceSets.headsExtras.output

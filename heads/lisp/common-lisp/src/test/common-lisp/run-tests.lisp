@@ -138,6 +138,18 @@
           (merge-pathnames "../../../dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/"
                            *hydra-cl-head*)))
 
+;; #546: the hydra.build.* main modules moved from hydra-kernel to the
+;; hydra-build package, so they live under dist/common-lisp/hydra-build/... —
+;; a separate tree the kernel gen-main walk above does not cover. Loaded via a
+;; second hydra-load-gen-main call below. In the bootstrap-demo flat layout
+;; (HYDRA_LISP_DIST_BASE set) all packages share one tree, so no second dir is
+;; needed there.
+(defvar *hydra-build-gen-main-dir*
+  (if *hydra-dist-base-env*
+      nil
+      (merge-pathnames "../../../dist/common-lisp/hydra-build/src/main/common-lisp/hydra/"
+                       *hydra-cl-head*)))
+
 ;; In the bootstrap demo, hand-written files (loader.lisp, prelude.lisp,
 ;; prims.lisp, lib/*.lisp, ...) live alongside generated files under the
 ;; same hydra/ tree (the demo uses a flat layout). They were already
@@ -159,6 +171,11 @@
 (hydra-set-function-bindings)
 
 (hydra-load-gen-main)
+
+;; #546: load the hydra-build main modules (hydra.build.*) from their own
+;; dist tree. Skipped in the bootstrap-demo flat layout (single shared tree).
+(when *hydra-build-gen-main-dir*
+  (hydra-load-gen-main *hydra-build-gen-main-dir*))
 
 ;; Set function bindings again for generated kernel defvars
 (hydra-set-function-bindings)
@@ -193,6 +210,21 @@
 
 (defun load-test-file (relative)
   (let ((path (merge-pathnames relative *test-data-base*)))
+    (when (probe-file path)
+      (hydra-load-file path))))
+
+;; #546: the hydra.test.build.* test data moved to the hydra-build package, so
+;; it lives under dist/common-lisp/hydra-build/... rather than the kernel test
+;; tree above. In the bootstrap-demo flat layout (HYDRA_LISP_DIST_BASE set) all
+;; packages share one tree, so *test-data-base* already covers it.
+(defvar *build-test-data-base*
+  (if *hydra-dist-base-env*
+      *test-data-base*
+      (merge-pathnames "../../../dist/common-lisp/hydra-build/src/test/common-lisp/hydra/test/"
+                       *hydra-cl-head*)))
+
+(defun load-build-test-file (relative)
+  (let ((path (merge-pathnames relative *build-test-data-base*)))
     (when (probe-file path)
       (hydra-load-file path))))
 
@@ -287,11 +319,11 @@
              "json/yaml.lisp"))
   (load-test-file f))
 
-;; Build tests
+;; Build tests (#546: now under the hydra-build package's dist tree)
 (dolist (f '("build/modules.lisp"
              "build/reconcile.lisp"
              "build/routing.lisp"))
-  (load-test-file f))
+  (load-build-test-file f))
 
 ;; Remaining test categories
 (load-test-file "dependencies.lisp")
