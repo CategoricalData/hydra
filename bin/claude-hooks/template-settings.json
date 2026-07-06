@@ -7,6 +7,14 @@
           {
             "type": "command",
             "command": "bin/claude-hooks/inbox-hook.sh"
+          },
+          {
+            "type": "command",
+            "command": "bin/claude-hooks/proposals-hook.sh"
+          },
+          {
+            "type": "command",
+            "command": "bin/claude-hooks/autonomy-hook.sh"
           }
         ]
       }
