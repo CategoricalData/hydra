@@ -16,6 +16,24 @@ import hydra.dsl.lib.pairs as Pairs
 import hydra.dsl.lib.sets as Sets
 import hydra.dsl.lib.strings as Strings
 from hydra.overlay.python.dsl.meta.phantoms import *  # noqa: F401,F403
+import hydra.dsl.util
+import hydra.dsl.checking
+import hydra.dsl.serialization
+import hydra.dsl.analysis
+import hydra.dsl.annotations
+import hydra.dsl.arity
+import hydra.dsl.dependencies
+import hydra.dsl.environment
+import hydra.dsl.formatting
+import hydra.dsl.lexical
+import hydra.dsl.names
+import hydra.dsl.predicates
+import hydra.dsl.reduction
+import hydra.dsl.resolution
+import hydra.dsl.rewriting
+import hydra.dsl.scoping
+import hydra.dsl.strip
+import hydra.dsl.variables
 import hydra.dsl.lib.eithers as Eithers
 import hydra.dsl.python.syntax as PySyn
 
@@ -170,7 +188,7 @@ def _type_cases_with_one_branch(arg_term, default_result, branch_field,
             field(v, constant(default_result))
         )
     return cases("hydra.core.Type",
-        _kref.strip_deannotate_type(arg_term),
+        hydra.dsl.strip.deannotate_type(arg_term),
         None_(),
         fields,
     )
@@ -211,7 +229,7 @@ from hydra.sources.python._source_dsl import py_name as _py_name
 def _analyze_python_function():
     body = lambdas(
         ["cx", "env", "term"],
-        _kref.analysis_analyze_function_term_with(var("cx"), _local("pythonBindingMetadata"), _local("pythonEnvironmentGetGraph"), _local("pythonEnvironmentSetGraph"), var("env"), var("term")),
+        hydra.dsl.analysis.analyze_function_term_with(var("cx"), _local("pythonBindingMetadata"), _local("pythonEnvironmentGetGraph"), _local("pythonEnvironmentSetGraph"), var("env"), var("term")),
     )
     return (_def("analyzePythonFunction")
         .doc("Analyze a function term with Python-specific Graph management")
@@ -232,7 +250,7 @@ def _class_variant_pattern_with_capture():
                     PySyn.closed_pattern_capture(
                         PySyn.capture_pattern(
                             PySyn.pattern_capture_target(
-                                _kref.names_encode_name(false(), _kref.util_case_convention_lower_snake, var("env"), var("varName"))
+                                _kref.names_encode_name(false(), hydra.dsl.util.case_convention_lower_snake, var("env"), var("varName"))
                             )
                         )
                     ),
@@ -286,7 +304,7 @@ def _case_block_to_expr():
                 ("fterm", Core.case_alternative_handler(var("field"))),
                 (
                     "stripped",
-                    _kref.strip_deannotate_and_detype_term(var("fterm")),
+                    hydra.dsl.strip.deannotate_and_detype_term(var("fterm")),
                 ),
                 (
                     "effectiveLambda",
@@ -315,15 +333,15 @@ def _case_block_to_expr():
                         Logic.or_(
                             var("isUnitVariant"),
                             Logic.or_(
-                                _kref.variables_is_free_variable_in_term(var("v"), var("rawBody")),
-                                _kref.predicates_is_unit_term(var("rawBody")),
+                                hydra.dsl.variables.is_free_variable_in_term(var("v"), var("rawBody")),
+                                hydra.dsl.predicates.is_unit_term(var("rawBody")),
                             ),
                         )
                     ),
                 ),
                 (
                     "env2",
-                    _local("pythonEnvironmentSetGraph")(_kref.scoping_extend_graph_for_lambda(_local("pythonEnvironmentGetGraph")(var("env")), var("effectiveLambda")), var("env")),
+                    _local("pythonEnvironmentSetGraph")(hydra.dsl.scoping.extend_graph_for_lambda(_local("pythonEnvironmentGetGraph")(var("env")), var("effectiveLambda")), var("env")),
                 ),
                 (
                     "pyVariantName",
@@ -393,11 +411,11 @@ def _cond_import_symbol():
 def _collect_type_variables():
     body = lambdas(
         ["initial", "typ"],
-        cases_with_default("hydra.core.Type", _kref.strip_deannotate_type(var("typ")), let_chain(
+        cases_with_default("hydra.core.Type", hydra.dsl.strip.deannotate_type(var("typ")), let_chain(
                     [
                         (
                             "freeVars",
-                            _kref.variables_free_variables_in_type(var("typ")),
+                            hydra.dsl.variables.free_variables_in_type(var("typ")),
                         ),
                         (
                             "isTypeVar",
@@ -455,7 +473,7 @@ def _deconflict_variant_name():
                     wrap("hydra.core.Name",
                         Strings.cat2(
                             Core.un_name(var("unionName")),
-                            _kref.formatting_capitalize(Core.un_name(var("fname"))),
+                            hydra.dsl.formatting.capitalize(Core.un_name(var("fname"))),
                         ),
                     ),
                 ),
@@ -527,7 +545,7 @@ def _deduplicate_case_variables():
                         ),
                         (
                             "newBody",
-                            _kref.reduction_alpha_convert(var("v"), var("v2"), var("body")),
+                            hydra.dsl.reduction.alpha_convert(var("v"), var("v2"), var("body")),
                         ),
                         (
                             "newLam",
@@ -569,7 +587,7 @@ def _deduplicate_case_variables():
                 ("fname", Core.case_alternative_name(var("field"))),
                 ("fterm", Core.case_alternative_handler(var("field"))),
             ],
-            cases_with_default("hydra.core.Term", _kref.strip_deannotate_and_detype_term(var("fterm")), pair(
+            cases_with_default("hydra.core.Term", hydra.dsl.strip.deannotate_and_detype_term(var("fterm")), pair(
                         var("countByName"),
                         Lists.cons(var("field"), var("done")),
                     ),
@@ -603,7 +621,7 @@ def _deduplicate_case_variables():
 def _dig_for_wrap():
     body = lambdas(
         ["isTermAnnot", "meta", "typ"],
-        cases_with_default("hydra.core.Type", _kref.strip_deannotate_type(var("typ")), var("meta"),
+        cases_with_default("hydra.core.Type", hydra.dsl.strip.deannotate_type(var("typ")), var("meta"),
             field("forall",
                     lam(
                         "ft",
@@ -859,7 +877,7 @@ def _eliminate_unit_var():
     rewrite = lambdas(
         ["recurse", "term"],
         cases("hydra.core.Term",
-            _kref.strip_deannotate_and_detype_term(var("term")),
+            hydra.dsl.strip.deannotate_and_detype_term(var("term")),
             Given(var("term")),
             rewrite_body_fields,
         ),
@@ -952,7 +970,7 @@ def _encode_application():
             [
                 ("g", _local("pythonEnvironmentGetGraph")(var("env"))),
                 ("term", Core.term_application(var("app"))),
-                ("gathered", _kref.analysis_gather_args(var("term"), list_([]))),
+                ("gathered", hydra.dsl.analysis.gather_args(var("term"), list_([]))),
                 ("fun", Pairs.first(var("gathered"))),
                 ("args", Pairs.second(var("gathered"))),
                 ("knownArity", _local("termArityWithPrimitives")(var("g"), var("fun"))),
@@ -1087,7 +1105,7 @@ def _encode_application_inner():
             [
                 (
                     "elArity",
-                    _kref.arity_type_scheme_arity(var("ts")),
+                    hydra.dsl.arity.type_scheme_arity(var("ts")),
                 ),
                 (
                     "consumeCount",
@@ -1133,7 +1151,7 @@ def _encode_application_inner():
                     ),
                     right(
                         pair(
-                            _kref.utils_function_call(_kref.utils_py_name_to_py_primary(_kref.names_encode_name(true(), _kref.util_case_convention_lower_snake, var("env"), var("name"))), var("consumedArgs")),
+                            _kref.utils_function_call(_kref.utils_py_name_to_py_primary(_kref.names_encode_name(true(), hydra.dsl.util.case_convention_lower_snake, var("env"), var("name"))), var("consumedArgs")),
                             var("remainingArgs"),
                         )
                     ),
@@ -1155,7 +1173,7 @@ def _encode_application_inner():
                 ),
             ), has_ts_branch,),
     )
-    not_primitive_branch = Optionals.cases(_kref.lexical_lookup_binding(var("g"), var("name")), not_in_graph_branch, in_graph_branch,)
+    not_primitive_branch = Optionals.cases(hydra.dsl.lexical.lookup_binding(var("g"), var("name")), not_in_graph_branch, in_graph_branch,)
     is_primitive_branch = lam(
         "_prim",
         let_chain(
@@ -1220,7 +1238,7 @@ def _encode_application_inner():
                 ("withRest", with_rest),
                 ("defaultCase", default_case),
             ],
-            cases_with_default("hydra.core.Term", _kref.strip_deannotate_and_detype_term(var("fun")), var("defaultCase"),
+            cases_with_default("hydra.core.Term", hydra.dsl.strip.deannotate_and_detype_term(var("fun")), var("defaultCase"),
             field("project", project_branch),
             field("cases", cases_branch),
             field("unwrap", unwrap_branch),
@@ -1306,14 +1324,14 @@ def _encode_binding_as():
                 ("cases_", Core.case_statement_cases(var(cs_var))),
             ],
             Eithers.bind(
-                _kref.resolution_require_union_type(var("cx"), _local("pythonEnvironmentGetGraph")(var("env")), var("tname")),
+                hydra.dsl.resolution.require_union_type(var("cx"), _local("pythonEnvironmentGetGraph")(var("env")), var("tname")),
                 lam(
                     "rt",
                     let_chain(
                         [
                             (
                                 "isEnum",
-                                _kref.predicates_is_enum_row_type(var("rt")),
+                                hydra.dsl.predicates.is_enum_row_type(var("rt")),
                             ),
                             (
                                 "isFull",
@@ -1527,14 +1545,14 @@ def _encode_binding_as():
                     ("cases_", Pairs.first(var("rest2"))),
                 ],
                 Eithers.bind(
-                    _kref.resolution_require_union_type(var("cx"), _local("pythonEnvironmentGetGraph")(var("env")), var("tname")),
+                    hydra.dsl.resolution.require_union_type(var("cx"), _local("pythonEnvironmentGetGraph")(var("env")), var("tname")),
                     lam(
                         "rt",
                         let_chain(
                             [
                                 (
                                     "isEnum",
-                                    _kref.predicates_is_enum_row_type(var("rt")),
+                                    hydra.dsl.predicates.is_enum_row_type(var("rt")),
                                 ),
                                 (
                                     "isFull",
@@ -1568,7 +1586,7 @@ def _encode_binding_as():
                                                 [
                                                     field("param",
                                                         PySyn.param(
-                                                            _kref.names_encode_name(false(), _kref.util_case_convention_lower_snake, var("env"), var("n")),
+                                                            _kref.names_encode_name(false(), hydra.dsl.util.case_convention_lower_snake, var("env"), var("n")),
                                                             nothing(),
                                                         ),
                                                     ),
@@ -1583,7 +1601,7 @@ def _encode_binding_as():
                                 ),
                                 (
                                     "matchArgName",
-                                    _kref.names_encode_name(false(), _kref.util_case_convention_lower_snake, var("env"), var("matchLambdaParam")),
+                                    _kref.names_encode_name(false(), hydra.dsl.util.case_convention_lower_snake, var("env"), var("matchLambdaParam")),
                                 ),
                                 (
                                     "matchParam",
@@ -1800,7 +1818,7 @@ def _encode_binding_as():
     has_ts_branch = lam(
         "ts",
         Eithers.bind(
-            _kref.annotations_get_term_description(var("cx"), _local("pythonEnvironmentGetGraph")(var("env")), var("term1")),
+            hydra.dsl.annotations.get_term_description(var("cx"), _local("pythonEnvironmentGetGraph")(var("env")), var("term1")),
             lam(
                 "comment",
                 let_chain(
@@ -1828,7 +1846,7 @@ def _encode_binding_as():
                 ("mts", Core.binding_type_scheme(var("binding"))),
                 (
                     "fname",
-                    _kref.names_encode_name(true(), _kref.util_case_convention_lower_snake, var("env"), var("name1")),
+                    _kref.names_encode_name(true(), hydra.dsl.util.case_convention_lower_snake, var("env"), var("name1")),
                 ),
             ],
             Optionals.cases(var("mts"), no_ts_branch, has_ts_branch),
@@ -1849,7 +1867,7 @@ def _encode_binding_as_assignment():
                 ("mts", Core.binding_type_scheme(var("binding"))),
                 (
                     "pyName",
-                    _kref.names_encode_name(false(), _kref.util_case_convention_lower_snake, var("env"), var("name")),
+                    _kref.names_encode_name(false(), hydra.dsl.util.case_convention_lower_snake, var("env"), var("name")),
                 ),
             ],
             Eithers.bind(
@@ -1861,15 +1879,15 @@ def _encode_binding_as_assignment():
                             ("tc", _env("graph", "env")),
                             (
                                 "isComplexVar",
-                                _kref.predicates_is_complex_variable(var("tc"), var("name")),
+                                hydra.dsl.predicates.is_complex_variable(var("tc"), var("name")),
                             ),
                             (
                                 "termIsComplex",
-                                _kref.predicates_is_complex_term(var("tc"), var("term")),
+                                hydra.dsl.predicates.is_complex_term(var("tc"), var("term")),
                             ),
                             (
                                 "isTrivial",
-                                _kref.predicates_is_trivial_term(var("term")),
+                                hydra.dsl.predicates.is_trivial_term(var("term")),
                             ),
                             (
                                 "needsThunk",
@@ -1888,7 +1906,7 @@ def _encode_binding_as_assignment():
                                                 var("allowThunking"),
                                                 Logic.and_(
                                                     Equality.equal(
-                                                        _kref.arity_type_scheme_arity(var("ts")),
+                                                        hydra.dsl.arity.type_scheme_arity(var("ts")),
                                                         int_(0),
                                                     ),
                                                     Logic.or_(
@@ -1948,7 +1966,7 @@ def _encode_default_case_block():
                         _kref.utils_raise_assertion_error(string("Unreachable: all variants handled")),
                         _kref.utils_raise_type_error(Strings.cat2(
                                 string("Unsupported "),
-                                _kref.names_local_name_of(var("tname")),
+                                hydra.dsl.names.local_name_of(var("tname")),
                             )),
                     )
                 ), lam(
@@ -2013,11 +2031,11 @@ def _encode_definition():
                             )
                         ),
                         nothing(),
-                    ), lam("sig", _kref.scoping_term_signature_to_type_scheme(var("sig"))),),
+                    ), lam("sig", hydra.dsl.scoping.term_signature_to_type_scheme(var("sig"))),),
             ),
         ],
         Eithers.bind(
-            _kref.annotations_get_term_description(var("cx"), _local("pythonEnvironmentGetGraph")(var("env")), var("term")),
+            hydra.dsl.annotations.get_term_description(var("cx"), _local("pythonEnvironmentGetGraph")(var("env")), var("term")),
             lam(
                 "comment",
                 let_chain(
@@ -2056,7 +2074,7 @@ def _encode_definition():
             ),
         ],
         Eithers.bind(
-            _kref.annotations_get_type_description(var("cx"), _local("pythonEnvironmentGetGraph")(var("env")), var("typ")),
+            hydra.dsl.annotations.get_type_description(var("cx"), _local("pythonEnvironmentGetGraph")(var("env")), var("typ")),
             lam(
                 "comment",
                 let_chain(
@@ -2103,7 +2121,7 @@ def _encode_enum_value_assignment():
                 ("ftype", Core.field_type_type(var("fieldType"))),
             ],
             Eithers.bind(
-                _kref.annotations_get_type_description(var("cx"), _local("pythonEnvironmentGetGraph")(var("env")), var("ftype")),
+                hydra.dsl.annotations.get_type_description(var("cx"), _local("pythonEnvironmentGetGraph")(var("env")), var("ftype")),
                 lam(
                     "mcomment",
                     let_chain(
@@ -2115,7 +2133,7 @@ def _encode_enum_value_assignment():
                             ("fnameStr", Core.un_name(var("fname"))),
                             (
                                 "pyValue",
-                                _kref.utils_function_call(_kref.utils_py_name_to_py_primary(_kref.names_encode_name(true(), _kref.util_case_convention_pascal, var("env"), Core.name(string("hydra.core.Name")))), list_(
+                                _kref.utils_function_call(_kref.utils_py_name_to_py_primary(_kref.names_encode_name(true(), hydra.dsl.util.case_convention_pascal, var("env"), Core.name(string("hydra.core.Name")))), list_(
                                         [
                                             _kref.utils_double_quoted_string(var("fnameStr"))
                                         ]
@@ -2183,7 +2201,7 @@ def _encode_field_type():
                 ("ftype", Core.field_type_type(var("fieldType"))),
             ],
             Eithers.bind(
-                _kref.annotations_get_type_description(var("cx"), _local("pythonEnvironmentGetGraph")(var("env")), var("ftype")),
+                hydra.dsl.annotations.get_type_description(var("cx"), _local("pythonEnvironmentGetGraph")(var("env")), var("ftype")),
                 lam(
                     "comment",
                     let_chain(
@@ -2347,7 +2365,7 @@ def _encode_float_value_py_special_float():
 def _encode_name_constants():
     to_stmt = lam(
         "pair",
-        _kref.utils_assignment_statement(Pairs.first(var("pair")), _kref.utils_function_call(_kref.utils_py_name_to_py_primary(_kref.names_encode_name(true(), _kref.util_case_convention_pascal, var("env"), Core.name(string("hydra.core.Name")))), list_(
+        _kref.utils_assignment_statement(Pairs.first(var("pair")), _kref.utils_function_call(_kref.utils_py_name_to_py_primary(_kref.names_encode_name(true(), hydra.dsl.util.case_convention_pascal, var("env"), Core.name(string("hydra.core.Name")))), list_(
                     [
                         _kref.utils_double_quoted_string(Core.un_name(Pairs.second(var("pair"))))
                     ]
@@ -2519,7 +2537,7 @@ def _encode_python_module():
             [
                 (
                     "defs",
-                    _kref.environment_reorder_defs(var("defs0")),
+                    hydra.dsl.environment.reorder_defs(var("defs0")),
                 ),
                 (
                     "meta0",
@@ -2833,7 +2851,7 @@ def _record_builder_class():
                             ),
                         ),
                         # build(): return R(<field>=self.<field>, ...).
-                        ("pyName", _kref.names_encode_name(false(), _kref.util_case_convention_pascal, var("env"), var("name"))),
+                        ("pyName", _kref.names_encode_name(false(), hydra.dsl.util.case_convention_pascal, var("env"), var("name"))),
                         (
                             "buildKwargs",
                             Lists.map(
@@ -2985,7 +3003,7 @@ def _encode_record_type():
                         ),
                         (
                             "pyName",
-                            _kref.names_encode_name(false(), _kref.util_case_convention_pascal, var("env"), var("name")),
+                            _kref.names_encode_name(false(), hydra.dsl.util.case_convention_pascal, var("env"), var("name")),
                         ),
                         ("noTypeParams", list_([])),
                     ],
@@ -3039,7 +3057,7 @@ def _encode_type_def_single():
             [
                 (
                     "pyName",
-                    _kref.names_encode_name(false(), _kref.util_case_convention_pascal, var("env"), var("name")),
+                    _kref.names_encode_name(false(), hydra.dsl.util.case_convention_pascal, var("env"), var("name")),
                 ),
                 (
                     "tparams",
@@ -3068,10 +3086,10 @@ def _encode_type_quoted():
                 right(
                     Logic.if_else(
                         Sets.null(
-                            _kref.variables_free_variables_in_type(var("typ"))
+                            hydra.dsl.variables.free_variables_in_type(var("typ"))
                         ),
                         var("pytype"),
-                        _kref.utils_double_quoted_string(var("hydra.serialization.printExpr")(var("hydra.python.serde.expressionToExpr")(var("pytype")))),
+                        _kref.utils_double_quoted_string(hydra.dsl.serialization.print_expr(var("hydra.python.serde.expressionToExpr")(var("pytype")))),
                     )
                 ),
             ),
@@ -3106,7 +3124,7 @@ def _encode_term_assignment():
                         # types out and use them as the doms/mcod source. See #488.
                         (
                             "sigTermSig",
-                            _kref.scoping_type_scheme_to_term_signature(var("ts")),
+                            hydra.dsl.scoping.type_scheme_to_term_signature(var("ts")),
                         ),
                         (
                             "sigParamTypes",
@@ -3140,11 +3158,11 @@ def _encode_term_assignment():
                         ),
                         (
                             "isComplex",
-                            _kref.predicates_is_complex_binding(var("tc"), var("binding")),
+                            hydra.dsl.predicates.is_complex_binding(var("tc"), var("binding")),
                         ),
                         (
                             "isTrivial",
-                            _kref.predicates_is_trivial_term(var("term")),
+                            hydra.dsl.predicates.is_trivial_term(var("term")),
                         ),
                     ],
                     Logic.if_else(
@@ -3168,7 +3186,7 @@ def _encode_term_assignment():
                                         [
                                             (
                                                 "pyName",
-                                                _kref.names_encode_name(false(), _kref.util_case_convention_lower_snake, var("env2"), var("name")),
+                                                _kref.names_encode_name(false(), hydra.dsl.util.case_convention_lower_snake, var("env2"), var("name")),
                                             ),
                                             (
                                                 "lazyExpr",
@@ -3201,7 +3219,7 @@ def _encode_term_assignment():
                                     [
                                         (
                                             "pyName",
-                                            _kref.names_encode_name(false(), _kref.util_case_convention_lower_snake, var("env2"), var("name")),
+                                            _kref.names_encode_name(false(), hydra.dsl.util.case_convention_lower_snake, var("env2"), var("name")),
                                         ),
                                     ],
                                     right(
@@ -3259,7 +3277,7 @@ def _encode_term_inline():
                         "mtyp",
                         Eithers.map(
                             lam("_r", Pairs.first(var("_r"))),
-                            var("hydra.checking.typeOf")(var("cx"), var("tc"), list_([]), var("term")),
+                            hydra.dsl.checking.type_of(var("cx"), var("tc"), list_([]), var("term")),
                         ),
                     ),
                 ],
@@ -3378,7 +3396,7 @@ def _encode_term_inline():
                                     (
                                         "pparams",
                                         Lists.map(
-                                            _kref.names_encode_name(false(), _kref.util_case_convention_lower_snake, var("innerEnv")),
+                                            _kref.names_encode_name(false(), hydra.dsl.util.case_convention_lower_snake, var("innerEnv")),
                                             var("params"),
                                         ),
                                     ),
@@ -3800,11 +3818,11 @@ def _encode_term_inline():
                 ("field", Core.injection_field(var("inj"))),
             ],
             Eithers.bind(
-                _kref.resolution_require_union_type(var("cx"), _local("pythonEnvironmentGetGraph")(var("env")), var("tname")),
+                hydra.dsl.resolution.require_union_type(var("cx"), _local("pythonEnvironmentGetGraph")(var("env")), var("tname")),
                 lam(
                     "rt",
                     Logic.if_else(
-                        _kref.predicates_is_enum_row_type(var("rt")),
+                        hydra.dsl.predicates.is_enum_row_type(var("rt")),
                         right(
                             _kref.utils_project_from_expression(_kref.utils_py_name_to_py_expression(_kref.names_encode_name_qualified(var("env"), var("tname"))), _kref.names_encode_enum_value(var("env"), Core.field_name(var("field"))))
                         ),
@@ -3826,7 +3844,7 @@ def _encode_term_inline():
                                             var("rt"),
                                         ), false(), lam(
                                             "ft",
-                                            _kref.predicates_is_unit_type(_kref.strip_deannotate_type(Core.field_type_type(
+                                            hydra.dsl.predicates.is_unit_type(hydra.dsl.strip.deannotate_type(Core.field_type_type(
                                                         var("ft")
                                                     ))),
                                         ),),
@@ -3835,7 +3853,7 @@ def _encode_term_inline():
                             Eithers.bind(
                                 Logic.if_else(
                                     Logic.or_(
-                                        _kref.predicates_is_unit_term(Core.field_term(var("field"))),
+                                        hydra.dsl.predicates.is_unit_term(Core.field_term(var("field"))),
                                         var("isUnitVariant"),
                                     ),
                                     right(list_([])),
@@ -3911,7 +3929,7 @@ def _encode_term_inline():
                 ("withCast", with_cast),
             ],
             cases("hydra.core.Term",
-                _kref.strip_deannotate_and_detype_term(var("term")),
+                hydra.dsl.strip.deannotate_and_detype_term(var("term")),
                 None_(),
                 [
                     field("application", application_branch),
@@ -4007,14 +4025,14 @@ def _encode_term_multiline():
                 ("cases_", Core.case_statement_cases(var("cs"))),
             ],
             Eithers.bind(
-                _kref.resolution_require_union_type(var("cx"), _local("pythonEnvironmentGetGraph")(var("env")), var("tname")),
+                hydra.dsl.resolution.require_union_type(var("cx"), _local("pythonEnvironmentGetGraph")(var("env")), var("tname")),
                 lam(
                     "rt",
                     let_chain(
                         [
                             (
                                 "isEnum",
-                                _kref.predicates_is_enum_row_type(var("rt")),
+                                hydra.dsl.predicates.is_enum_row_type(var("rt")),
                             ),
                             (
                                 "isFull",
@@ -4106,7 +4124,7 @@ def _encode_term_multiline():
                 ("dfltLogic", dflt_logic),
                 (
                     "gathered",
-                    _kref.analysis_gather_applications(var("term")),
+                    hydra.dsl.analysis.gather_applications(var("term")),
                 ),
                 ("args", Pairs.first(var("gathered"))),
                 ("body", Pairs.second(var("gathered"))),
@@ -4125,7 +4143,7 @@ def _encode_term_multiline():
                             ),
                         ),
                     ],
-                    cases_with_default("hydra.core.Term", _kref.strip_deannotate_and_detype_term(var("body")), var("dfltLogic"),
+                    cases_with_default("hydra.core.Term", hydra.dsl.strip.deannotate_and_detype_term(var("body")), var("dfltLogic"),
             field("cases", cases_branch)),
                 ),
                 var("dfltLogic"),
@@ -4147,14 +4165,14 @@ def _encode_term_multiline_tco():
                 ("cases_", Core.case_statement_cases(var("cs"))),
             ],
             Eithers.bind(
-                _kref.resolution_require_union_type(var("cx"), _local("pythonEnvironmentGetGraph")(var("env")), var("tname")),
+                hydra.dsl.resolution.require_union_type(var("cx"), _local("pythonEnvironmentGetGraph")(var("env")), var("tname")),
                 lam(
                     "rt",
                     let_chain(
                         [
                             (
                                 "isEnum",
-                                _kref.predicates_is_enum_row_type(var("rt")),
+                                hydra.dsl.predicates.is_enum_row_type(var("rt")),
                             ),
                             (
                                 "isFull",
@@ -4243,7 +4261,7 @@ def _encode_term_multiline_tco():
         [
             (
                 "gathered2",
-                _kref.analysis_gather_applications(var("term")),
+                hydra.dsl.analysis.gather_applications(var("term")),
             ),
             ("args2", Pairs.first(var("gathered2"))),
             ("body2", Pairs.second(var("gathered2"))),
@@ -4262,7 +4280,7 @@ def _encode_term_multiline_tco():
                         ),
                     ),
                 ],
-                cases_with_default("hydra.core.Term", _kref.strip_deannotate_and_detype_term(var("body2")), Eithers.bind(
+                cases_with_default("hydra.core.Term", hydra.dsl.strip.deannotate_and_detype_term(var("body2")), Eithers.bind(
                             _local("encodeTermInline")(var("cx"), var("env"), false(), var("term")),
                             lam(
                                 "expr",
@@ -4298,17 +4316,17 @@ def _encode_term_multiline_tco():
             [
                 (
                     "stripped",
-                    _kref.strip_deannotate_and_detype_term(var("term")),
+                    hydra.dsl.strip.deannotate_and_detype_term(var("term")),
                 ),
                 (
                     "gathered",
-                    _kref.analysis_gather_applications(var("stripped")),
+                    hydra.dsl.analysis.gather_applications(var("stripped")),
                 ),
                 ("gatherArgs", Pairs.first(var("gathered"))),
                 ("gatherFun", Pairs.second(var("gathered"))),
                 (
                     "strippedFun",
-                    _kref.strip_deannotate_and_detype_term(var("gatherFun")),
+                    hydra.dsl.strip.deannotate_and_detype_term(var("gatherFun")),
                 ),
                 (
                     "isSelfCall",
@@ -4363,7 +4381,7 @@ def _encode_term_multiline_tco():
                                                         ),
                                                     ),
                                                 ],
-                                                _kref.utils_assignment_statement(_kref.names_encode_name(false(), _kref.util_case_convention_lower_snake, var("env"), var("paramName")), var("pyArg")),
+                                                _kref.utils_assignment_statement(_kref.names_encode_name(false(), hydra.dsl.util.case_convention_lower_snake, var("env"), var("paramName")), var("pyArg")),
                                             ),
                                         ),
                                         Lists.zip(
@@ -4617,13 +4635,13 @@ def _encode_type():
                     right(
                         _kref.utils_double_quoted_string(Strings.cat2(
                                 string("type = "),
-                                _kref.show_core_type(_kref.strip_deannotate_type(var("typ"))),
+                                _kref.show_core_type(hydra.dsl.strip.deannotate_type(var("typ"))),
                             ))
                     ),
                 ),
             ],
             cases("hydra.core.Type",
-                _kref.strip_deannotate_type(var("typ")),
+                hydra.dsl.strip.deannotate_type(var("typ")),
                 None_(),
                 fields,
             ),
@@ -4671,7 +4689,7 @@ def _encode_type_assignment_inner():
         ["cx", "env", "name", "typ", "comment"],
         let_chain(
             [
-                ("stripped", _kref.strip_deannotate_type(var("typ"))),
+                ("stripped", hydra.dsl.strip.deannotate_type(var("typ"))),
                 ("dflt", dflt),
             ],
             cases_with_default("hydra.core.Type", var("stripped"), var("dflt"),
@@ -4744,7 +4762,7 @@ def _encode_union_elimination_inline():
                 ),
                 (
                     "pyTypeName",
-                    _kref.names_encode_name(true(), _kref.util_case_convention_pascal, var("env"), var("tname")),
+                    _kref.names_encode_name(true(), hydra.dsl.util.case_convention_pascal, var("env"), var("tname")),
                 ),
                 (
                     "pyEnumValue",
@@ -4843,14 +4861,14 @@ def _encode_union_elimination_inline():
                 ("cases_", Core.case_statement_cases(var("cs"))),
             ],
             Eithers.bind(
-                _kref.resolution_require_union_type(var("cx"), _local("pythonEnvironmentGetGraph")(var("env")), var("tname")),
+                hydra.dsl.resolution.require_union_type(var("cx"), _local("pythonEnvironmentGetGraph")(var("env")), var("tname")),
                 lam(
                     "rt",
                     let_chain(
                         [
                             (
                                 "isEnum",
-                                _kref.predicates_is_enum_row_type(var("rt")),
+                                hydra.dsl.predicates.is_enum_row_type(var("rt")),
                             ),
                             (
                                 "valueExpr",
@@ -4917,7 +4935,7 @@ def _encode_union_field():
                 ("ftype", Core.field_type_type(var("fieldType"))),
             ],
             Eithers.bind(
-                _kref.annotations_get_type_description(var("cx"), _local("pythonEnvironmentGetGraph")(var("env")), var("ftype")),
+                hydra.dsl.annotations.get_type_description(var("cx"), _local("pythonEnvironmentGetGraph")(var("env")), var("ftype")),
                 lam(
                     "fcomment",
                     let_chain(
@@ -4925,7 +4943,7 @@ def _encode_union_field():
                             (
                                 "isUnit",
                                 Equality.equal(
-                                    _kref.strip_deannotate_type(var("ftype")),
+                                    hydra.dsl.strip.deannotate_type(var("ftype")),
                                     Core.type_unit,
                                 ),
                             ),
@@ -5412,7 +5430,7 @@ def _environment_type_parameters():
 def _extend_env_with_lambda_params():
     inner_go = lambdas(
         ["e", "t"],
-        cases_with_default("hydra.core.Term", _kref.strip_deannotate_and_detype_term(var("t")), var("e"),
+        cases_with_default("hydra.core.Term", hydra.dsl.strip.deannotate_and_detype_term(var("t")), var("e"),
             field("lambda",
                     lam(
                         "lam",
@@ -5420,7 +5438,7 @@ def _extend_env_with_lambda_params():
                             [
                                 (
                                     "newTc",
-                                    _kref.scoping_extend_graph_for_lambda(_local("pythonEnvironmentGetGraph")(var("e")), var("lam")),
+                                    hydra.dsl.scoping.extend_graph_for_lambda(_local("pythonEnvironmentGetGraph")(var("e")), var("lam")),
                                 ),
                                 (
                                     "newEnv",
@@ -5518,11 +5536,11 @@ def _encode_union_type():
                     ),
                     (
                         "pyName",
-                        _kref.names_encode_name(false(), _kref.util_case_convention_pascal, var("env"), var("name")),
+                        _kref.names_encode_name(false(), hydra.dsl.util.case_convention_pascal, var("env"), var("name")),
                     ),
                     (
                         "typeConstStmt",
-                        _kref.utils_dotted_assignment_statement(var("pyName"), _kref.names_encode_constant_for_type_name(var("env"), var("name")), _kref.utils_function_call(_kref.utils_py_name_to_py_primary(_kref.names_encode_name(true(), _kref.util_case_convention_pascal, var("env"), Core.name(string("hydra.core.Name")))), list_(
+                        _kref.utils_dotted_assignment_statement(var("pyName"), _kref.names_encode_constant_for_type_name(var("env"), var("name")), _kref.utils_function_call(_kref.utils_py_name_to_py_primary(_kref.names_encode_name(true(), hydra.dsl.util.case_convention_pascal, var("env"), Core.name(string("hydra.core.Name")))), list_(
                                     [
                                         _kref.utils_double_quoted_string(Core.un_name(var("name")))
                                     ]
@@ -5575,7 +5593,7 @@ def _encode_union_type():
                         ),
                         (
                             "unionStmts",
-                            _local("unionTypeStatementsFor")(var("env"), _kref.names_encode_name(false(), _kref.util_case_convention_pascal, var("env"), var("name")), var("tparams"), var("comment"), _kref.utils_or_expression(var("unionAlts")), var("constStmts")),
+                            _local("unionTypeStatementsFor")(var("env"), _kref.names_encode_name(false(), hydra.dsl.util.case_convention_pascal, var("env"), var("name")), var("tparams"), var("comment"), _kref.utils_or_expression(var("unionAlts")), var("constStmts")),
                         ),
                     ],
                     right(
@@ -5590,7 +5608,7 @@ def _encode_union_type():
     body = lambdas(
         ["cx", "env", "name", "rowType", "comment"],
         Logic.if_else(
-            _kref.predicates_is_enum_row_type(var("rowType")),
+            hydra.dsl.predicates.is_enum_row_type(var("rowType")),
             enum_branch,
             union_branch,
         ),
@@ -5606,10 +5624,10 @@ def _encode_variable():
         return Logic.if_else(
             Logic.not_(
                 Sets.null(
-                    _kref.variables_free_variables_in_type(var(typ_var))
+                    hydra.dsl.variables.free_variables_in_type(var(typ_var))
                 )
             ),
-            _local("makeSimpleLambda")(_kref.arity_type_arity(var(typ_var)), var("asVariable")),
+            _local("makeSimpleLambda")(hydra.dsl.arity.type_arity(var(typ_var)), var("asVariable")),
             var("asVariable"),
         )
 
@@ -5617,10 +5635,10 @@ def _encode_variable():
     metadata_branch = Logic.if_else(
         Logic.and_(
             Equality.equal(
-                _kref.arity_type_arity(var("typ")),
+                hydra.dsl.arity.type_arity(var("typ")),
                 int32(0),
             ),
-            _kref.predicates_is_complex_variable(var("tc"), var("name")),
+            hydra.dsl.predicates.is_complex_variable(var("tc"), var("name")),
         ),
         right(var("asFunctionCall")),
         let_chain(
@@ -5636,10 +5654,10 @@ def _encode_variable():
             Logic.and_(
                 Logic.and_(
                     Equality.equal(
-                        _kref.arity_type_arity(var("typ")),
+                        hydra.dsl.arity.type_arity(var("typ")),
                         int32(0),
                     ),
-                    _kref.predicates_is_complex_binding(var("tc"), var("el")),
+                    hydra.dsl.predicates.is_complex_binding(var("tc"), var("el")),
                 ),
                 Logic.not_(var("elTrivial")),
             ),
@@ -5656,13 +5674,13 @@ def _encode_variable():
             [
                 (
                     "elTrivial",
-                    _kref.predicates_is_trivial_term(Core.binding_term(var("el"))),
+                    hydra.dsl.predicates.is_trivial_term(Core.binding_term(var("el"))),
                 ),
             ],
             Optionals.cases(Core.binding_type_scheme(var("el")), Logic.if_else(
                     Logic.and_(
                         Equality.equal(
-                            _kref.arity_type_arity(var("typ")),
+                            hydra.dsl.arity.type_arity(var("typ")),
                             int32(0),
                         ),
                         Logic.not_(var("elTrivial")),
@@ -5675,7 +5693,7 @@ def _encode_variable():
                 ), el_typed_branch,),
         ),
     )
-    not_in_metadata_branch = Optionals.cases(_kref.lexical_lookup_binding(var("g"), var("name")), let_chain(
+    not_in_metadata_branch = Optionals.cases(hydra.dsl.lexical.lookup_binding(var("g"), var("name")), let_chain(
             [("asFunctionRef", as_function_ref("typ"))],
             right(var("asFunctionRef")),
         ), el_branch,)
@@ -5699,10 +5717,10 @@ def _encode_variable():
                             Logic.if_else(
                                 Logic.not_(
                                     Sets.null(
-                                        _kref.variables_free_variables_in_type(var("typ"))
+                                        hydra.dsl.variables.free_variables_in_type(var("typ"))
                                     )
                                 ),
-                                _local("makeSimpleLambda")(_kref.arity_type_arity(var("typ")), var("unwrapped")),
+                                _local("makeSimpleLambda")(hydra.dsl.arity.type_arity(var("typ")), var("unwrapped")),
                                 var("unwrapped"),
                             ),
                         ),
@@ -5730,10 +5748,10 @@ def _encode_variable():
             Logic.and_(
                 Logic.and_(
                     Equality.equal(
-                        _kref.arity_type_scheme_arity(var("ts")),
+                        hydra.dsl.arity.type_scheme_arity(var("ts")),
                         int32(0),
                     ),
-                    _kref.predicates_is_complex_binding(var("tc"), var("el")),
+                    hydra.dsl.predicates.is_complex_binding(var("tc"), var("el")),
                 ),
                 Logic.not_(var("elTrivial1")),
             ),
@@ -5748,7 +5766,7 @@ def _encode_variable():
                                     Core.type_scheme_variables(var("ts"))
                                 )
                             ),
-                            _local("makeSimpleLambda")(_kref.arity_type_arity(Core.type_scheme_body(var("ts"))), var("asVariable")),
+                            _local("makeSimpleLambda")(hydra.dsl.arity.type_arity(Core.type_scheme_body(var("ts"))), var("asVariable")),
                             var("asVariable"),
                         ),
                     ),
@@ -5763,13 +5781,13 @@ def _encode_variable():
             [
                 (
                     "elTrivial1",
-                    _kref.predicates_is_trivial_term(Core.binding_term(var("el"))),
+                    hydra.dsl.predicates.is_trivial_term(Core.binding_term(var("el"))),
                 ),
             ],
             Optionals.cases(Core.binding_type_scheme(var("el")), right(var("asVariable")), el_branch_no_typ_inner,),
         ),
     )
-    not_in_graphBoundTypes_no_prim = Optionals.cases(_kref.lexical_lookup_binding(var("g"), var("name")), Optionals.cases(Maps.lookup(var("name"), var("tcMetadata")), left(
+    not_in_graphBoundTypes_no_prim = Optionals.cases(hydra.dsl.lexical.lookup_binding(var("g"), var("name")), Optionals.cases(Maps.lookup(var("name"), var("tcMetadata")), left(
                 Errors_dsl.error_other(
                     Errors_dsl.other_error(
                         Strings.cat2(
@@ -5785,7 +5803,7 @@ def _encode_variable():
             [
                 (
                     "primArity",
-                    _kref.arity_primitive_arity(var("prim")),
+                    hydra.dsl.arity.primitive_arity(var("prim")),
                 ),
             ],
             Logic.if_else(
@@ -5795,7 +5813,7 @@ def _encode_variable():
                     [
                         (
                             "ts",
-                            _kref.scoping_term_signature_to_type_scheme(
+                            hydra.dsl.scoping.term_signature_to_type_scheme(
                                 project(Name("hydra.packaging.PrimitiveDefinition"), Name("signature"))(
                                     _proj("hydra.graph.Primitive", "definition", "prim"))),
                         ),
@@ -5807,7 +5825,7 @@ def _encode_variable():
                                         Core.type_scheme_variables(var("ts"))
                                     )
                                 ),
-                                _local("makeSimpleLambda")(_kref.arity_type_arity(Core.type_scheme_body(var("ts"))), var("asVariable")),
+                                _local("makeSimpleLambda")(hydra.dsl.arity.type_arity(Core.type_scheme_body(var("ts"))), var("asVariable")),
                                 var("asVariable"),
                             ),
                         ),
@@ -5827,7 +5845,7 @@ def _encode_variable():
             right(
                 _local("lazyDotGet")(var("asVariable"))
             ),
-            Optionals.cases(_kref.lexical_lookup_primitive(var("g"), var("name")), not_in_graphBoundTypes_no_prim, is_prim_no_typ_branch,),
+            Optionals.cases(hydra.dsl.lexical.lookup_primitive(var("g"), var("name")), not_in_graphBoundTypes_no_prim, is_prim_no_typ_branch,),
         ),
     )
 
@@ -5840,7 +5858,7 @@ def _encode_variable():
             [
                 (
                     "primArity",
-                    _kref.arity_primitive_arity(var("prim")),
+                    hydra.dsl.arity.primitive_arity(var("prim")),
                 ),
             ],
             Logic.if_else(
@@ -5892,7 +5910,7 @@ def _encode_variable():
                         ),
                         (
                             "fullCall",
-                            _kref.utils_function_call(_kref.utils_py_name_to_py_primary(_kref.names_encode_name(true(), _kref.util_case_convention_lower_snake, var("env"), var("name"))), var("allArgs")),
+                            _kref.utils_function_call(_kref.utils_py_name_to_py_primary(_kref.names_encode_name(true(), hydra.dsl.util.case_convention_lower_snake, var("env"), var("name"))), var("allArgs")),
                         ),
                     ],
                     right(
@@ -5902,7 +5920,7 @@ def _encode_variable():
             ),
         ),
     )
-    nonempty_args_branch = Optionals.cases(_kref.lexical_lookup_primitive(var("g"), var("name")), right(var("asFunctionCall")), prim_branch,)
+    nonempty_args_branch = Optionals.cases(hydra.dsl.lexical.lookup_primitive(var("g"), var("name")), right(var("asFunctionCall")), prim_branch,)
 
     body = lambdas(
         ["cx", "env", "name", "args"],
@@ -5939,7 +5957,7 @@ def _encode_variable():
                 ),
                 (
                     "asFunctionCall",
-                    _kref.utils_function_call(_kref.utils_py_name_to_py_primary(_kref.names_encode_name(true(), _kref.util_case_convention_lower_snake, var("env"), var("name"))), var("args")),
+                    _kref.utils_function_call(_kref.utils_py_name_to_py_primary(_kref.names_encode_name(true(), hydra.dsl.util.case_convention_lower_snake, var("env"), var("name"))), var("args")),
                 ),
                 # Lazy-aware function call for inline-var references: name.get()(args)
                 (
@@ -5979,7 +5997,7 @@ def _encode_wrapped_type():
                         [
                             (
                                 "pyName",
-                                _kref.names_encode_name(false(), _kref.util_case_convention_pascal, var("env"), var("name")),
+                                _kref.names_encode_name(false(), hydra.dsl.util.case_convention_pascal, var("env"), var("name")),
                             ),
                             (
                                 "body",
@@ -5987,7 +6005,7 @@ def _encode_wrapped_type():
                             ),
                             (
                                 "typeConstStmt",
-                                _kref.utils_dotted_assignment_statement(var("pyName"), _kref.names_encode_constant_for_type_name(var("env"), var("name")), _kref.utils_function_call(_kref.utils_py_name_to_py_primary(_kref.names_encode_name(true(), _kref.util_case_convention_pascal, var("env"), Core.name(string("hydra.core.Name")))), list_(
+                                _kref.utils_dotted_assignment_statement(var("pyName"), _kref.names_encode_constant_for_type_name(var("env"), var("name")), _kref.utils_function_call(_kref.utils_py_name_to_py_primary(_kref.names_encode_name(true(), hydra.dsl.util.case_convention_pascal, var("env"), Core.name(string("hydra.core.Name")))), list_(
                                             [
                                                 _kref.utils_double_quoted_string(Core.un_name(var("name")))
                                             ]
@@ -6034,7 +6052,7 @@ def _enum_variant_pattern():
                 PySyn.attribute(
                     list_(
                         [
-                            _kref.names_encode_name(true(), _kref.util_case_convention_pascal, var("env"), var("typeName")),
+                            _kref.names_encode_name(true(), hydra.dsl.util.case_convention_pascal, var("env"), var("typeName")),
                             _kref.names_encode_enum_value(var("env"), var("fieldName")),
                         ]
                     )
@@ -6117,7 +6135,7 @@ def _extend_meta_for_term():
                                                                 ),
                                                             ],
                                                             Logic.if_else(
-                                                                _kref.analysis_is_simple_assignment(var("term1")),
+                                                                hydra.dsl.analysis.is_simple_assignment(var("term1")),
                                                                 var("m"),
                                                                 _local("extendMetaForType")(true(), true(), Core.type_scheme_body(
                                                                         var("ts")
@@ -6181,7 +6199,7 @@ def _extend_meta_for_term():
         ["topLevel", "meta0", "term"],
         let_chain(
             [("step", step_inner)],
-            _kref.rewriting_fold_over_term(Coders_dsl.traversal_order_pre, var("step"), var("meta0"), var("term")),
+            hydra.dsl.rewriting.fold_over_term(Coders_dsl.traversal_order_pre, var("step"), var("meta0"), var("term")),
         ),
     )
     return (_def("extendMetaForTerm")
@@ -6246,7 +6264,7 @@ def _extend_meta_for_type():
             lam(
                 "rt",
                 Logic.if_else(
-                    _kref.predicates_is_enum_row_type(var("rt")),
+                    hydra.dsl.predicates.is_enum_row_type(var("rt")),
                     _local("setMetaUsesEnum")(var("metaWithSubtypes"), true()),
                     Logic.if_else(
                         Logic.not_(Lists.null(var("rt"))),
@@ -6267,7 +6285,7 @@ def _extend_meta_for_type():
                             _local("digForWrap")(var("isTermAnnot"), var("metaWithSubtypes"), var("body")),
                         ),
                     ],
-                    cases_with_default("hydra.core.Type", _kref.strip_deannotate_type(var("body")), var("metaForWrap"),
+                    cases_with_default("hydra.core.Type", hydra.dsl.strip.deannotate_type(var("body")), var("metaForWrap"),
             field("record",
                                 constant(
                                     _local("setMetaUsesGeneric")(var("metaForWrap"), true())
@@ -6288,7 +6306,7 @@ def _extend_meta_for_type():
                                     ["b", "ft"],
                                     Logic.or_(
                                         var("b"),
-                                        _kref.annotations_has_type_description(Core.field_type_type(
+                                        hydra.dsl.annotations.has_type_description(Core.field_type_type(
                                                 var("ft")
                                             )),
                                     ),
@@ -6345,12 +6363,12 @@ def _extend_meta_for_type():
                             _local("extendMetaForType")(false(), var("isTermAnnot"), var("t"), var("m")),
                         ),
                         var("metaWithTvars"),
-                        _kref.rewriting_subtypes(var("typ")),
+                        hydra.dsl.rewriting.subtypes(var("typ")),
                     ),
                 ),
             ],
             cases("hydra.core.Type",
-                _kref.strip_deannotate_type(var("typ")),
+                hydra.dsl.strip.deannotate_type(var("typ")),
                 Given(var("metaWithSubtypes")),
                 case_fields,
             ),
@@ -6372,7 +6390,7 @@ def _extend_meta_for_types():
                         Lists.map(
                             lam(
                                 "t",
-                                _kref.dependencies_type_dependency_names(false(), var("t")),
+                                hydra.dsl.dependencies.type_dependency_names(false(), var("t")),
                             ),
                             var("types"),
                         )
@@ -6381,7 +6399,7 @@ def _extend_meta_for_types():
                 ("currentNs", _meta_proj("namespaces", "meta")),
                 (
                     "updatedNs",
-                    _kref.analysis_add_names_to_module_names(_kref.names_encode_namespace_with_overrides, var("names"), var("currentNs")),
+                    hydra.dsl.analysis.add_names_to_module_names(_kref.names_encode_namespace_with_overrides, var("names"), var("currentNs")),
                 ),
                 (
                     "meta1",
@@ -6406,7 +6424,7 @@ def _extend_meta_for_types():
 def _extract_case_elimination():
     body = lambdas(
         ["term"],
-        cases_with_default("hydra.core.Term", _kref.strip_deannotate_and_detype_term(var("term")), nothing(),
+        cases_with_default("hydra.core.Term", hydra.dsl.strip.deannotate_and_detype_term(var("term")), nothing(),
             field("cases",
                     lam("cs", just(var("cs"))),
                 )),
@@ -6459,7 +6477,7 @@ def _find_type_params():
             Lists.filter(
                 var("isBound"),
                 Sets.to_list(
-                    _kref.variables_free_variables_in_type(var("typ"))
+                    hydra.dsl.variables.free_variables_in_type(var("typ"))
                 ),
             ),
         ),
@@ -6485,7 +6503,7 @@ def _function_definition_to_expr():
                         right(
                             PyDsl.param_no_default_simple(
                                 PySyn.param(
-                                    _kref.names_encode_name(false(), _kref.util_case_convention_lower_snake, var("env"), var("argName")),
+                                    _kref.names_encode_name(false(), hydra.dsl.util.case_convention_lower_snake, var("env"), var("argName")),
                                     just(
                                         PySyn.annotation(var("pyTyp"))
                                     ),
@@ -6586,7 +6604,7 @@ def _function_definition_to_expr():
                             "isTCO",
                             Logic.and_(
                                 Logic.not_(Lists.null(var("args"))),
-                                _kref.analysis_is_self_tail_recursive(var("name"), var("body")),
+                                hydra.dsl.analysis.is_self_tail_recursive(var("name"), var("body")),
                             ),
                         ),
                     ],
@@ -6654,7 +6672,7 @@ def _function_definition_to_expr():
                                             ),
                                             (
                                                 "pyName",
-                                                _kref.names_encode_name(false(), _kref.util_case_convention_lower_snake, var("env"), var("name")),
+                                                _kref.names_encode_name(false(), hydra.dsl.util.case_convention_lower_snake, var("env"), var("name")),
                                             ),
                                         ],
                                         right(
@@ -6694,7 +6712,7 @@ def _function_definition_to_expr():
 def _gather_lambdas():
     inner_go = lambdas(
         ["params", "t"],
-        cases_with_default("hydra.core.Term", _kref.strip_deannotate_and_detype_term(var("t")), pair(var("params"), var("t")),
+        cases_with_default("hydra.core.Term", hydra.dsl.strip.deannotate_and_detype_term(var("t")), pair(var("params"), var("t")),
             field("lambda",
                     lam(
                         "l",
@@ -6743,7 +6761,7 @@ def _gather_metadata():
                                             )
                                         ), lam("sig",
                                             Core.type_scheme_body(
-                                                _kref.scoping_term_signature_to_type_scheme(var("sig"))
+                                                hydra.dsl.scoping.term_signature_to_type_scheme(var("sig"))
                                             )
                                         ),),
                                 ),
@@ -6774,7 +6792,7 @@ def _gather_metadata():
                                     _local("setMetaUsesName")(var("meta"), true()),
                                 ),
                             ],
-                            _kref.rewriting_fold_over_type(Coders_dsl.traversal_order_pre, lambdas(
+                            hydra.dsl.rewriting.fold_over_type(Coders_dsl.traversal_order_pre, lambdas(
                                     ["m", "t"],
                                     _local("extendMetaForType")(true(), false(), var("t"), var("m")),
                                 ), var("meta2"), var("typ")),
@@ -6888,7 +6906,7 @@ def _is_case_statement_application():
         ["term"],
         let_chain(
             [
-                ("gathered", _kref.analysis_gather_applications(var("term"))),
+                ("gathered", hydra.dsl.analysis.gather_applications(var("term"))),
                 ("args", Pairs.first(var("gathered"))),
                 ("body", Pairs.second(var("gathered"))),
             ],
@@ -6907,7 +6925,7 @@ def _is_case_statement_application():
                             ),
                         ),
                     ],
-                    cases_with_default("hydra.core.Term", _kref.strip_deannotate_and_detype_term(var("body")), nothing(),
+                    cases_with_default("hydra.core.Term", hydra.dsl.strip.deannotate_and_detype_term(var("body")), nothing(),
             field("cases",
                                 lam(
                                     "cs",
@@ -7008,7 +7026,7 @@ def _is_variant_unit_type():
                 Optionals.map(
                     lam(
                         "ft",
-                        _kref.predicates_is_unit_type(_kref.strip_deannotate_type(Core.field_type_type(var("ft")))),
+                        hydra.dsl.predicates.is_unit_type(hydra.dsl.strip.deannotate_type(Core.field_type_type(var("ft")))),
                     ),
                     var("mfield"),
                 ),
@@ -7391,11 +7409,11 @@ def _module_to_python():
                     [
                         (
                             "s",
-                            var("hydra.serialization.printExpr")(var("hydra.serialization.parenthesize")(var("hydra.python.serde.moduleToExpr")(var("file")))),
+                            hydra.dsl.serialization.print_expr(hydra.dsl.serialization.parenthesize(var("hydra.python.serde.moduleToExpr")(var("file")))),
                         ),
                         (
                             "path",
-                            var("hydra.names.moduleNameToFilePath")(_kref.util_case_convention_lower_snake, wrap("hydra.file.FileExtension",
+                            hydra.dsl.names.module_name_to_file_path(hydra.dsl.util.case_convention_lower_snake, wrap("hydra.file.FileExtension",
                                     string("py"),
                                 ), Pkg.module_name(var("mod"))),
                         ),
@@ -7419,7 +7437,7 @@ def _python_binding_metadata():
         Logic.if_else(
             _local("shouldThunkBinding")(var("g"), var("b")),
             Logic.if_else(
-                _kref.predicates_is_complex_binding(var("g"), var("b")),
+                hydra.dsl.predicates.is_complex_binding(var("g"), var("b")),
                 just(meta_true),
                 nothing(),
             ),
@@ -7640,9 +7658,9 @@ def _should_thunk_binding():
     body = lambdas(
         ["g", "b"],
         Logic.and_(
-            _kref.predicates_is_complex_binding(var("g"), var("b")),
+            hydra.dsl.predicates.is_complex_binding(var("g"), var("b")),
             Logic.not_(
-                _kref.predicates_is_trivial_term(Core.binding_term(var("b")))
+                hydra.dsl.predicates.is_trivial_term(Core.binding_term(var("b")))
             ),
         ),
     )
@@ -7696,7 +7714,7 @@ def _standard_import_statement():
 def _term_arity_with_primitives():
     body = lambdas(
         ["graph", "term"],
-        cases_with_default("hydra.core.Term", _kref.strip_deannotate_and_detype_term(var("term")), int_(0),
+        cases_with_default("hydra.core.Term", hydra.dsl.strip.deannotate_and_detype_term(var("term")), int_(0),
             field("application",
                     lam(
                         "app",
@@ -7727,11 +7745,11 @@ def _term_arity_with_primitives():
             field("variable",
                     lam(
                         "name",
-                        Optionals.cases(_kref.lexical_lookup_binding(var("graph"), var("name")), int_(0), lam(
+                        Optionals.cases(hydra.dsl.lexical.lookup_binding(var("graph"), var("name")), int_(0), lam(
                                 "el",
-                                Optionals.cases(Core.binding_type_scheme(var("el")), _kref.arity_term_arity(Core.binding_term(var("el"))), lam(
+                                Optionals.cases(Core.binding_type_scheme(var("el")), hydra.dsl.arity.term_arity(Core.binding_term(var("el"))), lam(
                                         "ts",
-                                        _kref.arity_type_scheme_arity(var("ts")),
+                                        hydra.dsl.arity.type_scheme_arity(var("ts")),
                                     ),),
                             ),),
                     ),
@@ -7892,7 +7910,7 @@ def _with_definitions():
                                                             "td",
                                                         ),
                                                         Optionals.map(
-                                                            lam("sig", _kref.scoping_term_signature_to_type_scheme(var("sig"))),
+                                                            lam("sig", hydra.dsl.scoping.term_signature_to_type_scheme(var("sig"))),
                                                             _proj(
                                                                 "hydra.packaging.TermDefinition",
                                                                 "signature",
@@ -7987,7 +8005,7 @@ def _with_let_inline():
                     lambdas(["tc", "b"], nothing()),
                 ),
             ],
-            _kref.environment_with_let_context(_local("pythonEnvironmentGetGraph"), _local("pythonEnvironmentSetGraph"), var("noMetadata"), var("env"), var("lt"), inner_lambda),
+            hydra.dsl.environment.with_let_context(_local("pythonEnvironmentGetGraph"), _local("pythonEnvironmentSetGraph"), var("noMetadata"), var("env"), var("lt"), inner_lambda),
         ),
     )
     return (_def("withLetInline")

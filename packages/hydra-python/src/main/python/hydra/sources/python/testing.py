@@ -15,12 +15,9 @@ import hydra.dsl.lib.logic as Logic
 import hydra.dsl.lib.optionals as Optionals
 import hydra.dsl.lib.strings as Strings
 from hydra.overlay.python.dsl.meta.phantoms import *  # noqa: F401,F403
+import hydra.dsl.constants
 import hydra.dsl.core as Core
 import hydra.dsl.packaging as Packaging
-
-from hydra.sources.python._kernel_refs import (
-    constants_warning_auto_generated_file,
-)
 
 
 # ----------------------------------------------------------------------
@@ -62,8 +59,6 @@ _PLACEHOLDER = Module(
 )
 
 
-
-
 _def = make_def(_PLACEHOLDER)
 _local = make_local("hydra.python.testing")
 # Frequently used type names
@@ -87,7 +82,7 @@ def _build_python_test_module():
             ),
             field("header",
                 Strings.cat(list_([
-                    Strings.cat2(string("# "), constants_warning_auto_generated_file),
+                    Strings.cat2(string("# "), hydra.dsl.constants.warning_auto_generated_file),
                     string("\n"),
                     Strings.cat2(string("# "), var("groupName_")),
                     string("\n\n"),
