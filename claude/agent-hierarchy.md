@@ -563,10 +563,16 @@ Design against "found out by accident."
    regression OR pushing a batch, drop a one-line "diagnosing / fixing /
    pushing X" note where the other staging agents reliably see it. Convergent
    double-work (two machines fixing the same red-CI bug) happened this week; this
-   prevents it. **Recommended channel: a pinned coordination issue** (rides
-   existing GitHub primitives, reliably pollable); a shared
-   `claude-hydra-messages`-style inbox that all staging agents poll is the
-   lower-latency alternative. The mechanism matters less than the invariant:
+   prevents it. **Channel (adopted 2026-07-06): the `coordination` branch of the wiki
+   repository** — `STATE.md` (durable, edit-in-place) + `LOG.md` (append-only
+   claims/events); a claim is a commit, so push-rejection gives atomic
+   compare-and-swap semantics; the branch is periodically deleted/recreated so
+   churn never bloats the wiki. See the rendered "Fleet coordination" wiki
+   page. (A pinned coordination issue was considered and rejected: unbounded
+   comment growth, weaker claim atomicity, and — decisive — main-repo events
+   including issue comments echo to the community Discord, so coordination
+   churn there would spam human developers. Wiki changes are not echoed;
+   never migrate this channel to a Discord-echoed surface.) The mechanism matters less than the invariant:
    *no staging agent starts a red-CI fix or a push without first checking
    whether another machine already has it in flight.*
 3. **Serialize pushes; parallelize everything else.** Validation (sync, test,
