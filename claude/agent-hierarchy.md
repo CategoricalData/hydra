@@ -454,6 +454,13 @@ block on the user unless the user has given the *specific* standing direction
 pre-push invariants always hold regardless of level: WIP-scan clean,
 `[CI]`-by-name gate, fetch-merge-before-push, tree-consistency.
 
+**Staging is exempt from the messaging row.** A staging agent sends coordination
+messages freely — and every agent responds to it freely — at *every* dial level,
+including *low*. This is a standing, dial-independent authority (staging is the
+fleet's coordination hub); see
+[branch-flow.md § Staging's non-issue duties](branch-flow.md#stagings-non-issue-duties).
+It covers coordination traffic only, not GitHub writes or other outward actions.
+
 Two asymmetries are load-bearing:
 
 - **Filing never rides the dial up to "just do it."** Even High only relaxes
@@ -671,7 +678,10 @@ notes are for issue agents doing host-generating work.)
   staging AND from other machines'. A remembered tip is a bug.
 - **Cross-worktree message sends normally need per-send user permission**, but a
   scoped autonomous grant (e.g. "coordinate freely until #416 lands") lifts that
-  within the stated scope. Know your scope.
+  within the stated scope. Know your scope. **Exception: a staging agent sends
+  freely at all times, and every agent responds to a staging agent freely** — a
+  standing, dial-independent authority for coordination traffic (see
+  [branch-flow.md § Staging's non-issue duties](branch-flow.md#stagings-non-issue-duties)).
 - **An agent's branch commits are safe as a git ref in the shared bare repo**
   independent of its tmux session — so pausing an agent (ending its session to
   save context) loses nothing *provided the coordinator has the commits*. The
