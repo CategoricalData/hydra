@@ -55,7 +55,13 @@ Spawning is step 1 of a lifecycle the coordinator owns end to end.
 1. **Spawn** — above.
 2. **Implement + review** — the agent builds; the coordinator reviews the
    diff *independently* (do not rubber-stamp a self-report) and returns a
-   verdict, iterating until correct.
+   verdict, iterating until correct. When the coordinator runs a more capable
+   model than the agent, this review is also **mentoring**: the agent owns and
+   *solves* its hard design calls and brings worked solutions (with reasoning
+   and rejected alternatives) for review — never a blank "which way?" — while
+   still surfacing the calls that genuinely benefit from the smarter look, and
+   respecting the parent's context budget. See
+   [capability-tiered mentoring](agent-hierarchy.md#capability-tiered-mentoring-across-a-parentchild-model-gap).
 3. **Rebase + squash + verify** — on the coordinator's signal the agent
    rebases onto the current `main` tip (`git fetch` first; `main` moves
    without notice), squashes to clean topic commits (no `WIP:` prefix; the
