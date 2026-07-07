@@ -59,9 +59,17 @@ compute_generator_stamp() {
         clojure|scheme|common-lisp|emacs-lisp|lisp) coder_pkg="hydra-lisp" ;;
         *)                                          coder_pkg="hydra-$lang" ;;
     esac
+    local kernel_id coder_id
+    # Assigned separately (not inline in printf) so a component_identity
+    # failure — e.g. an empty DSL-source fingerprint set (#562) — actually
+    # trips `set -e` in the caller, instead of silently hashing an empty
+    # string into the stamp. `printf "%s" "$(cmd)"` does NOT propagate a
+    # failing $(cmd) under set -e; a plain assignment does.
+    kernel_id="$(component_identity hydra-kernel)"
+    coder_id="$(component_identity "$coder_pkg")"
     {
-        printf 'kernel:%s\n'  "$(component_identity hydra-kernel)"
-        printf 'coder:%s\n'   "$(component_identity "$coder_pkg")"
+        printf 'kernel:%s\n'  "$kernel_id"
+        printf 'coder:%s\n'   "$coder_id"
         printf 'runtime:%s\n' "$(runtime_identity "$lang")"
         printf 'driver:%s\n'  "$(driver_identity)"
     } | shasum -a 256 | awk '{print substr($1,1,16)}'
@@ -178,11 +186,25 @@ driver_identity() {
 #      PUBLISHED_HOSTS allowlist there.
 #
 #   2. Local-source mode (the migration shim): when <pkg> is NOT a consumed
-#      published host, fall back to a hash of every Haskell source under
-#      packages/<pkg>/src/main/haskell/. This transitively covers the package's
-#      DSL sources, manifests, and (for the kernel) all the json/encode/decode
-#      modules previously fingerprinted by Hydra.Digest.encoderId (now retired).
-#      A source edit invalidates the stamp, exactly as before publishing.
+#      published host, fall back to a hash of every DSL source file under
+#      packages/<pkg>/src/main/<lang>/, where <lang> is <pkg>'s package.json
+#      `sourceLanguage` field (bin/lib/hydra-packages.py `source-language`;
+#      defaults to "haskell" if absent). This transitively covers the
+#      package's DSL sources, manifests, and (for the kernel) all the
+#      json/encode/decode modules previously fingerprinted by
+#      Hydra.Digest.encoderId (now retired). A source edit invalidates the
+#      stamp, exactly as before publishing.
+#
+#      Deriving <lang> from the manifest (rather than a hardcoded bash map)
+#      is deliberate (#562): a hardcoded list rots silently when a package's
+#      DSL sources move languages (exactly what happened here — src/main/
+#      haskell/ was hardcoded and stopped matching anything for the four
+#      packages host-natived by #346/#509). The manifest field is the
+#      single source of truth package.json already declares; there is no
+#      second list to fall out of sync with it. If a future package's
+#      sourceLanguage is ever wrong, the loud failure below (empty
+#      fingerprint set) surfaces it immediately instead of silently
+#      returning a constant identity.
 #
 # This is the swap point #347 wired and #370 builds on. Single function;
 # callers (compute_generator_stamp) don't need updating.
@@ -194,16 +216,43 @@ component_identity() {
         printf 'host:%s:%s' "$pkg" "$ver"
         return
     fi
-    local src_dir="$HYDRA_ROOT_DIR/packages/$pkg/src/main/haskell"
-    if [ -d "$src_dir" ]; then
-        find "$src_dir" -type f -name '*.hs' 2>/dev/null \
-            | LC_ALL=C sort | xargs cat 2>/dev/null \
-            | shasum -a 256 | awk '{print $1}'
-    else
-        # Package directory missing — emit a sentinel rather than empty
-        # so the composition still produces a stable distinct value.
-        echo "missing:$pkg"
+    local lang
+    lang=$("$HYDRA_ROOT_DIR/bin/lib/hydra-packages.py" source-language "$pkg")
+    local ext="hs"
+    case "$lang" in
+        java)   ext="java" ;;
+        python) ext="py" ;;
+        scala)  ext="scala" ;;
+        haskell) ext="hs" ;;
+    esac
+    local src_dir="$HYDRA_ROOT_DIR/packages/$pkg/src/main/$lang"
+    if [ ! -d "$src_dir" ]; then
+        # A missing source dir on the local-source fallback path is ALWAYS a
+        # bug — either <pkg> doesn't really exist, or sourceLanguage names
+        # the wrong tree. This used to return the constant sentinel
+        # "missing:$pkg" here, which is the ORIGINAL #562 failure mode: a
+        # future host-native package (or a manifest edited to the wrong
+        # language) would silently get a fingerprint that never changes,
+        # exactly like hydra-java/hydra-python did before this fix. Every
+        # registered package today has either a published-host resolution
+        # above or a real src/main/<sourceLanguage>/ dir (verified while
+        # fixing #562); there is no legitimate case that reaches here, so
+        # failing loudly is safe and is the whole point of the fix.
+        echo "component_identity: $pkg has no src/main/$lang/ (sourceLanguage=$lang) — missing package or wrong sourceLanguage?" >&2
+        return 1
     fi
+    local files
+    files=$(find "$src_dir" -type f -name "*.$ext" 2>/dev/null | LC_ALL=C sort)
+    if [ -z "$files" ]; then
+        # An existing source dir with zero matching files is the same bug
+        # one level in — either sourceLanguage names the wrong language for
+        # this tree, or the tree emptied out. Fail loudly rather than
+        # silently returning a constant (empty-hash) identity that would
+        # mask every future edit (#562).
+        echo "component_identity: $pkg has $src_dir but no *.$ext files — sourceLanguage mismatch?" >&2
+        return 1
+    fi
+    printf '%s\n' "$files" | xargs cat 2>/dev/null | shasum -a 256 | awk '{print $1}'
 }
 
 # Identity of a host's hand-written runtime support — the code under
