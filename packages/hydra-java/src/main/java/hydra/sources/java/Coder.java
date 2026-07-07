@@ -5380,6 +5380,8 @@ public class Coder {
                                         apply(
                                             ref(Utils.javaArrayInitializer),
                                             Lists.map(
+                                                // binaryToBytes yields unsigned [0, 255]; Java's signed byte
+                                                // needs values in [-128, 127], so fold the upper half down by 256.
                                                 lambda("w",
                                                     apply(
                                                         ref(Utils.javaLiteralToJavaExpression),
@@ -5387,7 +5389,11 @@ public class Coder {
                                                             hydra.java.syntax.Literal.INTEGER,
                                                             wrap(
                                                                 IntegerLiteral.TYPE_,
-                                                                Literals.int32ToBigint(var("w")))))),
+                                                                Literals.int32ToBigint(
+                                                                    Logic.ifElse(
+                                                                        Equality.gt(var("w"), int32(127)),
+                                                                        Math_.sub(var("w"), int32(256)),
+                                                                        var("w"))))))),
                                                 var("byteValues")))))))),
                     field(
                         Literal.BOOLEAN,

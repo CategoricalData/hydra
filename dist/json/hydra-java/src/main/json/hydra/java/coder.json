@@ -16134,7 +16134,28 @@
                                                                 "term": {
                                                                   "wrap": {
                                                                     "typeName": "hydra.java.syntax.IntegerLiteral",
-                                                                    "body": {"application": {"function": {"variable": "hydra.lib.literals.int32ToBigint"}, "argument": {"variable": "w"}}}}}}}}}}}}}},
+                                                                    "body": {
+                                                                      "application": {
+                                                                        "function": {"variable": "hydra.lib.literals.int32ToBigint"},
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.gt"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                            "argument": {"variable": "w"}}},
+                                                                                        "argument": {"literal": {"integer": {"int32": 127}}}}}}},
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "function": {"application": {"function": {"variable": "hydra.lib.math.sub"}, "argument": {"variable": "w"}}},
+                                                                                    "argument": {"literal": {"integer": {"int32": 256}}}}}}},
+                                                                            "argument": {"variable": "w"}}}}}}}}}}}}}}}},
                                               "argument": {"variable": "byteValues"}}}}}}}}}}}}},
                       {
                         "name": "boolean",
