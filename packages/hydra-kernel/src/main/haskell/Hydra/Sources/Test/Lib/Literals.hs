@@ -437,7 +437,8 @@ allTests = definitionInModule module_ "allTests" $
       literalsReadString,
       -- Binary conversions
       literalsStringToBinary,
-      literalsBinaryToString]
+      literalsBinaryToString,
+      literalsBinaryToBytes]
 
 literalsBinaryToString :: TypedTerm TestGroup
 literalsBinaryToString = subgroup "binaryToString" [
@@ -445,6 +446,14 @@ literalsBinaryToString = subgroup "binaryToString" [
   test "empty binary" B.empty ""]
   where
     test name x result = primCase name DefLiterals.binaryToString [binary x] (string result)
+
+literalsBinaryToBytes :: TypedTerm TestGroup
+literalsBinaryToBytes = subgroup "binaryToBytes" [
+  test "empty binary" B.empty [],
+  test "simple binary" (BC.pack "ab") [97, 98],
+  test "byte value above 127 stays unsigned" (B.pack [0xFF, 0x00, 0x80]) [255, 0, 128]]
+  where
+    test name x result = primCase name DefLiterals.binaryToBytes [binary x] (list (int32 <$> result))
 
 literalsReadBigint :: TypedTerm TestGroup
 literalsReadBigint = subgroup "readBigint" [

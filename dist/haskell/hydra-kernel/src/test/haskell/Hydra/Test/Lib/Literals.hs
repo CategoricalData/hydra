@@ -1866,5 +1866,42 @@ allTests =
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralBinary (Literals.stringToBinary "")))})))),
                 Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralString "")))})),
               Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []}]},
+        Testing.TestGroup {
+          Testing.testGroupName = "binaryToBytes",
+          Testing.testGroupDescription = Nothing,
+          Testing.testGroupSubgroups = [],
+          Testing.testGroupCases = [
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "empty binary",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.binaryToBytes")),
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralBinary (Literals.stringToBinary "")))})))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermList []))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "simple binary",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.binaryToBytes")),
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralBinary (Literals.stringToBinary "YWI=")))})))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermList [
+                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 97)),
+                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 98)))]))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
+              Testing.testCaseWithMetadataTags = []},
+            Testing.TestCaseWithMetadata {
+              Testing.testCaseWithMetadataName = "byte value above 127 stays unsigned",
+              Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.literals.binaryToBytes")),
+                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralBinary (Literals.stringToBinary "/wCA")))})))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermList [
+                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 255)),
+                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0))),
+                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 128)))]))})),
+              Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
