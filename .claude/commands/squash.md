@@ -32,7 +32,11 @@ Per the CLAUDE.md "Commit workflow" section:
 
 2. **Inspect the current commits.** `git log --oneline <fork-point>..HEAD`.
    Show the user. Confirm the squashing plan: which commits collapse
-   into which topic groups, in what order.
+   into which topic groups, in what order. **Echo the proposed new
+   commit messages verbatim into the reply** (not just group labels or
+   a pointer to tool output) — the user may be approving from a device
+   without CLI access, so the transcript itself must carry the full
+   text of every message they are asked to approve.
 
 3. **Soft-reset to the fork point.** `git reset --soft <fork-point>`.
    Everything since the fork is now staged.

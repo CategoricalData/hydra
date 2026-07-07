@@ -5,10 +5,8 @@ import hydra.packaging.Module
 /**
  * Package manifest for hydra-scala.
  *
- * Owns the Scala coder DSL sources.
- *
- * In-progress migration (#509): Syntax, Language, Serde, Utils translated.
- * Coder still defined in the Haskell DSL.
+ * Owns the Scala coder DSL sources (#509): Coder, Language, Serde, Syntax, Utils are all
+ * authored here in Scala; the Haskell DSL copies have been deleted.
  * Order matches Haskell Manifest.hs `mainModules`: Coder/Language/Serde/Syntax/Utils.
  */
 object Manifest:

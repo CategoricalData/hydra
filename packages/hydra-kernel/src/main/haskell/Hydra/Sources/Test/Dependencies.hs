@@ -23,6 +23,7 @@ import Hydra.Testing
 
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Dependencies as Dependencies
+import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
 import qualified Hydra.Dsl.Lib.Maps as Maps
 import qualified Hydra.Dsl.Lib.Pairs as Pairs
 import qualified Hydra.Dsl.Lib.Strings as Strings
@@ -405,4 +406,19 @@ topologicalSortBindingsGroup = subgroup "topologicalSortBindings" [
         Phantoms.list [
           Phantoms.pair (nm "a") (var "b"),
           Phantoms.pair (nm "b") (list [var "a", var "c"])],
-        Phantoms.list [Phantoms.pair (nm "d") (string "bar")]])]
+        Phantoms.list [Phantoms.pair (nm "d") (string "bar")]]),
+
+    sortBindingsCase "type-annotated binding is dependency-free"
+      (Phantoms.list [
+        Phantoms.pair (nm "a") (annotatedStringWithTypeKey (var "b")),
+        Phantoms.pair (nm "b") (string "bar")])
+      (Phantoms.list [
+        Phantoms.list [Phantoms.pair (nm "a") (annotatedStringWithTypeKey (var "b"))],
+        Phantoms.list [Phantoms.pair (nm "b") (string "bar")]])]
+
+-- | Wrap a term with a 'keyType' annotation, so hasTypeAnnotation's True branch fires
+-- and the binding is treated as dependency-free during topological sort, even though
+-- its subject term references another binding.
+annotatedStringWithTypeKey :: TypedTerm Term -> TypedTerm Term
+annotatedStringWithTypeKey subject =
+  annots (Phantoms.map (M.fromList [(Phantoms.asTerm Constants.keyType, string "someType")])) subject

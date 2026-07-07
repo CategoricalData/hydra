@@ -2200,8 +2200,7 @@ allTests =
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "v1"))}))}))}]})),
                             Core.applicationArgument = (Core.TermVariable (Core.Name "dir"))}))}))}))}))}))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
-              Testing.testCaseWithMetadataTags = [
-                Testing.Tag "disabled"]},
+              Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "applied projection",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {

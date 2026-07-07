@@ -354,13 +354,13 @@ public final class Phantoms {
         return tterm(Terms.inject(typeName.value, fieldName.value, value.value));
     }
 
-    /** {@code injectUnit TypeName fieldName} — variant case carrying unit. */
-    public static <A> TypedTerm<A> injectUnit(String typeName, String fieldName) {
+    /** {@code inject TypeName fieldName} — nullary (unit-carrying) variant, e.g. an enum case. */
+    public static <A> TypedTerm<A> inject(String typeName, String fieldName) {
         return tterm(Terms.inject(typeName, fieldName, Terms.unit()));
     }
 
-    /** {@code injectUnit TypeName fieldName} — Name overload. */
-    public static <A> TypedTerm<A> injectUnit(Name typeName, Name fieldName) {
+    /** {@code inject TypeName fieldName} — nullary variant, Name overload. */
+    public static <A> TypedTerm<A> inject(Name typeName, Name fieldName) {
         return tterm(Terms.inject(typeName.value, fieldName.value, Terms.unit()));
     }
 

@@ -15,24 +15,25 @@ import hydra.dsl.lib.optionals as Optionals
 import hydra.dsl.lib.pairs as Pairs
 import hydra.dsl.lib.strings as Strings
 from hydra.overlay.python.dsl.meta.phantoms import *  # noqa: F401,F403
-import hydra.dsl.core as Core
-
-from hydra.sources.python import _python_helpers as PyDsl
+import hydra.dsl.formatting
+from hydra.dsl.util import (
+    case_convention_camel as util_case_convention_camel,
+    case_convention_lower_snake as util_case_convention_lower_snake,
+    case_convention_pascal as util_case_convention_pascal,
+    case_convention_upper_snake as util_case_convention_upper_snake,
+)
 from hydra.sources.python._kernel_refs import (
-    formatting_capitalize,
     formatting_convert_case,
     formatting_sanitize_with_underscores,
-    names_module_name_of,
-    names_qualify_name,
     packaging_namespaces_focus,
     packaging_qualified_name_local,
     packaging_qualified_name_namespace,
     packaging_un_module_name,
-    util_case_convention_camel,
-    util_case_convention_lower_snake,
-    util_case_convention_pascal,
-    util_case_convention_upper_snake,
 )
+import hydra.dsl.names
+import hydra.dsl.core as Core
+
+from hydra.sources.python import _python_helpers as PyDsl
 
 
 # ----------------------------------------------------------------------
@@ -47,7 +48,7 @@ from hydra.sources.python._source_dsl import (
 
     KERNEL_TYPES_NAMESPACES,
     make_def,
-    make_local,
+    make_local_str,
     unqualified_dep,
 )
 DEPENDENCIES = [
@@ -76,10 +77,8 @@ _PLACEHOLDER = Module(
 )
 
 
-
-
 _def = make_def(_PLACEHOLDER)
-_local = make_local("hydra.python.names")
+_local = make_local_str("hydra.python.names")
 # Frequently used names — define once for reuse.
 _PY_NAME = Name("hydra.python.syntax.Name")
 _PY_DOTTED_NAME = Name("hydra.python.syntax.DottedName")
@@ -127,11 +126,11 @@ def _encode_name():
             field("focusPair", packaging_namespaces_focus(var("namespaces"))),
             field("focusNs", Pairs.first(var("focusPair"))),
             field("boundVars", project_bound_vars),
-            field("qualName", names_qualify_name(var("name"))),
+            field("qualName", hydra.dsl.names.qualify_name(var("name"))),
             field("mns", packaging_qualified_name_namespace(var("qualName"))),
             field("local", packaging_qualified_name_local(var("qualName"))),
             field("pyLocal",
-                _local("sanitizePythonName")(formatting_convert_case(util_case_convention_camel, var("conv"), var("local"))),
+                _local("sanitizePythonName")(hydra.dsl.formatting.convert_case(util_case_convention_camel, var("conv"), var("local"))),
             ),
             field("pyNs",
                 lam(
@@ -202,7 +201,7 @@ def _encode_name_qualified():
             field("focusNs", Pairs.first(var("focusPair"))),
             field("boundVars", project_bound_vars),
             field("qualName",
-                names_qualify_name(var("name")),
+                hydra.dsl.names.qualify_name(var("name")),
             ),
             field("mns",
                 packaging_qualified_name_namespace(var("qualName")),
@@ -269,7 +268,7 @@ def _encode_namespace():
                             "part",
                             wrap(
                                 _PY_NAME,
-                                formatting_convert_case(util_case_convention_camel, util_case_convention_lower_snake, var("part")),
+                                hydra.dsl.formatting.convert_case(util_case_convention_camel, util_case_convention_lower_snake, var("part")),
                             ),
                         ),
                         Strings.split_on(
@@ -348,7 +347,7 @@ def _encode_type_variable():
                 "name",
                 wrap(
                     _PY_NAME,
-                    formatting_capitalize(Core.un_name(var("name"))),
+                    hydra.dsl.formatting.capitalize(Core.un_name(var("name"))),
                 ),
             )))
 
@@ -382,7 +381,7 @@ def _encode_constant_for_field_name():
         .to(
             wrap(
                     _PY_NAME,
-                    formatting_convert_case(
+                    hydra.dsl.formatting.convert_case(
                         util_case_convention_camel,
                         util_case_convention_upper_snake,
                         Strings.intercalate(string("_"), Strings.split_on(string("-"), Core.un_name(var("fname")))),
@@ -416,7 +415,7 @@ def _variable_reference():
             field("focusPair", packaging_namespaces_focus(var("namespaces"))),
             field("focusNs", Pairs.first(var("focusPair"))),
             field("mns",
-                names_module_name_of(var("name")),
+                hydra.dsl.names.module_name_of(var("name")),
             ),
             field("sameNamespace",
                 Optionals.cases(var("mns"), false(), lam(
@@ -453,7 +452,7 @@ def _variant_name():
             _local("encodeName")(var("isQualified"), util_case_convention_pascal, var("env"), wrap("hydra.core.Name",
                         Strings.cat2(
                             Core.un_name(var("tname")),
-                            formatting_capitalize(Core.un_name(var("fname"))),
+                            hydra.dsl.formatting.capitalize(Core.un_name(var("fname"))),
                         ),
                     ))))
 

@@ -64,6 +64,13 @@ case "$DIALECT" in
     scheme)
         GEN_MAIN="$HYDRA_ROOT/dist/scheme/hydra-kernel/src/main/scheme"
         GEN_TEST="$HYDRA_ROOT/dist/scheme/hydra-kernel/src/test/scheme"
+        # #546: hydra.build.* main + hydra.test.build.* test modules moved to the
+        # hydra-build package. run-tests.scm imports (hydra test test_suite), which
+        # transitively imports (hydra test build ...) -> (hydra build ...); those
+        # libraries now resolve from the hydra-build dist tree, so add it to the
+        # load path.
+        BUILD_MAIN="$HYDRA_ROOT/dist/scheme/hydra-build/src/main/scheme"
+        BUILD_TEST="$HYDRA_ROOT/dist/scheme/hydra-build/src/test/scheme"
         # Run from GEN_TEST so that guile's (include "annotation_bindings.scm")
         # inside the (define-library (hydra test test_graph) ...) body resolves
         # to "hydra/test/annotation_bindings.scm" relative to CWD — i.e. the copy
@@ -76,9 +83,9 @@ case "$DIALECT" in
         # only the bootstrap driver remains there) and is dropped. run-tests.scm
         # itself is the head's test entry point and stays in heads.
         if command -v guile > /dev/null 2>&1; then
-            guile --no-auto-compile -L "$GEN_MAIN" -L "$GEN_TEST" -s "$HEAD_DIR/run-tests.scm"
+            guile --no-auto-compile -L "$GEN_MAIN" -L "$GEN_TEST" -L "$BUILD_MAIN" -L "$BUILD_TEST" -s "$HEAD_DIR/run-tests.scm"
         elif command -v chibi-scheme > /dev/null 2>&1; then
-            chibi-scheme -I "$GEN_MAIN" -I "$GEN_TEST" "$HEAD_DIR/run-tests.scm"
+            chibi-scheme -I "$GEN_MAIN" -I "$GEN_TEST" -I "$BUILD_MAIN" -I "$BUILD_TEST" "$HEAD_DIR/run-tests.scm"
         else
             echo "Error: No Scheme implementation found. Install guile or chibi-scheme." >&2
             exit 1

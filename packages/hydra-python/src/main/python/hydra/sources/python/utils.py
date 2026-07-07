@@ -15,6 +15,8 @@ import hydra.dsl.lib.optionals as Optionals
 import hydra.dsl.lib.pairs as Pairs
 import hydra.dsl.lib.strings as Strings
 from hydra.overlay.python.dsl.meta.phantoms import *  # noqa: F401,F403
+import hydra.dsl.analysis
+import hydra.dsl.serialization
 import hydra.dsl.packaging as Packaging
 import hydra.dsl.util as Util
 import hydra.dsl.python.syntax as PySyn
@@ -32,7 +34,7 @@ from hydra.sources.python._source_dsl import (
 
     KERNEL_TYPES_NAMESPACES,
     make_def,
-    make_local,
+    make_local_str,
     unqualified_dep,
 )
 
@@ -64,7 +66,7 @@ _PLACEHOLDER = Module(
 
 
 _def = make_def(_PLACEHOLDER)
-_local = make_local("hydra.python.utils")
+_local = make_local_str("hydra.python.utils")
 # Frequently used names
 _PY_NAME = Name("hydra.python.syntax.Name")
 
@@ -72,8 +74,8 @@ _PY_NAME = Name("hydra.python.syntax.Name")
 from hydra.sources.python._source_dsl import py_name as _py_name, py_helper_name as _py_helper_name
 
 # Kernel-side serialization / analysis refs (PyDsl uses no-prefix Hydra functions)
-_serialization_print_expr = var("hydra.serialization.printExpr")
-_analysis_module_names_for_definitions = var("hydra.analysis.moduleNamesForDefinitions")
+_serialization_print_expr = hydra.dsl.serialization.print_expr
+_analysis_module_names_for_definitions = hydra.dsl.analysis.module_names_for_definitions
 _pyserde_expression_to_expr = var("hydra.python.serde.expressionToExpr")
 _pynames_encode_namespace = var("hydra.python.names.encodeNamespace")
 _pynames_encode_namespace_with_overrides = var("hydra.python.names.encodeNamespaceWithOverrides")

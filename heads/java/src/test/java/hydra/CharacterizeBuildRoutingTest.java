@@ -41,13 +41,24 @@ public class CharacterizeBuildRoutingTest {
      * never actually reach {@code namespaceToPackage} in production. New entries here should be
      * scrutinized, not just added -- they represent a real gap in the legacy table.
      */
-    private static final Map<String, String> EXPECTED_DIVERGENCES = new TreeMap<>(Map.of(
-        "hydra.decode.neo4j.model", "hydra-pg",
-        "hydra.encode.neo4j.model", "hydra-pg",
-        "hydra.error.neo4j", "hydra-pg",
-        "hydra.neo4j.model", "hydra-pg",
-        "hydra.neo4j.pg", "hydra-pg",
-        "hydra.validate.neo4j", "hydra-pg"));
+    private static final Map<String, String> EXPECTED_DIVERGENCES = new TreeMap<>();
+    static {
+        EXPECTED_DIVERGENCES.put("hydra.decode.neo4j.model", "hydra-pg");
+        EXPECTED_DIVERGENCES.put("hydra.encode.neo4j.model", "hydra-pg");
+        EXPECTED_DIVERGENCES.put("hydra.error.neo4j", "hydra-pg");
+        EXPECTED_DIVERGENCES.put("hydra.neo4j.model", "hydra-pg");
+        EXPECTED_DIVERGENCES.put("hydra.neo4j.pg", "hydra-pg");
+        EXPECTED_DIVERGENCES.put("hydra.validate.neo4j", "hydra-pg");
+        // #546: the build modules were extracted from hydra-kernel into hydra-build.
+        // The legacy PACKAGE_PREFIXES table has no hydra.build. entry, so it falls back
+        // to hydra-kernel, while the manifest correctly routes them to hydra-build.
+        EXPECTED_DIVERGENCES.put("hydra.build.modules", "hydra-build");
+        EXPECTED_DIVERGENCES.put("hydra.build.reconcile", "hydra-build");
+        EXPECTED_DIVERGENCES.put("hydra.build.routing", "hydra-build");
+        EXPECTED_DIVERGENCES.put("hydra.test.build.modules", "hydra-build");
+        EXPECTED_DIVERGENCES.put("hydra.test.build.reconcile", "hydra-build");
+        EXPECTED_DIVERGENCES.put("hydra.test.build.routing", "hydra-build");
+    }
 
     // Minimal hand-rolled extraction for manifest.json's flat {"package": "...",
     // "mainModules": [...], "testModules": [...]} shape. Not a general JSON parser --

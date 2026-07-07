@@ -68,10 +68,6 @@ object Coder:
     applyP("hydra.dsl.errors.errorOther",
       applyP("hydra.dsl.errors.otherError", msg))
 
-  /** Apply a TypedTerm function to N curried arguments (term-level apply chain). */
-  private def applyN(fn: TypedTerm[Any], args: TypedTerm[Any]*): TypedTerm[Any] =
-    args.foldLeft[TypedTerm[Any]](fn)((acc, a) => Phantoms.apply(acc, a))
-
   /** errorLeft builds `Left(Error.other(OtherError("msg")))` directly as kernel Terms,
    *  avoiding the inference engine re-typing each layer. Error is a union (inject),
    *  OtherError is a wrap (wrap). */
@@ -714,11 +710,11 @@ object Coder:
               Phantoms.let(Seq(
                 field("f2", CoreDsl.applicationTypeFunction(v("at2"))),
                 field("a2", CoreDsl.applicationTypeArgument(v("at2")))),
-                applyN(v("collectTypeArgs"),
+                Phantoms.apply(v("collectTypeArgs"),
                   v("f2"),
                   applyP("hydra.lib.lists.cons", v("a2"), v("acc")))))))))),
       field("collected",
-        applyN(v("collectTypeArgs"),
+        Phantoms.apply(v("collectTypeArgs"),
           CoreDsl.typeApplication(v("at")),
           emptyList)),
       field("baseFun", applyP("hydra.lib.pairs.first", v("collected"))),
@@ -1013,7 +1009,7 @@ object Coder:
             inject("hydra.scala.syntax.Defn", "type",
               ScalaSyntax.typeDefn(emptyList)(ScalaSyntax.nameType(v("lname2")))(v("tparams2"))(v("styp")))))),
       applyP("hydra.lib.eithers.either",
-        constant(applyN(v("mkAlias"), applyP("hydra.scala.utils.stref", string("Any")))),
+        constant(Phantoms.apply(v("mkAlias"), applyP("hydra.scala.utils.stref", string("Any")))),
         v("mkAlias"),
         applyP("hydra.scala.coder.encodeType", v("cx2"), v("g2"), v("typ2")))))))))
 
@@ -1027,13 +1023,13 @@ object Coder:
             applyP("hydra.strip.deannotateType", v("t")),
             Phantoms.pair(v("acc"), v("t")),
             field("forall", lambda("ft2",
-              applyN(v("collectForallParams"),
+              Phantoms.apply(v("collectForallParams"),
                 CoreDsl.forallTypeBody(v("ft2")),
                 applyP("hydra.lib.lists.cons",
                   CoreDsl.forallTypeParameter(v("ft2")),
                   v("acc"))))))))),
       field("collected",
-        applyN(v("collectForallParams"), v("forallBody"), list(v("forallParam")))),
+        Phantoms.apply(v("collectForallParams"), v("forallBody"), list(v("forallParam")))),
       field("allForallParams",
         applyP("hydra.lib.lists.reverse",
           applyP("hydra.lib.pairs.first", v("collected")))),
@@ -1044,11 +1040,11 @@ object Coder:
           v("allForallParams")))),
       casesWithDefault("hydra.core.Type",
         applyP("hydra.strip.deannotateType", v("innerBody")),
-        applyN(defaultTypeCase, v("lname"), v("allTparams"), v("cx"), v("g"), v("innerBody")),
+        Phantoms.apply(defaultTypeCase, v("lname"), v("allTparams"), v("cx"), v("g"), v("innerBody")),
         field("record", lambda("rt2",
-          applyN(recordTypeCase, v("tname"), v("allTparams"), v("cx"), v("g"), v("rt2")))),
+          Phantoms.apply(recordTypeCase, v("tname"), v("allTparams"), v("cx"), v("g"), v("rt2")))),
         field("union", lambda("rt2",
-          applyN(unionTypeCase, v("tname"), v("lname"), v("allTparams"), v("cx"), v("g"), v("rt2")))),
+          Phantoms.apply(unionTypeCase, v("tname"), v("lname"), v("allTparams"), v("cx"), v("g"), v("rt2")))),
         field("wrap", encodeTypeDefForallInnerWrap))))
 
   private val encodeTypeDefinitionBody = lambda("cx", lambda("g", lambda("td",
@@ -1073,12 +1069,12 @@ object Coder:
         applyP("hydra.lib.lists.map", encodeTypeDefStparam, v("freeVars")))),
       casesWithDefault("hydra.core.Type",
         applyP("hydra.strip.deannotateType", v("typ")),
-        applyN(defaultTypeCase, v("lname"), v("tparams"), v("cx"), v("g"), v("typ")),
+        Phantoms.apply(defaultTypeCase, v("lname"), v("tparams"), v("cx"), v("g"), v("typ")),
         field("forall", encodeTypeDefForallArm),
         field("record", lambda("rt",
-          applyN(recordTypeCase, v("tname"), v("tparams"), v("cx"), v("g"), v("rt")))),
+          Phantoms.apply(recordTypeCase, v("tname"), v("tparams"), v("cx"), v("g"), v("rt")))),
         field("union", lambda("rt",
-          applyN(unionTypeCase, v("tname"), v("lname"), v("tparams"), v("cx"), v("g"), v("rt")))),
+          Phantoms.apply(unionTypeCase, v("tname"), v("lname"), v("tparams"), v("cx"), v("g"), v("rt")))),
         field("wrap", encodeTypeDefWrapArm))))))
 
   lazy val encodeTypeDefinitionDef: Definition =
@@ -2115,13 +2111,13 @@ object Coder:
             applyP("hydra.strip.deannotateTerm", v("t")),
             Phantoms.pair(v("acc"), v("t")),
             field("typeApplication", lambda("ta2",
-              applyN(v("collectTypeArgs"),
+              Phantoms.apply(v("collectTypeArgs"),
                 CoreDsl.typeApplicationTermBody(v("ta2")),
                 applyP("hydra.lib.lists.cons",
                   CoreDsl.typeApplicationTermType(v("ta2")),
                   v("acc"))))))))),
       field("collected",
-        applyN(v("collectTypeArgs"),
+        Phantoms.apply(v("collectTypeArgs"),
           CoreDsl.typeApplicationTermBody(v("ta")),
           list(CoreDsl.typeApplicationTermType(v("ta"))))),
       field("typeArgs", applyP("hydra.lib.pairs.first", v("collected"))),
@@ -2132,13 +2128,13 @@ object Coder:
             applyP("hydra.strip.deannotateTerm", v("t")),
             Phantoms.pair(v("acc"), v("t")),
             field("typeLambda", lambda("tl",
-              applyN(v("collectTypeLambdas"),
+              Phantoms.apply(v("collectTypeLambdas"),
                 CoreDsl.typeLambdaBody(v("tl")),
                 applyP("hydra.lib.lists.cons",
                   CoreDsl.typeLambdaParameter(v("tl")),
                   v("acc"))))))))),
       field("tlCollected",
-        applyN(v("collectTypeLambdas"), v("innerTerm"), emptyList)),
+        Phantoms.apply(v("collectTypeLambdas"), v("innerTerm"), emptyList)),
       field("typeParams", applyP("hydra.lib.pairs.first", v("tlCollected"))),
       field("bodyAfterTypeLambdas", applyP("hydra.lib.pairs.second", v("tlCollected"))),
       field("substitutedBody", v("bodyAfterTypeLambdas"))),

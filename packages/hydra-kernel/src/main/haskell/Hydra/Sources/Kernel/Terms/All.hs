@@ -7,9 +7,6 @@ import qualified Hydra.Sources.Kernel.Terms.Adapt           as Adapt
 import qualified Hydra.Sources.Kernel.Terms.Analysis        as Analysis
 import qualified Hydra.Sources.Kernel.Terms.Annotations     as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Arity           as Arity
-import qualified Hydra.Sources.Kernel.Terms.Build.Modules   as BuildModules
-import qualified Hydra.Sources.Kernel.Terms.Build.Reconcile as BuildReconcile
-import qualified Hydra.Sources.Kernel.Terms.Build.Routing   as BuildRouting
 import qualified Hydra.Sources.Kernel.Terms.Checking        as Checking
 import qualified Hydra.Sources.Kernel.Terms.Classes         as Classes
 import qualified Hydra.Sources.Kernel.Terms.Generation      as Generation
@@ -87,9 +84,6 @@ kernelPrimaryTermsModules = [
   Analysis.module_,
   Annotations.module_,
   Arity.module_,
-  BuildModules.module_,
-  BuildReconcile.module_,
-  BuildRouting.module_,
   Checking.module_,
   Classes.module_,
   Generation.module_,

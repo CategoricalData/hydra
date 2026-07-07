@@ -555,12 +555,14 @@ fi
 # self-contained when consumed as PUBLISHED artifacts — installed/resolved in
 # isolation from the worktree (Python: fresh venv + --no-index; Haskell: the
 # trio staged into one stack project; Java: published to a temp Maven repo and
-# resolved by an offline consumer). This is the class of break that shipped in
-# 0.16.0 — a package importing something present only in heads/, not in the
+# resolved by an offline consumer; Scala: published to a temp Ivy repo and
+# resolved by an offline sbt consumer). This is the class of break that shipped
+# in 0.16.0 — a package importing something present only in heads/, not in the
 # packaged dist/ — which every in-repo test masked because heads/ is always on
 # the path/source-set. The per-host tests above (Steps 2-4) do NOT exercise the
-# packaging boundary; this step does. See #472 (Python wheel) and #473 (Haskell
-# cold-build). Java's verifier hard-fails when no JDK 17+ is present.
+# packaging boundary; this step does. See #472 (Python wheel), #473 (Haskell
+# cold-build), and #537 (Scala). Java's verifier hard-fails when no JDK 17+ is
+# present.
 step 13 $TOTAL_STEPS "Verifying per-host published-package self-containment"
 echo ""
 
@@ -568,6 +570,7 @@ for hv in \
     "haskell:$HYDRA_ROOT/heads/haskell/bin/verify-distribution.sh" \
     "python:$HYDRA_ROOT/heads/python/bin/verify-distribution.sh" \
     "java:$HYDRA_ROOT/heads/java/bin/verify-distribution.sh" \
+    "scala:$HYDRA_ROOT/heads/scala/bin/verify-distribution.sh" \
     "typescript:$HYDRA_ROOT/heads/typescript/bin/verify-distribution.sh"; do
     host="${hv%%:*}"
     script="${hv##*:}"

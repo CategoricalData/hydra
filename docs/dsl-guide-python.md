@@ -43,6 +43,7 @@ Hydra-Python provides a layered DSL system for working with Hydra types and term
 | **Phantom-typed DSL** | `hydra.overlay.python.dsl.meta.phantoms` | Type safety via `TypedTerm[A]` phantom types |
 | **Domain-specific DSLs** | `hydra.dsl.core`, `hydra.dsl.graph` (generated) | Typed accessors for Hydra kernel types |
 | **Library wrappers** | `hydra.dsl.lib.*` | Typed wrappers around Hydra primitives (lists, sets, maps, etc.) |
+| **Term references** | `hydra.dsl.strip`, `hydra.dsl.serialization`, ... (generated) | Typed, rename-safe references to kernel functions (#467) |
 
 The Direct DSLs are suitable for casual use: constructing test fixtures, prototyping, or building types.
 The Phantom-typed and Domain-specific DSLs are designed for writing Hydra kernel source code in Python,
@@ -158,6 +159,26 @@ from_list = Sets.from_list(my_list)
 folded = Lists.foldl(fn, init, my_list)
 ```
 
+### 6. Term references
+
+**Modules**: `hydra.dsl.strip`, `hydra.dsl.serialization`, `hydra.dsl.names`, etc.
+
+One typed, rename-safe reference function per kernel term definition (#467), derived from the
+definition's inferred signature.
+These replace stringly-typed `var("hydra....")` references (and the coder-private `_kernel_refs.py`
+registry), which no rename catches and which fail only at inference time.
+
+```python
+import hydra.dsl.strip as Strip
+
+stripped = Strip.deannotate_type(typ)   # references hydra.strip.deannotateType, rename-safe
+```
+
+One module is generated per curated term module — the demand set covers the modules the coder
+sources reference (`strip`, `serialization`, `annotations`, `names`, `formatting`, `constants`, and
+more; curated via the kernel Manifest's `dslTermModules`).
+Prefer these over inline `var("hydra....")` strings in new code.
+
 ## When to use each variant
 
 | Scenario | Recommended DSLs | Why |
@@ -167,6 +188,7 @@ folded = Lists.foldl(fn, init, my_list)
 | Writing kernel source code | Phantom-typed + Domain-specific | Type tracking + domain accessors |
 | Field access on kernel types | Domain-specific DSLs | `Core.lambda_body(t)` vs manual projection |
 | Primitive function calls | Library wrappers | `Sets.union(a, b)` vs raw `primitive2(...)` |
+| Referencing kernel functions | Term references | `Strip.deannotate_type(t)` vs `var("hydra.strip.deannotateType")` |
 
 **Rule of thumb**:
 - **Type modules** (defining data types): Use `hydra.overlay.python.dsl.types as T` with `T.record()`, `T.union()`, `T.wrap()`
@@ -632,13 +654,32 @@ Term-level modules define Hydra functions using the Phantom-typed DSL.
 
 ### Pattern
 
-Definitions use the **fluent builder** — the blessed idiom across all Python coder sources:
-`_def("name").doc("...").lam("x").to(body)`. It reads top-to-bottom (name, doc, parameters, then body)
-instead of the inside-out `_def("name", doc("...", lambdas(["x"], body)))` nesting. The two forms are
-exactly equivalent — `.to(body)` composes `doc(desc, lambdas([params], body))`, omitting the `doc`/
-`lambdas` wrappers when none are given. `_def` (from `make_def(_PLACEHOLDER)`) accepts both the fluent
-`_def(name)` and the flat `_def(name, term)` form (the latter kept for parameterized helpers). Unlike
-Java, `.to(body)` is eager — Python builds each definition when its enclosing function runs.
+Definitions across the Python coder sources appear in **three shapes**. Prefer the fluent builder
+(shape a); the other two exist for concrete reasons noted below.
+
+**(a) Fluent builder — the default idiom.** `_def("name").doc("...").lam("x").to(body)` reads
+top-to-bottom (name, doc, parameters, then body) instead of the inside-out
+`_def("name", doc("...", lambdas(["x"], body)))` nesting. The two are exactly equivalent — `.to(body)`
+composes `doc(desc, lambdas([params], body))`, omitting the `doc`/`lambdas` wrappers when none are
+given. `_def` (from `make_def(_PLACEHOLDER)`) accepts both the fluent `_def(name)` and the flat
+`_def(name, term)` form. Unlike Java, `.to(body)` is eager — Python builds each definition when its
+enclosing function runs.
+
+**(b) Prebound body — when the body references its own lambda parameters while being built.**
+Roughly 110 sites in `coder.py` bind the body first, then hand it to `.to(...)`:
+
+```python
+body = lambdas(["env", "bindings"], _let_chain([...], ...))   # params referenced inside the chain
+return _def("bindingsToStatements").doc("...").to(body)
+```
+
+This is needed when a `_let_chain`/`lambdas` body is assembled with references to the parameters it
+introduces, which is awkward to express inline through `.lam(...)`. The emitted term is identical to
+shape (a); the difference is purely how the Python is written.
+
+**(c) Raw `definition_in_module` — single-def modules.** `language.py` bypasses `_def` entirely,
+calling `definition_in_module(placeholder, local_name, term)` directly (the primitive `_def` itself
+wraps). It is the low-level form; new multi-def term modules should use shape (a) instead.
 
 ```python
 import hydra.core

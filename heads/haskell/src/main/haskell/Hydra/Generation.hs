@@ -9,7 +9,7 @@ module Hydra.Generation (
 import Hydra.Kernel
 import Hydra.Overlay.Haskell.Dsl.Annotations
 import Hydra.Overlay.Haskell.Bootstrap
-import Hydra.PackageRouting (RoutingMap, groupByPackageIn, namespaceToPackageIn)
+import Hydra.PackageRouting (RoutingMap, groupByPackageIn, namespaceToPackageIn, namespaceToPackageMaybeIn)
 import Hydra.Packaging (_Module)
 import Hydra.Testing (TestGroup(..))
 import qualified Hydra.Json.Model as Json
@@ -343,12 +343,57 @@ inferAndWriteByPackageSeededFor
       pkgToMods       = M.fromList targetGroups
       pkgToUniverse   = M.fromList universeGroups
       pkgsInScope     = L.nub (map fst universeGroups ++ map fst targetGroups)
-  -- Build the package dep graph from each package's package.json.
+  -- Cross-package inference-order edges derived from actual module
+  -- dependencies (#546). package.json deps alone are insufficient when a module
+  -- in package A references (via moduleDependencies) a module owned by package
+  -- B that does NOT sit above A in the package.json graph. The canonical case:
+  -- the kernel's hydra.test.testSuite aggregate references hydra.test.build.*
+  -- (owned by hydra-build), yet hydra-build depends on hydra-kernel — so the
+  -- package graph would infer hydra-kernel first and fail to resolve the
+  -- build-test allTests bindings. Projecting each module's moduleDependencies
+  -- through the routing map yields the true inference order (provider package
+  -- before consumer). Namespaces not in the routing map (e.g. kernel type
+  -- modules absent from the test universe) are skipped via the safe lookup.
+  let routedPkg = namespaceToPackageMaybeIn routingMap
+      -- Only modules actually iterated in THIS pass (universeMods) constrain the
+      -- ordering; dependencies on modules outside it (e.g. kernel MAIN modules,
+      -- which are pre-seeded via seedBindingSchemes in the test pass) are already
+      -- satisfied and must NOT create edges — otherwise the genuine package-level
+      -- cycle reappears (hydra-build test deps on kernel main vs. kernel test-suite
+      -- deps on hydra-build test). Restricting the provider side to universeMods
+      -- keeps only the real in-pass constraints (kernel test-suite -> hydra-build
+      -- test), which are acyclic.
+      universeNs = S.fromList (map moduleName universeMods)
+      moduleDepEdges =
+        [ (consumerPkg, providerPkg)
+        | m <- universeMods
+        , Just consumerPkg <- [routedPkg (moduleName m)]
+        , dep <- moduleDependencies m
+        , let depNs = moduleDependencyModule dep
+        , S.member depNs universeNs
+        , Just providerPkg <- [routedPkg depNs]
+        , providerPkg /= consumerPkg
+        , providerPkg `elem` pkgsInScope
+        , consumerPkg `elem` pkgsInScope ]
+  -- Build the package dep graph from each package's package.json, then union in
+  -- the module-dependency-derived edges above. Conflict resolution: a
+  -- module-dependency edge reflects an ACTUAL reference in THIS source set, so
+  -- it wins over a contradicting package.json edge. Concretely, for the test
+  -- pass the kernel test-suite references hydra-build's test modules
+  -- (kernel -> hydra-build), while package.json records hydra-build -> kernel
+  -- (a MAIN-linkage fact, irrelevant to test ordering here). Dropping the
+  -- contradicted package.json edge for this pass avoids a spurious 2-cycle while
+  -- preserving the true inference order; kernel main is already seeded, so the
+  -- dropped edge costs nothing.
+  let modDepEdgeSet = S.fromList moduleDepEdges
   pkgDeps <- CM.forM pkgsInScope $ \p -> do
     deps <- loadPackageDeps p
-    -- Restrict deps to packages actually present in the in-scope set.
-    let inScope = filter (`elem` pkgsInScope) deps
-    return (p, inScope)
+    -- Restrict deps to packages actually present in the in-scope set, dropping
+    -- any package.json edge (p -> d) contradicted by a module-dep edge (d -> p).
+    let jsonDeps = [ d | d <- filter (`elem` pkgsInScope) deps
+                       , not (S.member (d, p) modDepEdgeSet) ]
+        modDeps  = [ prov | (cons, prov) <- moduleDepEdges, cons == p ]
+    return (p, L.nub (jsonDeps ++ modDeps))
   -- Topological sort: deps first, then dependents.
   topoResult <- case topologicalSort pkgDeps of
     Right ordered -> return ordered
@@ -698,21 +743,6 @@ writeModulesJsonPackageSplit routingMap doInfer distJsonRoot universeMods mods =
             refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
             refreshPerPackageDigests routingMap distJsonRoot universeMods mods
 
--- | Test-side digest anchor. The test universe routes entirely to
--- hydra-kernel today (every test namespace is hydra.test.*), so its
--- freshness cache lives at the per-package test path
--- dist/json/hydra-kernel/build/test/digest.json — the parallel of the
--- main path's per-package build/main/digest.json. We use the package
--- the targets actually route to (rather than hardcoding hydra-kernel)
--- so the anchor follows the routing table if test namespaces ever split
--- across packages.
-testDigestAnchor :: RoutingMap -> FilePath -> [Module] -> FilePath
-testDigestAnchor routingMap distJsonRoot testMods =
-  let pkg = case map fst (groupByPackageIn routingMap testMods) of
-              (p:_) -> p
-              []    -> "hydra-kernel"
-  in perPackageDigestPathFor "test" distJsonRoot pkg
-
 -- | Write test-suite modules to JSON via the per-package incremental
 -- inference driver (#395), the test-side analogue of
 -- 'writeModulesJsonPackageSplit'.
@@ -750,11 +780,24 @@ testDigestAnchor routingMap distJsonRoot testMods =
 writeTestModulesJson :: RoutingMap -> FilePath -> [Module] -> [Module] -> IO ()
 writeTestModulesJson routingMap distJsonRoot mainMods testMods = do
   let universeMods = mainMods ++ testMods
-      digestFile   = testDigestAnchor routingMap distJsonRoot testMods
       testPaths    = [ distJsonRoot FP.</> pkg FP.</> "src" FP.</> "test" FP.</> "json"
                                      FP.</> CodeGeneration.moduleNameToPath (moduleName m) ++ ".json"
                      | (pkg, pkgMods) <- groupByPackageIn routingMap testMods, m <- pkgMods ]
-  hit <- checkCacheHit digestFile universeMods testPaths
+      -- #551: every package owning test modules has its own build/test digest,
+      -- and freshness must be checked against ALL of them, not just the
+      -- (somewhat arbitrary) first one. Reading only one package's digest let
+      -- a stale/missing per-package digest slip past undetected whenever that
+      -- package's own file happened to still match the current universe hash
+      -- while another test-owning package's digest did not — the existence
+      -- check (every digest present) and the freshness check (every digest
+      -- fresh) must span the same set. See #546 for the original
+      -- existence-only guard this extends.
+      perPkgTestDigests = [ perPackageDigestPathFor "test" distJsonRoot pkg
+                          | (pkg, _) <- groupByPackageIn routingMap testMods ]
+  allDigestsPresent <- Prelude.and <$> Prelude.mapM SD.doesFileExist perPkgTestDigests
+  hit <- if allDigestsPresent
+           then checkCacheHitAll perPkgTestDigests universeMods testPaths
+           else return Nothing
   case hit of
     Just _ ->
       putStrLn $ "  Cache hit (" ++ show (length universeMods)
@@ -769,7 +812,7 @@ writeTestModulesJson routingMap distJsonRoot mainMods testMods = do
         Left e -> do
           putStrLn $ "  Test incremental seed-load failed (" ++ show e
             ++ "); falling back to flat-universe inference."
-          flatFallback universeMods digestFile
+          flatFallback universeMods
         Right mainLoaded -> do
           let seedBindingSchemes = M.fromList
                 [ (termDefinitionName td, ts)
@@ -793,15 +836,23 @@ writeTestModulesJson routingMap distJsonRoot mainMods testMods = do
           inferAndWriteByPackageSeededFor routingMap "test" distJsonRoot
             seedBindingSchemes seedSchemaSchemes
             mainLoaded testMods testMods
-          refreshDigestAt digestFile universeMods
+          refreshTestDigests universeMods
   where
+    -- #546: refresh a test digest for EVERY package that owns test modules,
+    -- not just the single anchor package. Before hydra-build, all test modules
+    -- belonged to hydra-kernel so one anchor sufficed; now the anchor
+    -- (alphabetically-first package = hydra-build) would leave the kernel test
+    -- digest unwritten, which the downstream per-package assemblers require.
+    refreshTestDigests universeMods =
+      CM.forM_ (groupByPackageIn routingMap testMods) $ \(pkg, _) ->
+        refreshDigestAt (perPackageDigestPathFor "test" distJsonRoot pkg) universeMods
     -- Last-resort flat path: identical inference to the pre-#395 code,
     -- writing into src/test/json per package and refreshing the test
     -- digest. Only reached if the main-JSON seed load throws.
-    flatFallback universeMods digestFile = do
+    flatFallback universeMods = do
       mods' <- inferModulesIO universeMods testMods
       writePackageSplitJsonFor routingMap "test" distJsonRoot universeMods universeMods mods'
-      refreshDigestAt digestFile universeMods
+      refreshTestDigests universeMods
 
 -- | Incremental inference result. 'IncrementalFull mods' means all
 -- modules need a fresh write; 'IncrementalPartial all dirty' means
@@ -1222,6 +1273,38 @@ loadCleanFromJson routingMap distJsonRoot universeModules namespaces =
           ++ unModuleName ns ++ ": " ++ showError err
         Right m  -> return m
 
+-- | Replace each DSL source module containing term definitions WITHOUT
+-- signatures by its just-written dist/json counterpart, whose term definitions
+-- carry the main pass's inferred signatures. The compiled source-as-data
+-- modules always have termDefinitionSignature = Nothing (inference never runs
+-- on the in-memory values), so without this read-back the DSL synthesizer's
+-- term path (Hydra.Sources.Kernel.Terms.Dsls.generateRefBindings) would
+-- silently skip every term definition and emit an empty module. Reading the
+-- routed JSON back reuses the single main-pass inference — no re-inference,
+-- which would not fit in memory — and holds on cache-hit paths too, since the
+-- JSON on disk is current either way. Modules with no unsigned term
+-- definitions (type modules, primitive hydra.lib.* modules) pass through
+-- untouched. Fails if a reloaded module still lacks a term signature, rather
+-- than regressing to silent omission. (#467)
+reloadTermSignatureSources :: RoutingMap -> FilePath -> [Module] -> [Module] -> IO [Module]
+reloadTermSignatureSources routingMap distJsonRoot universeModules mods = CM.forM mods $ \m ->
+    if null (unsigned m)
+      then return m
+      else do
+        loaded <- loadCleanFromJson routingMap distJsonRoot universeModules [moduleName m]
+        case loaded of
+          [m'] -> if null (unsigned m')
+            then return m'
+            else fail $ "DSL read-back: term definitions still lack signatures in "
+              ++ unModuleName (moduleName m) ++ ": "
+              ++ L.intercalate ", " (unName <$> unsigned m')
+          _ -> fail $ "DSL read-back: expected exactly one module for "
+            ++ unModuleName (moduleName m)
+  where
+    unsigned m = [ termDefinitionName td
+                 | DefinitionTerm td <- moduleDefinitions m
+                 , Y.isNothing (termDefinitionSignature td) ]
+
 -- | If every universe module's DSL source hash matches the stored digest,
 -- and every target module's JSON file already exists, return the current
 -- digest (indicating a cache hit, so the caller can skip the slow path).
@@ -1268,6 +1351,32 @@ checkCacheHit digestFile universeMods targetPaths = do
           existFlags <- mapM SD.doesFileExist targetPaths
           if and existFlags then return (Just currentDigest) else return Nothing
 
+-- | As 'checkCacheHit', but the stored digest is checked against EVERY file
+-- in 'digestFiles' rather than a single one. A hit requires each of them to
+-- match the current universe hash. #551: when several packages each keep
+-- their own copy of what is logically one cache entry (e.g. the test-side
+-- per-package digests, all written from the same 'universeMods' in
+-- 'writeTestModulesJson'), checking only one of those copies can miss a
+-- copy that fell out of sync with the others — a stale or orphaned
+-- per-package digest could otherwise coincidentally match the current
+-- hash while sitting alongside siblings that don't, or simply go
+-- unnoticed because nothing ever re-reads it. Requiring all copies to
+-- agree makes the multi-file redundancy actually load-bearing instead of
+-- cosmetic.
+checkCacheHitAll :: [FilePath] -> [Module] -> [FilePath] -> IO (Maybe Digest.DigestMap)
+checkCacheHitAll digestFiles universeMods targetPaths = do
+  nsFiles <- Digest.discoverModuleNameFiles
+  currentDigest <- Digest.hashUniverse nsFiles universeMods
+  if M.null currentDigest
+    then return Nothing  -- nothing to verify against; always recompute
+    else do
+      storedDigests <- mapM Digest.readDigest digestFiles
+      if any (/= currentDigest) storedDigests
+        then return Nothing
+        else do
+          existFlags <- mapM SD.doesFileExist targetPaths
+          if and existFlags then return (Just currentDigest) else return Nothing
+
 -- | After a successful slow-path run, overwrite the digest with fresh hashes.
 refreshDigest :: FilePath -> [Module] -> IO ()
 refreshDigest basePath universeMods = refreshDigestAt (Digest.digestPath basePath) universeMods
@@ -1300,7 +1409,8 @@ writeDslJson basePath universeModules typeModules = do
 -- See feature_347_merkle_trees for the broader transform-fingerprint story.
 writeDslJsonPackageSplit :: RoutingMap -> FilePath -> [Module] -> [Module] -> IO ()
 writeDslJsonPackageSplit routingMap distJsonRoot universeModules typeModules = do
-    dslMods <- generateDslModules universeModules typeModules
+    dslSources <- reloadTermSignatureSources routingMap distJsonRoot universeModules typeModules
+    dslMods <- generateDslModules universeModules dslSources
     let nonEmpty = filter (not . null . moduleDefinitions) dslMods
     writeModulesJsonPackageSplit routingMap False distJsonRoot universeModules nonEmpty
     mergeDslJsonIntoPerPackageDigests routingMap distJsonRoot nonEmpty
@@ -1343,7 +1453,8 @@ writeDslJsonPackageSplit routingMap distJsonRoot universeModules typeModules = d
 -- ONCE over the union of all derived kinds plus the already-written main modules.
 writeDerivedJsonPackageSplit :: RoutingMap -> FilePath -> [Module] -> [Module] -> [Module] -> IO ()
 writeDerivedJsonPackageSplit routingMap distJsonRoot universeModules dslSourceModules encodingSourceModules = do
-    dslMods <- generateDslModules universeModules dslSourceModules
+    dslSources <- reloadTermSignatureSources routingMap distJsonRoot universeModules dslSourceModules
+    dslMods <- generateDslModules universeModules dslSources
     encMods <- generateEncoderModules universeModules encodingSourceModules
     decMods <- generateDecoderModules universeModules encodingSourceModules
     let derived = filter (not . null . moduleDefinitions) (dslMods ++ encMods ++ decMods)

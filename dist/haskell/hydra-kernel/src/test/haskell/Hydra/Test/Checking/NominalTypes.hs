@@ -3466,24 +3466,25 @@ usingKernelTypesTests =
                   Core.applicationArgument = (Core.TermVariable (Core.Name "dir"))}))}))})))),
             Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeForall (Core.ForallType {
               Core.forallTypeParameter = (Core.Name "t0"),
-              Core.forallTypeBody = (Core.TypeFunction (Core.FunctionType {
-                Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.coders.CoderDirection")),
-                Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                  Core.functionTypeDomain = (Core.TypeApplication (Core.ApplicationType {
-                    Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
-                      Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.coders.Coder")),
-                      Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))})),
-                    Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))})),
+              Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
+                Core.forallTypeParameter = (Core.Name "t1"),
+                Core.forallTypeBody = (Core.TypeFunction (Core.FunctionType {
+                  Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.coders.CoderDirection")),
                   Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                    Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.typing.InferenceContext")),
+                    Core.functionTypeDomain = (Core.TypeApplication (Core.ApplicationType {
+                      Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
+                        Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
+                          Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.coders.Coder")),
+                          Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))})),
+                        Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t0"))})),
+                      Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "t1"))})),
                     Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                       Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                       Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-                        Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.Error")),
+                        Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "t1")),
                         Core.eitherTypeRight = (Core.TypeVariable (Core.Name "t0"))}))}))}))}))}))})))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = [
-            Testing.Tag "disabled"]}]}
+          Testing.testCaseWithMetadataTags = []}]}
 
 usingUnionPolymorphicRecursiveTests :: Testing.TestGroup
 usingUnionPolymorphicRecursiveTests =

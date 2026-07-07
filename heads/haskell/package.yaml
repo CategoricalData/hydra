@@ -65,6 +65,11 @@ library:
     - ../../dist/haskell/hydra-ext/src/main/haskell
     - ../../dist/haskell/hydra-bench/src/main/haskell
     - ../../dist/haskell/hydra-go/src/main/haskell
+    # #546: hydra-build's generated main modules (Hydra.Build.*). The generated
+    # test modules (in the test stanza) import these, so they must be on the
+    # library compile path. The dir is created empty on a cold worktree and
+    # populated by the sync's generation step.
+    - ../../dist/haskell/hydra-build/src/main/haskell
     - ../../dist/haskell/hydra-pg/src/main/haskell
     - ../../dist/haskell/hydra-rdf/src/main/haskell
     - ../../packages/hydra-coq/src/main/haskell
@@ -72,6 +77,7 @@ library:
     # hydra-java has no Haskell DSL sources: generated solely by the native Java
     # driver against the published host (#346/#370), like hydra-python. Source-dir
     # removed. (dist/haskell/hydra-java above stays — generated coder runtime.)
+    - ../../packages/hydra-build/src/main/haskell
     - ../../packages/hydra-typescript/src/main/haskell
     - ../../packages/hydra-kernel/src/main/haskell
     - ../../packages/hydra-lisp/src/main/haskell
@@ -185,6 +191,12 @@ executables:
     source-dirs:
       - src/exec/bootstrap-from-json
       - ../../dist/haskell/hydra-kernel/src/test/haskell
+      # #546: the generated kernel Hydra.Test.TestSuite (compiled from the test
+      # tree above via -Wmissing-home-modules) imports Hydra.Test.Build.*, which
+      # now live in hydra-build's dist test tree. Add it (and the main tree the
+      # build tests import) so the exec compiles.
+      - ../../dist/haskell/hydra-build/src/test/haskell
+      - ../../dist/haskell/hydra-build/src/main/haskell
     ghc-options: [-rtsopts]
     dependencies:
       - hydra
@@ -205,6 +217,10 @@ tests:
     source-dirs:
       - src/test/haskell
       - ../../dist/haskell/hydra-kernel/src/test/haskell
+      # #546: the hydra.test.build.* modules moved to hydra-build. The generated
+      # Hydra.Test.TestSuite (in hydra-kernel dist) still references their test
+      # groups (Option A), so this tree must be on the test compile path.
+      - ../../dist/haskell/hydra-build/src/test/haskell
     dependencies:
       - hydra
       - hspec                      >= 2.11.0 && < 2.12

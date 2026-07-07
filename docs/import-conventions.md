@@ -463,7 +463,7 @@ A few non-obvious rules emerged from a survey of the existing codebase:
    `Hydra.Dsl.Meta.Phantoms`.
 4. **`DeepCore` is the canonical alias for `Hydra.Dsl.Meta.DeepCore`.** Earlier
    files used `DC`; standardize on `DeepCore`.
-5. **`AsName` typeclass.** Phantoms's `inject`, `injectUnit`, `match`, `project`,
+5. **`AsName` typeclass.** Phantoms's `inject`, `match`, `project`,
    `record`, `unwrap`, `wrap` accept any `AsName n => n` for type-name arguments —
    `Name`, `TypedBinding Name`, or `TypedTermDefinition Name`. This lets call sites pass
    pre-defined kernel name constants like `_Foo` directly, without explicit lifts.

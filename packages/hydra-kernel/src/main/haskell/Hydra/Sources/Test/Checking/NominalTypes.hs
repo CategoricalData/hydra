@@ -1177,7 +1177,7 @@ unionEliminationsWithDefaultsTests = define "unionEliminationsWithDefaultsTests"
 usingKernelTypesTests :: TypedTermDefinition TestGroup
 usingKernelTypesTests = define "usingKernelTypesTests" $
   subgroup "Using kernel types" [
-  checkTest "case statement on CoderDirection applied to argument" [tag_disabled]
+  checkTest "case statement on CoderDirection applied to argument" []
     (lambda "dir" $
       lambda "coder" $
         match (name "hydra.coders.CoderDirection")
@@ -1191,27 +1191,26 @@ usingKernelTypesTests = define "usingKernelTypesTests" $
               project (name "hydra.coders.Coder") (name "decode")
                 @@ var "coder" @@ var "v12"]
           @@ var "dir")
-    (tylams ["t0"] $
+    (tylams ["t0", "t1"] $
       lambdaTyped "dir" (T.var "hydra.coders.CoderDirection") $
-        lambdaTyped "coder" (T.applys (T.var "hydra.coders.Coder") (T.var <$> ["t0", "t0"])) $
+        lambdaTyped "coder" (T.applys (T.var "hydra.coders.Coder") (T.var <$> ["t0", "t0", "t1"])) $
           match (name "hydra.coders.CoderDirection")
             nothing [
             "encode">: lambdaTyped "_" T.unit $
-              lambdaTyped "v12" (T.var "hydra.typing.InferenceContext") $
-                tyapps (project (name "hydra.coders.Coder") (name "encode")) (T.var <$> ["t0", "t0"])
+              lambdaTyped "v12" (T.var "t0") $
+                tyapps (project (name "hydra.coders.Coder") (name "encode")) (T.var <$> ["t0", "t0", "t1"])
                   @@ var "coder" @@ var "v12",
             "decode">: lambdaTyped "_" T.unit $
-              lambdaTyped "v12" (T.var "hydra.typing.InferenceContext") $
-                tyapps (project (name "hydra.coders.Coder") (name "decode")) (T.var <$> ["t0", "t0"])
+              lambdaTyped "v12" (T.var "t0") $
+                tyapps (project (name "hydra.coders.Coder") (name "decode")) (T.var <$> ["t0", "t0", "t1"])
                   @@ var "coder" @@ var "v12"]
           @@ var "dir")
-    (T.forAll "t0" $
+    (T.forAll "t0" $ T.forAll "t1" $
       T.functionMany [
         T.var "hydra.coders.CoderDirection",
-        T.applys (T.var "hydra.coders.Coder") (T.var <$> ["t0", "t0"]),
-        T.var "hydra.typing.InferenceContext",
+        T.applys (T.var "hydra.coders.Coder") (T.var <$> ["t0", "t0", "t1"]),
         T.var "t0",
-        T.either_ (T.var "hydra.errors.Error") (T.var "t0")])]
+        T.either_ (T.var "t1") (T.var "t0")])]
 
 usingUnionPolymorphicRecursiveTests :: TypedTermDefinition TestGroup
 usingUnionPolymorphicRecursiveTests = define "usingUnionPolymorphicRecursiveTests" $

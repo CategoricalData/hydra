@@ -1,5 +1,5 @@
 
-module Hydra.Sources.Kernel.Terms.Build.Routing where
+module Hydra.Sources.Build.Routing where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (buildRoutingMap, groupByPackageIn, namespaceToPackageIn)

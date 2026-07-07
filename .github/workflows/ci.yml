@@ -33,6 +33,20 @@ jobs:
   haskell:
     name: Haskell tests (JSON build + consistency check)
     runs-on: ubuntu-latest
+    # A healthy full cold run (regenerate all-target dists + stack tests) was ~2.5h
+    # (historically 2h19m-2h43m). The old 200min ceiling sat above that — but the
+    # #535 regression-harnesses step (bin/test-regressions.sh, which builds four
+    # standalone Haskell executables from source before running them) plus kernel
+    # growth pushed real work PAST 200min: every run from 2026-07-06 11:17Z onward
+    # was killed at exactly 200m00s on the final regression step (GitHub reports a
+    # timeout-kill as "cancelled", so it masqueraded as a runner stall for ~30h).
+    # Raised to 300min: headroom above the now-longer run while still well under
+    # GitHub's 6h default, so a genuinely wedged job still fails deterministically
+    # rather than needing a human to guess "is it hung?". If this ceiling is
+    # approached again, speed up the tail (cache/parallelize the regression build)
+    # or split the harnesses into their own job rather than raising it further.
+    # See #494 CI investigation.
+    timeout-minutes: 300
     steps:
       - uses: actions/checkout@v4
       # #541: cheap, toolchain-free gate that must run before anything else
@@ -180,6 +194,9 @@ jobs:
     name: Java tests
     needs: haskell
     runs-on: ubuntu-latest
+    # Downstream per-host jobs download the Haskell job's dist artifacts and run
+    # that host's tests — normally minutes. 45min is generous but bounds a hang.
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       # JDK 17 is installed first (and captured via its step id) so the
@@ -232,6 +249,7 @@ jobs:
     name: Python tests
     needs: haskell
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -260,6 +278,7 @@ jobs:
     name: Clojure tests
     needs: haskell
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: DeLaGuardo/setup-clojure@13
@@ -281,6 +300,7 @@ jobs:
     name: Scala tests
     needs: haskell
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -340,11 +360,19 @@ jobs:
           path: dist/scala/
       - run: sbt test
         working-directory: packages/hydra-scala
+      # Self-containment gate: publish the per-package artifacts to a temp Ivy
+      # repo and resolve them from an offline consumer, so a published jar that
+      # is missing classes its API needs (or whose POM references a sibling not
+      # in the publish set) fails here — the Scala analog of #472/#519 — before
+      # it reaches Maven Central. See #537.
+      - name: Verify Scala distribution self-containment
+        run: heads/scala/bin/verify-distribution.sh
 
   common-lisp:
     name: Common Lisp tests
     needs: haskell
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - name: Install SBCL and cl-ppcre
@@ -362,6 +390,7 @@ jobs:
     name: Scheme tests
     needs: haskell
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - name: Install Guile
@@ -379,6 +408,7 @@ jobs:
     name: Emacs Lisp tests
     needs: haskell
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - name: Install Emacs

@@ -12,7 +12,7 @@ module Main where
 import Hydra.Generation (writeTestModulesJson)
 import Hydra.PackageRouting (defaultDistJsonRoot, buildRoutingMap)
 import Hydra.Sources.All (mainModules)
-import Hydra.Sources.Ext (extRoutingInput)
+import Hydra.Sources.Ext (extRoutingInput, hydraBuildModules, hydraBuildTestModules)
 import Hydra.Sources.Test.All (testModules)
 import System.Environment (getArgs)
 import System.Exit (exitFailure)
@@ -23,15 +23,23 @@ import qualified Data.List as L
 main :: IO ()
 main = do
   distRoot <- parseDistRoot defaultDistJsonRoot
+  -- #546: hydra-build is the first non-kernel package with test modules. Its
+  -- main modules must seed the test-inference universe (loaded from
+  -- dist/json/hydra-build/src/main/json) and its test modules must be written;
+  -- both are folded in here since Sources.All.mainModules / Test.All.testModules
+  -- no longer contain the build family after the extraction.
+  let allMainModules = mainModules ++ hydraBuildModules
+      allTestModules = testModules ++ hydraBuildTestModules
+
   putStrLn "=== Generate Hydra test modules JSON ==="
   putStrLn ""
-  putStrLn $ "Generating " ++ show (length testModules)
+  putStrLn $ "Generating " ++ show (length allTestModules)
     ++ " test modules to JSON (per-package incremental inference)..."
   putStrLn $ "dist-json root: " ++ distRoot
   putStrLn ""
 
   let routingMap = buildRoutingMap extRoutingInput
-  result <- catch (writeTestModulesJson routingMap distRoot mainModules testModules >> return True)
+  result <- catch (writeTestModulesJson routingMap distRoot allMainModules allTestModules >> return True)
                   (\e -> do
                     putStrLn $ "Error: " ++ show (e :: SomeException)
                     return False)

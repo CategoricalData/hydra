@@ -451,7 +451,7 @@ literalsReadBigint = subgroup "readBigint" [
   testJust "positive" "42" 42,
   testJust "negative" "-42" (-42),
   testJust "zero" "0" 0,
-  primCaseWithTags "large" [tag_disabled] DefLiterals.readBigint [string "123456789012345678901234567890"] (Core.termOptional $ just (bigint 123456789012345678901234567890)),
+  primCaseWithTags "large" [] DefLiterals.readBigint [string "123456789012345678901234567890"] (Core.termOptional $ just (bigint 123456789012345678901234567890)),
   testNothing "invalid" "abc"]
   where
     testJust name x result = primCase name DefLiterals.readBigint [string x] (Core.termOptional $ just (bigint result))

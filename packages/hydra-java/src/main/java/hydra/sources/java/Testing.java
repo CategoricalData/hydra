@@ -1,5 +1,9 @@
 package hydra.sources.java;
 import hydra.core.Field;
+import hydra.overlay.java.dsl.meta.Defs;
+import hydra.overlay.java.dsl.meta.Defs.Def;
+import static hydra.overlay.java.dsl.meta.Defs.define;
+import static hydra.overlay.java.dsl.meta.Defs.definitionsOf;
 import static hydra.overlay.java.dsl.meta.Defs.unqualifiedDeps;
 import hydra.core.Name;
 import hydra.core.Type;
@@ -28,11 +32,10 @@ import hydra.packaging.ModuleDependency;
 import hydra.typed.TypedTerm;
 import hydra.overlay.java.util.Optional;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static hydra.overlay.java.dsl.meta.Phantoms.*;
-import static hydra.overlay.java.dsl.Helpers.termDef;
 
 /**
  * Java test code generation codec for JUnit-based generation tests.
@@ -42,6 +45,15 @@ import static hydra.overlay.java.dsl.Helpers.termDef;
  */
 public class Testing {
     public static final ModuleName NS = new ModuleName("hydra.java.testing");
+
+    private static Def def(String localName, Supplier<TypedTerm<?>> body) {
+        return define(NS, localName, body);
+    }
+
+    /** Fluent form: {@code def("name").doc("...").lam("x").to(() -> body)}. See Defs.DefBuilder. */
+    private static Defs.DefBuilder def(String localName) {
+        return define(NS, localName);
+    }
 
     // ---- Primitive references ----
     private static TypedTerm<?> prim(String fqName) { return var(fqName); }
@@ -118,10 +130,10 @@ public class Testing {
         return Packaging.unModuleName(tterm(ns.value));
     }
     private static TypedTerm<?> caseConventionLowerSnake() {
-        return injectUnit("hydra.util.CaseConvention", "lowerSnake");
+        return inject("hydra.util.CaseConvention", "lowerSnake");
     }
     private static TypedTerm<?> caseConventionPascal() {
-        return injectUnit("hydra.util.CaseConvention", "pascal");
+        return inject("hydra.util.CaseConvention", "pascal");
     }
     private static TypedTerm<?> rightTerm(TypedTerm<?> t) {
         return Phantoms.right(t);
@@ -135,12 +147,12 @@ public class Testing {
 
     // ---- Definitions ----
 
-    private static Definition buildJavaTestModule() {
-        TypedTerm<?> body = doc(
-            "Build the complete Java test module content",
-            lambda("testModule", lambda("testGroup", lambda("testBody",
+    public static final Def buildJavaTestModule = def("buildJavaTestModule")
+        .doc("Build the complete Java test module content")
+        .lam("testModule").lam("testGroup").lam("testBody")
+        .to(() ->
                 let(
-                    Arrays.<hydra.core.Field>asList(
+                    binds(
                         field("ns_", packagingModuleNamespace(var("testModule"))),
                         field("parts", stringsSplitOn(string("."), unwrapNamespace(var("ns_")))),
                         field("packageName", stringsIntercalate(string("."),
@@ -165,119 +177,114 @@ public class Testing {
                             stringsIntercalate(string("\n"), var("standardImports")),
                             string("\n\n"),
                             stringsCat(list(string("public class "), var("className_"), string(" {\n\n"))))))),
-                    stringsCat(list(var("header"), var("testBody"), string("\n}\n"))))))));
-        return termDef(NS, "buildJavaTestModule", body.value);
-    }
+                    stringsCat(list(var("header"), var("testBody"), string("\n}\n")))));
 
-    private static Definition findJavaImports() {
-        return termDef(NS, "findJavaImports", doc("Standard imports for Java JUnit test files",
+    public static final Def findJavaImports = def("findJavaImports")
+        .doc("Standard imports for Java JUnit test files")
+        .to(() ->
                 list(
                     string("import org.junit.jupiter.api.Test;"),
                     string("import static org.junit.jupiter.api.Assertions.*;"),
-                    string("import java.util.*;"))).value);
-    }
+                    string("import java.util.*;")));
 
-    private static Definition formatJavaTestName() {
-        TypedTerm<?> name = var("name");
-        TypedTerm<?> replaced =
-            replaceChar(string("-"), string(" Neg"),
-                replaceChar(string("."), string("Dot"),
-                    replaceChar(string("+"), string(" Plus"),
-                        replaceChar(string("/"), string(" Div"),
-                            replaceChar(string("*"), string(" Mul"),
-                                replaceChar(string("#"), string(" Num"), name))))));
-        TypedTerm<?> body = doc(
-            "Format a test name for Java (PascalCase method name with 'test' prefix)",
-            lambda("name",
+    public static final Def formatJavaTestName = def("formatJavaTestName")
+        .doc("Format a test name for Java (PascalCase method name with 'test' prefix)")
+        .lam("name")
+        .to(() -> {
+            TypedTerm<?> name = var("name");
+            TypedTerm<?> replaced =
+                replaceChar(string("-"), string(" Neg"),
+                    replaceChar(string("."), string("Dot"),
+                        replaceChar(string("+"), string(" Plus"),
+                            replaceChar(string("/"), string(" Div"),
+                                replaceChar(string("*"), string(" Mul"),
+                                    replaceChar(string("#"), string(" Num"), name))))));
+            return
                 let(
-                    Arrays.<hydra.core.Field>asList(
+                    binds(
                         field("replaced", replaced),
                         field("sanitized", formattingNonAlnumToUnderscores(var("replaced"))),
                         field("pascal_", formattingConvertCase(
                             caseConventionLowerSnake(),
                             caseConventionPascal(),
                             var("sanitized")))),
-                    stringsCat2(string("test"), var("pascal_")))));
-        return termDef(NS, "formatJavaTestName", body.value);
-    }
+                    stringsCat2(string("test"), var("pascal_")));
+        });
 
-    private static Definition generateJavaTestCase() {
-        TypedTerm<?> universalBranch = lambda("ucase",
-            let(
-                Arrays.<hydra.core.Field>asList(
-                    field("actual_", apply(
-                        apply(
-                            project("hydra.testing.UniversalTestCase", "actual"),
-                            var("ucase")),
-                        unit())),
-                    field("expected_", apply(
-                        apply(
-                            project("hydra.testing.UniversalTestCase", "expected"),
-                            var("ucase")),
-                        unit())),
-                    field("fullName", logicIfElse(
-                        listsNull(var("groupPath")),
-                        var("name_"),
-                        stringsIntercalate(string("_"),
-                            listsConcat2(var("groupPath"), list(var("name_")))))),
-                    field("formattedName",
-                        apply(prim("hydra.java.testing.formatJavaTestName"), var("fullName")))),
-                right(list(
-                    string("    @Test"),
-                    stringsCat(list(string("    public void "), var("formattedName"), string("() {"))),
-                    string("        assertEquals("),
-                    stringsCat(list(string("            "), var("expected_"), string(","))),
-                    stringsCat(list(string("            "), var("actual_"), string(");"))),
-                    string("    }")))));
-
-        TypedTerm<?> body = doc(
-            "Generate a single JUnit test case from a test case with metadata",
-            lambda("groupPath", lambda("tcm",
+    public static final Def generateJavaTestCase = def("generateJavaTestCase")
+        .doc("Generate a single JUnit test case from a test case with metadata")
+        .lam("groupPath").lam("tcm")
+        .to(() -> {
+            TypedTerm<?> universalBranch = lambda("ucase",
                 let(
-                    Arrays.<hydra.core.Field>asList(
+                    binds(
+                        field("actual_", apply(
+                            apply(
+                                project("hydra.testing.UniversalTestCase", "actual"),
+                                var("ucase")),
+                            unit())),
+                        field("expected_", apply(
+                            apply(
+                                project("hydra.testing.UniversalTestCase", "expected"),
+                                var("ucase")),
+                            unit())),
+                        field("fullName", logicIfElse(
+                            listsNull(var("groupPath")),
+                            var("name_"),
+                            stringsIntercalate(string("_"),
+                                listsConcat2(var("groupPath"), list(var("name_")))))),
+                        field("formattedName",
+                            apply(prim("hydra.java.testing.formatJavaTestName"), var("fullName")))),
+                    right(list(
+                        string("    @Test"),
+                        stringsCat(list(string("    public void "), var("formattedName"), string("() {"))),
+                        string("        assertEquals("),
+                        stringsCat(list(string("            "), var("expected_"), string(","))),
+                        stringsCat(list(string("            "), var("actual_"), string(");"))),
+                        string("    }")))));
+            return
+                let(
+                    binds(
                         field("name_", apply(
                             project("hydra.testing.TestCaseWithMetadata", "name"),
                             var("tcm"))),
                         field("tcase", apply(
                             project("hydra.testing.TestCaseWithMetadata", "case"),
                             var("tcm")))),
-                    cases("hydra.testing.TestCase", var("tcase"), field("universal", universalBranch))))));
-        return termDef(NS, "generateJavaTestCase", body.value);
-    }
+                    cases("hydra.testing.TestCase", var("tcase"), field("universal", universalBranch)));
+        });
 
-    private static Definition generateJavaTestFile() {
-        TypedTerm<?> body = doc(
-            "Generate a Java test file for a test group",
-            lambda("testModule", lambda("testGroup", lambda("_g",
+    public static final Def generateJavaTestFile = def("generateJavaTestFile")
+        .doc("Generate a Java test file for a test group")
+        .lam("testModule").lam("testGroup").lam("_g")
+        .to(() ->
                 apply(
                     prim("hydra.java.testing.generateTestFileWithJavaCodec"),
                     var("testModule"),
-                    var("testGroup"))))));
-        return termDef(NS, "generateJavaTestFile", body.value);
-    }
+                    var("testGroup")));
 
-    private static Definition generateJavaTestGroupHierarchy() {
-        // Inner lambda that walks one subgroup
-        TypedTerm<?> subgroupBlock = lambda("subgroup",
-            let(
-                Arrays.<hydra.core.Field>asList(
-                    field("groupName", apply(
-                        project("hydra.testing.TestGroup", "name"),
-                        var("subgroup"))),
-                    field("header", stringsCat2(string("    // "), var("groupName")))),
-                eithersMap(
-                    lambda("content",
-                        stringsCat(list(var("header"), string("\n\n"), var("content")))),
-                    apply(
-                        prim("hydra.java.testing.generateJavaTestGroupHierarchy"),
-                        listsConcat2(var("groupPath"), list(var("groupName"))),
-                        var("subgroup")))));
-
-        TypedTerm<?> body = doc(
-            "Generate test hierarchy for Java with nested subgroups",
-            lambda("groupPath", lambda("testGroup",
+    public static final Def generateJavaTestGroupHierarchy = def("generateJavaTestGroupHierarchy")
+        .doc("Generate test hierarchy for Java with nested subgroups")
+        .lam("groupPath").lam("testGroup")
+        .to(() -> {
+            // Inner lambda that walks one subgroup
+            TypedTerm<?> subgroupBlock = lambda("subgroup",
                 let(
-                    Arrays.<hydra.core.Field>asList(
+                    binds(
+                        field("groupName", apply(
+                            project("hydra.testing.TestGroup", "name"),
+                            var("subgroup"))),
+                        field("header", stringsCat2(string("    // "), var("groupName")))),
+                    eithersMap(
+                        lambda("content",
+                            stringsCat(list(var("header"), string("\n\n"), var("content")))),
+                        apply(
+                            prim("hydra.java.testing.generateJavaTestGroupHierarchy"),
+                            listsConcat2(var("groupPath"), list(var("groupName"))),
+                            var("subgroup")))));
+            return
+                let(
+                    binds(
                         field("cases_", apply(
                             project("hydra.testing.TestGroup", "cases"),
                             var("testGroup"))),
@@ -310,18 +317,17 @@ public class Testing {
                                 eithersMap(
                                     lambda("blocks",
                                         stringsIntercalate(string("\n\n"), var("blocks"))),
-                                    eithersMapList(subgroupBlock, var("subgroups"))))))))));
-        return termDef(NS, "generateJavaTestGroupHierarchy", body.value);
-    }
+                                    eithersMapList(subgroupBlock, var("subgroups")))))));
+        });
 
-    private static Definition generateTestFileWithJavaCodec() {
-        TypedTerm<?> body = doc(
-            "Generate a complete test file for Java",
-            lambda("testModule", lambda("testGroup",
+    public static final Def generateTestFileWithJavaCodec = def("generateTestFileWithJavaCodec")
+        .doc("Generate a complete test file for Java")
+        .lam("testModule").lam("testGroup")
+        .to(() ->
                 eithersMap(
                     lambda("testBody",
                         let(
-                            Arrays.<hydra.core.Field>asList(
+                            binds(
                                 field("testModuleContent", apply(
                                     prim("hydra.java.testing.buildJavaTestModule"),
                                     var("testModule"),
@@ -343,31 +349,27 @@ public class Testing {
                     apply(
                         prim("hydra.java.testing.generateJavaTestGroupHierarchy"),
                         list(),
-                        var("testGroup"))))));
-        return termDef(NS, "generateTestFileWithJavaCodec", body.value);
-    }
+                        var("testGroup"))));
 
-    private static Definition namespaceToJavaClassName() {
-        TypedTerm<?> body = doc(
-            "Convert namespace to Java class name",
-            lambda("ns_",
+    public static final Def namespaceToJavaClassName = def("namespaceToJavaClassName")
+        .doc("Convert namespace to Java class name")
+        .lam("ns_")
+        .to(() ->
                 stringsIntercalate(string("."),
                     listsMap(
                         prim("hydra.formatting.capitalize"),
-                        stringsSplitOn(string("."), unwrapNamespace(var("ns_")))))));
-        return termDef(NS, "namespaceToJavaClassName", body.value);
-    }
+                        stringsSplitOn(string("."), unwrapNamespace(var("ns_"))))));
 
     // Order matches the Haskell `definitions = [...]` list.
-    private static final List<Definition> DEFINITIONS = Arrays.asList(
-        buildJavaTestModule(),
-        findJavaImports(),
-        formatJavaTestName(),
-        generateJavaTestCase(),
-        generateJavaTestFile(),
-        generateJavaTestGroupHierarchy(),
-        generateTestFileWithJavaCodec(),
-        namespaceToJavaClassName());
+    private static final List<Definition> DEFINITIONS = definitionsOf(
+        buildJavaTestModule,
+        findJavaImports,
+        formatJavaTestName,
+        generateJavaTestCase,
+        generateJavaTestFile,
+        generateJavaTestGroupHierarchy,
+        generateTestFileWithJavaCodec,
+        namespaceToJavaClassName);
 
     // Haskell: [SerializationSource.ns, TestUtils.ns, Formatting.ns, Names.ns, Constants.ns]
     //         ++ (JavaSyntax.ns : kernelTypesNamespaces)

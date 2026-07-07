@@ -393,25 +393,22 @@ public class TestSuiteRunner {
         Name contextName = new Name("hydra.typing.InferenceContext");
         Name errorName = new Name("hydra.errors.Error");
         java.util.function.Function<Type, Type> eitherError = v ->
-            new Type.Either(new EitherType(new Type.Variable(errorName), v));
+            new Type.Either(new EitherType(new Type.Variable(new Name("e")), v));
 
-        // Coder: forall v1 v2. {encode: ..., decode: ...}
+        // Coder: forall v1 v2 e. {encode: v1 -> Either e v2, decode: v2 -> Either e v1}
         Type encodeType = new Type.Function(new FunctionType(
-            new Type.Variable(contextName),
-            new Type.Function(new FunctionType(
-                new Type.Variable(new Name("v1")),
-                eitherError.apply(new Type.Variable(new Name("v2")))))));
+            new Type.Variable(new Name("v1")),
+            eitherError.apply(new Type.Variable(new Name("v2")))));
         Type decodeType = new Type.Function(new FunctionType(
-            new Type.Variable(contextName),
-            new Type.Function(new FunctionType(
-                new Type.Variable(new Name("v2")),
-                eitherError.apply(new Type.Variable(new Name("v1")))))));
+            new Type.Variable(new Name("v2")),
+            eitherError.apply(new Type.Variable(new Name("v1")))));
         Type coderBody = new Type.Record(ConsList.of(
             new FieldType(new Name("encode"), encodeType),
             new FieldType(new Name("decode"), decodeType)));
         types.put(new Name("hydra.coders.Coder"),
             new Type.Forall(new ForallType(new Name("v1"),
-                new Type.Forall(new ForallType(new Name("v2"), coderBody)))));
+                new Type.Forall(new ForallType(new Name("v2"),
+                    new Type.Forall(new ForallType(new Name("e"), coderBody)))))));
 
         // Context
         types.put(contextName,

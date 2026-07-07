@@ -32,6 +32,7 @@ import Hydra.Kernel
 import Hydra.Sources.All
 
 import qualified Hydra.Sources.Bench.Manifest as BenchManifest
+import qualified Hydra.Sources.Build.Manifest as BuildManifest
 import qualified Hydra.Sources.Coq.Manifest as CoqManifest
 import qualified Hydra.Sources.Ext.Manifest as ExtManifest
 import qualified Hydra.Sources.Go.Manifest as GoManifest
@@ -75,6 +76,16 @@ import qualified Data.List as L
 
 hydraBenchModules :: [Module]
 hydraBenchModules = BenchManifest.mainModules
+
+-- | hydra-build: the build system promoted into Hydra (#546/#416). The first
+-- non-kernel package with non-empty testModules — hydraBuildTestModules is
+-- routed to hydra-build's test tree and honored by the JSON-writing drivers'
+-- generalized packageTestModules (previously kernel-only).
+hydraBuildModules :: [Module]
+hydraBuildModules = BuildManifest.mainModules
+
+hydraBuildTestModules :: [Module]
+hydraBuildTestModules = BuildManifest.testModules
 
 hydraCoqModules :: [Module]
 hydraCoqModules = CoqManifest.mainModules
@@ -149,6 +160,7 @@ allDslModules =
   kernelDslSourceModules
   ++ haskellDslSourceModules
   ++ BenchManifest.mainDslModules
+  ++ BuildManifest.mainDslModules
   ++ CoqManifest.mainDslModules
   ++ ExtManifest.mainDslModules
   ++ GoManifest.mainDslModules
@@ -163,6 +175,7 @@ allEncodingModules =
   kernelEncodingSourceModules
   ++ haskellEncodingSourceModules
   ++ BenchManifest.mainEncodingModules
+  ++ BuildManifest.mainEncodingModules
   ++ CoqManifest.mainEncodingModules
   ++ ExtManifest.mainEncodingModules
   ++ GoManifest.mainEncodingModules
@@ -199,6 +212,10 @@ extRoutingInput =
   [ ("hydra-kernel",     map moduleName (kernelModules ++ otherModules ++ dslSourceModules ++ testModules))
   , ("hydra-haskell",    map moduleName haskellModules)
   , ("hydra-bench",      map moduleName hydraBenchModules)
+  -- hydra-build carries BOTH its main and test module names so hydra.test.build.*
+  -- routes to hydra-build's test tree (it is the first non-kernel package with
+  -- non-empty testModules; the kernel row above likewise folds in testModules).
+  , ("hydra-build",      map moduleName (hydraBuildModules ++ hydraBuildTestModules))
   , ("hydra-coq",        map moduleName hydraCoqModules)
   , ("hydra-ext",        map moduleName hydraExtPackageModules)
   , ("hydra-go",         map moduleName hydraGoModules)
@@ -296,7 +313,8 @@ hydraExtEssentialModules = hydraJvmModules ++ hydraJavaModules ++ hydraPythonMod
 -- output matches exactly; both are flagged for future cleanup.
 hydraExtModules :: [Module]
 hydraExtModules =
-     hydraCoqModules
+     hydraBuildModules
+  ++ hydraCoqModules
   ++ hydraExtPackageModules
   ++ hydraGoModules
   ++ hydraJvmModules
