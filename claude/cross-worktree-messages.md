@@ -88,6 +88,12 @@ to confirm delivery.
    landing on main, a named task completing) — once the scope closes, revert to
    asking per send. **Know your scope** (it is a coordination-hygiene invariant in
    [`agent-hierarchy.md`](agent-hierarchy.md#on-coordination-hygiene)).
+   **Exception — staging agents:** a staging agent sends freely at all times
+   (no per-send permission, dial-independent), and every agent responds to a
+   staging agent freely. Staging is the fleet's coordination hub; see
+   [`branch-flow.md` § Staging's non-issue duties](branch-flow.md#stagings-non-issue-duties).
+   This covers coordination traffic only — GitHub writes and other outward actions
+   still follow the usual rules.
 2. Write the message to your own `claude-hydra-messages/outbox/<filename>.md`.
 3. Copy (not move) to the recipient's inbox:
    `cp outbox/<filename>.md ../<recipient>/claude-hydra-messages/inbox/<filename>.md`.
