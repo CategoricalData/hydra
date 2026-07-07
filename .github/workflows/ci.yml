@@ -33,13 +33,20 @@ jobs:
   haskell:
     name: Haskell tests (JSON build + consistency check)
     runs-on: ubuntu-latest
-    # A healthy full cold run (regenerate all-target dists + stack tests) is ~2.5h
-    # (historically 2h19m-2h43m). 200min (3h20m) sits comfortably above the worst
-    # normal run while well under GitHub's 6h default, so a genuinely wedged job
-    # fails deterministically here instead of needing a human to guess "is it hung?"
-    # and cancel — which previously caused healthy long runs to be cancelled at
-    # ~half-time and misdiagnosed as runner stalls. See #494 CI investigation.
-    timeout-minutes: 200
+    # A healthy full cold run (regenerate all-target dists + stack tests) was ~2.5h
+    # (historically 2h19m-2h43m). The old 200min ceiling sat above that — but the
+    # #535 regression-harnesses step (bin/test-regressions.sh, which builds four
+    # standalone Haskell executables from source before running them) plus kernel
+    # growth pushed real work PAST 200min: every run from 2026-07-06 11:17Z onward
+    # was killed at exactly 200m00s on the final regression step (GitHub reports a
+    # timeout-kill as "cancelled", so it masqueraded as a runner stall for ~30h).
+    # Raised to 300min: headroom above the now-longer run while still well under
+    # GitHub's 6h default, so a genuinely wedged job still fails deterministically
+    # rather than needing a human to guess "is it hung?". If this ceiling is
+    # approached again, speed up the tail (cache/parallelize the regression build)
+    # or split the harnesses into their own job rather than raising it further.
+    # See #494 CI investigation.
+    timeout-minutes: 300
     steps:
       - uses: actions/checkout@v4
       # #541: cheap, toolchain-free gate that must run before anything else
