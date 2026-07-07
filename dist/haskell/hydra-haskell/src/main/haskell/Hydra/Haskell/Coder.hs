@@ -102,9 +102,9 @@ constructModule namespaces mod defs cx g =
                   \namespace ->
                     let raw = Packaging.unModuleName namespace
                         parts = Strings.splitOn "." raw
-                    in (Logic.ifElse (Logic.and (Equality.equal (Lists.length parts) 3) (Equality.equal (Lists.take 2 parts) [
+                    in (Logic.ifElse (Logic.and (Logic.and (Equality.equal (Lists.length parts) 3) (Equality.equal (Lists.take 2 parts) [
                       "hydra",
-                      "lib"])) (Strings.cat2 "hydra.overlay.haskell.lib." (Strings.intercalate "." (Lists.drop 2 parts))) raw)
+                      "lib"])) (Logic.not (Equality.equal raw "hydra.lib.defaults"))) (Strings.cat2 "hydra.overlay.haskell.lib." (Strings.intercalate "." (Lists.drop 2 parts))) raw)
           createDeclarations =
                   \def -> case def of
                     Packaging.DefinitionType v0 ->

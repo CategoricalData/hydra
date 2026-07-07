@@ -182,18 +182,22 @@ constructModule = haskellCoderDefinition "constructModule" $
   -- references them as the canonical "hydra.lib.<sub>" (three segments
   -- exactly). When we see a referenced namespace matching that shape,
   -- rewrite the middle so generated Haskell imports the host-native
-  -- module. Other namespaces (including hydra.lib.defaults.* which is a
-  -- separate kernel-emitted tree) pass through unchanged.
+  -- module. Other namespaces (including hydra.lib.defaults, which is a
+  -- separate kernel-emitted tree with no host-native counterpart) pass
+  -- through unchanged.
   "hRaw">: "namespace" ~> unwrap _ModuleName @@ var "namespace",
   "h">: "namespace" ~>
     "raw" <~ (unwrap _ModuleName @@ var "namespace") $
     "parts" <~ Strings.splitOn (string ".") (var "raw") $
     Logic.ifElse
       (Logic.and
-        (Equality.equal (Lists.length (var "parts")) (int32 3))
-        (Equality.equal
-          (Lists.take (int32 2) (var "parts"))
-          (list [string "hydra", string "lib"])))
+        (Logic.and
+          (Equality.equal (Lists.length (var "parts")) (int32 3))
+          (Equality.equal
+            (Lists.take (int32 2) (var "parts"))
+            (list [string "hydra", string "lib"])))
+        (Logic.not
+          (Equality.equal (var "raw") (string "hydra.lib.defaults"))))
       (Strings.cat2 (string "hydra.overlay.haskell.lib.")
         (Strings.intercalate (string ".") (Lists.drop (int32 2) (var "parts"))))
       (var "raw"),
