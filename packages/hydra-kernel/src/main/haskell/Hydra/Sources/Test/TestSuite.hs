@@ -43,6 +43,7 @@ import qualified Hydra.Sources.Test.Lib.Regex as Regex
 import qualified Hydra.Sources.Test.Lib.Sets as Sets
 import qualified Hydra.Sources.Test.Lib.Strings as Strings
 import qualified Hydra.Sources.Test.Lib.System as System
+import qualified Hydra.Sources.Test.Lib.Text as Text
 import qualified Hydra.Sources.Test.Checking.All as CheckingAll
 import qualified Hydra.Sources.Test.Checking.Advanced as CheckingAdvanced
 import qualified Hydra.Sources.Test.Checking.AlgebraicTypes as CheckingAlgebraicTypes
@@ -124,7 +125,8 @@ libPairs = [
   (Regex.ns, Regex.allTests),
   (Sets.ns, Sets.allTests),
   (Strings.ns, Strings.allTests),
-  (System.ns, System.allTests)]
+  (System.ns, System.allTests),
+  (Text.ns, Text.allTests)]
 
 otherPairs :: [(ModuleName, TypedTermDefinition TestGroup)]
 otherPairs = [
@@ -166,7 +168,7 @@ testSuiteModules =
    Hashing.module_,
    Lists.module_, Literals.module_, Logic.module_, Maps.module_,
    Math.module_, Optionals.module_, Pairs.module_, Regex.module_, Sets.module_, Strings.module_,
-   System.module_,
+   System.module_, Text.module_,
    -- Hoisting tests (including sub-modules)
    HoistingAll.module_, HoistingCases.module_, HoistingLet.module_,
    -- Other tests

@@ -57,6 +57,7 @@ import qualified Hydra.Test.Lib.Regex as Regex
 import qualified Hydra.Test.Lib.Sets as Sets
 import qualified Hydra.Test.Lib.Strings as Strings
 import qualified Hydra.Test.Lib.System as LibSystem
+import qualified Hydra.Test.Lib.Text as Text
 import qualified Hydra.Test.Ordering as Ordering
 import qualified Hydra.Test.Reduction as Reduction
 import qualified Hydra.Test.Rewriting as Rewriting
@@ -102,6 +103,7 @@ allTests =
         Sets.allTests,
         Strings.allTests,
         LibSystem.allTests,
+        Text.allTests,
         Annotations.allTests,
         Modules.allTests,
         Reconcile.allTests,

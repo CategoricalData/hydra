@@ -328,6 +328,7 @@
     "hydra.test.lib.sets",
     "hydra.test.lib.strings",
     "hydra.test.lib.system",
+    "hydra.test.lib.text",
     "hydra.test.ordering",
     "hydra.test.reduction",
     "hydra.test.rewriting",
