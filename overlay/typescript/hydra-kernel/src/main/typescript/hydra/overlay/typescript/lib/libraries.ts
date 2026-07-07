@@ -33,6 +33,8 @@ import * as extractCore from "../../../extract/core.js";
 import * as scoping from "../../../scoping.js";
 import { createHash } from "node:crypto";
 
+import { defaultImplementations } from "../../../lib/defaults.js";
+
 import * as libChars from "./chars.js";
 import * as libEquality from "./equality.js";
 import * as libLists from "./lists.js";
@@ -195,6 +197,15 @@ const bind = <A, B>(e: Either<HydraError, A>, f: (a: A) => Either<HydraError, B>
 
 // === Primitive constructor ===
 
+// `defaultImplementations` is a `Map<Name, Term>` keyed by `Name` object
+// identity, which does not support lookup by a freshly-constructed `Name`
+// (JS `Map` uses reference equality, not structural equality). Re-key it
+// once by the qualified-name string, mirroring `PrimitiveRegistry` in
+// `hydra/primitives.ts`.
+const defaultImplementationsByName = new Map<string, Term>(
+  Array.from(defaultImplementations, ([name, term]) => [name.value, term]),
+);
+
 type Impl = (g: Graph, args: readonly Term[]) => Either<HydraError, Term>;
 
 const prim = (qname: string, ts: TypeScheme, impl: Impl, lazyPositions?: readonly number[], isPure?: boolean): Primitive => {
@@ -206,6 +217,7 @@ const prim = (qname: string, ts: TypeScheme, impl: Impl, lazyPositions?: readonl
     }
     (sig as any).parameters = params;
   }
+  const defaultImpl = defaultImplementationsByName.get(qname);
   return {
     definition: {
       name: { value: qname } as Name,
@@ -213,7 +225,8 @@ const prim = (qname: string, ts: TypeScheme, impl: Impl, lazyPositions?: readonl
       signature: sig,
       isPure: isPure !== false,
       isTotal: true,
-      defaultImplementation: { tag: "none" },
+      defaultImplementation:
+        defaultImpl === undefined ? { tag: "none" } : { tag: "given", value: defaultImpl },
     },
     implementation: impl,
   };
