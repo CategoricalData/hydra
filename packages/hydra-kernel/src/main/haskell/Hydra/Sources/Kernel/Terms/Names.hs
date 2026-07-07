@@ -3,7 +3,7 @@ module Hydra.Sources.Kernel.Terms.Names where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
-  compactName, freshName, freshNames, localNameOf, moduleNameOf, moduleNameToFilePath, nameToFilePath,
+  compactName, dslModuleName, freshName, freshNames, localNameOf, moduleNameOf, moduleNameToFilePath, nameToFilePath,
   normalTypeVariable, pushSubtermStep, qname, qualifyName, restoreTrace,
   chooseUniqueLabel, unqualifyName)
 import qualified Hydra.Dsl.Paths    as Paths
@@ -73,6 +73,7 @@ module_ = Module {
    definitions = [
      toDefinition chooseUniqueLabel,
      toDefinition compactName,
+     toDefinition dslModuleName,
      toDefinition freshName,
      toDefinition freshNames,
      toDefinition localNameOf,
@@ -111,6 +112,27 @@ compactName = define "compactName" $
     "local">: Util.qualifiedNameLocal $ var "qualName"]
     $ Optionals.cases (var "mns") (Core.unName $ var "name") (lambda "ns" $
           Optionals.cases (Maps.lookup (var "ns" :: TypedTerm ModuleName) (var "namespaces")) (var "local") (lambda "pre" $ Strings.cat $ list [var "pre", string ":", var "local"]))
+
+-- | Generate a DSL module name from a source module name
+-- For example, "hydra.core" -> "hydra.dsl.core"
+dslModuleName :: TypedTermDefinition (ModuleName -> ModuleName)
+dslModuleName = define "dslModuleName" $
+  doc "Generate a DSL module name from a source module name" $
+  "ns" ~>
+  "parts" <~ (Strings.splitOn (string ".") (Packaging.unModuleName (var "ns"))) $
+  "prefixFull" <~ (Packaging.moduleName2 (Strings.cat $ list [
+    string "hydra.dsl.",
+    Packaging.unModuleName (var "ns")])) $
+  -- For hydra.* namespaces: hydra.foo -> hydra.dsl.foo
+  -- For other namespaces: foo.bar -> hydra.dsl.foo.bar (preserve full path)
+  -- An empty parts list is unreachable for a well-formed namespace; fall back
+  -- to the full-prefix form.
+  Optionals.cases (Lists.uncons (var "parts")) (var "prefixFull") ("ht" ~>
+      Logic.ifElse (Equality.equal (Pairs.first (var "ht")) (string "hydra"))
+        (Packaging.moduleName2 (Strings.cat $ list [
+          string "hydra.dsl.",
+          Strings.intercalate (string ".") (Pairs.second (var "ht"))]))
+        (var "prefixFull"))
 
 freshName :: TypedTermDefinition (InferenceContext -> (Name, InferenceContext))
 freshName = define "freshName" $

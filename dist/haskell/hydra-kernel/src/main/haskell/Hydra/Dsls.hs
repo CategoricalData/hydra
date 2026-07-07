@@ -128,7 +128,7 @@ dslModule cx graph mod =
       _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (generateBindingsForType cx graph b)) typeBindings) (\typeDslBindings -> Eithers.bind (Eithers.mapList (\d -> generateRefBindings d) (Packaging.moduleDefinitions mod)) (\refDslBindings ->
       let allBindings = deduplicateBindings (Lists.concat2 (Lists.concat typeDslBindings) (Lists.concat refDslBindings))
       in (Logic.ifElse (Lists.null allBindings) (Right Nothing) (Right (Just (Packaging.Module {
-        Packaging.moduleName = (dslModuleName (Packaging.moduleName mod)),
+        Packaging.moduleName = (Names.dslModuleName (Packaging.moduleName mod)),
         Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
           Packaging.entityMetadataDescription = (Just (Strings.cat [
             "DSL functions for ",
@@ -140,25 +140,12 @@ dslModule cx graph mod =
           Packaging.moduleDependencyModule = ns,
           Packaging.moduleDependencyPackage = Nothing}) (Lists.nub (Lists.concat2 [
           Packaging.moduleName mod,
-          (Packaging.ModuleName "hydra.typed")] (Lists.concat2 (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod)) (Lists.map dslModuleName (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod))))))),
+          (Packaging.ModuleName "hydra.typed")] (Lists.concat2 (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod)) (Lists.map Names.dslModuleName (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod))))))),
         Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.bindingName b),
           Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionSignature = (Optionals.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b)),
           Packaging.termDefinitionBody = (Core.bindingTerm b)})) allBindings)})))))))
-
--- | Generate a DSL module name from a source module name
-dslModuleName :: Packaging.ModuleName -> Packaging.ModuleName
-dslModuleName ns =
-
-      let parts = Strings.splitOn "." (Packaging.unModuleName ns)
-          prefixFull =
-                  Packaging.ModuleName (Strings.cat [
-                    "hydra.dsl.",
-                    (Packaging.unModuleName ns)])
-      in (Optionals.cases (Lists.uncons parts) prefixFull (\ht -> Logic.ifElse (Equality.equal (Pairs.first ht) "hydra") (Packaging.ModuleName (Strings.cat [
-        "hydra.dsl.",
-        (Strings.intercalate "." (Pairs.second ht))])) prefixFull))
 
 -- | Build a TypedTerm-wrapped TypeScheme (functions of phantom terms) from a TermSignature
 dslSignatureTypeScheme :: Typing.TermSignature -> Core.TypeScheme

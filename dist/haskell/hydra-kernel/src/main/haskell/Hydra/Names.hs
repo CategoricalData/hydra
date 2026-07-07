@@ -72,6 +72,19 @@ compactName namespaces name =
         ":",
         local])))
 
+-- | Generate a DSL module name from a source module name
+dslModuleName :: Packaging.ModuleName -> Packaging.ModuleName
+dslModuleName ns =
+
+      let parts = Strings.splitOn "." (Packaging.unModuleName ns)
+          prefixFull =
+                  Packaging.ModuleName (Strings.cat [
+                    "hydra.dsl.",
+                    (Packaging.unModuleName ns)])
+      in (Optionals.cases (Lists.uncons parts) prefixFull (\ht -> Logic.ifElse (Equality.equal (Pairs.first ht) "hydra") (Packaging.ModuleName (Strings.cat [
+        "hydra.dsl.",
+        (Strings.intercalate "." (Pairs.second ht))])) prefixFull))
+
 -- | Generate a fresh type variable name, threading InferenceContext
 freshName :: Typing.InferenceContext -> (Core.Name, Typing.InferenceContext)
 freshName cx =

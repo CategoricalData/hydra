@@ -9,7 +9,6 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Decoding as Decoding
 import qualified Hydra.Docs as Docs
-import qualified Hydra.Dsls as Dsls
 import qualified Hydra.Encoding as Encoding
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
@@ -26,6 +25,7 @@ import qualified Hydra.Overlay.Haskell.Lib.Maps as Maps
 import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
 import qualified Hydra.Overlay.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Overlay.Haskell.Lib.Strings as Strings
+import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Paths as Paths
@@ -58,7 +58,7 @@ buildRoutingMap pkgs =
 derivedNames :: Packaging.ModuleName -> [Packaging.ModuleName]
 derivedNames m =
 
-      let dsl = Dsls.dslModuleName m
+      let dsl = Names.dslModuleName m
           enc = Encoding.encodeModuleName m
           dec = Decoding.decodeModuleName m
       in [
