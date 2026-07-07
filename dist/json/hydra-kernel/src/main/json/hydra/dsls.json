@@ -826,7 +826,7 @@
                                                                                   "name": "name",
                                                                                   "term": {
                                                                                     "application": {
-                                                                                      "function": {"variable": "hydra.dsls.dslModuleName"},
+                                                                                      "function": {"variable": "hydra.names.dslModuleName"},
                                                                                       "argument": {
                                                                                         "application": {"function": {"project": {"typeName": "hydra.packaging.Module", "fieldName": "name"}}, "argument": {"variable": "mod"}}}}}},
                                                                                 {
@@ -928,7 +928,7 @@
                                                                                                             "typeApplication": {
                                                                                                               "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
                                                                                                               "type": {"variable": "hydra.packaging.ModuleName"}}},
-                                                                                                          "argument": {"variable": "hydra.dsls.dslModuleName"}}},
+                                                                                                          "argument": {"variable": "hydra.names.dslModuleName"}}},
                                                                                                       "argument": {
                                                                                                         "application": {
                                                                                                           "function": {
@@ -1002,113 +1002,6 @@
                                                                 "type": {"optional": {"variable": "hydra.packaging.Module"}}}}}}}}}}}}}}}}}}}}}}}}}},
                 "annotation": {
                   "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Transform a source module into a DSL module"}}}]}}}}}}},
-    {
-      "term": {
-        "name": "hydra.dsls.dslModuleName",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.packaging.ModuleName"}, "isLazy": false}],
-          "result": {"type": {"variable": "hydra.packaging.ModuleName"}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "ns",
-                "domain": {"variable": "hydra.packaging.ModuleName"},
-                "body": {
-                  "let": {
-                    "bindings": [
-                      {
-                        "name": "parts",
-                        "term": {
-                          "application": {
-                            "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "."}}}},
-                            "argument": {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "ns"}}}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
-                    "body": {
-                      "let": {
-                        "bindings": [
-                          {
-                            "name": "prefixFull",
-                            "term": {
-                              "wrap": {
-                                "typeName": "hydra.packaging.ModuleName",
-                                "body": {
-                                  "application": {
-                                    "function": {"variable": "hydra.lib.strings.cat"},
-                                    "argument": {
-                                      "list": [
-                                        {"literal": {"string": "hydra.dsl."}},
-                                        {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "ns"}}}]}}}}},
-                            "typeScheme": {"variables": [], "body": {"variable": "hydra.packaging.ModuleName"}}}],
-                        "body": {
-                          "application": {
-                            "function": {
-                              "application": {
-                                "function": {
-                                  "application": {
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {
-                                          "typeApplication": {
-                                            "body": {"variable": "hydra.lib.optionals.cases"},
-                                            "type": {"pair": {"first": {"literal": "string"}, "second": {"list": {"literal": "string"}}}}}},
-                                        "type": {"variable": "hydra.packaging.ModuleName"}}},
-                                    "argument": {
-                                      "application": {
-                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.uncons"}, "type": {"literal": "string"}}},
-                                        "argument": {"variable": "parts"}}}}},
-                                "argument": {"variable": "prefixFull"}}},
-                            "argument": {
-                              "lambda": {
-                                "parameter": "ht",
-                                "domain": {"pair": {"first": {"literal": "string"}, "second": {"list": {"literal": "string"}}}},
-                                "body": {
-                                  "application": {
-                                    "function": {
-                                      "application": {
-                                        "function": {
-                                          "application": {
-                                            "function": {
-                                              "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
-                                            "argument": {
-                                              "application": {
-                                                "function": {
-                                                  "application": {
-                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": "string"}}},
-                                                    "argument": {
-                                                      "application": {
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"literal": "string"}}},
-                                                            "type": {"list": {"literal": "string"}}}},
-                                                        "argument": {"variable": "ht"}}}}},
-                                                "argument": {"literal": {"string": "hydra"}}}}}},
-                                        "argument": {
-                                          "wrap": {
-                                            "typeName": "hydra.packaging.ModuleName",
-                                            "body": {
-                                              "application": {
-                                                "function": {"variable": "hydra.lib.strings.cat"},
-                                                "argument": {
-                                                  "list": [
-                                                    {"literal": {"string": "hydra.dsl."}},
-                                                    {
-                                                      "application": {
-                                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.intercalate"}, "argument": {"literal": {"string": "."}}}},
-                                                        "argument": {
-                                                          "application": {
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"literal": "string"}}},
-                                                                "type": {"list": {"literal": "string"}}}},
-                                                            "argument": {"variable": "ht"}}}}}]}}}}}}},
-                                    "argument": {"variable": "prefixFull"}}}}}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Generate a DSL module name from a source module name"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsls.dslSignatureTypeScheme",
