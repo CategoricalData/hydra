@@ -191,7 +191,7 @@ def _patch_graph_with_default_impls(graph: hydra.graph.Graph) -> hydra.graph.Gra
     native implementation unchanged.
     """
     import hydra.reduction as reduction
-    from hydra.overlay.python.dsl.python import FrozenDict
+    from hydra.overlay.python.dsl.python import FrozenDict, Given, None_
     from dataclasses import replace
 
     native_graph = graph  # used as the fallback evaluation context
@@ -209,11 +209,11 @@ def _patch_graph_with_default_impls(graph: hydra.graph.Graph) -> hydra.graph.Gra
 
     patched = {}
     for name, prim in graph.primitives.items():
-        default_impl_term = prim.definition.default_implementation
-        if default_impl_term is not None:
-            patched[name] = replace(prim, implementation=make_default_impl(default_impl_term))
-        else:
-            patched[name] = prim
+        match prim.definition.default_implementation:
+            case None_():
+                patched[name] = prim
+            case Given(impl_term):
+                patched[name] = replace(prim, implementation=make_default_impl(impl_term))
 
     return replace(graph, primitives=FrozenDict(patched))
 

@@ -57,7 +57,11 @@ public class TestSuiteRunner {
     // Cached test infrastructure
     private static Graph testGraph;
 
-    private static synchronized Graph getTestGraph() {
+    /**
+     * Returns the cached, USE_DEFAULT_IMPLS-aware test graph, building it on first call.
+     * This is public because hydra.test.TestEnv delegates to it.
+     */
+    public static synchronized Graph getTestGraph() {
         if (testGraph == null) {
             testGraph = buildTestGraph(USE_DEFAULT_IMPLS);
         }
@@ -95,10 +99,8 @@ public class TestSuiteRunner {
     }
 
     /**
-     * Build the test graph with schema, test data, and primitives.
-     * Mirrors the Haskell testGraph in TestUtils.hs.
-     *
-     * This is public because TestEnv.java delegates to it.
+     * Build the test graph with schema, test data, and primitives, always using
+     * native implementations. Mirrors the Haskell testGraph in TestUtils.hs.
      */
     public static Graph buildTestGraph() {
         return buildTestGraph(false);
