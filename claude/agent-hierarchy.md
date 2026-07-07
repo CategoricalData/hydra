@@ -339,6 +339,48 @@ that already exists:
   the parent's or user's call" rule as the spawn-time table. One small dependency
   makes an Opus coordinator, not a Fable one.
 
+### Capability-tiered mentoring across a parent/child model gap
+
+Because the model tiers differ across the hierarchy, a parent coordinator is
+often running a **more capable model** than its child (Fable parent over an Opus
+child, Opus over `opusplan`). When that gap exists, the review relationship is
+not just lifecycle bookkeeping — it is **mentoring**: the more-capable parent
+sharpens the child's thinking, catches errors, and supplies context the child
+couldn't have. Two disciplines make this work, and both matter:
+
+- **The child owns its hard problems — it does not throw them upward.** The child
+  is expected to *solve* the difficult design decisions in its scope, then bring
+  its **worked solution** to the parent for review: "here is the decision, my
+  analysis, the approach I chose and why, the alternatives I rejected and the
+  tradeoff — does this hold?" That is the correct shape. "Here is a hard fork, you
+  pick" is throwing up its hands — not acceptable; it abdicates a decision the
+  child owns and wastes the point of provisioning a capable child. Lead with
+  analysis and a lean, never a blank ask. (The only legitimate blank-ish ask is
+  after *genuinely* working a problem and being unable to distinguish two options
+  on the merits — and even then, present both with the tradeoff, not "what do I
+  do?") A parent models this upward too: it brings *its* parent a recommendation
+  with reasoning, never "what should I do?"
+- **But the child *does* surface the calls that could genuinely use a smarter
+  look.** The flip side of "own your problems" is not "never ask." A child should
+  proactively route to the parent the design decisions where a more-capable model
+  plausibly sees something it can't — the load-bearing splits, the novel/
+  unproven paths, the behavior-changing flips, anything with a subtle or
+  irreversible downside. Silent over-confidence on a genuinely hard call is as bad
+  as helpless under-confidence. The parent's job is to make those calls *better*,
+  not to make them.
+- **The child respects the parent's context budget.** The parent is usually the
+  longer-lived, higher-stakes session; do not flood it with routine status or
+  every small decision. Batch routine updates; reserve interrupts for the
+  genuinely-review-worthy calls above and for blockers. A well-run child makes the
+  parent's attention *count* — surfacing the few decisions that need the smarter
+  model, handling the rest itself.
+
+The asymmetry to internalize: **cheap to bring a worked design call for review;
+expensive to guess wrong on one silently, and also expensive to abdicate one that
+was yours to make.** The parent raises the bar on the child deliberately — "own
+the calls; I make them better, not for you" — while keeping the door open for the
+hard ones.
+
 ## Context minimization: role-appropriate initial context
 
 Each agent role should start with **only the context its task needs** — not all
