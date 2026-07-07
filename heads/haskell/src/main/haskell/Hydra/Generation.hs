@@ -743,21 +743,6 @@ writeModulesJsonPackageSplit routingMap doInfer distJsonRoot universeMods mods =
             refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
             refreshPerPackageDigests routingMap distJsonRoot universeMods mods
 
--- | Test-side digest anchor. The test universe routes entirely to
--- hydra-kernel today (every test namespace is hydra.test.*), so its
--- freshness cache lives at the per-package test path
--- dist/json/hydra-kernel/build/test/digest.json — the parallel of the
--- main path's per-package build/main/digest.json. We use the package
--- the targets actually route to (rather than hardcoding hydra-kernel)
--- so the anchor follows the routing table if test namespaces ever split
--- across packages.
-testDigestAnchor :: RoutingMap -> FilePath -> [Module] -> FilePath
-testDigestAnchor routingMap distJsonRoot testMods =
-  let pkg = case map fst (groupByPackageIn routingMap testMods) of
-              (p:_) -> p
-              []    -> "hydra-kernel"
-  in perPackageDigestPathFor "test" distJsonRoot pkg
-
 -- | Write test-suite modules to JSON via the per-package incremental
 -- inference driver (#395), the test-side analogue of
 -- 'writeModulesJsonPackageSplit'.
@@ -795,20 +780,23 @@ testDigestAnchor routingMap distJsonRoot testMods =
 writeTestModulesJson :: RoutingMap -> FilePath -> [Module] -> [Module] -> IO ()
 writeTestModulesJson routingMap distJsonRoot mainMods testMods = do
   let universeMods = mainMods ++ testMods
-      digestFile   = testDigestAnchor routingMap distJsonRoot testMods
       testPaths    = [ distJsonRoot FP.</> pkg FP.</> "src" FP.</> "test" FP.</> "json"
                                      FP.</> CodeGeneration.moduleNameToPath (moduleName m) ++ ".json"
                      | (pkg, pkgMods) <- groupByPackageIn routingMap testMods, m <- pkgMods ]
-      -- #546: every package owning test modules has its own build/test digest.
-      -- A cache hit is valid only if ALL of them exist — otherwise a
-      -- downstream per-package assembler fails on the missing one (the kernel
-      -- digest was previously left unwritten because the single anchor points
-      -- at the alphabetically-first package, hydra-build).
+      -- #551: every package owning test modules has its own build/test digest,
+      -- and freshness must be checked against ALL of them, not just the
+      -- (somewhat arbitrary) first one. Reading only one package's digest let
+      -- a stale/missing per-package digest slip past undetected whenever that
+      -- package's own file happened to still match the current universe hash
+      -- while another test-owning package's digest did not — the existence
+      -- check (every digest present) and the freshness check (every digest
+      -- fresh) must span the same set. See #546 for the original
+      -- existence-only guard this extends.
       perPkgTestDigests = [ perPackageDigestPathFor "test" distJsonRoot pkg
                           | (pkg, _) <- groupByPackageIn routingMap testMods ]
   allDigestsPresent <- Prelude.and <$> Prelude.mapM SD.doesFileExist perPkgTestDigests
   hit <- if allDigestsPresent
-           then checkCacheHit digestFile universeMods testPaths
+           then checkCacheHitAll perPkgTestDigests universeMods testPaths
            else return Nothing
   case hit of
     Just _ ->
@@ -824,7 +812,7 @@ writeTestModulesJson routingMap distJsonRoot mainMods testMods = do
         Left e -> do
           putStrLn $ "  Test incremental seed-load failed (" ++ show e
             ++ "); falling back to flat-universe inference."
-          flatFallback universeMods digestFile
+          flatFallback universeMods
         Right mainLoaded -> do
           let seedBindingSchemes = M.fromList
                 [ (termDefinitionName td, ts)
@@ -861,7 +849,7 @@ writeTestModulesJson routingMap distJsonRoot mainMods testMods = do
     -- Last-resort flat path: identical inference to the pre-#395 code,
     -- writing into src/test/json per package and refreshing the test
     -- digest. Only reached if the main-JSON seed load throws.
-    flatFallback universeMods _digestFile = do
+    flatFallback universeMods = do
       mods' <- inferModulesIO universeMods testMods
       writePackageSplitJsonFor routingMap "test" distJsonRoot universeMods universeMods mods'
       refreshTestDigests universeMods
@@ -1358,6 +1346,32 @@ checkCacheHit digestFile universeMods targetPaths = do
     else do
       stored <- Digest.readDigest digestFile
       if stored /= currentDigest
+        then return Nothing
+        else do
+          existFlags <- mapM SD.doesFileExist targetPaths
+          if and existFlags then return (Just currentDigest) else return Nothing
+
+-- | As 'checkCacheHit', but the stored digest is checked against EVERY file
+-- in 'digestFiles' rather than a single one. A hit requires each of them to
+-- match the current universe hash. #551: when several packages each keep
+-- their own copy of what is logically one cache entry (e.g. the test-side
+-- per-package digests, all written from the same 'universeMods' in
+-- 'writeTestModulesJson'), checking only one of those copies can miss a
+-- copy that fell out of sync with the others — a stale or orphaned
+-- per-package digest could otherwise coincidentally match the current
+-- hash while sitting alongside siblings that don't, or simply go
+-- unnoticed because nothing ever re-reads it. Requiring all copies to
+-- agree makes the multi-file redundancy actually load-bearing instead of
+-- cosmetic.
+checkCacheHitAll :: [FilePath] -> [Module] -> [FilePath] -> IO (Maybe Digest.DigestMap)
+checkCacheHitAll digestFiles universeMods targetPaths = do
+  nsFiles <- Digest.discoverModuleNameFiles
+  currentDigest <- Digest.hashUniverse nsFiles universeMods
+  if M.null currentDigest
+    then return Nothing  -- nothing to verify against; always recompute
+    else do
+      storedDigests <- mapM Digest.readDigest digestFiles
+      if any (/= currentDigest) storedDigests
         then return Nothing
         else do
           existFlags <- mapM SD.doesFileExist targetPaths
