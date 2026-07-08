@@ -181,15 +181,30 @@ public class UpdateJavaJson {
             // single-writer (no Haskell DSL fallback), the native driver owns its
             // full emission set. The DSL-type source modules are the type-defining
             // ones: hydra.java.environment and hydra.java.syntax.
+            //
+            // #556: hydra.java.language and hydra.jvm.serde are demand-curated in
+            // too (mirroring the kernel's dslTermModules, #467) — they're the
+            // source modules behind the 5 inline var("hydra.java.language..."/
+            // "hydra.jvm.serde...") string refs this issue retires. Unlike the
+            // type-only modules above, these are TERM-only, so their term
+            // definitions need a TermSignature before Dsls.generateRefBindings will
+            // emit anything for them — see reloadTermSignatureSources below.
             List<Module> dslTypeMods = new ArrayList<>();
             for (Module m : sources) {
                 String ns = m.name.value;
-                if (ns.equals("hydra.java.environment") || ns.equals("hydra.java.syntax")) {
+                if (ns.equals("hydra.java.environment") || ns.equals("hydra.java.syntax")
+                        || ns.equals("hydra.java.language") || ns.equals("hydra.jvm.serde")) {
                     dslTypeMods.add(m);
                 }
             }
-            List<Module> writtenDsl = Generation.synthesizeAndWriteDslModules(
+            // #467/#556: the raw dslTypeMods entries have termDefinitionSignature =
+            // None (inference never runs on derived modules); reload the
+            // term-bearing ones from their just-written dist/json counterparts,
+            // which carry inferAndWriteByPackage's inferred signatures.
+            List<Module> dslSourcesForSynthesis = Generation.reloadTermSignatureSources(
                 distJsonRoot, universePlusSources, dslTypeMods);
+            List<Module> writtenDsl = Generation.synthesizeAndWriteDslModules(
+                distJsonRoot, universePlusSources, dslSourcesForSynthesis);
             System.err.println("  DSL wrappers: " + writtenDsl.size() + " module(s) written");
 
             // #511: synthesize term encode/decode wrappers (hydra.encode.* /

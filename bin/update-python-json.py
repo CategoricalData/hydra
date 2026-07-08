@@ -79,6 +79,7 @@ from hydra.generation import (
     infer_and_write_by_package,
     load_modules_from_json,
     read_manifest_field,
+    reload_term_signature_sources,
     synthesize_and_write_dsl_modules,
 )
 
@@ -215,12 +216,29 @@ def main():
         # single-writer (no Haskell DSL fallback), the native driver owns its
         # full emission set. The DSL-type source modules are the type-defining
         # ones: hydra.python.environment and hydra.python.syntax.
+        #
+        # #556: hydra.python.utils and hydra.python.names are demand-curated in
+        # too (mirroring the kernel's dslTermModules, #467) — they're the source
+        # modules behind the _kernel_refs.py var("hydra.python.utils..."/
+        # "hydra.python.names...") string refs this issue retires. Unlike the
+        # type-only modules above, these are TERM-only, so their term
+        # definitions need a TermSignature before generate_ref_bindings will
+        # emit anything for them — see reload_term_signature_sources below.
         dsl_type_mods = [
             m for m in py_sources
-            if m.name.value in ("hydra.python.environment", "hydra.python.syntax")
+            if m.name.value in (
+                "hydra.python.environment", "hydra.python.syntax",
+                "hydra.python.utils", "hydra.python.names")
         ]
-        written_dsl = synthesize_and_write_dsl_modules(
+        # #467/#556: the raw dsl_type_mods entries have
+        # termDefinitionSignature = None (inference never runs on derived
+        # modules); reload the term-bearing ones from their just-written
+        # dist/json counterparts, which carry infer_and_write_by_package's
+        # inferred signatures.
+        dsl_sources_for_synthesis = reload_term_signature_sources(
             dist_json_root, universe_all, dsl_type_mods)
+        written_dsl = synthesize_and_write_dsl_modules(
+            dist_json_root, universe_all, dsl_sources_for_synthesis)
         print(f"  DSL wrappers: {len(written_dsl)} module(s) written", flush=True)
         t_pkg = time.perf_counter() - t0
         print(f"  done ({t_pkg:.1f}s)", flush=True)

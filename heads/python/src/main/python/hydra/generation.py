@@ -689,6 +689,60 @@ def _list_json_files_recursive(root):
     return out
 
 
+def _unsigned_term_names(m):
+    """Names of term definitions in m with no TermSignature (i.e.
+    termDefinitionSignature = None). Mirrors the Haskell
+    Hydra.Generation.reloadTermSignatureSources's `unsigned`.
+    """
+    from hydra.packaging import DefinitionTerm
+
+    unsigned = []
+    for d in m.definitions:
+        if isinstance(d, DefinitionTerm):
+            td = d.value
+            if isinstance(td.signature, None_):
+                unsigned.append(td.name)
+    return unsigned
+
+
+def reload_term_signature_sources(dist_json_root, universe_mods, mods):
+    """Replace each DSL source module containing term definitions WITHOUT
+    signatures by its just-written dist_json_root counterpart, whose term
+    definitions carry the main pass's inferred signatures. Mirrors the
+    Haskell Hydra.Generation.reloadTermSignatureSources (#467): the raw
+    in-memory source modules always have termDefinitionSignature = None
+    (inference never runs on derived modules, and native drivers build
+    their DSL-module lists from the pre-inference sources list), so
+    without this read-back hydra.dsls.generate_ref_bindings's term path
+    would silently skip every term definition and emit an empty module
+    (#556). Modules with no unsigned term definitions (type modules,
+    primitive-only modules) pass through untouched. Raises if a reloaded
+    module still lacks a term signature, rather than regressing to silent
+    omission.
+    """
+    bs_graph = bootstrap_graph()
+    schema_map = bootstrap_schema_map()
+    result = []
+    for m in mods:
+        if not _unsigned_term_names(m):
+            result.append(m)
+            continue
+        pkg = namespace_to_package(m.name)
+        file_path = os.path.join(
+            dist_json_root, pkg, "src", "main", "json",
+            module_name_to_path(m.name) + ".json")
+        json_val = parse_json_file(file_path)
+        reloaded = decode_module(bs_graph, schema_map, json_val)
+        still_unsigned = _unsigned_term_names(reloaded)
+        if still_unsigned:
+            names = ", ".join(n.value for n in still_unsigned)
+            raise RuntimeError(
+                "DSL read-back: term definitions still lack signatures in "
+                f"{m.name.value}: {names}")
+        result.append(reloaded)
+    return result
+
+
 def generate_dsl_modules(universe_mods, type_mods):
     """Synthesize the DSL-wrapper modules (hydra.dsl.<lang>.*) for a set of
     type-defining modules, mirroring Hydra.Generation.generateDslModules.
