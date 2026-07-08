@@ -289,14 +289,21 @@ leaf/non-top agent that drafts a proposal:
 
 1. writes it into its *own* `proposals/pending/<id>.md`,
 2. sends it up the coordinator chain (ordinary message transport, copying into
-   the coordinator's `proposals/pending/`), and
-3. **immediately moves its own copy to `proposals/forwarded/`** — so its own
-   pending queue does not nag for a proposal whose disposition it does not own.
+   the coordinator's `proposals/pending/` — `mkdir -p` it first if the recipient
+   worktree predates the #557 spawn tooling), and
+3. moves its own copy to `proposals/forwarded/` **only after verifying the copy
+   is present in the coordinator's queue** — so its own pending queue does not
+   nag for a proposal whose disposition it does not own, and so "forwarded"
+   records verified state, not intent.
 
 Only the top coordinator's `pending/` accumulates awaiting-user proposals, and
 only there does the banner fire. A coordinator that is *itself* a child of a
 higher coordinator forwards likewise, until the proposal reaches the top of the
-subtree the user checks in with. See
+subtree the user checks in with. **Every hop is verified separately** — a
+proposal is not "with the user" until it sits in the queue the user actually
+checks; an agent reporting "awaiting user decision" should be able to point at
+that queue entry (a mid-chain coordinator holding an un-forwarded proposal is
+the observed failure mode). See
 [`cross-worktree-messages.md § Issue proposals`](cross-worktree-messages.md#issue-proposals-a-distinct-channel)
 for the transport mechanics (filenames, copy-before-archive, crash recovery).
 The banner always shows on the holding coordinator's surface; the
