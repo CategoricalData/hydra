@@ -71,22 +71,29 @@ Spawning is step 1 of a lifecycle the coordinator owns end to end.
    (Common Lisp, Emacs Lisp, Scheme) need generated files *and* loader-list
    entries the triad never exercises, and a triad-only handoff for a
    host-generating module has reddened `main` after landing.
-4. **Pause to save context** — once the change is rebased, squashed,
-   verified, and the issue is considered resolved (with a `Resolves #`
-   commit), ask the agent to `/save` its branch plan, then **end the
-   agent's session** so it stops consuming context and polling
-   while it waits on the staging cycle (which the coordinator, not the
-   child agent, drives). Do this **only after the coordinator has pulled the
-   agent's commits into the coordinating worktree** — never end a session
-   whose only copy of the work is its own worktree state. A paused agent
-   is idle, not gone.
+4. **Pause to save context (terminate the process, keep the worktree)** —
+   once the change is rebased, squashed, verified, and the issue is *closed
+   via a `Resolves #` commit*, ask the agent to `/save` its branch plan, then
+   **terminate the agent's Claude process** so it stops consuming context and
+   polling while it waits on the staging cycle (which the coordinator, not the
+   child agent, drives). Terminating the process is a distinct, earlier act
+   from *finalizing the worktree* (step 6): **terminate the process here;
+   never touch the worktree, tmux session, issue, or branch — those persist**
+   so the agent can be restarted in place if staging surfaces a bug (step 5).
+   Two preconditions for terminating the process: (a) the agent has `/save`d,
+   and (b) the issue is `Resolves`-closed. Do this **only after the coordinator
+   has pulled the agent's commits into the coordinating worktree** — never
+   terminate a session whose only copy of the work is its own worktree state.
+   A paused agent is idle, not gone; its worktree is untouched until finalize.
 5. **Reopen if bugs surface** — if a defect appears (e.g. a red CI job
    traced to the change), start a **new** session for that agent
    (usually `opusplan`; plain `opus` for architecture-level fixes) and give
    it instructions. Then re-pause or finalize as appropriate.
-6. **Finalize** — once the staging cycle completes, the change lands on
-   `main`, **CI on the landing tip is green**, **and every child issue is
-   closed**. Three gates, all required:
+6. **Finalize the worktree** — the end-of-life step, distinct from
+   terminating the process (step 4, which typically already happened). This is
+   what waits for the appropriate time: once the staging cycle completes, the
+   change lands on `main`, **CI on the landing tip is green**, **and every child
+   issue is closed**. Three gates, all required:
    - **Landed + green.** Not merely "pushed" — a push with red CI is not
      finalized. Key the CI check on the workflow *named* `[CI]`, not "the latest
      run": a fast auxiliary workflow (Dependency-Graph, JavaDocs) can show green
@@ -98,12 +105,14 @@ Spawning is step 1 of a lifecycle the coordinator owns end to end.
      took on children mid-flight extended its own finalize gate by exactly that
      much.
 
-   Then: `/save` the branch plan again if it changed since the pause, shut down
-   the agent's session, and copy the branch plan to
-   `worktrees/closed/<branch>-plan.md` (the archive `spawn-issue-worktree.sh`
-   checks to avoid re-spawning a closed issue). Archive the plan **before**
-   `git worktree remove` (removing first loses the plan). The worktree may then
-   be removed. Do **not** finalize on a red or in-progress CI run, or with an
+   Then: `/save` the branch plan again if it changed since the pause (restart
+   the process briefly if it was already terminated in step 4 and the plan
+   needs updating), ensure the agent's Claude process is terminated, and copy
+   the branch plan to `worktrees/closed/<branch>-plan.md` (the archive
+   `spawn-issue-worktree.sh` checks to avoid re-spawning a closed issue).
+   Archive the plan **before** `git worktree remove` (removing first loses the
+   plan). Only now — after landed + green — may the worktree be removed. Do
+   **not** finalize the worktree on a red or in-progress CI run, or with an
    open child — reopen (step 5) instead.
 
 ## Context hygiene (an ongoing duty, not a lifecycle step)
