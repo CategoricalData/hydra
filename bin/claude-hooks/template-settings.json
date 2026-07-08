@@ -14,6 +14,10 @@
           },
           {
             "type": "command",
+            "command": "bin/claude-hooks/decisions-hook.sh"
+          },
+          {
+            "type": "command",
             "command": "bin/claude-hooks/autonomy-hook.sh"
           }
         ]

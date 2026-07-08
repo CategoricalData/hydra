@@ -176,7 +176,7 @@ for hook in inbox-hook.sh notification-hook.sh stop-hook.sh; do
         exit 1
     fi
 done
-for hook in proposals-hook.sh autonomy-hook.sh; do
+for hook in proposals-hook.sh autonomy-hook.sh decisions-hook.sh; do
     if [ ! -x "$WT/bin/claude-hooks/$hook" ]; then
         echo "warning: bin/claude-hooks/$hook not present in this worktree." >&2
         echo "         It is expected until #557 lands on origin/main. The corresponding" >&2
@@ -222,6 +222,12 @@ mkdir -p "$WT/claude-hydra-messages/proposals/pending"
 mkdir -p "$WT/claude-hydra-messages/proposals/forwarded"
 mkdir -p "$WT/claude-hydra-messages/proposals/approved"
 mkdir -p "$WT/claude-hydra-messages/proposals/declined"
+# Design-decision queue (decisions-hook.sh; agent-hierarchy.md § Design decisions):
+# pending/ (awaiting answer; banner watches), forwarded/ (sent up-chain),
+# answered/ (answer recorded + routed down to the asker).
+mkdir -p "$WT/claude-hydra-messages/decisions/pending"
+mkdir -p "$WT/claude-hydra-messages/decisions/forwarded"
+mkdir -p "$WT/claude-hydra-messages/decisions/answered"
 TS="$(date -u +%Y-%m-%dT%H-%M-%SZ)"
 cat > "$WT/claude-hydra-messages/inbox/${TS}-coordinator-assignment.md" <<EOF
 # Assignment: GitHub issue #${NUM}

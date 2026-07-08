@@ -309,6 +309,37 @@ for the transport mechanics (filenames, copy-before-archive, crash recovery).
 The banner always shows on the holding coordinator's surface; the
 attention-marker fires on age/urgency escalation.
 
+## Design decisions: a distinct channel (decisions/)
+
+Proposals cover "should this issue exist?"; **decisions** cover "choose A or B
+for in-flight work" — and unlike proposals they frequently BLOCK a live agent.
+The observed failure mode this channel eliminates: an agent asks a design
+question in its own pane or plan doc, idles waiting, and nobody knows until a
+human tours every tmux session.
+
+Mechanics mirror the proposals queue (same transport, same verify-after-copy,
+same single-authoritative-queue principle; dirs under
+`claude-hydra-messages/decisions/`, hook `decisions-hook.sh`), with three
+differences:
+
+1. **Every decision file carries `blocking: yes|no`.** Blocking means the
+   asking agent is STOPPED; the banner sorts these first and they set the
+   sweep priority.
+2. **Coordinators answer, not just forward.** Each hop answers what is within
+   its own authority (design calls scoped to its subtree) and forwards up only
+   genuinely user-level questions. Most decisions should die before reaching
+   the user.
+3. **The lifecycle completes DOWNWARD.** An answer recorded at the top is not
+   a disposition: the file moves to `answered/` only once the answer has been
+   routed back down the chain to the asking agent (verify-after-copy at every
+   hop). "Answered but never relayed" is the second half of the failure mode.
+
+An agent that finds itself pausing on any question it cannot own MUST file a
+decision rather than idling silently: write `decisions/pending/<id>.md` (the
+question, the options, its own recommendation, `blocking:` flag), send it up,
+move the copy to `forwarded/`, and — if non-blocking — continue on its
+best-guess with the guess documented in the plan doc.
+
 ## Model selection by agent role
 
 The model an agent runs is part of its role definition, not an incidental spawn

@@ -36,7 +36,27 @@ claude-hydra-messages/
       <id>.md                      ← user approved (verdict recorded); may be filed
     declined/
       <id>.md                      ← user declined (verdict recorded)
+  decisions/                       ← design-question queue (often BLOCKING!)
+    pending/
+      <id>.md                      ← awaiting an answer (authoritative only at the
+                                     coordinator that owns the disposition; must
+                                     carry a `blocking: yes|no` line)
+    forwarded/
+      <id>.md                      ← asker's/mid-chain copy after sending it up
+    answered/
+      <id>.md                      ← answer recorded AND routed back down to the
+                                     asking agent (not done until the asker has it)
 ```
+
+`decisions/` carries **design questions** — "choose A or B for in-flight work."
+They bubble UP exactly like proposals (write to own `pending/`, send up-chain,
+move own copy to `forwarded/`, verify-after-copy at every hop), but differ in
+two ways: a coordinator ANSWERS what is within its own authority instead of
+forwarding everything to the user, and the lifecycle is complete only when the
+answer has been routed back DOWN to the asking agent. A `blocking: yes` decision
+means an agent is stopped on it; the decisions hook surfaces those first. Never
+leave a design question sitting in a tmux pane or plan doc — file it here, so
+the top coordinator's queue is the single place the user looks.
 
 `inbox/`/`outbox/` carry **messages** (a message is "done" once the *receiver*
 addresses it). `proposals/` carries **issue proposals** (a proposal is "done"
