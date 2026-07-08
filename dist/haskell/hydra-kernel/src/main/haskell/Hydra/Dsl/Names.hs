@@ -89,6 +89,13 @@ compactName arg0 arg1 =
         Core.applicationArgument = (Typed.unTypedTerm arg0)})),
       Core.applicationArgument = (Typed.unTypedTerm arg1)}))
 
+-- | DSL reference to hydra.names.dslModuleName
+dslModuleName :: Typed.TypedTerm Packaging.ModuleName -> Typed.TypedTerm Packaging.ModuleName
+dslModuleName arg0 =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.names.dslModuleName")),
+      Core.applicationArgument = (Typed.unTypedTerm arg0)}))
+
 -- | DSL reference to hydra.names.freshName
 freshName :: Typed.TypedTerm Typing.InferenceContext -> Typed.TypedTerm (Core.Name, Typing.InferenceContext)
 freshName arg0 =
