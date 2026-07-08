@@ -108,13 +108,15 @@ def default_primitive_definition(name: Name, typ, lazy_args: list[int] = []) -> 
             for i, p in enumerate(sig.parameters)
         ]
         sig = dataclasses.replace(sig, parameters=new_params)
+    import hydra.lib.defaults
+    default_impl = hydra.lib.defaults.default_implementations().get(name)
     return PrimitiveDefinition(
         name=name,
         signature=sig,
         metadata=None_(),
         is_pure=True,
         is_total=True,
-        default_implementation=None_(),
+        default_implementation=None_() if default_impl is None else Given(default_impl),
     )
 
 

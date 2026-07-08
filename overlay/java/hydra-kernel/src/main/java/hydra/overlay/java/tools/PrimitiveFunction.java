@@ -102,7 +102,7 @@ public abstract class PrimitiveFunction {
             signatureWithLaziness(),
             Boolean.TRUE,
             Boolean.TRUE,
-            Optional.none());
+            Optional.givenNullable(hydra.lib.Defaults.defaultImplementations().get(name())));
         return new Primitive(definition, nativeImpl);
     }
 }

@@ -23,11 +23,13 @@ public class TestEnv {
      * (Map Name Type -> Map Name Term -> Graph); the actual graph is built
      * from the TestSuiteRunner and ignores both arguments — primitives and
      * kernel bindings are host-language specific and can't be expressed at
-     * the DSL level.
+     * the DSL level. Delegates to TestSuiteRunner.getTestGraph() so that
+     * HYDRA_DEFAULT_IMPLS is honored (that cache is the USE_DEFAULT_IMPLS-aware
+     * one; TestSuiteRunner.buildTestGraph() always builds a native-only graph).
      */
     public static Graph testGraph(Map<Name, Type> testTypes, Map<Name, Term> testTerms) {
         if (cachedGraph == null) {
-            cachedGraph = TestSuiteRunner.buildTestGraph();
+            cachedGraph = TestSuiteRunner.getTestGraph();
         }
         return cachedGraph;
     }

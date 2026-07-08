@@ -1,0 +1,52 @@
+{
+  "name": "hydra.dsl.lib.defaults",
+  "metadata": {"description": "DSL functions for hydra.lib.defaults", "comments": [], "seeAlso": []},
+  "dependencies": [
+    {"module": "hydra.lib.defaults"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.lib.eithers"},
+    {"module": "hydra.lib.equality"},
+    {"module": "hydra.lib.lists"},
+    {"module": "hydra.lib.logic"},
+    {"module": "hydra.lib.maps"},
+    {"module": "hydra.lib.math"},
+    {"module": "hydra.lib.optionals"},
+    {"module": "hydra.lib.pairs"},
+    {"module": "hydra.lib.sets"},
+    {"module": "hydra.dsl.lib.eithers"},
+    {"module": "hydra.dsl.lib.equality"},
+    {"module": "hydra.dsl.lib.lists"},
+    {"module": "hydra.dsl.lib.logic"},
+    {"module": "hydra.dsl.lib.maps"},
+    {"module": "hydra.dsl.lib.math"},
+    {"module": "hydra.dsl.lib.optionals"},
+    {"module": "hydra.dsl.lib.pairs"},
+    {"module": "hydra.dsl.lib.sets"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.lib.defaults.defaultImplementations",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "variable",
+                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.defaults.defaultImplementations"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL reference to hydra.lib.defaults.defaultImplementations"}}}]}}}}}]}

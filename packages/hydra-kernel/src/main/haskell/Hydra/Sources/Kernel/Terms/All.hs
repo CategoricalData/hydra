@@ -27,6 +27,7 @@ import qualified Hydra.Sources.Kernel.Terms.Lexical         as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Literals        as Literals
 
 import qualified Hydra.Sources.Kernel.Lib.Chars             as LibChars
+import qualified Hydra.Sources.Kernel.Lib.Defaults          as LibDefaults
 import qualified Hydra.Sources.Kernel.Lib.Effects           as LibEffects
 import qualified Hydra.Sources.Kernel.Lib.Eithers           as LibEithers
 import qualified Hydra.Sources.Kernel.Lib.Equality          as LibEquality
@@ -101,6 +102,7 @@ kernelPrimaryTermsModules = [
   Languages.module_,
   Lexical.module_,
   LibChars.module_,
+  LibDefaults.module_,
   LibEffects.module_,
   LibEithers.module_,
   LibEquality.module_,
@@ -155,6 +157,7 @@ kernelPrimaryTermsModules = [
 kernelLibModules :: [Module]
 kernelLibModules = [
   LibChars.module_,
+  LibDefaults.module_,
   LibEithers.module_,
   LibEquality.module_,
   LibLists.module_,

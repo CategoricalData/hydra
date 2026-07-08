@@ -28,14 +28,16 @@ test_context = hydra.typing.InferenceContext(fresh_type_variable_count=0, trace=
 # repeated accesses are cheap. Imports test_suite_runner inside the
 # function body to defer the circular import (test_suite_runner imports
 # hydra.test.test_graph, which imports this module). Both arguments are
-# accepted for signature parity but ignored — the test_suite_runner
-# already maintains the live test graph used by all Python tests.
+# accepted for signature parity but ignored. Delegates to
+# test_suite_runner.get_test_graph() so that HYDRA_DEFAULT_IMPLS is honored
+# (that cache is the USE_DEFAULT_IMPLS-aware one; build_test_graph() called
+# with no arguments always builds a native-only graph).
 _cached_graph = None
 
 def test_graph(test_types=None, test_terms=None):
     global _cached_graph
     if _cached_graph is None:
-        from test_suite_runner import build_test_graph
-        _cached_graph = build_test_graph()
+        from test_suite_runner import get_test_graph
+        _cached_graph = get_test_graph()
     return _cached_graph
 test_graph.__test__ = False  # type: ignore[attr-defined]

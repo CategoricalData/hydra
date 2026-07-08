@@ -220,7 +220,7 @@ object Libraries:
       hydra.scoping.typeSchemeToTermSignature(ts),
       true,
       true,
-      None)
+      hydra.lib.defaults.defaultImplementations.get(name))
 
   private def mkPrim(name: String, ts: TypeScheme): Primitive =
     Primitive(mkPrimDef(name, ts), stubImpl)
