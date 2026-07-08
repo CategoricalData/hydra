@@ -72,6 +72,20 @@ if [ -f "$HYDRA_JAVA_DIR/src/test/java/hydra/test/TestEnv.java" ]; then
     cp "$HYDRA_JAVA_DIR/src/test/java/hydra/test/TestEnv.java" "$OUTPUT_DIR/src/test/java/hydra/test/"
 fi
 
+# #546: hydra-build owns hydra.build.* (main) + hydra.test.build.* (test), relocated out
+# of hydra-kernel. The kernel's generated TestSuite references hydra.test.build.*, which in
+# turn reference hydra.build.*; neither is emitted into the cell under --kernel-only. Copy
+# both from the hydra-build baseline (else: "package hydra.test.build does not exist").
+JAVA_BUILD_BASELINE="$HYDRA_ROOT/dist/java/hydra-build/src"
+if [ -d "$JAVA_BUILD_BASELINE/main/java/hydra/build" ]; then
+    mkdir -p "$JAVA_DST/build"
+    cp -r "$JAVA_BUILD_BASELINE/main/java/hydra/build/." "$JAVA_DST/build/"
+fi
+if [ -d "$JAVA_BUILD_BASELINE/test/java/hydra/test/build" ]; then
+    mkdir -p "$OUTPUT_DIR/src/test/java/hydra/test/build"
+    cp -r "$JAVA_BUILD_BASELINE/test/java/hydra/test/build/." "$OUTPUT_DIR/src/test/java/hydra/test/build/"
+fi
+
 # On-demand assembly of missing coder packages used to live here (and again
 # in invoke-java-host.sh). Both loops were eliminated in #309 by hoisting
 # the work into bootstrap-all.sh's pre-sync step, which calls

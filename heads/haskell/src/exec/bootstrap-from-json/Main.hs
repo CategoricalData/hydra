@@ -447,10 +447,18 @@ main = do
   -- a transitive dependency of the always-emitted kernel test suite
   -- (hydra.test.testSuite -> hydra.test.build.* -> hydra.build.*, Option A /
   -- #546/#547), so they must be present for the kernel test tree to compile.
+  -- #546/#547: whenever the kernel test suite is emitted (--include-tests), it
+  -- references hydra.test.build.* -> hydra.build.* (Option A), so hydra-build's
+  -- main modules must be in the universe to type those refs — otherwise
+  -- cross-host generation fails with "untyped term variable:
+  -- hydra.build.modules.dedupPreservingOrder". This holds for the plain demo
+  -- invocation (--kernel-only --include-tests, no --package/--all-packages),
+  -- which previously hit the empty `otherwise` branch and dropped hydra-build.
   let extPackagesToLoad
         | optExtOnly opts                           = extDemoPackages
         | Just p <- optPackage opts, p `elem` allExtPackages = packageDeps p
         | optAllPackages opts                       = ["hydra-build"]
+        | optIncludeTests opts                      = ["hydra-build"]
         | otherwise                                 = []
 
   dslMods <- if optIncludeDsls opts
@@ -998,14 +1006,14 @@ main = do
             extModsForTests = Prelude.filter (\m -> moduleName m `elem` testExtraDeps) allMods
         when (not (Prelude.null extModsForTests)) $ do
           putStrLn $ "Generating " ++ show (length extModsForTests) ++ " ext module(s) needed by tests..."
-          case target of
-            "haskell"    -> generateSources moduleToHaskell    haskellLanguage    False outMain allUniverse extModsForTests >> return ()
-            "java"       -> generateSources moduleToJava       javaLanguage       False outMain allUniverse extModsForTests >> return ()
-            "python"     -> generateSources moduleToPython     pythonLanguage     False outMain allUniverse extModsForTests >> return ()
-            "go"         -> generateSources moduleToGo  goLanguage         False outMain allUniverse extModsForTests >> return ()
-            "typescript" -> generateSources moduleToTypeScript typeScriptLanguage False outMain allUniverse extModsForTests >> return ()
-            _ | Just gen <- lispGenerator -> generateSources gen lispLanguage False outMain allUniverse extModsForTests >> return ()
-            _ -> return ()
+          -- Route through genForDirT (consumerTransform) rather than raw
+          -- generateSources so these modules get the #473-Step-0 primitive
+          -- redirect (hydra.lib.* -> hydra.<lang>.lib.*) that the main/test sets
+          -- get. Without it, e.g. hydra.build.modules calls hydra.lib.lists.nub
+          -- as a raw PrimitiveDefinition (uncallable at runtime on non-Haskell
+          -- targets: "'PrimitiveDefinition' object is not callable"). Universe is
+          -- allUniverse (main + test), matching genTestForDir below.
+          _ <- genForDirT consumerTransform allUniverse outMain extModsForTests
           putStrLn ""
 
       putStrLn $ "Mapping test modules to " ++ targetCap ++ "..."

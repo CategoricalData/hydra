@@ -304,6 +304,14 @@ def main():
     # Keep full module list for test universe
     full_mods = baseline_mods + coder_mods
 
+    # #546/#547: the kernel test suite references hydra.test.build.* -> hydra.build.*
+    # (Option A). When emitting tests, hydra-build's main modules must be in the
+    # universe so those refs type-check; otherwise cross-host generation fails with
+    # "Unknown variable: hydra.test.build.modules.allTests". Mirrors the Haskell
+    # bootstrap-from-json + Java Bootstrap fix.
+    if args.include_tests:
+        full_mods = full_mods + _load_package_main(dist_json_root, "hydra-build")
+
     # Generate main modules
     out_main = os.path.join(out_dir, "src/main")
     print(f"Mapping {len(mods_to_generate)} modules to {target_cap}...", flush=True)
@@ -370,6 +378,14 @@ def main():
         step_start = time.time()
         test_namespaces = read_manifest_field(kernel_main_dir, "testModules")
         test_mods = load_modules_from_json(test_json_dir, test_namespaces)
+        # #546/#547: also load hydra-build's OWN test modules (hydra.test.build.*),
+        # imported by the kernel test suite (Option A) but living in hydra-build's
+        # test tree, not hydra-kernel's.
+        build_main_dir = _package_main_dir(dist_json_root, "hydra-build")
+        build_test_json_dir = os.path.join(dist_json_root, "hydra-build", "src", "test", "json")
+        build_test_ns = read_manifest_field(build_main_dir, "testModules")
+        if build_test_ns:
+            test_mods = test_mods + load_modules_from_json(build_test_json_dir, build_test_ns)
         step_time = time.time() - step_start
         test_bindings = sum(len(m.definitions) for m in test_mods)
         print(f"  Loaded {len(test_mods)} test modules ({test_bindings} bindings).", flush=True)

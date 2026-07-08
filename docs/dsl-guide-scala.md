@@ -13,6 +13,10 @@ The Scala DSL was introduced in 0.17 (#509) so that the `hydra-scala` coder pack
 could be authored natively in Scala instead of via a Haskell DSL,
 parallelling the Java (#346) and Python (#346) migrations.
 The legacy Haskell DSL copy under `packages/hydra-scala/src/main/haskell/` has been deleted.
+A follow-up usability pass (#553) brought the Scala DSL's ergonomics to parity with the Java/Python
+passes from #430: a `makeLocal` helper for local/cross-module references, a fluent `DefBuilder`,
+and deduplication of infrastructure (`cat2`, the kernel-module dependency list) that had been
+copy-pasted across the coder source files.
 
 ## Prerequisites
 
@@ -62,16 +66,17 @@ in `dist/json/`.
   selectively (renaming `var` to `v` since `var` is a Scala reserved word) and brings in
   `applyP`, `lambda`, `let`, `field`, `string`, `int32`, `bool`, `list`, `nothing`,
   `just`, `doc`, `constant`, `cases`, `casesWithDefault`, `project`, `unwrap`, `wrap`,
-  `inject`.
+  `inject`, `makeLocal`, `define`, `cat2`.
 - **`var` reference**: use the imported alias `v("name")` to construct a `TypedTerm` variable
   reference. Equivalent to the Haskell `var "name"`.
 - **Function application**: use `applyP("hydra.lib.foo.bar", arg1, arg2, …)` for primitive
-  application (eta-expanded by the Scala codegen). For curried application of a `TypedTerm`
-  function value, use `Phantoms.apply(fn, arg1, arg2, …)` (variadic; folds a curried apply
-  chain).
+  application (eta-expanded by the Scala codegen; one varargs overload covers any arity). For
+  curried application of a `TypedTerm` function value, use `Phantoms.apply(fn, arg1, arg2, …)`
+  (variadic; folds a curried apply chain).
 - **Let bindings**: prefer the multi-binding form
-  `let(Seq(field("a", expr1), field("b", expr2), …), body)`. Hydra's let is letrec by default,
-  so a binding's value can reference its own name and its siblings'.
+  `let(Seq(field("a", expr1), field("b", expr2), …), body)`, or the varargs form
+  `binds(field("a", expr1), field("b", expr2), …)(body)` when writing bindings inline. Hydra's
+  let is letrec by default, so a binding's value can reference its own name and its siblings'.
 - **Recursive helpers**: bind via `field("collectFoo", lambda("t", lambda("acc", …)))` and
   call them with `Phantoms.apply(v("collectFoo"), …)`. The recursive call goes through `v(name)`
   rather than the Scala `private val` so the Hydra inference engine sees a single
@@ -80,6 +85,62 @@ in `dist/json/`.
   field("variantA", lambda("v", …)), field("variantB", lambda("v", …)), …)`. Field ordering
   is preserved into the generated Scala source's `match` cases — match the Haskell DSL's
   order to keep generated output structurally aligned.
+- **Local/cross-module references**: use `makeLocal(ns)` instead of spelling out FQN strings —
+  see [Local references](#local-references-makelocal) below.
+- **Definitions**: use the fluent `define(NS, "name").doc(...).lam(...).to(body)` builder instead
+  of the flat `` Phantoms.`def`(NS, name, doc(...)) `` form — see
+  [Fluent definitions](#fluent-definitions-defbuilder) below.
+
+## Local references (`makeLocal`)
+
+Self- and cross-module references within the Scala coder sources used to be fully-spelled FQN
+strings: `applyP("hydra.scala.coder.dropDomains", ...)` or `v("hydra.scala.utils.sname")`. This is
+brittle under renames and hard to read. `Phantoms.makeLocal(ns)` builds a small closure that
+prefixes a local name with the namespace, producing the same `Name`/`String` that `v`/`applyP`
+already accept:
+
+```scala
+private val local = makeLocal(NS)                    // self-module references
+private val localUtils = makeLocal("hydra.scala.utils")  // cross-module references
+
+// Instead of applyP("hydra.scala.coder.dropDomains", ...):
+applyP(local("dropDomains"), v("n"), ...)
+
+// Instead of v("hydra.scala.utils.typeToString"):
+v(localUtils("typeToString"))
+```
+
+Define one `local` (or `localX`) val per namespace a file references, near the top of the object,
+alongside the `DEPS` list. This is the Scala analogue of Java's `ref(Def)` and Python's
+`make_local` — see each guide's equivalent section.
+
+## Fluent definitions (`DefBuilder`)
+
+The flat `` Phantoms.`def`(NS, "name", doc("...", body)) `` form nests inside-out when a body has
+several lambda parameters and a description. `Phantoms.define(ns, name)` starts a fluent builder
+instead:
+
+```scala
+lazy val dropDomainsDef: Definition =
+  define(NS, "dropDomains").doc("Drop N domain types from a function type, returning the remaining type")
+    .lam("n").lam("t").to(
+      applyP("hydra.lib.logic.ifElse", ...))
+```
+
+`.doc(description)` is optional; `.lam(param)` (or `.lams(p1, p2, ...)`) can be chained zero or
+more times — each adds one implicit outer `lambda` around the eventual body, applied
+outermost-first, matching `lambda("n", lambda("t", ...))`. `.to(body)` closes over the body (taken
+by-name) and produces the `Definition`.
+
+When a body is long enough to warrant its own name — the prevailing style in Serde.scala and
+Coder.scala — bind it as a `private val fooBody = lambda(...)` first (params still inside the
+lambda chain) and pass the whole thing with zero `.lam()` calls: `define(NS, "foo").doc("...").to(fooBody)`.
+Both styles go through the same builder; which one to use is a readability call based on body size,
+not a structural difference.
+
+Scala's `lazy val` (used at each `lazy val fooDef` call site) already resolves forward and
+cross-references regardless of source order, so — unlike Java's `Supplier`-deferred `Def` — the
+body passed to `.to(...)` is not specially deferred beyond Scala's own by-name parameter.
 
 ## Inferring opaque `TypedTerm[Term]` values
 
@@ -112,19 +173,28 @@ sources (which spell out `project(...)` + `apply(...)`); prefer `proj`/`projTerm
 
 ## Differences from the Java and Python guides
 
-The Scala DSL deliberately omits several idioms that Java and Python provide, because Scala's own
-language features already cover them or because the ergonomic helpers have not been ported yet
-(tracked in #553):
+Following the #553 usability pass, the Scala DSL has parity with Java/Python on the ergonomics
+below. Remaining differences are deliberate — either Scala's own language features already cover
+the gap, or the idiom doesn't apply to Scala's laziness model:
 
-- **No fluent def builder.** Scala uses the flat `Phantoms` def method (`` `def`(NS, name,
-  doc(..., body)) ``); `lazy val` already solves definition-ordering, so the inside-out nesting is
-  the only remaining cost.
-- **No `recordWith` copy-with-update.** No current Scala site needs it; port opportunistically.
-- **No typed local-ref helper.** Self/cross-module references are fully-spelled FQN strings
-  (`applyP("hydra.scala.<module>.<name>", …)` / `v("hydra....")`), not typed `ref(Def)` (Java) or
-  `_local(...)` (Python). A `makeLocal(ns)` analogue is the headline item of #553.
-- **Laziness model.** Java defers bodies with `Supplier`, Python is eager, Scala uses `lazy val` —
-  see each guide's Conventions section.
+- **`recordWith`** exists (`Phantoms.recordWith`, ported from Java's `Phantoms.java`) but is not
+  yet used by any current Scala coder site — port call sites to it opportunistically as they come
+  up, the same way `proj`/`projTerm` are available but not yet adopted everywhere.
+- **`binds`** (the varargs `let` form) is a distinct name from `let`, not an overload — Scala's
+  existing `let(bindings: Seq[Field], body)` already avoids the arity-explosion problem that
+  motivated Java's 7 hand-unrolled `let(Field b1..b7, body)` overloads, so `binds` here is pure
+  convenience for inline-listed bindings, not a structural fix. Don't rename this to `let`: doing
+  so would collide with the existing `let(name, value, body)` and `let(Seq[Field], body)`
+  overloads and create overload-resolution ambiguity.
+- **Laziness model.** Java defers definition bodies with `Supplier`, Python is eager, Scala uses
+  `lazy val` at each `lazy val fooDef` call site plus a by-name parameter on `DefBuilder.to` — three
+  different mechanisms converging on the same guarantee (forward/cross-references between
+  definitions resolve regardless of source order).
+- **No typed generated-DSL reference layer yet.** Java has `hydra.dsl.Strip`/`hydra.dsl.Serialization`-style
+  typed, rename-safe references to kernel functions (#467); Scala doesn't generate these yet.
+  `makeLocal` covers *intra-package* Scala-to-Scala references (self/cross-module within
+  `hydra.sources.scala`) but not typed references into the kernel or other packages — those are
+  still spelled as raw primitive-name strings passed to `applyP`/`v`, same as before #553.
 
 ## Generation pipeline
 

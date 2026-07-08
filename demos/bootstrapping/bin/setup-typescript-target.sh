@@ -82,6 +82,18 @@ for f in "$HYDRA_TS_TEST_OVERLAY"/*.ts; do
     cp "$f" "$OUTPUT_DIR/src/test/typescript/hydra/test/"
 done
 
+# #546: overlay hydra-build's generated main+test (hydra.build.* + hydra.test.build.*),
+# referenced by the kernel testSuite but absent from the hydra-kernel dist tree.
+HYDRA_TS_BUILD_DIST="$HYDRA_ROOT/dist/typescript/hydra-build/src"
+if [ -d "$HYDRA_TS_BUILD_DIST/main/typescript/hydra/build" ]; then
+    mkdir -p "$OUTPUT_DIR/src/main/typescript/hydra/build"
+    cp -r "$HYDRA_TS_BUILD_DIST/main/typescript/hydra/build/." "$OUTPUT_DIR/src/main/typescript/hydra/build/"
+fi
+if [ -d "$HYDRA_TS_BUILD_DIST/test/typescript/hydra/test/build" ]; then
+    mkdir -p "$OUTPUT_DIR/src/test/typescript/hydra/test/build"
+    cp -r "$HYDRA_TS_BUILD_DIST/test/typescript/hydra/test/build/." "$OUTPUT_DIR/src/test/typescript/hydra/test/build/"
+fi
+
 # Rewrite the test runner's import of testSuite from the heads/typescript
 # dev path (`../../../../../dist/typescript/hydra-kernel/.../testSuite.ts`)
 # to the demo-local path (`./hydra/test/testSuite.ts`). In the demo

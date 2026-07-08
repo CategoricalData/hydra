@@ -58,4 +58,19 @@ object Helpers:
   def unqualifiedDeps(modules: ModuleName*): Seq[ModuleDependency] =
     modules.map(unqualifiedDep)
 
+  /**
+   * Namespaces of all kernel type modules, in the exact order produced by the Haskell pipeline
+   * (`Hydra.Sources.Kernel.Types.All.kernelTypesModuleNames`) — keep this order so generated JSON
+   * dependency lists stay byte-identical to the Haskell baseline.
+   */
+  val kernelTypesModuleNames: Seq[ModuleName] = Seq(
+    "hydra.paths", "hydra.ast", "hydra.coders", "hydra.core", "hydra.docs",
+    "hydra.error.checking", "hydra.error.core", "hydra.error.file",
+    "hydra.error.packaging", "hydra.error.system",
+    "hydra.errors", "hydra.file", "hydra.graph", "hydra.json.model",
+    "hydra.packaging", "hydra.parsing",
+    "hydra.query", "hydra.relational", "hydra.system", "hydra.tabular",
+    "hydra.testing", "hydra.time", "hydra.topology", "hydra.typed",
+    "hydra.typing", "hydra.util", "hydra.validation", "hydra.variants")
+
 end Helpers
