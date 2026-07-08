@@ -7,6 +7,7 @@ import hydra.dsl.Errors;
 import hydra.dsl.Packaging;
 import hydra.overlay.java.dsl.Types;
 import hydra.dsl.java.Environment;
+import hydra.dsl.java.Language;
 import hydra.dsl.java.Syntax;
 import hydra.dsl.lib.Eithers;
 import hydra.dsl.lib.Equality;
@@ -2699,7 +2700,7 @@ public class Utils {
                         Equality.equal(var("name"), string("_")),
                         string("ignored"),
                         hydra.dsl.Formatting.sanitizeWithUnderscores(
-                            var("hydra.java.language.reservedWords"),
+                            Language.reservedWords(),
                             var("name")))));
 
     public static final Def suppressWarningsUncheckedAnnotation = def("suppressWarningsUncheckedAnnotation")

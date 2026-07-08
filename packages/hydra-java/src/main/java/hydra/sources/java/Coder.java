@@ -7,6 +7,7 @@ import hydra.dsl.Core;
 import hydra.dsl.Packaging;
 import hydra.overlay.java.dsl.Types;
 import hydra.dsl.java.Environment;
+import hydra.dsl.java.Language;
 import hydra.dsl.java.Syntax;
 import hydra.dsl.lib.Eithers;
 import hydra.dsl.lib.Equality;
@@ -977,7 +978,7 @@ public class Coder {
                         proj(QualifiedName.TYPE_, QualifiedName.LOCAL, "qn")),
                     field("sanitized",
                         hydra.dsl.Formatting.sanitizeWithUnderscores(
-                            var("hydra.java.language.reservedWords"),
+                            Language.reservedWords(),
                             var("local"))),
                     field("unq",
                         hydra.dsl.Names.unqualifyName(
@@ -4129,7 +4130,7 @@ public class Coder {
                     field("parts",
                         Strings.splitOn(string("."), var("nsStr"))),
                     hydra.dsl.Formatting.sanitizeWithUnderscores(
-                        var("hydra.java.language.reservedWords"),
+                        Language.reservedWords(),
                         hydra.dsl.Formatting.capitalize(
                             Optionals.fromOptional(var("nsStr"), Lists.maybeLast(var("parts")))))));
 
