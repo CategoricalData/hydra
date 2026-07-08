@@ -662,7 +662,7 @@ importsToText kind currentNs names =
                         targetIsTest =
                                 Logic.and (Logic.not (Lists.null targetSegs)) (Equality.equal (Optionals.fromOptional "" (Lists.maybeHead targetSegs)) "test")
                         targetPathSegs =
-                                Logic.ifElse (Equality.equal (Optionals.fromOptional "" (Lists.maybeHead targetSegs)) "lib") (Lists.concat2 [
+                                Logic.ifElse (Logic.and (Equality.equal (Optionals.fromOptional "" (Lists.maybeHead targetSegs)) "lib") (Logic.not (Equality.equal (Packaging.unModuleName ns) "hydra.lib.defaults"))) (Lists.concat2 [
                                   "overlay",
                                   "typescript"] targetSegs) targetSegs
                         targetPath = Strings.intercalate "/" targetPathSegs

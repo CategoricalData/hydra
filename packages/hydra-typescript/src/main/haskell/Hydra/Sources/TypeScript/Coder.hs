@@ -1494,9 +1494,13 @@ importsToText = def "importsToText" $
         -- only the generated PrimitiveDefinition def-modules). A generated reference to
         -- hydra.lib.<x> must import from overlay/typescript/lib/<x>. Remap ONLY the on-disk
         -- path here; the module alias (nsSlug below) keeps the original hydra.lib.<x> segments
-        -- so the import alias still matches the call sites.
+        -- so the import alias still matches the call sites. Other namespaces (including
+        -- hydra.lib.defaults, which is a separate kernel-emitted tree with no host-native
+        -- counterpart -- see #565/#549) pass through unchanged.
         "targetPathSegs" <~ Logic.ifElse
-          (Equality.equal (Optionals.fromOptional (string "") (Lists.maybeHead (var "targetSegs"))) (string "lib"))
+          (Logic.and
+            (Equality.equal (Optionals.fromOptional (string "") (Lists.maybeHead (var "targetSegs"))) (string "lib"))
+            (Logic.not (Equality.equal (unwrap _ModuleName @@ var "ns") (string "hydra.lib.defaults"))))
           (Lists.concat2 (list [string "overlay", string "typescript"]) (var "targetSegs"))
           (var "targetSegs") $
         "targetPath" <~ Strings.intercalate (string "/") (var "targetPathSegs") $
