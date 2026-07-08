@@ -86,6 +86,37 @@ case "$PKG" in
         symlink_hydra_tree "$RDF_HYDRA" "$PKG_HYDRA"
         generate_npm_build "$PKG"
         ;;
+    hydra-build)
+        echo "  Generating $PKG -> typescript (main + test)"
+        "$HYDRA_ROOT/heads/haskell/bin/transform-json-to-target.sh" \
+            typescript "$PKG" main \
+            --output "$HYDRA_ROOT/dist/typescript"
+        "$HYDRA_ROOT/heads/haskell/bin/transform-json-to-target.sh" \
+            typescript "$PKG" test \
+            --output "$HYDRA_ROOT/dist/typescript"
+        # Cross-package self-containment: symlink kernel files into this package.
+        PKG_HYDRA="$HYDRA_ROOT/dist/typescript/$PKG/src/main/typescript/hydra"
+        KERNEL_HYDRA="$HYDRA_ROOT/dist/typescript/hydra-kernel/src/main/typescript/hydra"
+        symlink_hydra_tree "$KERNEL_HYDRA" "$PKG_HYDRA"
+        # hydra-kernel's own testSuite.ts imports hydra.test.build.* by relative
+        # path (hydra.test.testSuite is kernel-owned per #546/#547 and still
+        # references these test groups), expecting them alongside its own test
+        # tree. Symlink hydra-build's test/build subtree into hydra-kernel's test
+        # tree so that import resolves. hydra-kernel is assembled before
+        # hydra-build in sync.sh's Phase 3 loop, so its test tree already exists.
+        BUILD_TEST_HYDRA="$HYDRA_ROOT/dist/typescript/$PKG/src/test/typescript/hydra"
+        KERNEL_TEST_HYDRA="$HYDRA_ROOT/dist/typescript/hydra-kernel/src/test/typescript/hydra"
+        symlink_hydra_tree "$BUILD_TEST_HYDRA" "$KERNEL_TEST_HYDRA"
+        # The build test files themselves import their sibling main modules via
+        # relative paths into hydra/build/*.js. Symlink hydra-build's own (i.e.
+        # non-symlinked) hydra/build/ main subtree into hydra-kernel's main tree
+        # too, so those imports resolve from the test files' new home.
+        KERNEL_BUILD_DEST="$HYDRA_ROOT/dist/typescript/hydra-kernel/src/main/typescript/hydra/build"
+        if [ -d "$PKG_HYDRA/build" ] && [ ! -e "$KERNEL_BUILD_DEST" ]; then
+            ln -sf "$PKG_HYDRA/build" "$KERNEL_BUILD_DEST"
+        fi
+        generate_npm_build "$PKG"
+        ;;
     hydra-coq|hydra-wasm|hydra-ext)
         echo "  skipping: $PKG -> typescript (not yet supported)"
         ;;
