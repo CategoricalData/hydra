@@ -216,6 +216,12 @@ jobs:
           path: ~/.stack
           key: stack-${{ hashFiles('heads/haskell/stack.yaml', 'heads/haskell/package.yaml') }}
           restore-keys: stack-
+      # Post-#418 the overlay/haskell/hydra-kernel runtime files are untracked,
+      # so a fresh checkout alone can't build the Haskell project (GHC fails
+      # with "Could not find module 'Hydra.Overlay.Haskell.Lib.*'"). git
+      # checkout can't restore them either. This is the canonical fix.
+      - name: Restore overlay kernel runtime
+        run: heads/haskell/bin/overlay-kernel-runtime.sh
       - name: Run regression harnesses
         run: bin/test-regressions.sh
 
