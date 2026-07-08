@@ -12,6 +12,15 @@ Subcommands:
   supports-target <pkg> <tgt>   Exit 0 if <pkg> declares <tgt> in its
                                 targetLanguages field (or has no field, meaning
                                 every target). Exit 1 otherwise.
+  source-language <pkg>         Print <pkg>'s package.json sourceLanguage field
+                                (the language its DSL sources are authored in —
+                                "haskell" for most packages, "java"/"python"/
+                                "scala" for the host-native coders since #346/
+                                #509). Defaults to "haskell" if the field or the
+                                manifest itself is absent. Used by
+                                bin/lib/assemble-common.sh:component_identity
+                                to find the right src/main/<lang>/ tree to
+                                fingerprint (#562).
 
 Version accessors (single source of truth is hydra.json; the standalone VERSION
 file has been retired):
@@ -246,6 +255,15 @@ def cmd_reverse_closure(root: Path, args: list[str]) -> int:
     return 0
 
 
+def cmd_source_language(root: Path, args: list[str]) -> int:
+    if len(args) != 1:
+        print("Usage: hydra-packages.py source-language <pkg>", file=sys.stderr)
+        return 2
+    meta = load_package_meta(root, args[0])
+    print(meta.get("sourceLanguage", "haskell"))
+    return 0
+
+
 def cmd_supports_target(root: Path, args: list[str]) -> int:
     if len(args) != 2:
         print("Usage: hydra-packages.py supports-target <pkg> <target>", file=sys.stderr)
@@ -397,6 +415,7 @@ COMMANDS = {
     "topo": cmd_topo,
     "reverse-closure": cmd_reverse_closure,
     "supports-target": cmd_supports_target,
+    "source-language": cmd_source_language,
     "current-version": cmd_current_version,
     "set-current-version": cmd_set_current_version,
     "host-version": cmd_host_version,

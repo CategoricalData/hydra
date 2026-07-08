@@ -8,7 +8,9 @@ against the current state.
 Inputs hashed:
   - packages/*/src/main/haskell/Hydra/Sources/**.hs           (Haskell DSL sources)
   - packages/hydra-java/src/main/java/hydra/sources/**/*.java (Java DSL sources, #344)
+  - packages/hydra-jvm/src/main/java/hydra/sources/**/*.java  (JVM DSL sources, #509)
   - packages/hydra-python/src/main/python/hydra/sources/**/*.py (Python DSL sources, #344)
+  - packages/hydra-scala/src/main/scala/hydra/sources/**/*.scala (Scala DSL sources, #509)
   - heads/haskell/src/main/haskell/**.hs                      (hand-written runtime)
   - heads/haskell/src/test/haskell/**.hs                      (hand-written test infra)
   - heads/haskell/src/exec/**/*.hs                            (executables: transform-haskell-dsl-to-json, etc.)
@@ -74,13 +76,17 @@ def collect_inputs(hydra_root: Path) -> list:
             if sources.is_dir():
                 for hs in sources.rglob("*.hs"):
                     paths.add(hs)
-    # Host-native DSL source trees (#344). The Java and Python coders are
-    # now authored host-native, so edits there change Phase 1 outputs even
-    # though no .hs file moved. Future host-native trees (Scala, TypeScript)
-    # should be added here when they exist.
+    # Host-native DSL source trees (#344, #509). The Java, Python, Scala, and
+    # JVM coders are now authored host-native, so edits there change Phase 1
+    # outputs even though no .hs file moved. This list previously omitted
+    # hydra-scala/hydra-jvm even after their sources went host-native (#509) —
+    # the same blind spot as #562's component_identity bug, folded into that
+    # fix. Add future host-native trees here when they exist.
     host_native_dsl_dirs = (
         ("hydra-java", "src/main/java/hydra/sources", "*.java"),
+        ("hydra-jvm", "src/main/java/hydra/sources", "*.java"),
         ("hydra-python", "src/main/python/hydra/sources", "*.py"),
+        ("hydra-scala", "src/main/scala/hydra/sources", "*.scala"),
     )
     for pkg_name, subdir, glob in host_native_dsl_dirs:
         d = packages / pkg_name / subdir if packages.is_dir() else None

@@ -2,6 +2,6 @@
   "packageFormatVersion": 1,
   "name": "hydra-python",
   "description": "Python support for Hydra",
-  "sourceLanguage": "haskell",
+  "sourceLanguage": "python",
   "dependencies": ["hydra-kernel"]
 }
