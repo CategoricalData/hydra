@@ -89,9 +89,10 @@ const convertCases = (rhs: unknown): unknown => {
     const ck = k === "type" ? "type_" : k === "function" ? "function_" : k;
     out[ck] = convert(obj[k]);
   }
-  // Name-wrap fields.
+  // Name-wrap fields. Checks the original raw value (obj[k], not out[k]) —
+  // see the matching comment in convert() for why. Confirmed via bug_564.
   for (const k of ["typeName", "name"]) {
-    if (typeof out[k] === "string") out[k] = { value: out[k] };
+    if (typeof obj[k] === "string") out[k] = { value: obj[k] };
   }
   if ("default" in obj && obj.default !== null) {
     out.default_ = { tag: "given", value: convert(obj.default) };
@@ -100,6 +101,28 @@ const convertCases = (rhs: unknown): unknown => {
   }
   return out;
 };
+
+// Compact string form: a union variant whose payload is Unit encodes as a
+// bare JSON string (the variant name) instead of a single-key object — see
+// docs/json-format.md "Tagged unions" § Compact string form for unit-valued
+// variants. Decoders must accept both forms.
+//
+// Scoped narrowly to "unit" and "void" — the two arm names that are
+// zero-payload Type variants (Type.unit, Type.void) and can ONLY appear as
+// ordinary JSON data in this converter's untyped, position-agnostic walk if
+// something coincidentally used the bare word as string content, which
+// doesn't happen anywhere in the kernel's own JSON.
+//
+// Width-only LiteralType/IntegerType/FloatType arms (string, boolean,
+// binary, decimal, int32, float32, ...) are NOT included here even though
+// they're also zero-payload in their own unions: those same words are
+// common as ordinary string-typed *data* elsewhere (Literal.string content,
+// Name values, map keys), so blindly treating every occurrence as a
+// compact tag produces false positives — confirmed by a full test-suite
+// regression when "string"/"boolean" were added (bug_564 investigation).
+// convert() has no type context to disambiguate; only extend this set for
+// arm names proven collision-free by the full suite.
+const NULLARY_UNION_ARMS = new Set<string>(["unit", "void"]);
 
 // Convert one JSON value from the adjacently-tagged kernel encoding to
 // the internally-tagged runtime encoding. Recursive.
@@ -112,6 +135,7 @@ const convertCases = (rhs: unknown): unknown => {
 //       Term_let's "default" field stays as "default_".
 const convert = (j: unknown): unknown => {
   if (j === null || j === undefined) return j;
+  if (typeof j === "string" && NULLARY_UNION_ARMS.has(j)) return { tag: j };
   if (typeof j !== "object") return j;
   if (Array.isArray(j)) return j.map(convert);
   const obj = j as Record<string, unknown>;
@@ -196,10 +220,19 @@ const convert = (j: unknown): unknown => {
   }
   // Wrap Name-valued fields. In the JSON, Hydra Names serialize as bare
   // strings; the runtime expects `{value: "..."}`. The kernel's record
-  // types use these field names for Name positions:
+  // types use these field names for Name positions.
+  //
+  // Check the ORIGINAL raw value (obj[k]), not the post-convert() value
+  // (out[k]): convert()'s NULLARY_UNION_ARMS compact-tag check turns a raw
+  // "unit"/"void" string into {tag: "unit"}/{tag: "void"} regardless of
+  // position, so a Name that happens to equal "unit" or "void" (e.g.
+  // hydra.core.Type's own `unit`/`void` union-arm field names) would no
+  // longer read as a string post-convert() and would silently skip the
+  // Name-wrap below. Testing obj[k] instead is immune, since Name-position
+  // fields are always plain strings in the raw JSON. Confirmed via bug_564.
   for (const k of ["name", "parameter", "typeName", "field", "fieldName"]) {
-    if (typeof out[k] === "string") {
-      out[k] = { value: out[k] };
+    if (typeof obj[k] === "string") {
+      out[k] = { value: obj[k] };
     }
   }
   return out;
