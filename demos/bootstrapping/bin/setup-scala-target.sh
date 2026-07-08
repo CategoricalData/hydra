@@ -66,6 +66,18 @@ if [ -d "$HYDRA_SCALA_OVERLAY/src/test/scala" ]; then
     cp -r "$HYDRA_SCALA_OVERLAY/src/test/scala/hydra" "$OUTPUT_DIR/src/test/scala/"
 fi
 
+# #546: overlay hydra-build's generated main+test (hydra.build.* + hydra.test.build.*),
+# referenced by the kernel testSuite but absent from the hydra-kernel dist tree.
+HYDRA_SCALA_BUILD_DIST="$HYDRA_ROOT/dist/scala/hydra-build"
+if [ -d "$HYDRA_SCALA_BUILD_DIST/src/main/scala/hydra" ]; then
+    mkdir -p "$OUTPUT_DIR/src/main/scala/hydra"
+    cp -r "$HYDRA_SCALA_BUILD_DIST/src/main/scala/hydra/." "$OUTPUT_DIR/src/main/scala/hydra/"
+fi
+if [ -d "$HYDRA_SCALA_BUILD_DIST/src/test/scala/hydra" ]; then
+    mkdir -p "$OUTPUT_DIR/src/test/scala/hydra"
+    cp -r "$HYDRA_SCALA_BUILD_DIST/src/test/scala/hydra/." "$OUTPUT_DIR/src/test/scala/hydra/"
+fi
+
 # Summary
 STATIC_COUNT=$(find "$OUTPUT_DIR/src/main" -name "*.scala" 2>/dev/null | wc -l | tr -d ' ')
 echo "  Static resources: $STATIC_COUNT files"

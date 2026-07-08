@@ -39,6 +39,10 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 HYDRA_HASKELL_DIR="$HYDRA_ROOT/packages/hydra-haskell"
 HYDRA_KERNEL_DIR="$HYDRA_ROOT/packages/hydra-kernel"
+# #546: hydra-build owns Hydra.Sources.Build.Test.* (relocated out of hydra-kernel).
+# The kernel's Hydra.Sources.Test.TestSuite still imports them (Option-A stopgap,
+# TODO(#547)), so the bootstrap cell must include hydra-build's DSL sources too.
+HYDRA_BUILD_DIR="$HYDRA_ROOT/packages/hydra-build"
 HYDRA_HASKELL_HEAD_DIR="$HYDRA_ROOT/heads/haskell"
 HASKELL_RESOURCES="$SCRIPT_DIR/../resources/haskell"
 
@@ -53,10 +57,12 @@ PREP_HASH=$(
              "$HYDRA_ROOT/overlay/haskell/hydra-kernel/src/main/haskell/Hydra" \
              "$HYDRA_KERNEL_DIR/src/main/haskell/Hydra" \
              "$HYDRA_HASKELL_DIR/src/main/haskell/Hydra" \
+             "$HYDRA_BUILD_DIR/src/main/haskell/Hydra" \
              "$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Sources/Decode" \
              "$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Sources/Encode" \
              "$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl" \
              "$HYDRA_ROOT/dist/haskell/hydra-haskell/src/main/haskell/Hydra/Dsl" \
+             "$HYDRA_ROOT/dist/haskell/hydra-build/src/main/haskell/Hydra/Build" \
              "$HYDRA_HASKELL_HEAD_DIR/src/test/haskell" \
              "$HASKELL_RESOURCES" \
              -type f 2>/dev/null
@@ -123,6 +129,13 @@ fi
 if [ -d "$HYDRA_HASKELL_DIR/src/main/haskell/Hydra" ]; then
     cp -r "$HYDRA_HASKELL_DIR/src/main/haskell/Hydra/." "$OUTPUT_DIR/src/main/haskell/Hydra/"
 fi
+# Overlay hydra-build DSL sources (Hydra.Sources.Build.Test.{Modules,Reconcile,Routing}).
+# #546 relocated these out of hydra-kernel; the kernel Hydra.Sources.Test.TestSuite still
+# imports them (Option-A stopgap, TODO(#547)), so without this the cell's TestSuite fails
+# with "Could not find module 'Hydra.Sources.Build.Test.Reconcile'".
+if [ -d "$HYDRA_BUILD_DIR/src/main/haskell/Hydra" ]; then
+    cp -r "$HYDRA_BUILD_DIR/src/main/haskell/Hydra/." "$OUTPUT_DIR/src/main/haskell/Hydra/"
+fi
 
 # Copy ext modules from baseline. Hand-written Sources modules import generated
 # modules like Hydra.Sources.Decode.Core and Hydra.Sources.Encode.Core which live in dist.
@@ -130,6 +143,16 @@ echo "  Copying ext modules from baseline..."
 HS_GEN="$OUTPUT_DIR/src/main/haskell"
 HS_KERNEL_BASELINE="$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell"
 HS_HASKELL_BASELINE="$HYDRA_ROOT/dist/haskell/hydra-haskell/src/main/haskell"
+HS_BUILD_BASELINE="$HYDRA_ROOT/dist/haskell/hydra-build/src/main/haskell"
+# #546: the generated test modules Hydra.Test.Build.* import the generated runtime
+# Hydra.Build.{Modules,Reconcile,Routing}, which live in the hydra-build baseline (not
+# hydra-kernel) and aren't emitted into the cell under --kernel-only. Copy them so the
+# generated Test/Build/*.hs resolve (else: "Could not find module 'Hydra.Build.Modules'").
+if [ -d "$HS_BUILD_BASELINE/Hydra/Build" ]; then
+    mkdir -p "$HS_GEN/Hydra/Build"
+    cp -r "$HS_BUILD_BASELINE/Hydra/Build/." "$HS_GEN/Hydra/Build/"
+    echo "    Copied Hydra/Build from hydra-build baseline"
+fi
 # Copy Sources/Decode and Sources/Encode (generated DSL source modules imported by
 # hand-written Sources modules like Templates.hs and Annotations.hs)
 for src_dir in Decode Encode; do
