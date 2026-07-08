@@ -384,6 +384,8 @@ Current commands:
   and re-read it (space-saving context switch between major tasks)
 - `/improve-docs` — end-of-session documentation pass
 - `/inference-bench` — cross-host inference benchmark
+- `/issues` — drain the pending issue-proposal queue with the user: present
+  drafts, discuss, then file (+ usually spawn) or discard, per-item user-gated
 - `/lexicon` — regenerate `docs/hydra-lexicon.txt`
 - `/maintenance` — full maintenance pass
 - `/save` — save state to the branch plan document

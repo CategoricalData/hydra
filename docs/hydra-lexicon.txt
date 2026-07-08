@@ -48,6 +48,8 @@ Primitives:
   hydra.lib.files.rename : ((hydra.file.FilePath → hydra.file.FilePath → effect<either<hydra.error.file.FileError, unit>>))
   hydra.lib.files.status : ((hydra.file.FilePath → effect<either<hydra.error.file.FileError, hydra.file.FileStatus>>))
   hydra.lib.files.writeFile : ((hydra.file.FilePath → binary → effect<either<hydra.error.file.FileError, unit>>))
+  hydra.lib.hashing.sha256 : ((binary → binary))
+  hydra.lib.hashing.sha256Hex : ((binary → string))
   hydra.lib.lists.apply : (forall x,y. (list<(x → y)> → list<x> → list<y>))
   hydra.lib.lists.bind : (forall x,y. (list<x> → (x → list<y>) → list<y>))
   hydra.lib.lists.concat : (forall x. (list<list<x>> → list<x>))
@@ -268,6 +270,266 @@ Primitives:
   hydra.lib.text.encodeUtf8 : ((string → binary))
 
 Types:
+  hydra.ast.Associativity = union{none:unit, left:unit, right:unit, both:unit}
+  hydra.ast.BlockStyle = record{indent:optional<string>, newlineBeforeContent:boolean, newlineAfterContent:boolean}
+  hydra.ast.BracketExpr = record{brackets:hydra.ast.Brackets, enclosed:hydra.ast.Expr, style:hydra.ast.BlockStyle}
+  hydra.ast.Brackets = record{open:hydra.ast.Symbol, close:hydra.ast.Symbol}
+  hydra.ast.Expr = union{const:hydra.ast.Symbol, indent:hydra.ast.IndentedExpression, op:hydra.ast.OpExpr, brackets:hydra.ast.BracketExpr, seq:hydra.ast.SeqExpr}
+  hydra.ast.IndentStyle = union{allLines:string, subsequentLines:string}
+  hydra.ast.IndentedExpression = record{style:hydra.ast.IndentStyle, expr:hydra.ast.Expr}
+  hydra.ast.Op = record{symbol:hydra.ast.Symbol, padding:hydra.ast.Padding, precedence:hydra.ast.Precedence, associativity:hydra.ast.Associativity}
+  hydra.ast.OpExpr = record{op:hydra.ast.Op, lhs:hydra.ast.Expr, rhs:hydra.ast.Expr}
+  hydra.ast.Padding = record{left:hydra.ast.Ws, right:hydra.ast.Ws}
+  hydra.ast.Precedence = wrap(int32)
+  hydra.ast.SeqExpr = record{op:hydra.ast.Op, elements:list<hydra.ast.Expr>}
+  hydra.ast.Symbol = wrap(string)
+  hydra.ast.Ws = union{none:unit, space:unit, break:unit, breakAndIndent:string, doubleBreak:unit}
+  hydra.coders.Adapter = (∀t1.(∀t2.(∀v1.(∀v2.(∀e.record{isLossy:boolean, source:t1, target:t2, coder:(hydra.coders.Coder @ v1 @ v2 @ e)})))))
+  hydra.coders.AdapterContext = record{graph:hydra.graph.Graph, language:hydra.coders.Language, adapters:map<hydra.core.Name, (hydra.coders.Adapter @ hydra.core.Type @ hydra.core.Type @ hydra.core.Term @ hydra.core.Term @ hydra.errors.Error)>}
+  hydra.coders.Bicoder = (∀t1.(∀t2.(∀v1.(∀v2.(∀e.record{encode:(t1 → (hydra.coders.Adapter @ t1 @ t2 @ v1 @ v2 @ e)), decode:(t2 → (hydra.coders.Adapter @ t2 @ t1 @ v2 @ v1 @ e))})))))
+  hydra.coders.CaseConventions = record{constant:hydra.util.CaseConvention, directory:hydra.util.CaseConvention, enumValue:hydra.util.CaseConvention, field:hydra.util.CaseConvention, file:hydra.util.CaseConvention, module:hydra.util.CaseConvention, term:hydra.util.CaseConvention, termVariable:hydra.util.CaseConvention, type:hydra.util.CaseConvention, typeVariable:hydra.util.CaseConvention}
+  hydra.coders.Coder = (∀v1.(∀v2.(∀e.record{encode:(v1 → either<e, v2>), decode:(v2 → either<e, v1>)})))
+  hydra.coders.CoderDirection = union{encode:unit, decode:unit}
+  hydra.coders.Language = record{name:hydra.coders.LanguageName, constraints:hydra.coders.LanguageConstraints, supportedFeatures:set<hydra.coders.LanguageFeature>, caseConventions:hydra.coders.CaseConventions, defaultFileExtension:hydra.file.FileExtension}
+  hydra.coders.LanguageConstraints = record{literalVariants:set<hydra.variants.LiteralVariant>, floatTypes:set<hydra.core.FloatType>, integerTypes:set<hydra.core.IntegerType>, termVariants:set<hydra.variants.TermVariant>, typeVariants:set<hydra.variants.TypeVariant>, types:(hydra.core.Type → boolean)}
+  hydra.coders.LanguageFeature = union{partialApplication:unit, nestedCaseStatements:unit, nestedPolymorphicLetBindings:unit}
+  hydra.coders.LanguageName = wrap(string)
+  hydra.coders.SymmetricAdapter = (∀t.(∀v.(∀e.(hydra.coders.Adapter @ t @ t @ v @ v @ e))))
+  hydra.coders.TraversalOrder = union{pre:unit, post:unit}
+  hydra.coders.TypeAdapter = (hydra.coders.AdapterContext → hydra.core.Type → either<string, (hydra.coders.SymmetricAdapter @ hydra.core.Type @ hydra.core.Term @ string)>)
+  hydra.core.AnnotatedTerm = record{body:hydra.core.Term, annotation:hydra.core.Term}
+  hydra.core.AnnotatedType = record{body:hydra.core.Type, annotation:hydra.core.Term}
+  hydra.core.Application = record{function:hydra.core.Term, argument:hydra.core.Term}
+  hydra.core.ApplicationType = record{function:hydra.core.Type, argument:hydra.core.Type}
+  hydra.core.Binding = record{name:hydra.core.Name, term:hydra.core.Term, typeScheme:optional<hydra.core.TypeScheme>}
+  hydra.core.CaseAlternative = record{name:hydra.core.Name, handler:hydra.core.Term}
+  hydra.core.CaseStatement = record{typeName:hydra.core.Name, default:optional<hydra.core.Term>, cases:list<hydra.core.CaseAlternative>}
+  hydra.core.EitherType = record{left:hydra.core.Type, right:hydra.core.Type}
+  hydra.core.Field = record{name:hydra.core.Name, term:hydra.core.Term}
+  hydra.core.FieldType = record{name:hydra.core.Name, type:hydra.core.Type}
+  hydra.core.FloatType = union{float32:unit, float64:unit}
+  hydra.core.FloatValue = union{float32:float32, float64:float64}
+  hydra.core.ForallType = record{parameter:hydra.core.Name, body:hydra.core.Type}
+  hydra.core.FunctionType = record{domain:hydra.core.Type, codomain:hydra.core.Type}
+  hydra.core.Injection = record{typeName:hydra.core.Name, field:hydra.core.Field}
+  hydra.core.IntegerType = union{bigint:unit, int8:unit, int16:unit, int32:unit, int64:unit, uint8:unit, uint16:unit, uint32:unit, uint64:unit}
+  hydra.core.IntegerValue = union{bigint:bigint, int8:int8, int16:int16, int32:int32, int64:int64, uint8:uint8, uint16:uint16, uint32:uint32, uint64:uint64}
+  hydra.core.Lambda = record{parameter:hydra.core.Name, domain:optional<hydra.core.Type>, body:hydra.core.Term}
+  hydra.core.Let = record{bindings:list<hydra.core.Binding>, body:hydra.core.Term}
+  hydra.core.Literal = union{binary:binary, boolean:boolean, decimal:decimal, float:hydra.core.FloatValue, integer:hydra.core.IntegerValue, string:string}
+  hydra.core.LiteralType = union{binary:unit, boolean:unit, decimal:unit, float:hydra.core.FloatType, integer:hydra.core.IntegerType, string:unit}
+  hydra.core.MapType = record{keys:hydra.core.Type, values:hydra.core.Type}
+  hydra.core.Name = wrap(string)
+  hydra.core.PairType = record{first:hydra.core.Type, second:hydra.core.Type}
+  hydra.core.Projection = record{typeName:hydra.core.Name, fieldName:hydra.core.Name}
+  hydra.core.Record = record{typeName:hydra.core.Name, fields:list<hydra.core.Field>}
+  hydra.core.Term = union{annotated:hydra.core.AnnotatedTerm, application:hydra.core.Application, cases:hydra.core.CaseStatement, either:either<hydra.core.Term, hydra.core.Term>, inject:hydra.core.Injection, lambda:hydra.core.Lambda, let:hydra.core.Let, list:list<hydra.core.Term>, literal:hydra.core.Literal, map:map<hydra.core.Term, hydra.core.Term>, optional:optional<hydra.core.Term>, pair:(hydra.core.Term, hydra.core.Term), project:hydra.core.Projection, record:hydra.core.Record, set:set<hydra.core.Term>, typeApplication:hydra.core.TypeApplicationTerm, typeLambda:hydra.core.TypeLambda, unit:unit, unwrap:hydra.core.Name, variable:hydra.core.Name, wrap:hydra.core.WrappedTerm}
+  hydra.core.Type = union{annotated:hydra.core.AnnotatedType, application:hydra.core.ApplicationType, effect:hydra.core.Type, either:hydra.core.EitherType, forall:hydra.core.ForallType, function:hydra.core.FunctionType, list:hydra.core.Type, literal:hydra.core.LiteralType, map:hydra.core.MapType, optional:hydra.core.Type, pair:hydra.core.PairType, record:list<hydra.core.FieldType>, set:hydra.core.Type, union:list<hydra.core.FieldType>, unit:unit, variable:hydra.core.Name, void:unit, wrap:hydra.core.Type}
+  hydra.core.TypeApplicationTerm = record{body:hydra.core.Term, type:hydra.core.Type}
+  hydra.core.TypeClassConstraint = union{simple:hydra.core.Name}
+  hydra.core.TypeLambda = record{parameter:hydra.core.Name, body:hydra.core.Term}
+  hydra.core.TypeScheme = record{variables:list<hydra.core.Name>, body:hydra.core.Type, constraints:optional<map<hydra.core.Name, hydra.core.TypeVariableConstraints>>}
+  hydra.core.TypeVariableConstraints = record{classes:list<hydra.core.TypeClassConstraint>}
+  hydra.core.WrappedTerm = record{typeName:hydra.core.Name, body:hydra.core.Term}
+  hydra.docs.DocSegment = union{ref:hydra.packaging.EntityReference, text:string}
+  hydra.error.checking.CheckingError = union{incorrectUnification:hydra.error.checking.IncorrectUnificationError, notAForallType:hydra.error.checking.NotAForallTypeError, notAFunctionType:hydra.error.checking.NotAFunctionTypeError, other:hydra.error.checking.OtherCheckingError, typeArityMismatch:hydra.error.checking.TypeArityMismatchError, typeMismatch:hydra.error.checking.TypeMismatchError, unboundTypeVariables:hydra.error.checking.UnboundTypeVariablesError, undefinedTermVariable:hydra.error.checking.UndefinedTermVariableCheckingError, unequalTypes:hydra.error.checking.UnequalTypesError, unsupportedTermVariant:hydra.error.checking.UnsupportedTermVariantError, untypedLambda:hydra.error.checking.UntypedLambdaError, untypedLetBinding:hydra.error.checking.UntypedLetBindingError, untypedTermVariable:hydra.error.checking.UntypedTermVariableCheckingError}
+  hydra.error.checking.IncorrectUnificationError = record{substitution:hydra.typing.TypeSubst}
+  hydra.error.checking.NotAForallTypeError = record{type:hydra.core.Type, typeArguments:list<hydra.core.Type>}
+  hydra.error.checking.NotAFunctionTypeError = record{type:hydra.core.Type}
+  hydra.error.checking.OtherCheckingError = record{path:hydra.paths.SubtermPath, message:string}
+  hydra.error.checking.TypeArityMismatchError = record{type:hydra.core.Type, expectedArity:int32, actualArity:int32, typeArguments:list<hydra.core.Type>}
+  hydra.error.checking.TypeMismatchError = record{expectedType:hydra.core.Type, actualType:hydra.core.Type}
+  hydra.error.checking.UnboundTypeVariablesError = record{variables:set<hydra.core.Name>, type:hydra.core.Type}
+  hydra.error.checking.UndefinedTermVariableCheckingError = record{path:hydra.paths.SubtermPath, name:hydra.core.Name}
+  hydra.error.checking.UnequalTypesError = record{types:list<hydra.core.Type>, description:string}
+  hydra.error.checking.UnsupportedTermVariantError = record{termVariant:hydra.variants.TermVariant}
+  hydra.error.checking.UntypedLambdaError = record{}
+  hydra.error.checking.UntypedLetBindingError = record{binding:hydra.core.Binding}
+  hydra.error.checking.UntypedTermVariableCheckingError = record{path:hydra.paths.SubtermPath, name:hydra.core.Name}
+  hydra.error.core.ConstantConditionError = record{location:hydra.paths.SubtermPath, value:boolean}
+  hydra.error.core.DuplicateBindingError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
+  hydra.error.core.DuplicateFieldError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
+  hydra.error.core.DuplicateRecordTypeFieldNamesError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
+  hydra.error.core.DuplicateUnionTypeFieldNamesError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
+  hydra.error.core.EmptyCaseStatementError = record{location:hydra.paths.SubtermPath, typeName:hydra.core.Name}
+  hydra.error.core.EmptyLetBindingsError = record{location:hydra.paths.SubtermPath}
+  hydra.error.core.EmptyRecordTypeError = record{location:hydra.paths.SubtermPath}
+  hydra.error.core.EmptyTermAnnotationError = record{location:hydra.paths.SubtermPath}
+  hydra.error.core.EmptyTypeAnnotationError = record{location:hydra.paths.SubtermPath}
+  hydra.error.core.EmptyTypeNameInTermError = record{location:hydra.paths.SubtermPath}
+  hydra.error.core.EmptyUnionTypeError = record{location:hydra.paths.SubtermPath}
+  hydra.error.core.InvalidForallParameterNameError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
+  hydra.error.core.InvalidLambdaParameterNameError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
+  hydra.error.core.InvalidLetBindingNameError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
+  hydra.error.core.InvalidLiteralError = union{typeMismatch:hydra.error.core.LiteralTypeMismatchError}
+  hydra.error.core.InvalidTermError = union{constantCondition:hydra.error.core.ConstantConditionError, duplicateBinding:hydra.error.core.DuplicateBindingError, duplicateField:hydra.error.core.DuplicateFieldError, emptyCaseStatement:hydra.error.core.EmptyCaseStatementError, emptyLetBindings:hydra.error.core.EmptyLetBindingsError, emptyTermAnnotation:hydra.error.core.EmptyTermAnnotationError, emptyTypeNameInTerm:hydra.error.core.EmptyTypeNameInTermError, invalidLambdaParameterName:hydra.error.core.InvalidLambdaParameterNameError, invalidLetBindingName:hydra.error.core.InvalidLetBindingNameError, invalidTypeLambdaParameterName:hydra.error.core.InvalidTypeLambdaParameterNameError, nestedTermAnnotation:hydra.error.core.NestedTermAnnotationError, redundantWrapUnwrap:hydra.error.core.RedundantWrapUnwrapError, selfApplication:hydra.error.core.SelfApplicationError, termVariableShadowing:hydra.error.core.TermVariableShadowingError, typeVariableShadowingInTypeLambda:hydra.error.core.TypeVariableShadowingInTypeLambdaError, undefinedTermVariable:hydra.error.core.UndefinedTermVariableError, undefinedTypeVariableInBindingType:hydra.error.core.UndefinedTypeVariableInBindingTypeError, undefinedTypeVariableInLambdaDomain:hydra.error.core.UndefinedTypeVariableInLambdaDomainError, undefinedTypeVariableInTypeApplication:hydra.error.core.UndefinedTypeVariableInTypeApplicationError, unknownPrimitiveName:hydra.error.core.UnknownPrimitiveNameError, unnecessaryIdentityApplication:hydra.error.core.UnnecessaryIdentityApplicationError, untypedTermVariable:hydra.error.core.UntypedTermVariableError}
+  hydra.error.core.InvalidTypeError = union{duplicateRecordTypeFieldNames:hydra.error.core.DuplicateRecordTypeFieldNamesError, duplicateUnionTypeFieldNames:hydra.error.core.DuplicateUnionTypeFieldNamesError, emptyRecordType:hydra.error.core.EmptyRecordTypeError, emptyTypeAnnotation:hydra.error.core.EmptyTypeAnnotationError, emptyUnionType:hydra.error.core.EmptyUnionTypeError, invalidForallParameterName:hydra.error.core.InvalidForallParameterNameError, invalidTypeSchemeVariableName:hydra.error.core.InvalidTypeSchemeVariableNameError, nestedTypeAnnotation:hydra.error.core.NestedTypeAnnotationError, nonComparableMapKeyType:hydra.error.core.NonComparableMapKeyTypeError, nonComparableSetElementType:hydra.error.core.NonComparableSetElementTypeError, singleVariantUnion:hydra.error.core.SingleVariantUnionError, typeVariableShadowingInForall:hydra.error.core.TypeVariableShadowingInForallError, undefinedTypeVariable:hydra.error.core.UndefinedTypeVariableError, voidInNonBottomPosition:hydra.error.core.VoidInNonBottomPositionError}
+  hydra.error.core.InvalidTypeLambdaParameterNameError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
+  hydra.error.core.InvalidTypeSchemeVariableNameError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
+  hydra.error.core.LiteralTypeMismatchError = record{expectedType:hydra.core.LiteralType, actualType:hydra.core.LiteralType}
+  hydra.error.core.NestedTermAnnotationError = record{location:hydra.paths.SubtermPath}
+  hydra.error.core.NestedTypeAnnotationError = record{location:hydra.paths.SubtermPath}
+  hydra.error.core.NonComparableMapKeyTypeError = record{location:hydra.paths.SubtermPath, keyType:hydra.core.Type}
+  hydra.error.core.NonComparableSetElementTypeError = record{location:hydra.paths.SubtermPath, elementType:hydra.core.Type}
+  hydra.error.core.RedundantWrapUnwrapError = record{location:hydra.paths.SubtermPath, typeName:hydra.core.Name}
+  hydra.error.core.SelfApplicationError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
+  hydra.error.core.SingleVariantUnionError = record{location:hydra.paths.SubtermPath, fieldName:hydra.core.Name}
+  hydra.error.core.TermVariableShadowingError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
+  hydra.error.core.TypeVariableShadowingInForallError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
+  hydra.error.core.TypeVariableShadowingInTypeLambdaError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
+  hydra.error.core.UndefinedFieldError = record{fieldName:hydra.core.Name, typeName:hydra.core.Name}
+  hydra.error.core.UndefinedTermVariableError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
+  hydra.error.core.UndefinedTypeVariableError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
+  hydra.error.core.UndefinedTypeVariableInBindingTypeError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
+  hydra.error.core.UndefinedTypeVariableInLambdaDomainError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
+  hydra.error.core.UndefinedTypeVariableInTypeApplicationError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
+  hydra.error.core.UnexpectedTermVariantError = record{expectedVariant:hydra.variants.TermVariant, actualTerm:hydra.core.Term}
+  hydra.error.core.UnexpectedTypeVariantError = record{expectedVariant:hydra.variants.TypeVariant, actualType:hydra.core.Type}
+  hydra.error.core.UnknownPrimitiveNameError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
+  hydra.error.core.UnnecessaryIdentityApplicationError = record{location:hydra.paths.SubtermPath}
+  hydra.error.core.UntypedTermVariableError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
+  hydra.error.core.VoidInNonBottomPositionError = record{location:hydra.paths.SubtermPath}
+  hydra.error.file.FileError = union{alreadyExists:hydra.file.FilePath, invalidPath:string, notFound:hydra.file.FilePath, other:string, permissionDenied:hydra.file.FilePath}
+  hydra.error.packaging.ConflictingModuleNameError = record{first:hydra.packaging.ModuleName, second:hydra.packaging.ModuleName}
+  hydra.error.packaging.ConflictingVariantNameError = record{moduleName:hydra.packaging.ModuleName, typeName:hydra.core.Name, variantName:hydra.core.Name, conflictingName:hydra.core.Name}
+  hydra.error.packaging.DefinitionNotInModuleNameError = record{moduleName:hydra.packaging.ModuleName, name:hydra.core.Name}
+  hydra.error.packaging.DefinitionsOutOfOrderError = record{moduleName:hydra.packaging.ModuleName, precedingName:hydra.core.Name, followingName:hydra.core.Name}
+  hydra.error.packaging.DuplicateDefinitionNameError = record{moduleName:hydra.packaging.ModuleName, name:hydra.core.Name}
+  hydra.error.packaging.DuplicateModuleNameError = record{moduleName:hydra.packaging.ModuleName}
+  hydra.error.packaging.InvalidDefinitionNameError = record{moduleName:hydra.packaging.ModuleName, name:hydra.core.Name, expectedConvention:hydra.util.CaseConvention}
+  hydra.error.packaging.InvalidModuleError = union{conflictingVariantName:hydra.error.packaging.ConflictingVariantNameError, definitionNotInModuleName:hydra.error.packaging.DefinitionNotInModuleNameError, definitionsOutOfOrder:hydra.error.packaging.DefinitionsOutOfOrderError, duplicateDefinitionName:hydra.error.packaging.DuplicateDefinitionNameError, invalidDefinitionName:hydra.error.packaging.InvalidDefinitionNameError, invalidModuleNameConvention:hydra.error.packaging.InvalidModuleNameConventionError, missingDocumentation:hydra.error.packaging.MissingDocumentationError}
+  hydra.error.packaging.InvalidModuleNameConventionError = record{moduleName:hydra.packaging.ModuleName}
+  hydra.error.packaging.InvalidPackageError = union{conflictingModuleName:hydra.error.packaging.ConflictingModuleNameError, duplicateModuleName:hydra.error.packaging.DuplicateModuleNameError, invalidModule:hydra.error.packaging.InvalidModuleError, invalidPackageName:hydra.error.packaging.InvalidPackageNameError}
+  hydra.error.packaging.InvalidPackageNameError = record{packageName:hydra.packaging.PackageName}
+  hydra.error.packaging.MissingDocumentationError = record{moduleName:hydra.packaging.ModuleName, name:hydra.core.Name}
+  hydra.error.system.SystemError = union{commandNotFound:hydra.file.FilePath, permissionDenied:hydra.file.FilePath, invalidWorkingDirectory:hydra.file.FilePath, interrupted:unit, other:string}
+  hydra.errors.DecodingError = wrap(string)
+  hydra.errors.EmptyListError = unit
+  hydra.errors.Error = union{checking:hydra.error.checking.CheckingError, decoding:hydra.errors.DecodingError, duplicateBinding:hydra.error.core.DuplicateBindingError, duplicateField:hydra.error.core.DuplicateFieldError, extraction:hydra.errors.ExtractionError, inference:hydra.errors.InferenceError, invalidLiteral:hydra.error.core.InvalidLiteralError, other:hydra.errors.OtherError, resolution:hydra.errors.ResolutionError, undefinedField:hydra.error.core.UndefinedFieldError, undefinedTermVariable:hydra.error.core.UndefinedTermVariableError, untypedTermVariable:hydra.error.core.UntypedTermVariableError, unexpectedTermVariant:hydra.error.core.UnexpectedTermVariantError, unexpectedTypeVariant:hydra.error.core.UnexpectedTypeVariantError, unification:hydra.errors.UnificationError}
+  hydra.errors.ExtractionError = union{emptyList:hydra.errors.EmptyListError, multipleBindings:hydra.errors.MultipleBindingsError, multipleFields:hydra.errors.MultipleFieldsError, noMatchingField:hydra.errors.NoMatchingFieldError, noSuchBinding:hydra.errors.NoSuchBindingError, notEnoughCases:hydra.errors.NotEnoughCasesError, unexpectedShape:hydra.errors.UnexpectedShapeError}
+  hydra.errors.InferenceError = union{checking:hydra.error.checking.CheckingError, other:hydra.errors.OtherInferenceError, unification:hydra.errors.UnificationInferenceError}
+  hydra.errors.MultipleBindingsError = record{name:hydra.core.Name}
+  hydra.errors.MultipleFieldsError = record{fieldName:hydra.core.Name}
+  hydra.errors.NoMatchingFieldError = record{fieldName:hydra.core.Name}
+  hydra.errors.NoSuchBindingError = record{name:hydra.core.Name}
+  hydra.errors.NoSuchPrimitiveError = record{name:hydra.core.Name}
+  hydra.errors.NotEnoughCasesError = unit
+  hydra.errors.OtherError = wrap(string)
+  hydra.errors.OtherInferenceError = record{path:hydra.paths.SubtermPath, message:string}
+  hydra.errors.OtherResolutionError = wrap(string)
+  hydra.errors.ResolutionError = union{noSuchBinding:hydra.errors.NoSuchBindingError, noSuchPrimitive:hydra.errors.NoSuchPrimitiveError, noMatchingField:hydra.errors.NoMatchingFieldError, other:hydra.errors.OtherResolutionError, unexpectedShape:hydra.errors.UnexpectedShapeError}
+  hydra.errors.UnexpectedShapeError = record{expected:string, actual:string}
+  hydra.errors.UnificationError = record{leftType:hydra.core.Type, rightType:hydra.core.Type, message:string}
+  hydra.errors.UnificationInferenceError = record{path:hydra.paths.SubtermPath, cause:hydra.errors.UnificationError}
+  hydra.file.FileExtension = wrap(string)
+  hydra.file.FilePath = wrap(string)
+  hydra.file.FileStatus = record{fileType:hydra.file.FileType, size:int64, modificationTime:hydra.time.Timespec, accessTime:optional<hydra.time.Timespec>, statusChangeTime:optional<hydra.time.Timespec>}
+  hydra.file.FileType = union{block:unit, character:unit, directory:unit, fifo:unit, regular:unit, link:unit, socket:unit}
+  hydra.graph.Graph = record{boundTerms:map<hydra.core.Name, hydra.core.Term>, boundTypes:map<hydra.core.Name, hydra.core.TypeScheme>, classConstraints:map<hydra.core.Name, hydra.core.TypeVariableConstraints>, lambdaVariables:set<hydra.core.Name>, metadata:map<hydra.core.Name, hydra.core.Term>, primitives:map<hydra.core.Name, hydra.graph.Primitive>, schemaTypes:map<hydra.core.Name, hydra.core.TypeScheme>, typeVariables:set<hydra.core.Name>}
+  hydra.graph.Library = record{name:hydra.packaging.ModuleName, prefix:string, primitives:list<hydra.graph.Primitive>}
+  hydra.graph.Primitive = record{definition:hydra.packaging.PrimitiveDefinition, implementation:(hydra.graph.Graph → list<hydra.core.Term> → either<hydra.errors.Error, hydra.core.Term>)}
+  hydra.graph.TermCoder = (∀a.record{type:hydra.core.Type, encode:(hydra.typing.InferenceContext → hydra.graph.Graph → hydra.core.Term → either<hydra.errors.Error, a>), decode:(hydra.typing.InferenceContext → a → either<hydra.errors.Error, hydra.core.Term>)})
+  hydra.json.model.Value = union{array:list<hydra.json.model.Value>, boolean:boolean, null:unit, number:decimal, object:list<(string, hydra.json.model.Value)>, string:string}
+  hydra.packaging.Definition = union{primitive:hydra.packaging.PrimitiveDefinition, term:hydra.packaging.TermDefinition, type:hydra.packaging.TypeDefinition}
+  hydra.packaging.DefinitionReference = union{primitive:hydra.core.Name, term:hydra.core.Name, type:hydra.core.Name}
+  hydra.packaging.DependencyScope = union{api:unit, runtime:unit, test:unit, tool:unit}
+  hydra.packaging.EntityMetadata = record{description:optional<string>, comments:list<string>, seeAlso:list<hydra.packaging.EntityReference>, lifecycle:optional<hydra.packaging.LifecycleInfo>}
+  hydra.packaging.EntityReference = union{definition:hydra.packaging.DefinitionReference, module:hydra.packaging.ModuleName, package:hydra.packaging.PackageName, termExpr:string, typeExpr:string}
+  hydra.packaging.LifecycleInfo = record{availableSince:optional<hydra.packaging.Version>, deprecatedSince:optional<hydra.packaging.Version>}
+  hydra.packaging.Module = record{name:hydra.packaging.ModuleName, metadata:optional<hydra.packaging.EntityMetadata>, dependencies:list<hydra.packaging.ModuleDependency>, definitions:list<hydra.packaging.Definition>}
+  hydra.packaging.ModuleDependency = record{module:hydra.packaging.ModuleName, package:optional<hydra.packaging.PackageName>}
+  hydra.packaging.ModuleName = wrap(string)
+  hydra.packaging.Package = record{name:hydra.packaging.PackageName, metadata:optional<hydra.packaging.EntityMetadata>, dependencies:list<hydra.packaging.PackageDependency>, modules:list<hydra.packaging.Module>}
+  hydra.packaging.PackageDependency = record{name:hydra.packaging.PackageName, version:hydra.packaging.VersionSpecifier, scope:optional<hydra.packaging.DependencyScope>}
+  hydra.packaging.PackageName = wrap(string)
+  hydra.packaging.PrimitiveDefinition = record{name:hydra.core.Name, metadata:optional<hydra.packaging.EntityMetadata>, signature:hydra.typing.TermSignature, isPure:boolean, isTotal:boolean, defaultImplementation:optional<hydra.core.Term>}
+  hydra.packaging.TermDefinition = record{name:hydra.core.Name, metadata:optional<hydra.packaging.EntityMetadata>, signature:optional<hydra.typing.TermSignature>, body:hydra.core.Term}
+  hydra.packaging.TypeDefinition = record{name:hydra.core.Name, metadata:optional<hydra.packaging.EntityMetadata>, body:hydra.core.TypeScheme}
+  hydra.packaging.Version = wrap(string)
+  hydra.packaging.VersionRange = record{lowerInclusive:optional<hydra.packaging.Version>, upperExclusive:optional<hydra.packaging.Version>}
+  hydra.packaging.VersionSpecifier = union{any:unit, exact:hydra.packaging.Version, atLeast:hydra.packaging.Version, range:hydra.packaging.VersionRange}
+  hydra.parsing.ParseError = record{message:string, remainder:string}
+  hydra.parsing.ParseResult = (∀a.union{success:(hydra.parsing.ParseSuccess @ a), failure:hydra.parsing.ParseError})
+  hydra.parsing.ParseSuccess = (∀a.record{value:a, remainder:string})
+  hydra.parsing.Parser = (∀a.wrap((string → (hydra.parsing.ParseResult @ a))))
+  hydra.paths.SubtermEdge = record{source:hydra.paths.SubtermNode, path:hydra.paths.SubtermPath, target:hydra.paths.SubtermNode}
+  hydra.paths.SubtermGraph = record{nodes:list<hydra.paths.SubtermNode>, edges:list<hydra.paths.SubtermEdge>}
+  hydra.paths.SubtermNode = record{name:hydra.core.Name, label:string, id:string}
+  hydra.paths.SubtermPath = wrap(list<hydra.paths.SubtermStep>)
+  hydra.paths.SubtermStep = union{annotatedBody:unit, applicationFunction:unit, applicationArgument:unit, lambdaBody:unit, unionCasesDefault:unit, unionCasesBranch:hydra.core.Name, letBody:unit, letBinding:hydra.core.Name, listElement:int32, mapKey:int32, mapValue:int32, optionalTerm:unit, productTerm:int32, recordField:hydra.core.Name, setElement:int32, sumTerm:unit, typeLambdaBody:unit, typeApplicationTerm:unit, injectionTerm:unit, wrappedTerm:unit}
+  hydra.paths.SubtypeEdge = record{source:hydra.paths.SubtypeNode, path:hydra.paths.SubtypePath, target:hydra.paths.SubtypeNode}
+  hydra.paths.SubtypeGraph = record{nodes:list<hydra.paths.SubtypeNode>, edges:list<hydra.paths.SubtypeEdge>}
+  hydra.paths.SubtypeNode = record{name:hydra.core.Name, label:string, id:string}
+  hydra.paths.SubtypePath = wrap(list<hydra.paths.SubtypeStep>)
+  hydra.paths.SubtypeStep = union{annotatedBody:unit, applicationFunction:unit, applicationArgument:unit, eitherLeft:unit, eitherRight:unit, forallBody:unit, functionDomain:unit, functionCodomain:unit, listElement:unit, mapKeys:unit, mapValues:unit, optionalElement:unit, pairFirst:unit, pairSecond:unit, recordField:hydra.core.Name, setElement:unit, unionField:hydra.core.Name, wrappedType:unit}
+  hydra.query.ComparisonConstraint = union{equal:unit, notEqual:unit, lessThan:unit, greaterThan:unit, lessThanOrEqual:unit, greaterThanOrEqual:unit}
+  hydra.query.Edge = record{type:hydra.core.Name, out:optional<hydra.core.Name>, in:optional<hydra.core.Name>}
+  hydra.query.GraphPattern = record{graph:hydra.core.Name, patterns:list<hydra.query.Pattern>}
+  hydra.query.Node = union{term:hydra.core.Term, variable:hydra.query.Variable, wildcard:unit}
+  hydra.query.Path = union{step:hydra.query.Step, regex:hydra.query.RegexSequence, inverse:hydra.query.Path}
+  hydra.query.PathEquation = record{left:hydra.query.Path, right:hydra.query.Path}
+  hydra.query.Pattern = union{triple:hydra.query.TriplePattern, negation:hydra.query.Pattern, conjunction:list<hydra.query.Pattern>, disjunction:list<hydra.query.Pattern>, graph:hydra.query.GraphPattern}
+  hydra.query.PatternImplication = record{antecedent:hydra.query.Pattern, consequent:hydra.query.Pattern}
+  hydra.query.Query = record{variables:list<hydra.query.Variable>, patterns:list<hydra.query.Pattern>}
+  hydra.query.Range = record{min:int32, max:int32}
+  hydra.query.RegexQuantifier = union{one:unit, zeroOrOne:unit, zeroOrMore:unit, oneOrMore:unit, exactly:int32, atLeast:int32, range:hydra.query.Range}
+  hydra.query.RegexSequence = record{path:hydra.query.Path, quantifier:hydra.query.RegexQuantifier}
+  hydra.query.Step = union{edge:hydra.query.Edge, project:hydra.core.Projection, compare:hydra.query.ComparisonConstraint}
+  hydra.query.TriplePattern = record{subject:hydra.query.Node, predicate:hydra.query.Path, object:hydra.query.Node}
+  hydra.query.Variable = wrap(string)
+  hydra.relational.ColumnName = wrap(string)
+  hydra.relational.ColumnSchema = (∀t.record{name:hydra.relational.ColumnName, domain:t})
+  hydra.relational.ForeignKey = record{foreignRelation:hydra.relational.RelationName, keys:map<hydra.relational.ColumnName, hydra.relational.ColumnName>}
+  hydra.relational.PrimaryKey = wrap(list<hydra.relational.ColumnName>)
+  hydra.relational.Relation = (∀v.wrap(list<(hydra.relational.Row @ v)>))
+  hydra.relational.RelationName = wrap(string)
+  hydra.relational.RelationSchema = (∀t.record{name:hydra.relational.RelationName, columns:list<(hydra.relational.ColumnSchema @ t)>, primaryKeys:list<hydra.relational.PrimaryKey>, foreignKeys:list<hydra.relational.ForeignKey>})
+  hydra.relational.Relationship = (∀v.wrap(set<map<hydra.relational.ColumnName, v>>))
+  hydra.relational.Row = (∀v.wrap(list<v>))
+  hydra.system.Command = record{program:hydra.file.FilePath, arguments:list<string>, workingDirectory:optional<hydra.file.FilePath>, environment:optional<map<hydra.system.EnvironmentVariable, string>>}
+  hydra.system.EnvironmentVariable = wrap(string)
+  hydra.system.ProcessResult = record{exitCode:hydra.system.StatusCode, stdout:binary, stderr:binary}
+  hydra.system.StatusCode = wrap(int32)
+  hydra.tabular.ColumnType = record{name:hydra.relational.ColumnName, type:hydra.core.Type}
+  hydra.tabular.DataRow = (∀v.wrap(list<optional<v>>))
+  hydra.tabular.HeaderRow = wrap(list<string>)
+  hydra.tabular.Table = (∀v.record{header:optional<hydra.tabular.HeaderRow>, data:list<(hydra.tabular.DataRow @ v)>})
+  hydra.tabular.TableType = record{name:hydra.relational.RelationName, columns:list<hydra.tabular.ColumnType>}
+  hydra.testing.EffectfulTestCase = record{actual:(unit → effect<string>), expected:(unit → string)}
+  hydra.testing.Tag = wrap(string)
+  hydra.testing.TestCase = union{effectful:hydra.testing.EffectfulTestCase, universal:hydra.testing.UniversalTestCase}
+  hydra.testing.TestCaseWithMetadata = record{name:string, case:hydra.testing.TestCase, description:optional<string>, tags:list<hydra.testing.Tag>}
+  hydra.testing.TestGroup = record{name:string, description:optional<string>, subgroups:list<hydra.testing.TestGroup>, cases:list<hydra.testing.TestCaseWithMetadata>}
+  hydra.testing.UniversalTestCase = record{actual:(unit → string), expected:(unit → string)}
+  hydra.time.Timespec = record{seconds:int64, nanoseconds:uint32}
+  hydra.topology.Graph = map<hydra.topology.Vertex, list<hydra.topology.Vertex>>
+  hydra.topology.OrderingIsomorphism = (∀a.record{encode:(list<a> → list<a>), decode:(list<a> → list<a>)})
+  hydra.topology.TarjanState = record{counter:int32, indices:map<hydra.topology.Vertex, int32>, lowLinks:map<hydra.topology.Vertex, int32>, stack:list<hydra.topology.Vertex>, onStack:set<hydra.topology.Vertex>, sccs:list<list<hydra.topology.Vertex>>}
+  hydra.topology.Vertex = int32
+  hydra.typed.TypedBinding = (∀a.record{name:hydra.core.Name, term:(hydra.typed.TypedTerm @ a)})
+  hydra.typed.TypedTerm = (∀a.wrap(hydra.core.Term))
+  hydra.typed.TypedTermDefinition = (∀a.record{name:hydra.core.Name, term:(hydra.typed.TypedTerm @ a)})
+  hydra.typing.FunctionStructure = (∀env.record{typeParams:list<hydra.core.Name>, params:list<hydra.core.Name>, bindings:list<hydra.core.Binding>, body:hydra.core.Term, domains:list<hydra.core.Type>, codomain:optional<hydra.core.Type>, environment:env})
+  hydra.typing.InferenceContext = record{freshTypeVariableCount:int32, trace:list<hydra.paths.SubtermStep>}
+  hydra.typing.InferenceResult = record{term:hydra.core.Term, type:hydra.core.Type, subst:hydra.typing.TypeSubst, classConstraints:map<hydra.core.Name, hydra.core.TypeVariableConstraints>, context:hydra.typing.InferenceContext}
+  hydra.typing.Parameter = record{name:hydra.core.Name, description:optional<string>, type:hydra.core.Type, isLazy:boolean}
+  hydra.typing.Result = record{description:optional<string>, type:hydra.core.Type}
+  hydra.typing.TermSignature = record{typeParameters:list<hydra.typing.TypeParameter>, parameters:list<hydra.typing.Parameter>, result:hydra.typing.Result}
+  hydra.typing.TermSubst = wrap(map<hydra.core.Name, hydra.core.Term>)
+  hydra.typing.TypeClass = record{description:string}
+  hydra.typing.TypeConstraint = record{left:hydra.core.Type, right:hydra.core.Type, comment:string}
+  hydra.typing.TypeParameter = record{name:hydra.core.Name, constraints:list<hydra.core.TypeClassConstraint>}
+  hydra.typing.TypeSubst = wrap(map<hydra.core.Name, hydra.core.Type>)
+  hydra.util.CaseConvention = union{camel:unit, pascal:unit, lowerSnake:unit, upperSnake:unit}
+  hydra.util.Comparison = union{lessThan:unit, equalTo:unit, greaterThan:unit}
+  hydra.util.ModuleNames = (∀n.record{focus:(hydra.packaging.ModuleName, n), mapping:map<hydra.packaging.ModuleName, n>})
+  hydra.util.Precision = union{arbitrary:unit, bits:int32}
+  hydra.util.QualifiedName = record{moduleName:optional<hydra.packaging.ModuleName>, local:string}
+  hydra.validation.ValidationProfile = record{errorRules:set<hydra.core.Name>, warningRules:set<hydra.core.Name>, maxErrors:int32, maxWarnings:int32}
+  hydra.validation.ValidationResult = (∀e.record{errors:list<e>, warnings:list<e>})
+  hydra.variants.LiteralVariant = union{binary:unit, boolean:unit, decimal:unit, float:unit, integer:unit, string:unit}
+  hydra.variants.TermVariant = union{annotated:unit, application:unit, cases:unit, either:unit, inject:unit, lambda:unit, let:unit, list:unit, literal:unit, map:unit, optional:unit, pair:unit, project:unit, record:unit, set:unit, typeApplication:unit, typeLambda:unit, unit:unit, unwrap:unit, variable:unit, wrap:unit}
+  hydra.variants.TypeVariant = union{annotated:unit, application:unit, effect:unit, either:unit, forall:unit, function:unit, list:unit, literal:unit, map:unit, optional:unit, pair:unit, record:unit, set:unit, union:unit, unit:unit, variable:unit, void:unit, wrap:unit}
 
 Terms:
   hydra.adapt.adaptDataGraph : (forall t0. (hydra.coders.LanguageConstraints → boolean → list<hydra.core.Binding> → t0 → hydra.graph.Graph → either<hydra.errors.Error, (hydra.graph.Graph, list<hydra.core.Binding>)>))
@@ -1023,7 +1285,6 @@ Terms:
   hydra.extract.core.binaryLiteral : ((hydra.core.Literal → either<hydra.errors.Error, binary>))
   hydra.extract.core.boolean : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.Error, boolean>))
   hydra.extract.core.booleanLiteral : ((hydra.core.Literal → either<hydra.errors.Error, boolean>))
-  hydra.extract.core.caseField : ((hydra.core.Name → string → hydra.graph.Graph → hydra.core.Term → either<hydra.errors.Error, hydra.core.CaseAlternative>))
   hydra.extract.core.cases : ((hydra.core.Name → hydra.graph.Graph → hydra.core.Term → either<hydra.errors.Error, hydra.core.CaseStatement>))
   hydra.extract.core.decimal : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.Error, decimal>))
   hydra.extract.core.decimalLiteral : ((hydra.core.Literal → either<hydra.errors.Error, decimal>))
@@ -1034,7 +1295,6 @@ Terms:
   hydra.extract.core.decodePair : (forall t0,t1. ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, t0>) → (hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, t1>) → hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, (t0, t1)>))
   hydra.extract.core.decodeSet : (forall t0. (ordering t0) => ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, t0>) → hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, set<t0>>))
   hydra.extract.core.decodeUnit : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, unit>))
-  hydra.extract.core.decodeWrapped : (forall t0. ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, t0>) → hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, t0>))
   hydra.extract.core.eitherTerm : (forall t0,t1. ((hydra.core.Term → either<hydra.errors.Error, t0>) → (hydra.core.Term → either<hydra.errors.Error, t1>) → hydra.graph.Graph → hydra.core.Term → either<hydra.errors.Error, either<t0, t1>>))
   hydra.extract.core.eitherType : ((hydra.core.Type → either<hydra.errors.Error, hydra.core.EitherType>))
   hydra.extract.core.field : (forall t0. (hydra.core.Name → (hydra.core.Term → either<hydra.errors.Error, t0>) → hydra.graph.Graph → list<hydra.core.Field> → either<hydra.errors.Error, t0>))
@@ -1061,7 +1321,6 @@ Terms:
   hydra.extract.core.let : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.Error, hydra.core.Let>))
   hydra.extract.core.letBinding : ((string → hydra.graph.Graph → hydra.core.Term → either<hydra.errors.Error, hydra.core.Term>))
   hydra.extract.core.list : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.Error, list<hydra.core.Term>>))
-  hydra.extract.core.listHead : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.Error, hydra.core.Term>))
   hydra.extract.core.listOf : (forall t0. ((hydra.core.Term → either<hydra.errors.Error, t0>) → hydra.graph.Graph → hydra.core.Term → either<hydra.errors.Error, list<t0>>))
   hydra.extract.core.listType : ((hydra.core.Type → either<hydra.errors.Error, hydra.core.Type>))
   hydra.extract.core.literal : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.Error, hydra.core.Literal>))
@@ -1102,11 +1361,11 @@ Terms:
   hydra.extract.json.opt : (forall t0,t1. (ordering t0) => (t0 → map<t0, t1> → optional<t1>))
   hydra.extract.json.optArray : (forall t0. (ordering t0) => (t0 → map<t0, hydra.json.model.Value> → either<string, optional<list<hydra.json.model.Value>>>))
   hydra.extract.json.optString : (forall t0. (ordering t0) => (t0 → map<t0, hydra.json.model.Value> → either<string, optional<string>>))
-  hydra.extract.json.require : (forall t0,t1. (ordering t0) => (t0 → map<t0, t1> → either<string, t1>))
-  hydra.extract.json.requireArray : (forall t0. (ordering t0) => (t0 → map<t0, hydra.json.model.Value> → either<string, list<hydra.json.model.Value>>))
-  hydra.extract.json.requireNumber : (forall t0. (ordering t0) => (t0 → map<t0, hydra.json.model.Value> → either<string, decimal>))
-  hydra.extract.json.requireString : (forall t0. (ordering t0) => (t0 → map<t0, hydra.json.model.Value> → either<string, string>))
-  hydra.extract.json.showValue : (forall t0. (t0 → string))
+  hydra.extract.json.require : (forall t0. (string → map<string, t0> → either<string, t0>))
+  hydra.extract.json.requireArray : ((string → map<string, hydra.json.model.Value> → either<string, list<hydra.json.model.Value>>))
+  hydra.extract.json.requireNumber : ((string → map<string, hydra.json.model.Value> → either<string, decimal>))
+  hydra.extract.json.requireString : ((string → map<string, hydra.json.model.Value> → either<string, string>))
+  hydra.extract.json.showValue : ((hydra.json.model.Value → string))
   hydra.extract.util.comparison : (forall t0. (t0 → hydra.graph.Graph → hydra.core.Term → either<hydra.errors.Error, hydra.util.Comparison>))
   hydra.formatting.capitalize : ((string → string))
   hydra.formatting.convertCase : ((hydra.util.CaseConvention → hydra.util.CaseConvention → string → string))

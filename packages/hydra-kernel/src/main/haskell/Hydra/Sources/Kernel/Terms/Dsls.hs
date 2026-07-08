@@ -60,7 +60,6 @@ module_ = Module {
       toDefinition dslBindingName,
       toDefinition dslDefinitionName,
       toDefinition dslModule,
-      toDefinition dslModuleName,
       toDefinition dslSignatureTypeScheme,
       toDefinition dslTypeScheme,
       toDefinition filterTypeBindings,
@@ -268,7 +267,7 @@ dslModule = define "dslModule" $
     Logic.ifElse (Lists.null (var "allBindings"))
       (right nothing)
       (right (just (Packaging.module_
-        (dslModuleName @@ (Packaging.moduleName (var "mod")))
+        (Names.dslModuleName @@ (Packaging.moduleName (var "mod")))
         (just (Packaging.entityMetadata
           (just (Strings.cat $ list [
             string "DSL functions for ",
@@ -281,7 +280,7 @@ dslModule = define "dslModule" $
           (list [Packaging.moduleName (var "mod"), Packaging.moduleName2 (string "hydra.typed")])
           (Lists.concat2
             (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod")))
-            (primitive DefLists.map @@ dslModuleName @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))))))
+            (primitive DefLists.map @@ Names.dslModuleName @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))))))
         (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
           (Core.bindingName $ var "b")
           nothing
@@ -314,27 +313,6 @@ generateRefBindings = define "generateRefBindings" $
         ("sig" ~> right (list [generateSignatureRef @@ (Packaging.termDefinitionName (var "td")) @@ var "sig"])),
     _Definition_primitive>>: "pd" ~>
       right (list [generateSignatureRef @@ (Packaging.primitiveDefinitionName (var "pd")) @@ (Packaging.primitiveDefinitionSignature (var "pd"))])]
--- | Generate a DSL module name from a source module name
--- For example, "hydra.core" -> "hydra.dsl.core"
-dslModuleName :: TypedTermDefinition (ModuleName -> ModuleName)
-dslModuleName = define "dslModuleName" $
-  doc "Generate a DSL module name from a source module name" $
-  "ns" ~>
-  "parts" <~ (Strings.splitOn (string ".") (Packaging.unModuleName (var "ns"))) $
-  "prefixFull" <~ (Packaging.moduleName2 (Strings.cat $ list [
-    string "hydra.dsl.",
-    Packaging.unModuleName (var "ns")])) $
-  -- For hydra.* namespaces: hydra.foo -> hydra.dsl.foo
-  -- For other namespaces: foo.bar -> hydra.dsl.foo.bar (preserve full path)
-  -- An empty parts list is unreachable for a well-formed namespace; fall back
-  -- to the full-prefix form.
-  Optionals.cases (Lists.uncons (var "parts")) (var "prefixFull") ("ht" ~>
-      Logic.ifElse (Equality.equal (Pairs.first (var "ht")) (string "hydra"))
-        (Packaging.moduleName2 (Strings.cat $ list [
-          string "hydra.dsl.",
-          Strings.intercalate (string ".") (Pairs.second (var "ht"))]))
-        (var "prefixFull"))
-
 -- | Build a "functions of phantom terms" TypeScheme from a TermSignature.
 -- Each value parameter type and the result type are wrapped in TypedTerm, then folded
 -- into a chain of function arrows; the signature's type parameters become the foralls.
