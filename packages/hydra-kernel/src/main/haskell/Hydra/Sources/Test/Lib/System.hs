@@ -50,6 +50,10 @@ module_ = Module {
 -- exercise process execution, the environment, the working directory, and the system clock. The cases
 -- are written to be deterministic across hosts: they assert booleans or fixed strings rather than
 -- host-specific values.
+--
+-- Note: hydra.lib.system.exit is intentionally untested here. It terminates the calling process, so
+-- exercising it in-process would kill the test runner itself; there is no meaningful in-process
+-- assertion to make. See #561.
 
 allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $

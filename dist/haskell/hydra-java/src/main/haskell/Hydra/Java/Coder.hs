@@ -1322,7 +1322,7 @@ encodeLiteral lit =
     case lit of
       Core.LiteralBinary v0 ->
         let byteValues = Literals.binaryToBytes v0
-        in (Utils.javaArrayCreation Utils.javaBytePrimitiveType (Just (Utils.javaArrayInitializer (Lists.map (\w -> Utils.javaLiteralToJavaExpression (Syntax.LiteralInteger (Syntax.IntegerLiteral (Literals.int32ToBigint w)))) byteValues))))
+        in (Utils.javaArrayCreation Utils.javaBytePrimitiveType (Just (Utils.javaArrayInitializer (Lists.map (\w -> Utils.javaLiteralToJavaExpression (Syntax.LiteralInteger (Syntax.IntegerLiteral (Literals.int32ToBigint (Logic.ifElse (Equality.gt w 127) (Math.sub w 256) w))))) byteValues))))
       Core.LiteralBoolean v0 -> encodeLiteral_litExp (Utils.javaBoolean v0)
       Core.LiteralDecimal v0 -> Utils.javaConstructorCall (Utils.javaConstructorName (Syntax.Identifier "java.math.BigDecimal") Nothing) [
         encodeLiteral (Core.LiteralString (Literals.showDecimal v0))] Nothing
