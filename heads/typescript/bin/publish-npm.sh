@@ -71,6 +71,7 @@ VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 # Leaves-first publish order (dependency-ordered).
 PUBLISH_SET=(
     hydra-kernel
+    hydra-build
     hydra-rdf
     hydra-pg
     hydra-typescript

@@ -27,7 +27,7 @@ KEEP=false
 [ "${1:-}" = "--keep" ] && KEEP=true
 
 VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
-PKGS=(hydra-kernel hydra-haskell hydra)
+PKGS=(hydra-kernel hydra-build hydra-haskell hydra)
 
 WORK="$(mktemp -d -t hydra-verify-dist-XXXXXX)"
 cleanup() { [ "$KEEP" = true ] || rm -rf "$WORK"; }
@@ -66,6 +66,7 @@ system-ghc: true
 install-ghc: false
 packages:
   - hydra-kernel
+  - hydra-build
   - hydra-haskell
   - hydra
 extra-deps: []

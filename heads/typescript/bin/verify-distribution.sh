@@ -29,7 +29,7 @@ HYDRA_TS_HEAD="$( cd "$SCRIPT_DIR/.." && pwd )"
 HYDRA_ROOT="$( cd "$HYDRA_TS_HEAD/../.." && pwd )"
 
 # Mirror of publish-npm.sh PUBLISH_SET (leaves first).
-PUBLISH_SET=(hydra-kernel hydra-rdf hydra-pg hydra-typescript)
+PUBLISH_SET=(hydra-kernel hydra-build hydra-rdf hydra-pg hydra-typescript)
 
 TARBALLS_DIR=""
 while [ $# -gt 0 ]; do

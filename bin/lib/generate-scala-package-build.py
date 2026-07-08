@@ -185,6 +185,10 @@ def main() -> int:
 
     pkg_name = meta.get("name") or args.package
     description = meta.get("description") or pkg_name
+    # Interpolated into a double-quoted sbt string: escape backslashes and
+    # double quotes (same latent bug class as the java generator's
+    # single-quote escape; apostrophes are safe here).
+    description = description.replace("\\", "\\\\").replace('"', '\\"')
     deps = list(meta.get("dependencies") or [])
 
     with open(os.path.join(args.repo_root, "hydra.json")) as f:

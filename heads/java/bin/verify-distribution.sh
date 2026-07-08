@@ -57,6 +57,7 @@ KEEP=false
 # Java publish set, leaves-first (mirror of publish-maven.sh PUBLISH_SET).
 PUBLISH_SET=(
     hydra-kernel
+    hydra-build
     hydra-haskell
     hydra-jvm
     hydra-java

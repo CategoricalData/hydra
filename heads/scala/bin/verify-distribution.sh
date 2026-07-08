@@ -57,6 +57,7 @@ KEEP=false
 # (see publish-sbt.sh for details).
 PUBLISH_SET=(
     hydra-kernel
+    hydra-build
     hydra-haskell
     hydra-jvm
     hydra-java
