@@ -87,6 +87,12 @@ def _version_string(version_obj) -> str:
 def render_build_gradle(name: str, description: str, version: str, deps: list[str],
                         overlay: dict | None = None) -> str:
     overlay = overlay or {}
+    # The description is interpolated into a single-quoted Groovy string in the
+    # pom block; an unescaped apostrophe (e.g. hydra-build's "Hydra's build
+    # system...") produces a syntactically invalid build.gradle that fails at
+    # publishToMavenLocal — caught by gate 13 the first time hydra-build was
+    # actually exercised. Escape backslashes first, then single quotes.
+    description = description.replace("\\", "\\\\").replace("'", "\\'")
     dep_lines = []
     # Hydra inter-package deps (from package.json), always api-scoped.
     for dep in deps:
