@@ -61,37 +61,28 @@ object Phantoms:
   /** Reference a primitive / globally-named function by FQN — shorthand for `var`. */
   inline def prim[A](name: String): TypedTerm[A] = `var`(name)
 
-  /** Apply a primitive by name to one argument. */
-  inline def applyP[A](primName: String, a: TypedTerm[?]): TypedTerm[A] =
-    apply(prim(primName), a)
+  /**
+   * Build a local-reference function for a namespace: `makeLocal(ns)(localName)` produces the
+   * fully-qualified `Name` `ns.localName`, suitable for either `v(...)` (a bare variable
+   * reference) or `applyP(...)` (a primitive/function application) — both take a `Name`/`String`.
+   * Scala analogue of Java's `ref(Def)` and Python's `make_local`. Use for recursive, forward, or
+   * cross-module references within/between source modules, in place of fully-spelled FQN strings.
+   *
+   * Usage:
+   * {{{
+   *   private val local = makeLocal(NS)
+   *   ...
+   *   applyP(local("rewriteTerm"), v("rewrite"), v("term"))
+   *   v(local("someOtherDef"))
+   * }}}
+   */
+  def makeLocal(ns: ModuleName): String => Name =
+    val prefix = ns + "."
+    localName => prefix + localName
 
-  /** Apply a primitive by name to two curried arguments. */
-  inline def applyP[A](primName: String, a: TypedTerm[?], b: TypedTerm[?]): TypedTerm[A] =
-    apply(apply(prim(primName), a), b)
-
-  /** Apply a primitive by name to three curried arguments. */
-  inline def applyP[A](primName: String, a: TypedTerm[?], b: TypedTerm[?], c: TypedTerm[?]): TypedTerm[A] =
-    apply(apply(apply(prim(primName), a), b), c)
-
-  /** Apply a primitive by name to four curried arguments. */
-  inline def applyP[A](primName: String, a: TypedTerm[?], b: TypedTerm[?], c: TypedTerm[?], d: TypedTerm[?]): TypedTerm[A] =
-    apply(apply(apply(apply(prim(primName), a), b), c), d)
-
-  /** Apply a primitive by name to five curried arguments. */
-  inline def applyP[A](primName: String, a: TypedTerm[?], b: TypedTerm[?], c: TypedTerm[?], d: TypedTerm[?], e: TypedTerm[?]): TypedTerm[A] =
-    apply(apply(apply(apply(apply(prim(primName), a), b), c), d), e)
-
-  /** Apply a primitive by name to six curried arguments. */
-  inline def applyP[A](primName: String, a: TypedTerm[?], b: TypedTerm[?], c: TypedTerm[?], d: TypedTerm[?], e: TypedTerm[?], f: TypedTerm[?]): TypedTerm[A] =
-    apply(apply(apply(apply(apply(apply(prim(primName), a), b), c), d), e), f)
-
-  /** Apply a primitive by name to seven curried arguments. */
-  inline def applyP[A](primName: String, a: TypedTerm[?], b: TypedTerm[?], c: TypedTerm[?], d: TypedTerm[?], e: TypedTerm[?], f: TypedTerm[?], g: TypedTerm[?]): TypedTerm[A] =
-    apply(apply(apply(apply(apply(apply(apply(prim(primName), a), b), c), d), e), f), g)
-
-  /** Apply a primitive by name to eight curried arguments. */
-  inline def applyP[A](primName: String, a: TypedTerm[?], b: TypedTerm[?], c: TypedTerm[?], d: TypedTerm[?], e: TypedTerm[?], f: TypedTerm[?], g: TypedTerm[?], h: TypedTerm[?]): TypedTerm[A] =
-    apply(apply(apply(apply(apply(apply(apply(apply(prim(primName), a), b), c), d), e), f), g), h)
+  /** Apply a primitive by name to one or more curried arguments. */
+  def applyP[A](primName: String, a: TypedTerm[?], rest: TypedTerm[?]*): TypedTerm[A] =
+    apply(prim(primName), a +: rest*)
 
   // ---- Let bindings ----
 
@@ -102,6 +93,10 @@ object Phantoms:
   /** Multi-binding let. */
   def let[A](bindings: Seq[Field], body: TypedTerm[?]): TypedTerm[A] =
     Terms.lets(bindings, body)
+
+  /** Multi-binding let — varargs form, for when bindings are listed inline rather than as a Seq. */
+  def binds[A](b1: Field, b2: Field, rest: Field*)(body: TypedTerm[?]): TypedTerm[A] =
+    Terms.lets(b1 +: b2 +: rest, body)
 
   /** Build a let with an explicit TypeScheme attached to each binding. */
   def letTyped[A](name: String, value: TypedTerm[?], scheme: TypeScheme, body: TypedTerm[?]): TypedTerm[A] =
@@ -138,6 +133,10 @@ object Phantoms:
         Terms.boolean_(b))).asInstanceOf[TypedTerm[Term]]
   def float64(d: Double): TypedTerm[Double] = Terms.float64(d)
   def float32(f: Float): TypedTerm[Float] = Terms.float32(f)
+
+  /** 2-arg string concat — Haskell's (++) operator on strings desugars to this. */
+  def cat2(a: TypedTerm[String], b: TypedTerm[String]): TypedTerm[String] =
+    applyP("hydra.lib.strings.cat2", a, b)
 
   // ---- Unit, optional, either, pair, lists ----
 
@@ -182,6 +181,30 @@ object Phantoms:
 
   def projTerm[A](typeName: Name, fieldName: Name, term: TypedTerm[?]): TypedTerm[A] =
     apply(project(typeName, fieldName), term)
+
+  /**
+   * Copy-with-update: build a `record typeName` whose fields are, in the order of `allFields`,
+   * projected verbatim from `var(baseVar)` — except for those named in `overrides`, which supply
+   * their own value. Collapses the common "reconstruct the whole record to change one field"
+   * pattern (every unchanged field would otherwise be hand-written as
+   * `field(F, proj(typeName, F, baseVar))`).
+   *
+   * An override may still reference the base for the field it replaces, e.g. to add to a
+   * collection field: `field(varRenames, Maps.insert(k, v, proj(typeName, varRenames, "aliases")))`.
+   *
+   * `allFields` must list every field of the type in declaration order.
+   */
+  def recordWith[A](typeName: Name, baseVar: String, allFields: Seq[Name], overrides: Field*): TypedTerm[A] =
+    val overrideByName = scala.collection.mutable.LinkedHashMap.from(overrides.map(ov => ov.name -> ov))
+    val fields = allFields.map { f =>
+      overrideByName.remove(f) match
+        case Some(ov) => ov
+        case None => field(f, proj(typeName, f, baseVar))
+    }
+    if overrideByName.nonEmpty then
+      throw new IllegalArgumentException(
+        s"recordWith override(s) not in allFields for $typeName: ${overrideByName.keys.mkString(", ")}")
+    recordSeq(typeName, fields)
 
   def wrap[A](typeName: Name, body: TypedTerm[?]): TypedTerm[A] =
     Terms.wrap(typeName, body)
@@ -245,6 +268,49 @@ object Phantoms:
   def `def`[A](ns: ModuleName, localName: String, term: TypedTerm[A]): Definition =
     val fqName: Name = ns + "." + localName
     Definition.term(TermDefinition(fqName, None, None, term))
+
+  /**
+   * Begin a fluent definition: `define(NS, "name").doc("...").lam("x").lam("y").to(body)`.
+   *
+   * Reads top-to-bottom (declaration order) instead of the inside-out
+   * `` `def`(NS, "name", doc("...", lambda("x", lambda("y", body)))) `` nesting. The terminal
+   * [[DefBuilder.to]] yields the same [[Definition]] the flat form would: it composes the recorded
+   * doc + lambda parameters around the body as `doc(description, lambda([params], body))`,
+   * omitting the `doc`/`lambda` wrappers when none were specified. Scala's `lazy val` (used at
+   * call sites for the enclosing `def`) already handles forward/cross-references, so — unlike
+   * Java's `Supplier`-deferred `Def` — the body here is taken eagerly, by-name.
+   */
+  def define(ns: ModuleName, localName: String): DefBuilder =
+    DefBuilder(ns, localName, None, Seq.empty)
+
+  /**
+   * Fluent builder for a [[Definition]]. Records an optional doc description and zero or more
+   * lambda parameters, then [[to]] closes over the body to produce the [[Definition]]. See
+   * [[define]].
+   */
+  final case class DefBuilder(ns: ModuleName, localName: String, description: Option[String], params: Seq[String]):
+
+    /** Attach a doc description, wrapping the eventual body in `doc(description, ...)`. */
+    def doc(description: String): DefBuilder =
+      copy(description = Some(description))
+
+    /** Add one lambda parameter (applied outermost-first, matching `lambda("x", lambda("y", ...))`). */
+    def lam(param: String): DefBuilder =
+      copy(params = params :+ param)
+
+    /** Add several lambda parameters in order (equivalent to chained [[lam]] calls). */
+    def lams(ps: String*): DefBuilder =
+      copy(params = params ++ ps)
+
+    /** Close over the body and produce the [[Definition]]. */
+    def to[A](body: => TypedTerm[?]): Definition =
+      val t: TypedTerm[?] = if params.isEmpty then body else lambda(params, body)
+      val wrapped: TypedTerm[?] = description match
+        case Some(d) => Phantoms.doc(d, t)
+        case None => t
+      `def`(ns, localName, wrapped)
+
+  end DefBuilder
 
   /** Build a Definition with a pre-computed TypeScheme. */
   def defTyped[A](ns: ModuleName, localName: String, term: TypedTerm[A], ts: TypeScheme): Definition =

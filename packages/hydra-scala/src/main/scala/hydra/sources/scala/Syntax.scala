@@ -1025,7 +1025,11 @@ object Syntax:
   val module_ : Module = Module(
     name = NS,
     metadata = Some(EntityMetadata(
-      description = Some("A Scala syntax model for Hydra, anchored on Scalameta (https://scalameta.org). Departs from Scalameta where Hydra's needs differ: Term is renamed to Data, the FunctionType/FunctionData wrappers are flattened, and arms Hydra never emits (xml literals, quasiquote/macro forms) are omitted."),
+      description = Some(
+        "A Scala syntax model for Hydra, anchored on Scalameta (https://scalameta.org). " +
+        "Departs from Scalameta where Hydra's needs differ: Term is renamed to Data, the " +
+        "FunctionType/FunctionData wrappers are flattened, and arms Hydra never emits " +
+        "(xml literals, quasiquote/macro forms) are omitted."),
       comments = Seq.empty,
       seeAlso = Seq.empty,
       lifecycle = None)),

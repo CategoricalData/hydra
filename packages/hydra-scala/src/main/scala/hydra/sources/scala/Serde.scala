@@ -1,7 +1,7 @@
 package hydra.sources.scala
 
 import hydra.overlay.scala.dsl.{Helpers, Phantoms}
-import hydra.overlay.scala.dsl.Phantoms.{`var` => v, prim, applyP, lambda, let, field, string, int32, list, nothing, just, doc, casesWithDefault, cases, project, unwrap, wrap, constant}
+import hydra.overlay.scala.dsl.Phantoms.{`var` => v, prim, applyP, lambda, let, field, string, int32, list, nothing, just, doc, casesWithDefault, cases, project, unwrap, wrap, constant, makeLocal, define, cat2}
 import hydra.packaging.{Definition, EntityMetadata, Module, ModuleName}
 import hydra.typed.TypedTerm
 
@@ -19,24 +19,12 @@ object Serde:
   val NS: ModuleName = "hydra.scala.serde"
 
   /** Dependencies match Haskell `[Serialization.ns, jvmSerdeNs] ++ (ScalaSyntax.ns:kernelTypesModuleNames)`. */
-  private val DEPS: Seq[ModuleName] = Seq(
-    "hydra.serialization",
-    "hydra.jvm.serde",
-    "hydra.scala.syntax",
-    "hydra.paths",
-    "hydra.ast", "hydra.coders", "hydra.core",
-    "hydra.error.checking", "hydra.error.core", "hydra.error.file",
-    "hydra.error.packaging", "hydra.error.system",
-    "hydra.errors", "hydra.file", "hydra.graph", "hydra.json.model",
-    "hydra.packaging", "hydra.parsing",
-    "hydra.query", "hydra.relational", "hydra.system", "hydra.tabular",
-    "hydra.testing", "hydra.time", "hydra.topology", "hydra.typed",
-    "hydra.typing", "hydra.util", "hydra.validation", "hydra.variants")
+  private val DEPS: Seq[ModuleName] =
+    Seq("hydra.serialization", "hydra.jvm.serde", "hydra.scala.syntax") ++ Helpers.kernelTypesModuleNames
 
   // ===== Shorthand helpers (kept inline-small) =====
 
-  private def cat2(a: TypedTerm[String], b: TypedTerm[String]): TypedTerm[String] =
-    applyP("hydra.lib.strings.cat2", a, b)
+  private val local = makeLocal(NS)
 
   private def cst(t: TypedTerm[String]): TypedTerm[Any] =
     applyP("hydra.serialization.cst", t)
@@ -80,61 +68,61 @@ object Serde:
   private def fullBlockStyle: TypedTerm[Any] = v("hydra.serialization.fullBlockStyle")
 
   private def termToExprCall(t: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.scala.serde.termToExpr", t)
+    applyP(local("termToExpr"), t)
 
   private def typeToExprCall(t: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.scala.serde.typeToExpr", t)
+    applyP(local("typeToExpr"), t)
 
   private def patToExprCall(t: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.scala.serde.patToExpr", t)
+    applyP(local("patToExpr"), t)
 
   private def statToExprCall(t: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.scala.serde.statToExpr", t)
+    applyP(local("statToExpr"), t)
 
   private def caseToExprCall(t: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.scala.serde.caseToExpr", t)
+    applyP(local("caseToExpr"), t)
 
   private def dataParamToExprCall(t: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.scala.serde.dataParamToExpr", t)
+    applyP(local("dataParamToExpr"), t)
 
   private def dataNameToExprCall(t: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.scala.serde.dataNameToExpr", t)
+    applyP(local("dataNameToExpr"), t)
 
   private def typeNameToExprCall(t: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.scala.serde.typeNameToExpr", t)
+    applyP(local("typeNameToExpr"), t)
 
   private def typeParamToExprCall(t: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.scala.serde.typeParamToExpr", t)
+    applyP(local("typeParamToExpr"), t)
 
   private def nameToExprCall(t: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.scala.serde.nameToExpr", t)
+    applyP(local("nameToExpr"), t)
 
   private def modToExprCall(t: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.scala.serde.modToExpr", t)
+    applyP(local("modToExpr"), t)
 
   private def initToExprCall(t: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.scala.serde.initToExpr", t)
+    applyP(local("initToExpr"), t)
 
   private def importerToExprCall(t: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.scala.serde.importerToExpr", t)
+    applyP(local("importerToExpr"), t)
 
   private def importExportStatToExprCall(t: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.scala.serde.importExportStatToExpr", t)
+    applyP(local("importExportStatToExpr"), t)
 
   private def defnToExprCall(t: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.scala.serde.defnToExpr", t)
+    applyP(local("defnToExpr"), t)
 
   private def dataRefToExprCall(t: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.scala.serde.dataRefToExpr", t)
+    applyP(local("dataRefToExpr"), t)
 
   private def dataSelectToExprCall(t: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.scala.serde.dataSelectToExpr", t)
+    applyP(local("dataSelectToExpr"), t)
 
   private def dataFunctionToExprCall(t: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.scala.serde.dataFunctionToExpr", t)
+    applyP(local("dataFunctionToExpr"), t)
 
   private def litToExprCall(t: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.scala.serde.litToExpr", t)
+    applyP(local("litToExpr"), t)
 
   private def map[A, B](fn: TypedTerm[A], xs: TypedTerm[Seq[A]]): TypedTerm[Seq[B]] =
     applyP("hydra.lib.lists.map", fn, xs)
@@ -189,8 +177,7 @@ object Serde:
         termToExprCall(v("term"))))))
 
   lazy val caseToExprDef: Definition =
-    Phantoms.`def`(NS, "caseToExpr",
-      doc("Convert a case clause to an expression", caseToExprBody))
+    define(NS, "caseToExpr").doc("Convert a case clause to an expression").to(caseToExprBody)
 
   // ---- dataFunctionToExpr ----
   private val dataFunctionToExprBody = lambda("f",
@@ -202,25 +189,23 @@ object Serde:
       ifElse(
         gt(v("bodyLen"), int32(60)),
         noSep(list(
-          parenList(map(v("hydra.scala.serde.dataParamToExpr"), v("params"))),
+          parenList(map(v(local("dataParamToExpr")), v("params"))),
           cstS(" =>\n  "),
           v("bodyExpr"))),
         spaceSep(list(
-          parenList(map(v("hydra.scala.serde.dataParamToExpr"), v("params"))),
+          parenList(map(v(local("dataParamToExpr")), v("params"))),
           cstS("=>"),
           v("bodyExpr"))))))
 
   lazy val dataFunctionToExprDef: Definition =
-    Phantoms.`def`(NS, "dataFunctionToExpr",
-      doc("Convert a function-data lambda to an expression", dataFunctionToExprBody))
+    define(NS, "dataFunctionToExpr").doc("Convert a function-data lambda to an expression").to(dataFunctionToExprBody)
 
   // ---- dataNameToExpr ----
   private val dataNameToExprBody = lambda("dn",
     cst(ScalaSyntax.unPredefString(ScalaSyntax.nameDataValue(v("dn")))))
 
   lazy val dataNameToExprDef: Definition =
-    Phantoms.`def`(NS, "dataNameToExpr",
-      doc("Convert a data name to an expression", dataNameToExprBody))
+    define(NS, "dataNameToExpr").doc("Convert a data name to an expression").to(dataNameToExprBody)
 
   // ---- dataParamToExpr ----
   private val dataParamToExprBody = lambda("dp",
@@ -234,8 +219,7 @@ object Serde:
           v("stype")))))))
 
   lazy val dataParamToExprDef: Definition =
-    Phantoms.`def`(NS, "dataParamToExpr",
-      doc("Convert a data parameter to an expression", dataParamToExprBody))
+    define(NS, "dataParamToExpr").doc("Convert a data parameter to an expression").to(dataParamToExprBody)
 
   // ---- dataRefToExpr ----
   private val dataRefToExprBody = lambda("ref",
@@ -244,8 +228,7 @@ object Serde:
       field("select", lambda("sel", dataSelectToExprCall(v("sel"))))))
 
   lazy val dataRefToExprDef: Definition =
-    Phantoms.`def`(NS, "dataRefToExpr",
-      doc("Convert a data reference to an expression", dataRefToExprBody))
+    define(NS, "dataRefToExpr").doc("Convert a data reference to an expression").to(dataRefToExprBody)
 
   // ---- dataSelectToExpr ----
   private val dataSelectToExprBody = lambda("sel",
@@ -253,13 +236,12 @@ object Serde:
       field("arg", ScalaSyntax.selectDataQual(v("sel"))),
       field("name", ScalaSyntax.selectDataName(v("sel")))),
       ifx(
-        v("hydra.scala.serde.dotOp"),
+        v(local("dotOp")),
         termToExprCall(v("arg")),
         termToExprCall(ScalaSyntax.dataRef(ScalaSyntax.refDataName(v("name")))))))
 
   lazy val dataSelectToExprDef: Definition =
-    Phantoms.`def`(NS, "dataSelectToExpr",
-      doc("Convert a data select to an expression", dataSelectToExprBody))
+    define(NS, "dataSelectToExpr").doc("Convert a data select to an expression").to(dataSelectToExprBody)
 
   // ---- defnToExpr — six-arm cases. Each arm built as its own val. ----
 
@@ -295,14 +277,14 @@ object Serde:
       field("body", ScalaSyntax.defDefnBody(v("dd"))),
       field("tparamsExpr",
         ifElse(listNull(v("tparams")), nothing,
-          optPure(bracketList(inlineStyle, map(v("hydra.scala.serde.typeParamToExpr"), v("tparams")))))),
+          optPure(bracketList(inlineStyle, map(v(local("typeParamToExpr")), v("tparams")))))),
       field("scodExpr",
         optMap(
           lambda("t", spaceSep(list(cstS(":"), typeToExprCall(v("t"))))),
           v("scod"))),
       field("paramssExprs",
         map(
-          lambda("ps", parenList(map(v("hydra.scala.serde.dataParamToExpr"), v("ps")))),
+          lambda("ps", parenList(map(v(local("dataParamToExpr")), v("ps")))),
           v("paramss"))),
       field("nameAndParams",
         noSep(optCat(listConcat(list(
@@ -322,7 +304,7 @@ object Serde:
         optPure(cstS("type")),
         optPure(typeNameToExprCall(v("name"))),
         ifElse(listNull(v("tparams")), nothing,
-          optPure(bracketList(inlineStyle, map(v("hydra.scala.serde.typeParamToExpr"), v("tparams"))))),
+          optPure(bracketList(inlineStyle, map(v(local("typeParamToExpr")), v("tparams"))))),
         optPure(cstS("=")),
         optPure(typeToExprCall(v("body"))))))))
 
@@ -369,17 +351,17 @@ object Serde:
       field("paramss", ScalaSyntax.primaryCtorParamss(v("ctor"))),
       field("tparamsExpr",
         ifElse(listNull(v("tparams")), nothing,
-          optPure(bracketList(inlineStyle, map(v("hydra.scala.serde.typeParamToExpr"), v("tparams")))))),
+          optPure(bracketList(inlineStyle, map(v(local("typeParamToExpr")), v("tparams")))))),
       field("paramsExpr",
         ifElse(listNull(v("paramss")), nothing,
-          optPure(parenList(map(v("hydra.scala.serde.dataParamToExpr"), listConcat(v("paramss"))))))),
+          optPure(parenList(map(v(local("dataParamToExpr")), listConcat(v("paramss"))))))),
       field("nameAndParams",
         noSep(optCat(list(
           optPure(typeNameToExprCall(v("name"))),
           v("tparamsExpr"),
           v("paramsExpr")))))),
       spaceSep(listConcat(list(
-        map(v("hydra.scala.serde.modToExpr"), v("mods")),
+        map(v(local("modToExpr")), v("mods")),
         list(cstS("class"), v("nameAndParams")))))))
 
   // enum arm
@@ -395,7 +377,7 @@ object Serde:
           noSep(optCat(list(
             optPure(typeNameToExprCall(v("name"))),
             ifElse(listNull(v("tparams")), nothing,
-              optPure(bracketList(inlineStyle, map(v("hydra.scala.serde.typeParamToExpr"), v("tparams")))))))),
+              optPure(bracketList(inlineStyle, map(v(local("typeParamToExpr")), v("tparams")))))))),
           cstS(":")))),
       field("enumCases",
         map(
@@ -414,13 +396,13 @@ object Serde:
       field("params",
         ifElse(listNull(v("allParams")),
           cstS(""),
-          parenList(map(v("hydra.scala.serde.dataParamToExpr"), v("allParams"))))),
+          parenList(map(v(local("dataParamToExpr")), v("allParams"))))),
       field("extendsClause",
         ifElse(listNull(v("inits")),
           cstS(""),
           spaceSep(list(
             cstS("extends"),
-            commaSep(inlineStyle, map(v("hydra.scala.serde.initToExpr"), v("inits")))))))),
+            commaSep(inlineStyle, map(v(local("initToExpr")), v("inits")))))))),
       spaceSep(list(
         cstS("case"),
         noSep(list(dataNameToExprCall(v("name")), v("params"))),
@@ -436,8 +418,7 @@ object Serde:
       field("enumCase", enumCaseDefnArmBody)))
 
   lazy val defnToExprDef: Definition =
-    Phantoms.`def`(NS, "defnToExpr",
-      doc("Convert a definition to an expression", defnToExprBody))
+    define(NS, "defnToExpr").doc("Convert a definition to an expression").to(defnToExprBody)
 
   // ---- dotOp ----
   private val dotOpBody =
@@ -447,8 +428,7 @@ object Serde:
       AstDsl.associativityLeft)
 
   lazy val dotOpDef: Definition =
-    Phantoms.`def`(NS, "dotOp",
-      doc("The dot operator for member access", dotOpBody))
+    define(NS, "dotOp").doc("The dot operator for member access").to(dotOpBody)
 
   // ---- functionArrowOp ----
   private val functionArrowOpBody =
@@ -458,19 +438,17 @@ object Serde:
       AstDsl.associativityRight)
 
   lazy val functionArrowOpDef: Definition =
-    Phantoms.`def`(NS, "functionArrowOp",
-      doc("The function arrow operator (=>)", functionArrowOpBody))
+    define(NS, "functionArrowOp").doc("The function arrow operator (=>)").to(functionArrowOpBody)
 
   // ---- importExportStatToExpr ----
   private val importExportStatToExprBody = lambda("ie",
     cases("hydra.scala.syntax.ImportExportStat", v("ie"),
       field("import", lambda("imp",
         let(Seq(field("importers", ScalaSyntax.importImporters(v("imp")))),
-          newlineSep(map(v("hydra.scala.serde.importerToExpr"), v("importers"))))))))
+          newlineSep(map(v(local("importerToExpr")), v("importers"))))))))
 
   lazy val importExportStatToExprDef: Definition =
-    Phantoms.`def`(NS, "importExportStatToExpr",
-      doc("Convert an import/export statement to an expression", importExportStatToExprBody))
+    define(NS, "importExportStatToExpr").doc("Convert an import/export statement to an expression").to(importExportStatToExprBody)
 
   // ---- importerToExpr ----
 
@@ -479,6 +457,12 @@ object Serde:
     cases("hydra.scala.syntax.RefData", v("ref"),
       field("name", lambda("dn",
         ScalaSyntax.unPredefString(ScalaSyntax.nameDataValue(v("dn"))))))
+
+  // DEAD CODE (#553 audit): importeeRenderer and importerForImportees below are unreferenced —
+  // only importerForImporteesInlined (below) is actually used. __importee_renderer doesn't
+  // correspond to any registered Definition; this was an earlier attempt superseded by the
+  // inlined version per the NOTE below. Candidate for deletion in a follow-up; left in place here
+  // since removal wasn't in scope for this pass.
 
   // Per-importee renderer: matches wildcard or name, returns an Expr
   private val importeeRenderer = lambda("it",
@@ -500,12 +484,12 @@ object Serde:
         optFromOptional(cstS(""),
           optMap(
             lambda("firstImp",
-              noSep(list(cstS("."), applyP("hydra.scala.serde.__importee_renderer", v("firstImp"))))),
+              noSep(list(cstS("."), applyP(local("__importee_renderer"), v("firstImp"))))),
             listMaybeHead(v("importees")))),
         noSep(list(
           cstS("."),
           curlyBracesList(nothing, inlineStyle,
-            map(v("hydra.scala.serde.__importee_renderer"), v("importees")))))))
+            map(v(local("__importee_renderer")), v("importees")))))))
 
   // NOTE: importeeRenderer is bound as a private val here, but the let-body
   // can't reference Scala-level vals at term time — it needs to be inlined or
@@ -556,16 +540,14 @@ object Serde:
           v("forImportees")))))))
 
   lazy val importerToExprDef: Definition =
-    Phantoms.`def`(NS, "importerToExpr",
-      doc("Convert an importer to an expression", importerToExprBody))
+    define(NS, "importerToExpr").doc("Convert an importer to an expression").to(importerToExprBody)
 
   // ---- initToExpr ----
   private val initToExprBody = lambda("init",
     typeToExprCall(ScalaSyntax.initTpe(v("init"))))
 
   lazy val initToExprDef: Definition =
-    Phantoms.`def`(NS, "initToExpr",
-      doc("Convert an init to an expression", initToExprBody))
+    define(NS, "initToExpr").doc("Convert an init to an expression").to(initToExprBody)
 
   // ---- litToExpr ----
   private val litToExprBody = lambda("lit",
@@ -583,11 +565,11 @@ object Serde:
       field("long", lambda("i",
         cst(cat2(applyP("hydra.lib.literals.showInt64", v("i")), string("L"))))),
       field("float", lambda("f",
-        cst(applyP("hydra.scala.serde.scalaFloatLiteralText",
+        cst(applyP(local("scalaFloatLiteralText"),
           string("Float"), string("f"),
           applyP("hydra.lib.literals.showFloat32", v("f")))))),
       field("double", lambda("f",
-        cst(applyP("hydra.scala.serde.scalaFloatLiteralText",
+        cst(applyP(local("scalaFloatLiteralText"),
           string("Double"), string(""),
           applyP("hydra.lib.literals.showFloat64", v("f")))))),
       field("unit", constant(cstS("()"))),
@@ -606,8 +588,7 @@ object Serde:
             string(")"))))))))
 
   lazy val litToExprDef: Definition =
-    Phantoms.`def`(NS, "litToExpr",
-      doc("Convert a literal to an expression", litToExprBody))
+    define(NS, "litToExpr").doc("Convert a literal to an expression").to(litToExprBody)
 
   // ---- matchOp ----
   private val matchOpBody =
@@ -617,8 +598,7 @@ object Serde:
       AstDsl.associativityNone)
 
   lazy val matchOpDef: Definition =
-    Phantoms.`def`(NS, "matchOp",
-      doc("The match operator", matchOpBody))
+    define(NS, "matchOp").doc("The match operator").to(matchOpBody)
 
   // ---- modToExpr ----
   private val modToExprBody = lambda("m",
@@ -634,8 +614,7 @@ object Serde:
       field("protected", lambda("_", cstS("protected")))))
 
   lazy val modToExprDef: Definition =
-    Phantoms.`def`(NS, "modToExpr",
-      doc("Convert a modifier to an expression", modToExprBody))
+    define(NS, "modToExpr").doc("Convert a modifier to an expression").to(modToExprBody)
 
   // ---- nameToExpr ----
   private val nameToExprBody = lambda("name",
@@ -643,8 +622,7 @@ object Serde:
       field("value", lambda("s", cst(v("s"))))))
 
   lazy val nameToExprDef: Definition =
-    Phantoms.`def`(NS, "nameToExpr",
-      doc("Convert a name to an expression", nameToExprBody))
+    define(NS, "nameToExpr").doc("Convert a name to an expression").to(nameToExprBody)
 
   // ---- patToExpr ----
   private val patExtractArm = lambda("pe",
@@ -656,7 +634,7 @@ object Serde:
         termToExprCall(v("fun")),
         noSep(list(
           termToExprCall(v("fun")),
-          parenList(map(v("hydra.scala.serde.patToExpr"), v("args"))))))))
+          parenList(map(v(local("patToExpr")), v("args"))))))))
 
   private val patToExprBody = lambda("pat",
     cases("hydra.scala.syntax.Pat", v("pat"),
@@ -666,8 +644,7 @@ object Serde:
       field("wildcard", constant(cstS("_")))))
 
   lazy val patToExprDef: Definition =
-    Phantoms.`def`(NS, "patToExpr",
-      doc("Convert a pattern to an expression", patToExprBody))
+    define(NS, "patToExpr").doc("Convert a pattern to an expression").to(patToExprBody)
 
   // ---- pkgToExpr ----
   private val pkgToExprBody = lambda("pkg",
@@ -678,11 +655,10 @@ object Serde:
         spaceSep(list(cstS("package"), dataNameToExprCall(v("name")))))),
       doubleNewlineSep(listConcat(list(
         list(v("package")),
-        map(v("hydra.scala.serde.statToExpr"), v("stats")))))))
+        map(v(local("statToExpr")), v("stats")))))))
 
   lazy val pkgToExprDef: Definition =
-    Phantoms.`def`(NS, "pkgToExpr",
-      doc("Convert a package to an expression", pkgToExprBody))
+    define(NS, "pkgToExpr").doc("Convert a package to an expression").to(pkgToExprBody)
 
   // ---- scalaFloatLiteralText ----
   private val scalaFloatLiteralTextBody = lambda("prefix", lambda("suffix", lambda("s",
@@ -698,7 +674,7 @@ object Serde:
           cat2(v("s"), v("suffix"))))))))
 
   lazy val scalaFloatLiteralTextDef: Definition =
-    Phantoms.`def`(NS, "scalaFloatLiteralText", scalaFloatLiteralTextBody)
+    define(NS, "scalaFloatLiteralText").to(scalaFloatLiteralTextBody)
 
   // ---- statToExpr ----
   private val statToExprBody = lambda("stat",
@@ -708,8 +684,7 @@ object Serde:
       field("importExport", lambda("ie", importExportStatToExprCall(v("ie"))))))
 
   lazy val statToExprDef: Definition =
-    Phantoms.`def`(NS, "statToExpr",
-      doc("Convert a statement to an expression", statToExprBody))
+    define(NS, "statToExpr").doc("Convert a statement to an expression").to(statToExprBody)
 
   // ---- termToExpr — 8-arm cases on Data ----
 
@@ -719,7 +694,7 @@ object Serde:
       field("args", ScalaSyntax.applyDataArgs(v("app")))),
       noSep(list(
         termToExprCall(v("fun")),
-        parenList(map(v("hydra.scala.serde.termToExpr"), v("args")))))))
+        parenList(map(v(local("termToExpr")), v("args")))))))
 
   private val termAssignArm = lambda("a",
     let(Seq(
@@ -731,7 +706,7 @@ object Serde:
         termToExprCall(v("rhs"))))))
 
   private val termTupleArm = lambda("tup",
-    parenList(map(v("hydra.scala.serde.termToExpr"),
+    parenList(map(v(local("termToExpr")),
       ScalaSyntax.tupleDataArgs(v("tup")))))
 
   private val termMatchArm = lambda("m",
@@ -739,14 +714,14 @@ object Serde:
       field("expr", ScalaSyntax.matchDataExpr(v("m"))),
       field("mCases", ScalaSyntax.matchDataCases(v("m")))),
       ifx(
-        v("hydra.scala.serde.matchOp"),
+        v(local("matchOp")),
         termToExprCall(v("expr")),
-        newlineSep(map(v("hydra.scala.serde.caseToExpr"), v("mCases"))))))
+        newlineSep(map(v(local("caseToExpr")), v("mCases"))))))
 
   private val termBlockArm = lambda("blk",
     let(Seq(field("stats", ScalaSyntax.blockDataStats(v("blk")))),
       curlyBlock(fullBlockStyle,
-        newlineSep(map(v("hydra.scala.serde.statToExpr"), v("stats"))))))
+        newlineSep(map(v(local("statToExpr")), v("stats"))))))
 
   private val termToExprBody = lambda("term",
     cases("hydra.scala.syntax.Data", v("term"),
@@ -760,24 +735,21 @@ object Serde:
       field("block", termBlockArm)))
 
   lazy val termToExprDef: Definition =
-    Phantoms.`def`(NS, "termToExpr",
-      doc("Convert a term to an expression", termToExprBody))
+    define(NS, "termToExpr").doc("Convert a term to an expression").to(termToExprBody)
 
   // ---- typeNameToExpr ----
   private val typeNameToExprBody = lambda("tn",
     cst(ScalaSyntax.nameTypeValue(v("tn"))))
 
   lazy val typeNameToExprDef: Definition =
-    Phantoms.`def`(NS, "typeNameToExpr",
-      doc("Convert a type name to an expression", typeNameToExprBody))
+    define(NS, "typeNameToExpr").doc("Convert a type name to an expression").to(typeNameToExprBody)
 
   // ---- typeParamToExpr ----
   private val typeParamToExprBody = lambda("tp",
     nameToExprCall(ScalaSyntax.paramTypeName(v("tp"))))
 
   lazy val typeParamToExprDef: Definition =
-    Phantoms.`def`(NS, "typeParamToExpr",
-      doc("Convert a type parameter to an expression", typeParamToExprBody))
+    define(NS, "typeParamToExpr").doc("Convert a type parameter to an expression").to(typeParamToExprBody)
 
   // ---- typeToExpr ----
 
@@ -791,7 +763,7 @@ object Serde:
       field("args", ScalaSyntax.applyTypeArgs(v("ta")))),
       noSep(list(
         typeToExprCall(v("fun")),
-        bracketList(inlineStyle, map(v("hydra.scala.serde.typeToExpr"), v("args")))))))
+        bracketList(inlineStyle, map(v(local("typeToExpr")), v("args")))))))
 
   private val typeFunctionArm = lambda("tf",
     let(Seq(
@@ -800,7 +772,7 @@ object Serde:
         optFromOptional(v("cod"),
           listMaybeHead(ScalaSyntax.functionTypeParams(v("tf")))))),
       ifx(
-        v("hydra.scala.serde.functionArrowOp"),
+        v(local("functionArrowOp")),
         typeToExprCall(v("dom")),
         typeToExprCall(v("cod")))))
 
@@ -810,7 +782,7 @@ object Serde:
       field("body", ScalaSyntax.lambdaTypeTpe(v("tl")))),
       noSep(list(
         typeToExprCall(v("body")),
-        bracketList(inlineStyle, map(v("hydra.scala.serde.typeParamToExpr"), v("params")))))))
+        bracketList(inlineStyle, map(v(local("typeParamToExpr")), v("params")))))))
 
   private val typeVarArm = lambda("tv",
     typeNameToExprCall(ScalaSyntax.varTypeName(v("tv"))))
@@ -824,8 +796,7 @@ object Serde:
       field("var", typeVarArm)))
 
   lazy val typeToExprDef: Definition =
-    Phantoms.`def`(NS, "typeToExpr",
-      doc("Convert a type to an expression", typeToExprBody))
+    define(NS, "typeToExpr").doc("Convert a type to an expression").to(typeToExprBody)
 
   // ===== Module assembly — order matches Haskell `definitions` list =====
 
