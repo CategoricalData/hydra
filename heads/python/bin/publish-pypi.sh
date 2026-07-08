@@ -44,7 +44,7 @@ while [ $# -gt 0 ]; do
 done
 
 VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
-PUBLISH_SET=(hydra-kernel hydra-rdf hydra-pg hydra-python)
+PUBLISH_SET=(hydra-kernel hydra-build hydra-rdf hydra-pg hydra-python)
 
 # --- Guard: dependency closure -----------------------------------------------
 echo "=== Checking dependency closure of PyPI publish set ==="

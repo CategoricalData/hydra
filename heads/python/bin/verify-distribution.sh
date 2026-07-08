@@ -48,7 +48,7 @@ HYDRA_ROOT="$( cd "$HYDRA_PYTHON_DIR/../.." && pwd )"
 
 # The PyPI publish set (mirror of publish-pypi.sh PUBLISH_SET). Order is
 # leaves-first so a --no-index install can resolve inter-package deps.
-PUBLISH_SET=(hydra-kernel hydra-rdf hydra-pg hydra-python)
+PUBLISH_SET=(hydra-kernel hydra-build hydra-rdf hydra-pg hydra-python)
 
 WHEELS_DIR=""
 while [ $# -gt 0 ]; do

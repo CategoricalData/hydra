@@ -77,6 +77,7 @@ VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 # it from compiling standalone. Track the fix separately before adding it.
 PUBLISH_SET=(
     hydra-kernel
+    hydra-build
     hydra-haskell
     hydra-jvm
     hydra-java

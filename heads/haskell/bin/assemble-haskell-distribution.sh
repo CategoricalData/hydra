@@ -77,7 +77,7 @@ fi
 # per-package special-casing is needed below — only membership is checked here.
 # (#376: widened from the 0.16 trio hydra-kernel|hydra-haskell|hydra.)
 case "$PKG" in
-    hydra-kernel|hydra-haskell|hydra-coq|hydra-typescript|hydra-jvm|hydra-java|\
+    hydra-kernel|hydra-build|hydra-haskell|hydra-coq|hydra-typescript|hydra-jvm|hydra-java|\
     hydra-python|hydra-scala|hydra-lisp|hydra-go|hydra-wasm|hydra-rdf|hydra-pg|\
     hydra-ext|hydra-bench|hydra) ;;
     *) echo "ERROR: unsupported package '$PKG' (not a known Hydra Haskell distribution package)" >&2; exit 1 ;;

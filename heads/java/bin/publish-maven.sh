@@ -65,6 +65,7 @@ VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 # The 0.16.1 Java publish set, in LEAVES-FIRST topological order.
 PUBLISH_SET=(
     hydra-kernel
+    hydra-build
     hydra-haskell
     hydra-jvm
     hydra-java
