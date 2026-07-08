@@ -114,6 +114,21 @@ next session can pick it up and re-send. **Never archive a send you have not
 verified landed** — a silent non-delivery is exactly the failure class the #557
 model exists to eliminate.
 
+The verify rule generalizes beyond inbox messages: **a forward or send of any
+artifact (message, proposal file, draft) is DONE only when it is verified present
+at the destination path; plan-doc checkboxes and status reports record verified
+state, not intent.** Corollaries, each a silent-loss mode observed in practice:
+
+- Prefer absolute destination paths — a relative `cp` from an unexpected cwd can
+  write nothing while the sender records "relayed".
+- `mkdir -p` the destination directory before copying — worktrees spawned before
+  the #557 tooling lack `claude-hydra-messages/proposals/`; create it, don't
+  assume it.
+- A multi-hop forward is not complete at the first hop: "reached my
+  coordinator's queue" ≠ "reached the user." Each hop is verified separately,
+  and whoever records "waiting on X" should first confirm the request actually
+  reached X.
+
 Message body: include your branch name, the date, the ask or update, and any
 commit SHAs / verification results the recipient needs. Never edit or delete
 existing files in the recipient's inbox — only create new ones.
