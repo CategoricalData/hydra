@@ -210,3 +210,13 @@ There is **one staging agent per machine**, and all of them push to the same
    It covers **coordination messaging only**: it does *not* lift the draft-and-show
    rule for GitHub writes (issue filing, closing, labeling, commenting) or any other
    outward action — those still follow the dial and hard rule 5.
+5. **External process alerts.** Beyond agent-to-agent traffic, a staging agent may
+   receive messages from **non-agent processes on its machine** — a health/resource
+   watchdog, a monitoring script, a CI hook — alerting it to a machine-level
+   condition (memory pressure, an impending freeze, disk filling) that the running
+   agents cannot see from inside their worktrees and may need to respond to. As the
+   per-machine coordination hub, staging is the recipient for these host-level
+   signals; the usual response is fleet back-pressure (throttle/pause build work
+   until the condition clears). See [`external-alerts.md`](external-alerts.md) for
+   what these alerts look like, how to tell one from a peer message, and how to
+   handle it.
