@@ -54,3 +54,22 @@ mkdir -p "$UMBRELLA_DST"
 rm -rf "$UMBRELLA_DST"/*
 cp -R "$UMBRELLA_SRC"/. "$UMBRELLA_DST/"
 echo "    hydra: copied $(find "$UMBRELLA_DST" -name '*.hs' | wc -l | tr -d ' ') module(s)"
+
+# Generalization (#511 policy, applied to Haskell for #556): any OTHER
+# overlay/haskell/<pkg>/ tree (besides hydra-kernel and the hydra umbrella,
+# already handled above) MERGES onto dist/haskell/<pkg>/, exactly like Java's
+# and Python's copy-overlay.sh. This is a dumb full-tree merge — generated
+# siblings under the dist package are left untouched. Most packages have no
+# overlay tree at all; this loop is a no-op for them.
+for PKG_OVERLAY_SRC in "$HYDRA_ROOT_DIR"/overlay/haskell/*/src/main/haskell; do
+  [ -d "$PKG_OVERLAY_SRC" ] || continue
+  PKG_DIR="$( cd "$PKG_OVERLAY_SRC/../../.." && pwd )"
+  PKG="$( basename "$PKG_DIR" )"
+  case "$PKG" in
+    hydra-kernel|hydra) continue ;;  # already handled above
+  esac
+  PKG_DST="$HYDRA_ROOT_DIR/dist/haskell/$PKG/src/main/haskell"
+  mkdir -p "$PKG_DST"
+  cp -R "$PKG_OVERLAY_SRC"/. "$PKG_DST/"
+  echo "    $PKG: overlaid $(find "$PKG_OVERLAY_SRC" -name '*.hs' | wc -l | tr -d ' ') hand-written module(s)"
+done

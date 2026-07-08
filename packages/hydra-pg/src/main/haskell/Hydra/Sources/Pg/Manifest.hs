@@ -93,9 +93,10 @@ mainModules = [
 -- Current consumers (as of 2026-05-16):
 --   * Hydra.Dsl.Pg.Model — imported by Hydra.Sources.Pg.Rdf.Mappings
 --
--- Note: the hand-written DSL modules Hydra.Dsl.Pg.Mappings and
--- Hydra.Dsl.Pg.Schemas (used by the genpg demos) are NOT derived from
--- type modules; they live in packages/hydra-pg/.../Hydra/Dsl/Pg/ and
+-- Note: the hand-written DSL modules Hydra.Overlay.Haskell.Dsl.Pg.Mappings and
+-- Hydra.Overlay.Haskell.Dsl.Pg.Schemas (used by the genpg demos) are NOT derived
+-- from type modules; they live in
+-- overlay/haskell/hydra-pg/.../Hydra/Overlay/Haskell/Dsl/Pg/ (#501/#556) and
 -- don't go through this list.
 mainDslModules :: [Module]
 mainDslModules = [
