@@ -51,6 +51,7 @@ import qualified Data.Map                    as M
 import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
+import qualified Hydra.Sources.Kernel.Terms.Dsls as Dsls
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Encoding as Encoding
 import qualified Hydra.Sources.Kernel.Terms.Decoding as Decoding
@@ -74,7 +75,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, Encoding.ns, Decoding.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Dsls.ns, Names.ns, Encoding.ns, Decoding.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Manifest-derived, fail-loud routing of modules to their owning packages")}
   where
    definitions = [
@@ -112,7 +113,7 @@ derivedNames :: TypedTermDefinition (ModuleName -> [ModuleName])
 derivedNames = define "derivedNames" $
   doc "The derived module names produced from a source module name" $
   "m" ~>
-  "dsl" <~ (Names.dslModuleName @@ var "m") $
+  "dsl" <~ (Dsls.dslModuleName @@ var "m") $
   "enc" <~ (Encoding.encodeModuleName @@ var "m") $
   "dec" <~ (Decoding.decodeModuleName @@ var "m") $
   list [

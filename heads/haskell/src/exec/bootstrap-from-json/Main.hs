@@ -31,7 +31,7 @@ import Hydra.Kernel
 import Hydra.Generation
 import qualified Hydra.Codegen as CodeGeneration
 import Hydra.PackageRouting (RoutingMap, buildRoutingMap, groupByPackageIn, namespaceToPackageIn)
-import Hydra.Names (dslModuleName)
+import Hydra.Dsls (dslModuleName)
 import Hydra.Encoding (encodeModuleName)
 import Hydra.Decoding (decodeModuleName)
 import qualified Hydra.TargetFilePaths as TargetFilePaths
