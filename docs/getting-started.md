@@ -288,7 +288,7 @@ A handful of module names you'll touch most often as a library user:
 | `hydra.validate.pg` | Property-graph validation against a schema. |
 | `hydra.error.pg` | Property-graph validation errors. |
 | `hydra.lib.maps`, `hydra.lib.lists`, etc. | Stdlib-style helpers, generic over host stdlib. |
-| `hydra.util.Maybe`, `hydra.util.Either` | Functional-style result wrappers. Java/Python; Haskell uses native `Maybe` and `Either`. |
+| `hydra.overlay.java.util.Either` (Java) | Functional-style result wrapper; hand-written overlay type, not generated. Haskell uses native `Either`. |
 | `hydra.reflect` | Runtime reflection on the kernel types (`literalType`, `literalVariant`, etc.). |
 
 The full primitive lexicon is in

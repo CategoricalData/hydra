@@ -864,22 +864,3 @@ updateHoistState = define "updateHoistState" $
           (pair true true),  -- First app, still at top level but mark usedApp
       -- Application argument: takes us out of top level
       _SubtermStep_applicationArgument>>: constant $ pair false (var "usedApp")])
-
--- | Wrap a list of bindings in a let term, pushing the let inside any leading lambdas.
--- This ensures that hoisted bindings don't break function analysis, which expects
--- lambdas before lets (not the other way around).
--- e.g., instead of Let([h=...], Lambda(p, body)), this produces Lambda(p, Let([h=...], body))
-wrapLetInsideLambdas :: TypedTermDefinition ([Binding] -> Term -> Term)
-wrapLetInsideLambdas = define "wrapLetInsideLambdas" $
-  doc "Wrap bindings in a let term, pushing the let inside leading lambdas" $
-  "bindings" ~> "term" ~>
-  cases _Term (var "term") (Just $ Core.termLet $ Core.let_ (var "bindings") (var "term")) [
-    _Term_lambda>>: "lam" ~>
-      Core.termLambda $ Core.lambda
-        (Core.lambdaParameter $ var "lam")
-        (Core.lambdaDomain $ var "lam")
-        (wrapLetInsideLambdas @@ var "bindings" @@ Core.lambdaBody (var "lam")),
-    _Term_annotated>>: "ann" ~>
-      Core.termAnnotated $ Core.annotatedTerm
-        (wrapLetInsideLambdas @@ var "bindings" @@ Core.annotatedTermBody (var "ann"))
-        (Core.annotatedTermAnnotation $ var "ann")]

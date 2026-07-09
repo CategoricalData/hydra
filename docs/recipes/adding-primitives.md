@@ -518,7 +518,7 @@ import static hydra.dsl.Types.int32;
 import static hydra.dsl.Types.scheme;
 import hydra.typing.InferenceContext;
 import hydra.errors.Error_;
-import hydra.util.Either;
+import hydra.overlay.java.util.Either;
 
 public class IsAlphaNum extends PrimitiveFunction {
     public Name name() { return new Name("hydra.lib.chars.isAlphaNum"); }

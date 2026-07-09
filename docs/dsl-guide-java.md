@@ -827,7 +827,7 @@ was removed in #245). An `InferenceContext` value is threaded alongside the grap
 and carries the fresh-type-variable counter and the current subterm-path trace.
 
 ```java
-import hydra.util.Either;
+import hydra.overlay.java.util.Either;
 import hydra.typing.InferenceContext;
 import hydra.errors.Error;
 import hydra.graph.Graph;

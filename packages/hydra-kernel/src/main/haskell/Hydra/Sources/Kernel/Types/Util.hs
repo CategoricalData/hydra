@@ -4,7 +4,7 @@ module Hydra.Sources.Kernel.Types.Util where
 import           Hydra.Kernel
 import           Hydra.Overlay.Haskell.Dsl.Annotations (doc)
 import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
+import           Hydra.Overlay.Haskell.Dsl.Types ((>:))
 import qualified Hydra.Overlay.Haskell.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Packaging as Packaging
@@ -23,9 +23,6 @@ module_ = Module {
             moduleDependencies = unqualifiedDep <$> [Core.ns, Packaging.ns],
             moduleMetadata = descriptionMetadata (Just "General-purpose utility types used across Hydra.")}
   where
-    -- Note: either_ and pair are NOT included here because they correspond to built-in
-    -- type constructors (TypeEither, TypePair) which are handled natively by all target languages.
-    -- Including them would cause conflicts with Haskell's Prelude.Either.
     -- Note: adapter, bicoder, and coder have been moved to hydra.coders.
     definitions = [
       caseConvention,
@@ -47,17 +44,6 @@ comparison = define "Comparison" $
     "equalTo",
     "greaterThan"]
 
-either_ :: TypeDefinition
-either_ = define "Either" $
-  doc "A named union type equivalent to the built-in Either type constructor, for use in languages that lack anonymous sum types" $
-  T.forAlls ["a", "b"] $ T.union [
-    "left">:
-      doc "The left alternative"
-      (T.var "a"),
-    "right">:
-      doc "The right alternative"
-      (T.var "b")]
-
 moduleNames :: TypeDefinition
 moduleNames = define "ModuleNames" $
   doc "A mapping from module names to values of type n, with a focus on one module name" $
@@ -68,17 +54,6 @@ moduleNames = define "ModuleNames" $
     "mapping">:
       doc "A mapping of module names to values" $
       T.map Packaging.moduleNameDef "n"]
-
-pair :: TypeDefinition
-pair = define "Pair" $
-  doc "A named record type equivalent to the built-in Pair type constructor, for use in languages that lack anonymous product types" $
-  T.forAlls ["a", "b"] $ T.record [
-    "first">:
-      doc "The first component"
-      (T.var "a"),
-    "second">:
-      doc "The second component"
-      (T.var "b")]
 
 precision :: TypeDefinition
 precision = define "Precision" $
