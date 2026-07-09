@@ -4,6 +4,9 @@
   "dependencies": [
     {"module": "hydra.lib.defaults"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.lib.defaults"},
+    {"module": "hydra.decode.lib.defaults"},
+    {"module": "hydra.core"},
     {"module": "hydra.lib.eithers"},
     {"module": "hydra.lib.equality"},
     {"module": "hydra.lib.lists"},
@@ -13,6 +16,7 @@
     {"module": "hydra.lib.optionals"},
     {"module": "hydra.lib.pairs"},
     {"module": "hydra.lib.sets"},
+    {"module": "hydra.dsl.core"},
     {"module": "hydra.dsl.lib.eithers"},
     {"module": "hydra.dsl.lib.equality"},
     {"module": "hydra.dsl.lib.lists"},

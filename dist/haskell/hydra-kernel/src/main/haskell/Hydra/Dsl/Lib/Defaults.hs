@@ -5,6 +5,7 @@
 module Hydra.Dsl.Lib.Defaults where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Dsl.Lib.Eithers as Eithers
 import qualified Hydra.Dsl.Lib.Equality as Equality
 import qualified Hydra.Dsl.Lib.Lists as Lists

@@ -5,6 +5,7 @@
     "comments": [],
     "seeAlso": []},
   "dependencies": [
+    {"module": "hydra.core"},
     {"module": "hydra.lib.eithers"},
     {"module": "hydra.lib.equality"},
     {"module": "hydra.lib.lists"},
