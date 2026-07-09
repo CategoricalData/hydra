@@ -24,7 +24,7 @@
 ;; not valid UTF-8.
 (defvar hydra_overlay_emacs_lisp_lib_text_decode_utf8
   (lambda (data)
-    (let* ((bytes (string-as-unibyte (concat data)))
+    (let* ((bytes (apply #'unibyte-string (append data nil)))
            (text (decode-coding-string bytes 'utf-8 t))
            (invalid (cl-some (lambda (ch) (and (>= ch #x3FFF00) (<= ch #x3FFFFF)))
                              (append text nil))))

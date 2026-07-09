@@ -641,6 +641,7 @@ package's generated modules with the same ordering/exclusion rules."
                   "test/lib/sets.el"
                   "test/lib/strings.el"
                   "test/lib/system.el"
+                  "test/lib/text.el"
                   "test/annotations.el"
                   ;; #546: test/build/*.el moved to the hydra-build package's
                   ;; test tree; they are loaded separately by run-tests.el via

@@ -273,7 +273,8 @@
              "lib/regex.lisp"
              "lib/sets.lisp"
              "lib/strings.lisp"
-             "lib/system.lisp"))
+             "lib/system.lisp"
+             "lib/text.lisp"))
   (load-test-file f))
 
 ;; Annotation tests

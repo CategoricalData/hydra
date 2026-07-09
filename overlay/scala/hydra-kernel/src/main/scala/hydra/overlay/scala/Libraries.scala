@@ -6,7 +6,7 @@ import hydra.graph.Primitive
 // (the analog of Haskell's Hydra.Haskell.Lib.*), leaving hydra.lib free for the generated
 // PrimitiveDefinition def-modules. Import the impl objects so the bare references below
 // (chars.isAlphaNum, lists.cons, …) still resolve.
-import hydra.overlay.scala.lib.{chars, eithers, equality, lists, literals, logic, maps, math, optionals, pairs, regex, sets, strings}
+import hydra.overlay.scala.lib.{chars, eithers, equality, lists, literals, logic, maps, math, optionals, pairs, regex, sets, strings, text}
 
 /** Registry of all primitive functions available in Hydra-Scala.
   * First-order primitives have real (native) implementations. Most higher-order
@@ -1363,11 +1363,15 @@ object Libraries:
   private def textPrimitives(): Map[String, Primitive] =
     Map(
       // decodeUtf8: binary -> either<string, string>
-      hydra.lib.text.decodeUtf8.name -> mkPrim(hydra.lib.text.decodeUtf8.name,
-        tMono(tFun(tBinary, tEither(tString, tString)))),
+      hydra.lib.text.decodeUtf8.name -> mkPrimImpl(hydra.lib.text.decodeUtf8.name,
+        tMono(tFun(tBinary, tEither(tString, tString))),
+        impl1(a => text.decodeUtf8(exBinary(a)) match
+          case Left(msg) => mkEither(Left(mkString(msg)))
+          case Right(s) => mkEither(Right(mkString(s))))),
       // encodeUtf8: string -> binary
-      hydra.lib.text.encodeUtf8.name -> mkPrim(hydra.lib.text.encodeUtf8.name,
-        tMono(tFun(tString, tBinary))),
+      hydra.lib.text.encodeUtf8.name -> mkPrimImpl(hydra.lib.text.encodeUtf8.name,
+        tMono(tFun(tString, tBinary)),
+        impl1(a => mkBinary(text.encodeUtf8(exString(a))))),
     )
 
   /** All standard primitives. */
