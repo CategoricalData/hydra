@@ -22,7 +22,8 @@
 # Steps performed:
 #   1. Build required executables
 #   2. Export kernel + test modules to JSON (DSL → JSON)
-#   3. Verify JSON kernel (reconcile drift via update-json-kernel) + write manifest
+#   3. Verify JSON kernel (reconcile drift via update-json-kernel) + write manifest,
+#      then check kernel-authoring source for unregistered definitions (#554)
 #   4. Generate Haskell from JSON (JSON → Haskell)
 #   5. Post-process generated files (no-op since #307)
 #   6. Run tests (unless --no-tests)
@@ -221,6 +222,16 @@ else
     fi
 fi
 stack exec update-json-manifest
+
+# Registration-completeness check (#554): a kernel-authoring def can be written
+# as a top-level binding but never added to its module's `definitions = [...]`
+# assembly list, silently vanishing from generated output with no error. Unlike
+# the Java/Python ports of this check (which use runtime reflection), Haskell
+# has none, so this is a source-text scanner — pure and fast, no stack/GHC
+# invocation needed, so it runs unconditionally rather than being cache-gated.
+if ! python3 "$HYDRA_ROOT_DIR/bin/lib/check-haskell-def-completeness.py" "$HYDRA_ROOT_DIR"; then
+    die "Haskell kernel-authoring source has unregistered definition(s); see above."
+fi
 
 step 4 $TOTAL_STEPS "Generating Haskell from JSON"
 echo ""

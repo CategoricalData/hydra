@@ -784,6 +784,37 @@ module_ = Module {
         lambda "x" (Math.add (var "x") (int32 1))]
 ```
 
+### Registration-completeness checking
+
+A recurring authoring mistake: you write a new definition as a top-level binding, but forget to add it
+to the module's `definitions` list above. The binding still compiles fine (it's just an unreferenced,
+well-typed value), but it silently never reaches the generated `Module` — no error, anywhere, until
+something references it much later and fails far from the actual mistake.
+
+`bin/lib/check-haskell-def-completeness.py` catches this for kernel-authoring source under
+`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/`. It runs automatically as part of
+`heads/haskell/bin/sync-haskell.sh` (right after the JSON-kernel-verify step), scanning each `Terms/*.hs`,
+`Types/*.hs`, and `Lib/*.hs` file for top-level bindings with an explicit `:: TypedTermDefinition _`
+/ `:: TypeDefinition` / `:: PrimitiveDefinition` signature and checking that each is referenced in that
+file's own assembly list (`definitions = [...]` or an inline `moduleDefinitions = [...]`).
+
+This is a source-text scanner, not a runtime check — Haskell has no reflection to introspect its own
+module structure at compile or load time (unlike the Java and Python ports of this same guard, `Defs.
+checkComplete` and `check_complete`, which use `Class.getDeclaredFields()` and `inspect.getmembers`
+respectively). Two consequences of that:
+
+- **Only explicitly-typed bindings are checked.** A binding produced by an untyped factory function (e.g.
+  a helper like `keyClasses = defineAnnotationKey "classes" $ ...`, with no local type signature) is
+  invisible to the scanner. This is a deliberate under-approximation — it can't false-positive, but it can
+  miss a genuine orphan hidden behind such a pattern.
+- **Some definitions may be deliberately excluded** from a module's assembly list — e.g. a named type
+  alias that would shadow a built-in type constructor and conflict with target-language natives if
+  emitted. Mark these with an `-- unregistered: <reason>` comment on the line directly above the
+  binding's type signature; the scanner recognizes this and skips the binding instead of flagging it
+  every run. (Prefer deleting a binding outright over marking it `unregistered` when there's no live
+  reason to keep it — the marker is for defs that are genuinely wanted but can't be registered, not a
+  way to silence the checker on dead code.)
+
 ### When to use
 
 Use the meta DSLs when writing programs that construct Hydra terms or types:

@@ -171,6 +171,26 @@ packages, `update-json-main --include-java-python` after busting the input cache
 record in the package. Per #414 the message names the source module + the likely cause precisely;
 a record decoder also names the expected type ("expected a record of type T") on a shape mismatch.
 
+### "check-haskell-def-completeness: found unregistered definition(s)"
+
+**Symptom**: `sync-haskell.sh` aborts right after the JSON-kernel-verify step, printing one or
+more `<file>: <binding name>[, <binding name>...]` lines and "Add each to its module's `definitions
+= [...]` list, or remove the unused binding."
+
+**Cause**: A kernel-authoring source file (`Terms/*.hs`, `Types/*.hs`, or `Lib/*.hs` under
+`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/`) declares a top-level binding with
+an explicit `TypedTermDefinition`/`TypeDefinition`/`PrimitiveDefinition` type signature, but that
+binding is never referenced in the file's own `definitions = [...]` (or inline `moduleDefinitions
+= [...]`) assembly list — so it silently never reaches the generated module. See
+[docs/dsl-guide.md § Registration-completeness checking](dsl-guide.md#registration-completeness-checking)
+for the full design (`bin/lib/check-haskell-def-completeness.py`).
+
+**Fix**: Either add the named binding to the assembly list (alphabetically, per the
+[coding style guide](https://github.com/CategoricalData/hydra/wiki/Coding-style)), or delete the
+binding if it's genuinely unused. If the exclusion is deliberate (the binding shadows a built-in
+type constructor, for example), mark it with an `-- unregistered: <reason>` comment on the line
+directly above its type signature instead of adding it to the list.
+
 ## Python issues
 
 ### Naming collisions with reserved words
@@ -233,6 +253,23 @@ source directories over `dist/scala/hydra-{kernel,haskell,java,python,scala,lisp
 `bin/sync-scala.sh` is narrow (host=scala × target=scala only) and does not
 populate `dist/scala/hydra-{haskell,java,python,lisp}/`. Use
 `bin/sync.sh --hosts scala --targets all` for a full Scala dist refresh.
+
+### "checkComplete: <Module> declares def-producing member(s) missing from its DEFINITIONS list"
+
+**Symptom**: `bin/sync-scala.sh` (or any `bin/sync.sh` invocation targeting Scala) fails during
+the `hydra.updateScalaJson` sbt run with a `java.lang.IllegalStateException` at
+`hydra.overlay.scala.dsl.meta.Defs$.checkComplete`, naming one or more member names and the
+module they belong to.
+
+**Cause**: A Scala DSL-authoring file (`packages/hydra-scala/src/main/scala/hydra/sources/scala/
+{Coder,Language,Serde,Syntax,Utils}.scala`) declares a `lazy val fooDef: Definition`, but `fooDef`
+is never added to that file's `DEFINITIONS: Seq[Definition]` list — so it silently never reaches
+the generated module. See
+[docs/dsl-guide-scala.md § Registration-completeness checking](dsl-guide-scala.md#registration-completeness-checking)
+for the full design.
+
+**Fix**: Add the named member to `DEFINITIONS`. If it's genuinely unused, delete the `lazy val`
+instead of adding it.
 
 ### `hydra-java:compileJava` OOM during incremental rebuild
 
