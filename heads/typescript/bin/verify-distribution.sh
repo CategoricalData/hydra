@@ -100,8 +100,8 @@ TMP_INSTALL="$(mktemp -d "${TMPDIR:-/tmp}/hydra-npm-smoke.XXXXXX")"
     npm install --no-audit --no-fund --loglevel=error "${tarballs[@]}" 2>/dev/null
     # Verify the kernel core module loads — catches a file missing from the pack.
     node --input-type=module <<'EOF'
-import {} from 'hydra-kernel/dist/hydra/core.js';
-console.log('  OK   hydra-kernel/dist/hydra/core.js');
+import {} from 'hydra-kernel';
+console.log('  OK   hydra-kernel');
 EOF
 )
 
