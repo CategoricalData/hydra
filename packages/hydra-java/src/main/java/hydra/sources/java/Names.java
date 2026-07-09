@@ -157,7 +157,7 @@ public class Names {
         .to(() ->
                 string("R"));
 
-    private static final List<Definition> DEFINITIONS = definitionsOf(
+    private static final Def[] ALL_DEFS = {
             acceptMethodName,
             applyMethodName,
             compareToMethodName,
@@ -178,7 +178,13 @@ public class Names {
             valueFieldName,
             visitMethodName,
             visitorName,
-            visitorReturnParameter);
+            visitorReturnParameter};
+
+    static {
+        Defs.checkComplete(Names.class, ALL_DEFS);
+    }
+
+    private static final List<Definition> DEFINITIONS = definitionsOf(ALL_DEFS);
 
     private static final List<ModuleDependency> DEPENDENCIES = unqualifiedDeps(
         new ModuleName("hydra.java.syntax"),

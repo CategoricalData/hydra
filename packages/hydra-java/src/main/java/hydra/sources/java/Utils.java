@@ -3088,7 +3088,7 @@ public class Utils {
 
 
 
-    private static final List<Definition> DEFINITIONS = definitionsOf(
+    private static final Def[] ALL_DEFS = {
             addExpressions,
             addInScopeVar,
             addInScopeVars,
@@ -3224,7 +3224,14 @@ public class Utils {
             variableDeclarationStatement,
             variableToJavaIdentifier,
             variantClassName,
-            visitorTypeVariable);
+            visitorTypeVariable
+    };
+
+    static {
+        Defs.checkComplete(Utils.class, ALL_DEFS);
+    }
+
+    private static final List<Definition> DEFINITIONS = definitionsOf(ALL_DEFS);
 
     private static final List<ModuleDependency> DEPENDENCIES = unqualifiedDeps(
         new ModuleName("hydra.java.language"),

@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static hydra.overlay.java.dsl.meta.Phantoms.*;
+import hydra.overlay.java.dsl.meta.Defs;
 import hydra.overlay.java.dsl.meta.Defs.Def;
 import static hydra.overlay.java.dsl.meta.Defs.define;
 import static hydra.overlay.java.dsl.meta.Defs.unqualifiedDeps;
@@ -122,12 +123,19 @@ public class Serde {
                             apply(ref(Serde.hexDigit), var("d1")),
                             apply(ref(Serde.hexDigit), var("d0")))))));
 
-    private static final List<Definition> DEFINITIONS = definitionsOf(
+    private static final Def[] ALL_DEFS = {
             escapeJavaChar,
             escapeJavaString,
             hexDigit,
             javaUnicodeEscape,
-            padHex4);
+            padHex4
+    };
+
+    static {
+        Defs.checkComplete(Serde.class, ALL_DEFS);
+    }
+
+    private static final List<Definition> DEFINITIONS = definitionsOf(ALL_DEFS);
 
     private static final List<ModuleDependency> DEPENDENCIES = unqualifiedDeps(
         new ModuleName("hydra.paths"),

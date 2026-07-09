@@ -3195,7 +3195,7 @@ public class Serde {
 
 
 
-    private static final List<Definition> DEFINITIONS = definitionsOf(
+    private static final Def[] ALL_DEFS = {
             additionalBoundToExpr,
             additiveExpressionToExpr,
             ambiguousNameToExpr,
@@ -3364,7 +3364,14 @@ public class Serde {
             whileStatementToExpr,
             wildcardBoundsToExpr,
             wildcardToExpr,
-            withComments);
+            withComments
+    };
+
+    static {
+        Defs.checkComplete(Serde.class, ALL_DEFS);
+    }
+
+    private static final List<Definition> DEFINITIONS = definitionsOf(ALL_DEFS);
 
 
     private static final List<ModuleDependency> DEPENDENCIES = unqualifiedDeps(

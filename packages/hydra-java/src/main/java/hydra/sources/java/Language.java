@@ -313,10 +313,17 @@ public class Language {
                         var("literals")))));
         });
 
-    private static final List<Definition> DEFINITIONS = definitionsOf(
-        javaMaxTupleLength,
-        javaLanguage,
-        reservedWords);
+    private static final Def[] ALL_DEFS = {
+            javaMaxTupleLength,
+            javaLanguage,
+            reservedWords
+    };
+
+    static {
+        Defs.checkComplete(Language.class, ALL_DEFS);
+    }
+
+    private static final List<Definition> DEFINITIONS = definitionsOf(ALL_DEFS);
 
     // Haskell: moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces
     private static final List<ModuleDependency> DEPENDENCIES = unqualifiedDeps(

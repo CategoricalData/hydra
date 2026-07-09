@@ -12,7 +12,10 @@ import hydra.typed.TypedTerm;
 import hydra.typing.TermSignature;
 import hydra.overlay.java.util.Optional;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -185,6 +188,54 @@ public final class Defs {
             out.add(d.definition());
         }
         return out;
+    }
+
+    /**
+     * Verify that every {@code static final Def} field declared directly in {@code sourceClass} is
+     * among the given {@code registered} defs (typically the same array passed to
+     * {@link #definitionsOf(Def...)}). Throws {@link IllegalStateException} naming any orphaned field
+     * — a {@code Def} authored in the class but never added to the module's assembly list, which would
+     * otherwise silently vanish from the generated module.
+     *
+     * <p>Call once per source class, immediately after building {@code DEFINITIONS}:
+     * <pre>
+     *   private static final List&lt;Definition&gt; DEFINITIONS = definitionsOf(fooDef, barDef);
+     *   static { Defs.checkComplete(Names.class, fooDef, barDef); }
+     * </pre>
+     *
+     * <p>Only the omission direction is checked: a registered {@code Def} that isn't a field of
+     * {@code sourceClass} is not an error (e.g. a def imported from a sibling class), so this is not a
+     * full set-equality check.
+     */
+    public static void checkComplete(Class<?> sourceClass, Def... registered) {
+        IdentityHashMap<Def, Boolean> registeredSet = new IdentityHashMap<>(registered.length);
+        for (Def d : registered) {
+            registeredSet.put(d, Boolean.TRUE);
+        }
+        List<String> orphans = new ArrayList<>();
+        for (Field field : sourceClass.getDeclaredFields()) {
+            if (!Modifier.isStatic(field.getModifiers()) || field.getType() != Def.class) {
+                continue;
+            }
+            try {
+                field.setAccessible(true);
+                Def value = (Def) field.get(null);
+                if (value != null && !registeredSet.containsKey(value)) {
+                    orphans.add(field.getName());
+                }
+            } catch (IllegalAccessException e) {
+                throw new IllegalStateException(
+                    "Defs.checkComplete: could not read field " + field.getName()
+                        + " of " + sourceClass.getName(), e);
+            }
+        }
+        if (!orphans.isEmpty()) {
+            throw new IllegalStateException(
+                "Defs.checkComplete: " + sourceClass.getName()
+                    + " declares Def field(s) missing from its DEFINITIONS list: "
+                    + String.join(", ", orphans)
+                    + ". Add each to the definitionsOf(...) call, or remove the unused field.");
+        }
     }
 
     /** Construct a {@link ModuleDependency} on the given module, without a package qualifier. */

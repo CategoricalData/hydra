@@ -361,15 +361,22 @@ public class Testing {
                         stringsSplitOn(string("."), unwrapNamespace(var("ns_"))))));
 
     // Order matches the Haskell `definitions = [...]` list.
-    private static final List<Definition> DEFINITIONS = definitionsOf(
-        buildJavaTestModule,
-        findJavaImports,
-        formatJavaTestName,
-        generateJavaTestCase,
-        generateJavaTestFile,
-        generateJavaTestGroupHierarchy,
-        generateTestFileWithJavaCodec,
-        namespaceToJavaClassName);
+    private static final Def[] ALL_DEFS = {
+            buildJavaTestModule,
+            findJavaImports,
+            formatJavaTestName,
+            generateJavaTestCase,
+            generateJavaTestFile,
+            generateJavaTestGroupHierarchy,
+            generateTestFileWithJavaCodec,
+            namespaceToJavaClassName
+    };
+
+    static {
+        Defs.checkComplete(Testing.class, ALL_DEFS);
+    }
+
+    private static final List<Definition> DEFINITIONS = definitionsOf(ALL_DEFS);
 
     // Haskell: [SerializationSource.ns, TestUtils.ns, Formatting.ns, Names.ns, Constants.ns]
     //         ++ (JavaSyntax.ns : kernelTypesNamespaces)

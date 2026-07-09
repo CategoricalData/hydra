@@ -13734,7 +13734,7 @@ public class Coder {
 
 
 
-    private static final List<Definition> DEFINITIONS = definitionsOf(
+    private static final Def[] ALL_DEFS = {
             addComment,
             analyzeJavaFunction,
             annotateBodyWithCod,
@@ -13935,7 +13935,14 @@ public class Coder {
             withLambda,
             withTypeLambda,
             wrapInSupplierLambda,
-            wrapLazyArguments);
+            wrapLazyArguments
+    };
+
+    static {
+        Defs.checkComplete(Coder.class, ALL_DEFS);
+    }
+
+    private static final List<Definition> DEFINITIONS = definitionsOf(ALL_DEFS);
 
     private static final List<ModuleDependency> DEPENDENCIES = unqualifiedDeps(
         new ModuleName("hydra.java.utils"),
