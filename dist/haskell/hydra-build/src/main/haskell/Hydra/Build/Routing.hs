@@ -9,6 +9,7 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Decoding as Decoding
 import qualified Hydra.Docs as Docs
+import qualified Hydra.Dsls as Dsls
 import qualified Hydra.Encoding as Encoding
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
@@ -58,7 +59,7 @@ buildRoutingMap pkgs =
 derivedNames :: Packaging.ModuleName -> [Packaging.ModuleName]
 derivedNames m =
 
-      let dsl = Names.dslModuleName m
+      let dsl = Dsls.dslModuleName m
           enc = Encoding.encodeModuleName m
           dec = Decoding.decodeModuleName m
       in [

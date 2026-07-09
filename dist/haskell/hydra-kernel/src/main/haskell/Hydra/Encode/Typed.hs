@@ -23,6 +23,13 @@ typedBinding a x =
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (typedTerm a (Typed.typedBindingTerm x))}]})
 
+-- | Encoder for hydra.typed.TypedName
+typedName :: (a -> Core.Term) -> Typed.TypedName a -> Core.Term
+typedName a x =
+    Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.typed.TypedName"),
+      Core.wrappedTermBody = (EncodeCore.name (Typed.unTypedName x))})
+
 -- | Encoder for hydra.typed.TypedTerm
 typedTerm :: (a -> Core.Term) -> Typed.TypedTerm a -> Core.Term
 typedTerm a x =

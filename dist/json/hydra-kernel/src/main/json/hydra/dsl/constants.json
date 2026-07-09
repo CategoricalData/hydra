@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.constants"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.constants"},
+    {"module": "hydra.decode.constants"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},

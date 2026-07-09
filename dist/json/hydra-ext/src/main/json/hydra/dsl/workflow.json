@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.workflow"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.workflow"},
+    {"module": "hydra.decode.workflow"},
     {"module": "hydra.graph"},
     {"module": "hydra.packaging"},
     {"module": "hydra.core"},
@@ -11,6 +13,26 @@
     {"module": "hydra.dsl.packaging"},
     {"module": "hydra.dsl.core"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.workflow.hydraSchemaSpecHydraSchemaSpec",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.workflow.HydraSchemaSpec"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.workflow.HydraSchemaSpec"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.workflow.HydraSchemaSpec"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.workflow.hydraSchemaSpec",
@@ -470,6 +492,23 @@
                   "value": {"literal": {"string": "DSL updater for the typeName field of hydra.workflow.HydraSchemaSpec"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.workflow.schemaSpecSchemaSpec",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.workflow.SchemaSpec"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.workflow.SchemaSpec"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.workflow.SchemaSpec"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.workflow.schemaSpecHydra",
         "signature": {
           "typeParameters": [],
@@ -637,6 +676,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the provided variant of hydra.workflow.SchemaSpec"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.workflow.transformWorkflowTransformWorkflow",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.workflow.TransformWorkflow"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.workflow.TransformWorkflow"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.workflow.TransformWorkflow"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.workflow.transformWorkflow",

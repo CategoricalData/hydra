@@ -5,8 +5,12 @@
 module Hydra.Dsl.Tabular where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Tabular as DecodeTabular
 import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Dsl.Relational as DslRelational
+import qualified Hydra.Encode.Tabular as EncodeTabular
+import qualified Hydra.Errors as Errors
+import qualified Hydra.Graph as Graph
 import qualified Hydra.Relational as Relational
 import qualified Hydra.Tabular as Tabular
 import qualified Hydra.Typed as Typed
@@ -25,6 +29,10 @@ columnType name type_ =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Typed.unTypedTerm type_)}]}))
+
+-- | DSL name token for hydra.tabular.ColumnType
+columnTypeColumnType :: Typed.TypedName Tabular.ColumnType
+columnTypeColumnType = Typed.TypedName (Core.Name "hydra.tabular.ColumnType")
 
 -- | DSL accessor for the name field of hydra.tabular.ColumnType
 columnTypeName :: Typed.TypedTerm Tabular.ColumnType -> Typed.TypedTerm Relational.ColumnName
@@ -85,12 +93,48 @@ dataRow x =
       Core.wrappedTermTypeName = (Core.Name "hydra.tabular.DataRow"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.tabular.DataRow
+dataRowDataRow :: Typed.TypedName (Tabular.DataRow v)
+dataRowDataRow = Typed.TypedName (Core.Name "hydra.tabular.DataRow")
+
+-- | DSL composition builder for the decoder of hydra.tabular.DataRow
+decodeDataRow :: Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError v) -> Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError (Tabular.DataRow v))
+decodeDataRow v =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.tabular.dataRow")),
+      Core.applicationArgument = (Typed.unTypedTerm v)}))
+
+-- | DSL composition builder for the decoder of hydra.tabular.Table
+decodeTable :: Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError v) -> Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError (Tabular.Table v))
+decodeTable v =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.tabular.table")),
+      Core.applicationArgument = (Typed.unTypedTerm v)}))
+
+-- | DSL composition builder for the encoder of hydra.tabular.DataRow
+encodeDataRow :: Typed.TypedTerm (v -> Core.Term) -> Typed.TypedTerm (Tabular.DataRow v -> Core.Term)
+encodeDataRow v =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.tabular.dataRow")),
+      Core.applicationArgument = (Typed.unTypedTerm v)}))
+
+-- | DSL composition builder for the encoder of hydra.tabular.Table
+encodeTable :: Typed.TypedTerm (v -> Core.Term) -> Typed.TypedTerm (Tabular.Table v -> Core.Term)
+encodeTable v =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.tabular.table")),
+      Core.applicationArgument = (Typed.unTypedTerm v)}))
+
 -- | DSL constructor for the hydra.tabular.HeaderRow wrapper
 headerRow :: Typed.TypedTerm [String] -> Typed.TypedTerm Tabular.HeaderRow
 headerRow x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.tabular.HeaderRow"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.tabular.HeaderRow
+headerRowHeaderRow :: Typed.TypedName Tabular.HeaderRow
+headerRowHeaderRow = Typed.TypedName (Core.Name "hydra.tabular.HeaderRow")
 
 -- | DSL constructor for hydra.tabular.Table
 table :: Typed.TypedTerm (Maybe Tabular.HeaderRow) -> Typed.TypedTerm [Tabular.DataRow v] -> Typed.TypedTerm (Tabular.Table v)
@@ -123,6 +167,10 @@ tableHeader x =
         Core.projectionFieldName = (Core.Name "header")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.tabular.Table
+tableTable :: Typed.TypedName (Tabular.Table v)
+tableTable = Typed.TypedName (Core.Name "hydra.tabular.Table")
+
 -- | DSL constructor for hydra.tabular.TableType
 tableType :: Typed.TypedTerm Relational.RelationName -> Typed.TypedTerm [Tabular.ColumnType] -> Typed.TypedTerm Tabular.TableType
 tableType name columns =
@@ -153,6 +201,10 @@ tableTypeName x =
         Core.projectionTypeName = (Core.Name "hydra.tabular.TableType"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.tabular.TableType
+tableTypeTableType :: Typed.TypedName Tabular.TableType
+tableTypeTableType = Typed.TypedName (Core.Name "hydra.tabular.TableType")
 
 -- | DSL updater for the columns field of hydra.tabular.TableType
 tableTypeWithColumns :: Typed.TypedTerm Tabular.TableType -> Typed.TypedTerm [Tabular.ColumnType] -> Typed.TypedTerm Tabular.TableType

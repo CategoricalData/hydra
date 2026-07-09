@@ -5,7 +5,9 @@
 module Hydra.Dsl.Paths where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Paths as DecodePaths
 import qualified Hydra.Dsl.Core as DslCore
+import qualified Hydra.Encode.Paths as EncodePaths
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Typed as Typed
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -44,6 +46,10 @@ subtermEdgeSource x =
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtermEdge"),
         Core.projectionFieldName = (Core.Name "source")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.paths.SubtermEdge
+subtermEdgeSubtermEdge :: Typed.TypedName Paths.SubtermEdge
+subtermEdgeSubtermEdge = Typed.TypedName (Core.Name "hydra.paths.SubtermEdge")
 
 -- | DSL accessor for the target field of hydra.paths.SubtermEdge
 subtermEdgeTarget :: Typed.TypedTerm Paths.SubtermEdge -> Typed.TypedTerm Paths.SubtermNode
@@ -157,6 +163,10 @@ subtermGraphNodes x =
         Core.projectionFieldName = (Core.Name "nodes")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.paths.SubtermGraph
+subtermGraphSubtermGraph :: Typed.TypedName Paths.SubtermGraph
+subtermGraphSubtermGraph = Typed.TypedName (Core.Name "hydra.paths.SubtermGraph")
+
 -- | DSL updater for the edges field of hydra.paths.SubtermGraph
 subtermGraphWithEdges :: Typed.TypedTerm Paths.SubtermGraph -> Typed.TypedTerm [Paths.SubtermEdge] -> Typed.TypedTerm Paths.SubtermGraph
 subtermGraphWithEdges original newVal =
@@ -233,6 +243,10 @@ subtermNodeName x =
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtermNode"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.paths.SubtermNode
+subtermNodeSubtermNode :: Typed.TypedName Paths.SubtermNode
+subtermNodeSubtermNode = Typed.TypedName (Core.Name "hydra.paths.SubtermNode")
 
 -- | DSL updater for the id field of hydra.paths.SubtermNode
 subtermNodeWithId :: Typed.TypedTerm Paths.SubtermNode -> Typed.TypedTerm String -> Typed.TypedTerm Paths.SubtermNode
@@ -312,6 +326,10 @@ subtermPath x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.paths.SubtermPath"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.paths.SubtermPath
+subtermPathSubtermPath :: Typed.TypedName Paths.SubtermPath
+subtermPathSubtermPath = Typed.TypedName (Core.Name "hydra.paths.SubtermPath")
 
 -- | DSL injection for the annotatedBody variant of hydra.paths.SubtermStep
 subtermStepAnnotatedBody :: Typed.TypedTerm Paths.SubtermStep
@@ -439,6 +457,10 @@ subtermStepSetElement x =
         Core.fieldName = (Core.Name "setElement"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.paths.SubtermStep
+subtermStepSubtermStep :: Typed.TypedName Paths.SubtermStep
+subtermStepSubtermStep = Typed.TypedName (Core.Name "hydra.paths.SubtermStep")
+
 -- | DSL injection for the sumTerm variant of hydra.paths.SubtermStep
 subtermStepSumTerm :: Typed.TypedTerm Paths.SubtermStep
 subtermStepSumTerm =
@@ -526,6 +548,10 @@ subtypeEdgeSource x =
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeEdge"),
         Core.projectionFieldName = (Core.Name "source")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.paths.SubtypeEdge
+subtypeEdgeSubtypeEdge :: Typed.TypedName Paths.SubtypeEdge
+subtypeEdgeSubtypeEdge = Typed.TypedName (Core.Name "hydra.paths.SubtypeEdge")
 
 -- | DSL accessor for the target field of hydra.paths.SubtypeEdge
 subtypeEdgeTarget :: Typed.TypedTerm Paths.SubtypeEdge -> Typed.TypedTerm Paths.SubtypeNode
@@ -639,6 +665,10 @@ subtypeGraphNodes x =
         Core.projectionFieldName = (Core.Name "nodes")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.paths.SubtypeGraph
+subtypeGraphSubtypeGraph :: Typed.TypedName Paths.SubtypeGraph
+subtypeGraphSubtypeGraph = Typed.TypedName (Core.Name "hydra.paths.SubtypeGraph")
+
 -- | DSL updater for the edges field of hydra.paths.SubtypeGraph
 subtypeGraphWithEdges :: Typed.TypedTerm Paths.SubtypeGraph -> Typed.TypedTerm [Paths.SubtypeEdge] -> Typed.TypedTerm Paths.SubtypeGraph
 subtypeGraphWithEdges original newVal =
@@ -715,6 +745,10 @@ subtypeNodeName x =
         Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeNode"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.paths.SubtypeNode
+subtypeNodeSubtypeNode :: Typed.TypedName Paths.SubtypeNode
+subtypeNodeSubtypeNode = Typed.TypedName (Core.Name "hydra.paths.SubtypeNode")
 
 -- | DSL updater for the id field of hydra.paths.SubtypeNode
 subtypeNodeWithId :: Typed.TypedTerm Paths.SubtypeNode -> Typed.TypedTerm String -> Typed.TypedTerm Paths.SubtypeNode
@@ -794,6 +828,10 @@ subtypePath x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.paths.SubtypePath"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.paths.SubtypePath
+subtypePathSubtypePath :: Typed.TypedName Paths.SubtypePath
+subtypePathSubtypePath = Typed.TypedName (Core.Name "hydra.paths.SubtypePath")
 
 -- | DSL injection for the annotatedBody variant of hydra.paths.SubtypeStep
 subtypeStepAnnotatedBody :: Typed.TypedTerm Paths.SubtypeStep
@@ -938,6 +976,10 @@ subtypeStepSetElement =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "setElement"),
         Core.fieldTerm = Core.TermUnit}}))
+
+-- | DSL name token for hydra.paths.SubtypeStep
+subtypeStepSubtypeStep :: Typed.TypedName Paths.SubtypeStep
+subtypeStepSubtypeStep = Typed.TypedName (Core.Name "hydra.paths.SubtypeStep")
 
 -- | DSL injection for the unionField variant of hydra.paths.SubtypeStep
 subtypeStepUnionField :: Typed.TypedTerm Core.Name -> Typed.TypedTerm Paths.SubtypeStep

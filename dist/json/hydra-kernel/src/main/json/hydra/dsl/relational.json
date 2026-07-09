@@ -1,8 +1,32 @@
 {
   "name": "hydra.dsl.relational",
   "metadata": {"description": "DSL functions for hydra.relational", "comments": [], "seeAlso": []},
-  "dependencies": [{"module": "hydra.relational"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
+  "dependencies": [
+    {"module": "hydra.relational"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.encode.relational"},
+    {"module": "hydra.decode.relational"},
+    {"module": "hydra.core"},
+    {"module": "hydra.dsl.core"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.relational.columnNameColumnName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.relational.ColumnName"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.relational.ColumnName"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.relational.ColumnName"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.relational.columnName",
@@ -92,6 +116,162 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.relational.ColumnName"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.relational.columnSchemaColumnSchema",
+        "signature": {
+          "typeParameters": [{"name": "t", "constraints": []}],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"application": {"function": {"variable": "hydra.relational.ColumnSchema"}, "argument": {"variable": "t"}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.relational.ColumnSchema"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.relational.ColumnSchema"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.relational.encodeColumnSchema",
+        "signature": {
+          "typeParameters": [{"name": "t", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {"function": {"domain": {"variable": "t"}, "codomain": {"variable": "hydra.core.Term"}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {
+                  "function": {
+                    "domain": {"application": {"function": {"variable": "hydra.relational.ColumnSchema"}, "argument": {"variable": "t"}}},
+                    "codomain": {"variable": "hydra.core.Term"}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "t",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {"function": {"domain": {"variable": "t"}, "codomain": {"variable": "hydra.core.Term"}}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.Term",
+                                      "field": {
+                                        "name": "variable",
+                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.encode.relational.columnSchema"}}}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "t"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL composition builder for the encoder of hydra.relational.ColumnSchema"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.relational.decodeColumnSchema",
+        "signature": {
+          "typeParameters": [{"name": "t", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {
+                    "function": {
+                      "domain": {"variable": "hydra.graph.Graph"},
+                      "codomain": {
+                        "function": {
+                          "domain": {"variable": "hydra.core.Term"},
+                          "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "t"}}}}}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {
+                  "function": {
+                    "domain": {"variable": "hydra.graph.Graph"},
+                    "codomain": {
+                      "function": {
+                        "domain": {"variable": "hydra.core.Term"},
+                        "codomain": {
+                          "either": {
+                            "left": {"variable": "hydra.errors.DecodingError"},
+                            "right": {"application": {"function": {"variable": "hydra.relational.ColumnSchema"}, "argument": {"variable": "t"}}}}}}}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "t",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {
+                      "function": {
+                        "domain": {"variable": "hydra.graph.Graph"},
+                        "codomain": {
+                          "function": {
+                            "domain": {"variable": "hydra.core.Term"},
+                            "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "t"}}}}}}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.Term",
+                                      "field": {
+                                        "name": "variable",
+                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.decode.relational.columnSchema"}}}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "t"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL composition builder for the decoder of hydra.relational.ColumnSchema"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.relational.columnSchema",
@@ -541,6 +721,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the domain field of hydra.relational.ColumnSchema"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.relational.foreignKeyForeignKey",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.relational.ForeignKey"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.relational.ForeignKey"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.relational.ForeignKey"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.relational.foreignKey",
@@ -1009,6 +1207,24 @@
                   "value": {"literal": {"string": "DSL updater for the keys field of hydra.relational.ForeignKey"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.relational.primaryKeyPrimaryKey",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.relational.PrimaryKey"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.relational.PrimaryKey"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.relational.PrimaryKey"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.relational.primaryKey",
         "signature": {
           "typeParameters": [],
@@ -1117,6 +1333,159 @@
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.relational.PrimaryKey"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.relational.relationRelation",
+        "signature": {
+          "typeParameters": [{"name": "v", "constraints": []}],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"application": {"function": {"variable": "hydra.relational.Relation"}, "argument": {"variable": "v"}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.relational.Relation"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.relational.Relation"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.relational.encodeRelation",
+        "signature": {
+          "typeParameters": [{"name": "v", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {"function": {"domain": {"variable": "v"}, "codomain": {"variable": "hydra.core.Term"}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {
+                  "function": {
+                    "domain": {"application": {"function": {"variable": "hydra.relational.Relation"}, "argument": {"variable": "v"}}},
+                    "codomain": {"variable": "hydra.core.Term"}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "v",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {"function": {"domain": {"variable": "v"}, "codomain": {"variable": "hydra.core.Term"}}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.Term",
+                                      "field": {
+                                        "name": "variable",
+                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.encode.relational.relation"}}}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "v"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL composition builder for the encoder of hydra.relational.Relation"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.relational.decodeRelation",
+        "signature": {
+          "typeParameters": [{"name": "v", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {
+                    "function": {
+                      "domain": {"variable": "hydra.graph.Graph"},
+                      "codomain": {
+                        "function": {
+                          "domain": {"variable": "hydra.core.Term"},
+                          "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "v"}}}}}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {
+                  "function": {
+                    "domain": {"variable": "hydra.graph.Graph"},
+                    "codomain": {
+                      "function": {
+                        "domain": {"variable": "hydra.core.Term"},
+                        "codomain": {
+                          "either": {
+                            "left": {"variable": "hydra.errors.DecodingError"},
+                            "right": {"application": {"function": {"variable": "hydra.relational.Relation"}, "argument": {"variable": "v"}}}}}}}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "v",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {
+                      "function": {
+                        "domain": {"variable": "hydra.graph.Graph"},
+                        "codomain": {
+                          "function": {
+                            "domain": {"variable": "hydra.core.Term"},
+                            "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "v"}}}}}}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.Term",
+                                      "field": {
+                                        "name": "variable",
+                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.decode.relational.relation"}}}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "v"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL composition builder for the decoder of hydra.relational.Relation"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.relational.relation",
         "signature": {
           "typeParameters": [{"name": "v", "constraints": []}],
@@ -1222,6 +1591,26 @@
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.relational.Relation"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.relational.relationNameRelationName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.relational.RelationName"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.relational.RelationName"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.relational.RelationName"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.relational.relationName",
         "signature": {
           "typeParameters": [],
@@ -1309,6 +1698,162 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.relational.RelationName"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.relational.relationSchemaRelationSchema",
+        "signature": {
+          "typeParameters": [{"name": "t", "constraints": []}],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"application": {"function": {"variable": "hydra.relational.RelationSchema"}, "argument": {"variable": "t"}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.relational.RelationSchema"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.relational.RelationSchema"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.relational.encodeRelationSchema",
+        "signature": {
+          "typeParameters": [{"name": "t", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {"function": {"domain": {"variable": "t"}, "codomain": {"variable": "hydra.core.Term"}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {
+                  "function": {
+                    "domain": {"application": {"function": {"variable": "hydra.relational.RelationSchema"}, "argument": {"variable": "t"}}},
+                    "codomain": {"variable": "hydra.core.Term"}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "t",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {"function": {"domain": {"variable": "t"}, "codomain": {"variable": "hydra.core.Term"}}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.Term",
+                                      "field": {
+                                        "name": "variable",
+                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.encode.relational.relationSchema"}}}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "t"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL composition builder for the encoder of hydra.relational.RelationSchema"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.relational.decodeRelationSchema",
+        "signature": {
+          "typeParameters": [{"name": "t", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {
+                    "function": {
+                      "domain": {"variable": "hydra.graph.Graph"},
+                      "codomain": {
+                        "function": {
+                          "domain": {"variable": "hydra.core.Term"},
+                          "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "t"}}}}}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {
+                  "function": {
+                    "domain": {"variable": "hydra.graph.Graph"},
+                    "codomain": {
+                      "function": {
+                        "domain": {"variable": "hydra.core.Term"},
+                        "codomain": {
+                          "either": {
+                            "left": {"variable": "hydra.errors.DecodingError"},
+                            "right": {"application": {"function": {"variable": "hydra.relational.RelationSchema"}, "argument": {"variable": "t"}}}}}}}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "t",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {
+                      "function": {
+                        "domain": {"variable": "hydra.graph.Graph"},
+                        "codomain": {
+                          "function": {
+                            "domain": {"variable": "hydra.core.Term"},
+                            "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "t"}}}}}}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.Term",
+                                      "field": {
+                                        "name": "variable",
+                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.decode.relational.relationSchema"}}}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "t"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL composition builder for the decoder of hydra.relational.RelationSchema"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.relational.relationSchema",
@@ -2504,6 +3049,162 @@
                   "value": {"literal": {"string": "DSL updater for the foreignKeys field of hydra.relational.RelationSchema"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.relational.relationshipRelationship",
+        "signature": {
+          "typeParameters": [{"name": "v", "constraints": []}],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"application": {"function": {"variable": "hydra.relational.Relationship"}, "argument": {"variable": "v"}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.relational.Relationship"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.relational.Relationship"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.relational.encodeRelationship",
+        "signature": {
+          "typeParameters": [{"name": "v", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {"function": {"domain": {"variable": "v"}, "codomain": {"variable": "hydra.core.Term"}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {
+                  "function": {
+                    "domain": {"application": {"function": {"variable": "hydra.relational.Relationship"}, "argument": {"variable": "v"}}},
+                    "codomain": {"variable": "hydra.core.Term"}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "v",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {"function": {"domain": {"variable": "v"}, "codomain": {"variable": "hydra.core.Term"}}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.Term",
+                                      "field": {
+                                        "name": "variable",
+                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.encode.relational.relationship"}}}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "v"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL composition builder for the encoder of hydra.relational.Relationship"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.relational.decodeRelationship",
+        "signature": {
+          "typeParameters": [{"name": "v", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {
+                    "function": {
+                      "domain": {"variable": "hydra.graph.Graph"},
+                      "codomain": {
+                        "function": {
+                          "domain": {"variable": "hydra.core.Term"},
+                          "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "v"}}}}}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {
+                  "function": {
+                    "domain": {"variable": "hydra.graph.Graph"},
+                    "codomain": {
+                      "function": {
+                        "domain": {"variable": "hydra.core.Term"},
+                        "codomain": {
+                          "either": {
+                            "left": {"variable": "hydra.errors.DecodingError"},
+                            "right": {"application": {"function": {"variable": "hydra.relational.Relationship"}, "argument": {"variable": "v"}}}}}}}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "v",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {
+                      "function": {
+                        "domain": {"variable": "hydra.graph.Graph"},
+                        "codomain": {
+                          "function": {
+                            "domain": {"variable": "hydra.core.Term"},
+                            "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "v"}}}}}}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.Term",
+                                      "field": {
+                                        "name": "variable",
+                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.decode.relational.relationship"}}}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "v"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL composition builder for the decoder of hydra.relational.Relationship"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.relational.relationship",
         "signature": {
           "typeParameters": [{"name": "v", "constraints": []}],
@@ -2607,6 +3308,159 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.relational.Relationship"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.relational.rowRow",
+        "signature": {
+          "typeParameters": [{"name": "v", "constraints": []}],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"application": {"function": {"variable": "hydra.relational.Row"}, "argument": {"variable": "v"}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.relational.Row"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.relational.Row"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.relational.encodeRow",
+        "signature": {
+          "typeParameters": [{"name": "v", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {"function": {"domain": {"variable": "v"}, "codomain": {"variable": "hydra.core.Term"}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {
+                  "function": {
+                    "domain": {"application": {"function": {"variable": "hydra.relational.Row"}, "argument": {"variable": "v"}}},
+                    "codomain": {"variable": "hydra.core.Term"}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "v",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {"function": {"domain": {"variable": "v"}, "codomain": {"variable": "hydra.core.Term"}}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.Term",
+                                      "field": {
+                                        "name": "variable",
+                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.encode.relational.row"}}}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "v"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL composition builder for the encoder of hydra.relational.Row"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.relational.decodeRow",
+        "signature": {
+          "typeParameters": [{"name": "v", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {
+                    "function": {
+                      "domain": {"variable": "hydra.graph.Graph"},
+                      "codomain": {
+                        "function": {
+                          "domain": {"variable": "hydra.core.Term"},
+                          "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "v"}}}}}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {
+                  "function": {
+                    "domain": {"variable": "hydra.graph.Graph"},
+                    "codomain": {
+                      "function": {
+                        "domain": {"variable": "hydra.core.Term"},
+                        "codomain": {
+                          "either": {
+                            "left": {"variable": "hydra.errors.DecodingError"},
+                            "right": {"application": {"function": {"variable": "hydra.relational.Row"}, "argument": {"variable": "v"}}}}}}}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "v",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {
+                      "function": {
+                        "domain": {"variable": "hydra.graph.Graph"},
+                        "codomain": {
+                          "function": {
+                            "domain": {"variable": "hydra.core.Term"},
+                            "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "v"}}}}}}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.Term",
+                                      "field": {
+                                        "name": "variable",
+                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.decode.relational.row"}}}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "v"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL composition builder for the decoder of hydra.relational.Row"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.relational.row",

@@ -75,37 +75,17 @@ deduplicateBindings bindings =
 
 -- | Generate a binding name for a DSL function from a type name
 dslBindingName :: Core.Name -> Core.Name
-dslBindingName n =
-
-      let parts = Strings.splitOn "." (Core.unName n)
-          localPart = Formatting.decapitalize (Names.localNameOf n)
-          localResult = Core.Name localPart
-      in (Optionals.cases (Lists.maybeInit parts) localResult (\nsParts -> Optionals.cases (Lists.uncons nsParts) localResult (\nsHeadTail ->
-        let dslNsParts =
-                Logic.ifElse (Equality.equal (Pairs.first nsHeadTail) "hydra") (Lists.concat2 [
-                  "hydra",
-                  "dsl"] (Pairs.second nsHeadTail)) (Lists.concat2 [
-                  "hydra",
-                  "dsl"] nsParts)
-        in (Core.Name (Strings.intercalate "." (Lists.concat2 dslNsParts [
-          localPart]))))))
+dslBindingName =
+    Names.derivedBindingName [
+      "hydra",
+      "dsl"] False
 
 -- | Generate a qualified DSL element name from a type name and local element name
 dslDefinitionName :: Core.Name -> String -> Core.Name
-dslDefinitionName typeName localName =
-
-      let parts = Strings.splitOn "." (Core.unName typeName)
-      in (Optionals.cases (Lists.maybeInit parts) (Core.Name localName) (\nsParts ->
-        let dslNsParts =
-                Optionals.cases (Lists.uncons nsParts) [
-                  "hydra",
-                  "dsl"] (\nsHeadTail -> Logic.ifElse (Equality.equal (Pairs.first nsHeadTail) "hydra") (Lists.concat2 [
-                  "hydra",
-                  "dsl"] (Pairs.second nsHeadTail)) (Lists.concat2 [
-                  "hydra",
-                  "dsl"] nsParts))
-        in (Core.Name (Strings.intercalate "." (Lists.concat2 dslNsParts [
-          localName])))))
+dslDefinitionName =
+    Names.derivedDefinitionName [
+      "hydra",
+      "dsl"] False True
 
 -- | Transform a source module into a DSL module
 dslModule :: t0 -> Graph.Graph -> Packaging.Module -> Either Errors.Error (Maybe Packaging.Module)
@@ -128,7 +108,7 @@ dslModule cx graph mod =
       _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (generateBindingsForType cx graph b)) typeBindings) (\typeDslBindings -> Eithers.bind (Eithers.mapList (\d -> generateRefBindings d) (Packaging.moduleDefinitions mod)) (\refDslBindings ->
       let allBindings = deduplicateBindings (Lists.concat2 (Lists.concat typeDslBindings) (Lists.concat refDslBindings))
       in (Logic.ifElse (Lists.null allBindings) (Right Nothing) (Right (Just (Packaging.Module {
-        Packaging.moduleName = (Names.dslModuleName (Packaging.moduleName mod)),
+        Packaging.moduleName = (dslModuleName (Packaging.moduleName mod)),
         Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
           Packaging.entityMetadataDescription = (Just (Strings.cat [
             "DSL functions for ",
@@ -140,12 +120,25 @@ dslModule cx graph mod =
           Packaging.moduleDependencyModule = ns,
           Packaging.moduleDependencyPackage = Nothing}) (Lists.nub (Lists.concat2 [
           Packaging.moduleName mod,
-          (Packaging.ModuleName "hydra.typed")] (Lists.concat2 (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod)) (Lists.map Names.dslModuleName (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod))))))),
+          (Packaging.ModuleName "hydra.typed"),
+          (Names.derivedModuleName [
+            "hydra",
+            "encode"] True (Packaging.moduleName mod)),
+          (Names.derivedModuleName [
+            "hydra",
+            "decode"] True (Packaging.moduleName mod))] (Lists.concat2 (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod)) (Lists.map dslModuleName (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod))))))),
         Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.bindingName b),
           Packaging.termDefinitionMetadata = Nothing,
           Packaging.termDefinitionSignature = (Optionals.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b)),
           Packaging.termDefinitionBody = (Core.bindingTerm b)})) allBindings)})))))))
+
+-- | Generate a DSL module name from a source module name
+dslModuleName :: Packaging.ModuleName -> Packaging.ModuleName
+dslModuleName =
+    Names.derivedModuleName [
+      "hydra",
+      "dsl"] False
 
 -- | Build a TypedTerm-wrapped TypeScheme (functions of phantom terms) from a TermSignature
 dslSignatureTypeScheme :: Typing.TermSignature -> Core.TypeScheme
@@ -203,12 +196,184 @@ generateBindingsForType cx graph b =
         let typ = Strip.deannotateTypeParameters (Strip.deannotateType rawType)
         in (Right (case typ of
           Core.TypeRecord v0 -> Lists.concat [
-            generateRecordConstructor rawType typeName v0,
+            [
+              generateTypeNameToken rawType typeName],
+            (generateParametricRefBuilders rawType typeName),
+            (generateRecordConstructor rawType typeName v0),
             (Lists.map (generateRecordAccessor rawType typeName) v0),
             (Lists.map (generateRecordWithUpdater rawType typeName v0) v0)]
-          Core.TypeUnion v0 -> Lists.map (generateUnionInjector rawType typeName) v0
-          Core.TypeWrap v0 -> generateWrappedTypeAccessors rawType typeName v0
+          Core.TypeUnion v0 -> Lists.concat [
+            [
+              generateTypeNameToken rawType typeName],
+            (generateParametricRefBuilders rawType typeName),
+            (Lists.map (generateUnionInjector rawType typeName) v0)]
+          Core.TypeWrap v0 -> Lists.concat [
+            [
+              generateTypeNameToken rawType typeName],
+            (generateParametricRefBuilders rawType typeName),
+            (generateWrappedTypeAccessors rawType typeName v0)]
           _ -> []))))
+
+-- | Generate encode/decode composition builders for a parametric type definition
+generateParametricRefBuilders :: Core.Type -> Core.Name -> [Core.Binding]
+generateParametricRefBuilders origType typeName =
+
+      let vars = collectForallVars origType
+      in (Logic.ifElse (Lists.null vars) [] [
+
+          let vars = collectForallVars origType
+              localName = Names.localNameOf typeName
+              builderLocalName =
+                      Strings.cat [
+                        "encode",
+                        localName]
+              builderName = dslDefinitionName typeName builderLocalName
+              refName =
+                      Names.derivedBindingName [
+                        "hydra",
+                        "encode"] True typeName
+              paramPairs =
+                      Lists.map (\v -> (
+                        Core.unName v,
+                        (Core.TypeApplication (Core.ApplicationType {
+                          Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.typed.TypedTerm")),
+                          Core.applicationTypeArgument = (Core.TypeFunction (Core.FunctionType {
+                            Core.functionTypeDomain = (Core.TypeVariable v),
+                            Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))})))) vars
+              appBody =
+                      Lists.foldl (\acc -> \pp -> Core.TermInject (Core.Injection {
+                        Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+                        Core.injectionField = Core.Field {
+                          Core.fieldName = (Core.Name "application"),
+                          Core.fieldTerm = (Core.TermRecord (Core.Record {
+                            Core.recordTypeName = (Core.Name "hydra.core.Application"),
+                            Core.recordFields = [
+                              Core.Field {
+                                Core.fieldName = (Core.Name "function"),
+                                Core.fieldTerm = acc},
+                              Core.Field {
+                                Core.fieldName = (Core.Name "argument"),
+                                Core.fieldTerm = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.typed.TypedTerm")),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name (Pairs.first pp)))}))}]}))}})) (Core.TermInject (Core.Injection {
+                        Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+                        Core.injectionField = Core.Field {
+                          Core.fieldName = (Core.Name "variable"),
+                          Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                            Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName refName)))}))}})) paramPairs
+              builderTerm =
+                      Core.TermWrap (Core.WrappedTerm {
+                        Core.wrappedTermTypeName = (Core.Name "hydra.typed.TypedTerm"),
+                        Core.wrappedTermBody = appBody})
+              rawBody =
+                      Lists.foldl (\acc -> \pp -> Core.TermLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name (Pairs.first pp)),
+                        Core.lambdaDomain = (Just (Pairs.second pp)),
+                        Core.lambdaBody = acc})) builderTerm (Lists.reverse paramPairs)
+              description =
+                      Strings.cat [
+                        "DSL composition builder for the ",
+                        "encode",
+                        "r of ",
+                        (Core.unName typeName)]
+              body = Annotations.setTermDescription (Just description) rawBody
+              resultType = nominalResultType typeName origType
+              paramTypes =
+                      Lists.map (\v -> Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeVariable v),
+                        Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})) vars
+              ts =
+                      dslTypeScheme origType paramTypes (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = resultType,
+                        Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))
+          in Core.Binding {
+            Core.bindingName = builderName,
+            Core.bindingTerm = body,
+            Core.bindingTypeScheme = (Just ts)},
+
+          let vars = collectForallVars origType
+              localName = Names.localNameOf typeName
+              builderLocalName =
+                      Strings.cat [
+                        "decode",
+                        localName]
+              builderName = dslDefinitionName typeName builderLocalName
+              refName =
+                      Names.derivedBindingName [
+                        "hydra",
+                        "decode"] True typeName
+              paramPairs =
+                      Lists.map (\v -> (
+                        Core.unName v,
+                        (Core.TypeApplication (Core.ApplicationType {
+                          Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.typed.TypedTerm")),
+                          Core.applicationTypeArgument = (Core.TypeFunction (Core.FunctionType {
+                            Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
+                            Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
+                              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+                              Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
+                                Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
+                                Core.eitherTypeRight = (Core.TypeVariable v)}))}))}))})))) vars
+              appBody =
+                      Lists.foldl (\acc -> \pp -> Core.TermInject (Core.Injection {
+                        Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+                        Core.injectionField = Core.Field {
+                          Core.fieldName = (Core.Name "application"),
+                          Core.fieldTerm = (Core.TermRecord (Core.Record {
+                            Core.recordTypeName = (Core.Name "hydra.core.Application"),
+                            Core.recordFields = [
+                              Core.Field {
+                                Core.fieldName = (Core.Name "function"),
+                                Core.fieldTerm = acc},
+                              Core.Field {
+                                Core.fieldName = (Core.Name "argument"),
+                                Core.fieldTerm = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.typed.TypedTerm")),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name (Pairs.first pp)))}))}]}))}})) (Core.TermInject (Core.Injection {
+                        Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+                        Core.injectionField = Core.Field {
+                          Core.fieldName = (Core.Name "variable"),
+                          Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                            Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName refName)))}))}})) paramPairs
+              builderTerm =
+                      Core.TermWrap (Core.WrappedTerm {
+                        Core.wrappedTermTypeName = (Core.Name "hydra.typed.TypedTerm"),
+                        Core.wrappedTermBody = appBody})
+              rawBody =
+                      Lists.foldl (\acc -> \pp -> Core.TermLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name (Pairs.first pp)),
+                        Core.lambdaDomain = (Just (Pairs.second pp)),
+                        Core.lambdaBody = acc})) builderTerm (Lists.reverse paramPairs)
+              description =
+                      Strings.cat [
+                        "DSL composition builder for the ",
+                        "decode",
+                        "r of ",
+                        (Core.unName typeName)]
+              body = Annotations.setTermDescription (Just description) rawBody
+              resultType = nominalResultType typeName origType
+              paramTypes =
+                      Lists.map (\v -> Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
+                        Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
+                          Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+                          Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
+                            Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
+                            Core.eitherTypeRight = (Core.TypeVariable v)}))}))})) vars
+              ts =
+                      dslTypeScheme origType paramTypes (Core.TypeFunction (Core.FunctionType {
+                        Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
+                        Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
+                          Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+                          Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
+                            Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
+                            Core.eitherTypeRight = resultType}))}))}))
+          in Core.Binding {
+            Core.bindingName = builderName,
+            Core.bindingTerm = body,
+            Core.bindingTypeScheme = (Just ts)}])
 
 -- | Generate a record field accessor function
 generateRecordAccessor :: Core.Type -> Core.Name -> Core.FieldType -> Core.Binding
@@ -501,6 +666,38 @@ generateSignatureRef refName sig =
           ts = dslSignatureTypeScheme sig
       in Core.Binding {
         Core.bindingName = (dslDefinitionName refName (Names.localNameOf refName)),
+        Core.bindingTerm = body,
+        Core.bindingTypeScheme = (Just ts)}
+
+-- | Generate a TypedName token constant for a type definition
+generateTypeNameToken :: Core.Type -> Core.Name -> Core.Binding
+generateTypeNameToken origType typeName =
+
+      let localName = Names.localNameOf typeName
+          tokenLocalName =
+                  Strings.cat [
+                    Formatting.decapitalize localName,
+                    localName]
+          tokenName = dslDefinitionName typeName tokenLocalName
+          description =
+                  Strings.cat [
+                    "DSL name token for ",
+                    (Core.unName typeName)]
+          body =
+                  Annotations.setTermDescription (Just description) (Core.TermWrap (Core.WrappedTerm {
+                    Core.wrappedTermTypeName = (Core.Name "hydra.typed.TypedName"),
+                    Core.wrappedTermBody = (Core.TermWrap (Core.WrappedTerm {
+                      Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName typeName)))}))}))
+          ts =
+                  Core.TypeScheme {
+                    Core.typeSchemeVariables = (collectForallVars origType),
+                    Core.typeSchemeBody = (Core.TypeApplication (Core.ApplicationType {
+                      Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.typed.TypedName")),
+                      Core.applicationTypeArgument = (nominalResultType typeName origType)})),
+                    Core.typeSchemeConstraints = Nothing}
+      in Core.Binding {
+        Core.bindingName = tokenName,
         Core.bindingTerm = body,
         Core.bindingTypeScheme = (Just ts)}
 

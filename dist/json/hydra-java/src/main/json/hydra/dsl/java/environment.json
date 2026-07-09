@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.java.environment"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.java.environment"},
+    {"module": "hydra.decode.java.environment"},
     {"module": "hydra.java.syntax"},
     {"module": "hydra.core"},
     {"module": "hydra.graph"},
@@ -15,6 +17,26 @@
     {"module": "hydra.dsl.packaging"},
     {"module": "hydra.dsl.typing"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.java.environment.javaSymbolClassJavaSymbolClass",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.java.environment.JavaSymbolClass"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.java.environment.JavaSymbolClass"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.java.environment.JavaSymbolClass"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.java.environment.javaSymbolClassConstant",
@@ -242,6 +264,26 @@
                   "value": {"literal": {"string": "DSL injection for the localVariable variant of hydra.java.environment.JavaSymbolClass"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.java.environment.javaFeaturesJavaFeatures",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.java.environment.JavaFeatures"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.java.environment.JavaFeatures"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.java.environment.JavaFeatures"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.java.environment.javaFeatures",
         "signature": {
           "typeParameters": [],
@@ -463,6 +505,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the supportsDiamondOperator field of hydra.java.environment.JavaFeatures"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.java.environment.aliasesAliases",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.java.environment.Aliases"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.java.environment.Aliases"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.java.environment.Aliases"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.java.environment.aliases",
@@ -8367,6 +8429,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the thunkedVars field of hydra.java.environment.Aliases"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.java.environment.javaEnvironmentJavaEnvironment",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.java.environment.JavaEnvironment"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.java.environment.JavaEnvironment"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.java.environment.JavaEnvironment"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.java.environment.javaEnvironment",

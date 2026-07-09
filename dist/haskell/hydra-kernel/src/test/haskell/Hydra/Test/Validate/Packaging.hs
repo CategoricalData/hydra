@@ -60,6 +60,7 @@ allTests =
         checkDuplicateModuleNamesTests,
         checkModuleNameConventionTests,
         checkPackageNameConventionTests,
+        checkUndeclaredDependenciesTests,
         kernelModuleTests,
         kernelPackageTests,
         profileBehaviourTests],
@@ -953,6 +954,383 @@ checkPackageNameConventionTests =
               Packaging.packageModules = []})) "valid" (\e -> ShowErrorPackaging.invalidPackageError e)),
             Testing.universalTestCaseExpected = (\_ -> Optionals.cases (Just (ErrorPackaging.InvalidPackageErrorInvalidPackageName (ErrorPackaging.InvalidPackageNameError {
               ErrorPackaging.invalidPackageNameErrorPackageName = (Packaging.PackageName "hydra.kernel")}))) "valid" (\e -> ShowErrorPackaging.invalidPackageError e))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []}]}
+
+checkUndeclaredDependenciesTests :: Testing.TestGroup
+checkUndeclaredDependenciesTests =
+    Testing.TestGroup {
+      Testing.testGroupName = "checkUndeclaredDependencies",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [],
+      Testing.testGroupCases = [
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "single module, no references: no error",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (\_ -> Strings.cat2 "[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorPackaging.invalidPackageError e) (ValidatePackaging.checkUndeclaredDependencies (ValidatePackaging.undeclaredDependencyOwners [
+              Packaging.Module {
+                Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
+                Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
+                  Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
+                  Packaging.entityMetadataComments = [],
+                  Packaging.entityMetadataSeeAlso = [],
+                  Packaging.entityMetadataLifecycle = Nothing})),
+                Packaging.moduleDependencies = [],
+                Packaging.moduleDefinitions = [
+                  Packaging.DefinitionTerm (Packaging.TermDefinition {
+                    Packaging.termDefinitionName = (Core.Name "hydra.foo.a"),
+                    Packaging.termDefinitionMetadata = Nothing,
+                    Packaging.termDefinitionSignature = Nothing,
+                    Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
+                      Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
+                      Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
+                        (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]}]) Sets.empty (Packaging.Module {
+              Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
+              Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
+                Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
+                Packaging.entityMetadataComments = [],
+                Packaging.entityMetadataSeeAlso = [],
+                Packaging.entityMetadataLifecycle = Nothing})),
+              Packaging.moduleDependencies = [],
+              Packaging.moduleDefinitions = [
+                Packaging.DefinitionTerm (Packaging.TermDefinition {
+                  Packaging.termDefinitionName = (Core.Name "hydra.foo.a"),
+                  Packaging.termDefinitionMetadata = Nothing,
+                  Packaging.termDefinitionSignature = Nothing,
+                  Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
+                    Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
+                    Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
+                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]})))) "]")),
+            Testing.universalTestCaseExpected = (\_ -> Strings.cat2 "[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorPackaging.invalidPackageError e) [])) "]"))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "declared dependency covers the reference: no error",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (\_ -> Strings.cat2 "[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorPackaging.invalidPackageError e) (ValidatePackaging.checkUndeclaredDependencies (ValidatePackaging.undeclaredDependencyOwners [
+              Packaging.Module {
+                Packaging.moduleName = (Packaging.ModuleName "hydra.bar"),
+                Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
+                  Packaging.entityMetadataDescription = (Just "Test module hydra.bar"),
+                  Packaging.entityMetadataComments = [],
+                  Packaging.entityMetadataSeeAlso = [],
+                  Packaging.entityMetadataLifecycle = Nothing})),
+                Packaging.moduleDependencies = [],
+                Packaging.moduleDefinitions = [
+                  Packaging.DefinitionTerm (Packaging.TermDefinition {
+                    Packaging.termDefinitionName = (Core.Name "hydra.bar.b"),
+                    Packaging.termDefinitionMetadata = Nothing,
+                    Packaging.termDefinitionSignature = Nothing,
+                    Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
+                      Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
+                      Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
+                        (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]},
+              Packaging.Module {
+                Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
+                Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
+                  Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
+                  Packaging.entityMetadataComments = [],
+                  Packaging.entityMetadataSeeAlso = [],
+                  Packaging.entityMetadataLifecycle = Nothing})),
+                Packaging.moduleDependencies = [
+                  Packaging.ModuleDependency {
+                    Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.bar"),
+                    Packaging.moduleDependencyPackage = Nothing}],
+                Packaging.moduleDefinitions = [
+                  Packaging.DefinitionTerm (Packaging.TermDefinition {
+                    Packaging.termDefinitionName = (Core.Name "hydra.foo.a"),
+                    Packaging.termDefinitionMetadata = Nothing,
+                    Packaging.termDefinitionSignature = Nothing,
+                    Packaging.termDefinitionBody = (Core.TermVariable (Core.Name "hydra.bar.b"))})]}]) Sets.empty (Packaging.Module {
+              Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
+              Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
+                Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
+                Packaging.entityMetadataComments = [],
+                Packaging.entityMetadataSeeAlso = [],
+                Packaging.entityMetadataLifecycle = Nothing})),
+              Packaging.moduleDependencies = [
+                Packaging.ModuleDependency {
+                  Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.bar"),
+                  Packaging.moduleDependencyPackage = Nothing}],
+              Packaging.moduleDefinitions = [
+                Packaging.DefinitionTerm (Packaging.TermDefinition {
+                  Packaging.termDefinitionName = (Core.Name "hydra.foo.a"),
+                  Packaging.termDefinitionMetadata = Nothing,
+                  Packaging.termDefinitionSignature = Nothing,
+                  Packaging.termDefinitionBody = (Core.TermVariable (Core.Name "hydra.bar.b"))})]})))) "]")),
+            Testing.universalTestCaseExpected = (\_ -> Strings.cat2 "[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorPackaging.invalidPackageError e) [])) "]"))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "#555 regression: reference to another module's symbol with no declared dependency: error",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (\_ -> Strings.cat2 "[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorPackaging.invalidPackageError e) (ValidatePackaging.checkUndeclaredDependencies (ValidatePackaging.undeclaredDependencyOwners [
+              Packaging.Module {
+                Packaging.moduleName = (Packaging.ModuleName "hydra.dsls"),
+                Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
+                  Packaging.entityMetadataDescription = (Just "Test module hydra.dsls"),
+                  Packaging.entityMetadataComments = [],
+                  Packaging.entityMetadataSeeAlso = [],
+                  Packaging.entityMetadataLifecycle = Nothing})),
+                Packaging.moduleDependencies = [],
+                Packaging.moduleDefinitions = [
+                  Packaging.DefinitionTerm (Packaging.TermDefinition {
+                    Packaging.termDefinitionName = (Core.Name "hydra.dsls.dslModuleName"),
+                    Packaging.termDefinitionMetadata = Nothing,
+                    Packaging.termDefinitionSignature = Nothing,
+                    Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
+                      Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
+                      Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
+                        (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]},
+              Packaging.Module {
+                Packaging.moduleName = (Packaging.ModuleName "hydra.build.routing"),
+                Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
+                  Packaging.entityMetadataDescription = (Just "Test module hydra.build.routing"),
+                  Packaging.entityMetadataComments = [],
+                  Packaging.entityMetadataSeeAlso = [],
+                  Packaging.entityMetadataLifecycle = Nothing})),
+                Packaging.moduleDependencies = [],
+                Packaging.moduleDefinitions = [
+                  Packaging.DefinitionTerm (Packaging.TermDefinition {
+                    Packaging.termDefinitionName = (Core.Name "hydra.build.routing.route"),
+                    Packaging.termDefinitionMetadata = Nothing,
+                    Packaging.termDefinitionSignature = Nothing,
+                    Packaging.termDefinitionBody = (Core.TermVariable (Core.Name "hydra.dsls.dslModuleName"))})]}]) Sets.empty (Packaging.Module {
+              Packaging.moduleName = (Packaging.ModuleName "hydra.build.routing"),
+              Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
+                Packaging.entityMetadataDescription = (Just "Test module hydra.build.routing"),
+                Packaging.entityMetadataComments = [],
+                Packaging.entityMetadataSeeAlso = [],
+                Packaging.entityMetadataLifecycle = Nothing})),
+              Packaging.moduleDependencies = [],
+              Packaging.moduleDefinitions = [
+                Packaging.DefinitionTerm (Packaging.TermDefinition {
+                  Packaging.termDefinitionName = (Core.Name "hydra.build.routing.route"),
+                  Packaging.termDefinitionMetadata = Nothing,
+                  Packaging.termDefinitionSignature = Nothing,
+                  Packaging.termDefinitionBody = (Core.TermVariable (Core.Name "hydra.dsls.dslModuleName"))})]})))) "]")),
+            Testing.universalTestCaseExpected = (\_ -> Strings.cat2 "[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorPackaging.invalidPackageError e) [
+              ErrorPackaging.InvalidPackageErrorUndeclaredDependency (ErrorPackaging.UndeclaredDependencyError {
+                ErrorPackaging.undeclaredDependencyErrorModuleName = (Packaging.ModuleName "hydra.build.routing"),
+                ErrorPackaging.undeclaredDependencyErrorReferencedName = (Core.Name "hydra.dsls.dslModuleName"),
+                ErrorPackaging.undeclaredDependencyErrorOwningModuleName = (Packaging.ModuleName "hydra.dsls")})])) "]"))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "transitive-only dependency does not satisfy one-hop: error",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (\_ -> Strings.cat2 "[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorPackaging.invalidPackageError e) (ValidatePackaging.checkUndeclaredDependencies (ValidatePackaging.undeclaredDependencyOwners [
+              Packaging.Module {
+                Packaging.moduleName = (Packaging.ModuleName "hydra.baz"),
+                Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
+                  Packaging.entityMetadataDescription = (Just "Test module hydra.baz"),
+                  Packaging.entityMetadataComments = [],
+                  Packaging.entityMetadataSeeAlso = [],
+                  Packaging.entityMetadataLifecycle = Nothing})),
+                Packaging.moduleDependencies = [],
+                Packaging.moduleDefinitions = [
+                  Packaging.DefinitionTerm (Packaging.TermDefinition {
+                    Packaging.termDefinitionName = (Core.Name "hydra.baz.c"),
+                    Packaging.termDefinitionMetadata = Nothing,
+                    Packaging.termDefinitionSignature = Nothing,
+                    Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
+                      Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
+                      Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
+                        (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]},
+              Packaging.Module {
+                Packaging.moduleName = (Packaging.ModuleName "hydra.bar"),
+                Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
+                  Packaging.entityMetadataDescription = (Just "Test module hydra.bar"),
+                  Packaging.entityMetadataComments = [],
+                  Packaging.entityMetadataSeeAlso = [],
+                  Packaging.entityMetadataLifecycle = Nothing})),
+                Packaging.moduleDependencies = [
+                  Packaging.ModuleDependency {
+                    Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.baz"),
+                    Packaging.moduleDependencyPackage = Nothing}],
+                Packaging.moduleDefinitions = [
+                  Packaging.DefinitionTerm (Packaging.TermDefinition {
+                    Packaging.termDefinitionName = (Core.Name "hydra.bar.b"),
+                    Packaging.termDefinitionMetadata = Nothing,
+                    Packaging.termDefinitionSignature = Nothing,
+                    Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
+                      Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
+                      Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
+                        (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]},
+              Packaging.Module {
+                Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
+                Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
+                  Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
+                  Packaging.entityMetadataComments = [],
+                  Packaging.entityMetadataSeeAlso = [],
+                  Packaging.entityMetadataLifecycle = Nothing})),
+                Packaging.moduleDependencies = [
+                  Packaging.ModuleDependency {
+                    Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.bar"),
+                    Packaging.moduleDependencyPackage = Nothing}],
+                Packaging.moduleDefinitions = [
+                  Packaging.DefinitionTerm (Packaging.TermDefinition {
+                    Packaging.termDefinitionName = (Core.Name "hydra.foo.a"),
+                    Packaging.termDefinitionMetadata = Nothing,
+                    Packaging.termDefinitionSignature = Nothing,
+                    Packaging.termDefinitionBody = (Core.TermVariable (Core.Name "hydra.baz.c"))})]}]) Sets.empty (Packaging.Module {
+              Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
+              Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
+                Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
+                Packaging.entityMetadataComments = [],
+                Packaging.entityMetadataSeeAlso = [],
+                Packaging.entityMetadataLifecycle = Nothing})),
+              Packaging.moduleDependencies = [
+                Packaging.ModuleDependency {
+                  Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.bar"),
+                  Packaging.moduleDependencyPackage = Nothing}],
+              Packaging.moduleDefinitions = [
+                Packaging.DefinitionTerm (Packaging.TermDefinition {
+                  Packaging.termDefinitionName = (Core.Name "hydra.foo.a"),
+                  Packaging.termDefinitionMetadata = Nothing,
+                  Packaging.termDefinitionSignature = Nothing,
+                  Packaging.termDefinitionBody = (Core.TermVariable (Core.Name "hydra.baz.c"))})]})))) "]")),
+            Testing.universalTestCaseExpected = (\_ -> Strings.cat2 "[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorPackaging.invalidPackageError e) [
+              ErrorPackaging.InvalidPackageErrorUndeclaredDependency (ErrorPackaging.UndeclaredDependencyError {
+                ErrorPackaging.undeclaredDependencyErrorModuleName = (Packaging.ModuleName "hydra.foo"),
+                ErrorPackaging.undeclaredDependencyErrorReferencedName = (Core.Name "hydra.baz.c"),
+                ErrorPackaging.undeclaredDependencyErrorOwningModuleName = (Packaging.ModuleName "hydra.baz")})])) "]"))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "reference to a name with no known owner (e.g. a typo): no error",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (\_ -> Strings.cat2 "[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorPackaging.invalidPackageError e) (ValidatePackaging.checkUndeclaredDependencies (ValidatePackaging.undeclaredDependencyOwners [
+              Packaging.Module {
+                Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
+                Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
+                  Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
+                  Packaging.entityMetadataComments = [],
+                  Packaging.entityMetadataSeeAlso = [],
+                  Packaging.entityMetadataLifecycle = Nothing})),
+                Packaging.moduleDependencies = [],
+                Packaging.moduleDefinitions = [
+                  Packaging.DefinitionTerm (Packaging.TermDefinition {
+                    Packaging.termDefinitionName = (Core.Name "hydra.foo.a"),
+                    Packaging.termDefinitionMetadata = Nothing,
+                    Packaging.termDefinitionSignature = Nothing,
+                    Packaging.termDefinitionBody = (Core.TermVariable (Core.Name "hydra.nonexistent.thing"))})]}]) Sets.empty (Packaging.Module {
+              Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
+              Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
+                Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
+                Packaging.entityMetadataComments = [],
+                Packaging.entityMetadataSeeAlso = [],
+                Packaging.entityMetadataLifecycle = Nothing})),
+              Packaging.moduleDependencies = [],
+              Packaging.moduleDefinitions = [
+                Packaging.DefinitionTerm (Packaging.TermDefinition {
+                  Packaging.termDefinitionName = (Core.Name "hydra.foo.a"),
+                  Packaging.termDefinitionMetadata = Nothing,
+                  Packaging.termDefinitionSignature = Nothing,
+                  Packaging.termDefinitionBody = (Core.TermVariable (Core.Name "hydra.nonexistent.thing"))})]})))) "]")),
+            Testing.universalTestCaseExpected = (\_ -> Strings.cat2 "[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorPackaging.invalidPackageError e) [])) "]"))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "reference to a primitive name: excluded, no error",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (\_ -> Strings.cat2 "[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorPackaging.invalidPackageError e) (ValidatePackaging.checkUndeclaredDependencies (ValidatePackaging.undeclaredDependencyOwners [
+              Packaging.Module {
+                Packaging.moduleName = (Packaging.ModuleName "hydra.lib.lists"),
+                Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
+                  Packaging.entityMetadataDescription = (Just "Test module hydra.lib.lists"),
+                  Packaging.entityMetadataComments = [],
+                  Packaging.entityMetadataSeeAlso = [],
+                  Packaging.entityMetadataLifecycle = Nothing})),
+                Packaging.moduleDependencies = [],
+                Packaging.moduleDefinitions = [
+                  Packaging.DefinitionTerm (Packaging.TermDefinition {
+                    Packaging.termDefinitionName = (Core.Name "hydra.lib.lists.map"),
+                    Packaging.termDefinitionMetadata = Nothing,
+                    Packaging.termDefinitionSignature = Nothing,
+                    Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
+                      Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
+                      Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
+                        (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))})]},
+              Packaging.Module {
+                Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
+                Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
+                  Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
+                  Packaging.entityMetadataComments = [],
+                  Packaging.entityMetadataSeeAlso = [],
+                  Packaging.entityMetadataLifecycle = Nothing})),
+                Packaging.moduleDependencies = [],
+                Packaging.moduleDefinitions = [
+                  Packaging.DefinitionTerm (Packaging.TermDefinition {
+                    Packaging.termDefinitionName = (Core.Name "hydra.foo.a"),
+                    Packaging.termDefinitionMetadata = Nothing,
+                    Packaging.termDefinitionSignature = Nothing,
+                    Packaging.termDefinitionBody = (Core.TermVariable (Core.Name "hydra.lib.lists.map"))})]}]) (Sets.fromList [
+              Core.Name "hydra.lib.lists.map"]) (Packaging.Module {
+              Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
+              Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
+                Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
+                Packaging.entityMetadataComments = [],
+                Packaging.entityMetadataSeeAlso = [],
+                Packaging.entityMetadataLifecycle = Nothing})),
+              Packaging.moduleDependencies = [],
+              Packaging.moduleDefinitions = [
+                Packaging.DefinitionTerm (Packaging.TermDefinition {
+                  Packaging.termDefinitionName = (Core.Name "hydra.foo.a"),
+                  Packaging.termDefinitionMetadata = Nothing,
+                  Packaging.termDefinitionSignature = Nothing,
+                  Packaging.termDefinitionBody = (Core.TermVariable (Core.Name "hydra.lib.lists.map"))})]})))) "]")),
+            Testing.universalTestCaseExpected = (\_ -> Strings.cat2 "[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorPackaging.invalidPackageError e) [])) "]"))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "self-reference within the same module: no error",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
+            Testing.universalTestCaseActual = (\_ -> Strings.cat2 "[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorPackaging.invalidPackageError e) (ValidatePackaging.checkUndeclaredDependencies (ValidatePackaging.undeclaredDependencyOwners [
+              Packaging.Module {
+                Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
+                Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
+                  Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
+                  Packaging.entityMetadataComments = [],
+                  Packaging.entityMetadataSeeAlso = [],
+                  Packaging.entityMetadataLifecycle = Nothing})),
+                Packaging.moduleDependencies = [],
+                Packaging.moduleDefinitions = [
+                  Packaging.DefinitionTerm (Packaging.TermDefinition {
+                    Packaging.termDefinitionName = (Core.Name "hydra.foo.a"),
+                    Packaging.termDefinitionMetadata = Nothing,
+                    Packaging.termDefinitionSignature = Nothing,
+                    Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
+                      Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
+                      Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
+                        (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))}),
+                  (Packaging.DefinitionTerm (Packaging.TermDefinition {
+                    Packaging.termDefinitionName = (Core.Name "hydra.foo.b"),
+                    Packaging.termDefinitionMetadata = Nothing,
+                    Packaging.termDefinitionSignature = Nothing,
+                    Packaging.termDefinitionBody = (Core.TermVariable (Core.Name "hydra.foo.a"))}))]}]) Sets.empty (Packaging.Module {
+              Packaging.moduleName = (Packaging.ModuleName "hydra.foo"),
+              Packaging.moduleMetadata = (Just (Packaging.EntityMetadata {
+                Packaging.entityMetadataDescription = (Just "Test module hydra.foo"),
+                Packaging.entityMetadataComments = [],
+                Packaging.entityMetadataSeeAlso = [],
+                Packaging.entityMetadataLifecycle = Nothing})),
+              Packaging.moduleDependencies = [],
+              Packaging.moduleDefinitions = [
+                Packaging.DefinitionTerm (Packaging.TermDefinition {
+                  Packaging.termDefinitionName = (Core.Name "hydra.foo.a"),
+                  Packaging.termDefinitionMetadata = Nothing,
+                  Packaging.termDefinitionSignature = Nothing,
+                  Packaging.termDefinitionBody = (Core.TermAnnotated (Core.AnnotatedTerm {
+                    Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "value")),
+                    Core.annotatedTermAnnotation = (Annotations.wrapAnnotationMap (Maps.fromList [
+                      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "test description")))]))}))}),
+                (Packaging.DefinitionTerm (Packaging.TermDefinition {
+                  Packaging.termDefinitionName = (Core.Name "hydra.foo.b"),
+                  Packaging.termDefinitionMetadata = Nothing,
+                  Packaging.termDefinitionSignature = Nothing,
+                  Packaging.termDefinitionBody = (Core.TermVariable (Core.Name "hydra.foo.a"))}))]})))) "]")),
+            Testing.universalTestCaseExpected = (\_ -> Strings.cat2 "[" (Strings.cat2 (Strings.intercalate ";" (Lists.map (\e -> ShowErrorPackaging.invalidPackageError e) [])) "]"))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}
 

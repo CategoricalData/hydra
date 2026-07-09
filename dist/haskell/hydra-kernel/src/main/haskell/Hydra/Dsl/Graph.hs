@@ -19,6 +19,20 @@ import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | DSL composition builder for the decoder of hydra.graph.TermCoder
+decodeTermCoder :: Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError a) -> Typed.TypedTerm (Graph.Graph -> Core.Term -> Either Errors.DecodingError (Graph.TermCoder a))
+decodeTermCoder a =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.graph.termCoder")),
+      Core.applicationArgument = (Typed.unTypedTerm a)}))
+
+-- | DSL composition builder for the encoder of hydra.graph.TermCoder
+encodeTermCoder :: Typed.TypedTerm (a -> Core.Term) -> Typed.TypedTerm (Graph.TermCoder a -> Core.Term)
+encodeTermCoder a =
+    Typed.TypedTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.graph.termCoder")),
+      Core.applicationArgument = (Typed.unTypedTerm a)}))
+
 -- | DSL constructor for hydra.graph.Graph
 graph :: Typed.TypedTerm (M.Map Core.Name Core.Term) -> Typed.TypedTerm (M.Map Core.Name Core.TypeScheme) -> Typed.TypedTerm (M.Map Core.Name Core.TypeVariableConstraints) -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm (M.Map Core.Name Core.Term) -> Typed.TypedTerm (M.Map Core.Name Graph.Primitive) -> Typed.TypedTerm (M.Map Core.Name Core.TypeScheme) -> Typed.TypedTerm (S.Set Core.Name) -> Typed.TypedTerm Graph.Graph
 graph boundTerms boundTypes classConstraints lambdaVariables metadata primitives schemaTypes typeVariables =
@@ -76,6 +90,10 @@ graphClassConstraints x =
         Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
         Core.projectionFieldName = (Core.Name "classConstraints")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.graph.Graph
+graphGraph :: Typed.TypedName Graph.Graph
+graphGraph = Typed.TypedName (Core.Name "hydra.graph.Graph")
 
 -- | DSL accessor for the lambdaVariables field of hydra.graph.Graph
 graphLambdaVariables :: Typed.TypedTerm Graph.Graph -> Typed.TypedTerm (S.Set Core.Name)
@@ -610,6 +628,10 @@ library name prefix primitives =
           Core.fieldName = (Core.Name "primitives"),
           Core.fieldTerm = (Typed.unTypedTerm primitives)}]}))
 
+-- | DSL name token for hydra.graph.Library
+libraryLibrary :: Typed.TypedName Graph.Library
+libraryLibrary = Typed.TypedName (Core.Name "hydra.graph.Library")
+
 -- | DSL accessor for the name field of hydra.graph.Library
 libraryName :: Typed.TypedTerm Graph.Library -> Typed.TypedTerm Packaging.ModuleName
 libraryName x =
@@ -740,6 +762,10 @@ primitiveImplementation x =
         Core.projectionFieldName = (Core.Name "implementation")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.graph.Primitive
+primitivePrimitive :: Typed.TypedName Graph.Primitive
+primitivePrimitive = Typed.TypedName (Core.Name "hydra.graph.Primitive")
+
 -- | DSL updater for the definition field of hydra.graph.Primitive
 primitiveWithDefinition :: Typed.TypedTerm Graph.Primitive -> Typed.TypedTerm Packaging.PrimitiveDefinition -> Typed.TypedTerm Graph.Primitive
 primitiveWithDefinition original newVal =
@@ -807,6 +833,10 @@ termCoderEncode x =
         Core.projectionTypeName = (Core.Name "hydra.graph.TermCoder"),
         Core.projectionFieldName = (Core.Name "encode")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.graph.TermCoder
+termCoderTermCoder :: Typed.TypedName (Graph.TermCoder a)
+termCoderTermCoder = Typed.TypedName (Core.Name "hydra.graph.TermCoder")
 
 -- | DSL accessor for the type field of hydra.graph.TermCoder
 termCoderType :: Typed.TypedTerm (Graph.TermCoder a) -> Typed.TypedTerm Core.Type

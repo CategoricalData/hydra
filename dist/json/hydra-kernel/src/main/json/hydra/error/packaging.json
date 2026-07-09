@@ -408,7 +408,18 @@
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "A package whose name does not match the package-name naming convention"}}}]}}}}]},
+                              "value": {"literal": {"string": "A package whose name does not match the package-name naming convention"}}}]}}}},
+                  {
+                    "name": "undeclaredDependency",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.error.packaging.UndeclaredDependencyError"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "A module references a name owned by another module that is not among its declared dependencies"}}}]}}}}]},
               "annotation": {
                 "map": [
                   {"key": {"variable": "description"}, "value": {"literal": {"string": "An error indicating that a package is invalid"}}}]}}}}}},
@@ -468,4 +479,50 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A top-level definition whose term (or type, for type definitions) lacks a description annotation. Every definition in a Hydra module is expected to be wrapped in a doc \"...\" annotation at its top level."}}}]}}}}}}]}
+                        "string": "A top-level definition whose term (or type, for type definitions) lacks a description annotation. Every definition in a Hydra module is expected to be wrapped in a doc \"...\" annotation at its top level."}}}]}}}}}},
+    {
+      "type": {
+        "name": "hydra.error.packaging.UndeclaredDependencyError",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "moduleName",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.packaging.ModuleName"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The name of the module containing the undeclared reference"}}}]}}}},
+                  {
+                    "name": "referencedName",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.Name"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The free name referenced by the module's definitions"}}}]}}}},
+                  {
+                    "name": "owningModuleName",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.packaging.ModuleName"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The name of the module that actually defines the referenced name"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A module references a name owned by another module which is not among its declared moduleDependencies. Like a missing import: the reference may still resolve today via another module's transitive dependencies, but the declared dependency list no longer reflects what the module actually uses, and inference-time resolution is not guaranteed."}}}]}}}}}}]}

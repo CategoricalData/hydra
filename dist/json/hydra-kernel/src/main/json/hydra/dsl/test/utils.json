@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.test.utils"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.test.utils"},
+    {"module": "hydra.decode.test.utils"},
     {"module": "hydra.inference"},
     {"module": "hydra.show.errors"},
     {"module": "hydra.lexical"},

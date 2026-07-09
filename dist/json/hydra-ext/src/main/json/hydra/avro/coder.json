@@ -7,6 +7,7 @@
   "dependencies": [
     {"module": "hydra.extract.core"},
     {"module": "hydra.strip"},
+    {"module": "hydra.names"},
     {"module": "hydra.avro.environment"},
     {"module": "hydra.avro.schema"},
     {"module": "hydra.json.model"},

@@ -45,6 +45,7 @@ import Control.Exception (catch, SomeException)
 import Control.Monad (when)
 import qualified Control.Monad as CM
 import qualified Data.List as L
+import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified System.Directory as DD
 import System.Environment (getArgs)
@@ -182,6 +183,42 @@ main = do
         | otherwise         = filter (\m -> not (isNativeOwned m) && not (isDerived m)) universe
       excluded = length universe - length writeUniverse
 
+  -- Undeclared cross-module dependency check (#574). Runs over the
+  -- hand-written universe (not just kernelModules) since a referenced
+  -- name's owning module may live in a different package -- the
+  -- motivating incident (#555) was itself cross-package. Deliberately
+  -- independent of validateKernelModulesOrExit below (which is currently
+  -- disabled) -- this check must run regardless of that gate's status.
+  --
+  -- isExcludedFromUndeclaredDepsCheck reuses the isNativeOwned /
+  -- isDerivedEncodeDecode namespace predicates (defined below) as a
+  -- PROVISIONAL default, pending a separate, broader decision on whether
+  -- and how derived modules (hydra.dsl.*/encode.*/decode.*) should be
+  -- subject to validation at all -- see the coordination log for #574 (a
+  -- follow-up issue is expected to generalize this). Until that lands,
+  -- excluding this class here is a defensible default because it mirrors
+  -- how update-json-main already treats them elsewhere (native/derived
+  -- modules are loaded only to seed the inference universe, never
+  -- re-validated/re-inferred as if hand-written):
+  --   * isNativeOwned (hydra.jvm.*/java.*/python.*): native-host packages
+  --     with no Haskell DSL source; their JSON is loaded only to seed the
+  --     inference universe and can embed literal cross-namespace variable
+  --     references inside their own compiled bodies (observed: a
+  --     hydra.python.coder.json definitions entry literally named
+  --     "hydra.environment.reorderDefs", which corrupted the check's
+  --     name-to-owner map when included in its universe).
+  --   * isDerivedEncodeDecode (hydra.encode.*/hydra.decode.*): synthesized
+  --     modules whose moduleDependencies is computed by
+  --     Encoding.encodeModule/Decoding.decodeModule from the SOURCE
+  --     module's declared deps, but never includes the source's own raw
+  --     namespace -- even though the generated body embeds literal type
+  --     references into it (e.g. hydra.encode.paths references
+  --     hydra.core.Field/.Name/.Term/etc. with hydra.core absent from its
+  --     declared deps by construction, not by omission). Not a real gap.
+  let isExcludedFromUndeclaredDepsCheck m = isNativeOwned m || isDerivedEncodeDecode m
+      undeclaredDepsUniverse = filter (not . isExcludedFromUndeclaredDepsCheck) universe
+  checkUndeclaredDependenciesOrExit undeclaredDepsUniverse
+
   putStrLn $ "Generating " ++ show (length writeUniverse) ++ " modules to JSON, routed per package..."
   when (excluded > 0) $
     putStrLn $ "  (excluded " ++ show excluded
@@ -221,6 +258,36 @@ main = do
       putStrLn ""
       putStrLn "=== FAILED ==="
       exitFailure
+
+-- | Check every module in the given universe for undeclared cross-module
+-- dependencies (hydra.validate.packaging.checkUndeclaredDependencies /
+-- kernelUniverseUndeclaredDependencies; see #574): a module referencing a
+-- name owned by another module which is not among its declared
+-- moduleDependencies. Unlike 'validateKernelModulesOrExit', this runs over
+-- the WHOLE universe (all packages), not just kernelModules -- the
+-- motivating incident (#555) was itself cross-package, so a single-package
+-- check would not have caught it. Deliberately wired as its own call, not
+-- routed through validateKernelModulesOrExit (which is currently disabled;
+-- see the comment above) -- this check must run regardless of that gate's
+-- status.
+checkUndeclaredDependenciesOrExit :: [Kernel.Module] -> IO ()
+checkUndeclaredDependenciesOrExit mods = do
+    putStrLn $ "Checking " ++ show (length mods)
+               ++ " modules for undeclared cross-module dependencies (hydra.validate.packaging.checkUndeclaredDependencies)..."
+    hFlush stdout
+    let graph = modulesToGraph mods mods
+    let primNames = S.fromList (M.keys (Kernel.graphPrimitives graph))
+    let findings = ValidatePackaging.kernelUniverseUndeclaredDependencies mods primNames
+    if null findings
+      then do
+        putStrLn $ "  No undeclared dependencies found."
+        putStrLn ""
+      else do
+        putStrLn $ "  " ++ show (length findings) ++ " undeclared-dependency finding(s):"
+        mapM_ (\e -> putStrLn $ "    " ++ ShowErrorPackaging.invalidPackageError e) findings
+        putStrLn ""
+        putStrLn "=== FAILED: undeclared cross-module dependencies ==="
+        exitFailure
 
 -- | Run packaging + core validation against every kernel module.
 --

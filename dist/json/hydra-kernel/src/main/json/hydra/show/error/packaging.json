@@ -425,7 +425,8 @@
                               {"name": "conflictingModuleName", "handler": {"variable": "hydra.show.error.packaging.conflictingModuleNameError"}},
                               {"name": "duplicateModuleName", "handler": {"variable": "hydra.show.error.packaging.duplicateModuleNameError"}},
                               {"name": "invalidModule", "handler": {"variable": "hydra.show.error.packaging.invalidModuleError"}},
-                              {"name": "invalidPackageName", "handler": {"variable": "hydra.show.error.packaging.invalidPackageNameError"}}]}},
+                              {"name": "invalidPackageName", "handler": {"variable": "hydra.show.error.packaging.invalidPackageNameError"}},
+                              {"name": "undeclaredDependency", "handler": {"variable": "hydra.show.error.packaging.undeclaredDependencyError"}}]}},
                         "argument": {"variable": "e"}}}}}}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show an invalid package error as a string"}}}]}}}}},
@@ -496,4 +497,52 @@
                         {"literal": {"string": " lacks a description annotation"}}]}}}}},
             "annotation": {
               "map": [
-                {"key": {"variable": "description"}, "value": {"literal": {"string": "Show a missing documentation error as a string"}}}]}}}}}]}
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Show a missing documentation error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.show.error.packaging.undeclaredDependencyError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.packaging.UndeclaredDependencyError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.packaging.UndeclaredDependencyError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.cat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "module "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.packaging.ModuleName"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.UndeclaredDependencyError", "fieldName": "moduleName"}},
+                                "argument": {"variable": "e"}}}}},
+                        {"literal": {"string": " references "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.core.Name"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.UndeclaredDependencyError", "fieldName": "referencedName"}},
+                                "argument": {"variable": "e"}}}}},
+                        {"literal": {"string": ", whose owning module "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.packaging.ModuleName"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.UndeclaredDependencyError", "fieldName": "owningModuleName"}},
+                                "argument": {"variable": "e"}}}}},
+                        {"literal": {"string": " is not among its declared dependencies; add it to moduleDependencies"}}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Show an undeclared dependency error as a string"}}}]}}}}}]}

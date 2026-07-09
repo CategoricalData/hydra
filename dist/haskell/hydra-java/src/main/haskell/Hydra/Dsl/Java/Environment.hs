@@ -67,6 +67,10 @@ aliases currentNamespace packages branchVars recursiveVars inScopeTypeParams pol
           Core.fieldName = (Core.Name "thunkedVars"),
           Core.fieldTerm = (Typed.unTypedTerm thunkedVars)}]}))
 
+-- | DSL name token for hydra.java.environment.Aliases
+aliasesAliases :: Typed.TypedName Environment.Aliases
+aliasesAliases = Typed.TypedName (Core.Name "hydra.java.environment.Aliases")
+
 -- | DSL accessor for the branchVars field of hydra.java.environment.Aliases
 aliasesBranchVars :: Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm (S.Set Core.Name)
 aliasesBranchVars x =
@@ -1437,6 +1441,10 @@ javaEnvironmentGraph x =
         Core.projectionFieldName = (Core.Name "graph")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.java.environment.JavaEnvironment
+javaEnvironmentJavaEnvironment :: Typed.TypedName Environment.JavaEnvironment
+javaEnvironmentJavaEnvironment = Typed.TypedName (Core.Name "hydra.java.environment.JavaEnvironment")
+
 -- | DSL updater for the aliases field of hydra.java.environment.JavaEnvironment
 javaEnvironmentWithAliases :: Typed.TypedTerm Environment.JavaEnvironment -> Typed.TypedTerm Environment.Aliases -> Typed.TypedTerm Environment.JavaEnvironment
 javaEnvironmentWithAliases original newVal =
@@ -1481,6 +1489,10 @@ javaFeatures supportsDiamondOperator =
           Core.fieldName = (Core.Name "supportsDiamondOperator"),
           Core.fieldTerm = (Typed.unTypedTerm supportsDiamondOperator)}]}))
 
+-- | DSL name token for hydra.java.environment.JavaFeatures
+javaFeaturesJavaFeatures :: Typed.TypedName Environment.JavaFeatures
+javaFeaturesJavaFeatures = Typed.TypedName (Core.Name "hydra.java.environment.JavaFeatures")
+
 -- | DSL accessor for the supportsDiamondOperator field of hydra.java.environment.JavaFeatures
 javaFeaturesSupportsDiamondOperator :: Typed.TypedTerm Environment.JavaFeatures -> Typed.TypedTerm Bool
 javaFeaturesSupportsDiamondOperator x =
@@ -1517,6 +1529,10 @@ javaSymbolClassHoistedLambda x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hoistedLambda"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.java.environment.JavaSymbolClass
+javaSymbolClassJavaSymbolClass :: Typed.TypedName Environment.JavaSymbolClass
+javaSymbolClassJavaSymbolClass = Typed.TypedName (Core.Name "hydra.java.environment.JavaSymbolClass")
 
 -- | DSL injection for the localVariable variant of hydra.java.environment.JavaSymbolClass
 javaSymbolClassLocalVariable :: Typed.TypedTerm Environment.JavaSymbolClass

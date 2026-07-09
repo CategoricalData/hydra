@@ -6,6 +6,7 @@
     {"module": "hydra.formatting"},
     {"module": "hydra.haskell.language"},
     {"module": "hydra.names"},
+    {"module": "hydra.strip"},
     {"module": "hydra.haskell.syntax"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

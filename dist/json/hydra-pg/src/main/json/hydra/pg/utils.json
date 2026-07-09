@@ -4,6 +4,7 @@
   "dependencies": [
     {"module": "hydra.extract.core"},
     {"module": "hydra.pg.coder"},
+    {"module": "hydra.show.core"},
     {"module": "hydra.pg.model"},
     {"module": "hydra.pg.mapping"},
     {"module": "hydra.json.model"},

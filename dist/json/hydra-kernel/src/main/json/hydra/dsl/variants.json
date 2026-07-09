@@ -1,8 +1,34 @@
 {
   "name": "hydra.dsl.variants",
   "metadata": {"description": "DSL functions for hydra.variants", "comments": [], "seeAlso": []},
-  "dependencies": [{"module": "hydra.variants"}, {"module": "hydra.typed"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
+  "dependencies": [
+    {"module": "hydra.variants"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.encode.variants"},
+    {"module": "hydra.decode.variants"},
+    {"module": "hydra.core"},
+    {"module": "hydra.dsl.core"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.variants.literalVariantLiteralVariant",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.variants.LiteralVariant"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.LiteralVariant"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.variants.LiteralVariant"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.variants.literalVariantBinary",
@@ -237,6 +263,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the string variant of hydra.variants.LiteralVariant"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.variants.termVariantTermVariant",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.variants.TermVariant"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TermVariant"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.variants.TermVariant"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.variants.termVariantAnnotated",
@@ -1056,6 +1100,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the wrap variant of hydra.variants.TermVariant"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.variants.typeVariantTypeVariant",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.variants.TypeVariant"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.variants.TypeVariant"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.variants.TypeVariant"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.variants.typeVariantAnnotated",

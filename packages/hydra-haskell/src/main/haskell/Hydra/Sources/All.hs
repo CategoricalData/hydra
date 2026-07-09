@@ -20,7 +20,6 @@ import Hydra.Sources.Test.All
 import qualified Hydra.Sources.Kernel.Manifest as KernelManifest
 import qualified Hydra.Sources.Haskell.Manifest as HaskellManifest
 
-import qualified Hydra.Sources.Kernel.Terms.Dsls as Dsls
 
 
 mainModules :: [Module]
@@ -30,7 +29,7 @@ mainModules = kernelModules ++ haskellModules ++ jsonModules ++ otherModules
 -- because including it in the main generation causes a stack overflow due to the
 -- complexity of its term definitions (which reference decoders, the full type graph, etc.)
 dslSourceModules :: [Module]
-dslSourceModules = [Dsls.module_]
+dslSourceModules = []  -- hydra.dsls now a normal kernelPrimaryTermsModule (no special-casing; #555)
 
 -- | Per-package source-module lists for derived generation (#474). DSL wrappers
 -- are derived from the broad `mainDslModules`; encoders/decoders from the

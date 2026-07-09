@@ -68,6 +68,7 @@ import qualified Data.Maybe                  as Y
 import qualified Hydra.Sources.Json.Decode                  as JsonDecode
 import qualified Hydra.Sources.Kernel.Terms.Adapt           as Adapt
 import qualified Hydra.Sources.Kernel.Terms.Annotations     as Annotations
+import qualified Hydra.Sources.Kernel.Terms.Constants       as Constants
 import qualified Hydra.Sources.Kernel.Terms.Inference       as Inference
 import qualified Hydra.Sources.Kernel.Terms.Lexical         as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Names           as Names
@@ -88,7 +89,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Adapt.ns, Annotations.ns, Inference.ns, JsonDecode.ns, Lexical.ns, Names.ns,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Adapt.ns, Annotations.ns, Constants.ns, Inference.ns, JsonDecode.ns, Lexical.ns, Names.ns, Scoping.ns,
      Environment.ns, ShowCore.ns, ShowError.ns, Strip.ns,
      ModuleName "hydra.decoding", ModuleName "hydra.encoding",
      ModuleName "hydra.json.decode", ModuleName "hydra.json.encode", ModuleName "hydra.json.writer",

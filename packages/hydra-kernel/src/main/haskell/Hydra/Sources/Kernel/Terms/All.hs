@@ -50,6 +50,7 @@ import qualified Hydra.Sources.Kernel.Terms.Parsers         as Parsers
 import qualified Hydra.Sources.Kernel.Terms.Predicates     as Predicates
 import qualified Hydra.Sources.Kernel.Terms.Reduction       as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect         as Reflect
+import qualified Hydra.Sources.Kernel.Terms.Refs            as Refs
 import qualified Hydra.Sources.Kernel.Terms.Resolution     as Resolution
 import qualified Hydra.Sources.Kernel.Terms.Rewriting       as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Scoping         as Scoping
@@ -91,7 +92,7 @@ kernelPrimaryTermsModules = [
   Decoding.module_,
   Dependencies.module_,
   Differentiation.module_,
---  Dsls.module_,
+  Dsls.module_,
   Encoding.module_,
   Environment.module_,
   ExtractCore.module_,
@@ -127,6 +128,7 @@ kernelPrimaryTermsModules = [
   Predicates.module_,
   Reduction.module_,
   Reflect.module_,
+  Refs.module_,
   Resolution.module_,
   Rewriting.module_,
   Scoping.module_,

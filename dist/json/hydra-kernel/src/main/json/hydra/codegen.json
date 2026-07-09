@@ -7,10 +7,12 @@
   "dependencies": [
     {"module": "hydra.adapt"},
     {"module": "hydra.annotations"},
+    {"module": "hydra.constants"},
     {"module": "hydra.inference"},
     {"module": "hydra.json.decode"},
     {"module": "hydra.lexical"},
     {"module": "hydra.names"},
+    {"module": "hydra.scoping"},
     {"module": "hydra.environment"},
     {"module": "hydra.show.core"},
     {"module": "hydra.show.errors"},

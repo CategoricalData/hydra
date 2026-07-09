@@ -74,14 +74,6 @@ writeEncoderHaskell = writeCoderHaskell generateEncoderModules
 -- DSL Module Generation
 ----------------------------------------
 
--- | Write the hydra.dsls source module (the DSL generator itself) to Haskell.
--- The Dsls module is NOT included in the universe to avoid infinite recursion
--- during graph construction (its terms reference decoders that reference types).
-writeDslSourceHaskell :: FilePath -> IO ()
-writeDslSourceHaskell basePath = do
-    _ <- writeHaskell basePath Sources.mainModules Sources.dslSourceModules
-    return ()
-
 -- | Write DSL modules with doInfer=False. All bindings are fully typed.
 writeDslHaskell :: FilePath -> [Module] -> [Module] -> IO ()
 writeDslHaskell basePath universeModules typeModules = do

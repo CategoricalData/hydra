@@ -83,7 +83,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, ShowCore.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, Constants.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, Scoping.ns, ShowCore.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Functions for generating term decoders from type modules")}
   where
     definitions = [
@@ -369,18 +369,7 @@ decodeBinding = define "decodeBinding" $
 decodeBindingName :: TypedTermDefinition (Name -> Name)
 decodeBindingName = define "decodeBindingName" $
   doc "Generate a binding name for a decoder function from a type name" $
-  "n" ~>
-  "parts" <~ (Strings.splitOn (string ".") (Core.unName (var "n"))) $
-  "localPart" <~ (Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))) $
-  "localResult" <~ (Core.name (var "localPart")) $
-  Optionals.cases (Lists.maybeInit $ var "parts") (var "localResult") ("nsParts" ~>
-      Optionals.cases (Lists.uncons $ var "nsParts") (var "localResult") ("nsUc" ~>
-          "tail" <~ Pairs.second (var "nsUc") $
-          Core.name (Strings.intercalate (string ".") (Lists.concat2
-            (list [string "hydra", string "decode"])
-            (Lists.concat2
-              (var "tail")
-              (list [var "localPart"]))))))
+  Names.derivedBindingName @@ list [string "hydra", string "decode"] @@ boolean True
 
 -- | Generate a decoder for a literal type
 -- Match on the LiteralType to generate type-specific decoders
@@ -604,14 +593,7 @@ decodeModule = define "decodeModule" $
 decodeModuleName :: TypedTermDefinition (ModuleName -> ModuleName)
 decodeModuleName = define "decodeModuleName" $
   doc "Generate a decoder module name from a source module name" $
-  "ns" ~>
-  "parts" <~ Strings.splitOn (string ".") (Packaging.unModuleName (var "ns")) $
-  "fallback" <~ Packaging.moduleName2 (Packaging.unModuleName (var "ns")) $
-  Optionals.cases (Lists.uncons $ var "parts") (var "fallback") ("uc" ~>
-      Packaging.moduleName2 (
-        Strings.cat $ list [
-          string "hydra.decode.",
-          Strings.intercalate (string ".") (Pairs.second $ var "uc")]))
+  Names.derivedModuleName @@ list [string "hydra", string "decode"] @@ boolean True
 
 -- | Generate a decoder for a record type with element name
 -- | Generate a decoder for a pair type

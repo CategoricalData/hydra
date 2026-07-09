@@ -100,7 +100,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([ExtractCore.ns, PgCoder.ns] L.++ (PgModel.ns:PgMapping.ns:JsonModel.ns:KernelTypes.kernelTypesModuleNames)),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([ExtractCore.ns, PgCoder.ns, ShowCore.ns] L.++ (PgModel.ns:PgMapping.ns:JsonModel.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Utility functions for property graph operations")}
   where
     definitions = [

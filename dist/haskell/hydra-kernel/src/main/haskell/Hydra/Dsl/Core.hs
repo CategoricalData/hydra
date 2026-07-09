@@ -5,6 +5,8 @@
 module Hydra.Dsl.Core where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Core as DecodeCore
+import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Typed as Typed
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
@@ -25,6 +27,10 @@ annotatedTerm body annotation =
         Core.Field {
           Core.fieldName = (Core.Name "annotation"),
           Core.fieldTerm = (Typed.unTypedTerm annotation)}]}))
+
+-- | DSL name token for hydra.core.AnnotatedTerm
+annotatedTermAnnotatedTerm :: Typed.TypedName Core.AnnotatedTerm
+annotatedTermAnnotatedTerm = Typed.TypedName (Core.Name "hydra.core.AnnotatedTerm")
 
 -- | DSL accessor for the annotation field of hydra.core.AnnotatedTerm
 annotatedTermAnnotation :: Typed.TypedTerm Core.AnnotatedTerm -> Typed.TypedTerm Core.Term
@@ -91,6 +97,10 @@ annotatedType body annotation =
           Core.fieldName = (Core.Name "annotation"),
           Core.fieldTerm = (Typed.unTypedTerm annotation)}]}))
 
+-- | DSL name token for hydra.core.AnnotatedType
+annotatedTypeAnnotatedType :: Typed.TypedName Core.AnnotatedType
+annotatedTypeAnnotatedType = Typed.TypedName (Core.Name "hydra.core.AnnotatedType")
+
 -- | DSL accessor for the annotation field of hydra.core.AnnotatedType
 annotatedTypeAnnotation :: Typed.TypedTerm Core.AnnotatedType -> Typed.TypedTerm Core.Term
 annotatedTypeAnnotation x =
@@ -156,6 +166,10 @@ application function argument =
           Core.fieldName = (Core.Name "argument"),
           Core.fieldTerm = (Typed.unTypedTerm argument)}]}))
 
+-- | DSL name token for hydra.core.Application
+applicationApplication :: Typed.TypedName Core.Application
+applicationApplication = Typed.TypedName (Core.Name "hydra.core.Application")
+
 -- | DSL accessor for the argument field of hydra.core.Application
 applicationArgument :: Typed.TypedTerm Core.Application -> Typed.TypedTerm Core.Term
 applicationArgument x =
@@ -186,6 +200,10 @@ applicationType function argument =
         Core.Field {
           Core.fieldName = (Core.Name "argument"),
           Core.fieldTerm = (Typed.unTypedTerm argument)}]}))
+
+-- | DSL name token for hydra.core.ApplicationType
+applicationTypeApplicationType :: Typed.TypedName Core.ApplicationType
+applicationTypeApplicationType = Typed.TypedName (Core.Name "hydra.core.ApplicationType")
 
 -- | DSL accessor for the argument field of hydra.core.ApplicationType
 applicationTypeArgument :: Typed.TypedTerm Core.ApplicationType -> Typed.TypedTerm Core.Type
@@ -288,6 +306,10 @@ binding name term typeScheme =
         Core.Field {
           Core.fieldName = (Core.Name "typeScheme"),
           Core.fieldTerm = (Typed.unTypedTerm typeScheme)}]}))
+
+-- | DSL name token for hydra.core.Binding
+bindingBinding :: Typed.TypedName Core.Binding
+bindingBinding = Typed.TypedName (Core.Name "hydra.core.Binding")
 
 -- | DSL accessor for the name field of hydra.core.Binding
 bindingName :: Typed.TypedTerm Core.Binding -> Typed.TypedTerm Core.Name
@@ -401,6 +423,10 @@ caseAlternative name handler =
           Core.fieldName = (Core.Name "handler"),
           Core.fieldTerm = (Typed.unTypedTerm handler)}]}))
 
+-- | DSL name token for hydra.core.CaseAlternative
+caseAlternativeCaseAlternative :: Typed.TypedName Core.CaseAlternative
+caseAlternativeCaseAlternative = Typed.TypedName (Core.Name "hydra.core.CaseAlternative")
+
 -- | DSL accessor for the handler field of hydra.core.CaseAlternative
 caseAlternativeHandler :: Typed.TypedTerm Core.CaseAlternative -> Typed.TypedTerm Core.Term
 caseAlternativeHandler x =
@@ -468,6 +494,10 @@ caseStatement typeName default_ cases =
         Core.Field {
           Core.fieldName = (Core.Name "cases"),
           Core.fieldTerm = (Typed.unTypedTerm cases)}]}))
+
+-- | DSL name token for hydra.core.CaseStatement
+caseStatementCaseStatement :: Typed.TypedName Core.CaseStatement
+caseStatementCaseStatement = Typed.TypedName (Core.Name "hydra.core.CaseStatement")
 
 -- | DSL accessor for the cases field of hydra.core.CaseStatement
 caseStatementCases :: Typed.TypedTerm Core.CaseStatement -> Typed.TypedTerm [Core.CaseAlternative]
@@ -581,6 +611,10 @@ eitherType left right =
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Typed.unTypedTerm right)}]}))
 
+-- | DSL name token for hydra.core.EitherType
+eitherTypeEitherType :: Typed.TypedName Core.EitherType
+eitherTypeEitherType = Typed.TypedName (Core.Name "hydra.core.EitherType")
+
 -- | DSL accessor for the left field of hydra.core.EitherType
 eitherTypeLeft :: Typed.TypedTerm Core.EitherType -> Typed.TypedTerm Core.Type
 eitherTypeLeft x =
@@ -646,6 +680,10 @@ field name term =
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Typed.unTypedTerm term)}]}))
 
+-- | DSL name token for hydra.core.Field
+fieldField :: Typed.TypedName Core.Field
+fieldField = Typed.TypedName (Core.Name "hydra.core.Field")
+
 -- | DSL accessor for the name field of hydra.core.Field
 fieldName :: Typed.TypedTerm Core.Field -> Typed.TypedTerm Core.Name
 fieldName x =
@@ -676,6 +714,10 @@ fieldType name type_ =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Typed.unTypedTerm type_)}]}))
+
+-- | DSL name token for hydra.core.FieldType
+fieldTypeFieldType :: Typed.TypedName Core.FieldType
+fieldTypeFieldType = Typed.TypedName (Core.Name "hydra.core.FieldType")
 
 -- | DSL accessor for the name field of hydra.core.FieldType
 fieldTypeName :: Typed.TypedTerm Core.FieldType -> Typed.TypedTerm Core.Name
@@ -781,6 +823,10 @@ floatTypeFloat64 =
         Core.fieldName = (Core.Name "float64"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.core.FloatType
+floatTypeFloatType :: Typed.TypedName Core.FloatType
+floatTypeFloatType = Typed.TypedName (Core.Name "hydra.core.FloatType")
+
 -- | DSL injection for the float32 variant of hydra.core.FloatValue
 floatValueFloat32 :: Typed.TypedTerm Float -> Typed.TypedTerm Core.FloatValue
 floatValueFloat32 x =
@@ -798,6 +844,10 @@ floatValueFloat64 x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float64"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.core.FloatValue
+floatValueFloatValue :: Typed.TypedName Core.FloatValue
+floatValueFloatValue = Typed.TypedName (Core.Name "hydra.core.FloatValue")
 
 -- | DSL constructor for hydra.core.ForallType
 forallType :: Typed.TypedTerm Core.Name -> Typed.TypedTerm Core.Type -> Typed.TypedTerm Core.ForallType
@@ -820,6 +870,10 @@ forallTypeBody x =
         Core.projectionTypeName = (Core.Name "hydra.core.ForallType"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.core.ForallType
+forallTypeForallType :: Typed.TypedName Core.ForallType
+forallTypeForallType = Typed.TypedName (Core.Name "hydra.core.ForallType")
 
 -- | DSL accessor for the parameter field of hydra.core.ForallType
 forallTypeParameter :: Typed.TypedTerm Core.ForallType -> Typed.TypedTerm Core.Name
@@ -895,6 +949,10 @@ functionTypeDomain x =
         Core.projectionFieldName = (Core.Name "domain")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.core.FunctionType
+functionTypeFunctionType :: Typed.TypedName Core.FunctionType
+functionTypeFunctionType = Typed.TypedName (Core.Name "hydra.core.FunctionType")
+
 -- | DSL updater for the codomain field of hydra.core.FunctionType
 functionTypeWithCodomain :: Typed.TypedTerm Core.FunctionType -> Typed.TypedTerm Core.Type -> Typed.TypedTerm Core.FunctionType
 functionTypeWithCodomain original newVal =
@@ -950,6 +1008,10 @@ injectionField x =
         Core.projectionTypeName = (Core.Name "hydra.core.Injection"),
         Core.projectionFieldName = (Core.Name "field")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.core.Injection
+injectionInjection :: Typed.TypedName Core.Injection
+injectionInjection = Typed.TypedName (Core.Name "hydra.core.Injection")
 
 -- | DSL accessor for the typeName field of hydra.core.Injection
 injectionTypeName :: Typed.TypedTerm Core.Injection -> Typed.TypedTerm Core.Name
@@ -1039,6 +1101,10 @@ integerTypeInt8 =
         Core.fieldName = (Core.Name "int8"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.core.IntegerType
+integerTypeIntegerType :: Typed.TypedName Core.IntegerType
+integerTypeIntegerType = Typed.TypedName (Core.Name "hydra.core.IntegerType")
+
 -- | DSL injection for the uint16 variant of hydra.core.IntegerType
 integerTypeUint16 :: Typed.TypedTerm Core.IntegerType
 integerTypeUint16 =
@@ -1120,6 +1186,10 @@ integerValueInt8 x =
         Core.fieldName = (Core.Name "int8"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.core.IntegerValue
+integerValueIntegerValue :: Typed.TypedName Core.IntegerValue
+integerValueIntegerValue = Typed.TypedName (Core.Name "hydra.core.IntegerValue")
+
 -- | DSL injection for the uint16 variant of hydra.core.IntegerValue
 integerValueUint16 :: Typed.TypedTerm Int -> Typed.TypedTerm Core.IntegerValue
 integerValueUint16 x =
@@ -1189,6 +1259,10 @@ lambdaDomain x =
         Core.projectionTypeName = (Core.Name "hydra.core.Lambda"),
         Core.projectionFieldName = (Core.Name "domain")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.core.Lambda
+lambdaLambda :: Typed.TypedName Core.Lambda
+lambdaLambda = Typed.TypedName (Core.Name "hydra.core.Lambda")
 
 -- | DSL accessor for the parameter field of hydra.core.Lambda
 lambdaParameter :: Typed.TypedTerm Core.Lambda -> Typed.TypedTerm Core.Name
@@ -1302,6 +1376,10 @@ letBody x =
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.core.Let
+letLet :: Typed.TypedName Core.Let
+letLet = Typed.TypedName (Core.Name "hydra.core.Let")
+
 -- | DSL updater for the bindings field of hydra.core.Let
 letWithBindings :: Typed.TypedTerm Core.Let -> Typed.TypedTerm [Core.Binding] -> Typed.TypedTerm Core.Let
 letWithBindings original newVal =
@@ -1381,6 +1459,10 @@ literalInteger x =
         Core.fieldName = (Core.Name "integer"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.core.Literal
+literalLiteral :: Typed.TypedName Core.Literal
+literalLiteral = Typed.TypedName (Core.Name "hydra.core.Literal")
+
 -- | DSL injection for the string variant of hydra.core.Literal
 literalString :: Typed.TypedTerm String -> Typed.TypedTerm Core.Literal
 literalString x =
@@ -1435,6 +1517,10 @@ literalTypeInteger x =
         Core.fieldName = (Core.Name "integer"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.core.LiteralType
+literalTypeLiteralType :: Typed.TypedName Core.LiteralType
+literalTypeLiteralType = Typed.TypedName (Core.Name "hydra.core.LiteralType")
+
 -- | DSL injection for the string variant of hydra.core.LiteralType
 literalTypeString :: Typed.TypedTerm Core.LiteralType
 literalTypeString =
@@ -1465,6 +1551,10 @@ mapTypeKeys x =
         Core.projectionTypeName = (Core.Name "hydra.core.MapType"),
         Core.projectionFieldName = (Core.Name "keys")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.core.MapType
+mapTypeMapType :: Typed.TypedName Core.MapType
+mapTypeMapType = Typed.TypedName (Core.Name "hydra.core.MapType")
 
 -- | DSL accessor for the values field of hydra.core.MapType
 mapTypeValues :: Typed.TypedTerm Core.MapType -> Typed.TypedTerm Core.Type
@@ -1516,6 +1606,10 @@ name x =
       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.core.Name
+nameName :: Typed.TypedName Core.Name
+nameName = Typed.TypedName (Core.Name "hydra.core.Name")
+
 -- | DSL constructor for hydra.core.PairType
 pairType :: Typed.TypedTerm Core.Type -> Typed.TypedTerm Core.Type -> Typed.TypedTerm Core.PairType
 pairType first second =
@@ -1537,6 +1631,10 @@ pairTypeFirst x =
         Core.projectionTypeName = (Core.Name "hydra.core.PairType"),
         Core.projectionFieldName = (Core.Name "first")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.core.PairType
+pairTypePairType :: Typed.TypedName Core.PairType
+pairTypePairType = Typed.TypedName (Core.Name "hydra.core.PairType")
 
 -- | DSL accessor for the second field of hydra.core.PairType
 pairTypeSecond :: Typed.TypedTerm Core.PairType -> Typed.TypedTerm Core.Type
@@ -1603,6 +1701,10 @@ projectionFieldName x =
         Core.projectionFieldName = (Core.Name "fieldName")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.core.Projection
+projectionProjection :: Typed.TypedName Core.Projection
+projectionProjection = Typed.TypedName (Core.Name "hydra.core.Projection")
+
 -- | DSL accessor for the typeName field of hydra.core.Projection
 projectionTypeName :: Typed.TypedTerm Core.Projection -> Typed.TypedTerm Core.Name
 projectionTypeName x =
@@ -1667,6 +1769,10 @@ recordFields x =
         Core.projectionTypeName = (Core.Name "hydra.core.Record"),
         Core.projectionFieldName = (Core.Name "fields")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.core.Record
+recordRecord :: Typed.TypedName Core.Record
+recordRecord = Typed.TypedName (Core.Name "hydra.core.Record")
 
 -- | DSL accessor for the typeName field of hydra.core.Record
 recordTypeName :: Typed.TypedTerm Core.Record -> Typed.TypedTerm Core.Name
@@ -1846,6 +1952,10 @@ termSet x =
         Core.fieldName = (Core.Name "set"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.core.Term
+termTerm :: Typed.TypedName Core.Term
+termTerm = Typed.TypedName (Core.Name "hydra.core.Term")
+
 -- | DSL injection for the typeApplication variant of hydra.core.Term
 termTypeApplication :: Typed.TypedTerm Core.TypeApplicationTerm -> Typed.TypedTerm Core.Term
 termTypeApplication x =
@@ -1949,6 +2059,10 @@ typeApplicationTermType x =
         Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.core.TypeApplicationTerm
+typeApplicationTermTypeApplicationTerm :: Typed.TypedName Core.TypeApplicationTerm
+typeApplicationTermTypeApplicationTerm = Typed.TypedName (Core.Name "hydra.core.TypeApplicationTerm")
+
 -- | DSL updater for the body field of hydra.core.TypeApplicationTerm
 typeApplicationTermWithBody :: Typed.TypedTerm Core.TypeApplicationTerm -> Typed.TypedTerm Core.Term -> Typed.TypedTerm Core.TypeApplicationTerm
 typeApplicationTermWithBody original newVal =
@@ -1991,6 +2105,10 @@ typeClassConstraintSimple x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.core.TypeClassConstraint
+typeClassConstraintTypeClassConstraint :: Typed.TypedName Core.TypeClassConstraint
+typeClassConstraintTypeClassConstraint = Typed.TypedName (Core.Name "hydra.core.TypeClassConstraint")
 
 -- | DSL injection for the effect variant of hydra.core.Type
 typeEffect :: Typed.TypedTerm Core.Type -> Typed.TypedTerm Core.Type
@@ -2058,6 +2176,10 @@ typeLambdaParameter x =
         Core.projectionTypeName = (Core.Name "hydra.core.TypeLambda"),
         Core.projectionFieldName = (Core.Name "parameter")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.core.TypeLambda
+typeLambdaTypeLambda :: Typed.TypedName Core.TypeLambda
+typeLambdaTypeLambda = Typed.TypedName (Core.Name "hydra.core.TypeLambda")
 
 -- | DSL updater for the body field of hydra.core.TypeLambda
 typeLambdaWithBody :: Typed.TypedTerm Core.TypeLambda -> Typed.TypedTerm Core.Term -> Typed.TypedTerm Core.TypeLambda
@@ -2181,6 +2303,10 @@ typeSchemeConstraints x =
         Core.projectionFieldName = (Core.Name "constraints")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.core.TypeScheme
+typeSchemeTypeScheme :: Typed.TypedName Core.TypeScheme
+typeSchemeTypeScheme = Typed.TypedName (Core.Name "hydra.core.TypeScheme")
+
 -- | DSL accessor for the variables field of hydra.core.TypeScheme
 typeSchemeVariables :: Typed.TypedTerm Core.TypeScheme -> Typed.TypedTerm [Core.Name]
 typeSchemeVariables x =
@@ -2271,6 +2397,10 @@ typeSet x =
         Core.fieldName = (Core.Name "set"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.core.Type
+typeType :: Typed.TypedName Core.Type
+typeType = Typed.TypedName (Core.Name "hydra.core.Type")
+
 -- | DSL injection for the union variant of hydra.core.Type
 typeUnion :: Typed.TypedTerm [Core.FieldType] -> Typed.TypedTerm Core.Type
 typeUnion x =
@@ -2316,6 +2446,10 @@ typeVariableConstraintsClasses x =
         Core.projectionTypeName = (Core.Name "hydra.core.TypeVariableConstraints"),
         Core.projectionFieldName = (Core.Name "classes")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.core.TypeVariableConstraints
+typeVariableConstraintsTypeVariableConstraints :: Typed.TypedName Core.TypeVariableConstraints
+typeVariableConstraintsTypeVariableConstraints = Typed.TypedName (Core.Name "hydra.core.TypeVariableConstraints")
 
 -- | DSL updater for the classes field of hydra.core.TypeVariableConstraints
 typeVariableConstraintsWithClasses :: Typed.TypedTerm Core.TypeVariableConstraints -> Typed.TypedTerm [Core.TypeClassConstraint] -> Typed.TypedTerm Core.TypeVariableConstraints
@@ -2416,3 +2550,7 @@ wrappedTermWithTypeName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.core.WrappedTerm"),
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
+-- | DSL name token for hydra.core.WrappedTerm
+wrappedTermWrappedTerm :: Typed.TypedName Core.WrappedTerm
+wrappedTermWrappedTerm = Typed.TypedName (Core.Name "hydra.core.WrappedTerm")

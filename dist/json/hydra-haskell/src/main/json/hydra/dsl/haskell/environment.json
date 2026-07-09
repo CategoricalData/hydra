@@ -1,8 +1,35 @@
 {
   "name": "hydra.dsl.haskell.environment",
   "metadata": {"description": "DSL functions for hydra.haskell.environment", "comments": [], "seeAlso": []},
-  "dependencies": [{"module": "hydra.haskell.environment"}, {"module": "hydra.typed"}],
+  "dependencies": [
+    {"module": "hydra.haskell.environment"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.encode.haskell.environment"},
+    {"module": "hydra.decode.haskell.environment"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.environment.haskellModuleMetadataHaskellModuleMetadata",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.haskell.environment.HaskellModuleMetadata"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.haskell.environment.haskellModuleMetadata",

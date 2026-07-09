@@ -27,6 +27,10 @@ alternative pattern rhs binds =
           Core.fieldName = (Core.Name "binds"),
           Core.fieldTerm = (Typed.unTypedTerm binds)}]}))
 
+-- | DSL name token for hydra.haskell.syntax.Alternative
+alternativeAlternative :: Typed.TypedName Syntax.Alternative
+alternativeAlternative = Typed.TypedName (Core.Name "hydra.haskell.syntax.Alternative")
+
 -- | DSL accessor for the binds field of hydra.haskell.syntax.Alternative
 alternativeBinds :: Typed.TypedTerm Syntax.Alternative -> Typed.TypedTerm (Maybe Syntax.LocalBindings)
 alternativeBinds x =
@@ -139,6 +143,11 @@ applicationDeclarationHead function operand =
           Core.fieldName = (Core.Name "operand"),
           Core.fieldTerm = (Typed.unTypedTerm operand)}]}))
 
+-- | DSL name token for hydra.haskell.syntax.ApplicationDeclarationHead
+applicationDeclarationHeadApplicationDeclarationHead :: Typed.TypedName Syntax.ApplicationDeclarationHead
+applicationDeclarationHeadApplicationDeclarationHead =
+    Typed.TypedName (Core.Name "hydra.haskell.syntax.ApplicationDeclarationHead")
+
 -- | DSL accessor for the function field of hydra.haskell.syntax.ApplicationDeclarationHead
 applicationDeclarationHeadFunction :: Typed.TypedTerm Syntax.ApplicationDeclarationHead -> Typed.TypedTerm Syntax.DeclarationHead
 applicationDeclarationHeadFunction x =
@@ -203,6 +212,10 @@ applicationExpression function argument =
         Core.Field {
           Core.fieldName = (Core.Name "argument"),
           Core.fieldTerm = (Typed.unTypedTerm argument)}]}))
+
+-- | DSL name token for hydra.haskell.syntax.ApplicationExpression
+applicationExpressionApplicationExpression :: Typed.TypedName Syntax.ApplicationExpression
+applicationExpressionApplicationExpression = Typed.TypedName (Core.Name "hydra.haskell.syntax.ApplicationExpression")
 
 -- | DSL accessor for the argument field of hydra.haskell.syntax.ApplicationExpression
 applicationExpressionArgument :: Typed.TypedTerm Syntax.ApplicationExpression -> Typed.TypedTerm Syntax.Expression
@@ -269,6 +282,10 @@ applicationPattern name args =
           Core.fieldName = (Core.Name "args"),
           Core.fieldTerm = (Typed.unTypedTerm args)}]}))
 
+-- | DSL name token for hydra.haskell.syntax.ApplicationPattern
+applicationPatternApplicationPattern :: Typed.TypedName Syntax.ApplicationPattern
+applicationPatternApplicationPattern = Typed.TypedName (Core.Name "hydra.haskell.syntax.ApplicationPattern")
+
 -- | DSL accessor for the args field of hydra.haskell.syntax.ApplicationPattern
 applicationPatternArgs :: Typed.TypedTerm Syntax.ApplicationPattern -> Typed.TypedTerm [Syntax.Pattern]
 applicationPatternArgs x =
@@ -334,6 +351,10 @@ applicationType context argument =
           Core.fieldName = (Core.Name "argument"),
           Core.fieldTerm = (Typed.unTypedTerm argument)}]}))
 
+-- | DSL name token for hydra.haskell.syntax.ApplicationType
+applicationTypeApplicationType :: Typed.TypedName Syntax.ApplicationType
+applicationTypeApplicationType = Typed.TypedName (Core.Name "hydra.haskell.syntax.ApplicationType")
+
 -- | DSL accessor for the argument field of hydra.haskell.syntax.ApplicationType
 applicationTypeArgument :: Typed.TypedTerm Syntax.ApplicationType -> Typed.TypedTerm Syntax.Type
 applicationTypeArgument x =
@@ -398,6 +419,10 @@ asPattern name inner =
         Core.Field {
           Core.fieldName = (Core.Name "inner"),
           Core.fieldTerm = (Typed.unTypedTerm inner)}]}))
+
+-- | DSL name token for hydra.haskell.syntax.AsPattern
+asPatternAsPattern :: Typed.TypedName Syntax.AsPattern
+asPatternAsPattern = Typed.TypedName (Core.Name "hydra.haskell.syntax.AsPattern")
 
 -- | DSL accessor for the inner field of hydra.haskell.syntax.AsPattern
 asPatternInner :: Typed.TypedTerm Syntax.AsPattern -> Typed.TypedTerm Syntax.Pattern
@@ -482,6 +507,10 @@ caseExpressionCase x =
         Core.projectionFieldName = (Core.Name "case")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.haskell.syntax.CaseExpression
+caseExpressionCaseExpression :: Typed.TypedName Syntax.CaseExpression
+caseExpressionCaseExpression = Typed.TypedName (Core.Name "hydra.haskell.syntax.CaseExpression")
+
 -- | DSL updater for the alternatives field of hydra.haskell.syntax.CaseExpression
 caseExpressionWithAlternatives :: Typed.TypedTerm Syntax.CaseExpression -> Typed.TypedTerm [Syntax.Alternative] -> Typed.TypedTerm Syntax.CaseExpression
 caseExpressionWithAlternatives original newVal =
@@ -523,6 +552,10 @@ caseRhs x =
       Core.wrappedTermTypeName = (Core.Name "hydra.haskell.syntax.CaseRhs"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.haskell.syntax.CaseRhs
+caseRhsCaseRhs :: Typed.TypedName Syntax.CaseRhs
+caseRhsCaseRhs = Typed.TypedName (Core.Name "hydra.haskell.syntax.CaseRhs")
+
 -- | DSL constructor for hydra.haskell.syntax.ClassConstraint
 classConstraint :: Typed.TypedTerm Syntax.Name -> Typed.TypedTerm [Syntax.Type] -> Typed.TypedTerm Syntax.ClassConstraint
 classConstraint name types =
@@ -535,6 +568,10 @@ classConstraint name types =
         Core.Field {
           Core.fieldName = (Core.Name "types"),
           Core.fieldTerm = (Typed.unTypedTerm types)}]}))
+
+-- | DSL name token for hydra.haskell.syntax.ClassConstraint
+classConstraintClassConstraint :: Typed.TypedName Syntax.ClassConstraint
+classConstraintClassConstraint = Typed.TypedName (Core.Name "hydra.haskell.syntax.ClassConstraint")
 
 -- | DSL accessor for the name field of hydra.haskell.syntax.ClassConstraint
 classConstraintName :: Typed.TypedTerm Syntax.ClassConstraint -> Typed.TypedTerm Syntax.Name
@@ -601,6 +638,10 @@ constrainedType ctx type_ =
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Typed.unTypedTerm type_)}]}))
 
+-- | DSL name token for hydra.haskell.syntax.ConstrainedType
+constrainedTypeConstrainedType :: Typed.TypedName Syntax.ConstrainedType
+constrainedTypeConstrainedType = Typed.TypedName (Core.Name "hydra.haskell.syntax.ConstrainedType")
+
 -- | DSL accessor for the ctx field of hydra.haskell.syntax.ConstrainedType
 constrainedTypeCtx :: Typed.TypedTerm Syntax.ConstrainedType -> Typed.TypedTerm Syntax.Constraint
 constrainedTypeCtx x =
@@ -662,6 +703,10 @@ constraintClass x =
         Core.fieldName = (Core.Name "class"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.haskell.syntax.Constraint
+constraintConstraint :: Typed.TypedName Syntax.Constraint
+constraintConstraint = Typed.TypedName (Core.Name "hydra.haskell.syntax.Constraint")
+
 -- | DSL injection for the tuple variant of hydra.haskell.syntax.Constraint
 constraintTuple :: Typed.TypedTerm [Syntax.Constraint] -> Typed.TypedTerm Syntax.Constraint
 constraintTuple x =
@@ -670,6 +715,10 @@ constraintTuple x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "tuple"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.haskell.syntax.Constructor
+constructorConstructor :: Typed.TypedName Syntax.Constructor
+constructorConstructor = Typed.TypedName (Core.Name "hydra.haskell.syntax.Constructor")
 
 -- | DSL injection for the ordinary variant of hydra.haskell.syntax.Constructor
 constructorOrdinary :: Typed.TypedTerm Syntax.PositionalConstructor -> Typed.TypedTerm Syntax.Constructor
@@ -740,6 +789,10 @@ dataDeclarationContext x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.DataDeclaration"),
         Core.projectionFieldName = (Core.Name "context")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.haskell.syntax.DataDeclaration
+dataDeclarationDataDeclaration :: Typed.TypedName Syntax.DataDeclaration
+dataDeclarationDataDeclaration = Typed.TypedName (Core.Name "hydra.haskell.syntax.DataDeclaration")
 
 -- | DSL accessor for the deriving field of hydra.haskell.syntax.DataDeclaration
 dataDeclarationDeriving :: Typed.TypedTerm Syntax.DataDeclaration -> Typed.TypedTerm [Syntax.DerivingClause]
@@ -1047,6 +1100,10 @@ dataKeywordData =
         Core.fieldName = (Core.Name "data"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.haskell.syntax.DataKeyword
+dataKeywordDataKeyword :: Typed.TypedName Syntax.DataKeyword
+dataKeywordDataKeyword = Typed.TypedName (Core.Name "hydra.haskell.syntax.DataKeyword")
+
 -- | DSL injection for the newtype variant of hydra.haskell.syntax.DataKeyword
 dataKeywordNewtype :: Typed.TypedTerm Syntax.DataKeyword
 dataKeywordNewtype =
@@ -1065,6 +1122,10 @@ declarationData x =
         Core.fieldName = (Core.Name "data"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.haskell.syntax.Declaration
+declarationDeclaration :: Typed.TypedName Syntax.Declaration
+declarationDeclaration = Typed.TypedName (Core.Name "hydra.haskell.syntax.Declaration")
+
 -- | DSL injection for the application variant of hydra.haskell.syntax.DeclarationHead
 declarationHeadApplication :: Typed.TypedTerm Syntax.ApplicationDeclarationHead -> Typed.TypedTerm Syntax.DeclarationHead
 declarationHeadApplication x =
@@ -1073,6 +1134,10 @@ declarationHeadApplication x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "application"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.haskell.syntax.DeclarationHead
+declarationHeadDeclarationHead :: Typed.TypedName Syntax.DeclarationHead
+declarationHeadDeclarationHead = Typed.TypedName (Core.Name "hydra.haskell.syntax.DeclarationHead")
 
 -- | DSL injection for the simple variant of hydra.haskell.syntax.DeclarationHead
 declarationHeadSimple :: Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.DeclarationHead
@@ -1117,6 +1182,10 @@ derivingClause x =
       Core.wrappedTermTypeName = (Core.Name "hydra.haskell.syntax.DerivingClause"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.haskell.syntax.DerivingClause
+derivingClauseDerivingClause :: Typed.TypedName Syntax.DerivingClause
+derivingClauseDerivingClause = Typed.TypedName (Core.Name "hydra.haskell.syntax.DerivingClause")
+
 -- | DSL injection for the declaration variant of hydra.haskell.syntax.Export
 exportDeclaration :: Typed.TypedTerm Syntax.NamedImportExport -> Typed.TypedTerm Syntax.Export
 exportDeclaration x =
@@ -1125,6 +1194,10 @@ exportDeclaration x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "declaration"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.haskell.syntax.Export
+exportExport :: Typed.TypedName Syntax.Export
+exportExport = Typed.TypedName (Core.Name "hydra.haskell.syntax.Export")
 
 -- | DSL injection for the module variant of hydra.haskell.syntax.Export
 exportModule :: Typed.TypedTerm Syntax.ModuleName -> Typed.TypedTerm Syntax.Export
@@ -1170,6 +1243,10 @@ expressionDo x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "do"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.haskell.syntax.Expression
+expressionExpression :: Typed.TypedName Syntax.Expression
+expressionExpression = Typed.TypedName (Core.Name "hydra.haskell.syntax.Expression")
 
 -- | DSL injection for the if variant of hydra.haskell.syntax.Expression
 expressionIf :: Typed.TypedTerm Syntax.IfExpression -> Typed.TypedTerm Syntax.Expression
@@ -1304,6 +1381,10 @@ fieldComments x =
         Core.projectionFieldName = (Core.Name "comments")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.haskell.syntax.Field
+fieldField :: Typed.TypedName Syntax.Field
+fieldField = Typed.TypedName (Core.Name "hydra.haskell.syntax.Field")
+
 -- | DSL accessor for the name field of hydra.haskell.syntax.Field
 fieldName :: Typed.TypedTerm Syntax.Field -> Typed.TypedTerm Syntax.Name
 fieldName x =
@@ -1334,6 +1415,10 @@ fieldUpdate name value =
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Typed.unTypedTerm value)}]}))
+
+-- | DSL name token for hydra.haskell.syntax.FieldUpdate
+fieldUpdateFieldUpdate :: Typed.TypedName Syntax.FieldUpdate
+fieldUpdateFieldUpdate = Typed.TypedName (Core.Name "hydra.haskell.syntax.FieldUpdate")
 
 -- | DSL accessor for the name field of hydra.haskell.syntax.FieldUpdate
 fieldUpdateName :: Typed.TypedTerm Syntax.FieldUpdate -> Typed.TypedTerm Syntax.Name
@@ -1490,6 +1575,10 @@ functionTypeDomain x =
         Core.projectionFieldName = (Core.Name "domain")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.haskell.syntax.FunctionType
+functionTypeFunctionType :: Typed.TypedName Syntax.FunctionType
+functionTypeFunctionType = Typed.TypedName (Core.Name "hydra.haskell.syntax.FunctionType")
+
 -- | DSL updater for the codomain field of hydra.haskell.syntax.FunctionType
 functionTypeWithCodomain :: Typed.TypedTerm Syntax.FunctionType -> Typed.TypedTerm Syntax.Type -> Typed.TypedTerm Syntax.FunctionType
 functionTypeWithCodomain original newVal =
@@ -1557,6 +1646,10 @@ ifExpressionElse x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.IfExpression"),
         Core.projectionFieldName = (Core.Name "else")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.haskell.syntax.IfExpression
+ifExpressionIfExpression :: Typed.TypedName Syntax.IfExpression
+ifExpressionIfExpression = Typed.TypedName (Core.Name "hydra.haskell.syntax.IfExpression")
 
 -- | DSL accessor for the then field of hydra.haskell.syntax.IfExpression
 ifExpressionThen :: Typed.TypedTerm Syntax.IfExpression -> Typed.TypedTerm Syntax.Expression
@@ -1676,6 +1769,10 @@ importExportSubspecAll =
         Core.fieldName = (Core.Name "all"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.haskell.syntax.ImportExportSubspec
+importExportSubspecImportExportSubspec :: Typed.TypedName Syntax.ImportExportSubspec
+importExportSubspecImportExportSubspec = Typed.TypedName (Core.Name "hydra.haskell.syntax.ImportExportSubspec")
+
 -- | DSL injection for the list variant of hydra.haskell.syntax.ImportExportSubspec
 importExportSubspecList :: Typed.TypedTerm [Syntax.Name] -> Typed.TypedTerm Syntax.ImportExportSubspec
 importExportSubspecList x =
@@ -1684,6 +1781,14 @@ importExportSubspecList x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.haskell.syntax.Import
+importImport :: Typed.TypedName Syntax.Import
+importImport = Typed.TypedName (Core.Name "hydra.haskell.syntax.Import")
+
+-- | DSL name token for hydra.haskell.syntax.ImportModifier
+importModifierImportModifier :: Typed.TypedName Syntax.ImportModifier
+importModifierImportModifier = Typed.TypedName (Core.Name "hydra.haskell.syntax.ImportModifier")
 
 -- | DSL injection for the pattern variant of hydra.haskell.syntax.ImportModifier
 importModifierPattern :: Typed.TypedTerm Syntax.ImportModifier
@@ -1738,6 +1843,10 @@ importSpecHiding x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "hiding"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.haskell.syntax.ImportSpec
+importSpecImportSpec :: Typed.TypedName Syntax.ImportSpec
+importSpecImportSpec = Typed.TypedName (Core.Name "hydra.haskell.syntax.ImportSpec")
 
 -- | DSL injection for the list variant of hydra.haskell.syntax.ImportSpec
 importSpecList :: Typed.TypedTerm [Syntax.NamedImportExport] -> Typed.TypedTerm Syntax.ImportSpec
@@ -1888,6 +1997,10 @@ infixExpression lhs operator rhs =
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm rhs)}]}))
 
+-- | DSL name token for hydra.haskell.syntax.InfixExpression
+infixExpressionInfixExpression :: Typed.TypedName Syntax.InfixExpression
+infixExpressionInfixExpression = Typed.TypedName (Core.Name "hydra.haskell.syntax.InfixExpression")
+
 -- | DSL accessor for the lhs field of hydra.haskell.syntax.InfixExpression
 infixExpressionLhs :: Typed.TypedTerm Syntax.InfixExpression -> Typed.TypedTerm Syntax.Expression
 infixExpressionLhs x =
@@ -2002,6 +2115,10 @@ infixType lhs operator rhs =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm rhs)}]}))
+
+-- | DSL name token for hydra.haskell.syntax.InfixType
+infixTypeInfixType :: Typed.TypedName Syntax.InfixType
+infixTypeInfixType = Typed.TypedName (Core.Name "hydra.haskell.syntax.InfixType")
 
 -- | DSL accessor for the lhs field of hydra.haskell.syntax.InfixType
 infixTypeLhs :: Typed.TypedTerm Syntax.InfixType -> Typed.TypedTerm Syntax.Type
@@ -2133,6 +2250,10 @@ lambdaExpressionInner x =
         Core.projectionFieldName = (Core.Name "inner")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.haskell.syntax.LambdaExpression
+lambdaExpressionLambdaExpression :: Typed.TypedName Syntax.LambdaExpression
+lambdaExpressionLambdaExpression = Typed.TypedName (Core.Name "hydra.haskell.syntax.LambdaExpression")
+
 -- | DSL updater for the bindings field of hydra.haskell.syntax.LambdaExpression
 lambdaExpressionWithBindings :: Typed.TypedTerm Syntax.LambdaExpression -> Typed.TypedTerm [Syntax.Pattern] -> Typed.TypedTerm Syntax.LambdaExpression
 lambdaExpressionWithBindings original newVal =
@@ -2197,6 +2318,10 @@ letExpressionInner x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.LetExpression"),
         Core.projectionFieldName = (Core.Name "inner")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.haskell.syntax.LetExpression
+letExpressionLetExpression :: Typed.TypedName Syntax.LetExpression
+letExpressionLetExpression = Typed.TypedName (Core.Name "hydra.haskell.syntax.LetExpression")
 
 -- | DSL updater for the bindings field of hydra.haskell.syntax.LetExpression
 letExpressionWithBindings :: Typed.TypedTerm Syntax.LetExpression -> Typed.TypedTerm [Syntax.LocalBinding] -> Typed.TypedTerm Syntax.LetExpression
@@ -2277,6 +2402,10 @@ literalInteger x =
         Core.fieldName = (Core.Name "integer"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.haskell.syntax.Literal
+literalLiteral :: Typed.TypedName Syntax.Literal
+literalLiteral = Typed.TypedName (Core.Name "hydra.haskell.syntax.Literal")
+
 -- | DSL injection for the string variant of hydra.haskell.syntax.Literal
 literalString :: Typed.TypedTerm String -> Typed.TypedTerm Syntax.Literal
 literalString x =
@@ -2285,6 +2414,10 @@ literalString x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.haskell.syntax.LocalBinding
+localBindingLocalBinding :: Typed.TypedName Syntax.LocalBinding
+localBindingLocalBinding = Typed.TypedName (Core.Name "hydra.haskell.syntax.LocalBinding")
 
 -- | DSL injection for the signature variant of hydra.haskell.syntax.LocalBinding
 localBindingSignature :: Typed.TypedTerm Syntax.TypeSignature -> Typed.TypedTerm Syntax.LocalBinding
@@ -2310,6 +2443,10 @@ localBindings x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.haskell.syntax.LocalBindings"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.haskell.syntax.LocalBindings
+localBindingsLocalBindings :: Typed.TypedName Syntax.LocalBindings
+localBindingsLocalBindings = Typed.TypedName (Core.Name "hydra.haskell.syntax.LocalBindings")
 
 -- | DSL constructor for hydra.haskell.syntax.Module
 module_ :: Typed.TypedTerm (Maybe Syntax.ModuleHead) -> Typed.TypedTerm [Syntax.Import] -> Typed.TypedTerm [Syntax.Declaration] -> Typed.TypedTerm Syntax.Module
@@ -2378,6 +2515,10 @@ moduleHeadExports x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ModuleHead"),
         Core.projectionFieldName = (Core.Name "exports")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.haskell.syntax.ModuleHead
+moduleHeadModuleHead :: Typed.TypedName Syntax.ModuleHead
+moduleHeadModuleHead = Typed.TypedName (Core.Name "hydra.haskell.syntax.ModuleHead")
 
 -- | DSL accessor for the name field of hydra.haskell.syntax.ModuleHead
 moduleHeadName :: Typed.TypedTerm Syntax.ModuleHead -> Typed.TypedTerm Syntax.ModuleName
@@ -2469,12 +2610,20 @@ moduleImports x =
         Core.projectionFieldName = (Core.Name "imports")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.haskell.syntax.Module
+moduleModule :: Typed.TypedName Syntax.Module
+moduleModule = Typed.TypedName (Core.Name "hydra.haskell.syntax.Module")
+
 -- | DSL constructor for the hydra.haskell.syntax.ModuleName wrapper
 moduleName :: Typed.TypedTerm String -> Typed.TypedTerm Syntax.ModuleName
 moduleName x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.haskell.syntax.ModuleName"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.haskell.syntax.ModuleName
+moduleNameModuleName :: Typed.TypedName Syntax.ModuleName
+moduleNameModuleName = Typed.TypedName (Core.Name "hydra.haskell.syntax.ModuleName")
 
 -- | DSL updater for the declarations field of hydra.haskell.syntax.Module
 moduleWithDeclarations :: Typed.TypedTerm Syntax.Module -> Typed.TypedTerm [Syntax.Declaration] -> Typed.TypedTerm Syntax.Module
@@ -2557,6 +2706,10 @@ nameImplicit x =
         Core.fieldName = (Core.Name "implicit"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.haskell.syntax.Name
+nameName :: Typed.TypedName Syntax.Name
+nameName = Typed.TypedName (Core.Name "hydra.haskell.syntax.Name")
+
 -- | DSL injection for the normal variant of hydra.haskell.syntax.Name
 nameNormal :: Typed.TypedTerm Syntax.QualifiedName -> Typed.TypedTerm Syntax.Name
 nameNormal x =
@@ -2572,6 +2725,10 @@ namePart x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.haskell.syntax.NamePart"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.haskell.syntax.NamePart
+namePartNamePart :: Typed.TypedName Syntax.NamePart
+namePartNamePart = Typed.TypedName (Core.Name "hydra.haskell.syntax.NamePart")
 
 -- | DSL constructor for hydra.haskell.syntax.NamedImportExport
 namedImportExport :: Typed.TypedTerm (Maybe Syntax.ImportModifier) -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm (Maybe Syntax.ImportExportSubspec) -> Typed.TypedTerm Syntax.NamedImportExport
@@ -2606,6 +2763,10 @@ namedImportExportName x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.NamedImportExport"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.haskell.syntax.NamedImportExport
+namedImportExportNamedImportExport :: Typed.TypedName Syntax.NamedImportExport
+namedImportExportNamedImportExport = Typed.TypedName (Core.Name "hydra.haskell.syntax.NamedImportExport")
 
 -- | DSL accessor for the subspec field of hydra.haskell.syntax.NamedImportExport
 namedImportExportSubspec :: Typed.TypedTerm Syntax.NamedImportExport -> Typed.TypedTerm (Maybe Syntax.ImportExportSubspec)
@@ -2706,6 +2867,10 @@ operatorNormal x =
         Core.fieldName = (Core.Name "normal"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.haskell.syntax.Operator
+operatorOperator :: Typed.TypedName Syntax.Operator
+operatorOperator = Typed.TypedName (Core.Name "hydra.haskell.syntax.Operator")
+
 -- | DSL injection for the application variant of hydra.haskell.syntax.Pattern
 patternApplication :: Typed.TypedTerm Syntax.ApplicationPattern -> Typed.TypedTerm Syntax.Pattern
 patternApplication x =
@@ -2754,6 +2919,10 @@ patternFieldPattern x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.PatternField"),
         Core.projectionFieldName = (Core.Name "pattern")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.haskell.syntax.PatternField
+patternFieldPatternField :: Typed.TypedName Syntax.PatternField
+patternFieldPatternField = Typed.TypedName (Core.Name "hydra.haskell.syntax.PatternField")
 
 -- | DSL updater for the name field of hydra.haskell.syntax.PatternField
 patternFieldWithName :: Typed.TypedTerm Syntax.PatternField -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.PatternField
@@ -2815,6 +2984,10 @@ patternName x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "name"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.haskell.syntax.Pattern
+patternPattern :: Typed.TypedName Syntax.Pattern
+patternPattern = Typed.TypedName (Core.Name "hydra.haskell.syntax.Pattern")
 
 -- | DSL injection for the record variant of hydra.haskell.syntax.Pattern
 patternRecord :: Typed.TypedTerm Syntax.RecordPattern -> Typed.TypedTerm Syntax.Pattern
@@ -2894,6 +3067,10 @@ positionalConstructorName x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.PositionalConstructor"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.haskell.syntax.PositionalConstructor
+positionalConstructorPositionalConstructor :: Typed.TypedName Syntax.PositionalConstructor
+positionalConstructorPositionalConstructor = Typed.TypedName (Core.Name "hydra.haskell.syntax.PositionalConstructor")
 
 -- | DSL updater for the comments field of hydra.haskell.syntax.PositionalConstructor
 positionalConstructorWithComments :: Typed.TypedTerm Syntax.PositionalConstructor -> Typed.TypedTerm (Maybe String) -> Typed.TypedTerm Syntax.PositionalConstructor
@@ -2979,6 +3156,10 @@ qualifiedName qualifiers unqualified =
         Core.Field {
           Core.fieldName = (Core.Name "unqualified"),
           Core.fieldTerm = (Typed.unTypedTerm unqualified)}]}))
+
+-- | DSL name token for hydra.haskell.syntax.QualifiedName
+qualifiedNameQualifiedName :: Typed.TypedName Syntax.QualifiedName
+qualifiedNameQualifiedName = Typed.TypedName (Core.Name "hydra.haskell.syntax.QualifiedName")
 
 -- | DSL accessor for the qualifiers field of hydra.haskell.syntax.QualifiedName
 qualifiedNameQualifiers :: Typed.TypedTerm Syntax.QualifiedName -> Typed.TypedTerm [Syntax.NamePart]
@@ -3074,6 +3255,10 @@ recordConstructorName x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.RecordConstructor"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.haskell.syntax.RecordConstructor
+recordConstructorRecordConstructor :: Typed.TypedName Syntax.RecordConstructor
+recordConstructorRecordConstructor = Typed.TypedName (Core.Name "hydra.haskell.syntax.RecordConstructor")
 
 -- | DSL updater for the comments field of hydra.haskell.syntax.RecordConstructor
 recordConstructorWithComments :: Typed.TypedTerm Syntax.RecordConstructor -> Typed.TypedTerm (Maybe String) -> Typed.TypedTerm Syntax.RecordConstructor
@@ -3178,6 +3363,10 @@ recordExpressionName x =
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.haskell.syntax.RecordExpression
+recordExpressionRecordExpression :: Typed.TypedName Syntax.RecordExpression
+recordExpressionRecordExpression = Typed.TypedName (Core.Name "hydra.haskell.syntax.RecordExpression")
+
 -- | DSL updater for the fields field of hydra.haskell.syntax.RecordExpression
 recordExpressionWithFields :: Typed.TypedTerm Syntax.RecordExpression -> Typed.TypedTerm [Syntax.FieldUpdate] -> Typed.TypedTerm Syntax.RecordExpression
 recordExpressionWithFields original newVal =
@@ -3242,6 +3431,10 @@ recordPatternName x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.RecordPattern"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.haskell.syntax.RecordPattern
+recordPatternRecordPattern :: Typed.TypedName Syntax.RecordPattern
+recordPatternRecordPattern = Typed.TypedName (Core.Name "hydra.haskell.syntax.RecordPattern")
 
 -- | DSL updater for the fields field of hydra.haskell.syntax.RecordPattern
 recordPatternWithFields :: Typed.TypedTerm Syntax.RecordPattern -> Typed.TypedTerm [Syntax.PatternField] -> Typed.TypedTerm Syntax.RecordPattern
@@ -3308,6 +3501,10 @@ recordUpdateExpressionInner x =
         Core.projectionFieldName = (Core.Name "inner")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.haskell.syntax.RecordUpdateExpression
+recordUpdateExpressionRecordUpdateExpression :: Typed.TypedName Syntax.RecordUpdateExpression
+recordUpdateExpressionRecordUpdateExpression = Typed.TypedName (Core.Name "hydra.haskell.syntax.RecordUpdateExpression")
+
 -- | DSL updater for the fields field of hydra.haskell.syntax.RecordUpdateExpression
 recordUpdateExpressionWithFields :: Typed.TypedTerm Syntax.RecordUpdateExpression -> Typed.TypedTerm [Syntax.FieldUpdate] -> Typed.TypedTerm Syntax.RecordUpdateExpression
 recordUpdateExpressionWithFields original newVal =
@@ -3349,6 +3546,10 @@ rightHandSide x =
       Core.wrappedTermTypeName = (Core.Name "hydra.haskell.syntax.RightHandSide"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.haskell.syntax.RightHandSide
+rightHandSideRightHandSide :: Typed.TypedName Syntax.RightHandSide
+rightHandSideRightHandSide = Typed.TypedName (Core.Name "hydra.haskell.syntax.RightHandSide")
+
 -- | DSL constructor for hydra.haskell.syntax.SectionExpression
 sectionExpression :: Typed.TypedTerm Syntax.Operator -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.SectionExpression
 sectionExpression operator expression =
@@ -3379,6 +3580,10 @@ sectionExpressionOperator x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.SectionExpression"),
         Core.projectionFieldName = (Core.Name "operator")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.haskell.syntax.SectionExpression
+sectionExpressionSectionExpression :: Typed.TypedName Syntax.SectionExpression
+sectionExpressionSectionExpression = Typed.TypedName (Core.Name "hydra.haskell.syntax.SectionExpression")
 
 -- | DSL updater for the expression field of hydra.haskell.syntax.SectionExpression
 sectionExpressionWithExpression :: Typed.TypedTerm Syntax.SectionExpression -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.SectionExpression
@@ -3468,6 +3673,10 @@ simpleValueBindingRhs x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.SimpleValueBinding"),
         Core.projectionFieldName = (Core.Name "rhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.haskell.syntax.SimpleValueBinding
+simpleValueBindingSimpleValueBinding :: Typed.TypedName Syntax.SimpleValueBinding
+simpleValueBindingSimpleValueBinding = Typed.TypedName (Core.Name "hydra.haskell.syntax.SimpleValueBinding")
 
 -- | DSL updater for the comments field of hydra.haskell.syntax.SimpleValueBinding
 simpleValueBindingWithComments :: Typed.TypedTerm Syntax.SimpleValueBinding -> Typed.TypedTerm (Maybe String) -> Typed.TypedTerm Syntax.SimpleValueBinding
@@ -3600,6 +3809,10 @@ statement x =
       Core.wrappedTermTypeName = (Core.Name "hydra.haskell.syntax.Statement"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.haskell.syntax.Statement
+statementStatement :: Typed.TypedName Syntax.Statement
+statementStatement = Typed.TypedName (Core.Name "hydra.haskell.syntax.Statement")
+
 -- | DSL injection for the application variant of hydra.haskell.syntax.Type
 typeApplication :: Typed.TypedTerm Syntax.ApplicationType -> Typed.TypedTerm Syntax.Type
 typeApplication x =
@@ -3675,6 +3888,10 @@ typeSignatureType x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypeSignature"),
         Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.haskell.syntax.TypeSignature
+typeSignatureTypeSignature :: Typed.TypedName Syntax.TypeSignature
+typeSignatureTypeSignature = Typed.TypedName (Core.Name "hydra.haskell.syntax.TypeSignature")
 
 -- | DSL updater for the name field of hydra.haskell.syntax.TypeSignature
 typeSignatureWithName :: Typed.TypedTerm Syntax.TypeSignature -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.TypeSignature
@@ -3752,6 +3969,10 @@ typeSynonymDeclarationType x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypeSynonymDeclaration"),
         Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.haskell.syntax.TypeSynonymDeclaration
+typeSynonymDeclarationTypeSynonymDeclaration :: Typed.TypedName Syntax.TypeSynonymDeclaration
+typeSynonymDeclarationTypeSynonymDeclaration = Typed.TypedName (Core.Name "hydra.haskell.syntax.TypeSynonymDeclaration")
 
 -- | DSL updater for the comments field of hydra.haskell.syntax.TypeSynonymDeclaration
 typeSynonymDeclarationWithComments :: Typed.TypedTerm Syntax.TypeSynonymDeclaration -> Typed.TypedTerm (Maybe String) -> Typed.TypedTerm Syntax.TypeSynonymDeclaration
@@ -3834,6 +4055,10 @@ typeTuple x =
         Core.fieldName = (Core.Name "tuple"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.haskell.syntax.Type
+typeType :: Typed.TypedName Syntax.Type
+typeType = Typed.TypedName (Core.Name "hydra.haskell.syntax.Type")
+
 -- | DSL injection for the variable variant of hydra.haskell.syntax.Type
 typeVariable :: Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.Type
 typeVariable x =
@@ -3876,6 +4101,10 @@ typedBindingTypeSignature x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypedBinding"),
         Core.projectionFieldName = (Core.Name "typeSignature")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.haskell.syntax.TypedBinding
+typedBindingTypedBinding :: Typed.TypedName Syntax.TypedBinding
+typedBindingTypedBinding = Typed.TypedName (Core.Name "hydra.haskell.syntax.TypedBinding")
 
 -- | DSL accessor for the valueBinding field of hydra.haskell.syntax.TypedBinding
 typedBindingValueBinding :: Typed.TypedTerm Syntax.TypedBinding -> Typed.TypedTerm Syntax.ValueBinding
@@ -3989,6 +4218,10 @@ typedExpressionType x =
         Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.haskell.syntax.TypedExpression
+typedExpressionTypedExpression :: Typed.TypedName Syntax.TypedExpression
+typedExpressionTypedExpression = Typed.TypedName (Core.Name "hydra.haskell.syntax.TypedExpression")
+
 -- | DSL updater for the inner field of hydra.haskell.syntax.TypedExpression
 typedExpressionWithInner :: Typed.TypedTerm Syntax.TypedExpression -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.TypedExpression
 typedExpressionWithInner original newVal =
@@ -4053,6 +4286,10 @@ typedPatternType x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypedPattern"),
         Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.haskell.syntax.TypedPattern
+typedPatternTypedPattern :: Typed.TypedName Syntax.TypedPattern
+typedPatternTypedPattern = Typed.TypedName (Core.Name "hydra.haskell.syntax.TypedPattern")
 
 -- | DSL updater for the inner field of hydra.haskell.syntax.TypedPattern
 typedPatternWithInner :: Typed.TypedTerm Syntax.TypedPattern -> Typed.TypedTerm Syntax.Pattern -> Typed.TypedTerm Syntax.TypedPattern
@@ -4153,9 +4390,17 @@ valueBindingSimple x =
         Core.fieldName = (Core.Name "simple"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.haskell.syntax.ValueBinding
+valueBindingValueBinding :: Typed.TypedName Syntax.ValueBinding
+valueBindingValueBinding = Typed.TypedName (Core.Name "hydra.haskell.syntax.ValueBinding")
+
 -- | DSL constructor for the hydra.haskell.syntax.Variable wrapper
 variable :: Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.Variable
 variable x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.haskell.syntax.Variable"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.haskell.syntax.Variable
+variableVariable :: Typed.TypedName Syntax.Variable
+variableVariable = Typed.TypedName (Core.Name "hydra.haskell.syntax.Variable")

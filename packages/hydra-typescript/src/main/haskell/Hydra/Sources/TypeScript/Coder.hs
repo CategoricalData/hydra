@@ -74,7 +74,7 @@ module_ = Module {
               [moduleName TypeScriptLanguageSource.module_,
                moduleName TypeScriptSerdeSource.module_,
                Analysis.ns, Annotations.ns, Arity.ns, Environment.ns, Formatting.ns, Lexical.ns,
-               Names.ns, Rewriting.ns, Serialization.ns, ShowDocs.ns, Sorting.ns, Strip.ns, Variables.ns]
+               Names.ns, Rewriting.ns, Scoping.ns, Serialization.ns, ShowDocs.ns, Sorting.ns, Strip.ns, Variables.ns]
               L.++ (TypeScriptSyntax.ns : KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = descriptionMetadata (Just "TypeScript code generator: emits TypeScript type declarations from Hydra modules")}
   where

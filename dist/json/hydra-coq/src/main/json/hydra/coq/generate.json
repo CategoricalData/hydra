@@ -13,6 +13,7 @@
     {"module": "hydra.coq.language"},
     {"module": "hydra.coq.environment"},
     {"module": "hydra.coq.syntax"},
+    {"module": "hydra.scoping"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},

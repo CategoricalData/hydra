@@ -51,6 +51,7 @@ module Hydra.PackageRouting (
 ) where
 
 import Hydra.Kernel
+import qualified Hydra.Dsls as Dsls
 import qualified Hydra.Names as Names
 import qualified Hydra.Encoding as Encoding
 import qualified Hydra.Decoding as Decoding
@@ -99,7 +100,7 @@ buildRoutingMap pkgs = RoutingMap (M.union declaredMap derivedMap)
 -- shipped-kernel derived-name functions as the single source of truth.
 derivedNames :: ModuleName -> [ModuleName]
 derivedNames m =
-  [ Names.dslModuleName m
+  [ Dsls.dslModuleName m
   , Encoding.encodeModuleName m
   , Decoding.decodeModuleName m
   , sourceWrapperName (Encoding.encodeModuleName m)

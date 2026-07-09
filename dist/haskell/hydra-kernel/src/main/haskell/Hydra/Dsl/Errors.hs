@@ -5,12 +5,14 @@
 module Hydra.Dsl.Errors where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Errors as DecodeErrors
 import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Dsl.Error.Checking as ErrorChecking
 import qualified Hydra.Dsl.Error.Core as DslErrorCore
 import qualified Hydra.Dsl.Paths as DslPaths
 import qualified Hydra.Dsl.Typing as DslTyping
 import qualified Hydra.Dsl.Variants as DslVariants
+import qualified Hydra.Encode.Errors as EncodeErrors
 import qualified Hydra.Error.Checking as Checking
 import qualified Hydra.Error.Core as ErrorCore
 import qualified Hydra.Errors as Errors
@@ -27,6 +29,10 @@ decodingError x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.errors.DecodingError
+decodingErrorDecodingError :: Typed.TypedName Errors.DecodingError
+decodingErrorDecodingError = Typed.TypedName (Core.Name "hydra.errors.DecodingError")
 
 -- | DSL injection for the checking variant of hydra.errors.Error
 errorChecking :: Typed.TypedTerm Checking.CheckingError -> Typed.TypedTerm Errors.Error
@@ -63,6 +69,10 @@ errorDuplicateField x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "duplicateField"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.errors.Error
+errorError :: Typed.TypedName Errors.Error
+errorError = Typed.TypedName (Core.Name "hydra.errors.Error")
 
 -- | DSL injection for the extraction variant of hydra.errors.Error
 errorExtraction :: Typed.TypedTerm Errors.ExtractionError -> Typed.TypedTerm Errors.Error
@@ -172,6 +182,10 @@ extractionErrorEmptyList x =
         Core.fieldName = (Core.Name "emptyList"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.errors.ExtractionError
+extractionErrorExtractionError :: Typed.TypedName Errors.ExtractionError
+extractionErrorExtractionError = Typed.TypedName (Core.Name "hydra.errors.ExtractionError")
+
 -- | DSL injection for the multipleBindings variant of hydra.errors.ExtractionError
 extractionErrorMultipleBindings :: Typed.TypedTerm Errors.MultipleBindingsError -> Typed.TypedTerm Errors.ExtractionError
 extractionErrorMultipleBindings x =
@@ -235,6 +249,10 @@ inferenceErrorChecking x =
         Core.fieldName = (Core.Name "checking"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.errors.InferenceError
+inferenceErrorInferenceError :: Typed.TypedName Errors.InferenceError
+inferenceErrorInferenceError = Typed.TypedName (Core.Name "hydra.errors.InferenceError")
+
 -- | DSL injection for the other variant of hydra.errors.InferenceError
 inferenceErrorOther :: Typed.TypedTerm Errors.OtherInferenceError -> Typed.TypedTerm Errors.InferenceError
 inferenceErrorOther x =
@@ -262,6 +280,10 @@ multipleBindingsError name =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Typed.unTypedTerm name)}]}))
+
+-- | DSL name token for hydra.errors.MultipleBindingsError
+multipleBindingsErrorMultipleBindingsError :: Typed.TypedName Errors.MultipleBindingsError
+multipleBindingsErrorMultipleBindingsError = Typed.TypedName (Core.Name "hydra.errors.MultipleBindingsError")
 
 -- | DSL accessor for the name field of hydra.errors.MultipleBindingsError
 multipleBindingsErrorName :: Typed.TypedTerm Errors.MultipleBindingsError -> Typed.TypedTerm Core.Name
@@ -301,6 +323,10 @@ multipleFieldsErrorFieldName x =
         Core.projectionFieldName = (Core.Name "fieldName")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.errors.MultipleFieldsError
+multipleFieldsErrorMultipleFieldsError :: Typed.TypedName Errors.MultipleFieldsError
+multipleFieldsErrorMultipleFieldsError = Typed.TypedName (Core.Name "hydra.errors.MultipleFieldsError")
+
 -- | DSL updater for the fieldName field of hydra.errors.MultipleFieldsError
 multipleFieldsErrorWithFieldName :: Typed.TypedTerm Errors.MultipleFieldsError -> Typed.TypedTerm Core.Name -> Typed.TypedTerm Errors.MultipleFieldsError
 multipleFieldsErrorWithFieldName original newVal =
@@ -329,6 +355,10 @@ noMatchingFieldErrorFieldName x =
         Core.projectionTypeName = (Core.Name "hydra.errors.NoMatchingFieldError"),
         Core.projectionFieldName = (Core.Name "fieldName")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.errors.NoMatchingFieldError
+noMatchingFieldErrorNoMatchingFieldError :: Typed.TypedName Errors.NoMatchingFieldError
+noMatchingFieldErrorNoMatchingFieldError = Typed.TypedName (Core.Name "hydra.errors.NoMatchingFieldError")
 
 -- | DSL updater for the fieldName field of hydra.errors.NoMatchingFieldError
 noMatchingFieldErrorWithFieldName :: Typed.TypedTerm Errors.NoMatchingFieldError -> Typed.TypedTerm Core.Name -> Typed.TypedTerm Errors.NoMatchingFieldError
@@ -359,6 +389,10 @@ noSuchBindingErrorName x =
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.errors.NoSuchBindingError
+noSuchBindingErrorNoSuchBindingError :: Typed.TypedName Errors.NoSuchBindingError
+noSuchBindingErrorNoSuchBindingError = Typed.TypedName (Core.Name "hydra.errors.NoSuchBindingError")
+
 -- | DSL updater for the name field of hydra.errors.NoSuchBindingError
 noSuchBindingErrorWithName :: Typed.TypedTerm Errors.NoSuchBindingError -> Typed.TypedTerm Core.Name -> Typed.TypedTerm Errors.NoSuchBindingError
 noSuchBindingErrorWithName original newVal =
@@ -388,6 +422,10 @@ noSuchPrimitiveErrorName x =
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.errors.NoSuchPrimitiveError
+noSuchPrimitiveErrorNoSuchPrimitiveError :: Typed.TypedName Errors.NoSuchPrimitiveError
+noSuchPrimitiveErrorNoSuchPrimitiveError = Typed.TypedName (Core.Name "hydra.errors.NoSuchPrimitiveError")
+
 -- | DSL updater for the name field of hydra.errors.NoSuchPrimitiveError
 noSuchPrimitiveErrorWithName :: Typed.TypedTerm Errors.NoSuchPrimitiveError -> Typed.TypedTerm Core.Name -> Typed.TypedTerm Errors.NoSuchPrimitiveError
 noSuchPrimitiveErrorWithName original newVal =
@@ -404,6 +442,10 @@ otherError x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.errors.OtherError"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.errors.OtherError
+otherErrorOtherError :: Typed.TypedName Errors.OtherError
+otherErrorOtherError = Typed.TypedName (Core.Name "hydra.errors.OtherError")
 
 -- | DSL constructor for hydra.errors.OtherInferenceError
 otherInferenceError :: Typed.TypedTerm Paths.SubtermPath -> Typed.TypedTerm String -> Typed.TypedTerm Errors.OtherInferenceError
@@ -426,6 +468,10 @@ otherInferenceErrorMessage x =
         Core.projectionTypeName = (Core.Name "hydra.errors.OtherInferenceError"),
         Core.projectionFieldName = (Core.Name "message")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.errors.OtherInferenceError
+otherInferenceErrorOtherInferenceError :: Typed.TypedName Errors.OtherInferenceError
+otherInferenceErrorOtherInferenceError = Typed.TypedName (Core.Name "hydra.errors.OtherInferenceError")
 
 -- | DSL accessor for the path field of hydra.errors.OtherInferenceError
 otherInferenceErrorPath :: Typed.TypedTerm Errors.OtherInferenceError -> Typed.TypedTerm Paths.SubtermPath
@@ -477,6 +523,10 @@ otherResolutionError x =
       Core.wrappedTermTypeName = (Core.Name "hydra.errors.OtherResolutionError"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.errors.OtherResolutionError
+otherResolutionErrorOtherResolutionError :: Typed.TypedName Errors.OtherResolutionError
+otherResolutionErrorOtherResolutionError = Typed.TypedName (Core.Name "hydra.errors.OtherResolutionError")
+
 -- | DSL injection for the noMatchingField variant of hydra.errors.ResolutionError
 resolutionErrorNoMatchingField :: Typed.TypedTerm Errors.NoMatchingFieldError -> Typed.TypedTerm Errors.ResolutionError
 resolutionErrorNoMatchingField x =
@@ -512,6 +562,10 @@ resolutionErrorOther x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "other"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.errors.ResolutionError
+resolutionErrorResolutionError :: Typed.TypedName Errors.ResolutionError
+resolutionErrorResolutionError = Typed.TypedName (Core.Name "hydra.errors.ResolutionError")
 
 -- | DSL injection for the unexpectedShape variant of hydra.errors.ResolutionError
 resolutionErrorUnexpectedShape :: Typed.TypedTerm Errors.UnexpectedShapeError -> Typed.TypedTerm Errors.ResolutionError
@@ -573,6 +627,10 @@ unexpectedShapeErrorExpected x =
         Core.projectionTypeName = (Core.Name "hydra.errors.UnexpectedShapeError"),
         Core.projectionFieldName = (Core.Name "expected")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.errors.UnexpectedShapeError
+unexpectedShapeErrorUnexpectedShapeError :: Typed.TypedName Errors.UnexpectedShapeError
+unexpectedShapeErrorUnexpectedShapeError = Typed.TypedName (Core.Name "hydra.errors.UnexpectedShapeError")
 
 -- | DSL updater for the actual field of hydra.errors.UnexpectedShapeError
 unexpectedShapeErrorWithActual :: Typed.TypedTerm Errors.UnexpectedShapeError -> Typed.TypedTerm String -> Typed.TypedTerm Errors.UnexpectedShapeError
@@ -650,6 +708,10 @@ unificationErrorRightType x =
         Core.projectionTypeName = (Core.Name "hydra.errors.UnificationError"),
         Core.projectionFieldName = (Core.Name "rightType")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.errors.UnificationError
+unificationErrorUnificationError :: Typed.TypedName Errors.UnificationError
+unificationErrorUnificationError = Typed.TypedName (Core.Name "hydra.errors.UnificationError")
 
 -- | DSL updater for the leftType field of hydra.errors.UnificationError
 unificationErrorWithLeftType :: Typed.TypedTerm Errors.UnificationError -> Typed.TypedTerm Core.Type -> Typed.TypedTerm Errors.UnificationError
@@ -753,6 +815,10 @@ unificationInferenceErrorPath x =
         Core.projectionTypeName = (Core.Name "hydra.errors.UnificationInferenceError"),
         Core.projectionFieldName = (Core.Name "path")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.errors.UnificationInferenceError
+unificationInferenceErrorUnificationInferenceError :: Typed.TypedName Errors.UnificationInferenceError
+unificationInferenceErrorUnificationInferenceError = Typed.TypedName (Core.Name "hydra.errors.UnificationInferenceError")
 
 -- | DSL updater for the cause field of hydra.errors.UnificationInferenceError
 unificationInferenceErrorWithCause :: Typed.TypedTerm Errors.UnificationInferenceError -> Typed.TypedTerm Errors.UnificationError -> Typed.TypedTerm Errors.UnificationInferenceError

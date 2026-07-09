@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.resolution"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.resolution"},
+    {"module": "hydra.decode.resolution"},
     {"module": "hydra.lexical"},
     {"module": "hydra.names"},
     {"module": "hydra.scoping"},

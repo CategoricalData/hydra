@@ -11,6 +11,10 @@ import qualified Hydra.Typed as Typed
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 
+-- | DSL name token for hydra.python.syntax.AnnotatedRhs
+annotatedRhsAnnotatedRhs :: Typed.TypedName Syntax.AnnotatedRhs
+annotatedRhsAnnotatedRhs = Typed.TypedName (Core.Name "hydra.python.syntax.AnnotatedRhs")
+
 -- | DSL injection for the star variant of hydra.python.syntax.AnnotatedRhs
 annotatedRhsStar :: Typed.TypedTerm [Syntax.StarExpression] -> Typed.TypedTerm Syntax.AnnotatedRhs
 annotatedRhsStar x =
@@ -41,6 +45,10 @@ annotatedStatement comment statement =
         Core.Field {
           Core.fieldName = (Core.Name "statement"),
           Core.fieldTerm = (Typed.unTypedTerm statement)}]}))
+
+-- | DSL name token for hydra.python.syntax.AnnotatedStatement
+annotatedStatementAnnotatedStatement :: Typed.TypedName Syntax.AnnotatedStatement
+annotatedStatementAnnotatedStatement = Typed.TypedName (Core.Name "hydra.python.syntax.AnnotatedStatement")
 
 -- | DSL accessor for the comment field of hydra.python.syntax.AnnotatedStatement
 annotatedStatementComment :: Typed.TypedTerm Syntax.AnnotatedStatement -> Typed.TypedTerm String
@@ -101,6 +109,10 @@ annotation x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.Annotation"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.Annotation
+annotationAnnotation :: Typed.TypedName Syntax.Annotation
+annotationAnnotation = Typed.TypedName (Core.Name "hydra.python.syntax.Annotation")
+
 -- | DSL constructor for hydra.python.syntax.Args
 args :: Typed.TypedTerm [Syntax.PosArg] -> Typed.TypedTerm [Syntax.KwargOrStarred] -> Typed.TypedTerm [Syntax.KwargOrDoubleStarred] -> Typed.TypedTerm Syntax.Args
 args positional kwargOrStarred kwargOrDoubleStarred =
@@ -116,6 +128,10 @@ args positional kwargOrStarred kwargOrDoubleStarred =
         Core.Field {
           Core.fieldName = (Core.Name "kwargOrDoubleStarred"),
           Core.fieldTerm = (Typed.unTypedTerm kwargOrDoubleStarred)}]}))
+
+-- | DSL name token for hydra.python.syntax.Args
+argsArgs :: Typed.TypedName Syntax.Args
+argsArgs = Typed.TypedName (Core.Name "hydra.python.syntax.Args")
 
 -- | DSL accessor for the kwargOrDoubleStarred field of hydra.python.syntax.Args
 argsKwargOrDoubleStarred :: Typed.TypedTerm Syntax.Args -> Typed.TypedTerm [Syntax.KwargOrDoubleStarred]
@@ -238,6 +254,10 @@ asPatternAs x =
         Core.projectionFieldName = (Core.Name "as")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.AsPattern
+asPatternAsPattern :: Typed.TypedName Syntax.AsPattern
+asPatternAsPattern = Typed.TypedName (Core.Name "hydra.python.syntax.AsPattern")
+
 -- | DSL accessor for the pattern field of hydra.python.syntax.AsPattern
 asPatternPattern :: Typed.TypedTerm Syntax.AsPattern -> Typed.TypedTerm Syntax.OrPattern
 asPatternPattern x =
@@ -294,6 +314,10 @@ assertStatement expression1 expression2 =
           Core.fieldName = (Core.Name "expression2"),
           Core.fieldTerm = (Typed.unTypedTerm expression2)}]}))
 
+-- | DSL name token for hydra.python.syntax.AssertStatement
+assertStatementAssertStatement :: Typed.TypedName Syntax.AssertStatement
+assertStatementAssertStatement = Typed.TypedName (Core.Name "hydra.python.syntax.AssertStatement")
+
 -- | DSL accessor for the expression1 field of hydra.python.syntax.AssertStatement
 assertStatementExpression1 :: Typed.TypedTerm Syntax.AssertStatement -> Typed.TypedTerm Syntax.Expression
 assertStatementExpression1 x =
@@ -346,6 +370,10 @@ assertStatementWithExpression2 original newVal =
           Core.fieldName = (Core.Name "expression2"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 
+-- | DSL name token for hydra.python.syntax.Assignment
+assignmentAssignment :: Typed.TypedName Syntax.Assignment
+assignmentAssignment = Typed.TypedName (Core.Name "hydra.python.syntax.Assignment")
+
 -- | DSL injection for the aug variant of hydra.python.syntax.Assignment
 assignmentAug :: Typed.TypedTerm Syntax.AugAssignment -> Typed.TypedTerm Syntax.Assignment
 assignmentAug x =
@@ -367,6 +395,10 @@ assignmentExpression name expression =
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
           Core.fieldTerm = (Typed.unTypedTerm expression)}]}))
+
+-- | DSL name token for hydra.python.syntax.AssignmentExpression
+assignmentExpressionAssignmentExpression :: Typed.TypedName Syntax.AssignmentExpression
+assignmentExpressionAssignmentExpression = Typed.TypedName (Core.Name "hydra.python.syntax.AssignmentExpression")
 
 -- | DSL accessor for the expression field of hydra.python.syntax.AssignmentExpression
 assignmentExpressionExpression :: Typed.TypedTerm Syntax.AssignmentExpression -> Typed.TypedTerm Syntax.Expression
@@ -437,6 +469,10 @@ assignmentUntyped x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "untyped"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.python.syntax.Atom
+atomAtom :: Typed.TypedName Syntax.Atom
+atomAtom = Typed.TypedName (Core.Name "hydra.python.syntax.Atom")
 
 -- | DSL injection for the dict variant of hydra.python.syntax.Atom
 atomDict :: Typed.TypedTerm Syntax.Dict -> Typed.TypedTerm Syntax.Atom
@@ -589,6 +625,10 @@ attribute x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.Attribute"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.Attribute
+attributeAttribute :: Typed.TypedName Syntax.Attribute
+attributeAttribute = Typed.TypedName (Core.Name "hydra.python.syntax.Attribute")
+
 -- | DSL injection for the ampersandEqual variant of hydra.python.syntax.AugAssign
 augAssignAmpersandEqual :: Typed.TypedTerm Syntax.AugAssign
 augAssignAmpersandEqual =
@@ -606,6 +646,10 @@ augAssignAtEqual =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "atEqual"),
         Core.fieldTerm = Core.TermUnit}}))
+
+-- | DSL name token for hydra.python.syntax.AugAssign
+augAssignAugAssign :: Typed.TypedName Syntax.AugAssign
+augAssignAugAssign = Typed.TypedName (Core.Name "hydra.python.syntax.AugAssign")
 
 -- | DSL injection for the barEqual variant of hydra.python.syntax.AugAssign
 augAssignBarEqual :: Typed.TypedTerm Syntax.AugAssign
@@ -721,6 +765,10 @@ augAssignment lhs augassign rhs =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm rhs)}]}))
+
+-- | DSL name token for hydra.python.syntax.AugAssignment
+augAssignmentAugAssignment :: Typed.TypedName Syntax.AugAssignment
+augAssignmentAugAssignment = Typed.TypedName (Core.Name "hydra.python.syntax.AugAssignment")
 
 -- | DSL accessor for the augassign field of hydra.python.syntax.AugAssignment
 augAssignmentAugassign :: Typed.TypedTerm Syntax.AugAssignment -> Typed.TypedTerm Syntax.AugAssign
@@ -843,6 +891,10 @@ awaitPrimaryAwait x =
         Core.projectionFieldName = (Core.Name "await")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.AwaitPrimary
+awaitPrimaryAwaitPrimary :: Typed.TypedName Syntax.AwaitPrimary
+awaitPrimaryAwaitPrimary = Typed.TypedName (Core.Name "hydra.python.syntax.AwaitPrimary")
+
 -- | DSL accessor for the primary field of hydra.python.syntax.AwaitPrimary
 awaitPrimaryPrimary :: Typed.TypedTerm Syntax.AwaitPrimary -> Typed.TypedTerm Syntax.Primary
 awaitPrimaryPrimary x =
@@ -898,6 +950,10 @@ bitwiseAnd lhs rhs =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm rhs)}]}))
+
+-- | DSL name token for hydra.python.syntax.BitwiseAnd
+bitwiseAndBitwiseAnd :: Typed.TypedName Syntax.BitwiseAnd
+bitwiseAndBitwiseAnd = Typed.TypedName (Core.Name "hydra.python.syntax.BitwiseAnd")
 
 -- | DSL accessor for the lhs field of hydra.python.syntax.BitwiseAnd
 bitwiseAndLhs :: Typed.TypedTerm Syntax.BitwiseAnd -> Typed.TypedTerm (Maybe Syntax.BitwiseAnd)
@@ -964,6 +1020,10 @@ bitwiseOr lhs rhs =
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm rhs)}]}))
 
+-- | DSL name token for hydra.python.syntax.BitwiseOr
+bitwiseOrBitwiseOr :: Typed.TypedName Syntax.BitwiseOr
+bitwiseOrBitwiseOr = Typed.TypedName (Core.Name "hydra.python.syntax.BitwiseOr")
+
 -- | DSL accessor for the lhs field of hydra.python.syntax.BitwiseOr
 bitwiseOrLhs :: Typed.TypedTerm Syntax.BitwiseOr -> Typed.TypedTerm (Maybe Syntax.BitwiseOr)
 bitwiseOrLhs x =
@@ -1029,6 +1089,10 @@ bitwiseXor lhs rhs =
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm rhs)}]}))
 
+-- | DSL name token for hydra.python.syntax.BitwiseXor
+bitwiseXorBitwiseXor :: Typed.TypedName Syntax.BitwiseXor
+bitwiseXorBitwiseXor = Typed.TypedName (Core.Name "hydra.python.syntax.BitwiseXor")
+
 -- | DSL accessor for the lhs field of hydra.python.syntax.BitwiseXor
 bitwiseXorLhs :: Typed.TypedTerm Syntax.BitwiseXor -> Typed.TypedTerm (Maybe Syntax.BitwiseXor)
 bitwiseXorLhs x =
@@ -1081,6 +1145,10 @@ bitwiseXorWithRhs original newVal =
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 
+-- | DSL name token for hydra.python.syntax.Block
+blockBlock :: Typed.TypedName Syntax.Block
+blockBlock = Typed.TypedName (Core.Name "hydra.python.syntax.Block")
+
 -- | DSL injection for the indented variant of hydra.python.syntax.Block
 blockIndented :: Typed.TypedTerm [[Syntax.Statement]] -> Typed.TypedTerm Syntax.Block
 blockIndented x =
@@ -1106,6 +1174,10 @@ capturePattern x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.CapturePattern"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.CapturePattern
+capturePatternCapturePattern :: Typed.TypedName Syntax.CapturePattern
+capturePatternCapturePattern = Typed.TypedName (Core.Name "hydra.python.syntax.CapturePattern")
+
 -- | DSL constructor for hydra.python.syntax.CaseBlock
 caseBlock :: Typed.TypedTerm Syntax.Patterns -> Typed.TypedTerm (Maybe Syntax.Guard) -> Typed.TypedTerm Syntax.Block -> Typed.TypedTerm Syntax.CaseBlock
 caseBlock patterns guard body =
@@ -1130,6 +1202,10 @@ caseBlockBody x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.CaseBlock"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.CaseBlock
+caseBlockCaseBlock :: Typed.TypedName Syntax.CaseBlock
+caseBlockCaseBlock = Typed.TypedName (Core.Name "hydra.python.syntax.CaseBlock")
 
 -- | DSL accessor for the guard field of hydra.python.syntax.CaseBlock
 caseBlockGuard :: Typed.TypedTerm Syntax.CaseBlock -> Typed.TypedTerm (Maybe Syntax.Guard)
@@ -1260,6 +1336,10 @@ classDefinitionBody x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.ClassDefinition"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.ClassDefinition
+classDefinitionClassDefinition :: Typed.TypedName Syntax.ClassDefinition
+classDefinitionClassDefinition = Typed.TypedName (Core.Name "hydra.python.syntax.ClassDefinition")
 
 -- | DSL accessor for the decorators field of hydra.python.syntax.ClassDefinition
 classDefinitionDecorators :: Typed.TypedTerm Syntax.ClassDefinition -> Typed.TypedTerm (Maybe Syntax.Decorators)
@@ -1494,6 +1574,10 @@ classPattern nameOrAttribute positionalPatterns keywordPatterns =
           Core.fieldName = (Core.Name "keywordPatterns"),
           Core.fieldTerm = (Typed.unTypedTerm keywordPatterns)}]}))
 
+-- | DSL name token for hydra.python.syntax.ClassPattern
+classPatternClassPattern :: Typed.TypedName Syntax.ClassPattern
+classPatternClassPattern = Typed.TypedName (Core.Name "hydra.python.syntax.ClassPattern")
+
 -- | DSL accessor for the keywordPatterns field of hydra.python.syntax.ClassPattern
 classPatternKeywordPatterns :: Typed.TypedTerm Syntax.ClassPattern -> Typed.TypedTerm (Maybe Syntax.KeywordPatterns)
 classPatternKeywordPatterns x =
@@ -1611,6 +1695,10 @@ closedPatternClass x =
         Core.fieldName = (Core.Name "class"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.python.syntax.ClosedPattern
+closedPatternClosedPattern :: Typed.TypedName Syntax.ClosedPattern
+closedPatternClosedPattern = Typed.TypedName (Core.Name "hydra.python.syntax.ClosedPattern")
+
 -- | DSL injection for the group variant of hydra.python.syntax.ClosedPattern
 closedPatternGroup :: Typed.TypedTerm Syntax.GroupPattern -> Typed.TypedTerm Syntax.ClosedPattern
 closedPatternGroup x =
@@ -1678,6 +1766,10 @@ commaStarEtc paramMaybeDefault keywords =
           Core.fieldName = (Core.Name "keywords"),
           Core.fieldTerm = (Typed.unTypedTerm keywords)}]}))
 
+-- | DSL name token for hydra.python.syntax.CommaStarEtc
+commaStarEtcCommaStarEtc :: Typed.TypedName Syntax.CommaStarEtc
+commaStarEtcCommaStarEtc = Typed.TypedName (Core.Name "hydra.python.syntax.CommaStarEtc")
+
 -- | DSL accessor for the keywords field of hydra.python.syntax.CommaStarEtc
 commaStarEtcKeywords :: Typed.TypedTerm Syntax.CommaStarEtc -> Typed.TypedTerm (Maybe Syntax.Keywords)
 commaStarEtcKeywords x =
@@ -1743,6 +1835,10 @@ compareOpBitwiseOrPair operator rhs =
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm rhs)}]}))
 
+-- | DSL name token for hydra.python.syntax.CompareOpBitwiseOrPair
+compareOpBitwiseOrPairCompareOpBitwiseOrPair :: Typed.TypedName Syntax.CompareOpBitwiseOrPair
+compareOpBitwiseOrPairCompareOpBitwiseOrPair = Typed.TypedName (Core.Name "hydra.python.syntax.CompareOpBitwiseOrPair")
+
 -- | DSL accessor for the operator field of hydra.python.syntax.CompareOpBitwiseOrPair
 compareOpBitwiseOrPairOperator :: Typed.TypedTerm Syntax.CompareOpBitwiseOrPair -> Typed.TypedTerm Syntax.CompareOp
 compareOpBitwiseOrPairOperator x =
@@ -1794,6 +1890,10 @@ compareOpBitwiseOrPairWithRhs original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
+-- | DSL name token for hydra.python.syntax.CompareOp
+compareOpCompareOp :: Typed.TypedName Syntax.CompareOp
+compareOpCompareOp = Typed.TypedName (Core.Name "hydra.python.syntax.CompareOp")
 
 -- | DSL injection for the eq variant of hydra.python.syntax.CompareOp
 compareOpEq :: Typed.TypedTerm Syntax.CompareOp
@@ -1898,6 +1998,10 @@ comparison lhs rhs =
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Typed.unTypedTerm rhs)}]}))
 
+-- | DSL name token for hydra.python.syntax.Comparison
+comparisonComparison :: Typed.TypedName Syntax.Comparison
+comparisonComparison = Typed.TypedName (Core.Name "hydra.python.syntax.Comparison")
+
 -- | DSL accessor for the lhs field of hydra.python.syntax.Comparison
 comparisonLhs :: Typed.TypedTerm Syntax.Comparison -> Typed.TypedTerm Syntax.BitwiseOr
 comparisonLhs x =
@@ -1965,6 +2069,10 @@ complexNumber real plusOrMinus imaginary =
         Core.Field {
           Core.fieldName = (Core.Name "imaginary"),
           Core.fieldTerm = (Typed.unTypedTerm imaginary)}]}))
+
+-- | DSL name token for hydra.python.syntax.ComplexNumber
+complexNumberComplexNumber :: Typed.TypedName Syntax.ComplexNumber
+complexNumberComplexNumber = Typed.TypedName (Core.Name "hydra.python.syntax.ComplexNumber")
 
 -- | DSL accessor for the imaginary field of hydra.python.syntax.ComplexNumber
 complexNumberImaginary :: Typed.TypedTerm Syntax.ComplexNumber -> Typed.TypedTerm Syntax.ImaginaryNumber
@@ -2074,6 +2182,10 @@ compoundStatementClassDef x =
         Core.fieldName = (Core.Name "classDef"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.python.syntax.CompoundStatement
+compoundStatementCompoundStatement :: Typed.TypedName Syntax.CompoundStatement
+compoundStatementCompoundStatement = Typed.TypedName (Core.Name "hydra.python.syntax.CompoundStatement")
+
 -- | DSL injection for the for variant of hydra.python.syntax.CompoundStatement
 compoundStatementFor :: Typed.TypedTerm Syntax.ForStatement -> Typed.TypedTerm Syntax.CompoundStatement
 compoundStatementFor x =
@@ -2161,6 +2273,10 @@ conditionalBody x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.Conditional"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.Conditional
+conditionalConditional :: Typed.TypedName Syntax.Conditional
+conditionalConditional = Typed.TypedName (Core.Name "hydra.python.syntax.Conditional")
 
 -- | DSL accessor for the else field of hydra.python.syntax.Conditional
 conditionalElse :: Typed.TypedTerm Syntax.Conditional -> Typed.TypedTerm Syntax.Expression
@@ -2259,12 +2375,20 @@ conjunction x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.Conjunction"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.Conjunction
+conjunctionConjunction :: Typed.TypedName Syntax.Conjunction
+conjunctionConjunction = Typed.TypedName (Core.Name "hydra.python.syntax.Conjunction")
+
 -- | DSL constructor for the hydra.python.syntax.Decorators wrapper
 decorators :: Typed.TypedTerm [Syntax.NamedExpression] -> Typed.TypedTerm Syntax.Decorators
 decorators x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.Decorators"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.Decorators
+decoratorsDecorators :: Typed.TypedName Syntax.Decorators
+decoratorsDecorators = Typed.TypedName (Core.Name "hydra.python.syntax.Decorators")
 
 -- | DSL constructor for the hydra.python.syntax.Default wrapper
 default_ :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.Default
@@ -2273,12 +2397,24 @@ default_ x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.Default"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.Default
+defaultDefault :: Typed.TypedName Syntax.Default
+defaultDefault = Typed.TypedName (Core.Name "hydra.python.syntax.Default")
+
 -- | DSL constructor for the hydra.python.syntax.DelStatement wrapper
 delStatement :: Typed.TypedTerm Syntax.DelTargets -> Typed.TypedTerm Syntax.DelStatement
 delStatement x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.DelStatement"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.DelStatement
+delStatementDelStatement :: Typed.TypedName Syntax.DelStatement
+delStatementDelStatement = Typed.TypedName (Core.Name "hydra.python.syntax.DelStatement")
+
+-- | DSL name token for hydra.python.syntax.DelTAtom
+delTAtomDelTAtom :: Typed.TypedName Syntax.DelTAtom
+delTAtomDelTAtom = Typed.TypedName (Core.Name "hydra.python.syntax.DelTAtom")
 
 -- | DSL injection for the name variant of hydra.python.syntax.DelTAtom
 delTAtomName :: Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.DelTAtom
@@ -2316,6 +2452,10 @@ delTargetDelTAtom x =
         Core.fieldName = (Core.Name "delTAtom"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.python.syntax.DelTarget
+delTargetDelTarget :: Typed.TypedName Syntax.DelTarget
+delTargetDelTarget = Typed.TypedName (Core.Name "hydra.python.syntax.DelTarget")
+
 -- | DSL injection for the primaryAndName variant of hydra.python.syntax.DelTarget
 delTargetPrimaryAndName :: Typed.TypedTerm Syntax.TPrimaryAndName -> Typed.TypedTerm Syntax.DelTarget
 delTargetPrimaryAndName x =
@@ -2341,12 +2481,20 @@ delTargets x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.DelTargets"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.DelTargets
+delTargetsDelTargets :: Typed.TypedName Syntax.DelTargets
+delTargetsDelTargets = Typed.TypedName (Core.Name "hydra.python.syntax.DelTargets")
+
 -- | DSL constructor for the hydra.python.syntax.Dict wrapper
 dict :: Typed.TypedTerm [Syntax.DoubleStarredKvpair] -> Typed.TypedTerm Syntax.Dict
 dict x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.Dict"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.Dict
+dictDict :: Typed.TypedName Syntax.Dict
+dictDict = Typed.TypedName (Core.Name "hydra.python.syntax.Dict")
 
 -- | DSL constructor for hydra.python.syntax.Dictcomp
 dictcomp :: Typed.TypedTerm Syntax.Kvpair -> Typed.TypedTerm Syntax.ForIfClauses -> Typed.TypedTerm Syntax.Dictcomp
@@ -2360,6 +2508,10 @@ dictcomp kvpair forIfClauses =
         Core.Field {
           Core.fieldName = (Core.Name "forIfClauses"),
           Core.fieldTerm = (Typed.unTypedTerm forIfClauses)}]}))
+
+-- | DSL name token for hydra.python.syntax.Dictcomp
+dictcompDictcomp :: Typed.TypedName Syntax.Dictcomp
+dictcompDictcomp = Typed.TypedName (Core.Name "hydra.python.syntax.Dictcomp")
 
 -- | DSL accessor for the forIfClauses field of hydra.python.syntax.Dictcomp
 dictcompForIfClauses :: Typed.TypedTerm Syntax.Dictcomp -> Typed.TypedTerm Syntax.ForIfClauses
@@ -2420,6 +2572,10 @@ disjunction x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.Disjunction"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.Disjunction
+disjunctionDisjunction :: Typed.TypedName Syntax.Disjunction
+disjunctionDisjunction = Typed.TypedName (Core.Name "hydra.python.syntax.Disjunction")
+
 -- | DSL constructor for hydra.python.syntax.DottedAsName
 dottedAsName :: Typed.TypedTerm Syntax.DottedName -> Typed.TypedTerm (Maybe Syntax.Name) -> Typed.TypedTerm Syntax.DottedAsName
 dottedAsName name as =
@@ -2441,6 +2597,10 @@ dottedAsNameAs x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.DottedAsName"),
         Core.projectionFieldName = (Core.Name "as")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.DottedAsName
+dottedAsNameDottedAsName :: Typed.TypedName Syntax.DottedAsName
+dottedAsNameDottedAsName = Typed.TypedName (Core.Name "hydra.python.syntax.DottedAsName")
 
 -- | DSL accessor for the name field of hydra.python.syntax.DottedAsName
 dottedAsNameName :: Typed.TypedTerm Syntax.DottedAsName -> Typed.TypedTerm Syntax.DottedName
@@ -2492,12 +2652,20 @@ dottedName x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.DottedName"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.DottedName
+dottedNameDottedName :: Typed.TypedName Syntax.DottedName
+dottedNameDottedName = Typed.TypedName (Core.Name "hydra.python.syntax.DottedName")
+
 -- | DSL constructor for the hydra.python.syntax.DoubleStarPattern wrapper
 doubleStarPattern :: Typed.TypedTerm Syntax.PatternCaptureTarget -> Typed.TypedTerm Syntax.DoubleStarPattern
 doubleStarPattern x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.DoubleStarPattern"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.DoubleStarPattern
+doubleStarPatternDoubleStarPattern :: Typed.TypedName Syntax.DoubleStarPattern
+doubleStarPatternDoubleStarPattern = Typed.TypedName (Core.Name "hydra.python.syntax.DoubleStarPattern")
 
 -- | DSL constructor for hydra.python.syntax.DoubleStarTypeParameter
 doubleStarTypeParameter :: Typed.TypedTerm Syntax.Name -> Typed.TypedTerm (Maybe Syntax.Expression) -> Typed.TypedTerm Syntax.DoubleStarTypeParameter
@@ -2520,6 +2688,10 @@ doubleStarTypeParameterDefault x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.DoubleStarTypeParameter"),
         Core.projectionFieldName = (Core.Name "default")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.DoubleStarTypeParameter
+doubleStarTypeParameterDoubleStarTypeParameter :: Typed.TypedName Syntax.DoubleStarTypeParameter
+doubleStarTypeParameterDoubleStarTypeParameter = Typed.TypedName (Core.Name "hydra.python.syntax.DoubleStarTypeParameter")
 
 -- | DSL accessor for the name field of hydra.python.syntax.DoubleStarTypeParameter
 doubleStarTypeParameterName :: Typed.TypedTerm Syntax.DoubleStarTypeParameter -> Typed.TypedTerm Syntax.Name
@@ -2564,6 +2736,10 @@ doubleStarTypeParameterWithName original newVal =
               Core.projectionFieldName = (Core.Name "default")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 
+-- | DSL name token for hydra.python.syntax.DoubleStarredKvpair
+doubleStarredKvpairDoubleStarredKvpair :: Typed.TypedName Syntax.DoubleStarredKvpair
+doubleStarredKvpairDoubleStarredKvpair = Typed.TypedName (Core.Name "hydra.python.syntax.DoubleStarredKvpair")
+
 -- | DSL injection for the pair variant of hydra.python.syntax.DoubleStarredKvpair
 doubleStarredKvpairPair :: Typed.TypedTerm Syntax.Kvpair -> Typed.TypedTerm Syntax.DoubleStarredKvpair
 doubleStarredKvpairPair x =
@@ -2589,6 +2765,10 @@ eval x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.Eval"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.Eval
+evalEval :: Typed.TypedName Syntax.Eval
+evalEval = Typed.TypedName (Core.Name "hydra.python.syntax.Eval")
+
 -- | DSL constructor for hydra.python.syntax.ExceptBlock
 exceptBlock :: Typed.TypedTerm (Maybe Syntax.ExceptExpression) -> Typed.TypedTerm Syntax.Block -> Typed.TypedTerm Syntax.ExceptBlock
 exceptBlock expression body =
@@ -2610,6 +2790,10 @@ exceptBlockBody x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.ExceptBlock"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.ExceptBlock
+exceptBlockExceptBlock :: Typed.TypedName Syntax.ExceptBlock
+exceptBlockExceptBlock = Typed.TypedName (Core.Name "hydra.python.syntax.ExceptBlock")
 
 -- | DSL accessor for the expression field of hydra.python.syntax.ExceptBlock
 exceptBlockExpression :: Typed.TypedTerm Syntax.ExceptBlock -> Typed.TypedTerm (Maybe Syntax.ExceptExpression)
@@ -2675,6 +2859,10 @@ exceptExpressionAs x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.ExceptExpression"),
         Core.projectionFieldName = (Core.Name "as")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.ExceptExpression
+exceptExpressionExceptExpression :: Typed.TypedName Syntax.ExceptExpression
+exceptExpressionExceptExpression = Typed.TypedName (Core.Name "hydra.python.syntax.ExceptExpression")
 
 -- | DSL accessor for the expression field of hydra.python.syntax.ExceptExpression
 exceptExpressionExpression :: Typed.TypedTerm Syntax.ExceptExpression -> Typed.TypedTerm Syntax.Expression
@@ -2752,6 +2940,10 @@ exceptStarBlockBody x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.ExceptStarBlock"),
         Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.ExceptStarBlock
+exceptStarBlockExceptStarBlock :: Typed.TypedName Syntax.ExceptStarBlock
+exceptStarBlockExceptStarBlock = Typed.TypedName (Core.Name "hydra.python.syntax.ExceptStarBlock")
 
 -- | DSL accessor for the expression field of hydra.python.syntax.ExceptStarBlock
 exceptStarBlockExpression :: Typed.TypedTerm Syntax.ExceptStarBlock -> Typed.TypedTerm Syntax.Expression
@@ -2843,6 +3035,10 @@ expressionConditional x =
         Core.fieldName = (Core.Name "conditional"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.python.syntax.Expression
+expressionExpression :: Typed.TypedName Syntax.Expression
+expressionExpression = Typed.TypedName (Core.Name "hydra.python.syntax.Expression")
+
 -- | DSL injection for the lambda variant of hydra.python.syntax.Expression
 expressionLambda :: Typed.TypedTerm Syntax.Lambda -> Typed.TypedTerm Syntax.Expression
 expressionLambda x =
@@ -2869,6 +3065,10 @@ factorComplement x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "complement"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.python.syntax.Factor
+factorFactor :: Typed.TypedName Syntax.Factor
+factorFactor = Typed.TypedName (Core.Name "hydra.python.syntax.Factor")
 
 -- | DSL injection for the negative variant of hydra.python.syntax.Factor
 factorNegative :: Typed.TypedTerm Syntax.Factor -> Typed.TypedTerm Syntax.Factor
@@ -2904,6 +3104,10 @@ file x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.File"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.File
+fileFile :: Typed.TypedName Syntax.File
+fileFile = Typed.TypedName (Core.Name "hydra.python.syntax.File")
+
 -- | DSL constructor for hydra.python.syntax.ForIfClause
 forIfClause :: Typed.TypedTerm Bool -> Typed.TypedTerm [Syntax.StarTarget] -> Typed.TypedTerm Syntax.Disjunction -> Typed.TypedTerm [Syntax.Disjunction] -> Typed.TypedTerm Syntax.ForIfClause
 forIfClause async targets in_ ifs =
@@ -2931,6 +3135,10 @@ forIfClauseAsync x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.ForIfClause"),
         Core.projectionFieldName = (Core.Name "async")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.ForIfClause
+forIfClauseForIfClause :: Typed.TypedName Syntax.ForIfClause
+forIfClauseForIfClause = Typed.TypedName (Core.Name "hydra.python.syntax.ForIfClause")
 
 -- | DSL accessor for the ifs field of hydra.python.syntax.ForIfClause
 forIfClauseIfs :: Typed.TypedTerm Syntax.ForIfClause -> Typed.TypedTerm [Syntax.Disjunction]
@@ -3090,6 +3298,10 @@ forIfClauses x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.ForIfClauses"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.ForIfClauses
+forIfClausesForIfClauses :: Typed.TypedName Syntax.ForIfClauses
+forIfClausesForIfClauses = Typed.TypedName (Core.Name "hydra.python.syntax.ForIfClauses")
+
 -- | DSL constructor for hydra.python.syntax.ForStatement
 forStatement :: Typed.TypedTerm Bool -> Typed.TypedTerm [Syntax.StarTarget] -> Typed.TypedTerm [Syntax.StarExpression] -> Typed.TypedTerm (Maybe Syntax.TypeComment) -> Typed.TypedTerm Syntax.Block -> Typed.TypedTerm (Maybe Syntax.Block) -> Typed.TypedTerm Syntax.ForStatement
 forStatement async targets expressions typeComment body else_ =
@@ -3150,6 +3362,10 @@ forStatementExpressions x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.ForStatement"),
         Core.projectionFieldName = (Core.Name "expressions")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.ForStatement
+forStatementForStatement :: Typed.TypedName Syntax.ForStatement
+forStatementForStatement = Typed.TypedName (Core.Name "hydra.python.syntax.ForStatement")
 
 -- | DSL accessor for the targets field of hydra.python.syntax.ForStatement
 forStatementTargets :: Typed.TypedTerm Syntax.ForStatement -> Typed.TypedTerm [Syntax.StarTarget]
@@ -3446,6 +3662,10 @@ funcTypeComment x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.FuncTypeComment"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.FuncTypeComment
+funcTypeCommentFuncTypeComment :: Typed.TypedName Syntax.FuncTypeComment
+funcTypeCommentFuncTypeComment = Typed.TypedName (Core.Name "hydra.python.syntax.FuncTypeComment")
+
 -- | DSL constructor for hydra.python.syntax.FunctionDefRaw
 functionDefRaw :: Typed.TypedTerm Bool -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm [Syntax.TypeParameter] -> Typed.TypedTerm (Maybe Syntax.Parameters) -> Typed.TypedTerm (Maybe Syntax.Expression) -> Typed.TypedTerm (Maybe Syntax.FuncTypeComment) -> Typed.TypedTerm Syntax.Block -> Typed.TypedTerm Syntax.FunctionDefRaw
 functionDefRaw async name typeParams params returnType funcTypeComment block =
@@ -3500,6 +3720,10 @@ functionDefRawFuncTypeComment x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.FunctionDefRaw"),
         Core.projectionFieldName = (Core.Name "funcTypeComment")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.FunctionDefRaw
+functionDefRawFunctionDefRaw :: Typed.TypedName Syntax.FunctionDefRaw
+functionDefRawFunctionDefRaw = Typed.TypedName (Core.Name "hydra.python.syntax.FunctionDefRaw")
 
 -- | DSL accessor for the name field of hydra.python.syntax.FunctionDefRaw
 functionDefRawName :: Typed.TypedTerm Syntax.FunctionDefRaw -> Typed.TypedTerm Syntax.Name
@@ -3923,6 +4147,10 @@ functionDefinitionDecorators x =
         Core.projectionFieldName = (Core.Name "decorators")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.FunctionDefinition
+functionDefinitionFunctionDefinition :: Typed.TypedName Syntax.FunctionDefinition
+functionDefinitionFunctionDefinition = Typed.TypedName (Core.Name "hydra.python.syntax.FunctionDefinition")
+
 -- | DSL accessor for the raw field of hydra.python.syntax.FunctionDefinition
 functionDefinitionRaw :: Typed.TypedTerm Syntax.FunctionDefinition -> Typed.TypedTerm Syntax.FunctionDefRaw
 functionDefinitionRaw x =
@@ -3979,6 +4207,10 @@ genexp head tail =
           Core.fieldName = (Core.Name "tail"),
           Core.fieldTerm = (Typed.unTypedTerm tail)}]}))
 
+-- | DSL name token for hydra.python.syntax.Genexp
+genexpGenexp :: Typed.TypedName Syntax.Genexp
+genexpGenexp = Typed.TypedName (Core.Name "hydra.python.syntax.Genexp")
+
 -- | DSL accessor for the head field of hydra.python.syntax.Genexp
 genexpHead :: Typed.TypedTerm Syntax.Genexp -> Typed.TypedTerm Syntax.GenexpHead
 genexpHead x =
@@ -4005,6 +4237,10 @@ genexpHeadExpression x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "expression"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.python.syntax.GenexpHead
+genexpHeadGenexpHead :: Typed.TypedName Syntax.GenexpHead
+genexpHeadGenexpHead = Typed.TypedName (Core.Name "hydra.python.syntax.GenexpHead")
 
 -- | DSL accessor for the tail field of hydra.python.syntax.Genexp
 genexpTail :: Typed.TypedTerm Syntax.Genexp -> Typed.TypedTerm Syntax.ForIfClauses
@@ -4058,12 +4294,20 @@ groupExpression x =
         Core.fieldName = (Core.Name "expression"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.python.syntax.Group
+groupGroup :: Typed.TypedName Syntax.Group
+groupGroup = Typed.TypedName (Core.Name "hydra.python.syntax.Group")
+
 -- | DSL constructor for the hydra.python.syntax.GroupPattern wrapper
 groupPattern :: Typed.TypedTerm Syntax.Pattern -> Typed.TypedTerm Syntax.GroupPattern
 groupPattern x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.GroupPattern"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.GroupPattern
+groupPatternGroupPattern :: Typed.TypedName Syntax.GroupPattern
+groupPatternGroupPattern = Typed.TypedName (Core.Name "hydra.python.syntax.GroupPattern")
 
 -- | DSL injection for the yield variant of hydra.python.syntax.Group
 groupYield :: Typed.TypedTerm Syntax.YieldExpression -> Typed.TypedTerm Syntax.Group
@@ -4080,6 +4324,10 @@ guard x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.Guard"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.Guard
+guardGuard :: Typed.TypedName Syntax.Guard
+guardGuard = Typed.TypedName (Core.Name "hydra.python.syntax.Guard")
 
 -- | DSL constructor for hydra.python.syntax.IfStatement
 ifStatement :: Typed.TypedTerm Syntax.NamedExpression -> Typed.TypedTerm Syntax.Block -> Typed.TypedTerm (Maybe Syntax.IfTail) -> Typed.TypedTerm Syntax.IfStatement
@@ -4123,6 +4371,10 @@ ifStatementContinuation x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.IfStatement"),
         Core.projectionFieldName = (Core.Name "continuation")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.IfStatement
+ifStatementIfStatement :: Typed.TypedName Syntax.IfStatement
+ifStatementIfStatement = Typed.TypedName (Core.Name "hydra.python.syntax.IfStatement")
 
 -- | DSL updater for the body field of hydra.python.syntax.IfStatement
 ifStatementWithBody :: Typed.TypedTerm Syntax.IfStatement -> Typed.TypedTerm Syntax.Block -> Typed.TypedTerm Syntax.IfStatement
@@ -4214,12 +4466,20 @@ ifTailElse x =
         Core.fieldName = (Core.Name "else"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.python.syntax.IfTail
+ifTailIfTail :: Typed.TypedName Syntax.IfTail
+ifTailIfTail = Typed.TypedName (Core.Name "hydra.python.syntax.IfTail")
+
 -- | DSL constructor for the hydra.python.syntax.ImaginaryNumber wrapper
 imaginaryNumber :: Typed.TypedTerm Double -> Typed.TypedTerm Syntax.ImaginaryNumber
 imaginaryNumber x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.ImaginaryNumber"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.ImaginaryNumber
+imaginaryNumberImaginaryNumber :: Typed.TypedName Syntax.ImaginaryNumber
+imaginaryNumberImaginaryNumber = Typed.TypedName (Core.Name "hydra.python.syntax.ImaginaryNumber")
 
 -- | DSL constructor for hydra.python.syntax.ImportFrom
 importFrom :: Typed.TypedTerm [Syntax.RelativeImportPrefix] -> Typed.TypedTerm (Maybe Syntax.DottedName) -> Typed.TypedTerm Syntax.ImportFromTargets -> Typed.TypedTerm Syntax.ImportFrom
@@ -4258,6 +4518,10 @@ importFromAsNameAs x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.ImportFromAsName"),
         Core.projectionFieldName = (Core.Name "as")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.ImportFromAsName
+importFromAsNameImportFromAsName :: Typed.TypedName Syntax.ImportFromAsName
+importFromAsNameImportFromAsName = Typed.TypedName (Core.Name "hydra.python.syntax.ImportFromAsName")
 
 -- | DSL accessor for the name field of hydra.python.syntax.ImportFromAsName
 importFromAsNameName :: Typed.TypedTerm Syntax.ImportFromAsName -> Typed.TypedTerm Syntax.Name
@@ -4311,6 +4575,10 @@ importFromDottedName x =
         Core.projectionFieldName = (Core.Name "dottedName")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.ImportFrom
+importFromImportFrom :: Typed.TypedName Syntax.ImportFrom
+importFromImportFrom = Typed.TypedName (Core.Name "hydra.python.syntax.ImportFrom")
+
 -- | DSL accessor for the prefixes field of hydra.python.syntax.ImportFrom
 importFromPrefixes :: Typed.TypedTerm Syntax.ImportFrom -> Typed.TypedTerm [Syntax.RelativeImportPrefix]
 importFromPrefixes x =
@@ -4328,6 +4596,10 @@ importFromTargets x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.ImportFrom"),
         Core.projectionFieldName = (Core.Name "targets")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.ImportFromTargets
+importFromTargetsImportFromTargets :: Typed.TypedName Syntax.ImportFromTargets
+importFromTargetsImportFromTargets = Typed.TypedName (Core.Name "hydra.python.syntax.ImportFromTargets")
 
 -- | DSL injection for the parens variant of hydra.python.syntax.ImportFromTargets
 importFromTargetsParens :: Typed.TypedTerm [Syntax.ImportFromAsName] -> Typed.TypedTerm Syntax.ImportFromTargets
@@ -4435,6 +4707,10 @@ importName x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.ImportName"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.ImportName
+importNameImportName :: Typed.TypedName Syntax.ImportName
+importNameImportName = Typed.TypedName (Core.Name "hydra.python.syntax.ImportName")
+
 -- | DSL injection for the from variant of hydra.python.syntax.ImportStatement
 importStatementFrom :: Typed.TypedTerm Syntax.ImportFrom -> Typed.TypedTerm Syntax.ImportStatement
 importStatementFrom x =
@@ -4443,6 +4719,10 @@ importStatementFrom x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "from"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.python.syntax.ImportStatement
+importStatementImportStatement :: Typed.TypedName Syntax.ImportStatement
+importStatementImportStatement = Typed.TypedName (Core.Name "hydra.python.syntax.ImportStatement")
 
 -- | DSL injection for the name variant of hydra.python.syntax.ImportStatement
 importStatementName :: Typed.TypedTerm Syntax.ImportName -> Typed.TypedTerm Syntax.ImportStatement
@@ -4459,6 +4739,14 @@ interactive x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.Interactive"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.Interactive
+interactiveInteractive :: Typed.TypedName Syntax.Interactive
+interactiveInteractive = Typed.TypedName (Core.Name "hydra.python.syntax.Interactive")
+
+-- | DSL name token for hydra.python.syntax.Inversion
+inversionInversion :: Typed.TypedName Syntax.Inversion
+inversionInversion = Typed.TypedName (Core.Name "hydra.python.syntax.Inversion")
 
 -- | DSL injection for the not variant of hydra.python.syntax.Inversion
 inversionNot :: Typed.TypedTerm Syntax.Inversion -> Typed.TypedTerm Syntax.Inversion
@@ -4485,6 +4773,10 @@ itemsPattern x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.ItemsPattern"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.ItemsPattern
+itemsPatternItemsPattern :: Typed.TypedName Syntax.ItemsPattern
+itemsPatternItemsPattern = Typed.TypedName (Core.Name "hydra.python.syntax.ItemsPattern")
+
 -- | DSL constructor for hydra.python.syntax.KeyValuePattern
 keyValuePattern :: Typed.TypedTerm Syntax.LiteralExpressionOrAttribute -> Typed.TypedTerm Syntax.Pattern -> Typed.TypedTerm Syntax.KeyValuePattern
 keyValuePattern key value =
@@ -4506,6 +4798,10 @@ keyValuePatternKey x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.KeyValuePattern"),
         Core.projectionFieldName = (Core.Name "key")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.KeyValuePattern
+keyValuePatternKeyValuePattern :: Typed.TypedName Syntax.KeyValuePattern
+keyValuePatternKeyValuePattern = Typed.TypedName (Core.Name "hydra.python.syntax.KeyValuePattern")
 
 -- | DSL accessor for the value field of hydra.python.syntax.KeyValuePattern
 keyValuePatternValue :: Typed.TypedTerm Syntax.KeyValuePattern -> Typed.TypedTerm Syntax.Pattern
@@ -4562,6 +4858,10 @@ keywordPattern name pattern =
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
           Core.fieldTerm = (Typed.unTypedTerm pattern)}]}))
+
+-- | DSL name token for hydra.python.syntax.KeywordPattern
+keywordPatternKeywordPattern :: Typed.TypedName Syntax.KeywordPattern
+keywordPatternKeywordPattern = Typed.TypedName (Core.Name "hydra.python.syntax.KeywordPattern")
 
 -- | DSL accessor for the name field of hydra.python.syntax.KeywordPattern
 keywordPatternName :: Typed.TypedTerm Syntax.KeywordPattern -> Typed.TypedTerm Syntax.Name
@@ -4622,12 +4922,20 @@ keywordPatterns x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.KeywordPatterns"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.KeywordPatterns
+keywordPatternsKeywordPatterns :: Typed.TypedName Syntax.KeywordPatterns
+keywordPatternsKeywordPatterns = Typed.TypedName (Core.Name "hydra.python.syntax.KeywordPatterns")
+
 -- | DSL constructor for the hydra.python.syntax.Keywords wrapper
 keywords :: Typed.TypedTerm Syntax.ParamNoDefault -> Typed.TypedTerm Syntax.Keywords
 keywords x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.Keywords"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.Keywords
+keywordsKeywords :: Typed.TypedName Syntax.Keywords
+keywordsKeywords = Typed.TypedName (Core.Name "hydra.python.syntax.Keywords")
 
 -- | DSL constructor for hydra.python.syntax.Kvpair
 kvpair :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.Kvpair
@@ -4650,6 +4958,10 @@ kvpairKey x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.Kvpair"),
         Core.projectionFieldName = (Core.Name "key")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.Kvpair
+kvpairKvpair :: Typed.TypedName Syntax.Kvpair
+kvpairKvpair = Typed.TypedName (Core.Name "hydra.python.syntax.Kvpair")
 
 -- | DSL accessor for the value field of hydra.python.syntax.Kvpair
 kvpairValue :: Typed.TypedTerm Syntax.Kvpair -> Typed.TypedTerm Syntax.Expression
@@ -4707,6 +5019,10 @@ kwarg name value =
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Typed.unTypedTerm value)}]}))
 
+-- | DSL name token for hydra.python.syntax.Kwarg
+kwargKwarg :: Typed.TypedName Syntax.Kwarg
+kwargKwarg = Typed.TypedName (Core.Name "hydra.python.syntax.Kwarg")
+
 -- | DSL accessor for the name field of hydra.python.syntax.Kwarg
 kwargName :: Typed.TypedTerm Syntax.Kwarg -> Typed.TypedTerm Syntax.Name
 kwargName x =
@@ -4734,6 +5050,10 @@ kwargOrDoubleStarredKwarg x =
         Core.fieldName = (Core.Name "kwarg"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.python.syntax.KwargOrDoubleStarred
+kwargOrDoubleStarredKwargOrDoubleStarred :: Typed.TypedName Syntax.KwargOrDoubleStarred
+kwargOrDoubleStarredKwargOrDoubleStarred = Typed.TypedName (Core.Name "hydra.python.syntax.KwargOrDoubleStarred")
+
 -- | DSL injection for the kwarg variant of hydra.python.syntax.KwargOrStarred
 kwargOrStarredKwarg :: Typed.TypedTerm Syntax.Kwarg -> Typed.TypedTerm Syntax.KwargOrStarred
 kwargOrStarredKwarg x =
@@ -4742,6 +5062,10 @@ kwargOrStarredKwarg x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "kwarg"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.python.syntax.KwargOrStarred
+kwargOrStarredKwargOrStarred :: Typed.TypedName Syntax.KwargOrStarred
+kwargOrStarredKwargOrStarred = Typed.TypedName (Core.Name "hydra.python.syntax.KwargOrStarred")
 
 -- | DSL injection for the starred variant of hydra.python.syntax.KwargOrStarred
 kwargOrStarredStarred :: Typed.TypedTerm Syntax.StarredExpression -> Typed.TypedTerm Syntax.KwargOrStarred
@@ -4824,6 +5148,14 @@ lambdaKwds x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.LambdaKwds"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.LambdaKwds
+lambdaKwdsLambdaKwds :: Typed.TypedName Syntax.LambdaKwds
+lambdaKwdsLambdaKwds = Typed.TypedName (Core.Name "hydra.python.syntax.LambdaKwds")
+
+-- | DSL name token for hydra.python.syntax.Lambda
+lambdaLambda :: Typed.TypedName Syntax.Lambda
+lambdaLambda = Typed.TypedName (Core.Name "hydra.python.syntax.Lambda")
+
 -- | DSL constructor for hydra.python.syntax.LambdaParamMaybeDefault
 lambdaParamMaybeDefault :: Typed.TypedTerm Syntax.Name -> Typed.TypedTerm (Maybe Syntax.Default) -> Typed.TypedTerm Syntax.LambdaParamMaybeDefault
 lambdaParamMaybeDefault param default_ =
@@ -4845,6 +5177,10 @@ lambdaParamMaybeDefaultDefault x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.LambdaParamMaybeDefault"),
         Core.projectionFieldName = (Core.Name "default")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.LambdaParamMaybeDefault
+lambdaParamMaybeDefaultLambdaParamMaybeDefault :: Typed.TypedName Syntax.LambdaParamMaybeDefault
+lambdaParamMaybeDefaultLambdaParamMaybeDefault = Typed.TypedName (Core.Name "hydra.python.syntax.LambdaParamMaybeDefault")
 
 -- | DSL accessor for the param field of hydra.python.syntax.LambdaParamMaybeDefault
 lambdaParamMaybeDefaultParam :: Typed.TypedTerm Syntax.LambdaParamMaybeDefault -> Typed.TypedTerm Syntax.Name
@@ -4896,6 +5232,10 @@ lambdaParamNoDefault x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.LambdaParamNoDefault"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.LambdaParamNoDefault
+lambdaParamNoDefaultLambdaParamNoDefault :: Typed.TypedName Syntax.LambdaParamNoDefault
+lambdaParamNoDefaultLambdaParamNoDefault = Typed.TypedName (Core.Name "hydra.python.syntax.LambdaParamNoDefault")
+
 -- | DSL constructor for hydra.python.syntax.LambdaParamWithDefault
 lambdaParamWithDefault :: Typed.TypedTerm Syntax.Name -> Typed.TypedTerm (Maybe Syntax.Default) -> Typed.TypedTerm Syntax.LambdaParamWithDefault
 lambdaParamWithDefault param default_ =
@@ -4917,6 +5257,10 @@ lambdaParamWithDefaultDefault x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.LambdaParamWithDefault"),
         Core.projectionFieldName = (Core.Name "default")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.LambdaParamWithDefault
+lambdaParamWithDefaultLambdaParamWithDefault :: Typed.TypedName Syntax.LambdaParamWithDefault
+lambdaParamWithDefaultLambdaParamWithDefault = Typed.TypedName (Core.Name "hydra.python.syntax.LambdaParamWithDefault")
 
 -- | DSL accessor for the param field of hydra.python.syntax.LambdaParamWithDefault
 lambdaParamWithDefaultParam :: Typed.TypedTerm Syntax.LambdaParamWithDefault -> Typed.TypedTerm Syntax.Name
@@ -4979,6 +5323,10 @@ lambdaParameters slashNoDefault paramNoDefault paramWithDefault starEtc =
         Core.Field {
           Core.fieldName = (Core.Name "starEtc"),
           Core.fieldTerm = (Typed.unTypedTerm starEtc)}]}))
+
+-- | DSL name token for hydra.python.syntax.LambdaParameters
+lambdaParametersLambdaParameters :: Typed.TypedName Syntax.LambdaParameters
+lambdaParametersLambdaParameters = Typed.TypedName (Core.Name "hydra.python.syntax.LambdaParameters")
 
 -- | DSL accessor for the paramNoDefault field of hydra.python.syntax.LambdaParameters
 lambdaParametersParamNoDefault :: Typed.TypedTerm Syntax.LambdaParameters -> Typed.TypedTerm [Syntax.LambdaParamNoDefault]
@@ -5159,6 +5507,10 @@ lambdaSlashNoDefault parameters =
           Core.fieldName = (Core.Name "parameters"),
           Core.fieldTerm = (Typed.unTypedTerm parameters)}]}))
 
+-- | DSL name token for hydra.python.syntax.LambdaSlashNoDefault
+lambdaSlashNoDefaultLambdaSlashNoDefault :: Typed.TypedName Syntax.LambdaSlashNoDefault
+lambdaSlashNoDefaultLambdaSlashNoDefault = Typed.TypedName (Core.Name "hydra.python.syntax.LambdaSlashNoDefault")
+
 -- | DSL accessor for the parameters field of hydra.python.syntax.LambdaSlashNoDefault
 lambdaSlashNoDefaultParameters :: Typed.TypedTerm Syntax.LambdaSlashNoDefault -> Typed.TypedTerm [Syntax.LambdaParamNoDefault]
 lambdaSlashNoDefaultParameters x =
@@ -5190,6 +5542,10 @@ lambdaSlashWithDefault paramNoDefault paramWithDefault =
         Core.Field {
           Core.fieldName = (Core.Name "paramWithDefault"),
           Core.fieldTerm = (Typed.unTypedTerm paramWithDefault)}]}))
+
+-- | DSL name token for hydra.python.syntax.LambdaSlashWithDefault
+lambdaSlashWithDefaultLambdaSlashWithDefault :: Typed.TypedName Syntax.LambdaSlashWithDefault
+lambdaSlashWithDefaultLambdaSlashWithDefault = Typed.TypedName (Core.Name "hydra.python.syntax.LambdaSlashWithDefault")
 
 -- | DSL accessor for the paramNoDefault field of hydra.python.syntax.LambdaSlashWithDefault
 lambdaSlashWithDefaultParamNoDefault :: Typed.TypedTerm Syntax.LambdaSlashWithDefault -> Typed.TypedTerm [Syntax.LambdaParamNoDefault]
@@ -5251,6 +5607,10 @@ lambdaStarEtcKwds x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "kwds"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.python.syntax.LambdaStarEtc
+lambdaStarEtcLambdaStarEtc :: Typed.TypedName Syntax.LambdaStarEtc
+lambdaStarEtcLambdaStarEtc = Typed.TypedName (Core.Name "hydra.python.syntax.LambdaStarEtc")
 
 -- | DSL injection for the paramMaybeDefault variant of hydra.python.syntax.LambdaStarEtc
 lambdaStarEtcParamMaybeDefault :: Typed.TypedTerm [Syntax.LambdaParamMaybeDefault] -> Typed.TypedTerm Syntax.LambdaStarEtc
@@ -5320,6 +5680,10 @@ list x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.List"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.List
+listList :: Typed.TypedName Syntax.List
+listList = Typed.TypedName (Core.Name "hydra.python.syntax.List")
+
 -- | DSL constructor for hydra.python.syntax.Listcomp
 listcomp :: Typed.TypedTerm Syntax.NamedExpression -> Typed.TypedTerm Syntax.ForIfClauses -> Typed.TypedTerm Syntax.Listcomp
 listcomp expression forIfClauses =
@@ -5350,6 +5714,10 @@ listcompForIfClauses x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.Listcomp"),
         Core.projectionFieldName = (Core.Name "forIfClauses")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.Listcomp
+listcompListcomp :: Typed.TypedName Syntax.Listcomp
+listcompListcomp = Typed.TypedName (Core.Name "hydra.python.syntax.Listcomp")
 
 -- | DSL updater for the expression field of hydra.python.syntax.Listcomp
 listcompWithExpression :: Typed.TypedTerm Syntax.Listcomp -> Typed.TypedTerm Syntax.NamedExpression -> Typed.TypedTerm Syntax.Listcomp
@@ -5403,6 +5771,10 @@ literalExpressionFalse =
         Core.fieldName = (Core.Name "false"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.python.syntax.LiteralExpression
+literalExpressionLiteralExpression :: Typed.TypedName Syntax.LiteralExpression
+literalExpressionLiteralExpression = Typed.TypedName (Core.Name "hydra.python.syntax.LiteralExpression")
+
 -- | DSL injection for the none variant of hydra.python.syntax.LiteralExpression
 literalExpressionNone :: Typed.TypedTerm Syntax.LiteralExpression
 literalExpressionNone =
@@ -5438,6 +5810,11 @@ literalExpressionOrAttributeLiteral x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "literal"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.python.syntax.LiteralExpressionOrAttribute
+literalExpressionOrAttributeLiteralExpressionOrAttribute :: Typed.TypedName Syntax.LiteralExpressionOrAttribute
+literalExpressionOrAttributeLiteralExpressionOrAttribute =
+    Typed.TypedName (Core.Name "hydra.python.syntax.LiteralExpressionOrAttribute")
 
 -- | DSL injection for the string variant of hydra.python.syntax.LiteralExpression
 literalExpressionString :: Typed.TypedTerm Syntax.String_ -> Typed.TypedTerm Syntax.LiteralExpression
@@ -5487,6 +5864,10 @@ mappingPatternItems x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.MappingPattern"),
         Core.projectionFieldName = (Core.Name "items")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.MappingPattern
+mappingPatternMappingPattern :: Typed.TypedName Syntax.MappingPattern
+mappingPatternMappingPattern = Typed.TypedName (Core.Name "hydra.python.syntax.MappingPattern")
 
 -- | DSL updater for the doubleStar field of hydra.python.syntax.MappingPattern
 mappingPatternWithDoubleStar :: Typed.TypedTerm Syntax.MappingPattern -> Typed.TypedTerm (Maybe Syntax.DoubleStarPattern) -> Typed.TypedTerm Syntax.MappingPattern
@@ -5544,6 +5925,10 @@ matchStatementCases x =
         Core.projectionFieldName = (Core.Name "cases")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.MatchStatement
+matchStatementMatchStatement :: Typed.TypedName Syntax.MatchStatement
+matchStatementMatchStatement = Typed.TypedName (Core.Name "hydra.python.syntax.MatchStatement")
+
 -- | DSL accessor for the subject field of hydra.python.syntax.MatchStatement
 matchStatementSubject :: Typed.TypedTerm Syntax.MatchStatement -> Typed.TypedTerm Syntax.SubjectExpression
 matchStatementSubject x =
@@ -5594,6 +5979,14 @@ maybeSequencePattern x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.MaybeSequencePattern"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.MaybeSequencePattern
+maybeSequencePatternMaybeSequencePattern :: Typed.TypedName Syntax.MaybeSequencePattern
+maybeSequencePatternMaybeSequencePattern = Typed.TypedName (Core.Name "hydra.python.syntax.MaybeSequencePattern")
+
+-- | DSL name token for hydra.python.syntax.MaybeStarPattern
+maybeStarPatternMaybeStarPattern :: Typed.TypedName Syntax.MaybeStarPattern
+maybeStarPatternMaybeStarPattern = Typed.TypedName (Core.Name "hydra.python.syntax.MaybeStarPattern")
+
 -- | DSL injection for the pattern variant of hydra.python.syntax.MaybeStarPattern
 maybeStarPatternPattern :: Typed.TypedTerm Syntax.Pattern -> Typed.TypedTerm Syntax.MaybeStarPattern
 maybeStarPatternPattern x =
@@ -5619,6 +6012,10 @@ module_ x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.Module"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.Module
+moduleModule :: Typed.TypedName Syntax.Module
+moduleModule = Typed.TypedName (Core.Name "hydra.python.syntax.Module")
+
 -- | DSL constructor for the hydra.python.syntax.Name wrapper
 name :: Typed.TypedTerm String -> Typed.TypedTerm Syntax.Name
 name x =
@@ -5626,12 +6023,20 @@ name x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.Name"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.Name
+nameName :: Typed.TypedName Syntax.Name
+nameName = Typed.TypedName (Core.Name "hydra.python.syntax.Name")
+
 -- | DSL constructor for the hydra.python.syntax.NameOrAttribute wrapper
 nameOrAttribute :: Typed.TypedTerm [Syntax.Name] -> Typed.TypedTerm Syntax.NameOrAttribute
 nameOrAttribute x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.NameOrAttribute"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.NameOrAttribute
+nameOrAttributeNameOrAttribute :: Typed.TypedName Syntax.NameOrAttribute
+nameOrAttributeNameOrAttribute = Typed.TypedName (Core.Name "hydra.python.syntax.NameOrAttribute")
 
 -- | DSL injection for the assignment variant of hydra.python.syntax.NamedExpression
 namedExpressionAssignment :: Typed.TypedTerm Syntax.AssignmentExpression -> Typed.TypedTerm Syntax.NamedExpression
@@ -5641,6 +6046,10 @@ namedExpressionAssignment x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "assignment"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.python.syntax.NamedExpression
+namedExpressionNamedExpression :: Typed.TypedName Syntax.NamedExpression
+namedExpressionNamedExpression = Typed.TypedName (Core.Name "hydra.python.syntax.NamedExpression")
 
 -- | DSL injection for the simple variant of hydra.python.syntax.NamedExpression
 namedExpressionSimple :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.NamedExpression
@@ -5675,6 +6084,11 @@ noDefaultStarAnnotationStarEtcKeywords x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.NoDefaultStarAnnotationStarEtc"),
         Core.projectionFieldName = (Core.Name "keywords")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.NoDefaultStarAnnotationStarEtc
+noDefaultStarAnnotationStarEtcNoDefaultStarAnnotationStarEtc :: Typed.TypedName Syntax.NoDefaultStarAnnotationStarEtc
+noDefaultStarAnnotationStarEtcNoDefaultStarAnnotationStarEtc =
+    Typed.TypedName (Core.Name "hydra.python.syntax.NoDefaultStarAnnotationStarEtc")
 
 -- | DSL accessor for the paramMaybeDefault field of hydra.python.syntax.NoDefaultStarAnnotationStarEtc
 noDefaultStarAnnotationStarEtcParamMaybeDefault :: Typed.TypedTerm Syntax.NoDefaultStarAnnotationStarEtc -> Typed.TypedTerm [Syntax.ParamMaybeDefault]
@@ -5790,6 +6204,10 @@ noDefaultStarEtcKeywords x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.NoDefaultStarEtc"),
         Core.projectionFieldName = (Core.Name "keywords")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.NoDefaultStarEtc
+noDefaultStarEtcNoDefaultStarEtc :: Typed.TypedName Syntax.NoDefaultStarEtc
+noDefaultStarEtcNoDefaultStarEtc = Typed.TypedName (Core.Name "hydra.python.syntax.NoDefaultStarEtc")
 
 -- | DSL accessor for the paramMaybeDefault field of hydra.python.syntax.NoDefaultStarEtc
 noDefaultStarEtcParamMaybeDefault :: Typed.TypedTerm Syntax.NoDefaultStarEtc -> Typed.TypedTerm [Syntax.ParamMaybeDefault]
@@ -5908,6 +6326,10 @@ numberInteger x =
         Core.fieldName = (Core.Name "integer"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.python.syntax.Number
+numberNumber :: Typed.TypedName Syntax.Number
+numberNumber = Typed.TypedName (Core.Name "hydra.python.syntax.Number")
+
 -- | DSL constructor for hydra.python.syntax.OpenSequencePattern
 openSequencePattern :: Typed.TypedTerm Syntax.MaybeStarPattern -> Typed.TypedTerm (Maybe Syntax.MaybeSequencePattern) -> Typed.TypedTerm Syntax.OpenSequencePattern
 openSequencePattern head tail =
@@ -5929,6 +6351,10 @@ openSequencePatternHead x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.OpenSequencePattern"),
         Core.projectionFieldName = (Core.Name "head")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.OpenSequencePattern
+openSequencePatternOpenSequencePattern :: Typed.TypedName Syntax.OpenSequencePattern
+openSequencePatternOpenSequencePattern = Typed.TypedName (Core.Name "hydra.python.syntax.OpenSequencePattern")
 
 -- | DSL accessor for the tail field of hydra.python.syntax.OpenSequencePattern
 openSequencePatternTail :: Typed.TypedTerm Syntax.OpenSequencePattern -> Typed.TypedTerm (Maybe Syntax.MaybeSequencePattern)
@@ -5979,6 +6405,10 @@ orPattern x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.OrPattern"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.OrPattern
+orPatternOrPattern :: Typed.TypedName Syntax.OrPattern
+orPatternOrPattern = Typed.TypedName (Core.Name "hydra.python.syntax.OrPattern")
 
 -- | DSL constructor for hydra.python.syntax.Param
 param :: Typed.TypedTerm Syntax.Name -> Typed.TypedTerm (Maybe Syntax.Annotation) -> Typed.TypedTerm Syntax.Param
@@ -6035,6 +6465,10 @@ paramMaybeDefaultParam x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.ParamMaybeDefault"),
         Core.projectionFieldName = (Core.Name "param")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.ParamMaybeDefault
+paramMaybeDefaultParamMaybeDefault :: Typed.TypedName Syntax.ParamMaybeDefault
+paramMaybeDefaultParamMaybeDefault = Typed.TypedName (Core.Name "hydra.python.syntax.ParamMaybeDefault")
 
 -- | DSL accessor for the typeComment field of hydra.python.syntax.ParamMaybeDefault
 paramMaybeDefaultTypeComment :: Typed.TypedTerm Syntax.ParamMaybeDefault -> Typed.TypedTerm (Maybe Syntax.TypeComment)
@@ -6148,6 +6582,10 @@ paramNoDefaultParam x =
         Core.projectionFieldName = (Core.Name "param")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.ParamNoDefault
+paramNoDefaultParamNoDefault :: Typed.TypedName Syntax.ParamNoDefault
+paramNoDefaultParamNoDefault = Typed.TypedName (Core.Name "hydra.python.syntax.ParamNoDefault")
+
 -- | DSL constructor for hydra.python.syntax.ParamNoDefaultParameters
 paramNoDefaultParameters :: Typed.TypedTerm [Syntax.ParamNoDefault] -> Typed.TypedTerm [Syntax.ParamWithDefault] -> Typed.TypedTerm (Maybe Syntax.StarEtc) -> Typed.TypedTerm Syntax.ParamNoDefaultParameters
 paramNoDefaultParameters paramNoDefault paramWithDefault starEtc =
@@ -6172,6 +6610,11 @@ paramNoDefaultParametersParamNoDefault x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.ParamNoDefaultParameters"),
         Core.projectionFieldName = (Core.Name "paramNoDefault")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.ParamNoDefaultParameters
+paramNoDefaultParametersParamNoDefaultParameters :: Typed.TypedName Syntax.ParamNoDefaultParameters
+paramNoDefaultParametersParamNoDefaultParameters =
+    Typed.TypedName (Core.Name "hydra.python.syntax.ParamNoDefaultParameters")
 
 -- | DSL accessor for the paramWithDefault field of hydra.python.syntax.ParamNoDefaultParameters
 paramNoDefaultParametersParamWithDefault :: Typed.TypedTerm Syntax.ParamNoDefaultParameters -> Typed.TypedTerm [Syntax.ParamWithDefault]
@@ -6276,6 +6719,11 @@ paramNoDefaultStarAnnotation paramStarAnnotation typeComment =
           Core.fieldName = (Core.Name "typeComment"),
           Core.fieldTerm = (Typed.unTypedTerm typeComment)}]}))
 
+-- | DSL name token for hydra.python.syntax.ParamNoDefaultStarAnnotation
+paramNoDefaultStarAnnotationParamNoDefaultStarAnnotation :: Typed.TypedName Syntax.ParamNoDefaultStarAnnotation
+paramNoDefaultStarAnnotationParamNoDefaultStarAnnotation =
+    Typed.TypedName (Core.Name "hydra.python.syntax.ParamNoDefaultStarAnnotation")
+
 -- | DSL accessor for the paramStarAnnotation field of hydra.python.syntax.ParamNoDefaultStarAnnotation
 paramNoDefaultStarAnnotationParamStarAnnotation :: Typed.TypedTerm Syntax.ParamNoDefaultStarAnnotation -> Typed.TypedTerm Syntax.ParamStarAnnotation
 paramNoDefaultStarAnnotationParamStarAnnotation x =
@@ -6371,6 +6819,10 @@ paramNoDefaultWithTypeComment original newVal =
           Core.fieldName = (Core.Name "typeComment"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 
+-- | DSL name token for hydra.python.syntax.Param
+paramParam :: Typed.TypedName Syntax.Param
+paramParam = Typed.TypedName (Core.Name "hydra.python.syntax.Param")
+
 -- | DSL constructor for hydra.python.syntax.ParamStarAnnotation
 paramStarAnnotation :: Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.StarAnnotation -> Typed.TypedTerm Syntax.ParamStarAnnotation
 paramStarAnnotation name annotation =
@@ -6401,6 +6853,10 @@ paramStarAnnotationName x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.ParamStarAnnotation"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.ParamStarAnnotation
+paramStarAnnotationParamStarAnnotation :: Typed.TypedName Syntax.ParamStarAnnotation
+paramStarAnnotationParamStarAnnotation = Typed.TypedName (Core.Name "hydra.python.syntax.ParamStarAnnotation")
 
 -- | DSL updater for the annotation field of hydra.python.syntax.ParamStarAnnotation
 paramStarAnnotationWithAnnotation :: Typed.TypedTerm Syntax.ParamStarAnnotation -> Typed.TypedTerm Syntax.StarAnnotation -> Typed.TypedTerm Syntax.ParamStarAnnotation
@@ -6487,6 +6943,10 @@ paramWithDefaultParam x =
         Core.projectionFieldName = (Core.Name "param")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.ParamWithDefault
+paramWithDefaultParamWithDefault :: Typed.TypedName Syntax.ParamWithDefault
+paramWithDefaultParamWithDefault = Typed.TypedName (Core.Name "hydra.python.syntax.ParamWithDefault")
+
 -- | DSL constructor for hydra.python.syntax.ParamWithDefaultParameters
 paramWithDefaultParameters :: Typed.TypedTerm [Syntax.ParamWithDefault] -> Typed.TypedTerm (Maybe Syntax.StarEtc) -> Typed.TypedTerm Syntax.ParamWithDefaultParameters
 paramWithDefaultParameters paramWithDefault starEtc =
@@ -6508,6 +6968,11 @@ paramWithDefaultParametersParamWithDefault x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.ParamWithDefaultParameters"),
         Core.projectionFieldName = (Core.Name "paramWithDefault")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.ParamWithDefaultParameters
+paramWithDefaultParametersParamWithDefaultParameters :: Typed.TypedName Syntax.ParamWithDefaultParameters
+paramWithDefaultParametersParamWithDefaultParameters =
+    Typed.TypedName (Core.Name "hydra.python.syntax.ParamWithDefaultParameters")
 
 -- | DSL accessor for the starEtc field of hydra.python.syntax.ParamWithDefaultParameters
 paramWithDefaultParametersStarEtc :: Typed.TypedTerm Syntax.ParamWithDefaultParameters -> Typed.TypedTerm (Maybe Syntax.StarEtc)
@@ -6668,6 +7133,10 @@ parametersParamWithDefault x =
         Core.fieldName = (Core.Name "paramWithDefault"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.python.syntax.Parameters
+parametersParameters :: Typed.TypedName Syntax.Parameters
+parametersParameters = Typed.TypedName (Core.Name "hydra.python.syntax.Parameters")
+
 -- | DSL injection for the slashNoDefault variant of hydra.python.syntax.Parameters
 parametersSlashNoDefault :: Typed.TypedTerm Syntax.SlashNoDefaultParameters -> Typed.TypedTerm Syntax.Parameters
 parametersSlashNoDefault x =
@@ -6711,6 +7180,10 @@ patternCaptureTarget x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.PatternCaptureTarget"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.PatternCaptureTarget
+patternCaptureTargetPatternCaptureTarget :: Typed.TypedName Syntax.PatternCaptureTarget
+patternCaptureTargetPatternCaptureTarget = Typed.TypedName (Core.Name "hydra.python.syntax.PatternCaptureTarget")
+
 -- | DSL injection for the or variant of hydra.python.syntax.Pattern
 patternOr :: Typed.TypedTerm Syntax.OrPattern -> Typed.TypedTerm Syntax.Pattern
 patternOr x =
@@ -6720,6 +7193,10 @@ patternOr x =
         Core.fieldName = (Core.Name "or"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.python.syntax.Pattern
+patternPattern :: Typed.TypedName Syntax.Pattern
+patternPattern = Typed.TypedName (Core.Name "hydra.python.syntax.Pattern")
+
 -- | DSL injection for the pattern variant of hydra.python.syntax.Patterns
 patternsPattern :: Typed.TypedTerm Syntax.Pattern -> Typed.TypedTerm Syntax.Patterns
 patternsPattern x =
@@ -6728,6 +7205,10 @@ patternsPattern x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "pattern"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.python.syntax.Patterns
+patternsPatterns :: Typed.TypedName Syntax.Patterns
+patternsPatterns = Typed.TypedName (Core.Name "hydra.python.syntax.Patterns")
 
 -- | DSL injection for the sequence variant of hydra.python.syntax.Patterns
 patternsSequence :: Typed.TypedTerm Syntax.OpenSequencePattern -> Typed.TypedTerm Syntax.Patterns
@@ -6756,6 +7237,10 @@ plusOrMinusPlus =
         Core.fieldName = (Core.Name "plus"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.python.syntax.PlusOrMinus
+plusOrMinusPlusOrMinus :: Typed.TypedName Syntax.PlusOrMinus
+plusOrMinusPlusOrMinus = Typed.TypedName (Core.Name "hydra.python.syntax.PlusOrMinus")
+
 -- | DSL injection for the assignment variant of hydra.python.syntax.PosArg
 posArgAssignment :: Typed.TypedTerm Syntax.AssignmentExpression -> Typed.TypedTerm Syntax.PosArg
 posArgAssignment x =
@@ -6774,6 +7259,10 @@ posArgExpression x =
         Core.fieldName = (Core.Name "expression"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.python.syntax.PosArg
+posArgPosArg :: Typed.TypedName Syntax.PosArg
+posArgPosArg = Typed.TypedName (Core.Name "hydra.python.syntax.PosArg")
+
 -- | DSL injection for the starred variant of hydra.python.syntax.PosArg
 posArgStarred :: Typed.TypedTerm Syntax.StarredExpression -> Typed.TypedTerm Syntax.PosArg
 posArgStarred x =
@@ -6789,6 +7278,10 @@ positionalPatterns x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.PositionalPatterns"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.PositionalPatterns
+positionalPatternsPositionalPatterns :: Typed.TypedName Syntax.PositionalPatterns
+positionalPatternsPositionalPatterns = Typed.TypedName (Core.Name "hydra.python.syntax.PositionalPatterns")
 
 -- | DSL constructor for hydra.python.syntax.Power
 power :: Typed.TypedTerm Syntax.AwaitPrimary -> Typed.TypedTerm (Maybe Syntax.Factor) -> Typed.TypedTerm Syntax.Power
@@ -6811,6 +7304,10 @@ powerLhs x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.Power"),
         Core.projectionFieldName = (Core.Name "lhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.Power
+powerPower :: Typed.TypedName Syntax.Power
+powerPower = Typed.TypedName (Core.Name "hydra.python.syntax.Power")
 
 -- | DSL accessor for the rhs field of hydra.python.syntax.Power
 powerRhs :: Typed.TypedTerm Syntax.Power -> Typed.TypedTerm (Maybe Syntax.Factor)
@@ -6864,6 +7361,10 @@ primaryCompound x =
         Core.fieldName = (Core.Name "compound"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.python.syntax.Primary
+primaryPrimary :: Typed.TypedName Syntax.Primary
+primaryPrimary = Typed.TypedName (Core.Name "hydra.python.syntax.Primary")
+
 -- | DSL injection for the call variant of hydra.python.syntax.PrimaryRhs
 primaryRhsCall :: Typed.TypedTerm Syntax.Args -> Typed.TypedTerm Syntax.PrimaryRhs
 primaryRhsCall x =
@@ -6881,6 +7382,10 @@ primaryRhsGenexp x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "genexp"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.python.syntax.PrimaryRhs
+primaryRhsPrimaryRhs :: Typed.TypedName Syntax.PrimaryRhs
+primaryRhsPrimaryRhs = Typed.TypedName (Core.Name "hydra.python.syntax.PrimaryRhs")
 
 -- | DSL injection for the project variant of hydra.python.syntax.PrimaryRhs
 primaryRhsProject :: Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.PrimaryRhs
@@ -6930,6 +7435,10 @@ primaryWithRhsPrimary x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.PrimaryWithRhs"),
         Core.projectionFieldName = (Core.Name "primary")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.PrimaryWithRhs
+primaryWithRhsPrimaryWithRhs :: Typed.TypedName Syntax.PrimaryWithRhs
+primaryWithRhsPrimaryWithRhs = Typed.TypedName (Core.Name "hydra.python.syntax.PrimaryWithRhs")
 
 -- | DSL accessor for the rhs field of hydra.python.syntax.PrimaryWithRhs
 primaryWithRhsRhs :: Typed.TypedTerm Syntax.PrimaryWithRhs -> Typed.TypedTerm Syntax.PrimaryRhs
@@ -6982,6 +7491,10 @@ quoteStyleDouble =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "double"),
         Core.fieldTerm = Core.TermUnit}}))
+
+-- | DSL name token for hydra.python.syntax.QuoteStyle
+quoteStyleQuoteStyle :: Typed.TypedName Syntax.QuoteStyle
+quoteStyleQuoteStyle = Typed.TypedName (Core.Name "hydra.python.syntax.QuoteStyle")
 
 -- | DSL injection for the single variant of hydra.python.syntax.QuoteStyle
 quoteStyleSingle :: Typed.TypedTerm Syntax.QuoteStyle
@@ -7041,6 +7554,10 @@ raiseExpressionFrom x =
         Core.projectionFieldName = (Core.Name "from")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.RaiseExpression
+raiseExpressionRaiseExpression :: Typed.TypedName Syntax.RaiseExpression
+raiseExpressionRaiseExpression = Typed.TypedName (Core.Name "hydra.python.syntax.RaiseExpression")
+
 -- | DSL updater for the expression field of hydra.python.syntax.RaiseExpression
 raiseExpressionWithExpression :: Typed.TypedTerm Syntax.RaiseExpression -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.RaiseExpression
 raiseExpressionWithExpression original newVal =
@@ -7082,6 +7599,10 @@ raiseStatement x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.RaiseStatement"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.RaiseStatement
+raiseStatementRaiseStatement :: Typed.TypedName Syntax.RaiseStatement
+raiseStatementRaiseStatement = Typed.TypedName (Core.Name "hydra.python.syntax.RaiseStatement")
+
 -- | DSL injection for the float variant of hydra.python.syntax.RealNumber
 realNumberFloat :: Typed.TypedTerm Double -> Typed.TypedTerm Syntax.RealNumber
 realNumberFloat x =
@@ -7099,6 +7620,10 @@ realNumberInteger x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "integer"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.python.syntax.RealNumber
+realNumberRealNumber :: Typed.TypedName Syntax.RealNumber
+realNumberRealNumber = Typed.TypedName (Core.Name "hydra.python.syntax.RealNumber")
 
 -- | DSL injection for the dot variant of hydra.python.syntax.RelativeImportPrefix
 relativeImportPrefixDot :: Typed.TypedTerm Syntax.RelativeImportPrefix
@@ -7118,12 +7643,20 @@ relativeImportPrefixEllipsis =
         Core.fieldName = (Core.Name "ellipsis"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.python.syntax.RelativeImportPrefix
+relativeImportPrefixRelativeImportPrefix :: Typed.TypedName Syntax.RelativeImportPrefix
+relativeImportPrefixRelativeImportPrefix = Typed.TypedName (Core.Name "hydra.python.syntax.RelativeImportPrefix")
+
 -- | DSL constructor for the hydra.python.syntax.ReturnStatement wrapper
 returnStatement :: Typed.TypedTerm [Syntax.StarExpression] -> Typed.TypedTerm Syntax.ReturnStatement
 returnStatement x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.ReturnStatement"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.ReturnStatement
+returnStatementReturnStatement :: Typed.TypedName Syntax.ReturnStatement
+returnStatementReturnStatement = Typed.TypedName (Core.Name "hydra.python.syntax.ReturnStatement")
 
 -- | DSL injection for the list variant of hydra.python.syntax.SequencePattern
 sequencePatternList :: Typed.TypedTerm (Maybe Syntax.MaybeSequencePattern) -> Typed.TypedTerm Syntax.SequencePattern
@@ -7133,6 +7666,10 @@ sequencePatternList x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.python.syntax.SequencePattern
+sequencePatternSequencePattern :: Typed.TypedName Syntax.SequencePattern
+sequencePatternSequencePattern = Typed.TypedName (Core.Name "hydra.python.syntax.SequencePattern")
 
 -- | DSL injection for the tuple variant of hydra.python.syntax.SequencePattern
 sequencePatternTuple :: Typed.TypedTerm (Maybe Syntax.OpenSequencePattern) -> Typed.TypedTerm Syntax.SequencePattern
@@ -7149,6 +7686,10 @@ set x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.Set"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.Set
+setSet :: Typed.TypedName Syntax.Set
+setSet = Typed.TypedName (Core.Name "hydra.python.syntax.Set")
 
 -- | DSL constructor for hydra.python.syntax.Setcomp
 setcomp :: Typed.TypedTerm Syntax.NamedExpression -> Typed.TypedTerm Syntax.ForIfClauses -> Typed.TypedTerm Syntax.Setcomp
@@ -7180,6 +7721,10 @@ setcompForIfClauses x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.Setcomp"),
         Core.projectionFieldName = (Core.Name "forIfClauses")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.Setcomp
+setcompSetcomp :: Typed.TypedName Syntax.Setcomp
+setcompSetcomp = Typed.TypedName (Core.Name "hydra.python.syntax.Setcomp")
 
 -- | DSL updater for the expression field of hydra.python.syntax.Setcomp
 setcompWithExpression :: Typed.TypedTerm Syntax.Setcomp -> Typed.TypedTerm Syntax.NamedExpression -> Typed.TypedTerm Syntax.Setcomp
@@ -7246,6 +7791,10 @@ shiftExpressionRhs x =
         Core.projectionFieldName = (Core.Name "rhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.ShiftExpression
+shiftExpressionShiftExpression :: Typed.TypedName Syntax.ShiftExpression
+shiftExpressionShiftExpression = Typed.TypedName (Core.Name "hydra.python.syntax.ShiftExpression")
+
 -- | DSL updater for the lhs field of hydra.python.syntax.ShiftExpression
 shiftExpressionWithLhs :: Typed.TypedTerm Syntax.ShiftExpression -> Typed.TypedTerm (Maybe Syntax.ShiftLhs) -> Typed.TypedTerm Syntax.ShiftExpression
 shiftExpressionWithLhs original newVal =
@@ -7311,6 +7860,10 @@ shiftLhsOperator x =
         Core.projectionFieldName = (Core.Name "operator")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.ShiftLhs
+shiftLhsShiftLhs :: Typed.TypedName Syntax.ShiftLhs
+shiftLhsShiftLhs = Typed.TypedName (Core.Name "hydra.python.syntax.ShiftLhs")
+
 -- | DSL updater for the operand field of hydra.python.syntax.ShiftLhs
 shiftLhsWithOperand :: Typed.TypedTerm Syntax.ShiftLhs -> Typed.TypedTerm Syntax.ShiftExpression -> Typed.TypedTerm Syntax.ShiftLhs
 shiftLhsWithOperand original newVal =
@@ -7363,6 +7916,10 @@ shiftOpRight =
         Core.fieldName = (Core.Name "right"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.python.syntax.ShiftOp
+shiftOpShiftOp :: Typed.TypedName Syntax.ShiftOp
+shiftOpShiftOp = Typed.TypedName (Core.Name "hydra.python.syntax.ShiftOp")
+
 -- | DSL injection for the number variant of hydra.python.syntax.SignedNumber
 signedNumberNumber :: Typed.TypedTerm Syntax.Number -> Typed.TypedTerm Syntax.SignedNumber
 signedNumberNumber x =
@@ -7381,6 +7938,10 @@ signedNumberSign x =
         Core.fieldName = (Core.Name "sign"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.python.syntax.SignedNumber
+signedNumberSignedNumber :: Typed.TypedName Syntax.SignedNumber
+signedNumberSignedNumber = Typed.TypedName (Core.Name "hydra.python.syntax.SignedNumber")
+
 -- | DSL injection for the number variant of hydra.python.syntax.SignedRealNumber
 signedRealNumberNumber :: Typed.TypedTerm Syntax.RealNumber -> Typed.TypedTerm Syntax.SignedRealNumber
 signedRealNumberNumber x =
@@ -7398,6 +7959,10 @@ signedRealNumberSign x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "sign"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.python.syntax.SignedRealNumber
+signedRealNumberSignedRealNumber :: Typed.TypedName Syntax.SignedRealNumber
+signedRealNumberSignedRealNumber = Typed.TypedName (Core.Name "hydra.python.syntax.SignedRealNumber")
 
 -- | DSL injection for the assert variant of hydra.python.syntax.SimpleStatement
 simpleStatementAssert :: Typed.TypedTerm Syntax.AssertStatement -> Typed.TypedTerm Syntax.SimpleStatement
@@ -7498,6 +8063,10 @@ simpleStatementReturn x =
         Core.fieldName = (Core.Name "return"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.python.syntax.SimpleStatement
+simpleStatementSimpleStatement :: Typed.TypedName Syntax.SimpleStatement
+simpleStatementSimpleStatement = Typed.TypedName (Core.Name "hydra.python.syntax.SimpleStatement")
+
 -- | DSL injection for the starExpressions variant of hydra.python.syntax.SimpleStatement
 simpleStatementStarExpressions :: Typed.TypedTerm [Syntax.StarExpression] -> Typed.TypedTerm Syntax.SimpleStatement
 simpleStatementStarExpressions x =
@@ -7567,6 +8136,10 @@ simpleTypeParameterName x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.SimpleTypeParameter"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.SimpleTypeParameter
+simpleTypeParameterSimpleTypeParameter :: Typed.TypedName Syntax.SimpleTypeParameter
+simpleTypeParameterSimpleTypeParameter = Typed.TypedName (Core.Name "hydra.python.syntax.SimpleTypeParameter")
 
 -- | DSL updater for the bound field of hydra.python.syntax.SimpleTypeParameter
 simpleTypeParameterWithBound :: Typed.TypedTerm Syntax.SimpleTypeParameter -> Typed.TypedTerm (Maybe Syntax.Expression) -> Typed.TypedTerm Syntax.SimpleTypeParameter
@@ -7658,6 +8231,11 @@ singleSubscriptAttributeTargetPrimaryAndSlices x =
         Core.fieldName = (Core.Name "primaryAndSlices"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.python.syntax.SingleSubscriptAttributeTarget
+singleSubscriptAttributeTargetSingleSubscriptAttributeTarget :: Typed.TypedName Syntax.SingleSubscriptAttributeTarget
+singleSubscriptAttributeTargetSingleSubscriptAttributeTarget =
+    Typed.TypedName (Core.Name "hydra.python.syntax.SingleSubscriptAttributeTarget")
+
 -- | DSL injection for the name variant of hydra.python.syntax.SingleTarget
 singleTargetName :: Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.SingleTarget
 singleTargetName x =
@@ -7675,6 +8253,10 @@ singleTargetParens x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "parens"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.python.syntax.SingleTarget
+singleTargetSingleTarget :: Typed.TypedName Syntax.SingleTarget
+singleTargetSingleTarget = Typed.TypedName (Core.Name "hydra.python.syntax.SingleTarget")
 
 -- | DSL injection for the subscriptAttributeTarget variant of hydra.python.syntax.SingleTarget
 singleTargetSubscriptAttributeTarget :: Typed.TypedTerm Syntax.SingleSubscriptAttributeTarget -> Typed.TypedTerm Syntax.SingleTarget
@@ -7737,6 +8319,11 @@ slashNoDefaultParametersSlash x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.SlashNoDefaultParameters"),
         Core.projectionFieldName = (Core.Name "slash")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.SlashNoDefaultParameters
+slashNoDefaultParametersSlashNoDefaultParameters :: Typed.TypedName Syntax.SlashNoDefaultParameters
+slashNoDefaultParametersSlashNoDefaultParameters =
+    Typed.TypedName (Core.Name "hydra.python.syntax.SlashNoDefaultParameters")
 
 -- | DSL accessor for the starEtc field of hydra.python.syntax.SlashNoDefaultParameters
 slashNoDefaultParametersStarEtc :: Typed.TypedTerm Syntax.SlashNoDefaultParameters -> Typed.TypedTerm (Maybe Syntax.StarEtc)
@@ -7871,6 +8458,10 @@ slashNoDefaultParametersWithStarEtc original newVal =
           Core.fieldName = (Core.Name "starEtc"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 
+-- | DSL name token for hydra.python.syntax.SlashNoDefault
+slashNoDefaultSlashNoDefault :: Typed.TypedName Syntax.SlashNoDefault
+slashNoDefaultSlashNoDefault = Typed.TypedName (Core.Name "hydra.python.syntax.SlashNoDefault")
+
 -- | DSL constructor for hydra.python.syntax.SlashWithDefault
 slashWithDefault :: Typed.TypedTerm [Syntax.ParamNoDefault] -> Typed.TypedTerm [Syntax.ParamWithDefault] -> Typed.TypedTerm Syntax.SlashWithDefault
 slashWithDefault paramNoDefault paramWithDefault =
@@ -7935,6 +8526,11 @@ slashWithDefaultParametersParamWithDefault x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.SlashWithDefaultParameters"),
         Core.projectionFieldName = (Core.Name "paramWithDefault")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.SlashWithDefaultParameters
+slashWithDefaultParametersSlashWithDefaultParameters :: Typed.TypedName Syntax.SlashWithDefaultParameters
+slashWithDefaultParametersSlashWithDefaultParameters =
+    Typed.TypedName (Core.Name "hydra.python.syntax.SlashWithDefaultParameters")
 
 -- | DSL accessor for the starEtc field of hydra.python.syntax.SlashWithDefaultParameters
 slashWithDefaultParametersStarEtc :: Typed.TypedTerm Syntax.SlashWithDefaultParameters -> Typed.TypedTerm (Maybe Syntax.StarEtc)
@@ -8017,6 +8613,10 @@ slashWithDefaultParametersWithStarEtc original newVal =
           Core.fieldName = (Core.Name "starEtc"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
 
+-- | DSL name token for hydra.python.syntax.SlashWithDefault
+slashWithDefaultSlashWithDefault :: Typed.TypedName Syntax.SlashWithDefault
+slashWithDefaultSlashWithDefault = Typed.TypedName (Core.Name "hydra.python.syntax.SlashWithDefault")
+
 -- | DSL updater for the paramNoDefault field of hydra.python.syntax.SlashWithDefault
 slashWithDefaultWithParamNoDefault :: Typed.TypedTerm Syntax.SlashWithDefault -> Typed.TypedTerm [Syntax.ParamNoDefault] -> Typed.TypedTerm Syntax.SlashWithDefault
 slashWithDefaultWithParamNoDefault original newVal =
@@ -8066,6 +8666,10 @@ sliceExpression start stop step =
         Core.Field {
           Core.fieldName = (Core.Name "step"),
           Core.fieldTerm = (Typed.unTypedTerm step)}]}))
+
+-- | DSL name token for hydra.python.syntax.SliceExpression
+sliceExpressionSliceExpression :: Typed.TypedName Syntax.SliceExpression
+sliceExpressionSliceExpression = Typed.TypedName (Core.Name "hydra.python.syntax.SliceExpression")
 
 -- | DSL accessor for the start field of hydra.python.syntax.SliceExpression
 sliceExpressionStart :: Typed.TypedTerm Syntax.SliceExpression -> Typed.TypedTerm (Maybe Syntax.Expression)
@@ -8184,6 +8788,11 @@ sliceOrStarredExpressionSlice x =
         Core.fieldName = (Core.Name "slice"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.python.syntax.SliceOrStarredExpression
+sliceOrStarredExpressionSliceOrStarredExpression :: Typed.TypedName Syntax.SliceOrStarredExpression
+sliceOrStarredExpressionSliceOrStarredExpression =
+    Typed.TypedName (Core.Name "hydra.python.syntax.SliceOrStarredExpression")
+
 -- | DSL injection for the starred variant of hydra.python.syntax.SliceOrStarredExpression
 sliceOrStarredExpressionStarred :: Typed.TypedTerm Syntax.StarredExpression -> Typed.TypedTerm Syntax.SliceOrStarredExpression
 sliceOrStarredExpressionStarred x =
@@ -8192,6 +8801,10 @@ sliceOrStarredExpressionStarred x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "starred"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.python.syntax.Slice
+sliceSlice :: Typed.TypedName Syntax.Slice
+sliceSlice = Typed.TypedName (Core.Name "hydra.python.syntax.Slice")
 
 -- | DSL injection for the slice_ variant of hydra.python.syntax.Slice
 sliceSlice_ :: Typed.TypedTerm Syntax.SliceExpression -> Typed.TypedTerm Syntax.Slice
@@ -8223,6 +8836,10 @@ slicesHead x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.Slices"),
         Core.projectionFieldName = (Core.Name "head")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.Slices
+slicesSlices :: Typed.TypedName Syntax.Slices
+slicesSlices = Typed.TypedName (Core.Name "hydra.python.syntax.Slices")
 
 -- | DSL accessor for the tail field of hydra.python.syntax.Slices
 slicesTail :: Typed.TypedTerm Syntax.Slices -> Typed.TypedTerm [Syntax.SliceOrStarredExpression]
@@ -8274,6 +8891,10 @@ starAnnotation x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.StarAnnotation"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.StarAnnotation
+starAnnotationStarAnnotation :: Typed.TypedName Syntax.StarAnnotation
+starAnnotationStarAnnotation = Typed.TypedName (Core.Name "hydra.python.syntax.StarAnnotation")
+
 -- | DSL injection for the name variant of hydra.python.syntax.StarAtom
 starAtomName :: Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.StarAtom
 starAtomName x =
@@ -8282,6 +8903,10 @@ starAtomName x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "name"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.python.syntax.StarAtom
+starAtomStarAtom :: Typed.TypedName Syntax.StarAtom
+starAtomStarAtom = Typed.TypedName (Core.Name "hydra.python.syntax.StarAtom")
 
 -- | DSL injection for the starTargetsListSeq variant of hydra.python.syntax.StarAtom
 starAtomStarTargetsListSeq :: Typed.TypedTerm (Maybe Syntax.StarTargetsListSeq) -> Typed.TypedTerm Syntax.StarAtom
@@ -8328,6 +8953,10 @@ starEtcStarComma x =
         Core.fieldName = (Core.Name "starComma"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.python.syntax.StarEtc
+starEtcStarEtc :: Typed.TypedName Syntax.StarEtc
+starEtcStarEtc = Typed.TypedName (Core.Name "hydra.python.syntax.StarEtc")
+
 -- | DSL injection for the starNoDefault variant of hydra.python.syntax.StarEtc
 starEtcStarNoDefault :: Typed.TypedTerm Syntax.NoDefaultStarEtc -> Typed.TypedTerm Syntax.StarEtc
 starEtcStarNoDefault x =
@@ -8364,6 +8993,10 @@ starExpressionStar x =
         Core.fieldName = (Core.Name "star"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.python.syntax.StarExpression
+starExpressionStarExpression :: Typed.TypedName Syntax.StarExpression
+starExpressionStarExpression = Typed.TypedName (Core.Name "hydra.python.syntax.StarExpression")
+
 -- | DSL injection for the simple variant of hydra.python.syntax.StarNamedExpression
 starNamedExpressionSimple :: Typed.TypedTerm Syntax.NamedExpression -> Typed.TypedTerm Syntax.StarNamedExpression
 starNamedExpressionSimple x =
@@ -8382,12 +9015,20 @@ starNamedExpressionStar x =
         Core.fieldName = (Core.Name "star"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.python.syntax.StarNamedExpression
+starNamedExpressionStarNamedExpression :: Typed.TypedName Syntax.StarNamedExpression
+starNamedExpressionStarNamedExpression = Typed.TypedName (Core.Name "hydra.python.syntax.StarNamedExpression")
+
 -- | DSL constructor for the hydra.python.syntax.StarNamedExpressions wrapper
 starNamedExpressions :: Typed.TypedTerm [Syntax.StarNamedExpression] -> Typed.TypedTerm Syntax.StarNamedExpressions
 starNamedExpressions x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.StarNamedExpressions"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.StarNamedExpressions
+starNamedExpressionsStarNamedExpressions :: Typed.TypedName Syntax.StarNamedExpressions
+starNamedExpressionsStarNamedExpressions = Typed.TypedName (Core.Name "hydra.python.syntax.StarNamedExpressions")
 
 -- | DSL injection for the capture variant of hydra.python.syntax.StarPattern
 starPatternCapture :: Typed.TypedTerm Syntax.PatternCaptureTarget -> Typed.TypedTerm Syntax.StarPattern
@@ -8398,6 +9039,10 @@ starPatternCapture x =
         Core.fieldName = (Core.Name "capture"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.python.syntax.StarPattern
+starPatternStarPattern :: Typed.TypedName Syntax.StarPattern
+starPatternStarPattern = Typed.TypedName (Core.Name "hydra.python.syntax.StarPattern")
+
 -- | DSL injection for the wildcard variant of hydra.python.syntax.StarPattern
 starPatternWildcard :: Typed.TypedTerm Syntax.StarPattern
 starPatternWildcard =
@@ -8406,6 +9051,10 @@ starPatternWildcard =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "wildcard"),
         Core.fieldTerm = Core.TermUnit}}))
+
+-- | DSL name token for hydra.python.syntax.StarTarget
+starTargetStarTarget :: Typed.TypedName Syntax.StarTarget
+starTargetStarTarget = Typed.TypedName (Core.Name "hydra.python.syntax.StarTarget")
 
 -- | DSL injection for the starred variant of hydra.python.syntax.StarTarget
 starTargetStarred :: Typed.TypedTerm Syntax.StarTarget -> Typed.TypedTerm Syntax.StarTarget
@@ -8432,12 +9081,20 @@ starTargetsListSeq x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.StarTargetsListSeq"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.StarTargetsListSeq
+starTargetsListSeqStarTargetsListSeq :: Typed.TypedName Syntax.StarTargetsListSeq
+starTargetsListSeqStarTargetsListSeq = Typed.TypedName (Core.Name "hydra.python.syntax.StarTargetsListSeq")
+
 -- | DSL constructor for the hydra.python.syntax.StarTargetsTupleSeq wrapper
 starTargetsTupleSeq :: Typed.TypedTerm [Syntax.StarTarget] -> Typed.TypedTerm Syntax.StarTargetsTupleSeq
 starTargetsTupleSeq x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.StarTargetsTupleSeq"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.StarTargetsTupleSeq
+starTargetsTupleSeqStarTargetsTupleSeq :: Typed.TypedName Syntax.StarTargetsTupleSeq
+starTargetsTupleSeqStarTargetsTupleSeq = Typed.TypedName (Core.Name "hydra.python.syntax.StarTargetsTupleSeq")
 
 -- | DSL constructor for hydra.python.syntax.StarTypeParameter
 starTypeParameter :: Typed.TypedTerm Syntax.Name -> Typed.TypedTerm (Maybe Syntax.StarExpression) -> Typed.TypedTerm Syntax.StarTypeParameter
@@ -8469,6 +9126,10 @@ starTypeParameterName x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.StarTypeParameter"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.StarTypeParameter
+starTypeParameterStarTypeParameter :: Typed.TypedName Syntax.StarTypeParameter
+starTypeParameterStarTypeParameter = Typed.TypedName (Core.Name "hydra.python.syntax.StarTypeParameter")
 
 -- | DSL updater for the default field of hydra.python.syntax.StarTypeParameter
 starTypeParameterWithDefault :: Typed.TypedTerm Syntax.StarTypeParameter -> Typed.TypedTerm (Maybe Syntax.StarExpression) -> Typed.TypedTerm Syntax.StarTypeParameter
@@ -8511,6 +9172,10 @@ starredExpression x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.StarredExpression"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.StarredExpression
+starredExpressionStarredExpression :: Typed.TypedName Syntax.StarredExpression
+starredExpressionStarredExpression = Typed.TypedName (Core.Name "hydra.python.syntax.StarredExpression")
+
 -- | DSL injection for the annotated variant of hydra.python.syntax.Statement
 statementAnnotated :: Typed.TypedTerm Syntax.AnnotatedStatement -> Typed.TypedTerm Syntax.Statement
 statementAnnotated x =
@@ -8537,6 +9202,10 @@ statementSimple x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "simple"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.python.syntax.Statement
+statementStatement :: Typed.TypedName Syntax.Statement
+statementStatement = Typed.TypedName (Core.Name "hydra.python.syntax.Statement")
 
 -- | DSL constructor for hydra.python.syntax.String
 string :: Typed.TypedTerm String -> Typed.TypedTerm (Maybe Syntax.StringPrefix) -> Typed.TypedTerm Syntax.QuoteStyle -> Typed.TypedTerm Syntax.String_
@@ -8590,6 +9259,10 @@ stringPrefixRawBytes =
         Core.fieldName = (Core.Name "rawBytes"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.python.syntax.StringPrefix
+stringPrefixStringPrefix :: Typed.TypedName Syntax.StringPrefix
+stringPrefixStringPrefix = Typed.TypedName (Core.Name "hydra.python.syntax.StringPrefix")
+
 -- | DSL injection for the unicode variant of hydra.python.syntax.StringPrefix
 stringPrefixUnicode :: Typed.TypedTerm Syntax.StringPrefix
 stringPrefixUnicode =
@@ -8607,6 +9280,10 @@ stringQuoteStyle x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.String"),
         Core.projectionFieldName = (Core.Name "quoteStyle")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.String
+stringString :: Typed.TypedName Syntax.String_
+stringString = Typed.TypedName (Core.Name "hydra.python.syntax.String")
 
 -- | DSL accessor for the value field of hydra.python.syntax.String
 stringValue :: Typed.TypedTerm Syntax.String_ -> Typed.TypedTerm String
@@ -8698,6 +9375,10 @@ subjectExpressionSimple x =
         Core.fieldName = (Core.Name "simple"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.python.syntax.SubjectExpression
+subjectExpressionSubjectExpression :: Typed.TypedName Syntax.SubjectExpression
+subjectExpressionSubjectExpression = Typed.TypedName (Core.Name "hydra.python.syntax.SubjectExpression")
+
 -- | DSL injection for the tuple variant of hydra.python.syntax.SubjectExpression
 subjectExpressionTuple :: Typed.TypedTerm [Syntax.StarNamedExpression] -> Typed.TypedTerm Syntax.SubjectExpression
 subjectExpressionTuple x =
@@ -8760,6 +9441,10 @@ sumLhsOperator x =
         Core.projectionFieldName = (Core.Name "operator")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.SumLhs
+sumLhsSumLhs :: Typed.TypedName Syntax.SumLhs
+sumLhsSumLhs = Typed.TypedName (Core.Name "hydra.python.syntax.SumLhs")
+
 -- | DSL updater for the operand field of hydra.python.syntax.SumLhs
 sumLhsWithOperand :: Typed.TypedTerm Syntax.SumLhs -> Typed.TypedTerm Syntax.Sum -> Typed.TypedTerm Syntax.SumLhs
 sumLhsWithOperand original newVal =
@@ -8812,6 +9497,10 @@ sumOpSub =
         Core.fieldName = (Core.Name "sub"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.python.syntax.SumOp
+sumOpSumOp :: Typed.TypedName Syntax.SumOp
+sumOpSumOp = Typed.TypedName (Core.Name "hydra.python.syntax.SumOp")
+
 -- | DSL accessor for the rhs field of hydra.python.syntax.Sum
 sumRhs :: Typed.TypedTerm Syntax.Sum -> Typed.TypedTerm Syntax.Term
 sumRhs x =
@@ -8820,6 +9509,10 @@ sumRhs x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.Sum"),
         Core.projectionFieldName = (Core.Name "rhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.Sum
+sumSum :: Typed.TypedName Syntax.Sum
+sumSum = Typed.TypedName (Core.Name "hydra.python.syntax.Sum")
 
 -- | DSL updater for the lhs field of hydra.python.syntax.Sum
 sumWithLhs :: Typed.TypedTerm Syntax.Sum -> Typed.TypedTerm (Maybe Syntax.SumLhs) -> Typed.TypedTerm Syntax.Sum
@@ -8886,6 +9579,10 @@ tPrimaryAndArgumentsPrimary x =
         Core.projectionFieldName = (Core.Name "primary")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.TPrimaryAndArguments
+tPrimaryAndArgumentsTPrimaryAndArguments :: Typed.TypedName Syntax.TPrimaryAndArguments
+tPrimaryAndArgumentsTPrimaryAndArguments = Typed.TypedName (Core.Name "hydra.python.syntax.TPrimaryAndArguments")
+
 -- | DSL updater for the arguments field of hydra.python.syntax.TPrimaryAndArguments
 tPrimaryAndArgumentsWithArguments :: Typed.TypedTerm Syntax.TPrimaryAndArguments -> Typed.TypedTerm (Maybe Syntax.Args) -> Typed.TypedTerm Syntax.TPrimaryAndArguments
 tPrimaryAndArgumentsWithArguments original newVal =
@@ -8950,6 +9647,10 @@ tPrimaryAndGenexpPrimary x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.TPrimaryAndGenexp"),
         Core.projectionFieldName = (Core.Name "primary")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.TPrimaryAndGenexp
+tPrimaryAndGenexpTPrimaryAndGenexp :: Typed.TypedName Syntax.TPrimaryAndGenexp
+tPrimaryAndGenexpTPrimaryAndGenexp = Typed.TypedName (Core.Name "hydra.python.syntax.TPrimaryAndGenexp")
 
 -- | DSL updater for the genexp field of hydra.python.syntax.TPrimaryAndGenexp
 tPrimaryAndGenexpWithGenexp :: Typed.TypedTerm Syntax.TPrimaryAndGenexp -> Typed.TypedTerm Syntax.Genexp -> Typed.TypedTerm Syntax.TPrimaryAndGenexp
@@ -9016,6 +9717,10 @@ tPrimaryAndNamePrimary x =
         Core.projectionFieldName = (Core.Name "primary")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.TPrimaryAndName
+tPrimaryAndNameTPrimaryAndName :: Typed.TypedName Syntax.TPrimaryAndName
+tPrimaryAndNameTPrimaryAndName = Typed.TypedName (Core.Name "hydra.python.syntax.TPrimaryAndName")
+
 -- | DSL updater for the name field of hydra.python.syntax.TPrimaryAndName
 tPrimaryAndNameWithName :: Typed.TypedTerm Syntax.TPrimaryAndName -> Typed.TypedTerm Syntax.Name -> Typed.TypedTerm Syntax.TPrimaryAndName
 tPrimaryAndNameWithName original newVal =
@@ -9080,6 +9785,10 @@ tPrimaryAndSlicesSlices x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.TPrimaryAndSlices"),
         Core.projectionFieldName = (Core.Name "slices")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.TPrimaryAndSlices
+tPrimaryAndSlicesTPrimaryAndSlices :: Typed.TypedName Syntax.TPrimaryAndSlices
+tPrimaryAndSlicesTPrimaryAndSlices = Typed.TypedName (Core.Name "hydra.python.syntax.TPrimaryAndSlices")
 
 -- | DSL updater for the primary field of hydra.python.syntax.TPrimaryAndSlices
 tPrimaryAndSlicesWithPrimary :: Typed.TypedTerm Syntax.TPrimaryAndSlices -> Typed.TypedTerm Syntax.TPrimary -> Typed.TypedTerm Syntax.TPrimaryAndSlices
@@ -9160,6 +9869,10 @@ tPrimaryPrimaryAndSlices x =
         Core.fieldName = (Core.Name "primaryAndSlices"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.python.syntax.TPrimary
+tPrimaryTPrimary :: Typed.TypedName Syntax.TPrimary
+tPrimaryTPrimary = Typed.TypedName (Core.Name "hydra.python.syntax.TPrimary")
+
 -- | DSL injection for the atom variant of hydra.python.syntax.TargetWithStarAtom
 targetWithStarAtomAtom :: Typed.TypedTerm Syntax.StarAtom -> Typed.TypedTerm Syntax.TargetWithStarAtom
 targetWithStarAtomAtom x =
@@ -9186,6 +9899,10 @@ targetWithStarAtomSlices x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "slices"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.python.syntax.TargetWithStarAtom
+targetWithStarAtomTargetWithStarAtom :: Typed.TypedName Syntax.TargetWithStarAtom
+targetWithStarAtomTargetWithStarAtom = Typed.TypedName (Core.Name "hydra.python.syntax.TargetWithStarAtom")
 
 -- | DSL constructor for hydra.python.syntax.Term
 term :: Typed.TypedTerm (Maybe Syntax.TermLhs) -> Typed.TypedTerm Syntax.Factor -> Typed.TypedTerm Syntax.Term
@@ -9239,6 +9956,10 @@ termLhsOperator x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.TermLhs"),
         Core.projectionFieldName = (Core.Name "operator")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.TermLhs
+termLhsTermLhs :: Typed.TypedName Syntax.TermLhs
+termLhsTermLhs = Typed.TypedName (Core.Name "hydra.python.syntax.TermLhs")
 
 -- | DSL updater for the operand field of hydra.python.syntax.TermLhs
 termLhsWithOperand :: Typed.TypedTerm Syntax.TermLhs -> Typed.TypedTerm Syntax.Term -> Typed.TypedTerm Syntax.TermLhs
@@ -9319,6 +10040,10 @@ termOpMul =
         Core.fieldName = (Core.Name "mul"),
         Core.fieldTerm = Core.TermUnit}}))
 
+-- | DSL name token for hydra.python.syntax.TermOp
+termOpTermOp :: Typed.TypedName Syntax.TermOp
+termOpTermOp = Typed.TypedName (Core.Name "hydra.python.syntax.TermOp")
+
 -- | DSL accessor for the rhs field of hydra.python.syntax.Term
 termRhs :: Typed.TypedTerm Syntax.Term -> Typed.TypedTerm Syntax.Factor
 termRhs x =
@@ -9327,6 +10052,10 @@ termRhs x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.Term"),
         Core.projectionFieldName = (Core.Name "rhs")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.Term
+termTerm :: Typed.TypedName Syntax.Term
+termTerm = Typed.TypedName (Core.Name "hydra.python.syntax.Term")
 
 -- | DSL updater for the lhs field of hydra.python.syntax.Term
 termWithLhs :: Typed.TypedTerm Syntax.Term -> Typed.TypedTerm (Maybe Syntax.TermLhs) -> Typed.TypedTerm Syntax.Term
@@ -9416,6 +10145,10 @@ tryExceptStarStatementFinally x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.TryExceptStarStatement"),
         Core.projectionFieldName = (Core.Name "finally")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.TryExceptStarStatement
+tryExceptStarStatementTryExceptStarStatement :: Typed.TypedName Syntax.TryExceptStarStatement
+tryExceptStarStatementTryExceptStarStatement = Typed.TypedName (Core.Name "hydra.python.syntax.TryExceptStarStatement")
 
 -- | DSL updater for the body field of hydra.python.syntax.TryExceptStarStatement
 tryExceptStarStatementWithBody :: Typed.TypedTerm Syntax.TryExceptStarStatement -> Typed.TypedTerm Syntax.Block -> Typed.TypedTerm Syntax.TryExceptStarStatement
@@ -9596,6 +10329,10 @@ tryExceptStatementFinally x =
         Core.projectionFieldName = (Core.Name "finally")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.TryExceptStatement
+tryExceptStatementTryExceptStatement :: Typed.TypedName Syntax.TryExceptStatement
+tryExceptStatementTryExceptStatement = Typed.TypedName (Core.Name "hydra.python.syntax.TryExceptStatement")
+
 -- | DSL updater for the body field of hydra.python.syntax.TryExceptStatement
 tryExceptStatementWithBody :: Typed.TypedTerm Syntax.TryExceptStatement -> Typed.TypedTerm Syntax.Block -> Typed.TypedTerm Syntax.TryExceptStatement
 tryExceptStatementWithBody original newVal =
@@ -9751,6 +10488,10 @@ tryFinallyStatementFinally x =
         Core.projectionFieldName = (Core.Name "finally")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.TryFinallyStatement
+tryFinallyStatementTryFinallyStatement :: Typed.TypedName Syntax.TryFinallyStatement
+tryFinallyStatementTryFinallyStatement = Typed.TypedName (Core.Name "hydra.python.syntax.TryFinallyStatement")
+
 -- | DSL updater for the body field of hydra.python.syntax.TryFinallyStatement
 tryFinallyStatementWithBody :: Typed.TypedTerm Syntax.TryFinallyStatement -> Typed.TypedTerm Syntax.Block -> Typed.TypedTerm Syntax.TryFinallyStatement
 tryFinallyStatementWithBody original newVal =
@@ -9812,12 +10553,20 @@ tryStatementFinally x =
         Core.fieldName = (Core.Name "finally"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.python.syntax.TryStatement
+tryStatementTryStatement :: Typed.TypedName Syntax.TryStatement
+tryStatementTryStatement = Typed.TypedName (Core.Name "hydra.python.syntax.TryStatement")
+
 -- | DSL constructor for the hydra.python.syntax.Tuple wrapper
 tuple :: Typed.TypedTerm [Syntax.StarNamedExpression] -> Typed.TypedTerm Syntax.Tuple
 tuple x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.Tuple"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.Tuple
+tupleTuple :: Typed.TypedName Syntax.Tuple
+tupleTuple = Typed.TypedName (Core.Name "hydra.python.syntax.Tuple")
 
 -- | DSL constructor for hydra.python.syntax.TypeAlias
 typeAlias :: Typed.TypedTerm Syntax.Name -> Typed.TypedTerm [Syntax.TypeParameter] -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.TypeAlias
@@ -9852,6 +10601,10 @@ typeAliasName x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.TypeAlias"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.TypeAlias
+typeAliasTypeAlias :: Typed.TypedName Syntax.TypeAlias
+typeAliasTypeAlias = Typed.TypedName (Core.Name "hydra.python.syntax.TypeAlias")
 
 -- | DSL accessor for the typeParams field of hydra.python.syntax.TypeAlias
 typeAliasTypeParams :: Typed.TypedTerm Syntax.TypeAlias -> Typed.TypedTerm [Syntax.TypeParameter]
@@ -9941,6 +10694,10 @@ typeComment x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.TypeComment"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.TypeComment
+typeCommentTypeComment :: Typed.TypedName Syntax.TypeComment
+typeCommentTypeComment = Typed.TypedName (Core.Name "hydra.python.syntax.TypeComment")
+
 -- | DSL injection for the doubleStarredExpression variant of hydra.python.syntax.TypeExpression
 typeExpressionDoubleStarredExpression :: Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm Syntax.TypeExpression
 typeExpressionDoubleStarredExpression x =
@@ -9968,6 +10725,10 @@ typeExpressionStarredExpression x =
         Core.fieldName = (Core.Name "starredExpression"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.python.syntax.TypeExpression
+typeExpressionTypeExpression :: Typed.TypedName Syntax.TypeExpression
+typeExpressionTypeExpression = Typed.TypedName (Core.Name "hydra.python.syntax.TypeExpression")
+
 -- | DSL injection for the doubleStar variant of hydra.python.syntax.TypeParameter
 typeParameterDoubleStar :: Typed.TypedTerm Syntax.DoubleStarTypeParameter -> Typed.TypedTerm Syntax.TypeParameter
 typeParameterDoubleStar x =
@@ -9994,6 +10755,10 @@ typeParameterStar x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "star"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.python.syntax.TypeParameter
+typeParameterTypeParameter :: Typed.TypedName Syntax.TypeParameter
+typeParameterTypeParameter = Typed.TypedName (Core.Name "hydra.python.syntax.TypeParameter")
 
 -- | DSL constructor for hydra.python.syntax.TypedAssignment
 typedAssignment :: Typed.TypedTerm Syntax.SingleTarget -> Typed.TypedTerm Syntax.Expression -> Typed.TypedTerm (Maybe Syntax.AnnotatedRhs) -> Typed.TypedTerm Syntax.TypedAssignment
@@ -10037,6 +10802,10 @@ typedAssignmentType x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.TypedAssignment"),
         Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.TypedAssignment
+typedAssignmentTypedAssignment :: Typed.TypedName Syntax.TypedAssignment
+typedAssignmentTypedAssignment = Typed.TypedName (Core.Name "hydra.python.syntax.TypedAssignment")
 
 -- | DSL updater for the lhs field of hydra.python.syntax.TypedAssignment
 typedAssignmentWithLhs :: Typed.TypedTerm Syntax.TypedAssignment -> Typed.TypedTerm Syntax.SingleTarget -> Typed.TypedTerm Syntax.TypedAssignment
@@ -10482,6 +11251,10 @@ untypedAssignmentTypeComment x =
         Core.projectionFieldName = (Core.Name "typeComment")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.UntypedAssignment
+untypedAssignmentUntypedAssignment :: Typed.TypedName Syntax.UntypedAssignment
+untypedAssignmentUntypedAssignment = Typed.TypedName (Core.Name "hydra.python.syntax.UntypedAssignment")
+
 -- | DSL updater for the rhs field of hydra.python.syntax.UntypedAssignment
 untypedAssignmentWithRhs :: Typed.TypedTerm Syntax.UntypedAssignment -> Typed.TypedTerm Syntax.AnnotatedRhs -> Typed.TypedTerm Syntax.UntypedAssignment
 untypedAssignmentWithRhs original newVal =
@@ -10561,6 +11334,10 @@ valuePattern x =
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.ValuePattern"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.python.syntax.ValuePattern
+valuePatternValuePattern :: Typed.TypedName Syntax.ValuePattern
+valuePatternValuePattern = Typed.TypedName (Core.Name "hydra.python.syntax.ValuePattern")
+
 -- | DSL constructor for hydra.python.syntax.WhileStatement
 whileStatement :: Typed.TypedTerm Syntax.NamedExpression -> Typed.TypedTerm Syntax.Block -> Typed.TypedTerm (Maybe Syntax.Block) -> Typed.TypedTerm Syntax.WhileStatement
 whileStatement condition body else_ =
@@ -10603,6 +11380,10 @@ whileStatementElse x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.WhileStatement"),
         Core.projectionFieldName = (Core.Name "else")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.WhileStatement
+whileStatementWhileStatement :: Typed.TypedName Syntax.WhileStatement
+whileStatementWhileStatement = Typed.TypedName (Core.Name "hydra.python.syntax.WhileStatement")
 
 -- | DSL updater for the body field of hydra.python.syntax.WhileStatement
 whileStatementWithBody :: Typed.TypedTerm Syntax.WhileStatement -> Typed.TypedTerm Syntax.Block -> Typed.TypedTerm Syntax.WhileStatement
@@ -10740,6 +11521,10 @@ withItemWithExpression original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.syntax.WithItem"),
               Core.projectionFieldName = (Core.Name "as")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
+
+-- | DSL name token for hydra.python.syntax.WithItem
+withItemWithItem :: Typed.TypedName Syntax.WithItem
+withItemWithItem = Typed.TypedName (Core.Name "hydra.python.syntax.WithItem")
 
 -- | DSL constructor for hydra.python.syntax.WithStatement
 withStatement :: Typed.TypedTerm Bool -> Typed.TypedTerm [Syntax.WithItem] -> Typed.TypedTerm (Maybe Syntax.TypeComment) -> Typed.TypedTerm Syntax.Block -> Typed.TypedTerm Syntax.WithStatement
@@ -10889,6 +11674,10 @@ withStatementWithItems original newVal =
               Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Typed.unTypedTerm original)}))}]}))
 
+-- | DSL name token for hydra.python.syntax.WithStatement
+withStatementWithStatement :: Typed.TypedName Syntax.WithStatement
+withStatementWithStatement = Typed.TypedName (Core.Name "hydra.python.syntax.WithStatement")
+
 -- | DSL updater for the typeComment field of hydra.python.syntax.WithStatement
 withStatementWithTypeComment :: Typed.TypedTerm Syntax.WithStatement -> Typed.TypedTerm (Maybe Syntax.TypeComment) -> Typed.TypedTerm Syntax.WithStatement
 withStatementWithTypeComment original newVal =
@@ -10938,9 +11727,17 @@ yieldExpressionSimple x =
         Core.fieldName = (Core.Name "simple"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.python.syntax.YieldExpression
+yieldExpressionYieldExpression :: Typed.TypedName Syntax.YieldExpression
+yieldExpressionYieldExpression = Typed.TypedName (Core.Name "hydra.python.syntax.YieldExpression")
+
 -- | DSL constructor for the hydra.python.syntax.YieldStatement wrapper
 yieldStatement :: Typed.TypedTerm Syntax.YieldExpression -> Typed.TypedTerm Syntax.YieldStatement
 yieldStatement x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.YieldStatement"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.python.syntax.YieldStatement
+yieldStatementYieldStatement :: Typed.TypedName Syntax.YieldStatement
+yieldStatementYieldStatement = Typed.TypedName (Core.Name "hydra.python.syntax.YieldStatement")

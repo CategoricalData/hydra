@@ -2,14 +2,19 @@
 
 Kernel-function references have been replaced by the generated hydra.dsl.* modules
 (#467): e.g. hydra.dsl.strip.deannotate_type, hydra.dsl.names.qualify_name.
-What remains here are references to this package's OWN modules (hydra.python.*) and
-derived-family modules (hydra.show.*), which do not yet project generated DSLs;
-they migrate when DSL generation widens beyond the kernel (see #467).
+What remains here are references to this package's OWN modules (hydra.python.*),
+which do not yet project generated DSLs; they migrate when DSL generation widens
+beyond the kernel (see #467). The last derived-family reference
+(hydra.show.core.type) was retired in favor of the typed hydra.refs.show_ref +
+hydra.dsl.core.type_type (see #555).
 
 Keep this list minimal -- only add what is actually used and not generated.
 """
 
 from hydra.overlay.python.dsl.meta.phantoms import var
+from hydra.typed import TypedTerm
+import hydra.dsl.core
+import hydra.refs
 
 
 # hydra.constants
@@ -62,7 +67,7 @@ utils_raise_type_error = var("hydra.python.utils.raiseTypeError")
 utils_return_single = var("hydra.python.utils.returnSingle")
 utils_name_and_params = var("hydra.python.utils.nameAndParams")
 utils_py_none = var("hydra.python.utils.pyNone")
-show_core_type = var("hydra.show.core.type")
+show_core_type = TypedTerm(hydra.refs.show_ref(hydra.dsl.core.type_type))
 names_type_variable_reference = var("hydra.python.names.typeVariableReference")
 names_term_variable_reference = var("hydra.python.names.termVariableReference")
 names_encode_name_qualified = var("hydra.python.names.encodeNameQualified")

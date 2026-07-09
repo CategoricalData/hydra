@@ -134,7 +134,8 @@ invalidPackageError e =
       ErrorPackaging.InvalidPackageErrorConflictingModuleName v0 -> conflictingModuleNameError v0
       ErrorPackaging.InvalidPackageErrorDuplicateModuleName v0 -> duplicateModuleNameError v0
       ErrorPackaging.InvalidPackageErrorInvalidModule v0 -> invalidModuleError v0
-      ErrorPackaging.InvalidPackageErrorInvalidPackageName v0 -> invalidPackageNameError v0)
+      ErrorPackaging.InvalidPackageErrorInvalidPackageName v0 -> invalidPackageNameError v0
+      ErrorPackaging.InvalidPackageErrorUndeclaredDependency v0 -> undeclaredDependencyError v0)
 
 -- | Show an invalid package name error as a string
 invalidPackageNameError :: ErrorPackaging.InvalidPackageNameError -> String
@@ -153,3 +154,15 @@ missingDocumentationError e =
       ": definition ",
       (Core.unName (ErrorPackaging.missingDocumentationErrorName e)),
       " lacks a description annotation"]
+
+-- | Show an undeclared dependency error as a string
+undeclaredDependencyError :: ErrorPackaging.UndeclaredDependencyError -> String
+undeclaredDependencyError e =
+    Strings.cat [
+      "module ",
+      (Packaging.unModuleName (ErrorPackaging.undeclaredDependencyErrorModuleName e)),
+      " references ",
+      (Core.unName (ErrorPackaging.undeclaredDependencyErrorReferencedName e)),
+      ", whose owning module ",
+      (Packaging.unModuleName (ErrorPackaging.undeclaredDependencyErrorOwningModuleName e)),
+      " is not among its declared dependencies; add it to moduleDependencies"]

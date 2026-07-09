@@ -181,7 +181,9 @@ data InvalidPackageError =
   -- | A module within the package is invalid
   InvalidPackageErrorInvalidModule InvalidModuleError |
   -- | A package whose name does not match the package-name naming convention
-  InvalidPackageErrorInvalidPackageName InvalidPackageNameError
+  InvalidPackageErrorInvalidPackageName InvalidPackageNameError |
+  -- | A module references a name owned by another module that is not among its declared dependencies
+  InvalidPackageErrorUndeclaredDependency UndeclaredDependencyError
   deriving (Eq, Ord, Read, Show)
 
 _InvalidPackageError = Core.Name "hydra.error.packaging.InvalidPackageError"
@@ -193,6 +195,8 @@ _InvalidPackageError_duplicateModuleName = Core.Name "duplicateModuleName"
 _InvalidPackageError_invalidModule = Core.Name "invalidModule"
 
 _InvalidPackageError_invalidPackageName = Core.Name "invalidPackageName"
+
+_InvalidPackageError_undeclaredDependency = Core.Name "undeclaredDependency"
 
 -- | A package whose name does not match the hyphen-separated lowercase naming convention. Package names must be hyphen-separated lowercase segments, each starting with a letter, e.g. hydra-kernel or hydra-python.
 data InvalidPackageNameError =
@@ -219,3 +223,22 @@ _MissingDocumentationError = Core.Name "hydra.error.packaging.MissingDocumentati
 _MissingDocumentationError_moduleName = Core.Name "moduleName"
 
 _MissingDocumentationError_name = Core.Name "name"
+
+-- | A module references a name owned by another module which is not among its declared moduleDependencies. Like a missing import: the reference may still resolve today via another module's transitive dependencies, but the declared dependency list no longer reflects what the module actually uses, and inference-time resolution is not guaranteed.
+data UndeclaredDependencyError =
+  UndeclaredDependencyError {
+    -- | The name of the module containing the undeclared reference
+    undeclaredDependencyErrorModuleName :: Packaging.ModuleName,
+    -- | The free name referenced by the module's definitions
+    undeclaredDependencyErrorReferencedName :: Core.Name,
+    -- | The name of the module that actually defines the referenced name
+    undeclaredDependencyErrorOwningModuleName :: Packaging.ModuleName}
+  deriving (Eq, Ord, Read, Show)
+
+_UndeclaredDependencyError = Core.Name "hydra.error.packaging.UndeclaredDependencyError"
+
+_UndeclaredDependencyError_moduleName = Core.Name "moduleName"
+
+_UndeclaredDependencyError_referencedName = Core.Name "referencedName"
+
+_UndeclaredDependencyError_owningModuleName = Core.Name "owningModuleName"

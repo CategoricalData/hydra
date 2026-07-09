@@ -28,6 +28,7 @@ import qualified Hydra.Dsl.Lib.Strings as Strings
 import qualified Hydra.Overlay.Haskell.Dsl.Typed.Terms as MetaTerms
 import Hydra.Overlay.Haskell.Dsl.Terms (ToPrimName)
 import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types as T
+import qualified Data.Set as S
 import qualified Hydra.Dsl.Validation as Validation
 
 import qualified Data.Int as I
@@ -77,6 +78,12 @@ checkModuleNameConventionRef = TypedTerm $ TermVariable $ Name "hydra.validate.p
 
 checkPackageNameConventionRef :: TypedTerm (Package -> Maybe InvalidPackageError)
 checkPackageNameConventionRef = TypedTerm $ TermVariable $ Name "hydra.validate.packaging.checkPackageNameConvention"
+
+checkUndeclaredDependenciesRef :: TypedTerm (M.Map Name ModuleName -> S.Set Name -> Module -> [InvalidPackageError])
+checkUndeclaredDependenciesRef = TypedTerm $ TermVariable $ Name "hydra.validate.packaging.checkUndeclaredDependencies"
+
+undeclaredDependencyOwnersRef :: TypedTerm ([Module] -> M.Map Name ModuleName)
+undeclaredDependencyOwnersRef = TypedTerm $ TermVariable $ Name "hydra.validate.packaging.undeclaredDependencyOwners"
 
 -- | Type checking test: infers the type and compares with expected.
 checkTest :: String -> [Tag] -> TypedTerm Term -> TypedTerm Term -> TypedTerm Type -> TypedTerm TestCaseWithMetadata

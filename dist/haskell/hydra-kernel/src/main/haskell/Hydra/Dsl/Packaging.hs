@@ -5,13 +5,19 @@
 module Hydra.Dsl.Packaging where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Packaging as DecodePackaging
 import qualified Hydra.Dsl.Core as DslCore
 import qualified Hydra.Dsl.Typing as DslTyping
+import qualified Hydra.Encode.Packaging as EncodePackaging
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Typed as Typed
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
+-- | DSL name token for hydra.packaging.Definition
+definitionDefinition :: Typed.TypedName Packaging.Definition
+definitionDefinition = Typed.TypedName (Core.Name "hydra.packaging.Definition")
 
 -- | DSL injection for the primitive variant of hydra.packaging.Definition
 definitionPrimitive :: Typed.TypedTerm Packaging.PrimitiveDefinition -> Typed.TypedTerm Packaging.Definition
@@ -21,6 +27,10 @@ definitionPrimitive x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primitive"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.packaging.DefinitionReference
+definitionReferenceDefinitionReference :: Typed.TypedName Packaging.DefinitionReference
+definitionReferenceDefinitionReference = Typed.TypedName (Core.Name "hydra.packaging.DefinitionReference")
 
 -- | DSL injection for the primitive variant of hydra.packaging.DefinitionReference
 definitionReferencePrimitive :: Typed.TypedTerm Core.Name -> Typed.TypedTerm Packaging.DefinitionReference
@@ -75,6 +85,10 @@ dependencyScopeApi =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "api"),
         Core.fieldTerm = Core.TermUnit}}))
+
+-- | DSL name token for hydra.packaging.DependencyScope
+dependencyScopeDependencyScope :: Typed.TypedName Packaging.DependencyScope
+dependencyScopeDependencyScope = Typed.TypedName (Core.Name "hydra.packaging.DependencyScope")
 
 -- | DSL injection for the runtime variant of hydra.packaging.DependencyScope
 dependencyScopeRuntime :: Typed.TypedTerm Packaging.DependencyScope
@@ -139,6 +153,10 @@ entityMetadataDescription x =
         Core.projectionTypeName = (Core.Name "hydra.packaging.EntityMetadata"),
         Core.projectionFieldName = (Core.Name "description")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.packaging.EntityMetadata
+entityMetadataEntityMetadata :: Typed.TypedName Packaging.EntityMetadata
+entityMetadataEntityMetadata = Typed.TypedName (Core.Name "hydra.packaging.EntityMetadata")
 
 -- | DSL accessor for the lifecycle field of hydra.packaging.EntityMetadata
 entityMetadataLifecycle :: Typed.TypedTerm Packaging.EntityMetadata -> Typed.TypedTerm (Maybe Packaging.LifecycleInfo)
@@ -291,6 +309,10 @@ entityReferenceDefinition x =
         Core.fieldName = (Core.Name "definition"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.packaging.EntityReference
+entityReferenceEntityReference :: Typed.TypedName Packaging.EntityReference
+entityReferenceEntityReference = Typed.TypedName (Core.Name "hydra.packaging.EntityReference")
+
 -- | DSL injection for the module variant of hydra.packaging.EntityReference
 entityReferenceModule :: Typed.TypedTerm Packaging.ModuleName -> Typed.TypedTerm Packaging.EntityReference
 entityReferenceModule x =
@@ -357,6 +379,10 @@ lifecycleInfoDeprecatedSince x =
         Core.projectionTypeName = (Core.Name "hydra.packaging.LifecycleInfo"),
         Core.projectionFieldName = (Core.Name "deprecatedSince")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.packaging.LifecycleInfo
+lifecycleInfoLifecycleInfo :: Typed.TypedName Packaging.LifecycleInfo
+lifecycleInfoLifecycleInfo = Typed.TypedName (Core.Name "hydra.packaging.LifecycleInfo")
 
 -- | DSL updater for the availableSince field of hydra.packaging.LifecycleInfo
 lifecycleInfoWithAvailableSince :: Typed.TypedTerm Packaging.LifecycleInfo -> Typed.TypedTerm (Maybe Packaging.Version) -> Typed.TypedTerm Packaging.LifecycleInfo
@@ -451,6 +477,10 @@ moduleDependencyModule x =
         Core.projectionFieldName = (Core.Name "module")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.packaging.ModuleDependency
+moduleDependencyModuleDependency :: Typed.TypedName Packaging.ModuleDependency
+moduleDependencyModuleDependency = Typed.TypedName (Core.Name "hydra.packaging.ModuleDependency")
+
 -- | DSL accessor for the package field of hydra.packaging.ModuleDependency
 moduleDependencyPackage :: Typed.TypedTerm Packaging.ModuleDependency -> Typed.TypedTerm (Maybe Packaging.PackageName)
 moduleDependencyPackage x =
@@ -503,6 +533,10 @@ moduleMetadata x =
         Core.projectionFieldName = (Core.Name "metadata")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.packaging.Module
+moduleModule :: Typed.TypedName Packaging.Module
+moduleModule = Typed.TypedName (Core.Name "hydra.packaging.Module")
+
 -- | DSL accessor for the name field of hydra.packaging.Module
 moduleName :: Typed.TypedTerm Packaging.Module -> Typed.TypedTerm Packaging.ModuleName
 moduleName x =
@@ -518,6 +552,10 @@ moduleName2 x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.packaging.ModuleName"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.packaging.ModuleName
+moduleNameModuleName :: Typed.TypedName Packaging.ModuleName
+moduleNameModuleName = Typed.TypedName (Core.Name "hydra.packaging.ModuleName")
 
 -- | DSL updater for the definitions field of hydra.packaging.Module
 moduleWithDefinitions :: Typed.TypedTerm Packaging.Module -> Typed.TypedTerm [Packaging.Definition] -> Typed.TypedTerm Packaging.Module
@@ -696,6 +734,10 @@ packageDependencyName x =
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.packaging.PackageDependency
+packageDependencyPackageDependency :: Typed.TypedName Packaging.PackageDependency
+packageDependencyPackageDependency = Typed.TypedName (Core.Name "hydra.packaging.PackageDependency")
+
 -- | DSL accessor for the scope field of hydra.packaging.PackageDependency
 packageDependencyScope :: Typed.TypedTerm Packaging.PackageDependency -> Typed.TypedTerm (Maybe Packaging.DependencyScope)
 packageDependencyScope x =
@@ -819,6 +861,14 @@ packageName2 x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.packaging.PackageName"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.packaging.PackageName
+packageNamePackageName :: Typed.TypedName Packaging.PackageName
+packageNamePackageName = Typed.TypedName (Core.Name "hydra.packaging.PackageName")
+
+-- | DSL name token for hydra.packaging.Package
+packagePackage :: Typed.TypedName Packaging.Package
+packagePackage = Typed.TypedName (Core.Name "hydra.packaging.Package")
 
 -- | DSL updater for the dependencies field of hydra.packaging.Package
 packageWithDependencies :: Typed.TypedTerm Packaging.Package -> Typed.TypedTerm [Packaging.PackageDependency] -> Typed.TypedTerm Packaging.Package
@@ -1013,6 +1063,10 @@ primitiveDefinitionName x =
         Core.projectionTypeName = (Core.Name "hydra.packaging.PrimitiveDefinition"),
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.packaging.PrimitiveDefinition
+primitiveDefinitionPrimitiveDefinition :: Typed.TypedName Packaging.PrimitiveDefinition
+primitiveDefinitionPrimitiveDefinition = Typed.TypedName (Core.Name "hydra.packaging.PrimitiveDefinition")
 
 -- | DSL accessor for the signature field of hydra.packaging.PrimitiveDefinition
 primitiveDefinitionSignature :: Typed.TypedTerm Packaging.PrimitiveDefinition -> Typed.TypedTerm Typing.TermSignature
@@ -1348,6 +1402,10 @@ termDefinitionSignature x =
         Core.projectionFieldName = (Core.Name "signature")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.packaging.TermDefinition
+termDefinitionTermDefinition :: Typed.TypedName Packaging.TermDefinition
+termDefinitionTermDefinition = Typed.TypedName (Core.Name "hydra.packaging.TermDefinition")
+
 -- | DSL updater for the body field of hydra.packaging.TermDefinition
 termDefinitionWithBody :: Typed.TypedTerm Packaging.TermDefinition -> Typed.TypedTerm Core.Term -> Typed.TypedTerm Packaging.TermDefinition
 termDefinitionWithBody original newVal =
@@ -1515,6 +1573,10 @@ typeDefinitionName x =
         Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.packaging.TypeDefinition
+typeDefinitionTypeDefinition :: Typed.TypedName Packaging.TypeDefinition
+typeDefinitionTypeDefinition = Typed.TypedName (Core.Name "hydra.packaging.TypeDefinition")
+
 -- | DSL updater for the body field of hydra.packaging.TypeDefinition
 typeDefinitionWithBody :: Typed.TypedTerm Packaging.TypeDefinition -> Typed.TypedTerm Core.TypeScheme -> Typed.TypedTerm Packaging.TypeDefinition
 typeDefinitionWithBody original newVal =
@@ -1646,6 +1708,10 @@ versionRangeUpperExclusive x =
         Core.projectionFieldName = (Core.Name "upperExclusive")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.packaging.VersionRange
+versionRangeVersionRange :: Typed.TypedName Packaging.VersionRange
+versionRangeVersionRange = Typed.TypedName (Core.Name "hydra.packaging.VersionRange")
+
 -- | DSL updater for the lowerInclusive field of hydra.packaging.VersionRange
 versionRangeWithLowerInclusive :: Typed.TypedTerm Packaging.VersionRange -> Typed.TypedTerm (Maybe Packaging.Version) -> Typed.TypedTerm Packaging.VersionRange
 versionRangeWithLowerInclusive original newVal =
@@ -1715,3 +1781,11 @@ versionSpecifierRange x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "range"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.packaging.VersionSpecifier
+versionSpecifierVersionSpecifier :: Typed.TypedName Packaging.VersionSpecifier
+versionSpecifierVersionSpecifier = Typed.TypedName (Core.Name "hydra.packaging.VersionSpecifier")
+
+-- | DSL name token for hydra.packaging.Version
+versionVersion :: Typed.TypedName Packaging.Version
+versionVersion = Typed.TypedName (Core.Name "hydra.packaging.Version")

@@ -5,7 +5,9 @@
 module Hydra.Dsl.Time where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Time as DecodeTime
 import qualified Hydra.Dsl.Core as DslCore
+import qualified Hydra.Encode.Time as EncodeTime
 import qualified Hydra.Time as Time
 import qualified Hydra.Typed as Typed
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -42,6 +44,10 @@ timespecSeconds x =
         Core.projectionTypeName = (Core.Name "hydra.time.Timespec"),
         Core.projectionFieldName = (Core.Name "seconds")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.time.Timespec
+timespecTimespec :: Typed.TypedName Time.Timespec
+timespecTimespec = Typed.TypedName (Core.Name "hydra.time.Timespec")
 
 -- | DSL updater for the nanoseconds field of hydra.time.Timespec
 timespecWithNanoseconds :: Typed.TypedTerm Time.Timespec -> Typed.TypedTerm I.Int64 -> Typed.TypedTerm Time.Timespec

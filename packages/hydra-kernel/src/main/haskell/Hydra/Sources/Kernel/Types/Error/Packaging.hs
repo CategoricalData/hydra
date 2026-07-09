@@ -35,7 +35,8 @@ module_ = Module {
       invalidModuleNameConventionError,
       invalidPackageError,
       invalidPackageNameError,
-      missingDocumentationError]
+      missingDocumentationError,
+      undeclaredDependencyError]
 
 conflictingModuleNameError :: TypeDefinition
 conflictingModuleNameError = define "ConflictingModuleNameError" $
@@ -172,7 +173,10 @@ invalidPackageError = define "InvalidPackageError" $
       invalidModuleError,
     "invalidPackageName">:
       doc "A package whose name does not match the package-name naming convention" $
-      invalidPackageNameError]
+      invalidPackageNameError,
+    "undeclaredDependency">:
+      doc "A module references a name owned by another module that is not among its declared dependencies" $
+      undeclaredDependencyError]
 
 invalidPackageNameError :: TypeDefinition
 invalidPackageNameError = define "InvalidPackageNameError" $
@@ -192,3 +196,17 @@ missingDocumentationError = define "MissingDocumentationError" $
     "name">:
       doc "The name of the undocumented definition" $
       Core.name]
+
+undeclaredDependencyError :: TypeDefinition
+undeclaredDependencyError = define "UndeclaredDependencyError" $
+  doc "A module references a name owned by another module which is not among its declared moduleDependencies. Like a missing import: the reference may still resolve today via another module's transitive dependencies, but the declared dependency list no longer reflects what the module actually uses, and inference-time resolution is not guaranteed." $
+  T.record [
+    "moduleName">:
+      doc "The name of the module containing the undeclared reference" $
+      Packaging.moduleNameDef,
+    "referencedName">:
+      doc "The free name referenced by the module's definitions" $
+      Core.name,
+    "owningModuleName">:
+      doc "The name of the module that actually defines the referenced name" $
+      Packaging.moduleNameDef]

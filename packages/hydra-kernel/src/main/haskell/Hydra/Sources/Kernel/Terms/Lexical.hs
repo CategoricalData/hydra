@@ -70,7 +70,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns, ShowCore.ns, ShowError.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns, ShowCore.ns, ShowError.ns, Scoping.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just ("A module for lexical operations over graphs."))}
   where
     definitions = [

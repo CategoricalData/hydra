@@ -26,6 +26,7 @@ import qualified Hydra.Dsl.Parsing as DslParsing
 import qualified Hydra.Dsl.Paths as DslPaths
 import qualified Hydra.Dsl.Query as DslQuery
 import qualified Hydra.Dsl.Relational as DslRelational
+import qualified Hydra.Dsl.Scoping as DslScoping
 import qualified Hydra.Dsl.Strip as DslStrip
 import qualified Hydra.Dsl.System as DslSystem
 import qualified Hydra.Dsl.Tabular as DslTabular
@@ -51,6 +52,7 @@ import qualified Hydra.Parsing as Parsing
 import qualified Hydra.Paths as Paths
 import qualified Hydra.Query as Query
 import qualified Hydra.Relational as Relational
+import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Show.Errors as ShowErrors
 import qualified Hydra.Strip as Strip

@@ -5,11 +5,17 @@
 module Hydra.Dsl.Query where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Query as DecodeQuery
 import qualified Hydra.Dsl.Core as DslCore
+import qualified Hydra.Encode.Query as EncodeQuery
 import qualified Hydra.Query as Query
 import qualified Hydra.Typed as Typed
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+
+-- | DSL name token for hydra.query.ComparisonConstraint
+comparisonConstraintComparisonConstraint :: Typed.TypedName Query.ComparisonConstraint
+comparisonConstraintComparisonConstraint = Typed.TypedName (Core.Name "hydra.query.ComparisonConstraint")
 
 -- | DSL injection for the equal variant of hydra.query.ComparisonConstraint
 comparisonConstraintEqual :: Typed.TypedTerm Query.ComparisonConstraint
@@ -80,6 +86,10 @@ edge type_ out in_ =
         Core.Field {
           Core.fieldName = (Core.Name "in"),
           Core.fieldTerm = (Typed.unTypedTerm in_)}]}))
+
+-- | DSL name token for hydra.query.Edge
+edgeEdge :: Typed.TypedName Query.Edge
+edgeEdge = Typed.TypedName (Core.Name "hydra.query.Edge")
 
 -- | DSL accessor for the in field of hydra.query.Edge
 edgeIn :: Typed.TypedTerm Query.Edge -> Typed.TypedTerm (Maybe Core.Name)
@@ -202,6 +212,10 @@ graphPatternGraph x =
         Core.projectionFieldName = (Core.Name "graph")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.query.GraphPattern
+graphPatternGraphPattern :: Typed.TypedName Query.GraphPattern
+graphPatternGraphPattern = Typed.TypedName (Core.Name "hydra.query.GraphPattern")
+
 -- | DSL accessor for the patterns field of hydra.query.GraphPattern
 graphPatternPatterns :: Typed.TypedTerm Query.GraphPattern -> Typed.TypedTerm [Query.Pattern]
 graphPatternPatterns x =
@@ -244,6 +258,10 @@ graphPatternWithPatterns original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "patterns"),
           Core.fieldTerm = (Typed.unTypedTerm newVal)}]}))
+
+-- | DSL name token for hydra.query.Node
+nodeNode :: Typed.TypedName Query.Node
+nodeNode = Typed.TypedName (Core.Name "hydra.query.Node")
 
 -- | DSL injection for the term variant of hydra.query.Node
 nodeTerm :: Typed.TypedTerm Core.Term -> Typed.TypedTerm Query.Node
@@ -293,6 +311,10 @@ pathEquationLeft x =
         Core.projectionTypeName = (Core.Name "hydra.query.PathEquation"),
         Core.projectionFieldName = (Core.Name "left")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.query.PathEquation
+pathEquationPathEquation :: Typed.TypedName Query.PathEquation
+pathEquationPathEquation = Typed.TypedName (Core.Name "hydra.query.PathEquation")
 
 -- | DSL accessor for the right field of hydra.query.PathEquation
 pathEquationRight :: Typed.TypedTerm Query.PathEquation -> Typed.TypedTerm Query.Path
@@ -345,6 +367,10 @@ pathInverse x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inverse"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.query.Path
+pathPath :: Typed.TypedName Query.Path
+pathPath = Typed.TypedName (Core.Name "hydra.query.Path")
 
 -- | DSL injection for the regex variant of hydra.query.Path
 pathRegex :: Typed.TypedTerm Query.RegexSequence -> Typed.TypedTerm Query.Path
@@ -422,6 +448,10 @@ patternImplicationConsequent x =
         Core.projectionFieldName = (Core.Name "consequent")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
 
+-- | DSL name token for hydra.query.PatternImplication
+patternImplicationPatternImplication :: Typed.TypedName Query.PatternImplication
+patternImplicationPatternImplication = Typed.TypedName (Core.Name "hydra.query.PatternImplication")
+
 -- | DSL updater for the antecedent field of hydra.query.PatternImplication
 patternImplicationWithAntecedent :: Typed.TypedTerm Query.PatternImplication -> Typed.TypedTerm Query.Pattern -> Typed.TypedTerm Query.PatternImplication
 patternImplicationWithAntecedent original newVal =
@@ -465,6 +495,10 @@ patternNegation x =
         Core.fieldName = (Core.Name "negation"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.query.Pattern
+patternPattern :: Typed.TypedName Query.Pattern
+patternPattern = Typed.TypedName (Core.Name "hydra.query.Pattern")
+
 -- | DSL injection for the triple variant of hydra.query.Pattern
 patternTriple :: Typed.TypedTerm Query.TriplePattern -> Typed.TypedTerm Query.Pattern
 patternTriple x =
@@ -495,6 +529,10 @@ queryPatterns x =
         Core.projectionTypeName = (Core.Name "hydra.query.Query"),
         Core.projectionFieldName = (Core.Name "patterns")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.query.Query
+queryQuery :: Typed.TypedName Query.Query
+queryQuery = Typed.TypedName (Core.Name "hydra.query.Query")
 
 -- | DSL accessor for the variables field of hydra.query.Query
 queryVariables :: Typed.TypedTerm Query.Query -> Typed.TypedTerm [Query.Variable]
@@ -569,6 +607,10 @@ rangeMin x =
         Core.projectionTypeName = (Core.Name "hydra.query.Range"),
         Core.projectionFieldName = (Core.Name "min")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.query.Range
+rangeRange :: Typed.TypedName Query.Range
+rangeRange = Typed.TypedName (Core.Name "hydra.query.Range")
 
 -- | DSL updater for the max field of hydra.query.Range
 rangeWithMax :: Typed.TypedTerm Query.Range -> Typed.TypedTerm Int -> Typed.TypedTerm Query.Range
@@ -649,6 +691,10 @@ regexQuantifierRange x =
         Core.fieldName = (Core.Name "range"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.query.RegexQuantifier
+regexQuantifierRegexQuantifier :: Typed.TypedName Query.RegexQuantifier
+regexQuantifierRegexQuantifier = Typed.TypedName (Core.Name "hydra.query.RegexQuantifier")
+
 -- | DSL injection for the zeroOrMore variant of hydra.query.RegexQuantifier
 regexQuantifierZeroOrMore :: Typed.TypedTerm Query.RegexQuantifier
 regexQuantifierZeroOrMore =
@@ -697,6 +743,10 @@ regexSequenceQuantifier x =
         Core.projectionTypeName = (Core.Name "hydra.query.RegexSequence"),
         Core.projectionFieldName = (Core.Name "quantifier")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.query.RegexSequence
+regexSequenceRegexSequence :: Typed.TypedName Query.RegexSequence
+regexSequenceRegexSequence = Typed.TypedName (Core.Name "hydra.query.RegexSequence")
 
 -- | DSL updater for the path field of hydra.query.RegexSequence
 regexSequenceWithPath :: Typed.TypedTerm Query.RegexSequence -> Typed.TypedTerm Query.Path -> Typed.TypedTerm Query.RegexSequence
@@ -759,6 +809,10 @@ stepProject x =
         Core.fieldName = (Core.Name "project"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
 
+-- | DSL name token for hydra.query.Step
+stepStep :: Typed.TypedName Query.Step
+stepStep = Typed.TypedName (Core.Name "hydra.query.Step")
+
 -- | DSL constructor for hydra.query.TriplePattern
 triplePattern :: Typed.TypedTerm Query.Node -> Typed.TypedTerm Query.Path -> Typed.TypedTerm Query.Node -> Typed.TypedTerm Query.TriplePattern
 triplePattern subject predicate object =
@@ -801,6 +855,10 @@ triplePatternSubject x =
         Core.projectionTypeName = (Core.Name "hydra.query.TriplePattern"),
         Core.projectionFieldName = (Core.Name "subject")})),
       Core.applicationArgument = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.query.TriplePattern
+triplePatternTriplePattern :: Typed.TypedName Query.TriplePattern
+triplePatternTriplePattern = Typed.TypedName (Core.Name "hydra.query.TriplePattern")
 
 -- | DSL updater for the object field of hydra.query.TriplePattern
 triplePatternWithObject :: Typed.TypedTerm Query.TriplePattern -> Typed.TypedTerm Query.Node -> Typed.TypedTerm Query.TriplePattern
@@ -887,3 +945,7 @@ variable x =
     Typed.TypedTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.query.Variable"),
       Core.wrappedTermBody = (Typed.unTypedTerm x)}))
+
+-- | DSL name token for hydra.query.Variable
+variableVariable :: Typed.TypedName Query.Variable
+variableVariable = Typed.TypedName (Core.Name "hydra.query.Variable")

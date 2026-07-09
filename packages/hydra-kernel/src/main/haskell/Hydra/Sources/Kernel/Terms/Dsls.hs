@@ -51,7 +51,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Annotations.ns, Formatting.ns, Lexical.ns, Names.ns, Strip.ns, ModuleName "hydra.constants", ModuleName "hydra.decode.core", ModuleName "hydra.encode.core"] L.++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([Annotations.ns, Formatting.ns, Lexical.ns, Names.ns, Scoping.ns, Strip.ns, ModuleName "hydra.constants", ModuleName "hydra.decode.core", ModuleName "hydra.encode.core"] L.++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata (Just "Functions for generating domain-specific DSL modules from type modules")}
   where
     definitions = [
@@ -60,15 +60,18 @@ module_ = Module {
       toDefinition dslBindingName,
       toDefinition dslDefinitionName,
       toDefinition dslModule,
+      toDefinition dslModuleName,
       toDefinition dslSignatureTypeScheme,
       toDefinition dslTypeScheme,
       toDefinition filterTypeBindings,
       toDefinition generateBindingsForType,
+      toDefinition generateParametricRefBuilders,
       toDefinition generateRecordAccessor,
       toDefinition generateRecordConstructor,
       toDefinition generateRecordWithUpdater,
       toDefinition generateRefBindings,
       toDefinition generateSignatureRef,
+      toDefinition generateTypeNameToken,
       toDefinition generateUnionInjector,
       toDefinition generateWrappedTypeAccessors,
       toDefinition isDslEligibleBinding,
@@ -182,27 +185,7 @@ deepWrap typeName body =
 dslBindingName :: TypedTermDefinition (Name -> Name)
 dslBindingName = define "dslBindingName" $
   doc "Generate a binding name for a DSL function from a type name" $
-  "n" ~>
-  "parts" <~ (Strings.splitOn (string ".") (Core.unName (var "n"))) $
-  "localPart" <~ (Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))) $
-  "localResult" <~ (Core.name (var "localPart")) $
-  -- nsParts = parts minus the last element (the namespace components).
-  -- Nothing means parts was empty (unreachable for a valid name);
-  -- Just [] means the name has no namespace (local type).
-  Optionals.cases (Lists.maybeInit (var "parts")) (var "localResult") ("nsParts" ~>
-      Optionals.cases
-        (Lists.uncons (var "nsParts"))
-        -- single-element parts: local type, no namespace
-        (var "localResult")
-        ("nsHeadTail" ~>
-          "dslNsParts" <~ (Logic.ifElse
-            (Equality.equal (Pairs.first (var "nsHeadTail")) (string "hydra"))
-            -- hydra.core.Foo -> [hydra, dsl] ++ tail nsParts
-            (Lists.concat2 (list [string "hydra", string "dsl"]) (Pairs.second (var "nsHeadTail")))
-            -- openGql.grammar.Foo -> [hydra, dsl] ++ nsParts
-            (Lists.concat2 (list [string "hydra", string "dsl"]) (var "nsParts"))) $
-          Core.name (Strings.intercalate (string ".")
-            (Lists.concat2 (var "dslNsParts") (list [var "localPart"])))))
+  Names.derivedBindingName @@ list [string "hydra", string "dsl"] @@ boolean False
 
 -- | Generate a DSL element name from a type name and a local element name.
 -- For example, ("hydra.core.AnnotatedTerm", "annotatedTermBody") -> "hydra.dsl.core.annotatedTermBody"
@@ -211,23 +194,7 @@ dslBindingName = define "dslBindingName" $
 dslDefinitionName :: TypedTermDefinition (Name -> String -> Name)
 dslDefinitionName = define "dslDefinitionName" $
   doc "Generate a qualified DSL element name from a type name and local element name" $
-  "typeName" ~> "localName" ~>
-  "parts" <~ (Strings.splitOn (string ".") (Core.unName (var "typeName"))) $
-  -- Extract namespace parts (all but last); fall back to the bare local name
-  -- when the type name has no namespace (unreachable for well-formed inputs).
-  Optionals.cases (Lists.maybeInit (var "parts")) (Core.name (var "localName")) ("nsParts" ~>
-      "dslNsParts" <~ (Optionals.cases
-        (Lists.uncons (var "nsParts"))
-        -- nsParts empty: just prepend hydra.dsl
-        (list [string "hydra", string "dsl"])
-        ("nsHeadTail" ~> Logic.ifElse
-          (Equality.equal (Pairs.first (var "nsHeadTail")) (string "hydra"))
-          -- hydra.core -> hydra.dsl.core (drop the leading "hydra", keep the rest)
-          (Lists.concat2 (list [string "hydra", string "dsl"]) (Pairs.second (var "nsHeadTail")))
-          -- openGql.grammar -> hydra.dsl.openGql.grammar
-          (Lists.concat2 (list [string "hydra", string "dsl"]) (var "nsParts")))) $
-      Core.name (Strings.intercalate (string ".")
-        (Lists.concat2 (var "dslNsParts") (list [var "localName"]))))
+  Names.derivedDefinitionName @@ list [string "hydra", string "dsl"] @@ boolean False @@ boolean True
 
 -- | Generate a record constructor function.
 -- For a record type like {body: Term, annotation: Map(Name, Term)},
@@ -267,20 +234,24 @@ dslModule = define "dslModule" $
     Logic.ifElse (Lists.null (var "allBindings"))
       (right nothing)
       (right (just (Packaging.module_
-        (Names.dslModuleName @@ (Packaging.moduleName (var "mod")))
+        (dslModuleName @@ (Packaging.moduleName (var "mod")))
         (just (Packaging.entityMetadata
           (just (Strings.cat $ list [
             string "DSL functions for ",
             Packaging.unModuleName (Packaging.moduleName (var "mod"))]))
           (list ([] :: [TypedTerm String])) (list ([] :: [TypedTerm EntityReference])) nothing))
         -- DSL modules depend on:
-        -- (1) the original module + its source dependencies + hydra.typed (for TypedTerm), and
-        -- (2) DSL modules for the source's dependencies (to reference other types' DSL functions)
+        -- (1) the original module + its source dependencies + hydra.typed (for TypedTerm),
+        -- (2) DSL modules for the source's dependencies (to reference other types' DSL functions), and
+        -- (3) the original module's own encode/decode modules (referenced by
+        --     generateParametricRefBuilders's composition builders)
         (Lists.map ("ns" ~> Packaging.moduleDependency (var "ns") nothing) (Lists.nub (Lists.concat2
-          (list [Packaging.moduleName (var "mod"), Packaging.moduleName2 (string "hydra.typed")])
+          (list [Packaging.moduleName (var "mod"), Packaging.moduleName2 (string "hydra.typed"),
+            Names.derivedModuleName @@ list [string "hydra", string "encode"] @@ boolean True @@ (Packaging.moduleName (var "mod")),
+            Names.derivedModuleName @@ list [string "hydra", string "decode"] @@ boolean True @@ (Packaging.moduleName (var "mod"))])
           (Lists.concat2
             (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod")))
-            (primitive DefLists.map @@ Names.dslModuleName @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))))))
+            (primitive DefLists.map @@ dslModuleName @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))))))
         (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
           (Core.bindingName $ var "b")
           nothing
@@ -313,6 +284,13 @@ generateRefBindings = define "generateRefBindings" $
         ("sig" ~> right (list [generateSignatureRef @@ (Packaging.termDefinitionName (var "td")) @@ var "sig"])),
     _Definition_primitive>>: "pd" ~>
       right (list [generateSignatureRef @@ (Packaging.primitiveDefinitionName (var "pd")) @@ (Packaging.primitiveDefinitionSignature (var "pd"))])]
+-- | Generate a DSL module name from a source module name
+-- For example, "hydra.core" -> "hydra.dsl.core"
+dslModuleName :: TypedTermDefinition (ModuleName -> ModuleName)
+dslModuleName = define "dslModuleName" $
+  doc "Generate a DSL module name from a source module name" $
+  Names.derivedModuleName @@ list [string "hydra", string "dsl"] @@ boolean False
+
 -- | Build a "functions of phantom terms" TypeScheme from a TermSignature.
 -- Each value parameter type and the result type are wrapped in TypedTerm, then folded
 -- into a chain of function arrows; the signature's type parameters become the foralls.
@@ -375,17 +353,31 @@ generateBindingsForType = define "generateBindingsForType" $
   Eithers.bind (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "b"))) (
     "rawType" ~>
     "typ" <~ (Strip.deannotateTypeParameters @@ (Strip.deannotateType @@ var "rawType")) $
+    -- Token + parametric composition builders are generated only alongside a
+    -- concrete nominal shape (record/union/wrap) — never for a transparent
+    -- alias (e.g. SymmetricAdapter = Adapter t t v v e, a bare Type_application),
+    -- since hosts do not materialize a distinct class/type for aliases and a
+    -- token/builder referencing one would be dead weight at best, a broken
+    -- reference at worst.
     right (cases _Type (var "typ") (Just $ list ([] :: [TypedTerm Binding])) [
       _Type_record>>: "fts" ~>
         Lists.concat $ list [
+          list [generateTypeNameToken @@ var "rawType" @@ var "typeName"],
+          generateParametricRefBuilders @@ var "rawType" @@ var "typeName",
           generateRecordConstructor @@ var "rawType" @@ var "typeName" @@ var "fts",
           Lists.map (generateRecordAccessor @@ var "rawType" @@ var "typeName") (var "fts"),
           Lists.map (generateRecordWithUpdater @@ var "rawType" @@ var "typeName" @@ var "fts")
             (var "fts")],
       _Type_union>>: "fts" ~>
-        Lists.map (generateUnionInjector @@ var "rawType" @@ var "typeName") (var "fts"),
+        Lists.concat $ list [
+          list [generateTypeNameToken @@ var "rawType" @@ var "typeName"],
+          generateParametricRefBuilders @@ var "rawType" @@ var "typeName",
+          Lists.map (generateUnionInjector @@ var "rawType" @@ var "typeName") (var "fts")],
       _Type_wrap>>: "innerType" ~>
-        generateWrappedTypeAccessors @@ var "rawType" @@ var "typeName" @@ var "innerType"]))
+        Lists.concat $ list [
+          list [generateTypeNameToken @@ var "rawType" @@ var "typeName"],
+          generateParametricRefBuilders @@ var "rawType" @@ var "typeName",
+          generateWrappedTypeAccessors @@ var "rawType" @@ var "typeName" @@ var "innerType"]]))
 
 -- | Deduplicate bindings by giving duplicate names a numeric suffix.
 -- Later bindings get suffixes; earlier ones keep their name.
@@ -558,6 +550,109 @@ generateSignatureRef = define "generateSignatureRef" $
   "ts" <~ (dslSignatureTypeScheme @@ var "sig") $
   Core.binding
     (dslDefinitionName @@ var "refName" @@ (Names.localNameOf @@ var "refName"))
+    (var "body")
+    (just (var "ts"))
+
+-- | Generate encode/decode composition builders for a parametric type definition.
+-- A bare TypedName token cannot select the right encoder/decoder for a parametric
+-- type's arguments (a Name carries no information about which coder to use for a type
+-- parameter), so a parametric type gets one small typed builder per direction instead:
+-- given an encoder/decoder for each of its forall-bound type parameters, produces an
+-- encoder/decoder for the fully-applied type. For a type "ParseResult a" this produces
+--   encodeParseResult :: TypedTerm (a -> Term) -> TypedTerm (ParseResult a -> Term)
+--   decodeParseResult :: TypedTerm (Graph -> Term -> Either DecodingError a)
+--     -> TypedTerm (Graph -> Term -> Either DecodingError (ParseResult a))
+-- by partially applying the synthesized (already forall-polymorphic) encoder/decoder
+-- binding to the given per-parameter coder arguments. These compose for nesting
+-- (encodeValidationResult (encodeParseResult (encodeRef nameName))) and stay at kind
+-- *, since each parameter is a single coder argument (no HKT). Non-parametric types
+-- (no forall vars) get no builder — generateTypeNameToken's bare TypedName token
+-- already suffices for them via hydra.refs's encodeRef/decodeRef.
+generateParametricRefBuilders :: TypedTermDefinition (Type -> Name -> [Binding])
+generateParametricRefBuilders = define "generateParametricRefBuilders" $
+  doc "Generate encode/decode composition builders for a parametric type definition" $
+  "origType" ~> "typeName" ~>
+  "vars" <~ (collectForallVars @@ var "origType") $
+  Logic.ifElse (Lists.null (var "vars"))
+    (list ([] :: [TypedTerm Binding]))
+    (list [
+      generateParametricCoderBuilder ["hydra", "encode"] encoderVarType encoderResultType "encode" (var "origType") (var "typeName"),
+      generateParametricCoderBuilder ["hydra", "decode"] decoderVarType decoderVarType "decode" (var "origType") (var "typeName")])
+  where
+    encoderVarType v = Core.typeFunction $ Core.functionType v (Core.typeVariable (Core.nameLift _Term))
+    encoderResultType = encoderVarType
+    decoderVarType t =
+      Core.typeFunction $ Core.functionType (Core.typeVariable (Core.nameLift _Graph)) $
+      Core.typeFunction $ Core.functionType (Core.typeVariable (Core.nameLift _Term)) $
+      Core.typeEither $ Core.eitherType (Core.typeVariable (Core.nameLift _DecodingError)) t
+
+-- | Generate one direction's (encode or decode) composition builder for a parametric
+-- type, given: the category's namespace segments (for looking up the synthesized
+-- per-type coder binding); a function from a bound type variable (or the fully-applied
+-- result type) to its coder type; the category's local-name prefix (e.g. "encode"); the
+-- type's original (forall-quantified) Type and Name.
+generateParametricCoderBuilder :: [String] -> (TypedTerm Type -> TypedTerm Type) -> (TypedTerm Type -> TypedTerm Type) -> String -> TypedTerm Type -> TypedTerm Name -> TypedTerm Binding
+generateParametricCoderBuilder categoryPrefix varCoderType resultCoderType categoryLocalPrefix origType typeName =
+  "vars" <~ (collectForallVars @@ origType) $
+  "localName" <~ (Names.localNameOf @@ typeName) $
+  "builderLocalName" <~ (Strings.cat $ list [string categoryLocalPrefix, var "localName"]) $
+  "builderName" <~ (dslDefinitionName @@ typeName @@ var "builderLocalName") $
+  "refName" <~ (Names.derivedBindingName @@ list (string <$> categoryPrefix) @@ boolean True @@ typeName) $
+  -- Parameter (var, TypedTerm<varCoderType>) pairs for the lambda chain, one per forall var.
+  "paramPairs" <~ (Lists.map
+    ("v" ~> pair (Core.unName (var "v")) (wrapInTypedTerm (varCoderType (Core.typeVariable (var "v")))))
+    (var "vars")) $
+  -- Body: apply the deep reference to each unwrapped phantom coder argument, left to right.
+  "appBody" <~ (Lists.foldl
+    ("acc" ~> "pp" ~> deepApplication (var "acc")
+      (unwrapTypedTerm (Core.termVariable (Core.name (Pairs.first (var "pp"))))))
+    (deepVariable (var "refName"))
+    (var "paramPairs")) $
+  "builderTerm" <~ (wrapTermInTypedTerm (var "appBody")) $
+  "rawBody" <~ (Lists.foldl
+    ("acc" ~> "pp" ~>
+      Core.termLambda $ Core.lambda (Core.name (Pairs.first (var "pp"))) (just (Pairs.second (var "pp"))) (var "acc"))
+    (var "builderTerm")
+    (Lists.reverse (var "paramPairs"))) $
+  "description" <~ (Strings.cat $ list [
+    string "DSL composition builder for the ",
+    string categoryLocalPrefix,
+    string "r of ",
+    Core.unName typeName]) $
+  "body" <~ (Annotations.setTermDescription @@ (just (var "description")) @@ var "rawBody") $
+  "resultType" <~ (nominalResultType @@ typeName @@ origType) $
+  "paramTypes" <~ (Lists.map ("v" ~> varCoderType (Core.typeVariable (var "v"))) (var "vars")) $
+  "ts" <~ (dslTypeScheme @@ origType @@ var "paramTypes" @@ (resultCoderType (var "resultType"))) $
+  Core.binding
+    (var "builderName")
+    (var "body")
+    (just (var "ts"))
+
+-- | Generate a compile-time name token for a type definition: a TypedName constant
+-- tying the type's Name to its host type, so it can be passed to hydra.refs helpers
+-- (encodeRef, decodeRef, showRef) without an unsafely bare Name. For a type "Name" in
+-- module "hydra.core", produces:
+--   nameName :: TypedName Name
+--   nameName = TypedName "hydra.core.Name"
+generateTypeNameToken :: TypedTermDefinition (Type -> Name -> Binding)
+generateTypeNameToken = define "generateTypeNameToken" $
+  doc "Generate a TypedName token constant for a type definition" $
+  "origType" ~> "typeName" ~>
+  "localName" <~ (Names.localNameOf @@ var "typeName") $
+  "tokenLocalName" <~ (Strings.cat $ list [
+    Formatting.decapitalize @@ var "localName",
+    var "localName"]) $
+  "tokenName" <~ (dslDefinitionName @@ var "typeName" @@ var "tokenLocalName") $
+  "description" <~ (Strings.cat $ list [
+    string "DSL name token for ",
+    Core.unName (var "typeName")]) $
+  "body" <~ (Annotations.setTermDescription @@ (just (var "description")) @@ (wrapNameInTypedName (var "typeName"))) $
+  "ts" <~ (Core.typeScheme
+    (collectForallVars @@ var "origType")
+    (wrapInTypedName (nominalResultType @@ var "typeName" @@ var "origType"))
+    nothing) $
+  Core.binding
+    (var "tokenName")
     (var "body")
     (just (var "ts"))
 
@@ -744,9 +839,17 @@ unwrapTypedTerm v = Core.termApplication $ Core.application
   (Core.termUnwrap (Core.nameLift _TypedTerm))
   v
 
+-- | Wrap a type in TypedName: TypeApplication (TypeVariable "hydra.typed.TypedName") innerType
+wrapInTypedName :: TypedTerm Type -> TypedTerm Type
+wrapInTypedName t = Core.typeApplication $ Core.applicationType (Core.typeVariable (Core.nameLift _TypedName)) t
+
 -- | Wrap a type in TypedTerm: TypeApplication (TypeVariable "hydra.typed.TypedTerm") innerType
 wrapInTypedTerm :: TypedTerm Type -> TypedTerm Type
 wrapInTypedTerm t = Core.typeApplication $ Core.applicationType (Core.typeVariable (Core.nameLift _TypedTerm)) t
+
+-- | Wrap a name in TypedName: WrappedTerm _TypedName (deep Name term)
+wrapNameInTypedName :: TypedTerm Name -> TypedTerm Term
+wrapNameInTypedName n = Core.termWrap $ Core.wrappedTerm (Core.nameLift _TypedName) (deepName (Core.unName n))
 
 -- | Wrap a term in TypedTerm: WrappedTerm _TypedTerm term
 wrapTermInTypedTerm :: TypedTerm Term -> TypedTerm Term

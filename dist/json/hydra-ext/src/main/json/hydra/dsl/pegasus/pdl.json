@@ -4,11 +4,33 @@
   "dependencies": [
     {"module": "hydra.pegasus.pdl"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.pegasus.pdl"},
+    {"module": "hydra.decode.pegasus.pdl"},
     {"module": "hydra.json.model"},
     {"module": "hydra.core"},
     {"module": "hydra.dsl.json.model"},
     {"module": "hydra.dsl.core"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.pegasus.pdl.annotationsAnnotations",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.pegasus.pdl.Annotations"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.Annotations"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.pegasus.pdl.Annotations"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.pegasus.pdl.annotations",
@@ -375,6 +397,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the deprecated field of hydra.pegasus.pdl.Annotations"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.pegasus.pdl.enumFieldEnumField",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.pegasus.pdl.EnumField"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.EnumField"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.pegasus.pdl.EnumField"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.pegasus.pdl.enumField",
@@ -754,6 +794,26 @@
                   "value": {"literal": {"string": "DSL updater for the annotations field of hydra.pegasus.pdl.EnumField"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.pegasus.pdl.enumFieldNameEnumFieldName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.pegasus.pdl.EnumFieldName"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.EnumFieldName"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.pegasus.pdl.EnumFieldName"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.pegasus.pdl.enumFieldName2",
         "signature": {
           "typeParameters": [],
@@ -841,6 +901,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.pegasus.pdl.EnumFieldName"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.pegasus.pdl.enumSchemaEnumSchema",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.pegasus.pdl.EnumSchema"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.EnumSchema"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.pegasus.pdl.EnumSchema"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.pegasus.pdl.enumSchema",
@@ -1015,6 +1095,24 @@
                   "value": {"literal": {"string": "DSL updater for the fields field of hydra.pegasus.pdl.EnumSchema"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.pegasus.pdl.fieldNameFieldName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.pegasus.pdl.FieldName"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.FieldName"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.pegasus.pdl.FieldName"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.pegasus.pdl.fieldName",
         "signature": {
           "typeParameters": [],
@@ -1102,6 +1200,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.pegasus.pdl.FieldName"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.pegasus.pdl.namedSchemaNamedSchema",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.pegasus.pdl.NamedSchema"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.NamedSchema"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.pegasus.pdl.NamedSchema"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.pegasus.pdl.namedSchema",
@@ -1760,6 +1878,26 @@
                   "value": {"literal": {"string": "DSL updater for the annotations field of hydra.pegasus.pdl.NamedSchema"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.pegasus.pdl.namedSchemaTypeNamedSchemaType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.pegasus.pdl.NamedSchemaType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.NamedSchemaType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.pegasus.pdl.NamedSchemaType"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.pegasus.pdl.namedSchemaTypeRecord",
         "signature": {
           "typeParameters": [],
@@ -1913,6 +2051,22 @@
                   "value": {"literal": {"string": "DSL injection for the typeref variant of hydra.pegasus.pdl.NamedSchemaType"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.pegasus.pdl.nameName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {"application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.pegasus.pdl.Name"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.Name"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.pegasus.pdl.Name"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.pegasus.pdl.name",
         "signature": {
           "typeParameters": [],
@@ -1997,6 +2151,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.pegasus.pdl.Name"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.pegasus.pdl.namespaceNamespace",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.pegasus.pdl.Namespace"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.Namespace"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.pegasus.pdl.Namespace"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.pegasus.pdl.namespace",
@@ -2088,6 +2260,23 @@
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.pegasus.pdl.Namespace"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.pegasus.pdl.packagePackage",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.pegasus.pdl.Package"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.Package"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.pegasus.pdl.Package"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.pegasus.pdl.package",
         "signature": {
           "typeParameters": [],
@@ -2175,6 +2364,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.pegasus.pdl.Package"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.pegasus.pdl.primitiveTypePrimitiveType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.pegasus.pdl.PrimitiveType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.PrimitiveType"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.pegasus.pdl.PrimitiveType"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.pegasus.pdl.primitiveTypeBoolean",
@@ -2450,6 +2659,26 @@
                   "value": {"literal": {"string": "DSL injection for the string variant of hydra.pegasus.pdl.PrimitiveType"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.pegasus.pdl.propertyKeyPropertyKey",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.pegasus.pdl.PropertyKey"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.PropertyKey"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.pegasus.pdl.PropertyKey"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.pegasus.pdl.propertyKey",
         "signature": {
           "typeParameters": [],
@@ -2537,6 +2766,24 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL accessor for the body of hydra.pegasus.pdl.PropertyKey"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.pegasus.pdl.propertyProperty",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.pegasus.pdl.Property"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.Property"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.pegasus.pdl.Property"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.pegasus.pdl.property",
@@ -2912,6 +3159,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the value field of hydra.pegasus.pdl.Property"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.pegasus.pdl.qualifiedNameQualifiedName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.pegasus.pdl.QualifiedName"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.QualifiedName"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.pegasus.pdl.QualifiedName"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.pegasus.pdl.qualifiedName",
@@ -3294,6 +3561,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the namespace field of hydra.pegasus.pdl.QualifiedName"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.pegasus.pdl.recordFieldRecordField",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.pegasus.pdl.RecordField"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.RecordField"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.pegasus.pdl.RecordField"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.pegasus.pdl.recordField",
@@ -4690,6 +4977,26 @@
                   "value": {"literal": {"string": "DSL updater for the annotations field of hydra.pegasus.pdl.RecordField"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.pegasus.pdl.recordSchemaRecordSchema",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.pegasus.pdl.RecordSchema"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.RecordSchema"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.pegasus.pdl.RecordSchema"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.pegasus.pdl.recordSchema",
         "signature": {
           "typeParameters": [],
@@ -5065,6 +5372,23 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the includes field of hydra.pegasus.pdl.RecordSchema"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.pegasus.pdl.schemaSchema",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.pegasus.pdl.Schema"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.Schema"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.pegasus.pdl.Schema"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.pegasus.pdl.schemaArray",
@@ -5459,6 +5783,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the union variant of hydra.pegasus.pdl.Schema"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.pegasus.pdl.schemaFileSchemaFile",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.pegasus.pdl.SchemaFile"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.SchemaFile"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.pegasus.pdl.SchemaFile"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.pegasus.pdl.schemaFile",
@@ -6462,6 +6806,26 @@
                   "value": {"literal": {"string": "DSL updater for the schemas field of hydra.pegasus.pdl.SchemaFile"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.pegasus.pdl.unionMemberUnionMember",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.pegasus.pdl.UnionMember"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.UnionMember"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.pegasus.pdl.UnionMember"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.pegasus.pdl.unionMember",
         "signature": {
           "typeParameters": [],
@@ -7120,6 +7484,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the annotations field of hydra.pegasus.pdl.UnionMember"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.pegasus.pdl.unionSchemaUnionSchema",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.pegasus.pdl.UnionSchema"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.pegasus.pdl.UnionSchema"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.pegasus.pdl.UnionSchema"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.pegasus.pdl.unionSchema",

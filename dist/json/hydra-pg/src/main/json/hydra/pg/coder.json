@@ -8,6 +8,7 @@
     {"module": "hydra.annotations"},
     {"module": "hydra.extract.core"},
     {"module": "hydra.resolution"},
+    {"module": "hydra.strip"},
     {"module": "hydra.pg.termsToElements"},
     {"module": "hydra.pg.model"},
     {"module": "hydra.pg.mapping"},

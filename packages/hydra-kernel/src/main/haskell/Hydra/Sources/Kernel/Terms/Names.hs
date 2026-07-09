@@ -3,9 +3,9 @@ module Hydra.Sources.Kernel.Terms.Names where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
-  compactName, dslModuleName, freshName, freshNames, localNameOf, moduleNameOf, moduleNameToFilePath, nameToFilePath,
-  normalTypeVariable, pushSubtermStep, qname, qualifyName, restoreTrace,
-  chooseUniqueLabel, unqualifyName)
+  chooseUniqueLabel, compactName, derivedBindingName, derivedDefinitionName, derivedModuleName,
+  freshName, freshNames, localNameOf, moduleNameOf, moduleNameToFilePath, nameToFilePath,
+  normalTypeVariable, pushSubtermStep, qname, qualifyName, restoreTrace, unqualifyName)
 import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Overlay.Haskell.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast
@@ -73,7 +73,9 @@ module_ = Module {
    definitions = [
      toDefinition chooseUniqueLabel,
      toDefinition compactName,
-     toDefinition dslModuleName,
+     toDefinition derivedBindingName,
+     toDefinition derivedDefinitionName,
+     toDefinition derivedModuleName,
      toDefinition freshName,
      toDefinition freshNames,
      toDefinition localNameOf,
@@ -113,26 +115,70 @@ compactName = define "compactName" $
     $ Optionals.cases (var "mns") (Core.unName $ var "name") (lambda "ns" $
           Optionals.cases (Maps.lookup (var "ns" :: TypedTerm ModuleName) (var "namespaces")) (var "local") (lambda "pre" $ Strings.cat $ list [var "pre", string ":", var "local"]))
 
--- | Generate a DSL module name from a source module name
--- For example, "hydra.core" -> "hydra.dsl.core"
-dslModuleName :: TypedTermDefinition (ModuleName -> ModuleName)
-dslModuleName = define "dslModuleName" $
-  doc "Generate a DSL module name from a source module name" $
-  "ns" ~>
+-- | Generate a fully qualified binding name for a derived function (encoder, decoder,
+-- DSL helper, etc.) from a type/term name, given the category's namespace segments
+-- (e.g. ["hydra", "encode"]) and whether to always drop the name's leading namespace
+-- segment (encode/decode category convention) vs. only when it is literally "hydra"
+-- and otherwise keep the full original namespace (DSL category convention). A name with
+-- no namespace yields the bare local name, unprefixed (encode/decode/dslBindingName
+-- convention).
+-- For example, derivedBindingName ["hydra", "encode"] True "hydra.core.Name" -> "hydra.encode.core.name"
+derivedBindingName :: TypedTermDefinition ([String] -> Bool -> Name -> Name)
+derivedBindingName = define "derivedBindingName" $
+  doc "Generate a binding name for a derived function from a type/term name, given the category's namespace segments" $
+  "categoryPrefix" ~> "alwaysDropFirst" ~> "n" ~>
+  derivedDefinitionName @@ var "categoryPrefix" @@ var "alwaysDropFirst" @@ boolean False @@ var "n" @@ (Formatting.decapitalize @@ (localNameOf @@ (var "n")))
+
+-- | Generate a derived element name (DSL accessor, updater, injector, etc.) from a
+-- source name (used for its namespace only) and an explicit local element name, given
+-- the category's namespace segments, drop-first-segment convention (see
+-- 'derivedBindingName'), and whether a namespace-less source name still gets the category
+-- prefix (dslDefinitionName convention: True) or yields the bare local name (False).
+-- For example, derivedDefinitionName ["hydra", "dsl"] False True "hydra.core.AnnotatedTerm" "annotatedTermBody"
+--   -> "hydra.dsl.core.annotatedTermBody"
+derivedDefinitionName :: TypedTermDefinition ([String] -> Bool -> Bool -> Name -> String -> Name)
+derivedDefinitionName = define "derivedDefinitionName" $
+  doc "Generate a derived element name from a source name's namespace and an explicit local name" $
+  "categoryPrefix" ~> "alwaysDropFirst" ~> "prefixWhenNoNamespace" ~> "n" ~> "localName" ~>
+  "localResult" <~ (Core.name (var "localName")) $
+  "prefixedResult" <~ (Core.name (Strings.intercalate (string ".")
+    (Lists.concat2 (var "categoryPrefix") (list [var "localName"])))) $
+  "noNamespaceResult" <~ (Logic.ifElse (var "prefixWhenNoNamespace") (var "prefixedResult") (var "localResult")) $
+  -- nsParts = parts minus the last element (the namespace components).
+  -- Nothing means parts was empty (unreachable for a valid name);
+  -- Just [] means the name has no namespace (local type).
+  Optionals.cases (Lists.maybeInit (Strings.splitOn (string ".") (Core.unName (var "n")))) (var "noNamespaceResult") ("nsParts" ~>
+      Optionals.cases
+        (Lists.uncons (var "nsParts"))
+        -- single-element parts: local type, no namespace
+        (var "noNamespaceResult")
+        ("nsHeadTail" ~>
+          "categoryPrefixResolved" <~ (Logic.ifElse
+            (Logic.or (var "alwaysDropFirst") (Equality.equal (Pairs.first (var "nsHeadTail")) (string "hydra")))
+            -- drop the leading segment (always, or because it is "hydra")
+            (Lists.concat2 (var "categoryPrefix") (Pairs.second (var "nsHeadTail")))
+            -- keep the full original namespace (non-"hydra", DSL category convention)
+            (Lists.concat2 (var "categoryPrefix") (var "nsParts"))) $
+          Core.name (Strings.intercalate (string ".")
+            (Lists.concat2 (var "categoryPrefixResolved") (list [var "localName"])))))
+
+-- | Generate a derived module name (encoder, decoder, DSL, etc.) from a source module
+-- name, given the category's namespace segments and drop-first-segment convention.
+-- See 'derivedBindingName' for the convention parameter.
+-- For example, derivedModuleName ["hydra", "encode"] True "hydra.util" -> "hydra.encode.util"
+derivedModuleName :: TypedTermDefinition ([String] -> Bool -> ModuleName -> ModuleName)
+derivedModuleName = define "derivedModuleName" $
+  doc "Generate a derived module name from a source module name, given the category's namespace segments" $
+  "categoryPrefix" ~> "alwaysDropFirst" ~> "ns" ~>
   "parts" <~ (Strings.splitOn (string ".") (Packaging.unModuleName (var "ns"))) $
-  "prefixFull" <~ (Packaging.moduleName2 (Strings.cat $ list [
-    string "hydra.dsl.",
-    Packaging.unModuleName (var "ns")])) $
-  -- For hydra.* namespaces: hydra.foo -> hydra.dsl.foo
-  -- For other namespaces: foo.bar -> hydra.dsl.foo.bar (preserve full path)
-  -- An empty parts list is unreachable for a well-formed namespace; fall back
-  -- to the full-prefix form.
-  Optionals.cases (Lists.uncons (var "parts")) (var "prefixFull") ("ht" ~>
-      Logic.ifElse (Equality.equal (Pairs.first (var "ht")) (string "hydra"))
-        (Packaging.moduleName2 (Strings.cat $ list [
-          string "hydra.dsl.",
-          Strings.intercalate (string ".") (Pairs.second (var "ht"))]))
-        (var "prefixFull"))
+  "fallback" <~ (Packaging.moduleName2 (Strings.intercalate (string ".")
+    (Lists.concat2 (var "categoryPrefix") (var "parts")))) $
+  Optionals.cases (Lists.uncons (var "parts")) (var "fallback") ("ht" ~>
+      Logic.ifElse
+        (Logic.or (var "alwaysDropFirst") (Equality.equal (Pairs.first (var "ht")) (string "hydra")))
+        (Packaging.moduleName2 (Strings.intercalate (string ".")
+          (Lists.concat2 (var "categoryPrefix") (Pairs.second (var "ht")))))
+        (var "fallback"))
 
 freshName :: TypedTermDefinition (InferenceContext -> (Name, InferenceContext))
 freshName = define "freshName" $

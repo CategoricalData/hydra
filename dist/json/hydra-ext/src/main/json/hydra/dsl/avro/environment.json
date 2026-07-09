@@ -4,6 +4,8 @@
   "dependencies": [
     {"module": "hydra.avro.environment"},
     {"module": "hydra.typed"},
+    {"module": "hydra.encode.avro.environment"},
+    {"module": "hydra.decode.avro.environment"},
     {"module": "hydra.core"},
     {"module": "hydra.coders"},
     {"module": "hydra.errors"},
@@ -15,6 +17,28 @@
     {"module": "hydra.dsl.avro.schema"},
     {"module": "hydra.dsl.json.model"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.dsl.avro.environment.avroQualifiedNameAvroQualifiedName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.avro.environment.AvroQualifiedName"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.avro.environment.AvroQualifiedName"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.avro.environment.AvroQualifiedName"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.avro.environment.avroQualifiedName",
@@ -464,6 +488,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the name field of hydra.avro.environment.AvroQualifiedName"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.avro.environment.avroForeignKeyAvroForeignKey",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.avro.environment.AvroForeignKey"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.avro.environment.AvroForeignKey"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.avro.environment.AvroForeignKey"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.avro.environment.avroForeignKey",
@@ -933,6 +977,26 @@
                   "value": {"literal": {"string": "DSL updater for the constructor field of hydra.avro.environment.AvroForeignKey"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.avro.environment.avroPrimaryKeyAvroPrimaryKey",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.avro.environment.AvroPrimaryKey"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.avro.environment.AvroPrimaryKey"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.avro.environment.AvroPrimaryKey"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.avro.environment.avroPrimaryKey",
         "signature": {
           "typeParameters": [],
@@ -1378,6 +1442,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the constructor field of hydra.avro.environment.AvroPrimaryKey"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.avro.environment.avroEnvironmentAvroEnvironment",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.avro.environment.AvroEnvironment"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.avro.environment.AvroEnvironment"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.avro.environment.AvroEnvironment"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.avro.environment.avroEnvironment",
@@ -2209,6 +2293,28 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the elements field of hydra.avro.environment.AvroEnvironment"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.avro.environment.encodeEnvironmentEncodeEnvironment",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedName"},
+                "argument": {"variable": "hydra.avro.environment.EncodeEnvironment"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.avro.environment.EncodeEnvironment"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.avro.environment.EncodeEnvironment"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.avro.environment.encodeEnvironment",

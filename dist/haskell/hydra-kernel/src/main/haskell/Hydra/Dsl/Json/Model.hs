@@ -5,7 +5,9 @@
 module Hydra.Dsl.Json.Model where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Json.Model as DecodeJsonModel
 import qualified Hydra.Dsl.Core as DslCore
+import qualified Hydra.Encode.Json.Model as EncodeJsonModel
 import qualified Hydra.Json.Model as Model
 import qualified Hydra.Typed as Typed
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -64,3 +66,7 @@ valueString x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
         Core.fieldTerm = (Typed.unTypedTerm x)}}))
+
+-- | DSL name token for hydra.json.model.Value
+valueValue :: Typed.TypedName Model.Value
+valueValue = Typed.TypedName (Core.Name "hydra.json.model.Value")

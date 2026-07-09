@@ -28,6 +28,13 @@ typedBinding a cx raw =
           Typed.typedBindingTerm = field_term}))))
       _ -> Left (Errors.DecodingError "expected a record of type hydra.typed.TypedBinding")) (ExtractCore.stripWithDecodingError cx raw)
 
+-- | Decoder for hydra.typed.TypedName
+typedName :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError a) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Typed.TypedName a)
+typedName a cx raw =
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermWrap v0 -> Eithers.map (\b -> Typed.TypedName b) (DecodeCore.name cx (Core.wrappedTermBody v0))
+      _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+
 -- | Decoder for hydra.typed.TypedTerm
 typedTerm :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError a) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Typed.TypedTerm a)
 typedTerm a cx raw =
