@@ -81,6 +81,7 @@ from hydra.generation import (
     read_manifest_field,
     reload_term_signature_sources,
     synthesize_and_write_dsl_modules,
+    write_package_manifests,
 )
 
 # Python source module names under hydra.sources.python.* (matches Haskell
@@ -240,6 +241,19 @@ def main():
         written_dsl = synthesize_and_write_dsl_modules(
             dist_json_root, universe_all, dsl_sources_for_synthesis)
         print(f"  DSL wrappers: {len(written_dsl)} module(s) written", flush=True)
+
+        # #556: write the native package's manifest.json source-driven (rich
+        # schema, partitioned by Generation.namespace_to_package), mirroring
+        # Java's writePackageManifests. Previously this manifest was a static
+        # leftover from the retired Haskell DSL pass (legacy dslModules/
+        # mainModules-only schema, #511), so it never picked up hydra.python.
+        # utils/names once they became DSL-generated here — silently starving
+        # the Haskell-side assembler of hydra/dsl/python/{utils,names}.py.
+        # mainModules = the loaded source modules; mainDslModules = the
+        # DSL-type source modules; mainEncodingModules is empty (this driver
+        # doesn't yet synthesize encode/decode wrappers for hydra-python).
+        write_package_manifests(dist_json_root, py_sources, dsl_type_mods, [])
+
         t_pkg = time.perf_counter() - t0
         print(f"  done ({t_pkg:.1f}s)", flush=True)
 

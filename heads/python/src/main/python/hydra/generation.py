@@ -841,3 +841,48 @@ def _write_package_split_json(dist_json_root, universe_mods, universe_for_schema
                 case _:
                     raise RuntimeError(
                         f"_write_package_split_json: unexpected encode result {result!r}")
+
+
+def _namespaces_array(mods):
+    """A sorted JSON string array of the namespaces of the given modules."""
+    names = sorted(m.name.value for m in mods)
+    return JsonModel.ValueArray([JsonModel.ValueString(n) for n in names])
+
+
+def write_package_manifests(dist_json_root, main_mods, dsl_mods, enc_mods):
+    """Write each package's manifest.json in the current (#511) schema:
+    mainDslModules / mainEncodingModules / mainModules / manifestFormatVersion /
+    package / testModules. Mirrors Java's Generation.writePackageManifests and
+    the underlying Haskell writer's field order and formatting (alphabetized
+    keys, via hydra.json.writer.print_json so output is byte-for-byte
+    consistent with the other native drivers).
+
+    Only packages present in main_mods are visited (mirrors Java): a package
+    whose sources feed dsl_mods/enc_mods but not main_mods won't get a
+    manifest written here.
+    """
+    from hydra.json.writer import print_json
+
+    main_by_pkg = dict(group_by_package(main_mods))
+    dsl_by_pkg = dict(group_by_package(dsl_mods))
+    enc_by_pkg = dict(group_by_package(enc_mods))
+
+    for pkg in sorted(main_by_pkg.keys()):
+        main = main_by_pkg.get(pkg, [])
+        dsl = dsl_by_pkg.get(pkg, [])
+        enc = enc_by_pkg.get(pkg, [])
+        fields = [
+            ("mainDslModules", _namespaces_array(dsl)),
+            ("mainEncodingModules", _namespaces_array(enc)),
+            ("mainModules", _namespaces_array(main)),
+            ("manifestFormatVersion", JsonModel.ValueNumber(Decimal(1))),
+            ("package", JsonModel.ValueString(pkg)),
+            ("testModules", _namespaces_array([])),
+        ]
+        json_str = print_json(JsonModel.ValueObject(fields))
+        pkg_dir = os.path.join(dist_json_root, pkg, "src", "main", "json")
+        os.makedirs(pkg_dir, exist_ok=True)
+        file_path = os.path.join(pkg_dir, "manifest.json")
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write(json_str + "\n")
+        print(f"  Wrote manifest: {file_path}", flush=True)
